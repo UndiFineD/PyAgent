@@ -19,37 +19,42 @@ import shutil
 from typing import List, Optional
 from pathlib import Path
 
+
 class ArchiveIntelligence:
     """
     Refactored logic from Archive Alchemist for safe archive analysis.
     Focuses on detecting malicious patterns like ZipSlip or massive compression ratios.
     """
-    
+
     @staticmethod
     async def analyze_zip(file_path: str) -> dict:
         results = {"vulnerabilities": [], "files": []}
         try:
-            with zipfile.ZipFile(file_path, 'r') as zip_ref:
+            with zipfile.ZipFile(file_path, "r") as zip_ref:
                 for info in zip_ref.infolist():
                     # Detect ZipSlip
                     if ".." in info.filename or info.filename.startswith("/"):
-                        results["vulnerabilities"].append({
-                            "type": "ZipSlip",
-                            "file": info.filename,
-                            "severity": "High"
-                        })
-                    
+                        results["vulnerabilities"].append(
+                            {
+                                "type": "ZipSlip",
+                                "file": info.filename,
+                                "severity": "High",
+                            }
+                        )
+
                     # Detect massive expansion ratio (ZipBomb)
                     if info.file_size > 0:
                         ratio = info.compress_size / info.file_size
                         if ratio < 0.001 and info.file_size > 1024 * 1024:
-                            results["vulnerabilities"].append({
-                                "type": "PotentialZipBomb",
-                                "file": info.filename,
-                                "ratio": ratio,
-                                "severity": "Medium"
-                            })
-                    
+                            results["vulnerabilities"].append(
+                                {
+                                    "type": "PotentialZipBomb",
+                                    "file": info.filename,
+                                    "ratio": ratio,
+                                    "severity": "Medium",
+                                }
+                            )
+
                     results["files"].append(info.filename)
         except Exception as e:
             results["error"] = str(e)
@@ -59,15 +64,13 @@ class ArchiveIntelligence:
     async def analyze_tar(file_path: str) -> dict:
         results = {"vulnerabilities": [], "files": []}
         try:
-            with tarfile.open(file_path, 'r:*') as tar_ref:
+            with tarfile.open(file_path, "r:*") as tar_ref:
                 for member in tar_ref.getmembers():
                     # Detect Directory Traversal (TarSlip)
                     if ".." in member.name or member.name.startswith("/"):
-                        results["vulnerabilities"].append({
-                            "type": "TarSlip",
-                            "file": member.name,
-                            "severity": "High"
-                        })
+                        results["vulnerabilities"].append(
+                            {"type": "TarSlip", "file": member.name, "severity": "High"}
+                        )
                     results["files"].append(member.name)
         except Exception as e:
             results["error"] = str(e)

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,6 +22,7 @@ from src.logic.agents.cognitive.context.utils.CrossRepoContext import CrossRepoC
 from typing import Dict, List
 
 __version__ = VERSION
+
 
 class CrossRepoAnalyzer:
     """Analyzes context across multiple repositories.

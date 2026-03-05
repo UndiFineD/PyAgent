@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -90,6 +91,7 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
         """
         self.start_indices.append(len(self.logprobs))
         if value:
+
             def _proc_item(item):
                 token_id, logprob = item
                 self.token_ids.append(token_id)
@@ -212,11 +214,13 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
 
     def __iter__(self) -> Iterator[LogprobsOnePosition]:
         """Iterate over all positions."""
+
         def _recursive_gen(idx):
             if idx >= len(self):
                 return
             yield self[idx]
             yield from _recursive_gen(idx + 1)
+
         return _recursive_gen(0)
 
     def clear(self) -> None:
@@ -252,7 +256,9 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
         return flat_overhead < dict_overhead
 
 
-def create_prompt_logprobs(flat_logprobs: bool = True) -> FlatLogprobs | list[LogprobsOnePosition | None]:
+def create_prompt_logprobs(
+    flat_logprobs: bool = True,
+) -> FlatLogprobs | list[LogprobsOnePosition | None]:
     """
     Create a container for prompt logprobs.
 
@@ -272,7 +278,9 @@ def create_prompt_logprobs(flat_logprobs: bool = True) -> FlatLogprobs | list[Lo
     return logprobs
 
 
-def create_sample_logprobs(flat_logprobs: bool = True) -> FlatLogprobs | list[LogprobsOnePosition]:
+def create_sample_logprobs(
+    flat_logprobs: bool = True,
+) -> FlatLogprobs | list[LogprobsOnePosition]:
     """
     Create a container for sampled (decode) logprobs.
 

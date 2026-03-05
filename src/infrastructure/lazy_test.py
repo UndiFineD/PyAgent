@@ -17,11 +17,12 @@ def test_imports_and_symbols():
     assert hasattr(mod, "get_arc_offload_manager"), "get_arc_offload_manager missing"
     assert hasattr(mod, "get_tool_parser_registry"), "get_tool_parser_registry missing"
     assert hasattr(mod, "get_reasoning_engine"), "get_reasoning_engine missing"
-    assert hasattr(mod, "get_paged_attention_engine"), "get_paged_attention_engine missing"
+    assert hasattr(
+        mod, "get_paged_attention_engine"
+    ), "get_paged_attention_engine missing"
     assert hasattr(mod, "get_mooncake_connector"), "get_mooncake_connector missing"
     assert hasattr(mod, "get_nixl_connector"), "get_nixl_connector missing"
     assert hasattr(mod, "get_prefill_worker"), "get_prefill_worker missing"
     assert hasattr(mod, "get_decode_worker"), "get_decode_worker missing"
     assert hasattr(mod, "get_pp_transfer"), "get_pp_transfer missing"
     assert hasattr(mod, "get_tp_transfer"), "get_tp_transfer missing"
-

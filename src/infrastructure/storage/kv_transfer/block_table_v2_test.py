@@ -23,4 +23,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "DistributedBlockTable"), "DistributedBlockTable missing"
     assert hasattr(mod, "BlockTableV2"), "BlockTableV2 missing"
     assert hasattr(mod, "BlockTableFactory"), "BlockTableFactory missing"
-

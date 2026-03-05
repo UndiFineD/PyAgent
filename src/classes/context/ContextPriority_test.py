@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_contextpriority_exists():
     """Test that ContextPriority class exists and is importable."""
-    assert 'ContextPriority' in dir()
+    assert "ContextPriority" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

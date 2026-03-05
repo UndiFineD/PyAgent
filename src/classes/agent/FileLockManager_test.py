@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_filelockmanager_exists():
     """Test that FileLockManager class exists and is importable."""
-    assert 'FileLockManager' in dir()
+    assert "FileLockManager" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_websecurityscanneragent_exists():
     """Test that WebSecurityScannerAgent class exists and is importable."""
-    assert 'WebSecurityScannerAgent' in dir()
+    assert "WebSecurityScannerAgent" in dir()
 
 
 def test_websecurityscanneragent_instantiation():
@@ -45,4 +45,3 @@ def test_websecurityscanneragent_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

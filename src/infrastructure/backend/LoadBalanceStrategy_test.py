@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_loadbalancestrategy_exists():
     """Test that LoadBalanceStrategy class exists and is importable."""
-    assert 'LoadBalanceStrategy' in dir()
+    assert "LoadBalanceStrategy" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

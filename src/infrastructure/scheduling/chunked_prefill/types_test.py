@@ -33,35 +33,34 @@ except ImportError as e:
 
 def test_chunkstate_exists():
     """Test that ChunkState class exists and is importable."""
-    assert 'ChunkState' in dir()
+    assert "ChunkState" in dir()
 
 
 def test_chunkpriority_exists():
     """Test that ChunkPriority class exists and is importable."""
-    assert 'ChunkPriority' in dir()
+    assert "ChunkPriority" in dir()
 
 
 def test_chunkmetrics_exists():
     """Test that ChunkMetrics class exists and is importable."""
-    assert 'ChunkMetrics' in dir()
+    assert "ChunkMetrics" in dir()
 
 
 def test_prefillchunk_exists():
     """Test that PrefillChunk class exists and is importable."""
-    assert 'PrefillChunk' in dir()
+    assert "PrefillChunk" in dir()
 
 
 def test_chunkedrequest_exists():
     """Test that ChunkedRequest class exists and is importable."""
-    assert 'ChunkedRequest' in dir()
+    assert "ChunkedRequest" in dir()
 
 
 def test_chunkedprefillconfig_exists():
     """Test that ChunkedPrefillConfig class exists and is importable."""
-    assert 'ChunkedPrefillConfig' in dir()
+    assert "ChunkedPrefillConfig" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

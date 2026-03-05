@@ -28,10 +28,11 @@ def test_imports_and_symbols():
     assert hasattr(mod, "add_span_attributes"), "add_span_attributes missing"
     assert hasattr(mod, "add_span_event"), "add_span_event missing"
     assert hasattr(mod, "record_exception"), "record_exception missing"
-    assert hasattr(mod, "log_tracing_disabled_warning"), "log_tracing_disabled_warning missing"
+    assert hasattr(
+        mod, "log_tracing_disabled_warning"
+    ), "log_tracing_disabled_warning missing"
     assert hasattr(mod, "SpanTiming"), "SpanTiming missing"
     assert hasattr(mod, "timed_span"), "timed_span missing"
     assert hasattr(mod, "NullSpan"), "NullSpan missing"
     assert hasattr(mod, "NullTracer"), "NullTracer missing"
     assert hasattr(mod, "get_null_tracer"), "get_null_tracer missing"
-

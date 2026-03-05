@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_multimodalhasher_exists():
     """Test that MultiModalHasher class exists and is importable."""
-    assert 'MultiModalHasher' in dir()
+    assert "MultiModalHasher" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -31,6 +31,7 @@ logger = logging.getLogger(__name__)
 
 class EnvironmentStatus(Enum):
     """Environment lifecycle status"""
+
     CREATED = "created"
     INITIALIZING = "initializing"
     READY = "ready"
@@ -42,6 +43,7 @@ class EnvironmentStatus(Enum):
 @dataclass
 class EnvironmentResult:
     """Result from environment execution"""
+
     content: List[Dict[str, Any]]
     is_error: bool = False
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -51,6 +53,7 @@ class EnvironmentResult:
 @dataclass
 class EnvironmentCapabilities:
     """Capabilities exposed by an environment"""
+
     tools: List[str] = field(default_factory=list)
     agents: List[str] = field(default_factory=list)
     resources: List[str] = field(default_factory=list)
@@ -61,24 +64,20 @@ class EnvironmentProtocol(Protocol):
     """Protocol for environment-like objects"""
 
     @property
-    def name(self) -> str:
-        ...
+    def name(self) -> str: ...
 
     @property
-    def status(self) -> EnvironmentStatus:
-        ...
+    def status(self) -> EnvironmentStatus: ...
 
-    async def initialize(self) -> bool:
-        ...
+    async def initialize(self) -> bool: ...
 
-    async def execute(self, action: str, parameters: Dict[str, Any]) -> EnvironmentResult:
-        ...
+    async def execute(
+        self, action: str, parameters: Dict[str, Any]
+    ) -> EnvironmentResult: ...
 
-    def get_capabilities(self) -> EnvironmentCapabilities:
-        ...
+    def get_capabilities(self) -> EnvironmentCapabilities: ...
 
-    async def terminate(self):
-        ...
+    async def terminate(self): ...
 
 
 class BaseEnvironment(ABC):
@@ -120,7 +119,9 @@ class BaseEnvironment(ABC):
         pass
 
     @abstractmethod
-    async def execute(self, action: str, parameters: Dict[str, Any]) -> EnvironmentResult:
+    async def execute(
+        self, action: str, parameters: Dict[str, Any]
+    ) -> EnvironmentResult:
         """Execute an action in the environment"""
         pass
 
@@ -136,7 +137,9 @@ class BaseEnvironment(ABC):
 
     def _update_status(self, status: EnvironmentStatus):
         """Update environment status"""
-        logger.info(f"Environment {self.name} status: {self._status.value} -> {status.value}")
+        logger.info(
+            f"Environment {self.name} status: {self._status.value} -> {status.value}"
+        )
         self._status = status
 
     def _record_execution(self):
@@ -150,22 +153,28 @@ class ToolEnvironment(BaseEnvironment):
     Treats individual tools as environments
     """
 
-    def __init__(self, name: str, tool_func: Callable, config: Optional[Dict[str, Any]] = None):
+    def __init__(
+        self, name: str, tool_func: Callable, config: Optional[Dict[str, Any]] = None
+    ):
         super().__init__(name, config)
         self.tool_func = tool_func
         self._capabilities = EnvironmentCapabilities(
             tools=[name],
             metadata={
-                'type': 'tool',
-                'description': config.get('description', f'Tool environment for {name}')
-            }
+                "type": "tool",
+                "description": config.get(
+                    "description", f"Tool environment for {name}"
+                ),
+            },
         )
 
     async def initialize(self) -> bool:
         self._update_status(EnvironmentStatus.READY)
         return True
 
-    async def execute(self, action: str, parameters: Dict[str, Any]) -> EnvironmentResult:
+    async def execute(
+        self, action: str, parameters: Dict[str, Any]
+    ) -> EnvironmentResult:
         start_time = time.time()
 
         try:
@@ -179,19 +188,23 @@ class ToolEnvironment(BaseEnvironment):
             execution_time = time.time() - start_time
 
             return EnvironmentResult(
-                content=[{'result': result}],
+                content=[{"result": result}],
                 execution_time=execution_time,
-                metadata={'action': action, 'parameters': parameters}
+                metadata={"action": action, "parameters": parameters},
             )
 
         except Exception as e:
             execution_time = time.time() - start_time
             logger.error(f"Tool execution failed: {e}")
             return EnvironmentResult(
-                content=[{'error': str(e)}],
+                content=[{"error": str(e)}],
                 is_error=True,
                 execution_time=execution_time,
-                metadata={'action': action, 'parameters': parameters, 'exception': type(e).__name__}
+                metadata={
+                    "action": action,
+                    "parameters": parameters,
+                    "exception": type(e).__name__,
+                },
             )
 
     def get_capabilities(self) -> EnvironmentCapabilities:
@@ -207,15 +220,19 @@ class AgentEnvironment(BaseEnvironment):
     Treats agents as environments that can be called like tools
     """
 
-    def __init__(self, name: str, agent_instance, config: Optional[Dict[str, Any]] = None):
+    def __init__(
+        self, name: str, agent_instance, config: Optional[Dict[str, Any]] = None
+    ):
         super().__init__(name, config)
         self.agent = agent_instance
         self._capabilities = EnvironmentCapabilities(
             agents=[name],
             metadata={
-                'type': 'agent',
-                'description': config.get('description', f'Agent environment for {name}')
-            }
+                "type": "agent",
+                "description": config.get(
+                    "description", f"Agent environment for {name}"
+                ),
+            },
         )
 
     async def initialize(self) -> bool:
@@ -223,16 +240,18 @@ class AgentEnvironment(BaseEnvironment):
         self._update_status(EnvironmentStatus.READY)
         return True
 
-    async def execute(self, action: str, parameters: Dict[str, Any]) -> EnvironmentResult:
+    async def execute(
+        self, action: str, parameters: Dict[str, Any]
+    ) -> EnvironmentResult:
         start_time = time.time()
 
         try:
             self._record_execution()
 
             # Assume agent has an execute or run method
-            if hasattr(self.agent, 'execute'):
+            if hasattr(self.agent, "execute"):
                 result = await self.agent.execute(action, parameters)
-            elif hasattr(self.agent, 'run'):
+            elif hasattr(self.agent, "run"):
                 result = await self.agent.run(action, parameters)
             else:
                 raise AttributeError(f"Agent {self.name} has no execute or run method")
@@ -240,19 +259,23 @@ class AgentEnvironment(BaseEnvironment):
             execution_time = time.time() - start_time
 
             return EnvironmentResult(
-                content=[{'result': result}],
+                content=[{"result": result}],
                 execution_time=execution_time,
-                metadata={'action': action, 'parameters': parameters}
+                metadata={"action": action, "parameters": parameters},
             )
 
         except Exception as e:
             execution_time = time.time() - start_time
             logger.error(f"Agent execution failed: {e}")
             return EnvironmentResult(
-                content=[{'error': str(e)}],
+                content=[{"error": str(e)}],
                 is_error=True,
                 execution_time=execution_time,
-                metadata={'action': action, 'parameters': parameters, 'exception': type(e).__name__}
+                metadata={
+                    "action": action,
+                    "parameters": parameters,
+                    "exception": type(e).__name__,
+                },
             )
 
     def get_capabilities(self) -> EnvironmentCapabilities:
@@ -260,7 +283,7 @@ class AgentEnvironment(BaseEnvironment):
 
     async def terminate(self):
         # Assume agent cleanup if available
-        if hasattr(self.agent, 'cleanup'):
+        if hasattr(self.agent, "cleanup"):
             await self.agent.cleanup()
         self._update_status(EnvironmentStatus.TERMINATED)
 
@@ -271,8 +294,12 @@ class CompositeEnvironment(BaseEnvironment):
     Enables complex multi-environment orchestration
     """
 
-    def __init__(self, name: str, sub_environments: List[BaseEnvironment],
-                 config: Optional[Dict[str, Any]] = None):
+    def __init__(
+        self,
+        name: str,
+        sub_environments: List[BaseEnvironment],
+        config: Optional[Dict[str, Any]] = None,
+    ):
         super().__init__(name, config)
         self.sub_environments = sub_environments
         self._capabilities = self._aggregate_capabilities()
@@ -282,7 +309,7 @@ class CompositeEnvironment(BaseEnvironment):
         all_tools = []
         all_agents = []
         all_resources = []
-        metadata = {'type': 'composite', 'sub_environments': len(self.sub_environments)}
+        metadata = {"type": "composite", "sub_environments": len(self.sub_environments)}
 
         for env in self.sub_environments:
             caps = env.get_capabilities()
@@ -294,7 +321,7 @@ class CompositeEnvironment(BaseEnvironment):
             tools=list(set(all_tools)),
             agents=list(set(all_agents)),
             resources=list(set(all_resources)),
-            metadata=metadata
+            metadata=metadata,
         )
 
     async def initialize(self) -> bool:
@@ -312,7 +339,9 @@ class CompositeEnvironment(BaseEnvironment):
             self._update_status(EnvironmentStatus.ERROR)
             return False
 
-    async def execute(self, action: str, parameters: Dict[str, Any]) -> EnvironmentResult:
+    async def execute(
+        self, action: str, parameters: Dict[str, Any]
+    ) -> EnvironmentResult:
         start_time = time.time()
 
         try:
@@ -322,9 +351,9 @@ class CompositeEnvironment(BaseEnvironment):
             target_env = self._route_action(action, parameters)
             if not target_env:
                 return EnvironmentResult(
-                    content=[{'error': f'No environment can handle action: {action}'}],
+                    content=[{"error": f"No environment can handle action: {action}"}],
                     is_error=True,
-                    execution_time=time.time() - start_time
+                    execution_time=time.time() - start_time,
                 )
 
             result = await target_env.execute(action, parameters)
@@ -335,18 +364,28 @@ class CompositeEnvironment(BaseEnvironment):
             execution_time = time.time() - start_time
             logger.error(f"Composite environment execution failed: {e}")
             return EnvironmentResult(
-                content=[{'error': str(e)}],
+                content=[{"error": str(e)}],
                 is_error=True,
                 execution_time=execution_time,
-                metadata={'action': action, 'parameters': parameters, 'exception': type(e).__name__}
+                metadata={
+                    "action": action,
+                    "parameters": parameters,
+                    "exception": type(e).__name__,
+                },
             )
 
-    def _route_action(self, action: str, parameters: Dict[str, Any]) -> Optional[BaseEnvironment]:
+    def _route_action(
+        self, action: str, parameters: Dict[str, Any]
+    ) -> Optional[BaseEnvironment]:
         """Route action to appropriate sub-environment"""
         # Simple routing: check if any environment has the action in its capabilities
         for env in self.sub_environments:
             caps = env.get_capabilities()
-            if action in caps.tools or action in caps.agents or action in caps.resources:
+            if (
+                action in caps.tools
+                or action in caps.agents
+                or action in caps.resources
+            ):
                 return env
 
         # Default to first environment if no specific routing
@@ -398,22 +437,23 @@ class EnvironmentRegistry:
         """Get status of all environments"""
         return {
             name: {
-                'status': env.status.value,
-                'uptime': env.uptime,
-                'execution_count': env.execution_count,
-                'capabilities': env.get_capabilities().tools + env.get_capabilities().agents
+                "status": env.status.value,
+                "uptime": env.uptime,
+                "execution_count": env.execution_count,
+                "capabilities": env.get_capabilities().tools
+                + env.get_capabilities().agents,
             }
             for name, env in self.environments.items()
         }
 
-    async def execute_in_environment(self, env_name: str, action: str,
-                                   parameters: Dict[str, Any]) -> EnvironmentResult:
+    async def execute_in_environment(
+        self, env_name: str, action: str, parameters: Dict[str, Any]
+    ) -> EnvironmentResult:
         """Execute action in specified environment"""
         env = self.get_environment(env_name)
         if not env:
             return EnvironmentResult(
-                content=[{'error': f'Environment not found: {env_name}'}],
-                is_error=True
+                content=[{"error": f"Environment not found: {env_name}"}], is_error=True
             )
 
         return await env.execute(action, parameters)
@@ -423,6 +463,6 @@ class EnvironmentRegistry:
 environment_registry = EnvironmentRegistry()
 
 # Register built-in environment types
-environment_registry.register_environment_type('tool', ToolEnvironment)
-environment_registry.register_environment_type('agent', AgentEnvironment)
-environment_registry.register_environment_type('composite', CompositeEnvironment)
+environment_registry.register_environment_type("tool", ToolEnvironment)
+environment_registry.register_environment_type("agent", AgentEnvironment)
+environment_registry.register_environment_type("composite", CompositeEnvironment)

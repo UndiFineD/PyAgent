@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "CostRecord"), "CostRecord missing"
     assert hasattr(mod, "BudgetAlert"), "BudgetAlert missing"
     assert hasattr(mod, "BudgetManager"), "BudgetManager missing"
-

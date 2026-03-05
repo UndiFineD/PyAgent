@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_modalteleportationorchestrator_exists():
     """Test that ModalTeleportationOrchestrator class exists and is importable."""
-    assert 'ModalTeleportationOrchestrator' in dir()
+    assert "ModalTeleportationOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

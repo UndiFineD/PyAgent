@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_voicesession_exists():
     """Test that VoiceSession class exists and is importable."""
-    assert 'VoiceSession' in dir()
+    assert "VoiceSession" in dir()
 
 
 def test_voiceagentorchestrator_exists():
     """Test that VoiceAgentOrchestrator class exists and is importable."""
-    assert 'VoiceAgentOrchestrator' in dir()
+    assert "VoiceAgentOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

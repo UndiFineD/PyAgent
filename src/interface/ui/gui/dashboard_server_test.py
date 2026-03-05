@@ -21,4 +21,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "get_thoughts"), "get_thoughts missing"
     assert hasattr(mod, "list_artifacts"), "list_artifacts missing"
     assert hasattr(mod, "websocket_telemetry"), "websocket_telemetry missing"
-

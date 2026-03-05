@@ -52,6 +52,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class MessagePart:
     """Represents a part of a message (text, image, file, etc.)"""
+
     type: str  # "text", "image", "file", etc.
     content: str
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -60,6 +61,7 @@ class MessagePart:
 @dataclass
 class UIMessage:
     """UI message format compatible with AI SDK"""
+
     id: str
     role: str  # "user", "assistant", "system", "tool"
     parts: List[MessagePart]
@@ -70,6 +72,7 @@ class UIMessage:
 @dataclass
 class ConversationThread:
     """Represents a conversation thread with memory"""
+
     thread_id: str
     resource_id: str
     messages: List[UIMessage] = field(default_factory=list)
@@ -81,6 +84,7 @@ class ConversationThread:
 @dataclass
 class ToolDefinition:
     """MCP-compatible tool definition"""
+
     name: str
     description: str
     input_schema: Dict[str, Any]
@@ -91,6 +95,7 @@ class ToolDefinition:
 @dataclass
 class AgentConfig:
     """Configuration for an AI agent"""
+
     name: str
     system_prompt: str
     model: str = "gpt-4"
@@ -105,6 +110,7 @@ class AgentConfig:
 @dataclass
 class StreamingContext:
     """Context for streaming responses"""
+
     session_id: str
     is_active: bool = False
     abort_signal: threading.Event = field(default_factory=threading.Event)
@@ -115,19 +121,27 @@ class StreamingContext:
 class MemoryProvider(Protocol):
     """Protocol for memory storage providers"""
 
-    async def create_thread(self, thread_id: str, resource_id: str, metadata: Dict[str, Any] = None) -> None:
+    async def create_thread(
+        self, thread_id: str, resource_id: str, metadata: Dict[str, Any] = None
+    ) -> None:
         """Create a new conversation thread"""
         ...
 
-    async def save_messages(self, messages: List[UIMessage], thread_id: str = None, resource_id: str = None) -> None:
+    async def save_messages(
+        self, messages: List[UIMessage], thread_id: str = None, resource_id: str = None
+    ) -> None:
         """Save messages to memory"""
         ...
 
-    async def query_messages(self, thread_id: str, resource_id: str, limit: int = 100) -> List[UIMessage]:
+    async def query_messages(
+        self, thread_id: str, resource_id: str, limit: int = 100
+    ) -> List[UIMessage]:
         """Query messages from memory"""
         ...
 
-    async def search_similar(self, query: str, thread_id: str = None, limit: int = 10) -> List[UIMessage]:
+    async def search_similar(
+        self, query: str, thread_id: str = None, limit: int = 10
+    ) -> List[UIMessage]:
         """Search for similar messages using vector similarity"""
         ...
 
@@ -171,11 +185,15 @@ class StreamingProvider(Protocol):
 class CodeExecutionProvider(Protocol):
     """Protocol for code execution environments"""
 
-    async def create_environment(self, template: str, config: Dict[str, Any] = None) -> str:
+    async def create_environment(
+        self, template: str, config: Dict[str, Any] = None
+    ) -> str:
         """Create a new code execution environment"""
         ...
 
-    async def execute_code(self, environment_id: str, code: str, language: str = "python") -> Dict[str, Any]:
+    async def execute_code(
+        self, environment_id: str, code: str, language: str = "python"
+    ) -> Dict[str, Any]:
         """Execute code in the environment"""
         ...
 
@@ -244,8 +262,8 @@ class AIAgentOrchestrationCore(BaseCore):
             streaming_enabled=True,
             metadata={
                 "purpose": "AI-powered code generation and editing",
-                "inspired_by": "Adorable/builder.ts"
-            }
+                "inspired_by": "Adorable/builder.ts",
+            },
         )
 
         # Development Assistant Agent
@@ -259,8 +277,8 @@ class AIAgentOrchestrationCore(BaseCore):
             streaming_enabled=True,
             metadata={
                 "purpose": "General development assistance and guidance",
-                "capabilities": ["code_review", "debugging", "documentation"]
-            }
+                "capabilities": ["code_review", "debugging", "documentation"],
+            },
         )
 
         self.agents[code_builder.name] = code_builder
@@ -332,13 +350,22 @@ Be concise but thorough in your responses. Use examples when helpful."""
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "target_file": {"type": "string", "description": "File to edit"},
-                        "instructions": {"type": "string", "description": "Edit instructions"},
-                        "code_edit": {"type": "string", "description": "Code changes with context"}
+                        "target_file": {
+                            "type": "string",
+                            "description": "File to edit",
+                        },
+                        "instructions": {
+                            "type": "string",
+                            "description": "Edit instructions",
+                        },
+                        "code_edit": {
+                            "type": "string",
+                            "description": "Code changes with context",
+                        },
                     },
-                    "required": ["target_file", "instructions", "code_edit"]
+                    "required": ["target_file", "instructions", "code_edit"],
                 },
-                handler=self._handle_file_edit
+                handler=self._handle_file_edit,
             ),
             ToolDefinition(
                 name="create_file",
@@ -346,12 +373,15 @@ Be concise but thorough in your responses. Use examples when helpful."""
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "file_path": {"type": "string", "description": "Path for new file"},
-                        "content": {"type": "string", "description": "File content"}
+                        "file_path": {
+                            "type": "string",
+                            "description": "Path for new file",
+                        },
+                        "content": {"type": "string", "description": "File content"},
                     },
-                    "required": ["file_path", "content"]
+                    "required": ["file_path", "content"],
                 },
-                handler=self._handle_file_create
+                handler=self._handle_file_create,
             ),
             ToolDefinition(
                 name="run_command",
@@ -360,11 +390,14 @@ Be concise but thorough in your responses. Use examples when helpful."""
                     "type": "object",
                     "properties": {
                         "command": {"type": "string", "description": "Command to run"},
-                        "working_directory": {"type": "string", "description": "Working directory"}
+                        "working_directory": {
+                            "type": "string",
+                            "description": "Working directory",
+                        },
                     },
-                    "required": ["command"]
+                    "required": ["command"],
                 },
-                handler=self._handle_run_command
+                handler=self._handle_run_command,
             ),
             ToolDefinition(
                 name="read_file",
@@ -373,13 +406,19 @@ Be concise but thorough in your responses. Use examples when helpful."""
                     "type": "object",
                     "properties": {
                         "file_path": {"type": "string", "description": "File to read"},
-                        "start_line": {"type": "integer", "description": "Start line (optional)"},
-                        "end_line": {"type": "integer", "description": "End line (optional)"}
+                        "start_line": {
+                            "type": "integer",
+                            "description": "Start line (optional)",
+                        },
+                        "end_line": {
+                            "type": "integer",
+                            "description": "End line (optional)",
+                        },
                     },
-                    "required": ["file_path"]
+                    "required": ["file_path"],
                 },
-                handler=self._handle_read_file
-            )
+                handler=self._handle_read_file,
+            ),
         ]
 
     def _get_dev_assistant_tools(self) -> List[ToolDefinition]:
@@ -392,11 +431,14 @@ Be concise but thorough in your responses. Use examples when helpful."""
                     "type": "object",
                     "properties": {
                         "code": {"type": "string", "description": "Code to analyze"},
-                        "language": {"type": "string", "description": "Programming language"}
+                        "language": {
+                            "type": "string",
+                            "description": "Programming language",
+                        },
                     },
-                    "required": ["code", "language"]
+                    "required": ["code", "language"],
                 },
-                handler=self._handle_code_analysis
+                handler=self._handle_code_analysis,
             ),
             ToolDefinition(
                 name="search_documentation",
@@ -405,12 +447,15 @@ Be concise but thorough in your responses. Use examples when helpful."""
                     "type": "object",
                     "properties": {
                         "query": {"type": "string", "description": "Search query"},
-                        "category": {"type": "string", "description": "Documentation category"}
+                        "category": {
+                            "type": "string",
+                            "description": "Documentation category",
+                        },
                     },
-                    "required": ["query"]
+                    "required": ["query"],
                 },
-                handler=self._handle_doc_search
-            )
+                handler=self._handle_doc_search,
+            ),
         ]
 
     def _initialize_providers(self) -> None:
@@ -418,14 +463,20 @@ Be concise but thorough in your responses. Use examples when helpful."""
         # This would be configured externally in a real implementation
         pass
 
-    async def create_conversation_thread(self, resource_id: str, metadata: Dict[str, Any] = None) -> str:
+    async def create_conversation_thread(
+        self, resource_id: str, metadata: Dict[str, Any] = None
+    ) -> str:
         """Create a new conversation thread"""
         thread_id = str(uuid.uuid4())
 
         if self.memory_provider:
-            await self.memory_provider.create_thread(thread_id, resource_id, metadata or {})
+            await self.memory_provider.create_thread(
+                thread_id, resource_id, metadata or {}
+            )
 
-        logger.info(f"Created conversation thread {thread_id} for resource {resource_id}")
+        logger.info(
+            f"Created conversation thread {thread_id} for resource {resource_id}"
+        )
         return thread_id
 
     async def send_message(
@@ -434,7 +485,7 @@ Be concise but thorough in your responses. Use examples when helpful."""
         message: UIMessage,
         thread_id: str = None,
         streaming: bool = True,
-        context: CascadeContext = None
+        context: CascadeContext = None,
     ) -> Union[str, StreamingContext]:
         """Send a message to an AI agent"""
         if agent_name not in self.agents:
@@ -448,15 +499,21 @@ Be concise but thorough in your responses. Use examples when helpful."""
 
         # Save user message to memory
         if self.memory_provider and agent_config.memory_enabled:
-            await self.memory_provider.save_messages([message], thread_id, f"agent_{agent_name}")
+            await self.memory_provider.save_messages(
+                [message], thread_id, f"agent_{agent_name}"
+            )
 
         # Get conversation history
         conversation_history = []
         if self.memory_provider and agent_config.memory_enabled:
-            conversation_history = await self.memory_provider.query_messages(thread_id, f"agent_{agent_name}")
+            conversation_history = await self.memory_provider.query_messages(
+                thread_id, f"agent_{agent_name}"
+            )
 
         # Prepare messages for AI
-        messages = self._prepare_messages_for_ai(conversation_history + [message], agent_config)
+        messages = self._prepare_messages_for_ai(
+            conversation_history + [message], agent_config
+        )
 
         # Create streaming context if needed
         streaming_context = None
@@ -467,10 +524,7 @@ Be concise but thorough in your responses. Use examples when helpful."""
         # Generate response
         try:
             response = await self._generate_ai_response(
-                agent_config,
-                messages,
-                streaming_context,
-                context
+                agent_config, messages, streaming_context, context
             )
 
             # Save AI response to memory
@@ -478,9 +532,11 @@ Be concise but thorough in your responses. Use examples when helpful."""
                 ai_message = UIMessage(
                     id=str(uuid.uuid4()),
                     role="assistant",
-                    parts=[MessagePart(type="text", content=response)]
+                    parts=[MessagePart(type="text", content=response)],
                 )
-                await self.memory_provider.save_messages([ai_message], thread_id, f"agent_{agent_name}")
+                await self.memory_provider.save_messages(
+                    [ai_message], thread_id, f"agent_{agent_name}"
+                )
 
             return streaming_context if streaming_context else response
 
@@ -495,7 +551,7 @@ Be concise but thorough in your responses. Use examples when helpful."""
         agent_config: AgentConfig,
         messages: List[Dict[str, Any]],
         streaming_context: StreamingContext = None,
-        context: CascadeContext = None
+        context: CascadeContext = None,
     ) -> str:
         """Generate AI response (placeholder - would integrate with actual AI provider)"""
         # This is a placeholder implementation
@@ -507,15 +563,14 @@ Be concise but thorough in your responses. Use examples when helpful."""
         # For now, return a simple response
         return "This is a placeholder AI response. The actual implementation would integrate with AI providers like OpenAI, Anthropic, or local models."
 
-    def _prepare_messages_for_ai(self, ui_messages: List[UIMessage], agent_config: AgentConfig) -> List[Dict[str, Any]]:
+    def _prepare_messages_for_ai(
+        self, ui_messages: List[UIMessage], agent_config: AgentConfig
+    ) -> List[Dict[str, Any]]:
         """Convert UI messages to AI provider format"""
         messages = []
 
         # Add system prompt
-        messages.append({
-            "role": "system",
-            "content": agent_config.system_prompt
-        })
+        messages.append({"role": "system", "content": agent_config.system_prompt})
 
         # Convert UI messages
         for ui_msg in ui_messages:
@@ -529,28 +584,31 @@ Be concise but thorough in your responses. Use examples when helpful."""
                     content += part.content
                 # Handle other part types as needed
 
-            messages.append({
-                "role": role,
-                "content": content
-            })
+            messages.append({"role": role, "content": content})
 
         return messages
 
-    async def execute_tool(self, tool_name: str, parameters: Dict[str, Any], context: CascadeContext = None) -> Any:
+    async def execute_tool(
+        self, tool_name: str, parameters: Dict[str, Any], context: CascadeContext = None
+    ) -> Any:
         """Execute a tool"""
         if not self.tool_provider:
             raise ValueError("No tool provider configured")
 
         return await self.tool_provider.execute_tool(tool_name, parameters)
 
-    async def create_development_environment(self, template: str, config: Dict[str, Any] = None) -> str:
+    async def create_development_environment(
+        self, template: str, config: Dict[str, Any] = None
+    ) -> str:
         """Create a development environment"""
         if not self.code_provider:
             raise ValueError("No code execution provider configured")
 
         return await self.code_provider.create_environment(template, config or {})
 
-    async def execute_code_in_environment(self, environment_id: str, code: str, language: str = "python") -> Dict[str, Any]:
+    async def execute_code_in_environment(
+        self, environment_id: str, code: str, language: str = "python"
+    ) -> Dict[str, Any]:
         """Execute code in a development environment"""
         if not self.code_provider:
             raise ValueError("No code execution provider configured")
@@ -570,14 +628,18 @@ Be concise but thorough in your responses. Use examples when helpful."""
         """List available agents"""
         return list(self.agents.keys())
 
-    async def get_conversation_history(self, thread_id: str, resource_id: str, limit: int = 100) -> List[UIMessage]:
+    async def get_conversation_history(
+        self, thread_id: str, resource_id: str, limit: int = 100
+    ) -> List[UIMessage]:
         """Get conversation history"""
         if not self.memory_provider:
             return []
 
         return await self.memory_provider.query_messages(thread_id, resource_id, limit)
 
-    async def search_conversations(self, query: str, thread_id: str = None, limit: int = 10) -> List[UIMessage]:
+    async def search_conversations(
+        self, query: str, thread_id: str = None, limit: int = 10
+    ) -> List[UIMessage]:
         """Search conversations using semantic similarity"""
         if not self.memory_provider:
             return []
@@ -593,12 +655,18 @@ Be concise but thorough in your responses. Use examples when helpful."""
     async def _handle_file_create(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """Handle file creation tool"""
         # Placeholder implementation
-        return {"status": "success", "message": "File creation tool not yet implemented"}
+        return {
+            "status": "success",
+            "message": "File creation tool not yet implemented",
+        }
 
     async def _handle_run_command(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """Handle command execution tool"""
         # Placeholder implementation
-        return {"status": "success", "message": "Command execution tool not yet implemented"}
+        return {
+            "status": "success",
+            "message": "Command execution tool not yet implemented",
+        }
 
     async def _handle_read_file(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """Handle file reading tool"""
@@ -608,12 +676,18 @@ Be concise but thorough in your responses. Use examples when helpful."""
     async def _handle_code_analysis(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """Handle code analysis tool"""
         # Placeholder implementation
-        return {"status": "success", "message": "Code analysis tool not yet implemented"}
+        return {
+            "status": "success",
+            "message": "Code analysis tool not yet implemented",
+        }
 
     async def _handle_doc_search(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """Handle documentation search tool"""
         # Placeholder implementation
-        return {"status": "success", "message": "Documentation search tool not yet implemented"}
+        return {
+            "status": "success",
+            "message": "Documentation search tool not yet implemented",
+        }
 
     # Provider setters
     def set_memory_provider(self, provider: MemoryProvider) -> None:
@@ -671,9 +745,9 @@ Be concise but thorough in your responses. Use examples when helpful."""
                 "memory": self.memory_provider is not None,
                 "tool": self.tool_provider is not None,
                 "streaming": self.streaming_provider is not None,
-                "code": self.code_provider is not None
+                "code": self.code_provider is not None,
             },
-            "active_streams": len(self.streaming_contexts)
+            "active_streams": len(self.streaming_contexts),
         }
 
     async def get_metrics(self, context: CascadeContext = None) -> Dict[str, Any]:
@@ -683,10 +757,12 @@ Be concise but thorough in your responses. Use examples when helpful."""
             "conversations": 0,  # Would track actual conversation count
             "tools_executed": 0,  # Would track tool execution count
             "environments_created": 0,  # Would track environment creation count
-            "uptime": 0  # Would track uptime
+            "uptime": 0,  # Would track uptime
         }
 
-    async def process_task(self, task_data: Dict[str, Any], context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    async def process_task(
+        self, task_data: Dict[str, Any], context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """Process a task through the orchestration core"""
         task_type = task_data.get("type", "unknown")
 
@@ -698,10 +774,12 @@ Be concise but thorough in your responses. Use examples when helpful."""
             message = UIMessage(
                 id=str(uuid.uuid4()),
                 role="user",
-                parts=[MessagePart(type="text", content=message_content)]
+                parts=[MessagePart(type="text", content=message_content)],
             )
 
-            response = await self.send_message(agent_name, message, thread_id, context=context)
+            response = await self.send_message(
+                agent_name, message, thread_id, context=context
+            )
             return {"response": response, "thread_id": thread_id}
 
         elif task_type == "create_environment":

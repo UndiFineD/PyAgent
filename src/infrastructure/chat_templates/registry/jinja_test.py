@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_jinjatemplate_exists():
     """Test that JinjaTemplate class exists and is importable."""
-    assert 'JinjaTemplate' in dir()
+    assert "JinjaTemplate" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

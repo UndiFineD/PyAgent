@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_conversationhistory_exists():
     """Test that ConversationHistory class exists and is importable."""
-    assert 'ConversationHistory' in dir()
+    assert "ConversationHistory" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

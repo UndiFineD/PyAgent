@@ -16,5 +16,6 @@ def test_imports_and_symbols():
     assert hasattr(mod, "GrammarCompiler"), "GrammarCompiler missing"
     assert hasattr(mod, "StructuredOutputManager"), "StructuredOutputManager missing"
     assert hasattr(mod, "compile_grammar"), "compile_grammar missing"
-    assert hasattr(mod, "validate_structured_output_params"), "validate_structured_output_params missing"
-
+    assert hasattr(
+        mod, "validate_structured_output_params"
+    ), "validate_structured_output_params missing"

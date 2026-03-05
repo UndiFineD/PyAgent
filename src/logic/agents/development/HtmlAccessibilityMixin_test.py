@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_htmlaccessibilitymixin_exists():
     """Test that HtmlAccessibilityMixin class exists and is importable."""
-    assert 'HtmlAccessibilityMixin' in dir()
+    assert "HtmlAccessibilityMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

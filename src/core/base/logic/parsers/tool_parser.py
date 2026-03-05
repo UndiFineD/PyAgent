@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -254,7 +255,7 @@ class JSONToolParser(ToolParser):
                     json_partial + "]",
                     json_partial + "}}]",
                 ]
-                
+
                 def try_attempts(att_list):
                     if not att_list:
                         return None
@@ -262,7 +263,7 @@ class JSONToolParser(ToolParser):
                         return json.loads(att_list[0])
                     except json.JSONDecodeError:
                         return try_attempts(att_list[1:])
-                
+
                 parsed = try_attempts(attempts)
 
                 if parsed is None:
@@ -277,7 +278,9 @@ class JSONToolParser(ToolParser):
                         arguments_delta=json.dumps(current_call.get("arguments", {})),
                         is_complete=self.tool_call_end in current_text,
                     )
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             pass
 
         return None
@@ -329,8 +332,12 @@ class XMLToolParser(ToolParser):
                 id=f"call_{idx}",
             )
 
-            next_calls, next_contents = process_matches(curr_matches[1:], match.end(), idx + 1)
-            return [call] + next_calls, ([pre_content] if pre_content else []) + next_contents
+            next_calls, next_contents = process_matches(
+                curr_matches[1:], match.end(), idx + 1
+            )
+            return [call] + next_calls, (
+                [pre_content] if pre_content else []
+            ) + next_contents
 
         tool_calls, content_parts = process_matches(matches, 0, 0)
         content = "".join(content_parts).strip() or None
@@ -362,7 +369,9 @@ class XMLToolParser(ToolParser):
             # We're inside an incomplete tool call
             # Extract partial name/arguments
             name_match = re.search(r"<name>(.*?)(?:</name>|$)", current_text, re.DOTALL)
-            args_match = re.search(r"<arguments>(.*?)(?:</arguments>|$)", current_text, re.DOTALL)
+            args_match = re.search(
+                r"<arguments>(.*?)(?:</arguments>|$)", current_text, re.DOTALL
+            )
 
             return StreamingToolCallDelta(
                 tool_call_index=open_count - 1,
@@ -450,7 +459,9 @@ class ToolParserManager:
                     raise TypeError(f"{class_name} is not a ToolParser subclass")
                 cls._parsers[name] = parser_cls  # Cache it
                 return parser_cls
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 raise ImportError(f"Failed to load parser '{name}': {e}") from e
 
         raise KeyError(f"Tool parser '{name}' not found")

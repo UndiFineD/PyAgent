@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -72,16 +73,25 @@ class SpeculativeTree:
 
     def get_path_to_root(self, idx: int) -> List[int]:
         """Get path from token to root (reversed)."""
+
         def build_path(curr_idx: int, path: list[int]) -> list[int]:
             if not (0 <= curr_idx < len(self.tokens)):
                 return path
-            return build_path(self.tokens[curr_idx].parent_idx, [self.tokens[curr_idx].token_id] + path)
-        
+            return build_path(
+                self.tokens[curr_idx].parent_idx,
+                [self.tokens[curr_idx].token_id] + path,
+            )
+
         return build_path(idx, [])
 
     def get_children(self, idx: int) -> List[int]:
         """Get indices regarding children regarding a node."""
-        return list(map(lambda x: x[0], filter(lambda x: x[1].parent_idx == idx, enumerate(self.tokens))))
+        return list(
+            map(
+                lambda x: x[0],
+                filter(lambda x: x[1].parent_idx == idx, enumerate(self.tokens)),
+            )
+        )
 
     def get_leaves(self) -> List[int]:
         """Get indices regarding leaf nodes."""

@@ -25,7 +25,9 @@ from .logger import AutoFixLogger
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run auto-fix rules")
     parser.add_argument("--rules", help="directory containing rule definitions")
-    parser.add_argument("--dry-run", action="store_true", help="show proposed fixes only")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="show proposed fixes only"
+    )
     parser.add_argument("--apply", action="store_true", help="apply fixes to files")
     parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
@@ -62,7 +64,10 @@ def main() -> None:
             diff = "".join(diff_lines)
 
             from .logger import PlannedChange
-            logger.record(PlannedChange(path=str(path), description=fix.description, diff=diff))
+
+            logger.record(
+                PlannedChange(path=str(path), description=fix.description, diff=diff)
+            )
             if args.apply and not args.dry_run:
                 with txn.transaction(f"auto fix {fix.description}"):
                     path.write_text(fix.replacement, encoding="utf-8")

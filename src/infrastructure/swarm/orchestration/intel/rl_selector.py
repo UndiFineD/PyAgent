@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -53,7 +54,9 @@ class RLSelector:
             stats["beta"] += 1.0
 
         weight = stats["alpha"] / (stats["alpha"] + stats["beta"])
-        logging.info(f"RL-SELECTOR: Updated Bayesian posterior for {tool_name} (Expected Success: {weight:.2f})")
+        logging.info(
+            f"RL-SELECTOR: Updated Bayesian posterior for {tool_name} (Expected Success: {weight:.2f})"
+        )
 
     def select_best_tool(self, candidate_tools: list[str]) -> str:
         """
@@ -78,7 +81,9 @@ class RLSelector:
                 max_sample = sample
                 best_tool = tool
 
-        logging.info(f"RL-SELECTOR: Thompson Sampling selected '{best_tool}' (Sample value: {max_sample:.2f})")
+        logging.info(
+            f"RL-SELECTOR: Thompson Sampling selected '{best_tool}' (Sample value: {max_sample:.2f})"
+        )
 
         return best_tool
 
@@ -88,7 +93,9 @@ class RLSelector:
 
         for tool, stats in self.tool_stats.items():
             expected = stats["alpha"] / (stats["alpha"] + stats["beta"])
-            summary.append(f"- **{tool}**: Expected Success Rate {expected * 100:.1f}% ({stats['total_calls']} calls)")
+            summary.append(
+                f"- **{tool}**: Expected Success Rate {expected * 100:.1f}% ({stats['total_calls']} calls)"
+            )
         return "\n".join(summary) if len(summary) > 1 else "No policy data yet."
 
 

@@ -1,4 +1,3 @@
-
 """
 Core logic for Quantum-Ready Reasoning (Phase 177).
 Mathematical models for "Superposition Prompting" (Theoretical).
@@ -7,16 +6,19 @@ Mathematical models for "Superposition Prompting" (Theoretical).
 import math
 from typing import List, Dict
 
+
 class QuantumCore:
     @staticmethod
-    def calculate_superposition_weights(prompts: list[str], constraints: dict[str, float]) -> list[float]:
+    def calculate_superposition_weights(
+        prompts: list[str], constraints: dict[str, float]
+    ) -> list[float]:
         r"""
         Calculates weights for multiple prompts being processed in "superposition".
         $W_i = \frac{e^{C_i}}{\sum e^{C_j}}$ where $C$ is the constraint score.
         """
         if not prompts:
             return []
-            
+
         scores = []
         for p in prompts:
             # Simple heuristic: longer prompts with specific keywords get higher weight
@@ -26,7 +28,7 @@ class QuantumCore:
             if "efficiency" in p.lower():
                 score += 0.3
             scores.append(score)
-            
+
         # Softmax normalization
         exp_scores = [math.exp(s) for s in scores]
         total = sum(exp_scores)

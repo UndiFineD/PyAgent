@@ -21,4 +21,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "StagedWriteTensor"), "StagedWriteTensor missing"
     assert hasattr(mod, "create_staged_tensor"), "create_staged_tensor missing"
     assert hasattr(mod, "coalesce_write_indices"), "coalesce_write_indices missing"
-

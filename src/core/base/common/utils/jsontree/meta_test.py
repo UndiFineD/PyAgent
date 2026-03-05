@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "json_filter_leaves"), "json_filter_leaves missing"
     assert hasattr(mod, "json_validate_leaves"), "json_validate_leaves missing"
     assert hasattr(mod, "json_find_leaves"), "json_find_leaves missing"
-

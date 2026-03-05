@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -9,10 +10,13 @@ from src.core.base.models import AgentPriority
 if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
 
+
 class FleetTaskMixin:
     """Mixin for task execution, preemption, and consensus management in FleetManager."""
 
-    def preempt_lower_priority_tasks(self: FleetManager, new_priority: AgentPriority) -> None:
+    def preempt_lower_priority_tasks(
+        self: FleetManager, new_priority: AgentPriority
+    ) -> None:
         """Suspends all tasks with lower priority than the new high-priority task."""
         for tid, data in self.active_tasks.items():
             if data["priority"].value > new_priority.value:
@@ -42,11 +46,15 @@ class FleetTaskMixin:
         """Executes a task using the 7-phase inner loop and linguistic articulation."""
         return await self.execution_core.execute_reliable_task(task, priority=priority)
 
-    async def _record_success(self: FleetManager, res_or_prompt: Any, *args: Any, **kwargs: Any) -> None:
+    async def _record_success(
+        self: FleetManager, res_or_prompt: Any, *args: Any, **kwargs: Any
+    ) -> None:
         """Records the success of a workflow step (Delegated)."""
         await self.interaction_recorder.record_success(res_or_prompt, *args, **kwargs)
 
-    async def _record_failure(self: FleetManager, prompt: str, error: str, model: str) -> None:
+    async def _record_failure(
+        self: FleetManager, prompt: str, error: str, model: str
+    ) -> None:
         """Records errors, failures, and mistakes (Delegated)."""
         await self.interaction_recorder.record_failure(prompt, error, model)
 

@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ConstantDict"), "ConstantDict missing"
     assert hasattr(mod, "FrozenDict"), "FrozenDict missing"
     assert hasattr(mod, "as_constant"), "as_constant missing"
-

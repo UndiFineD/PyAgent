@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_censysresult_exists():
     """Test that CensysResult class exists and is importable."""
-    assert 'CensysResult' in dir()
+    assert "CensysResult" in dir()
 
 
 def test_censysintelligence_exists():
     """Test that CensysIntelligence class exists and is importable."""
-    assert 'CensysIntelligence' in dir()
+    assert "CensysIntelligence" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

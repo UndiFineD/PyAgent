@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,9 +26,10 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
 class BrowsingAgent(BaseAgent):
     """Interacts with the web to retrieve documentation, search for solutions, and extract data."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (

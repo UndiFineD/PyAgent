@@ -59,7 +59,9 @@ class StatsAPIServer:
         self.endpoints[path] = ep
         return ep
 
-    def handle_request(self, path: str, method: str = "GET", params: dict[str, Any] | None = None) -> dict[str, Any]:
+    def handle_request(
+        self, path: str, method: str = "GET", params: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
         endpoint = self.endpoints.get(path)
         if not endpoint or endpoint.method != method:
             return {"error": "Not Found", "status": 404}

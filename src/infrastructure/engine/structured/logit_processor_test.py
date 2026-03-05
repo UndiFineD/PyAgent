@@ -16,14 +16,21 @@ def test_imports_and_symbols():
     assert hasattr(mod, "LogitBias"), "LogitBias missing"
     assert hasattr(mod, "ProcessorStats"), "ProcessorStats missing"
     assert hasattr(mod, "LogitProcessor"), "LogitProcessor missing"
-    assert hasattr(mod, "ConstrainedLogitProcessor"), "ConstrainedLogitProcessor missing"
+    assert hasattr(
+        mod, "ConstrainedLogitProcessor"
+    ), "ConstrainedLogitProcessor missing"
     assert hasattr(mod, "BitmaskLogitProcessor"), "BitmaskLogitProcessor missing"
     assert hasattr(mod, "BiasLogitProcessor"), "BiasLogitProcessor missing"
     assert hasattr(mod, "CompositeLogitProcessor"), "CompositeLogitProcessor missing"
     assert hasattr(mod, "TemperatureProcessor"), "TemperatureProcessor missing"
     assert hasattr(mod, "TopKProcessor"), "TopKProcessor missing"
     assert hasattr(mod, "TopPProcessor"), "TopPProcessor missing"
-    assert hasattr(mod, "RepetitionPenaltyProcessor"), "RepetitionPenaltyProcessor missing"
-    assert hasattr(mod, "create_standard_processor_chain"), "create_standard_processor_chain missing"
-    assert hasattr(mod, "apply_constraints_to_logits"), "apply_constraints_to_logits missing"
-
+    assert hasattr(
+        mod, "RepetitionPenaltyProcessor"
+    ), "RepetitionPenaltyProcessor missing"
+    assert hasattr(
+        mod, "create_standard_processor_chain"
+    ), "create_standard_processor_chain missing"
+    assert hasattr(
+        mod, "apply_constraints_to_logits"
+    ), "apply_constraints_to_logits missing"

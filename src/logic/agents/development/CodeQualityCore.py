@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +19,7 @@ from typing import Dict, List, Any
 
 __version__ = VERSION
 
+
 class CodeQualityCore:
     """
     Pure logic for code quality analysis.
@@ -36,11 +38,13 @@ class CodeQualityCore:
         lines = source.splitlines()
         for i, line in enumerate(lines, 1):
             if len(line) > 120:
-                issues.append({
-                    "line": i, 
-                    "type": "Style", 
-                    "message": "Line too long (>120 chars)"
-                })
+                issues.append(
+                    {
+                        "line": i,
+                        "type": "Style",
+                        "message": "Line too long (>120 chars)",
+                    }
+                )
         return issues
 
     @staticmethod
@@ -48,11 +52,26 @@ class CodeQualityCore:
         """Analyzes Rust source for common patterns/issues."""
         issues = []
         if not source or len(source.strip()) < 5:
-            issues.append({"type": "Suggestion", "message": "clippy: source too sparse for deep analysis."})
+            issues.append(
+                {
+                    "type": "Suggestion",
+                    "message": "clippy: source too sparse for deep analysis.",
+                }
+            )
         if "unwrap()" in source:
-            issues.append({"type": "Safety", "message": "Avoid '.unwrap()', use proper error handling or '.expect()'."})
+            issues.append(
+                {
+                    "type": "Safety",
+                    "message": "Avoid '.unwrap()', use proper error handling or '.expect()'.",
+                }
+            )
         if "match" in source and source.count("=>") == 1:
-            issues.append({"type": "Suggestion", "message": "Consider using 'if let' instead of 'match' for single pattern."})
+            issues.append(
+                {
+                    "type": "Suggestion",
+                    "message": "Consider using 'if let' instead of 'match' for single pattern.",
+                }
+            )
         return issues
 
     @staticmethod
@@ -60,8 +79,19 @@ class CodeQualityCore:
         """Analyzes JavaScript source for common patterns/issues."""
         issues = []
         import re
+
         if re.search(r"\bvar\s+", source):
-            issues.append({"type": "Insecure", "message": "Avoid using 'var', use 'let' or 'const' instead."})
+            issues.append(
+                {
+                    "type": "Insecure",
+                    "message": "Avoid using 'var', use 'let' or 'const' instead.",
+                }
+            )
         if "==" in source and "===" not in source:
-            issues.append({"type": "Style", "message": "Use '===' instead of '==' for strict equality check."})
+            issues.append(
+                {
+                    "type": "Style",
+                    "message": "Use '===' instead of '==' for strict equality check.",
+                }
+            )
         return issues

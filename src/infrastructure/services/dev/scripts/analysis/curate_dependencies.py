@@ -57,9 +57,14 @@ def curate_dependencies() -> None:
                     if match:
                         module = match.group(1).lower()
                         # Ignore internal imports
-                        if not (src_dir / module).exists() and not (src_dir / (module + ".py")).exists():
+                        if (
+                            not (src_dir / module).exists()
+                            and not (src_dir / (module + ".py")).exists()
+                        ):
                             imported_modules.add(module)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             print(f"Error reading {py_file}: {e}")
 
     # 2. Read requirements files
@@ -67,7 +72,7 @@ def curate_dependencies() -> None:
     req_path = workspace_root / "requirements"
     if req_path.exists():
         for req_file in req_path.glob("*.txt"):
-            with open(req_file, 'r', encoding='utf-8') as f:
+            with open(req_file, "r", encoding="utf-8") as f:
                 for line in f:
                     match = re.match(r"^([a-zA-Z0-9_\-]+)", line.strip())
                     if match:
@@ -77,7 +82,9 @@ def curate_dependencies() -> None:
     req_modules = set()
     for rm in req_modules_raw:
         normalized = rm.replace("-", "_")
-        mapped = PACKAGE_TO_IMPORT_MAP.get(rm, PACKAGE_TO_IMPORT_MAP.get(normalized, normalized)).lower()
+        mapped = PACKAGE_TO_IMPORT_MAP.get(
+            rm, PACKAGE_TO_IMPORT_MAP.get(normalized, normalized)
+        ).lower()
         req_modules.add(mapped)
 
     # 3. Intersection and delta
@@ -89,7 +96,9 @@ def curate_dependencies() -> None:
     for rm in req_modules_raw:
         normalized = rm.replace("-", "_")
 
-        mapped = PACKAGE_TO_IMPORT_MAP.get(rm, PACKAGE_TO_IMPORT_MAP.get(normalized, normalized)).lower()
+        mapped = PACKAGE_TO_IMPORT_MAP.get(
+            rm, PACKAGE_TO_IMPORT_MAP.get(normalized, normalized)
+        ).lower()
         if mapped in unused_normalized:
             unused_raw.append(rm)
 

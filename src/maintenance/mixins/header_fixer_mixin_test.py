@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_headerfixermixin_exists():
     """Test that HeaderFixerMixin class exists and is importable."""
-    assert 'HeaderFixerMixin' in dir()
+    assert "HeaderFixerMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

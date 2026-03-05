@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,6 +29,7 @@ from typing import Any, Optional
 
 __version__ = VERSION
 
+
 class BackendHandlers:
     """Namespace for backend execution logic."""
 
@@ -41,7 +43,7 @@ class BackendHandlers:
         pattern = r"\[IMAGE_DATA:([^\]\s]+)\]"
         last_idx = 0
         for match in re.finditer(pattern, text):
-            pre_text = text[last_idx:match.start()].strip()
+            pre_text = text[last_idx : match.start()].strip()
             if pre_text:
                 parts.append({"type": "text", "text": pre_text})
 
@@ -49,10 +51,7 @@ class BackendHandlers:
             if not image_data.startswith("data:image"):
                 image_data = f"data:image/png;base64,{image_data}"
 
-            parts.append({
-                "type": "image_url",
-                "image_url": {"url": image_data}
-            })
+            parts.append({"type": "image_url", "image_url": {"url": image_data}})
             last_idx = match.end()
 
         remaining = text[last_idx:].strip()
@@ -65,7 +64,9 @@ class BackendHandlers:
     def build_full_prompt(description: str, prompt: str, original_content: str) -> str:
         """Constructs the full prompt for backends."""
         try:
-            max_context_chars = int(os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000"))
+            max_context_chars = int(
+                os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000")
+            )
         except ValueError:
             max_context_chars = 12_000
         trimmed_original = (original_content or "")[:max_context_chars]
@@ -77,22 +78,42 @@ class BackendHandlers:
         ).strip()
 
     @staticmethod
-    async def try_codex_cli(full_prompt: str, repo_root: Path, recorder=None) -> str | None:
+    async def try_codex_cli(
+        full_prompt: str, repo_root: Path, recorder=None
+    ) -> str | None:
         """Attempts to use the Codex CLI backend, with robust error handling and recording."""
         try:
             logging.debug("Attempting to use Codex CLI backend")
             process = await asyncio.create_subprocess_exec(
-                'codex', '--prompt', full_prompt, '--no-color', '--log-level', 'error', 
-                '--add-dir', str(repo_root), '--allow-all-tools', '--disable-parallel-tools-execution', 
-                '--deny-tool', 'write', '--deny-tool', 'shell', '--silent', '--stream', 'off',
-                stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=str(repo_root)
+                "codex",
+                "--prompt",
+                full_prompt,
+                "--no-color",
+                "--log-level",
+                "error",
+                "--add-dir",
+                str(repo_root),
+                "--allow-all-tools",
+                "--disable-parallel-tools-execution",
+                "--deny-tool",
+                "write",
+                "--deny-tool",
+                "shell",
+                "--silent",
+                "--stream",
+                "off",
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                cwd=str(repo_root),
             )
             try:
-                stdout, stderr = await asyncio.wait_for(process.communicate(), timeout=180)
+                stdout, stderr = await asyncio.wait_for(
+                    process.communicate(), timeout=180
+                )
             except asyncio.TimeoutError:
                 process.kill()
                 raise
-            stdout = stdout.decode('utf-8', errors='replace').strip()
+            stdout = stdout.decode("utf-8", errors="replace").strip()
             returncode = process.returncode
             # Phase 108: Recording
             if recorder:
@@ -103,7 +124,7 @@ class BackendHandlers:
                 logging.info("Codex CLI backend succeeded")
                 return stdout
             if returncode != 0:
-                stderr_msg = stderr.decode('utf-8', errors='replace') if stderr else ""
+                stderr_msg = stderr.decode("utf-8", errors="replace") if stderr else ""
                 logging.debug(f"Codex CLI failed (code {returncode}): {stderr_msg}")
         except asyncio.TimeoutError:
             logging.warning("Codex CLI timed out")
@@ -117,15 +138,19 @@ class BackendHandlers:
         try:
             logging.debug("Attempting to use local Copilot CLI backend")
             process = await asyncio.create_subprocess_exec(
-                'copilot', 'explain', full_prompt,
-                stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=str(repo_root)
+                "copilot",
+                "explain",
+                full_prompt,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                cwd=str(repo_root),
             )
             try:
                 stdout, _ = await asyncio.wait_for(process.communicate(), timeout=60)
             except asyncio.TimeoutError:
                 process.kill()
                 raise
-            stdout = stdout.decode('utf-8', errors='replace').strip()
+            stdout = stdout.decode("utf-8", errors="replace").strip()
             if process.returncode == 0 and stdout:
                 logging.info("Copilot CLI backend succeeded")
                 return stdout
@@ -134,14 +159,16 @@ class BackendHandlers:
         return None
 
     @staticmethod
-    async def try_gh_copilot(full_prompt: str, repo_root: Path, allow_non_command: bool = False) -> str | None:
+    async def try_gh_copilot(
+        full_prompt: str, repo_root: Path, allow_non_command: bool = False
+    ) -> str | None:
         """Attempts to use the gh copilot alias backend for code explanation.
-        
+
         Args:
             full_prompt: The prompt to send to gh copilot.
             repo_root: The root directory of the repository.
             allow_non_command: Whether to allow non-command prompts (unused optimization flag).
-            
+
         Returns:
             The response from gh copilot, or None if the call fails.
         """
@@ -156,8 +183,13 @@ class BackendHandlers:
             # Note: gh copilot requires interactive session or specific config for shell completion
             # We attempt it as a subprocess call
             process = await asyncio.create_subprocess_exec(
-                'gh', 'copilot', 'explain', full_prompt,
-                stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=str(repo_root)
+                "gh",
+                "copilot",
+                "explain",
+                full_prompt,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                cwd=str(repo_root),
             )
             try:
                 stdout, _ = await asyncio.wait_for(process.communicate(), timeout=60)
@@ -165,7 +197,7 @@ class BackendHandlers:
                 process.kill()
                 raise
             if process.returncode == 0 and stdout:
-                return stdout.decode('utf-8', errors='replace').strip()
+                return stdout.decode("utf-8", errors="replace").strip()
         except Exception as e:
             logging.debug(f"gh copilot failed: {e}")
         return None
@@ -173,11 +205,11 @@ class BackendHandlers:
     @staticmethod
     def try_github_models(full_prompt: str, requests_lib: Any) -> str | None:
         """Attempts to use the GitHub Models API backend for code generation.
-        
+
         Args:
             full_prompt: The prompt to send to the GitHub Models API.
             requests_lib: The requests library instance for making HTTP calls.
-            
+
         Returns:
             The response from GitHub Models, or None if the call fails or token is not found.
         """
@@ -185,12 +217,17 @@ class BackendHandlers:
             return None
 
         base_url = (
-            os.environ.get("GITHUB_MODELS_BASE_URL") 
-            or "https://models.inference.ai.azure.com").strip().rstrip("/"
+            (
+                os.environ.get("GITHUB_MODELS_BASE_URL")
+                or "https://models.inference.ai.azure.com"
+            )
+            .strip()
+            .rstrip("/")
         )
         model = (
-            os.environ.get("DV_AGENT_MODEL") 
-            or os.environ.get("GITHUB_MODELS_MODEL") or "gpt-4o-mini"
+            os.environ.get("DV_AGENT_MODEL")
+            or os.environ.get("GITHUB_MODELS_MODEL")
+            or "gpt-4o-mini"
         ) or ""
         model = model if isinstance(model, str) else ""
         model = model.strip()
@@ -200,7 +237,7 @@ class BackendHandlers:
             search_paths = [
                 os.environ.get("DV_GITHUB_TOKEN_FILE"),
                 r"C:\DEV\github-gat.txt",
-                "github-token.txt"
+                "github-token.txt",
             ]
             for path_str in search_paths:
                 if not path_str:
@@ -208,7 +245,7 @@ class BackendHandlers:
                 path = Path(path_str)
                 if path.exists():
                     try:
-                        token = path.read_text(encoding='utf-8').strip()
+                        token = path.read_text(encoding="utf-8").strip()
                         if token:
                             break
                     except Exception:
@@ -223,19 +260,24 @@ class BackendHandlers:
             content = BackendHandlers._parse_content(full_prompt)
             headers = {
                 "Authorization": f"Bearer {token}",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             }
             payload = {
                 "messages": [
-                    {"role": "system", "content": "You are a helpful coding assistant."},
-                    {"role": "user", "content": content}
+                    {
+                        "role": "system",
+                        "content": "You are a helpful coding assistant.",
+                    },
+                    {"role": "user", "content": content},
                 ],
                 "model": model,
                 "temperature": 0.1,
-                "max_tokens": 4096
+                "max_tokens": 4096,
             }
             url = f"{base_url}/v1/chat/completions"
-            response = requests_lib.post(url, headers=headers, data=json.dumps(payload), timeout=120)
+            response = requests_lib.post(
+                url, headers=headers, data=json.dumps(payload), timeout=120
+            )
             response.raise_for_status()
             data = response.json()
             return data["choices"][0]["message"]["content"].strip()
@@ -247,11 +289,11 @@ class BackendHandlers:
     @staticmethod
     def try_openai_api(full_prompt: str, requests_lib: Any) -> str | None:
         """Attempts to use the OpenAI API backend for code generation.
-        
+
         Args:
             full_prompt: The prompt to send to the OpenAI API.
             requests_lib: The requests library instance for making HTTP calls.
-            
+
         Returns:
             The response from OpenAI, or None if the call fails or API key is not found.
         """
@@ -270,17 +312,22 @@ class BackendHandlers:
             content = BackendHandlers._parse_content(full_prompt)
             headers = {
                 "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             }
             payload = {
                 "model": model,
                 "messages": [
                     {"role": "system", "content": "You are a helpful assistant."},
-                    {"role": "user", "content": content}
+                    {"role": "user", "content": content},
                 ],
-                "temperature": 0
+                "temperature": 0,
             }
-            response = requests_lib.post(f"{base_url}/chat/completions", headers=headers, json=payload, timeout=60)
+            response = requests_lib.post(
+                f"{base_url}/chat/completions",
+                headers=headers,
+                json=payload,
+                timeout=60,
+            )
             response.raise_for_status()
             data = response.json()
             return data["choices"][0]["message"]["content"].strip()

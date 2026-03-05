@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -58,6 +59,7 @@ class CompletionRenderer(PromptRenderer):
 
         if config.normalize_unicode:
             import unicodedata
+
             text = unicodedata.normalize("NFC", text)
 
         tokens = self._tokenize(text, config.add_special_tokens)
@@ -95,9 +97,9 @@ class ChatRenderer(PromptRenderer):
         """Render chat prompt."""
         if config.messages is None:
             # Fallback to completion rendering
-            return CompletionRenderer(
-                self.tokenizer, self.max_model_tokens
-            ).render(config)
+            return CompletionRenderer(self.tokenizer, self.max_model_tokens).render(
+                config
+            )
 
         # Apply chat template
         text = self._apply_template(
@@ -138,7 +140,10 @@ class ChatRenderer(PromptRenderer):
         """Apply Jinja2 chat template."""
         # Try Rust acceleration first
         from .utils import _try_rust_render_template
-        rust_rendered = _try_rust_render_template(template, messages, add_generation_prompt)
+
+        rust_rendered = _try_rust_render_template(
+            template, messages, add_generation_prompt
+        )
         if rust_rendered:
             return rust_rendered
 
@@ -179,9 +184,10 @@ class ChatRenderer(PromptRenderer):
     ) -> Optional[List[int]]:
         """Find image placeholder positions in text."""
         patterns = ["<image>", "[IMAGE]", "<|image|>", "{{IMAGE}}"]
-        
+
         # Try Rust acceleration
         from .utils import _try_rust_find_placeholders
+
         rust_positions = _try_rust_find_placeholders(text, patterns)
         if rust_positions:
             return rust_positions

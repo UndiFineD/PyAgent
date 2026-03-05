@@ -33,47 +33,47 @@ except ImportError as e:
 
 def test_weightformat_exists():
     """Test that WeightFormat class exists and is importable."""
-    assert 'WeightFormat' in dir()
+    assert "WeightFormat" in dir()
 
 
 def test_weightspec_exists():
     """Test that WeightSpec class exists and is importable."""
-    assert 'WeightSpec' in dir()
+    assert "WeightSpec" in dir()
 
 
 def test_loadstats_exists():
     """Test that LoadStats class exists and is importable."""
-    assert 'LoadStats' in dir()
+    assert "LoadStats" in dir()
 
 
 def test_atomicwriter_exists():
     """Test that AtomicWriter class exists and is importable."""
-    assert 'AtomicWriter' in dir()
+    assert "AtomicWriter" in dir()
 
 
 def test_weightloader_exists():
     """Test that WeightLoader class exists and is importable."""
-    assert 'WeightLoader' in dir()
+    assert "WeightLoader" in dir()
 
 
 def test_safetensorsloader_exists():
     """Test that SafetensorsLoader class exists and is importable."""
-    assert 'SafetensorsLoader' in dir()
+    assert "SafetensorsLoader" in dir()
 
 
 def test_multithreadweightloader_exists():
     """Test that MultiThreadWeightLoader class exists and is importable."""
-    assert 'MultiThreadWeightLoader' in dir()
+    assert "MultiThreadWeightLoader" in dir()
 
 
 def test_fastsafetensorsloader_exists():
     """Test that FastSafetensorsLoader class exists and is importable."""
-    assert 'FastSafetensorsLoader' in dir()
+    assert "FastSafetensorsLoader" in dir()
 
 
 def test_streamingweightloader_exists():
     """Test that StreamingWeightLoader class exists and is importable."""
-    assert 'StreamingWeightLoader' in dir()
+    assert "StreamingWeightLoader" in dir()
 
 
 def test_atomic_writer_exists():
@@ -109,4 +109,3 @@ def test_filter_shared_tensors_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

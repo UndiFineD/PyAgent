@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_qualitygateagent_exists():
     """Test that QualityGateAgent class exists and is importable."""
-    assert 'QualityGateAgent' in dir()
+    assert "QualityGateAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

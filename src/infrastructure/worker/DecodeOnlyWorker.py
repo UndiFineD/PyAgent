@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
@@ -50,9 +51,9 @@ if TYPE_CHECKING:
 class DecodeOnlyWorker:
     """
     Worker specialized in the decode stage.
-    
+
     This worker assumes the prefill (initial prompt processing) has been done elsewhere.
-    It pulls the necessary KV cache blocks on-demand or ahead-of-time from the 
+    It pulls the necessary KV cache blocks on-demand or ahead-of-time from the
     distributed pool (e.g., Mooncake) and proceeds with generation.
     """
 
@@ -67,24 +68,24 @@ class DecodeOnlyWorker:
         self.model_config = model_config
         self.parallel_config = parallel_config
         self.kv_transfer_config = kv_transfer_config
-        
+
         # Ensure role is set to CONSUMER
         self.kv_transfer_config.kv_role = KVConnectorRole.CONSUMER
-        
+
         # Components
         self.cache_manager: Optional[KVCacheManager] = None
         self.kv_connector: Optional[KVConnectorBase] = None
         self.model_executor: Optional[Any] = None
-        
+
         # State
         self._is_active = False
         self._active_sequences: Dict[str, Any] = {}
-        
+
         # Metrics
         self.tokens_generated = 0
         self.cache_hits_remote = 0
         self.cache_misses_remote = 0
-        
+
         logger.info("DecodeOnlyWorker %s initialized.", worker_id)
 
     def initialize(self):
@@ -96,7 +97,7 @@ class DecodeOnlyWorker:
     def execute_step(self, active_requests: List[Any]) -> None:
         """
         Perform one decoding step for a batch of requests.
-        
+
         1. Coordinate with KV connector to ensure blocks are loaded
         2. Execute model forward pass (single token)
         3. Sample next tokens
@@ -108,12 +109,12 @@ class DecodeOnlyWorker:
         # Ahead-of-time loading coordination
         # for request in active_requests:
         #    self.kv_connector.start_load_kv(forward_context)
-        
+
         # Model forward loop:
         # for layer_idx in range(num_layers):
         #    self.kv_connector.wait_for_layer_load(layer_name)
         #    ... attention ...
-        
+
         self.tokens_generated += len(active_requests)
 
     def _schedule_kv_prefetch_rust(self, seq_metadata: Any) -> List[int]:
@@ -138,6 +139,7 @@ class DecodeOnlyWorker:
         if self.kv_connector:
             self.kv_connector.close()
         logger.info("DecodeOnlyWorker %s shut down.", self.worker_id)
+
 
 # Lazy loading registration
 _worker = LazyLoader("src.infrastructure.worker.DecodeOnlyWorker", "DecodeOnlyWorker")

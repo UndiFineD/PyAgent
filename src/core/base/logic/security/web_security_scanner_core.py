@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,6 +29,7 @@ from urllib.parse import urlparse
 
 try:
     import aiohttp
+
     HAS_AIOHTTP = True
 except ImportError:
     aiohttp = None
@@ -48,7 +50,9 @@ class WebSecurityScannerCore:
         self.last_request_time = 0.0
         self.min_interval = 1.0 / rate_limit if rate_limit > 0 else 0.0
 
-    async def scan_hosts(self, hosts: List[str], patterns: Dict[str, str]) -> Dict[str, List[str]]:
+    async def scan_hosts(
+        self, hosts: List[str], patterns: Dict[str, str]
+    ) -> Dict[str, List[str]]:
         """
         Scan a list of hosts for security patterns.
 
@@ -83,8 +87,8 @@ class WebSecurityScannerCore:
 
     def _normalize_url(self, host: str) -> Optional[str]:
         """Normalize host string to full URL."""
-        if not host.startswith(('http://', 'https://')):
-            host = f'http://{host}'
+        if not host.startswith(("http://", "https://")):
+            host = f"http://{host}"
         try:
             parsed = urlparse(host)
             if parsed.netloc:
@@ -108,13 +112,15 @@ class WebSecurityScannerCore:
             try:
                 async with aiohttp.ClientSession(
                     timeout=aiohttp.ClientTimeout(total=self.timeout),
-                    connector=aiohttp.TCPConnector(verify_ssl=False)
+                    connector=aiohttp.TCPConnector(verify_ssl=False),
                 ) as session:
                     headers = {
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
                     }
 
-                    async with session.get(url, headers=headers, allow_redirects=True) as response:
+                    async with session.get(
+                        url, headers=headers, allow_redirects=True
+                    ) as response:
                         if response.status == 200:
                             text = await response.text()
                             for pattern_name, regex in patterns.items():
@@ -139,12 +145,12 @@ class WebSecurityScannerCore:
         """
         # Common CMS detection patterns
         cms_patterns = {
-            'aem': r'href="/content/dam|/etc/clientlibs',
-            'wordpress': r'wp-content|wp-includes',
-            'drupal': r'Drupal|drupal',
-            'joomla': r'Joomla|joomla',
-            'magento': r'Magento|magento',
-            'shopify': r'shopify|myshopify',
+            "aem": r'href="/content/dam|/etc/clientlibs',
+            "wordpress": r"wp-content|wp-includes",
+            "drupal": r"Drupal|drupal",
+            "joomla": r"Joomla|joomla",
+            "magento": r"Magento|magento",
+            "shopify": r"shopify|myshopify",
         }
 
         return await self.scan_hosts(hosts, cms_patterns)

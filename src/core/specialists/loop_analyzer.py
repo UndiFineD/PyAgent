@@ -31,6 +31,7 @@ from pathlib import Path
 @dataclass
 class LoopAnalysisResult:
     """Result of loop analysis for a single file."""
+
     file_path: str
     lines_of_code: int
     loop_count: int
@@ -38,12 +39,13 @@ class LoopAnalysisResult:
     loop_density: float  # loops per 100 lines
     has_nested_loops: bool
     has_deep_nesting: bool  # nesting > 3 levels
-    has_large_loops: bool   # loops with > 50 statements
+    has_large_loops: bool  # loops with > 50 statements
 
 
 @dataclass
 class LoopAnalysisConfig:
     """Configuration for loop analysis."""
+
     min_loc_threshold: int = 200
     min_loop_threshold: int = 3
     max_nesting_threshold: int = 3
@@ -54,9 +56,9 @@ class LoopAnalysisConfig:
 
     def __post_init__(self):
         if self.exclude_dirs is None:
-            self.exclude_dirs = {'.venv', '__pycache__', 'node_modules', '.git'}
+            self.exclude_dirs = {".venv", "__pycache__", "node_modules", ".git"}
         if self.include_patterns is None:
-            self.include_patterns = ['*.py']
+            self.include_patterns = ["*.py"]
         if self.exclude_patterns is None:
             self.exclude_patterns = []
 
@@ -72,10 +74,10 @@ class LoopAnalyzer:
         try:
             # Count explicit for/while statements (not in strings/comments)
             result = subprocess.run(
-                ['rg', '-c', r'\b(for|while)\s+', file_path],
+                ["rg", "-c", r"\b(for|while)\s+", file_path],
                 capture_output=True,
                 text=True,
-                timeout=10
+                timeout=10,
             )
             if result.returncode == 0:
                 return int(result.stdout.strip())
@@ -87,17 +89,17 @@ class LoopAnalyzer:
     def _count_loops_regex(self, file_path: str) -> int:
         """Fallback loop counting using regex."""
         try:
-            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                 content = f.read()
 
             # Simple regex to count for/while statements
             # This is less accurate but works without ripgrep
-            loop_pattern = r'\b(for|while)\s+'
+            loop_pattern = r"\b(for|while)\s+"
             matches = re.findall(loop_pattern, content)
 
             # Filter out matches in comments and strings (basic filtering)
             filtered_matches = []
-            lines = content.split('\n')
+            lines = content.split("\n")
             for match in matches:
                 # Basic check - if line doesn't start with # and isn't in a string
                 # This is approximate but better than nothing
@@ -110,7 +112,7 @@ class LoopAnalyzer:
     def count_lines(self, file_path: str) -> int:
         """Count lines of code in a file."""
         try:
-            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                 return sum(1 for _ in f)
         except Exception:
             return 0
@@ -118,24 +120,24 @@ class LoopAnalyzer:
     def analyze_nesting(self, file_path: str) -> Tuple[bool, bool]:
         """Analyze loop nesting patterns."""
         try:
-            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                 content = f.read()
 
             # Simple nesting analysis - count indentation levels
-            lines = content.split('\n')
+            lines = content.split("\n")
             max_nesting = 0
             current_nesting = 0
 
             for line in lines:
                 stripped = line.strip()
-                if not stripped or stripped.startswith('#'):
+                if not stripped or stripped.startswith("#"):
                     continue
 
                 # Count leading spaces/tabs (assuming 4 spaces per indent)
                 indent = len(line) - len(line.lstrip())
                 level = indent // 4
 
-                if re.match(r'\b(for|while)\s+', stripped):
+                if re.match(r"\b(for|while)\s+", stripped):
                     current_nesting = max(current_nesting, level + 1)
                     max_nesting = max(max_nesting, current_nesting)
 
@@ -149,21 +151,26 @@ class LoopAnalyzer:
     def analyze_loop_sizes(self, file_path: str) -> bool:
         """Check for unusually large loops."""
         try:
-            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                 content = f.read()
 
             # Very basic loop size analysis
             # This is approximate - real analysis would need AST parsing
-            lines = content.split('\n')
+            lines = content.split("\n")
             in_loop = False
             loop_start = 0
 
             for i, line in enumerate(lines):
                 stripped = line.strip()
-                if re.match(r'\b(for|while)\s+', stripped):
+                if re.match(r"\b(for|while)\s+", stripped):
                     in_loop = True
                     loop_start = i
-                elif in_loop and stripped and not stripped.startswith(' ') and not stripped.startswith('\t'):
+                elif (
+                    in_loop
+                    and stripped
+                    and not stripped.startswith(" ")
+                    and not stripped.startswith("\t")
+                ):
                     # End of loop (approximate)
                     loop_size = i - loop_start
                     if loop_size > self.config.large_loop_threshold:
@@ -174,7 +181,9 @@ class LoopAnalyzer:
         except Exception:
             return False
 
-    def calculate_complexity_score(self, loc: int, loops: int, has_nested: bool, has_deep: bool, has_large: bool) -> float:
+    def calculate_complexity_score(
+        self, loc: int, loops: int, has_nested: bool, has_deep: bool, has_large: bool
+    ) -> float:
         """Calculate a complexity score for prioritization."""
         score = (loops * 2) + (loc / 100)
 
@@ -195,7 +204,9 @@ class LoopAnalyzer:
         has_large = self.analyze_loop_sizes(file_path)
 
         density = (loops / max(loc, 1)) * 100
-        complexity = self.calculate_complexity_score(loc, loops, has_nested, has_deep, has_large)
+        complexity = self.calculate_complexity_score(
+            loc, loops, has_nested, has_deep, has_large
+        )
 
         return LoopAnalysisResult(
             file_path=file_path,
@@ -205,7 +216,7 @@ class LoopAnalyzer:
             loop_density=round(density, 2),
             has_nested_loops=has_nested,
             has_deep_nesting=has_deep,
-            has_large_loops=has_large
+            has_large_loops=has_large,
         )
 
     def should_analyze_file(self, file_path: str) -> bool:
@@ -217,7 +228,9 @@ class LoopAnalyzer:
 
         # Check file extensions
         file_name = os.path.basename(file_path)
-        if not any(file_name.endswith(ext.lstrip('*')) for ext in self.config.include_patterns):
+        if not any(
+            file_name.endswith(ext.lstrip("*")) for ext in self.config.include_patterns
+        ):
             return False
 
         # Check exclude patterns
@@ -244,8 +257,10 @@ class LoopAnalyzer:
                 result = self.analyze_file(file_path)
 
                 # Apply thresholds
-                if (result.lines_of_code >= self.config.min_loc_threshold and
-                    result.loop_count >= self.config.min_loop_threshold):
+                if (
+                    result.lines_of_code >= self.config.min_loc_threshold
+                    and result.loop_count >= self.config.min_loop_threshold
+                ):
                     candidates.append(result)
 
         # Sort by complexity score (highest first)
@@ -268,17 +283,25 @@ class LoopAnalyzer:
                 result = self.analyze_file(file_path)
                 all_files.append(result)
 
-                if (result.lines_of_code >= self.config.min_loc_threshold and
-                    result.loop_count >= self.config.min_loop_threshold):
+                if (
+                    result.lines_of_code >= self.config.min_loc_threshold
+                    and result.loop_count >= self.config.min_loop_threshold
+                ):
                     candidates.append(result)
 
         return {
-            'all_files': sorted(all_files, key=lambda x: x.complexity_score, reverse=True),
-            'candidates': sorted(candidates, key=lambda x: x.complexity_score, reverse=True)
+            "all_files": sorted(
+                all_files, key=lambda x: x.complexity_score, reverse=True
+            ),
+            "candidates": sorted(
+                candidates, key=lambda x: x.complexity_score, reverse=True
+            ),
         }
 
 
-def print_analysis_report(results: List[LoopAnalysisResult], title: str = "Loop Analysis Report"):
+def print_analysis_report(
+    results: List[LoopAnalysisResult], title: str = "Loop Analysis Report"
+):
     """Print a formatted analysis report."""
     print(f"\n{title}")
     print("=" * len(title))
@@ -302,8 +325,10 @@ def print_analysis_report(results: List[LoopAnalysisResult], title: str = "Loop 
         flag_str = f" [{', '.join(flags)}]" if flags else ""
 
         print(f"🔄 {result.file_path}")
-        print(f"   LOC: {result.lines_of_code}, Loops: {result.loop_count}, "
-              f"Density: {result.loop_density:.1f}%, Score: {result.complexity_score}{flag_str}")
+        print(
+            f"   LOC: {result.lines_of_code}, Loops: {result.loop_count}, "
+            f"Density: {result.loop_density:.1f}%, Score: {result.complexity_score}{flag_str}"
+        )
         print()
 
 
@@ -313,27 +338,39 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="PyAgent Loop Analysis Utility")
     parser.add_argument("directory", help="Directory to analyze")
-    parser.add_argument("--min-loc", type=int, default=200, help="Minimum lines of code threshold")
-    parser.add_argument("--min-loops", type=int, default=3, help="Minimum loop count threshold")
-    parser.add_argument("--exclude", nargs='*', default=['.venv', '__pycache__', 'node_modules'],
-                       help="Directories to exclude")
-    parser.add_argument("--format", choices=['summary', 'detailed'], default='summary',
-                       help="Output format")
+    parser.add_argument(
+        "--min-loc", type=int, default=200, help="Minimum lines of code threshold"
+    )
+    parser.add_argument(
+        "--min-loops", type=int, default=3, help="Minimum loop count threshold"
+    )
+    parser.add_argument(
+        "--exclude",
+        nargs="*",
+        default=[".venv", "__pycache__", "node_modules"],
+        help="Directories to exclude",
+    )
+    parser.add_argument(
+        "--format",
+        choices=["summary", "detailed"],
+        default="summary",
+        help="Output format",
+    )
 
     args = parser.parse_args()
 
     config = LoopAnalysisConfig(
         min_loc_threshold=args.min_loc,
         min_loop_threshold=args.min_loops,
-        exclude_dirs=set(args.exclude)
+        exclude_dirs=set(args.exclude),
     )
 
     analyzer = LoopAnalyzer(config)
     results = analyzer.find_candidates(args.directory)
 
-    if args.format == 'detailed':
+    if args.format == "detailed":
         analysis = analyzer.analyze_directory(args.directory)
-        print_analysis_report(analysis['candidates'], "High Priority Candidates")
-        print_analysis_report(analysis['all_files'][:10], "Top 10 Files by Complexity")
+        print_analysis_report(analysis["candidates"], "High Priority Candidates")
+        print_analysis_report(analysis["all_files"][:10], "Top 10 Files by Complexity")
     else:
         print_analysis_report(results, "Loop Analysis Summary")

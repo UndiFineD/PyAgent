@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 """
 Network arch search agent.py module.
 """
-
 
 
 import json
@@ -47,12 +47,16 @@ class NetworkArchSearchAgent(BaseAgent):
         )
 
     @as_tool
-    async def search_optimal_architecture(self, task_requirement: str, latency_target_ms: int = 50) -> dict[str, Any]:
+    async def search_optimal_architecture(
+        self, task_requirement: str, latency_target_ms: int = 50
+    ) -> dict[str, Any]:
         """
         Searches for the optimal neural architecture components for a given task.
         Returns a specification for a LoRA or small model adapter.
         """
-        logging.info(f"NASAgent: Searching for architecture optimized for: {task_requirement}")
+        logging.info(
+            f"NASAgent: Searching for architecture optimized for: {task_requirement}"
+        )
 
         prompt = (
             f"Task Requirement: {task_requirement}\n"

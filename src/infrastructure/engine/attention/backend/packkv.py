@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -66,7 +67,9 @@ class PackKVAttentionBackend(AttentionBackend[None]):
         """
         if metadata.compression_metadata is None:
             # Fallback to standard SDPA if no compression metadata is present
-            return TorchSDPABackend().forward(query, key, value, kv_cache, metadata, scale)
+            return TorchSDPABackend().forward(
+                query, key, value, kv_cache, metadata, scale
+            )
 
         # In a real implementation, this would call a fused kernel (Triton/CUDA/Rust)
         # that performs dequantization into registers during the matmul loops.

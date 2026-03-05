@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "BeamSearchConfig"), "BeamSearchConfig missing"
     assert hasattr(mod, "BeamHypothesis"), "BeamHypothesis missing"
     assert hasattr(mod, "BeamSearchSampler"), "BeamSearchSampler missing"
-

@@ -23,4 +23,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "StatsStream"), "StatsStream missing"
     assert hasattr(mod, "StatsStreamManager"), "StatsStreamManager missing"
     assert hasattr(mod, "StatsStreamer"), "StatsStreamer missing"
-

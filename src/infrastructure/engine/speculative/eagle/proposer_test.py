@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "EagleProposer"), "EagleProposer missing"
     assert hasattr(mod, "EagleProposerFactory"), "EagleProposerFactory missing"
     assert hasattr(mod, "AsyncEagleProposer"), "AsyncEagleProposer missing"
-

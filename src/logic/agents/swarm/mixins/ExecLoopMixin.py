@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +19,7 @@ from __future__ import annotations
 import logging
 import asyncio
 
+
 class ExecLoopMixin:
     """Mixin for parallel execution strategies and main run loops."""
 
@@ -31,9 +33,7 @@ class ExecLoopMixin:
 
         loop_count = getattr(self, "loop", 1)
         for loop_iteration in range(1, loop_count + 1):
-            logging.info(
-                f"Starting loop iteration {loop_iteration}/{loop_count}"
-            )
+            logging.info(f"Starting loop iteration {loop_iteration}/{loop_count}")
 
             if getattr(self, "enable_multiprocessing", False):
                 logging.info("Using multiprocessing for parallel execution")
@@ -48,9 +48,7 @@ class ExecLoopMixin:
                 if hasattr(self, "process_files_threaded"):
                     self.process_files_threaded(code_files)
 
-            logging.info(
-                f"Completed loop iteration {loop_iteration}/{loop_count}"
-            )
+            logging.info(f"Completed loop iteration {loop_iteration}/{loop_count}")
 
         if hasattr(self, "run_stats_update"):
             self.run_stats_update(code_files)
@@ -58,16 +56,21 @@ class ExecLoopMixin:
         if hasattr(self, "execute_callbacks"):
             self.execute_callbacks("agent_complete", getattr(self, "metrics", {}))
         if hasattr(self, "send_webhook_notification"):
-            self.send_webhook_notification("agent_complete", getattr(self, "metrics", {}))
+            self.send_webhook_notification(
+                "agent_complete", getattr(self, "metrics", {})
+            )
 
     def run(self) -> None:
         """Run the main agent loop."""
         if not hasattr(self, "logger"):
             from src.observability.StructuredLogger import StructuredLogger
+
             self.logger = StructuredLogger(agent_id=self.__class__.__name__)
 
         self.logger.info("Entering agent.run()")
-        if getattr(self, "enable_async", False) or getattr(self, "enable_multiprocessing", False):
+        if getattr(self, "enable_async", False) or getattr(
+            self, "enable_multiprocessing", False
+        ):
             self.run_with_parallel_execution()
         else:
             if not hasattr(self, "find_code_files"):
@@ -78,15 +81,11 @@ class ExecLoopMixin:
             )
             loop_count = getattr(self, "loop", 1)
             for loop_iteration in range(1, loop_count + 1):
-                logging.info(
-                    f"Starting loop iteration {loop_iteration}/{loop_count}"
-                )
+                logging.info(f"Starting loop iteration {loop_iteration}/{loop_count}")
                 for code_file in code_files:
                     if hasattr(self, "process_file"):
                         self.process_file(code_file)
-                logging.info(
-                    f"Completed loop iteration {loop_iteration}/{loop_count}"
-                )
+                logging.info(f"Completed loop iteration {loop_iteration}/{loop_count}")
             logging.info("Final stats:")
             if hasattr(self, "run_stats_update"):
                 self.run_stats_update(code_files)
@@ -94,4 +93,6 @@ class ExecLoopMixin:
             if hasattr(self, "execute_callbacks"):
                 self.execute_callbacks("agent_complete", getattr(self, "metrics", {}))
             if hasattr(self, "send_webhook_notification"):
-                self.send_webhook_notification("agent_complete", getattr(self, "metrics", {}))
+                self.send_webhook_notification(
+                    "agent_complete", getattr(self, "metrics", {})
+                )

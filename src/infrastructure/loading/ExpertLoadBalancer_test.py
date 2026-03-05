@@ -33,42 +33,42 @@ except ImportError as e:
 
 def test_experttype_exists():
     """Test that ExpertType class exists and is importable."""
-    assert 'ExpertType' in dir()
+    assert "ExpertType" in dir()
 
 
 def test_eplbmetrics_exists():
     """Test that EplbMetrics class exists and is importable."""
-    assert 'EplbMetrics' in dir()
+    assert "EplbMetrics" in dir()
 
 
 def test_expertmapping_exists():
     """Test that ExpertMapping class exists and is importable."""
-    assert 'ExpertMapping' in dir()
+    assert "ExpertMapping" in dir()
 
 
 def test_abstracteplbpolicy_exists():
     """Test that AbstractEplbPolicy class exists and is importable."""
-    assert 'AbstractEplbPolicy' in dir()
+    assert "AbstractEplbPolicy" in dir()
 
 
 def test_defaulteplbpolicy_exists():
     """Test that DefaultEplbPolicy class exists and is importable."""
-    assert 'DefaultEplbPolicy' in dir()
+    assert "DefaultEplbPolicy" in dir()
 
 
 def test_localityawarepolicy_exists():
     """Test that LocalityAwarePolicy class exists and is importable."""
-    assert 'LocalityAwarePolicy' in dir()
+    assert "LocalityAwarePolicy" in dir()
 
 
 def test_expertloadbalancer_exists():
     """Test that ExpertLoadBalancer class exists and is importable."""
-    assert 'ExpertLoadBalancer' in dir()
+    assert "ExpertLoadBalancer" in dir()
 
 
 def test_asyncexpertrebalancer_exists():
     """Test that AsyncExpertRebalancer class exists and is importable."""
-    assert 'AsyncExpertRebalancer' in dir()
+    assert "AsyncExpertRebalancer" in dir()
 
 
 def test_compute_balanced_packing_rust_exists():
@@ -89,4 +89,3 @@ def test_compute_load_imbalance_rust_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

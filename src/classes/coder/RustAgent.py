@@ -6,9 +6,10 @@ from .CoderAgent import CoderAgent
 from src.classes.base_agent.utilities import create_main_function
 import logging
 
+
 class RustAgent(CoderAgent):
     """Agent for Rust code improvement and auditing."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._language = "rust"
@@ -22,8 +23,7 @@ class RustAgent(CoderAgent):
     def _get_default_content(self) -> str:
         return 'fn main() {\n    println!("Hello, Rust!");\n}\n'
 
+
 if __name__ == "__main__":
     main = create_main_function(RustAgent, "Rust Agent", "Path to Rust file (.rs)")
     main()
-
-

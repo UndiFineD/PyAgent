@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_responsepostprocessor_exists():
     """Test that ResponsePostProcessor class exists and is importable."""
-    assert 'ResponsePostProcessor' in dir()
+    assert "ResponsePostProcessor" in dir()
 
 
 def test_responsepostprocessor_instantiation():
@@ -44,7 +44,7 @@ def test_responsepostprocessor_instantiation():
 
 def test_multimodalprocessor_exists():
     """Test that MultimodalProcessor class exists and is importable."""
-    assert 'MultimodalProcessor' in dir()
+    assert "MultimodalProcessor" in dir()
 
 
 def test_multimodalprocessor_instantiation():
@@ -55,10 +55,9 @@ def test_multimodalprocessor_instantiation():
 
 def test_serializationmanager_exists():
     """Test that SerializationManager class exists and is importable."""
-    assert 'SerializationManager' in dir()
+    assert "SerializationManager" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

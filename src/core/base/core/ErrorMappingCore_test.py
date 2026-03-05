@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_errormappingcore_exists():
     """Test that ErrorMappingCore class exists and is importable."""
-    assert 'ErrorMappingCore' in dir()
+    assert "ErrorMappingCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -244,7 +245,9 @@ def get_hash_fn_by_name(name: str) -> Callable[[Union[str, bytes]], str]:
 
     algorithm = name_map.get(name.lower())
     if algorithm is None:
-        raise ValueError(f"Unknown hash algorithm: {name}. Available: {list(name_map.keys())}")
+        raise ValueError(
+            f"Unknown hash algorithm: {name}. Available: {list(name_map.keys())}"
+        )
 
     return get_hash_fn(algorithm)
 
@@ -311,7 +314,7 @@ class ContentHasher:
     def hash_file(self, filepath: str, chunk_size: int = 8192) -> str:
         """Hash a file's contents."""
         h = hashlib.sha256()  # Use SHA-256 for file hashing
-        with open(filepath, 'rb', encoding='utf-8') as f:
+        with open(filepath, "rb", encoding="utf-8") as f:
             while chunk := f.read(chunk_size):
                 h.update(chunk)
         result = h.hexdigest()

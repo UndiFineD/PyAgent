@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -69,7 +70,9 @@ class QuantumMemoryAgent(BaseAgent):
         summary = f"[Compressed Context]: Dense summary of {len(context_text)} characters. Main themes preserved."
 
         block_id = f"block_{len(self.active_context_blocks)}"
-        self.active_context_blocks.append({"id": block_id, "original_len": len(context_text), "summary": summary})
+        self.active_context_blocks.append(
+            {"id": block_id, "original_len": len(context_text), "summary": summary}
+        )
 
         return f"SUCCESS: Compressed block {block_id}. Current context pool: {len(self.active_context_blocks)} blocks."
 
@@ -82,7 +85,9 @@ class QuantumMemoryAgent(BaseAgent):
         # Logic: Scan all summaries and 're-hydrate' only the most relevant blocks.
         if _RUST_ACCEL and self.active_context_blocks:
             # Use Rust for block search: Vec<(block_id, summary)>
-            blocks = [(b["id"], b.get("summary", "")) for b in self.active_context_blocks]
+            blocks = [
+                (b["id"], b.get("summary", "")) for b in self.active_context_blocks
+            ]
             relevant_blocks = search_blocks_rust(blocks, query)
         else:
             relevant_blocks = [
@@ -105,7 +110,7 @@ class QuantumMemoryAgent(BaseAgent):
         """Exports the current compressed context as a JSON Knowledge Graph."""
 
         filepath = self.context_cache_dir / "knowledge_graph.json"
-        with open(filepath, 'w', encoding='utf-8') as f:
+        with open(filepath, "w", encoding="utf-8") as f:
             json.dump(self.active_context_blocks, f, indent=2)
 
         return f"Knowledge Graph exported to {filepath}"
@@ -118,5 +123,7 @@ class QuantumMemoryAgent(BaseAgent):
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(QuantumMemoryAgent, "Quantum Memory Agent", "Context compression tool")
+    main = create_main_function(
+        QuantumMemoryAgent, "Quantum Memory Agent", "Context compression tool"
+    )
     main()

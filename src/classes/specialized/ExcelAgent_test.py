@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_excelagent_exists():
     """Test that ExcelAgent class exists and is importable."""
-    assert 'ExcelAgent' in dir()
+    assert "ExcelAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,18 +22,36 @@ from src.core.base.types.AccessibilityIssue import AccessibilityIssue
 from src.core.base.types.AccessibilityIssueType import AccessibilityIssueType
 from src.core.base.types.WCAGLevel import WCAGLevel
 from src.logic.agents.development.HtmlAccessibilityMixin import HtmlAccessibilityMixin
-from src.logic.agents.development.PythonAccessibilityMixin import PythonAccessibilityMixin
-from src.logic.agents.development.JavascriptAccessibilityMixin import JavascriptAccessibilityMixin
-from src.logic.agents.development.AccessibilityReportMixin import AccessibilityReportMixin
-from src.logic.agents.development.mixins.AccessibilityCoreMixin import AccessibilityCoreMixin
-from src.logic.agents.development.mixins.AccessibilityLogicMixin import AccessibilityLogicMixin
+from src.logic.agents.development.PythonAccessibilityMixin import (
+    PythonAccessibilityMixin,
+)
+from src.logic.agents.development.JavascriptAccessibilityMixin import (
+    JavascriptAccessibilityMixin,
+)
+from src.logic.agents.development.AccessibilityReportMixin import (
+    AccessibilityReportMixin,
+)
+from src.logic.agents.development.mixins.AccessibilityCoreMixin import (
+    AccessibilityCoreMixin,
+)
+from src.logic.agents.development.mixins.AccessibilityLogicMixin import (
+    AccessibilityLogicMixin,
+)
 from src.core.base.BaseAgent import BaseAgent
 import logging
 
 __version__ = VERSION
 
 
-class AccessibilityAgent(BaseAgent, HtmlAccessibilityMixin, PythonAccessibilityMixin, JavascriptAccessibilityMixin, AccessibilityReportMixin, AccessibilityCoreMixin, AccessibilityLogicMixin):
+class AccessibilityAgent(
+    BaseAgent,
+    HtmlAccessibilityMixin,
+    PythonAccessibilityMixin,
+    JavascriptAccessibilityMixin,
+    AccessibilityReportMixin,
+    AccessibilityCoreMixin,
+    AccessibilityLogicMixin,
+):
     """Analyzer for accessibility issues in UI code.
 
     Detects accessibility problems and suggests improvements

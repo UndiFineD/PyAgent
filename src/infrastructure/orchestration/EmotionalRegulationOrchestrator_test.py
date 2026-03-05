@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_emotionalregulationorchestrator_exists():
     """Test that EmotionalRegulationOrchestrator class exists and is importable."""
-    assert 'EmotionalRegulationOrchestrator' in dir()
+    assert "EmotionalRegulationOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -18,6 +18,7 @@ Provides a rich interactive console experience using 'rich.layout'.
 """
 
 import time
+
 # ...existing code...
 from rich.console import Console
 from rich.layout import Layout
@@ -25,6 +26,7 @@ from rich.panel import Panel
 from rich.live import Live
 from rich.table import Table
 from datetime import datetime
+
 
 class PyAgentTUI:
     def __init__(self) -> None:
@@ -53,12 +55,12 @@ class PyAgentTUI:
         table.add_column("Node", style="cyan")
         table.add_column("Status", style="green")
         table.add_column("Load", style="magenta")
-        
+
         table.add_row("Main-01", "Active", "45%")
         table.add_row("Worker-01", "Idle", "10%")
         table.add_row("Worker-02", "Busy", "88%")
         table.add_row("NPU-Edge", "Active", "32%")
-        
+
         return Panel(table, title="Swarm Typology")
 
     def generate_logs(self) -> Panel:
@@ -69,7 +71,7 @@ class PyAgentTUI:
             "[WARN] Latency spike on vector_store_03 (450ms)",
             "[INFO] CosyVoice model loaded (300M)",
             "[DEBUG] Voyager P2P: Handshake from 192.168.1.50 accepted",
-            f"[INFO] Heartbeat tick {int(time.time())}"
+            f"[INFO] Heartbeat tick {int(time.time())}",
         ]
         return Panel("\n".join(logs), title="Live Event Log", style="white on black")
 
@@ -87,9 +89,11 @@ class PyAgentTUI:
                     self.layout["logs"].update(self.generate_logs())
                     self.layout["footer"].update(self.generate_footer())
                     import asyncio
+
                     await asyncio.sleep(0.25)
             except KeyboardInterrupt:
                 pass
+
 
 if __name__ == "__main__":
     tui = PyAgentTUI()

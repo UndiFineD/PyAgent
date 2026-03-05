@@ -15,7 +15,9 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "JSONTree"), "JSONTree missing"
     assert hasattr(mod, "json_iter_leaves"), "json_iter_leaves missing"
-    assert hasattr(mod, "json_iter_leaves_with_path"), "json_iter_leaves_with_path missing"
+    assert hasattr(
+        mod, "json_iter_leaves_with_path"
+    ), "json_iter_leaves_with_path missing"
     assert hasattr(mod, "json_iter_leaves_fast"), "json_iter_leaves_fast missing"
     assert hasattr(mod, "json_map_leaves"), "json_map_leaves missing"
     assert hasattr(mod, "json_map_leaves_async"), "json_map_leaves_async missing"
@@ -31,5 +33,6 @@ def test_imports_and_symbols():
     assert hasattr(mod, "json_filter_leaves"), "json_filter_leaves missing"
     assert hasattr(mod, "json_validate_leaves"), "json_validate_leaves missing"
     assert hasattr(mod, "json_find_leaves"), "json_find_leaves missing"
-    assert hasattr(mod, "RUST_ACCELERATION_AVAILABLE"), "RUST_ACCELERATION_AVAILABLE missing"
-
+    assert hasattr(
+        mod, "RUST_ACCELERATION_AVAILABLE"
+    ), "RUST_ACCELERATION_AVAILABLE missing"

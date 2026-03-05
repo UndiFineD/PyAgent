@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_consensusorchestrator_exists():
     """Test that ConsensusOrchestrator class exists and is importable."""
-    assert 'ConsensusOrchestrator' in dir()
+    assert "ConsensusOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

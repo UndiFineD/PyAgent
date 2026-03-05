@@ -33,17 +33,17 @@ except ImportError as e:
 
 def test_securityvulnerability_exists():
     """Test that SecurityVulnerability class exists and is importable."""
-    assert 'SecurityVulnerability' in dir()
+    assert "SecurityVulnerability" in dir()
 
 
 def test_workflowanalysis_exists():
     """Test that WorkflowAnalysis class exists and is importable."""
-    assert 'WorkflowAnalysis' in dir()
+    assert "WorkflowAnalysis" in dir()
 
 
 def test_workflowsecurityanalyzer_exists():
     """Test that WorkflowSecurityAnalyzer class exists and is importable."""
-    assert 'WorkflowSecurityAnalyzer' in dir()
+    assert "WorkflowSecurityAnalyzer" in dir()
 
 
 def test_workflowsecurityanalyzer_instantiation():
@@ -54,7 +54,7 @@ def test_workflowsecurityanalyzer_instantiation():
 
 def test_workflowastanalyzer_exists():
     """Test that WorkflowASTAnalyzer class exists and is importable."""
-    assert 'WorkflowASTAnalyzer' in dir()
+    assert "WorkflowASTAnalyzer" in dir()
 
 
 def test_workflowastanalyzer_instantiation():
@@ -65,7 +65,7 @@ def test_workflowastanalyzer_instantiation():
 
 def test_securityanalysismixin_exists():
     """Test that SecurityAnalysisMixin class exists and is importable."""
-    assert 'SecurityAnalysisMixin' in dir()
+    assert "SecurityAnalysisMixin" in dir()
 
 
 def test_securityanalysismixin_instantiation():
@@ -77,4 +77,3 @@ def test_securityanalysismixin_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

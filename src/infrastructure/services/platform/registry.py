@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,8 +28,13 @@ from typing import Dict, Optional, Type
 from .base import Platform
 from .cpu import CpuPlatform
 from .cuda import CudaPlatform
-from .models import (AttentionBackend, DeviceCapability, MemoryInfo,
-                     PlatformType, QuantizationType)
+from .models import (
+    AttentionBackend,
+    DeviceCapability,
+    MemoryInfo,
+    PlatformType,
+    QuantizationType,
+)
 from .rocm import RocmPlatform
 from .tpu import TpuPlatform
 from .xpu import XpuPlatform
@@ -44,7 +50,9 @@ class PlatformRegistry:
     _lock = threading.Lock()
 
     @classmethod
-    def register(cls, platform_type: PlatformType, platform_cls: Type[Platform]) -> None:
+    def register(
+        cls, platform_type: PlatformType, platform_cls: Type[Platform]
+    ) -> None:
         """Register a platform implementation."""
         cls._platforms[platform_type] = platform_cls
 

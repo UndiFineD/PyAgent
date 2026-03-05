@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_sandboxruntime_exists():
     """Test that SandboxRuntime class exists and is importable."""
-    assert 'SandboxRuntime' in dir()
+    assert "SandboxRuntime" in dir()
 
 
 def test_sandboxruntime_instantiation():
@@ -45,4 +45,3 @@ def test_sandboxruntime_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

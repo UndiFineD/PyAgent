@@ -20,4 +20,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "gumbel_sample_rust"), "gumbel_sample_rust missing"
     assert hasattr(mod, "beam_score_rust"), "beam_score_rust missing"
     assert hasattr(mod, "compute_penalties_rust"), "compute_penalties_rust missing"
-

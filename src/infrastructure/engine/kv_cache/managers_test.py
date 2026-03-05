@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "FullAttentionManager"), "FullAttentionManager missing"
     assert hasattr(mod, "SlidingWindowManager"), "SlidingWindowManager missing"
     assert hasattr(mod, "CrossAttentionManager"), "CrossAttentionManager missing"
-

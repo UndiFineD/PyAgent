@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_dreamstateorchestrator_exists():
     """Test that DreamStateOrchestrator class exists and is importable."""
-    assert 'DreamStateOrchestrator' in dir()
+    assert "DreamStateOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

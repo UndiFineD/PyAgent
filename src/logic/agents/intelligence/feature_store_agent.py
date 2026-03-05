@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,7 +42,9 @@ class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def __init__(self, file_path: str = ".") -> None:
         super().__init__(file_path)
-        self.feature_dir = Path(self._workspace_root) / "data/memory/agent_store/features"
+        self.feature_dir = (
+            Path(self._workspace_root) / "data/memory/agent_store/features"
+        )
         self.feature_dir.mkdir(parents=True, exist_ok=True)
         self.core = SynthesisCore()
 
@@ -52,7 +55,9 @@ class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         """
         vector = self.core.vectorize_insight(insight_text)
         feature_name = f"insight_{hash(insight_text)}"
-        return self.register_feature(feature_name, vector, {"original_text": insight_text, "tags": tags})
+        return self.register_feature(
+            feature_name, vector, {"original_text": insight_text, "tags": tags}
+        )
 
     @as_tool
     def merge_swarm_insights(self, feature_names: list[str]) -> list[float]:
@@ -68,7 +73,9 @@ class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return self.core.merge_feature_vectors(vectors)
 
     @as_tool
-    def register_feature(self, feature_name: str, value: Any, metadata: dict[str, Any] | None = None) -> str:
+    def register_feature(
+        self, feature_name: str, value: Any, metadata: dict[str, Any] | None = None
+    ) -> str:
         """Registers a new feature in the store.
 
         Args:
@@ -107,11 +114,15 @@ class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Advisory on feature engineering for agents."""
         _ = (prompt, target_file)
-        return "I am serving current agentic features. Recommend a feature for extraction?"
+        return (
+            "I am serving current agentic features. Recommend a feature for extraction?"
+        )
 
 
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(FeatureStoreAgent, "Feature Store Agent", "Feature life-cycle management")
+    main = create_main_function(
+        FeatureStoreAgent, "Feature Store Agent", "Feature life-cycle management"
+    )
     main()

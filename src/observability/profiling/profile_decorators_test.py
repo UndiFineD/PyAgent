@@ -22,4 +22,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "track"), "track missing"
     assert hasattr(mod, "get_profile_report"), "get_profile_report missing"
     assert hasattr(mod, "reset_profile_data"), "reset_profile_data missing"
-

@@ -33,35 +33,34 @@ except ImportError as e:
 
 def test_offloadmedium_exists():
     """Test that OffloadMedium class exists and is importable."""
-    assert 'OffloadMedium' in dir()
+    assert "OffloadMedium" in dir()
 
 
 def test_blockstate_exists():
     """Test that BlockState class exists and is importable."""
-    assert 'BlockState' in dir()
+    assert "BlockState" in dir()
 
 
 def test_blockstatus_exists():
     """Test that BlockStatus class exists and is importable."""
-    assert 'BlockStatus' in dir()
+    assert "BlockStatus" in dir()
 
 
 def test_loadstorespec_exists():
     """Test that LoadStoreSpec class exists and is importable."""
-    assert 'LoadStoreSpec' in dir()
+    assert "LoadStoreSpec" in dir()
 
 
 def test_offloadingevent_exists():
     """Test that OffloadingEvent class exists and is importable."""
-    assert 'OffloadingEvent' in dir()
+    assert "OffloadingEvent" in dir()
 
 
 def test_preparestoreoutput_exists():
     """Test that PrepareStoreOutput class exists and is importable."""
-    assert 'PrepareStoreOutput' in dir()
+    assert "PrepareStoreOutput" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

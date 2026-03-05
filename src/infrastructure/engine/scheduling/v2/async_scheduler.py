@@ -22,7 +22,10 @@ import time
 from typing import Any, Dict, List
 
 from src.infrastructure.engine.request_queue.v2.request_queue import RequestQueueV2
-from src.infrastructure.engine.scheduling.v2.scheduler_output import ScheduledSequence, SchedulerOutput
+from src.infrastructure.engine.scheduling.v2.scheduler_output import (
+    ScheduledSequence,
+    SchedulerOutput,
+)
 
 try:
     import rust_core as rc
@@ -74,12 +77,16 @@ class AsyncSchedulerV2:
             try:
                 # Optimized metadata update
                 rc.async_schedule_update_rust(output.get_seq_ids())
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.debug(f"Rust schedule update fallback: {e}")
 
         # 4. Cleanup old outputs
         now: float = time.time()
-        self.active_outputs = {k: v for k, v in self.active_outputs.items() if now - k < 60.0}
+        self.active_outputs = {
+            k: v for k, v in self.active_outputs.items() if now - k < 60.0
+        }
         self.active_outputs[now] = output
 
         latency: float = (time.perf_counter() - start_time) * 1000.0

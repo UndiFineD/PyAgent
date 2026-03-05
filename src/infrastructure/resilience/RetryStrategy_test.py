@@ -33,27 +33,27 @@ except ImportError as e:
 
 def test_jittertype_exists():
     """Test that JitterType class exists and is importable."""
-    assert 'JitterType' in dir()
+    assert "JitterType" in dir()
 
 
 def test_retrystats_exists():
     """Test that RetryStats class exists and is importable."""
-    assert 'RetryStats' in dir()
+    assert "RetryStats" in dir()
 
 
 def test_retryexhaustederror_exists():
     """Test that RetryExhaustedError class exists and is importable."""
-    assert 'RetryExhaustedError' in dir()
+    assert "RetryExhaustedError" in dir()
 
 
 def test_retrystrategy_exists():
     """Test that RetryStrategy class exists and is importable."""
-    assert 'RetryStrategy' in dir()
+    assert "RetryStrategy" in dir()
 
 
 def test_retrybudget_exists():
     """Test that RetryBudget class exists and is importable."""
-    assert 'RetryBudget' in dir()
+    assert "RetryBudget" in dir()
 
 
 def test_retry_exists():
@@ -64,4 +64,3 @@ def test_retry_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

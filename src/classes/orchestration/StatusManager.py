@@ -4,9 +4,10 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, Any, List
 
+
 class StatusManager:
     """Manages project execution status for the DirectorAgent and GUI."""
-    
+
     def __init__(self) -> None:
         self.status_file = Path("src/classes/orchestration/status.json")
         self.clear_status()
@@ -18,7 +19,7 @@ class StatusManager:
             "active_project": None,
             "steps": [],
             "current_step_index": -1,
-            "overall_status": "Idle"
+            "overall_status": "Idle",
         }
         self._write(initial_data)
 
@@ -29,20 +30,22 @@ class StatusManager:
             "active_project": goal,
             "steps": [],
             "current_step_index": 0,
-            "overall_status": "Running"
+            "overall_status": "Running",
         }
         self._write(data)
 
     def add_step(self, agent: str, file: str, prompt: str) -> None:
         """Adds a scheduled step to the plan."""
         data = self._read()
-        data["steps"].append({
-            "agent": agent,
-            "file": file,
-            "prompt": prompt,
-            "status": "Pending",
-            "result": None
-        })
+        data["steps"].append(
+            {
+                "agent": agent,
+                "file": file,
+                "prompt": prompt,
+                "status": "Pending",
+                "result": None,
+            }
+        )
         self._write(data)
 
     def update_step_status(self, index: int, status: str, result: Any = None) -> None:

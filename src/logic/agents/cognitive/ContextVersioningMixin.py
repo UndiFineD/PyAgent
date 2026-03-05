@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -18,7 +19,9 @@ class ContextVersioningMixin:
         self, version: str, changes: list[str] | None = None, author: str = ""
     ) -> ContextVersion:
         """Create a new version snapshot."""
-        content = getattr(self, "current_content", None) or getattr(self, "previous_content", "")
+        content = getattr(self, "current_content", None) or getattr(
+            self, "previous_content", ""
+        )
         content_hash = hashlib.sha256(content.encode()).hexdigest()[:12]
 
         version_obj = ContextVersion(
@@ -65,7 +68,9 @@ class ContextVersioningMixin:
     def compress_content(self, content: str | None = None) -> bytes:
         """Compress content for storage."""
         if content is None:
-            content = getattr(self, "current_content", None) or getattr(self, "previous_content", "")
+            content = getattr(self, "current_content", None) or getattr(
+                self, "previous_content", ""
+            )
 
         self._compressed_content = zlib.compress(content.encode(), level=9)
         return self._compressed_content
@@ -83,7 +88,9 @@ class ContextVersioningMixin:
     def get_compression_ratio(self, content: str | None = None) -> float:
         """Get compression ratio (space savings) for the current/previous content."""
         if content is None:
-            content = getattr(self, "current_content", None) or getattr(self, "previous_content", "")
+            content = getattr(self, "current_content", None) or getattr(
+                self, "previous_content", ""
+            )
 
         original_size = len(content.encode())
         if original_size == 0:

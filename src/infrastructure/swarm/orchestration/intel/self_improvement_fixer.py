@@ -1,7 +1,7 @@
-
 """
 Self improvement fixer.py module.
 """
+
 # Copyright 2026 PyAgent Authors
 # Specialized assistant for applying autonomous fixes to the codebase.
 
@@ -18,7 +18,11 @@ class SelfImprovementFixer:
         self.workspace_root = workspace_root
 
     def apply_autonomous_fixes(
-        self, file_path: str, rel_path: str, content: str, findings: List[Dict[str, Any]]
+        self,
+        file_path: str,
+        rel_path: str,
+        content: str,
+        findings: List[Dict[str, Any]],
     ) -> None:
         """Iterates through findings and applies fixes where possible."""
         for finding in findings:
@@ -27,7 +31,10 @@ class SelfImprovementFixer:
 
             # Skip if no specific fix logic yet for this type
             fixable_types = [
-                "Security Risk", "Complexity Issue", "Missing Docstring", "Rust Readiness Task"
+                "Security Risk",
+                "Complexity Issue",
+                "Missing Docstring",
+                "Rust Readiness Task",
             ]
             if finding["type"] not in fixable_types:
                 continue
@@ -46,6 +53,8 @@ class SelfImprovementFixer:
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(new_content)
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to apply patch to {file_path}: {e}")
             return False

@@ -23,4 +23,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "DiffResult"), "DiffResult missing"
     assert hasattr(mod, "ModelConfig"), "ModelConfig missing"
     assert hasattr(mod, "EventHook"), "EventHook missing"
-

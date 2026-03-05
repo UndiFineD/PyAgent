@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -78,9 +79,9 @@ class FixHeadersAgent:
             True if the file has the proper header, False otherwise
         """
         return (
-            "Copyright 2026 PyAgent Authors" in content and
-            "Licensed under the Apache License" in content and
-            "http://www.apache.org/licenses/LICENSE-2.0" in content
+            "Copyright 2026 PyAgent Authors" in content
+            and "Licensed under the Apache License" in content
+            and "http://www.apache.org/licenses/LICENSE-2.0" in content
         )
 
     def clean_existing_headers(self, content: str) -> str:
@@ -94,14 +95,11 @@ class FixHeadersAgent:
             Content with existing headers removed
         """
         # Remove existing shebang
-        content = re.sub(r'^#!.*?\n', '', content, flags=re.MULTILINE)
+        content = re.sub(r"^#!.*?\n", "", content, flags=re.MULTILINE)
 
         # Remove existing copyright/license headers (multi-line)
         content = re.sub(
-            r'^# Copyright.*?(?:\n#(?!#).*?)*?\n',
-            '',
-            content,
-            flags=re.MULTILINE
+            r"^# Copyright.*?(?:\n#(?!#).*?)*?\n", "", content, flags=re.MULTILINE
         )
 
         # Remove any leading empty lines
@@ -137,7 +135,7 @@ class FixHeadersAgent:
         """
         try:
             # Read the file
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, "r", encoding="utf-8") as f:
                 content = f.read()
 
             # Check if header is already correct
@@ -157,7 +155,7 @@ class FixHeadersAgent:
                 return True
             else:
                 # Write the updated content
-                with open(filepath, 'w', encoding='utf-8') as f:
+                with open(filepath, "w", encoding="utf-8") as f:
                     f.write(new_content)
 
                 if self.verbose:
@@ -169,7 +167,9 @@ class FixHeadersAgent:
             print(f"❌ Error processing {filepath}: {e}")
             return False
 
-    def process_directory(self, directory: Path, exclude_patterns: Set[str] = None) -> None:
+    def process_directory(
+        self, directory: Path, exclude_patterns: Set[str] = None
+    ) -> None:
         """
         Process all Python files in a directory tree.
 
@@ -178,14 +178,20 @@ class FixHeadersAgent:
             exclude_patterns: Set of directory names to exclude (e.g., {'__pycache__', '.git'})
         """
         if exclude_patterns is None:
-            exclude_patterns = {'__pycache__', '.git', '.venv', 'node_modules', '.pytest_cache'}
+            exclude_patterns = {
+                "__pycache__",
+                ".git",
+                ".venv",
+                "node_modules",
+                ".pytest_cache",
+            }
 
         for root, dirs, files in os.walk(directory):
             # Remove excluded directories
             dirs[:] = [d for d in dirs if d not in exclude_patterns]
 
             for file in files:
-                if file.endswith('.py'):
+                if file.endswith(".py"):
                     filepath = Path(root) / file
                     self.process_file(filepath)
                     self.files_processed += 1
@@ -217,7 +223,7 @@ Mode:             {'DRY RUN' if self.dry_run else 'LIVE'}
         target_path = Path(target)
 
         if target_path.is_file():
-            if target_path.suffix == '.py':
+            if target_path.suffix == ".py":
                 self.process_file(target_path)
                 self.files_processed = 1
             else:
@@ -247,36 +253,36 @@ Examples:
 
 This tool ensures all Python files have proper Apache 2.0 license headers
 with PyAgent copyright notices.
-        """
+        """,
+    )
+
+    parser.add_argument("target", help="File or directory to process")
+
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would be changed without modifying files",
     )
 
     parser.add_argument(
-        'target',
-        help='File or directory to process'
+        "--verbose",
+        "-v",
+        action="store_true",
+        help="Provide detailed output for each file",
     )
 
     parser.add_argument(
-        '--dry-run',
-        action='store_true',
-        help='Show what would be changed without modifying files'
-    )
-
-    parser.add_argument(
-        '--verbose', '-v',
-        action='store_true',
-        help='Provide detailed output for each file'
-    )
-
-    parser.add_argument(
-        '--exclude',
-        action='append',
-        help='Directory patterns to exclude (can be used multiple times)'
+        "--exclude",
+        action="append",
+        help="Directory patterns to exclude (can be used multiple times)",
     )
 
     args = parser.parse_args()
 
     exclude_patterns = set(args.exclude or [])
-    exclude_patterns.update({'__pycache__', '.git', '.venv', 'node_modules', '.pytest_cache'})
+    exclude_patterns.update(
+        {"__pycache__", ".git", ".venv", "node_modules", ".pytest_cache"}
+    )
 
     agent = FixHeadersAgent(dry_run=args.dry_run, verbose=args.verbose)
     agent.run(args.target, exclude_patterns)

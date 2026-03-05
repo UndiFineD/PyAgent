@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_ropevariant_exists():
     """Test that RoPEVariant class exists and is importable."""
-    assert 'RoPEVariant' in dir()
+    assert "RoPEVariant" in dir()
 
 
 def test_ropescalingtype_exists():
     """Test that RoPEScalingType class exists and is importable."""
-    assert 'RoPEScalingType' in dir()
+    assert "RoPEScalingType" in dir()
 
 
 def test_ropeconfig_exists():
     """Test that RoPEConfig class exists and is importable."""
-    assert 'RoPEConfig' in dir()
+    assert "RoPEConfig" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

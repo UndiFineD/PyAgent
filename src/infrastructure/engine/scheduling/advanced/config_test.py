@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "RequestState"), "RequestState missing"
     assert hasattr(mod, "PreemptionReason"), "PreemptionReason missing"
     assert hasattr(mod, "SchedulerConfig"), "SchedulerConfig missing"
-

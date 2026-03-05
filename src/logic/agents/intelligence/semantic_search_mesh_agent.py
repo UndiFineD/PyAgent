@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 """
 Semantic search mesh agent.py module.
 """
-
 
 
 import asyncio
@@ -50,7 +50,9 @@ class SemanticSearchMeshAgent:
         self.memo_rag = MemoRagAgent(r"intelligence\SemanticSearchMeshAgent.py")
         self.remembered_urls: set[str] = set()
 
-    async def federated_external_search(self, query: str, providers: list[str]) -> list[dict[str, Any]]:
+    async def federated_external_search(
+        self, query: str, providers: list[str]
+    ) -> list[dict[str, Any]]:
         """
         Queries multiple external search providers in parallel and synthesize results.
         """
@@ -71,11 +73,15 @@ class SemanticSearchMeshAgent:
         # Update memory
         for item in filtered[:3]:  # Remember top 3 for this session
             self.remembered_urls.add(item["url"])
-            self.memo_rag.memorise_to_shard(f"Visited: {item['url']} for query: {query}", "search_history")
+            self.memo_rag.memorise_to_shard(
+                f"Visited: {item['url']} for query: {query}", "search_history"
+            )
 
         return filtered
 
-    async def _mock_provider_call(self, provider: str, query: str) -> list[dict[str, Any]]:
+    async def _mock_provider_call(
+        self, provider: str, query: str
+    ) -> list[dict[str, Any]]:
         """Mock search provider response."""
         await asyncio.sleep(0.1)  # Simulate network latency
         return [
@@ -100,7 +106,9 @@ class SemanticSearchMeshAgent:
         self.local_indices.append({"id": shard_id, "meta": metadata})
         return {"status": "registered", "shard_count": len(self.local_indices)}
 
-    def federated_search(self, query_embedding: list[float], limit: int = 5) -> list[dict[str, Any]]:
+    def federated_search(
+        self, query_embedding: list[float], limit: int = 5
+    ) -> list[dict[str, Any]]:
         """
         Simulates a search across all registered shards.
         Uses Rust acceleration for cosine similarity if available.
@@ -112,7 +120,9 @@ class SemanticSearchMeshAgent:
 
             if HAS_RUST and vectors:
                 # Direct Rust acceleration for multi-vector search
-                matches = rust_core.top_k_cosine_similarity(query_embedding, vectors, limit)
+                matches = rust_core.top_k_cosine_similarity(
+                    query_embedding, vectors, limit
+                )
                 for idx, score in matches:
                     results.append(
                         {

@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_peerinfo_exists():
     """Test that PeerInfo class exists and is importable."""
-    assert 'PeerInfo' in dir()
+    assert "PeerInfo" in dir()
 
 
 def test_landiscovery_exists():
     """Test that LANDiscovery class exists and is importable."""
-    assert 'LANDiscovery' in dir()
+    assert "LANDiscovery" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

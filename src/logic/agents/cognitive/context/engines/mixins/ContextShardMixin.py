@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@ from __future__ import annotations
 
 import json
 import logging
+
 
 class ContextShardMixin:
     """Mixin for managing memory shards and persistence."""
@@ -57,7 +59,11 @@ class ContextShardMixin:
 
     def load(self) -> None:
         """Loads default context state."""
-        if not hasattr(self, "context_file") or not hasattr(self, "memory") or not hasattr(self, "_loaded_shards"):
+        if (
+            not hasattr(self, "context_file")
+            or not hasattr(self, "memory")
+            or not hasattr(self, "_loaded_shards")
+        ):
             return
 
         if self.context_file.exists():
@@ -71,7 +77,12 @@ class ContextShardMixin:
 
     def save(self) -> None:
         """Saves context to disk with optimization for large datasets."""
-        if not hasattr(self, "core") or not hasattr(self, "memory") or not hasattr(self, "context_file") or not hasattr(self, "shard_dir"):
+        if (
+            not hasattr(self, "core")
+            or not hasattr(self, "memory")
+            or not hasattr(self, "context_file")
+            or not hasattr(self, "shard_dir")
+        ):
             return
 
         try:

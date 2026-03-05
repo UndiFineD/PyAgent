@@ -98,7 +98,10 @@ class StreamingHandler:
             self.response.output.append(self._current_output)
             await self.stream.send(
                 "response.output_item.added",
-                {"output_index": len(self.response.output) - 1, "item": self._current_output.to_dict()},
+                {
+                    "output_index": len(self.response.output) - 1,
+                    "item": self._current_output.to_dict(),
+                },
             )
         self._text_buffer.append(text)
         await self.stream.send(
@@ -117,7 +120,10 @@ class StreamingHandler:
             self._current_output.status = ResponseStatus.COMPLETED
             await self.stream.send(
                 "response.output_item.done",
-                {"output_index": len(self.response.output) - 1, "item": self._current_output.to_dict()},
+                {
+                    "output_index": len(self.response.output) - 1,
+                    "item": self._current_output.to_dict(),
+                },
             )
             self._current_output = None
             self._text_buffer = []
@@ -131,5 +137,7 @@ class StreamingHandler:
 
     async def fail(self, error: str, code: str = "internal_error") -> None:
         self.response.fail(error, code)
-        await self.stream.send("response.failed", {"error": {"message": error, "code": code}})
+        await self.stream.send(
+            "response.failed", {"error": {"message": error, "code": code}}
+        )
         await self.stream.close()

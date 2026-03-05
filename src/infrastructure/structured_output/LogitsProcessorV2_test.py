@@ -33,50 +33,49 @@ except ImportError as e:
 
 def test_movedirectionality_exists():
     """Test that MoveDirectionality class exists and is importable."""
-    assert 'MoveDirectionality' in dir()
+    assert "MoveDirectionality" in dir()
 
 
 def test_samplingparams_exists():
     """Test that SamplingParams class exists and is importable."""
-    assert 'SamplingParams' in dir()
+    assert "SamplingParams" in dir()
 
 
 def test_batchupdate_exists():
     """Test that BatchUpdate class exists and is importable."""
-    assert 'BatchUpdate' in dir()
+    assert "BatchUpdate" in dir()
 
 
 def test_batchupdatebuilder_exists():
     """Test that BatchUpdateBuilder class exists and is importable."""
-    assert 'BatchUpdateBuilder' in dir()
+    assert "BatchUpdateBuilder" in dir()
 
 
 def test_logitsprocessor_exists():
     """Test that LogitsProcessor class exists and is importable."""
-    assert 'LogitsProcessor' in dir()
+    assert "LogitsProcessor" in dir()
 
 
 def test_minplogitsprocessor_exists():
     """Test that MinPLogitsProcessor class exists and is importable."""
-    assert 'MinPLogitsProcessor' in dir()
+    assert "MinPLogitsProcessor" in dir()
 
 
 def test_logitbiaslogitsprocessor_exists():
     """Test that LogitBiasLogitsProcessor class exists and is importable."""
-    assert 'LogitBiasLogitsProcessor' in dir()
+    assert "LogitBiasLogitsProcessor" in dir()
 
 
 def test_compositelogitsprocessor_exists():
     """Test that CompositeLogitsProcessor class exists and is importable."""
-    assert 'CompositeLogitsProcessor' in dir()
+    assert "CompositeLogitsProcessor" in dir()
 
 
 def test_logitsprocessorregistry_exists():
     """Test that LogitsProcessorRegistry class exists and is importable."""
-    assert 'LogitsProcessorRegistry' in dir()
+    assert "LogitsProcessorRegistry" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

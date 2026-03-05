@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_stemscalinglayer_exists():
     """Test that STEMScalingLayer class exists and is importable."""
-    assert 'STEMScalingLayer' in dir()
+    assert "STEMScalingLayer" in dir()
 
 
 def test_stemmanager_exists():
     """Test that STEMManager class exists and is importable."""
-    assert 'STEMManager' in dir()
+    assert "STEMManager" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

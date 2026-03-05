@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_sharedcontext_exists():
     """Test that SharedContext class exists and is importable."""
-    assert 'SharedContext' in dir()
+    assert "SharedContext" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

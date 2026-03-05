@@ -39,12 +39,14 @@ import string
 
 class SAMLVersion(Enum):
     """SAML protocol versions"""
+
     SAML_1_1 = "1.1"
     SAML_2_0 = "2.0"
 
 
 class FederationProvider(Enum):
     """Supported federation providers"""
+
     OFFICE_365 = "office365"
     DROPBOX = "dropbox"
     GENERIC_SAML2 = "saml2"
@@ -54,6 +56,7 @@ class FederationProvider(Enum):
 
 class SignatureAlgorithm(Enum):
     """SAML signature algorithms"""
+
     RSA_SHA256 = "rsa-sha256"
     RSA_SHA384 = "rsa-sha384"
     RSA_SHA512 = "rsa-sha512"
@@ -61,6 +64,7 @@ class SignatureAlgorithm(Enum):
 
 class DigestAlgorithm(Enum):
     """SAML digest algorithms"""
+
     SHA256 = "sha256"
     SHA384 = "sha384"
     SHA512 = "sha512"
@@ -69,6 +73,7 @@ class DigestAlgorithm(Enum):
 @dataclass
 class FederationService:
     """AD FS federation service configuration"""
+
     service_id: str
     name: str
     server_fqdn: str
@@ -84,6 +89,7 @@ class FederationService:
 @dataclass
 class SAMLToken:
     """SAML security token"""
+
     token_id: str
     version: SAMLVersion
     issuer: str
@@ -101,6 +107,7 @@ class SAMLToken:
 @dataclass
 class RelyingParty:
     """Relying party configuration"""
+
     identifier: str
     name: str
     endpoint: str
@@ -113,6 +120,7 @@ class RelyingParty:
 @dataclass
 class FederationUser:
     """Federated user information"""
+
     upn: str
     object_guid: Optional[str] = None
     sam_account_name: Optional[str] = None
@@ -124,6 +132,7 @@ class FederationUser:
 @dataclass
 class TokenGenerationRequest:
     """Request to generate a SAML token"""
+
     provider: FederationProvider
     user: FederationUser
     relying_party: RelyingParty
@@ -195,7 +204,6 @@ class FederationServicesCore:
         </saml:Attribute>
     </saml:AttributeStatement>
 </saml:Assertion>""",
-
             "saml2.0_generic": """<?xml version="1.0" encoding="UTF-8"?>
 <saml2:Assertion xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion"
                  ID="{AssertionID}"
@@ -219,7 +227,7 @@ class FederationServicesCore:
         </saml2:AuthnContext>
     </saml2:AuthnStatement>
     {Assertions}
-</saml2:Assertion>"""
+</saml2:Assertion>""",
         }
 
         self.logger.info(f"Loaded {len(self.templates)} SAML templates")
@@ -230,7 +238,7 @@ class FederationServicesCore:
         server_fqdn: str,
         signing_cert_path: Optional[str] = None,
         private_key_path: Optional[str] = None,
-        cert_password: Optional[str] = None
+        cert_password: Optional[str] = None,
     ) -> Optional[str]:
         """Create a new federation service"""
         service_id = str(uuid.uuid4())
@@ -239,18 +247,20 @@ class FederationServicesCore:
             service_id=service_id,
             name=name,
             server_fqdn=server_fqdn,
-            certificate_password=cert_password
+            certificate_password=cert_password,
         )
 
         # Load certificates if provided
         if signing_cert_path and private_key_path:
             try:
-                with open(signing_cert_path, 'rb') as f:
+                with open(signing_cert_path, "rb") as f:
                     service.signing_certificate = f.read()
-                with open(private_key_path, 'rb') as f:
+                with open(private_key_path, "rb") as f:
                     service.private_key = f.read()
             except Exception as e:
-                self.logger.error(f"Failed to load certificates for service {name}: {e}")
+                self.logger.error(
+                    f"Failed to load certificates for service {name}: {e}"
+                )
                 return None
 
         self.services[service_id] = service
@@ -259,7 +269,7 @@ class FederationServicesCore:
         service.endpoints = {
             "metadata": f"https://{server_fqdn}/FederationMetadata/2007-06/FederationMetadata.xml",
             "token": f"https://{server_fqdn}/adfs/oauth2/token",
-            "authorize": f"https://{server_fqdn}/adfs/oauth2/authorize"
+            "authorize": f"https://{server_fqdn}/adfs/oauth2/authorize",
         }
 
         self.logger.info(f"Created federation service: {name} ({service_id})")
@@ -271,7 +281,7 @@ class FederationServicesCore:
         name: str,
         endpoint: str,
         name_id_format: str = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
-        claim_rules: Optional[List[Dict[str, Any]]] = None
+        claim_rules: Optional[List[Dict[str, Any]]] = None,
     ) -> str:
         """Add a relying party configuration"""
         rp = RelyingParty(
@@ -279,7 +289,7 @@ class FederationServicesCore:
             name=name,
             endpoint=endpoint,
             name_id_format=name_id_format,
-            claim_rules=claim_rules or []
+            claim_rules=claim_rules or [],
         )
 
         self.relying_parties[identifier] = rp
@@ -287,8 +297,7 @@ class FederationServicesCore:
         return identifier
 
     async def generate_saml_token(
-        self,
-        request: TokenGenerationRequest
+        self, request: TokenGenerationRequest
     ) -> Optional[SAMLToken]:
         """Generate a SAML security token"""
         try:
@@ -298,11 +307,17 @@ class FederationServicesCore:
 
             # Create token based on provider
             if request.provider == FederationProvider.OFFICE_365:
-                token = await self._generate_office365_token(request, token_id, now, expires)
+                token = await self._generate_office365_token(
+                    request, token_id, now, expires
+                )
             elif request.provider == FederationProvider.DROPBOX:
-                token = await self._generate_dropbox_token(request, token_id, now, expires)
+                token = await self._generate_dropbox_token(
+                    request, token_id, now, expires
+                )
             elif request.provider == FederationProvider.GENERIC_SAML2:
-                token = await self._generate_generic_saml2_token(request, token_id, now, expires)
+                token = await self._generate_generic_saml2_token(
+                    request, token_id, now, expires
+                )
             else:
                 raise ValueError(f"Unsupported provider: {request.provider}")
 
@@ -312,7 +327,9 @@ class FederationServicesCore:
 
             self.tokens[token_id] = token
 
-            self.logger.info(f"Generated SAML token for {request.user.upn} targeting {request.provider.value}")
+            self.logger.info(
+                f"Generated SAML token for {request.user.upn} targeting {request.provider.value}"
+            )
             return token
 
         except Exception as e:
@@ -324,7 +341,7 @@ class FederationServicesCore:
         request: TokenGenerationRequest,
         token_id: str,
         now: datetime,
-        expires: datetime
+        expires: datetime,
     ) -> SAMLToken:
         """Generate Office 365 SAML 1.1 token"""
         token = SAMLToken(
@@ -333,7 +350,7 @@ class FederationServicesCore:
             issuer=request.service.server_fqdn,
             subject=request.user.upn,
             audience="urn:federation:MicrosoftOnline",
-            expires_at=expires
+            expires_at=expires,
         )
 
         # Add Office 365 specific assertions
@@ -341,13 +358,13 @@ class FederationServicesCore:
             {
                 "name": "objectguid",
                 "namespace": "http://schemas.microsoft.com/identity/claims",
-                "value": request.user.object_guid or str(uuid.uuid4())
+                "value": request.user.object_guid or str(uuid.uuid4()),
             }
         ]
 
         token.conditions = {
             "not_before": now.isoformat(),
-            "not_on_or_after": expires.isoformat()
+            "not_on_or_after": expires.isoformat(),
         }
 
         return token
@@ -357,7 +374,7 @@ class FederationServicesCore:
         request: TokenGenerationRequest,
         token_id: str,
         now: datetime,
-        expires: datetime
+        expires: datetime,
     ) -> SAMLToken:
         """Generate Dropbox SAML 2.0 token"""
         token = SAMLToken(
@@ -366,7 +383,7 @@ class FederationServicesCore:
             issuer=request.service.server_fqdn,
             subject=request.user.email or request.user.upn,
             audience=request.relying_party.identifier,
-            expires_at=expires
+            expires_at=expires,
         )
 
         # Add Dropbox specific assertions
@@ -374,18 +391,19 @@ class FederationServicesCore:
             {
                 "name": "email",
                 "namespace": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims",
-                "value": request.user.email or request.user.upn
+                "value": request.user.email or request.user.upn,
             },
             {
                 "name": "accountname",
                 "namespace": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims",
-                "value": request.user.sam_account_name or request.user.upn.split('@')[0]
-            }
+                "value": request.user.sam_account_name
+                or request.user.upn.split("@")[0],
+            },
         ]
 
         token.conditions = {
             "not_before": now.isoformat(),
-            "not_on_or_after": expires.isoformat()
+            "not_on_or_after": expires.isoformat(),
         }
 
         return token
@@ -395,7 +413,7 @@ class FederationServicesCore:
         request: TokenGenerationRequest,
         token_id: str,
         now: datetime,
-        expires: datetime
+        expires: datetime,
     ) -> SAMLToken:
         """Generate generic SAML 2.0 token"""
         token = SAMLToken(
@@ -404,7 +422,7 @@ class FederationServicesCore:
             issuer=request.service.server_fqdn,
             subject=request.user.upn,
             audience=request.relying_party.identifier,
-            expires_at=expires
+            expires_at=expires,
         )
 
         # Add custom assertions
@@ -413,23 +431,23 @@ class FederationServicesCore:
         # Add default assertions based on claim rules
         for rule in request.relying_party.claim_rules:
             if rule.get("type") == "issuance":
-                token.assertions.append({
-                    "name": rule.get("claim_type", ""),
-                    "namespace": rule.get("namespace", ""),
-                    "value": rule.get("value", "")
-                })
+                token.assertions.append(
+                    {
+                        "name": rule.get("claim_type", ""),
+                        "namespace": rule.get("namespace", ""),
+                        "value": rule.get("value", ""),
+                    }
+                )
 
         token.conditions = {
             "not_before": now.isoformat(),
-            "not_on_or_after": expires.isoformat()
+            "not_on_or_after": expires.isoformat(),
         }
 
         return token
 
     async def _sign_saml_token(
-        self,
-        token: SAMLToken,
-        service: FederationService
+        self, token: SAMLToken, service: FederationService
     ) -> str:
         """Sign a SAML token with the service's private key"""
         try:
@@ -456,10 +474,7 @@ class FederationServicesCore:
             return ""
 
     async def decrypt_encrypted_pfx(
-        self,
-        encrypted_blob: bytes,
-        dkm_key: bytes,
-        output_path: str
+        self, encrypted_blob: bytes, dkm_key: bytes, output_path: str
     ) -> bool:
         """
         Decrypt an EncryptedPFX blob using DKM key
@@ -479,7 +494,7 @@ class FederationServicesCore:
             # Generate a mock PFX file
             mock_pfx = secrets.token_bytes(1024)
 
-            with open(output_path, 'wb') as f:
+            with open(output_path, "wb") as f:
                 f.write(mock_pfx)
 
             self.logger.info(f"Decrypted PFX blob and saved to {output_path}")
@@ -490,9 +505,7 @@ class FederationServicesCore:
             return False
 
     async def load_pfx_certificate(
-        self,
-        pfx_path: str,
-        password: Optional[str] = None
+        self, pfx_path: str, password: Optional[str] = None
     ) -> Tuple[Optional[bytes], Optional[bytes]]:
         """
         Load certificate and private key from PFX file
@@ -505,7 +518,7 @@ class FederationServicesCore:
             Tuple of (certificate_bytes, private_key_bytes)
         """
         try:
-            with open(pfx_path, 'rb') as f:
+            with open(pfx_path, "rb") as f:
                 pfx_data = f.read()
 
             # Mock loading - in real implementation would use cryptography library
@@ -525,7 +538,7 @@ class FederationServicesCore:
         self,
         common_name: str,
         organization: str = "Example Corp",
-        validity_days: int = 365
+        validity_days: int = 365,
     ) -> Tuple[bytes, bytes]:
         """
         Generate a self-signed certificate for testing
@@ -541,37 +554,34 @@ class FederationServicesCore:
         try:
             # Generate private key
             private_key = rsa.generate_private_key(
-                public_exponent=65537,
-                key_size=2048,
-                backend=default_backend()
+                public_exponent=65537, key_size=2048, backend=default_backend()
             )
 
             # Create certificate
-            subject = issuer = x509.Name([
-                x509.NameAttribute(NameOID.COMMON_NAME, common_name),
-                x509.NameAttribute(NameOID.ORGANIZATION_NAME, organization),
-            ])
+            subject = issuer = x509.Name(
+                [
+                    x509.NameAttribute(NameOID.COMMON_NAME, common_name),
+                    x509.NameAttribute(NameOID.ORGANIZATION_NAME, organization),
+                ]
+            )
 
-            cert = x509.CertificateBuilder().subject_name(
-                subject
-            ).issuer_name(
-                issuer
-            ).public_key(
-                private_key.public_key()
-            ).serial_number(
-                x509.random_serial_number()
-            ).not_valid_before(
-                datetime.utcnow()
-            ).not_valid_after(
-                datetime.utcnow() + timedelta(days=validity_days)
-            ).sign(private_key, hashes.SHA256(), default_backend())
+            cert = (
+                x509.CertificateBuilder()
+                .subject_name(subject)
+                .issuer_name(issuer)
+                .public_key(private_key.public_key())
+                .serial_number(x509.random_serial_number())
+                .not_valid_before(datetime.utcnow())
+                .not_valid_after(datetime.utcnow() + timedelta(days=validity_days))
+                .sign(private_key, hashes.SHA256(), default_backend())
+            )
 
             # Serialize to PEM
             cert_pem = cert.public_bytes(serialization.Encoding.PEM)
             key_pem = private_key.private_bytes(
                 encoding=serialization.Encoding.PEM,
                 format=serialization.PrivateFormat.PKCS8,
-                encryption_algorithm=serialization.NoEncryption()
+                encryption_algorithm=serialization.NoEncryption(),
             )
 
             self.logger.info(f"Generated self-signed certificate for {common_name}")
@@ -582,10 +592,7 @@ class FederationServicesCore:
             return b"", b""
 
     async def export_token_to_file(
-        self,
-        token: SAMLToken,
-        filepath: str,
-        format: str = "xml"
+        self, token: SAMLToken, filepath: str, format: str = "xml"
     ) -> None:
         """
         Export SAML token to file
@@ -596,23 +603,30 @@ class FederationServicesCore:
             format: Export format (xml, json)
         """
         if format == "xml":
-            content = token.signed_xml or f"<!-- Unsigned SAML Token -->\n{token.token_id}"
+            content = (
+                token.signed_xml or f"<!-- Unsigned SAML Token -->\n{token.token_id}"
+            )
         elif format == "json":
-            content = json.dumps({
-                "token_id": token.token_id,
-                "version": token.version.value,
-                "issuer": token.issuer,
-                "subject": token.subject,
-                "audience": token.audience,
-                "assertions": token.assertions,
-                "conditions": token.conditions,
-                "created_at": token.created_at.isoformat(),
-                "expires_at": token.expires_at.isoformat() if token.expires_at else None
-            }, indent=2)
+            content = json.dumps(
+                {
+                    "token_id": token.token_id,
+                    "version": token.version.value,
+                    "issuer": token.issuer,
+                    "subject": token.subject,
+                    "audience": token.audience,
+                    "assertions": token.assertions,
+                    "conditions": token.conditions,
+                    "created_at": token.created_at.isoformat(),
+                    "expires_at": (
+                        token.expires_at.isoformat() if token.expires_at else None
+                    ),
+                },
+                indent=2,
+            )
         else:
             raise ValueError(f"Unsupported format: {format}")
 
-        with open(filepath, 'w', encoding='utf-8') as f:
+        with open(filepath, "w", encoding="utf-8") as f:
             f.write(content)
 
         self.logger.info(f"Exported SAML token to {filepath}")
@@ -623,22 +637,24 @@ class FederationServicesCore:
             "total_services": len(self.services),
             "total_relying_parties": len(self.relying_parties),
             "total_tokens": len(self.tokens),
-            "active_services": len([s for s in self.services.values() if s.signing_certificate]),
+            "active_services": len(
+                [s for s in self.services.values() if s.signing_certificate]
+            ),
             "tokens_by_version": {},
             "tokens_by_provider": {},
-            "recent_tokens": []
+            "recent_tokens": [],
         }
 
         # Token statistics
         for token in self.tokens.values():
             version = token.version.value
-            stats["tokens_by_version"][version] = stats["tokens_by_version"].get(version, 0) + 1
+            stats["tokens_by_version"][version] = (
+                stats["tokens_by_version"].get(version, 0) + 1
+            )
 
         # Recent tokens (last 10)
         recent_tokens = sorted(
-            self.tokens.values(),
-            key=lambda t: t.created_at,
-            reverse=True
+            self.tokens.values(), key=lambda t: t.created_at, reverse=True
         )[:10]
 
         stats["recent_tokens"] = [
@@ -646,7 +662,7 @@ class FederationServicesCore:
                 "id": t.token_id,
                 "subject": t.subject,
                 "created_at": t.created_at.isoformat(),
-                "expires_at": t.expires_at.isoformat() if t.expires_at else None
+                "expires_at": t.expires_at.isoformat() if t.expires_at else None,
             }
             for t in recent_tokens
         ]

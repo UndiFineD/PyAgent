@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_truncationmanager_exists():
     """Test that TruncationManager class exists and is importable."""
-    assert 'TruncationManager' in dir()
+    assert "TruncationManager" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

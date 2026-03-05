@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 
 """Lazy-loading entry point for observability.errors."""
@@ -121,10 +122,16 @@ except Exception:  # pragma: no cover - optional component may be absent
     SuggestedFix = None
 
 _LAZY_REGISTRY = {
-    "AutoFixSuggester": ("src.observability.errors.auto_fix_suggester", "AutoFixSuggester"),
+    "AutoFixSuggester": (
+        "src.observability.errors.auto_fix_suggester",
+        "AutoFixSuggester",
+    ),
     "BlameInfo": ("src.observability.errors.blame_info", "BlameInfo"),
     "CodeContext": ("src.observability.errors.code_context", "CodeContext"),
-    "ContextAggregator": ("src.observability.errors.context_aggregator", "ContextAggregator"),
+    "ContextAggregator": (
+        "src.observability.errors.context_aggregator",
+        "ContextAggregator",
+    ),
     "CustomError": ("src.observability.errors.custom_err", "CustomError"),
     "ErrorAgent": ("src.observability.errors.error_agent", "ErrorAgent"),
     "ErrorCategory": ("src.observability.errors.error_category", "ErrorCategory"),
@@ -138,17 +145,31 @@ _LAZY_REGISTRY = {
     "ErrorSeverity": ("src.observability.errors.error_severity", "ErrorSeverity"),
     "ErrorStats": ("src.observability.errors.error_stats", "ErrorStats"),
     "ErrorStatus": ("src.observability.errors.error_status", "ErrorStatus"),
-    "NotificationManager": ("src.observability.errors.notification_manager", "NotificationManager"),
-    "ResolutionRecommendation": ("src.observability.errors.resolution_recommendation", "ResolutionRecommendation"),
-    "RootCauseAnalysis": ("src.observability.errors.root_cause_analysis", "RootCauseAnalysis"),
-    "SolutionVerifier": ("src.observability.errors.solution_verifier", "SolutionVerifier"),
+    "NotificationManager": (
+        "src.observability.errors.notification_manager",
+        "NotificationManager",
+    ),
+    "ResolutionRecommendation": (
+        "src.observability.errors.resolution_recommendation",
+        "ResolutionRecommendation",
+    ),
+    "RootCauseAnalysis": (
+        "src.observability.errors.root_cause_analysis",
+        "RootCauseAnalysis",
+    ),
+    "SolutionVerifier": (
+        "src.observability.errors.solution_verifier",
+        "SolutionVerifier",
+    ),
     "SourceLocation": ("src.observability.errors.source_location", "SourceLocation"),
     "SuggestedFix": ("src.observability.errors.suggested_fix", "SuggestedFix"),
 }
 
 _loader = ModuleLazyLoader(_LAZY_REGISTRY)
 
+
 def __getattr__(name: str) -> Any:
     return _loader.load(name)
+
 
 __all__ = ["VERSION"] + list(_LAZY_REGISTRY.keys())

@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_executionresult_exists():
     """Test that ExecutionResult class exists and is importable."""
-    assert 'ExecutionResult' in dir()
+    assert "ExecutionResult" in dir()
 
 
 def test_safelocalinterpreter_exists():
     """Test that SafeLocalInterpreter class exists and is importable."""
-    assert 'SafeLocalInterpreter' in dir()
+    assert "SafeLocalInterpreter" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

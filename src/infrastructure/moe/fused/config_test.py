@@ -33,30 +33,29 @@ except ImportError as e:
 
 def test_expertplacementstrategy_exists():
     """Test that ExpertPlacementStrategy class exists and is importable."""
-    assert 'ExpertPlacementStrategy' in dir()
+    assert "ExpertPlacementStrategy" in dir()
 
 
 def test_moequantmethod_exists():
     """Test that MoEQuantMethod class exists and is importable."""
-    assert 'MoEQuantMethod' in dir()
+    assert "MoEQuantMethod" in dir()
 
 
 def test_fusedmoeconfig_exists():
     """Test that FusedMoEConfig class exists and is importable."""
-    assert 'FusedMoEConfig' in dir()
+    assert "FusedMoEConfig" in dir()
 
 
 def test_fusedmoeparallelconfig_exists():
     """Test that FusedMoEParallelConfig class exists and is importable."""
-    assert 'FusedMoEParallelConfig' in dir()
+    assert "FusedMoEParallelConfig" in dir()
 
 
 def test_fusedmoequantconfig_exists():
     """Test that FusedMoEQuantConfig class exists and is importable."""
-    assert 'FusedMoEQuantConfig' in dir()
+    assert "FusedMoEQuantConfig" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

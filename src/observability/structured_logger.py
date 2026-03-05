@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -80,12 +81,16 @@ class StructuredLogger:
     def _compress_logs(self) -> None:
         """Compresses current log file to .json.gz (Phase 277)."""
         timestamp: str = datetime.now().strftime("%Y%m%d_%H%M%S")
-        compressed_file: Path = self.log_file.with_name(f"{self.log_file.stem}_{timestamp}.json.gz")
-        logging.info(f"StructuredLogger: Compressing log file ({self.log_file.name}) to {compressed_file.name}")
+        compressed_file: Path = self.log_file.with_name(
+            f"{self.log_file.stem}_{timestamp}.json.gz"
+        )
+        logging.info(
+            f"StructuredLogger: Compressing log file ({self.log_file.name}) to {compressed_file.name}"
+        )
 
         try:
-            with open(self.log_file, 'rb') as f_in:
-                with gzip.open(compressed_file, 'wb') as f_out:
+            with open(self.log_file, "rb") as f_in:
+                with gzip.open(compressed_file, "wb") as f_out:
                     shutil.copyfileobj(f_in, f_out)
             self._fs.delete(self.log_file)  # Delete original
         except OSError as e:  # pylint: disable=broad-exception-caught, unused-variable
@@ -121,22 +126,31 @@ class StructuredLogger:
                     extra_json,
                 )
                 # Console logging (quick)
-                std_logger: logging.Logger = logging.getLogger(f"PyAgent.{self.agent_id}")
-                log_func: Any | Callable[..., None] = getattr(std_logger, level.lower(), std_logger.info)
+                std_logger: logging.Logger = logging.getLogger(
+                    f"PyAgent.{self.agent_id}"
+                )
+                log_func: Any | Callable[..., None] = getattr(
+                    std_logger, level.lower(), std_logger.info
+                )
                 log_func(f"[{self.agent_id}] {message[:200]}")
 
                 # File write
                 try:
                     with open(self.log_file, "a", encoding="utf-8") as f:
                         f.write(entry_json + "\n")
-                except OSError as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except (
+                    OSError
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logging.error(f"StructuredLogger failed to write: {e}")
                     traceback.print_exc()
                 return
 
         # Python fallback path
         clean_message: str = self._mask_sensitive(message)
-        clean_kwargs: dict[str, str | Any] = {k: (self._mask_sensitive(str(v)) if isinstance(v, str) else v) for k, v in kwargs.items()}
+        clean_kwargs: dict[str, str | Any] = {
+            k: (self._mask_sensitive(str(v)) if isinstance(v, str) else v)
+            for k, v in kwargs.items()
+        }
 
         entry = {
             "timestamp": timestamp,
@@ -149,8 +163,12 @@ class StructuredLogger:
 
         # Also log to standard logging for console visibility
         std_logger: logging.Logger = logging.getLogger(f"PyAgent.{self.agent_id}")
-        log_func: Any | Callable[..., None] = getattr(std_logger, level.lower(), std_logger.info)
-        log_func(f"[{self.agent_id}] {clean_message} {json.dumps(clean_kwargs) if clean_kwargs else ''}")
+        log_func: Any | Callable[..., None] = getattr(
+            std_logger, level.lower(), std_logger.info
+        )
+        log_func(
+            f"[{self.agent_id}] {clean_message} {json.dumps(clean_kwargs) if clean_kwargs else ''}"
+        )
 
         try:
             with open(self.log_file, "a", encoding="utf-8") as f:

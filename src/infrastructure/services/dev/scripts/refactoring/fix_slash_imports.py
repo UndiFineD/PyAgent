@@ -2,15 +2,16 @@
 """
 Fix slash command imports by converting absolute imports to relative ones.
 """
+
 import os
 from pathlib import Path
 
 # Robustly find the repository root
 current_path = Path(__file__).resolve()
 project_root = current_path
-while project_root.name != 'src' and project_root.parent != project_root:
+while project_root.name != "src" and project_root.parent != project_root:
     project_root = project_root.parent
-if project_root.name == 'src':
+if project_root.name == "src":
     project_root = project_root.parent
 
 DIR_PATH = project_root / "src/interface/slash_commands/commands"
@@ -26,9 +27,16 @@ for filename in os.listdir(DIR_PATH):
             content = f.read()
 
         # Replace absolute imports with relative ones
-        new_content = content.replace("from src.interface.slash_commands.core import", "from ..core import")
-        new_content = new_content.replace("from src.interface.slash_commands.registry import", "from ..registry import")
-        new_content = new_content.replace("from src.interface.slash_commands.loader import", "from ..loader import")
+        new_content = content.replace(
+            "from src.interface.slash_commands.core import", "from ..core import"
+        )
+        new_content = new_content.replace(
+            "from src.interface.slash_commands.registry import",
+            "from ..registry import",
+        )
+        new_content = new_content.replace(
+            "from src.interface.slash_commands.loader import", "from ..loader import"
+        )
 
         if new_content != content:
             with open(filepath, "w", encoding="utf-8") as f:

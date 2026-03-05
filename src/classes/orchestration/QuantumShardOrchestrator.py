@@ -13,6 +13,7 @@ from typing import Dict, List, Any, Optional
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
+
 class QuantumShardOrchestrator(BaseAgent):
     """Simulates distributed quantum-sharded state management."""
 
@@ -34,9 +35,9 @@ class QuantumShardOrchestrator(BaseAgent):
             if self.state_file.exists():
                 with open(self.state_file, "r") as f:
                     current_field = json.load(f)
-            
+
             current_field.update(self.shared_state)
-            
+
             with open(self.state_file, "w") as f:
                 json.dump(current_field, f, indent=4)
         except Exception as e:
@@ -65,8 +66,13 @@ class QuantumShardOrchestrator(BaseAgent):
     def improve_content(self, input_text: str) -> str:
         return f"Shard {self.shard_id} active. State coherency: 99.9%."
 
+
 if __name__ == "__main__":
     from src.classes.base_agent.utilities import create_main_function
-    main = create_main_function(QuantumShardOrchestrator, "Quantum Shard Orchestrator", "Distributed state entanglement")
-    main()
 
+    main = create_main_function(
+        QuantumShardOrchestrator,
+        "Quantum Shard Orchestrator",
+        "Distributed state entanglement",
+    )
+    main()

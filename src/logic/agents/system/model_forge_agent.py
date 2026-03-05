@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -58,7 +59,9 @@ class ModelForgeAgent(BaseAgent):
 
         self.agent_quality_history[agent_name].append(last_score)
 
-        if self.registry.should_trigger_finetuning(self.agent_quality_history[agent_name]):
+        if self.registry.should_trigger_finetuning(
+            self.agent_quality_history[agent_name]
+        ):
             logging.warning(
                 f"ModelForge: Triggering autonomous fine-tuning for {agent_name} due to low quality scores."
             )
@@ -66,7 +69,9 @@ class ModelForgeAgent(BaseAgent):
         return f"Quality for {agent_name} is acceptable."
 
     @as_tool
-    async def prepare_dataset(self, task_name: str, examples: list[dict[str, str]]) -> str:
+    async def prepare_dataset(
+        self, task_name: str, examples: list[dict[str, str]]
+    ) -> str:
         """Prepares a JSONL dataset for fine-tuning.
         Args:
             task_name: Unique name for the fine-tuning task.
@@ -82,11 +87,15 @@ class ModelForgeAgent(BaseAgent):
         try:
             await asyncio.to_thread(write_dataset)
             return f"Dataset prepared at {output_path} with {len(examples)} examples."
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Failed to prepare dataset: {e}"
 
     @as_tool
-    async def trigger_autonomous_tuning(self, module_name: str, evolution_data: dict[str, Any]) -> str:
+    async def trigger_autonomous_tuning(
+        self, module_name: str, evolution_data: dict[str, Any]
+    ) -> str:
         """
         Triggers an autonomous fine-tuning loop for a specific agent/module.
         Args:
@@ -109,7 +118,9 @@ class ModelForgeAgent(BaseAgent):
         return "FAILED: Could not start fine-tuning job."
 
     @as_tool
-    async def start_finetuning(self, task_name: str, base_model: str = "unsloth/llama-3-8b-bnb-4bit") -> str:
+    async def start_finetuning(
+        self, task_name: str, base_model: str = "unsloth/llama-3-8b-bnb-4bit"
+    ) -> str:
         """Simulates starting a LoRA fine-tuning session.
         Args:
             task_name: Name of the task/dataset to use.
@@ -125,8 +136,10 @@ class ModelForgeAgent(BaseAgent):
             # Save config to data/config (Phase 282: Dedicated config storage)
             config_path = Path("data/config") / f"{task_name}_adapter_config.json"
             config_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(config_path, 'w', encoding='utf-8') as f:
-                json.dump({"base_model": base_model, "peft_type": "LORA", "job_id": job_id}, f)
+            with open(config_path, "w", encoding="utf-8") as f:
+                json.dump(
+                    {"base_model": base_model, "peft_type": "LORA", "job_id": job_id}, f
+                )
 
             # Keep adapter directory for other artifacts
             adapter_path = self.adapters_dir / task_name
@@ -138,9 +151,13 @@ class ModelForgeAgent(BaseAgent):
             return f"Error: Dataset {dataset_path} not found."
 
         if hasattr(self, "recorder") and self.recorder:
-            self.recorder.record_lesson("model_forge_finetune", {"task": task_name, "base": base_model})
+            self.recorder.record_lesson(
+                "model_forge_finetune", {"task": task_name, "base": base_model}
+            )
 
-        logging.info(f"ModelForge: Starting fine-tuning for '{task_name}' on '{base_model}'...")
+        logging.info(
+            f"ModelForge: Starting fine-tuning for '{task_name}' on '{base_model}'..."
+        )
         return (
             f"SUCCESS: Fine-tuning job '{job_id}' started. "
             f"Monitoring progress at {self.forge_dir}/logs/{job_id}.log"
@@ -159,7 +176,7 @@ class ModelForgeAgent(BaseAgent):
             return f"Error: Adapter '{task_name}' not found."
 
         def read_config() -> str:
-            with open(adapter_path, encoding='utf-8') as f:
+            with open(adapter_path, encoding="utf-8") as f:
                 return f.read()
 
         return await asyncio.to_thread(read_config)

@@ -55,7 +55,9 @@ class ExpertRewardPredictor:
 
         return biases
 
-    def adjust_routing(self, agent_id: str, base_similarity: float, domain: str = "general") -> float:
+    def adjust_routing(
+        self, agent_id: str, base_similarity: float, domain: str = "general"
+    ) -> float:
         """
         Adjusts the raw similarity score with a historical reward bias.
         """

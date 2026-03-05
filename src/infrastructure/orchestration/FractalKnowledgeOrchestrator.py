@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,13 +26,14 @@ from typing import Dict, List, Any
 
 __version__ = VERSION
 
+
 class FractalKnowledgeOrchestrator:
     """
     Phase 39: Fractal Knowledge Synthesis.
     Synthesizes cross-domain knowledge by recursively merging summaries from specialized agents.
     Resolves conflicting insights into a unified 'Wisdom Layer'.
     """
-    
+
     def __init__(self, fleet) -> None:
         self.fleet = fleet
         self.wisdom_cache: dict[str, Any] = {}
@@ -40,18 +42,24 @@ class FractalKnowledgeOrchestrator:
         """
         Gathers insights from specific agents and merges them into a fractal summary.
         """
-        logging.info(f"FractalKnowledge: Synthesizing wisdom for '{topic}' across {len(agent_names)} agents...")
-        
+        logging.info(
+            f"FractalKnowledge: Synthesizing wisdom for '{topic}' across {len(agent_names)} agents..."
+        )
+
         raw_insights = {}
         for name in agent_names:
             if name in self.fleet.agents:
                 # Consult the agent's expertise
                 agent = self.fleet.agents[name]
-                raw_insights[name] = agent.improve_content(f"Analyze data regarding topic: {topic}")
-        
+                raw_insights[name] = agent.improve_content(
+                    f"Analyze data regarding topic: {topic}"
+                )
+
         # Real Conflict Resolution logic using AI
-        consultation_text = "\n".join([f"Agent {name}: {insight}" for name, insight in raw_insights.items()])
-        
+        consultation_text = "\n".join(
+            [f"Agent {name}: {insight}" for name, insight in raw_insights.items()]
+        )
+
         description = f"Synthesize insights for {topic}"
         prompt = (
             f"You are the Fractal Knowledge Orchestrator. Synthesize the following agent insights regarding '{topic}' "
@@ -59,20 +67,22 @@ class FractalKnowledgeOrchestrator:
             "logical consistency and expert reasoning.\n\n"
             f"### Agent Insights:\n{consultation_text}"
         )
-        
+
         # Use the first agent's run_subagent capability (shared via fleet)
         # or assuming LLMClient is available globally
         try:
-             unified_wisdom = self.fleet.agents[agent_names[0]].run_subagent(description, prompt)
+            unified_wisdom = self.fleet.agents[agent_names[0]].run_subagent(
+                description, prompt
+            )
         except Exception:
-             unified_wisdom = " | ".join(raw_insights.values())
-        
+            unified_wisdom = " | ".join(raw_insights.values())
+
         resolution_report = {
             "topic": topic,
             "sources": list(raw_insights.keys()),
-            "conflicts_resolved": len(raw_insights) // 2, # Heuristic
-            "unified_wisdom": unified_wisdom
+            "conflicts_resolved": len(raw_insights) // 2,  # Heuristic
+            "unified_wisdom": unified_wisdom,
         }
-        
+
         self.wisdom_cache[topic] = resolution_report
         return resolution_report

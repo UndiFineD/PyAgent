@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_dynamicdecomposeragent_exists():
     """Test that DynamicDecomposerAgent class exists and is importable."""
-    assert 'DynamicDecomposerAgent' in dir()
+    assert "DynamicDecomposerAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

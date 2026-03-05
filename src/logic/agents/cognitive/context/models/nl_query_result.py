@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,6 +23,7 @@ from typing import List
 
 __version__ = VERSION
 
+
 @dataclass
 class NLQueryResult:
     """Result from natural language query.
@@ -32,6 +34,7 @@ class NLQueryResult:
         relevant_contexts: List of relevant context files.
         confidence: Confidence score (0 - 1).
     """
+
     query: str
     answer: str
     relevant_contexts: list[str] = field(default_factory=lambda: [])

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +28,9 @@ from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
 
@@ -89,7 +92,9 @@ def main() -> None:
         logging.info(f"    - Issues: {len(quality_res['issues'])}")
 
     logging.info("--- Summary ---")
-    logging.info("Safety Audit Complete. The codebase has multiple active monitoring agents in place.")
+    logging.info(
+        "Safety Audit Complete. The codebase has multiple active monitoring agents in place."
+    )
 
 
 if __name__ == "__main__":

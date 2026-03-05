@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -163,4 +164,3 @@ class BaseAgentCore(ValidationCore, MetricsCore, FormattingCore, UtilsCore, Even
             "# Windows: winget install GitHub.Copilot\n"
             "# npm: npm install -g @github/copilot\n"
         )
-

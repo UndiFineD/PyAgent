@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -43,10 +44,16 @@ class KnowledgeAgent(BaseAgent):
 
     def __init__(self, file_path: str | None = None, fleet: Any | None = None) -> None:
         if file_path is None:
-            file_path = str(fleet.workspace_root) if fleet and hasattr(fleet, "workspace_root") else "."
+            file_path = (
+                str(fleet.workspace_root)
+                if fleet and hasattr(fleet, "workspace_root")
+                else "."
+            )
 
         super().__init__(file_path)
-        workspace_root = self.file_path if self.file_path.is_dir() else self.file_path.parent
+        workspace_root = (
+            self.file_path if self.file_path.is_dir() else self.file_path.parent
+        )
         self.index_file = workspace_root / ".agent_knowledge_index.json"
         self.db_path = workspace_root / "data/db/.agent_chroma_db"
 
@@ -65,7 +72,9 @@ class KnowledgeAgent(BaseAgent):
             "You manage 6 memory tiers: Core, Episodic, Semantic, Procedural, Resource, and Knowledge."
         )
 
-    def record_tier_memory(self, tier: str, content: str, metadata: dict[str, Any] | None = None) -> None:
+    def record_tier_memory(
+        self, tier: str, content: str, metadata: dict[str, Any] | None = None
+    ) -> None:
         """Records a piece of knowledge into the MIRIX 6-tier architecture."""
         self.tiered_memory.record_memory(tier, content, metadata)
 
@@ -87,8 +96,11 @@ class KnowledgeAgent(BaseAgent):
         snippets = []
         for m in hits:
             doc = m["content"][:1000]
-            snippets.append(f"> [!ABSTRACT] File: {m['metadata']['path']}\n> ```\n" +
-                           "\n".join([f"> {sl}" for sl in doc.splitlines()[:20]]) + "\n> ```\n")
+            snippets.append(
+                f"> [!ABSTRACT] File: {m['metadata']['path']}\n> ```\n"
+                + "\n".join([f"> {sl}" for sl in doc.splitlines()[:20]])
+                + "\n> ```\n"
+            )
         return "\n".join(snippets)
 
     def scan_workspace(self, query: str) -> str:
@@ -113,7 +125,11 @@ class KnowledgeAgent(BaseAgent):
             if hits:
                 context_snippets.append(hits)
         if len(context_snippets) < 3:
-            context_snippets.extend(self.knowledge_core.perform_fallback_scan(query, root, index.get(query, [])))
+            context_snippets.extend(
+                self.knowledge_core.perform_fallback_scan(
+                    query, root, index.get(query, [])
+                )
+            )
         return "\n".join(context_snippets) if context_snippets else "No context."
 
     def _load_index(self) -> dict:
@@ -156,6 +172,7 @@ class KnowledgeAgent(BaseAgent):
         """User-facing tool."""
         hits = self.tiered_memory.search_workspace(query, n_results=5)
         return "\n".join([f"- {m['metadata']['path']}" for m in hits])
+
 
 if __name__ == "__main__":
     main = create_main_function(KnowledgeAgent, "Knowledge Agent", "Query")

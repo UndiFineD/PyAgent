@@ -10,19 +10,22 @@ from src.core.base.Version import VERSION
 
 logger = StructuredLogger(__name__)
 
+
 class TeleportationEngine:
     """
-    Handles the serialization and deserialization of agent states for 
+    Handles the serialization and deserialization of agent states for
     cross-machine 'teleportation'.
     """
-    
+
     @staticmethod
     def capture_agent_state(agent: Any) -> bytes:
         """
         Captures the complete state of an agent into a compressed binary blob.
         """
-        logger.info(f"Teleportation: Capturing state for agent {getattr(agent, 'name', 'Unknown')}")
-        
+        logger.info(
+            f"Teleportation: Capturing state for agent {getattr(agent, 'name', 'Unknown')}"
+        )
+
         # Extract core state
         # In a real scenario, we'd use the persistence mixin or __getstate__
         state = {
@@ -31,15 +34,15 @@ class TeleportationEngine:
             "memory": getattr(agent, "memory", {}),
             "mission_params": getattr(agent, "mission_params", {}),
             "lineage": getattr(agent, "lineage", []),
-            "dynamic_weights": getattr(agent, "dynamic_weights", {})
+            "dynamic_weights": getattr(agent, "dynamic_weights", {}),
         }
-        
+
         # Serialize with MessagePack
         packed = msgpack.packb(state, use_bin_type=True)
-        
+
         # Compress
         compressed = zlib.compress(packed)
-        
+
         logger.info(f"Teleportation: State captured. Size: {len(compressed)} bytes.")
         return compressed
 
@@ -62,7 +65,7 @@ class TeleportationEngine:
     @staticmethod
     def encode_for_transport(blob: bytes) -> str:
         """Encodes binary blob as a base64 string for text-based protocols (JSON/HTTP)."""
-        return base64.b64encode(blob).decode('utf-8')
+        return base64.b64encode(blob).decode("utf-8")
 
     @staticmethod
     def decode_from_transport(encoded: str) -> bytes:

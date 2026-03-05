@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,12 +39,21 @@ class DiffCore(BaseCore):
     Supports unified diff format and structured JSON diffs.
     """
 
-    def __init__(self, output_format: DiffOutputFormat = DiffOutputFormat.UNIFIED, context_lines: int = 3) -> None:
+    def __init__(
+        self,
+        output_format: DiffOutputFormat = DiffOutputFormat.UNIFIED,
+        context_lines: int = 3,
+    ) -> None:
         super().__init__()
         self.output_format = output_format
         self.context_lines = context_lines
 
-    def generate_diff(self, old_text: str | Path, new_text: str, file_path: Optional[str | Path] = None) -> DiffResult:
+    def generate_diff(
+        self,
+        old_text: str | Path,
+        new_text: str,
+        file_path: Optional[str | Path] = None,
+    ) -> DiffResult:
         """
         Generates a diff between two strings.
         If rc is available, uses the Rust-accelerated diffing engine (LCS or Myers).
@@ -53,10 +63,15 @@ class DiffCore(BaseCore):
         actual_new = new_text
         actual_path = file_path
 
-        if (isinstance(old_text, (Path, str)) and isinstance(new_text, str) and
-            (file_path is None or isinstance(file_path, str))):
+        if (
+            isinstance(old_text, (Path, str))
+            and isinstance(new_text, str)
+            and (file_path is None or isinstance(file_path, str))
+        ):
             # Check if old_text looks like a path and new_text looks like content
-            if isinstance(old_text, Path) or (isinstance(old_text, str) and ("/" in old_text or "\\" in old_text)):
+            if isinstance(old_text, Path) or (
+                isinstance(old_text, str) and ("/" in old_text or "\\" in old_text)
+            ):
                 # If we have 3 args and first is path, 2nd is old, 3rd is new
                 if file_path is not None:
                     actual_path = str(old_text)
@@ -105,17 +120,21 @@ class DiffCore(BaseCore):
             diff_lines=diff_text.splitlines() if diff_text else [],
             additions=additions,
             deletions=deletions,
-            changes=additions + deletions
+            changes=additions + deletions,
         )
 
-    def format_diff(self, result: DiffResult, fmt: Optional[DiffOutputFormat] = None) -> str:
+    def format_diff(
+        self, result: DiffResult, fmt: Optional[DiffOutputFormat] = None
+    ) -> str:
         """Formats a DiffResult into a string."""
         target_fmt = fmt or self.output_format
         if hasattr(target_fmt, "name") and target_fmt.name == "HTML":
             return f"<html><body><pre>{result.diff_text}</pre></body></html>"
         return result.diff_text
 
-    def generate_structured_diff(self, old_text: str, new_text: str) -> List[Dict[str, Any]]:
+    def generate_structured_diff(
+        self, old_text: str, new_text: str
+    ) -> List[Dict[str, Any]]:
         """Generates a structured list of changes (line by line)."""
         # Python implementation using SequenceMatcher
         _ = (old_text, new_text)  # Mark as used

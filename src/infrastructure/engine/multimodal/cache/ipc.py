@@ -72,7 +72,9 @@ class IPCMultiModalCache(MultiModalCache):
         self._stats.misses += 1
         return None
 
-    def put(self, key: MediaHash, data: Any, metadata: Optional[Dict] = None) -> CacheEntry:
+    def put(
+        self, key: MediaHash, data: Any, metadata: Optional[Dict] = None
+    ) -> CacheEntry:
         """Put in local cache and mark for sharing."""
         entry = self._local_cache.put(key, data, metadata)
         self._shared_keys.add(key.value)

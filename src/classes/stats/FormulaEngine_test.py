@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_formulaengine_exists():
     """Test that FormulaEngine class exists and is importable."""
-    assert 'FormulaEngine' in dir()
+    assert "FormulaEngine" in dir()
 
 
 def test_formulaengine_instantiation():
@@ -45,4 +45,3 @@ def test_formulaengine_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

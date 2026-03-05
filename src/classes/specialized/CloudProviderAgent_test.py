@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_cloudprovideragent_exists():
     """Test that CloudProviderAgent class exists and is importable."""
-    assert 'CloudProviderAgent' in dir()
+    assert "CloudProviderAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

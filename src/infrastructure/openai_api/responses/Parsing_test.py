@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_conversationbuilder_exists():
     """Test that ConversationBuilder class exists and is importable."""
-    assert 'ConversationBuilder' in dir()
+    assert "ConversationBuilder" in dir()
 
 
 def test_parse_response_request_exists():
@@ -44,4 +44,3 @@ def test_parse_response_request_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

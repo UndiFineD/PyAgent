@@ -59,7 +59,11 @@ class ComplianceAgent(BaseAgent):
         for name, pattern in patterns.items():
             if re.search(pattern, content):
                 findings.append(name)
-        return {"compliant": len(findings) == 0, "findings": findings, "pii_detected": len(findings) > 0}
+        return {
+            "compliant": len(findings) == 0,
+            "findings": findings,
+            "pii_detected": len(findings) > 0,
+        }
 
     @as_tool
     def perform_audit(self, file_map: dict[str, str]) -> dict[str, Any]:
@@ -77,7 +81,9 @@ class ComplianceAgent(BaseAgent):
         report = {
             "score": score,
             "issue_count": len(all_issues),
-            "critical_violations": [i.message for i in all_issues if i.severity == "CRITICAL"],
+            "critical_violations": [
+                i.message for i in all_issues if i.severity == "CRITICAL"
+            ],
             "status": "PASS" if score > 0.8 else "FAIL",
         }
 

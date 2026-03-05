@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "create_detokenizer"), "create_detokenizer missing"
     assert hasattr(mod, "detokenize_incrementally"), "detokenize_incrementally missing"
-

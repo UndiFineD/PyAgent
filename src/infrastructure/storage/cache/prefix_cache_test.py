@@ -22,4 +22,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "BlockHasher"), "BlockHasher missing"
     assert hasattr(mod, "create_prefix_cache"), "create_prefix_cache missing"
     assert hasattr(mod, "get_request_block_hasher"), "get_request_block_hasher missing"
-

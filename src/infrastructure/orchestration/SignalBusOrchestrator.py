@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,17 +24,20 @@ from collections.abc import Callable
 
 __version__ = VERSION
 
+
 class SignalBusOrchestrator:
     """
     High-speed signal bus for low-latency agent-to-agent communication.
     Uses an internal message queue and a pub-sub pattern to bypass slow JSON/HTTP overhead.
     """
-    
+
     def __init__(self) -> None:
         self._subscribers: dict[str, list[Callable[[Any, str], None]]] = {}
         self._queue: queue.Queue[dict[str, Any]] = queue.Queue()
         self._running: bool = True
-        self._thread: threading.Thread = threading.Thread(target=self._process_bus, daemon=True)
+        self._thread: threading.Thread = threading.Thread(
+            target=self._process_bus, daemon=True
+        )
         self._thread.start()
 
     def subscribe(self, signal_type: str, callback: Callable[[Any, str], None]) -> None:
@@ -58,7 +62,9 @@ class SignalBusOrchestrator:
                         try:
                             callback(msg["payload"], msg["sender"])
                         except Exception as e:
-                            logging.error(f"SignalBus: Callback error for {signal_type}: {e}")
+                            logging.error(
+                                f"SignalBus: Callback error for {signal_type}: {e}"
+                            )
                 self._queue.task_done()
             except queue.Empty:
                 continue

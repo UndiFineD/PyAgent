@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,6 +32,7 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
 class GovernanceAgent(BaseAgent):
     """Manages proposals, voting cycles, and governance policies for the fleet."""
 
@@ -46,9 +48,11 @@ class GovernanceAgent(BaseAgent):
         )
 
     @as_tool
-    def submit_proposal(self, title: str, description: str, creator: str, options: list[str] = None) -> str:
+    def submit_proposal(
+        self, title: str, description: str, creator: str, options: list[str] = None
+    ) -> str:
         """Submits a new governance proposal for the fleet.
-        
+
         Args:
             title: Title of the proposal.
             description: Detailed description of the requested change/action.
@@ -64,23 +68,31 @@ class GovernanceAgent(BaseAgent):
             "options": options or ["Approve", "Reject"],
             "status": "active",
             "votes": {opt: [] for opt in (options or ["Approve", "Reject"])},
-            "created_at": time.time()
+            "created_at": time.time(),
         }
-        
+
         path = self.proposals_dir / f"{proposal_id}.json"
         with open(path, "w", encoding="utf-8") as f:
             json.dump(proposal, f, indent=4)
-        
+
         # Phase 108: Intelligence Recording
-        self._record(description, proposal_id, provider="Governance", model="ProposalSubmission", meta={"title": title, "creator": creator})
+        self._record(
+            description,
+            proposal_id,
+            provider="Governance",
+            model="ProposalSubmission",
+            meta={"title": title, "creator": creator},
+        )
 
         logging.info(f"Governance: New proposal submitted: {title} ({proposal_id})")
         return proposal_id
 
     @as_tool
-    def cast_vote(self, proposal_id: str, voter: str, choice: str, rationale: str = "") -> str:
+    def cast_vote(
+        self, proposal_id: str, voter: str, choice: str, rationale: str = ""
+    ) -> str:
         """Casts a vote on an active proposal.
-        
+
         Args:
             proposal_id: ID of the proposal to vote on.
             voter: Name of the agent casting the vote.
@@ -90,33 +102,37 @@ class GovernanceAgent(BaseAgent):
         path = self.proposals_dir / f"{proposal_id}.json"
         if not path.exists():
             return f"Error: Proposal {proposal_id} not found."
-            
+
         with open(path, encoding="utf-8") as f:
             proposal = json.load(f)
-            
+
         if proposal["status"] != "active":
             return f"Error: Proposal {proposal_id} is no longer active."
-            
+
         if choice not in proposal["votes"]:
             return f"Error: Invalid choice '{choice}'. Valid: {list(proposal['votes'].keys())}"
-            
+
         # Check if already voted
         for opt in proposal["votes"]:
             for v in proposal["votes"][opt]:
                 if v["agent"] == voter:
                     return f"Error: Agent {voter} has already voted on this proposal."
-        
-        proposal["votes"][choice].append({
-            "agent": voter,
-            "rationale": rationale,
-            "timestamp": time.time()
-        })
-        
+
+        proposal["votes"][choice].append(
+            {"agent": voter, "rationale": rationale, "timestamp": time.time()}
+        )
+
         with open(path, "w", encoding="utf-8") as f:
             json.dump(proposal, f, indent=4)
-            
+
         # Phase 108: Intelligence Recording
-        self._record(f"{voter} voted {choice} on {proposal_id}", rationale, provider="Governance", model="Vote", meta={"proposal_id": proposal_id})
+        self._record(
+            f"{voter} voted {choice} on {proposal_id}",
+            rationale,
+            provider="Governance",
+            model="Vote",
+            meta={"proposal_id": proposal_id},
+        )
 
         return f"Vote cast by {voter} on proposal {proposal_id}."
 
@@ -126,29 +142,30 @@ class GovernanceAgent(BaseAgent):
         path = self.proposals_dir / f"{proposal_id}.json"
         if not path.exists():
             return {"error": "Proposal not found"}
-            
+
         with open(path, encoding="utf-8") as f:
             proposal = json.load(f)
-            
+
         proposal["status"] = "closed"
-        
+
         # Calculate winner
         tallies = {opt: len(proposal["votes"][opt]) for opt in proposal["votes"]}
         winner = max(tallies, key=tallies.get)
-        proposal["result"] = {
-            "winner": winner,
-            "tallies": tallies
-        }
-        
+        proposal["result"] = {"winner": winner, "tallies": tallies}
+
         with open(path, "w", encoding="utf-8") as f:
             json.dump(proposal, f, indent=4)
-            
+
         return proposal
 
     def improve_content(self, input_text: str) -> str:
         return "Decentralized governance ensures fleet resilience and alignment."
 
+
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function
-    main = create_main_function(GovernanceAgent, "Governance Agent", "Swarm DAO Management")
+
+    main = create_main_function(
+        GovernanceAgent, "Governance Agent", "Swarm DAO Management"
+    )
     main()

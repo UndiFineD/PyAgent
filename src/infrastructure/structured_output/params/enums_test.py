@@ -33,30 +33,29 @@ except ImportError as e:
 
 def test_structuredoutputtype_exists():
     """Test that StructuredOutputType class exists and is importable."""
-    assert 'StructuredOutputType' in dir()
+    assert "StructuredOutputType" in dir()
 
 
 def test_constrainttype_exists():
     """Test that ConstraintType class exists and is importable."""
-    assert 'ConstraintType' in dir()
+    assert "ConstraintType" in dir()
 
 
 def test_schemaformat_exists():
     """Test that SchemaFormat class exists and is importable."""
-    assert 'SchemaFormat' in dir()
+    assert "SchemaFormat" in dir()
 
 
 def test_guideddecodingbackend_exists():
     """Test that GuidedDecodingBackend class exists and is importable."""
-    assert 'GuidedDecodingBackend' in dir()
+    assert "GuidedDecodingBackend" in dir()
 
 
 def test_whitespacepattern_exists():
     """Test that WhitespacePattern class exists and is importable."""
-    assert 'WhitespacePattern' in dir()
+    assert "WhitespacePattern" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

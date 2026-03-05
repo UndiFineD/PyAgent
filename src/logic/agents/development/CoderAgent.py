@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,10 +26,16 @@ from src.core.base.types.RefactoringPattern import RefactoringPattern
 from src.core.base.types.StyleRule import StyleRule
 from src.logic.agents.development.CoderCore import CoderCore, DEFAULT_PYTHON_STYLE_RULES
 from src.core.base.BaseAgent import BaseAgent
-from src.logic.agents.development.mixins.agent.AgentLanguageMixin import AgentLanguageMixin
+from src.logic.agents.development.mixins.agent.AgentLanguageMixin import (
+    AgentLanguageMixin,
+)
 from src.logic.agents.development.mixins.agent.AgentStyleMixin import AgentStyleMixin
-from src.logic.agents.development.mixins.agent.AgentMetricsMixin import AgentMetricsMixin
-from src.logic.agents.development.mixins.agent.AgentRefactorMixin import AgentRefactorMixin
+from src.logic.agents.development.mixins.agent.AgentMetricsMixin import (
+    AgentMetricsMixin,
+)
+from src.logic.agents.development.mixins.agent.AgentRefactorMixin import (
+    AgentRefactorMixin,
+)
 from pathlib import Path
 import logging
 
@@ -36,7 +43,11 @@ __version__ = VERSION
 
 
 class CoderAgent(
-    BaseAgent, AgentLanguageMixin, AgentStyleMixin, AgentMetricsMixin, AgentRefactorMixin
+    BaseAgent,
+    AgentLanguageMixin,
+    AgentStyleMixin,
+    AgentMetricsMixin,
+    AgentRefactorMixin,
 ):
     """Updates code files using AI assistance.
 

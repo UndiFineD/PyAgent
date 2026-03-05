@@ -5,9 +5,11 @@ except Exception:
     try:
         from src.classes.specialized.MCPAgent import MCPAgent as _MCPAgent
     except Exception:
+
         class _MCPAgent:
             def __init__(self, *args, **kwargs):
                 raise RuntimeError("MCPAgent implementation not available")
+
 
 MCPAgent = _MCPAgent
 

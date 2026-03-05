@@ -12,6 +12,7 @@ from typing import Dict, List, Any, Optional
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
+
 class GraphRelationalAgent(BaseAgent):
     """Hybrid RAG agent combining Graph-based relationships and Vector search."""
 
@@ -41,12 +42,18 @@ class GraphRelationalAgent(BaseAgent):
         try:
             self.graph_store_path.parent.mkdir(parents=True, exist_ok=True)
             with open(self.graph_store_path, "w") as f:
-                json.dump({"entities": self.entities, "relations": self.relations}, f, indent=4)
+                json.dump(
+                    {"entities": self.entities, "relations": self.relations},
+                    f,
+                    indent=4,
+                )
         except Exception as e:
             logging.error(f"GraphRelationalAgent: Failed to save graph: {e}")
 
     @as_tool
-    def add_entity(self, name: str, entity_type: str, properties: Optional[Dict[str, Any]] = None) -> str:
+    def add_entity(
+        self, name: str, entity_type: str, properties: Optional[Dict[str, Any]] = None
+    ) -> str:
         """Adds a node to the knowledge graph."""
         self.entities[name] = {"type": entity_type, "properties": properties or {}}
         self._save_graph()
@@ -57,7 +64,7 @@ class GraphRelationalAgent(BaseAgent):
         """Adds a directed edge between two entities."""
         if source not in self.entities or target not in self.entities:
             return f"Error: Source '{source}' or Target '{target}' not in graph."
-        
+
         rel = {"source": source, "type": relation_type, "target": target}
         if rel not in self.relations:
             self.relations.append(rel)
@@ -67,7 +74,11 @@ class GraphRelationalAgent(BaseAgent):
     @as_tool
     def query_relationships(self, entity_name: str) -> List[Dict[str, str]]:
         """Finds all relationships for a given entity."""
-        return [r for r in self.relations if r["source"] == entity_name or r["target"] == entity_name]
+        return [
+            r
+            for r in self.relations
+            if r["source"] == entity_name or r["target"] == entity_name
+        ]
 
     @as_tool
     def hybrid_search(self, query: str) -> Dict[str, Any]:
@@ -76,13 +87,21 @@ class GraphRelationalAgent(BaseAgent):
         return {
             "query": query,
             "vector_results": ["Related code snippet from src/classes/base_agent.py"],
-            "graph_context": self.query_relationships(query) if query in self.entities else "No direct graph matches."
+            "graph_context": (
+                self.query_relationships(query)
+                if query in self.entities
+                else "No direct graph matches."
+            ),
         }
 
     def improve_content(self, input_text: str) -> str:
         return f"Graph currently holds {len(self.entities)} entities and {len(self.relations)} relations."
 
+
 if __name__ == "__main__":
     from src.classes.base_agent.utilities import create_main_function
-    main = create_main_function(GraphRelationalAgent, "Graph Relational Agent", "Hybrid knowledge graph RAG")
+
+    main = create_main_function(
+        GraphRelationalAgent, "Graph Relational Agent", "Hybrid knowledge graph RAG"
+    )
     main()

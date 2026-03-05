@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "RewardFunctions"), "RewardFunctions missing"
     assert hasattr(mod, "CompositeRewardFunction"), "CompositeRewardFunction missing"
     assert hasattr(mod, "RewardShaper"), "RewardShaper missing"
-

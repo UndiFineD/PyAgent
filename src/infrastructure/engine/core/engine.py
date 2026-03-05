@@ -85,7 +85,9 @@ class EngineCore:
         """Context manager for detailed error logging."""
         try:
             yield
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(
                 "Error during model execution. "
                 f"Scheduled {len(scheduler_output.scheduled_requests)} requests, "
@@ -95,7 +97,9 @@ class EngineCore:
             raise
 
     @contextmanager
-    def log_iteration_details(self, scheduler_output: SchedulerOutput) -> Iterator[None]:
+    def log_iteration_details(
+        self, scheduler_output: SchedulerOutput
+    ) -> Iterator[None]:
         """Context manager for iteration logging."""
         start_time = time.time()
         yield

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_improvementpriority_exists():
     """Test that ImprovementPriority class exists and is importable."""
-    assert 'ImprovementPriority' in dir()
+    assert "ImprovementPriority" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

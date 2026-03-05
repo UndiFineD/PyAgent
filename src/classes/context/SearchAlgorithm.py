@@ -16,8 +16,10 @@ import logging
 import re
 import zlib
 
+
 class SearchAlgorithm(Enum):
     """Algorithms for semantic search."""
+
     KEYWORD = "keyword"
     FUZZY = "fuzzy"
     SEMANTIC = "semantic"

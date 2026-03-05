@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # WebSearchEssayAgent: Research-driven Essay Writing Specialist - Phase 319 Enhanced
 
@@ -15,6 +16,7 @@ from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
 
+
 class EssayStyle(Enum):
     ACADEMIC = "academic"
     PROFESSIONAL = "professional"
@@ -23,32 +25,38 @@ class EssayStyle(Enum):
     PERSUASIVE = "persuasive"
     EXPOSITORY = "expository"
 
+
 class EssayLength(Enum):
     SHORT = "short"  # ~500 words
     MEDIUM = "medium"  # ~1000 words
     LONG = "long"  # ~2000 words
     COMPREHENSIVE = "comprehensive"  # ~3000+ words
 
+
 @dataclass
 class Source:
     """Represents a research source."""
+
     title: str
     url: str
     snippet: str
     relevance: float = 0.0
     date: Optional[str] = None
 
+
 @dataclass
 class EssayOutline:
     """Represents an essay outline."""
+
     title: str
     thesis: str
     sections: List[Dict[str, Any]]
     sources: List[Source]
 
+
 class WebSearchEssayAgent(SearchAgent):
     """
-    Agent that researches complex subjects via web search and 
+    Agent that researches complex subjects via web search and
     composes structured essays based on findings.
     """
 
@@ -66,33 +74,41 @@ class WebSearchEssayAgent(SearchAgent):
 
     @as_tool
     async def write_essay(
-        self, 
-        subject: str, 
+        self,
+        subject: str,
         length: str = "medium",
         style: str = "academic",
         include_citations: bool = True,
-        target_audience: str = "general"
+        target_audience: str = "general",
     ) -> Dict[str, Any]:
         """Researches a subject and writes an essay."""
         logging.info(f"WebSearchEssayAgent: Researching subject: {subject}")
-        
-        essay_style = EssayStyle(style) if style in [s.value for s in EssayStyle] else EssayStyle.ACADEMIC
-        essay_length = EssayLength(length) if length in [l.value for l in EssayLength] else EssayLength.MEDIUM
-        
+
+        essay_style = (
+            EssayStyle(style)
+            if style in [s.value for s in EssayStyle]
+            else EssayStyle.ACADEMIC
+        )
+        essay_length = (
+            EssayLength(length)
+            if length in [l.value for l in EssayLength]
+            else EssayLength.MEDIUM
+        )
+
         word_targets = {
             EssayLength.SHORT: 500,
             EssayLength.MEDIUM: 1000,
             EssayLength.LONG: 2000,
-            EssayLength.COMPREHENSIVE: 3000
+            EssayLength.COMPREHENSIVE: 3000,
         }
         target_words = word_targets.get(essay_length, 1000)
-        
+
         # Step 1: Multi-query research
         sources = await self._research_topic(subject)
-        
+
         # Step 2: Generate outline
         outline = await self._generate_outline(subject, sources, essay_style)
-        
+
         # Step 3: Compose essay
         essay_prompt = (
             f"Subject: {subject}\n"
@@ -110,14 +126,14 @@ class WebSearchEssayAgent(SearchAgent):
             "4. Compelling conclusion that synthesizes the argument\n"
             "5. Professional tone appropriate for the style"
         )
-        
+
         essay = await self.improve_content(essay_prompt)
-        
+
         # Step 4: Generate references if citations included
         references = ""
         if include_citations:
             references = await self._generate_references(sources)
-        
+
         result = {
             "subject": subject,
             "style": essay_style.value,
@@ -125,22 +141,26 @@ class WebSearchEssayAgent(SearchAgent):
             "references": references if include_citations else None,
             "sources_used": len(sources),
             "target_words": target_words,
-            "estimated_words": len(essay.split())
+            "estimated_words": len(essay.split()),
         }
-        
-        self._essay_history.append({
-            "subject": subject,
-            "timestamp": time.time(),
-            "word_count": result["estimated_words"]
-        })
-        
+
+        self._essay_history.append(
+            {
+                "subject": subject,
+                "timestamp": time.time(),
+                "word_count": result["estimated_words"],
+            }
+        )
+
         return result
 
     @as_tool
-    async def research_topic(self, subject: str, depth: str = "standard") -> Dict[str, Any]:
+    async def research_topic(
+        self, subject: str, depth: str = "standard"
+    ) -> Dict[str, Any]:
         """Performs in-depth research on a topic without writing an essay."""
         sources = await self._research_topic(subject, depth)
-        
+
         # Synthesize findings
         synthesis_prompt = (
             f"Synthesize the key findings from this research on '{subject}':\n\n"
@@ -153,9 +173,9 @@ class WebSearchEssayAgent(SearchAgent):
             "5. Gaps in available information\n"
             "Output JSON: {'key_facts': [...], 'perspectives': [...], 'consensus': [...], 'controversies': [...], 'gaps': [...]}"
         )
-        
+
         res = await self.improve_content(synthesis_prompt)
-        
+
         try:
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
@@ -164,41 +184,42 @@ class WebSearchEssayAgent(SearchAgent):
                 synthesis = {"raw": res}
         except:
             synthesis = {"raw": res}
-        
+
         return {
             "subject": subject,
-            "sources": [{"title": s.title, "url": s.url, "snippet": s.snippet} for s in sources],
-            "synthesis": synthesis
+            "sources": [
+                {"title": s.title, "url": s.url, "snippet": s.snippet} for s in sources
+            ],
+            "synthesis": synthesis,
         }
 
     @as_tool
     async def generate_outline(
-        self, 
-        subject: str, 
-        style: str = "academic",
-        num_sections: int = 4
+        self, subject: str, style: str = "academic", num_sections: int = 4
     ) -> Dict[str, Any]:
         """Generates an essay outline for a subject."""
         sources = await self._research_topic(subject, "light")
-        essay_style = EssayStyle(style) if style in [s.value for s in EssayStyle] else EssayStyle.ACADEMIC
-        
-        outline = await self._generate_outline(subject, sources, essay_style, num_sections)
-        
-        return {
-            "subject": subject,
-            "style": essay_style.value,
-            "outline": outline
-        }
+        essay_style = (
+            EssayStyle(style)
+            if style in [s.value for s in EssayStyle]
+            else EssayStyle.ACADEMIC
+        )
+
+        outline = await self._generate_outline(
+            subject, sources, essay_style, num_sections
+        )
+
+        return {"subject": subject, "style": essay_style.value, "outline": outline}
 
     @as_tool
     async def fact_check(self, claim: str) -> Dict[str, Any]:
         """Fact-checks a claim using web search."""
         logging.info(f"WebSearchEssayAgent: Fact-checking: {claim}")
-        
+
         # Search for verification
         search_query = f"fact check {claim}"
         search_data = self._search_duckduckgo(search_query)
-        
+
         prompt = (
             f"Claim to fact-check: {claim}\n\n"
             f"Search Results:\n{search_data}\n\n"
@@ -209,20 +230,22 @@ class WebSearchEssayAgent(SearchAgent):
             "4. UNVERIFIABLE - insufficient evidence\n\n"
             "Output JSON: {'verdict': '...', 'confidence': 0-1, 'evidence': [...], 'explanation': '...'}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         try:
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
         except:
             pass
-        
+
         return {"raw": res}
 
     @as_tool
-    async def compare_perspectives(self, topic: str, perspectives: List[str]) -> Dict[str, Any]:
+    async def compare_perspectives(
+        self, topic: str, perspectives: List[str]
+    ) -> Dict[str, Any]:
         """Compares different perspectives on a topic."""
         # Research each perspective
         all_findings = []
@@ -230,11 +253,16 @@ class WebSearchEssayAgent(SearchAgent):
             query = f"{topic} {perspective}"
             data = self._search_duckduckgo(query)
             all_findings.append({"perspective": perspective, "findings": data})
-        
+
         prompt = (
             f"Topic: {topic}\n\n"
             f"Perspectives to compare:\n"
-            + "\n".join([f"**{p['perspective']}**:\n{p['findings'][:1000]}" for p in all_findings])
+            + "\n".join(
+                [
+                    f"**{p['perspective']}**:\n{p['findings'][:1000]}"
+                    for p in all_findings
+                ]
+            )
             + "\n\nProvide a balanced comparison:\n"
             "1. Key arguments for each perspective\n"
             "2. Strengths and weaknesses\n"
@@ -242,36 +270,40 @@ class WebSearchEssayAgent(SearchAgent):
             "4. Irreconcilable differences\n"
             "Output JSON: {'comparison': {...}, 'common_ground': [...], 'key_differences': [...]}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         try:
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
         except:
             pass
-        
+
         return {"raw": res}
 
-    async def _research_topic(self, subject: str, depth: str = "standard") -> List[Source]:
+    async def _research_topic(
+        self, subject: str, depth: str = "standard"
+    ) -> List[Source]:
         """Performs multi-query research on a topic."""
         if subject in self._research_cache:
             return self._research_cache[subject]
-        
+
         queries = [
             f"comprehensive overview {subject}",
             f"{subject} latest research 2025 2026",
-            f"{subject} expert analysis"
+            f"{subject} expert analysis",
         ]
-        
+
         if depth == "deep":
-            queries.extend([
-                f"{subject} statistics data",
-                f"{subject} criticism controversy",
-                f"{subject} future trends predictions"
-            ])
-        
+            queries.extend(
+                [
+                    f"{subject} statistics data",
+                    f"{subject} criticism controversy",
+                    f"{subject} future trends predictions",
+                ]
+            )
+
         sources = []
         for query in queries:
             try:
@@ -281,21 +313,21 @@ class WebSearchEssayAgent(SearchAgent):
                     title=f"Search: {query}",
                     url="duckduckgo.com",
                     snippet=data[:500] if data else "",
-                    relevance=0.8
+                    relevance=0.8,
                 )
                 sources.append(source)
             except Exception as e:
                 logging.debug(f"Search failed for query '{query}': {e}")
-        
+
         self._research_cache[subject] = sources
         return sources
 
     async def _generate_outline(
-        self, 
-        subject: str, 
-        sources: List[Source], 
+        self,
+        subject: str,
+        sources: List[Source],
         style: EssayStyle,
-        num_sections: int = 4
+        num_sections: int = 4,
     ) -> Dict[str, Any]:
         """Generates an essay outline."""
         prompt = (
@@ -310,21 +342,21 @@ class WebSearchEssayAgent(SearchAgent):
             '  "sections": [\n'
             '    {"heading": "Introduction", "points": ["hook", "context", "thesis"]},\n'
             '    {"heading": "Body 1", "points": ["topic sentence", "evidence", "analysis"]},\n'
-            '    ...\n'
+            "    ...\n"
             '    {"heading": "Conclusion", "points": ["restate thesis", "synthesis", "call to action"]}\n'
-            '  ]\n'
+            "  ]\n"
             "}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         try:
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
         except:
             pass
-        
+
         return {"title": subject, "thesis": "", "sections": []}
 
     async def _generate_references(self, sources: List[Source]) -> str:
@@ -338,7 +370,6 @@ class WebSearchEssayAgent(SearchAgent):
 
     def _format_sources(self, sources: List[Source]) -> str:
         """Formats sources for prompts."""
-        return "\n\n".join([
-            f"**{s.title}**\nURL: {s.url}\n{s.snippet}"
-            for s in sources
-        ])
+        return "\n\n".join(
+            [f"**{s.title}**\nURL: {s.url}\n{s.snippet}" for s in sources]
+        )

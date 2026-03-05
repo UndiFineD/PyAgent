@@ -73,7 +73,9 @@ def cmd_env(ctx: CommandContext) -> CommandResult:
 
     # List common env vars
     common_vars = ["PATH", "HOME", "USER", "SHELL", "VIRTUAL_ENV", "PYTHONPATH"]
-    found = {k: os.environ.get(k, "not set")[:30] for k in common_vars if k in os.environ}
+    found = {
+        k: os.environ.get(k, "not set")[:30] for k in common_vars if k in os.environ
+    }
 
     return CommandResult.ok(
         output=f"[Env vars: {len(os.environ)} total]",

@@ -33,57 +33,57 @@ except ImportError as e:
 
 def test_logitbias_exists():
     """Test that LogitBias class exists and is importable."""
-    assert 'LogitBias' in dir()
+    assert "LogitBias" in dir()
 
 
 def test_processorstats_exists():
     """Test that ProcessorStats class exists and is importable."""
-    assert 'ProcessorStats' in dir()
+    assert "ProcessorStats" in dir()
 
 
 def test_logitprocessor_exists():
     """Test that LogitProcessor class exists and is importable."""
-    assert 'LogitProcessor' in dir()
+    assert "LogitProcessor" in dir()
 
 
 def test_constrainedlogitprocessor_exists():
     """Test that ConstrainedLogitProcessor class exists and is importable."""
-    assert 'ConstrainedLogitProcessor' in dir()
+    assert "ConstrainedLogitProcessor" in dir()
 
 
 def test_bitmasklogitprocessor_exists():
     """Test that BitmaskLogitProcessor class exists and is importable."""
-    assert 'BitmaskLogitProcessor' in dir()
+    assert "BitmaskLogitProcessor" in dir()
 
 
 def test_biaslogitprocessor_exists():
     """Test that BiasLogitProcessor class exists and is importable."""
-    assert 'BiasLogitProcessor' in dir()
+    assert "BiasLogitProcessor" in dir()
 
 
 def test_compositelogitprocessor_exists():
     """Test that CompositeLogitProcessor class exists and is importable."""
-    assert 'CompositeLogitProcessor' in dir()
+    assert "CompositeLogitProcessor" in dir()
 
 
 def test_temperatureprocessor_exists():
     """Test that TemperatureProcessor class exists and is importable."""
-    assert 'TemperatureProcessor' in dir()
+    assert "TemperatureProcessor" in dir()
 
 
 def test_topkprocessor_exists():
     """Test that TopKProcessor class exists and is importable."""
-    assert 'TopKProcessor' in dir()
+    assert "TopKProcessor" in dir()
 
 
 def test_toppprocessor_exists():
     """Test that TopPProcessor class exists and is importable."""
-    assert 'TopPProcessor' in dir()
+    assert "TopPProcessor" in dir()
 
 
 def test_repetitionpenaltyprocessor_exists():
     """Test that RepetitionPenaltyProcessor class exists and is importable."""
-    assert 'RepetitionPenaltyProcessor' in dir()
+    assert "RepetitionPenaltyProcessor" in dir()
 
 
 def test_create_standard_processor_chain_exists():
@@ -99,4 +99,3 @@ def test_apply_constraints_to_logits_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

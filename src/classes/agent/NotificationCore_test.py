@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_notificationcore_exists():
     """Test that NotificationCore class exists and is importable."""
-    assert 'NotificationCore' in dir()
+    assert "NotificationCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

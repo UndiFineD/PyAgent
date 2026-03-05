@@ -1,10 +1,12 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Apache 2.0 License
 
 from typing import List, Dict, Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+
 
 class FinancialAgent(BaseAgent):
     """
@@ -16,11 +18,11 @@ class FinancialAgent(BaseAgent):
         super().__init__(file_path)
         self.pricing = {
             "Ollama": 0.0,
-            "GPT-4o": 15.00, # Per 1M tokens
+            "GPT-4o": 15.00,  # Per 1M tokens
             "GPT-4o-mini": 0.15,
             "Claude-3.5-Sonnet": 3.00,
             "DeepSeek-V3": 0.20,
-            "GLM-4": 0.10
+            "GLM-4": 0.10,
         }
 
     @as_tool
@@ -33,20 +35,17 @@ class FinancialAgent(BaseAgent):
         details = []
 
         for model, count in token_usage.items():
-            rate = self.pricing.get(model, 1.0) # Default to 1.0/million if unknown
+            rate = self.pricing.get(model, 1.0)  # Default to 1.0/million if unknown
             cost = (count / 1_000_000) * rate
             total_usd += cost
-            details.append({
-                "model": model,
-                "tokens": count,
-                "cost_usd": round(cost, 4)
-            })
+            details.append(
+                {"model": model, "tokens": count, "cost_usd": round(cost, 4)}
+            )
 
-        return {
-            "total_usd": round(total_usd, 2),
-            "breakdown": details
-        }
+        return {"total_usd": round(total_usd, 2), "breakdown": details}
 
-    async def get_improvement_items(self, context: dict[str, Any]) -> list[dict[str, Any]]:
+    async def get_improvement_items(
+        self, context: dict[str, Any]
+    ) -> list[dict[str, Any]]:
         # Financial agent doesn't modify code directly, it audits.
         return []

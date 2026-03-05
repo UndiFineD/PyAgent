@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ReduceOp"), "ReduceOp missing"
     assert hasattr(mod, "NCCLConfig"), "NCCLConfig missing"
     assert hasattr(mod, "NCCLStats"), "NCCLStats missing"
-

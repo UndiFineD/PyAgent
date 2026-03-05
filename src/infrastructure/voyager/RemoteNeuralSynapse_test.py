@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_remoteneuralsynapse_exists():
     """Test that RemoteNeuralSynapse class exists and is importable."""
-    assert 'RemoteNeuralSynapse' in dir()
+    assert "RemoteNeuralSynapse" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

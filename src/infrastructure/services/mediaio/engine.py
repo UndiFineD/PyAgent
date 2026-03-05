@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -87,7 +88,16 @@ class MediaIOEngine:
         """Detect media type from source."""
         if isinstance(source, (str, Path)):
             ext = Path(str(source)).suffix.lower()
-            if ext in (".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp", ".tiff", ".heic"):
+            if ext in (
+                ".jpg",
+                ".jpeg",
+                ".png",
+                ".webp",
+                ".gif",
+                ".bmp",
+                ".tiff",
+                ".heic",
+            ):
                 return MediaType.IMAGE
             elif ext in (".mp4", ".webm", ".avi", ".mov", ".mkv"):
                 return MediaType.VIDEO
@@ -95,7 +105,9 @@ class MediaIOEngine:
                 return MediaType.AUDIO
         return MediaType.IMAGE
 
-    def _compute_cache_key(self, source: Union[str, bytes, BinaryIO], media_type: MediaType) -> str:
+    def _compute_cache_key(
+        self, source: Union[str, bytes, BinaryIO], media_type: MediaType
+    ) -> str:
         """Compute cache key for media."""
         if isinstance(source, str):
             return f"{media_type.name}:{source}"

@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_toolparserregistry_exists():
     """Test that ToolParserRegistry class exists and is importable."""
-    assert 'ToolParserRegistry' in dir()
+    assert "ToolParserRegistry" in dir()
 
 
 def test_streamingtoolparser_exists():
     """Test that StreamingToolParser class exists and is importable."""
-    assert 'StreamingToolParser' in dir()
+    assert "StreamingToolParser" in dir()
 
 
 def test_parse_tool_call_exists():
@@ -49,4 +49,3 @@ def test_parse_tool_call_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

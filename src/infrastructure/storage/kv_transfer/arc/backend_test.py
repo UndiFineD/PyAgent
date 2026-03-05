@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "Backend"), "Backend missing"
     assert hasattr(mod, "SimpleBackend"), "SimpleBackend missing"
-

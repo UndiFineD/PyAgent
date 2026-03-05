@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_enginestate_exists():
     """Test that EngineState class exists and is importable."""
-    assert 'EngineState' in dir()
+    assert "EngineState" in dir()
 
 
 def test_engineconfig_exists():
     """Test that EngineConfig class exists and is importable."""
-    assert 'EngineConfig' in dir()
+    assert "EngineConfig" in dir()
 
 
 def test_enginelifecyclemanager_exists():
     """Test that EngineLifecycleManager class exists and is importable."""
-    assert 'EngineLifecycleManager' in dir()
+    assert "EngineLifecycleManager" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

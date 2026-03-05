@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@ import re
 from typing import Any
 from src.core.base.types.RefactoringPattern import RefactoringPattern
 
+
 class AgentRefactorMixin:
     """Mixin for code deduplication and refactoring patterns."""
 
@@ -27,7 +29,11 @@ class AgentRefactorMixin:
     ) -> list[dict[str, Any]]:
         """Find duplicate code blocks."""
         if content is None:
-            content = getattr(self, "current_content", "") or getattr(self, "previous_content", "") or ""
+            content = (
+                getattr(self, "current_content", "")
+                or getattr(self, "previous_content", "")
+                or ""
+            )
         if hasattr(self, "core"):
             return self.core.find_duplicate_code(content, min_lines)
         return []
@@ -35,14 +41,17 @@ class AgentRefactorMixin:
     def get_duplicate_ratio(self, content: str | None = None) -> float:
         """Calculate the ratio of duplicate code."""
         if content is None:
-            content = getattr(self, "current_content", "") or getattr(self, "previous_content", "") or ""
+            content = (
+                getattr(self, "current_content", "")
+                or getattr(self, "previous_content", "")
+                or ""
+            )
         duplicates = self.find_duplicate_code(content)
         total_lines = len(content.split("\n"))
         if total_lines == 0:
             return 0.0
         duplicate_lines = sum(
-            (d["occurrences"] - 1) * 4  # min_lines default
-            for d in duplicates
+            (d["occurrences"] - 1) * 4 for d in duplicates  # min_lines default
         )
         return min(1.0, duplicate_lines / total_lines)
 
@@ -69,7 +78,11 @@ class AgentRefactorMixin:
     def suggest_refactorings(self, content: str | None = None) -> list[dict[str, str]]:
         """Suggest possible refactorings based on code analysis."""
         if content is None:
-            content = getattr(self, "current_content", "") or getattr(self, "previous_content", "") or ""
+            content = (
+                getattr(self, "current_content", "")
+                or getattr(self, "previous_content", "")
+                or ""
+            )
         if hasattr(self, "core"):
             return self.core.suggest_refactorings(content)
         return []

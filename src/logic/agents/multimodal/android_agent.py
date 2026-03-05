@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ Android agent.py module.
 """
 
 
-
 import logging
 import time
 from pathlib import Path
@@ -27,8 +27,9 @@ from typing import Any
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.compute.backend.local_context_recorder import \
-    LocalContextRecorder
+from src.infrastructure.compute.backend.local_context_recorder import (
+    LocalContextRecorder,
+)
 from src.logic.agents.multimodal.core.android_core import AndroidCore
 
 __version__ = VERSION
@@ -64,7 +65,9 @@ class AndroidAgent(BaseAgent):
                     "type": "mobile_automation",
                     "timestamp": time.time(),
                 }
-                self.recorder.record_interaction("android", "local_device", action, details, meta=meta)
+                self.recorder.record_interaction(
+                    "android", "local_device", action, details, meta=meta
+                )
             except (AttributeError, RuntimeError, TypeError, IOError) as e:
                 logging.error(f"AndroidAgent: Recording error: {e}")
 

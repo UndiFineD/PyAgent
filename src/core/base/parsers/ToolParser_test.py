@@ -33,37 +33,37 @@ except ImportError as e:
 
 def test_toolcall_exists():
     """Test that ToolCall class exists and is importable."""
-    assert 'ToolCall' in dir()
+    assert "ToolCall" in dir()
 
 
 def test_extractedtoolcalls_exists():
     """Test that ExtractedToolCalls class exists and is importable."""
-    assert 'ExtractedToolCalls' in dir()
+    assert "ExtractedToolCalls" in dir()
 
 
 def test_streamingtoolcalldelta_exists():
     """Test that StreamingToolCallDelta class exists and is importable."""
-    assert 'StreamingToolCallDelta' in dir()
+    assert "StreamingToolCallDelta" in dir()
 
 
 def test_toolparser_exists():
     """Test that ToolParser class exists and is importable."""
-    assert 'ToolParser' in dir()
+    assert "ToolParser" in dir()
 
 
 def test_jsontoolparser_exists():
     """Test that JSONToolParser class exists and is importable."""
-    assert 'JSONToolParser' in dir()
+    assert "JSONToolParser" in dir()
 
 
 def test_xmltoolparser_exists():
     """Test that XMLToolParser class exists and is importable."""
-    assert 'XMLToolParser' in dir()
+    assert "XMLToolParser" in dir()
 
 
 def test_toolparsermanager_exists():
     """Test that ToolParserManager class exists and is importable."""
-    assert 'ToolParserManager' in dir()
+    assert "ToolParserManager" in dir()
 
 
 def test_tool_parser_exists():
@@ -79,4 +79,3 @@ def test_extract_tool_calls_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

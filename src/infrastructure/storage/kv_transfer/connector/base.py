@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,8 +27,12 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
 if TYPE_CHECKING:
     from src.infrastructure.storage.kv_transfer.connector.types import (
-        ForwardContext, KVCacheBlocks, KVConnectorMetadata, KVTransferConfig,
-        Request)
+        ForwardContext,
+        KVCacheBlocks,
+        KVConnectorMetadata,
+        KVTransferConfig,
+        Request,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +76,9 @@ class KVConnectorBase(ABC):
         ...
 
     @abstractmethod
-    def save_kv_layer(self, layer_name: str, kv_layer: Any, attn_metadata: Any, **kwargs: Any) -> None:
+    def save_kv_layer(
+        self, layer_name: str, kv_layer: Any, attn_metadata: Any, **kwargs: Any
+    ) -> None:
         """Save a layer's KV cache for transfer."""
         ...
 
@@ -82,12 +89,16 @@ class KVConnectorBase(ABC):
     # Scheduler-side methods
 
     @abstractmethod
-    def get_num_new_matched_tokens(self, request: Request, num_computed_tokens: int) -> Tuple[int, bool]:
+    def get_num_new_matched_tokens(
+        self, request: Request, num_computed_tokens: int
+    ) -> Tuple[int, bool]:
         """Get number of tokens that can be loaded from external KV cache."""
         ...
 
     @abstractmethod
-    def update_state_after_alloc(self, request: Request, blocks: KVCacheBlocks, num_external_tokens: int) -> None:
+    def update_state_after_alloc(
+        self, request: Request, blocks: KVCacheBlocks, num_external_tokens: int
+    ) -> None:
         """Update connector state after block allocation."""
         ...
 
@@ -97,7 +108,9 @@ class KVConnectorBase(ABC):
         ...
 
     @abstractmethod
-    def request_finished(self, request: Request, block_ids: List[int]) -> Tuple[bool, Optional[Dict[str, Any]]]:
+    def request_finished(
+        self, request: Request, block_ids: List[int]
+    ) -> Tuple[bool, Optional[Dict[str, Any]]]:
         """Handle request completion."""
         ...
 
@@ -116,7 +129,9 @@ class KVConnectorBase(ABC):
         self._error_count += 1
         if self._error_count > self.config.retry_attempts:
             self._health_status = False
-            logger.warning("KV connector marked unhealthy after %d errors", self._error_count)
+            logger.warning(
+                "KV connector marked unhealthy after %d errors", self._error_count
+            )
 
     def close(self) -> None:
         """Close the connector and release resources."""

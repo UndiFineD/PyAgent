@@ -26,13 +26,18 @@ def test_imports_and_symbols():
     assert hasattr(mod, "EvictionPolicy"), "EvictionPolicy missing"
     assert hasattr(mod, "FreeBlockQueue"), "FreeBlockQueue missing"
     assert hasattr(mod, "FullAttentionManager"), "FullAttentionManager missing"
-    assert hasattr(mod, "HierarchicalKVCacheCoordinator"), "HierarchicalKVCacheCoordinator missing"
+    assert hasattr(
+        mod, "HierarchicalKVCacheCoordinator"
+    ), "HierarchicalKVCacheCoordinator missing"
     assert hasattr(mod, "KVCacheBlock"), "KVCacheBlock missing"
     assert hasattr(mod, "KVCacheBlocks"), "KVCacheBlocks missing"
     assert hasattr(mod, "KVCacheCoordinator"), "KVCacheCoordinator missing"
     assert hasattr(mod, "PackKVManager"), "PackKVManager missing"
-    assert hasattr(mod, "PredictiveKVCacheCoordinator"), "PredictiveKVCacheCoordinator missing"
+    assert hasattr(
+        mod, "PredictiveKVCacheCoordinator"
+    ), "PredictiveKVCacheCoordinator missing"
     assert hasattr(mod, "SingleTypeKVCacheManager"), "SingleTypeKVCacheManager missing"
     assert hasattr(mod, "SlidingWindowManager"), "SlidingWindowManager missing"
-    assert hasattr(mod, "create_kv_cache_coordinator"), "create_kv_cache_coordinator missing"
-
+    assert hasattr(
+        mod, "create_kv_cache_coordinator"
+    ), "create_kv_cache_coordinator missing"

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,6 +35,7 @@ problem-solving and response quality through recursive thinking.
 @dataclass
 class ThinkingRound:
     """Represents a single round of thinking."""
+
     round_number: int
     response: str
     selected: bool = False
@@ -45,6 +47,7 @@ class ThinkingRound:
 @dataclass
 class CoRTResult:
     """Result of a CoRT reasoning process."""
+
     final_response: str
     thinking_history: List[ThinkingRound]
     total_rounds: int
@@ -65,12 +68,11 @@ class CoRTReasoningCore:
         self.inference_engine = inference_engine
         self.logger = logging.getLogger("pyagent.reasoning.cort.core")
 
-
     async def think_and_respond(
         self,
-        user_input: str, 
+        user_input: str,
         _context: Optional[CascadeContext] = None,
-        verbose: bool = True
+        verbose: bool = True,
     ) -> CoRTResult:
         """
         Process user input with recursive thinking.
@@ -97,11 +99,9 @@ class CoRTReasoningCore:
         # Generate initial response
         initial_response = await self._generate_initial_response(user_input)
 
-        thinking_history = [ThinkingRound(
-            round_number=0,
-            response=initial_response,
-            selected=True
-        )]
+        thinking_history = [
+            ThinkingRound(round_number=0, response=initial_response, selected=True)
+        ]
 
         current_best = initial_response
 
@@ -115,15 +115,19 @@ class CoRTReasoningCore:
 
             # Add alternatives to history
             for i, alt in enumerate(alternatives):
-                thinking_history.append(ThinkingRound(
-                    round_number=round_num,
-                    response=alt,
-                    selected=False,
-                    alternative_number=i + 1
-                ))
+                thinking_history.append(
+                    ThinkingRound(
+                        round_number=round_num,
+                        response=alt,
+                        selected=False,
+                        alternative_number=i + 1,
+                    )
+                )
 
             # Evaluate and select best response
-            new_best, explanation = await self._evaluate_responses(user_input, current_best, alternatives)
+            new_best, explanation = await self._evaluate_responses(
+                user_input, current_best, alternatives
+            )
 
             # Update thinking history
             if new_best != current_best:
@@ -142,10 +146,14 @@ class CoRTReasoningCore:
                 current_best = new_best
 
             if verbose:
-                self.logger.info(f"🤔 Round {round_num} complete. Selection: {explanation}")
+                self.logger.info(
+                    f"🤔 Round {round_num} complete. Selection: {explanation}"
+                )
 
         # Calculate confidence and reasoning chain
-        confidence_score = await self._calculate_confidence(current_best, thinking_history)
+        confidence_score = await self._calculate_confidence(
+            current_best, thinking_history
+        )
         reasoning_chain = self._extract_reasoning_chain(thinking_history)
 
         processing_time = time.time() - start_time
@@ -156,7 +164,7 @@ class CoRTReasoningCore:
             total_rounds=thinking_rounds,
             processing_time=processing_time,
             confidence_score=confidence_score,
-            reasoning_chain=reasoning_chain
+            reasoning_chain=reasoning_chain,
         )
 
         if verbose:
@@ -164,7 +172,6 @@ class CoRTReasoningCore:
                 f"🤔 CoRT process complete in {processing_time:.2f}s with {confidence_score:.2f} confidence"
             )
         return result
-
 
     async def _determine_thinking_rounds(self, prompt: str) -> int:
         """
@@ -181,14 +188,13 @@ Respond with just a number between 1 and 5."""
 
         try:
             response = await self.inference_engine.generate(
-                prompt=meta_prompt,
-                temperature=0.3,
-                max_tokens=10
+                prompt=meta_prompt, temperature=0.3, max_tokens=10
             )
 
             # Extract number from response
             import re
-            numbers = re.findall(r'\d+', response.strip())
+
+            numbers = re.findall(r"\d+", response.strip())
             if numbers:
                 rounds = int(numbers[0])
                 return min(max(rounds, 1), 5)
@@ -205,16 +211,18 @@ Respond with just a number between 1 and 5."""
 
         try:
             response = await self.inference_engine.generate(
-                prompt=prompt,
-                temperature=0.7,
-                max_tokens=1000
+                prompt=prompt, temperature=0.7, max_tokens=1000
             )
             return response.strip()
         except Exception as e:
             self.logger.error(f"Failed to generate initial response: {e}")
-            return "I apologize, but I encountered an error while processing your request."
+            return (
+                "I apologize, but I encountered an error while processing your request."
+            )
 
-    async def _generate_alternatives(self, base_response: str, prompt: str, num_alternatives: int = 3) -> List[str]:
+    async def _generate_alternatives(
+        self, base_response: str, prompt: str, num_alternatives: int = 3
+    ) -> List[str]:
         """
         Generate alternative responses using different approaches.
 
@@ -234,9 +242,7 @@ Alternative response:"""
 
             try:
                 alternative = await self.inference_engine.generate(
-                    prompt=alt_prompt,
-                    temperature=temp,
-                    max_tokens=1000
+                    prompt=alt_prompt, temperature=temp, max_tokens=1000
                 )
                 alternatives.append(alternative.strip())
             except Exception as e:
@@ -245,7 +251,9 @@ Alternative response:"""
 
         return alternatives
 
-    async def _evaluate_responses(self, prompt: str, current_best: str, alternatives: List[str]) -> Tuple[str, str]:
+    async def _evaluate_responses(
+        self, prompt: str, current_best: str, alternatives: List[str]
+    ) -> Tuple[str, str]:
         """
         Evaluate responses and select the best one.
 
@@ -269,28 +277,29 @@ Then on a new line, explain your choice in one sentence."""
             evaluation = await self.inference_engine.generate(
                 prompt=eval_prompt,
                 temperature=0.2,  # Low temperature for consistent evaluation
-                max_tokens=200
+                max_tokens=200,
             )
 
             # Parse evaluation response
-            lines = [line.strip() for line in evaluation.split('\n') if line.strip()]
+            lines = [line.strip() for line in evaluation.split("\n") if line.strip()]
 
-            choice = 'current'
+            choice = "current"
             explanation = "No explanation provided"
 
             if lines:
                 first_line = lines[0].lower()
-                if 'current' in first_line:
-                    choice = 'current'
+                if "current" in first_line:
+                    choice = "current"
                 else:
                     # Look for number
                     import re
-                    numbers = re.findall(r'\d+', first_line)
+
+                    numbers = re.findall(r"\d+", first_line)
                     if numbers:
                         choice = numbers[0]
 
             # Select response based on choice
-            if choice == 'current':
+            if choice == "current":
                 return current_best, explanation
             else:
                 try:
@@ -306,11 +315,15 @@ Then on a new line, explain your choice in one sentence."""
         # Default to current best
         return current_best, "Evaluation failed, keeping current response"
 
-    async def _calculate_confidence(self, final_response: str, thinking_history: List[ThinkingRound]) -> float:
+    async def _calculate_confidence(
+        self, final_response: str, thinking_history: List[ThinkingRound]
+    ) -> float:
         """Calculate confidence score based on thinking consistency and rounds."""
         try:
             # Base confidence on number of rounds and consistency
-            total_rounds = max(1, max((r.round_number for r in thinking_history), default=1))
+            total_rounds = max(
+                1, max((r.round_number for r in thinking_history), default=1)
+            )
 
             # Higher rounds generally indicate more complex reasoning
             round_factor = min(total_rounds / 5.0, 1.0)
@@ -329,7 +342,9 @@ Then on a new line, explain your choice in one sentence."""
             self.logger.warning(f"Failed to calculate confidence: {e}")
             return 0.5
 
-    def _extract_reasoning_chain(self, thinking_history: List[ThinkingRound]) -> List[str]:
+    def _extract_reasoning_chain(
+        self, thinking_history: List[ThinkingRound]
+    ) -> List[str]:
         """Extract the reasoning chain from thinking history."""
         chain = []
         for round_item in thinking_history:
@@ -355,7 +370,9 @@ class CoRTAgentMixin:
         self.cort_core = cort_core
         self.enable_cort_reasoning = True
 
-    async def process_input(self, user_input: str, context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    async def process_input(
+        self, user_input: str, context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """
         Base process_input method. Must be overridden by subclass.
 
@@ -371,7 +388,9 @@ class CoRTAgentMixin:
         """
         raise NotImplementedError("Subclass must implement process_input method")
 
-    async def process_with_cort(self, user_input: str, context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    async def process_with_cort(
+        self, user_input: str, context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """
         Process user input using CoRT reasoning.
 
@@ -391,14 +410,15 @@ class CoRTAgentMixin:
 
         # Create response with CoRT metadata
         result = {
-            'response': cort_result.final_response,
-            'cort_metadata': {
-                'thinking_rounds': cort_result.total_rounds,
-                'processing_time': cort_result.processing_time,
-                'confidence_score': cort_result.confidence_score,
-                'reasoning_chain': cort_result.reasoning_chain,
-                'total_alternatives': len(cort_result.thinking_history) - cort_result.total_rounds
-            }
+            "response": cort_result.final_response,
+            "cort_metadata": {
+                "thinking_rounds": cort_result.total_rounds,
+                "processing_time": cort_result.processing_time,
+                "confidence_score": cort_result.confidence_score,
+                "reasoning_chain": cort_result.reasoning_chain,
+                "total_alternatives": len(cort_result.thinking_history)
+                - cort_result.total_rounds,
+            },
         }
 
         return result

@@ -33,32 +33,32 @@ except ImportError as e:
 
 def test_logprobformat_exists():
     """Test that LogprobFormat class exists and is importable."""
-    assert 'LogprobFormat' in dir()
+    assert "LogprobFormat" in dir()
 
 
 def test_toplogprob_exists():
     """Test that TopLogprob class exists and is importable."""
-    assert 'TopLogprob' in dir()
+    assert "TopLogprob" in dir()
 
 
 def test_logprobentry_exists():
     """Test that LogprobEntry class exists and is importable."""
-    assert 'LogprobEntry' in dir()
+    assert "LogprobEntry" in dir()
 
 
 def test_promptlogprobs_exists():
     """Test that PromptLogprobs class exists and is importable."""
-    assert 'PromptLogprobs' in dir()
+    assert "PromptLogprobs" in dir()
 
 
 def test_samplelogprobs_exists():
     """Test that SampleLogprobs class exists and is importable."""
-    assert 'SampleLogprobs' in dir()
+    assert "SampleLogprobs" in dir()
 
 
 def test_logprobsresult_exists():
     """Test that LogprobsResult class exists and is importable."""
-    assert 'LogprobsResult' in dir()
+    assert "LogprobsResult" in dir()
 
 
 def test_compute_perplexity_exists():
@@ -69,4 +69,3 @@ def test_compute_perplexity_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

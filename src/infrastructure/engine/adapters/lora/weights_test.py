@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "LoRALayerWeights"), "LoRALayerWeights missing"
     assert hasattr(mod, "IA3LayerWeights"), "IA3LayerWeights missing"
     assert hasattr(mod, "PackedLoRAWeights"), "PackedLoRAWeights missing"
-

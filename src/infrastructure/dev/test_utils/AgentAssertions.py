@@ -1,5 +1,6 @@
 """Compatibility shim for AgentAssertions in dev test utilities."""
 
+
 class AgentAssertions:
     """Minimal placeholder for assertion helpers used during test collection."""
 

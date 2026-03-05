@@ -33,22 +33,22 @@ except ImportError as e:
 
 def test_spanattributes_exists():
     """Test that SpanAttributes class exists and is importable."""
-    assert 'SpanAttributes' in dir()
+    assert "SpanAttributes" in dir()
 
 
 def test_spantiming_exists():
     """Test that SpanTiming class exists and is importable."""
-    assert 'SpanTiming' in dir()
+    assert "SpanTiming" in dir()
 
 
 def test_nullspan_exists():
     """Test that NullSpan class exists and is importable."""
-    assert 'NullSpan' in dir()
+    assert "NullSpan" in dir()
 
 
 def test_nulltracer_exists():
     """Test that NullTracer class exists and is importable."""
-    assert 'NullTracer' in dir()
+    assert "NullTracer" in dir()
 
 
 def test_is_otel_available_exists():
@@ -139,4 +139,3 @@ def test_get_null_tracer_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

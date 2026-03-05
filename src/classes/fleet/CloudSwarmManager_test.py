@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_cloudswarmmanager_exists():
     """Test that CloudSwarmManager class exists and is importable."""
-    assert 'CloudSwarmManager' in dir()
+    assert "CloudSwarmManager" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

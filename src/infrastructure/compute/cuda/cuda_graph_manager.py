@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 """
 Module: cuda_graph_manager
 Manages CUDA graph execution and lifecycle for GPU acceleration in PyAgent.
@@ -74,7 +75,11 @@ class BatchDescriptor:
 
     def relaxed(self) -> "BatchDescriptor":
         """Get relaxed key without num_reqs for fallback matching."""
-        return BatchDescriptor(num_tokens=self.num_tokens, num_reqs=None, is_uniform_decode=self.is_uniform_decode)
+        return BatchDescriptor(
+            num_tokens=self.num_tokens,
+            num_reqs=None,
+            is_uniform_decode=self.is_uniform_decode,
+        )
 
 
 @dataclass
@@ -331,7 +336,10 @@ class CUDAGraphWrapper:
             return
 
         # Find entry with oldest capture time and lowest replay count
-        lru_key = min(self.entries.keys(), key=lambda k: (self.entries[k].replay_count, self.entries[k].capture_time))
+        lru_key = min(
+            self.entries.keys(),
+            key=lambda k: (self.entries[k].replay_count, self.entries[k].capture_time),
+        )
         del self.entries[lru_key]
 
     def _get_input_addresses(self, args: tuple) -> List[int]:
@@ -395,7 +403,10 @@ class AdaptiveCUDAGraphWrapper(CUDAGraphWrapper):
             self.shape_frequency[batch_descriptor] += 1
 
         return super().__call__(
-            *args, batch_descriptor=batch_descriptor, cudagraph_runtime_mode=cudagraph_runtime_mode, **kwargs
+            *args,
+            batch_descriptor=batch_descriptor,
+            cudagraph_runtime_mode=cudagraph_runtime_mode,
+            **kwargs,
         )
 
     def _evict_lru(self) -> None:
@@ -404,19 +415,31 @@ class AdaptiveCUDAGraphWrapper(CUDAGraphWrapper):
             return
 
         # Don't evict entries with high replay count
-        candidates = [k for k, v in self.entries.items() if v.replay_count < self.min_replays_to_keep]
+        candidates = [
+            k
+            for k, v in self.entries.items()
+            if v.replay_count < self.min_replays_to_keep
+        ]
 
         if not candidates:
             # All entries are important, use standard LRU
             candidates = list(self.entries.keys())
 
         # Evict least frequent among candidates
-        lru_key = min(candidates, key=lambda k: (self.shape_frequency.get(k, 0), self.entries[k].replay_count))
+        lru_key = min(
+            candidates,
+            key=lambda k: (
+                self.shape_frequency.get(k, 0),
+                self.entries[k].replay_count,
+            ),
+        )
         del self.entries[lru_key]
 
     def get_hot_shapes(self, top_k: int = 10) -> List[Tuple[BatchDescriptor, int]]:
         """Get most frequently accessed shapes."""
-        sorted_shapes = sorted(self.shape_frequency.items(), key=lambda x: x[1], reverse=True)
+        sorted_shapes = sorted(
+            self.shape_frequency.items(), key=lambda x: x[1], reverse=True
+        )
         return sorted_shapes[:top_k]
 
     def prewarm(self, shapes: List[BatchDescriptor], dummy_fn: Callable) -> None:
@@ -429,7 +452,10 @@ class AdaptiveCUDAGraphWrapper(CUDAGraphWrapper):
 
 
 @contextmanager
-def cudagraph_context(mode: CUDAGraphMode = CUDAGraphMode.NONE, descriptor: Optional[BatchDescriptor] = None):
+def cudagraph_context(
+    mode: CUDAGraphMode = CUDAGraphMode.NONE,
+    descriptor: Optional[BatchDescriptor] = None,
+):
     """Context manager for CUDA graph execution context."""
     # Store context in thread-local
     ctx = {"mode": mode, "descriptor": descriptor}
@@ -437,7 +463,10 @@ def cudagraph_context(mode: CUDAGraphMode = CUDAGraphMode.NONE, descriptor: Opti
 
 
 def get_cudagraph_sizes(
-    capture_sizes: Optional[List[int]], max_num_reqs: int, max_num_tokens: int, mode: CUDAGraphMode
+    capture_sizes: Optional[List[int]],
+    max_num_reqs: int,
+    max_num_tokens: int,
+    mode: CUDAGraphMode,
 ) -> List[int]:
     """
     Compute CUDA graph capture sizes.

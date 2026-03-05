@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,22 +28,23 @@ from src.core.base.version import VERSION
 __version__ = VERSION
 logger = logging.getLogger(__name__)
 
+
 class BinaryTransport:
     """
     Handles binary serialization and compression for agent communication.
     Utilizes MessagePack and Zstd for optimal performance.
     """
-    
+
     @staticmethod
     def pack(data: Any, compress: bool = False, level: int = 3) -> bytes:
         """
         Serializes data using MessagePack and optionally compresses with Zstd.
-        
+
         Args:
             data: The data to serialize.
             compress: Whether to apply Zstd compression.
             level: Zstd compression level (1-22).
-            
+
         Returns:
             bytes: The packed (and possibly compressed) data.
         """
@@ -59,11 +61,11 @@ class BinaryTransport:
     def unpack(payload: bytes, compressed: bool = False) -> Any:
         """
         Decompresses (optionally) and deserializes data using MessagePack.
-        
+
         Args:
             payload: The bytes to unpack.
             compressed: Whether the payload is Zstd compressed.
-            
+
         Returns:
             Any: The unpacked data.
         """
@@ -76,11 +78,13 @@ class BinaryTransport:
             logger.error(f"BinaryTransport.unpack failed: {e}")
             raise
 
+
 class HeartbeatSignal:
     """
     Specialized structure for high-frequency heartbeat signals.
     Optimized for BinaryTransport.
     """
+
     def __init__(self, agent_id: str, status: str, load: float = 0.0) -> None:
         self.agent_id = agent_id
         self.status = status
@@ -92,7 +96,7 @@ class HeartbeatSignal:
             "a": self.agent_id,
             "s": self.status,
             "l": self.load,
-            "t": self.timestamp
+            "t": self.timestamp,
         }
 
     @classmethod

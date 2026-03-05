@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -76,9 +77,11 @@ class NeuroSymbolicAgent(BaseAgent):
                     {
                         "rule": rule["name"],
                         "impact": rule["impact"],
-                        "action": "CORRECTION_REQUIRED"
-                        if rule["impact"] == "BLOCK"
-                        else "ADVISORY",
+                        "action": (
+                            "CORRECTION_REQUIRED"
+                            if rule["impact"] == "BLOCK"
+                            else "ADVISORY"
+                        ),
                     }
                 )
 
@@ -87,9 +90,9 @@ class NeuroSymbolicAgent(BaseAgent):
         return {
             "content_verified": passed,
             "violations": violations,
-            "corrected_content": content
-            if passed
-            else "# BLOCK: Symbolic Rule Violation Detected",
+            "corrected_content": (
+                content if passed else "# BLOCK: Symbolic Rule Violation Detected"
+            ),
         }
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:

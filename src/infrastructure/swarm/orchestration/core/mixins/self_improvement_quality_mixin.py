@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +27,9 @@ from typing import Any, Dict, List
 class SelfImprovementQualityMixin:
     """Mixin for quality, complexity, and robustness analysis."""
 
-    def _analyze_complexity(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
+    def _analyze_complexity(
+        self, content: str, file_path_rel: str
+    ) -> List[Dict[str, Any]]:
         """Checks for high cyclomatic complexity."""
         rust_accel = getattr(self, "_RUST_ACCEL", False)
         rc = getattr(self, "rc", None)
@@ -49,7 +52,9 @@ class SelfImprovementQualityMixin:
                 pass
         return []
 
-    def _analyze_documentation(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
+    def _analyze_documentation(
+        self, content: str, file_path_rel: str
+    ) -> List[Dict[str, Any]]:
         """Checks for missing or insufficient docstrings."""
         findings = []
         # Phase 337: Increased search window to 3000 to accommodate long license headers
@@ -72,7 +77,14 @@ class SelfImprovementQualityMixin:
                 n
                 for n in ast.walk(tree)
                 if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
-                and (n.returns is None or any(arg.annotation is None for arg in n.args.args if arg.arg != "self"))
+                and (
+                    n.returns is None
+                    or any(
+                        arg.annotation is None
+                        for arg in n.args.args
+                        if arg.arg != "self"
+                    )
+                )
             ]
             for n in untyped_nodes:
                 findings.append(
@@ -87,7 +99,9 @@ class SelfImprovementQualityMixin:
                         "details": [n.name],
                     }
                 )
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             # Simple line-based fallback for broken syntax
             untyped_count = content.count("def ") - content.count("->")
             if untyped_count > 0:
@@ -128,7 +142,10 @@ class SelfImprovementQualityMixin:
         # Performance: time.sleep in non-test code
         sleep_pattern = r"^[^\#]*time" + r"\.sleep\("
         for match in re.finditer(sleep_pattern, content, re.MULTILINE):
-            if "test" not in file_path_rel.lower() and "SelfImprovementCore.py" not in file_path_rel:
+            if (
+                "test" not in file_path_rel.lower()
+                and "SelfImprovementCore.py" not in file_path_rel
+            ):
                 line_no = content.count("\n", 0, match.start()) + 1
                 findings.append(
                     {
@@ -144,7 +161,9 @@ class SelfImprovementQualityMixin:
         if (
             io_pattern
             and re.search(io_pattern, content)
-            and not any(x in content for x in ["_record", "record_lesson", "record_interaction"])
+            and not any(
+                x in content for x in ["_record", "record_lesson", "record_interaction"]
+            )
         ):
             findings.append(
                 {

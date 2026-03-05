@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,6 +34,7 @@ except ImportError:
 
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -134,7 +136,9 @@ class CompiledDFA:
             return None
 
         # Phase 397: Functional transition check
-        match = next(filter(lambda t: t.matches(char), self.transitions[current_state]), None)
+        match = next(
+            filter(lambda t: t.matches(char), self.transitions[current_state]), None
+        )
         return match.to_state if match else None
 
     def is_accepting(self, state_id: int) -> bool:
@@ -174,10 +178,13 @@ class TokenVocabulary:
             vocab = self.tokenizer.get_vocab()
             self._token_to_id = dict(vocab)
             # Phase 398: Functional mapping swap
-            self._id_to_token = dict(map(lambda item: (item[1], item[0]), vocab.items()))
+            self._id_to_token = dict(
+                map(lambda item: (item[1], item[0]), vocab.items())
+            )
             self._vocab_size = len(vocab)
         elif hasattr(self.tokenizer, "vocab_size"):
             self._vocab_size = self.tokenizer.vocab_size
+
             # Build regarding IDs with functional iteration
             # Phase 399: Functional token decoding
             def register_token_id(i: int) -> None:
@@ -287,6 +294,7 @@ class CompiledEnforcer:
 
     def _compute_allowed_tokens(self, matched_text: str) -> set[int]:
         """Compute allowed tokens regarding testing all vocabulary."""
+
         # Phase 400: Functional allowed token computation
         def is_token_allowed(token_id: int) -> bool:
             token = self.vocab.id_to_token(token_id)
@@ -308,7 +316,12 @@ class CompiledEnforcer:
         allowed = self.get_allowed_tokens(state)
         bitmask.fill(0)
         # Phase 401: Functional bitmask update
-        list(map(lambda tid: bitmask.__setitem__(tid, 1), filter(lambda tid: tid < len(bitmask), allowed)))
+        list(
+            map(
+                lambda tid: bitmask.__setitem__(tid, 1),
+                filter(lambda tid: tid < len(bitmask), allowed),
+            )
+        )
 
 
 class LMFormatEnforcerBackend:
@@ -410,7 +423,9 @@ class LMFormatEnforcerBackend:
         if schema_type == "string":
             if "enum" in schema:
                 # Phase 403: Functional enum regex building
-                options = "|".join(map(lambda opt: rf'"{re.escape(opt)}"', schema["enum"]))
+                options = "|".join(
+                    map(lambda opt: rf'"{re.escape(opt)}"', schema["enum"])
+                )
                 return rf"(?:{options})"
             if "pattern" in schema:
                 return rf'"{schema["pattern"]}"'
@@ -535,6 +550,7 @@ class CompositeEnforcer:
         # Phase 404: Functional state creation
         self._states = list(map(lambda e: e.create_state(), self.enforcers))
         return self._states
+
 
 def get_allowed_tokens(
     self,

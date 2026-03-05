@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,11 +38,16 @@ import logging
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from src.core.lazy_loader import LazyLoader
-from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (KVConnectorRole, KVTransferConfig)
+from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
+    KVConnectorRole,
+    KVTransferConfig,
+)
 
 if TYPE_CHECKING:
     from src.infrastructure.storage.cache.kv_cache_manager import KVCacheManager
-    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import KVConnectorBase
+    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
+        KVConnectorBase,
+    )
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -141,4 +147,6 @@ class DecodeOnlyWorker:
 
 
 # Lazy loading registration
-_worker = LazyLoader("src.infrastructure.swarm.worker.decode_only_worker", "DecodeOnlyWorker")
+_worker = LazyLoader(
+    "src.infrastructure.swarm.worker.decode_only_worker", "DecodeOnlyWorker"
+)

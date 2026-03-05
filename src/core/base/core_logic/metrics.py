@@ -11,8 +11,11 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
 class MetricsCore:
-    def calculate_anchoring_strength(self, result: str, context_pool: Optional[Dict[str, Any]] = None) -> float:
+    def calculate_anchoring_strength(
+        self, result: str, context_pool: Optional[Dict[str, Any]] = None
+    ) -> float:
         """Calculate the 'Anchoring Strength' metric (Stanford Research 2025)."""
         return AgentVerifier.calculate_anchoring_strength(result, context_pool or {})
 
@@ -20,7 +23,9 @@ class MetricsCore:
         """Self-verification layer."""
         return AgentVerifier.verify_self(result, anchoring_score)
 
-    def assess_response_quality(self, response: str, metadata: Optional[Dict[str, Any]] = None) -> ResponseQuality:
+    def assess_response_quality(
+        self, response: str, metadata: Optional[Dict[str, Any]] = None
+    ) -> ResponseQuality:
         """Assess the quality of a response."""
         if rc:
             try:
@@ -30,23 +35,37 @@ class MetricsCore:
         else:
             final_score = self._assess_quality_python(response, metadata)
 
-        if final_score >= 0.9: return ResponseQuality.EXCELLENT
-        elif final_score >= 0.7: return ResponseQuality.GOOD
-        elif final_score >= 0.5: return ResponseQuality.ACCEPTABLE
-        elif final_score >= 0.3: return ResponseQuality.POOR
-        else: return ResponseQuality.INVALID
+        if final_score >= 0.9:
+            return ResponseQuality.EXCELLENT
+        elif final_score >= 0.7:
+            return ResponseQuality.GOOD
+        elif final_score >= 0.5:
+            return ResponseQuality.ACCEPTABLE
+        elif final_score >= 0.3:
+            return ResponseQuality.POOR
+        else:
+            return ResponseQuality.INVALID
 
-    def _assess_quality_python(self, response: str, metadata: Optional[Dict[str, Any]] = None) -> float:
+    def _assess_quality_python(
+        self, response: str, metadata: Optional[Dict[str, Any]] = None
+    ) -> float:
         """Fallback Python implementation of quality assessment."""
-        if metadata is None: metadata = {}
+        if metadata is None:
+            metadata = {}
         score = 0.5
-        if len(response) > 100: score += 0.1
-        if "error" not in response.lower() and "fail" not in response.lower(): score += 0.1
-        if metadata.get("has_references"): score += 0.1
-        if metadata.get("is_complete"): score += 0.1
+        if len(response) > 100:
+            score += 0.1
+        if "error" not in response.lower() and "fail" not in response.lower():
+            score += 0.1
+        if metadata.get("has_references"):
+            score += 0.1
+        if metadata.get("is_complete"):
+            score += 0.1
         return min(1.0, score)
 
-    def calculate_priority_score(self, priority: AgentPriority, urgency: float) -> float:
+    def calculate_priority_score(
+        self, priority: AgentPriority, urgency: float
+    ) -> float:
         """Calculate effective priority score."""
         priority_base = {
             AgentPriority.LOW: 0.2,

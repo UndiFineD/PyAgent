@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,7 +24,9 @@ import os
 import sys
 
 # Ensure the project root is in PYTHONPATH before importing from src
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
+project_root = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "..", "..", "..")
+)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
@@ -41,6 +44,7 @@ from src.infrastructure.fleet.FleetManager import FleetManager
 # Phase 120: Load environment variables if available
 try:
     from dotenv import load_dotenv
+
     load_dotenv()
 except ImportError:
     pass
@@ -59,7 +63,7 @@ def run_cycle(
     prompt_path: str | None = None,
     context_path: str | None = None,
     current_cycle: int = 1,
-    model_name: str = "gemini-3-flash"
+    model_name: str = "gemini-3-flash",
 ) -> None:
     """Run a single improvement cycle."""
     start_time = time.time()
@@ -89,23 +93,29 @@ def run_cycle(
         # Parse @focus: markers to reduce scan surface (Cycle Time Optimization)
         # Supports both simple comma-separated and JSON-style lists
         # Improved multi-line @focus parsing (Phase 140 fix)
-        focus_match = re.search(r"@focus:\s*(\[.*?\]|.*?\n)", strategic_note, re.DOTALL | re.IGNORECASE)
+        focus_match = re.search(
+            r"@focus:\s*(\[.*?\]|.*?\n)", strategic_note, re.DOTALL | re.IGNORECASE
+        )
         if focus_match:
             focus_val = focus_match.group(1).strip()
             if focus_val.startswith("[") and focus_val.endswith("]"):
                 try:
                     # Clean up multi-line formatting inside the list
-                    clean_focus = re.sub(r'[\s\n]+', ' ', focus_val)
-                    target_dirs = json.loads(clean_focus.replace("'", "\""))
+                    clean_focus = re.sub(r"[\s\n]+", " ", focus_val)
+                    target_dirs = json.loads(clean_focus.replace("'", '"'))
                 except Exception:
                     # Fallback for complex lists
                     inner = focus_val[1:-1].split(",")
-                    target_dirs = [d.strip().strip('"').strip("'").strip() for d in inner if d.strip()]
+                    target_dirs = [
+                        d.strip().strip('"').strip("'").strip()
+                        for d in inner
+                        if d.strip()
+                    ]
             else:
                 target_dirs = [d.strip() for d in focus_val.split(",") if d.strip()]
             print(f" - Directive Focus: {target_dirs}")
 
-        # Parse and execute @cmd: markers (Proactive Fixes)
+            # Parse and execute @cmd: markers (Proactive Fixes)
             import shlex
         cmd_matches = re.findall(r"@cmd:\s*(.*)", strategic_note, re.IGNORECASE)
         for cmd in cmd_matches:
@@ -125,7 +135,12 @@ def run_cycle(
         # Use subprocess.run with list arguments instead for safer external command execution
 
     # 1. Run the improvement cycle (Quality, Security, Tech Debt)
-    combined_stats = {"files_scanned": 0, "issues_found": 0, "fixes_applied": 0, "details": []}
+    combined_stats = {
+        "files_scanned": 0,
+        "issues_found": 0,
+        "fixes_applied": 0,
+        "details": [],
+    }
     for t_dir in target_dirs:
         stats = fleet.self_improvement.run_improvement_cycle(target_dir=t_dir)
         combined_stats["files_scanned"] += stats.get("files_scanned", 0)
@@ -141,45 +156,62 @@ def run_cycle(
 
     # 2. Log what is 'broken' (issues not fixed)
     broken_items = []
-    for detail in stats['details']:
-        unfixed = [i for i in detail['issues'] if not i.get('fixed')]
+    for detail in stats["details"]:
+        unfixed = [i for i in detail["issues"] if not i.get("fixed")]
         if unfixed:
-            broken_items.append({"file": detail['file'], "remaining_issues": unfixed})
+            broken_items.append({"file": detail["file"], "remaining_issues": unfixed})
 
     if broken_items:
         print("\n--- Remaining Technical Debt / Issues ---")
         for item in broken_items:
-            issues_to_print = item['remaining_issues']
+            issues_to_print = item["remaining_issues"]
             # Filter matches for the orchestrator itself if they are false positives (Phase 149)
-            if "run_fleet_self_improvement.py" in item['file']:
-                issues_to_print = [issue for issue in item['remaining_issues'] if "subprocess.run" not in str(issue) and "time.sleep" not in str(issue)]
+            if "run_fleet_self_improvement.py" in item["file"]:
+                issues_to_print = [
+                    issue
+                    for issue in item["remaining_issues"]
+                    if "subprocess.run" not in str(issue)
+                    and "time.sleep" not in str(issue)
+                ]
 
             if issues_to_print:
                 print(f"File: {item['file']}")
                 for issue in issues_to_print:
-                    issue_type = issue.get('type') or issue.get('message', 'Unknown Issue')
-                    detail_text = issue.get('detail') or issue.get('message', '')
+                    issue_type = issue.get("type") or issue.get(
+                        "message", "Unknown Issue"
+                    )
+                    detail_text = issue.get("detail") or issue.get("message", "")
                     print(f"  - [ ] {issue_type}: {detail_text}")
     else:
         print("\nAll scanned issues have been autonomously addressed.")
 
     # 3. Documentation & Research Summary (Phase 112)
     print("\n[Research] Summarizing codebase intelligence...")
-    library_path = os.path.join(root, "data/memory/knowledge_exports", "research_library.json")
+    library_path = os.path.join(
+        root, "data/memory/knowledge_exports", "research_library.json"
+    )
     if os.path.exists(library_path):
         with open(library_path) as f:
             library = json.load(f)
         print(f" - Fleet Intelligence Library contains {len(library)} indexed agents.")
 
         # Performance/Complexity check
-        high_comp = [e for e in library if e.get("taxonomy", {}).get("logic_complexity") == "High"]
+        high_comp = [
+            e
+            for e in library
+            if e.get("taxonomy", {}).get("logic_complexity") == "High"
+        ]
         if high_comp:
-            print(f" - WARNING: {len(high_comp)} files identified with HIGH logic complexity.")
+            print(
+                f" - WARNING: {len(high_comp)} files identified with HIGH logic complexity."
+            )
             for e in high_comp[:3]:
                 print(f"    * {e['title']}")
 
     print("\n[Documentation] Generating updated docs for improvements...")
-    doc_res = fleet.doc_gen_agent.extract_docs(os.path.join(root, "src/infrastructure/fleet/FleetManager.py"))
+    doc_res = fleet.doc_gen_agent.extract_docs(
+        os.path.join(root, "src/infrastructure/fleet/FleetManager.py")
+    )
     doc_path = os.path.join(root, "docs/FLEET_AUTO_DOC.md")
     # Using 'a' to preserve maintenance summary if it exists, or handling intelligently
     with open(doc_path, "w", encoding="utf-8") as f:
@@ -187,7 +219,9 @@ def run_cycle(
         f.write(doc_res)
 
     # Re-trigger maintenance log if it was overwritten
-    maintenance_summary = f"\n## {time.strftime('%Y-%m-%d')} - Maintenance Cycle Summary\n"
+    maintenance_summary = (
+        f"\n## {time.strftime('%Y-%m-%d')} - Maintenance Cycle Summary\n"
+    )
     maintenance_summary += f"The fleet's SelfImprovementOrchestrator completed a cycle over {stats['files_scanned']} files. Re-stabilization phase engaged.\n"
     with open(doc_path, "a", encoding="utf-8") as f:
         f.write(maintenance_summary)
@@ -197,9 +231,11 @@ def run_cycle(
     # 4. Explainability Log
     workflow_id = "self_improvement_01"
     fleet.explainability.log_reasoning_step(
-        workflow_id, "SelfImprovementOrchestrator", "run_improvement_cycle",
+        workflow_id,
+        "SelfImprovementOrchestrator",
+        "run_improvement_cycle",
         "Autonomous fleet optimization maintains system health and security parity.",
-        {"stats": stats}
+        {"stats": stats},
     )
     print("\nReasoning for this cycle logged to Explainability trace.")
 
@@ -207,19 +243,27 @@ def run_cycle(
     print("\n[Intelligence] Verifying local interaction recording...")
     # Simulated internal AI thought to be recorded
     test_prompt = "How can we optimize for a trillion parameters?"
-    test_result = "By using compressed sharding and adler32 hashing for high-speed indexing."
-    fleet.recorder.record_interaction("internal_fleet_optimizer", "logic-v1", test_prompt, test_result)
+    test_result = (
+        "By using compressed sharding and adler32 hashing for high-speed indexing."
+    )
+    fleet.recorder.record_interaction(
+        "internal_fleet_optimizer", "logic-v1", test_prompt, test_result
+    )
     print(" - Interaction archived to compressed local shard.")
 
     # 6. External Federated Learning (Phase 112+)
-    consult_external_models(fleet, broken_items, prompt_path=prompt_path, model_name=model_name)
+    consult_external_models(
+        fleet, broken_items, prompt_path=prompt_path, model_name=model_name
+    )
 
     # 7. Knowledge Synthesis (Phase 108)
     print("\n[Intelligence] Synthesizing collective knowledge...")
     try:
         new_patterns = fleet.intelligence.synthesize_collective_intelligence()
         if new_patterns:
-            print(f" - Identified {len(new_patterns)} new actionable patterns for the next cycle.")
+            print(
+                f" - Identified {len(new_patterns)} new actionable patterns for the next cycle."
+            )
     except Exception as e:
         print(f" - Intelligence synthesis skipped: {e}")
 
@@ -229,24 +273,54 @@ def run_cycle(
         if not p_path.is_absolute():
             p_path = Path(root) / prompt_path
         if p_path.exists():
-            print(f"\n[Maintenance] Area '@focus: {target_dirs}' is CLEAN. Pruning directive...")
+            print(
+                f"\n[Maintenance] Area '@focus: {target_dirs}' is CLEAN. Pruning directive..."
+            )
             content = p_path.read_text(encoding="utf-8")
 
             # Remove ONLY the first focus and commands that are now verified (Phase 135 fix)
             # DYNAMIC MULTI-LINE PRUNING (Phase 141)
-            new_content = re.sub(r"^@focus:.*?\].*?\n", "", content, count=1, flags=re.MULTILINE | re.IGNORECASE | re.DOTALL)
+            new_content = re.sub(
+                r"^@focus:.*?\].*?\n",
+                "",
+                content,
+                count=1,
+                flags=re.MULTILINE | re.IGNORECASE | re.DOTALL,
+            )
             if new_content == content:
                 # Fallback if no brackets
-                new_content = re.sub(r"^@focus:.*$\n?", "", content, count=1, flags=re.MULTILINE | re.IGNORECASE)
+                new_content = re.sub(
+                    r"^@focus:.*$\n?",
+                    "",
+                    content,
+                    count=1,
+                    flags=re.MULTILINE | re.IGNORECASE,
+                )
 
-            new_content = re.sub(r"^@cmd:.*$\n?", "", new_content, count=1, flags=re.MULTILINE | re.IGNORECASE)
-            # For python blocks, we use DOTALL so we need to be careful. 
+            new_content = re.sub(
+                r"^@cmd:.*$\n?",
+                "",
+                new_content,
+                count=1,
+                flags=re.MULTILINE | re.IGNORECASE,
+            )
+            # For python blocks, we use DOTALL so we need to be careful.
             # We'll remove the first python block if it exists.
-            new_content = re.sub(r"^@python:\s*\"\"\"(.*?)\"\"\"\n?", "", new_content, count=1, flags=re.DOTALL | re.IGNORECASE)
+            new_content = re.sub(
+                r"^@python:\s*\"\"\"(.*?)\"\"\"\n?",
+                "",
+                new_content,
+                count=1,
+                flags=re.DOTALL | re.IGNORECASE,
+            )
 
             # Also remove completed task markers if they exist
-            new_content = re.sub(r"^- \[x\].*$\n?", "", new_content, flags=re.MULTILINE | re.IGNORECASE)
-            new_content = re.sub(r"^# DONE.*$\n?", "", new_content, flags=re.MULTILINE | re.IGNORECASE)
+            new_content = re.sub(
+                r"^- \[x\].*$\n?", "", new_content, flags=re.MULTILINE | re.IGNORECASE
+            )
+            new_content = re.sub(
+                r"^# DONE.*$\n?", "", new_content, flags=re.MULTILINE | re.IGNORECASE
+            )
 
             if new_content != content:
                 p_path.write_text(new_content.strip() + "\n", encoding="utf-8")
@@ -260,10 +334,10 @@ def consult_external_models(
     fleet: FleetManager,
     broken_items: list[dict[str, Any]],
     prompt_path: str | None = None,
-    model_name: str = "gemini-3-flash"
+    model_name: str = "gemini-3-flash",
 ) -> list[dict[str, str]]:
     """
-    Queries external model backends (Ollama, Gemini, and Agentic Copilot) 
+    Queries external model backends (Ollama, Gemini, and Agentic Copilot)
     to extract lessons for the fleet.
     """
     import requests
@@ -272,7 +346,9 @@ def consult_external_models(
 
     ai = LLMClient(requests, workspace_root=str(fleet.workspace_root))
 
-    print("\n[Federated Learning] Consulting external models for specialized lessons...")
+    print(
+        "\n[Federated Learning] Consulting external models for specialized lessons..."
+    )
 
     # Context of current health
     if broken_items:
@@ -316,7 +392,7 @@ def consult_external_models(
     # 2. Gemini/GitHub (Global External)
     print(f" - Harvesting insights from GitHub Models (Model: {model_name})...")
     # Using the preferred model (Phase 164 optimization)
-    gemini_res = ai.llm_chat_via_github_models(prompt, model=model_name) 
+    gemini_res = ai.llm_chat_via_github_models(prompt, model=model_name)
     if gemini_res:
         lessons.append({"provider": "GitHubModels", "text": gemini_res})
 
@@ -327,7 +403,9 @@ def consult_external_models(
         lessons.append({"provider": "CopilotCLI", "text": copilot_res})
     else:
         # Fallback to smart_chat if CLI fails
-        agentic_res = ai.smart_chat(prompt, preference="external", external_model=model_name)
+        agentic_res = ai.smart_chat(
+            prompt, preference="external", external_model=model_name
+        )
         if agentic_res:
             lessons.append({"provider": "Copilot/Agent", "text": agentic_res})
 
@@ -338,10 +416,12 @@ def consult_external_models(
             for lesson in lessons:
                 fleet.intelligence.contribute_insight(
                     agent_name=f"External_{lesson['provider']}",
-                    insight=lesson['text'],
-                    confidence=0.85
+                    insight=lesson["text"],
+                    confidence=0.85,
                 )
-            print(f" - Successfully integrated {len(lessons)} external insights into Hive Mind.")
+            print(
+                f" - Successfully integrated {len(lessons)} external insights into Hive Mind."
+            )
         except Exception as e:
             print(f" - Failed to contribute insights to Intelligence Orchestrator: {e}")
 
@@ -354,8 +434,10 @@ def _cycle_throttle(delay: int, root: str, target_dirs: list[str]) -> None:
     Uses 'watchfiles' for event-driven triggering if available (Phase 147).
     """
     import threading
+
     try:
         from watchfiles import watch
+
         print(f"\n[Watcher] Waiting for modifications in {target_dirs}...")
 
         # Build absolute paths for watching
@@ -370,7 +452,7 @@ def _cycle_throttle(delay: int, root: str, target_dirs: list[str]) -> None:
         if not watch_paths:
             watch_paths = [root]
 
-        # watch() is a generator that yields changes. 
+        # watch() is a generator that yields changes.
         # We'll wait for the first change.
         for changes in watch(*watch_paths):
             if changes:
@@ -385,14 +467,47 @@ def _cycle_throttle(delay: int, root: str, target_dirs: list[str]) -> None:
         # Use threading.Event to avoid synchronous wait performance warnings
         threading.Event().wait(timeout=float(delay))
 
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="PyAgent Fleet Self-Improvement Loop")
-    parser.add_argument("--cycles", "-c", type=int, default=1, help="Number of improvement cycles to run (default: 1). Use 0 or -1 for infinite/continuous.")
-    parser.add_argument("--delay", "-d", type=int, default=6, help="Delay in seconds between cycles (default: 6)")
-    parser.add_argument("--prompt", "-p", type=str, help="Path to a strategic prompt/directive file (optional)")
-    parser.add_argument("--context", "-t", type=str, help="Path to a context file for additional directives (optional)")
-    parser.add_argument("--model", "-m", type=str, default="gemini-3-flash", help="Model to use for external consultation (default: gemini-3-flash)")
-    parser.add_argument("--dry-run", action="store_true", help="Initialize and verify fleet without running full cycle")
+    parser.add_argument(
+        "--cycles",
+        "-c",
+        type=int,
+        default=1,
+        help="Number of improvement cycles to run (default: 1). Use 0 or -1 for infinite/continuous.",
+    )
+    parser.add_argument(
+        "--delay",
+        "-d",
+        type=int,
+        default=6,
+        help="Delay in seconds between cycles (default: 6)",
+    )
+    parser.add_argument(
+        "--prompt",
+        "-p",
+        type=str,
+        help="Path to a strategic prompt/directive file (optional)",
+    )
+    parser.add_argument(
+        "--context",
+        "-t",
+        type=str,
+        help="Path to a context file for additional directives (optional)",
+    )
+    parser.add_argument(
+        "--model",
+        "-m",
+        type=str,
+        default="gemini-3-flash",
+        help="Model to use for external consultation (default: gemini-3-flash)",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Initialize and verify fleet without running full cycle",
+    )
     args = parser.parse_args()
 
     root = os.getcwd()
@@ -418,13 +533,24 @@ def main() -> None:
         last_target_dirs = ["src"]
 
         if num_cycles == 1:
-            run_cycle(fleet, root, prompt_path=prompt_path, context_path=context_path, current_cycle=1, model_name=model_name)
+            run_cycle(
+                fleet,
+                root,
+                prompt_path=prompt_path,
+                context_path=context_path,
+                current_cycle=1,
+                model_name=model_name,
+            )
         else:
             current_cycle = 0
             if is_infinite:
-                print(f"Running in CONTINUOUS mode with {args.delay}s delay/Watcher. Press Ctrl+C to stop.")
+                print(
+                    f"Running in CONTINUOUS mode with {args.delay}s delay/Watcher. Press Ctrl+C to stop."
+                )
             else:
-                print(f"Running {num_cycles} cycles with {args.delay}s delay/Watcher. Press Ctrl+C to stop.")
+                print(
+                    f"Running {num_cycles} cycles with {args.delay}s delay/Watcher. Press Ctrl+C to stop."
+                )
 
             while True:
                 current_cycle += 1
@@ -439,19 +565,40 @@ def main() -> None:
                         try:
                             # Re-parse focus just for the watcher
                             note = p_path.read_text(encoding="utf-8")
-                            focus_match = re.search(r"@focus:\s*(\[.*?\]|.*?\n)", note, re.DOTALL | re.IGNORECASE)
+                            focus_match = re.search(
+                                r"@focus:\s*(\[.*?\]|.*?\n)",
+                                note,
+                                re.DOTALL | re.IGNORECASE,
+                            )
                             if focus_match:
                                 # Simple extraction for watcher
                                 focus_val = focus_match.group(1).strip()
-                                if focus_val.startswith("[") and focus_val.endswith("]"):
+                                if focus_val.startswith("[") and focus_val.endswith(
+                                    "]"
+                                ):
                                     # Very loose parse for watcher paths
-                                    last_target_dirs = [d.strip().strip('"').strip("'") for d in focus_val[1:-1].split(",") if d.strip()]
+                                    last_target_dirs = [
+                                        d.strip().strip('"').strip("'")
+                                        for d in focus_val[1:-1].split(",")
+                                        if d.strip()
+                                    ]
                                 else:
-                                    last_target_dirs = [d.strip() for d in focus_val.split(",") if d.strip()]
+                                    last_target_dirs = [
+                                        d.strip()
+                                        for d in focus_val.split(",")
+                                        if d.strip()
+                                    ]
                         except Exception:
                             pass
 
-                run_cycle(fleet, root, prompt_path=prompt_path, context_path=context_path, current_cycle=current_cycle, model_name=model_name)
+                run_cycle(
+                    fleet,
+                    root,
+                    prompt_path=prompt_path,
+                    context_path=context_path,
+                    current_cycle=current_cycle,
+                    model_name=model_name,
+                )
 
                 if not is_infinite and current_cycle >= num_cycles:
                     break
@@ -463,6 +610,6 @@ def main() -> None:
         print("\n=== STOPPING SELF-IMPROVEMENT (User Interrupt) ===")
         sys.exit(0)
 
+
 if __name__ == "__main__":
     main()
-    

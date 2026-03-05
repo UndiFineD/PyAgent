@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -110,10 +111,12 @@ class SemanticSearchMeshAgent:
         for index in self.local_indices:
             shard_id = index["id"]
             vectors = index["meta"].get("vectors", [])
-            
+
             if HAS_RUST and vectors:
                 # Direct Rust acceleration for multi-vector search
-                matches = rust_core.top_k_cosine_similarity(query_embedding, vectors, limit)
+                matches = rust_core.top_k_cosine_similarity(
+                    query_embedding, vectors, limit
+                )
                 for idx, score in matches:
                     results.append(
                         {
@@ -132,7 +135,7 @@ class SemanticSearchMeshAgent:
                         "content": f"Match from {shard_id} (Simulated Similarity)",
                     }
                 )
-        
+
         # Sort combined results by score
         results.sort(key=lambda x: x["score"], reverse=True)
         return results[:limit]

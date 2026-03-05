@@ -34,7 +34,9 @@ logger = logging.getLogger(__name__)
 class LMStudioAPIClient:
     """HTTP REST API client for LM Studio with retry and error handling."""
 
-    def __init__(self, base_url: str, api_token: Optional[str] = None, default_model: str = ""):
+    def __init__(
+        self, base_url: str, api_token: Optional[str] = None, default_model: str = ""
+    ):
         """Initialize REST API client.
 
         Args:
@@ -105,7 +107,9 @@ class LMStudioAPIClient:
 
         for attempt in range(max_retries):
             try:
-                logger.debug(f"[LMStudio] HTTP {method} {url} (attempt {attempt + 1}/{max_retries})")
+                logger.debug(
+                    f"[LMStudio] HTTP {method} {url} (attempt {attempt + 1}/{max_retries})"
+                )
                 if method.upper() == "GET":
                     resp = httpx.get(url, timeout=timeout, headers=headers)
                 elif method.upper() == "POST":
@@ -113,7 +117,11 @@ class LMStudioAPIClient:
                         url,
                         timeout=timeout,
                         headers=headers,
-                        **{k: v for k, v in kwargs.items() if k not in ("timeout", "headers")},
+                        **{
+                            k: v
+                            for k, v in kwargs.items()
+                            if k not in ("timeout", "headers")
+                        },
                     )
                 else:
                     raise ValueError(f"Unsupported HTTP method: {method}")
@@ -124,21 +132,29 @@ class LMStudioAPIClient:
                     )
 
                 return resp
-            except (httpx.TimeoutException, httpx.ConnectError, httpx.NetworkError) as e:
+            except (
+                httpx.TimeoutException,
+                httpx.ConnectError,
+                httpx.NetworkError,
+            ) as e:
                 if attempt < max_retries - 1:
-                    wait_time = 2 ** attempt
+                    wait_time = 2**attempt
                     logger.warning(
                         f"[LMStudio] HTTP {method} {url} transient error: {e}; retrying in {wait_time}s"
                     )
                     time.sleep(wait_time)  # nosec
                     continue
-                logger.error(f"[LMStudio] HTTP {method} {url} failed after {max_retries} attempts: {e}")
+                logger.error(
+                    f"[LMStudio] HTTP {method} {url} failed after {max_retries} attempts: {e}"
+                )
                 raise
             except (ValueError, RuntimeError) as e:
                 logger.error(f"[LMStudio] HTTP {method} {url} failed: {e}")
                 raise
 
-        raise RuntimeError(f"[LMStudio] HTTP {method} {url} failed after {max_retries} attempts")
+        raise RuntimeError(
+            f"[LMStudio] HTTP {method} {url} failed after {max_retries} attempts"
+        )
 
     def list_models(self) -> list[str]:
         """List available models via REST API.
@@ -156,10 +172,17 @@ class LMStudioAPIClient:
                 models = []
                 for item in data:
                     if isinstance(item, dict):
-                        models.append(item.get("path") or item.get("id") or item.get("name") or str(item))
+                        models.append(
+                            item.get("path")
+                            or item.get("id")
+                            or item.get("name")
+                            or str(item)
+                        )
                     else:
                         models.append(str(item))
-                logger.info(f"[LMStudio] HTTP list_models succeeded: {len(models)} models from {url}")
+                logger.info(
+                    f"[LMStudio] HTTP list_models succeeded: {len(models)} models from {url}"
+                )
                 return models
 
             logger.error(
@@ -186,7 +209,9 @@ class LMStudioAPIClient:
             for endpoint in ["info", "version", "status"]:
                 try:
                     url = f"{self._normalize_url()}/{endpoint}"
-                    resp = self._http_request_with_retry("GET", url, max_retries=1, timeout=2.0)
+                    resp = self._http_request_with_retry(
+                        "GET", url, max_retries=1, timeout=2.0
+                    )
                     if resp and resp.status_code == 200:
                         data = resp.json()
                         info["api_version"] = (

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -65,12 +66,16 @@ class UniprocExecutor(Executor):
                 raise ValueError(f"Unknown function: {func_name}")
             result = self._functions[func_name](*args, **kwargs)
             future.set_result(result)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             future.set_exception(e)
 
         return future
 
-    def broadcast(self, func_name: str, *args: Any, **kwargs: Any) -> List[FutureWrapper[Any]]:
+    def broadcast(
+        self, func_name: str, *args: Any, **kwargs: Any
+    ) -> List[FutureWrapper[Any]]:
         """Broadcast (just execute once for uniproc)."""
         return [self.submit(func_name, *args, **kwargs)]
 

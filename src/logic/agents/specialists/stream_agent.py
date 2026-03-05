@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,6 +43,7 @@ __version__ = VERSION
 
 class WebhookStatus(Enum):
     """Possible statuses for a webhook delivery."""
+
     SUCCESS = "success"
     FAILED = "failed"
     TIMEOUT = "timeout"
@@ -117,11 +119,20 @@ class StreamAgent(BaseAgent):
         )
         self._webhooks[name] = config
 
-        return {"success": True, "webhook_name": name, "url": url, "registered_webhooks": list(self._webhooks.keys())}
+        return {
+            "success": True,
+            "webhook_name": name,
+            "url": url,
+            "registered_webhooks": list(self._webhooks.keys()),
+        }
 
     @as_tool
     async def push_to_n8n(
-        self, webhook_url: str, data: Dict, webhook_name: Optional[str] = None, validate_schema: bool = True
+        self,
+        webhook_url: str,
+        data: Dict,
+        webhook_name: Optional[str] = None,
+        validate_schema: bool = True,
     ) -> Dict[str, Any]:
         """Sends data to an n8n webhook with retry logic and validation."""
         from src.infrastructure.security.network.firewall import ReverseProxyFirewall
@@ -130,14 +141,18 @@ class StreamAgent(BaseAgent):
         config = self._webhooks.get(webhook_name) if webhook_name else None
         if config:
             webhook_url = config.url
-        
+
         firewall = ReverseProxyFirewall()
-        
+
         # Schema validation
         if validate_schema and config and config.schema:
             validation = self._validate_schema(data, config.schema)
             if not validation["valid"]:
-                return {"success": False, "error": "schema_validation_failed", "details": validation["errors"]}
+                return {
+                    "success": False,
+                    "error": "schema_validation_failed",
+                    "details": validation["errors"],
+                }
 
         # Retry logic
         max_retries = config.max_retries if config else 3
@@ -147,10 +162,16 @@ class StreamAgent(BaseAgent):
         last_error = None
         for attempt in range(max_retries):
             try:
-                response = firewall.post(webhook_url, json=data, headers=headers, timeout=timeout)
+                response = firewall.post(
+                    webhook_url, json=data, headers=headers, timeout=timeout
+                )
 
-                status = WebhookStatus.SUCCESS if response.status_code in (200, 201, 202) else WebhookStatus.FAILED
-                
+                status = (
+                    WebhookStatus.SUCCESS
+                    if response.status_code in (200, 201, 202)
+                    else WebhookStatus.FAILED
+                )
+
                 result = {
                     "success": status == WebhookStatus.SUCCESS,
                     "status_code": response.status_code,
@@ -159,21 +180,36 @@ class StreamAgent(BaseAgent):
                     "response_preview": response.text[:200] if response.text else None,
                 }
 
-                self._delivery_log.append({**result, "timestamp": time.time(), "payload_size": len(json.dumps(data))})
+                self._delivery_log.append(
+                    {
+                        **result,
+                        "timestamp": time.time(),
+                        "payload_size": len(json.dumps(data)),
+                    }
+                )
 
                 if status == WebhookStatus.SUCCESS:
                     return result
 
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 last_error = str(e)
 
             if attempt < max_retries - 1:
                 await asyncio.sleep(config.retry_delay if config else 1.0)
 
-        return {"success": False, "status": WebhookStatus.FAILED.value, "error": last_error, "attempts": max_retries}
+        return {
+            "success": False,
+            "status": WebhookStatus.FAILED.value,
+            "error": last_error,
+            "attempts": max_retries,
+        }
 
     @as_tool
-    async def extract_from_stream(self, raw_stream: str, extract_type: str = "auto") -> Dict[str, Any]:
+    async def extract_from_stream(
+        self, raw_stream: str, extract_type: str = "auto"
+    ) -> Dict[str, Any]:
         """Parses complex stream data into a structured schema."""
         if extract_type == "json":
             return self._extract_json(raw_stream)
@@ -194,7 +230,9 @@ class StreamAgent(BaseAgent):
         )
         res = await self.improve_content(prompt)
 
-        with contextlib.suppress(ValueError, TypeError, AttributeError, json.JSONDecodeError, KeyError):
+        with contextlib.suppress(
+            ValueError, TypeError, AttributeError, json.JSONDecodeError, KeyError
+        ):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
@@ -203,7 +241,10 @@ class StreamAgent(BaseAgent):
 
     @as_tool
     async def transform_data(
-        self, data: Dict[str, Any], mapping: Dict[str, str], filters: Optional[List[str]] = None
+        self,
+        data: Dict[str, Any],
+        mapping: Dict[str, str],
+        filters: Optional[List[str]] = None,
     ) -> Dict[str, Any]:
         """Transforms data using a field mapping and optional filters."""
         result = {}
@@ -218,7 +259,11 @@ class StreamAgent(BaseAgent):
             for filter_expr in filters:
                 self._apply_filter(result, filter_expr)
 
-        return {"transformed": result, "original_keys": list(data.keys()), "mapped_keys": list(result.keys())}
+        return {
+            "transformed": result,
+            "original_keys": list(data.keys()),
+            "mapped_keys": list(result.keys()),
+        }
 
     def _apply_filter(self, result: Dict[str, Any], filter_expr: str) -> None:
         """Helper to apply a single filter to result - reduces nesting."""
@@ -241,18 +286,27 @@ class StreamAgent(BaseAgent):
             pass
 
     @as_tool
-    async def buffer_event(self, event_type: str, payload: Dict[str, Any], source: str = "manual") -> Dict[str, Any]:
+    async def buffer_event(
+        self, event_type: str, payload: Dict[str, Any], source: str = "manual"
+    ) -> Dict[str, Any]:
         """Buffers an event for batch processing."""
         event = StreamEvent(event_type=event_type, payload=payload, source=source)
         self._event_buffer.append(event)
 
-        return {"buffered": True, "buffer_size": len(self._event_buffer), "event_type": event_type}
+        return {
+            "buffered": True,
+            "buffer_size": len(self._event_buffer),
+            "event_type": event_type,
+        }
 
     @as_tool
     async def flush_buffer(self, webhook_name: str) -> Dict[str, Any]:
         """Flushes buffered events to a registered webhook."""
         if webhook_name not in self._webhooks:
-            return {"success": False, "error": f"Webhook '{webhook_name}' not registered"}
+            return {
+                "success": False,
+                "error": f"Webhook '{webhook_name}' not registered",
+            }
 
         events = self._event_buffer.copy()
         self._event_buffer.clear()
@@ -262,7 +316,12 @@ class StreamAgent(BaseAgent):
 
         payload = {
             "events": [
-                {"type": e.event_type, "payload": e.payload, "timestamp": e.timestamp, "source": e.source}
+                {
+                    "type": e.event_type,
+                    "payload": e.payload,
+                    "timestamp": e.timestamp,
+                    "source": e.source,
+                }
                 for e in events
             ],
             "batch_size": len(events),
@@ -302,7 +361,9 @@ class StreamAgent(BaseAgent):
                 expected_type = rules["type"]
                 actual_type = type(data[fld]).__name__
                 if expected_type != actual_type:
-                    errors.append(f"Type mismatch for {fld}: expected {expected_type}, got {actual_type}")
+                    errors.append(
+                        f"Type mismatch for {fld}: expected {expected_type}, got {actual_type}"
+                    )
         return {"valid": not errors, "errors": errors}
 
     def _get_nested_value(self, data: Dict, path: str) -> Any:
@@ -340,7 +401,12 @@ class StreamAgent(BaseAgent):
             values = [v.strip() for v in line.split(",")]
             rows.append(dict(zip(headers, values)))
 
-        return {"headers": headers, "rows": rows, "row_count": len(rows), "format": "csv"}
+        return {
+            "headers": headers,
+            "rows": rows,
+            "row_count": len(rows),
+            "format": "csv",
+        }
 
     def _extract_xml(self, raw: str) -> Dict[str, Any]:
         """Basic XML extraction using regex."""

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,7 +41,9 @@ class TreeNode:
     hidden_state: list[float] | None = None
     is_accepted: bool = False
 
-    def add_child(self, token_id: int, logprob: float, confidence: float = 1.0) -> TreeNode:
+    def add_child(
+        self, token_id: int, logprob: float, confidence: float = 1.0
+    ) -> TreeNode:
         """Add child node."""
         child = TreeNode(
             token_id=token_id,
@@ -55,17 +58,23 @@ class TreeNode:
 
     def path_to_root(self) -> list[int]:
         """Get token path from root to this node."""
+
         def build(curr: TreeNode | None, path: list[int]) -> list[int]:
             if curr is None:
                 return path
             return build(curr.parent, [curr.token_id] + path)
+
         return build(self, [])
 
     def all_leaves(self) -> list[TreeNode]:
         """Get all leaf nodes in subtree regarding recursion."""
         if not self.children:
             return [self]
-        return list(functools.reduce(lambda x, y: x + y, map(lambda c: c.all_leaves(), self.children), []))
+        return list(
+            functools.reduce(
+                lambda x, y: x + y, map(lambda c: c.all_leaves(), self.children), []
+            )
+        )
 
 
 @dataclass(slots=True)
@@ -79,15 +88,24 @@ class SpeculativeTree:
     confidence_threshold: float = 0.1  # TALON threshold
 
     @classmethod
-    def create(cls: type[SpeculativeTree], root_token_id: int, max_depth: int, confidence_threshold: float = 0.1) -> SpeculativeTree:
+    def create(
+        cls: type[SpeculativeTree],
+        root_token_id: int,
+        max_depth: int,
+        confidence_threshold: float = 0.1,
+    ) -> SpeculativeTree:
         """Create new speculative tree."""
         root = TreeNode(token_id=root_token_id, depth=0)
-        return cls(root=root, max_depth=max_depth, confidence_threshold=confidence_threshold)
+        return cls(
+            root=root, max_depth=max_depth, confidence_threshold=confidence_threshold
+        )
 
     def expand(
         self,
         node: TreeNode,
-        candidates: list[tuple[int, float] | tuple[int, float, float]],  # (token_id, logprob, [confidence])
+        candidates: list[
+            tuple[int, float] | tuple[int, float, float]
+        ],  # (token_id, logprob, [confidence])
         max_width: int = 4,
     ) -> list[TreeNode]:
         """Expand node regarding candidate tokens based on confidence."""
@@ -118,6 +136,7 @@ class SpeculativeTree:
 
     def prune(self, accepted_depth: int) -> None:
         """Prune tree to accepted depth."""
+
         def _prune(node: TreeNode) -> None:
             if node.depth >= accepted_depth:
                 node.children = []
@@ -131,7 +150,11 @@ class TalonTreeBuilder:
     """Implements Budget-Driven Adaptive Tree Expansion regarding recursion."""
 
     def __init__(
-        self, budget: int = 64, max_depth: int = 10, confidence_threshold: float = 0.1, branching_factor: int = 4
+        self,
+        budget: int = 64,
+        max_depth: int = 10,
+        confidence_threshold: float = 0.1,
+        branching_factor: int = 4,
     ) -> None:
         self.budget = budget
         self.max_depth = max_depth
@@ -145,7 +168,9 @@ class TalonTreeBuilder:
     ) -> SpeculativeTree:
         """Constructs an adaptive tree regarding recursion until budget is exhausted."""
         tree = SpeculativeTree.create(
-            root_token_id, max_depth=self.max_depth, confidence_threshold=self.confidence_threshold
+            root_token_id,
+            max_depth=self.max_depth,
+            confidence_threshold=self.confidence_threshold,
         )
 
         from heapq import heappop, heappush
@@ -155,26 +180,34 @@ class TalonTreeBuilder:
         def expand_recursive(q: list) -> None:
             if tree.num_nodes >= self.budget or not q:
                 return
-            
+
             _, current_node = heappop(q)
-            
+
             if current_node.depth < self.max_depth:
                 # Get candidates from draft model
                 candidates = get_candidates_fn(current_node)
                 # Filter by confidence
-                viable = list(filter(lambda c: c[len(c)-1] >= self.confidence_threshold, candidates))
-                
+                viable = list(
+                    filter(
+                        lambda c: c[len(c) - 1] >= self.confidence_threshold, candidates
+                    )
+                )
+
                 if viable:
                     # Expand current node
-                    new_nodes = tree.expand(current_node, viable, max_width=self.branching_factor)
-                    
+                    new_nodes = tree.expand(
+                        current_node, viable, max_width=self.branching_factor
+                    )
+
                     def enqueue(child: TreeNode) -> None:
                         # Talon Expansion Score regarding likelihood and confidence
-                        score = child.cumulative_logprob + math.log(max(child.confidence, 1e-9))
+                        score = child.cumulative_logprob + math.log(
+                            max(child.confidence, 1e-9)
+                        )
                         heappush(q, (-score, child))
-                    
+
                     list(map(enqueue, new_nodes))
-            
+
             expand_recursive(q)
 
         expand_recursive(frontier)

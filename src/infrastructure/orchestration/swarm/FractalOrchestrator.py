@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@ if TYPE_CHECKING:
 
     __version__ = VERSION
 
+
 class FractalOrchestrator:
     """
     Orchestrator for managing fractal (self-similar) swarm hierarchies.
@@ -38,7 +40,9 @@ class FractalOrchestrator:
         self.sub_swarms: Dict[str, List[str]] = {}
         logging.info(f"FractalOrchestrator v{VERSION} initialized.")
 
-    def create_sub_swarm(self, parent_task_id: str, required_capabilities: List[str]) -> str:
+    def create_sub_swarm(
+        self, parent_task_id: str, required_capabilities: List[str]
+    ) -> str:
         """
         Creates a new sub-swarm group for a specific task.
 
@@ -59,10 +63,14 @@ class FractalOrchestrator:
                 members.append(name)
 
         self.sub_swarms[swarm_id] = members
-        logging.info(f"FractalOrchestrator: Created sub-swarm {swarm_id} with {len(members)} members.")
+        logging.info(
+            f"FractalOrchestrator: Created sub-swarm {swarm_id} with {len(members)} members."
+        )
         return swarm_id
 
-    def delegate_to_sub_swarm(self, swarm_id: str, sub_task: Dict[str, Any]) -> Dict[str, Any]:
+    def delegate_to_sub_swarm(
+        self, swarm_id: str, sub_task: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """
         Delegates a sub-task to an existing sub-swarm.
 
@@ -78,5 +86,8 @@ class FractalOrchestrator:
 
         logging.info(f"FractalOrchestrator: Delegating task to sub-swarm {swarm_id}.")
         # (In a full implementation, this would use a SubSwarmExecutor)
-        return {"status": "delegated", "swarm_id": swarm_id, "members": self.sub_swarms[swarm_id]}
-
+        return {
+            "status": "delegated",
+            "swarm_id": swarm_id,
+            "members": self.sub_swarms[swarm_id],
+        }

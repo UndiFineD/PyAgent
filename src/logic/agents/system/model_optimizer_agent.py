@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,8 +23,7 @@ import logging
 from typing import Any
 
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.infrastructure.services.simulation.hopper_sim import (HopperSim,
-                                                               Precision)
+from src.infrastructure.services.simulation.hopper_sim import HopperSim, Precision
 
 try:
     import rust_core as rc
@@ -109,13 +109,17 @@ class ModelOptimizerAgent(BaseAgent):
 
         return strategy
 
-    def run_tinyml_benchmark(self, model_id: str, hardware_target: str) -> dict[str, Any]:
+    def run_tinyml_benchmark(
+        self, model_id: str, hardware_target: str
+    ) -> dict[str, Any]:
         """
         Runs an energy and latency benchmark for a specific model on target hardware (MLSysBook Pattern).
         Analyzes batch size, precision (INT8/FP16), and memory constraints.
         """
         if self.recorder:
-            self.recorder.record_lesson("tinyml_benchmark", {"model": model_id, "target": hardware_target})
+            self.recorder.record_lesson(
+                "tinyml_benchmark", {"model": model_id, "target": hardware_target}
+            )
 
         logging.info(f"Running TinyML benchmark for {model_id} on {hardware_target}...")
         return {
@@ -145,7 +149,8 @@ class ModelOptimizerAgent(BaseAgent):
             "hardware": "NVIDIA H100 (Hopper)",
             "peak_tflops_fp8": 3958,
             "simulated_block_latency_ms": round(latency, 2),
-            "simulated_throughput_tokens_s": (3350 / (model_params_billions * 2)) * utilization,
+            "simulated_throughput_tokens_s": (3350 / (model_params_billions * 2))
+            * utilization,
             "energy_efficiency_score": 0.95,
             "recommendation": "Use FP8 mixed-precision via Transformer Engine for compute efficiency.",
         }
@@ -208,6 +213,6 @@ if __name__ == "__main__":
     main = create_main_function(
         ModelOptimizerAgent,
         description="Optimizer Agent for model inference and quantization.",
-        context_help="Manage model loading strategies and inference performance."
+        context_help="Manage model loading strategies and inference performance.",
     )
     main()

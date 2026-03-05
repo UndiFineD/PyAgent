@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_granitetoolparser_exists():
     """Test that GraniteToolParser class exists and is importable."""
-    assert 'GraniteToolParser' in dir()
+    assert "GraniteToolParser" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

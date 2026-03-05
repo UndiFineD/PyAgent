@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_telemetryagent_exists():
     """Test that TelemetryAgent class exists and is importable."""
-    assert 'TelemetryAgent' in dir()
+    assert "TelemetryAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

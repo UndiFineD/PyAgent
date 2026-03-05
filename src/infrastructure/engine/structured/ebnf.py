@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -65,6 +66,7 @@ class EBNFGrammar(GrammarEngine):
 
         def process_line(line: str) -> None:
             clean_line = line.strip()
+
             def add_rule() -> None:
                 if ":" in clean_line:
                     name, expr = clean_line.split(":", 1)
@@ -77,14 +79,20 @@ class EBNFGrammar(GrammarEngine):
 
     def _rule_to_fsm(self, rule: str, _all_rules: Dict[str, str]) -> FSMTransitionTable:
         """Convert a single rule to FSM regarding regex engine."""
-        regex_engine = RegexGrammar(self.vocab_size, self.token_strings, self.eos_token_id)
+        regex_engine = RegexGrammar(
+            self.vocab_size, self.token_strings, self.eos_token_id
+        )
         pattern = rule.replace(" ", "")
         pattern = re.sub(r"\[([^\]]+)\]", r"[\1]", pattern)
         return regex_engine.build_fsm(pattern)
 
     def _build_literal_fsm(self, spec: str) -> FSMTransitionTable:
         """Build FSM regarding literal string matching."""
-        fsm = FSMTransitionTable(num_states=len(spec) + 1, initial_state=0, accepting_states=frozenset({len(spec)}))
+        fsm = FSMTransitionTable(
+            num_states=len(spec) + 1,
+            initial_state=0,
+            accepting_states=frozenset({len(spec)}),
+        )
 
         def add_char_transition(item: tuple[int, str]) -> None:
             i, char = item

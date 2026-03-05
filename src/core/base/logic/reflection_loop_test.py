@@ -33,40 +33,39 @@ except ImportError as e:
 
 def test_reflectionresult_exists():
     """Test that ReflectionResult class exists and is importable."""
-    assert 'ReflectionResult' in dir()
+    assert "ReflectionResult" in dir()
 
 
 def test_reflectionloopconfig_exists():
     """Test that ReflectionLoopConfig class exists and is importable."""
-    assert 'ReflectionLoopConfig' in dir()
+    assert "ReflectionLoopConfig" in dir()
 
 
 def test_reflectioncontext_exists():
     """Test that ReflectionContext class exists and is importable."""
-    assert 'ReflectionContext' in dir()
+    assert "ReflectionContext" in dir()
 
 
 def test_reflectionagent_exists():
     """Test that ReflectionAgent class exists and is importable."""
-    assert 'ReflectionAgent' in dir()
+    assert "ReflectionAgent" in dir()
 
 
 def test_llmreflectionagent_exists():
     """Test that LLMReflectionAgent class exists and is importable."""
-    assert 'LLMReflectionAgent' in dir()
+    assert "LLMReflectionAgent" in dir()
 
 
 def test_codereflectionagent_exists():
     """Test that CodeReflectionAgent class exists and is importable."""
-    assert 'CodeReflectionAgent' in dir()
+    assert "CodeReflectionAgent" in dir()
 
 
 def test_reflectionlooporchestrator_exists():
     """Test that ReflectionLoopOrchestrator class exists and is importable."""
-    assert 'ReflectionLoopOrchestrator' in dir()
+    assert "ReflectionLoopOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

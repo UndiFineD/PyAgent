@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "NixlMemoryRegionStatus"), "NixlMemoryRegionStatus missing"
     assert hasattr(mod, "NixlMemoryRegion"), "NixlMemoryRegion missing"
     assert hasattr(mod, "NixlConnector"), "NixlConnector missing"
-

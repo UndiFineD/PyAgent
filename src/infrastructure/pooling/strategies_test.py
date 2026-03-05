@@ -33,55 +33,54 @@ except ImportError as e:
 
 def test_basepooler_exists():
     """Test that BasePooler class exists and is importable."""
-    assert 'BasePooler' in dir()
+    assert "BasePooler" in dir()
 
 
 def test_meanpooler_exists():
     """Test that MeanPooler class exists and is importable."""
-    assert 'MeanPooler' in dir()
+    assert "MeanPooler" in dir()
 
 
 def test_clspooler_exists():
     """Test that CLSPooler class exists and is importable."""
-    assert 'CLSPooler' in dir()
+    assert "CLSPooler" in dir()
 
 
 def test_lasttokenpooler_exists():
     """Test that LastTokenPooler class exists and is importable."""
-    assert 'LastTokenPooler' in dir()
+    assert "LastTokenPooler" in dir()
 
 
 def test_maxpooler_exists():
     """Test that MaxPooler class exists and is importable."""
-    assert 'MaxPooler' in dir()
+    assert "MaxPooler" in dir()
 
 
 def test_attentionpooler_exists():
     """Test that AttentionPooler class exists and is importable."""
-    assert 'AttentionPooler' in dir()
+    assert "AttentionPooler" in dir()
 
 
 def test_weightedmeanpooler_exists():
     """Test that WeightedMeanPooler class exists and is importable."""
-    assert 'WeightedMeanPooler' in dir()
+    assert "WeightedMeanPooler" in dir()
 
 
 def test_matryoshkapooler_exists():
     """Test that MatryoshkaPooler class exists and is importable."""
-    assert 'MatryoshkaPooler' in dir()
+    assert "MatryoshkaPooler" in dir()
 
 
 def test_multivectorpooler_exists():
     """Test that MultiVectorPooler class exists and is importable."""
-    assert 'MultiVectorPooler' in dir()
+    assert "MultiVectorPooler" in dir()
 
 
 def test_steppooler_exists():
     """Test that StepPooler class exists and is importable."""
-    assert 'StepPooler' in dir()
+    assert "StepPooler" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

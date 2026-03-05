@@ -33,17 +33,17 @@ except ImportError as e:
 
 def test_ttsengine_exists():
     """Test that TTSEngine class exists and is importable."""
-    assert 'TTSEngine' in dir()
+    assert "TTSEngine" in dir()
 
 
 def test_coquittsengine_exists():
     """Test that CoquiTTSEngine class exists and is importable."""
-    assert 'CoquiTTSEngine' in dir()
+    assert "CoquiTTSEngine" in dir()
 
 
 def test_ttsservice_exists():
     """Test that TTSService class exists and is importable."""
-    assert 'TTSService' in dir()
+    assert "TTSService" in dir()
 
 
 def test_text_to_speech_exists():
@@ -54,4 +54,3 @@ def test_text_to_speech_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

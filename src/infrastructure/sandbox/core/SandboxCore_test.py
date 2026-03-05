@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_sandboxconfig_exists():
     """Test that SandboxConfig class exists and is importable."""
-    assert 'SandboxConfig' in dir()
+    assert "SandboxConfig" in dir()
 
 
 def test_sandboxcore_exists():
     """Test that SandboxCore class exists and is importable."""
-    assert 'SandboxCore' in dir()
+    assert "SandboxCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

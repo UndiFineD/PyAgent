@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 """Run run_full_pipeline.py repeatedly until no further changes are detected.
 Exit when run_full_pipeline.py returns exit code 10 (stable), or after max iterations.
 """
@@ -9,7 +10,7 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-RFP = ROOT / 'src' / 'tools' / 'run_full_pipeline.py'
+RFP = ROOT / "src" / "tools" / "run_full_pipeline.py"
 PY = sys.executable
 
 
@@ -40,5 +41,5 @@ def main() -> int:
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     raise SystemExit(main())

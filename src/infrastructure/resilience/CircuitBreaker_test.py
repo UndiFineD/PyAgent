@@ -33,27 +33,27 @@ except ImportError as e:
 
 def test_circuitstate_exists():
     """Test that CircuitState class exists and is importable."""
-    assert 'CircuitState' in dir()
+    assert "CircuitState" in dir()
 
 
 def test_circuitstats_exists():
     """Test that CircuitStats class exists and is importable."""
-    assert 'CircuitStats' in dir()
+    assert "CircuitStats" in dir()
 
 
 def test_circuitbreakererror_exists():
     """Test that CircuitBreakerError class exists and is importable."""
-    assert 'CircuitBreakerError' in dir()
+    assert "CircuitBreakerError" in dir()
 
 
 def test_circuitbreaker_exists():
     """Test that CircuitBreaker class exists and is importable."""
-    assert 'CircuitBreaker' in dir()
+    assert "CircuitBreaker" in dir()
 
 
 def test_circuitbreakerregistry_exists():
     """Test that CircuitBreakerRegistry class exists and is importable."""
-    assert 'CircuitBreakerRegistry' in dir()
+    assert "CircuitBreakerRegistry" in dir()
 
 
 def test_circuitbreakerregistry_instantiation():
@@ -80,4 +80,3 @@ def test_get_all_circuit_stats_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

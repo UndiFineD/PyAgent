@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_selfhealingagent_exists():
     """Test that SelfHealingAgent class exists and is importable."""
-    assert 'SelfHealingAgent' in dir()
+    assert "SelfHealingAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

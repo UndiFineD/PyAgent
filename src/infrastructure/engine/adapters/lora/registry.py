@@ -61,7 +61,8 @@ class LoRARegistry:
 
         # Evict if needed
         while (
-            self._current_memory + model_memory > self.max_memory_bytes or len(self._models) >= self.max_models
+            self._current_memory + model_memory > self.max_memory_bytes
+            or len(self._models) >= self.max_models
         ) and self._models:
             self._evict_lru()
 

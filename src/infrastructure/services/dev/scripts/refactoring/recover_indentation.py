@@ -19,6 +19,7 @@ Recover Indentation module.
 import re
 from pathlib import Path
 
+
 def fix_broken_indentation(root_dir):
     """
     Fix indentation broken by previous refactoring.
@@ -53,11 +54,14 @@ def fix_broken_indentation(root_dir):
             i = 0
             while i < len(lines):
                 line = lines[i]
-                if "pylint: disable=broad-exception-caught" in line and "except" in line:
+                if (
+                    "pylint: disable=broad-exception-caught" in line
+                    and "except" in line
+                ):
                     new_lines.append(line)
                     # The next line might be missing indentation
                     if i + 1 < len(lines):
-                        next_line = lines[i+1]
+                        next_line = lines[i + 1]
                         if next_line.strip() and not next_line.startswith(" "):
                             # Indent it!
                             indent_match = re.match(r"^(\s*)", line)
@@ -75,13 +79,14 @@ def fix_broken_indentation(root_dir):
         except (IOError, OSError, UnicodeDecodeError) as e:
             print(f"Error fixing {p}: {e}")
 
+
 if __name__ == "__main__":
     # Robustly find the repository root
     current_path = Path(__file__).resolve()
     project_root = current_path
-    while project_root.name != 'src' and project_root.parent != project_root:
+    while project_root.name != "src" and project_root.parent != project_root:
         project_root = project_root.parent
-    if project_root.name == 'src':
+    if project_root.name == "src":
         project_root = project_root.parent
 
     fix_broken_indentation(project_root / "src")

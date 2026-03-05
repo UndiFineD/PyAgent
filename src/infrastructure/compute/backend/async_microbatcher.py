@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -214,7 +215,9 @@ class AsyncMicrobatcher(Generic[T, R]):
 
         return batch
 
-    async def _wait_for_first_item(self, batch: list[BatchItem[T, R]], deadline: float) -> bool:
+    async def _wait_for_first_item(
+        self, batch: list[BatchItem[T, R]], deadline: float
+    ) -> bool:
         """Wait for the first item in the batch."""
         try:
             timeout = self._batch_wait_timeout_s if self._running else 0.1
@@ -224,7 +227,9 @@ class AsyncMicrobatcher(Generic[T, R]):
         except asyncio.TimeoutError:
             return False
 
-    async def _collect_remaining_items(self, batch: list[BatchItem[T, R]], deadline: float) -> None:
+    async def _collect_remaining_items(
+        self, batch: list[BatchItem[T, R]], deadline: float
+    ) -> None:
         """Collect remaining items to fill the batch."""
         while len(batch) < self._max_batch_size:
             remaining = deadline - time.time()
@@ -249,7 +254,9 @@ class AsyncMicrobatcher(Generic[T, R]):
         try:
             results = await self._batch_fn(data)
             self._resolve_futures(batch, results)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             self._fail_futures(batch, e)
 
     def _update_stats(self, batch: list[BatchItem[T, R]], now: float) -> None:
@@ -375,7 +382,9 @@ class SyncMicrobatcher(Generic[T, R]):
         try:
             results = self._batch_fn(data)
             self._set_results(batch, results)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             self._set_exceptions(batch, e)
 
     def _update_stats(self, batch: list[tuple[T, threading.Event, list]]) -> None:
@@ -385,12 +394,16 @@ class SyncMicrobatcher(Generic[T, R]):
         if batch_size > self._stats.max_batch_size_seen:
             self._stats.max_batch_size_seen = batch_size
 
-    def _set_results(self, batch: list[tuple[T, threading.Event, list]], results: list[R]) -> None:
+    def _set_results(
+        self, batch: list[tuple[T, threading.Event, list]], results: list[R]
+    ) -> None:
         for (_, event, result_holder), result in zip(batch, results):
             result_holder.append(result)
             event.set()
 
-    def _set_exceptions(self, batch: list[tuple[T, threading.Event, list]], exc: Exception) -> None:
+    def _set_exceptions(
+        self, batch: list[tuple[T, threading.Event, list]], exc: Exception
+    ) -> None:
         for _, event, result_holder in batch:
             result_holder.extend([None, exc])
             event.set()

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_searchalgorithm_exists():
     """Test that SearchAlgorithm class exists and is importable."""
-    assert 'SearchAlgorithm' in dir()
+    assert "SearchAlgorithm" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

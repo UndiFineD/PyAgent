@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ import logging
 import re
 
 __version__ = VERSION
+
 
 class ReportValidator:
     """Validator for report data integrity.
@@ -51,21 +53,18 @@ class ReportValidator:
         errors: list[str] = []
         warnings: list[str] = []
         # Check for required sections
-        if not re.search(r'^#+\s', content, re.MULTILINE):
+        if not re.search(r"^#+\s", content, re.MULTILINE):
             errors.append("Missing main heading")
         # Check for empty content
         if len(content.strip()) < 10:
             errors.append("Content too short")
         # Check for malformed links
-        if re.search(r'\[.*?\]\(\s*\)', content):
+        if re.search(r"\[.*?\]\(\s*\)", content):
             warnings.append("Contains empty link targets")
         # Calculate checksum
         checksum = hashlib.sha256(content.encode()).hexdigest()[:16]
         return ValidationResult(
-            valid=len(errors) == 0,
-            errors=errors,
-            warnings=warnings,
-            checksum=checksum
+            valid=len(errors) == 0, errors=errors, warnings=warnings, checksum=checksum
         )
 
     def verify_checksum(self, content: str, expected: str) -> bool:

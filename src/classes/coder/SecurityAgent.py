@@ -6,9 +6,10 @@ from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import create_main_function
 import logging
 
+
 class SecurityAgent(BaseAgent):
     """Agent for security analysis of code and configuration."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -21,7 +22,9 @@ class SecurityAgent(BaseAgent):
     def _get_default_content(self) -> str:
         return "# Security Audit Report\n\n## Summary\nPending audit...\n"
 
-if __name__ == "__main__":
-    main = create_main_function(SecurityAgent, "Security Agent", "File to audit for security")
-    main()
 
+if __name__ == "__main__":
+    main = create_main_function(
+        SecurityAgent, "Security Agent", "File to audit for security"
+    )
+    main()

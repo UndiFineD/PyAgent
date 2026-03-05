@@ -21,4 +21,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "list_fastest_peers"), "list_fastest_peers missing"
     assert hasattr(mod, "dispatch_task"), "dispatch_task missing"
     assert hasattr(mod, "websocket_endpoint"), "websocket_endpoint missing"
-

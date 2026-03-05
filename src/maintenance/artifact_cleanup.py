@@ -43,7 +43,7 @@ class ArtifactCleanupCore:
         default_ttl: int = 3600,  # 1 hour
         max_age_overrides: Optional[Dict[str, int]] = None,
         cleanup_dirs: Optional[List[str]] = None,
-        dry_run: bool = False
+        dry_run: bool = False,
     ):
         """
         Initialize the artifact cleanup core.
@@ -62,7 +62,7 @@ class ArtifactCleanupCore:
             "data/cache",
             "data/logs",
             "temp",
-            "scratch"
+            "scratch",
         ]
         self.dry_run = dry_run
         self._running = False
@@ -77,7 +77,9 @@ class ArtifactCleanupCore:
 
         self._running = True
         self._task = asyncio.create_task(self._cleanup_loop())
-        logger.info(f"Started artifact cleanup worker (interval: {self.cleanup_interval}s)")
+        logger.info(
+            f"Started artifact cleanup worker (interval: {self.cleanup_interval}s)"
+        )
 
     async def stop_cleanup_worker(self) -> None:
         """Stop the background cleanup worker."""
@@ -120,7 +122,9 @@ class ArtifactCleanupCore:
 
         if total_removed > 0:
             self._cleanup_count += total_removed
-            logger.info(f"Cleanup cycle completed: removed {total_removed} artifacts (total: {self._cleanup_count})")
+            logger.info(
+                f"Cleanup cycle completed: removed {total_removed} artifacts (total: {self._cleanup_count})"
+            )
 
     async def _cleanup_directory(self, dir_path: str, current_time: float) -> int:
         """Clean up artifacts in a specific directory."""
@@ -195,7 +199,7 @@ class ArtifactCleanupCore:
             "default_ttl": self.default_ttl,
             "cleanup_dirs": self.cleanup_dirs,
             "total_cleaned": self._cleanup_count,
-            "dry_run": self.dry_run
+            "dry_run": self.dry_run,
         }
 
 

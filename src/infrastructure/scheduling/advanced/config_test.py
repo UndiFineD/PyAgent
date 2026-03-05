@@ -33,25 +33,24 @@ except ImportError as e:
 
 def test_requestpriority_exists():
     """Test that RequestPriority class exists and is importable."""
-    assert 'RequestPriority' in dir()
+    assert "RequestPriority" in dir()
 
 
 def test_requeststate_exists():
     """Test that RequestState class exists and is importable."""
-    assert 'RequestState' in dir()
+    assert "RequestState" in dir()
 
 
 def test_preemptionreason_exists():
     """Test that PreemptionReason class exists and is importable."""
-    assert 'PreemptionReason' in dir()
+    assert "PreemptionReason" in dir()
 
 
 def test_schedulerconfig_exists():
     """Test that SchedulerConfig class exists and is importable."""
-    assert 'SchedulerConfig' in dir()
+    assert "SchedulerConfig" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

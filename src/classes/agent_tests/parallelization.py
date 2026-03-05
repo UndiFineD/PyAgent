@@ -2,7 +2,9 @@
 try:
     from src.infrastructure.services.dev.agent_tests.parallelization import *  # type: ignore
 except Exception:
+
     class ParallelizationStrategy:
         pass
+
 
 __all__ = ["ParallelizationStrategy"]

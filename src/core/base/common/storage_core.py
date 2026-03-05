@@ -36,7 +36,6 @@ class StorageCore:
     Reduces redundancy across the codebase.
     """
 
-
     @staticmethod
     def load_json(path: Union[str, Path], default: Any = None) -> Any:
         """Safely load JSON data from a file."""
@@ -50,7 +49,6 @@ class StorageCore:
             logger.error("Failed to load JSON from %s: %s", p, e)
             return default
 
-
     @staticmethod
     def save_json(path: Union[str, Path], data: Any, indent: int = 4) -> None:
         """Safely save data to a JSON file, creating directories if needed."""
@@ -62,16 +60,19 @@ class StorageCore:
             if rc and hasattr(rc, "save_json_atomic"):
                 content = json.dumps(data, indent=indent)
                 try:
-                    if rc.save_json_atomic(str(p), content):  # pylint: disable=no-member
+                    if rc.save_json_atomic(
+                        str(p), content
+                    ):  # pylint: disable=no-member
                         return
                 except (AttributeError, RuntimeError) as e:
-                    logger.warning("Rust save_json_atomic failed, falling back to Python: %s", e)
+                    logger.warning(
+                        "Rust save_json_atomic failed, falling back to Python: %s", e
+                    )
 
             with open(p, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=indent)
         except OSError as e:
             logger.error("Failed to save JSON to %s: %s", p, e)
-
 
     @staticmethod
     def load_yaml(path: Union[str, Path], default: Any = None) -> Any:
@@ -86,7 +87,6 @@ class StorageCore:
             logger.error("Failed to load YAML from %s: %s", p, e)
             return default
 
-
     @staticmethod
     def save_yaml(path: Union[str, Path], data: Any) -> None:
         """Safely save data to a YAML file, creating directories if needed."""
@@ -97,7 +97,6 @@ class StorageCore:
                 yaml.dump(data, f, default_flow_style=False)
         except OSError as e:
             logger.error("Failed to save YAML to %s: %s", p, e)
-
 
     @staticmethod
     def to_json(data: Any, indent: int = 4) -> str:
@@ -110,7 +109,6 @@ class StorageCore:
                 logger.warning("Rust to_json failed, falling back to Python: %s", e)
 
         return json.dumps(data, indent=indent)
-
 
     @staticmethod
     def to_yaml(data: Any) -> str:

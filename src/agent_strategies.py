@@ -8,6 +8,7 @@ Strategies Module: Unified interface for agent decision-making strategies.
 from src.version import VERSION
 import sys
 from pathlib import Path
+
 # from typing import Any, Dict, List, Optional, Callable
 
 
@@ -22,8 +23,4 @@ if str(root / "src") not in sys.path:
 from src.classes.strategies import *
 
 # Type alias for functional compatibility
-BackendFunction = Callable[
-    [str, 
-     Optional[str], 
-     Optional[List[Dict[str, str]]]], 
-    str]
+BackendFunction = Callable[[str, Optional[str], Optional[List[Dict[str, str]]]], str]

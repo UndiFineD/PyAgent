@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@ Documentation generation logic for CoderCore.
 
 import ast
 from src.core.base.types.CodeLanguage import CodeLanguage
+
 
 class CoderDocMixin:
     """Mixin for generating documentation from code."""
@@ -63,15 +65,15 @@ class CoderDocMixin:
                 if method_doc:
                     class_docs.append(f"{method_doc}\n")
                 # Document parameters
-                params = [
-                    arg.arg for arg in item.args.args if arg.arg != "self"
-                ]
+                params = [arg.arg for arg in item.args.args if arg.arg != "self"]
                 if params:
                     class_docs.append(f"**Parameters:** {', '.join(params)}\n")
         class_docs.append("\n")
         return "".join(class_docs)
 
-    def _document_python_function(self, node: ast.FunctionDef | ast.AsyncFunctionDef) -> str:
+    def _document_python_function(
+        self, node: ast.FunctionDef | ast.AsyncFunctionDef
+    ) -> str:
         """Generate documentation for a Python function."""
         func_docs = [f"## Function: `{node.name}`\n"]
         func_doc = ast.get_docstring(node)

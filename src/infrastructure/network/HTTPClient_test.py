@@ -33,17 +33,17 @@ except ImportError as e:
 
 def test_httpclient_exists():
     """Test that HTTPClient class exists and is importable."""
-    assert 'HTTPClient' in dir()
+    assert "HTTPClient" in dir()
 
 
 def test_asynchttpclient_exists():
     """Test that AsyncHTTPClient class exists and is importable."""
-    assert 'AsyncHTTPClient' in dir()
+    assert "AsyncHTTPClient" in dir()
 
 
 def test_retryablehttpclient_exists():
     """Test that RetryableHTTPClient class exists and is importable."""
-    assert 'RetryableHTTPClient' in dir()
+    assert "RetryableHTTPClient" in dir()
 
 
 def test_retryablehttpclient_instantiation():
@@ -70,4 +70,3 @@ def test_get_json_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -44,14 +45,18 @@ class LoggingCore:
 
     def __init__(self, custom_patterns: list[str] | None = None) -> None:
         self._has_custom_patterns = custom_patterns is not None
-        self.patterns: list[Pattern] = [re.compile(p) for p in (custom_patterns or self.DEFAULT_SENSITIVE_PATTERNS)]
+        self.patterns: list[Pattern] = [
+            re.compile(p) for p in (custom_patterns or self.DEFAULT_SENSITIVE_PATTERNS)
+        ]
 
     def mask_text(self, text: str) -> str:
         """Apply all masking patterns to the input string."""
         if HAS_RUST and not self._has_custom_patterns:
             try:
                 return rust_core.mask_sensitive_logs(text)  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         result = text

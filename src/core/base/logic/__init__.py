@@ -18,8 +18,11 @@ Logic Package - Core implementation of agent reasoning and utilities.
 
 from .acceleration_manager import NeuralPruningEngine  # noqa: F401
 from .agent_plugin_base import AgentPluginBase  # noqa: F401
-from .agent_verification import (AgentVerifier, CodeHealthAuditor,  # noqa: F401
-                                 CodeIntegrityVerifier)
+from .agent_verification import (
+    AgentVerifier,
+    CodeHealthAuditor,  # noqa: F401
+    CodeIntegrityVerifier,
+)
 from .circuit_breaker import CircuitBreaker  # noqa: F401
 from .connectivity_manager import ConnectivityManager  # noqa: F401
 from .dependency_graph import DependencyGraph  # noqa: F401

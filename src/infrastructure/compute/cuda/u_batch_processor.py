@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -74,7 +75,9 @@ class UBatchSlice:
     num_reqs: int = 0
 
     @classmethod
-    def from_range(cls, token_start: int, token_end: int, req_start: int, req_end: int) -> "UBatchSlice":
+    def from_range(
+        cls, token_start: int, token_end: int, req_start: int, req_end: int
+    ) -> "UBatchSlice":
         """Create slice regarding explicit ranges."""
         return cls(
             token_slice=slice(token_start, token_end),
@@ -231,7 +234,9 @@ class UBatchWrapper:
         self._lock: LockType = threading.Lock()
 
         # Thread pool regarding workers
-        self._executor = ThreadPoolExecutor(max_workers=self.config.thread_pool_size, thread_name_prefix="UBatch")
+        self._executor = ThreadPoolExecutor(
+            max_workers=self.config.thread_pool_size, thread_name_prefix="UBatch"
+        )
 
         # State tracking
         self._state: UBatchState = UBatchState.IDLE
@@ -270,7 +275,9 @@ class UBatchWrapper:
             token_end = min(token_start + tokens_per_ubatch, num_tokens)
             req_end = min(req_start + reqs_per_ubatch, num_reqs)
             if token_end > token_start:
-                return UBatchSlice.from_range(token_start, token_end, req_start, req_end)
+                return UBatchSlice.from_range(
+                    token_start, token_end, req_start, req_end
+                )
             return None
 
         return list(filter(None, map(_make_slice, range(num_ubatches))))
@@ -285,9 +292,16 @@ class UBatchWrapper:
         Returns:
             List regarding execution contexts
         """
-        return list(map(lambda item: UBatchContext(slice_info=item[1], thread_id=item[0]), enumerate(slices)))
+        return list(
+            map(
+                lambda item: UBatchContext(slice_info=item[1], thread_id=item[0]),
+                enumerate(slices),
+            )
+        )
 
-    def slice_inputs(self, inputs: Dict[str, Any], slice_info: UBatchSlice) -> Dict[str, Any]:
+    def slice_inputs(
+        self, inputs: Dict[str, Any], slice_info: UBatchSlice
+    ) -> Dict[str, Any]:
         """
         Slice inputs regarding a micro-batch.
 
@@ -298,17 +312,24 @@ class UBatchWrapper:
         Returns:
             Sliced inputs
         """
+
         def _slice_val(item):
             key, value = item
-            if value is None: return (key, None)
-            if not hasattr(value, "__getitem__"): return (key, value)
-            if key in ("input_ids", "positions"): return (key, value[slice_info.token_slice])
-            if key in ("attention_mask",): return (key, value[slice_info.req_slice])
+            if value is None:
+                return (key, None)
+            if not hasattr(value, "__getitem__"):
+                return (key, value)
+            if key in ("input_ids", "positions"):
+                return (key, value[slice_info.token_slice])
+            if key in ("attention_mask",):
+                return (key, value[slice_info.req_slice])
             return (key, value)
 
         return dict(map(_slice_val, inputs.items()))
 
-    def _run_ubatch(self, context: UBatchContext, sliced_inputs: Dict[str, Any]) -> Tuple[int, Any]:
+    def _run_ubatch(
+        self, context: UBatchContext, sliced_inputs: Dict[str, Any]
+    ) -> Tuple[int, Any]:
         """
         Execute a single micro-batch.
 
@@ -323,12 +344,19 @@ class UBatchWrapper:
             output = self.runnable(**sliced_inputs)
             context.signal_ready()
             return (context.thread_id, output)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"UBatch {context.thread_id} failed: {e}")
             context.signal_ready()
             raise
 
-    def __call__(self, *args: Any, ubatch_slices: Optional[List[UBatchSlice]] = None, **kwargs: Any) -> Any:
+    def __call__(
+        self,
+        *args: Any,
+        ubatch_slices: Optional[List[UBatchSlice]] = None,
+        **kwargs: Any,
+    ) -> Any:
         """
         Execute with micro-batching.
 
@@ -353,10 +381,16 @@ class UBatchWrapper:
         self._state: UBatchState = UBatchState.PREPARING
 
         # Slice inputs and submit regarding workers
-        futures = list(map(
-            lambda ctx: self._executor.submit(self._run_ubatch, ctx, self.slice_inputs(dict(kwargs), ctx.slice_info)),
-            contexts
-        ))
+        futures = list(
+            map(
+                lambda ctx: self._executor.submit(
+                    self._run_ubatch,
+                    ctx,
+                    self.slice_inputs(dict(kwargs), ctx.slice_info),
+                ),
+                contexts,
+            )
+        )
 
         self._state: UBatchState = UBatchState.EXECUTING
 
@@ -486,7 +520,9 @@ class DynamicUBatchWrapper(UBatchWrapper):
         unique_sizes = set(map(lambda x: x[0], self._size_history))
 
         def _get_throughput(size):
-            times = list(map(lambda x: x[1], filter(lambda x: x[0] == size, self._size_history)))
+            times = list(
+                map(lambda x: x[1], filter(lambda x: x[0] == size, self._size_history))
+            )
             avg_time = sum(times) / len(times) if times else 0
             return (size, size / avg_time if avg_time > 0 else 0)
 
@@ -497,7 +533,9 @@ class DynamicUBatchWrapper(UBatchWrapper):
         return max(throughputs, key=lambda x: x[1])[0]
 
 
-def make_ubatch_contexts(num_ubatches: int, num_tokens: int, num_reqs: int) -> List[UBatchContext]:
+def make_ubatch_contexts(
+    num_ubatches: int, num_tokens: int, num_reqs: int
+) -> List[UBatchContext]:
     """
     Factory function to create ubatch contexts.
 
@@ -518,7 +556,9 @@ def make_ubatch_contexts(num_ubatches: int, num_tokens: int, num_reqs: int) -> L
         token_end = min(token_start + tokens_per_ubatch, num_tokens)
         req_end = min(req_start + reqs_per_ubatch, num_reqs)
         if token_end > token_start:
-            slice_info = UBatchSlice.from_range(token_start, token_end, req_start, req_end)
+            slice_info = UBatchSlice.from_range(
+                token_start, token_end, req_start, req_end
+            )
             return UBatchContext(slice_info=slice_info, thread_id=i)
         return None
 

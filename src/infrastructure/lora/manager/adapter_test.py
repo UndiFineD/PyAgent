@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_loraadapter_exists():
     """Test that LoRAAdapter class exists and is importable."""
-    assert 'LoRAAdapter' in dir()
+    assert "LoRAAdapter" in dir()
 
 
 def test_load_lora_adapter_exists():
@@ -49,4 +49,3 @@ def test_get_lora_info_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

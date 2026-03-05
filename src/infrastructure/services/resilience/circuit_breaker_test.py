@@ -21,4 +21,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "circuit_breaker"), "circuit_breaker missing"
     assert hasattr(mod, "get_circuit_stats"), "get_circuit_stats missing"
     assert hasattr(mod, "get_all_circuit_stats"), "get_all_circuit_stats missing"
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,8 +34,13 @@ except ImportError:
     HAS_RUST = False
 
 from .base import OffloadingBackend, OffloadingManager
-from .models import (BlockHash, BlockStatus, LoadStoreSpec, OffloadingEvent,
-                     PrepareStoreOutput)
+from .models import (
+    BlockHash,
+    BlockStatus,
+    LoadStoreSpec,
+    OffloadingEvent,
+    PrepareStoreOutput,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -58,6 +64,7 @@ class LRUOffloadingManager(OffloadingManager):
 
     def lookup(self, block_hashes: Iterable[BlockHash]) -> int:
         """Count consecutive cached blocks from start."""
+
         def _is_hit(h: BlockHash) -> bool:
             block = self.blocks.get(h)
             return block is not None and block.is_ready
@@ -79,6 +86,7 @@ class LRUOffloadingManager(OffloadingManager):
 
     def touch(self, block_hashes: Iterable[BlockHash]) -> None:
         """Move blocks to end regarding LRU order."""
+
         def _touch_one(h: BlockHash) -> None:
             if h in self.blocks:
                 self.blocks.move_to_end(h)
@@ -87,6 +95,7 @@ class LRUOffloadingManager(OffloadingManager):
 
     def complete_load(self, block_hashes: Iterable[BlockHash]) -> None:
         """Decrement refcount after load."""
+
         def _unpin(h: BlockHash) -> None:
             block = self.blocks[h]
             assert block.ref_cnt > 0
@@ -100,16 +109,20 @@ class LRUOffloadingManager(OffloadingManager):
     ) -> Optional[PrepareStoreOutput]:
         """Prepare to store blocks, evicting as needed."""
         # Filter already stored
-        block_hashes_to_store = list(filter(lambda h: h not in self.blocks, block_hashes))
+        block_hashes_to_store = list(
+            filter(lambda h: h not in self.blocks, block_hashes)
+        )
         num_to_evict = len(block_hashes_to_store) - self.backend.get_num_free_blocks()
 
         # Find blocks to evict identifying side-effects
         to_evict: List[BlockHash] = []
         if num_to_evict > 0:
-            evictable_keys = list(islice(
-                filter(lambda k: self.blocks[k].ref_cnt == 0, self.blocks),
-                num_to_evict
-            ))
+            evictable_keys = list(
+                islice(
+                    filter(lambda k: self.blocks[k].ref_cnt == 0, self.blocks),
+                    num_to_evict,
+                )
+            )
             if len(evictable_keys) < num_to_evict:
                 return None
             to_evict.extend(evictable_keys)
@@ -215,6 +228,7 @@ class ARCOffloadingManager(OffloadingManager):
 
     def lookup(self, block_hashes: Iterable[BlockHash]) -> int:
         """Count consecutive hits in T1 or T2."""
+
         def _is_hit(h: BlockHash) -> bool:
             block = self.t1.get(h) or self.t2.get(h)
             return block is not None and block.is_ready
@@ -237,6 +251,7 @@ class ARCOffloadingManager(OffloadingManager):
 
     def touch(self, block_hashes: Iterable[BlockHash]) -> None:
         """Update LRU state with ARC adaptation."""
+
         def _touch_one(h: BlockHash) -> None:
             if h in self.t1:
                 block = self.t1.pop(h)
@@ -248,14 +263,24 @@ class ARCOffloadingManager(OffloadingManager):
                 self.t2.move_to_end(h)
             elif h in self.b1:
                 self.target_t1_size = compute_arc_target_rust(
-                    len(self.t1), len(self.t2), len(self.b1), len(self.b2),
-                    self.target_t1_size, True, self.cache_capacity,
+                    len(self.t1),
+                    len(self.t2),
+                    len(self.b1),
+                    len(self.b2),
+                    self.target_t1_size,
+                    True,
+                    self.cache_capacity,
                 )
                 self.b1.move_to_end(h)
             elif h in self.b2:
                 self.target_t1_size = compute_arc_target_rust(
-                    len(self.t1), len(self.t2), len(self.b1), len(self.b2),
-                    self.target_t1_size, False, self.cache_capacity,
+                    len(self.t1),
+                    len(self.t2),
+                    len(self.b1),
+                    len(self.b2),
+                    self.target_t1_size,
+                    False,
+                    self.cache_capacity,
                 )
                 self.b2.move_to_end(h)
 
@@ -263,6 +288,7 @@ class ARCOffloadingManager(OffloadingManager):
 
     def complete_load(self, block_hashes: Iterable[BlockHash]) -> None:
         """Decrement refcount after load."""
+
         def _unpin(h: BlockHash) -> None:
             block = self.t1.get(h) or self.t2.get(h)
             if block is not None:
@@ -309,7 +335,9 @@ class ARCOffloadingManager(OffloadingManager):
     ) -> Optional[PrepareStoreOutput]:
         """Prepare to store with ARC eviction."""
         hashes_list = list(block_hashes)
-        block_hashes_to_store = list(filter(lambda h: h not in self.t1 and h not in self.t2, hashes_list))
+        block_hashes_to_store = list(
+            filter(lambda h: h not in self.t1 and h not in self.t2, hashes_list)
+        )
         num_to_evict = len(block_hashes_to_store) - self.backend.get_num_free_blocks()
 
         evicted: List[BlockHash] = []
@@ -336,7 +364,12 @@ class ARCOffloadingManager(OffloadingManager):
                 )
             )
 
-        list(map(lambda h: (self.b1.pop(h, None), self.b2.pop(h, None)), block_hashes_to_store))
+        list(
+            map(
+                lambda h: (self.b1.pop(h, None), self.b2.pop(h, None)),
+                block_hashes_to_store,
+            )
+        )
 
         blocks = self.backend.allocate_blocks(block_hashes_to_store)
 
@@ -417,7 +450,9 @@ class TieredOffloadManager(OffloadingManager):
         enable_events: bool = False,
     ) -> None:
         self.backends = backends
-        self.managers = list(map(lambda b: LRUOffloadingManager(b, enable_events), backends))
+        self.managers = list(
+            map(lambda b: LRUOffloadingManager(b, enable_events), backends)
+        )
         self.events: Optional[List[OffloadingEvent]] = [] if enable_events else None
         self._tier_map: Dict[BlockHash, int] = {}
 
@@ -458,7 +493,9 @@ class TieredOffloadManager(OffloadingManager):
                 tier_groups.setdefault(t, []).append(h)
 
         list(map(_group_tier, block_hashes))
-        list(map(lambda item: self.managers[item[0]].touch(item[1]), tier_groups.items()))
+        list(
+            map(lambda item: self.managers[item[0]].touch(item[1]), tier_groups.items())
+        )
 
     def complete_load(self, block_hashes: Iterable[BlockHash]) -> None:
         tier_groups: Dict[int, List[BlockHash]] = {}
@@ -469,7 +506,12 @@ class TieredOffloadManager(OffloadingManager):
                 tier_groups.setdefault(t, []).append(h)
 
         list(map(_group_tier, block_hashes))
-        list(map(lambda item: self.managers[item[0]].complete_load(item[1]), tier_groups.items()))
+        list(
+            map(
+                lambda item: self.managers[item[0]].complete_load(item[1]),
+                tier_groups.items(),
+            )
+        )
 
     def prepare_store(
         self,
@@ -482,7 +524,12 @@ class TieredOffloadManager(OffloadingManager):
                 return None
             res = self.managers[manager_idx].prepare_store(hashes)
             if res is not None:
-                list(map(lambda h: self._tier_map.update({h: manager_idx}), res.block_hashes_to_store))
+                list(
+                    map(
+                        lambda h: self._tier_map.update({h: manager_idx}),
+                        res.block_hashes_to_store,
+                    )
+                )
                 return res
             return _try_manager(manager_idx + 1)
 

@@ -16,5 +16,6 @@ def test_imports_and_symbols():
     assert hasattr(mod, "NoteType"), "NoteType missing"
     assert hasattr(mod, "CodeEntity"), "CodeEntity missing"
     assert hasattr(mod, "VaultNote"), "VaultNote missing"
-    assert hasattr(mod, "ObsidianCodeDescriberAgent"), "ObsidianCodeDescriberAgent missing"
-
+    assert hasattr(
+        mod, "ObsidianCodeDescriberAgent"
+    ), "ObsidianCodeDescriberAgent missing"

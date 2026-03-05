@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 """
 Self archiving agent.py module.
 """
-
 
 
 import logging
@@ -50,7 +50,9 @@ class SelfArchivingAgent(BaseAgent):
         """
         Scans for files or memory entries that haven't been accessed in the given threshold.
         """
-        logging.info(f"SelfArchiving: Scanning for targets older than {threshold_days} days.")
+        logging.info(
+            f"SelfArchiving: Scanning for targets older than {threshold_days} days."
+        )
         # Mock logic to 'find' some obsolete paths
         targets = [
             str(Path(__file__).resolve().parents[4]) + "/logs/session_old_001.log",
@@ -70,7 +72,9 @@ class SelfArchivingAgent(BaseAgent):
         # Simplified simulation: just pretend we archived them
         os.path.join(os.path.dirname(self.file_path), "archives")
 
-        report = f"### Archiving Report\n- **Timestamp**: {datetime.now().isoformat()}\n"
+        report = (
+            f"### Archiving Report\n- **Timestamp**: {datetime.now().isoformat()}\n"
+        )
         for t in targets:
             report += f"- [ARCHIVED] {t}\n"
 

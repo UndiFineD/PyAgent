@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_federatedorchestrator_exists():
     """Test that FederatedOrchestrator class exists and is importable."""
-    assert 'FederatedOrchestrator' in dir()
+    assert "FederatedOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

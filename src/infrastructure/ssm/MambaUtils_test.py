@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_mambablockstate_exists():
     """Test that MambaBlockState class exists and is importable."""
-    assert 'MambaBlockState' in dir()
+    assert "MambaBlockState" in dir()
 
 
 def test_compute_ssm_state_shape_exists():
@@ -104,4 +104,3 @@ def test_init_dt_proj_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

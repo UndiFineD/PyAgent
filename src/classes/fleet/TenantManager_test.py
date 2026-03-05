@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_tenantmanager_exists():
     """Test that TenantManager class exists and is importable."""
-    assert 'TenantManager' in dir()
+    assert "TenantManager" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

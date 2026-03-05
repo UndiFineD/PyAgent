@@ -30,10 +30,13 @@ __version__ = VERSION
 # Phase 16: Rust acceleration imports
 try:
     import rust_core
+
     _RUST_AVAILABLE = True
 except ImportError:
     _RUST_AVAILABLE = False
-    logging.debug("rust_core not available, using Python fallback for SemanticSearchEngine")
+    logging.debug(
+        "rust_core not available, using Python fallback for SemanticSearchEngine"
+    )
 
 
 class SemanticSearchEngine:
@@ -65,8 +68,14 @@ class SemanticSearchEngine:
         """Handle Pydantic v2 compatibility for older ChromaDB versions."""
         try:
             import pydantic  # pylint: disable=import-outside-toplevel
-            if hasattr(pydantic, "__version__") and pydantic.__version__.startswith("2"):
-                from pydantic_settings import BaseSettings  # pylint: disable=import-outside-toplevel
+
+            if hasattr(pydantic, "__version__") and pydantic.__version__.startswith(
+                "2"
+            ):
+                from pydantic_settings import (
+                    BaseSettings,
+                )  # pylint: disable=import-outside-toplevel
+
                 # Only patch if not already present
                 if not hasattr(pydantic, "BaseSettings"):
                     pydantic.BaseSettings = BaseSettings
@@ -82,12 +91,12 @@ class SemanticSearchEngine:
             self._maybe_patch_pydantic()
 
             import chromadb  # pylint: disable=import-outside-toplevel
-            from chromadb.utils import embedding_functions  # pylint: disable=import-outside-toplevel
+            from chromadb.utils import (
+                embedding_functions,
+            )  # pylint: disable=import-outside-toplevel
 
             if self.persist_directory:
-                self._client = chromadb.PersistentClient(
-                    path=self.persist_directory
-                )
+                self._client = chromadb.PersistentClient(path=self.persist_directory)
             else:
                 self._client = chromadb.EphemeralClient()
 
@@ -210,7 +219,9 @@ class SemanticSearchEngine:
                                     similarity_score=min(scores[i], 1.0),
                                 )
                             )
-                    return sorted(self.results, key=lambda r: r.similarity_score, reverse=True)
+                    return sorted(
+                        self.results, key=lambda r: r.similarity_score, reverse=True
+                    )
             except (RuntimeError, AttributeError):
                 pass  # Fall through to Python implementation
 

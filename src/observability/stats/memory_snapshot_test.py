@@ -21,4 +21,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "freeze_gc_heap"), "freeze_gc_heap missing"
     assert hasattr(mod, "unfreeze_gc_heap"), "unfreeze_gc_heap missing"
     assert hasattr(mod, "gc_stats"), "gc_stats missing"
-

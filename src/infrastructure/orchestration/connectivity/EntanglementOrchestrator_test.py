@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_entanglementorchestrator_exists():
     """Test that EntanglementOrchestrator class exists and is importable."""
-    assert 'EntanglementOrchestrator' in dir()
+    assert "EntanglementOrchestrator" in dir()
 
 
 def test_entanglementorchestrator_instantiation():
@@ -45,4 +45,3 @@ def test_entanglementorchestrator_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

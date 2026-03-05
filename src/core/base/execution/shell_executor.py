@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,6 +30,7 @@ from src.core.base.common.shell_core import ShellCore
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class ShellExecutor:
     """
@@ -61,7 +63,9 @@ class ShellExecutor:
         if models_config:
             env["AGENT_MODELS_CONFIG"] = json.dumps(models_config)
 
-        result: subprocess.CompletedProcess = await core.execute_async(cmd=cmd, timeout=timeout, env=env, cwd=workspace_root, sanitize=True)
+        result: subprocess.CompletedProcess = await core.execute_async(
+            cmd=cmd, timeout=timeout, env=env, cwd=workspace_root, sanitize=True
+        )
 
         if recorder:
             output = result.stdout + result.stderr
@@ -74,7 +78,10 @@ class ShellExecutor:
             )
 
         return subprocess.CompletedProcess(
-            args=cmd, returncode=result.returncode, stdout=result.stdout, stderr=result.stderr
+            args=cmd,
+            returncode=result.returncode,
+            stdout=result.stdout,
+            stderr=result.stderr,
         )
 
     @staticmethod
@@ -123,11 +130,15 @@ class ShellExecutor:
             except subprocess.TimeoutExpired as e:
                 logging.warning("Timeout (attempt %s/%s)", attempt + 1, max_retries)
                 last_error = e
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error("Execution failure: %s", e)
                 last_error = e
 
         if isinstance(last_error, subprocess.TimeoutExpired):
             raise last_error
 
-        return subprocess.CompletedProcess(args=cmd, returncode=1, stdout="", stderr=str(last_error))
+        return subprocess.CompletedProcess(
+            args=cmd, returncode=1, stdout="", stderr=str(last_error)
+        )

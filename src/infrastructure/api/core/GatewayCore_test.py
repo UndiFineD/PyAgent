@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_gatewaycore_exists():
     """Test that GatewayCore class exists and is importable."""
-    assert 'GatewayCore' in dir()
+    assert "GatewayCore" in dir()
 
 
 def test_gatewaycore_instantiation():
@@ -45,4 +45,3 @@ def test_gatewaycore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_simpleregexgrammar_exists():
     """Test that SimpleRegexGrammar class exists and is importable."""
-    assert 'SimpleRegexGrammar' in dir()
+    assert "SimpleRegexGrammar" in dir()
 
 
 def test_choicegrammar_exists():
     """Test that ChoiceGrammar class exists and is importable."""
-    assert 'ChoiceGrammar' in dir()
+    assert "ChoiceGrammar" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

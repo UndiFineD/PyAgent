@@ -41,6 +41,9 @@ class AttributionCore:
         """
         Appends the SPDX header if not already present.
         """
-        if "SPDX-License-Identifier" in content or "Copyright 2026 PyAgent Authors" in content:
+        if (
+            "SPDX-License-Identifier" in content
+            or "Copyright 2026 PyAgent Authors" in content
+        ):
             return content
         return AttributionCore.SPDX_TEMPLATE + "\n" + content

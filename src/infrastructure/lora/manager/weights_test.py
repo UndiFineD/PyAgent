@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_loraweights_exists():
     """Test that LoRAWeights class exists and is importable."""
-    assert 'LoRAWeights' in dir()
+    assert "LoRAWeights" in dir()
 
 
 def test_merge_adapters_exists():
@@ -44,4 +44,3 @@ def test_merge_adapters_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

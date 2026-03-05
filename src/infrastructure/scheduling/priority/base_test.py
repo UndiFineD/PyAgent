@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_priorityscheduler_exists():
     """Test that PriorityScheduler class exists and is importable."""
-    assert 'PriorityScheduler' in dir()
+    assert "PriorityScheduler" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

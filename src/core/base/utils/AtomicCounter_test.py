@@ -33,25 +33,24 @@ except ImportError as e:
 
 def test_counter_exists():
     """Test that Counter class exists and is importable."""
-    assert 'Counter' in dir()
+    assert "Counter" in dir()
 
 
 def test_atomiccounter_exists():
     """Test that AtomicCounter class exists and is importable."""
-    assert 'AtomicCounter' in dir()
+    assert "AtomicCounter" in dir()
 
 
 def test_atomicflag_exists():
     """Test that AtomicFlag class exists and is importable."""
-    assert 'AtomicFlag' in dir()
+    assert "AtomicFlag" in dir()
 
 
 def test_atomicgauge_exists():
     """Test that AtomicGauge class exists and is importable."""
-    assert 'AtomicGauge' in dir()
+    assert "AtomicGauge" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

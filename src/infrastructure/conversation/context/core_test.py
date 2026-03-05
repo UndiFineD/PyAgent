@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_conversationcontext_exists():
     """Test that ConversationContext class exists and is importable."""
-    assert 'ConversationContext' in dir()
+    assert "ConversationContext" in dir()
 
 
 def test_agenticcontext_exists():
     """Test that AgenticContext class exists and is importable."""
-    assert 'AgenticContext' in dir()
+    assert "AgenticContext" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

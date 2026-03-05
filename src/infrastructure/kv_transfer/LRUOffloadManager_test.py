@@ -33,40 +33,39 @@ except ImportError as e:
 
 def test_lruentry_exists():
     """Test that LRUEntry class exists and is importable."""
-    assert 'LRUEntry' in dir()
+    assert "LRUEntry" in dir()
 
 
 def test_lruoffloadmanager_exists():
     """Test that LRUOffloadManager class exists and is importable."""
-    assert 'LRUOffloadManager' in dir()
+    assert "LRUOffloadManager" in dir()
 
 
 def test_weightedlrumanager_exists():
     """Test that WeightedLRUManager class exists and is importable."""
-    assert 'WeightedLRUManager' in dir()
+    assert "WeightedLRUManager" in dir()
 
 
 def test_tieredlrumanager_exists():
     """Test that TieredLRUManager class exists and is importable."""
-    assert 'TieredLRUManager' in dir()
+    assert "TieredLRUManager" in dir()
 
 
 def test_prefetchinglrumanager_exists():
     """Test that PrefetchingLRUManager class exists and is importable."""
-    assert 'PrefetchingLRUManager' in dir()
+    assert "PrefetchingLRUManager" in dir()
 
 
 def test_asynclrumanager_exists():
     """Test that AsyncLRUManager class exists and is importable."""
-    assert 'AsyncLRUManager' in dir()
+    assert "AsyncLRUManager" in dir()
 
 
 def test_lrumanagerfactory_exists():
     """Test that LRUManagerFactory class exists and is importable."""
-    assert 'LRUManagerFactory' in dir()
+    assert "LRUManagerFactory" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

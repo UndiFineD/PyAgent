@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_authmanager_exists():
     """Test that AuthManager class exists and is importable."""
-    assert 'AuthManager' in dir()
+    assert "AuthManager" in dir()
 
 
 def test_authmanager_instantiation():
@@ -45,4 +45,3 @@ def test_authmanager_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

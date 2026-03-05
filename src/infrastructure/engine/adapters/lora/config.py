@@ -43,7 +43,9 @@ class LoRAConfig:
     rank: int = 8
     alpha: float = 16.0
     dropout: float = 0.0
-    target_modules: set[str] = field(default_factory=lambda: {"q_proj", "k_proj", "v_proj", "o_proj"})
+    target_modules: set[str] = field(
+        default_factory=lambda: {"q_proj", "k_proj", "v_proj", "o_proj"}
+    )
     fan_in_fan_out: bool = False
     bias: str = "none"
     modules_to_save: set[str] = field(default_factory=set)
@@ -60,7 +62,9 @@ class LoRAConfig:
         if self.dropout < 0 or self.dropout >= 1:
             raise ValueError(f"dropout must be in [0, 1), got {self.dropout}")
         if self.bias not in ("none", "all", "lora_only"):
-            raise ValueError(f"bias must be 'none', 'all', or 'lora_only', got {self.bias}")
+            raise ValueError(
+                f"bias must be 'none', 'all', or 'lora_only', got {self.bias}"
+            )
 
     @property
     def scaling(self) -> float:

@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "BatchStats"), "BatchStats missing"
     assert hasattr(mod, "AsyncMicrobatcher"), "AsyncMicrobatcher missing"
     assert hasattr(mod, "SyncMicrobatcher"), "SyncMicrobatcher missing"
-

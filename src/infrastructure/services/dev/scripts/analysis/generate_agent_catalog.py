@@ -43,7 +43,10 @@ def generate_catalog() -> None:
                         # Version extraction
                         if isinstance(item, ast.Assign):
                             for target in item.targets:
-                                if isinstance(target, ast.Name) and target.id == "__version__":
+                                if (
+                                    isinstance(target, ast.Name)
+                                    and target.id == "__version__"
+                                ):
                                     if isinstance(item.value, ast.Constant):
                                         version = str(item.value.value)
                                     elif isinstance(item.value, ast.Name):
@@ -53,7 +56,9 @@ def generate_catalog() -> None:
                         # Class extraction
                         if isinstance(item, ast.ClassDef):
                             # Check if it looks like an Agent class (usually inherits from BaseAgent or CoderAgent)
-                            docstring = ast.get_docstring(item) or "No description provided."
+                            docstring = (
+                                ast.get_docstring(item) or "No description provided."
+                            )
                             # Just take the first line of docstring for the table
                             summary = docstring.strip().split("\n")[0]
                             classes.append({"name": item.name, "description": summary})
@@ -71,7 +76,9 @@ def generate_catalog() -> None:
                                 "File": f"[{file_path.name}](../{rel_path})",
                             }
                         )
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                     print(f"Warning: Failed to parse {file_path}: {e}")
 
     # Sort data

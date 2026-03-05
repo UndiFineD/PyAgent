@@ -23,4 +23,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "compute_cumsum_offsets"), "compute_cumsum_offsets missing"
     assert hasattr(mod, "flatten_with_offsets"), "flatten_with_offsets missing"
     assert hasattr(mod, "split_by_offsets"), "split_by_offsets missing"
-

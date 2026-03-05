@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_reconconfig_exists():
     """Test that ReconConfig class exists and is importable."""
-    assert 'ReconConfig' in dir()
+    assert "ReconConfig" in dir()
 
 
 def test_externalreconorchestrator_exists():
     """Test that ExternalReconOrchestrator class exists and is importable."""
-    assert 'ExternalReconOrchestrator' in dir()
+    assert "ExternalReconOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

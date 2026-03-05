@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_gpumetrics_exists():
     """Test that GPUMetrics class exists and is importable."""
-    assert 'GPUMetrics' in dir()
+    assert "GPUMetrics" in dir()
 
 
 def test_gpumonitorcore_exists():
     """Test that GPUMonitorCore class exists and is importable."""
-    assert 'GPUMonitorCore' in dir()
+    assert "GPUMonitorCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

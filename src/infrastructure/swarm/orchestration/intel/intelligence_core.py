@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -83,13 +84,15 @@ class IntelligenceCore:
             "corrupt": FailureClassification.SHARD_CORRUPTION,
             "distributed": FailureClassification.DISTRIBUTED_STATE_ERROR,
             "synchronization": FailureClassification.DISTRIBUTED_STATE_ERROR,
-            "recursive": FailureClassification.RECURSION_LIMIT, # Map rough matches
+            "recursive": FailureClassification.RECURSION_LIMIT,  # Map rough matches
             "self_improvement": FailureClassification.RECURSIVE_IMPROVEMENT,
             "self_healing": FailureClassification.RECURSIVE_IMPROVEMENT,
             "swarm_desynchronization": FailureClassification.DISTRIBUTED_STATE_ERROR,
         }
 
-    def filter_relevant_insights(self, pool: list[dict[str, Any]], limit: int = 20) -> list[SwarmInsight]:
+    def filter_relevant_insights(
+        self, pool: list[dict[str, Any]], limit: int = 20
+    ) -> list[SwarmInsight]:
         """Filters relevant insights from the pool.
 
         Args:
@@ -103,7 +106,9 @@ class IntelligenceCore:
             try:
                 # Optimized sort and truncate in Rust
                 pool = rc.filter_relevant_insights(pool, limit)  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning(f"Rust filter_relevant_insights failed: {e}")
 
         insights = []
@@ -119,7 +124,9 @@ class IntelligenceCore:
             )
         return insights
 
-    def generate_synthesis_prompt(self, insights: list[SwarmInsight], sql_lessons: list[dict[str, Any]]) -> str:
+    def generate_synthesis_prompt(
+        self, insights: list[SwarmInsight], sql_lessons: list[dict[str, Any]]
+    ) -> str:
         """Constructs a prompt for AI synthesis from collected insights.
 
         Args:
@@ -131,7 +138,9 @@ class IntelligenceCore:
         """
         lines = [i.format_for_pool() for i in insights]
         for lesson in sql_lessons:
-            lines.append(f"- RELATIONAL_LESSON: {lesson.get('sample_lesson')} (Category: {lesson.get('category')})")
+            lines.append(
+                f"- RELATIONAL_LESSON: {lesson.get('sample_lesson')} (Category: {lesson.get('category')})"
+            )
 
         pool_text = "\n".join(lines)
         return (
@@ -143,7 +152,9 @@ class IntelligenceCore:
             f"Insights:\n{pool_text}"
         )
 
-    def extract_actionable_patterns(self, raw_patterns: list[str]) -> list[dict[str, Any]]:
+    def extract_actionable_patterns(
+        self, raw_patterns: list[str]
+    ) -> list[dict[str, Any]]:
         """Filters raw AI output and converts to structured dictionaries.
 
         Args:
@@ -222,16 +233,21 @@ class IntelligenceCore:
                     logger.error(
                         f"Intelligence Circuit Breaker: Stopping recursive healing loop (Depth {self._healing_depth})"
                     )
-                    valid_patterns.append({
-                        "file": "SWARM",
-                        "line": "0",
-                        "description": "STOP_RECURSION: Meta-stability loop detected in self-healing."
-                    })
+                    valid_patterns.append(
+                        {
+                            "file": "SWARM",
+                            "line": "0",
+                            "description": "STOP_RECURSION: Meta-stability loop detected in self-healing.",
+                        }
+                    )
                     continue
 
             # If still unknown, check general keywords
             if classification == FailureClassification.UNKNOWN:
-                if any(k in lower_desc for k in keywords) or len(pattern_dict["description"]) > 40:
+                if (
+                    any(k in lower_desc for k in keywords)
+                    or len(pattern_dict["description"]) > 40
+                ):
                     classification = FailureClassification.AI_ERROR
                 else:
                     # Generic / Noise
@@ -243,10 +259,12 @@ class IntelligenceCore:
 
         # Phase 336: Surface unknown patterns
         if unknown_failures:
-            valid_patterns.append({
-                "file": "SwarmScanner",
-                "line": "0",
-                "description": f"[Unclassified Patterns Detected]: Found {len(unknown_failures)} unknown patterns."
-            })
+            valid_patterns.append(
+                {
+                    "file": "SwarmScanner",
+                    "line": "0",
+                    "description": f"[Unclassified Patterns Detected]: Found {len(unknown_failures)} unknown patterns.",
+                }
+            )
 
         return valid_patterns

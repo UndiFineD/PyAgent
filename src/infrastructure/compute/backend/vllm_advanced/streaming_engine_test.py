@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "StreamToken"), "StreamToken missing"
     assert hasattr(mod, "TokenStreamIterator"), "TokenStreamIterator missing"
     assert hasattr(mod, "StreamingVllmEngine"), "StreamingVllmEngine missing"
-

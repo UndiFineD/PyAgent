@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_eaglemethod_exists():
     """Test that EagleMethod class exists and is importable."""
-    assert 'EagleMethod' in dir()
+    assert "EagleMethod" in dir()
 
 
 def test_attentionbackend_exists():
     """Test that AttentionBackend class exists and is importable."""
-    assert 'AttentionBackend' in dir()
+    assert "AttentionBackend" in dir()
 
 
 def test_eagleconfig_exists():
     """Test that EagleConfig class exists and is importable."""
-    assert 'EagleConfig' in dir()
+    assert "EagleConfig" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

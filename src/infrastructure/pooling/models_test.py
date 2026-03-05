@@ -33,35 +33,34 @@ except ImportError as e:
 
 def test_poolingtask_exists():
     """Test that PoolingTask class exists and is importable."""
-    assert 'PoolingTask' in dir()
+    assert "PoolingTask" in dir()
 
 
 def test_poolingstrategy_exists():
     """Test that PoolingStrategy class exists and is importable."""
-    assert 'PoolingStrategy' in dir()
+    assert "PoolingStrategy" in dir()
 
 
 def test_poolingconfig_exists():
     """Test that PoolingConfig class exists and is importable."""
-    assert 'PoolingConfig' in dir()
+    assert "PoolingConfig" in dir()
 
 
 def test_poolingresult_exists():
     """Test that PoolingResult class exists and is importable."""
-    assert 'PoolingResult' in dir()
+    assert "PoolingResult" in dir()
 
 
 def test_embeddingoutput_exists():
     """Test that EmbeddingOutput class exists and is importable."""
-    assert 'EmbeddingOutput' in dir()
+    assert "EmbeddingOutput" in dir()
 
 
 def test_classificationoutput_exists():
     """Test that ClassificationOutput class exists and is importable."""
-    assert 'ClassificationOutput' in dir()
+    assert "ClassificationOutput" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

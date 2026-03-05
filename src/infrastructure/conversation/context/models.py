@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -14,6 +15,7 @@ from typing import Any, Dict, List, Optional
 
 class ContextState(Enum):
     """Conversation context state."""
+
     ACTIVE = "active"
     WAITING_INPUT = "waiting_input"
     WAITING_TOOL = "waiting_tool"
@@ -25,6 +27,7 @@ class ContextState(Enum):
 
 class TurnType(Enum):
     """Conversation turn type."""
+
     SYSTEM = "system"
     USER = "user"
     ASSISTANT = "assistant"
@@ -35,6 +38,7 @@ class TurnType(Enum):
 
 class ToolExecutionPolicy(Enum):
     """Tool execution policy."""
+
     SEQUENTIAL = "sequential"  # Execute tools one at a time
     PARALLEL = "parallel"  # Execute tools in parallel
     BATCH = "batch"  # Batch similar tools
@@ -44,6 +48,7 @@ class ToolExecutionPolicy(Enum):
 @dataclass
 class TokenMetrics:
     """Token usage metrics."""
+
     input_tokens: int = 0
     output_tokens: int = 0
     cached_tokens: int = 0
@@ -83,6 +88,7 @@ class TokenMetrics:
 @dataclass
 class ConversationTurn:
     """Single conversation turn."""
+
     id: str
     type: TurnType
     content: Any
@@ -127,6 +133,7 @@ class ConversationTurn:
 @dataclass
 class ToolExecution:
     """Tool execution record."""
+
     call_id: str
     tool_name: str
     arguments: Dict[str, Any]
@@ -150,6 +157,7 @@ class ToolExecution:
 @dataclass
 class ContextConfig:
     """Context configuration."""
+
     max_turns: int = 100
     max_tokens: int = 128000
     max_tool_calls_per_turn: int = 10
@@ -173,6 +181,7 @@ class ContextConfig:
 @dataclass
 class ContextSnapshot:
     """Snapshot of context state."""
+
     context_id: str
     timestamp: float
     state: ContextState

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@ from src.maintenance.workspace_maintenance import WorkspaceMaintenance
 
 logger = logging.getLogger(__name__)
 
+
 class CodingStandardsAgent(BaseAgent):
     """
     Agent that autonomously maintains the codebase by enforcing style,
@@ -35,7 +37,13 @@ class CodingStandardsAgent(BaseAgent):
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
-        self.maintenance = WorkspaceMaintenance(workspace_root=self.state.workspace_root if hasattr(self.state, 'workspace_root') else ".")
+        self.maintenance = WorkspaceMaintenance(
+            workspace_root=(
+                self.state.workspace_root
+                if hasattr(self.state, "workspace_root")
+                else "."
+            )
+        )
         logger.info("CodingStandardsAgent initialized.")
 
     async def execute_task(self, task: dict[str, Any]) -> dict[str, Any]:

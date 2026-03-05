@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
@@ -11,29 +12,37 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Optional
 
+
 class DPRole(Enum):
     """Data parallel role."""
-    MASTER = auto()    # Coordinates workers
-    WORKER = auto()    # Executes work
-    HYBRID = auto()    # Both roles
+
+    MASTER = auto()  # Coordinates workers
+    WORKER = auto()  # Executes work
+    HYBRID = auto()  # Both roles
+
 
 class WorkerHealth(Enum):
     """Worker health status."""
+
     HEALTHY = auto()
     DEGRADED = auto()
     RECOVERING = auto()
     FAILED = auto()
 
+
 class LoadBalanceStrategy(Enum):
     """Load balancing strategy."""
+
     ROUND_ROBIN = auto()
     LEAST_LOADED = auto()
-    P2C = auto()               # Power of Two Choices
-    LOCALITY_AWARE = auto()    # Prefer local workers
+    P2C = auto()  # Power of Two Choices
+    LOCALITY_AWARE = auto()  # Prefer local workers
+
 
 @dataclass
 class DPConfig:
     """Configuration for data parallel coordinator."""
+
     num_workers: int = 1
     dp_rank: int = 0
     dp_size: int = 1
@@ -45,9 +54,11 @@ class DPConfig:
     enable_locality: bool = True
     locality_groups: list[list[int]] = field(default_factory=list)
 
+
 @dataclass
 class WorkerState:
     """State of a DP worker."""
+
     worker_id: int
     dp_rank: int
     health: WorkerHealth = WorkerHealth.HEALTHY
@@ -58,39 +69,43 @@ class WorkerState:
     consecutive_failures: int = 0
     locality_group: int = 0
     metadata: dict[str, Any] = field(default_factory=dict)
-    
+
     def update_latency(self, latency_ms: float) -> None:
         """Update average latency with EMA."""
         self.avg_latency_ms = 0.9 * self.avg_latency_ms + 0.1 * latency_ms
 
+
 @dataclass
 class StepState:
     """State for a single step."""
+
     step_id: int
     wave_id: int
     request_count: int = 0
     completed_count: int = 0
     start_time: float = field(default_factory=time.time)
     end_time: Optional[float] = None
-    
+
     @property
     def is_complete(self) -> bool:
         return self.completed_count >= self.request_count
-    
+
     @property
     def duration_ms(self) -> float:
         end = self.end_time or time.time()
         return (end - self.start_time) * 1000
 
+
 @dataclass
 class WaveState:
     """State for an execution wave."""
+
     wave_id: int
     num_steps: int = 0
     completed_steps: int = 0
     start_time: float = field(default_factory=time.time)
     end_time: Optional[float] = None
-    
+
     @property
     def is_complete(self) -> bool:
         return self.completed_steps >= self.num_steps

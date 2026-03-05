@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_mcpclient_exists():
     """Test that MCPClient class exists and is importable."""
-    assert 'MCPClient' in dir()
+    assert "MCPClient" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

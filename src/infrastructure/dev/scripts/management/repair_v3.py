@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,6 +32,7 @@ def fix_all() -> None:
         for file in files:
             if file.endswith(".py"):
                 _process_file(os.path.join(root, file))
+
 
 def _should_skip_dir(root: str) -> bool:
     """Returns True if the directory should be skipped during repair."""

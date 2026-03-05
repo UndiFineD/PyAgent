@@ -33,50 +33,49 @@ except ImportError as e:
 
 def test_connectionstate_exists():
     """Test that ConnectionState class exists and is importable."""
-    assert 'ConnectionState' in dir()
+    assert "ConnectionState" in dir()
 
 
 def test_closeable_exists():
     """Test that Closeable class exists and is importable."""
-    assert 'Closeable' in dir()
+    assert "Closeable" in dir()
 
 
 def test_pingable_exists():
     """Test that Pingable class exists and is importable."""
-    assert 'Pingable' in dir()
+    assert "Pingable" in dir()
 
 
 def test_poolstats_exists():
     """Test that PoolStats class exists and is importable."""
-    assert 'PoolStats' in dir()
+    assert "PoolStats" in dir()
 
 
 def test_pooledconnection_exists():
     """Test that PooledConnection class exists and is importable."""
-    assert 'PooledConnection' in dir()
+    assert "PooledConnection" in dir()
 
 
 def test_connectionpool_exists():
     """Test that ConnectionPool class exists and is importable."""
-    assert 'ConnectionPool' in dir()
+    assert "ConnectionPool" in dir()
 
 
 def test_asyncconnectionpool_exists():
     """Test that AsyncConnectionPool class exists and is importable."""
-    assert 'AsyncConnectionPool' in dir()
+    assert "AsyncConnectionPool" in dir()
 
 
 def test_pooledconnectionmanager_exists():
     """Test that PooledConnectionManager class exists and is importable."""
-    assert 'PooledConnectionManager' in dir()
+    assert "PooledConnectionManager" in dir()
 
 
 def test_multihostpool_exists():
     """Test that MultiHostPool class exists and is importable."""
-    assert 'MultiHostPool' in dir()
+    assert "MultiHostPool" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

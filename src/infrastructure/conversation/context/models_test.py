@@ -33,45 +33,44 @@ except ImportError as e:
 
 def test_contextstate_exists():
     """Test that ContextState class exists and is importable."""
-    assert 'ContextState' in dir()
+    assert "ContextState" in dir()
 
 
 def test_turntype_exists():
     """Test that TurnType class exists and is importable."""
-    assert 'TurnType' in dir()
+    assert "TurnType" in dir()
 
 
 def test_toolexecutionpolicy_exists():
     """Test that ToolExecutionPolicy class exists and is importable."""
-    assert 'ToolExecutionPolicy' in dir()
+    assert "ToolExecutionPolicy" in dir()
 
 
 def test_tokenmetrics_exists():
     """Test that TokenMetrics class exists and is importable."""
-    assert 'TokenMetrics' in dir()
+    assert "TokenMetrics" in dir()
 
 
 def test_conversationturn_exists():
     """Test that ConversationTurn class exists and is importable."""
-    assert 'ConversationTurn' in dir()
+    assert "ConversationTurn" in dir()
 
 
 def test_toolexecution_exists():
     """Test that ToolExecution class exists and is importable."""
-    assert 'ToolExecution' in dir()
+    assert "ToolExecution" in dir()
 
 
 def test_contextconfig_exists():
     """Test that ContextConfig class exists and is importable."""
-    assert 'ContextConfig' in dir()
+    assert "ContextConfig" in dir()
 
 
 def test_contextsnapshot_exists():
     """Test that ContextSnapshot class exists and is importable."""
-    assert 'ContextSnapshot' in dir()
+    assert "ContextSnapshot" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

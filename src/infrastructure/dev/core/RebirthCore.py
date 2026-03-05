@@ -1,4 +1,3 @@
-
 """
 Core logic for Swarm Rebirth (Phase 180).
 Handles mass directory scaffolding and cleanup.
@@ -8,6 +7,7 @@ import os
 import shutil
 import yaml
 from typing import Dict, Any
+
 
 class RebirthCore:
     @staticmethod
@@ -28,7 +28,7 @@ class RebirthCore:
                 count += 1
                 for item in sub:
                     # Create empty files for list items
-                    open(os.path.join(path, item), 'a').close()
+                    open(os.path.join(path, item), "a").close()
         return count
 
     @staticmethod

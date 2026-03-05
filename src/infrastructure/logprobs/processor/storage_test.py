@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_flatlogprobs_exists():
     """Test that FlatLogprobs class exists and is importable."""
-    assert 'FlatLogprobs' in dir()
+    assert "FlatLogprobs" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

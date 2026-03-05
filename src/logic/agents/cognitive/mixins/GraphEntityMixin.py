@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +19,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 from src.core.base.BaseUtilities import as_tool
+
 
 class GraphEntityMixin:
     """Mixin for entity and relationship management."""
@@ -71,12 +73,14 @@ class GraphEntityMixin:
         """Performs a combined vector-graph search (Simulated)."""
         # In a real system, this would call ChromaDB for vectors and then cross-reference with self.entities
         if not hasattr(self, "entities"):
-             return {"error": "Entities not initialized"}
+            return {"error": "Entities not initialized"}
 
         return {
             "query": query,
             "vector_results": ["Related code snippet from repository"],
-            "graph_context": self.query_relationships(query)
-            if query in self.entities
-            else "No direct graph matches.",
+            "graph_context": (
+                self.query_relationships(query)
+                if query in self.entities
+                else "No direct graph matches."
+            ),
         }

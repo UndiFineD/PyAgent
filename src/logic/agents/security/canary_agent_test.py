@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_canaryobject_exists():
     """Test that CanaryObject class exists and is importable."""
-    assert 'CanaryObject' in dir()
+    assert "CanaryObject" in dir()
 
 
 def test_canaryagent_exists():
     """Test that CanaryAgent class exists and is importable."""
-    assert 'CanaryAgent' in dir()
+    assert "CanaryAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

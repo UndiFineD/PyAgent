@@ -28,4 +28,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "LoRARegistry"), "LoRARegistry missing"
     assert hasattr(mod, "LoRASlotManager"), "LoRASlotManager missing"
     assert hasattr(mod, "LoRAManager"), "LoRAManager missing"
-

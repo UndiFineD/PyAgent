@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,9 +23,10 @@ if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
     from src.core.knowledge.GlobalContext import GlobalContext
 
+
 class MetaOrchestratorAgent(BaseAgent):
     """
-    Expert orchestrator that can decompose high-level objectives into 
+    Expert orchestrator that can decompose high-level objectives into
     multi-agent workflows and manage recursive resolution.
     """
 
@@ -36,17 +38,19 @@ class MetaOrchestratorAgent(BaseAgent):
 
     async def solve_complex_objective(self, objective: str, depth: int = 0) -> str:
         """
-        Decomposes an objective and executes it, handling sub-goals 
+        Decomposes an objective and executes it, handling sub-goals
         recursively if necessary.
         """
         if depth > self.max_depth:
             return f"Error: Maximum recursion depth ({self.max_depth}) exceeded for objective: {objective}"
 
-        logging.info(f"MetaOrchestrator: Decomposing objective (Depth {depth}): {objective[:50]}...")
-        
+        logging.info(
+            f"MetaOrchestrator: Decomposing objective (Depth {depth}): {objective[:50]}..."
+        )
+
         # Phase 1: Decomposition
         plan = await self._decompose_objective(objective)
-        
+
         results = []
         for step in plan:
             if step.get("type") == "complex":
@@ -58,11 +62,13 @@ class MetaOrchestratorAgent(BaseAgent):
             agent_name = step.get("agent")
             action = step.get("action")
             args = step.get("args", [])
-            
+
             # Execute via FleetManager (Phase 152: await)
-            res = await self.fleet.execute_workflow(objective, [{"agent": agent_name, "action": action, "args": args}])
+            res = await self.fleet.execute_workflow(
+                objective, [{"agent": agent_name, "action": action, "args": args}]
+            )
             results.append(res)
-            
+
         return f"# Objective Resolution Report (Depth {depth})\n\n" + "\n".join(results)
 
     async def _decompose_objective(self, objective: str) -> list[dict[str, Any]]:
@@ -80,10 +86,12 @@ class MetaOrchestratorAgent(BaseAgent):
         
         Return ONLY valid JSON.
         """
-        
+
         # Use an available agent for decomposition or internal logic
-        res = await self.fleet.call_by_capability("Security.improve_content", prompt=prompt)
-        
+        res = await self.fleet.call_by_capability(
+            "Security.improve_content", prompt=prompt
+        )
+
         try:
             # Simple extractor for markdown
             if "```json" in res:
@@ -93,13 +101,20 @@ class MetaOrchestratorAgent(BaseAgent):
             return json.loads(res)
         except Exception as e:
             logging.error(f"MetaOrchestrator failed to parse decomposition JSON: {e}")
-            return [{"type": "simple", "agent": "Reasoning", "action": "analyze_tot", "args": [objective]}]
+            return [
+                {
+                    "type": "simple",
+                    "agent": "Reasoning",
+                    "action": "analyze_tot",
+                    "args": [objective],
+                }
+            ]
 
     def _enrich_args(self, args: list[Any]) -> list[Any]:
         """Injects global context into agent arguments."""
         enriched = []
         context_brief = self.global_context.get_summary()
-        
+
         for arg in args:
             if isinstance(arg, str) and "{context}" in arg:
                 enriched.append(arg.replace("{context}", context_brief))

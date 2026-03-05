@@ -10,6 +10,7 @@ import numpy as np
 
 class TensorDtype(Enum):
     """Supported tensor data types."""
+
     FLOAT32 = "float32"
     FLOAT16 = "float16"
     BFLOAT16 = "bfloat16"
@@ -21,6 +22,7 @@ class TensorDtype(Enum):
 
 class CompressionType(Enum):
     """Supported compression types."""
+
     NONE = "none"
     ZSTD = "zstd"
     LZ4 = "lz4"
@@ -46,6 +48,7 @@ DTYPE_MAP = {
 @dataclass
 class TensorizerConfig:
     """Configuration for tensorizer operations."""
+
     compression: CompressionType = CompressionType.NONE
     compression_level: int = 3
     verify_checksums: bool = True

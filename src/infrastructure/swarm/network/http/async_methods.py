@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -57,7 +58,9 @@ class AsyncHTTPMixin:
         allow_redirects: bool = True,
     ) -> bytes:
         """Async GET request returning response body as bytes."""
-        async with await self.async_get_response(url, timeout=timeout, allow_redirects=allow_redirects) as r:
+        async with await self.async_get_response(
+            url, timeout=timeout, allow_redirects=allow_redirects
+        ) as r:
             r.raise_for_status()
             return await r.read()
 
@@ -126,7 +129,7 @@ class AsyncHTTPMixin:
             total_size = int(r.headers.get("content-length", 0)) or None
             downloaded = 0
 
-            with save_path.open("wb", encoding='utf-8') as f:
+            with save_path.open("wb", encoding="utf-8") as f:
                 async for chunk in r.content.iter_chunked(chunk_size):
                     f.write(chunk)
                     downloaded += len(chunk)

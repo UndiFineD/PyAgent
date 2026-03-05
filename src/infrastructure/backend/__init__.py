@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,6 +15,7 @@ from __future__ import annotations
 
 
 from src.core.base.version import VERSION as VERSION
+
 try:
     from .ABTestVariant import ABTestVariant as ABTestVariant
     from .ABTester import ABTester as ABTester
@@ -51,8 +53,12 @@ try:
     from .RequestThrottler import RequestThrottler as RequestThrottler
     from .RequestTracer import RequestTracer as RequestTracer
     from .ResponseTransform import ResponseTransform as ResponseTransform
-    from .ResponseTransformerBase import ResponseTransformerBase as ResponseTransformerBase
-    from .StripWhitespaceTransformer import StripWhitespaceTransformer as StripWhitespaceTransformer
+    from .ResponseTransformerBase import (
+        ResponseTransformerBase as ResponseTransformerBase,
+    )
+    from .StripWhitespaceTransformer import (
+        StripWhitespaceTransformer as StripWhitespaceTransformer,
+    )
     from .SubagentRunner import SubagentRunner as SubagentRunner
     from .TTLCache import TTLCache as TTLCache
     from .UsageQuota import UsageQuota as UsageQuota
@@ -122,17 +128,24 @@ except Exception:
     UsageRecord = _mk_placeholder("UsageRecord")
     VersionNegotiator = _mk_placeholder("VersionNegotiator")
     DiskCache = _mk_placeholder("DiskCache")
+
     def llm_chat_via_github_models(*a, **k):
         raise RuntimeError("execution engine not available")
+
     def llm_chat_via_ollama(*a, **k):
         raise RuntimeError("execution engine not available")
+
     def llm_chat_via_copilot_cli(*a, **k):
         raise RuntimeError("execution engine not available")
+
     def run_subagent(*a, **k):
         raise RuntimeError("execution engine not available")
+
     def get_backend_status(*a, **k):
         raise RuntimeError("execution engine not available")
+
     def describe_backends(*a, **k):
         raise RuntimeError("execution engine not available")
+
 
 __version__ = VERSION

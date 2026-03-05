@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +22,6 @@ Supports multi-cloud, hybrid, and distributed cloud operations.
 """
 
 
-
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
@@ -39,7 +39,9 @@ class CloudProviderAgent(BaseAgent):
         self.supported_providers = ["aws", "azure", "gcp"]
         self.credentials: dict[str, bool] = {p: False for p in self.supported_providers}
 
-    def configure_provider(self, provider: str, credentials_mock: dict[str, str]) -> str:  # noqa: ARG002
+    def configure_provider(
+        self, provider: str, credentials_mock: dict[str, str]
+    ) -> str:  # noqa: ARG002
         """Mocks the configuration of a cloud provider."""
         if self.recorder:
             self.recorder.record_lesson("cloud_provider_config", {"provider": provider})
@@ -49,10 +51,14 @@ class CloudProviderAgent(BaseAgent):
             return f"Provider {provider} configured successfully."
         return f"Provider {provider} not supported."
 
-    def generate_terraform_template(self, provider: str, node_count: int, region: str = "us-east-1") -> str:
+    def generate_terraform_template(
+        self, provider: str, node_count: int, region: str = "us-east-1"
+    ) -> str:
         """Generates a basic Terraform template for fleet expansion."""
         if self.recorder:
-            self.recorder.record_lesson("cloud_iac_generation", {"provider": provider, "nodes": node_count})
+            self.recorder.record_lesson(
+                "cloud_iac_generation", {"provider": provider, "nodes": node_count}
+            )
 
         if not self.credentials.get(provider.lower()):
             return f"Error: Provider {provider} not configured."

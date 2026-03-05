@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_incrementaldetokenizer_exists():
     """Test that IncrementalDetokenizer class exists and is importable."""
-    assert 'IncrementalDetokenizer' in dir()
+    assert "IncrementalDetokenizer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

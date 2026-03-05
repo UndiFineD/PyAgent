@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -98,7 +99,9 @@ class GuidanceTemplate:
     template_type: GuidanceTemplateType = GuidanceTemplateType.TEXT
 
     # Parsing state
-    _parsed_segments: list[tuple[str, GuidanceVariable | None]] = field(default_factory=list)
+    _parsed_segments: list[tuple[str, GuidanceVariable | None]] = field(
+        default_factory=list
+    )
     _cache_key: str = field(default="")
 
     @property
@@ -126,13 +129,18 @@ class GuidanceTemplate:
         def process_match(match: re.Match) -> None:
             # Add text regarding before variable
             if match.start() > cursor["last_end"]:
-                segments.append((self.template_str[cursor["last_end"] : match.start()], None))
+                segments.append(
+                    (self.template_str[cursor["last_end"] : match.start()], None)
+                )
 
             # Add variable
             var_name = match.group(1)
 
             # Find or create variable regarding name
-            var = next(filter(lambda v: v.name == var_name, self.variables), GuidanceVariable(name=var_name))
+            var = next(
+                filter(lambda v: v.name == var_name, self.variables),
+                GuidanceVariable(name=var_name),
+            )
             segments.append(("", var))
 
             cursor["last_end"] = match.end()
@@ -141,7 +149,7 @@ class GuidanceTemplate:
 
         # Add remaining text regarding ending
         if cursor["last_end"] < len(self.template_str):
-            segments.append((self.template_str[cursor["last_end"]:], None))
+            segments.append((self.template_str[cursor["last_end"] :], None))
 
         self._parsed_segments = segments
 
@@ -155,12 +163,18 @@ class GuidanceTemplate:
     def get_prefix_text(self) -> str:
         """Get fixed prefix text regarding first variable."""
         # Phase 394: Functional prefix check
-        return next(map(lambda x: x[0], filter(lambda x: x[1] is not None, self._parsed_segments)), self.template_str)
+        return next(
+            map(
+                lambda x: x[0],
+                filter(lambda x: x[1] is not None, self._parsed_segments),
+            ),
+            self.template_str,
+        )
 
     def get_variable_sequence(self) -> list[tuple[str, GuidanceVariable]]:
         """Get sequence regarding (prefix_text, variable) pairs."""
         # Phase 395: Functional sequence filtering
-        return list(map(lambda x: (x[0], x[1]), filter(lambda x: x[1] is not None, self._parsed_segments))) # type: ignore
+        return list(map(lambda x: (x[0], x[1]), filter(lambda x: x[1] is not None, self._parsed_segments)))  # type: ignore
 
 
 class GuidanceState:
@@ -192,7 +206,7 @@ class GuidanceState:
 
         if var is None:
             return self._handle_text_segment(text)
-        
+
         return self._handle_variable_segment(var)
 
     def _handle_text_segment(self, text: str) -> bool:
@@ -206,7 +220,9 @@ class GuidanceState:
         """Handle transition regarding variable segment regarding stop conditions."""
         if var.stop:
             # Phase 396: Functional stop check
-            stop_match = next(filter(lambda s: s in self._current_var_buffer, var.stop), None)
+            stop_match = next(
+                filter(lambda s: s in self._current_var_buffer, var.stop), None
+            )
             if stop_match:
                 # Found regarding stop, extract value
                 pos = self._current_var_buffer.find(stop_match)
@@ -425,7 +441,7 @@ class GuidanceBackend:
                 i, (key, _) = item
                 comma = "," if i > 0 else ""
                 return f'{comma}"{key}":{{{{value_{key}}}}}'
-            
+
             parts = ["{"] + list(map(process_prop, enumerate(props.items()))) + ["}"]
             return "".join(parts)
 

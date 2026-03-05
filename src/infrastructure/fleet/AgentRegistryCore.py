@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ logger = logging.getLogger(__name__)
 try:
     from rust_core import topological_sort_rust, to_snake_case_rust
     from rust_core import detect_cycles_rust
+
     _RUST_CYCLES = True
     _RUST_ACCEL = True
 except ImportError:
@@ -65,9 +67,7 @@ class AgentRegistryCore:
 
             agent_name = file[:-3]
             module_path = (
-                rel_path.replace(os.path.sep, ".")
-                .replace("/", ".")
-                .replace(".py", "")
+                rel_path.replace(os.path.sep, ".").replace("/", ".").replace(".py", "")
             )
 
             # Register multiple variants for the same module
@@ -75,8 +75,10 @@ class AgentRegistryCore:
         return discovered
 
     def _register_agent_variants(
-        self, discovered: dict[str, tuple[str, str, str | None]],
-        agent_name: str, module_path: str
+        self,
+        discovered: dict[str, tuple[str, str, str | None]],
+        agent_name: str,
+        module_path: str,
     ) -> None:
         """Helper to register an agent under its primary, snake_case, and short names."""
         # 1. Primary name
@@ -141,7 +143,7 @@ class AgentRegistryCore:
                 return detect_cycles_rust(graph_list)
             except Exception:
                 pass  # Fall back to Python
-        
+
         visited = set()
         path: list[Any] = []
         cycles = []
@@ -173,7 +175,7 @@ class AgentRegistryCore:
                 return to_snake_case_rust(name)
             except Exception:
                 pass
-        # Python fallback
+                # Python fallback
                 import re
         s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
         return re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1).lower()

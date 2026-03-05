@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Standardized OrchestratorAgent for Swarm Intelligence
 
@@ -14,12 +15,13 @@ from .OrchestratorFeatures import OrchestratorFeatures
 
 __version__ = VERSION
 
+
 class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
     """
     Primary orchestrator for swarm agentic workflows.
     Combines core BaseAgent capabilities with specialized orchestrator features.
-    
-    This class satisfies both modern Mixin-based architecture and legacy 
+
+    This class satisfies both modern Mixin-based architecture and legacy
     integration requirements (Phase 317 consolidation).
     """
 
@@ -28,22 +30,22 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
         repo_root = kwargs.get("repo_root")
         if repo_root and (file_path == "." or not file_path):
             file_path = repo_root
-            
+
         super().__init__(str(file_path), **kwargs)
-        
+
         # Initialize legacy components expected by some integration tests
         self.command_handler = AgentCommandHandler(str(self._workspace_root))
-        
+
         # Legacy attribute support
         self.enable_async = kwargs.get("enable_async", False)
         self.dry_run = kwargs.get("dry_run", False)
         self.strategy = kwargs.get("strategy", "direct")
-        
+
         # Handle rate limiting from config/kwargs
         if "rate_limit" in kwargs or "rate_limiter" in kwargs:
             rl_config = kwargs.get("rate_limit", {})
             self.enable_rate_limiting(config=rl_config)
-            
+
         # Performance/Cost metrics (Legacy support)
         self._metrics: dict[str, Any] = {
             "files_processed": 0,
@@ -52,12 +54,12 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
             "start_time": time.time(),
             "end_time": 0.0,
         }
-        
+
     @property
     def metrics(self) -> dict[str, Any]:
         """Provides access to agent metrics."""
         return self._metrics
-        
+
     @metrics.setter
     def metrics(self, value: dict[str, Any]) -> None:
         """Sets agent metrics."""
@@ -65,15 +67,17 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
 
     def register_plugin(self, plugin: Any) -> None:
         """
-        Registers a plugin. Overrides BaseAgent classmethod 
+        Registers a plugin. Overrides BaseAgent classmethod
         to use OrchestratorPluginMixin instance method.
         """
         # Ensure plugins dict exists on instance
         if not hasattr(self, "plugins"):
             self.plugins = {}
-        
-        # Use the mixin implementation
-            from src.logic.agents.swarm.OrchestratorPluginMixin import OrchestratorPluginMixin
+
+            # Use the mixin implementation
+            from src.logic.agents.swarm.OrchestratorPluginMixin import (
+                OrchestratorPluginMixin,
+            )
         OrchestratorPluginMixin.register_plugin(self, plugin)
 
     @property
@@ -93,13 +97,14 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
         Legacy support for config-driven initialization.
         """
         import json
+
         config_path = Path(config_path)
         if not config_path.exists():
             raise FileNotFoundError(f"Config file not found: {config_path}")
-            
+
         with open(config_path, "r") as f:
             config = json.load(f)
-            
+
         repo_root = config.get("repo_root", ".")
         return cls(file_path=repo_root, **config)
 
@@ -111,12 +116,12 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
         processed = self._metrics.get("files_processed", 0)
         modified = self._metrics.get("files_modified", 0)
         rate = (modified / processed * 100.0) if processed > 0 else 0.0
-        
+
         return {
             "summary": {
                 "files_processed": processed,
                 "files_modified": modified,
-                "modification_rate": rate
+                "modification_rate": rate,
             },
             "agents": self._metrics.get("agents_applied", {}),
             "mode": {
@@ -135,7 +140,7 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
         return {
             "average_per_file": avg,
             "total_time": elapsed,
-            "file_count": total_files
+            "file_count": total_files,
         }
 
     def cost_analysis(self, cost_per_request: float = 0.0) -> dict[str, Any]:
@@ -148,7 +153,7 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
             "total_estimated_cost": agent_runs * cost_per_request,
             "total_agent_runs": agent_runs,
             "cost_per_request": cost_per_request,
-            "currency": "USD"
+            "currency": "USD",
         }
 
     def update_code(self, target: Path) -> str:
@@ -157,15 +162,15 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
         Redirects to modern sub-agent execution via command_handler.
         """
         logging.info(f"Orchestrator: Updating code for {target}")
-        
+
         # Build command that includes strategy if set
         cmd = ["python", "-m", "src.main", str(target)]
         if hasattr(self, "strategy") and self.strategy:
             cmd.extend(["--strategy", self.strategy])
-            
+
         # Call command_handler to satisfy test mocks
         result = self.command_handler.run_command(cmd)
-        
+
         if result.returncode == 0:
             return "Success"
         return f"Error: {result.stderr}"
@@ -182,8 +187,8 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
                 self.run_with_parallel_execution()
                 return "Success"
             return "Orchestrator: No loop implementation found."
-            
-        # Call modern async run via runner
+
+            # Call modern async run via runner
             import asyncio
         try:
             # Check if there is an existing event loop
@@ -191,7 +196,7 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
                 loop = asyncio.get_event_loop()
             except RuntimeError:
                 loop = None
-                
+
             if loop and loop.is_running():
                 # We are in an async context already (unlikely for these tests)
                 # This is a bit tricky, but for tests we'll just return a placeholder
@@ -202,4 +207,3 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
         except Exception as e:
             logging.error(f"Error in OrchestratorAgent.run: {e}")
             return f"Error: {e}"
-

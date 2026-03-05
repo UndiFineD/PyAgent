@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 import hashlib
 from datetime import datetime
-from src.logic.agents.cognitive.context.models.ContextAnnotation import ContextAnnotation
+from src.logic.agents.cognitive.context.models.ContextAnnotation import (
+    ContextAnnotation,
+)
 
 
 class ContextAnnotationMixin:
@@ -33,7 +36,9 @@ class ContextAnnotationMixin:
 
     def get_annotations_for_line(self, line_number: int) -> list[ContextAnnotation]:
         """Get annotations for a specific line."""
-        return [a for a in getattr(self, "_annotations", []) if a.line_number == line_number]
+        return [
+            a for a in getattr(self, "_annotations", []) if a.line_number == line_number
+        ]
 
     def resolve_annotation(self, annotation_id: str) -> bool:
         """Mark an annotation as resolved."""

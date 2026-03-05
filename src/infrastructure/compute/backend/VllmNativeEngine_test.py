@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_vllmnativeengine_exists():
     """Test that VllmNativeEngine class exists and is importable."""
-    assert 'VllmNativeEngine' in dir()
+    assert "VllmNativeEngine" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

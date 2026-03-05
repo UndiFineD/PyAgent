@@ -10,8 +10,10 @@ import os
 from pathlib import Path
 from typing import Dict, Any, Optional
 
+
 class ConnectivityManager:
     """Manages connection status for external APIs with persistent 15-minute TTL caching."""
+
     _instance = None
 
     def __new__(cls, *args, **kwargs) -> ConnectivityManager:
@@ -24,7 +26,11 @@ class ConnectivityManager:
         if hasattr(self, "_initialized") and self._initialized:
             return
         self.workspace_root = Path(workspace_root) if workspace_root else None
-        self._conn_status_file = self.workspace_root / "logs" / "connectivity_status.json" if self.workspace_root else None
+        self._conn_status_file = (
+            self.workspace_root / "logs" / "connectivity_status.json"
+            if self.workspace_root
+            else None
+        )
         self._ttl = 900  # 15 minutes
         self._cache: Dict[str, Any] = self._load_status()
         self._preferred_cache: Dict[str, str] = self._cache.get("__preferred__", {})
@@ -72,16 +78,15 @@ class ConnectivityManager:
             if elapsed < self._ttl:
                 is_working = status.get("working", False)
                 if not is_working:
-                    logging.debug(f"ConnectivityManager: Skipping '{endpoint_id}' (cached offline)")
+                    logging.debug(
+                        f"ConnectivityManager: Skipping '{endpoint_id}' (cached offline)"
+                    )
                 return is_working
         return True  # Default to True
 
     def update_status(self, endpoint_id: str, working: bool) -> None:
         """Updates and persists the status for an endpoint."""
-        self._cache[endpoint_id] = {
-            "working": working,
-            "timestamp": time.time()
-        }
+        self._cache[endpoint_id] = {"working": working, "timestamp": time.time()}
         self._save_status()
 
     def is_online(self, endpoint: str) -> bool:
@@ -92,16 +97,20 @@ class ConnectivityManager:
         """Compatibility alias for update_status."""
         self.update_status(endpoint, online)
 
-    def check_and_execute(self, endpoint_id: str, func: callable, *args, **kwargs) -> Any:
+    def check_and_execute(
+        self, endpoint_id: str, func: callable, *args, **kwargs
+    ) -> Any:
         """Executes a function only if endpoint is available, updating status on failure."""
         if not self.is_endpoint_available(endpoint_id):
             return None
-            
+
         try:
             result = func(*args, **kwargs)
             self.update_status(endpoint_id, True)
             return result
         except Exception as e:
-            logging.warning(f"ConnectivityManager: Endpoint '{endpoint_id}' failed: {e}")
+            logging.warning(
+                f"ConnectivityManager: Endpoint '{endpoint_id}' failed: {e}"
+            )
             self.update_status(endpoint_id, False)
             raise e

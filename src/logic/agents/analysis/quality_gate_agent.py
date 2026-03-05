@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -55,9 +56,15 @@ class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             # Use sys.executable to be robust
             import sys
 
-            subprocess.run([sys.executable, "-m", "pytest", "--version"], capture_output=True, check=False)
+            subprocess.run(
+                [sys.executable, "-m", "pytest", "--version"],
+                capture_output=True,
+                check=False,
+            )
             # Phase 108: Record validation
-            self._record("check_gates", "Initiated", provider="Internal", model="Gatekeeper")
+            self._record(
+                "check_gates", "Initiated", provider="Internal", model="Gatekeeper"
+            )
 
             # In a real scenario, we'd run: ["python", "-m", "pytest", "tests/"]
             # To keep this fast for the dashboard, we check if test_results.txt exists
@@ -65,12 +72,16 @@ class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             if test_results.exists():
                 content = test_results.read_text()
                 if "FAILED" in content:
-                    report.append("- ❌ **Tests**: FAILED items detected in test_results.txt")
+                    report.append(
+                        "- ❌ **Tests**: FAILED items detected in test_results.txt"
+                    )
                     blocked = True
                 else:
                     report.append("- ✅ **Tests**: All tests passing.")
             else:
-                report.append("- ⚠️ **Tests**: No test_results.txt found. Run tests first.")
+                report.append(
+                    "- ⚠️ **Tests**: No test_results.txt found. Run tests first."
+                )
         except (subprocess.SubprocessError, RuntimeError, OSError) as e:
             report.append(f"- ❌ **Tests**: Error running test suites: {e}")
             blocked = True
@@ -83,14 +94,18 @@ class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             telemetry = json.loads(telemetry_file.read_text())
             errors = [m for m in telemetry if m.get("status") == "error"]
             if errors:
-                report.append(f"- ❌ **Reliability**: Found {len(errors)} execution errors in recent telemetry.")
+                report.append(
+                    f"- ❌ **Reliability**: Found {len(errors)} execution errors in recent telemetry."
+                )
                 blocked = True
             else:
                 report.append("- ✅ **Reliability**: Zero execution errors in history.")
 
         if blocked:
             report.append("\n## ⛔ DEPLOYMENT BLOCKED")
-            report.append("Please resolve the issues above before attempting to release.")
+            report.append(
+                "Please resolve the issues above before attempting to release."
+            )
         else:
             report.append("\n## ✅ READY FOR RELEASE")
             report.append("All quality gates are currently green.")
@@ -111,7 +126,9 @@ class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         matches = [obj for obj in objectives if obj.lower() in result.lower()]
         if len(matches) == len(objectives):
-            return "✅ Result successfully aligns with the logical blueprint objectives."
+            return (
+                "✅ Result successfully aligns with the logical blueprint objectives."
+            )
 
         return (
             f"❌ Alignment mismatch: Result did not clearly address "
@@ -119,13 +136,17 @@ class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         )
 
     @as_tool
-    def validate_release(self, current_result: str | None = None, reasoning_blueprint: str | None = None) -> str:
+    def validate_release(
+        self, current_result: str | None = None, reasoning_blueprint: str | None = None
+    ) -> str:
         """High-level validation including blueprint alignment and gates."""
         report = [self.check_gates()]
 
         if current_result and reasoning_blueprint:
             report.append("\n## Blueprint Alignment Check")
-            report.append(self.validate_against_blueprint(current_result, reasoning_blueprint))
+            report.append(
+                self.validate_against_blueprint(current_result, reasoning_blueprint)
+            )
 
         return "\n".join(report)
 
@@ -135,5 +156,7 @@ class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
 
 if __name__ == "__main__":
-    main = create_main_function(QualityGateAgent, "QualityGate Agent", "Task (e.g. 'check')")
+    main = create_main_function(
+        QualityGateAgent, "QualityGate Agent", "Task (e.g. 'check')"
+    )
     main()

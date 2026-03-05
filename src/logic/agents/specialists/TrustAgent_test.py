@@ -33,30 +33,29 @@ except ImportError as e:
 
 def test_mood_exists():
     """Test that Mood class exists and is importable."""
-    assert 'Mood' in dir()
+    assert "Mood" in dir()
 
 
 def test_trustlevel_exists():
     """Test that TrustLevel class exists and is importable."""
-    assert 'TrustLevel' in dir()
+    assert "TrustLevel" in dir()
 
 
 def test_emotionalstate_exists():
     """Test that EmotionalState class exists and is importable."""
-    assert 'EmotionalState' in dir()
+    assert "EmotionalState" in dir()
 
 
 def test_trustmetrics_exists():
     """Test that TrustMetrics class exists and is importable."""
-    assert 'TrustMetrics' in dir()
+    assert "TrustMetrics" in dir()
 
 
 def test_trustagent_exists():
     """Test that TrustAgent class exists and is importable."""
-    assert 'TrustAgent' in dir()
+    assert "TrustAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

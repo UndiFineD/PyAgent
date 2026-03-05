@@ -10,18 +10,21 @@ from typing import Dict, Any, Optional
 # Constants for common models (Jan 2026 estimates)
 from .TokenCostCore import TokenCostCore, MODEL_COSTS
 
+
 class TokenCostEngine:
     """
     Calculates estimated costs for LLM tokens based on model variety.
     Shell for TokenCostCore.
     """
-    
+
     def __init__(self) -> None:
         self.core = TokenCostCore()
         # Keep global reference for backward compatibility if needed
         self.MODEL_COSTS = MODEL_COSTS
 
-    def calculate_cost(self, model: str, input_tokens: int = 0, output_tokens: int = 0) -> float:
+    def calculate_cost(
+        self, model: str, input_tokens: int = 0, output_tokens: int = 0
+    ) -> float:
         """Returns the estimated cost in USD for the given token counts."""
         return self.core.compute_usd(model, input_tokens, output_tokens)
 

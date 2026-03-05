@@ -22,6 +22,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+
 class PylintFixerMixin:
     """Provides automated fixes for common Pylint warnings."""
 
@@ -32,19 +33,21 @@ class PylintFixerMixin:
             new_content = re.sub(
                 r"\bopen\(([^,)]+), \s*['\"]([rwab]+)['\"](?!\s*,\s*encoding=)\)",
                 r"open(\1, '\2', encoding='utf-8')",
-                content
+                content,
             )
             new_content = re.sub(
                 r"\bopen\(([^,)]+)(?!\s*,\s*encoding=)\)",
                 r"open(\1, encoding='utf-8')",
-                new_content
+                new_content,
             )
-            
+
             if new_content != content:
                 file_path.write_text(new_content, encoding="utf-8")
                 return True
             return False
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Failed to fix encoding in {file_path}: {e}")
             return False
 
@@ -58,14 +61,14 @@ class PylintFixerMixin:
             modified = False
             while i < len(lines):
                 line = lines[i]
-                return_match = re.match(r'^(\s*)return(\s+|$)', line)
+                return_match = re.match(r"^(\s*)return(\s+|$)", line)
                 if return_match:
                     indent = return_match.group(1)
                     if i + 1 < len(lines):
-                        next_line = lines[i+1]
-                        else_match = re.search(r'^\s*(else|elif):', next_line)
+                        next_line = lines[i + 1]
+                        else_match = re.search(r"^\s*(else|elif):", next_line)
                         if else_match:
-                            actual_indent = re.match(r'^\s*', next_line).group(0)
+                            actual_indent = re.match(r"^\s*", next_line).group(0)
                             if actual_indent == indent:
                                 new_lines.append(line)
                                 modified = True
@@ -73,12 +76,14 @@ class PylintFixerMixin:
                                 continue
                 new_lines.append(line)
                 i += 1
-            
+
             if modified:
                 file_path.write_text("\n".join(new_lines) + "\n", encoding="utf-8")
                 return True
             return False
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Failed to fix no-else-return in {file_path}: {e}")
             return False
 
@@ -91,23 +96,42 @@ class PylintFixerMixin:
             modified = False
             for line in lines:
                 sline = line.strip()
-                if sline.startswith("except") and sline.endswith(":") or (":" in sline and sline.startswith("except") and "#" in sline):
-                    if "Exception" in sline or "BaseException" in sline or sline.startswith("except:"):
+                if (
+                    sline.startswith("except")
+                    and sline.endswith(":")
+                    or (":" in sline and sline.startswith("except") and "#" in sline)
+                ):
+                    if (
+                        "Exception" in sline
+                        or "BaseException" in sline
+                        or sline.startswith("except:")
+                    ):
                         if "pylint: disable=" in line:
-                             updated_line = line
-                             if "broad-exception-caught" not in line and "broad-except" not in line:
-                                 updated_line = updated_line.replace("pylint: disable=", "pylint: disable=broad-exception-caught, ")
-                                 modified = True
-                             if "unused-variable" not in line:
-                                 updated_line = updated_line.replace("pylint: disable=", "pylint: disable=unused-variable, ")
-                                 modified = True
-                             new_lines.append(updated_line)
-                             continue
-                            
+                            updated_line = line
+                            if (
+                                "broad-exception-caught" not in line
+                                and "broad-except" not in line
+                            ):
+                                updated_line = updated_line.replace(
+                                    "pylint: disable=",
+                                    "pylint: disable=broad-exception-caught, ",
+                                )
+                                modified = True
+                            if "unused-variable" not in line:
+                                updated_line = updated_line.replace(
+                                    "pylint: disable=",
+                                    "pylint: disable=unused-variable, ",
+                                )
+                                modified = True
+                            new_lines.append(updated_line)
+                            continue
+
                         # If no disable, inject it
                         indent_match = re.match(r"^(\s*)", line)
                         indent = indent_match.group(1) if indent_match else ""
-                        new_lines.append(f"{indent}except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable")
+                        new_lines.append(
+                            f"{indent}except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable"
+                        )
                         modified = True
                     else:
                         new_lines.append(line)
@@ -118,6 +142,8 @@ class PylintFixerMixin:
                 file_path.write_text("\n".join(new_lines) + "\n", encoding="utf-8")
                 return True
             return False
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Failed to fix broad exception in {file_path}: {e}")
             return False

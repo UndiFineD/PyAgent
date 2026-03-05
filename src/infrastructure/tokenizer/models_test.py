@@ -33,45 +33,44 @@ except ImportError as e:
 
 def test_tokenizerbackend_exists():
     """Test that TokenizerBackend class exists and is importable."""
-    assert 'TokenizerBackend' in dir()
+    assert "TokenizerBackend" in dir()
 
 
 def test_specialtokenhandling_exists():
     """Test that SpecialTokenHandling class exists and is importable."""
-    assert 'SpecialTokenHandling' in dir()
+    assert "SpecialTokenHandling" in dir()
 
 
 def test_truncationstrategy_exists():
     """Test that TruncationStrategy class exists and is importable."""
-    assert 'TruncationStrategy' in dir()
+    assert "TruncationStrategy" in dir()
 
 
 def test_paddingstrategy_exists():
     """Test that PaddingStrategy class exists and is importable."""
-    assert 'PaddingStrategy' in dir()
+    assert "PaddingStrategy" in dir()
 
 
 def test_tokenizerconfig_exists():
     """Test that TokenizerConfig class exists and is importable."""
-    assert 'TokenizerConfig' in dir()
+    assert "TokenizerConfig" in dir()
 
 
 def test_tokenizerinfo_exists():
     """Test that TokenizerInfo class exists and is importable."""
-    assert 'TokenizerInfo' in dir()
+    assert "TokenizerInfo" in dir()
 
 
 def test_tokenizeresult_exists():
     """Test that TokenizeResult class exists and is importable."""
-    assert 'TokenizeResult' in dir()
+    assert "TokenizeResult" in dir()
 
 
 def test_batchtokenizeresult_exists():
     """Test that BatchTokenizeResult class exists and is importable."""
-    assert 'BatchTokenizeResult' in dir()
+    assert "BatchTokenizeResult" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

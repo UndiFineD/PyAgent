@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,19 +39,19 @@ class DataParsingCore:
             # Simple pattern-based extraction
             start_pattern = f"<{tag_pattern}>"
             end_pattern = f"</{tag_pattern}>"
-            
+
             start_pos = xml.find(start_pattern)
             if start_pos == -1:
                 return None
-                
+
             start_pos += len(start_pattern)
             end_pos = xml.find(end_pattern, start_pos)
             if end_pos == -1:
                 return None
-                
+
             value = xml[start_pos:end_pos]
             return self.html_unescape(value)
-            
+
         except Exception:
             return None
 

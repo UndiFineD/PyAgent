@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_weather_apitool_exists():
     """Test that Weather_APITool class exists and is importable."""
-    assert 'Weather_APITool' in dir()
+    assert "Weather_APITool" in dir()
 
 
 def test_weather_apitool_instantiation():
@@ -45,4 +45,3 @@ def test_weather_apitool_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

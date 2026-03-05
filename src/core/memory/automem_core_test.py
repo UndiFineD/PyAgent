@@ -33,30 +33,29 @@ except ImportError as e:
 
 def test_memoryconfig_exists():
     """Test that MemoryConfig class exists and is importable."""
-    assert 'MemoryConfig' in dir()
+    assert "MemoryConfig" in dir()
 
 
 def test_memory_exists():
     """Test that Memory class exists and is importable."""
-    assert 'Memory' in dir()
+    assert "Memory" in dir()
 
 
 def test_automemcore_exists():
     """Test that AutoMemCore class exists and is importable."""
-    assert 'AutoMemCore' in dir()
+    assert "AutoMemCore" in dir()
 
 
 def test_memoryconsolidator_exists():
     """Test that MemoryConsolidator class exists and is importable."""
-    assert 'MemoryConsolidator' in dir()
+    assert "MemoryConsolidator" in dir()
 
 
 def test_pointstruct_exists():
     """Test that PointStruct class exists and is importable."""
-    assert 'PointStruct' in dir()
+    assert "PointStruct" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

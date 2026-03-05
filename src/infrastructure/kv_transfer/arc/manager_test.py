@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_arcoffloadmanager_exists():
     """Test that ARCOffloadManager class exists and is importable."""
-    assert 'ARCOffloadManager' in dir()
+    assert "ARCOffloadManager" in dir()
 
 
 def test_adaptivearcmanager_exists():
     """Test that AdaptiveARCManager class exists and is importable."""
-    assert 'AdaptiveARCManager' in dir()
+    assert "AdaptiveARCManager" in dir()
 
 
 def test_asyncarcmanager_exists():
     """Test that AsyncARCManager class exists and is importable."""
-    assert 'AsyncARCManager' in dir()
+    assert "AsyncARCManager" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

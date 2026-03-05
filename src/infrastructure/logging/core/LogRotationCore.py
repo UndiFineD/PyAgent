@@ -6,6 +6,7 @@ import shutil
 from typing import Optional
 from datetime import datetime
 
+
 class LogRotationCore:
     """
     LogRotationCore handles rolling log file strategies with compression.
@@ -37,12 +38,12 @@ class LogRotationCore:
         try:
             # Rename for rotation
             shutil.move(file_path, rotated_path)
-            
+
             # Compress
-            with open(rotated_path, 'rb') as f_in:
-                with gzip.open(compressed_path, 'wb') as f_out:
+            with open(rotated_path, "rb") as f_in:
+                with gzip.open(compressed_path, "wb") as f_out:
                     shutil.copyfileobj(f_in, f_out)
-            
+
             # Remove uncompressed rotated file
             os.remove(rotated_path)
             return compressed_path

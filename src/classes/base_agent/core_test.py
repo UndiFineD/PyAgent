@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_codequalityreport_exists():
     """Test that CodeQualityReport class exists and is importable."""
-    assert 'CodeQualityReport' in dir()
+    assert "CodeQualityReport" in dir()
 
 
 def test_basecore_exists():
     """Test that BaseCore class exists and is importable."""
-    assert 'BaseCore' in dir()
+    assert "BaseCore" in dir()
 
 
 def test_logiccore_exists():
     """Test that LogicCore class exists and is importable."""
-    assert 'LogicCore' in dir()
+    assert "LogicCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

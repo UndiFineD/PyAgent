@@ -15,5 +15,6 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "EpisodeStats"), "EpisodeStats missing"
     assert hasattr(mod, "RLEnvironment"), "RLEnvironment missing"
-    assert hasattr(mod, "CodeImprovementEnvironment"), "CodeImprovementEnvironment missing"
-
+    assert hasattr(
+        mod, "CodeImprovementEnvironment"
+    ), "CodeImprovementEnvironment missing"

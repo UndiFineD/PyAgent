@@ -30,6 +30,7 @@ logger = logging.getLogger(__name__)
 
 class TaskStatus(Enum):
     """Status of a pipeline task"""
+
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
@@ -39,6 +40,7 @@ class TaskStatus(Enum):
 
 class TaskPriority(Enum):
     """Priority levels for tasks"""
+
     LOW = 1
     NORMAL = 2
     HIGH = 3
@@ -48,6 +50,7 @@ class TaskPriority(Enum):
 @dataclass
 class PipelineTask:
     """Represents a task in the async pipeline"""
+
     task_id: str
     name: str
     priority: TaskPriority = TaskPriority.NORMAL
@@ -74,6 +77,7 @@ class PipelineTask:
 @dataclass
 class PipelineConfig:
     """Configuration for the async pipeline"""
+
     max_concurrent_tasks: int = 10
     max_queue_size: int = 1000
     task_timeout: float = 300.0  # 5 minutes
@@ -91,7 +95,9 @@ class AsyncPipelineCore:
     def __init__(self, config: PipelineConfig = None):
         self.config = config or PipelineConfig()
         self.tasks: Dict[str, PipelineTask] = {}
-        self.task_queue: asyncio.PriorityQueue = asyncio.PriorityQueue(maxsize=self.config.max_queue_size)
+        self.task_queue: asyncio.PriorityQueue = asyncio.PriorityQueue(
+            maxsize=self.config.max_queue_size
+        )
         self.running_tasks: Dict[str, asyncio.Task] = {}
         self.completed_tasks: Dict[str, PipelineTask] = {}
         self.task_handlers: Dict[str, Callable[[PipelineTask], Awaitable[Any]]] = {}
@@ -128,7 +134,9 @@ class AsyncPipelineCore:
         self.executor.shutdown(wait=True)
         logger.info("Async Pipeline Core stopped")
 
-    def register_handler(self, task_type: str, handler: Callable[[PipelineTask], Awaitable[Any]]):
+    def register_handler(
+        self, task_type: str, handler: Callable[[PipelineTask], Awaitable[Any]]
+    ):
         """Register a handler for a specific task type"""
         self.task_handlers[task_type] = handler
         logger.info(f"Registered handler for task type: {task_type}")
@@ -168,17 +176,28 @@ class AsyncPipelineCore:
 
     def get_pending_tasks(self) -> List[PipelineTask]:
         """Get all pending tasks"""
-        return [task for task in self.tasks.values() if task.status == TaskStatus.PENDING]
+        return [
+            task for task in self.tasks.values() if task.status == TaskStatus.PENDING
+        ]
 
     def get_running_tasks(self) -> List[PipelineTask]:
         """Get all running tasks"""
-        return [task for task in self.tasks.values() if task.status == TaskStatus.RUNNING]
+        return [
+            task for task in self.tasks.values() if task.status == TaskStatus.RUNNING
+        ]
 
     def get_completed_tasks(self) -> List[PipelineTask]:
         """Get all completed tasks"""
-        return [task for task in self.tasks.values() if task.status in [TaskStatus.COMPLETED, TaskStatus.FAILED, TaskStatus.CANCELLED]]
+        return [
+            task
+            for task in self.tasks.values()
+            if task.status
+            in [TaskStatus.COMPLETED, TaskStatus.FAILED, TaskStatus.CANCELLED]
+        ]
 
-    async def wait_for_task(self, task_id: str, timeout: Optional[float] = None) -> PipelineTask:
+    async def wait_for_task(
+        self, task_id: str, timeout: Optional[float] = None
+    ) -> PipelineTask:
         """Wait for a task to complete"""
         start_time = time.time()
 
@@ -187,15 +206,23 @@ class AsyncPipelineCore:
             if task is None:
                 raise ValueError(f"Task {task_id} not found")
 
-            if task.status in [TaskStatus.COMPLETED, TaskStatus.FAILED, TaskStatus.CANCELLED]:
+            if task.status in [
+                TaskStatus.COMPLETED,
+                TaskStatus.FAILED,
+                TaskStatus.CANCELLED,
+            ]:
                 return task
 
             if timeout and (time.time() - start_time) > timeout:
-                raise asyncio.TimeoutError(f"Task {task_id} timed out after {timeout} seconds")
+                raise asyncio.TimeoutError(
+                    f"Task {task_id} timed out after {timeout} seconds"
+                )
 
             await asyncio.sleep(0.1)  # Poll every 100ms
 
-    async def wait_for_all(self, task_ids: List[str], timeout: Optional[float] = None) -> List[PipelineTask]:
+    async def wait_for_all(
+        self, task_ids: List[str], timeout: Optional[float] = None
+    ) -> List[PipelineTask]:
         """Wait for all tasks to complete"""
         start_time = time.time()
         results = []
@@ -206,7 +233,11 @@ class AsyncPipelineCore:
                     continue
 
                 task = self.get_task_status(task_id)
-                if task and task.status in [TaskStatus.COMPLETED, TaskStatus.FAILED, TaskStatus.CANCELLED]:
+                if task and task.status in [
+                    TaskStatus.COMPLETED,
+                    TaskStatus.FAILED,
+                    TaskStatus.CANCELLED,
+                ]:
                     results.append(task)
 
             if timeout and (time.time() - start_time) > timeout:
@@ -225,8 +256,7 @@ class AsyncPipelineCore:
                 # Get next task from queue with timeout
                 try:
                     priority, task_id = await asyncio.wait_for(
-                        self.task_queue.get(),
-                        timeout=1.0
+                        self.task_queue.get(), timeout=1.0
                     )
                 except asyncio.TimeoutError:
                     continue
@@ -237,7 +267,10 @@ class AsyncPipelineCore:
                     continue
 
                 # Check dependencies
-                if self.config.enable_dependency_resolution and not self._check_dependencies(task):
+                if (
+                    self.config.enable_dependency_resolution
+                    and not self._check_dependencies(task)
+                ):
                     # Dependencies not met, re-queue
                     await self.task_queue.put((priority, task_id))
                     await asyncio.sleep(0.5)  # Brief delay before retry
@@ -270,7 +303,9 @@ class AsyncPipelineCore:
             logger.info(f"Executing task: {task.task_id} ({task.name})")
 
             # Get task type from metadata or name
-            task_type = task.metadata.get('task_type', task.name.lower().replace(' ', '_'))
+            task_type = task.metadata.get(
+                "task_type", task.name.lower().replace(" ", "_")
+            )
 
             # Get handler
             handler = self.task_handlers.get(task_type)
@@ -280,15 +315,16 @@ class AsyncPipelineCore:
             # Execute with timeout
             try:
                 result = await asyncio.wait_for(
-                    handler(task),
-                    timeout=self.config.task_timeout
+                    handler(task), timeout=self.config.task_timeout
                 )
                 task.result = result
                 task.status = TaskStatus.COMPLETED
                 logger.info(f"Task completed: {task.task_id}")
 
             except asyncio.TimeoutError:
-                raise TimeoutError(f"Task timed out after {self.config.task_timeout} seconds")
+                raise TimeoutError(
+                    f"Task timed out after {self.config.task_timeout} seconds"
+                )
 
         except Exception as e:
             logger.error(f"Task failed: {task.task_id} - {e}")
@@ -299,7 +335,9 @@ class AsyncPipelineCore:
             if task.retry_count < task.max_retries:
                 task.retry_count += 1
                 task.status = TaskStatus.PENDING
-                logger.info(f"Retrying task: {task.task_id} (attempt {task.retry_count}/{task.max_retries})")
+                logger.info(
+                    f"Retrying task: {task.task_id} (attempt {task.retry_count}/{task.max_retries})"
+                )
 
                 # Re-queue with backoff
                 await asyncio.sleep(self.config.retry_delay * task.retry_count)
@@ -313,34 +351,38 @@ class AsyncPipelineCore:
                 del self.running_tasks[task.task_id]
 
     # Convenience methods for common coding tasks
-    async def submit_code_task(self, name: str, code: str, task_type: str = "execute_code",
-                              dependencies: List[str] = None, priority: TaskPriority = TaskPriority.NORMAL) -> str:
+    async def submit_code_task(
+        self,
+        name: str,
+        code: str,
+        task_type: str = "execute_code",
+        dependencies: List[str] = None,
+        priority: TaskPriority = TaskPriority.NORMAL,
+    ) -> str:
         """Submit a coding task"""
         task = PipelineTask(
             task_id=f"{task_type}_{int(time.time() * 1000)}",
             name=name,
             priority=priority,
             dependencies=dependencies or [],
-            metadata={
-                'task_type': task_type,
-                'code': code
-            }
+            metadata={"task_type": task_type, "code": code},
         )
         return await self.submit_task(task)
 
-    async def submit_test_task(self, name: str, test_code: str, dependencies: List[str] = None) -> str:
+    async def submit_test_task(
+        self, name: str, test_code: str, dependencies: List[str] = None
+    ) -> str:
         """Submit a testing task"""
         return await self.submit_code_task(name, test_code, "run_tests", dependencies)
 
-    async def submit_lint_task(self, name: str, files: List[str], dependencies: List[str] = None) -> str:
+    async def submit_lint_task(
+        self, name: str, files: List[str], dependencies: List[str] = None
+    ) -> str:
         """Submit a linting task"""
         task = PipelineTask(
             task_id=f"lint_{int(time.time() * 1000)}",
             name=name,
             dependencies=dependencies or [],
-            metadata={
-                'task_type': 'lint',
-                'files': files
-            }
+            metadata={"task_type": "lint", "files": files},
         )
         return await self.submit_task(task)

@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_debateagent_exists():
     """Test that DebateAgent class exists and is importable."""
-    assert 'DebateAgent' in dir()
+    assert "DebateAgent" in dir()
 
 
 def test_debateconfig_exists():
     """Test that DebateConfig class exists and is importable."""
-    assert 'DebateConfig' in dir()
+    assert "DebateConfig" in dir()
 
 
 def test_debateworkpattern_exists():
     """Test that DebateWorkPattern class exists and is importable."""
-    assert 'DebateWorkPattern' in dir()
+    assert "DebateWorkPattern" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

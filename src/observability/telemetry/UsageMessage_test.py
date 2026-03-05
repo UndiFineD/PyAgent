@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_usagecontext_exists():
     """Test that UsageContext class exists and is importable."""
-    assert 'UsageContext' in dir()
+    assert "UsageContext" in dir()
 
 
 def test_usagemessage_exists():
     """Test that UsageMessage class exists and is importable."""
-    assert 'UsageMessage' in dir()
+    assert "UsageMessage" in dir()
 
 
 def test_set_runtime_usage_data_exists():
@@ -104,4 +104,3 @@ def test_get_platform_summary_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

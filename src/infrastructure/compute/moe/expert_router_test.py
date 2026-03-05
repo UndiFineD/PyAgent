@@ -23,4 +23,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "SoftMoERouter"), "SoftMoERouter missing"
     assert hasattr(mod, "AdaptiveRouter"), "AdaptiveRouter missing"
     assert hasattr(mod, "RoutingSimulator"), "RoutingSimulator missing"
-

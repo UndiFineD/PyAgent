@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,16 +22,31 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Optional
 import time
-from .core_enums import (AuthMethod, FilePriority,
-                         SerializationFormat, EnvironmentStatus, EnvironmentIsolation)
+from .core_enums import (
+    AuthMethod,
+    FilePriority,
+    SerializationFormat,
+    EnvironmentStatus,
+    EnvironmentIsolation,
+)
 from ._factories import (
-    _empty_agent_event_handlers, _empty_dict_str_any,
-    _empty_dict_str_callable_any_any, _empty_dict_str_configprofile,
-    _empty_dict_str_filepriority, _empty_dict_str_float,
-    _empty_dict_str_health_checks, _empty_dict_str_int,
-    _empty_dict_str_modelconfig, _empty_dict_str_quality_criteria,
-    _empty_dict_str_str, _empty_list_dict_str_any, _empty_list_float,
-    _empty_list_int, _empty_list_str, _empty_routes_list)
+    _empty_agent_event_handlers,
+    _empty_dict_str_any,
+    _empty_dict_str_callable_any_any,
+    _empty_dict_str_configprofile,
+    _empty_dict_str_filepriority,
+    _empty_dict_str_float,
+    _empty_dict_str_health_checks,
+    _empty_dict_str_int,
+    _empty_dict_str_modelconfig,
+    _empty_dict_str_quality_criteria,
+    _empty_dict_str_str,
+    _empty_list_dict_str_any,
+    _empty_list_float,
+    _empty_list_int,
+    _empty_list_str,
+    _empty_routes_list,
+)
 
 __all__ = [
     "CacheEntry",
@@ -109,8 +125,12 @@ class SerializationConfig:
 class FilePriorityConfig:
     """Configuration for file priority."""
 
-    path_patterns: dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
-    extension_priorities: dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
+    path_patterns: dict[str, FilePriority] = field(
+        default_factory=_empty_dict_str_filepriority
+    )
+    extension_priorities: dict[str, FilePriority] = field(
+        default_factory=_empty_dict_str_filepriority
+    )
     default_priority: FilePriority = FilePriority.NORMAL
 
 
@@ -134,7 +154,7 @@ class ValidationRule:
     validator: Callable[[str, Path], bool] | None = None
     required: bool = False
     file_pattern: str = ""  # Alias for backward compatibility
-    error_message: str = "" # Alias for backward compatibility
+    error_message: str = ""  # Alias for backward compatibility
 
     def __post_init__(self) -> None:
         if not self.pattern and self.file_pattern:

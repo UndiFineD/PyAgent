@@ -116,10 +116,14 @@ class LoraManager:
             self._update_lru(name)
             self._stats["total_loads"] += 1
 
-            logger.info("Activated LoRA adapter: %s (%.1fms)", name, adapter.load_time_ms)
+            logger.info(
+                "Activated LoRA adapter: %s (%.1fms)", name, adapter.load_time_ms
+            )
             return True
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             adapter.state = AdapterState.ERROR
             logger.error("Failed to activate adapter %s: %s", name, e)
             return False
@@ -185,7 +189,11 @@ class LoraManager:
 
     def get_active_adapters(self) -> List[LoraAdapter]:
         """Get list of currently active adapters."""
-        return [self.registry.get(name) for name in self._active_adapters if self.registry.get(name) is not None]
+        return [
+            self.registry.get(name)
+            for name in self._active_adapters
+            if self.registry.get(name) is not None
+        ]
 
     def list_adapters(self) -> List[Dict[str, Any]]:
         """List all registered adapters with status."""
@@ -229,5 +237,8 @@ class LoraManager:
             "active_count": len(self._active_adapters),
             "registered_count": len(self.registry.list_adapters()),
             "max_loras": self.config.max_loras,
-            "hit_rate": (self._stats["cache_hits"] / max(1, self._stats["cache_hits"] + self._stats["cache_misses"])),
+            "hit_rate": (
+                self._stats["cache_hits"]
+                / max(1, self._stats["cache_hits"] + self._stats["cache_misses"])
+            ),
         }

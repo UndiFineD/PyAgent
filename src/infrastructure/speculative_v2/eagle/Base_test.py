@@ -33,25 +33,24 @@ except ImportError as e:
 
 def test_inputbuffer_exists():
     """Test that InputBuffer class exists and is importable."""
-    assert 'InputBuffer' in dir()
+    assert "InputBuffer" in dir()
 
 
 def test_cpugpubuffer_exists():
     """Test that CpuGpuBuffer class exists and is importable."""
-    assert 'CpuGpuBuffer' in dir()
+    assert "CpuGpuBuffer" in dir()
 
 
 def test_attentionmetadata_exists():
     """Test that AttentionMetadata class exists and is importable."""
-    assert 'AttentionMetadata' in dir()
+    assert "AttentionMetadata" in dir()
 
 
 def test_treeattentionmetadata_exists():
     """Test that TreeAttentionMetadata class exists and is importable."""
-    assert 'TreeAttentionMetadata' in dir()
+    assert "TreeAttentionMetadata" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

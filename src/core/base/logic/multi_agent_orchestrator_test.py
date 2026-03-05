@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_agentmetadata_exists():
     """Test that AgentMetadata class exists and is importable."""
-    assert 'AgentMetadata' in dir()
+    assert "AgentMetadata" in dir()
 
 
 def test_taskresult_exists():
     """Test that TaskResult class exists and is importable."""
-    assert 'TaskResult' in dir()
+    assert "TaskResult" in dir()
 
 
 def test_multiagentorchestratorcore_exists():
     """Test that MultiAgentOrchestratorCore class exists and is importable."""
-    assert 'MultiAgentOrchestratorCore' in dir()
+    assert "MultiAgentOrchestratorCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

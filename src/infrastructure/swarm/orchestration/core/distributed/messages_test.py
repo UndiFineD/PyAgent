@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ResponseMessage"), "ResponseMessage missing"
     assert hasattr(mod, "ControlMessage"), "ControlMessage missing"
     assert hasattr(mod, "MetricsMessage"), "MetricsMessage missing"
-

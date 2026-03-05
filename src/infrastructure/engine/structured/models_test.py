@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "FSMState"), "FSMState missing"
     assert hasattr(mod, "FSMTransitionTable"), "FSMTransitionTable missing"
     assert hasattr(mod, "TokenMask"), "TokenMask missing"
-

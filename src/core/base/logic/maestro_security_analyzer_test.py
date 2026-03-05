@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_agentnode_exists():
     """Test that AgentNode class exists and is importable."""
-    assert 'AgentNode' in dir()
+    assert "AgentNode" in dir()
 
 
 def test_threatassessment_exists():
     """Test that ThreatAssessment class exists and is importable."""
-    assert 'ThreatAssessment' in dir()
+    assert "ThreatAssessment" in dir()
 
 
 def test_maestrosecurityanalyzer_exists():
     """Test that MAESTROSecurityAnalyzer class exists and is importable."""
-    assert 'MAESTROSecurityAnalyzer' in dir()
+    assert "MAESTROSecurityAnalyzer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

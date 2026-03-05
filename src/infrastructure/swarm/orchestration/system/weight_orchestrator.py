@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,17 +38,17 @@ class WeightOrchestrator(BaseAgent):
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.weights_registry_path = Path(self._workspace_root) / "data/memory/agent_store/weights_registry.json"
+        self.weights_registry_path = (
+            Path(self._workspace_root) / "data/memory/agent_store/weights_registry.json"
+        )
         self.active_adapters: dict[str, str] = {}  # agent_name -> adapter_name
         self._load_registry()
-        self._system_prompt = (
-            "You are the Weight Orchestrator. You manage model adapters and neural weights across the fleet."
-        )
+        self._system_prompt = "You are the Weight Orchestrator. You manage model adapters and neural weights across the fleet."
 
     def _load_registry(self) -> bool:
         if self.weights_registry_path.exists():
             try:
-                with open(self.weights_registry_path, encoding='utf-8') as f:
+                with open(self.weights_registry_path, encoding="utf-8") as f:
                     data = json.load(f)
                     self.active_adapters = data.get("active_adapters", {})
             except (IOError, OSError, json.JSONDecodeError, UnicodeDecodeError) as e:
@@ -56,7 +57,7 @@ class WeightOrchestrator(BaseAgent):
     def _save_registry(self) -> bool:
         try:
             self.weights_registry_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(self.weights_registry_path, 'w', encoding='utf-8') as f:
+            with open(self.weights_registry_path, "w", encoding="utf-8") as f:
                 json.dump({"active_adapters": self.active_adapters}, f, indent=4)
         except (IOError, OSError, TypeError, UnicodeEncodeError) as e:
             logging.error(f"WeightOrchestrator: Failed to save registry: {e}")
@@ -64,7 +65,9 @@ class WeightOrchestrator(BaseAgent):
     @as_tool
     def activate_adapter(self, agent_name: str, adapter_name: str) -> bool:
         """Assigns an adapter to an agent and triggers a 'weights_updated' signal."""
-        logging.info(f"WeightOrchestrator: Activating adapter '{adapter_name}' for agent '{agent_name}'")
+        logging.info(
+            f"WeightOrchestrator: Activating adapter '{adapter_name}' for agent '{agent_name}'"
+        )
         self.active_adapters[agent_name] = adapter_name
         self._save_registry()
         # In a real system, this would trigger a signal that the agent's Proxy or Backend listens to

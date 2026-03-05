@@ -4,6 +4,7 @@ import hashlib
 from typing import List, Set
 from dataclasses import dataclass
 
+
 @dataclass
 class Lesson:
     error_pattern: str
@@ -11,11 +12,12 @@ class Lesson:
     solution: str
     impact_score: float = 0.5
 
+
 class LessonCore:
     """Pure logic for cross-fleet lesson aggregation.
     Uses bloom-filter-like hashing to track known failure modes.
     """
-    
+
     def __init__(self) -> None:
         self.known_failures: set[str] = set()
 
@@ -36,7 +38,13 @@ class LessonCore:
         self.known_failures.add(f_hash)
         return f_hash
 
-    def get_related_lessons(self, error_msg: str, all_lessons: list[Lesson]) -> list[Lesson]:
+    def get_related_lessons(
+        self, error_msg: str, all_lessons: list[Lesson]
+    ) -> list[Lesson]:
         """Returns lessons that match the normalized error pattern."""
         target_hash = self.generate_failure_hash(error_msg)
-        return [lesson for lesson in all_lessons if self.generate_failure_hash(lesson.error_pattern) == target_hash]
+        return [
+            lesson
+            for lesson in all_lessons
+            if self.generate_failure_hash(lesson.error_pattern) == target_hash
+        ]

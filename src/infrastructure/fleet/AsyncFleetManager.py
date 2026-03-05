@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -39,9 +40,16 @@ class AsyncFleetManager(FleetManager):
         self.active_workflows: dict[str, WorkflowState] = {}
         self._migration_events: dict[str, asyncio.Event] = {}
 
-    async def execute_workflow_async(self, task: str, workflow_steps: list[dict[str, Any]], workflow_id: str | None = None) -> str:
+    async def execute_workflow_async(
+        self,
+        task: str,
+        workflow_steps: list[dict[str, Any]],
+        workflow_id: str | None = None,
+    ) -> str:
         """Runs multiple agent steps in parallel with dependency-aware batching (Phase 232)."""
-        logging.info(f"Starting parallel workflow: {task} with {len(workflow_steps)} steps.")
+        logging.info(
+            f"Starting parallel workflow: {task} with {len(workflow_steps)} steps."
+        )
 
         if not workflow_id:
             workflow_id = f"async_wf_{int(time.time())}"
@@ -49,7 +57,9 @@ class AsyncFleetManager(FleetManager):
         # Phase 239: Initialize or retrieve workflow state
         if workflow_id in self.active_workflows:
             state = self.active_workflows[workflow_id]
-            logging.info(f"Resuming workflow {workflow_id} from step index {state.get('next_batch_idx', 0)}")
+            logging.info(
+                f"Resuming workflow {workflow_id} from step index {state.get('next_batch_idx', 0)}"
+            )
         else:
             state = WorkflowState(task_id=workflow_id, original_request=task)
             state.set("next_batch_idx", 0)
@@ -76,7 +86,9 @@ class AsyncFleetManager(FleetManager):
             logging.error(f"Workflow dependency resolution failed: {e}")
             return f"Error: Invalid workflow graph - {e}"
 
-        logging.info(f"Resolved workflow into {len(batches)} parallel execution batches.")
+        logging.info(
+            f"Resolved workflow into {len(batches)} parallel execution batches."
+        )
 
         all_results = state.get("all_results")
         start_idx = state.get("next_batch_idx")
@@ -87,7 +99,9 @@ class AsyncFleetManager(FleetManager):
 
             # Phase 239: Check for migration signal
             if state.get("migration_pending"):
-                logging.info(f"Migration signal received for {workflow_id}. Suspending at batch {batch_idx}.")
+                logging.info(
+                    f"Migration signal received for {workflow_id}. Suspending at batch {batch_idx}."
+                )
                 state.set("next_batch_idx", batch_idx)
                 if workflow_id in self._migration_events:
                     self._migration_events[workflow_id].set()
@@ -95,7 +109,7 @@ class AsyncFleetManager(FleetManager):
 
             logging.info(f"Executing batch {batch_idx + 1}/{len(batches)}: {batch}")
             tasks = [
-                self._run_single_step(step_map[step_id], workflow_id) 
+                self._run_single_step(step_map[step_id], workflow_id)
                 for step_id in batch
             ]
 
@@ -106,10 +120,16 @@ class AsyncFleetManager(FleetManager):
                 agent_name = step_map[step_id].get("agent")
 
                 if isinstance(res, Exception):
-                    logging.error(f"Async failure in batch {batch_idx+1} for {agent_name}: {res}")
-                    all_results.append(f"### Error from {agent_name} ({step_id})\n{str(res)}\n")
+                    logging.error(
+                        f"Async failure in batch {batch_idx+1} for {agent_name}: {res}"
+                    )
+                    all_results.append(
+                        f"### Error from {agent_name} ({step_id})\n{str(res)}\n"
+                    )
                 else:
-                    all_results.append(f"### Results from {agent_name} ({step_id})\n{res}\n")
+                    all_results.append(
+                        f"### Results from {agent_name} ({step_id})\n{res}\n"
+                    )
 
         # Cleanup on completion
         if workflow_id in self.active_workflows:
@@ -117,7 +137,9 @@ class AsyncFleetManager(FleetManager):
 
         return f"# Parallel Workflow Summary: {task}\n\n" + "\n".join(all_results)
 
-    async def migrate_workflow(self, workflow_id: str, remote_manager: AsyncFleetManager) -> bool:
+    async def migrate_workflow(
+        self, workflow_id: str, remote_manager: AsyncFleetManager
+    ) -> bool:
         """Phase 239: Migrates an active workflow to another manager without downtime."""
         if workflow_id not in self.active_workflows:
             logging.error(f"Cannot migrate {workflow_id}: Not found.")
@@ -174,6 +196,7 @@ class AsyncFleetManager(FleetManager):
 
         try:
             from src.infrastructure.orchestration.LockManager import LockManager
+
             locker = LockManager()
 
             # Phase 152: Recursive async lock acquisition
@@ -192,14 +215,22 @@ class AsyncFleetManager(FleetManager):
                     return await run_with_async_locks(res_list[1:])
 
             res = await run_with_async_locks(resources)
-            self.telemetry.end_trace(trace_id, agent_name, action_name, status="success")
+            self.telemetry.end_trace(
+                trace_id, agent_name, action_name, status="success"
+            )
 
             if isinstance(res, str):
                 res = await self._pre_commit_audit(res, agent_name)
 
             return res
         except Exception as e:
-            self.telemetry.end_trace(trace_id, agent_name, action_name, status="error", metadata={"error": str(e)})
+            self.telemetry.end_trace(
+                trace_id,
+                agent_name,
+                action_name,
+                status="error",
+                metadata={"error": str(e)},
+            )
             raise e
 
     async def _pre_commit_audit(self, content: str, agent_name: str) -> str:
@@ -216,7 +247,9 @@ class AsyncFleetManager(FleetManager):
             # 1. License Check (Phase 238)
             compliance = audit_agent.check_license_compliance(content)
             if not compliance["is_compliant"]:
-                logging.warning(f"Legal Violation in {agent_name} output: {compliance['violations']}")
+                logging.warning(
+                    f"Legal Violation in {agent_name} output: {compliance['violations']}"
+                )
                 return f"[LEGAL_BLOCK]: Output from {agent_name} contains blacklisted licenses ({', '.join(compliance['violations'])}). REDACTED."
 
             # 2. Liability Check
@@ -224,7 +257,10 @@ class AsyncFleetManager(FleetManager):
             if "WARNING" in liability:
                 logging.warning(f"Liability Risk in {agent_name} output: {liability}")
                 # Append disclaimer instead of blocking
-                return content + "\n\n---\n*DISCLAIMER: This output contains language flagged for liability risk and has not been verified for legal accuracy.*"
+                return (
+                    content
+                    + "\n\n---\n*DISCLAIMER: This output contains language flagged for liability risk and has not been verified for legal accuracy.*"
+                )
 
         except Exception as e:
             logging.debug(f"Audit failed (Agent likely not found or errored): {e}")
@@ -232,7 +268,7 @@ class AsyncFleetManager(FleetManager):
         return content
 
     if __name__ == "__main__":
-    # Test script
+        # Test script
         import asyncio
         from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
         from src.logic.agents.security.SecurityGuardAgent import SecurityGuardAgent
@@ -243,9 +279,9 @@ class AsyncFleetManager(FleetManager):
         afleet.register_agent("S1", SecurityGuardAgent)
 
         wf = [
-        {"agent": "K1", "action": "improve_content", "args": ["agent"]},
-        {"agent": "S1", "action": "improve_content", "args": ["clean code"]}
-    ]
+            {"agent": "K1", "action": "improve_content", "args": ["agent"]},
+            {"agent": "S1", "action": "improve_content", "args": ["clean code"]},
+        ]
 
     async def run_test() -> None:
         report = await afleet.execute_workflow_async("Parallel Test", wf)

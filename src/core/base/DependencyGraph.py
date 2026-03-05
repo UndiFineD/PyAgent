@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,6 +23,7 @@ import graphlib
 
 __version__ = VERSION
 
+
 class DependencyGraph:
     """Resolve agent dependencies for ordered execution.
 
@@ -37,7 +39,7 @@ class DependencyGraph:
         """Initialize dependency graph."""
         self._nodes: set[str] = set()
         self._edges: dict[str, set[str]] = {}  # node -> dependencies (must run first)
-        self._resources: dict[str, set[str]] = {} # node -> set of resource URIs
+        self._resources: dict[str, set[str]] = {}  # node -> set of resource URIs
 
     def add_node(self, name: str, resources: list[str] | None = None) -> None:
         """Add a node.
@@ -81,7 +83,7 @@ class DependencyGraph:
 
         # TopologicalSorter expects {node: dependencies}
         ts = graphlib.TopologicalSorter(self._edges)
-        
+
         try:
             ts.prepare()
         except graphlib.CycleError as e:
@@ -94,16 +96,16 @@ class DependencyGraph:
                 break
             batches.append(ready)
             ts.done(*ready)
-            
+
         return batches
 
     def _refine_batch_by_resources(self, batch: list[str]) -> list[list[str]]:
         """Splits a batch into multiple sequential sub-batches to avoid resource collisions."""
         refined: list[list[str]] = []
-        
+
         for node in batch:
             node_resources = self._resources.get(node, set())
-            
+
             # Find the first batch where this node doesn't collide
             placed = False
             for sub_batch in refined:
@@ -114,13 +116,13 @@ class DependencyGraph:
                     if node_resources.intersection(other_resources):
                         collision = True
                         break
-                
+
                 if not collision:
                     sub_batch.append(node)
                     placed = True
                     break
-            
+
             if not placed:
                 refined.append([node])
-                
+
         return refined

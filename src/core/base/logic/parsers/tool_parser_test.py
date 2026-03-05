@@ -22,4 +22,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ToolParserManager"), "ToolParserManager missing"
     assert hasattr(mod, "tool_parser"), "tool_parser missing"
     assert hasattr(mod, "extract_tool_calls"), "extract_tool_calls missing"
-

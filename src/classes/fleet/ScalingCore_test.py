@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_scalingcore_exists():
     """Test that ScalingCore class exists and is importable."""
-    assert 'ScalingCore' in dir()
+    assert "ScalingCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

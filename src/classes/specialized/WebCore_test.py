@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_webcore_exists():
     """Test that WebCore class exists and is importable."""
-    assert 'WebCore' in dir()
+    assert "WebCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

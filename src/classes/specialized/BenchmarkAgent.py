@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,15 +25,19 @@ import logging
 from typing import Dict, List, Any, Optional
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
-from src.logic.agents.development.core.BenchmarkCore import BenchmarkCore, BenchmarkResult
+from src.logic.agents.development.core.BenchmarkCore import (
+    BenchmarkCore,
+    BenchmarkResult,
+)
 
 __version__ = VERSION
+
 
 class BenchmarkAgent(BaseAgent):
     """Benchmarks the performance of the agent fleet.
     Integrated with BenchmarkCore for regression testing and baseline tracking.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.core = BenchmarkCore()
@@ -48,24 +53,26 @@ class BenchmarkAgent(BaseAgent):
         )
 
     @as_tool
-    def run_sgi_benchmark(self, agent_name: str, scientific_task: str) -> dict[str, Any]:
+    def run_sgi_benchmark(
+        self, agent_name: str, scientific_task: str
+    ) -> dict[str, Any]:
         """Runs an SGI-Bench scientific inquiry evaluation on an agent."""
         logging.info(f"BENCHMARK: Running SGI inquiry for {agent_name}")
-        
+
         # In a real system, we'd inspect the agent's internal DCAP metadata
         scores = {
-            "deliberation_score": 0.85, # Mock
+            "deliberation_score": 0.85,  # Mock
             "conception_score": 0.92,
             "action_score": 0.78,
             "perception_score": 0.88,
-            "sgi_index": 0.86
+            "sgi_index": 0.86,
         }
-        
+
         result = {
             "agent": agent_name,
             "task": scientific_task,
             "metrics": scores,
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }
         self.results.append(result)
         return result
@@ -89,7 +96,9 @@ class BenchmarkAgent(BaseAgent):
         )
 
     @as_tool
-    def evaluate_model_on_benchmark(self, model_name: str, benchmark_suite: str) -> dict[str, Any]:
+    def evaluate_model_on_benchmark(
+        self, model_name: str, benchmark_suite: str
+    ) -> dict[str, Any]:
         """Runs a standard benchmark suite (MMLU, GSM8K, SGI-Bench) against a specific model."""
         logging.info(f"BENCHMARK: Evaluating {model_name} on {benchmark_suite}")
         # Standard score ranges
@@ -98,44 +107,48 @@ class BenchmarkAgent(BaseAgent):
             "suite": benchmark_suite,
             "accuracy": "78.4%",
             "reasoning_depth": "Advanced",
-            "fail_cases": ["Multi-turn logic decay", "Mathematical precision at scale"]
+            "fail_cases": ["Multi-turn logic decay", "Mathematical precision at scale"],
         }
 
     @as_tool
-    def run_benchmark(self, agent_name: str, task: str, expected_output: str | None = None) -> str:
+    def run_benchmark(
+        self, agent_name: str, task: str, expected_output: str | None = None
+    ) -> str:
         """Runs a task against an agent and measures performance."""
         # Note: In a real system, this would call the FleetManager
         start_time = time.time()
-        
+
         # Simulated run (for the skeleton)
         logging.info(f"BENCHMARK: Running task '{task}' on agent '{agent_name}'")
-        
+
         # We would actually trigger the agent here
         # captured_output = fleet.agents[agent_name].improve_content(task)
-        
+
         duration = time.time() - start_time
-        
+
         result = {
             "agent": agent_name,
             "task": task,
             "latency": duration,
-            "success": True # Mock
+            "success": True,  # Mock
         }
         self.results.append(result)
-        
+
         return f"Benchmark completed for {agent_name}. Latency: {duration:.2f}s"
 
     @as_tool
-    def check_for_performance_regression(self, agent_id: str, current_latency: float) -> str:
+    def check_for_performance_regression(
+        self, agent_id: str, current_latency: float
+    ) -> str:
         """Checks if an agent's current performance has regressed vs the fleet baseline."""
         baseline = self.core.calculate_baseline(self.benchmark_results)
         regression = self.core.check_regression(current_latency, baseline)
-        
+
         if regression["regression"]:
             msg = f"REGRESSION DETECTED: {agent_id} is {regression['delta_percentage']:.1f}% slower than baseline."
             logging.error(msg)
             return msg
-            
+
         return f"SUCCESS: {agent_id} is within performance limits."
 
     @as_tool
@@ -143,14 +156,20 @@ class BenchmarkAgent(BaseAgent):
         """Generates a summary report of all benchmark runs."""
         if not self.results:
             return "No benchmark data available."
-        
+
         report = ["## Benchmark Summary Report"]
         for r in self.results:
-            report.append(f"- **Agent**: {r['agent']} | **Task**: {r['task']} | **Latency**: {r['latency']:.2f}s")
-        
+            report.append(
+                f"- **Agent**: {r['agent']} | **Task**: {r['task']} | **Latency**: {r['latency']:.2f}s"
+            )
+
         return "\n".join(report)
+
 
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function
-    main = create_main_function(BenchmarkAgent, "Benchmark Agent", "Benchmark history path")
+
+    main = create_main_function(
+        BenchmarkAgent, "Benchmark Agent", "Benchmark history path"
+    )
     main()

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Apache 2.0 License
 
@@ -10,9 +11,11 @@ import logging
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
     BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 
     __version__ = VERSION
+
 
 class ReflexionStrategy(AgentStrategy):
     """Reflexion strategy: Draft -> Critique -> Revise."""
@@ -23,10 +26,12 @@ class ReflexionStrategy(AgentStrategy):
         context: str,
         backend_call: BackendFunction,
         system_prompt: Optional[str] = None,
-        history: Optional[List[Dict[str, str]]] = None
+        history: Optional[List[Dict[str, str]]] = None,
     ) -> str:
         # Step 1: Draft
-        draft = await backend_call(f"{prompt}\n\nContext:\n{context}", system_prompt, history)
+        draft = await backend_call(
+            f"{prompt}\n\nContext:\n{context}", system_prompt, history
+        )
 
         # Step 2: Critique
         critique_prompt = (
@@ -35,7 +40,9 @@ class ReflexionStrategy(AgentStrategy):
             "Critique this implementation. Identify any bugs, missing requirements, "
             "or style issues. Be harsh but constructive."
         )
-        critique = await backend_call(critique_prompt, "You are a senior code reviewer.", [])
+        critique = await backend_call(
+            critique_prompt, "You are a senior code reviewer.", []
+        )
         logging.info(f"Reflexion Critique:\n{critique}")
 
         # Step 3: Revise

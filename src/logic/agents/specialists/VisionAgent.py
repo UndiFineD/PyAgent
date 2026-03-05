@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # VisionAgent: Image Analysis and Computer Vision Specialist - Phase 319 Enhanced
 
@@ -13,9 +14,10 @@ from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
 
+
 class VisionAgent(BaseAgent):
     """
-    Agent specializing in image description, OCR, diagram analysis, 
+    Agent specializing in image description, OCR, diagram analysis,
     and visual pattern recognition using multi-modal model backends.
     """
 
@@ -30,7 +32,9 @@ class VisionAgent(BaseAgent):
         self._analysis_cache: Dict[str, Dict] = {}
 
     @as_tool
-    async def analyze_image(self, image_source: str, query: str = "Describe this image in detail.") -> Dict[str, Any]:
+    async def analyze_image(
+        self, image_source: str, query: str = "Describe this image in detail."
+    ) -> Dict[str, Any]:
         """
         Analyzes an image and answers a query about it.
         image_source: Either a base64 string, file path, or URL.
@@ -46,14 +50,10 @@ class VisionAgent(BaseAgent):
 
         prompt = f"[IMAGE_DATA:{b64_data}]\n{query}"
         logging.info("VisionAgent: Requesting multi-modal analysis...")
-        
+
         result = await self.improve_content(prompt)
-        
-        response = {
-            "query": query,
-            "description": result,
-            "status": "success"
-        }
+
+        response = {"query": query, "description": result, "status": "success"}
         self._analysis_cache[cache_key] = response
         return response
 
@@ -70,13 +70,13 @@ class VisionAgent(BaseAgent):
             "Preserve the layout and formatting as much as possible. "
             "Output only the extracted text, nothing else."
         )
-        
+
         result = await self.improve_content(prompt)
-        
+
         return {
             "extracted_text": result,
             "word_count": len(result.split()),
-            "status": "success"
+            "status": "success",
         }
 
     @as_tool
@@ -92,32 +92,34 @@ class VisionAgent(BaseAgent):
             "Output ONLY the code with proper indentation, no explanations."
         )
         extracted_code = await self.improve_content(extract_prompt)
-        
+
         analyze_prompt = f"Analyze this code and identify:\n1. Programming language\n2. Purpose/functionality\n3. Any visible issues\n\nCode:\n{extracted_code}"
         analysis = await self.improve_content(analyze_prompt)
-        
+
         # Detect language
         language = "unknown"
         lang_patterns = {
-            "python": r'\b(def |import |class |print\()',
-            "javascript": r'\b(function |const |let |var |=>)',
-            "rust": r'\b(fn |let |mut |impl |struct )',
-            "java": r'\b(public |private |class |void |static )'
+            "python": r"\b(def |import |class |print\()",
+            "javascript": r"\b(function |const |let |var |=>)",
+            "rust": r"\b(fn |let |mut |impl |struct )",
+            "java": r"\b(public |private |class |void |static )",
         }
         for lang, pattern in lang_patterns.items():
             if re.search(pattern, extracted_code):
                 language = lang
                 break
-        
+
         return {
             "extracted_code": extracted_code,
             "detected_language": language,
             "analysis": analysis,
-            "status": "success"
+            "status": "success",
         }
 
     @as_tool
-    async def analyze_diagram(self, image_source: str, diagram_type: str = "auto") -> Dict[str, Any]:
+    async def analyze_diagram(
+        self, image_source: str, diagram_type: str = "auto"
+    ) -> Dict[str, Any]:
         """Analyzes flowcharts, UML diagrams, architecture diagrams, etc."""
         b64_data = await self._resolve_image_source(image_source)
         if not b64_data:
@@ -129,21 +131,19 @@ class VisionAgent(BaseAgent):
             "Identify:\n1. Type of diagram\n2. Main components/nodes\n3. Relationships/connections\n"
             "4. Data flow or sequence (if applicable)\n5. Key insights"
         )
-        
+
         result = await self.improve_content(prompt)
-        
-        return {
-            "diagram_type": diagram_type,
-            "analysis": result,
-            "status": "success"
-        }
+
+        return {"diagram_type": diagram_type, "analysis": result, "status": "success"}
 
     @as_tool
-    async def compare_images(self, image1_source: str, image2_source: str) -> Dict[str, Any]:
+    async def compare_images(
+        self, image1_source: str, image2_source: str
+    ) -> Dict[str, Any]:
         """Compares two images and identifies differences."""
         b64_1 = await self._resolve_image_source(image1_source)
         b64_2 = await self._resolve_image_source(image2_source)
-        
+
         if not b64_1 or not b64_2:
             return {"error": "Could not load one or both images", "status": "failed"}
 
@@ -153,16 +153,15 @@ class VisionAgent(BaseAgent):
             "Compare these two images. Identify:\n"
             "1. Key similarities\n2. Key differences\n3. Any notable changes"
         )
-        
+
         result = await self.improve_content(prompt)
-        
-        return {
-            "comparison": result,
-            "status": "success"
-        }
+
+        return {"comparison": result, "status": "success"}
 
     @as_tool
-    async def detect_objects(self, image_source: str, target_objects: Optional[List[str]] = None) -> Dict[str, Any]:
+    async def detect_objects(
+        self, image_source: str, target_objects: Optional[List[str]] = None
+    ) -> Dict[str, Any]:
         """Detects and locates objects in an image."""
         b64_data = await self._resolve_image_source(image_source)
         if not b64_data:
@@ -179,24 +178,24 @@ class VisionAgent(BaseAgent):
                 f"[IMAGE_DATA:{b64_data}]\n"
                 "List all distinct objects visible in this image with their approximate locations."
             )
-        
+
         result = await self.improve_content(prompt)
-        
+
         return {
             "target_objects": target_objects,
             "detections": result,
-            "status": "success"
+            "status": "success",
         }
 
     async def _resolve_image_source(self, source: str) -> Optional[str]:
         """Resolves various image sources to base64."""
         if not source:
             return None
-            
+
         # Already base64
         if len(source) > 500 and not source.startswith(("http", "/")):
             return source
-        
+
         # File path
         path = Path(source)
         if path.exists() and path.is_file():
@@ -206,16 +205,17 @@ class VisionAgent(BaseAgent):
             except Exception as e:
                 logging.error(f"VisionAgent: Failed to read file {source}: {e}")
                 return None
-        
+
         # URL
         if source.startswith(("http://", "https://")):
             try:
                 import requests
+
                 response = requests.get(source, timeout=10)
                 if response.status_code == 200:
                     return base64.b64encode(response.content).decode("utf-8")
             except Exception as e:
                 logging.error(f"VisionAgent: Failed to fetch URL {source}: {e}")
                 return None
-        
+
         return source  # Assume it's already base64

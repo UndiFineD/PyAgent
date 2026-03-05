@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -49,7 +50,9 @@ class SpecDecodeMetadataV2:
 
     def __post_init__(self) -> None:
         if not self.max_spec_len:
-            self.max_spec_len = max(self.num_draft_tokens) if self.num_draft_tokens else 0
+            self.max_spec_len = (
+                max(self.num_draft_tokens) if self.num_draft_tokens else 0
+            )
         if not self.cu_num_draft_tokens:
             self._build_cumulative_indices()
 
@@ -59,8 +62,10 @@ class SpecDecodeMetadataV2:
                 rust_core, "spec_decode_build_cu_indices_rust"
             )(self.num_draft_tokens)
             return
-        
-        def update(acc: tuple[list[int], list[int], int, int], num: int) -> tuple[list[int], list[int], int, int]:
+
+        def update(
+            acc: tuple[list[int], list[int], int, int], num: int
+        ) -> tuple[list[int], list[int], int, int]:
             d, s, td, ts = acc
             ntd = td + num
             nts = ts + num + 1
@@ -72,14 +77,20 @@ class SpecDecodeMetadataV2:
     def build_logits_indices(self) -> None:
         """Build indices mapping regarding gathering target and bonus logits."""
         if HAS_RUST and hasattr(rust_core, "spec_decode_build_logits_indices_rust"):
-            self.target_logits_indices, self.bonus_logits_indices, self.logits_indices = getattr(
-                rust_core, "spec_decode_build_logits_indices_rust"
-            )(self.num_draft_tokens, self.cu_num_draft_tokens)
+            (
+                self.target_logits_indices,
+                self.bonus_logits_indices,
+                self.logits_indices,
+            ) = getattr(rust_core, "spec_decode_build_logits_indices_rust")(
+                self.num_draft_tokens, self.cu_num_draft_tokens
+            )
             return
         batch_size = len(self.num_draft_tokens)
         num_tokens = sum(self.num_draft_tokens)
         self.target_logits_indices = list(range(num_tokens))
-        self.bonus_logits_indices = list(map(lambda i: self.cu_num_draft_tokens[i] - 1, range(batch_size)))
+        self.bonus_logits_indices = list(
+            map(lambda i: self.cu_num_draft_tokens[i] - 1, range(batch_size))
+        )
         self.logits_indices = list(range(num_tokens + batch_size))
 
     def record_acceptance(self, accepted: list[bool]) -> None:
@@ -100,18 +111,25 @@ class SpecDecodeMetadataV2:
         return 0.0
 
     @classmethod
-    def make_dummy(cls: type[SpecDecodeMetadataV2], draft_token_ids: list[list[int]]) -> SpecDecodeMetadataV2:
+    def make_dummy(
+        cls: type[SpecDecodeMetadataV2], draft_token_ids: list[list[int]]
+    ) -> SpecDecodeMetadataV2:
         """Create placeholder metadata regarding testing."""
         flattened = list(functools.reduce(lambda x, y: x + y, draft_token_ids, []))
         num_draft = list(map(len, draft_token_ids))
         return cls(draft_token_ids=flattened, num_draft_tokens=num_draft)
 
     @classmethod
-    def from_proposals(cls: type[SpecDecodeMetadataV2], proposals: list[list[int]]) -> SpecDecodeMetadataV2:
+    def from_proposals(
+        cls: type[SpecDecodeMetadataV2], proposals: list[list[int]]
+    ) -> SpecDecodeMetadataV2:
         """Create metadata from a list regarding draft token sequences."""
-        def combine(acc: tuple[list[int], list[int]], p: list[int]) -> tuple[list[int], list[int]]:
+
+        def combine(
+            acc: tuple[list[int], list[int]], p: list[int]
+        ) -> tuple[list[int], list[int]]:
             return (acc[0] + p, acc[1] + [len(p)])
-        
+
         flat, num = functools.reduce(combine, proposals, ([], []))
         metadata = cls(draft_token_ids=flat, num_draft_tokens=num)
         metadata.build_logits_indices()
@@ -147,31 +165,36 @@ class TreeVerificationMetadata:
 
     @classmethod
     def from_tree(
-        cls: type[TreeVerificationMetadata], tree_tokens: list[list[int]], tree_parents: list[list[int]]
+        cls: type[TreeVerificationMetadata],
+        tree_tokens: list[list[int]],
+        tree_parents: list[list[int]],
     ) -> TreeVerificationMetadata:
         """Construct verification metadata from tree paths and parent pointers."""
-        def flatten_next(acc: tuple[list[int], list[int], list[int], list[int], list[int], int], item: tuple[list[int], list[int]]) -> tuple[list[int], list[int], list[int], list[int], list[int], int]:
+
+        def flatten_next(
+            acc: tuple[list[int], list[int], list[int], list[int], list[int], int],
+            item: tuple[list[int], list[int]],
+        ) -> tuple[list[int], list[int], list[int], list[int], list[int], int]:
             ft, fp, fd, pl, ps, cp = acc
             pt, pp = item
             new_ps = ps + [cp]
             new_pl = pl + [len(pt)]
-            
-            def add_token(inner_acc: tuple[list[int], list[int], list[int]], inner_item: tuple[int, int, int]) -> tuple[list[int], list[int], list[int]]:
+
+            def add_token(
+                inner_acc: tuple[list[int], list[int], list[int]],
+                inner_item: tuple[int, int, int],
+            ) -> tuple[list[int], list[int], list[int]]:
                 t, p, d = inner_acc
                 tn, pn, dn = inner_item
                 return (t + [tn], p + [pn], d + [dn])
 
             nft, nfp, nfd = functools.reduce(
-                add_token, 
-                zip(pt, pp, range(len(pt))), 
-                (ft, fp, fd)
+                add_token, zip(pt, pp, range(len(pt))), (ft, fp, fd)
             )
             return (nft, nfp, nfd, new_pl, new_ps, cp + len(pt))
 
         res = functools.reduce(
-            flatten_next, 
-            zip(tree_tokens, tree_parents), 
-            ([], [], [], [], [], 0)
+            flatten_next, zip(tree_tokens, tree_parents), ([], [], [], [], [], 0)
         )
         return cls(
             tree_token_ids=res[0],
@@ -187,25 +210,35 @@ class SpecDecodeMetadataFactory:
     """Factory regarding creating speculative decode metadata."""
 
     @staticmethod
-    def create_simple(draft_tokens: list[int], num_requests: int = 1) -> SpecDecodeMetadataV2:
+    def create_simple(
+        draft_tokens: list[int], num_requests: int = 1
+    ) -> SpecDecodeMetadataV2:
         """Create simple linear speculative metadata."""
         tokens_per_req = len(draft_tokens) // max(1, num_requests)
         num_draft = [tokens_per_req] * num_requests
-        
+
         def adjust_last(n_draft: list[int]) -> list[int]:
             rem = len(draft_tokens) - tokens_per_req * num_requests
             if rem > 0 and len(n_draft) > 0:
                 n_draft[-1] += rem
             return n_draft
 
-        return SpecDecodeMetadataV2(draft_token_ids=draft_tokens, num_draft_tokens=adjust_last(num_draft))
+        return SpecDecodeMetadataV2(
+            draft_token_ids=draft_tokens, num_draft_tokens=adjust_last(num_draft)
+        )
 
     @staticmethod
-    def create_tree(tree_paths: list[list[int]]) -> tuple[SpecDecodeMetadataV2, TreeVerificationMetadata]:
+    def create_tree(
+        tree_paths: list[list[int]],
+    ) -> tuple[SpecDecodeMetadataV2, TreeVerificationMetadata]:
         """Create tree-based speculative metadata."""
         flat_tokens = list(functools.reduce(lambda x, y: x + y, tree_paths, []))
         num_draft = list(map(len, tree_paths))
-        basic = SpecDecodeMetadataV2(draft_token_ids=flat_tokens, num_draft_tokens=num_draft)
-        tree_parents = list(map(lambda path: [-1] + list(range(len(path) - 1)), tree_paths))
+        basic = SpecDecodeMetadataV2(
+            draft_token_ids=flat_tokens, num_draft_tokens=num_draft
+        )
+        tree_parents = list(
+            map(lambda path: [-1] + list(range(len(path) - 1)), tree_paths)
+        )
         tree = TreeVerificationMetadata.from_tree(tree_paths, tree_parents)
         return basic, tree

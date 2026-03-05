@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_directstrategy_exists():
     """Test that DirectStrategy class exists and is importable."""
-    assert 'DirectStrategy' in dir()
+    assert "DirectStrategy" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

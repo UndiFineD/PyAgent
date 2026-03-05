@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_parallelprocessor_exists():
     """Test that ParallelProcessor class exists and is importable."""
-    assert 'ParallelProcessor' in dir()
+    assert "ParallelProcessor" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

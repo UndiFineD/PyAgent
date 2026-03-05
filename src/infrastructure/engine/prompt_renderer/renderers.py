@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -103,7 +104,9 @@ class ChatRenderer(PromptRenderer):
         """Render chat prompt."""
         if config.messages is None:
             # Fallback to completion rendering
-            return CompletionRenderer(self.tokenizer, self.max_model_tokens).render(config)
+            return CompletionRenderer(self.tokenizer, self.max_model_tokens).render(
+                config
+            )
 
         # Apply chat template
         text = self.apply_template(
@@ -145,7 +148,9 @@ class ChatRenderer(PromptRenderer):
         # Try Rust acceleration first
         from .helpers import _try_rust_render_template
 
-        rust_rendered = _try_rust_render_template(template, messages, add_generation_prompt)
+        rust_rendered = _try_rust_render_template(
+            template, messages, add_generation_prompt
+        )
         if rust_rendered:
             return rust_rendered
 

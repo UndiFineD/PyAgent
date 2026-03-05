@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_morphologycore_exists():
     """Test that MorphologyCore class exists and is importable."""
-    assert 'MorphologyCore' in dir()
+    assert "MorphologyCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

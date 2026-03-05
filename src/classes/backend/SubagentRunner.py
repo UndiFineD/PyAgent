@@ -26,7 +26,7 @@ except ImportError:
 
 class SubagentRunner:
     """Handles running subagents with multiple backend support and fallback logic."""
-    
+
     _command_cache: Dict[str, bool] = {}
 
     @staticmethod
@@ -46,12 +46,12 @@ class SubagentRunner:
         """Check if a command is available in PATH with result caching (Phase 108)."""
         if command in SubagentRunner._command_cache:
             return SubagentRunner._command_cache[command]
-            
+
         try:
             logging.debug(f"Checking if command is available: {command}")
             # Use 'which' on Linux/Mac or 'where' on Windows for faster checks
             subprocess.run(
-                ['where' if os.name == 'nt' else 'which', command],
+                ["where" if os.name == "nt" else "which", command],
                 capture_output=True,
                 text=True,
                 timeout=2,
@@ -60,7 +60,11 @@ class SubagentRunner:
             logging.debug(f"Command available: {command}")
             SubagentRunner._command_cache[command] = True
             return True
-        except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired):
+        except (
+            subprocess.CalledProcessError,
+            FileNotFoundError,
+            subprocess.TimeoutExpired,
+        ):
             logging.debug(f"Command not available: {command}")
             SubagentRunner._command_cache[command] = False
             return False
@@ -68,14 +72,16 @@ class SubagentRunner:
     def __init__(self) -> None:
         """Initialize the subagent runner with empty cache and metrics."""
         self._response_cache: Dict[str, str] = {}
-        
+
         # Disk cache initialization
         repo_root = self._resolve_repo_root()
-        self.disk_cache = DiskCache(repo_root / ".agent_cache", ttl_seconds=60*60*24*7) # 7 days default
-        
+        self.disk_cache = DiskCache(
+            repo_root / ".agent_cache", ttl_seconds=60 * 60 * 24 * 7
+        )  # 7 days default
+
         # Phase 108: Recording Intelligence
         self.recorder = LocalContextRecorder(workspace_root=repo_root)
-        
+
         self._metrics: Dict[str, Any] = {
             "requests": 0,
             "errors": 0,
@@ -89,7 +95,7 @@ class SubagentRunner:
     def clear_response_cache(self) -> None:
         """Clear the response cache."""
         self._response_cache.clear()
-        if hasattr(self, 'disk_cache'):
+        if hasattr(self, "disk_cache"):
             self.disk_cache.clear()
         logging.debug("Response cache cleared")
 
@@ -99,21 +105,25 @@ class SubagentRunner:
 
     def reset_metrics(self) -> None:
         """Reset metrics to zero."""
-        self._metrics.update({
-            "requests": 0,
-            "errors": 0,
-            "timeouts": 0,
-            "cache_hits": 0,
-            "total_latency_ms": 0,
-        })
+        self._metrics.update(
+            {
+                "requests": 0,
+                "errors": 0,
+                "timeouts": 0,
+                "cache_hits": 0,
+                "total_latency_ms": 0,
+            }
+        )
         logging.debug("Metrics reset")
 
     def _get_cache_key(self, prompt: str, model: str) -> str:
         """Generate a cache key for a prompt-model combination."""
-        content = f"{prompt}:{model}".encode('utf-8')
+        content = f"{prompt}:{model}".encode("utf-8")
         return hashlib.sha256(content).hexdigest()
 
-    def validate_response_content(self, response: str, content_types: Optional[List[str]] = None) -> bool:
+    def validate_response_content(
+        self, response: str, content_types: Optional[List[str]] = None
+    ) -> bool:
         """Validate that AI response contains expected content types."""
         if not response:
             return False
@@ -123,7 +133,9 @@ class SubagentRunner:
         for content_type in content_types:
             if content_type.lower() in response_lower:
                 return True
-        logging.warning(f"Response validation failed: expected {content_types}, got partial match")
+        logging.warning(
+            f"Response validation failed: expected {content_types}, got partial match"
+        )
         return True
 
     def estimate_tokens(self, text: str) -> int:
@@ -132,7 +144,9 @@ class SubagentRunner:
             return 0
         return max(1, len(text) // 4)
 
-    def estimate_cost(self, tokens: int, model: str = "gpt-4", rate_per_1k_input: float = 0.03) -> float:
+    def estimate_cost(
+        self, tokens: int, model: str = "gpt-4", rate_per_1k_input: float = 0.03
+    ) -> float:
         """Estimate cost for API-based backends."""
         cost = (tokens / 1000.0) * rate_per_1k_input
         logging.debug(f"Estimated cost for {tokens} tokens: ${cost:.6f}")
@@ -180,9 +194,9 @@ class SubagentRunner:
                 token=token,
                 timeout_s=timeout_s,
                 max_retries=max_retries,
-                stream=stream
+                stream=stream,
             )
-            
+
             if result:
                 if validate_content and not self.validate_response_content(result):
                     logging.warning("Response validation failed")
@@ -201,19 +215,40 @@ class SubagentRunner:
     def _looks_like_command(self, text: str) -> bool:
         """Helper to decide if a prompt is command-like."""
         t = (text or "").strip()
-        if not t: return False
-        if "\n" in t: return False
-        if any(op in t for op in ("|", "&&", ";")): return True
-        starters = ("git ", "gh ", "docker ", "kubectl ", "pip ", "python ", "npm ", "node ", "pwsh ", "powershell ", "Get-", "Set-", "New-")
+        if not t:
+            return False
+        if "\n" in t:
+            return False
+        if any(op in t for op in ("|", "&&", ";")):
+            return True
+        starters = (
+            "git ",
+            "gh ",
+            "docker ",
+            "kubectl ",
+            "pip ",
+            "python ",
+            "npm ",
+            "node ",
+            "pwsh ",
+            "powershell ",
+            "Get-",
+            "Set-",
+            "New-",
+        )
         return t.startswith(starters)
 
-    def run_subagent(self, description: str, prompt: str, original_content: str = "") -> Optional[str]:
+    def run_subagent(
+        self, description: str, prompt: str, original_content: str = ""
+    ) -> Optional[str]:
         """Run a subagent using available backends."""
         backend_env = os.environ.get("DV_AGENT_BACKEND", "auto").strip().lower()
         use_cache = os.environ.get("DV_AGENT_CACHE", "true").lower() == "true"
-        
+
         cache_model = backend_env if backend_env != "auto" else "subagent_auto"
-        cache_key = self._get_cache_key(f"{description}:{prompt}:{original_content}", cache_model)
+        cache_key = self._get_cache_key(
+            f"{description}:{prompt}:{original_content}", cache_model
+        )
 
         if use_cache:
             if cache_key in self._response_cache:
@@ -225,21 +260,29 @@ class SubagentRunner:
                 self._response_cache[cache_key] = cached_val
                 return cached_val
 
-        full_prompt = BackendHandlers.build_full_prompt(description, prompt, original_content)
+        full_prompt = BackendHandlers.build_full_prompt(
+            description, prompt, original_content
+        )
         repo_root = self._resolve_repo_root()
 
         def _try_codex_cli() -> Optional[str]:
-            if not self._command_available('codex'): return None
+            if not self._command_available("codex"):
+                return None
             return BackendHandlers.try_codex_cli(full_prompt, repo_root)
 
         def _try_copilot_cli() -> Optional[str]:
-            if not self._command_available('copilot'): return None
+            if not self._command_available("copilot"):
+                return None
             return BackendHandlers.try_copilot_cli(full_prompt, repo_root)
 
         def _try_gh_copilot(allow_non_command: bool) -> Optional[str]:
-            if not self._command_available('gh'): return None
-            if not allow_non_command and not self._looks_like_command(prompt): return None
-            return BackendHandlers.try_gh_copilot(full_prompt, repo_root, allow_non_command)
+            if not self._command_available("gh"):
+                return None
+            if not allow_non_command and not self._looks_like_command(prompt):
+                return None
+            return BackendHandlers.try_gh_copilot(
+                full_prompt, repo_root, allow_non_command
+            )
 
         def _try_github_models() -> Optional[str]:
             return BackendHandlers.try_github_models(full_prompt, self.requests)
@@ -270,21 +313,29 @@ class SubagentRunner:
             res = _try_openai_api()
         else:
             # auto (default) logic: Priority on local high-performance backends (Phase 108)
-            res = _try_vllm() or _try_ollama() or _try_codex_cli() or _try_copilot_cli() or _try_github_models() or _try_openai_api() or _try_gh_copilot(allow_non_command=False)
+            res = (
+                _try_vllm()
+                or _try_ollama()
+                or _try_codex_cli()
+                or _try_copilot_cli()
+                or _try_github_models()
+                or _try_openai_api()
+                or _try_gh_copilot(allow_non_command=False)
+            )
 
         if res and use_cache:
             self._response_cache[cache_key] = res
             self.disk_cache.set(cache_key, res)
-        
+
         # Phase 108: Record AI interaction
         if self.recorder:
             self.recorder.record_interaction(
                 provider="SubagentRunner",
                 model=backend_env,
                 prompt=prompt,
-                result=res or "FAILED"
+                result=res or "FAILED",
             )
-            
+
         return res
 
     def llm_chat_via_ollama(self, *args, **kwargs) -> str:
@@ -300,22 +351,34 @@ class SubagentRunner:
         backend = os.environ.get("DV_AGENT_BACKEND", "auto").strip().lower()
         repo_root = str(self._resolve_repo_root())
         try:
-            max_context_chars = int(os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000"))
+            max_context_chars = int(
+                os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000")
+            )
         except ValueError:
             max_context_chars = 12_000
         models_base_url = (os.environ.get("GITHUB_MODELS_BASE_URL") or "").strip()
-        models_model = (os.environ.get("DV_AGENT_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or "").strip()
-        
+        models_model = (
+            os.environ.get("DV_AGENT_MODEL")
+            or os.environ.get("GITHUB_MODELS_MODEL")
+            or ""
+        ).strip()
+
         token_set = bool(os.environ.get("GITHUB_TOKEN"))
         if not token_set:
-            token_file = os.environ.get("DV_GITHUB_TOKEN_FILE", r"C:\DEV\github-gat.txt")
+            token_file = os.environ.get(
+                "DV_GITHUB_TOKEN_FILE", r"C:\DEV\github-gat.txt"
+            )
             token_set = Path(token_file).exists()
 
         warnings = []
         if os.environ.get("TERM_PROGRAM") == "vscode":
-            warnings.append("VS Code Environment: Pylance or Git extensions may lock files or cause rewrite conflicts.")
-        if os.name == 'nt':
-            warnings.append("Windows Platform: Sensitive to file locks. Consider closing open editors for target files.")
+            warnings.append(
+                "VS Code Environment: Pylance or Git extensions may lock files or cause rewrite conflicts."
+            )
+        if os.name == "nt":
+            warnings.append(
+                "Windows Platform: Sensitive to file locks. Consider closing open editors for target files."
+            )
 
         return {
             "selected_backend": backend,
@@ -332,7 +395,12 @@ class SubagentRunner:
                 "base_url_set": bool(models_base_url),
                 "model_set": bool(models_model),
                 "token_set": token_set,
-                "configured": bool(models_base_url and models_model and token_set and self.requests is not None),
+                "configured": bool(
+                    models_base_url
+                    and models_model
+                    and token_set
+                    and self.requests is not None
+                ),
             },
         }
 
@@ -341,8 +409,10 @@ class SubagentRunner:
         status = self.get_backend_status()
         cmd = status["commands"]
         models = status["github_models"]
-        def yn(v: bool) -> str: return "yes" if v else "no"
-        
+
+        def yn(v: bool) -> str:
+            return "yes" if v else "no"
+
         lines = [
             "Backend diagnostics:",
             f"- selected: {status['selected_backend']}",
@@ -357,10 +427,10 @@ class SubagentRunner:
             f"  - model set: {yn(bool(models.get('model_set')))}",
             f"  - token set: {yn(bool(models.get('token_set')))}",
         ]
-        
+
         if status.get("warnings"):
             lines.append("- POTENTIAL CONFLICTS:")
             for w in status["warnings"]:
                 lines.append(f"  ! {w}")
-                
+
         return "\n".join(lines)

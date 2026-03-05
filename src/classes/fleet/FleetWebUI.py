@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,19 +32,22 @@ from pathlib import Path
 
 __version__ = VERSION
 
+
 class FleetWebUI:
     """Provides backend support for the Fleet visualization dashboard."""
 
     def __init__(self, fleet_manager: Any) -> None:
         self.fleet = fleet_manager
-        self.generative_registry: dict[str, dict[str, Any]] = {} # Tambo Pattern
+        self.generative_registry: dict[str, dict[str, Any]] = {}  # Tambo Pattern
 
-    def register_generative_component(self, name: str, description: str, props_schema: dict[str, Any]) -> str:
+    def register_generative_component(
+        self, name: str, description: str, props_schema: dict[str, Any]
+    ) -> str:
         """Registers a UI component that the AI can choose to render dynamically (Tambo Pattern)."""
         self.generative_registry[name] = {
             "description": description,
             "props_schema": props_schema,
-            "type": "generative"
+            "type": "generative",
         }
         logging.info(f"Registered generative UI component: {name}")
 
@@ -52,34 +56,40 @@ class FleetWebUI:
         suggestions = []
         for name, metadata in self.generative_registry.items():
             if metadata["description"].lower() in task_result.lower():
-                suggestions.append({"component": name, "props": {}}) # Simplified
+                suggestions.append({"component": name, "props": {}})  # Simplified
         return suggestions
 
     def get_fleet_topology(self) -> str:
         """Returns a graph representation of the fleet for Mermaid/D3 visualization."""
         nodes = []
         links = []
-        
+
         for name, agent in self.fleet.agents.items():
-            nodes.append({"id": name, "type": "agent", "model": getattr(agent, "model", "unknown")})
-            
+            nodes.append(
+                {
+                    "id": name,
+                    "type": "agent",
+                    "model": getattr(agent, "model", "unknown"),
+                }
+            )
+
         return json.dumps({"nodes": nodes, "links": links}, indent=2)
 
     def generate_workflow_graph(self, workflow_state: Any) -> str:
         """Generates a Mermaid graph for a specific workflow's progress."""
         if not workflow_state:
             return "graph TD\n  Empty[No Active Workflow]"
-            
+
         mermaid_lines = ["graph LR"]
         history = workflow_state.history
-        
+
         last_node = "START"
         for i, entry in enumerate(history):
             node_id = f"step_{i}_{entry['agent']}"
             mermaid_lines.append(f"  {last_node} --> {node_id}")
             mermaid_lines.append(f"  {node_id}[{entry['agent']}: {entry['action']}]")
             last_node = node_id
-            
+
         return "\n".join(mermaid_lines)
 
     def get_metrics_snapshot(self) -> dict[str, Any]:
@@ -91,19 +101,22 @@ class FleetWebUI:
         Returns directory structure and file metadata.
         """
         from pathlib import Path
+
         base = Path(self.fleet.workspace_root) / sub_path
         if not base.exists():
             return {"error": f"Path {sub_path} not found"}
-            
+
         items = []
         for item in base.iterdir():
-            items.append({
-                "name": item.name,
-                "is_dir": item.is_dir(),
-                "size": item.stat().st_size if item.is_file() else 0,
-                "extension": item.suffix if item.is_file() else "",
-                "preview": self._get_preview(item) if item.is_file() else None
-            })
+            items.append(
+                {
+                    "name": item.name,
+                    "is_dir": item.is_dir(),
+                    "size": item.stat().st_size if item.is_file() else 0,
+                    "extension": item.suffix if item.is_file() else "",
+                    "preview": self._get_preview(item) if item.is_file() else None,
+                }
+            )
         return {"path": str(sub_path), "items": items}
 
     def _get_preview(self, file_path: Path) -> str:
@@ -120,26 +133,33 @@ class FleetWebUI:
         """Returns the available nodes and signals for the Graphical Workflow Designer."""
         available_agents = []
         for name, agent in self.fleet.agents.items():
-            methods = [m for m in dir(agent) if not m.startswith("_") and callable(getattr(agent, m))]
-            available_agents.append({
-                "name": name,
-                "actions": methods,
-                "capabilities": getattr(agent, "capabilities", [])
-            })
-            
+            methods = [
+                m
+                for m in dir(agent)
+                if not m.startswith("_") and callable(getattr(agent, m))
+            ]
+            available_agents.append(
+                {
+                    "name": name,
+                    "actions": methods,
+                    "capabilities": getattr(agent, "capabilities", []),
+                }
+            )
+
         return {
             "agents": available_agents,
             "triggers": ["HTTP_REQUEST", "SCHEDULE", "SIGNAL_EMITTED"],
-            "v_connectors": ["sequential", "parallel", "conditional"]
+            "v_connectors": ["sequential", "parallel", "conditional"],
         }
 
     def get_multi_fleet_manager(self) -> dict[str, Any]:
         """Returns status of multiple fleets (local and remote)."""
         return {
-            "local_fleet": {
-                "agents": len(self.fleet.agents),
-                "status": "active"
-            },
+            "local_fleet": {"agents": len(self.fleet.agents), "status": "active"},
             "remote_nodes": self.fleet.remote_nodes,
-            "mesh_status": self.fleet.mesh.get_mesh_status() if hasattr(self.fleet, "mesh") else "Unknown"
+            "mesh_status": (
+                self.fleet.mesh.get_mesh_status()
+                if hasattr(self.fleet, "mesh")
+                else "Unknown"
+            ),
         }

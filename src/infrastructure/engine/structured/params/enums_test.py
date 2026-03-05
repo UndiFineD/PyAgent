@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "SchemaFormat"), "SchemaFormat missing"
     assert hasattr(mod, "GuidedDecodingBackend"), "GuidedDecodingBackend missing"
     assert hasattr(mod, "WhitespacePattern"), "WhitespacePattern missing"
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,6 +21,7 @@ Duplicate code detection logic for CoderCore.
 import hashlib
 import re
 from typing import List, Dict, Any
+
 
 class CoderDuplicationMixin:
     """Mixin for identifying duplicate code."""
@@ -55,7 +57,9 @@ class CoderDuplicationMixin:
 
         return self._find_duplicate_code_fallback(content, min_lines)
 
-    def _find_duplicate_code_fallback(self, content: str, min_lines: int) -> List[Dict[str, Any]]:
+    def _find_duplicate_code_fallback(
+        self, content: str, min_lines: int
+    ) -> List[Dict[str, Any]]:
         """Non-Rust fallback for duplicate detection."""
         lines = content.split("\n")
         duplicates = []

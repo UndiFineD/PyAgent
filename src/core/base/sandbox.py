@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,22 +23,23 @@ import os
 import sys
 from pathlib import Path
 
+
 class SandboxManager:
     """Manages restricted execution environments for plugins."""
-    
+
     @staticmethod
     def get_sandboxed_env(base_env: dict[str, str]) -> dict[str, str]:
         """Returns a heavily restricted environment for plugin execution."""
         # Phase 132 lockdown
         restricted = {
-            'PATH': base_env.get('PATH', ''),
-            'PYTHONPATH': base_env.get('PYTHONPATH', ''),
-            'TEMP': base_env.get('TEMP', ''),
+            "PATH": base_env.get("PATH", ""),
+            "PYTHONPATH": base_env.get("PYTHONPATH", ""),
+            "TEMP": base_env.get("TEMP", ""),
             # Explicitly block access to credentials usually passed in env
-            'AGENT_IDENTITY': '[REDACTED]',
-            'SWARM_CORE_KEY': '[REDACTED]',
+            "AGENT_IDENTITY": "[REDACTED]",
+            "SWARM_CORE_KEY": "[REDACTED]",
             # Force low-privilege settings if possible
-            'PYAGENT_SANDBOX_ACTIVE': '1'
+            "PYAGENT_SANDBOX_ACTIVE": "1",
         }
         return restricted
 
@@ -46,14 +48,14 @@ class SandboxManager:
         """Checks if a command is trying to write outside the permitted plugin zone."""
         workspace = Path(workspace_root).resolve()
         target = Path(target_path).resolve()
-        
+
         # Only allow writing in scratch or plugins/ directories
         safe_zones = [
             workspace / "data" / "scratch",
             workspace / "plugins",
-            workspace / "temp"
+            workspace / "temp",
         ]
-        
+
         return any(target.is_relative_to(zone) for zone in safe_zones)
 
     @staticmethod
@@ -61,6 +63,7 @@ class SandboxManager:
         """Returns flags to lower process priority / restrict UI (Windows specific)."""
         if sys.platform == "win32":
             import subprocess
+
             # CREATE_NO_WINDOW and BELOW_NORMAL_PRIORITY_CLASS
             return creationflags | 0x08000000 | 0x00004000
         return creationflags

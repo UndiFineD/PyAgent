@@ -33,32 +33,32 @@ except ImportError as e:
 
 def test_requesttype_exists():
     """Test that RequestType class exists and is importable."""
-    assert 'RequestType' in dir()
+    assert "RequestType" in dir()
 
 
 def test_clientconfig_exists():
     """Test that ClientConfig class exists and is importable."""
-    assert 'ClientConfig' in dir()
+    assert "ClientConfig" in dir()
 
 
 def test_enginecoreclient_exists():
     """Test that EngineCoreClient class exists and is importable."""
-    assert 'EngineCoreClient' in dir()
+    assert "EngineCoreClient" in dir()
 
 
 def test_inprocclient_exists():
     """Test that InprocClient class exists and is importable."""
-    assert 'InprocClient' in dir()
+    assert "InprocClient" in dir()
 
 
 def test_syncmpclient_exists():
     """Test that SyncMPClient class exists and is importable."""
-    assert 'SyncMPClient' in dir()
+    assert "SyncMPClient" in dir()
 
 
 def test_asyncmpclient_exists():
     """Test that AsyncMPClient class exists and is importable."""
-    assert 'AsyncMPClient' in dir()
+    assert "AsyncMPClient" in dir()
 
 
 def test_create_client_exists():
@@ -69,4 +69,3 @@ def test_create_client_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

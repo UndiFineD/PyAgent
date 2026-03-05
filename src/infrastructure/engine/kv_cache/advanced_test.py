@@ -13,7 +13,10 @@ def _load_module():
 
 def test_imports_and_symbols():
     mod = _load_module()
-    assert hasattr(mod, "HierarchicalKVCacheCoordinator"), "HierarchicalKVCacheCoordinator missing"
-    assert hasattr(mod, "PredictiveKVCacheCoordinator"), "PredictiveKVCacheCoordinator missing"
+    assert hasattr(
+        mod, "HierarchicalKVCacheCoordinator"
+    ), "HierarchicalKVCacheCoordinator missing"
+    assert hasattr(
+        mod, "PredictiveKVCacheCoordinator"
+    ), "PredictiveKVCacheCoordinator missing"
     assert hasattr(mod, "AsyncPrefetchCoordinator"), "AsyncPrefetchCoordinator missing"
-

@@ -1,10 +1,12 @@
 from typing import Dict, Any, List
 
+
 class BlackboardCore:
     """
     Pure logic for Blackboard operations.
     Handles data indexing and history tracking.
     """
+
     def __init__(self) -> None:
         self.data: Dict[str, Any] = {}
         self.history: List[Dict[str, Any]] = []

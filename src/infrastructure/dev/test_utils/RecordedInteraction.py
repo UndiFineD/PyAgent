@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """RecordedInteraction shim for pytest collection."""
 
+
 class RecordedInteraction:
     def __init__(self, input=None, output=None, meta=None):
         self.input = input

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_swarmarbitratoragent_exists():
     """Test that SwarmArbitratorAgent class exists and is importable."""
-    assert 'SwarmArbitratorAgent' in dir()
+    assert "SwarmArbitratorAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -118,9 +119,15 @@ class CoderSmellMixin:
                 )
             )
 
-    def _check_python_class_smells(self, node: ast.ClassDef, smells: List[CodeSmell]) -> None:
+    def _check_python_class_smells(
+        self, node: ast.ClassDef, smells: List[CodeSmell]
+    ) -> None:
         """Check for god classes."""
-        method_count = sum(1 for n in node.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)))
+        method_count = sum(
+            1
+            for n in node.body
+            if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
+        )
         threshold = CODE_SMELL_PATTERNS["god_class"]["threshold"]
         if method_count > threshold:
             smells.append(

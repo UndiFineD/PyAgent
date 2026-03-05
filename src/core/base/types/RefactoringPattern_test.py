@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_refactoringpattern_exists():
     """Test that RefactoringPattern class exists and is importable."""
-    assert 'RefactoringPattern' in dir()
+    assert "RefactoringPattern" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

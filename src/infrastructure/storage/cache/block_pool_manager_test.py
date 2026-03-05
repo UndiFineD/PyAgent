@@ -22,4 +22,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ARCPolicy"), "ARCPolicy missing"
     assert hasattr(mod, "BlockPool"), "BlockPool missing"
     assert hasattr(mod, "compute_block_hash"), "compute_block_hash missing"
-

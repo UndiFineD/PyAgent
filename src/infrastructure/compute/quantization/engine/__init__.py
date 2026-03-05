@@ -24,8 +24,12 @@ from .factory import quantize_tensor  # noqa: F401
 from .layer import DequantizedLinear  # noqa: F401
 from .linear import LinearQuantizer  # noqa: F401
 from .tensor import QuantizedTensor  # noqa: F401
-from .utils import (compute_scales_minmax, get_quantization_error, pack_int4,  # noqa: F401
-                    unpack_int4)
+from .utils import (
+    compute_scales_minmax,
+    get_quantization_error,
+    pack_int4,  # noqa: F401
+    unpack_int4,
+)
 
 __all__ = [
     "QuantScheme",

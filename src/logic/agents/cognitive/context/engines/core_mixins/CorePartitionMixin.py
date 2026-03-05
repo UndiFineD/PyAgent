@@ -6,9 +6,11 @@ import json
 
 try:
     from rust_core import partition_to_shards_rust
+
     _RUST_ACCEL = True
 except ImportError:
     _RUST_ACCEL = False
+
 
 class CorePartitionMixin:
     """Methods for partitioning and bloat detection."""
@@ -21,6 +23,7 @@ class CorePartitionMixin:
         Implements stable sub-sharding for trillion-parameter scalability.
         """
         import zlib
+
         shards: dict[str, dict[str, Any]] = {"default": {}}
         for category, data in memory.items():
             if not isinstance(data, dict) or not data:
@@ -33,7 +36,9 @@ class CorePartitionMixin:
                 if _RUST_ACCEL:
                     try:
                         items = [(k, json.dumps(v)) for k, v in data.items()]
-                        rust_shards = partition_to_shards_rust(category, items, max_entries_per_shard)
+                        rust_shards = partition_to_shards_rust(
+                            category, items, max_entries_per_shard
+                        )
                         for shard_name, shard_items in rust_shards:
                             if shard_name not in shards:
                                 shards[shard_name] = {}

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,36 +25,37 @@ from typing import List, Dict, Optional
 
 __version__ = VERSION
 
+
 class ConsensusCore:
     """Pure logic core for consensus protocols."""
-    
+
     def __init__(self, mode: str = "plurality") -> None:
         self.mode = mode
 
-    def calculate_winner(self, proposals: list[str], weights: list[float] | None = None) -> str:
+    def calculate_winner(
+        self, proposals: list[str], weights: list[float] | None = None
+    ) -> str:
         """
         Determines the winning proposal based on voting rules.
         Phase 119: Supports weighted voting based on agent reliability.
         """
         if not proposals:
             return ""
-            
+
         if weights and len(weights) != len(proposals):
-            weights = None # Fallback to unweighted if mismatch
+            weights = None  # Fallback to unweighted if mismatch
 
         # Count identical proposals with weights
         counts: dict[str, float] = {}
         for idx, p in enumerate(proposals):
             weight = weights[idx] if weights else 1.0
             counts[p] = counts.get(p, 0) + weight
-            
+
         # Strategy: Most weighted, then longest as tie-breaker
-        winner = sorted(
-            counts.keys(), 
-            key=lambda x: (counts[x], len(x)), 
-            reverse=True
-        )[0]
-        
+        winner = sorted(counts.keys(), key=lambda x: (counts[x], len(x)), reverse=True)[
+            0
+        ]
+
         return winner
 
     def get_agreement_score(self, proposals: list[str], winner: str) -> float:

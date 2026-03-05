@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,9 +23,10 @@ from src.core.base.utilities import create_main_function
 
 __version__ = VERSION
 
+
 class CsvAgent(BaseAgent):
     """Agent for CSV data cleaning, analysis, and transformation."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -36,6 +38,7 @@ class CsvAgent(BaseAgent):
 
     def _get_default_content(self) -> str:
         return "header1,header2\nvalue1,value2\n"
+
 
 if __name__ == "__main__":
     main = create_main_function(CsvAgent, "CSV Agent", "Path to CSV file (.csv)")

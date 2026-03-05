@@ -33,47 +33,47 @@ except ImportError as e:
 
 def test_environmentstatus_exists():
     """Test that EnvironmentStatus class exists and is importable."""
-    assert 'EnvironmentStatus' in dir()
+    assert "EnvironmentStatus" in dir()
 
 
 def test_environmentresult_exists():
     """Test that EnvironmentResult class exists and is importable."""
-    assert 'EnvironmentResult' in dir()
+    assert "EnvironmentResult" in dir()
 
 
 def test_environmentcapabilities_exists():
     """Test that EnvironmentCapabilities class exists and is importable."""
-    assert 'EnvironmentCapabilities' in dir()
+    assert "EnvironmentCapabilities" in dir()
 
 
 def test_environmentprotocol_exists():
     """Test that EnvironmentProtocol class exists and is importable."""
-    assert 'EnvironmentProtocol' in dir()
+    assert "EnvironmentProtocol" in dir()
 
 
 def test_baseenvironment_exists():
     """Test that BaseEnvironment class exists and is importable."""
-    assert 'BaseEnvironment' in dir()
+    assert "BaseEnvironment" in dir()
 
 
 def test_toolenvironment_exists():
     """Test that ToolEnvironment class exists and is importable."""
-    assert 'ToolEnvironment' in dir()
+    assert "ToolEnvironment" in dir()
 
 
 def test_agentenvironment_exists():
     """Test that AgentEnvironment class exists and is importable."""
-    assert 'AgentEnvironment' in dir()
+    assert "AgentEnvironment" in dir()
 
 
 def test_compositeenvironment_exists():
     """Test that CompositeEnvironment class exists and is importable."""
-    assert 'CompositeEnvironment' in dir()
+    assert "CompositeEnvironment" in dir()
 
 
 def test_environmentregistry_exists():
     """Test that EnvironmentRegistry class exists and is importable."""
-    assert 'EnvironmentRegistry' in dir()
+    assert "EnvironmentRegistry" in dir()
 
 
 def test_environmentregistry_instantiation():
@@ -85,4 +85,3 @@ def test_environmentregistry_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

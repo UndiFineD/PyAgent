@@ -2,6 +2,7 @@
 try:
     from src.infrastructure.services.dev.agent_tests.test_generation import *  # type: ignore
 except Exception:
+
     def TestGenerator(*a, **k):
         raise RuntimeError("test_generation not available")
 
@@ -10,5 +11,6 @@ except Exception:
 
     def TestDocGenerator(*a, **k):
         raise RuntimeError("test_generation not available")
+
 
 __all__ = ["TestGenerator", "TestCaseMinimizer", "TestDocGenerator"]

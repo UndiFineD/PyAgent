@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_systemcapability_exists():
     """Test that SystemCapability class exists and is importable."""
-    assert 'SystemCapability' in dir()
+    assert "SystemCapability" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

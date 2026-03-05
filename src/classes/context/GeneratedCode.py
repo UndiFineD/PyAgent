@@ -16,6 +16,7 @@ import logging
 import re
 import zlib
 
+
 @dataclass
 class GeneratedCode:
     """Context-aware generated code.
@@ -26,6 +27,7 @@ class GeneratedCode:
         context_used: Context files used for generation.
         description: Description of what the code does.
     """
+
     language: str
     code: str
     context_used: List[str] = field(default_factory=lambda: [])

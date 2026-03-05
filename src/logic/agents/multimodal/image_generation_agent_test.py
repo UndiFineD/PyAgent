@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_imagegenerationagent_exists():
     """Test that ImageGenerationAgent class exists and is importable."""
-    assert 'ImageGenerationAgent' in dir()
+    assert "ImageGenerationAgent" in dir()
 
 
 def test_imagegenerationagent_instantiation():
@@ -45,4 +45,3 @@ def test_imagegenerationagent_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

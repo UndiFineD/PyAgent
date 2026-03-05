@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "VerificationStrategy"), "VerificationStrategy missing"
     assert hasattr(mod, "AcceptancePolicy"), "AcceptancePolicy missing"
     assert hasattr(mod, "SpecDecodeConfig"), "SpecDecodeConfig missing"
-

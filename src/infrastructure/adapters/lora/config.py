@@ -8,6 +8,7 @@ from enum import Enum
 
 class LoRATarget(Enum):
     """Common LoRA target modules."""
+
     Q_PROJ = "q_proj"
     K_PROJ = "k_proj"
     V_PROJ = "v_proj"
@@ -24,19 +25,20 @@ class LoRATarget(Enum):
 @dataclass
 class LoRAConfig:
     """Configuration for LoRA adapter."""
+
     rank: int = 8
     alpha: float = 16.0
     dropout: float = 0.0
-    target_modules: set[str] = field(default_factory=lambda: {
-        "q_proj", "k_proj", "v_proj", "o_proj"
-    })
+    target_modules: set[str] = field(
+        default_factory=lambda: {"q_proj", "k_proj", "v_proj", "o_proj"}
+    )
     fan_in_fan_out: bool = False
     bias: str = "none"
     modules_to_save: set[str] = field(default_factory=set)
-    
+
     def __post_init__(self):
         self._validate()
-    
+
     def _validate(self):
         """Validate configuration."""
         if self.rank <= 0:
@@ -46,8 +48,10 @@ class LoRAConfig:
         if self.dropout < 0 or self.dropout >= 1:
             raise ValueError(f"dropout must be in [0, 1), got {self.dropout}")
         if self.bias not in ("none", "all", "lora_only"):
-            raise ValueError(f"bias must be 'none', 'all', or 'lora_only', got {self.bias}")
-    
+            raise ValueError(
+                f"bias must be 'none', 'all', or 'lora_only', got {self.bias}"
+            )
+
     @property
     def scaling(self) -> float:
         """LoRA scaling factor (alpha / rank)."""
@@ -56,6 +60,7 @@ class LoRAConfig:
 
 class LoRAModelState(Enum):
     """State of a LoRA model in the manager."""
+
     LOADED = "loaded"
     ACTIVE = "active"
     EVICTED = "evicted"

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_slapolicy_exists():
     """Test that SLAPolicy class exists and is importable."""
-    assert 'SLAPolicy' in dir()
+    assert "SLAPolicy" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "replace_in_file"), "replace_in_file missing"
     assert hasattr(mod, "main"), "main missing"
-

@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "resilient_import"), "resilient_import missing"
     assert hasattr(mod, "ResilientStub"), "ResilientStub missing"
-

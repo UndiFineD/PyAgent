@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "EmotionalState"), "EmotionalState missing"
     assert hasattr(mod, "TrustMetrics"), "TrustMetrics missing"
     assert hasattr(mod, "TrustAgent"), "TrustAgent missing"
-

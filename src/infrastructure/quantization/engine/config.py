@@ -1,8 +1,10 @@
 from enum import Enum
 from dataclasses import dataclass
 
+
 class QuantScheme(Enum):
     """Quantization scheme types."""
+
     INT4 = "int4"
     INT8 = "int8"
     FP8 = "fp8"
@@ -10,16 +12,20 @@ class QuantScheme(Enum):
     AWQ = "awq"  # Activation-aware Weight Quantization
     GPTQ = "gptq"  # GPTQ quantization
 
+
 class QuantStrategy(Enum):
     """Quantization granularity strategy."""
+
     TENSOR = "tensor"  # Single scale per tensor
     CHANNEL = "channel"  # Per output channel
     GROUP = "group"  # Per group of weights
     BLOCK = "block"  # Block-wise quantization
 
+
 @dataclass
 class QuantConfig:
     """Configuration for quantization."""
+
     bits: int = 8
     scheme: QuantScheme = QuantScheme.INT8
     strategy: QuantStrategy = QuantStrategy.GROUP
@@ -27,28 +33,30 @@ class QuantConfig:
     symmetric: bool = True
     zero_point: bool = False
     desc_act: bool = False
-    
+
     def __post_init__(self):
         self._validate()
-    
+
     def _validate(self):
         if self.bits not in (4, 8):
             raise ValueError(f"bits must be 4 or 8, got {self.bits}")
         if self.group_size < -1 or self.group_size == 0:
-            raise ValueError(f"group_size must be -1 or positive, got {self.group_size}")
+            raise ValueError(
+                f"group_size must be -1 or positive, got {self.group_size}"
+            )
         if self.symmetric and self.zero_point:
             raise ValueError("symmetric quantization cannot have zero_point")
-    
+
     @property
     def pack_factor(self) -> int:
         return 32 // self.bits
-    
+
     @property
     def qmin(self) -> int:
         if self.symmetric:
             return -(1 << (self.bits - 1))
         return 0
-    
+
     @property
     def qmax(self) -> int:
         if self.symmetric:

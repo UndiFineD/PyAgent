@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_urlclassifier_exists():
     """Test that URLClassifier class exists and is importable."""
-    assert 'URLClassifier' in dir()
+    assert "URLClassifier" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

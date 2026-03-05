@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,6 +34,7 @@ import time
 
 try:
     import rust_core as rc
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -52,6 +54,7 @@ class ShardedKnowledgeCore:
     def get_shard_id(self, entity_name: str) -> int:
         """Determines the shard ID for a given entity using stable MD5 hashing (Phase 318)."""
         from src.core.rust_bridge import RustBridge
+
         return RustBridge.calculate_shard_id(entity_name, self.shard_count)
 
     def get_shard_path(self, shard_id: int) -> Path:
@@ -92,6 +95,7 @@ class ShardedKnowledgeCore:
         if HAS_RUST:
             try:
                 import json
+
                 base_json = json.dumps(base)
                 delta_json = json.dumps(delta)
                 merged_json = rc.merge_knowledge_rust(base_json, delta_json)
@@ -112,8 +116,11 @@ class ShardedKnowledgeCore:
         if HAS_RUST:
             try:
                 import json
+
                 data_json = json.dumps(data)
-                filtered_json = rc.filter_stable_knowledge_rust(data_json, threshold_confidence)
+                filtered_json = rc.filter_stable_knowledge_rust(
+                    data_json, threshold_confidence
+                )
                 return json.loads(filtered_json)
             except Exception:
                 pass

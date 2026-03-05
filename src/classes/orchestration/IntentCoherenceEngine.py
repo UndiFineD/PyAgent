@@ -8,13 +8,14 @@ from datetime import datetime
 if TYPE_CHECKING:
     from src.classes.fleet.FleetManager import FleetManager
 
+
 class IntentCoherenceEngine:
     """
     Implements Swarm Consciousness (Phase 30).
     Maintains a unified 'Intent' layer that synchronizes all agent goals
     without necessitating explicit task decomposition.
     """
-    
+
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
         self.global_intent: Optional[str] = None
@@ -28,19 +29,23 @@ class IntentCoherenceEngine:
         logging.info(f"IntentCoherenceEngine: Broadcasting global intent: {intent}")
         self.global_intent = intent
         self.intent_priority = priority
-        
+
         # Emit signal via the signal bus
-        if hasattr(self.fleet, 'signals'):
-            self.fleet.signals.emit("COHERENT_INTENT_ESTABLISHED", {
-                "intent": intent,
-                "priority": priority,
-                "timestamp": datetime.now().isoformat()
-            }, sender="IntentCoherenceEngine")
-            
+        if hasattr(self.fleet, "signals"):
+            self.fleet.signals.emit(
+                "COHERENT_INTENT_ESTABLISHED",
+                {
+                    "intent": intent,
+                    "priority": priority,
+                    "timestamp": datetime.now().isoformat(),
+                },
+                sender="IntentCoherenceEngine",
+            )
+
         return {
             "status": "synchronized",
             "global_intent": self.global_intent,
-            "priority": self.intent_priority
+            "priority": self.intent_priority,
         }
 
     def align_agent(self, agent_name: str, local_task: str) -> str:
@@ -49,10 +54,12 @@ class IntentCoherenceEngine:
         """
         if not self.global_intent:
             return local_task
-            
-        logging.info(f"IntentCoherenceEngine: Aligning {agent_name} with global intent.")
-        
-        # In a real implementation, we'd use an LLM or vector similarity to 
+
+        logging.info(
+            f"IntentCoherenceEngine: Aligning {agent_name} with global intent."
+        )
+
+        # In a real implementation, we'd use an LLM or vector similarity to
         # project the local task into the global intent space.
         alignment_prompt = (
             f"Global Objective: {self.global_intent}\n"
@@ -60,7 +67,7 @@ class IntentCoherenceEngine:
             "Adjust the local task to ensure it best serves the Global Objective. "
             "Return the optimized task description."
         )
-        
+
         # For simulation, we'll just prepend the global context
         aligned_task = f"[Aligned with: {self.global_intent}] {local_task}"
         return aligned_task

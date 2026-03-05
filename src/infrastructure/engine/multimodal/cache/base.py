@@ -52,7 +52,9 @@ class MultiModalCache(ABC):
         raise NotImplementedError("Subclasses must implement get()")
 
     @abstractmethod
-    def put(self, key: MediaHash, data: Any, metadata: Optional[Dict] = None) -> CacheEntry:
+    def put(
+        self, key: MediaHash, data: Any, metadata: Optional[Dict] = None
+    ) -> CacheEntry:
         """Put entry into cache."""
         raise NotImplementedError("Subclasses must implement put()")
 
@@ -72,7 +74,10 @@ class MultiModalCache(ABC):
         raise NotImplementedError("Subclasses must implement contains()")
 
     def get_or_compute(
-        self, key: MediaHash, compute_fn: Callable[[], Any], metadata: Optional[Dict] = None
+        self,
+        key: MediaHash,
+        compute_fn: Callable[[], Any],
+        metadata: Optional[Dict] = None,
     ) -> CacheEntry:
         """Get from cache or compute and cache."""
         entry = self.get(key)

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,10 +23,13 @@ import requests
 
 __version__ = VERSION
 
+
 class OllamaConnectorAgent(BaseAgent):
     """Handles local inference requests via the Ollama API."""
-    
-    def __init__(self, file_path: str, endpoint: str = "http://localhost:11434") -> None:
+
+    def __init__(
+        self, file_path: str, endpoint: str = "http://localhost:11434"
+    ) -> None:
         super().__init__(file_path)
         self.endpoint = endpoint
         self._system_prompt = "You are an Edge Intelligence Connector for Ollama."
@@ -42,13 +46,9 @@ class OllamaConnectorAgent(BaseAgent):
         """Runs a local inference request."""
         if not self.check_availability():
             return "Error: Ollama service not reachable at " + self.endpoint
-            
-        payload = {
-            "model": model,
-            "prompt": prompt,
-            "stream": False
-        }
-        
+
+        payload = {"model": model, "prompt": prompt, "stream": False}
+
         try:
             response = requests.post(f"{self.endpoint}/api/generate", json=payload)
             response_text = ""
@@ -60,10 +60,7 @@ class OllamaConnectorAgent(BaseAgent):
             # Phase 120: Harvest intelligence/interaction to shards
             if hasattr(self, "recorder") and self.recorder:
                 self.recorder.record_interaction(
-                    provider="Ollama",
-                    model=model,
-                    prompt=prompt,
-                    result=response_text
+                    provider="Ollama", model=model, prompt=prompt, result=response_text
                 )
             return response_text
         except Exception as e:
@@ -74,11 +71,13 @@ class OllamaConnectorAgent(BaseAgent):
                     model=model,
                     prompt=prompt,
                     result=error_msg,
-                    meta={"status": "exception"}
+                    meta={"status": "exception"},
                 )
             return error_msg
 
+
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function
+
     main = create_main_function(OllamaConnectorAgent)
     main()

@@ -18,8 +18,10 @@ import shutil
 import subprocess
 import tempfile
 
+
 class SecurityIssueType(Enum):
     """Types of security vulnerabilities."""
+
     SQL_INJECTION = "sql_injection"
     XSS = "xss"
     HARDCODED_SECRET = "hardcoded_secret"

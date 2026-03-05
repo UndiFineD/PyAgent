@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,7 +29,9 @@ from pathlib import Path
 from typing import Any
 
 # Ensure the project root is in PYTHONPATH before importing from src
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
+project_root = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "..", "..", "..")
+)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
@@ -53,7 +56,10 @@ except ImportError:
 from src.core.base.lifecycle.version import VERSION  # noqa: E402
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager  # noqa: E402
 from src.observability.structured_logger import StructuredLogger  # noqa: E402
-from src.infrastructure.services.dev.scripts.analysis.prompt_optimizer_agent import PromptOptimizerAgent  # noqa: E402
+from src.infrastructure.services.dev.scripts.analysis.prompt_optimizer_agent import (
+    PromptOptimizerAgent,
+)  # noqa: E402
+
 # pylint: enable=wrong-import-position
 
 
@@ -61,7 +67,9 @@ from src.infrastructure.services.dev.scripts.analysis.prompt_optimizer_agent imp
 class DirectiveParser:
     """Parses strategic directives from prompt and context files."""
 
-    def __init__(self, root: str, prompt_path: str | None, context_path: str | None) -> None:
+    def __init__(
+        self, root: str, prompt_path: str | None, context_path: str | None
+    ) -> None:
         self.root = Path(root)
         self.prompt_path = prompt_path
         self.context_path = context_path
@@ -86,7 +94,9 @@ class DirectiveParser:
         if not self.strategic_note:
             return ["src"]
 
-        focus_match = re.search(r"@focus:\s*(\[.*?\]|.*?\n)", self.strategic_note, re.DOTALL | re.IGNORECASE)
+        focus_match = re.search(
+            r"@focus:\s*(\[.*?\]|.*?\n)", self.strategic_note, re.DOTALL | re.IGNORECASE
+        )
         if not focus_match:
             return ["src"]
 
@@ -97,7 +107,9 @@ class DirectiveParser:
                 return json.loads(clean_focus.replace("'", '"'))
             except (json.JSONDecodeError, ValueError):
                 inner = focus_val[1:-1].split(",")
-                return [d.strip().strip('"').strip("'").strip() for d in inner if d.strip()]
+                return [
+                    d.strip().strip('"').strip("'").strip() for d in inner if d.strip()
+                ]
         return [d.strip() for d in focus_val.split(",") if d.strip()]
 
     def execute_commands(self) -> None:
@@ -124,7 +136,6 @@ class IntelligenceHarvester:
         self.fleet = fleet
         self.model_name = model_name
 
-
     def harvest(self) -> list[dict[str, Any]]:
         """Harvests insights from multiple external backends, with prompt optimization."""
         from src.infrastructure.compute.backend import execution_engine as ai
@@ -147,7 +158,9 @@ class IntelligenceHarvester:
 
         # 1. LMStudio (Local External)
         try:
-            lmstudio_res = ai.llm_chat_via_lmstudio(prompt, model=os.environ.get("DV_LMSTUDIO_MODEL", ""))
+            lmstudio_res = ai.llm_chat_via_lmstudio(
+                prompt, model=os.environ.get("DV_LMSTUDIO_MODEL", "")
+            )
             if lmstudio_res:
                 lessons.append({"provider": "LMStudio", "text": lmstudio_res})
         except Exception:
@@ -185,8 +198,8 @@ class IntelligenceHarvester:
         return lessons
 
 
-
 # Global flag to ensure Triton compatibility is only checked/logged on the first cycle
+
 
 class CycleOrchestrator:
     """Manages the execution of multiple improvement cycles."""
@@ -201,7 +214,6 @@ class CycleOrchestrator:
         # Stores normalized messages from the last completed cycle for stagnation detection
         self._last_cycle_messages: list[str] | None = None
 
-
     def run(self) -> None:
         """Executes the loop based on arguments, always printing per-cycle timing."""
         current_cycle = 0
@@ -209,16 +221,26 @@ class CycleOrchestrator:
             current_cycle += 1
             start_time = time.time()
             # Only allow Triton compatibility check/logging on the first cycle
-            if not hasattr(self, '_triton_checked_once') or not self._triton_checked_once:
+            if (
+                not hasattr(self, "_triton_checked_once")
+                or not self._triton_checked_once
+            ):
                 # Proactively set GITHUB_TOKEN from gh CLI if not already set
                 if not os.environ.get("GITHUB_TOKEN"):
                     try:
-                        res = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True, check=False)
+                        res = subprocess.run(
+                            ["gh", "auth", "token"],
+                            capture_output=True,
+                            text=True,
+                            check=False,
+                        )
                         if res.returncode == 0:
                             token = res.stdout.strip()
                             if token:
                                 os.environ["GITHUB_TOKEN"] = token
-                                logging.info("GITHUB_TOKEN set from 'gh auth token' for first cycle.")
+                                logging.info(
+                                    "GITHUB_TOKEN set from 'gh auth token' for first cycle."
+                                )
                     except subprocess.SubprocessError:
                         logging.warning("Could not set GITHUB_TOKEN from gh CLI.")
                 result = run_cycle(
@@ -242,14 +264,23 @@ class CycleOrchestrator:
                     allow_triton_check=False,
                 )
             duration = time.time() - start_time
-            print(f"\n=== CYCLE {current_cycle} COMPLETE (Time spent: {duration:.2f}s) ===")
+            print(
+                f"\n=== CYCLE {current_cycle} COMPLETE (Time spent: {duration:.2f}s) ==="
+            )
             # Compare messages with previous cycle to detect stagnation.
             # Only apply this early-cancel behavior when the user requested multiple cycles.
-            current_messages: list[str] = result.get("messages", []) if isinstance(result, dict) else []
+            current_messages: list[str] = (
+                result.get("messages", []) if isinstance(result, dict) else []
+            )
 
             if getattr(self.args, "cycles", 1) > 1 and current_cycle > 1:
-                if hasattr(self, "_last_cycle_messages") and self._last_cycle_messages == current_messages:
-                    self.logger.info("No new messages since previous cycle — cancelling remaining cycles.")
+                if (
+                    hasattr(self, "_last_cycle_messages")
+                    and self._last_cycle_messages == current_messages
+                ):
+                    self.logger.info(
+                        "No new messages since previous cycle — cancelling remaining cycles."
+                    )
                     break
 
             # Save for next cycle comparison
@@ -259,7 +290,12 @@ class CycleOrchestrator:
                 break
 
             self.logger.info("Waiting before next cycle... (Press Ctrl+C to stop)")
-            _cycle_throttle(self.args.delay, self.root, self._get_last_focus(), use_watcher=self.args.watch)
+            _cycle_throttle(
+                self.args.delay,
+                self.root,
+                self._get_last_focus(),
+                use_watcher=self.args.watch,
+            )
 
     def _get_last_focus(self) -> list[str]:
         """Peeks at the prompt for the watcher's benefit."""
@@ -280,7 +316,6 @@ except ImportError:
     pass
 
 __version__ = VERSION
-
 
 
 def run_cycle(
@@ -308,10 +343,17 @@ def run_cycle(
     parser.execute_commands()
 
     # 2. Run Improvement Loop
-    combined_stats = {"files_scanned": 0, "issues_found": 0, "fixes_applied": 0, "details": []}
+    combined_stats = {
+        "files_scanned": 0,
+        "issues_found": 0,
+        "fixes_applied": 0,
+        "details": [],
+    }
     for t_dir in target_dirs:
         # Patch: Only allow Triton compatibility check on first cycle
-        stats = fleet.self_improvement.run_improvement_cycle(target_dir=t_dir, allow_triton_check=allow_triton_check)
+        stats = fleet.self_improvement.run_improvement_cycle(
+            target_dir=t_dir, allow_triton_check=allow_triton_check
+        )
         combined_stats["files_scanned"] += stats.get("files_scanned", 0)
         combined_stats["issues_found"] += stats.get("issues_found", 0)
         combined_stats["fixes_applied"] += stats.get("fixes_applied", 0)
@@ -338,7 +380,11 @@ def run_cycle(
     lessons = harvester.harvest()
 
     # Normalize messages for inter-cycle comparison
-    messages = [f"{l.get('provider')}:{l.get('text')}" for l in lessons if isinstance(l, dict) and l.get('text')]
+    messages = [
+        f"{l.get('provider')}:{l.get('text')}"
+        for l in lessons
+        if isinstance(l, dict) and l.get("text")
+    ]
 
     # Return per-cycle information for orchestration decisions
     return {"messages": messages, "stats": combined_stats}
@@ -348,7 +394,7 @@ def consult_external_models(
     fleet: Any,
     broken_items: list[dict[str, Any]],
     prompt_path: str | None = None,
-    model_name: str | None = None
+    model_name: str | None = None,
 ) -> None:
     """
     Placeholder for federated learning consultation (Phase 112).
@@ -360,8 +406,10 @@ def consult_external_models(
         for item in broken_items:
             print(f"   * File: {item['file']}")
             for issue in item["remaining_issues"]:
-                line = issue.get('line', '1')
-                print(f"     - L{line} | {issue.get('type', 'Unknown')}: {issue.get('message', '')}")
+                line = issue.get("line", "1")
+                print(
+                    f"     - L{line} | {issue.get('type', 'Unknown')}: {issue.get('message', '')}"
+                )
     print("[Intelligence] Federated consensus reached: Continue localized refactoring.")
 
 
@@ -375,16 +423,21 @@ def _analyze_unfixed_issues(stats: dict[str, Any]) -> list[dict[str, Any]]:
             # Filter matches for the orchestrator itself if they are false positives
             if "run_fleet_self_improvement.py" in detail["file"]:
                 unfixed = [
-                    i for i in unfixed
+                    i
+                    for i in unfixed
                     if "subprocess.run" not in str(i) and "time.sleep" not in str(i)
                 ]
 
             if unfixed:
-                broken_items.append({"file": detail["file"], "remaining_issues": unfixed})
+                broken_items.append(
+                    {"file": detail["file"], "remaining_issues": unfixed}
+                )
     return broken_items
 
 
-def _update_auto_documentation(fleet: FleetManager, root: str, stats: dict[str, Any]) -> None:
+def _update_auto_documentation(
+    fleet: FleetManager, root: str, stats: dict[str, Any]
+) -> None:
     """Updates FLEET_AUTO_DOC.md with cycle results."""
     fleet_path = os.path.join(root, "src/infrastructure/swarm/fleet/fleet_manager.py")
     doc_res = fleet.doc_gen_agent.extract_docs(fleet_path)
@@ -417,8 +470,12 @@ def _log_explainability(fleet: FleetManager, stats: dict[str, Any]) -> None:
 def _verify_ai_recording(fleet: FleetManager) -> None:
     """Verifies that local interaction recording is functional."""
     test_prompt = "How can we optimize for a trillion parameters?"
-    test_result = "By using compressed sharding and adler32 hashing for high-speed indexing."
-    fleet.recorder.record_interaction("internal_fleet_optimizer", "logic-v1", test_prompt, test_result)
+    test_result = (
+        "By using compressed sharding and adler32 hashing for high-speed indexing."
+    )
+    fleet.recorder.record_interaction(
+        "internal_fleet_optimizer", "logic-v1", test_prompt, test_result
+    )
 
 
 def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
@@ -427,7 +484,9 @@ def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
     try:
         new_patterns = fleet.intelligence.synthesize_collective_intelligence()
         if new_patterns:
-            logger.info(f"[Intelligence] Identified {len(new_patterns)} new actionable patterns for the next cycle.")
+            logger.info(
+                f"[Intelligence] Identified {len(new_patterns)} new actionable patterns for the next cycle."
+            )
             for idx, pattern in enumerate(new_patterns, 1):
                 file_link = ""
                 doc_link = ""
@@ -443,7 +502,7 @@ def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
                     desc = str(pattern)
                     file_path = None
                     doc = None
-                
+
                 if file_path and file_path != "unknown":
                     file_link = f" [View]({file_path})"
                 if doc:
@@ -454,7 +513,9 @@ def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
         logger.warning(f"[Intelligence] Synthesis skipped: {e}")
 
 
-def _attempt_autonomous_solutions(fleet: FleetManager, broken_items: list[dict[str, Any]], model_name: str) -> None:
+def _attempt_autonomous_solutions(
+    fleet: FleetManager, broken_items: list[dict[str, Any]], model_name: str
+) -> None:
     """
     Constructs a prompt with cycle findings and attempts to solve remaining issues
     via autonomous reasoning or external LLM consultation.
@@ -499,7 +560,7 @@ def _attempt_autonomous_solutions(fleet: FleetManager, broken_items: list[dict[s
             fleet.intelligence.contribute_insight(
                 agent_name="AutonomousSolver",
                 insight=f"Proposed fix for debt cluster: {solution[:100]}...",
-                confidence=0.9
+                confidence=0.9,
             )
             print(" - Solution pattern recorded to collective knowledge.")
 
@@ -509,10 +570,7 @@ def _attempt_autonomous_solutions(fleet: FleetManager, broken_items: list[dict[s
 
 
 def _prune_verified_directives(
-    prompt_path: str | None,
-    root: str,
-    target_dirs: list[str],
-    broken_items: list[Any]
+    prompt_path: str | None, root: str, target_dirs: list[str], broken_items: list[Any]
 ) -> None:
     """Removes completed directives from the prompt file."""
     if not (prompt_path and not broken_items):
@@ -524,7 +582,9 @@ def _prune_verified_directives(
     if not p_path.exists():
         return
 
-    print(f"\n[Maintenance] Area '@focus: {target_dirs}' is CLEAN. Pruning directive...")
+    print(
+        f"\n[Maintenance] Area '@focus: {target_dirs}' is CLEAN. Pruning directive..."
+    )
     content = p_path.read_text(encoding="utf-8")
 
     # DYNAMIC MULTI-LINE PRUNING (Phase 141)
@@ -536,15 +596,26 @@ def _prune_verified_directives(
         flags=re.MULTILINE | re.IGNORECASE | re.DOTALL,
     )
     if new_content == content:
-        new_content = re.sub(r"^@focus:.*$\n?", "", content, count=1, flags=re.MULTILINE | re.IGNORECASE)
+        new_content = re.sub(
+            r"^@focus:.*$\n?", "", content, count=1, flags=re.MULTILINE | re.IGNORECASE
+        )
 
-    new_content = re.sub(r"^@cmd:.*$\n?", "", new_content, count=1, flags=re.MULTILINE | re.IGNORECASE)
     new_content = re.sub(
-        r"^@python:\s*\"\"\"(.*?)\"\"\"\n?", "", new_content, count=1,
-        flags=re.DOTALL | re.IGNORECASE
+        r"^@cmd:.*$\n?", "", new_content, count=1, flags=re.MULTILINE | re.IGNORECASE
     )
-    new_content = re.sub(r"^- \[x\].*$\n?", "", new_content, flags=re.MULTILINE | re.IGNORECASE)
-    new_content = re.sub(r"^# DONE.*$\n?", "", new_content, flags=re.MULTILINE | re.IGNORECASE)
+    new_content = re.sub(
+        r"^@python:\s*\"\"\"(.*?)\"\"\"\n?",
+        "",
+        new_content,
+        count=1,
+        flags=re.DOTALL | re.IGNORECASE,
+    )
+    new_content = re.sub(
+        r"^- \[x\].*$\n?", "", new_content, flags=re.MULTILINE | re.IGNORECASE
+    )
+    new_content = re.sub(
+        r"^# DONE.*$\n?", "", new_content, flags=re.MULTILINE | re.IGNORECASE
+    )
 
     if new_content != content:
         p_path.write_text(new_content.strip() + "\n", encoding="utf-8")
@@ -570,7 +641,9 @@ def _report_remaining_debt(
         for item in broken_items:
             logger.info(f"File: {item['file']}")
             for issue in item["remaining_issues"]:
-                logger.info(f"  - [ ] {issue.get('type', 'Issue')}: {issue.get('message', '')}")
+                logger.info(
+                    f"  - [ ] {issue.get('type', 'Issue')}: {issue.get('message', '')}"
+                )
 
     # 2. Update Documentation
     logger.info("[Documentation] Generating updated docs for improvements...")
@@ -584,7 +657,9 @@ def _report_remaining_debt(
     print(" - Interaction archived to compressed local shard.")
 
     # 4. Intelligence and Synthesis
-    consult_external_models(fleet, broken_items, prompt_path=prompt_path, model_name=model_name)
+    consult_external_models(
+        fleet, broken_items, prompt_path=prompt_path, model_name=model_name
+    )
 
     # 5. Autonomous Problem Solving
     _attempt_autonomous_solutions(fleet, broken_items, model_name)
@@ -598,10 +673,7 @@ def _report_remaining_debt(
 
 
 def _cycle_throttle(
-    delay: int,
-    root: str,
-    target_dirs: list[str],
-    use_watcher: bool = False
+    delay: int, root: str, target_dirs: list[str], use_watcher: bool = False
 ) -> None:
     """
     Implement a controlled delay between improvement cycles.
@@ -642,7 +714,6 @@ def _cycle_throttle(
     print(f" - [Throttle] Waiting {delay}s for next cycle...")
     # Use threading.Event to avoid synchronous wait performance warnings
     threading.Event().wait(timeout=float(delay))
-
 
 
 def main() -> None:

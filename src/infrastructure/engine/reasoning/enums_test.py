@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ReasoningFormat"), "ReasoningFormat missing"
     assert hasattr(mod, "ToolCallFormat"), "ToolCallFormat missing"
     assert hasattr(mod, "ParseState"), "ParseState missing"
-

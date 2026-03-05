@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +18,9 @@ from pathlib import Path
 from typing import Iterable, Tuple, Optional
 
 
-def _build_pytest_command(kexpr: Optional[str] = None, extra_args: Optional[Iterable[str]] = None) -> list[str]:
+def _build_pytest_command(
+    kexpr: Optional[str] = None, extra_args: Optional[Iterable[str]] = None
+) -> list[str]:
     cmd = ["python", "-m", "pytest", "-q"]
     if kexpr:
         cmd.extend(["-k", kexpr])
@@ -26,7 +29,9 @@ def _build_pytest_command(kexpr: Optional[str] = None, extra_args: Optional[Iter
     return cmd
 
 
-def run_focused_tests_for_files(files: Iterable[str], timeout: int = 300) -> Tuple[bool, str]:
+def run_focused_tests_for_files(
+    files: Iterable[str], timeout: int = 300
+) -> Tuple[bool, str]:
     """Run a focused pytest subset based on changed file names.
 
     Args:

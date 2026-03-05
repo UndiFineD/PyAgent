@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,6 +24,7 @@ import re
 
 __version__ = VERSION
 
+
 class TemplateManager:
     """Manages entry templates with placeholders.
 
@@ -42,10 +44,7 @@ class TemplateManager:
         self.templates: dict[str, EntryTemplate] = {}
 
     def add_template(
-        self,
-        name: str,
-        template_text: str,
-        description: str = ""
+        self, name: str, template_text: str, description: str = ""
     ) -> EntryTemplate:
         """Add a new template.
 
@@ -58,13 +57,13 @@ class TemplateManager:
             The created EntryTemplate.
         """
         # Extract placeholders
-        placeholders = re.findall(r'\{(\w+)\}', template_text)
+        placeholders = re.findall(r"\{(\w+)\}", template_text)
 
         template = EntryTemplate(
             name=name,
             template_text=template_text,
             placeholders=placeholders,
-            description=description
+            description=description,
         )
         self.templates[name] = template
         return template

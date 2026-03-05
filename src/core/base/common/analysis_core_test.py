@@ -1,9 +1,11 @@
+#!/usr/bin/env python3
 # Auto-synced test for core/base/common/analysis_core.py
 import importlib.util
 import pathlib
 
 
 def _load_module():
+    """Dynamically load the module under test."""
     p = pathlib.Path(__file__).parent / "analysis_core.py"
     spec = importlib.util.spec_from_file_location("_mod_under_test", p)
     mod = importlib.util.module_from_spec(spec)
@@ -12,6 +14,6 @@ def _load_module():
 
 
 def test_imports_and_symbols():
+    """Test that the module imports and key symbols are present."""
     mod = _load_module()
     assert hasattr(mod, "AnalysisCore"), "AnalysisCore missing"
-

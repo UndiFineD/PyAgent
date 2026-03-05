@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_coderlanguagemixin_exists():
     """Test that CoderLanguageMixin class exists and is importable."""
-    assert 'CoderLanguageMixin' in dir()
+    assert "CoderLanguageMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

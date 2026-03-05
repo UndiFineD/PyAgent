@@ -4,6 +4,7 @@ import json
 from typing import Dict, Any, List
 from dataclasses import dataclass
 
+
 @dataclass(frozen=True)
 class ToolDefinition:
     name: str
@@ -11,11 +12,12 @@ class ToolDefinition:
     parameters: dict[str, Any]
     endpoint: str
 
+
 class ToolDraftingCore:
     """Pure logic for agents generating their own OpenAPI tools.
     Handles schema drafting, parameter validation, and endpoint mapping.
     """
-    
+
     def generate_openapi_spec(self, tools: list[ToolDefinition]) -> str:
         """Converts internal tool definitions into a valid OpenAPI 3.0 spec."""
         paths = {}
@@ -25,22 +27,16 @@ class ToolDraftingCore:
                     "summary": tool.description,
                     "operationId": tool.name,
                     "requestBody": {
-                        "content": {
-                            "application/json": {
-                                "schema": tool.parameters
-                            }
-                        }
+                        "content": {"application/json": {"schema": tool.parameters}}
                     },
-                    "responses": {
-                        "200": {"description": "Successful execution"}
-                    }
+                    "responses": {"200": {"description": "Successful execution"}},
                 }
             }
-            
+
         spec = {
             "openapi": "3.0.0",
             "info": {"title": "Dynamic Agent Tools", "version": "1.0.0"},
-            "paths": paths
+            "paths": paths,
         }
         return json.dumps(spec, indent=2)
 
@@ -52,7 +48,7 @@ class ToolDraftingCore:
         """Generates a Python function stub for the drafted tool."""
         params = tool.parameters.get("properties", {})
         args = ", ".join([f"{k}: Any" for k in params.keys()])
-        
+
         return f"""
 def {tool.name}({args}) -> Any:
     \"\"\"{tool.description}\"\"\"

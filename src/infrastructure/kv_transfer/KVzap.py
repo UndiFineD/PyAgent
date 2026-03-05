@@ -9,9 +9,11 @@ import torch
 import torch.nn as nn
 from dataclasses import dataclass
 
+
 @dataclass
 class KVzapConfig:
     """Configuration for KVzap pruning."""
+
     hidden_dim: int
     num_heads: int
     threshold: float = -4.0
@@ -19,11 +21,13 @@ class KVzapConfig:
     use_mlp: bool = True
     enabled: bool = True
 
+
 class KVzapSurrogate(nn.Module):
     """
     Lightweight surrogate model to predict KV importance scores from hidden states.
     Efficiently predicts which tokens can be safely pruned from the cache.
     """
+
     def __init__(self, config: KVzapConfig):
         super().__init__()
         self.config = config
@@ -31,7 +35,7 @@ class KVzapSurrogate(nn.Module):
             self.model = nn.Sequential(
                 nn.Linear(config.hidden_dim, config.hidden_dim // 8),
                 nn.GELU(),
-                nn.Linear(config.hidden_dim // 8, config.num_heads)
+                nn.Linear(config.hidden_dim // 8, config.num_heads),
             )
         else:
             self.model = nn.Linear(config.hidden_dim, config.num_heads)
@@ -41,10 +45,12 @@ class KVzapSurrogate(nn.Module):
         # output: [batch, seq_len, num_heads]
         return self.model(hidden_states)
 
+
 class KVzapPruner:
     """
     Orchestrates KV cache pruning using the surrogate model.
     """
+
     def __init__(self, config: KVzapConfig):
         self.config = config
         self.surrogate = KVzapSurrogate(config)
@@ -56,12 +62,12 @@ class KVzapPruner:
         """Calculate importance scores for each token/head."""
         with torch.no_grad():
             scores = self.surrogate(hidden_states.to(self.device))
-            
+
             # Protect the most recent window tokens (Sliding Window protection)
             seq_len = hidden_states.shape[1]
             if seq_len > self.config.window_size:
-                scores[:, -self.config.window_size:, :] = float('inf')
-                
+                scores[:, -self.config.window_size :, :] = float("inf")
+
             return scores
 
     def create_pruning_mask(self, scores: torch.Tensor) -> torch.Tensor:
@@ -69,10 +75,7 @@ class KVzapPruner:
         return scores >= self.config.threshold
 
     def prune_kv(
-        self, 
-        hidden_states: torch.Tensor, 
-        keys: torch.Tensor, 
-        values: torch.Tensor
+        self, hidden_states: torch.Tensor, keys: torch.Tensor, values: torch.Tensor
     ) -> Tuple[torch.Tensor, torch.Tensor, float]:
         """
         Prunes KV cache based on predicted importance.
@@ -83,13 +86,13 @@ class KVzapPruner:
 
         scores = self.get_importance_scores(hidden_states)
         mask = self.create_pruning_mask(scores)
-        
+
         # Simplified pruning logic for stub/integration
         # In a real vLLM implementation, this would involve updating PagedAttention block tables
         total_tokens = mask.numel()
         kept_tokens = mask.sum().item()
         compression_ratio = total_tokens / max(1, kept_tokens)
-        
+
         # For now, we return original tensors but log the potential saving
         # A full implementation would requires non-uniform tensor support or block-level masking
         return keys, values, compression_ratio

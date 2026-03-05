@@ -33,27 +33,27 @@ except ImportError as e:
 
 def test_textprompt_exists():
     """Test that TextPrompt class exists and is importable."""
-    assert 'TextPrompt' in dir()
+    assert "TextPrompt" in dir()
 
 
 def test_tokensprompt_exists():
     """Test that TokensPrompt class exists and is importable."""
-    assert 'TokensPrompt' in dir()
+    assert "TokensPrompt" in dir()
 
 
 def test_embedsprompt_exists():
     """Test that EmbedsPrompt class exists and is importable."""
-    assert 'EmbedsPrompt' in dir()
+    assert "EmbedsPrompt" in dir()
 
 
 def test_dataprompt_exists():
     """Test that DataPrompt class exists and is importable."""
-    assert 'DataPrompt' in dir()
+    assert "DataPrompt" in dir()
 
 
 def test_explicitencoderdecoderprompt_exists():
     """Test that ExplicitEncoderDecoderPrompt class exists and is importable."""
-    assert 'ExplicitEncoderDecoderPrompt' in dir()
+    assert "ExplicitEncoderDecoderPrompt" in dir()
 
 
 def test_is_text_prompt_exists():
@@ -134,4 +134,3 @@ def test_validate_prompt_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_tablemetadata_exists():
     """Test that TableMetadata class exists and is importable."""
-    assert 'TableMetadata' in dir()
+    assert "TableMetadata" in dir()
 
 
 def test_tabletrienode_exists():
     """Test that TableTrieNode class exists and is importable."""
-    assert 'TableTrieNode' in dir()
+    assert "TableTrieNode" in dir()
 
 
 def test_tabletrienode_instantiation():
@@ -49,7 +49,7 @@ def test_tabletrienode_instantiation():
 
 def test_tablecachemanager_exists():
     """Test that TableCacheManager class exists and is importable."""
-    assert 'TableCacheManager' in dir()
+    assert "TableCacheManager" in dir()
 
 
 def test_tablecachemanager_instantiation():
@@ -61,4 +61,3 @@ def test_tablecachemanager_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

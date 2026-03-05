@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
@@ -23,6 +24,7 @@ except ImportError:
 
 class TemperatureSampler(Sampler):
     """Temperature scaling sampler."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -41,6 +43,7 @@ class TemperatureSampler(Sampler):
 
 class TopKSampler(Sampler):
     """Top-K filtering sampler."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -61,6 +64,7 @@ class TopKSampler(Sampler):
 
 class TopPSampler(Sampler):
     """Top-P (nucleus) sampling."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -72,11 +76,11 @@ class TopPSampler(Sampler):
         if HAS_RUST and logits.ndim == 1:
             result = top_p_mask_rust(logits.tolist(), params.top_p)
             return np.array(result, dtype=logits.dtype)
-        
+
         was_1d = logits.ndim == 1
         if was_1d:
             logits = logits.reshape(1, -1)
-        
+
         batch_size, _ = logits.shape
         result = logits.copy()
         for i in range(batch_size):
@@ -87,12 +91,13 @@ class TopPSampler(Sampler):
             cutoff_idx = np.searchsorted(cumsum, params.top_p) + 1
             remove_indices = sorted_indices[cutoff_idx:]
             result[i, remove_indices] = -float("inf")
-        
+
         return result.squeeze(0) if was_1d else result
 
 
 class TopKTopPSampler(Sampler):
     """Combined top-k and top-p filtering."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -103,19 +108,20 @@ class TopKTopPSampler(Sampler):
         was_1d = result.ndim == 1
         if was_1d:
             result = result.reshape(1, -1)
-        
+
         if params.use_top_k:
             k = min(params.top_k, result.shape[-1])
             top_k_values = np.partition(result, -k, axis=-1)[..., -k:]
             threshold = np.min(top_k_values, axis=-1, keepdims=True)
             mask = result < threshold
             result = np.where(mask, -float("inf"), result)
-        
+
         if params.use_top_p:
             batch_size = result.shape[0]
             for i in range(batch_size):
                 valid_mask = result[i] > -float("inf")
-                if not np.any(valid_mask): continue
+                if not np.any(valid_mask):
+                    continue
                 valid_logits = result[i][valid_mask]
                 valid_indices = np.where(valid_mask)[0]
                 sorted_order = np.argsort(valid_logits)[::-1]
@@ -126,19 +132,20 @@ class TopKTopPSampler(Sampler):
                 cutoff_idx = np.searchsorted(cumsum, params.top_p) + 1
                 remove_indices = sorted_indices[cutoff_idx:]
                 result[i, remove_indices] = -float("inf")
-        
+
         if params.use_min_p:
             probs = _softmax(result)
             max_prob = np.max(probs, axis=-1, keepdims=True)
             threshold = params.min_p * max_prob
             mask = probs < threshold
             result = np.where(mask, -float("inf"), result)
-        
+
         return result.squeeze(0) if was_1d else result
 
 
 class GumbelSampler(Sampler):
     """Gumbel-max trick sampler."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -170,6 +177,7 @@ class GumbelSampler(Sampler):
 
 class RepetitionPenaltySampler(Sampler):
     """Repetition penalty sampler."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -180,10 +188,12 @@ class RepetitionPenaltySampler(Sampler):
             return logits
         result = logits.copy()
         all_tokens = state.get_all_token_ids()
-        if not all_tokens: return result
+        if not all_tokens:
+            return result
         unique_tokens = set(all_tokens)
         for token_id in unique_tokens:
-            if token_id >= result.shape[-1]: continue
+            if token_id >= result.shape[-1]:
+                continue
             if result[0, token_id] > 0:
                 result[0, token_id] /= params.repetition_penalty
             else:
@@ -193,13 +203,16 @@ class RepetitionPenaltySampler(Sampler):
 
 class PenaltySampler(Sampler):
     """Presence and frequency penalty sampler."""
+
     def forward(
         self,
         logits: np.ndarray,
         params: SamplingParams,
         state: Optional[SamplingState] = None,
     ) -> np.ndarray:
-        if (params.presence_penalty == 0 and params.frequency_penalty == 0) or state is None:
+        if (
+            params.presence_penalty == 0 and params.frequency_penalty == 0
+        ) or state is None:
             return logits
         if HAS_RUST:
             return compute_penalties_rust(
@@ -210,7 +223,8 @@ class PenaltySampler(Sampler):
             )
         result = logits.copy()
         for token_id, count in state.token_counts.items():
-            if token_id >= result.shape[-1]: continue
+            if token_id >= result.shape[-1]:
+                continue
             result[0, token_id] -= params.presence_penalty
             result[0, token_id] -= params.frequency_penalty * count
         return result

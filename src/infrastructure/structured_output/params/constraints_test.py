@@ -33,35 +33,34 @@ except ImportError as e:
 
 def test_outputconstraint_exists():
     """Test that OutputConstraint class exists and is importable."""
-    assert 'OutputConstraint' in dir()
+    assert "OutputConstraint" in dir()
 
 
 def test_jsonschemaconstraint_exists():
     """Test that JsonSchemaConstraint class exists and is importable."""
-    assert 'JsonSchemaConstraint' in dir()
+    assert "JsonSchemaConstraint" in dir()
 
 
 def test_regexconstraint_exists():
     """Test that RegexConstraint class exists and is importable."""
-    assert 'RegexConstraint' in dir()
+    assert "RegexConstraint" in dir()
 
 
 def test_choiceconstraint_exists():
     """Test that ChoiceConstraint class exists and is importable."""
-    assert 'ChoiceConstraint' in dir()
+    assert "ChoiceConstraint" in dir()
 
 
 def test_grammarconstraint_exists():
     """Test that GrammarConstraint class exists and is importable."""
-    assert 'GrammarConstraint' in dir()
+    assert "GrammarConstraint" in dir()
 
 
 def test_typeconstraint_exists():
     """Test that TypeConstraint class exists and is importable."""
-    assert 'TypeConstraint' in dir()
+    assert "TypeConstraint" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

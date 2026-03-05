@@ -34,14 +34,20 @@ class MultimodalStreamSession:
         self.core = core
         self.audio_proc = StreamingAudioProcessor()
         self.vision_enc = StreamingVisionEncoder()
-        self.temporal_mem = TemporalModalityBuffer(max_size=15)  # ~1 second of frames at 15fps
+        self.temporal_mem = TemporalModalityBuffer(
+            max_size=15
+        )  # ~1 second of frames at 15fps
         self.channels = dict(core.active_channels)  # Clone defaults
         self.channels["Thought"] = "hidden"  # Default thought to hidden for session
         self.input_history: List[Dict[str, Any]] = []
         self.output_history: List[Dict[str, Any]] = []
-        self.modificators: List[Callable[[List[Dict[str, Any]]], List[Dict[str, Any]]]] = []
+        self.modificators: List[
+            Callable[[List[Dict[str, Any]]], List[Dict[str, Any]]]
+        ] = []
 
-    def add_modificator(self, mod: Callable[[List[Dict[str, Any]]], List[Dict[str, Any]]]) -> None:
+    def add_modificator(
+        self, mod: Callable[[List[Dict[str, Any]]], List[Dict[str, Any]]]
+    ) -> None:
         """Add a hook to modify fragments before they reach the channel filter."""
         self.modificators.append(mod)
 
@@ -54,7 +60,11 @@ class MultimodalStreamSession:
         return packet
 
     def process_input_frame(
-        self, audio: List[float], image: Optional[bytes] = None, width: int = 640, height: int = 480
+        self,
+        audio: List[float],
+        image: Optional[bytes] = None,
+        width: int = 640,
+        height: int = 480,
     ) -> Dict[str, Any]:
         """
         Process a single clock-tick of multimodal data (e.g. 32ms audio + optional frame).
@@ -92,7 +102,9 @@ class MultimodalStreamSession:
                 # Extract 224x224 ROI around focal point (CLIP/LLAVA size)
                 rx = max(0, min(width - 224, x_grid * 16 - 112))
                 ry = max(0, min(height - 224, y_grid * 16 - 112))
-                result["active_roi"] = self.core.extract_roi(image, width, height, rx, ry, 224, 224)
+                result["active_roi"] = self.core.extract_roi(
+                    image, width, height, rx, ry, 224, 224
+                )
 
         # If stereo audio, estimate direction
         if len(audio) > 1024 and len(audio) % 2 == 0:
@@ -134,7 +146,9 @@ class MultimodalStreamSession:
         self.output_history.extend(filtered)
         return filtered
 
-    def _reparse_if_needed(self, fragments: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def _reparse_if_needed(
+        self, fragments: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
         """Scans for text fragments that might contain newly injected tags."""
         new_list = []
         for f in fragments:

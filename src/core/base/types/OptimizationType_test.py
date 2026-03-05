@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_optimizationtype_exists():
     """Test that OptimizationType class exists and is importable."""
-    assert 'OptimizationType' in dir()
+    assert "OptimizationType" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_fusedmoelayer_exists():
     """Test that FusedMoELayer class exists and is importable."""
-    assert 'FusedMoELayer' in dir()
+    assert "FusedMoELayer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

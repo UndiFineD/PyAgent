@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_validationseverity_exists():
     """Test that ValidationSeverity class exists and is importable."""
-    assert 'ValidationSeverity' in dir()
+    assert "ValidationSeverity" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

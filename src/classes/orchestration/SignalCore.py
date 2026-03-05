@@ -1,6 +1,7 @@
 from typing import Dict, List, Any, Optional
 from datetime import datetime
 
+
 class SignalCore:
     """
     Pure logic for the Signal Registry.
@@ -13,9 +14,11 @@ class SignalCore:
             "signal": signal_name,
             "data": data,
             "sender": sender,
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
 
-    def prune_history(self, history: List[Dict[str, Any]], limit: int) -> List[Dict[str, Any]]:
+    def prune_history(
+        self, history: List[Dict[str, Any]], limit: int
+    ) -> List[Dict[str, Any]]:
         """Returns the last N events from the signal history."""
         return history[-limit:]

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -15,11 +16,13 @@ from src.core.base.utils.RateLimiter import RateLimiter
 class OrchestratorResourceMixin:
     """Resource management methods (rate limiting, locking, incremental processing) for OrchestratorAgent."""
 
-    def enable_rate_limiting(self, config: RateLimitConfig | dict[str, Any] | None = None) -> None:
+    def enable_rate_limiting(
+        self, config: RateLimitConfig | dict[str, Any] | None = None
+    ) -> None:
         """Enable rate limiting for API calls."""
         if isinstance(config, dict):
             config = RateLimitConfig(**config)
-            
+
         self.rate_limiter = RateLimiter(config)
         logging.info(f"Rate limiting enabled: {config or 'default settings'}")
 

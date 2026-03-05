@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_selfarchivingagent_exists():
     """Test that SelfArchivingAgent class exists and is importable."""
-    assert 'SelfArchivingAgent' in dir()
+    assert "SelfArchivingAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

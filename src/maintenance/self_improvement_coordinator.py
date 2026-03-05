@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +20,7 @@ parsing, and implementation of improvements, healing, and research synthesis for
 It loads strategic directives from context.txt and prompt.txt, manages cloud and LAN peer discovery,
 and coordinates self-healing and research synthesis cycles.
 """
+
 # Copyright 2026 PyAgent Authors
 # SelfImprovementCoordinator: Automates the monitoring and implementation of improvements.
 
@@ -66,15 +66,18 @@ class SelfImprovementCoordinator:
     def _init_discovery(self) -> None:
         """Initializes LANDiscovery for peer finding."""
         try:
-            from src.infrastructure.swarm.network.lan_discovery import \
-                LANDiscovery
+            from src.infrastructure.swarm.network.lan_discovery import LANDiscovery
 
             secret_key: str | None = os.getenv("PYAGENT_SECRET")
             if not secret_key:
-                self.logger.warning("PYAGENT_SECRET not set; LAN discovery disabled for security.")
+                self.logger.warning(
+                    "PYAGENT_SECRET not set; LAN discovery disabled for security."
+                )
                 return
             self.discovery = LANDiscovery(
-                agent_id=f"Coordinator-{os.getpid()}", service_port=8000, secret_key=secret_key
+                agent_id=f"Coordinator-{os.getpid()}",
+                service_port=8000,
+                secret_key=secret_key,
             )
             self.discovery.start()
         except ImportError:
@@ -95,11 +98,17 @@ class SelfImprovementCoordinator:
             if f.exists():
                 content: str = f.read_text(encoding="utf-8")
                 # Extract "fixed prompt" sections
-                fixed_prompts: List[Any] = re.findall(r"-\s+(.*?)(?=\n-|\n\n|\n#|$)", content, re.DOTALL)
-                self.directives["fixed_prompts"].extend([p.strip().replace("\n", " ") for p in fixed_prompts])
+                fixed_prompts: List[Any] = re.findall(
+                    r"-\s+(.*?)(?=\n-|\n\n|\n#|$)", content, re.DOTALL
+                )
+                self.directives["fixed_prompts"].extend(
+                    [p.strip().replace("\n", " ") for p in fixed_prompts]
+                )
 
                 # Extract arXiv links
-                arxiv: List[Any] = re.findall(r"arxiv\.org/(?:abs|list)/[\w\.\/\?=&]+", content)
+                arxiv: List[Any] = re.findall(
+                    r"arxiv\.org/(?:abs|list)/[\w\.\/\?=&]+", content
+                )
                 self.directives["research_links"].extend(arxiv)
                 # Extract potential peers mentioned in context
                 peers: List[Any] = re.findall(r"peer:\s*([\w\-]+)", content)
@@ -120,24 +129,35 @@ class SelfImprovementCoordinator:
         # 1. Discover local peers via LANDiscovery
         if self.discovery:
             # Accessing protected member _lock is discouraged; consider exposing via public API in LANDiscovery
-            lock = getattr(self.discovery, '_lock', None)
-            registry = getattr(self.discovery, 'registry', {})
+            lock = getattr(self.discovery, "_lock", None)
+            registry = getattr(self.discovery, "registry", {})
             if lock is not None:
                 with lock:
                     for peer_id, info in registry.items():
                         all_nodes.append(
-                            {"id": peer_id, "type": "lan_peer", "ip": info.ip, "port": info.port, "status": "online"}
+                            {
+                                "id": peer_id,
+                                "type": "lan_peer",
+                                "ip": info.ip,
+                                "port": info.port,
+                                "status": "online",
+                            }
                         )
             else:
                 for peer_id, info in registry.items():
                     all_nodes.append(
-                        {"id": peer_id, "type": "lan_peer", "ip": info.ip, "port": info.port, "status": "online"}
+                        {
+                            "id": peer_id,
+                            "type": "lan_peer",
+                            "ip": info.ip,
+                            "port": info.port,
+                            "status": "online",
+                        }
                     )
 
         # 2. Discover registered MCP servers
         try:
-            from src.infrastructure.services.mcp.registry import \
-                MCPServerRegistry
+            from src.infrastructure.services.mcp.registry import MCPServerRegistry
 
             registry = MCPServerRegistry()
             for name in registry.servers:
@@ -146,36 +166,74 @@ class SelfImprovementCoordinator:
                         "id": name,
                         "type": "mcp_server",
                         # Accessing protected member _sessions is discouraged; consider exposing via public API in MCPServerRegistry
-                        "status": "connected" if hasattr(registry, '_sessions') and name in registry._sessions else "registered",
+                        "status": (
+                            "connected"
+                            if hasattr(registry, "_sessions")
+                            and name in registry._sessions
+                            else "registered"
+                        ),
                     }
                 )
         except ImportError as e:
             self.logger.debug(f"MCPServerRegistry not available for discovery: {e}")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            self.logger.error(f"[Robustness] Error during MCP server discovery from registry: {e}", exc_info=True)
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            self.logger.error(
+                f"[Robustness] Error during MCP server discovery from registry: {e}",
+                exc_info=True,
+            )
 
         # 3. Check persistent ConnectivityManager status
         try:
             # Ensure connectivity status is checked from the source
-            status_file: Path = self.workspace_root / "data" / "logs" / "connectivity_status.json"
+            status_file: Path = (
+                self.workspace_root / "data" / "logs" / "connectivity_status.json"
+            )
             if status_file.exists():
                 try:
                     data = json.loads(status_file.read_text(encoding="utf-8"))
                     for key, val in data.items():
-                        if isinstance(val, dict) and val.get("working") and not key.startswith("__"):
+                        if (
+                            isinstance(val, dict)
+                            and val.get("working")
+                            and not key.startswith("__")
+                        ):
                             # Avoid duplicates from LAN/MCP
                             if not any(n["id"] == key for n in all_nodes):
-                                all_nodes.append({"id": key, "type": "remote_endpoint", "status": "available"})
+                                all_nodes.append(
+                                    {
+                                        "id": key,
+                                        "type": "remote_endpoint",
+                                        "status": "available",
+                                    }
+                                )
                 except json.JSONDecodeError as jde:
-                    self.logger.warning(f"Failed to parse connectivity_status.json: {jde}")
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    self.logger.error(f"[Robustness] Error reading/processing connectivity_status.json: {e}", exc_info=True)
+                    self.logger.warning(
+                        f"Failed to parse connectivity_status.json: {jde}"
+                    )
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                    self.logger.error(
+                        f"[Robustness] Error reading/processing connectivity_status.json: {e}",
+                        exc_info=True,
+                    )
         except ImportError as e:
-            self.logger.debug(f"ConnectivityManager not available for status check: {e}")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            self.logger.error(f"[Robustness] Unexpected error in ConnectivityManager discovery block: {e}", exc_info=True)
+            self.logger.debug(
+                f"ConnectivityManager not available for status check: {e}"
+            )
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            self.logger.error(
+                f"[Robustness] Unexpected error in ConnectivityManager discovery block: {e}",
+                exc_info=True,
+            )
 
-        self.logger.info(f"Discovery Cycle: Found {len(all_nodes)} total available/connected servers/nodes.")
+        self.logger.info(
+            f"Discovery Cycle: Found {len(all_nodes)} total available/connected servers/nodes."
+        )
         return all_nodes
 
     async def research_synthesis_loop(self) -> None:
@@ -188,19 +246,24 @@ class SelfImprovementCoordinator:
         # 1. Identify targets from strategic context
         await self.load_strategic_context()
         topics: List[Any] = [
-            p.split(":", 1)[1].strip() for p in self.directives["fixed_prompts"] if p.lower().startswith("research:")
+            p.split(":", 1)[1].strip()
+            for p in self.directives["fixed_prompts"]
+            if p.lower().startswith("research:")
         ]
 
         if not topics:
-            self.logger.info("No explicit research topics found. Checking for general multimodal cues.")
+            self.logger.info(
+                "No explicit research topics found. Checking for general multimodal cues."
+            )
             if any("multimodal" in p.lower() for p in self.directives["fixed_prompts"]):
                 topics: List[str] = ["multimodal ia3 scaling tensorrt"]
             else:
                 return
 
-        # 2. Instantiate Director for cross-agent orchestration
-                from src.infrastructure.swarm.orchestration.swarm.director_agent import \
-            DirectorAgent
+                # 2. Instantiate Director for cross-agent orchestration
+                from src.infrastructure.swarm.orchestration.swarm.director_agent import (
+                    DirectorAgent,
+                )
 
         # Use a temporary or the main improvements file
         director = DirectorAgent(str(self.improvements_file))
@@ -227,7 +290,9 @@ class SelfImprovementCoordinator:
 
         # 1. Discover nodes
         nodes: List[Dict[str, Any]] = await self.discover_external_servers()
-        active_peers: List[Dict[str, Any]] = [n for n in nodes if n["status"] in ["online", "connected", "available"]]
+        active_peers: List[Dict[str, Any]] = [
+            n for n in nodes if n["status"] in ["online", "connected", "available"]
+        ]
 
         if not active_peers:
             self.logger.info("No active cloud or LAN peers found for offloading.")
@@ -236,11 +301,15 @@ class SelfImprovementCoordinator:
         # 2. Audit Budget
         current_burn = self.budget.get_current_burn()
         if current_burn >= self.budget.daily_limit:
-            self.logger.warning(f"Daily cloud budget (${self.budget.daily_limit}) reached. Throttling offloads.")
+            self.logger.warning(
+                f"Daily cloud budget (${self.budget.daily_limit}) reached. Throttling offloads."
+            )
             return
 
         # 3. Identify offloadable tasks (Complexity > 0.8)
-        self.logger.info(f"Active Fleet: {len(active_peers)} nodes available. Current Burn: ${current_burn:.2f}")
+        self.logger.info(
+            f"Active Fleet: {len(active_peers)} nodes available. Current Burn: ${current_burn:.2f}"
+        )
         # In a real scenario, this would pop from a RequestQueue and call execute_remote_task
 
     async def run_healing_cycle(self) -> dict[str, Any]:
@@ -248,8 +317,9 @@ class SelfImprovementCoordinator:
         Phase 317: Automated Self-Healing Trigger.
         Reads health stats and documentation context to trigger repairs.
         """
-        from src.infrastructure.swarm.orchestration.healing.self_healing_orchestrator import \
-            SelfHealingOrchestrator
+        from src.infrastructure.swarm.orchestration.healing.self_healing_orchestrator import (
+            SelfHealingOrchestrator,
+        )
 
         # Initialize orchestrator (which now loads overrides from docs/prompt)
         orchestrator = SelfHealingOrchestrator(None)  # type: ignore
@@ -273,18 +343,26 @@ class SelfImprovementCoordinator:
         }
 
         if failed_agents:
-            self.logger.warning(f"Self-Healing: {len(failed_agents)} failures detected. Reviewing roadmap items...")
+            self.logger.warning(
+                f"Self-Healing: {len(failed_agents)} failures detected. Reviewing roadmap items..."
+            )
             for agent in failed_agents:
                 # Prioritize healing for agents mentioned in the fixed prompts or roadmap
-                is_priority = any(agent.lower() in p.lower() for p in self.directives["fixed_prompts"])
+                is_priority = any(
+                    agent.lower() in p.lower() for p in self.directives["fixed_prompts"]
+                )
                 if is_priority:
                     self.logger.info(f"Self-Healing: Priority recovery for {agent}")
                     # orchestrator.attempt_recovery(agent) # Would need fleet_manager
-                    results["actions_taken"].append(f"Queued priority recovery for {agent}")
+                    results["actions_taken"].append(
+                        f"Queued priority recovery for {agent}"
+                    )
 
         return results
 
-    async def execute_remote_task(self, task: Dict[str, Any], target_peer: str) -> Dict[str, Any]:
+    async def execute_remote_task(
+        self, task: Dict[str, Any], target_peer: str
+    ) -> Dict[str, Any]:
         """
         Executes a remote task on the specified peer. (Not yet implemented)
         Args:
@@ -294,7 +372,9 @@ class SelfImprovementCoordinator:
             A dictionary with the result of the remote execution.
         """
         # TODO: Implement remote task execution logic
-        self.logger.info(f"execute_remote_task called for peer {target_peer}, but not implemented.")
+        self.logger.info(
+            f"execute_remote_task called for peer {target_peer}, but not implemented."
+        )
         return {"status": "not_implemented"}
         """
         Dispatches a healing or improvement task to a remote peer.
@@ -302,11 +382,16 @@ class SelfImprovementCoordinator:
         """
         # 1. Check if peer is known and online
         peers: List[Dict[str, Any]] = await self.discover_external_servers()
-        target: Dict[str, Any] | None = next((p for p in peers if p["id"] == target_peer), None)
+        target: Dict[str, Any] | None = next(
+            (p for p in peers if p["id"] == target_peer), None
+        )
 
         valid_statuses: set[str] = {"online", "connected", "available"}
         if not target or target.get("status") not in valid_statuses:
-            return {"status": "failed", "error": f"Peer {target_peer} is offline or unknown"}
+            return {
+                "status": "failed",
+                "error": f"Peer {target_peer} is offline or unknown",
+            }
 
         # 2. Simulate task dispatch (Integration with RequestQueue.py / DistributedCoordinator.py)
         # In Phase 51, this would use NixlConnector or MooncakeConnector for KV-warm transfer
@@ -328,11 +413,16 @@ class SelfImprovementCoordinator:
         content: str = self.improvements_file.read_text(encoding="utf-8")
 
         # Simple extraction logic for "High Priority" items
-        high_priority_section: re.Match[str] | None = re.search(r"### High Priority\n(.*?)(?=\n###|\n==)", content, re.DOTALL)
+        high_priority_section: re.Match[str] | None = re.search(
+            r"### High Priority\n(.*?)(?=\n###|\n==)", content, re.DOTALL
+        )
         if not high_priority_section:
             return []
 
-        items: List[Any] = re.findall(r"\d+\.\s+\*\*(.*?)\*\*\n\s+-\s+Status:\s+(.*?)\n", high_priority_section.group(1))
+        items: List[Any] = re.findall(
+            r"\d+\.\s+\*\*(.*?)\*\*\n\s+-\s+Status:\s+(.*?)\n",
+            high_priority_section.group(1),
+        )
 
         active_ideas = []
         for title, status in items:
@@ -350,10 +440,17 @@ class SelfImprovementCoordinator:
         # Find arXiv links
         arxiv_links: List[Any] = re.findall(r"arxiv\.org/abs/(\d+\.\d+)", content)
         # Find ScienceDirect PIIs
-        sciencedirect_links: List[Any] = re.findall(r"sciencedirect\.com/science/article/pii/(\w+)", content)
+        sciencedirect_links: List[Any] = re.findall(
+            r"sciencedirect\.com/science/article/pii/(\w+)", content
+        )
 
         links: List[str] = [f"https://arxiv.org/abs/{link}" for link in arxiv_links]
-        links.extend([f"https://www.sciencedirect.com/science/article/pii/{link}" for link in sciencedirect_links])
+        links.extend(
+            [
+                f"https://www.sciencedirect.com/science/article/pii/{link}"
+                for link in sciencedirect_links
+            ]
+        )
         return list(set(links))
 
     async def sync_with_roadmap(self, active_ideas: list[dict[str, Any]]) -> None:
@@ -371,7 +468,9 @@ class SelfImprovementCoordinator:
     async def generate_action_plan(self, active_ideas: list[dict[str, Any]]) -> None:
         """Simulates triggering implementations for high-priority ideas."""
         for idea in active_ideas:
-            print(f"[ACTION] Processing Improvement: {idea['title']} (Status: {idea['status']})")
+            print(
+                f"[ACTION] Processing Improvement: {idea['title']} (Status: {idea['status']})"
+            )
             await self.trigger_agent_execution(idea)
 
     async def trigger_agent_execution(self, item: dict[str, Any]) -> None:
@@ -384,8 +483,9 @@ class SelfImprovementCoordinator:
 
         try:
             if status == "PLANNED" or status == "PLANNING":
-                from src.infrastructure.swarm.orchestration.swarm.director_agent import \
-                    DirectorAgent
+                from src.infrastructure.swarm.orchestration.swarm.director_agent import (
+                    DirectorAgent,
+                )
 
                 self.logger.info(f"Handing off to DirectorAgent: {title}")
                 agent = DirectorAgent(str(self.improvements_file))
@@ -398,8 +498,7 @@ class SelfImprovementCoordinator:
                 print(f"  -> [DIRECTOR RESPONSE] {res[:200]}...")
 
             elif status == "RESEARCH":
-                from src.logic.agents.intelligence.research_agent import \
-                    ResearchAgent
+                from src.logic.agents.intelligence.research_agent import ResearchAgent
 
                 self.logger.info(f"Handing off to ResearchAgent: {title}")
                 agent = ResearchAgent(str(self.improvements_file))
@@ -412,8 +511,12 @@ class SelfImprovementCoordinator:
 
         except ImportError as e:
             self.logger.warning(f"  -> [SKIP] Required agent not found: {e}")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            self.logger.error(f"  -> [Robustness] Failed to trigger agent: {e}", exc_info=True)
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            self.logger.error(
+                f"  -> [Robustness] Failed to trigger agent: {e}", exc_info=True
+            )
 
 
 async def main() -> None:

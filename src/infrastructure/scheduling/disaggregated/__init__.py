@@ -2,18 +2,13 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
 from .enums import InstanceRole, SchedulingPolicy
-from .config import (
-    InstanceInfo, 
-    DCPConfig, 
-    KVTransferParams, 
-    ScheduledRequest
-)
+from .config import InstanceInfo, DCPConfig, KVTransferParams, ScheduledRequest
 from .selectors import (
     InstanceSelector,
     RoundRobinSelector,
     LeastLoadedSelector,
     RandomSelector,
-    HashSelector
+    HashSelector,
 )
 from .scheduler import DisaggregatedScheduler
 from .factory import SchedulerFactory

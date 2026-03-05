@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -48,7 +49,13 @@ class HealthCore(BaseCore):
         """Check if git is installed and responsive."""
         start_time = time.time()
         try:
-            result = subprocess.run(["git", "--version"], capture_output=True, text=True, timeout=5, check=False)
+            result = subprocess.run(
+                ["git", "--version"],
+                capture_output=True,
+                text=True,
+                timeout=5,
+                check=False,
+            )
             self._record_diagnostic_event("git_check")
             ms = (time.time() - start_time) * 1000
             if result.returncode == 0:
@@ -60,7 +67,9 @@ class HealthCore(BaseCore):
                 )
         except (subprocess.SubprocessError, OSError) as e:
             self._record_diagnostic_event("git_check_failed")
-            return AgentHealthCheck(agent_name="git", status=HealthStatus.UNHEALTHY, error_message=str(e))
+            return AgentHealthCheck(
+                agent_name="git", status=HealthStatus.UNHEALTHY, error_message=str(e)
+            )
         return AgentHealthCheck(agent_name="git", status=HealthStatus.UNHEALTHY)
 
     def _record_diagnostic_event(self, event: str) -> None:
@@ -69,7 +78,6 @@ class HealthCore(BaseCore):
         This provides a trace of shell operations.
         """
         # Placeholder for telemetry hook
-
 
     def check_python(self) -> AgentHealthCheck:
         """Return details about the current Python environment."""
@@ -91,7 +99,7 @@ class HealthCore(BaseCore):
         return list(
             map(
                 lambda item: item[0],
-                filter(lambda item: (now - item[1]) > 30.0, agent_heartbeats.items())
+                filter(lambda item: (now - item[1]) > 30.0, agent_heartbeats.items()),
             )
         )
 
@@ -134,11 +142,11 @@ class HealthCore(BaseCore):
         # Phase 42 Integration: Also check regarding core agent scripts functionally
         def _check_agent(agent_name: str) -> None:
             agent_file = self.workspace_root / "src" / f"agent_{agent_name}.py"
-            status = HealthStatus.HEALTHY if agent_file.exists() else HealthStatus.UNHEALTHY
+            status = (
+                HealthStatus.HEALTHY if agent_file.exists() else HealthStatus.UNHEALTHY
+            )
             self.results[agent_name] = AgentHealthCheck(
-                agent_name=agent_name,
-                status=status,
-                details={"path": str(agent_file)}
+                agent_name=agent_name, status=status, details={"path": str(agent_file)}
             )
 
         list(map(_check_agent, ["coder", "researcher", "architect"]))

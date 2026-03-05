@@ -17,6 +17,7 @@
 Provides a tiny placeholder class so imports succeed during iterative fixes.
 """
 
+
 class Benchmarker:
     def __init__(self, *_, **__):
         self.results = []

@@ -33,6 +33,7 @@ from urllib.parse import urlparse
 @dataclass
 class TemplateInfo:
     """Template metadata"""
+
     name: str
     author: str
     severity: str
@@ -44,6 +45,7 @@ class TemplateInfo:
 @dataclass
 class TemplateRequest:
     """HTTP request specification"""
+
     method: str
     path: str
     headers: Optional[Dict[str, str]] = None
@@ -53,6 +55,7 @@ class TemplateRequest:
 @dataclass
 class MatcherCondition:
     """Matcher condition specification"""
+
     type: str
     dsl: Optional[List[str]] = None
     status_code: Optional[int] = None
@@ -65,6 +68,7 @@ class MatcherCondition:
 @dataclass
 class TemplateHTTP:
     """HTTP template specification"""
+
     requests: List[TemplateRequest]
     matchers: List[MatcherCondition]
     matchers_condition: Optional[str] = None  # "and" or "or"
@@ -73,6 +77,7 @@ class TemplateHTTP:
 @dataclass
 class NucleiTemplate:
     """Complete Nuclei template"""
+
     id: str
     info: TemplateInfo
     http: Optional[TemplateHTTP] = None
@@ -81,6 +86,7 @@ class NucleiTemplate:
 @dataclass
 class ScanResult:
     """Result from template execution"""
+
     template_id: str
     url: str
     matched: bool
@@ -115,54 +121,50 @@ class NucleiTemplateEngine:
             data = yaml.safe_load(yaml_content)
 
             # Parse info section
-            info_data = data.get('info', {})
+            info_data = data.get("info", {})
             info = TemplateInfo(
-                name=info_data.get('name', ''),
-                author=info_data.get('author', ''),
-                severity=info_data.get('severity', 'info'),
-                description=info_data.get('description', ''),
-                reference=info_data.get('reference', []),
-                tags=info_data.get('tags', [])
+                name=info_data.get("name", ""),
+                author=info_data.get("author", ""),
+                severity=info_data.get("severity", "info"),
+                description=info_data.get("description", ""),
+                reference=info_data.get("reference", []),
+                tags=info_data.get("tags", []),
             )
 
             # Parse HTTP section
-            http_data = data.get('http')
+            http_data = data.get("http")
             http = None
             if http_data:
                 requests = []
-                for req_data in http_data.get('requests', []):
+                for req_data in http_data.get("requests", []):
                     request = TemplateRequest(
-                        method=req_data.get('method', 'GET'),
-                        path=req_data.get('path', '/'),
-                        headers=req_data.get('headers', {}),
-                        body=req_data.get('body')
+                        method=req_data.get("method", "GET"),
+                        path=req_data.get("path", "/"),
+                        headers=req_data.get("headers", {}),
+                        body=req_data.get("body"),
                     )
                     requests.append(request)
 
                 matchers = []
-                for matcher_data in http_data.get('matchers', []):
+                for matcher_data in http_data.get("matchers", []):
                     matcher = MatcherCondition(
-                        type=matcher_data.get('type', 'word'),
-                        dsl=matcher_data.get('dsl'),
-                        status_code=matcher_data.get('status_code'),
-                        headers=matcher_data.get('headers'),
-                        body=matcher_data.get('body'),
-                        words=matcher_data.get('words'),
-                        regex=matcher_data.get('regex')
+                        type=matcher_data.get("type", "word"),
+                        dsl=matcher_data.get("dsl"),
+                        status_code=matcher_data.get("status_code"),
+                        headers=matcher_data.get("headers"),
+                        body=matcher_data.get("body"),
+                        words=matcher_data.get("words"),
+                        regex=matcher_data.get("regex"),
                     )
                     matchers.append(matcher)
 
                 http = TemplateHTTP(
                     requests=requests,
                     matchers=matchers,
-                    matchers_condition=http_data.get('matchers-condition')
+                    matchers_condition=http_data.get("matchers-condition"),
                 )
 
-            template = NucleiTemplate(
-                id=data.get('id', ''),
-                info=info,
-                http=http
-            )
+            template = NucleiTemplate(id=data.get("id", ""), info=info, http=http)
 
             self.templates[template.id] = template
             return template
@@ -182,14 +184,16 @@ class NucleiTemplateEngine:
             Parsed NucleiTemplate or None if loading fails
         """
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
             return self.load_template_from_yaml(content)
         except Exception as e:
             self.logger.error(f"Failed to load template from {file_path}: {e}")
             return None
 
-    async def scan_url_with_template(self, template: NucleiTemplate, base_url: str) -> Optional[ScanResult]:
+    async def scan_url_with_template(
+        self, template: NucleiTemplate, base_url: str
+    ) -> Optional[ScanResult]:
         """
         Scan a URL with a specific template.
 
@@ -213,14 +217,16 @@ class NucleiTemplateEngine:
                     url=url,
                     method=request.method,
                     headers=request.headers,
-                    body=request.body
+                    body=request.body,
                 )
 
                 if not response:
                     continue
 
                 # Check matchers
-                matched = self._check_matchers(template.http.matchers, response, template.http.matchers_condition)
+                matched = self._check_matchers(
+                    template.http.matchers, response, template.http.matchers_condition
+                )
 
                 if matched:
                     return ScanResult(
@@ -229,16 +235,16 @@ class NucleiTemplateEngine:
                         matched=True,
                         info=template.info,
                         request_details={
-                            'method': request.method,
-                            'url': url,
-                            'headers': request.headers,
-                            'body': request.body
+                            "method": request.method,
+                            "url": url,
+                            "headers": request.headers,
+                            "body": request.body,
                         },
                         response_details={
-                            'status_code': response.status_code,
-                            'headers': dict(response.headers),
-                            'content': response.text[:1000]  # Truncate for storage
-                        }
+                            "status_code": response.status_code,
+                            "headers": dict(response.headers),
+                            "content": response.text[:1000],  # Truncate for storage
+                        },
                     )
 
         except Exception as e:
@@ -246,7 +252,9 @@ class NucleiTemplateEngine:
 
         return None
 
-    async def scan_url_with_templates(self, base_url: str, template_ids: Optional[List[str]] = None) -> List[ScanResult]:
+    async def scan_url_with_templates(
+        self, base_url: str, template_ids: Optional[List[str]] = None
+    ) -> List[ScanResult]:
         """
         Scan a URL with multiple templates.
 
@@ -261,7 +269,9 @@ class NucleiTemplateEngine:
         templates_to_scan = []
 
         if template_ids:
-            templates_to_scan = [self.templates.get(tid) for tid in template_ids if tid in self.templates]
+            templates_to_scan = [
+                self.templates.get(tid) for tid in template_ids if tid in self.templates
+            ]
         else:
             templates_to_scan = list(self.templates.values())
 
@@ -275,16 +285,20 @@ class NucleiTemplateEngine:
 
     def _build_url(self, base_url: str, path: str) -> str:
         """Build full URL from base URL and path."""
-        base_url = base_url.rstrip('/')
-        if path.startswith('/'):
+        base_url = base_url.rstrip("/")
+        if path.startswith("/"):
             return f"{base_url}{path}"
         else:
             return f"{base_url}/{path}"
 
-    async def _make_http_request(self, url: str, method: str = 'GET',
-                                headers: Optional[Dict[str, str]] = None,
-                                body: Optional[str] = None,
-                                timeout: int = 10) -> Optional[requests.Response]:
+    async def _make_http_request(
+        self,
+        url: str,
+        method: str = "GET",
+        headers: Optional[Dict[str, str]] = None,
+        body: Optional[str] = None,
+        timeout: int = 10,
+    ) -> Optional[requests.Response]:
         """Make HTTP request with timeout."""
         try:
             # In a real implementation, this would use aiohttp for async HTTP
@@ -295,16 +309,19 @@ class NucleiTemplateEngine:
                 headers=headers,
                 data=body,
                 timeout=timeout,
-                allow_redirects=False  # Don't follow redirects for security testing
+                allow_redirects=False,  # Don't follow redirects for security testing
             )
             return response
         except Exception as e:
             self.logger.error(f"HTTP request failed: {e}")
             return None
 
-    def _check_matchers(self, matchers: List[MatcherCondition],
-                       response: requests.Response,
-                       condition: Optional[str] = None) -> bool:
+    def _check_matchers(
+        self,
+        matchers: List[MatcherCondition],
+        response: requests.Response,
+        condition: Optional[str] = None,
+    ) -> bool:
         """
         Check if response matches the template matchers.
 
@@ -331,7 +348,9 @@ class NucleiTemplateEngine:
         else:  # "or"
             return any(results)
 
-    def _check_single_matcher(self, matcher: MatcherCondition, response: requests.Response) -> bool:
+    def _check_single_matcher(
+        self, matcher: MatcherCondition, response: requests.Response
+    ) -> bool:
         """Check a single matcher condition."""
         try:
             if matcher.type == "dsl":
@@ -349,7 +368,9 @@ class NucleiTemplateEngine:
             self.logger.error(f"Matcher check failed: {e}")
             return False
 
-    def _check_dsl_matcher(self, dsl_expressions: List[str], response: requests.Response) -> bool:
+    def _check_dsl_matcher(
+        self, dsl_expressions: List[str], response: requests.Response
+    ) -> bool:
         """Check DSL (Domain Specific Language) expressions."""
         # Simplified DSL evaluation - in real Nuclei, this is more complex
         for expr in dsl_expressions:
@@ -365,7 +386,9 @@ class NucleiTemplateEngine:
                 pass
             elif "contains" in expr:
                 # Content check
-                if "body" in expr and not any(word in response.text for word in ["error", "not found"]):
+                if "body" in expr and not any(
+                    word in response.text for word in ["error", "not found"]
+                ):
                     return False
 
         return True
@@ -387,14 +410,17 @@ class NucleiTemplateEngine:
 
     def get_available_templates(self) -> List[Dict[str, Any]]:
         """Get list of available templates with metadata."""
-        return [{
-            'id': template.id,
-            'name': template.info.name,
-            'author': template.info.author,
-            'severity': template.info.severity,
-            'description': template.info.description,
-            'tags': template.info.tags or []
-        } for template in self.templates.values()]
+        return [
+            {
+                "id": template.id,
+                "name": template.info.name,
+                "author": template.info.author,
+                "severity": template.info.severity,
+                "description": template.info.description,
+                "tags": template.info.tags or [],
+            }
+            for template in self.templates.values()
+        ]
 
 
 # Example usage and test template

@@ -6,12 +6,13 @@ import queue
 import threading
 from typing import Dict, List, Any, Optional, Callable
 
+
 class SignalBusOrchestrator:
     """
     High-speed signal bus for low-latency agent-to-agent communication.
     Uses an internal message queue and a pub-sub pattern to bypass slow JSON/HTTP overhead.
     """
-    
+
     def __init__(self) -> None:
         self._subscribers: Dict[str, List[Callable]] = {}
         self._queue = queue.Queue()
@@ -41,7 +42,9 @@ class SignalBusOrchestrator:
                         try:
                             callback(msg["payload"], msg["sender"])
                         except Exception as e:
-                            logging.error(f"SignalBus: Callback error for {signal_type}: {e}")
+                            logging.error(
+                                f"SignalBus: Callback error for {signal_type}: {e}"
+                            )
                 self._queue.task_done()
             except queue.Empty:
                 continue

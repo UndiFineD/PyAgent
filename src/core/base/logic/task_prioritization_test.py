@@ -33,37 +33,37 @@ except ImportError as e:
 
 def test_prioritylevel_exists():
     """Test that PriorityLevel class exists and is importable."""
-    assert 'PriorityLevel' in dir()
+    assert "PriorityLevel" in dir()
 
 
 def test_taskstatus_exists():
     """Test that TaskStatus class exists and is importable."""
-    assert 'TaskStatus' in dir()
+    assert "TaskStatus" in dir()
 
 
 def test_tasktype_exists():
     """Test that TaskType class exists and is importable."""
-    assert 'TaskType' in dir()
+    assert "TaskType" in dir()
 
 
 def test_task_exists():
     """Test that Task class exists and is importable."""
-    assert 'Task' in dir()
+    assert "Task" in dir()
 
 
 def test_prioritizedtask_exists():
     """Test that PrioritizedTask class exists and is importable."""
-    assert 'PrioritizedTask' in dir()
+    assert "PrioritizedTask" in dir()
 
 
 def test_agentcapability_exists():
     """Test that AgentCapability class exists and is importable."""
-    assert 'AgentCapability' in dir()
+    assert "AgentCapability" in dir()
 
 
 def test_taskmanager_exists():
     """Test that TaskManager class exists and is importable."""
-    assert 'TaskManager' in dir()
+    assert "TaskManager" in dir()
 
 
 def test_taskmanager_instantiation():
@@ -74,7 +74,7 @@ def test_taskmanager_instantiation():
 
 def test_taskscheduler_exists():
     """Test that TaskScheduler class exists and is importable."""
-    assert 'TaskScheduler' in dir()
+    assert "TaskScheduler" in dir()
 
 
 def test_create_task_exists():
@@ -90,4 +90,3 @@ def test_create_agent_capability_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

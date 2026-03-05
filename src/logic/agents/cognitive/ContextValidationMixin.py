@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -43,7 +44,9 @@ class ContextValidationMixin:
     def validate_content(self, content: str | None = None) -> list[dict[str, Any]]:
         """Validate content against all rules."""
         if content is None:
-            content = getattr(self, "current_content", None) or getattr(self, "previous_content", "")
+            content = getattr(self, "current_content", None) or getattr(
+                self, "previous_content", ""
+            )
 
         issues: list[dict[str, Any]] = []
         rules = getattr(self, "_validation_rules", DEFAULT_VALIDATION_RULES)

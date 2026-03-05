@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -80,13 +81,15 @@ class FileSystemDataSource(ChangeDataSource):
 
         if current_mtime > float(usn):
             # Simple example: just report the directory change
-            changes.append({
-                'object': str(self.watch_path),
-                'attribute_name': 'mtime',
-                'attribute_value': current_mtime,
-                'last_orig_change_time': time.time(),
-                'usn': current_mtime
-            })
+            changes.append(
+                {
+                    "object": str(self.watch_path),
+                    "attribute_name": "mtime",
+                    "attribute_value": current_mtime,
+                    "last_orig_change_time": time.time(),
+                    "usn": current_mtime,
+                }
+            )
 
         return changes
 
@@ -94,16 +97,18 @@ class FileSystemDataSource(ChangeDataSource):
         """Get initial file listing."""
         files = []
         if self.watch_path.exists() and self.watch_path.is_dir():
-            for file_path in self.watch_path.rglob('*'):
+            for file_path in self.watch_path.rglob("*"):
                 if file_path.is_file():
                     stat = file_path.stat()
-                    files.append({
-                        'object': str(file_path),
-                        'attribute_name': 'size',
-                        'attribute_value': stat.st_size,
-                        'last_orig_change_time': stat.st_mtime,
-                        'usn': stat.st_mtime
-                    })
+                    files.append(
+                        {
+                            "object": str(file_path),
+                            "attribute_name": "size",
+                            "attribute_value": stat.st_size,
+                            "last_orig_change_time": stat.st_mtime,
+                            "usn": stat.st_mtime,
+                        }
+                    )
         return files
 
 
@@ -123,20 +128,22 @@ class HistoryManager:
     def get_previous_value(self, object_id: str, attribute: str) -> Optional[Any]:
         """Get the most recent previous value for an object/attribute."""
         for change in reversed(self.history):
-            if (change.get('object') == object_id and
-                change.get('attribute_name') == attribute):
-                return change.get('attribute_value')
+            if (
+                change.get("object") == object_id
+                and change.get("attribute_name") == attribute
+            ):
+                return change.get("attribute_value")
         return None
 
     def save_to_file(self, filepath: str) -> None:
         """Save history to JSON file."""
-        with open(filepath, 'w') as f:
+        with open(filepath, "w") as f:
             json.dump(self.history, f, indent=2, default=str)
 
     def load_from_file(self, filepath: str) -> None:
         """Load history from JSON file."""
         if Path(filepath).exists():
-            with open(filepath, 'r') as f:
+            with open(filepath, "r") as f:
                 self.history = json.load(f)
 
 
@@ -227,14 +234,16 @@ class ChangeMonitoringAgent(BaseAgent, DataProcessingMixin):
                         processed_changes.append(processed_change)
 
                         # Update last USN
-                        if 'usn' in change:
-                            last_usn = change['usn']
+                        if "usn" in change:
+                            last_usn = change["usn"]
 
                     # Output changes
                     await self._output_changes(processed_changes)
 
                     # Log changes
-                    logging.info(f"Detected {len(changes)} changes in {data_source_name}")
+                    logging.info(
+                        f"Detected {len(changes)} changes in {data_source_name}"
+                    )
 
             except asyncio.CancelledError:
                 break
@@ -246,13 +255,13 @@ class ChangeMonitoringAgent(BaseAgent, DataProcessingMixin):
         """Output changes in configured format."""
         if self.output_file:
             # Append to file
-            with open(self.output_file, 'a') as f:
+            with open(self.output_file, "a") as f:
                 for change in changes:
-                    f.write(json.dumps(change, default=str) + '\n')
+                    f.write(json.dumps(change, default=str) + "\n")
 
         # Also print to console in table format
         if changes:
-            output = self.format_change_output(changes, 'table')
+            output = self.format_change_output(changes, "table")
             print(f"\n--- Changes Detected ---\n{output}\n")
 
     async def get_initial_dump(self, data_source_name: str) -> List[Dict[str, Any]]:
@@ -285,24 +294,24 @@ class ChangeMonitoringAgent(BaseAgent, DataProcessingMixin):
 
         history = self.history_managers[data_source_name].history
         summary = {
-            'total_changes': len(history),
-            'attributes_changed': set(),
-            'objects_affected': set(),
-            'time_range': {}
+            "total_changes": len(history),
+            "attributes_changed": set(),
+            "objects_affected": set(),
+            "time_range": {},
         }
 
         if history:
-            summary['time_range'] = {
-                'start': min(h.get('last_orig_change_time', 0) for h in history),
-                'end': max(h.get('last_orig_change_time', 0) for h in history)
+            summary["time_range"] = {
+                "start": min(h.get("last_orig_change_time", 0) for h in history),
+                "end": max(h.get("last_orig_change_time", 0) for h in history),
             }
 
         for change in history:
-            summary['attributes_changed'].add(change.get('attribute_name', ''))
-            summary['objects_affected'].add(change.get('object', ''))
+            summary["attributes_changed"].add(change.get("attribute_name", ""))
+            summary["objects_affected"].add(change.get("object", ""))
 
         # Convert sets to lists for JSON serialization
-        summary['attributes_changed'] = list(summary['attributes_changed'])
-        summary['objects_affected'] = list(summary['objects_affected'])
+        summary["attributes_changed"] = list(summary["attributes_changed"])
+        summary["objects_affected"] = list(summary["objects_affected"])
 
         return summary

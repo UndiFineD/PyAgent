@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
 class ResourceCurationAgent(BaseAgent):
     """Manages the 'Good Read Unit' and research link lifecycle."""
 
@@ -40,16 +42,18 @@ class ResourceCurationAgent(BaseAgent):
         )
 
     @as_tool
-    def add_resource(self, url: str, title: str, summary: str | None = None, tags: list[str] = None) -> str:
+    def add_resource(
+        self, url: str, title: str, summary: str | None = None, tags: list[str] = None
+    ) -> str:
         """Adds a new research resource to the library."""
         resource = {
             "url": url,
             "title": title,
             "summary": summary or "Pending automated summary",
             "tags": tags or [],
-            "status": "Archived"
+            "status": "Archived",
         }
-        
+
         try:
             library = self._load_library()
             library.append(resource)
@@ -66,6 +70,7 @@ class ResourceCurationAgent(BaseAgent):
 
     def _load_library(self) -> list[dict[str, Any]]:
         import os
+
         if not os.path.exists(self.library_path):
             return []
         with open(self.library_path, encoding="utf-8") as f:
@@ -78,7 +83,13 @@ class ResourceCurationAgent(BaseAgent):
     def improve_content(self, input_text: str) -> str:
         return f"Library currently contains {len(self._load_library())} curated research units."
 
+
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function
-    main = create_main_function(ResourceCurationAgent, "Resource Curation Agent", "Curating research and documentation")
+
+    main = create_main_function(
+        ResourceCurationAgent,
+        "Resource Curation Agent",
+        "Curating research and documentation",
+    )
     main()

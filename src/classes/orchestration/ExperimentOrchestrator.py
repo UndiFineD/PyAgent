@@ -11,6 +11,7 @@ from typing import Dict, List, Any
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
+
 class ExperimentOrchestrator(BaseAgent):
     """Orchestrates Agent-led experiments and training simulations."""
 
@@ -23,29 +24,31 @@ class ExperimentOrchestrator(BaseAgent):
         )
 
     @as_tool
-    def run_benchmark_experiment(self, suite_name: str, agents_to_test: List[str]) -> Dict[str, Any]:
+    def run_benchmark_experiment(
+        self, suite_name: str, agents_to_test: List[str]
+    ) -> Dict[str, Any]:
         """Runs a suite of benchmarks across specified agents.
-        
+
         Args:
             suite_name: Name of the benchmark suite (e.g., 'SGI-Bench-Alpha').
             agents_to_test: List of agent names/types to evaluate.
         """
         experiment_id = str(uuid.uuid4())[:8]
         start_time = time.time()
-        
+
         # Simulate benchmark logic - in real usage, this would call BenchmarkAgent
         results = {
             "experiment_id": experiment_id,
             "suite": suite_name,
             "agents": agents_to_test,
             "metrics": {
-                "accuracy": 0.85, # Real feedback would be integrated here
+                "accuracy": 0.85,  # Real feedback would be integrated here
                 "latency_ms": 120,
-                "token_efficiency": 0.92
+                "token_efficiency": 0.92,
             },
-            "status": "COMPLETED"
+            "status": "COMPLETED",
         }
-        
+
         self.log_experiment(results)
         return results
 
@@ -57,7 +60,13 @@ class ExperimentOrchestrator(BaseAgent):
     def improve_content(self, input_text: str) -> str:
         return "Experimentation is the bridge to AGI efficiency."
 
+
 if __name__ == "__main__":
     from src.classes.base_agent.utilities import create_main_function
-    main = create_main_function(ExperimentOrchestrator, "Experiment Orchestrator", "Automated experiment management")
+
+    main = create_main_function(
+        ExperimentOrchestrator,
+        "Experiment Orchestrator",
+        "Automated experiment management",
+    )
     main()

@@ -5,6 +5,7 @@ import logging
 from datetime import datetime
 from typing import Any
 
+
 class MemoryEpisodeMixin:
     """Methods for recording and updating episodes."""
 

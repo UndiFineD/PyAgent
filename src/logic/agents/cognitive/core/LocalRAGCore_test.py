@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_ragshard_exists():
     """Test that RAGShard class exists and is importable."""
-    assert 'RAGShard' in dir()
+    assert "RAGShard" in dir()
 
 
 def test_localragcore_exists():
     """Test that LocalRAGCore class exists and is importable."""
-    assert 'LocalRAGCore' in dir()
+    assert "LocalRAGCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

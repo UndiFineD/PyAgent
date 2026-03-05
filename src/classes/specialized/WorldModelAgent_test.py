@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_worldmodelagent_exists():
     """Test that WorldModelAgent class exists and is importable."""
-    assert 'WorldModelAgent' in dir()
+    assert "WorldModelAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

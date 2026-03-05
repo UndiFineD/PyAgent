@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,6 +32,7 @@ from typing import List, Dict, Any
 
 __version__ = VERSION
 
+
 class MemoryConsolidatorCore:
     """Pure logic core for memory consolidation."""
 
@@ -41,7 +43,7 @@ class MemoryConsolidatorCore:
             "timestamp": time.time(),
             "agent": agent,
             "task": task,
-            "outcome": outcome
+            "outcome": outcome,
         }
 
     @staticmethod
@@ -49,21 +51,21 @@ class MemoryConsolidatorCore:
         """Groups interactions and generates summary strings (insights)."""
         if not buffer:
             return []
-            
+
         summary: dict[str, list[str]] = {}
         for entry in buffer:
             agent = entry.get("agent", "Unknown")
             if agent not in summary:
                 summary[agent] = []
             summary[agent].append(entry.get("task", "Unknown Task"))
-            
+
         consolidated: list[str] = []
         for agent, tasks in summary.items():
             # In a real scenario, this might involve LLM calls (via the Shell)
             # but the logic of collation is here.
             insight = f"{agent} completed {len(tasks)} tasks. Key focus: {tasks[-1]}."
             consolidated.append(insight)
-            
+
         return consolidated
 
     @staticmethod
@@ -81,7 +83,4 @@ class MemoryConsolidatorCore:
     @staticmethod
     def format_daily_memory(insights: list[str]) -> dict[str, Any]:
         """Prepares the daily record object."""
-        return {
-            "date": time.strftime("%Y-%m-%d"),
-            "insights": insights
-        }
+        return {"date": time.strftime("%Y-%m-%d"), "insights": insights}

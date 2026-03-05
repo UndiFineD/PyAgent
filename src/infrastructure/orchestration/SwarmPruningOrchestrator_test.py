@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_swarmpruningorchestrator_exists():
     """Test that SwarmPruningOrchestrator class exists and is importable."""
-    assert 'SwarmPruningOrchestrator' in dir()
+    assert "SwarmPruningOrchestrator" in dir()
 
 
 def test_mockfleet_exists():
     """Test that MockFleet class exists and is importable."""
-    assert 'MockFleet' in dir()
+    assert "MockFleet" in dir()
 
 
 def test_mockfleet_instantiation():
@@ -50,4 +50,3 @@ def test_mockfleet_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -16,26 +16,26 @@ try:
         json_count_leaves_rust,
         json_flatten_rust,
     )
-    
+
     # Use Rust versions if available
     _json_iter_leaves_native = json_iter_leaves
     _json_count_leaves_native = json_count_leaves
     _json_flatten_native = json_flatten
-    
+
     def json_iter_leaves_fast(value: JSONTree[_T]) -> Iterable[_T]:
         """Rust-accelerated leaf iteration."""
         try:
             return json_iter_leaves_rust(value)
         except Exception:
             return _json_iter_leaves_native(value)
-    
+
     def json_count_leaves_fast(value: JSONTree[_T]) -> int:
         """Rust-accelerated leaf counting."""
         try:
             return json_count_leaves_rust(value)
         except Exception:
             return _json_count_leaves_native(value)
-    
+
     def json_flatten_fast(
         value: JSONTree[_T],
         separator: str = ".",
@@ -45,10 +45,10 @@ try:
             return json_flatten_rust(value, separator)
         except Exception:
             return _json_flatten_native(value, separator)
-    
+
     RUST_ACCELERATION_AVAILABLE = True
     logger.debug("JSONTreeUtils: Rust acceleration available")
-    
+
 except ImportError:
     # Rust not available, use pure Python
     json_iter_leaves_fast = json_iter_leaves

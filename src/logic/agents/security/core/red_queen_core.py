@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -75,7 +76,9 @@ class RedQueenCore:
 
         return matches / len(forbidden_patterns) if forbidden_patterns else 0.0
 
-    def select_parent_attacks(self, archive: list[AttackVector], count: int = 5) -> list[AttackVector]:
+    def select_parent_attacks(
+        self, archive: list[AttackVector], count: int = 5
+    ) -> list[AttackVector]:
         """Selects the most successful attack vectors for the next generation."""
         sorted_archive = sorted(archive, key=lambda x: x.success_rate, reverse=True)
         return sorted_archive[:count]

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_immunesystemagent_exists():
     """Test that ImmuneSystemAgent class exists and is importable."""
-    assert 'ImmuneSystemAgent' in dir()
+    assert "ImmuneSystemAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

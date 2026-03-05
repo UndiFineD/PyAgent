@@ -33,65 +33,64 @@ except ImportError as e:
 
 def test_contentpart_exists():
     """Test that ContentPart class exists and is importable."""
-    assert 'ContentPart' in dir()
+    assert "ContentPart" in dir()
 
 
 def test_textcontent_exists():
     """Test that TextContent class exists and is importable."""
-    assert 'TextContent' in dir()
+    assert "TextContent" in dir()
 
 
 def test_imagecontent_exists():
     """Test that ImageContent class exists and is importable."""
-    assert 'ImageContent' in dir()
+    assert "ImageContent" in dir()
 
 
 def test_audiocontent_exists():
     """Test that AudioContent class exists and is importable."""
-    assert 'AudioContent' in dir()
+    assert "AudioContent" in dir()
 
 
 def test_refusalcontent_exists():
     """Test that RefusalContent class exists and is importable."""
-    assert 'RefusalContent' in dir()
+    assert "RefusalContent" in dir()
 
 
 def test_toolcallcontent_exists():
     """Test that ToolCallContent class exists and is importable."""
-    assert 'ToolCallContent' in dir()
+    assert "ToolCallContent" in dir()
 
 
 def test_message_exists():
     """Test that Message class exists and is importable."""
-    assert 'Message' in dir()
+    assert "Message" in dir()
 
 
 def test_tooldefinition_exists():
     """Test that ToolDefinition class exists and is importable."""
-    assert 'ToolDefinition' in dir()
+    assert "ToolDefinition" in dir()
 
 
 def test_responseconfig_exists():
     """Test that ResponseConfig class exists and is importable."""
-    assert 'ResponseConfig' in dir()
+    assert "ResponseConfig" in dir()
 
 
 def test_responseusage_exists():
     """Test that ResponseUsage class exists and is importable."""
-    assert 'ResponseUsage' in dir()
+    assert "ResponseUsage" in dir()
 
 
 def test_responseoutput_exists():
     """Test that ResponseOutput class exists and is importable."""
-    assert 'ResponseOutput' in dir()
+    assert "ResponseOutput" in dir()
 
 
 def test_response_exists():
     """Test that Response class exists and is importable."""
-    assert 'Response' in dir()
+    assert "Response" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

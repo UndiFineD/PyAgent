@@ -33,72 +33,72 @@ except ImportError as e:
 
 def test_prompttype_exists():
     """Test that PromptType class exists and is importable."""
-    assert 'PromptType' in dir()
+    assert "PromptType" in dir()
 
 
 def test_inputformat_exists():
     """Test that InputFormat class exists and is importable."""
-    assert 'InputFormat' in dir()
+    assert "InputFormat" in dir()
 
 
 def test_textprompt_exists():
     """Test that TextPrompt class exists and is importable."""
-    assert 'TextPrompt' in dir()
+    assert "TextPrompt" in dir()
 
 
 def test_tokensprompt_exists():
     """Test that TokensPrompt class exists and is importable."""
-    assert 'TokensPrompt' in dir()
+    assert "TokensPrompt" in dir()
 
 
 def test_embedsprompt_exists():
     """Test that EmbedsPrompt class exists and is importable."""
-    assert 'EmbedsPrompt' in dir()
+    assert "EmbedsPrompt" in dir()
 
 
 def test_encoderdecoderprompt_exists():
     """Test that EncoderDecoderPrompt class exists and is importable."""
-    assert 'EncoderDecoderPrompt' in dir()
+    assert "EncoderDecoderPrompt" in dir()
 
 
 def test_chatmessage_exists():
     """Test that ChatMessage class exists and is importable."""
-    assert 'ChatMessage' in dir()
+    assert "ChatMessage" in dir()
 
 
 def test_chatprompt_exists():
     """Test that ChatPrompt class exists and is importable."""
-    assert 'ChatPrompt' in dir()
+    assert "ChatPrompt" in dir()
 
 
 def test_inputmetadata_exists():
     """Test that InputMetadata class exists and is importable."""
-    assert 'InputMetadata' in dir()
+    assert "InputMetadata" in dir()
 
 
 def test_processedinput_exists():
     """Test that ProcessedInput class exists and is importable."""
-    assert 'ProcessedInput' in dir()
+    assert "ProcessedInput" in dir()
 
 
 def test_prompttemplate_exists():
     """Test that PromptTemplate class exists and is importable."""
-    assert 'PromptTemplate' in dir()
+    assert "PromptTemplate" in dir()
 
 
 def test_promptvalidator_exists():
     """Test that PromptValidator class exists and is importable."""
-    assert 'PromptValidator' in dir()
+    assert "PromptValidator" in dir()
 
 
 def test_conversationlinearizer_exists():
     """Test that ConversationLinearizer class exists and is importable."""
-    assert 'ConversationLinearizer' in dir()
+    assert "ConversationLinearizer" in dir()
 
 
 def test_inputpreprocessor_exists():
     """Test that InputPreprocessor class exists and is importable."""
-    assert 'InputPreprocessor' in dir()
+    assert "InputPreprocessor" in dir()
 
 
 def test_parse_prompt_exists():
@@ -114,4 +114,3 @@ def test_estimate_tokens_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

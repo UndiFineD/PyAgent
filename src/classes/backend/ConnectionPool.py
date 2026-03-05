@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@ import uuid
 
 __version__ = VERSION
 
+
 class ConnectionPool:
     """
     Manages a pool of reusable connections with Phase 108 status caching.
@@ -34,17 +36,22 @@ class ConnectionPool:
     caching 'working' status for 15 minutes.
     """
 
-    def __init__(self, max_connections: int = 10, timeout_s: float = 30.0, cache_file: str | None = None) -> None:
+    def __init__(
+        self,
+        max_connections: int = 10,
+        timeout_s: float = 30.0,
+        cache_file: str | None = None,
+    ) -> None:
         """Initialize connection pool."""
         self.max_connections = max_connections
         self.timeout_s = timeout_s
         self._pools: dict[str, list[Any]] = {}
         self._in_use: dict[str, int] = {}
         self._lock = threading.Lock()
-        
+
         # Phase 108: Status Caching (15 minute TTL)
         self.status_cache: dict[str, dict[str, Any]] = {}
-        self.cache_ttl = 900 # 15 minutes
+        self.cache_ttl = 900  # 15 minutes
         self.cache_file = Path(cache_file) if cache_file else None
         self._load_status_cache()
 
@@ -71,21 +78,20 @@ class ConnectionPool:
                 elapsed = time.time() - status.get("timestamp", 0)
                 if elapsed < self.cache_ttl:
                     return status.get("working", False)
-        return True # Default to True if no cache or expired
+        return True  # Default to True if no cache or expired
 
     def set_backend_status(self, backend: str, working: bool) -> None:
         """Updates the working status of a backend."""
         with self._lock:
-            self.status_cache[backend] = {
-                "working": working,
-                "timestamp": time.time()
-            }
+            self.status_cache[backend] = {"working": working, "timestamp": time.time()}
             self._save_status_cache()
 
     def acquire(self, backend: str) -> Any:
         """Acquire a connection, respecting the status cache (Phase 108)."""
         if not self.is_backend_working(backend):
-            logging.debug(f"ConnectionPool: Skipping '{backend}' (cached as non-working)")
+            logging.debug(
+                f"ConnectionPool: Skipping '{backend}' (cached as non-working)"
+            )
             return None
 
         with self._lock:

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_feedformat_exists():
     """Test that FeedFormat class exists and is importable."""
-    assert 'FeedFormat' in dir()
+    assert "FeedFormat" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

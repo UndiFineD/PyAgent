@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_neurosymbolicagent_exists():
     """Test that NeuroSymbolicAgent class exists and is importable."""
-    assert 'NeuroSymbolicAgent' in dir()
+    assert "NeuroSymbolicAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 """
 OpenTelemetry Tracing Module - Phase 20: Production Infrastructure
 ===================================================================
@@ -71,6 +72,7 @@ try:
         get_tracer_provider,
         set_tracer_provider,
     )
+
     if not TYPE_CHECKING:
         from opentelemetry.context.context import Context
         from opentelemetry.trace import Tracer, Span
@@ -78,6 +80,7 @@ try:
     _IS_OTEL_IMPORTED = True
 except ImportError:
     import traceback
+
     OTEL_IMPORT_ERROR_TRACEBACK = traceback.format_exc()
     Status = None
     StatusCode = None
@@ -103,7 +106,7 @@ T = TypeVar("T")
 class SpanAttributes:
     """
     Standard span attribute names for LLM and AI operations.
-    
+
     Based on OpenTelemetry semantic conventions for GenAI.
     """
 
@@ -168,7 +171,7 @@ def init_tracer(
 ) -> Tracer | None:
     """
     Initialize an OpenTelemetry tracer.
-    
+
     Args:
         instrumenting_module_name: Name of the module being instrumented.
         otlp_traces_endpoint: OTLP endpoint URL for trace export.
@@ -203,7 +206,7 @@ def init_tracer(
 def get_span_exporter(endpoint: str) -> SpanExporter:
     """
     Get a span exporter based on the configured protocol.
-    
+
     Supports both gRPC and HTTP protocols.
     """
     if not is_otel_available():
@@ -373,6 +376,7 @@ def traced(
         ... def process_data(data: str) -> str:
         ...     return data.upper()
     """
+
     def decorator(func: Callable[P, T]) -> Callable[P, T]:
         span_name = name or func.__name__
 
@@ -405,7 +409,7 @@ def get_current_span_safe() -> Span | None:
 def add_span_attributes(attributes: dict[str, Any]) -> None:
     """
     Add attributes to the current span.
-    
+
     Safe to call even if tracing is not available.
     """
     if not is_otel_available():
@@ -455,6 +459,7 @@ def record_exception(exception: Exception, escaped: bool = True) -> None:
 # ============================================================================
 class _LoggingState:
     """Tracks logging state to avoid repeated warnings."""
+
     disabled_warning_logged = False
 
 
@@ -502,9 +507,7 @@ class SpanTiming:
 
 @contextmanager
 def timed_span(
-    name: str,
-    tracer: Tracer | None = None,
-    **kwargs: Any
+    name: str, tracer: Tracer | None = None, **kwargs: Any
 ) -> Generator[tuple[Span | None, SpanTiming], None, None]:
     """
     Context manager for a span with timing.
@@ -561,9 +564,7 @@ class NullTracer:
 
     @contextmanager
     def start_as_current_span(
-        self,
-        name: str,
-        **kwargs: Any
+        self, name: str, **kwargs: Any
     ) -> Generator[NullSpan, None, None]:
         """Context manager that yields a NullSpan."""
         yield NullSpan()

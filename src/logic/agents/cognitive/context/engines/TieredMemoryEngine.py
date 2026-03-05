@@ -4,6 +4,7 @@
 import logging
 from typing import Any, List, Dict, Optional
 
+
 class TieredMemoryEngine:
     """Manages the 6 memory tiers: Core, Episodic, Semantic, Procedural, Resource, and Knowledge."""
 
@@ -12,7 +13,9 @@ class TieredMemoryEngine:
         # Initialization logic for ChromaDB would be here
         pass
 
-    def record_memory(self, tier: str, content: str, metadata: Optional[Dict[str, Any]] = None) -> None:
+    def record_memory(
+        self, tier: str, content: str, metadata: Optional[Dict[str, Any]] = None
+    ) -> None:
         """Persists a memory fragment into the specified tier."""
         logging.info(f"MIRIX: Recording to {tier} tier.")
         pass
@@ -21,7 +24,9 @@ class TieredMemoryEngine:
         """Queries a specific memory tier."""
         return f"Simulated context from {tier} tier for query: {query}"
 
-    def upsert_documents(self, documents: List[str], metadatas: List[Dict[str, Any]], ids: List[str]) -> None:
+    def upsert_documents(
+        self, documents: List[str], metadatas: List[Dict[str, Any]], ids: List[str]
+    ) -> None:
         """Bulk updates the vector database."""
         pass
 

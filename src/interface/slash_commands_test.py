@@ -27,4 +27,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "execute_command"), "execute_command missing"
     assert hasattr(mod, "register_command"), "register_command missing"
     assert hasattr(mod, "command"), "command missing"
-

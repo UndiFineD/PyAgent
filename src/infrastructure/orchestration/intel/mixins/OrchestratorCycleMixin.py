@@ -5,6 +5,7 @@ import logging
 from typing import Any
 from src.core.base.Version import is_gate_open
 
+
 class OrchestratorCycleMixin:
     """Methods for managing the improvement cycle and gates."""
 
@@ -25,7 +26,9 @@ class OrchestratorCycleMixin:
             "details": [],
         }
 
-        debt_records: list[tuple[str, str, str, int, float]] = self._scan_and_repair_files(target_dir, results)
+        debt_records: list[tuple[str, str, str, int, float]] = (
+            self._scan_and_repair_files(target_dir, results)
+        )
         self._record_debt_to_sql(debt_records)
         self._log_results(results)
 
@@ -40,6 +43,7 @@ class OrchestratorCycleMixin:
     def _check_gate_stability(self) -> bool:
         """Verifies if the system is stable enough for autonomous changes."""
         from src.core.base.Version import STABILITY_SCORE
+
         if not is_gate_open(100) or STABILITY_SCORE < 0.8:
             logging.error(
                 f"Self-Improvement: System stability too low ({STABILITY_SCORE}) for autonomous code modification."

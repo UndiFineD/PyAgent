@@ -19,9 +19,11 @@ Heterogeneous speculator.py module.
 import logging
 from typing import Any, List, Tuple
 
-from src.core.base.common.models.communication_models import ExpertProfile, MoERoutingDecision
-from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import \
-    MoEGatekeeper
+from src.core.base.common.models.communication_models import (
+    ExpertProfile,
+    MoERoutingDecision,
+)
+from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatekeeper
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -44,14 +46,18 @@ class HeterogeneousSpeculator:
         experts: List[ExpertProfile] = list(self.gatekeeper.experts.values())
 
         # Filter by domain
-        domain_experts: List[ExpertProfile] = [e for e in experts if domain in e.domains or "general" in e.domains]
+        domain_experts: List[ExpertProfile] = [
+            e for e in experts if domain in e.domains or "general" in e.domains
+        ]
 
         drafters: List[ExpertProfile] = [
-            e for e in domain_experts
+            e
+            for e in domain_experts
             if e.acceleration_type in ["fp8_bitnet", "int4_quant"]
         ]
         verifiers: List[ExpertProfile] = [
-            e for e in domain_experts
+            e
+            for e in domain_experts
             if e.acceleration_type in ["h100_tensor", "standard"]
         ]
 
@@ -63,10 +69,14 @@ class HeterogeneousSpeculator:
         for i in range(min(len(drafters), len(verifiers))):
             pairs.append((drafters[i].agent_id, verifiers[i].agent_id))
 
-        logger.info(f"[Phase 85] Heterogeneous pairs identified for domain '{domain}': {len(pairs)}")
+        logger.info(
+            f"[Phase 85] Heterogeneous pairs identified for domain '{domain}': {len(pairs)}"
+        )
         return pairs
 
-    async def execute_task(self, task: str, domain: str, _orchestrator: Any) -> MoERoutingDecision | dict[str, str]:
+    async def execute_task(
+        self, task: str, domain: str, _orchestrator: Any
+    ) -> MoERoutingDecision | dict[str, str]:
         """
         Convenience method to run a task through the swarm's speculative pipe.
         """
@@ -79,4 +89,9 @@ class HeterogeneousSpeculator:
         drafter_id, verifier_id = pairs[0]
         # In a real integration, we'd call SpeculativeSwarmOrchestrator.execute_speculative_task
         # Here we simulate the handoff
-        return {"mode": "speculative", "drafter": drafter_id, "verifier": verifier_id, "task": task}
+        return {
+            "mode": "speculative",
+            "drafter": drafter_id,
+            "verifier": verifier_id,
+            "task": task,
+        }

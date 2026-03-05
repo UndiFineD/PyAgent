@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_tensordtype_exists():
     """Test that TensorDtype class exists and is importable."""
-    assert 'TensorDtype' in dir()
+    assert "TensorDtype" in dir()
 
 
 def test_compressiontype_exists():
     """Test that CompressionType class exists and is importable."""
-    assert 'CompressionType' in dir()
+    assert "CompressionType" in dir()
 
 
 def test_tensorizerconfig_exists():
     """Test that TensorizerConfig class exists and is importable."""
-    assert 'TensorizerConfig' in dir()
+    assert "TensorizerConfig" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

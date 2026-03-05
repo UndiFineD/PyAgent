@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,23 +26,27 @@ from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
 
+
 class ResourceForecastingAgent(BaseAgent):
     """
-    Resource Forecasting Agent: Predicts future compute, storage, and 
+    Resource Forecasting Agent: Predicts future compute, storage, and
     network requirements based on historical fleet activity trends.
     """
+
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
-        self.usage_history = [] # List of snapshots
+        self.usage_history = []  # List of snapshots
 
-    def log_usage_snapshot(self, compute_units: float, storage_gb: float, network_mbps: float) -> str:
+    def log_usage_snapshot(
+        self, compute_units: float, storage_gb: float, network_mbps: float
+    ) -> str:
         """Logs a current snapshot of resource usage."""
         snapshot = {
             "timestamp": time.time(),
             "compute": compute_units,
             "storage": storage_gb,
-            "network": network_mbps
+            "network": network_mbps,
         }
         self.usage_history.append(snapshot)
         return snapshot
@@ -54,8 +59,8 @@ class ResourceForecastingAgent(BaseAgent):
         # Simple linear trend extrapolation for simulation
         first = self.usage_history[0]
         last = self.usage_history[-1]
-        t_delta = last['timestamp'] - first['timestamp']
-        
+        t_delta = last["timestamp"] - first["timestamp"]
+
         if t_delta == 0:
             return {"status": "Zero Time Delta", "prediction": None}
 
@@ -64,27 +69,27 @@ class ResourceForecastingAgent(BaseAgent):
             return last[key] + (rate * horizon_hours * 3600)
 
         prediction = {
-            "compute": max(0, extrapolate('compute')),
-            "storage": max(0, extrapolate('storage')),
-            "network": max(0, extrapolate('network')),
-            "horizon_hours": horizon_hours
+            "compute": max(0, extrapolate("compute")),
+            "storage": max(0, extrapolate("storage")),
+            "network": max(0, extrapolate("network")),
+            "horizon_hours": horizon_hours,
         }
 
         return {
             "status": "Success",
             "prediction": prediction,
-            "confidence": 0.7 if len(self.usage_history) > 10 else 0.4
+            "confidence": 0.7 if len(self.usage_history) > 10 else 0.4,
         }
 
     def get_scaling_recommendation(self) -> str:
         """Suggests whether to scale up or down based on forecasts."""
         forecast = self.predict_future_needs()
-        if forecast['status'] != "Success":
+        if forecast["status"] != "Success":
             return "Wait for more data."
-        
-        pred = forecast['prediction']
-        if pred['compute'] > 100 or pred['storage'] > 500:
+
+        pred = forecast["prediction"]
+        if pred["compute"] > 100 or pred["storage"] > 500:
             return "Recommend SCALE_UP: Resource exhaustion predicted."
-        elif pred['compute'] < 10 and len(self.usage_history) > 5:
+        elif pred["compute"] < 10 and len(self.usage_history) > 5:
             return "Recommend SCALE_DOWN: Resource underutilization predicted."
         return "Maintain current scale."

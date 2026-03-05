@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_executorfactory_exists():
     """Test that ExecutorFactory class exists and is importable."""
-    assert 'ExecutorFactory' in dir()
+    assert "ExecutorFactory" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

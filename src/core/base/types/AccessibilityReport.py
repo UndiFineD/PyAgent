@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 try:
-    from src.core.base.common.types.accessibility_report import AccessibilityReport as _AccessibilityReport
+    from src.core.base.common.types.accessibility_report import (
+        AccessibilityReport as _AccessibilityReport,
+    )
 except Exception:
+
     class _AccessibilityReport:  # fallback placeholder
         pass
+
 
 AccessibilityReport = _AccessibilityReport
 

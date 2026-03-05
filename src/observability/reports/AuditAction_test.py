@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_auditaction_exists():
     """Test that AuditAction class exists and is importable."""
-    assert 'AuditAction' in dir()
+    assert "AuditAction" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

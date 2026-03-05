@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_planstep_exists():
     """Test that PlanStep class exists and is importable."""
-    assert 'PlanStep' in dir()
+    assert "PlanStep" in dir()
 
 
 def test_taskdecomposercore_exists():
     """Test that TaskDecomposerCore class exists and is importable."""
-    assert 'TaskDecomposerCore' in dir()
+    assert "TaskDecomposerCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

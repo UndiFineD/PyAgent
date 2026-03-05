@@ -33,25 +33,24 @@ except ImportError as e:
 
 def test_samplingmetadata_exists():
     """Test that SamplingMetadata class exists and is importable."""
-    assert 'SamplingMetadata' in dir()
+    assert "SamplingMetadata" in dir()
 
 
 def test_inputbuffers_exists():
     """Test that InputBuffers class exists and is importable."""
-    assert 'InputBuffers' in dir()
+    assert "InputBuffers" in dir()
 
 
 def test_inputbatch_exists():
     """Test that InputBatch class exists and is importable."""
-    assert 'InputBatch' in dir()
+    assert "InputBatch" in dir()
 
 
 def test_batchbuilder_exists():
     """Test that BatchBuilder class exists and is importable."""
-    assert 'BatchBuilder' in dir()
+    assert "BatchBuilder" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

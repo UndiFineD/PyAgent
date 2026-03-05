@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 """
 LogitsProcessor - Composable token filtering pipeline.
 
@@ -17,6 +18,7 @@ from typing import Protocol, Any, TYPE_CHECKING
 
 try:
     import torch
+
     TORCH_AVAILABLE = True
 except ImportError:
     TORCH_AVAILABLE = False
@@ -24,6 +26,7 @@ except ImportError:
 
 try:
     import numpy as np
+
     NUMPY_AVAILABLE = True
 except ImportError:
     NUMPY_AVAILABLE = False
@@ -32,6 +35,7 @@ except ImportError:
 # Try Rust acceleration
 try:
     import rust_core
+
     RUST_AVAILABLE = True
 except ImportError:
     RUST_AVAILABLE = False
@@ -41,22 +45,22 @@ if TYPE_CHECKING:
     import torch
 
     __all__ = [
-    "LogitsProcessor",
-    "LogitsProcessorList",
-    "TemperatureProcessor",
-    "TopKProcessor",
-    "TopPProcessor",
-    "RepetitionPenaltyProcessor",
-    "NoBadWordsProcessor",
-    "MinLengthProcessor",
-    "apply_processors",
-]
+        "LogitsProcessor",
+        "LogitsProcessorList",
+        "TemperatureProcessor",
+        "TopKProcessor",
+        "TopPProcessor",
+        "RepetitionPenaltyProcessor",
+        "NoBadWordsProcessor",
+        "MinLengthProcessor",
+        "apply_processors",
+    ]
 
 
 class LogitsProcessor(Protocol):
     """
     Protocol for logits processors.
-    
+
     A logits processor modifies the logits tensor before sampling.
     It receives the past token IDs and current logits, returning
     modified logits.
@@ -96,16 +100,13 @@ class LogitsProcessorList:
     def __init__(self, processors: list[LogitsProcessor] | None = None):
         self.processors: list[LogitsProcessor] = processors or []
 
-
     def append(self, processor: LogitsProcessor) -> None:
         """Add a processor to the list."""
         self.processors.append(processor)
 
-
     def extend(self, processors: Sequence[LogitsProcessor]) -> None:
         """Add multiple processors."""
         self.processors.extend(processors)
-
 
     def __call__(
         self,
@@ -117,10 +118,8 @@ class LogitsProcessorList:
             logits = processor(input_ids, logits)
         return logits
 
-
     def __len__(self) -> int:
         return len(self.processors)
-
 
     def __iter__(self):
         return iter(self.processors)
@@ -138,7 +137,6 @@ class TemperatureProcessor:
         if temperature <= 0:
             raise ValueError("Temperature must be positive")
         self.temperature = temperature
-
 
     def __call__(
         self,
@@ -271,6 +269,7 @@ class NoBadWordsProcessor:
     Given a list of "bad word" token sequences, this processor sets
     their logits to -inf when they would complete a bad sequence.
     """
+
     _SMALLEST_LOGIT = float("-inf")
     _NEUTRAL_LOGIT = 0.0
 
@@ -320,7 +319,9 @@ class NoBadWordsProcessor:
         """Initialize static bias for single-token bad words."""
         vocab_size = logits.shape[-1]
 
-        self._word_bias = torch.zeros(vocab_size, dtype=logits.dtype, device=logits.device)
+        self._word_bias = torch.zeros(
+            vocab_size, dtype=logits.dtype, device=logits.device
+        )
 
         for bad_word_ids in self.bad_words_ids:
             if len(bad_word_ids) == 1:
@@ -375,7 +376,7 @@ class MaxLengthProcessor:
 class PresencePenaltyProcessor:
     """
     Additive penalty for tokens that have appeared.
-    
+
     Unlike RepetitionPenalty (multiplicative), this adds a flat penalty
     to any token that has appeared at least once.
     """
@@ -417,7 +418,7 @@ class FrequencyPenaltyProcessor:
         if self.penalty == 0.0 or len(input_ids) == 0:
             return logits
 
-        # Count frequencies
+            # Count frequencies
             from collections import Counter
         freq = Counter(input_ids)
 

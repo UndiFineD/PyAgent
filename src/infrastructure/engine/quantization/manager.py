@@ -33,6 +33,7 @@ class QuantizationMode(Enum):
     """
     Supported quantization modes.
     """
+
     FP16 = "fp16"
     FP8 = "fp8"
     INT8 = "int8"
@@ -58,9 +59,13 @@ class QuantizationManager:
         self.supported_modes.append(QuantizationMode.FP8)
         self.supported_modes.append(QuantizationMode.BITNET_158)
         self.supported_modes.append(QuantizationMode.AWQ)
-        logger.info(f"QuantizationManager: Supported modes: {[m.value for m in self.supported_modes]}")
+        logger.info(
+            f"QuantizationManager: Supported modes: {[m.value for m in self.supported_modes]}"
+        )
 
-    def get_kernel_config(self, mode: Optional[QuantizationMode] = None) -> Dict[str, Any]:
+    def get_kernel_config(
+        self, mode: Optional[QuantizationMode] = None
+    ) -> Dict[str, Any]:
         """
         Returns parameters for the inference kernel (scales, zero-points, bit-width).
         """
@@ -68,9 +73,23 @@ class QuantizationManager:
 
         configs = {
             QuantizationMode.FP16: {"bits": 16, "type": "float", "accelerated": True},
-            QuantizationMode.FP8: {"bits": 8, "type": "float", "accelerated": True, "e4m3_support": True},
-            QuantizationMode.BITNET_158: {"bits": 1.58, "type": "ternary", "accelerated": False},
-            QuantizationMode.AWQ: {"bits": 4, "type": "int", "accelerated": True, "group_size": 128},
+            QuantizationMode.FP8: {
+                "bits": 8,
+                "type": "float",
+                "accelerated": True,
+                "e4m3_support": True,
+            },
+            QuantizationMode.BITNET_158: {
+                "bits": 1.58,
+                "type": "ternary",
+                "accelerated": False,
+            },
+            QuantizationMode.AWQ: {
+                "bits": 4,
+                "type": "int",
+                "accelerated": True,
+                "group_size": 128,
+            },
         }
 
         return configs.get(target_mode, configs[QuantizationMode.FP16])
@@ -80,7 +99,9 @@ class QuantizationManager:
         Applies quantization to a tensor (simulated wrapper/dispatch).
         """
         if mode not in self.supported_modes:
-            raise ValueError(f"Quantization mode {mode} not supported on this hardware.")
+            raise ValueError(
+                f"Quantization mode {mode} not supported on this hardware."
+            )
 
         logger.debug(f"Applying {mode.value} quantization")
 
@@ -92,7 +113,9 @@ class QuantizationManager:
     def switch_mode(self, new_mode: QuantizationMode) -> bool:
         """Dynamic hot-switching of quantization mode."""
         if new_mode in self.supported_modes:
-            logger.info(f"QuantizationManager: Switching from {self.current_mode.value} to {new_mode.value}")
+            logger.info(
+                f"QuantizationManager: Switching from {self.current_mode.value} to {new_mode.value}"
+            )
             self.current_mode = new_mode
             return True
         return False

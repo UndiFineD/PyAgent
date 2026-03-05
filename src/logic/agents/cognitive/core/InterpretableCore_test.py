@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_interpretablecore_exists():
     """Test that InterpretableCore class exists and is importable."""
-    assert 'InterpretableCore' in dir()
+    assert "InterpretableCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

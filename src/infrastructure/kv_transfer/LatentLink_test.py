@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_synapticadapter_exists():
     """Test that SynapticAdapter class exists and is importable."""
-    assert 'SynapticAdapter' in dir()
+    assert "SynapticAdapter" in dir()
 
 
 def test_latentlinkmanager_exists():
     """Test that LatentLinkManager class exists and is importable."""
-    assert 'LatentLinkManager' in dir()
+    assert "LatentLinkManager" in dir()
 
 
 def test_latentlinkmanager_instantiation():
@@ -49,10 +49,9 @@ def test_latentlinkmanager_instantiation():
 
 def test_synapticlink_exists():
     """Test that SynapticLink class exists and is importable."""
-    assert 'SynapticLink' in dir()
+    assert "SynapticLink" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

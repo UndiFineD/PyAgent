@@ -12,6 +12,7 @@ from typing import Dict, List, Any, Optional
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
+
 class ExternalAIRecorderAgent(BaseAgent):
     """Records interactions with external AI models to build a rich local knowledge repository."""
 
@@ -20,7 +21,7 @@ class ExternalAIRecorderAgent(BaseAgent):
         self.logs_dir = Path("logs/external_ai_learning")
         self.logs_dir.mkdir(parents=True, exist_ok=True)
         self.archive_path = self.logs_dir / "external_knowledge.jsonl"
-        
+
         self._system_prompt = (
             "You are the External AI Recorder Agent. "
             "Your role is to act as a memory bridge between external AI sessions and our local knowledge base. "
@@ -30,7 +31,9 @@ class ExternalAIRecorderAgent(BaseAgent):
         )
 
     @as_tool
-    def record_external_interaction(self, external_ai_name: str, prompt: str, context: str, response: str) -> str:
+    def record_external_interaction(
+        self, external_ai_name: str, prompt: str, context: str, response: str
+    ) -> str:
         """Saves a session with an external AI to the local learning archive.
         Args:
             external_ai_name: Name of the external system (e.g., 'Claude-3.5', 'GPT-4o').
@@ -44,9 +47,9 @@ class ExternalAIRecorderAgent(BaseAgent):
             "prompt": prompt,
             "context": context,
             "response": response,
-            "hash": hash(prompt + response) # Simple identifier
+            "hash": hash(prompt + response),  # Simple identifier
         }
-        
+
         try:
             with open(self.archive_path, "a", encoding="utf-8") as f:
                 f.write(json.dumps(entry) + "\n")
@@ -62,7 +65,13 @@ class ExternalAIRecorderAgent(BaseAgent):
     def improve_content(self, prompt: str) -> str:
         return "Local knowledge base is thriving with data from external AI sessions."
 
+
 if __name__ == "__main__":
     from src.classes.base_agent.utilities import create_main_function
-    main = create_main_function(ExternalAIRecorderAgent, "External AI Recorder Agent", "Cross-model knowledge harvester")
+
+    main = create_main_function(
+        ExternalAIRecorderAgent,
+        "External AI Recorder Agent",
+        "Cross-model knowledge harvester",
+    )
     main()

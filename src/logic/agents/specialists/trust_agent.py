@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,6 +43,7 @@ __version__ = VERSION
 
 class Mood(Enum):
     """Possible emotional moods for the interaction."""
+
     JOYFUL = "joyful"
     CONTENT = "content"
     NEUTRAL = "neutral"
@@ -52,6 +54,7 @@ class Mood(Enum):
 
 class TrustLevel(Enum):
     """Ordinal levels of trust based on scores."""
+
     HIGH = "high"  # 0.8-1.0
     MEDIUM = "medium"  # 0.5-0.8
     LOW = "low"  # 0.2-0.5
@@ -156,7 +159,9 @@ class TrustAgent(BaseAgent):
                 self._update_trust(adj, data.get("explanation", ""))
 
                 # Record interaction
-                self._interaction_history.append({"text": text[:100], "analysis": data, "timestamp": time.time()})
+                self._interaction_history.append(
+                    {"text": text[:100], "analysis": data, "timestamp": time.time()}
+                )
 
                 return {
                     **data,
@@ -170,7 +175,9 @@ class TrustAgent(BaseAgent):
         return {"error": "parsing_failed", "raw": res}
 
     @as_tool
-    async def assess_trustworthiness(self, entity: str, evidence: List[str]) -> Dict[str, Any]:
+    async def assess_trustworthiness(
+        self, entity: str, evidence: List[str]
+    ) -> Dict[str, Any]:
         """Assesses the trustworthiness of an entity based on evidence."""
         evidence_block = "\n".join([f"- {e}" for e in evidence])
         prompt = (
@@ -222,7 +229,9 @@ class TrustAgent(BaseAgent):
         return {"error": "analysis_failed", "raw": res}
 
     @as_tool
-    async def calibrate_emotional_response(self, context: str, target_outcome: str) -> Dict[str, Any]:
+    async def calibrate_emotional_response(
+        self, context: str, target_outcome: str
+    ) -> Dict[str, Any]:
         """Suggests appropriate emotional tone for a response."""
         prompt = (
             f"Context: {context}\n"

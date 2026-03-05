@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_tracingcore_exists():
     """Test that TracingCore class exists and is importable."""
-    assert 'TracingCore' in dir()
+    assert "TracingCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

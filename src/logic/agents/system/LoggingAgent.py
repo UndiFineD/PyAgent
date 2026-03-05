@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,9 +30,10 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
 class LoggingAgent(BaseAgent):
     """Manages distributed fleet logs and integrates with external aggregators."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -44,10 +46,15 @@ class LoggingAgent(BaseAgent):
         self._internal_buffer: list[dict[str, Any]] = []
 
     @as_tool
-    async def configure_aggregator(self, url: str | None = None, syslog_host: str | None = None, syslog_port: int = 514) -> str:
+    async def configure_aggregator(
+        self,
+        url: str | None = None,
+        syslog_host: str | None = None,
+        syslog_port: int = 514,
+    ) -> str:
         """
         Configures the destination for distributed logs.
-        
+
         Args:
             url: HTTP endpoint for centralized logs (e.g., http://aggregator:8080/log)
             syslog_host: Hostname/IP of a SysLog server.
@@ -55,20 +62,30 @@ class LoggingAgent(BaseAgent):
         """
         self.log_aggregator_url = url
         if syslog_host:
+
             def init_syslog() -> str:
                 try:
-                    self.syslog_handler = logging.handlers.SysLogHandler(address=(syslog_host, syslog_port))
+                    self.syslog_handler = logging.handlers.SysLogHandler(
+                        address=(syslog_host, syslog_port)
+                    )
                     return f"LoggingAgent: Configured SysLog to {syslog_host}:{syslog_port} and Aggregator URL to {url}."
                 except Exception as e:
                     return f"LoggingAgent: Failed to configure SysLog: {e}"
+
             return await asyncio.to_thread(init_syslog)
         return f"LoggingAgent: Configured Aggregator URL to {url}."
 
     @as_tool
-    async def broadcast_log(self, level: str, source: str, message: str, metadata: dict[str, Any] | None = None) -> str:
+    async def broadcast_log(
+        self,
+        level: str,
+        source: str,
+        message: str,
+        metadata: dict[str, Any] | None = None,
+    ) -> str:
         """
         Broadcasts a log entry to configured aggregators.
-        
+
         Args:
             level: INFO, WARNING, ERROR, DEBUG
             source: Name of the agent or service originating the log.
@@ -80,32 +97,36 @@ class LoggingAgent(BaseAgent):
             "level": level.upper(),
             "source": source,
             "message": message,
-            "metadata": metadata or {}
+            "metadata": metadata or {},
         }
-        
+
         # Local buffering
         self._internal_buffer.append(log_entry)
         if len(self._internal_buffer) > 500:
             self._internal_buffer.pop(0)
-            
+
         def forward() -> str:
             # 1. Forward to SysLog
             if self.syslog_handler:
                 lvl_const = getattr(logging, level.upper(), logging.INFO)
-                record = logging.makeLogRecord({
-                    "name": source,
-                    "levelno": lvl_const,
-                    "resLevelName": level.upper(),
-                    "msg": message,
-                    "args": (),
-                    "kwargs": {}
-                })
+                record = logging.makeLogRecord(
+                    {
+                        "name": source,
+                        "levelno": lvl_const,
+                        "resLevelName": level.upper(),
+                        "msg": message,
+                        "args": (),
+                        "kwargs": {},
+                    }
+                )
                 self.syslog_handler.emit(record)
-                
+
             # 2. Forward to HTTP Aggregator (Mocked/Future-proofed)
             if self.log_aggregator_url:
-                logging.debug(f"LoggingAgent: Forwarding to {self.log_aggregator_url} -> {message}")
-                
+                logging.debug(
+                    f"LoggingAgent: Forwarding to {self.log_aggregator_url} -> {message}"
+                )
+
         await asyncio.to_thread(forward)
         return "Log broadcasted successfully."
 

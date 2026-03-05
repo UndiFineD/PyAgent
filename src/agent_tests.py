@@ -22,9 +22,9 @@ from src.classes.agent_tests import *
 # Create main function using the helper
 main = create_main_function(
     TestsAgent,
-    'Tests Agent: Updates code file test suites',
-    'Path to the test file (e.g., test_file.py)'
+    "Tests Agent: Updates code file test suites",
+    "Path to the test file (e.g., test_file.py)",
 )
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

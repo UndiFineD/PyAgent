@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_changerecord_exists():
     """Test that ChangeRecord class exists and is importable."""
-    assert 'ChangeRecord' in dir()
+    assert "ChangeRecord" in dir()
 
 
 def test_filemetadata_exists():
     """Test that FileMetadata class exists and is importable."""
-    assert 'FileMetadata' in dir()
+    assert "FileMetadata" in dir()
 
 
 def test_efficientchangedetector_exists():
     """Test that EfficientChangeDetector class exists and is importable."""
-    assert 'EfficientChangeDetector' in dir()
+    assert "EfficientChangeDetector" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_xmlreasoningparser_exists():
     """Test that XMLReasoningParser class exists and is importable."""
-    assert 'XMLReasoningParser' in dir()
+    assert "XMLReasoningParser" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

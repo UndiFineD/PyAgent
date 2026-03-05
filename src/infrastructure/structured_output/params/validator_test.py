@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_structuredoutputvalidator_exists():
     """Test that StructuredOutputValidator class exists and is importable."""
-    assert 'StructuredOutputValidator' in dir()
+    assert "StructuredOutputValidator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

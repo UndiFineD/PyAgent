@@ -54,7 +54,10 @@ class ResourceMonitor:
                 stats["status"] = "WARNING"
             else:
                 stats["status"] = "HEALTHY"
-        except (psutil.Error, OSError) as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            psutil.Error,
+            OSError,
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Failed to gather resource stats: {e}")
             stats["status"] = "ERROR"
         return stats

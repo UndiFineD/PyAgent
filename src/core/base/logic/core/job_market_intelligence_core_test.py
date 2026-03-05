@@ -33,17 +33,17 @@ except ImportError as e:
 
 def test_jobposting_exists():
     """Test that JobPosting class exists and is importable."""
-    assert 'JobPosting' in dir()
+    assert "JobPosting" in dir()
 
 
 def test_jobmarketstats_exists():
     """Test that JobMarketStats class exists and is importable."""
-    assert 'JobMarketStats' in dir()
+    assert "JobMarketStats" in dir()
 
 
 def test_jobmarketintelligencecore_exists():
     """Test that JobMarketIntelligenceCore class exists and is importable."""
-    assert 'JobMarketIntelligenceCore' in dir()
+    assert "JobMarketIntelligenceCore" in dir()
 
 
 def test_jobmarketintelligencecore_instantiation():
@@ -55,4 +55,3 @@ def test_jobmarketintelligencecore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

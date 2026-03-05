@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -68,14 +69,19 @@ class AcceptanceStats:
     def get_optimal_depth(self, min_rate: float = 0.5) -> int:
         """Get optimal speculation depth based on acceptance rates."""
         with self._lock:
+
             def is_below_threshold(pos: int) -> bool:
                 history = self._position_history.get(pos, deque())
                 if not history:
                     return True
                 return (sum(history) / len(history)) < min_rate
 
-            failed_positions = list(filter(is_below_threshold, sorted(self._position_history.keys())))
+            failed_positions = list(
+                filter(is_below_threshold, sorted(self._position_history.keys()))
+            )
             if failed_positions:
                 return max(1, failed_positions[0])
-                
-            return max(1, max(self._position_history.keys()) if self._position_history else 1)
+
+            return max(
+                1, max(self._position_history.keys()) if self._position_history else 1
+            )

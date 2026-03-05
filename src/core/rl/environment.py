@@ -1,7 +1,7 @@
-
 """
 Environment.py module.
 """
+
 # Copyright 2026 PyAgent Authors
 # Reinforcement Learning Environment Framework - Phase 319 Enhanced
 
@@ -49,7 +49,9 @@ class RLEnvironment(abc.ABC):
         self._truncated = False
 
     @abc.abstractmethod
-    def reset(self, seed: Optional[int] = None, options: Optional[Dict] = None) -> Tuple[Any, Dict]:
+    def reset(
+        self, seed: Optional[int] = None, options: Optional[Dict] = None
+    ) -> Tuple[Any, Dict]:
         """
         Resets the environment to an initial state.
         Returns: (observation, info)
@@ -95,9 +97,15 @@ class RLEnvironment(abc.ABC):
         """Get statistics for completed episodes."""
         return {
             "episode_count": self._episode_count,
-            "avg_reward": sum(self._episode_rewards) / len(self._episode_rewards) if self._episode_rewards else 0.0,
+            "avg_reward": (
+                sum(self._episode_rewards) / len(self._episode_rewards)
+                if self._episode_rewards
+                else 0.0
+            ),
             "total_episodes": len(self._episode_rewards),
-            "best_episode_reward": max(self._episode_rewards) if self._episode_rewards else 0.0,
+            "best_episode_reward": (
+                max(self._episode_rewards) if self._episode_rewards else 0.0
+            ),
         }
 
 
@@ -111,15 +119,23 @@ class CodeImprovementEnvironment(RLEnvironment):
 
     def __init__(self, initial_metrics: Dict[str, float] = None) -> None:
         super().__init__(max_steps=50)
-        self.action_space = DiscreteActionSpace(5, ["refactor", "add_tests", "optimize", "document", "skip"])
-        self.initial_metrics = initial_metrics or {"complexity": 50.0, "coverage": 0.5, "quality": 0.6}
+        self.action_space = DiscreteActionSpace(
+            5, ["refactor", "add_tests", "optimize", "document", "skip"]
+        )
+        self.initial_metrics = initial_metrics or {
+            "complexity": 50.0,
+            "coverage": 0.5,
+            "quality": 0.6,
+        }
         self.metrics = dict(self.initial_metrics)
         self.state = self._get_state()
 
     def _get_state(self) -> Dict[str, float]:
         return dict(self.metrics)
 
-    def reset(self, seed: Optional[int] = None, options: Optional[Dict] = None) -> Tuple[Dict, Dict]:
+    def reset(
+        self, seed: Optional[int] = None, options: Optional[Dict] = None
+    ) -> Tuple[Dict, Dict]:
         if seed:
             self.seed(seed)
         self.metrics = dict(self.initial_metrics)
@@ -136,7 +152,11 @@ class CodeImprovementEnvironment(RLEnvironment):
         old_metrics = dict(self.metrics)
 
         # Simulate action effects
-        action_name = self.action_space.actions[action] if action < len(self.action_space.actions) else "skip"
+        action_name = (
+            self.action_space.actions[action]
+            if action < len(self.action_space.actions)
+            else "skip"
+        )
 
         if action_name == "refactor":
             self.metrics["complexity"] = max(1, self.metrics["complexity"] - 5)
@@ -161,14 +181,20 @@ class CodeImprovementEnvironment(RLEnvironment):
 
         # Check termination
         self._terminated = (
-            self.metrics["complexity"] <= 10 and self.metrics["coverage"] >= 0.9 and self.metrics["quality"] >= 0.9
+            self.metrics["complexity"] <= 10
+            and self.metrics["coverage"] >= 0.9
+            and self.metrics["quality"] >= 0.9
         )
         self._truncated = self._current_step >= self.max_steps
 
         if self._terminated or self._truncated:
             self._episode_rewards.append(self._current_episode_reward)
 
-        info = {"step": self._current_step, "action": action_name, "metrics": dict(self.metrics)}
+        info = {
+            "step": self._current_step,
+            "action": action_name,
+            "metrics": dict(self.metrics),
+        }
 
         return self.state, reward, self._terminated, self._truncated, info
 

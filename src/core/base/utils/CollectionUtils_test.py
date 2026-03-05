@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_lazydict_exists():
     """Test that LazyDict class exists and is importable."""
-    assert 'LazyDict' in dir()
+    assert "LazyDict" in dir()
 
 
 def test_as_list_exists():
@@ -154,4 +154,3 @@ def test_pairwise_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -26,4 +26,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "pooled_list"), "pooled_list missing"
     assert hasattr(mod, "pooled_dict"), "pooled_dict missing"
     assert hasattr(mod, "pooled_set"), "pooled_set missing"
-

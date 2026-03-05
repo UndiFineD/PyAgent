@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_taskrequest_exists():
     """Test that TaskRequest class exists and is importable."""
-    assert 'TaskRequest' in dir()
+    assert "TaskRequest" in dir()
 
 
 def test_telemetrymanger_exists():
     """Test that TelemetryManger class exists and is importable."""
-    assert 'TelemetryManger' in dir()
+    assert "TelemetryManger" in dir()
 
 
 def test_telemetrymanger_instantiation():
@@ -50,4 +50,3 @@ def test_telemetrymanger_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

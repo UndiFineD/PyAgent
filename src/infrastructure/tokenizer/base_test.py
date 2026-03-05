@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_basetokenizer_exists():
     """Test that BaseTokenizer class exists and is importable."""
-    assert 'BaseTokenizer' in dir()
+    assert "BaseTokenizer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

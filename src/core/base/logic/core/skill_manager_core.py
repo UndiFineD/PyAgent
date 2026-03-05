@@ -18,11 +18,13 @@ import asyncio
 from typing import Dict, Any, List, Optional
 from src.core.base.agent_state_manager import StateTransaction
 
+
 class SkillManagerCore:
     """
     Manages the dynamic discovery and registration of agent skills (MCP tools).
     Harvested from awesome-mcp patterns.
     """
+
     def __init__(self, skills_dir: str = "src/tools/skills"):
         self.skills_dir = skills_dir
         self.active_skills: Dict[str, Any] = {}
@@ -37,7 +39,7 @@ class SkillManagerCore:
             if "mcp.json" in files:
                 manifest_path = os.path.join(root, "mcp.json")
                 try:
-                    with open(manifest_path, 'r', encoding='utf-8') as f:
+                    with open(manifest_path, "r", encoding="utf-8") as f:
                         manifest = json.load(f)
                         skill_name = manifest.get("name", os.path.basename(root))
                         self.active_skills[skill_name] = manifest
@@ -50,8 +52,9 @@ class SkillManagerCore:
         """Retrieves the manifest for a registered skill by name."""
         return self.active_skills.get(skill_name)
 
-
-    async def ensure_tool_installed(self, tool_name: str, install_cmd: List[str]) -> bool:
+    async def ensure_tool_installed(
+        self, tool_name: str, install_cmd: List[str]
+    ) -> bool:
         """
         JIT installation of missing tools/CLIs.
         Pattern harvested from AI-coding-platform.
@@ -69,7 +72,7 @@ class SkillManagerCore:
             process = await asyncio.create_subprocess_exec(
                 *install_cmd,
                 stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE
+                stderr=asyncio.subprocess.PIPE,
             )
             _, stderr = await process.communicate()
 
@@ -83,7 +86,6 @@ class SkillManagerCore:
             print(f"Exception during JIT installation of {tool_name}: {e}")
             return False
 
-
     async def jit_install_from_manifest(self, skill_name: str) -> bool:
         """Installs dependencies defined in the skill's mcp.json."""
         manifest = self.get_skill_manifest(skill_name)
@@ -92,7 +94,7 @@ class SkillManagerCore:
 
         install_info = manifest.get("install")
         if not install_info:
-            return True # Nothing to install
+            return True  # Nothing to install
 
         cmd = install_info.get("command")
         check_binary = install_info.get("check_binary", skill_name)

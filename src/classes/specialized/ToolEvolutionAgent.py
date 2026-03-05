@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,20 +26,24 @@ import time
 from pathlib import Path
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
-from src.logic.agents.development.core.ToolDraftingCore import ToolDraftingCore, ToolDefinition
+from src.logic.agents.development.core.ToolDraftingCore import (
+    ToolDraftingCore,
+    ToolDefinition,
+)
 
 __version__ = VERSION
 
+
 class ToolEvolutionAgent(BaseAgent):
     """Detects automation opportunities and writes its own toolsets."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.core = ToolDraftingCore()
         self.evolved_tools_dir = Path("src/tools/evolved")
         self.evolved_tools_dir.mkdir(parents=True, exist_ok=True)
         (self.evolved_tools_dir / "__init__.py").touch(exist_ok=True)
-        
+
         self._system_prompt = (
             "You are the Tool Evolution Agent. "
             "Your purpose is to increase the system's autonomy by creating new tools. "
@@ -57,40 +62,42 @@ class ToolEvolutionAgent(BaseAgent):
         path = Path(recording_path)
         if not path.exists():
             return f"Error: Recording at {recording_path} not found."
-            
+
         with open(path) as f:
             events = json.load(f)
-            
+
         if not events:
             return "No events found in recording."
 
         # Analysis logic: Group clicks, identify common targets, generate code
         tool_name = f"auto_gui_{int(time.time())}"
-        
+
         explanation = f"I have analyzed {len(events)} events. Most events were clicks at specific coordinates."
-        
+
         code_lines = [
             "import pyautogui",
             "from src.core.base.utilities import as_tool",
             "",
             "@as_tool",
             f"def {tool_name}():",
-            f'    """Automated GUI task generated from {path.name}"""'
+            f'    """Automated GUI task generated from {path.name}"""',
         ]
-        
+
         for event in events:
             if event["type"] == "click":
                 code_lines.append(f"    pyautogui.click({event['x']}, {event['y']})")
             elif event["type"] == "keypress":
                 key = event["key"].replace("Key.", "")
                 code_lines.append(f"    pyautogui.press('{key}')")
-                
+
         implementation = "\n".join(code_lines)
-        
+
         return f"### Automation Analysis Complete\n\n{explanation}\n\nGenerated Implementation:\n\n```python\n{implementation}\n```\n\nRun `implement_and_save_tool` with this code to activate it."
 
     @as_tool
-    def implement_and_save_tool(self, tool_name: str, code_content: str, description: str) -> str:
+    def implement_and_save_tool(
+        self, tool_name: str, code_content: str, description: str
+    ) -> str:
         """Writes a new Python tool to the evolved tool directory.
         Args:
             tool_name: CamelCase name for the tool file (e.g. MyNewTool).
@@ -104,7 +111,7 @@ class ToolEvolutionAgent(BaseAgent):
             with open(filepath, "w") as f:
                 f.write(f'"""{description}"""\n\n')
                 f.write(code_content)
-            
+
             return f"SUCCESS: Evolved tool '{tool_name}' saved to {filepath}. It is now available for import."
         except Exception as e:
             return f"ERROR: Failed to save evolved tool: {e}"
@@ -119,14 +126,14 @@ class ToolEvolutionAgent(BaseAgent):
         """
         if not self.core.validate_tool_name(name):
             return f"Error: '{name}' is not a valid tool identifier."
-            
+
         tool_def = ToolDefinition(
             name=name,
             description=description,
             parameters={"type": "object", "properties": {"input": {"type": "string"}}},
-            endpoint=endpoint
+            endpoint=endpoint,
         )
-        
+
         spec = self.core.generate_openapi_spec([tool_def])
         logging.info(f"ToolEvolution: Generated contract for {name}")
         return f"### OpenAPI Contract for '{name}'\n\n```json\n{spec}\n```"
@@ -136,7 +143,11 @@ class ToolEvolutionAgent(BaseAgent):
         """General evolution logic."""
         return "I am scanning for ways to improve my own capabilities."
 
+
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function
-    main = create_main_function(ToolEvolutionAgent, "Tool Evolution Agent", "Self-evolving tool creator")
+
+    main = create_main_function(
+        ToolEvolutionAgent, "Tool Evolution Agent", "Self-evolving tool creator"
+    )
     main()

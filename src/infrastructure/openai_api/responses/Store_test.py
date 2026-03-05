@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_responsestore_exists():
     """Test that ResponseStore class exists and is importable."""
-    assert 'ResponseStore' in dir()
+    assert "ResponseStore" in dir()
 
 
 def test_inmemoryresponsestore_exists():
     """Test that InMemoryResponseStore class exists and is importable."""
-    assert 'InMemoryResponseStore' in dir()
+    assert "InMemoryResponseStore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

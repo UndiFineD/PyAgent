@@ -19,7 +19,9 @@ if TYPE_CHECKING:
 class FleetDelegationMixin:
     """Mixin for agent delegation logic in FleetManager."""
 
-    async def delegate_to(self: FleetManager, agent_type: str, prompt: str, target_file: str | None = None) -> str:
+    async def delegate_to(
+        self: FleetManager, agent_type: str, prompt: str, target_file: str | None = None
+    ) -> str:
         """Synaptic Delegation: Hands off a sub-task to a specialized agent."""
         logging.info(f"Fleet: Delegating {agent_type} (Target: {target_file})")
 

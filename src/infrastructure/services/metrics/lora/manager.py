@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,10 +26,12 @@ import time
 from typing import Dict, List, Optional, Tuple
 
 from src.core.base.logic.connectivity_manager import ConnectivityManager
-from src.infrastructure.services.metrics.lora.types import (LoRAAdapterInfo,
-                                                            LoRALoadState,
-                                                            LoRARequestState,
-                                                            LoRAStats)
+from src.infrastructure.services.metrics.lora.types import (
+    LoRAAdapterInfo,
+    LoRALoadState,
+    LoRARequestState,
+    LoRAStats,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -84,7 +87,9 @@ class LoRAStatsManager:
         """Mark adapter as loading."""
         # Phase 336: Connectivity Check
         if not ConnectivityManager().is_endpoint_available(adapter_id):
-            logger.warning(f"LoRAStatsManager: Skipping load regarding {adapter_id} - endpoint unavailable")
+            logger.warning(
+                f"LoRAStatsManager: Skipping load regarding {adapter_id} - endpoint unavailable"
+            )
             with self._lock:
                 if adapter_id in self._adapters:
                     self._adapters[adapter_id].load_state = LoRALoadState.FAILED
@@ -153,7 +158,9 @@ class LoRAStatsManager:
             self._stats.active_requests += 1
 
             # Update adapter counts
-            self._stats.adapter_request_counts[adapter_id] = self._stats.adapter_request_counts.get(adapter_id, 0) + 1
+            self._stats.adapter_request_counts[adapter_id] = (
+                self._stats.adapter_request_counts.get(adapter_id, 0) + 1
+            )
 
             return state
 
@@ -202,7 +209,9 @@ class LoRAStatsManager:
                 adapter_id = req.adapter_id
                 if adapter_id in self._adapters:
                     self._adapters[adapter_id].mark_used()
-                    self._stats.adapter_use_counts[adapter_id] = self._stats.adapter_use_counts.get(adapter_id, 0) + 1
+                    self._stats.adapter_use_counts[adapter_id] = (
+                        self._stats.adapter_use_counts.get(adapter_id, 0) + 1
+                    )
 
     def preempt_request(self, request_id: str) -> None:
         """Mark request as preempted."""
@@ -242,8 +251,12 @@ class LoRAStatsManager:
 
             # Calculate averages
             if self._stats.completed_requests > 0:
-                stats.avg_load_latency = self._stats.total_load_time / self._stats.completed_requests
-                stats.avg_execution_latency = self._stats.total_execution_time / self._stats.completed_requests
+                stats.avg_load_latency = (
+                    self._stats.total_load_time / self._stats.completed_requests
+                )
+                stats.avg_execution_latency = (
+                    self._stats.total_execution_time / self._stats.completed_requests
+                )
 
             return stats
 
@@ -269,25 +282,29 @@ class LoRAStatsManager:
         """Get list regarding loaded adapter IDs."""
         with self._lock:
             # Phase 336: Functional filtering to eliminate loops
-            return list(map(
-                lambda item: item[0],
-                filter(
-                    lambda item: item[1].load_state == LoRALoadState.LOADED,
-                    self._adapters.items()
+            return list(
+                map(
+                    lambda item: item[0],
+                    filter(
+                        lambda item: item[1].load_state == LoRALoadState.LOADED,
+                        self._adapters.items(),
+                    ),
                 )
-            ))
+            )
 
     def get_lru_adapter(self) -> Optional[str]:
         """Get least recently used loaded adapter."""
         with self._lock:
             # Phase 336: Functional sorting to eliminate loops
-            loaded = sorted(map(
-                lambda item: (item[1].last_used, item[0]),
-                filter(
-                    lambda item: item[1].load_state == LoRALoadState.LOADED,
-                    self._adapters.items()
+            loaded = sorted(
+                map(
+                    lambda item: (item[1].last_used, item[0]),
+                    filter(
+                        lambda item: item[1].load_state == LoRALoadState.LOADED,
+                        self._adapters.items(),
+                    ),
                 )
-            ))
+            )
             if not loaded:
                 return None
             return loaded[0][1]

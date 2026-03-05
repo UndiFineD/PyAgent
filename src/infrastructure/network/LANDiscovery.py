@@ -15,6 +15,7 @@ from src.observability.StructuredLogger import StructuredLogger
 
 logger = StructuredLogger(__name__)
 
+
 @dataclass
 class PeerInfo:
     agent_id: str
@@ -28,21 +29,23 @@ class PeerInfo:
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
+
 class LANDiscovery:
     """
     Decentralized LAN Discovery for PyAgents.
     Follows an Announce -> Respond -> Register -> Sync cycle.
     """
+
     DISCOVERY_PORT = 31415
     BROADCAST_ADDR = "255.255.255.255"
     MAX_CLOCK_SKEW = 10.0  # Seconds
-    
+
     def __init__(
-        self, 
-        agent_id: str, 
-        service_port: int, 
+        self,
+        agent_id: str,
+        service_port: int,
         secret_key: Optional[str] = None,
-        metadata: Optional[Dict] = None
+        metadata: Optional[Dict] = None,
     ):
         self.agent_id = agent_id
         self.service_port = service_port
@@ -52,8 +55,8 @@ class LANDiscovery:
         self._running = False
         self._lock = threading.Lock()
         self._nonces: Dict[str, float] = {}  # agent_id: last_timestamp
-        self._ping_times: Dict[str, float] = {} # agent_id: sent_time
-        
+        self._ping_times: Dict[str, float] = {}  # agent_id: sent_time
+
         # Local IP detection (lazy)
         self._local_ip = None
 
@@ -67,9 +70,7 @@ class LANDiscovery:
         if not self.secret_key:
             return "unsigned"
         return hmac.new(
-            self.secret_key.encode(), 
-            data.encode(), 
-            hashlib.sha256
+            self.secret_key.encode(), data.encode(), hashlib.sha256
         ).hexdigest()
 
     def _verify(self, data: str, signature: str) -> bool:
@@ -85,16 +86,13 @@ class LANDiscovery:
             "ip": self.local_ip,
             "port": self.service_port,
             "timestamp": time.time(),
-            "metadata": self.metadata
+            "metadata": self.metadata,
         }
         if extra:
             payload.update(extra)
-        
+
         data_str = json.dumps(payload, sort_keys=True)
-        envelope = {
-            "data": payload,
-            "sig": self._sign(data_str)
-        }
+        envelope = {"data": payload, "sig": self._sign(data_str)}
         return json.dumps(envelope).encode()
 
     def start(self):
@@ -104,9 +102,13 @@ class LANDiscovery:
         self._running = True
         self._listen_thread = threading.Thread(target=self._listen_loop, daemon=True)
         self._listen_thread.start()
-        self._announce_thread = threading.Thread(target=self._announce_loop, daemon=True)
+        self._announce_thread = threading.Thread(
+            target=self._announce_loop, daemon=True
+        )
         self._announce_thread.start()
-        logger.info(f"LANDiscovery: Active for {self.agent_id} on {self.local_ip}:{self.service_port}")
+        logger.info(
+            f"LANDiscovery: Active for {self.agent_id} on {self.local_ip}:{self.service_port}"
+        )
 
     def stop(self):
         """Stops the discovery threads."""
@@ -115,7 +117,7 @@ class LANDiscovery:
     def _announce_loop(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        
+
         # Initial announcement
         try:
             msg = self._create_message("ANNOUNCE")
@@ -128,25 +130,25 @@ class LANDiscovery:
                 # Periodic Heartbeat
                 msg = self._create_message("HEARTBEAT")
                 sock.sendto(msg, (self.BROADCAST_ADDR, self.DISCOVERY_PORT))
-                
+
                 # Registry Sync (Gossip)
                 if len(self.registry) > 0:
                     self._sync_registry(sock)
-                    
+
             except Exception as e:
                 logger.debug(f"LANDiscovery: Background loop error: {e}")
-            
-            time.sleep(30) # Announce every 30 seconds
+
+            time.sleep(30)  # Announce every 30 seconds
 
     def _sync_registry(self, sock: socket.socket):
         with self._lock:
             # Send top 10 most recent peers
             peers_list = sorted(
                 [p.to_dict() for p in self.registry.values()],
-                key=lambda x: x['last_seen'],
-                reverse=True
+                key=lambda x: x["last_seen"],
+                reverse=True,
             )[:10]
-            
+
         msg = self._create_message("SYNC", {"peers": peers_list})
         sock.sendto(msg, (self.BROADCAST_ADDR, self.DISCOVERY_PORT))
 
@@ -157,7 +159,9 @@ class LANDiscovery:
             # Bind to all interfaces on DISCOVERY_PORT
             sock.bind(("", self.DISCOVERY_PORT))
         except Exception as e:
-            logger.error(f"LANDiscovery: Failed to bind to port {self.DISCOVERY_PORT}: {e}")
+            logger.error(
+                f"LANDiscovery: Failed to bind to port {self.DISCOVERY_PORT}: {e}"
+            )
             return
 
         while self._running:
@@ -173,10 +177,10 @@ class LANDiscovery:
             envelope = json.loads(data.decode())
             payload = envelope.get("data")
             sig = envelope.get("sig")
-            
+
             if not payload or not sig:
                 return
-            
+
             # 1. Validation & Security
             data_str = json.dumps(payload, sort_keys=True)
             if not self._verify(data_str, sig):
@@ -185,37 +189,43 @@ class LANDiscovery:
 
             remote_agent_id = payload.get("agent_id")
             if remote_agent_id == self.agent_id:
-                return # Self ignore
+                return  # Self ignore
 
             msg_timestamp = payload.get("timestamp", 0)
             now = time.time()
-            
+
             # Anti-Replay & Clock Skew Protection
             if abs(now - msg_timestamp) > self.MAX_CLOCK_SKEW:
-                logger.debug(f"LANDiscovery: Dropping message from {remote_agent_id} (Clock skew: {now - msg_timestamp:.2f}s)")
+                logger.debug(
+                    f"LANDiscovery: Dropping message from {remote_agent_id} (Clock skew: {now - msg_timestamp:.2f}s)"
+                )
                 return
-            
+
             if self._nonces.get(remote_agent_id, 0) >= msg_timestamp:
-                return # Replay or old message
+                return  # Replay or old message
             self._nonces[remote_agent_id] = msg_timestamp
 
             msg_type = payload.get("type")
-            
+
             # 2. Registration
             self._update_peer(payload)
-            
+
             # 3. Message Handling
             if msg_type == "ANNOUNCE":
                 # Direct respond to announcer
                 resp = self._create_message("ACK")
                 self._ping_times[remote_agent_id] = now
-                socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(resp, (addr[0], self.DISCOVERY_PORT))
-                logger.info(f"LANDiscovery: New peer announced: {remote_agent_id} at {addr[0]}")
+                socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(
+                    resp, (addr[0], self.DISCOVERY_PORT)
+                )
+                logger.info(
+                    f"LANDiscovery: New peer announced: {remote_agent_id} at {addr[0]}"
+                )
 
             elif msg_type == "ACK":
                 # Calculate latency if we sent the request
                 if remote_agent_id in self._ping_times:
-                    latency = (now - self._ping_times.pop(remote_agent_id)) * 1000 # ms
+                    latency = (now - self._ping_times.pop(remote_agent_id)) * 1000  # ms
                     with self._lock:
                         if remote_agent_id in self.registry:
                             self.registry[remote_agent_id].latency = latency
@@ -231,11 +241,11 @@ class LANDiscovery:
         agent_id = data.get("agent_id")
         if not agent_id or agent_id == self.agent_id:
             return
-        
+
         with self._lock:
             existing = self.registry.get(agent_id)
             latency = existing.latency if existing else data.get("latency", 0.0)
-            
+
             # Update or Register
             self.registry[agent_id] = PeerInfo(
                 agent_id=agent_id,
@@ -244,7 +254,7 @@ class LANDiscovery:
                 last_seen=time.time(),
                 metadata=data.get("metadata", {}),
                 trust_score=data.get("trust_score", 1.0),
-                latency=latency
+                latency=latency,
             )
 
     def get_active_peers(self, max_age: int = 300) -> List[PeerInfo]:

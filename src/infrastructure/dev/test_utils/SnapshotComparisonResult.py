@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """SnapshotComparisonResult shim for pytest collection."""
 
+
 class SnapshotComparisonResult:
     def __init__(self, baseline=None, current=None, diffs=None):
         self.baseline = baseline

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -74,7 +75,9 @@ class KernelAgent(BaseAgent):
                 f"Disk Usage for {path}: {used // (2**30)}GB used / "
                 f"{free // (2**30)}GB free (Total: {total // (2**30)}GB)"
             )
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error checking disk space: {e}"
 
     @as_tool
@@ -85,7 +88,9 @@ class KernelAgent(BaseAgent):
         logging.warning(f"KernelAgent auditing shell command: {command}")
 
         # Security Audit (HITL Gate)
-        risk_level, warning = await asyncio.to_thread(self.security_guard.audit_command, command)
+        risk_level, warning = await asyncio.to_thread(
+            self.security_guard.audit_command, command
+        )
         if risk_level == "HIGH" and not force:
             return (
                 f"BLOCKED: High-risk command detected.\n"
@@ -117,10 +122,16 @@ class KernelAgent(BaseAgent):
                 proc.kill()
                 await proc.wait()
                 if hasattr(self, "recorder") and self.recorder:
-                    self.recorder.record_lesson("kernel_shell_timeout", {"command": command})
+                    self.recorder.record_lesson(
+                        "kernel_shell_timeout", {"command": command}
+                    )
                 return "Error: Command timed out after 30 seconds."
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             if hasattr(self, "recorder") and self.recorder:
-                self.recorder.record_lesson("kernel_shell_error", {"command": command, "error": str(e)})
+                self.recorder.record_lesson(
+                    "kernel_shell_error", {"command": command, "error": str(e)}
+                )
             return f"Error executing command: {e}"

@@ -12,6 +12,7 @@ from typing import Dict, List, Any, Optional
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
+
 class RefinementAgent(BaseAgent):
     """Refines the swarm's core logic and instructions through performance feedback."""
 
@@ -19,7 +20,7 @@ class RefinementAgent(BaseAgent):
         super().__init__(file_path)
         self.refinement_logs = Path("logs/self_refinement")
         self.refinement_logs.mkdir(parents=True, exist_ok=True)
-        
+
         self._system_prompt = (
             "You are the Refinement Agent. "
             "Your role is to iteratively improve the performance of all agents in the fleet. "
@@ -41,20 +42,22 @@ class RefinementAgent(BaseAgent):
         return analysis
 
     @as_tool
-    def propose_prompt_update(self, agent_class_name: str, performance_feedback: str) -> str:
+    def propose_prompt_update(
+        self, agent_class_name: str, performance_feedback: str
+    ) -> str:
         """Generates a new optimized system prompt for an agent.
         Args:
             agent_class_name: The name of the agent class to refine.
             performance_feedback: Summary of what the agent is doing wrong.
         """
         logging.info(f"Refinement: Generating new prompt for {agent_class_name}...")
-        
+
         new_prompt = (
             f"You are the {agent_class_name}. "
             f"Optimized Instructions: Focus on high-precision outputs. "
             f"Avoid verbose explanations. Correct for: {performance_feedback}"
         )
-        
+
         return f"### Proposed System Prompt for {agent_class_name}\n\n```\n{new_prompt}\n```"
 
     @as_tool
@@ -69,13 +72,17 @@ class RefinementAgent(BaseAgent):
         ref_file = self.refinement_logs / f"refine_{os.path.basename(file_path)}.txt"
         with open(ref_file, "w") as f:
             f.write(new_logic_snippet)
-            
+
         return f"Refinement logic written to {ref_file}. Verification required before merge."
 
     def improve_content(self, prompt: str) -> str:
         return "Fleet self-refinement loops are active and monitoring for optimization opportunities."
 
+
 if __name__ == "__main__":
     from src.classes.base_agent.utilities import create_main_function
-    main = create_main_function(RefinementAgent, "Refinement Agent", "Autonomous logic optimizer")
+
+    main = create_main_function(
+        RefinementAgent, "Refinement Agent", "Autonomous logic optimizer"
+    )
     main()

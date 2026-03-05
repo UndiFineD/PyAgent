@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_attentiontype_exists():
     """Test that AttentionType class exists and is importable."""
-    assert 'AttentionType' in dir()
+    assert "AttentionType" in dir()
 
 
 def test_kvcachedtype_exists():
     """Test that KVCacheDtype class exists and is importable."""
-    assert 'KVCacheDtype' in dir()
+    assert "KVCacheDtype" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

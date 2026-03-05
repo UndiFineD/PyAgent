@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,6 +29,7 @@ __version__ = VERSION
 # Phase 16: Rust acceleration imports
 try:
     import rust_core
+
     _RUST_AVAILABLE = True
 except ImportError:
     _RUST_AVAILABLE = False
@@ -127,7 +129,7 @@ class PromptVersionManager:
         total_weight = sum(v.weight for v in versions)
         if total_weight <= 0:
             return versions[0]
-        
+
         # Phase 16: Try Rust-accelerated weighted random selection
         selected_idx = None
         if _RUST_AVAILABLE and hasattr(rust_core, "weighted_random_select_rust"):
@@ -136,7 +138,7 @@ class PromptVersionManager:
                 selected_idx = rust_core.weighted_random_select_rust(weights)
             except Exception:
                 selected_idx = None
-        
+
         if selected_idx is not None and 0 <= selected_idx < len(versions):
             version = versions[selected_idx]
         else:
@@ -149,7 +151,7 @@ class PromptVersionManager:
                 if r <= cumulative:
                     version = v
                     break
-        
+
         self.selection_history.append(
             {
                 "template_id": template_id,

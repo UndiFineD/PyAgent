@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "WebhookConfig"), "WebhookConfig missing"
     assert hasattr(mod, "StreamEvent"), "StreamEvent missing"
     assert hasattr(mod, "StreamAgent"), "StreamAgent missing"
-

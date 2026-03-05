@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_videoprocessor_exists():
     """Test that VideoProcessor class exists and is importable."""
-    assert 'VideoProcessor' in dir()
+    assert "VideoProcessor" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

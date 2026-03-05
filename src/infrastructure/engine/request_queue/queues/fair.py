@@ -84,7 +84,9 @@ class FairQueue(RequestQueue):
     def peek(self) -> T:
         """Peek at next fair request."""
         for client_id in sorted(
-            self._client_queues.keys(), key=lambda c: self._client_served.get(c, 0) / self._client_weights.get(c, 1.0)
+            self._client_queues.keys(),
+            key=lambda c: self._client_served.get(c, 0)
+            / self._client_weights.get(c, 1.0),
         ):
             if self._client_queues[client_id]:
                 return self._client_queues[client_id][0]

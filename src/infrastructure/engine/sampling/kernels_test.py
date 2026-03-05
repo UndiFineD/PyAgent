@@ -20,4 +20,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "GumbelSampler"), "GumbelSampler missing"
     assert hasattr(mod, "RepetitionPenaltySampler"), "RepetitionPenaltySampler missing"
     assert hasattr(mod, "PenaltySampler"), "PenaltySampler missing"
-

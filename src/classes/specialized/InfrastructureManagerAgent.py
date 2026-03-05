@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,9 +27,10 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
 class InfrastructureManagerAgent(BaseAgent):
     """Manages remote infrastructure including Proxmox virtualization and HomeAssistant IoT."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -50,7 +52,7 @@ class InfrastructureManagerAgent(BaseAgent):
         # Simulation of Proxmox API call
         # url = f"https://{host}:8006/api2/json/nodes"
         # headers = {"Authorization": f"PVEAPIToken={token_id}={secret}"}
-        
+
         return (
             f"### Proxmox Inventory for {host}\n"
             "- VM 101: `Ubuntu-Server` (Status: Running, CPU: 2.1%)\n"
@@ -59,7 +61,9 @@ class InfrastructureManagerAgent(BaseAgent):
         )
 
     @as_tool
-    def control_homeassistant_device(self, entity_id: str, action: str, api_url: str, token: str) -> str:
+    def control_homeassistant_device(
+        self, entity_id: str, action: str, api_url: str, token: str
+    ) -> str:
         """Controls a HomeAssistant device (light, switch, etc.).
         Args:
             entity_id: The HA entity ID (e.g., 'light.living_room').
@@ -71,7 +75,7 @@ class InfrastructureManagerAgent(BaseAgent):
         # Simulation of HA REST API call
         # url = f"{api_url}/api/services/{entity_id.split('.')[0]}/{action}"
         # headers = {"Authorization": f"Bearer {token}"}
-        
+
         return f"Successfully executed `{action}` for `{entity_id}` on HomeAssistant at {api_url}."
 
     @as_tool
@@ -84,13 +88,17 @@ class InfrastructureManagerAgent(BaseAgent):
             "cpu_usage": "15%",
             "ram_free": "8.2GB",
             "disk_status": "Healthy",
-            "uptime": "14 days, 3 hours"
+            "uptime": "14 days, 3 hours",
         }
 
     def improve_content(self, prompt: str) -> str:
         return "Infrastructure Manager ready. Provide Proxmox or HomeAssistant credentials to begin orchestration."
 
+
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function
-    main = create_main_function(InfrastructureManagerAgent, "Infra Manager", "Infra logs")
+
+    main = create_main_function(
+        InfrastructureManagerAgent, "Infra Manager", "Infra logs"
+    )
     main()

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_sampler_exists():
     """Test that Sampler class exists and is importable."""
-    assert 'Sampler' in dir()
+    assert "Sampler" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

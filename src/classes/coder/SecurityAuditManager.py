@@ -9,9 +9,10 @@ import time
 import uuid
 from typing import Dict, List, Any
 
+
 class SecurityAuditManager:
     """Manages fleet security including certificates and access control."""
-    
+
     def __init__(self) -> None:
         self.certificates: Dict[str, Dict[str, Any]] = {}
 
@@ -21,8 +22,8 @@ class SecurityAuditManager:
         self.certificates[fleet_id] = {
             "cert_id": new_cert_id,
             "issued_at": time.time(),
-            "expires_at": time.time() + (3600 * 24 * 90), # 90 days
-            "status": "valid"
+            "expires_at": time.time() + (3600 * 24 * 90),  # 90 days
+            "status": "valid",
         }
         return f"Rotated certificates for fleet {fleet_id}. New Cert ID: {new_cert_id}"
 

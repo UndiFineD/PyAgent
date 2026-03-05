@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,17 +27,19 @@ from .SelfHealingCore import SelfHealingCore
 
 __version__ = VERSION
 
+
 class SelfHealingOrchestrator:
     """
     Advanced Self-Healing v3: Shell for fleet resilience logic.
     Delegates thresholds and strategy to SelfHealingCore.
     Uses AgentRegistry tools for re-loading failed plugins.
     """
+
     def __init__(self, fleet_manager: Any) -> None:
         self.fleet_manager: Any = fleet_manager
         # Shell-Core separation: The core handles pure logic and state registry
         self.core = SelfHealingCore(timeout_seconds=15.0, max_errors=3)
-        self.state_backups: dict[str, Any] = {}    # agent_name -> state_snapshot
+        self.state_backups: dict[str, Any] = {}  # agent_name -> state_snapshot
         self.recovery_logs: list[dict[str, Any]] = []
 
     @property
@@ -44,7 +47,13 @@ class SelfHealingOrchestrator:
         """Provides access to the core health registry for testing and monitoring."""
         return self.core.health_registry
 
-    def register_heartbeat(self, agent_name: str, state: dict[str, Any] | None = None, latency: float = 0.0, error: bool = False) -> None:
+    def register_heartbeat(
+        self,
+        agent_name: str,
+        state: dict[str, Any] | None = None,
+        latency: float = 0.0,
+        error: bool = False,
+    ) -> None:
         """Signals that an agent is alive and optionally backs up its state."""
         self.core.update_health(agent_name, latency=latency, error=error)
         if state:
@@ -53,48 +62,58 @@ class SelfHealingOrchestrator:
     def check_fleet_health(self) -> None:
         """Scans the fleet for agents that have stopped responding."""
         failed_agents = self.core.detect_failures()
-        
+
         for agent_name in failed_agents:
             self.attempt_recovery(agent_name)
 
     def attempt_recovery(self, agent_name: str) -> bool:
         """Attempts to restart a failed agent and restore its last known state."""
         action = self.core.get_recovery_action(agent_name)
-        logging.info(f"Self-Healing: Recovery action '{action}' triggered for {agent_name}")
-        
+        logging.info(
+            f"Self-Healing: Recovery action '{action}' triggered for {agent_name}"
+        )
+
         success = False
-        
+
         # Action implementation using FleetManager/Registry
         if action == "reinitialize" or action == "restart_process":
             # Attempt to reload through the registry
-            if hasattr(self.fleet_manager, 'agents') and hasattr(self.fleet_manager.agents, 'try_reload'):
+            if hasattr(self.fleet_manager, "agents") and hasattr(
+                self.fleet_manager.agents, "try_reload"
+            ):
                 success = self.fleet_manager.agents.try_reload(agent_name)
             else:
-                logging.warning(f"Self-Healing: FleetManager registry unavailable for {agent_name} recovery.")
+                logging.warning(
+                    f"Self-Healing: FleetManager registry unavailable for {agent_name} recovery."
+                )
                 success = False
-        
+
         if success:
             # Clear error count on success
             self.core.health_registry[agent_name].error_count = 0
             self.core.health_registry[agent_name].is_alive = True
-            
+
             # Update core that it's fixed
             self.core.update_health(agent_name, error=False)
-            
+
             restored_state = self.state_backups.get(agent_name, "N/A")
-            self.recovery_logs.append({
-                "agent": agent_name,
-                "timestamp": time.time(),
-                "action": action,
-                "state_restored": restored_state is not None
-            })
+            self.recovery_logs.append(
+                {
+                    "agent": agent_name,
+                    "timestamp": time.time(),
+                    "action": action,
+                    "state_restored": restored_state is not None,
+                }
+            )
             logging.info(f"Self-Healing: Successfully recovered {agent_name}")
             return True
         elif action == "apoptosis":
-            logging.error(f"Self-Healing: Agent {agent_name} is unrecoverable. Initiating apoptosis.")
+            logging.error(
+                f"Self-Healing: Agent {agent_name} is unrecoverable. Initiating apoptosis."
+            )
             # Logic to remove from registry or kill process here
             return False
-            
+
         return False
 
     def attempt_repair(self, agent_name: str, error: Exception = None, **kwargs) -> Any:
@@ -108,7 +127,7 @@ class SelfHealingOrchestrator:
         return {
             "monitored_agents": len(self.core.health_registry),
             "total_recoveries": len(self.recovery_logs),
-            "recent_actions": self.recovery_logs[-5:]
+            "recent_actions": self.recovery_logs[-5:],
         }
 
     def review_recovery_lessons(self) -> None:
@@ -118,15 +137,17 @@ class SelfHealingOrchestrator:
         """
         if not self.recovery_logs:
             return
-            
-        logging.info("Self-Healing: Reviewing recovery logs for new intelligence lessons...")
+
+        logging.info(
+            "Self-Healing: Reviewing recovery logs for new intelligence lessons..."
+        )
         for log in self.recovery_logs[-10:]:
             if log.get("action") == "apoptosis":
                 lesson = f"Lesson: Agent {log['agent']} reached apoptosis. Root cause analysis needed."
                 # Record lesson to SQL intelligence table via FleetManager
-                if hasattr(self.fleet_manager, 'sql_metadata'):
+                if hasattr(self.fleet_manager, "sql_metadata"):
                     self.fleet_manager.sql_metadata.record_lesson(
                         interaction_id=f"recovery_{int(log['timestamp'])}",
                         text=lesson,
-                        category="Self-Healing Failure"
+                        category="Self-Healing Failure",
                     )

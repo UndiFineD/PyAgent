@@ -14,5 +14,6 @@ def _load_module():
 def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "determine_expert_map"), "determine_expert_map missing"
-    assert hasattr(mod, "get_compressed_expert_map"), "get_compressed_expert_map missing"
-
+    assert hasattr(
+        mod, "get_compressed_expert_map"
+    ), "get_compressed_expert_map missing"

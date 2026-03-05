@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,8 +31,11 @@ logger = logging.getLogger(__name__)
 
 # Try to import Rust-accelerated versions
 try:
-    from rust_core import (json_count_leaves_rust, json_flatten_rust,
-                           json_iter_leaves_rust)
+    from rust_core import (
+        json_count_leaves_rust,
+        json_flatten_rust,
+        json_iter_leaves_rust,
+    )
 
     # Use Rust versions if available
     _json_iter_leaves_native = json_iter_leaves
@@ -42,16 +46,20 @@ try:
         """Rust-accelerated leaf iteration."""
         try:
             return json_iter_leaves_rust(value)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            # pylint: disable=broad-exception-caught
             return _json_iter_leaves_native(value)
 
     def json_count_leaves_fast(value: JSONTree[_T]) -> int:
         """Rust-accelerated leaf counting."""
         try:
             return json_count_leaves_rust(value)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            # pylint: disable=broad-exception-caught
             return _json_count_leaves_native(value)
 
     def json_flatten_fast(
@@ -61,8 +69,10 @@ try:
         """Rust-accelerated flattening."""
         try:
             return json_flatten_rust(value, separator)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            # pylint: disable=broad-exception-caught
             return _json_flatten_native(value, separator)
 
     RUST_ACCELERATION_AVAILABLE = True

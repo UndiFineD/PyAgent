@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_graphrelationalagent_exists():
     """Test that GraphRelationalAgent class exists and is importable."""
-    assert 'GraphRelationalAgent' in dir()
+    assert "GraphRelationalAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

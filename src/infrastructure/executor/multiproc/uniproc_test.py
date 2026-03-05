@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_uniprocexecutor_exists():
     """Test that UniprocExecutor class exists and is importable."""
-    assert 'UniprocExecutor' in dir()
+    assert "UniprocExecutor" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

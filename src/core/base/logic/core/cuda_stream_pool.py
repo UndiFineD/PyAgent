@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -58,7 +59,7 @@ try:
     _BRIDGE = get_bridge()
     HAS_RUST = hasattr(_BRIDGE, "event_query_rust")
 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+    # pylint: disable=broad-exception-caught
     HAS_RUST = False
     _BRIDGE = None
 
@@ -275,9 +276,11 @@ class EventPool:
     def clear(self) -> None:
         """Reset pool state."""
         with self._lock:
+
             def _reset_event(event):
                 event.in_use = False
                 return event
+
             list(map(_reset_event, self._events))
             self._free = deque(self._events)
 
@@ -336,6 +339,7 @@ class CudaStreamPool:
 
     def _initialize_pools(self) -> None:
         """Create stream pools."""
+
         def _create_and_add(priority, target_list, free_deque):
             stream = PooledStream(
                 stream_id=self._next_id,
@@ -347,11 +351,32 @@ class CudaStreamPool:
             return stream
 
         # Compute streams
-        list(map(lambda _: _create_and_add(StreamPriority.NORMAL, self._compute_streams, self._free_compute), range(self.compute_streams_count)))
+        list(
+            map(
+                lambda _: _create_and_add(
+                    StreamPriority.NORMAL, self._compute_streams, self._free_compute
+                ),
+                range(self.compute_streams_count),
+            )
+        )
         # Communication streams
-        list(map(lambda _: _create_and_add(StreamPriority.NORMAL, self._comm_streams, self._free_comm), range(self.comm_streams_count)))
+        list(
+            map(
+                lambda _: _create_and_add(
+                    StreamPriority.NORMAL, self._comm_streams, self._free_comm
+                ),
+                range(self.comm_streams_count),
+            )
+        )
         # High priority streams
-        list(map(lambda _: _create_and_add(StreamPriority.HIGH, self._high_priority_streams, self._free_high), range(self.high_priority_count)))
+        list(
+            map(
+                lambda _: _create_and_add(
+                    StreamPriority.HIGH, self._high_priority_streams, self._free_high
+                ),
+                range(self.high_priority_count),
+            )
+        )
 
     def acquire_compute(
         self,
@@ -484,7 +509,9 @@ class CudaStreamPool:
                 self._free_high.append(stream)
 
     @contextmanager
-    def compute_context(self, affinity_key: Optional[str] = None) -> Iterator[Optional[PooledStream]]:
+    def compute_context(
+        self, affinity_key: Optional[str] = None
+    ) -> Iterator[Optional[PooledStream]]:
         """Context manager regarding compute stream."""
         stream = self.acquire_compute(affinity_key)
         if stream is None:
@@ -498,7 +525,9 @@ class CudaStreamPool:
             self.release(stream)
 
     @contextmanager
-    def comm_context(self, affinity_key: Optional[str] = None) -> Iterator[Optional[PooledStream]]:
+    def comm_context(
+        self, affinity_key: Optional[str] = None
+    ) -> Iterator[Optional[PooledStream]]:
         """Context manager regarding communication stream."""
         stream = self.acquire_comm(affinity_key)
         if stream is None:
@@ -541,7 +570,9 @@ class CudaStreamPool:
 
     def sync_all(self) -> None:
         """Synchronize all streams."""
-        all_streams = self._compute_streams + self._comm_streams + self._high_priority_streams
+        all_streams = (
+            self._compute_streams + self._comm_streams + self._high_priority_streams
+        )
         list(map(lambda s: s.synchronize(), all_streams))
 
     def sync_compute(self) -> None:
@@ -556,10 +587,14 @@ class CudaStreamPool:
         """Clear all stream affinities."""
         with self._lock:
             self._affinity_map.clear()
+
             def _clear_stream_affinity(s):
                 s.affinity_key = None
                 return s
-            list(map(_clear_stream_affinity, self._compute_streams + self._comm_streams))
+
+            list(
+                map(_clear_stream_affinity, self._compute_streams + self._comm_streams)
+            )
 
     @property
     def stats(self) -> dict[str, Any]:
@@ -573,7 +608,9 @@ class CudaStreamPool:
                     "count": len(streams),
                     "total_acquisitions": total_acq,
                     "total_active_time_ms": total_time / 1_000_000,
-                    "avg_active_time_ms": (total_time / total_acq / 1_000_000) if total_acq > 0 else 0,
+                    "avg_active_time_ms": (
+                        (total_time / total_acq / 1_000_000) if total_acq > 0 else 0
+                    ),
                 }
 
             return {
@@ -628,7 +665,9 @@ def reset_global_pool() -> None:
 
 # Convenience functions
 @contextmanager
-def compute_stream(affinity_key: Optional[str] = None) -> Iterator[Optional[PooledStream]]:
+def compute_stream(
+    affinity_key: Optional[str] = None,
+) -> Iterator[Optional[PooledStream]]:
     """Get a compute stream from the global pool."""
     pool = get_global_stream_pool()
     with pool.compute_context(affinity_key) as stream:

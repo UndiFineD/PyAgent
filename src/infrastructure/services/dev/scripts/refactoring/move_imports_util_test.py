@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "fix_file"), "fix_file missing"
     assert hasattr(mod, "walk_dir"), "walk_dir missing"
-

@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Dict, List
 import re
 
+
 class PoolingCore:
     """
     PoolingCore implements logic for HTTP/2 connection pooling and prompt compression.
@@ -16,7 +17,7 @@ class PoolingCore:
             (r"\bi would like you to\b", ""),
             (r"\bthank you\b", ""),
             (r"\bhelpful assistant\b", "assistant"),
-            (r"\s+", " ") # Collapse whitespace
+            (r"\s+", " "),  # Collapse whitespace
         ]
 
     def compress_prompt(self, text: str) -> str:
@@ -29,13 +30,15 @@ class PoolingCore:
             compressed = re.sub(pattern, replacement, compressed, flags=re.IGNORECASE)
         return compressed.strip()
 
-    def select_best_endpoint(self, preferred_host: str, endpoint_stats: dict[str, float]) -> str:
+    def select_best_endpoint(
+        self, preferred_host: str, endpoint_stats: dict[str, float]
+    ) -> str:
         """
         Selects the lowest-latency endpoint from a pool based on recent stats.
         """
         if not endpoint_stats:
             return preferred_host
-            
+
         return min(endpoint_stats, key=endpoint_stats.get)
 
     def should_reuse_session(self, host: str, active_sessions: list[str]) -> bool:

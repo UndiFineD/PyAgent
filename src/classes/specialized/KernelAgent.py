@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,9 +34,10 @@ from src.logic.agents.development.SecurityGuardAgent import SecurityGuardAgent
 
 __version__ = VERSION
 
+
 class KernelAgent(BaseAgent):
     """Interacts directly with the host OS to manage environments and perform diagnostics."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.security_guard = SecurityGuardAgent(file_path + ".audit")
@@ -49,6 +51,7 @@ class KernelAgent(BaseAgent):
     @as_tool
     async def get_system_info(self) -> str:
         """Returns details about the current operating system and environment."""
+
         def get_info() -> str:
             info = {
                 "os": platform.system(),
@@ -56,10 +59,10 @@ class KernelAgent(BaseAgent):
                 "machine": platform.machine(),
                 "python_version": sys.version,
                 "cwd": os.getcwd(),
-                "env_vars": list(os.environ.keys())[:10]  # First 10 for brevity
+                "env_vars": list(os.environ.keys())[:10],  # First 10 for brevity
             }
             return json.dumps(info, indent=2)
-            
+
         return await asyncio.to_thread(get_info)
 
     @as_tool
@@ -77,9 +80,11 @@ class KernelAgent(BaseAgent):
         High-risk commands require 'force=True' as a HITL gate.
         """
         logging.warning(f"KernelAgent auditing shell command: {command}")
-        
+
         # Security Audit (HITL Gate)
-        risk_level, warning = await asyncio.to_thread(self.security_guard.audit_command, command)
+        risk_level, warning = await asyncio.to_thread(
+            self.security_guard.audit_command, command
+        )
         if risk_level == "HIGH" and not force:
             return (
                 f"BLOCKED: High-risk command detected.\n"
@@ -90,30 +95,35 @@ class KernelAgent(BaseAgent):
         try:
             # Phase 287: Use asyncio for sub-processes
             proc = await asyncio.create_subprocess_shell(
-                command,
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE
+                command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
             )
-            
+
             try:
                 stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=30)
                 output = f"STDOUT:\n{stdout.decode()}\n"
                 if stderr:
                     output += f"STDERR:\n{stderr.decode()}\n"
-                
+
                 # Intelligence Harvesting (Phase 108)
-                if hasattr(self, 'recorder') and self.recorder:
-                    self.recorder.record_lesson("kernel_shell_exec", {"command": command, "exit_code": proc.returncode})
-                    
+                if hasattr(self, "recorder") and self.recorder:
+                    self.recorder.record_lesson(
+                        "kernel_shell_exec",
+                        {"command": command, "exit_code": proc.returncode},
+                    )
+
                 return output
             except asyncio.TimeoutExpired:
                 proc.kill()
                 await proc.wait()
-                if hasattr(self, 'recorder') and self.recorder:
-                    self.recorder.record_lesson("kernel_shell_timeout", {"command": command})
+                if hasattr(self, "recorder") and self.recorder:
+                    self.recorder.record_lesson(
+                        "kernel_shell_timeout", {"command": command}
+                    )
                 return "Error: Command timed out after 30 seconds."
-                
+
         except Exception as e:
-            if hasattr(self, 'recorder') and self.recorder:
-                self.recorder.record_lesson("kernel_shell_error", {"command": command, "error": str(e)})
+            if hasattr(self, "recorder") and self.recorder:
+                self.recorder.record_lesson(
+                    "kernel_shell_error", {"command": command, "error": str(e)}
+                )
             return f"Error executing command: {e}"

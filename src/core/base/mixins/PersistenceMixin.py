@@ -5,6 +5,7 @@ from src.core.base.models import AgentState, EventType
 from src.core.base.AgentHistory import AgentConversationHistory
 from src.core.base.AgentScratchpad import AgentScratchpad
 
+
 class PersistenceMixin:
     """Handles agent state, history, scratchpad, metrics, and file persistence."""
 
@@ -38,9 +39,15 @@ class PersistenceMixin:
 
     def generate_diff(self) -> str:
         """Generate a unified diff between original and improved content."""
-        if hasattr(self, "core") and hasattr(self, "previous_content") and hasattr(self, "current_content"):
+        if (
+            hasattr(self, "core")
+            and hasattr(self, "previous_content")
+            and hasattr(self, "current_content")
+        ):
             return self.core.calculate_diff(
-                self.previous_content, self.current_content, filename=str(self.file_path)
+                self.previous_content,
+                self.current_content,
+                filename=str(self.file_path),
             )
         return ""
 
@@ -67,11 +74,14 @@ class PersistenceMixin:
 
         content_to_write = self.current_content
         suffix = self.file_path.suffix.lower()
-        if suffix in {".md", ".markdown"} or self.file_path.name.lower().endswith(".plan.md"):
+        if suffix in {".md", ".markdown"} or self.file_path.name.lower().endswith(
+            ".plan.md"
+        ):
             content_to_write = self.core.fix_markdown(content_to_write)
 
         if not self.core.validate_content_safety(content_to_write):
             import logging
+
             logging.error(f"Security violation detected in {self.file_path.name}")
             return False
 
@@ -84,12 +94,14 @@ class PersistenceMixin:
             return True
         except Exception as e:
             import logging
+
             logging.error(f"File write failed: {e}")
             return False
 
     def _write_dry_run_diff(self) -> bool:
         """Saves a diff for verification without modifying the file."""
         from pathlib import Path
+
         diff = self.get_diff()
         if not diff:
             return True

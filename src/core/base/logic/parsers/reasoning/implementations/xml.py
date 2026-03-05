@@ -128,8 +128,11 @@ class XMLReasoningParser(ReasoningParser):
             # After reasoning is complete, accumulate content
             state.content_buffer = self._extract_content(current_text)
 
-        return ReasoningResult(
-            reasoning=state.reasoning_buffer if state.reasoning_buffer else None,
-            content=state.content_buffer if state.content_buffer else None,
-            is_complete=state.reasoning_complete and self.end_tag in current_text,
-        ), state
+        return (
+            ReasoningResult(
+                reasoning=state.reasoning_buffer if state.reasoning_buffer else None,
+                content=state.content_buffer if state.content_buffer else None,
+                is_complete=state.reasoning_complete and self.end_tag in current_text,
+            ),
+            state,
+        )

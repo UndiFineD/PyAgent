@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,11 +41,13 @@ workspace_root = str(Path(__file__).resolve().parents[3]) + ""
 fleet = FleetManager(workspace_root)
 load_balancer = FleetLoadBalancer(fleet)
 
+
 class TaskRequest(BaseModel):
     agent_id: str
     task: str
     context: dict[str, Any] = {}
-    interface: str | None = "Web" # Default to web if not specified
+    interface: str | None = "Web"  # Default to web if not specified
+
 
 class TelemetryManger:
     def __init__(self) -> None:
@@ -64,24 +67,26 @@ class TelemetryManger:
             except Exception:
                 pass
 
+
 telemetry = TelemetryManger()
+
 
 @app.get("/")
 async def root() -> dict[str, Any]:
     return {
-        "status": "online", 
-        "version": "2.0.0", 
+        "status": "online",
+        "version": "2.0.0",
         "fleet_size": len(fleet.agents),
-        "lb_stats": load_balancer.get_stats()
+        "lb_stats": load_balancer.get_stats(),
     }
+
 
 @app.get("/agents")
 async def list_agents() -> dict[str, Any]:
     return {
-        "agents": [
-            {"id": k, "type": type(v).__name__} for k, v in fleet.agents.items()
-        ]
+        "agents": [{"id": k, "type": type(v).__name__} for k, v in fleet.agents.items()]
     }
+
 
 @app.post("/task")
 async def dispatch_task(request: TaskRequest) -> dict[str, Any]:
@@ -91,29 +96,38 @@ async def dispatch_task(request: TaskRequest) -> dict[str, Any]:
         return {"status": "error", "message": lb_result.get("reason"), "code": 429}
 
     # Log task start to telemetry
-    await telemetry.broadcast(json.dumps({
-        "type": "task_started",
-        "agent": request.agent_id,
-        "interface": request.interface,
-        "timestamp": time.time(),
-        "lb_metadata": lb_result
-    }))
-    
+    await telemetry.broadcast(
+        json.dumps(
+            {
+                "type": "task_started",
+                "agent": request.agent_id,
+                "interface": request.interface,
+                "timestamp": time.time(),
+                "lb_metadata": lb_result,
+            }
+        )
+    )
+
     # Simulate routing to agent
     # In a real scenario, we'd use fleet.get_agent(request.agent_id).run(...)
     try:
         # Mock result for now
         result = f"Task '{request.task}' received by {request.agent_id}"
-        
-        await telemetry.broadcast(json.dumps({
-            "type": "task_completed",
-            "agent": request.agent_id,
-            "status": "success",
-            "timestamp": time.time()
-        }))
+
+        await telemetry.broadcast(
+            json.dumps(
+                {
+                    "type": "task_completed",
+                    "agent": request.agent_id,
+                    "status": "success",
+                    "timestamp": time.time(),
+                }
+            )
+        )
         return {"status": "success", "result": result}
     except Exception as e:
         return {"status": "error", "message": str(e)}
+
 
 @app.websocket("/ws/telemetry")
 async def websocket_endpoint(websocket: WebSocket) -> None:
@@ -126,6 +140,8 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
     except WebSocketDisconnect:
         telemetry.disconnect(websocket)
 
+
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)

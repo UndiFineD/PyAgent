@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_modelmanagercore_exists():
     """Test that ModelManagerCore class exists and is importable."""
-    assert 'ModelManagerCore' in dir()
+    assert "ModelManagerCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

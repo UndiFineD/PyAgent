@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_neuralpruningengine_exists():
     """Test that NeuralPruningEngine class exists and is importable."""
-    assert 'NeuralPruningEngine' in dir()
+    assert "NeuralPruningEngine" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

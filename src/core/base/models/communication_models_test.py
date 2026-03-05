@@ -33,27 +33,27 @@ except ImportError as e:
 
 def test_cascadecontext_exists():
     """Test that CascadeContext class exists and is importable."""
-    assert 'CascadeContext' in dir()
+    assert "CascadeContext" in dir()
 
 
 def test_prompttemplate_exists():
     """Test that PromptTemplate class exists and is importable."""
-    assert 'PromptTemplate' in dir()
+    assert "PromptTemplate" in dir()
 
 
 def test_conversationmessage_exists():
     """Test that ConversationMessage class exists and is importable."""
-    assert 'ConversationMessage' in dir()
+    assert "ConversationMessage" in dir()
 
 
 def test_conversationhistory_exists():
     """Test that ConversationHistory class exists and is importable."""
-    assert 'ConversationHistory' in dir()
+    assert "ConversationHistory" in dir()
 
 
 def test_prompttemplatemanager_exists():
     """Test that PromptTemplateManager class exists and is importable."""
-    assert 'PromptTemplateManager' in dir()
+    assert "PromptTemplateManager" in dir()
 
 
 def test_prompttemplatemanager_instantiation():
@@ -64,7 +64,7 @@ def test_prompttemplatemanager_instantiation():
 
 def test_responsepostprocessor_exists():
     """Test that ResponsePostProcessor class exists and is importable."""
-    assert 'ResponsePostProcessor' in dir()
+    assert "ResponsePostProcessor" in dir()
 
 
 def test_responsepostprocessor_instantiation():
@@ -75,50 +75,49 @@ def test_responsepostprocessor_instantiation():
 
 def test_promptversion_exists():
     """Test that PromptVersion class exists and is importable."""
-    assert 'PromptVersion' in dir()
+    assert "PromptVersion" in dir()
 
 
 def test_batchrequest_exists():
     """Test that BatchRequest class exists and is importable."""
-    assert 'BatchRequest' in dir()
+    assert "BatchRequest" in dir()
 
 
 def test_batchresult_exists():
     """Test that BatchResult class exists and is importable."""
-    assert 'BatchResult' in dir()
+    assert "BatchResult" in dir()
 
 
 def test_multimodalinput_exists():
     """Test that MultimodalInput class exists and is importable."""
-    assert 'MultimodalInput' in dir()
+    assert "MultimodalInput" in dir()
 
 
 def test_contextwindow_exists():
     """Test that ContextWindow class exists and is importable."""
-    assert 'ContextWindow' in dir()
+    assert "ContextWindow" in dir()
 
 
 def test_multimodalbuilder_exists():
     """Test that MultimodalBuilder class exists and is importable."""
-    assert 'MultimodalBuilder' in dir()
+    assert "MultimodalBuilder" in dir()
 
 
 def test_cachedresult_exists():
     """Test that CachedResult class exists and is importable."""
-    assert 'CachedResult' in dir()
+    assert "CachedResult" in dir()
 
 
 def test_telemetryspan_exists():
     """Test that TelemetrySpan class exists and is importable."""
-    assert 'TelemetrySpan' in dir()
+    assert "TelemetrySpan" in dir()
 
 
 def test_spancontext_exists():
     """Test that SpanContext class exists and is importable."""
-    assert 'SpanContext' in dir()
+    assert "SpanContext" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

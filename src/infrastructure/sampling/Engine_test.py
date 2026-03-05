@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_samplingpipeline_exists():
     """Test that SamplingPipeline class exists and is importable."""
-    assert 'SamplingPipeline' in dir()
+    assert "SamplingPipeline" in dir()
 
 
 def test_sample_logits_exists():
@@ -44,4 +44,3 @@ def test_sample_logits_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,17 +33,17 @@ except ImportError as e:
 
 def test_draftproposer_exists():
     """Test that DraftProposer class exists and is importable."""
-    assert 'DraftProposer' in dir()
+    assert "DraftProposer" in dir()
 
 
 def test_ngramproposer_exists():
     """Test that NgramProposer class exists and is importable."""
-    assert 'NgramProposer' in dir()
+    assert "NgramProposer" in dir()
 
 
 def test_suffixnode_exists():
     """Test that SuffixNode class exists and is importable."""
-    assert 'SuffixNode' in dir()
+    assert "SuffixNode" in dir()
 
 
 def test_suffixnode_instantiation():
@@ -54,7 +54,7 @@ def test_suffixnode_instantiation():
 
 def test_suffixproposer_exists():
     """Test that SuffixProposer class exists and is importable."""
-    assert 'SuffixProposer' in dir()
+    assert "SuffixProposer" in dir()
 
 
 def test_ngram_match_exists():
@@ -65,4 +65,3 @@ def test_ngram_match_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

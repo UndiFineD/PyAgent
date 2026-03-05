@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,8 +29,7 @@ from pathlib import Path
 from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.fleet.core.attribution_core import \
-    AttributionCore
+from src.infrastructure.swarm.fleet.core.attribution_core import AttributionCore
 
 __version__ = VERSION
 
@@ -46,7 +46,7 @@ class AttributionEngine:
 
     def _load(self) -> list[dict[str, Any]]:
         if self.log_file.exists():
-            with open(self.log_file, encoding='utf-8') as f:
+            with open(self.log_file, encoding="utf-8") as f:
                 return json.load(f)
         return []
 
@@ -66,7 +66,9 @@ class AttributionEngine:
                 f.write(new_content)
             logging.info(f"AttributionEngine: Applied license header to {file_path}")
 
-    def record_attribution(self, agent_id: str, content: str, task_context: str) -> None:
+    def record_attribution(
+        self, agent_id: str, content: str, task_context: str
+    ) -> None:
         """Creates a record of content generation."""
         content_hash = hashlib.sha256(content.encode()).hexdigest()
         record = {
@@ -80,7 +82,7 @@ class AttributionEngine:
         self._save()
 
     def _save(self) -> None:
-        with open(self.log_file, 'w', encoding='utf-8') as f:
+        with open(self.log_file, "w", encoding="utf-8") as f:
             json.dump(self.records, f, indent=2)
 
     def get_lineage(self, content_hash: str) -> list[dict[str, Any]]:

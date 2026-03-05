@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,7 +29,9 @@ from src.infrastructure.engine.engine_client.types import EngineOutput
 
 if TYPE_CHECKING:
     from src.infrastructure.engine.engine_client.types import (
-        EngineClientConfig, SchedulerOutput)
+        EngineClientConfig,
+        SchedulerOutput,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +44,9 @@ class InprocClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
     """
 
     def __init__(
-        self, config: EngineClientConfig, engine_core: Optional[Callable[[SchedulerOutput], EngineOutput]] = None
+        self,
+        config: EngineClientConfig,
+        engine_core: Optional[Callable[[SchedulerOutput], EngineOutput]] = None,
     ) -> None:
         super().__init__(config)
         self._engine_core = engine_core
@@ -49,7 +54,9 @@ class InprocClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
         self._results: dict[str, EngineOutput] = {}
         self._loop: Optional[asyncio.AbstractEventLoop] = None
 
-    def set_engine_core(self, engine_core: Callable[[SchedulerOutput], EngineOutput]) -> None:
+    def set_engine_core(
+        self, engine_core: Callable[[SchedulerOutput], EngineOutput]
+    ) -> None:
         """Set the engine core callable."""
         self._engine_core = engine_core
 
@@ -60,7 +67,10 @@ class InprocClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
         if self._engine_core is None:
             # Mock execution for testing
             output = EngineOutput(
-                request_id=request_id, outputs=[{"token_ids": [1, 2, 3]}], finished=True, metrics={"latency_ms": 1.0}
+                request_id=request_id,
+                outputs=[{"token_ids": [1, 2, 3]}],
+                finished=True,
+                metrics={"latency_ms": 1.0},
             )
         else:
             output = self._engine_core(request)
@@ -69,11 +79,15 @@ class InprocClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
         self._results[request_id] = output
         return request_id
 
-    def get_output(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
+    def get_output(
+        self, request_id: str, timeout_ms: Optional[int] = None
+    ) -> Optional[EngineOutput]:
         """Get output synchronously."""
         return self._results.pop(request_id, None)
 
-    async def get_output_async(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
+    async def get_output_async(
+        self, request_id: str, timeout_ms: Optional[int] = None
+    ) -> Optional[EngineOutput]:
         """Get output asynchronously."""
         # For in-proc, results are immediately available
         return self._results.pop(request_id, None)

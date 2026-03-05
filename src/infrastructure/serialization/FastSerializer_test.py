@@ -33,17 +33,17 @@ except ImportError as e:
 
 def test_serializationformat_exists():
     """Test that SerializationFormat class exists and is importable."""
-    assert 'SerializationFormat' in dir()
+    assert "SerializationFormat" in dir()
 
 
 def test_serializerstats_exists():
     """Test that SerializerStats class exists and is importable."""
-    assert 'SerializerStats' in dir()
+    assert "SerializerStats" in dir()
 
 
 def test_serializer_exists():
     """Test that Serializer class exists and is importable."""
-    assert 'Serializer' in dir()
+    assert "Serializer" in dir()
 
 
 def test_serializer_instantiation():
@@ -54,22 +54,22 @@ def test_serializer_instantiation():
 
 def test_jsonserializer_exists():
     """Test that JSONSerializer class exists and is importable."""
-    assert 'JSONSerializer' in dir()
+    assert "JSONSerializer" in dir()
 
 
 def test_pickleserializer_exists():
     """Test that PickleSerializer class exists and is importable."""
-    assert 'PickleSerializer' in dir()
+    assert "PickleSerializer" in dir()
 
 
 def test_msgpackserializer_exists():
     """Test that MsgPackSerializer class exists and is importable."""
-    assert 'MsgPackSerializer' in dir()
+    assert "MsgPackSerializer" in dir()
 
 
 def test_cborserializer_exists():
     """Test that CBORSerializer class exists and is importable."""
-    assert 'CBORSerializer' in dir()
+    assert "CBORSerializer" in dir()
 
 
 def test_cborserializer_instantiation():
@@ -80,7 +80,7 @@ def test_cborserializer_instantiation():
 
 def test_binaryserializer_exists():
     """Test that BinarySerializer class exists and is importable."""
-    assert 'BinarySerializer' in dir()
+    assert "BinarySerializer" in dir()
 
 
 def test_binaryserializer_instantiation():
@@ -91,7 +91,7 @@ def test_binaryserializer_instantiation():
 
 def test_serializerregistry_exists():
     """Test that SerializerRegistry class exists and is importable."""
-    assert 'SerializerRegistry' in dir()
+    assert "SerializerRegistry" in dir()
 
 
 def test_serializerregistry_instantiation():
@@ -138,4 +138,3 @@ def test_from_msgpack_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

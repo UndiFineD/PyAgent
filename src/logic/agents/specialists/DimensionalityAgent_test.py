@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_reductionmethod_exists():
     """Test that ReductionMethod class exists and is importable."""
-    assert 'ReductionMethod' in dir()
+    assert "ReductionMethod" in dir()
 
 
 def test_embeddingstats_exists():
     """Test that EmbeddingStats class exists and is importable."""
-    assert 'EmbeddingStats' in dir()
+    assert "EmbeddingStats" in dir()
 
 
 def test_dimensionalityagent_exists():
     """Test that DimensionalityAgent class exists and is importable."""
-    assert 'DimensionalityAgent' in dir()
+    assert "DimensionalityAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -99,7 +100,9 @@ class MetricCollector(ABC):
     """Abstract base regarding metric collectors."""
 
     @abstractmethod
-    def increment(self, value: float = 1.0, labels: Optional[Dict[str, str]] = None) -> None:
+    def increment(
+        self, value: float = 1.0, labels: Optional[Dict[str, str]] = None
+    ) -> None:
         """Increment a counter."""
         pass
 
@@ -127,12 +130,16 @@ class Counter(MetricCollector):
         self._values: Dict[Tuple[Tuple[str, str], ...], float] = {}
         self._lock = threading.Lock()
 
-    def _label_key(self, labels: Optional[Dict[str, str]]) -> Tuple[Tuple[str, str], ...]:
+    def _label_key(
+        self, labels: Optional[Dict[str, str]]
+    ) -> Tuple[Tuple[str, str], ...]:
         if not labels:
             return ()
         return tuple(sorted(labels.items()))
 
-    def increment(self, value: float = 1.0, labels: Optional[Dict[str, str]] = None) -> None:
+    def increment(
+        self, value: float = 1.0, labels: Optional[Dict[str, str]] = None
+    ) -> None:
         key = self._label_key(labels)
         with self._lock:
             self._values[key] = self._values.get(key, 0.0) + value
@@ -164,17 +171,23 @@ class Gauge(MetricCollector):
         self._values: Dict[Tuple[Tuple[str, str], ...], float] = {}
         self._lock = threading.Lock()
 
-    def _label_key(self, labels: Optional[Dict[str, str]]) -> Tuple[Tuple[str, str], ...]:
+    def _label_key(
+        self, labels: Optional[Dict[str, str]]
+    ) -> Tuple[Tuple[str, str], ...]:
         if not labels:
             return ()
         return tuple(sorted(labels.items()))
 
-    def increment(self, value: float = 1.0, labels: Optional[Dict[str, str]] = None) -> None:
+    def increment(
+        self, value: float = 1.0, labels: Optional[Dict[str, str]] = None
+    ) -> None:
         key = self._label_key(labels)
         with self._lock:
             self._values[key] = self._values.get(key, 0.0) + value
 
-    def decrement(self, value: float = 1.0, labels: Optional[Dict[str, str]] = None) -> None:
+    def decrement(
+        self, value: float = 1.0, labels: Optional[Dict[str, str]] = None
+    ) -> None:
         self.increment(-value, labels)
 
     def set(self, value: float, labels: Optional[Dict[str, str]] = None) -> None:
@@ -207,7 +220,23 @@ class HistogramBucket:
 class Histogram(MetricCollector):
     """Thread-safe histogram metric with configurable buckets."""
 
-    DEFAULT_BUCKETS = (0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10.0, float("inf"))
+    DEFAULT_BUCKETS = (
+        0.005,
+        0.01,
+        0.025,
+        0.05,
+        0.075,
+        0.1,
+        0.25,
+        0.5,
+        0.75,
+        1.0,
+        2.5,
+        5.0,
+        7.5,
+        10.0,
+        float("inf"),
+    )
 
     def __init__(self, spec: MetricSpec) -> None:
         self.spec = spec
@@ -215,7 +244,9 @@ class Histogram(MetricCollector):
         self._data: Dict[Tuple[Tuple[str, str], ...], Dict[str, Any]] = {}
         self._lock = threading.Lock()
 
-    def _label_key(self, labels: Optional[Dict[str, str]]) -> Tuple[Tuple[str, str], ...]:
+    def _label_key(
+        self, labels: Optional[Dict[str, str]]
+    ) -> Tuple[Tuple[str, str], ...]:
         if not labels:
             return ()
         return tuple(sorted(labels.items()))
@@ -230,7 +261,9 @@ class Histogram(MetricCollector):
             }
         return self._data[key]
 
-    def increment(self, value: float = 1.0, labels: Optional[Dict[str, str]] = None) -> None:
+    def increment(
+        self, value: float = 1.0, labels: Optional[Dict[str, str]] = None
+    ) -> None:
         raise NotImplementedError("Histograms only support observe")
 
     def set(self, value: float, labels: Optional[Dict[str, str]] = None) -> None:
@@ -242,6 +275,7 @@ class Histogram(MetricCollector):
             data = self._get_or_create(key)
             data["sum"] += value
             data["count"] += 1
+
             # Phase 336: Functional bucket update regarding loops
             def _update_bucket(bound: float) -> None:
                 if value <= bound:
@@ -278,19 +312,25 @@ class Summary(MetricCollector):
 
     DEFAULT_QUANTILES = (0.5, 0.9, 0.95, 0.99)
 
-    def __init__(self, spec: MetricSpec, max_age_seconds: float = 60.0, max_samples: int = 1000) -> None:
+    def __init__(
+        self, spec: MetricSpec, max_age_seconds: float = 60.0, max_samples: int = 1000
+    ) -> None:
         self.spec = spec
         self._max_age = max_age_seconds
         self._max_samples = max_samples
         self._data: Dict[Tuple[Tuple[str, str], ...], List[Tuple[float, float]]] = {}
         self._lock = threading.Lock()
 
-    def _label_key(self, labels: Optional[Dict[str, str]]) -> Tuple[Tuple[str, str], ...]:
+    def _label_key(
+        self, labels: Optional[Dict[str, str]]
+    ) -> Tuple[Tuple[str, str], ...]:
         if not labels:
             return ()
         return tuple(sorted(labels.items()))
 
-    def _prune(self, samples: List[Tuple[float, float]], now: float) -> List[Tuple[float, float]]:
+    def _prune(
+        self, samples: List[Tuple[float, float]], now: float
+    ) -> List[Tuple[float, float]]:
         cutoff = now - self._max_age
         # Phase 336: Functional pruning regarding age
         pruned = list(filter(lambda x: x[0] > cutoff, samples))
@@ -298,7 +338,9 @@ class Summary(MetricCollector):
             pruned = pruned[-self._max_samples :]
         return pruned
 
-    def increment(self, value: float = 1.0, labels: Optional[Dict[str, str]] = None) -> None:
+    def increment(
+        self, value: float = 1.0, labels: Optional[Dict[str, str]] = None
+    ) -> None:
         raise NotImplementedError("Summaries only support observe")
 
     def set(self, value: float, labels: Optional[Dict[str, str]] = None) -> None:
@@ -325,7 +367,9 @@ class Summary(MetricCollector):
                 return len(samples)
             return 0.0
 
-    def get_quantile(self, quantile: float, labels: Optional[Dict[str, str]] = None) -> float:
+    def get_quantile(
+        self, quantile: float, labels: Optional[Dict[str, str]] = None
+    ) -> float:
         key = self._label_key(labels)
         now = time.time()
         with self._lock:
@@ -363,7 +407,9 @@ class MetricsRegistry:
         self._initialized = False
 
     @classmethod
-    def get_instance(cls, backend: MetricsBackend = MetricsBackend.PROMETHEUS) -> "MetricsRegistry":
+    def get_instance(
+        cls, backend: MetricsBackend = MetricsBackend.PROMETHEUS
+    ) -> "MetricsRegistry":
         """Get singleton instance."""
         if cls._instance is None:
             with cls._lock:
@@ -506,10 +552,12 @@ class MetricsRegistry:
                     return name, {
                         "type": "summary",
                         "count": collector.get(),
-                        "quantiles": dict(map(
-                            lambda q: (q, collector.get_quantile(q)),
-                            Summary.DEFAULT_QUANTILES
-                        )),
+                        "quantiles": dict(
+                            map(
+                                lambda q: (q, collector.get_quantile(q)),
+                                Summary.DEFAULT_QUANTILES,
+                            )
+                        ),
                     }
                 return name, {"type": "unknown"}
 
@@ -542,7 +590,9 @@ class SampledCounter(Counter):
         self._sample_counter = 0
         self._sample_lock = threading.Lock()
 
-    def increment(self, value: float = 1.0, labels: Optional[Dict[str, str]] = None) -> None:
+    def increment(
+        self, value: float = 1.0, labels: Optional[Dict[str, str]] = None
+    ) -> None:
         with self._sample_lock:
             self._sample_counter += 1
             if self._sample_counter % int(1 / self._sample_rate) == 0:
@@ -609,13 +659,38 @@ class VLLMMetrics:
             "request_latency_seconds",
             "Request end-to-end latency",
             subsystem="engine",
-            buckets=(0.01, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0, 30.0, 60.0, float("inf")),
+            buckets=(
+                0.01,
+                0.05,
+                0.1,
+                0.25,
+                0.5,
+                1.0,
+                2.5,
+                5.0,
+                10.0,
+                30.0,
+                60.0,
+                float("inf"),
+            ),
         )
         self.time_to_first_token = self.registry.histogram(
             "time_to_first_token_seconds",
             "Time to first token latency",
             subsystem="engine",
-            buckets=(0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, float("inf")),
+            buckets=(
+                0.001,
+                0.005,
+                0.01,
+                0.025,
+                0.05,
+                0.1,
+                0.25,
+                0.5,
+                1.0,
+                2.5,
+                float("inf"),
+            ),
         )
         self.inter_token_latency = self.registry.histogram(
             "inter_token_latency_seconds",

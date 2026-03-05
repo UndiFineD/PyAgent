@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_contextconsolidationmixin_exists():
     """Test that ContextConsolidationMixin class exists and is importable."""
-    assert 'ContextConsolidationMixin' in dir()
+    assert "ContextConsolidationMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

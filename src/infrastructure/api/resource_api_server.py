@@ -18,12 +18,16 @@ from fastapi.responses import JSONResponse
 import uvicorn
 from src.infrastructure.api.resource.resource_manager import ResourceManager
 
-app = FastAPI(title="PyAgent Resource API", description="Serves vLLM, Ollama, and NPU resources.")
+app = FastAPI(
+    title="PyAgent Resource API", description="Serves vLLM, Ollama, and NPU resources."
+)
 manager = ResourceManager()
+
 
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
 
 @app.post("/vllm/infer")
 async def vllm_infer(request: Request):
@@ -34,6 +38,7 @@ async def vllm_infer(request: Request):
     result = manager.infer_vllm(prompt, model, system_prompt)
     return JSONResponse({"result": result})
 
+
 @app.post("/ollama/infer")
 async def ollama_infer(request: Request):
     data = await request.json()
@@ -43,12 +48,14 @@ async def ollama_infer(request: Request):
     result = manager.infer_ollama(prompt, model, system_prompt)
     return JSONResponse({"result": result})
 
+
 @app.post("/npu/task")
 async def npu_task(request: Request):
     data = await request.json()
     task = data.get("task", "")
     result = manager.run_npu_task(task)
     return JSONResponse({"result": result})
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080)

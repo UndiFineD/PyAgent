@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_refactoringadvisor_exists():
     """Test that RefactoringAdvisor class exists and is importable."""
-    assert 'RefactoringAdvisor' in dir()
+    assert "RefactoringAdvisor" in dir()
 
 
 def test_refactoringadvisor_instantiation():
@@ -45,4 +45,3 @@ def test_refactoringadvisor_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

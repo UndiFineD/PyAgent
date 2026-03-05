@@ -20,9 +20,9 @@ from src.classes.errors import *
 # Create main function using the helper
 main = create_main_function(
     ErrorsAgent,
-    'Errors Agent: Updates code file error reports',
-    'Path to the errors file (e.g., file.errors.md)'
+    "Errors Agent: Updates code file error reports",
+    "Path to the errors file (e.g., file.errors.md)",
 )
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_lazyorchestratormap_exists():
     """Test that LazyOrchestratorMap class exists and is importable."""
-    assert 'LazyOrchestratorMap' in dir()
+    assert "LazyOrchestratorMap" in dir()
 
 
 def test_orchestratorregistry_exists():
     """Test that OrchestratorRegistry class exists and is importable."""
-    assert 'OrchestratorRegistry' in dir()
+    assert "OrchestratorRegistry" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

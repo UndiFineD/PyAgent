@@ -7,22 +7,26 @@ Implemented based on arXiv:2601.08743 (Jan 2026).
 from typing import Dict, List, Set, Optional
 import dataclasses
 
+
 @dataclasses.dataclass
 class TableMetadata:
     table_name: str
     columns: List[str]
     sample_rows: List[Dict[str, Any]] = dataclasses.field(default_factory=list)
 
+
 class TableTrieNode:
     def __init__(self):
         self.children: Dict[str, TableTrieNode] = {}
         self.metadata: Optional[TableMetadata] = None
+
 
 class TableCacheManager:
     """
     Manages a Trie-based cache of database schema metadata.
     Enables 3.6x TTFT speedup for Text-to-SQL tasks by pre-filtering schema.
     """
+
     def __init__(self):
         self.root = TableTrieNode()
         self.table_count = 0
@@ -35,7 +39,7 @@ class TableCacheManager:
             if char not in node.children:
                 node.children[char] = TableTrieNode()
             node = node.children[char]
-        
+
         node.metadata = TableMetadata(table_name=table_name, columns=columns)
         self.table_count += 1
 
@@ -46,7 +50,7 @@ class TableCacheManager:
             if char not in node.children:
                 return []
             node = node.children[char]
-        
+
         # Collect all metadata in subtree
         results = []
         self._collect_metadata(node, results)

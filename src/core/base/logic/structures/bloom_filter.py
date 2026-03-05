@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -73,7 +74,9 @@ class BloomFilter:
         if bit_array is not None:
             self._bits = bit_array
             self._size = len(bit_array) * 8
-            self._num_hashes = num_hashes or self._optimal_num_hashes(self._size, expected_items)
+            self._num_hashes = num_hashes or self._optimal_num_hashes(
+                self._size, expected_items
+            )
         else:
             self._size = self._optimal_size(expected_items, fp_rate)
             self._bits = bytearray((self._size + 7) // 8)
@@ -288,10 +291,11 @@ class CountingBloomFilter:
 
     def add(self, item: Any) -> None:
         """Add an item to the filter."""
+
         def increment(pos):
             if self._counters[pos] < self._max_count:
                 self._counters[pos] += 1
-        
+
         list(map(increment, self._get_hash_positions(item)))
         self._count += 1
 
@@ -312,7 +316,7 @@ class CountingBloomFilter:
         def decrement(pos):
             if self._counters[pos] > 0:
                 self._counters[pos] -= 1
-        
+
         list(map(decrement, positions))
         self._count = max(0, self._count - 1)
         return True
@@ -375,7 +379,9 @@ class ScalableBloomFilter:
         self._fp_tightening_ratio = fp_tightening_ratio
 
         # Start with one filter
-        self._filters: list[BloomFilter] = [BloomFilter(expected_items=initial_capacity, fp_rate=fp_rate)]
+        self._filters: list[BloomFilter] = [
+            BloomFilter(expected_items=initial_capacity, fp_rate=fp_rate)
+        ]
 
     def add(self, item: Any) -> None:
         """Add an item to the filter."""
@@ -388,7 +394,9 @@ class ScalableBloomFilter:
             new_capacity = current._expected_items * self._growth_factor
             new_fp = self._fp_rate * (self._fp_tightening_ratio ** len(self._filters))
 
-            self._filters.append(BloomFilter(expected_items=new_capacity, fp_rate=new_fp))
+            self._filters.append(
+                BloomFilter(expected_items=new_capacity, fp_rate=new_fp)
+            )
 
         self._filters[-1].add(item)
 

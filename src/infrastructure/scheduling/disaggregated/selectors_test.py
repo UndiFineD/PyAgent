@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_instanceselector_exists():
     """Test that InstanceSelector class exists and is importable."""
-    assert 'InstanceSelector' in dir()
+    assert "InstanceSelector" in dir()
 
 
 def test_roundrobinselector_exists():
     """Test that RoundRobinSelector class exists and is importable."""
-    assert 'RoundRobinSelector' in dir()
+    assert "RoundRobinSelector" in dir()
 
 
 def test_roundrobinselector_instantiation():
@@ -49,20 +49,19 @@ def test_roundrobinselector_instantiation():
 
 def test_leastloadedselector_exists():
     """Test that LeastLoadedSelector class exists and is importable."""
-    assert 'LeastLoadedSelector' in dir()
+    assert "LeastLoadedSelector" in dir()
 
 
 def test_randomselector_exists():
     """Test that RandomSelector class exists and is importable."""
-    assert 'RandomSelector' in dir()
+    assert "RandomSelector" in dir()
 
 
 def test_hashselector_exists():
     """Test that HashSelector class exists and is importable."""
-    assert 'HashSelector' in dir()
+    assert "HashSelector" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

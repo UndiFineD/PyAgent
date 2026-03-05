@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,14 +26,17 @@ from .PrometheusExporter import PrometheusExporter
 
 __version__ = VERSION
 
+
 class MetricsExporter:
     """Consolidates all fleet telemetry and exposes it for external monitoring."""
-    
+
     def __init__(self) -> None:
         self.prometheus = PrometheusExporter()
         self.last_export_time = time.time()
 
-    def record_agent_call(self, agent_name: str, duration_ms: float, success: bool) -> str:
+    def record_agent_call(
+        self, agent_name: str, duration_ms: float, success: bool
+    ) -> str:
         """Records a single agent execution event."""
         labels = {"agent": agent_name, "status": "success" if success else "failure"}
         self.prometheus.record_metric("agent_call_duration_ms", duration_ms, labels)
@@ -50,9 +54,12 @@ class MetricsExporter:
     def export_to_grafana(self) -> str:
         """Simulates pushing metrics to a Grafana Cloud API."""
         payload = self.get_prometheus_payload()
-        logging.info(f"MetricsExporter: Pushing batch to Grafana... ({len(payload)} bytes)")
+        logging.info(
+            f"MetricsExporter: Pushing batch to Grafana... ({len(payload)} bytes)"
+        )
         self.last_export_time = time.time()
         return "Export successful."
+
 
 if __name__ == "__main__":
     exporter = MetricsExporter()

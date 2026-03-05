@@ -32,34 +32,38 @@ from datetime import datetime
 from enum import Enum
 from dataclasses import dataclass, field
 
+
 # Simple execution context for orchestration
 @dataclass
 class ExecutionContext:
     """Simple execution context for orchestration."""
+
     context_id: str
     parent_id: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     @classmethod
-    def create_root(cls, context_id: str) -> 'ExecutionContext':
+    def create_root(cls, context_id: str) -> "ExecutionContext":
         """Create a root execution context."""
         return cls(context_id=context_id)
 
-    def create_child(self, child_id: str) -> 'ExecutionContext':
+    def create_child(self, child_id: str) -> "ExecutionContext":
         """Create a child execution context."""
         return ExecutionContext(
             context_id=child_id,
             parent_id=self.context_id,
-            metadata=self.metadata.copy()
+            metadata=self.metadata.copy(),
         )
+
 
 logger = logging.getLogger(__name__)
 
-TState = TypeVar('TState', bound='OrchestrationState')
+TState = TypeVar("TState", bound="OrchestrationState")
 
 
 class OrchestrationStatus(Enum):
     """Status of orchestration execution."""
+
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
@@ -70,6 +74,7 @@ class OrchestrationStatus(Enum):
 @dataclass
 class OrchestrationState:
     """Base state for orchestration workflows."""
+
     status: OrchestrationStatus = OrchestrationStatus.PENDING
     current_runner: Optional[str] = None
     execution_history: List[Dict[str, Any]] = field(default_factory=list)
@@ -85,15 +90,17 @@ class OrchestrationState:
 @dataclass
 class GraphEdge:
     """Represents an edge between runners in the orchestration graph."""
+
     source_runner: str
     target_runner: str
-    condition: Optional[Callable[['OrchestrationResult'], bool]] = None
+    condition: Optional[Callable[["OrchestrationResult"], bool]] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
 class OrchestrationResult:
     """Result of a runner execution."""
+
     runner_name: str
     success: bool
     output: Any = None
@@ -111,7 +118,9 @@ class OrchestrationRunnable(ABC):
         self.allow_dead_end = False
 
     @abstractmethod
-    async def execute(self, state: OrchestrationState, context: ExecutionContext) -> OrchestrationResult:
+    async def execute(
+        self, state: OrchestrationState, context: ExecutionContext
+    ) -> OrchestrationResult:
         """Execute this runner with the given state and context."""
         pass
 
@@ -133,7 +142,9 @@ class OrchestrationAdvancer:
     def __init__(self, edges: List[GraphEdge]):
         self.edges = edges
 
-    def get_next_runners(self, current_runner: str, result: OrchestrationResult) -> List[str]:
+    def get_next_runners(
+        self, current_runner: str, result: OrchestrationResult
+    ) -> List[str]:
         """Get the next runners to execute based on the current result."""
         next_runners = []
 
@@ -159,7 +170,7 @@ class OrchestrationGraph(Generic[TState]):
         edges: List[GraphEdge],
         entry_runnable: Optional[OrchestrationRunnable] = None,
         exit_runnables: Optional[List[OrchestrationRunnable]] = None,
-        initial_state: Optional[TState] = None
+        initial_state: Optional[TState] = None,
     ):
         self.runnables = runnables
         self.edges = edges
@@ -179,7 +190,9 @@ class OrchestrationGraph(Generic[TState]):
         """Get a runnable by name."""
         return self._runnable_map.get(name)
 
-    def get_next_runners(self, current_runner: str, result: OrchestrationResult) -> List[str]:
+    def get_next_runners(
+        self, current_runner: str, result: OrchestrationResult
+    ) -> List[str]:
         """Get the next runners to execute."""
         return self._advancer.get_next_runners(current_runner, result)
 
@@ -203,14 +216,16 @@ class OrchestrationGraphBuilder(Generic[TState]):
         self._initial_state: Optional[TState] = None
         self._is_built = False
 
-    def with_initial_state(self, state: TState) -> 'OrchestrationGraphBuilder[TState]':
+    def with_initial_state(self, state: TState) -> "OrchestrationGraphBuilder[TState]":
         """Set the initial state for the orchestration."""
         if self._is_built:
             raise ValueError("Cannot modify graph after build() has been called.")
         self._initial_state = state
         return self
 
-    def add_runnable(self, runnable: OrchestrationRunnable) -> 'OrchestrationGraphBuilder[TState]':
+    def add_runnable(
+        self, runnable: OrchestrationRunnable
+    ) -> "OrchestrationGraphBuilder[TState]":
         """Add a runnable to the graph."""
         if self._is_built:
             raise ValueError("Cannot modify graph after build() has been called.")
@@ -218,7 +233,9 @@ class OrchestrationGraphBuilder(Generic[TState]):
             self._runnables.append(runnable)
         return self
 
-    def set_entry_runnable(self, runnable: OrchestrationRunnable) -> 'OrchestrationGraphBuilder[TState]':
+    def set_entry_runnable(
+        self, runnable: OrchestrationRunnable
+    ) -> "OrchestrationGraphBuilder[TState]":
         """Set the entry point runnable."""
         if self._is_built:
             raise ValueError("Cannot modify graph after build() has been called.")
@@ -226,7 +243,9 @@ class OrchestrationGraphBuilder(Generic[TState]):
         self._entry_runnable = runnable
         return self
 
-    def set_exit_runnable(self, runnable: OrchestrationRunnable, allow_dead_end: bool = False) -> 'OrchestrationGraphBuilder[TState]':
+    def set_exit_runnable(
+        self, runnable: OrchestrationRunnable, allow_dead_end: bool = False
+    ) -> "OrchestrationGraphBuilder[TState]":
         """Set an exit point runnable."""
         if self._is_built:
             raise ValueError("Cannot modify graph after build() has been called.")
@@ -241,8 +260,8 @@ class OrchestrationGraphBuilder(Generic[TState]):
         self,
         source: OrchestrationRunnable,
         target: OrchestrationRunnable,
-        condition: Optional[Callable[[OrchestrationResult], bool]] = None
-    ) -> 'OrchestrationGraphBuilder[TState]':
+        condition: Optional[Callable[[OrchestrationResult], bool]] = None,
+    ) -> "OrchestrationGraphBuilder[TState]":
         """Add an edge between two runnables."""
         if self._is_built:
             raise ValueError("Cannot modify graph after build() has been called.")
@@ -250,9 +269,7 @@ class OrchestrationGraphBuilder(Generic[TState]):
         self.add_runnable(target)
 
         edge = GraphEdge(
-            source_runner=source.name,
-            target_runner=target.name,
-            condition=condition
+            source_runner=source.name, target_runner=target.name, condition=condition
         )
         self._edges.append(edge)
         return self
@@ -275,7 +292,7 @@ class OrchestrationGraphBuilder(Generic[TState]):
             edges=self._edges,
             entry_runnable=self._entry_runnable,
             exit_runnables=self._exit_runnables,
-            initial_state=self._initial_state
+            initial_state=self._initial_state,
         )
 
 
@@ -292,9 +309,7 @@ class Orchestrator(Generic[TState]):
         self._cancelled = False
 
     async def execute(
-        self,
-        initial_context: ExecutionContext,
-        max_iterations: int = 100
+        self, initial_context: ExecutionContext, max_iterations: int = 100
     ) -> TState:
         """
         Execute the orchestration graph.
@@ -317,10 +332,14 @@ class Orchestrator(Generic[TState]):
             state.status = OrchestrationStatus.RUNNING
             context = initial_context
 
-            current_runners = [self.graph.entry_runnable.name] if self.graph.entry_runnable else []
+            current_runners = (
+                [self.graph.entry_runnable.name] if self.graph.entry_runnable else []
+            )
             iteration = 0
 
-            while current_runners and iteration < max_iterations and not self._cancelled:
+            while (
+                current_runners and iteration < max_iterations and not self._cancelled
+            ):
                 iteration += 1
                 next_runners = []
 
@@ -340,30 +359,38 @@ class Orchestrator(Generic[TState]):
                         if isinstance(result, Exception):
                             logger.error(f"Runner {runner_name} failed: {result}")
                             state.status = OrchestrationStatus.FAILED
-                            state.execution_history.append({
-                                "runner": runner_name,
-                                "success": False,
-                                "error": str(result),
-                                "iteration": iteration
-                            })
+                            state.execution_history.append(
+                                {
+                                    "runner": runner_name,
+                                    "success": False,
+                                    "error": str(result),
+                                    "iteration": iteration,
+                                }
+                            )
                             return state
                         else:
-                            state.execution_history.append({
-                                "runner": runner_name,
-                                "success": result.success,
-                                "output": result.output,
-                                "error": result.error,
-                                "iteration": iteration
-                            })
+                            state.execution_history.append(
+                                {
+                                    "runner": runner_name,
+                                    "success": result.success,
+                                    "output": result.output,
+                                    "error": result.error,
+                                    "iteration": iteration,
+                                }
+                            )
 
                             # Check if this runner failed
                             if not result.success:
-                                logger.error(f"Runner {runner_name} failed: {result.error}")
+                                logger.error(
+                                    f"Runner {runner_name} failed: {result.error}"
+                                )
                                 state.status = OrchestrationStatus.FAILED
                                 return state
 
                             # Get next runners based on this result
-                            next_from_this = self.graph.get_next_runners(runner_name, result)
+                            next_from_this = self.graph.get_next_runners(
+                                runner_name, result
+                            )
                             next_runners.extend(next_from_this)
 
                             # Update state
@@ -374,8 +401,11 @@ class Orchestrator(Generic[TState]):
                 current_runners = list(set(next_runners))
 
                 # Check if we've reached exit runnables - execute them but don't continue
-                has_exit_runnables = any(self.graph.is_exit_runnable(self.graph.get_runnable(name))
-                                        for name in current_runners if self.graph.get_runnable(name))
+                has_exit_runnables = any(
+                    self.graph.is_exit_runnable(self.graph.get_runnable(name))
+                    for name in current_runners
+                    if self.graph.get_runnable(name)
+                )
                 if has_exit_runnables:
                     # Execute exit runnables but don't get their successors
                     exit_tasks = []
@@ -389,26 +419,34 @@ class Orchestrator(Generic[TState]):
                             non_exit_runners.append(runner_name)
 
                     if exit_tasks:
-                        exit_results = await asyncio.gather(*[task for _, task in exit_tasks], return_exceptions=True)
+                        exit_results = await asyncio.gather(
+                            *[task for _, task in exit_tasks], return_exceptions=True
+                        )
                         for (runner_name, _), result in zip(exit_tasks, exit_results):
                             if isinstance(result, Exception):
-                                logger.error(f"Exit runner {runner_name} failed: {result}")
+                                logger.error(
+                                    f"Exit runner {runner_name} failed: {result}"
+                                )
                                 state.status = OrchestrationStatus.FAILED
-                                state.execution_history.append({
-                                    "runner": runner_name,
-                                    "success": False,
-                                    "error": str(result),
-                                    "iteration": iteration
-                                })
+                                state.execution_history.append(
+                                    {
+                                        "runner": runner_name,
+                                        "success": False,
+                                        "error": str(result),
+                                        "iteration": iteration,
+                                    }
+                                )
                                 return state
                             else:
-                                state.execution_history.append({
-                                    "runner": runner_name,
-                                    "success": result.success,
-                                    "output": result.output,
-                                    "error": result.error,
-                                    "iteration": iteration
-                                })
+                                state.execution_history.append(
+                                    {
+                                        "runner": runner_name,
+                                        "success": result.success,
+                                        "output": result.output,
+                                        "error": result.error,
+                                        "iteration": iteration,
+                                    }
+                                )
                                 state.current_runner = runner_name
                                 state.update_timestamp()
 
@@ -421,7 +459,9 @@ class Orchestrator(Generic[TState]):
                 state.status = OrchestrationStatus.CANCELLED
             elif iteration >= max_iterations:
                 state.status = OrchestrationStatus.FAILED
-                logger.warning(f"Orchestration exceeded maximum iterations ({max_iterations})")
+                logger.warning(
+                    f"Orchestration exceeded maximum iterations ({max_iterations})"
+                )
             else:
                 state.status = OrchestrationStatus.COMPLETED
 
@@ -431,13 +471,11 @@ class Orchestrator(Generic[TState]):
             self._running = False
 
     async def _execute_runner(
-        self,
-        runner: OrchestrationRunnable,
-        state: TState,
-        context: ExecutionContext
+        self, runner: OrchestrationRunnable, state: TState, context: ExecutionContext
     ) -> OrchestrationResult:
         """Execute a single runner."""
         import time
+
         start_time = time.time()
 
         try:
@@ -451,7 +489,7 @@ class Orchestrator(Generic[TState]):
                 runner_name=runner.name,
                 success=False,
                 error=str(e),
-                execution_time=execution_time
+                execution_time=execution_time,
             )
 
     def cancel(self):
@@ -471,9 +509,11 @@ class Orchestrator(Generic[TState]):
 
 # Example concrete implementations
 
+
 @dataclass
 class AgentTaskState(OrchestrationState):
     """State for agent task orchestration."""
+
     task_description: str = ""
     assigned_agents: List[str] = field(default_factory=list)
     completed_tasks: List[str] = field(default_factory=list)
@@ -487,7 +527,9 @@ class AgentRunner(OrchestrationRunnable):
         super().__init__(name, **kwargs)
         self.agent_function = agent_function
 
-    async def execute(self, state: OrchestrationState, context: ExecutionContext) -> OrchestrationResult:
+    async def execute(
+        self, state: OrchestrationState, context: ExecutionContext
+    ) -> OrchestrationResult:
         """Execute the agent function."""
         try:
             # Create a new context for this runner
@@ -498,27 +540,33 @@ class AgentRunner(OrchestrationRunnable):
                 runner_name=self.name,
                 success=True,
                 output=result,
-                metadata={"context_id": runner_context.context_id}
+                metadata={"context_id": runner_context.context_id},
             )
         except Exception as e:
             return OrchestrationResult(
-                runner_name=self.name,
-                success=False,
-                error=str(e)
+                runner_name=self.name, success=False, error=str(e)
             )
 
 
 class ConditionalRunner(OrchestrationRunnable):
     """Runner that executes based on conditions."""
 
-    def __init__(self, name: str, condition_func: Callable[[OrchestrationState], bool],
-                 true_runner: OrchestrationRunnable, false_runner: Optional[OrchestrationRunnable] = None, **kwargs):
+    def __init__(
+        self,
+        name: str,
+        condition_func: Callable[[OrchestrationState], bool],
+        true_runner: OrchestrationRunnable,
+        false_runner: Optional[OrchestrationRunnable] = None,
+        **kwargs,
+    ):
         super().__init__(name, **kwargs)
         self.condition_func = condition_func
         self.true_runner = true_runner
         self.false_runner = false_runner
 
-    async def execute(self, state: OrchestrationState, context: ExecutionContext) -> OrchestrationResult:
+    async def execute(
+        self, state: OrchestrationState, context: ExecutionContext
+    ) -> OrchestrationResult:
         """Execute based on condition."""
         try:
             condition_result = self.condition_func(state)
@@ -527,13 +575,14 @@ class ConditionalRunner(OrchestrationRunnable):
             return OrchestrationResult(
                 runner_name=self.name,
                 success=True,
-                output={"condition": condition_result, "next_runner": next_runner.name if next_runner else None}
+                output={
+                    "condition": condition_result,
+                    "next_runner": next_runner.name if next_runner else None,
+                },
             )
         except Exception as e:
             return OrchestrationResult(
-                runner_name=self.name,
-                success=False,
-                error=str(e)
+                runner_name=self.name, success=False, error=str(e)
             )
 
 
@@ -548,7 +597,9 @@ class GraphOrchestrationMixin:
         super().__init__(**kwargs)
         self._orchestrators: Dict[str, Orchestrator] = {}
 
-    def create_orchestration_builder(self) -> OrchestrationGraphBuilder[OrchestrationState]:
+    def create_orchestration_builder(
+        self,
+    ) -> OrchestrationGraphBuilder[OrchestrationState]:
         """Create a new orchestration graph builder."""
         return OrchestrationGraphBuilder[OrchestrationState]()
 
@@ -561,10 +612,7 @@ class GraphOrchestrationMixin:
         self._orchestrators[name] = orchestrator
 
     async def execute_orchestration(
-        self,
-        orchestrator_name: str,
-        context: ExecutionContext,
-        **kwargs
+        self, orchestrator_name: str, context: ExecutionContext, **kwargs
     ) -> OrchestrationState:
         """Execute a registered orchestrator."""
         if orchestrator_name not in self._orchestrators:

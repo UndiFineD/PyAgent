@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_p2cloadbalancer_exists():
     """Test that P2CLoadBalancer class exists and is importable."""
-    assert 'P2CLoadBalancer' in dir()
+    assert "P2CLoadBalancer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_rlselector_exists():
     """Test that RLSelector class exists and is importable."""
-    assert 'RLSelector' in dir()
+    assert "RLSelector" in dir()
 
 
 def test_rlselector_instantiation():
@@ -45,4 +45,3 @@ def test_rlselector_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -35,7 +35,11 @@ class UBatchingUtils:
     """
 
     def __init__(self) -> None:
-        self._stats: Dict[str, Any] = {"total_slices": 0, "avg_slice_size": 0.0, "sync_count": 0}
+        self._stats: Dict[str, Any] = {
+            "total_slices": 0,
+            "avg_slice_size": 0.0,
+            "sync_count": 0,
+        }
 
     @staticmethod
     def slice_batch(batch: List[Any], min_slice: int = 4) -> List[List[Any]]:
@@ -66,6 +70,7 @@ class UBatchingUtils:
         else:
             # Emulated wait
             import threading
+
             threading.Event().wait(0.001 * (thread_id / total_threads))
 
     def get_ubatch_metrics(self) -> Dict[str, Any]:

@@ -22,6 +22,7 @@ from dataclasses import dataclass
 # This orchestration replaces the bash script with a Pythonic, async-capable flow.
 # Actual binaries (nuclei, amass, etc.) must be installed in the system path.
 
+
 @dataclass
 class ReconConfig:
     domain: str
@@ -30,10 +31,12 @@ class ReconConfig:
     use_nuclei: bool = True
     threads: int = 5
 
+
 class ExternalReconOrchestrator:
     """
     Orchestrates external security tools similar to AutoRecon.
     """
+
     def __init__(self, config: ReconConfig):
         self.config = config
         self.domain_dir = os.path.join(self.config.results_path, self.config.domain)
@@ -45,17 +48,15 @@ class ExternalReconOrchestrator:
         """
         print(f"[*] Running: {cmd}")
         process = await asyncio.create_subprocess_shell(
-            cmd,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
+            cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
         )
-        
+
         stdout, stderr = await process.communicate()
-        
+
         if stdout and output_file:
-            with open(output_file, 'wb') as f:
+            with open(output_file, "wb") as f:
                 f.write(stdout)
-        
+
         if process.returncode != 0:
             print(f"[!] Command failed: {cmd}")
             print(f"[!] Error: {stderr.decode()}")
@@ -70,7 +71,9 @@ class ExternalReconOrchestrator:
             print("[!] Amass not found in PATH")
             return
 
-        cmd = f"amass enum -d {self.config.domain} -active -o {self.domain_dir}/amass.txt"
+        cmd = (
+            f"amass enum -d {self.config.domain} -active -o {self.domain_dir}/amass.txt"
+        )
         await self.run_command(cmd)
 
     async def run_httprobe(self):
@@ -80,18 +83,22 @@ class ExternalReconOrchestrator:
         if not shutil.which("httprobe"):
             print("[!] httprobe not found")
             return
-        
+
         input_file = f"{self.domain_dir}/amass.txt"
         output_file = f"{self.domain_dir}/httprobe.txt"
-        
+
         if not os.path.exists(input_file):
             print("[!] No input for httprobe")
             return
 
         # cat domains | httprobe
-        cmd = f"type {input_file} | httprobe -p http:81 -p https:81" if os.name == 'nt' else f"cat {input_file} | httprobe"
+        cmd = (
+            f"type {input_file} | httprobe -p http:81 -p https:81"
+            if os.name == "nt"
+            else f"cat {input_file} | httprobe"
+        )
         # Note: 'type' is windows equivalent of 'cat'
-        
+
         await self.run_command(cmd, output_file)
 
     async def run_nuclei(self):
@@ -118,11 +125,12 @@ class ExternalReconOrchestrator:
         """
         if self.config.use_amass:
             await self.run_amass()
-        
+
         await self.run_httprobe()
-        
+
         if self.config.use_nuclei:
             await self.run_nuclei()
+
 
 # Example usage
 # if __name__ == "__main__":

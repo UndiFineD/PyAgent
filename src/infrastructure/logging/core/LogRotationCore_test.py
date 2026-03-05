@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_logrotationcore_exists():
     """Test that LogRotationCore class exists and is importable."""
-    assert 'LogRotationCore' in dir()
+    assert "LogRotationCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

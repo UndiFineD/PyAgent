@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,13 +51,17 @@ class ModelRegistryCore:
         for name, path_str in current_adapters:
             path = Path(path_str)
             if not path.exists():
-                logging.warning(f"ModelRegistry: Adapter '{name}' path '{path_str}' is missing. Healing...")
+                logging.warning(
+                    f"ModelRegistry: Adapter '{name}' path '{path_str}' is missing. Healing..."
+                )
                 del self.adapter_registry[name]
                 self.unhealthy_entries.add(name)
                 healed_count += 1
 
         if healed_count > 0:
-            logging.info(f"ModelRegistry: Self-healing complete. {healed_count} entries removed.")
+            logging.info(
+                f"ModelRegistry: Self-healing complete. {healed_count} entries removed."
+            )
         return healed_count
 
     def get_adapter_for_task(self, task_type: str) -> str | None:
@@ -67,7 +72,9 @@ class ModelRegistryCore:
             return self.adapter_registry.get(task_type.lower())
         return adapter
 
-    def should_trigger_finetuning(self, quality_history: list[float], threshold: float = 0.6) -> bool:
+    def should_trigger_finetuning(
+        self, quality_history: list[float], threshold: float = 0.6
+    ) -> bool:
         """
         Determines if fine-tuning is needed (e.g., last 5 scores below threshold).
         """

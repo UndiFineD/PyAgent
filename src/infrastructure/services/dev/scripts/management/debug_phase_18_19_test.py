@@ -14,4 +14,3 @@ def _load_module():
 def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "test_sql_and_adversarial"), "test_sql_and_adversarial missing"
-

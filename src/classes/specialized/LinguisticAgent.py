@@ -8,9 +8,10 @@ import logging
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
+
 class LinguisticAgent(BaseAgent):
     """The linguistic surface layer of the PyAgent OS."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -31,7 +32,7 @@ class LinguisticAgent(BaseAgent):
             A natural language summary.
         """
         logging.info("LinguisticAgent: Articulating technical report...")
-        
+
         # In a real implementation, this would call the LLM with the report as context.
         # Here we simulate the constrained linguistic surface.
         return f"Hello! Regarding your request: '{user_query}', I have processed it through the expert systems.\n\nSummary of results:\n{technical_report[:500]}..."

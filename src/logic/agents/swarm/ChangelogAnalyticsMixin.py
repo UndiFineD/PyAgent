@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 
 import re
 from typing import Any
+
 
 class ChangelogAnalyticsMixin:
     """Mixin for calculating statistics and analytics for changelogs."""
 
     def calculate_statistics(self) -> dict[str, Any]:
         """Calculate statistics for the changelog."""
-        content = getattr(self, "current_content", "") or getattr(self, "previous_content", "")
+        content = getattr(self, "current_content", "") or getattr(
+            self, "previous_content", ""
+        )
         if not content:
             return {}
 
@@ -20,11 +24,22 @@ class ChangelogAnalyticsMixin:
 
         # Count entries per category
         categories: dict[str, int] = {}
-        for section in ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]:
+        for section in [
+            "Added",
+            "Changed",
+            "Deprecated",
+            "Removed",
+            "Fixed",
+            "Security",
+        ]:
             pattern = rf"###\s*{section}\s*\n(.*?)(?=###|\Z)"
             matches = re.findall(pattern, content, re.DOTALL)
             if matches:
-                entries = [line for line in matches[0].split("\n") if line.strip().startswith("-")]
+                entries = [
+                    line
+                    for line in matches[0].split("\n")
+                    if line.strip().startswith("-")
+                ]
                 categories[section] = len(entries)
 
         # Count contributors

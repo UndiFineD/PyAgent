@@ -1,17 +1,18 @@
-
 """
 Module: inspect_shard
 Inspects and validates shard data for distributed storage in PyAgent.
 """
+
 import gzip
 import json
 import sys
 from pathlib import Path
 
+
 def inspect_shard(file_path):
     print(f"Inspecting {file_path}...")
     try:
-        with gzip.open(file_path, 'rt', encoding='utf-8') as f:
+        with gzip.open(file_path, "rt", encoding="utf-8") as f:
             for line in f:
                 try:
                     data = json.loads(line)
@@ -21,9 +22,10 @@ def inspect_shard(file_path):
     except Exception as e:
         print(f"Error reading {file_path}: {e}")
 
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python inspect_shard.py <path_to_shard>")
         sys.exit(1)
-    
+
     inspect_shard(sys.argv[1])

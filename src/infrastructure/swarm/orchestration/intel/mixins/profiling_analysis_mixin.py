@@ -12,7 +12,9 @@ import os
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import SelfImprovementAnalysis
+    from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import (
+        SelfImprovementAnalysis,
+    )
 
 
 class ProfilingAnalysisMixin:
@@ -23,7 +25,7 @@ class ProfilingAnalysisMixin:
         findings: list[dict[str, Any]],
         file_path: str,
         rel_path: str,
-        content: str
+        content: str,
     ) -> None:
         """
         Analyzes a file for performance bottlenecks using the ProfilingAgent.
@@ -37,45 +39,57 @@ class ProfilingAnalysisMixin:
         if loop_count < 3:
             return
 
-        logging.info(f"Self-Improvement: Triggering profiling for potential bottleneck: {rel_path}")
-        
+        logging.info(
+            f"Self-Improvement: Triggering profiling for potential bottleneck: {rel_path}"
+        )
+
         # Access fleet through the orchestrator
         if not hasattr(self, "profiling_agent") or self.profiling_agent is None:
             # Add a placeholder finding so IntelligenceOrchestrator can suggest profiling
-            findings.append({
-                "file": rel_path,
-                "line": "0",
-                "type": "Profiling Candidate",
-                "message": f"File {rel_path} is complex ({loop_count} loops). Needs ProfilingAgent review.",
-                "fixed": False
-            })
+            findings.append(
+                {
+                    "file": rel_path,
+                    "line": "0",
+                    "type": "Profiling Candidate",
+                    "message": f"File {rel_path} is complex ({loop_count} loops). Needs ProfilingAgent review.",
+                    "fixed": False,
+                }
+            )
             return
 
         try:
             # Phase 336: Use ProfilingAgent's static analysis during the scan
             performance_stats = []
             if hasattr(self.profiling_agent, "static_profile"):
-                logging.info(f"Self-Improvement: Calling static_profile for {file_path}")
+                logging.info(
+                    f"Self-Improvement: Calling static_profile for {file_path}"
+                )
                 performance_stats = self.profiling_agent.static_profile(file_path)
             else:
-                logging.info(f"Self-Improvement: profiling_agent missing static_profile: {type(self.profiling_agent)}")
-            
+                logging.info(
+                    f"Self-Improvement: profiling_agent missing static_profile: {type(self.profiling_agent)}"
+                )
+
             if performance_stats:
                 for stat in performance_stats:
-                    findings.append({
-                        "file": rel_path,
-                        "line": str(stat.line_number),
-                        "type": "Profiling",
-                        "message": f"Static analysis suggests bottleneck in '{stat.function_name}'. High loop density detected. Recommend Rust port.",
-                        "fixed": False
-                    })
+                    findings.append(
+                        {
+                            "file": rel_path,
+                            "line": str(stat.line_number),
+                            "type": "Profiling",
+                            "message": f"Static analysis suggests bottleneck in '{stat.function_name}'. High loop density detected. Recommend Rust port.",
+                            "fixed": False,
+                        }
+                    )
             else:
-                findings.append({
-                    "file": rel_path,
-                    "line": "0",
-                    "type": "Profiling",
-                    "message": f"Detected compute-intensive patterns in {rel_path} ({loop_count} loops). Recommend Rust port.",
-                    "fixed": False
-                })
+                findings.append(
+                    {
+                        "file": rel_path,
+                        "line": "0",
+                        "type": "Profiling",
+                        "message": f"Detected compute-intensive patterns in {rel_path} ({loop_count} loops). Recommend Rust port.",
+                        "fixed": False,
+                    }
+                )
         except Exception as e:
             logging.debug(f"Profiling analysis failed for {rel_path}: {e}")

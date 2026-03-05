@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_agentrefactormixin_exists():
     """Test that AgentRefactorMixin class exists and is importable."""
-    assert 'AgentRefactorMixin' in dir()
+    assert "AgentRefactorMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

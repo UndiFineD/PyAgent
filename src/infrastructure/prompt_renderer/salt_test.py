@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_cachesaltgenerator_exists():
     """Test that CacheSaltGenerator class exists and is importable."""
-    assert 'CacheSaltGenerator' in dir()
+    assert "CacheSaltGenerator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

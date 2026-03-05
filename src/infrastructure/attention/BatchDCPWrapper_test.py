@@ -33,52 +33,52 @@ except ImportError as e:
 
 def test_batchphase_exists():
     """Test that BatchPhase class exists and is importable."""
-    assert 'BatchPhase' in dir()
+    assert "BatchPhase" in dir()
 
 
 def test_allreducestrategy_exists():
     """Test that AllReduceStrategy class exists and is importable."""
-    assert 'AllReduceStrategy' in dir()
+    assert "AllReduceStrategy" in dir()
 
 
 def test_batchrequest_exists():
     """Test that BatchRequest class exists and is importable."""
-    assert 'BatchRequest' in dir()
+    assert "BatchRequest" in dir()
 
 
 def test_batchmetadata_exists():
     """Test that BatchMetadata class exists and is importable."""
-    assert 'BatchMetadata' in dir()
+    assert "BatchMetadata" in dir()
 
 
 def test_dcpplanconfig_exists():
     """Test that DCPPlanConfig class exists and is importable."""
-    assert 'DCPPlanConfig' in dir()
+    assert "DCPPlanConfig" in dir()
 
 
 def test_executionplan_exists():
     """Test that ExecutionPlan class exists and is importable."""
-    assert 'ExecutionPlan' in dir()
+    assert "ExecutionPlan" in dir()
 
 
 def test_batchexecutor_exists():
     """Test that BatchExecutor class exists and is importable."""
-    assert 'BatchExecutor' in dir()
+    assert "BatchExecutor" in dir()
 
 
 def test_batchdcpprefillwrapper_exists():
     """Test that BatchDCPPrefillWrapper class exists and is importable."""
-    assert 'BatchDCPPrefillWrapper' in dir()
+    assert "BatchDCPPrefillWrapper" in dir()
 
 
 def test_batchdcpdecodewrapper_exists():
     """Test that BatchDCPDecodeWrapper class exists and is importable."""
-    assert 'BatchDCPDecodeWrapper' in dir()
+    assert "BatchDCPDecodeWrapper" in dir()
 
 
 def test_unifiedbatchwrapper_exists():
     """Test that UnifiedBatchWrapper class exists and is importable."""
-    assert 'UnifiedBatchWrapper' in dir()
+    assert "UnifiedBatchWrapper" in dir()
 
 
 def test_create_prefill_wrapper_exists():
@@ -99,4 +99,3 @@ def test_create_unified_wrapper_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

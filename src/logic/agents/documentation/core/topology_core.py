@@ -29,7 +29,9 @@ class TopologyCore:
     """Core logic for generating swarm topology visualizations."""
 
     @staticmethod
-    def generate_mermaid_graph(nodes: list[str], edges: list[dict[str, str]], direction: str = "TD") -> str:
+    def generate_mermaid_graph(
+        nodes: list[str], edges: list[dict[str, str]], direction: str = "TD"
+    ) -> str:
         """
         Generates a Mermaid.js flowchart string.
         """
@@ -64,19 +66,25 @@ class TopologyCore:
         return "\n".join(lines)
 
     @staticmethod
-    def filter_active_relationships(all_deps: dict[str, list[str]], focus_list: list[str]) -> dict[str, list[str]]:
+    def filter_active_relationships(
+        all_deps: dict[str, list[str]], focus_list: list[str]
+    ) -> dict[str, list[str]]:
         """
         Filters a dependency map to only include nodes relevant to the focus list.
         """
         if HAS_RUST:
             try:
                 # type: ignore[attr-defined]
-                return rust_core.filter_active_topology_relationships(all_deps, focus_list)
+                return rust_core.filter_active_topology_relationships(
+                    all_deps, focus_list
+                )
             except (AttributeError, RuntimeError, TypeError):
                 pass
 
         filtered = {}
         for source, targets in all_deps.items():
             if any(f in source for f in focus_list):
-                filtered[source] = [t for t in targets if any(f in t for f in focus_list) or "Core" in t]
+                filtered[source] = [
+                    t for t in targets if any(f in t for f in focus_list) or "Core" in t
+                ]
         return filtered

@@ -33,30 +33,29 @@ except ImportError as e:
 
 def test_specmethod_exists():
     """Test that SpecMethod class exists and is importable."""
-    assert 'SpecMethod' in dir()
+    assert "SpecMethod" in dir()
 
 
 def test_speculativeconfig_exists():
     """Test that SpeculativeConfig class exists and is importable."""
-    assert 'SpeculativeConfig' in dir()
+    assert "SpeculativeConfig" in dir()
 
 
 def test_draftproposal_exists():
     """Test that DraftProposal class exists and is importable."""
-    assert 'DraftProposal' in dir()
+    assert "DraftProposal" in dir()
 
 
 def test_verificationresult_exists():
     """Test that VerificationResult class exists and is importable."""
-    assert 'VerificationResult' in dir()
+    assert "VerificationResult" in dir()
 
 
 def test_specdecodingmetrics_exists():
     """Test that SpecDecodingMetrics class exists and is importable."""
-    assert 'SpecDecodingMetrics' in dir()
+    assert "SpecDecodingMetrics" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

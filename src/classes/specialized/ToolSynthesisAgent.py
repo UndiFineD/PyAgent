@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,11 +25,13 @@ from typing import Dict, List, Any
 
 __version__ = VERSION
 
+
 class ToolSynthesisAgent:
     """
-    Synthesizes new helper scripts and tools based on observed 
+    Synthesizes new helper scripts and tools based on observed
     recurring task patterns in the fleet.
     """
+
     def __init__(self, workspace_path) -> None:
         self.workspace_path = Path(workspace_path)
         self.tool_cache = self.workspace_path / "src/generated"
@@ -41,17 +44,15 @@ class ToolSynthesisAgent:
         """
         tool_name = f"tool_{len(self.synthesis_history) + 1}.py"
         tool_content = f'"""\nGenerated tool for {task_pattern}\n"""\n\ndef run(data):\n    # Requirements: {requirements}\n    return f"Processed {{data}} using {tool_name}"\n'
-        
+
         tool_path = self.tool_cache / tool_name
         with open(tool_path, "w") as f:
             f.write(tool_content.strip())
-        
-        self.synthesis_history.append({
-            "name": tool_name,
-            "pattern": task_pattern,
-            "path": str(tool_path)
-        })
-        
+
+        self.synthesis_history.append(
+            {"name": tool_name, "pattern": task_pattern, "path": str(tool_path)}
+        )
+
         return {"tool_name": tool_name, "status": "synthesized"}
 
     def get_available_tools(self) -> list[dict[str, Any]]:

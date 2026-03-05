@@ -33,30 +33,29 @@ except ImportError as e:
 
 def test_templatetype_exists():
     """Test that TemplateType class exists and is importable."""
-    assert 'TemplateType' in dir()
+    assert "TemplateType" in dir()
 
 
 def test_modeltype_exists():
     """Test that ModelType class exists and is importable."""
-    assert 'ModelType' in dir()
+    assert "ModelType" in dir()
 
 
 def test_templateconfig_exists():
     """Test that TemplateConfig class exists and is importable."""
-    assert 'TemplateConfig' in dir()
+    assert "TemplateConfig" in dir()
 
 
 def test_templateinfo_exists():
     """Test that TemplateInfo class exists and is importable."""
-    assert 'TemplateInfo' in dir()
+    assert "TemplateInfo" in dir()
 
 
 def test_renderoptions_exists():
     """Test that RenderOptions class exists and is importable."""
-    assert 'RenderOptions' in dir()
+    assert "RenderOptions" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

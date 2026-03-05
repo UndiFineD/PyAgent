@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # TrustAgent: Multi-dimensional Socio-Emotional Analysis Agent - Phase 319 Enhanced
 
@@ -15,6 +16,7 @@ from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
 
+
 class Mood(Enum):
     JOYFUL = "joyful"
     CONTENT = "content"
@@ -23,32 +25,38 @@ class Mood(Enum):
     FRUSTRATED = "frustrated"
     ANXIOUS = "anxious"
 
+
 class TrustLevel(Enum):
     HIGH = "high"  # 0.8-1.0
     MEDIUM = "medium"  # 0.5-0.8
     LOW = "low"  # 0.2-0.5
     CRITICAL = "critical"  # 0.0-0.2
 
+
 @dataclass
 class EmotionalState:
     """Represents the current emotional state of an interaction."""
+
     mood: Mood = Mood.NEUTRAL
     valence: float = 0.0  # -1.0 (negative) to 1.0 (positive)
     arousal: float = 0.0  # 0.0 (calm) to 1.0 (excited)
     dominance: float = 0.5  # 0.0 (submissive) to 1.0 (dominant)
 
+
 @dataclass
 class TrustMetrics:
     """Tracks trust-related metrics over time."""
+
     trust_score: float = 1.0
     honesty_score: float = 1.0
     reliability_score: float = 1.0
     consistency_score: float = 1.0
     history: List[Dict[str, Any]] = field(default_factory=list)
 
+
 class TrustAgent(BaseAgent):
     """
-    Agent specializing in human-agent alignment, mood detection, 
+    Agent specializing in human-agent alignment, mood detection,
     emotional intelligence, and maintaining trust scores for interaction safety.
     """
 
@@ -87,7 +95,7 @@ class TrustAgent(BaseAgent):
     async def analyze_sentiment(self, text: str) -> Dict[str, Any]:
         """Performs comprehensive sentiment and emotional analysis."""
         prompt = (
-            f"Analyze this text for emotional content:\n\n\"{text}\"\n\n"
+            f'Analyze this text for emotional content:\n\n"{text}"\n\n'
             "Provide analysis in JSON format:\n"
             "{\n"
             '  "primary_emotion": "emotion name",\n'
@@ -101,43 +109,43 @@ class TrustAgent(BaseAgent):
             '  "explanation": "brief explanation"\n'
             "}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         try:
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 data = json.loads(match.group(1))
-                
+
                 # Update emotional state
                 self.emotional_state.valence = data.get("valence", 0.0)
                 self.emotional_state.arousal = data.get("arousal", 0.0)
                 self._map_emotion_to_mood(data.get("primary_emotion", "neutral"))
-                
+
                 # Update trust metrics
                 adj = data.get("trust_adjustment", 0.0)
                 self._update_trust(adj, data.get("explanation", ""))
-                
+
                 # Record interaction
-                self._interaction_history.append({
-                    "text": text[:100],
-                    "analysis": data,
-                    "timestamp": time.time()
-                })
-                
+                self._interaction_history.append(
+                    {"text": text[:100], "analysis": data, "timestamp": time.time()}
+                )
+
                 return {
                     **data,
                     "current_trust_score": self.trust_score,
                     "current_mood": self.mood,
-                    "trust_level": self.trust_level.value
+                    "trust_level": self.trust_level.value,
                 }
         except Exception as e:
             logging.debug(f"TrustAgent: Parse error: {e}")
-        
+
         return {"error": "parsing_failed", "raw": res}
 
     @as_tool
-    async def assess_trustworthiness(self, entity: str, evidence: List[str]) -> Dict[str, Any]:
+    async def assess_trustworthiness(
+        self, entity: str, evidence: List[str]
+    ) -> Dict[str, Any]:
         """Assesses the trustworthiness of an entity based on evidence."""
         evidence_block = "\n".join([f"- {e}" for e in evidence])
         prompt = (
@@ -151,23 +159,23 @@ class TrustAgent(BaseAgent):
             "5. Overall Trust Score\n"
             "Format as JSON with 'honesty', 'reliability', 'consistency', 'competence', 'overall', 'reasoning'"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         try:
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
         except:
             pass
-        
+
         return {"entity": entity, "raw_assessment": res}
 
     @as_tool
     async def detect_manipulation(self, text: str) -> Dict[str, Any]:
         """Detects potential manipulation tactics in communication."""
         prompt = (
-            f"Analyze this text for manipulation tactics:\n\n\"{text}\"\n\n"
+            f'Analyze this text for manipulation tactics:\n\n"{text}"\n\n'
             "Check for:\n"
             "1. Gaslighting indicators\n"
             "2. Emotional manipulation\n"
@@ -176,9 +184,9 @@ class TrustAgent(BaseAgent):
             "5. Deception patterns\n\n"
             "Return JSON: {'manipulation_detected': true/false, 'tactics': [...], 'severity': 0-10, 'advice': '...'}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         try:
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
@@ -189,11 +197,13 @@ class TrustAgent(BaseAgent):
                 return data
         except:
             pass
-        
+
         return {"error": "analysis_failed", "raw": res}
 
     @as_tool
-    async def calibrate_emotional_response(self, context: str, target_outcome: str) -> Dict[str, Any]:
+    async def calibrate_emotional_response(
+        self, context: str, target_outcome: str
+    ) -> Dict[str, Any]:
         """Suggests appropriate emotional tone for a response."""
         prompt = (
             f"Context: {context}\n"
@@ -204,16 +214,16 @@ class TrustAgent(BaseAgent):
             "- Warmth vs professionalism balance\n"
             "Return JSON: {'recommended_tone': '...', 'empathy_level': 0-10, 'assertiveness': 0-10, 'sample_phrases': [...]}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         try:
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
         except:
             pass
-        
+
         return {"raw_recommendation": res}
 
     def get_trust_report(self) -> Dict[str, Any]:
@@ -228,33 +238,45 @@ class TrustAgent(BaseAgent):
             "emotional_state": {
                 "valence": self.emotional_state.valence,
                 "arousal": self.emotional_state.arousal,
-                "dominance": self.emotional_state.dominance
+                "dominance": self.emotional_state.dominance,
             },
             "interaction_count": len(self._interaction_history),
-            "recent_adjustments": self.trust_metrics.history[-5:]
+            "recent_adjustments": self.trust_metrics.history[-5:],
         }
 
     def _update_trust(self, adjustment: float, reason: str) -> None:
         """Updates trust score with bounds and history."""
         old_score = self.trust_metrics.trust_score
         self.trust_metrics.trust_score = max(0.0, min(1.0, old_score + adjustment))
-        self.trust_metrics.history.append({
-            "adjustment": adjustment,
-            "reason": reason,
-            "old_score": old_score,
-            "new_score": self.trust_metrics.trust_score,
-            "timestamp": time.time()
-        })
+        self.trust_metrics.history.append(
+            {
+                "adjustment": adjustment,
+                "reason": reason,
+                "old_score": old_score,
+                "new_score": self.trust_metrics.trust_score,
+                "timestamp": time.time(),
+            }
+        )
 
     def _map_emotion_to_mood(self, emotion: str) -> None:
         """Maps detected emotion to mood enum."""
         emotion_lower = emotion.lower()
         mood_map = {
-            "joy": Mood.JOYFUL, "happy": Mood.JOYFUL, "excited": Mood.JOYFUL,
-            "content": Mood.CONTENT, "satisfied": Mood.CONTENT, "calm": Mood.CONTENT,
-            "neutral": Mood.NEUTRAL, "indifferent": Mood.NEUTRAL,
-            "concerned": Mood.CONCERNED, "worried": Mood.CONCERNED,
-            "frustrated": Mood.FRUSTRATED, "angry": Mood.FRUSTRATED, "annoyed": Mood.FRUSTRATED,
-            "anxious": Mood.ANXIOUS, "fearful": Mood.ANXIOUS, "nervous": Mood.ANXIOUS
+            "joy": Mood.JOYFUL,
+            "happy": Mood.JOYFUL,
+            "excited": Mood.JOYFUL,
+            "content": Mood.CONTENT,
+            "satisfied": Mood.CONTENT,
+            "calm": Mood.CONTENT,
+            "neutral": Mood.NEUTRAL,
+            "indifferent": Mood.NEUTRAL,
+            "concerned": Mood.CONCERNED,
+            "worried": Mood.CONCERNED,
+            "frustrated": Mood.FRUSTRATED,
+            "angry": Mood.FRUSTRATED,
+            "annoyed": Mood.FRUSTRATED,
+            "anxious": Mood.ANXIOUS,
+            "fearful": Mood.ANXIOUS,
+            "nervous": Mood.ANXIOUS,
         }
         self.emotional_state.mood = mood_map.get(emotion_lower, Mood.NEUTRAL)

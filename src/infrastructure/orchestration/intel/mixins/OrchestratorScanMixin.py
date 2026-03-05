@@ -6,17 +6,22 @@ import time
 import logging
 from typing import Any
 
+
 class OrchestratorScanMixin:
     """Methods for scanning files and analyzing contents."""
 
-    def _scan_and_repair_files(self, target_dir: str, results: dict[str, Any]) -> list[tuple[str, str, str, int, float]]:
+    def _scan_and_repair_files(
+        self, target_dir: str, results: dict[str, Any]
+    ) -> list[tuple[str, str, str, int, float]]:
         """Iterates through files, analyzes them, and applies fixes."""
         debt_records: list[tuple[str, str, str, int, float]] = []
         current_time = time.time()
         src_path = os.path.join(self.workspace_root, target_dir)
 
         if os.path.isfile(src_path) and src_path.endswith(".py"):
-            target_files: Any = [(os.path.dirname(src_path), [], [os.path.basename(src_path)])]
+            target_files: Any = [
+                (os.path.dirname(src_path), [], [os.path.basename(src_path)])
+            ]
         elif os.path.isdir(src_path):
             target_files = os.walk(src_path)
         else:
@@ -35,14 +40,18 @@ class OrchestratorScanMixin:
                         for issue in file_issues:
                             if issue.get("fixed"):
                                 results["fixes_applied"] += 1
-                            debt_records.append((
-                                rel_path,
-                                issue.get("type", "General"),
-                                issue.get("message", ""),
-                                1 if issue.get("fixed", False) else 0,
-                                current_time,
-                            ))
-                        results["details"].append({"file": rel_path, "issues": file_issues})
+                            debt_records.append(
+                                (
+                                    rel_path,
+                                    issue.get("type", "General"),
+                                    issue.get("message", ""),
+                                    1 if issue.get("fixed", False) else 0,
+                                    current_time,
+                                )
+                            )
+                        results["details"].append(
+                            {"file": rel_path, "issues": file_issues}
+                        )
         return debt_records
 
     def _record_debt_to_sql(self, debt_records: list[tuple]) -> None:
@@ -72,7 +81,9 @@ class OrchestratorScanMixin:
 
         # 1. Structural and Hive Analysis
         self.analysis.add_structural_findings(findings, file_path, rel_path, content)
-        self.analysis.add_hive_findings(findings, file_path, rel_path, getattr(self, "active_tasks", []))
+        self.analysis.add_hive_findings(
+            findings, file_path, rel_path, getattr(self, "active_tasks", [])
+        )
 
         # 2. Autonomous Fixes (Self-Healing Delegation)
         self.fixer.apply_autonomous_fixes(file_path, rel_path, content, findings)

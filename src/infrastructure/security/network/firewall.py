@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -39,7 +40,7 @@ __version__ = VERSION
 class ReverseProxyFirewall:
     """
     Centralized firewall and reverse proxy for all agent network interactions.
-    
+
     Responsibilities:
     1. Validate outbound requests against security policies.
     2. Manage connection pooling and retries for resilience.
@@ -58,40 +59,37 @@ class ReverseProxyFirewall:
     def __init__(self) -> None:
         if self._initialized:
             return
-        
+
         self.logger = logging.getLogger("NetworkFirewall")
         self.connectivity = ConnectivityManager()
-        
+
         # Configure robust session with retries for internal proxying
         self.session = requests.Session()
         retry_strategy = Retry(
             total=3,
             backoff_factor=1,
             status_forcelist=[429, 500, 502, 503, 504],
-            allowed_methods=["HEAD", "GET", "OPTIONS", "POST", "PUT", "DELETE"]
+            allowed_methods=["HEAD", "GET", "OPTIONS", "POST", "PUT", "DELETE"],
         )
         adapter = HTTPAdapter(max_retries=retry_strategy)
         self.session.mount("https://", adapter)
         self.session.mount("http://", adapter)
-        
+
         # Firewall Policy Configuration
         # In a real deployment, these would load from external config
-        self.blocked_domains = [
-            "telemetry.spyware.net",
-            "adservice.google.com"
-        ]
+        self.blocked_domains = ["telemetry.spyware.net", "adservice.google.com"]
         self.allowed_schemes = ["http", "https"]
-        
+
         self._initialized = True
 
     def validate_request(self, url: str, method: str) -> bool:
         """
         Validates outbound request against firewall rules and connectivity status.
-        
+
         Args:
             url: The destination URL.
             method: The HTTP method.
-            
+
         Returns:
             True if the request is allowed and endpoint is likely healthy.
         """
@@ -99,21 +97,25 @@ class ReverseProxyFirewall:
         if not any(url.startswith(f"{s}://") for s in self.allowed_schemes):
             self.logger.warning("Firewall Blocked: Invalid scheme in %s", url)
             return False
-            
+
         # 2. Check blocked domains
         for domain in self.blocked_domains:
             if domain in url:
-                self.logger.warning("Firewall Blocked: Denied domain %s in %s", domain, url)
+                self.logger.warning(
+                    "Firewall Blocked: Denied domain %s in %s", domain, url
+                )
                 return False
-                
+
         # 3. Check Connectivity Status
         # We parse the base URL or domain as the endpoint ID
         try:
             parsed = urlparse(url)
             endpoint_id = f"{parsed.scheme}://{parsed.netloc}"
             if not self.connectivity.is_endpoint_available(endpoint_id):
-                self.logger.info("Firewall Pre-empted: Endpoint %s is marked offline", endpoint_id)
-                # We return True to let the request try anyway if it's critical? 
+                self.logger.info(
+                    "Firewall Pre-empted: Endpoint %s is marked offline", endpoint_id
+                )
+                # We return True to let the request try anyway if it's critical?
                 # Or False to enforcing caching. The prompt asked for "Resilience Issue: Use ConnectivityManager"
                 # If we return False, we are doing what ConnectivityManager suggests (skipping dead endpoints).
                 return False
@@ -125,47 +127,49 @@ class ReverseProxyFirewall:
     def request(self, method: str, url: str, **kwargs: Any) -> requests.Response:
         """
         Executes an HTTP request through the firewall proxy.
-        
+
         Args:
             method: HTTP method (GET, POST, etc.)
             url: Target URL
             **kwargs: Arguments passed to requests.Session.request
-            
+
         Returns:
             Review requests.Response object
-            
+
         Raises:
             ConnectionError: If firewall blocks the request or connectivity fails.
         """
         if not self.validate_request(url, method):
             raise ConnectionError(f"Firewall blocked or pre-empted request to {url}")
-            
+
         try:
             self.logger.debug("FW-OUT: %s %s", method, url)
-            
+
             # Execute request
-            response = self.session.request(method, url, timeout=kwargs.pop('timeout', 30), **kwargs)
-            
+            response = self.session.request(
+                method, url, timeout=kwargs.pop("timeout", 30), **kwargs
+            )
+
             self.logger.debug("FW-IN: %s from %s", response.status_code, url)
-            
+
             # Update Health
             try:
                 parsed = urlparse(url)
                 endpoint_id = f"{parsed.scheme}://{parsed.netloc}"
                 self.connectivity.update_status(endpoint_id, response.ok)
-            except Exception: # pylint: disable=broad-except
+            except Exception:  # pylint: disable=broad-except
                 pass
-            
+
             return response
-            
+
         except Exception as e:
             try:
                 parsed = urlparse(url)
                 endpoint_id = f"{parsed.scheme}://{parsed.netloc}"
                 self.connectivity.update_status(endpoint_id, False)
-            except Exception: # pylint: disable=broad-except
+            except Exception:  # pylint: disable=broad-except
                 pass
-                
+
             self.logger.error("Firewall Transport Error: %s", e)
             raise e
 
@@ -177,11 +181,11 @@ class ReverseProxyFirewall:
     def post(self, url: str, **kwargs: Any) -> requests.Response:
         """Wrapper for POST requests."""
         return self.request("POST", url, **kwargs)
-        
+
     def put(self, url: str, **kwargs: Any) -> requests.Response:
         """Wrapper for PUT requests."""
         return self.request("PUT", url, **kwargs)
-        
+
     def delete(self, url: str, **kwargs: Any) -> requests.Response:
         """Wrapper for DELETE requests."""
         return self.request("DELETE", url, **kwargs)

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_contextvalidationmixin_exists():
     """Test that ContextValidationMixin class exists and is importable."""
-    assert 'ContextValidationMixin' in dir()
+    assert "ContextValidationMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -32,6 +32,7 @@ logger = logging.getLogger(__name__)
 
 class MigrationTask(Enum):
     """Types of migration tasks supported"""
+
     CODE_REFACTORING = "code_refactoring"
     LINT_RULE_ENFORCEMENT = "lint_rule_enforcement"
     API_MIGRATION = "api_migration"
@@ -43,6 +44,7 @@ class MigrationTask(Enum):
 @dataclass
 class MigrationTarget:
     """Represents a single migration target (file, component, etc.)"""
+
     identifier: str  # file path, component name, etc.
     content_hash: str  # for change detection
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -51,6 +53,7 @@ class MigrationTarget:
 @dataclass
 class MigrationBatch:
     """A batch of migration targets for a single sub-agent"""
+
     batch_id: str
     targets: List[MigrationTarget]
     instructions: str
@@ -60,6 +63,7 @@ class MigrationBatch:
 @dataclass
 class MigrationResult:
     """Result of a migration batch execution"""
+
     batch_id: str
     success: bool
     changes_made: int
@@ -72,7 +76,9 @@ class MigrationStrategy(ABC):
     """Abstract base class for migration strategies"""
 
     @abstractmethod
-    async def execute_migration(self, batch: MigrationBatch, context: CascadeContext) -> MigrationResult:
+    async def execute_migration(
+        self, batch: MigrationBatch, context: CascadeContext
+    ) -> MigrationResult:
         """Execute migration on a batch of targets"""
         pass
 
@@ -88,10 +94,12 @@ class SwarmMigrationCore:
     Enables parallel execution of large-scale code migrations using multiple sub-agents
     """
 
-    def __init__(self,
-                 max_parallel_agents: int = 10,
-                 batch_size: int = 10,
-                 timeout_seconds: int = 300):
+    def __init__(
+        self,
+        max_parallel_agents: int = 10,
+        batch_size: int = 10,
+        timeout_seconds: int = 300,
+    ):
         self.max_parallel_agents = max_parallel_agents
         self.batch_size = batch_size
         self.timeout_seconds = timeout_seconds
@@ -102,11 +110,13 @@ class SwarmMigrationCore:
         self.migration_strategies[task_type] = strategy
         logger.info(f"Registered migration strategy for {task_type.value}")
 
-    async def execute_swarm_migration(self,
-                                    targets: List[MigrationTarget],
-                                    task_type: MigrationTask,
-                                    context: CascadeContext,
-                                    progress_callback: Optional[Callable] = None) -> OptimizationTrial:
+    async def execute_swarm_migration(
+        self,
+        targets: List[MigrationTarget],
+        task_type: MigrationTask,
+        context: CascadeContext,
+        progress_callback: Optional[Callable] = None,
+    ) -> OptimizationTrial:
         """
         Execute a swarm migration across multiple targets
         Based on the Swarm Migration Pattern from agentic-patterns
@@ -119,18 +129,22 @@ class SwarmMigrationCore:
         # Create migration batches
         batches = self._create_migration_batches(targets, strategy)
 
-        logger.info(f"Created {len(batches)} migration batches for {len(targets)} targets")
+        logger.info(
+            f"Created {len(batches)} migration batches for {len(targets)} targets"
+        )
 
         # Execute batches in parallel with controlled concurrency
         semaphore = asyncio.Semaphore(self.max_parallel_agents)
         tasks = []
 
-        async def execute_batch_with_semaphore(batch: MigrationBatch) -> MigrationResult:
+        async def execute_batch_with_semaphore(
+            batch: MigrationBatch,
+        ) -> MigrationResult:
             async with semaphore:
                 try:
                     return await asyncio.wait_for(
                         strategy.execute_migration(batch, context),
-                        timeout=self.timeout_seconds
+                        timeout=self.timeout_seconds,
                     )
                 except asyncio.TimeoutError:
                     return MigrationResult(
@@ -138,7 +152,7 @@ class SwarmMigrationCore:
                         success=False,
                         changes_made=0,
                         errors=[f"Timeout after {self.timeout_seconds} seconds"],
-                        execution_time=self.timeout_seconds
+                        execution_time=self.timeout_seconds,
                     )
                 except Exception as e:
                     return MigrationResult(
@@ -146,7 +160,7 @@ class SwarmMigrationCore:
                         success=False,
                         changes_made=0,
                         errors=[str(e)],
-                        execution_time=0.0
+                        execution_time=0.0,
                     )
 
         # Start all batch executions
@@ -163,12 +177,14 @@ class SwarmMigrationCore:
 
         for result in results:
             if isinstance(result, Exception):
-                failed_results.append(MigrationResult(
-                    batch_id="unknown",
-                    success=False,
-                    changes_made=0,
-                    errors=[str(result)]
-                ))
+                failed_results.append(
+                    MigrationResult(
+                        batch_id="unknown",
+                        success=False,
+                        changes_made=0,
+                        errors=[str(result)],
+                    )
+                )
             elif result.success:
                 successful_results.append(result)
             else:
@@ -177,7 +193,7 @@ class SwarmMigrationCore:
         # Create optimization trial result
         trial = OptimizationTrial(
             trial_id=f"swarm_migration_{int(asyncio.get_event_loop().time())}",
-            strategy_configs=[{"type": task_type.value, "batch_count": len(batches)}]
+            strategy_configs=[{"type": task_type.value, "batch_count": len(batches)}],
         )
 
         trial.performance_results = [
@@ -186,30 +202,39 @@ class SwarmMigrationCore:
                 "success": r.success,
                 "changes_made": r.changes_made,
                 "errors": r.errors,
-                "execution_time": r.execution_time
+                "execution_time": r.execution_time,
             }
             for r in successful_results + failed_results
         ]
 
         total_changes = sum(r.changes_made for r in successful_results)
-        trial.best_strategy = {"total_changes": total_changes, "successful_batches": len(successful_results)}
-        trial.optimization_score = len(successful_results) / len(batches) if batches else 0
+        trial.best_strategy = {
+            "total_changes": total_changes,
+            "successful_batches": len(successful_results),
+        }
+        trial.optimization_score = (
+            len(successful_results) / len(batches) if batches else 0
+        )
 
-        logger.info(f"Swarm migration completed: {len(successful_results)}/{len(batches)} successful batches, {total_changes} total changes")
+        logger.info(
+            f"Swarm migration completed: {len(successful_results)}/{len(batches)} successful batches, {total_changes} total changes"
+        )
 
         return trial
 
-    def _create_migration_batches(self, targets: List[MigrationTarget], strategy: MigrationStrategy) -> List[MigrationBatch]:
+    def _create_migration_batches(
+        self, targets: List[MigrationTarget], strategy: MigrationStrategy
+    ) -> List[MigrationBatch]:
         """Create migration batches from targets"""
         batches = []
         batch_id_counter = 0
 
         for i in range(0, len(targets), self.batch_size):
-            batch_targets = targets[i:i + self.batch_size]
+            batch_targets = targets[i : i + self.batch_size]
             batch = MigrationBatch(
                 batch_id=f"batch_{batch_id_counter}",
                 targets=batch_targets,
-                instructions=strategy.get_migration_instructions()
+                instructions=strategy.get_migration_instructions(),
             )
             batches.append(batch)
             batch_id_counter += 1
@@ -224,7 +249,7 @@ class SwarmMigrationCore:
             "failed_batches": 0,
             "total_changes": 0,
             "total_errors": 0,
-            "avg_execution_time": 0.0
+            "avg_execution_time": 0.0,
         }
 
         execution_times = []
@@ -242,6 +267,10 @@ class SwarmMigrationCore:
         if execution_times:
             stats["avg_execution_time"] = sum(execution_times) / len(execution_times)
 
-        stats["success_rate"] = stats["successful_batches"] / stats["total_batches"] if stats["total_batches"] > 0 else 0
+        stats["success_rate"] = (
+            stats["successful_batches"] / stats["total_batches"]
+            if stats["total_batches"] > 0
+            else 0
+        )
 
         return stats

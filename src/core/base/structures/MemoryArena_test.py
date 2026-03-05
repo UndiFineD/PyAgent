@@ -33,27 +33,27 @@ except ImportError as e:
 
 def test_arenastats_exists():
     """Test that ArenaStats class exists and is importable."""
-    assert 'ArenaStats' in dir()
+    assert "ArenaStats" in dir()
 
 
 def test_memoryarena_exists():
     """Test that MemoryArena class exists and is importable."""
-    assert 'MemoryArena' in dir()
+    assert "MemoryArena" in dir()
 
 
 def test_typedarena_exists():
     """Test that TypedArena class exists and is importable."""
-    assert 'TypedArena' in dir()
+    assert "TypedArena" in dir()
 
 
 def test_stackarena_exists():
     """Test that StackArena class exists and is importable."""
-    assert 'StackArena' in dir()
+    assert "StackArena" in dir()
 
 
 def test_slaballocator_exists():
     """Test that SlabAllocator class exists and is importable."""
-    assert 'SlabAllocator' in dir()
+    assert "SlabAllocator" in dir()
 
 
 def test_get_thread_arena_exists():
@@ -74,4 +74,3 @@ def test_thread_temp_alloc_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_fileanalysisresult_exists():
     """Test that FileAnalysisResult class exists and is importable."""
-    assert 'FileAnalysisResult' in dir()
+    assert "FileAnalysisResult" in dir()
 
 
 def test_fileclassifier_exists():
     """Test that FileClassifier class exists and is importable."""
-    assert 'FileClassifier' in dir()
+    assert "FileClassifier" in dir()
 
 
 def test_fileclassifier_instantiation():
@@ -50,4 +50,3 @@ def test_fileclassifier_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

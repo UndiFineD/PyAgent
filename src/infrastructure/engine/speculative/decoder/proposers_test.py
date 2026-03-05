@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "SpeculativeProposer"), "SpeculativeProposer missing"
     assert hasattr(mod, "NgramProposer"), "NgramProposer missing"
     assert hasattr(mod, "MedusaProposer"), "MedusaProposer missing"
-

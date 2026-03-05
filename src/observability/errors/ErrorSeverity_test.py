@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_errorseverity_exists():
     """Test that ErrorSeverity class exists and is importable."""
-    assert 'ErrorSeverity' in dir()
+    assert "ErrorSeverity" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

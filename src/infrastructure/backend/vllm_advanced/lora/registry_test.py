@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_loraregistry_exists():
     """Test that LoraRegistry class exists and is importable."""
-    assert 'LoraRegistry' in dir()
+    assert "LoraRegistry" in dir()
 
 
 def test_loraregistry_instantiation():
@@ -45,4 +45,3 @@ def test_loraregistry_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

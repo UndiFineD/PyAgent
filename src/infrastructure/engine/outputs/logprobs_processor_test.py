@@ -20,7 +20,12 @@ def test_imports_and_symbols():
     assert hasattr(mod, "AsyncCPUTransfer"), "AsyncCPUTransfer missing"
     assert hasattr(mod, "SamplerOutput"), "SamplerOutput missing"
     assert hasattr(mod, "ModelRunnerOutput"), "ModelRunnerOutput missing"
-    assert hasattr(mod, "StreamingLogprobsCollector"), "StreamingLogprobsCollector missing"
-    assert hasattr(mod, "extract_top_k_logprobs_rust"), "extract_top_k_logprobs_rust missing"
-    assert hasattr(mod, "batch_logprobs_to_cpu_rust"), "batch_logprobs_to_cpu_rust missing"
-
+    assert hasattr(
+        mod, "StreamingLogprobsCollector"
+    ), "StreamingLogprobsCollector missing"
+    assert hasattr(
+        mod, "extract_top_k_logprobs_rust"
+    ), "extract_top_k_logprobs_rust missing"
+    assert hasattr(
+        mod, "batch_logprobs_to_cpu_rust"
+    ), "batch_logprobs_to_cpu_rust missing"

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -78,7 +79,9 @@ class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
         """Sets the active Vibe-Coding 2025 track (Overrides phase-based defaults)."""
         if track_name.upper() in VIBE_CODING_2025_TRACKS:
             self.active_track = track_name.upper()
-            self._state_data["active_track"] = self.active_track  # Phase 283 Persistence
+            self._state_data["active_track"] = (
+                self.active_track
+            )  # Phase 283 Persistence
             self._apply_vibe_persona()
             return (
                 f"Vibe-Coding track set to {self.active_track}. Persona: "
@@ -115,13 +118,17 @@ class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
                     prompt=f"As Supervisor, I need you to address: {goal}",
                 )
                 results.append(f"[{agent_type}]: {result[:150]}...")
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 results.append(f"[{agent_type}]: FAILED - {e}")
 
         return f"Supervisor results for '{goal}':\n\n" + "\n".join(results)
 
     @as_tool
-    async def orchestrate_debate(self, topic: str, pro_agent: str, con_agent: str) -> str:
+    async def orchestrate_debate(
+        self, topic: str, pro_agent: str, con_agent: str
+    ) -> str:
         """Runs the Debate pattern (Phase 283): agents argue iterations to reach consensus."""
         logging.info(f"ORCHESTRATOR: Debate mode for topic: {topic}")
 
@@ -183,7 +190,9 @@ class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
         return f"Final Pipeline Output: {current_data}"
 
     @as_tool
-    async def orchestrate_mapreduce(self, file_path: str, chunk_size: int = 1000) -> str:
+    async def orchestrate_mapreduce(
+        self, file_path: str, chunk_size: int = 1000
+    ) -> str:
         """Runs MapReduce (Phase 283): splits file, processes in parallel, merges results."""
         import math
 
@@ -214,7 +223,8 @@ class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
         logging.info("MapReduce: Reducing results.")
         summary = await delegator.delegate(
             agent_type="ArchitectAgent",
-            prompt=f"Merge these {len(shards)} analysis shards into a final report: " + "\n---\n".join(shards)[:2000],
+            prompt=f"Merge these {len(shards)} analysis shards into a final report: "
+            + "\n---\n".join(shards)[:2000],
         )
 
         return f"MapReduce Complete for {file_path}:\n\n{summary}"
@@ -234,5 +244,7 @@ class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(PatternOrchestrator, "Pattern Orchestrator", "Orchestration logs")
+    main = create_main_function(
+        PatternOrchestrator, "Pattern Orchestrator", "Orchestration logs"
+    )
     main()

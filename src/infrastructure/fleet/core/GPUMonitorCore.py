@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,9 +17,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import List, Optional
 
+
 @dataclass(frozen=True)
 class GPUMetrics:
     """Pure data class for GPU telemetry."""
+
     index: int
     name: str
     vram_total: int
@@ -33,6 +36,7 @@ class GPUMetrics:
     @property
     def vram_percent(self) -> float:
         return (self.vram_used / self.vram_total) * 100 if self.vram_total > 0 else 0.0
+
 
 class GPUMonitorCore:
     """
@@ -57,16 +61,17 @@ class GPUMonitorCore:
         """
         if not metrics:
             return None
-        
+
         # Sort by utilization first, then by free VRAM (descending)
-        sorted_gpus = sorted(
-            metrics, 
-            key=lambda m: (m.utilization_gpu, -m.vram_free)
-        )
+        sorted_gpus = sorted(metrics, key=lambda m: (m.utilization_gpu, -m.vram_free))
         return sorted_gpus[0].index
 
     @staticmethod
-    def needs_throttling(metrics: GPUMetrics, temp_threshold: int = 85, vram_threshold_percent: float = 95.0) -> bool:
+    def needs_throttling(
+        metrics: GPUMetrics,
+        temp_threshold: int = 85,
+        vram_threshold_percent: float = 95.0,
+    ) -> bool:
         """
         Determines if an agent shard should throttle based on GPU thermal or memory limits.
         """

@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "DocstringAnalyzer"), "DocstringAnalyzer missing"
     assert hasattr(mod, "DocstringFixer"), "DocstringFixer missing"
     assert hasattr(mod, "main"), "main missing"
-

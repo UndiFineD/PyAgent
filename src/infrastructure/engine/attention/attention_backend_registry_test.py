@@ -25,4 +25,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "PackKVAttentionBackend"), "PackKVAttentionBackend missing"
     assert hasattr(mod, "TorchSDPABackend"), "TorchSDPABackend missing"
     assert hasattr(mod, "get_attention_registry"), "get_attention_registry missing"
-

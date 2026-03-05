@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_platformregistry_exists():
     """Test that PlatformRegistry class exists and is importable."""
-    assert 'PlatformRegistry' in dir()
+    assert "PlatformRegistry" in dir()
 
 
 def test_get_current_platform_exists():
@@ -74,4 +74,3 @@ def test_select_attention_backend_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -38,9 +38,11 @@ class DownloadAgent:
         self.config = config
         self.classifier = URLClassifier()
         self.session = requests.Session()
-        self.session.headers.update({
-            'User-Agent': 'PyAgent-DownloadAgent/1.0 (https://github.com/UndiFineD/PyAgent)'
-        })
+        self.session.headers.update(
+            {
+                "User-Agent": "PyAgent-DownloadAgent/1.0 (https://github.com/UndiFineD/PyAgent)"
+            }
+        )
 
     def ensure_directory(self, path: str) -> Path:
         """Ensure directory exists."""
@@ -50,9 +52,9 @@ class DownloadAgent:
 
     def download_github_repo(self, url: str, metadata: Dict) -> DownloadResult:
         """Download GitHub repository using git clone."""
-        owner = metadata['owner']
-        repo = metadata['repo']
-        dest_dir = self.ensure_directory(metadata['destination'])
+        owner = metadata["owner"]
+        repo = metadata["repo"]
+        dest_dir = self.ensure_directory(metadata["destination"])
         repo_path = dest_dir / f"{owner}-{repo}"
 
         if self.config.skip_existing and repo_path.exists():
@@ -60,8 +62,8 @@ class DownloadAgent:
                 url=url,
                 success=True,
                 destination=str(repo_path),
-                file_type='git_repo',
-                metadata={'skipped': True}
+                file_type="git_repo",
+                metadata={"skipped": True},
             )
 
         if self.config.dry_run:
@@ -69,37 +71,36 @@ class DownloadAgent:
                 url=url,
                 success=True,
                 destination=str(repo_path),
-                file_type='git_repo',
-                metadata={'dry_run': True}
+                file_type="git_repo",
+                metadata={"dry_run": True},
             )
 
         try:
-            cmd = ['git', 'clone', '--depth', '1', url, str(repo_path)]
+            cmd = ["git", "clone", "--depth", "1", url, str(repo_path)]
             result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=self.config.timeout_seconds
+                cmd, capture_output=True, text=True, timeout=self.config.timeout_seconds
             )
 
             if result.returncode == 0:
                 # Get repo size
-                size = sum(f.stat().st_size for f in repo_path.rglob('*') if f.is_file())
+                size = sum(
+                    f.stat().st_size for f in repo_path.rglob("*") if f.is_file()
+                )
                 return DownloadResult(
                     url=url,
                     success=True,
                     destination=str(repo_path),
-                    file_type='git_repo',
+                    file_type="git_repo",
                     size_bytes=size,
-                    metadata={'owner': owner, 'repo': repo}
+                    metadata={"owner": owner, "repo": repo},
                 )
             else:
                 return DownloadResult(
                     url=url,
                     success=False,
                     destination=str(repo_path),
-                    file_type='git_repo',
-                    error_message=result.stderr
+                    file_type="git_repo",
+                    error_message=result.stderr,
                 )
 
         except (subprocess.TimeoutExpired, Exception) as e:
@@ -107,15 +108,15 @@ class DownloadAgent:
                 url=url,
                 success=False,
                 destination=str(repo_path),
-                file_type='git_repo',
-                error_message=str(e)
+                file_type="git_repo",
+                error_message=str(e),
             )
 
     def download_github_gist(self, url: str, metadata: Dict) -> DownloadResult:
         """Download GitHub Gist using git clone."""
-        owner = metadata['owner']
-        gist_id = metadata['gist_id']
-        dest_dir = self.ensure_directory(metadata['destination'])
+        owner = metadata["owner"]
+        gist_id = metadata["gist_id"]
+        dest_dir = self.ensure_directory(metadata["destination"])
         gist_path = dest_dir / f"gist-{owner}-{gist_id}"
 
         if self.config.skip_existing and gist_path.exists():
@@ -123,8 +124,8 @@ class DownloadAgent:
                 url=url,
                 success=True,
                 destination=str(gist_path),
-                file_type='git_gist',
-                metadata={'skipped': True}
+                file_type="git_gist",
+                metadata={"skipped": True},
             )
 
         if self.config.dry_run:
@@ -132,36 +133,35 @@ class DownloadAgent:
                 url=url,
                 success=True,
                 destination=str(gist_path),
-                file_type='git_gist',
-                metadata={'dry_run': True}
+                file_type="git_gist",
+                metadata={"dry_run": True},
             )
 
         try:
-            cmd = ['git', 'clone', url, str(gist_path)]
+            cmd = ["git", "clone", url, str(gist_path)]
             result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=self.config.timeout_seconds
+                cmd, capture_output=True, text=True, timeout=self.config.timeout_seconds
             )
 
             if result.returncode == 0:
-                size = sum(f.stat().st_size for f in gist_path.rglob('*') if f.is_file())
+                size = sum(
+                    f.stat().st_size for f in gist_path.rglob("*") if f.is_file()
+                )
                 return DownloadResult(
                     url=url,
                     success=True,
                     destination=str(gist_path),
-                    file_type='git_gist',
+                    file_type="git_gist",
                     size_bytes=size,
-                    metadata={'owner': owner, 'gist_id': gist_id}
+                    metadata={"owner": owner, "gist_id": gist_id},
                 )
             else:
                 return DownloadResult(
                     url=url,
                     success=False,
                     destination=str(gist_path),
-                    file_type='git_gist',
-                    error_message=result.stderr
+                    file_type="git_gist",
+                    error_message=result.stderr,
                 )
 
         except (subprocess.TimeoutExpired, Exception) as e:
@@ -169,13 +169,15 @@ class DownloadAgent:
                 url=url,
                 success=False,
                 destination=str(gist_path),
-                file_type='git_gist',
-                error_message=str(e)
+                file_type="git_gist",
+                error_message=str(e),
             )
 
-    def download_file(self, url: str, metadata: Dict, filename: Optional[str] = None) -> DownloadResult:
+    def download_file(
+        self, url: str, metadata: Dict, filename: Optional[str] = None
+    ) -> DownloadResult:
         """Download file using HTTP requests."""
-        dest_dir = self.ensure_directory(metadata['destination'])
+        dest_dir = self.ensure_directory(metadata["destination"])
 
         if not filename:
             # Extract filename from URL
@@ -192,9 +194,9 @@ class DownloadAgent:
                 url=url,
                 success=True,
                 destination=str(dest_path),
-                file_type=metadata.get('format', 'unknown'),
+                file_type=metadata.get("format", "unknown"),
                 size_bytes=size,
-                metadata={'skipped': True}
+                metadata={"skipped": True},
             )
 
         if self.config.dry_run:
@@ -202,15 +204,17 @@ class DownloadAgent:
                 url=url,
                 success=True,
                 destination=str(dest_path),
-                file_type=metadata.get('format', 'unknown'),
-                metadata={'dry_run': True}
+                file_type=metadata.get("format", "unknown"),
+                metadata={"dry_run": True},
             )
 
         try:
-            response = self.session.get(url, timeout=self.config.timeout_seconds, stream=True)
+            response = self.session.get(
+                url, timeout=self.config.timeout_seconds, stream=True
+            )
             response.raise_for_status()
 
-            with open(dest_path, 'wb') as f:
+            with open(dest_path, "wb") as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
 
@@ -218,9 +222,11 @@ class DownloadAgent:
                 url=url,
                 success=True,
                 destination=str(dest_path),
-                file_type=metadata.get('format', 'unknown'),
+                file_type=metadata.get("format", "unknown"),
                 size_bytes=dest_path.stat().st_size,
-                metadata={'content_type': response.headers.get('content-type', 'unknown')}
+                metadata={
+                    "content_type": response.headers.get("content-type", "unknown")
+                },
             )
 
         except Exception as e:
@@ -228,19 +234,19 @@ class DownloadAgent:
                 url=url,
                 success=False,
                 destination=str(dest_path),
-                file_type=metadata.get('format', 'unknown'),
-                error_message=str(e)
+                file_type=metadata.get("format", "unknown"),
+                error_message=str(e),
             )
 
     def download_arxiv_paper(self, url: str, metadata: Dict) -> DownloadResult:
         """Download ArXiv paper."""
-        paper_id = metadata['paper_id']
-        paper_format = metadata.get('format', 'pdf')
+        paper_id = metadata["paper_id"]
+        paper_format = metadata.get("format", "pdf")
 
-        if paper_format == 'pdf':
+        if paper_format == "pdf":
             # Convert abs URL to PDF URL if needed
-            if '/abs/' in url:
-                pdf_url = url.replace('/abs/', '/pdf/')
+            if "/abs/" in url:
+                pdf_url = url.replace("/abs/", "/pdf/")
             else:
                 pdf_url = url
             filename = f"arxiv_{paper_id}.pdf"
@@ -254,7 +260,7 @@ class DownloadAgent:
         """Open webpage in browser or download HTML."""
         # For now, just download the HTML content
         parsed = urllib.parse.urlparse(url)
-        domain = parsed.netloc.replace('.', '_')
+        domain = parsed.netloc.replace(".", "_")
         filename = f"{domain}_{int(time.time())}.html"
 
         return self.download_file(url, metadata, filename)
@@ -266,13 +272,13 @@ class DownloadAgent:
         if self.config.verbose:
             print(f"Processing {url_type}: {url}")
 
-        if url_type == 'github_repo':
+        if url_type == "github_repo":
             return self.download_github_repo(url, metadata)
-        elif url_type == 'github_gist':
+        elif url_type == "github_gist":
             return self.download_github_gist(url, metadata)
-        elif url_type == 'arxiv_paper':
+        elif url_type == "arxiv_paper":
             return self.download_arxiv_paper(url, metadata)
-        elif url_type in ['research_paper', 'dataset', 'documentation']:
+        elif url_type in ["research_paper", "dataset", "documentation"]:
             return self.download_file(url, metadata)
         else:  # webpage
             return self.open_webpage(url, metadata)
@@ -286,16 +292,16 @@ class DownloadAgent:
             return []
 
         results = []
-        with open(urls_file, 'r', encoding='utf-8') as f:
+        with open(urls_file, "r", encoding="utf-8") as f:
             for line_num, line in enumerate(f, 1):
                 line = line.strip()
 
                 # Skip empty lines and comments
-                if not line or line.startswith('#'):
+                if not line or line.startswith("#"):
                     continue
 
                 # Extract URL (handle comments after URL)
-                url = line.split('#')[0].strip()
+                url = line.split("#")[0].strip()
                 if not url:
                     continue
 
@@ -316,35 +322,40 @@ class DownloadAgent:
         output_path = Path(self.config.base_dir) / output_file
 
         data = {
-            'timestamp': datetime.now().isoformat(),
-            'config': {
-                'urls_file': self.config.urls_file,
-                'max_retries': self.config.max_retries,
-                'timeout_seconds': self.config.timeout_seconds,
-                'dry_run': self.config.dry_run
+            "timestamp": datetime.now().isoformat(),
+            "config": {
+                "urls_file": self.config.urls_file,
+                "max_retries": self.config.max_retries,
+                "timeout_seconds": self.config.timeout_seconds,
+                "dry_run": self.config.dry_run,
             },
-            'results': [
+            "results": [
                 {
-                    'url': r.url,
-                    'success': r.success,
-                    'destination': r.destination,
-                    'file_type': r.file_type,
-                    'size_bytes': r.size_bytes,
-                    'error_message': r.error_message,
-                    'metadata': r.metadata or {}
-                } for r in results
+                    "url": r.url,
+                    "success": r.success,
+                    "destination": r.destination,
+                    "file_type": r.file_type,
+                    "size_bytes": r.size_bytes,
+                    "error_message": r.error_message,
+                    "metadata": r.metadata or {},
+                }
+                for r in results
             ],
-            'summary': {
-                'total': len(results),
-                'successful': len([r for r in results if r.success]),
-                'failed': len([r for r in results if not r.success]),
-                'skipped': len([r for r in results if r.metadata and r.metadata.get('skipped')]),
-                'dry_run': len([r for r in results if r.metadata and r.metadata.get('dry_run')]),
-                'total_size_bytes': sum(r.size_bytes for r in results if r.success)
-            }
+            "summary": {
+                "total": len(results),
+                "successful": len([r for r in results if r.success]),
+                "failed": len([r for r in results if not r.success]),
+                "skipped": len(
+                    [r for r in results if r.metadata and r.metadata.get("skipped")]
+                ),
+                "dry_run": len(
+                    [r for r in results if r.metadata and r.metadata.get("dry_run")]
+                ),
+                "total_size_bytes": sum(r.size_bytes for r in results if r.success),
+            },
         }
 
-        with open(output_path, 'w', encoding='utf-8') as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
 
         print(f"Results saved to: {output_path}")

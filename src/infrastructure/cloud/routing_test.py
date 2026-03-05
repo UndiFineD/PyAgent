@@ -33,25 +33,24 @@ except ImportError as e:
 
 def test_routingstrategy_exists():
     """Test that RoutingStrategy class exists and is importable."""
-    assert 'RoutingStrategy' in dir()
+    assert "RoutingStrategy" in dir()
 
 
 def test_providermetrics_exists():
     """Test that ProviderMetrics class exists and is importable."""
-    assert 'ProviderMetrics' in dir()
+    assert "ProviderMetrics" in dir()
 
 
 def test_routingconstraints_exists():
     """Test that RoutingConstraints class exists and is importable."""
-    assert 'RoutingConstraints' in dir()
+    assert "RoutingConstraints" in dir()
 
 
 def test_intelligentrouter_exists():
     """Test that IntelligentRouter class exists and is importable."""
-    assert 'IntelligentRouter' in dir()
+    assert "IntelligentRouter" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

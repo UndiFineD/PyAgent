@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_assetdiscoveryresult_exists():
     """Test that AssetDiscoveryResult class exists and is importable."""
-    assert 'AssetDiscoveryResult' in dir()
+    assert "AssetDiscoveryResult" in dir()
 
 
 def test_reconnaissanceconfig_exists():
     """Test that ReconnaissanceConfig class exists and is importable."""
-    assert 'ReconnaissanceConfig' in dir()
+    assert "ReconnaissanceConfig" in dir()
 
 
 def test_networkreconnaissancecore_exists():
     """Test that NetworkReconnaissanceCore class exists and is importable."""
-    assert 'NetworkReconnaissanceCore' in dir()
+    assert "NetworkReconnaissanceCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

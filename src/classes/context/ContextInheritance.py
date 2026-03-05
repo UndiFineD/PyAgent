@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,15 +25,16 @@ import re
 
 __version__ = VERSION
 
+
 class ContextInheritance:
     """Manages context inheritance from parent files.
 
-    Provides functionality for child contexts to inherit
-from parent contexts.
+        Provides functionality for child contexts to inherit
+    from parent contexts.
 
-    Example:
-        >>> inheritance=ContextInheritance()
-        >>> inherited=inheritance.inherit_from("parent.description.md", "child.description.md")
+        Example:
+            >>> inheritance=ContextInheritance()
+            >>> inherited=inheritance.inherit_from("parent.description.md", "child.description.md")
     """
 
     def __init__(self) -> None:
@@ -61,7 +63,7 @@ from parent contexts.
         self,
         parent_path: str,
         child_path: str,
-        mode: InheritanceMode = InheritanceMode.MERGE
+        mode: InheritanceMode = InheritanceMode.MERGE,
     ) -> InheritedContext:
         """Set up inheritance relationship.
 
@@ -73,18 +75,13 @@ from parent contexts.
         Returns:
             InheritedContext configuration.
         """
-        inherited = InheritedContext(
-            parent_path=parent_path,
-            mode=mode
-        )
+        inherited = InheritedContext(parent_path=parent_path, mode=mode)
         self.inheritance_map[child_path] = inherited
         return inherited
 
     def resolve_inheritance(
-            self,
-            parent_content: str,
-            child_content: str,
-            mode: InheritanceMode) -> str:
+        self, parent_content: str, child_content: str, mode: InheritanceMode
+    ) -> str:
         """Resolve inheritance to produce final content.
 
         Args:
@@ -103,7 +100,9 @@ from parent contexts.
             # MERGE
             # Simple merge: keep child sections, add missing from parent
             child_sections = set(re.findall(r"##\s+(\w+)", child_content))
-            parent_sections = re.findall(r"(##\s+\w+.*?)(?=##|\Z)", parent_content, re.DOTALL)
+            parent_sections = re.findall(
+                r"(##\s+\w+.*?)(?=##|\Z)", parent_content, re.DOTALL
+            )
 
             result = child_content
             for section in parent_sections:

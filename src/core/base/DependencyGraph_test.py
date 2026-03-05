@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_dependencygraph_exists():
     """Test that DependencyGraph class exists and is importable."""
-    assert 'DependencyGraph' in dir()
+    assert "DependencyGraph" in dir()
 
 
 def test_dependencygraph_instantiation():
@@ -45,4 +45,3 @@ def test_dependencygraph_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

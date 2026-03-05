@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ if TYPE_CHECKING:
     pass
 __version__ = VERSION
 
+
 @dataclass
 class BranchComparison:
     """Comparison of context across branches.
@@ -35,6 +37,7 @@ class BranchComparison:
         files_only_in_b: Files only in branch B.
         modified_files: Files modified between branches.
     """
+
     branch_a: str
     branch_b: str
     files_only_in_a: list[str] = field(default_factory=lambda: [])

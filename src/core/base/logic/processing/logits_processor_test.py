@@ -18,12 +18,15 @@ def test_imports_and_symbols():
     assert hasattr(mod, "TemperatureProcessor"), "TemperatureProcessor missing"
     assert hasattr(mod, "TopKProcessor"), "TopKProcessor missing"
     assert hasattr(mod, "TopPProcessor"), "TopPProcessor missing"
-    assert hasattr(mod, "RepetitionPenaltyProcessor"), "RepetitionPenaltyProcessor missing"
+    assert hasattr(
+        mod, "RepetitionPenaltyProcessor"
+    ), "RepetitionPenaltyProcessor missing"
     assert hasattr(mod, "NoBadWordsProcessor"), "NoBadWordsProcessor missing"
     assert hasattr(mod, "MinLengthProcessor"), "MinLengthProcessor missing"
     assert hasattr(mod, "apply_processors"), "apply_processors missing"
     assert hasattr(mod, "MaxLengthProcessor"), "MaxLengthProcessor missing"
     assert hasattr(mod, "PresencePenaltyProcessor"), "PresencePenaltyProcessor missing"
-    assert hasattr(mod, "FrequencyPenaltyProcessor"), "FrequencyPenaltyProcessor missing"
+    assert hasattr(
+        mod, "FrequencyPenaltyProcessor"
+    ), "FrequencyPenaltyProcessor missing"
     assert hasattr(mod, "create_processor_chain"), "create_processor_chain missing"
-

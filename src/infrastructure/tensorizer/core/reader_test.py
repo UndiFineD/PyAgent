@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_loadprogress_exists():
     """Test that LoadProgress class exists and is importable."""
-    assert 'LoadProgress' in dir()
+    assert "LoadProgress" in dir()
 
 
 def test_tensorizerreader_exists():
     """Test that TensorizerReader class exists and is importable."""
-    assert 'TensorizerReader' in dir()
+    assert "TensorizerReader" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

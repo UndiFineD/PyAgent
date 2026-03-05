@@ -15,38 +15,37 @@ else:
 if TYPE_CHECKING:
     import torch as torch_type
 
+
 class GptJRotaryEmbedding(RotaryEmbeddingBase):
     """GPT-J style rotary position embedding.
-    
+
     Interleaved rotation pattern where pairs of dimensions
     are rotated together.
     """
-
 
     def __init__(self, config: RoPEConfig):
         config.is_neox_style = False
         super().__init__(config)
         self.inv_freq = self._compute_inv_freq()
 
-
     def _compute_inv_freq(self) -> Any:
         """Compute inverse frequencies."""
         if HAS_TORCH and torch is not None:
             return 1.0 / (
-                self.base ** (
+                self.base
+                ** (
                     torch.arange(0, self.rotary_dim, 2, dtype=torch.float32)
                     / self.rotary_dim
                 )
             )
         elif HAS_NUMPY and np is not None:
             return 1.0 / (
-                self.base ** (
-                    np.arange(0, self.rotary_dim, 2, dtype=np.float32)
-                    / self.rotary_dim
+                self.base
+                ** (
+                    np.arange(0, self.rotary_dim, 2, dtype=np.float32) / self.rotary_dim
                 )
             )
         raise RuntimeError("No numerical backend available")
-
 
     def _compute_cos_sin_cache(self, max_len: int) -> Tuple[Any, Any]:
         """Compute cos/sin cache."""
@@ -64,7 +63,6 @@ class GptJRotaryEmbedding(RotaryEmbeddingBase):
             sin_cache = np.repeat(np.sin(freqs), 2, axis=-1)
             return cos_cache, sin_cache
         raise RuntimeError("No numerical backend available")
-
 
     def forward_native(
         self,

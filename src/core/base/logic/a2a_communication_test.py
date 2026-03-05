@@ -33,47 +33,47 @@ except ImportError as e:
 
 def test_messagetype_exists():
     """Test that MessageType class exists and is importable."""
-    assert 'MessageType' in dir()
+    assert "MessageType" in dir()
 
 
 def test_agentcapability_exists():
     """Test that AgentCapability class exists and is importable."""
-    assert 'AgentCapability' in dir()
+    assert "AgentCapability" in dir()
 
 
 def test_agentskill_exists():
     """Test that AgentSkill class exists and is importable."""
-    assert 'AgentSkill' in dir()
+    assert "AgentSkill" in dir()
 
 
 def test_agentcard_exists():
     """Test that AgentCard class exists and is importable."""
-    assert 'AgentCard' in dir()
+    assert "AgentCard" in dir()
 
 
 def test_agentcapabilities_exists():
     """Test that AgentCapabilities class exists and is importable."""
-    assert 'AgentCapabilities' in dir()
+    assert "AgentCapabilities" in dir()
 
 
 def test_a2amessage_exists():
     """Test that A2AMessage class exists and is importable."""
-    assert 'A2AMessage' in dir()
+    assert "A2AMessage" in dir()
 
 
 def test_a2aresponse_exists():
     """Test that A2AResponse class exists and is importable."""
-    assert 'A2AResponse' in dir()
+    assert "A2AResponse" in dir()
 
 
 def test_agentprotocol_exists():
     """Test that AgentProtocol class exists and is importable."""
-    assert 'AgentProtocol' in dir()
+    assert "AgentProtocol" in dir()
 
 
 def test_messagerouter_exists():
     """Test that MessageRouter class exists and is importable."""
-    assert 'MessageRouter' in dir()
+    assert "MessageRouter" in dir()
 
 
 def test_messagerouter_instantiation():
@@ -84,12 +84,12 @@ def test_messagerouter_instantiation():
 
 def test_a2acommunicationmixin_exists():
     """Test that A2ACommunicationMixin class exists and is importable."""
-    assert 'A2ACommunicationMixin' in dir()
+    assert "A2ACommunicationMixin" in dir()
 
 
 def test_simplea2aagent_exists():
     """Test that SimpleA2AAgent class exists and is importable."""
-    assert 'SimpleA2AAgent' in dir()
+    assert "SimpleA2AAgent" in dir()
 
 
 def test_create_agent_card_from_dict_exists():
@@ -100,4 +100,3 @@ def test_create_agent_card_from_dict_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

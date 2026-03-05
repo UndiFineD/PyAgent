@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -84,7 +85,9 @@ class DirectiveParser:
                 return json.loads(clean_focus.replace("'", '"'))
             except Exception:
                 inner = focus_val[1:-1].split(",")
-                return [d.strip().strip('"').strip("'").strip() for d in inner if d.strip()]
+                return [
+                    d.strip().strip('"').strip("'").strip() for d in inner if d.strip()
+                ]
         return [d.strip() for d in focus_val.split(",") if d.strip()]
 
     def execute_commands(self) -> None:
@@ -102,8 +105,10 @@ class DirectiveParser:
             except Exception as e:
                 logging.error(f"   - Command failed: {e}")
 
+
 class IntelligenceHarvester:
     """Orchestrates external intelligence harvesting."""
+
     def __init__(self, fleet: FleetManager, model_name: str):
         self.fleet = fleet
         self.model_name = model_name
@@ -144,8 +149,10 @@ class IntelligenceHarvester:
 
         return lessons
 
+
 class CycleOrchestrator:
     """Manages the execution of multiple improvement cycles."""
+
     def __init__(self, fleet: FleetManager, args: argparse.Namespace):
         self.fleet = fleet
         self.args = args
@@ -160,11 +167,13 @@ class CycleOrchestrator:
             current_cycle += 1
 
             run_cycle(
-                self.fleet, self.root, self.logger,
+                self.fleet,
+                self.root,
+                self.logger,
                 prompt_path=self.args.prompt,
                 context_path=self.args.context,
                 current_cycle=current_cycle,
-                model_name=self.args.model
+                model_name=self.args.model,
             )
 
             if not self.is_infinite and current_cycle >= self.args.cycles:
@@ -172,7 +181,10 @@ class CycleOrchestrator:
 
             self.logger.info("Waiting before next cycle... (Press Ctrl+C to stop)")
             _cycle_throttle(
-                self.args.delay, self.root, self._get_last_focus(), use_watcher=self.args.watch
+                self.args.delay,
+                self.root,
+                self._get_last_focus(),
+                use_watcher=self.args.watch,
             )
 
     def _get_last_focus(self) -> list[str]:
@@ -214,7 +226,12 @@ def run_cycle(
     parser.execute_commands()
 
     # 2. Run Improvement Loop
-    combined_stats = {"files_scanned": 0, "issues_found": 0, "fixes_applied": 0, "details": []}
+    combined_stats = {
+        "files_scanned": 0,
+        "issues_found": 0,
+        "fixes_applied": 0,
+        "details": [],
+    }
     for t_dir in target_dirs:
         stats = fleet.self_improvement.run_improvement_cycle(target_dir=t_dir)
         combined_stats["files_scanned"] += stats.get("files_scanned", 0)
@@ -223,13 +240,25 @@ def run_cycle(
         combined_stats["details"].extend(stats.get("details", []))
 
     # 3. Report Results
-    logger.info(f" - Scanned: {combined_stats['files_scanned']}, Issues: {combined_stats['issues_found']}, Fixed: {combined_stats['fixes_applied']}")
+    logger.info(
+        f" - Scanned: {combined_stats['files_scanned']}, Issues: {combined_stats['issues_found']}, Fixed: {combined_stats['fixes_applied']}"
+    )
 
-    _report_remaining_debt(combined_stats, logger, fleet, root, target_dirs=target_dirs, prompt_path=prompt_path, model_name=model_name, current_cycle=current_cycle)
+    _report_remaining_debt(
+        combined_stats,
+        logger,
+        fleet,
+        root,
+        target_dirs=target_dirs,
+        prompt_path=prompt_path,
+        model_name=model_name,
+        current_cycle=current_cycle,
+    )
 
     # 4. Harvest External Intelligence
     harvester = IntelligenceHarvester(fleet, model_name)
     harvester.harvest()
+
 
 def consult_external_models(fleet, broken_items, prompt_path=None, model_name=None):
     """
@@ -240,6 +269,7 @@ def consult_external_models(fleet, broken_items, prompt_path=None, model_name=No
         print(f" - Analyzed {len(broken_items)} debt clusters.")
     print(" - Federated consensus reached: Continue localized refactoring.")
 
+
 def _analyze_unfixed_issues(stats: dict[str, Any]) -> list[dict[str, Any]]:
     """Filters and summarizes issues that were not fixed."""
     broken_items = []
@@ -248,13 +278,22 @@ def _analyze_unfixed_issues(stats: dict[str, Any]) -> list[dict[str, Any]]:
         if unfixed:
             # Filter matches for the orchestrator itself if they are false positives
             if "run_fleet_self_improvement.py" in detail["file"]:
-                unfixed = [i for i in unfixed if "subprocess.run" not in str(i) and "time.sleep" not in str(i)]
+                unfixed = [
+                    i
+                    for i in unfixed
+                    if "subprocess.run" not in str(i) and "time.sleep" not in str(i)
+                ]
 
             if unfixed:
-                broken_items.append({"file": detail["file"], "remaining_issues": unfixed})
+                broken_items.append(
+                    {"file": detail["file"], "remaining_issues": unfixed}
+                )
     return broken_items
 
-def _update_auto_documentation(fleet: FleetManager, root: str, stats: dict[str, Any]) -> None:
+
+def _update_auto_documentation(
+    fleet: FleetManager, root: str, stats: dict[str, Any]
+) -> None:
     """Updates FLEET_AUTO_DOC.md with cycle results."""
     doc_res = fleet.doc_gen_agent.extract_docs(
         os.path.join(root, "src/infrastructure/fleet/FleetManager.py")
@@ -272,6 +311,7 @@ def _update_auto_documentation(fleet: FleetManager, root: str, stats: dict[str, 
     with open(doc_path, "a", encoding="utf-8") as f:
         f.write(maintenance_summary)
 
+
 def _log_explainability(fleet: FleetManager, stats: dict[str, Any]) -> None:
     """Logs the reasoning for the improvement cycle."""
     fleet.explainability.log_reasoning_step(
@@ -282,24 +322,33 @@ def _log_explainability(fleet: FleetManager, stats: dict[str, Any]) -> None:
         {"stats": stats},
     )
 
+
 def _verify_ai_recording(fleet: FleetManager) -> None:
     """Verifies that local interaction recording is functional."""
     test_prompt = "How can we optimize for a trillion parameters?"
-    test_result = "By using compressed sharding and adler32 hashing for high-speed indexing."
+    test_result = (
+        "By using compressed sharding and adler32 hashing for high-speed indexing."
+    )
     fleet.recorder.record_interaction(
         "internal_fleet_optimizer", "logic-v1", test_prompt, test_result
     )
+
 
 def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
     """Triggers knowledge synthesis from the swarm."""
     try:
         new_patterns = fleet.intelligence.synthesize_collective_intelligence()
         if new_patterns:
-            print(f"\n[Intelligence] Identified {len(new_patterns)} new actionable patterns for the next cycle.")
+            print(
+                f"\n[Intelligence] Identified {len(new_patterns)} new actionable patterns for the next cycle."
+            )
     except Exception as e:
         print(f"\n[Intelligence] Synthesis skipped: {e}")
 
-def _prune_verified_directives(prompt_path: str | None, root: str, target_dirs: list[str], broken_items: list) -> None:
+
+def _prune_verified_directives(
+    prompt_path: str | None, root: str, target_dirs: list[str], broken_items: list
+) -> None:
     """Removes completed directives from the prompt file."""
     if not (prompt_path and not broken_items):
         return
@@ -310,7 +359,9 @@ def _prune_verified_directives(prompt_path: str | None, root: str, target_dirs: 
     if not p_path.exists():
         return
 
-    print(f"\n[Maintenance] Area '@focus: {target_dirs}' is CLEAN. Pruning directive...")
+    print(
+        f"\n[Maintenance] Area '@focus: {target_dirs}' is CLEAN. Pruning directive..."
+    )
     content = p_path.read_text(encoding="utf-8")
 
     # DYNAMIC MULTI-LINE PRUNING (Phase 141)
@@ -322,16 +373,31 @@ def _prune_verified_directives(prompt_path: str | None, root: str, target_dirs: 
         flags=re.MULTILINE | re.IGNORECASE | re.DOTALL,
     )
     if new_content == content:
-        new_content = re.sub(r"^@focus:.*$\n?", "", content, count=1, flags=re.MULTILINE | re.IGNORECASE)
+        new_content = re.sub(
+            r"^@focus:.*$\n?", "", content, count=1, flags=re.MULTILINE | re.IGNORECASE
+        )
 
-    new_content = re.sub(r"^@cmd:.*$\n?", "", new_content, count=1, flags=re.MULTILINE | re.IGNORECASE)
-    new_content = re.sub(r"^@python:\s*\"\"\"(.*?)\"\"\"\n?", "", new_content, count=1, flags=re.DOTALL | re.IGNORECASE)
-    new_content = re.sub(r"^- \[x\].*$\n?", "", new_content, flags=re.MULTILINE | re.IGNORECASE)
-    new_content = re.sub(r"^# DONE.*$\n?", "", new_content, flags=re.MULTILINE | re.IGNORECASE)
+    new_content = re.sub(
+        r"^@cmd:.*$\n?", "", new_content, count=1, flags=re.MULTILINE | re.IGNORECASE
+    )
+    new_content = re.sub(
+        r"^@python:\s*\"\"\"(.*?)\"\"\"\n?",
+        "",
+        new_content,
+        count=1,
+        flags=re.DOTALL | re.IGNORECASE,
+    )
+    new_content = re.sub(
+        r"^- \[x\].*$\n?", "", new_content, flags=re.MULTILINE | re.IGNORECASE
+    )
+    new_content = re.sub(
+        r"^# DONE.*$\n?", "", new_content, flags=re.MULTILINE | re.IGNORECASE
+    )
 
     if new_content != content:
         p_path.write_text(new_content.strip() + "\n", encoding="utf-8")
         print(f" - Updated {p_path.name}: Verified directives REMOVED.")
+
 
 def _report_remaining_debt(
     stats: dict[str, Any],
@@ -353,7 +419,9 @@ def _report_remaining_debt(
         for item in broken_items:
             logger.info(f"File: {item['file']}")
             for issue in item["remaining_issues"]:
-                logger.info(f"  - [ ] {issue.get('type', 'Issue')}: {issue.get('message', '')}")
+                logger.info(
+                    f"  - [ ] {issue.get('type', 'Issue')}: {issue.get('message', '')}"
+                )
 
     # 2. Update Documentation
     logger.info("[Documentation] Generating updated docs for improvements...")
@@ -367,7 +435,9 @@ def _report_remaining_debt(
     print(" - Interaction archived to compressed local shard.")
 
     # 4. Intelligence and Synthesis
-    consult_external_models(fleet, broken_items, prompt_path=prompt_path, model_name=model_name)
+    consult_external_models(
+        fleet, broken_items, prompt_path=prompt_path, model_name=model_name
+    )
     _synthesize_collective_knowledge(fleet)
 
     # 5. Maintenance: Pruning

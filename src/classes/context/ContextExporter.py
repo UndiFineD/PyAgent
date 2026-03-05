@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@ import re
 
 __version__ = VERSION
 
+
 class ContextExporter:
     """Exports context to documentation systems.
 
@@ -46,7 +48,9 @@ class ContextExporter:
         """Return all supported export formats."""
         return list(ExportFormat)
 
-    def export(self, content: str, format: ExportFormat | None = None) -> ExportedContext:
+    def export(
+        self, content: str, format: ExportFormat | None = None
+    ) -> ExportedContext:
         """Export context to specified format.
 
         Args:
@@ -64,9 +68,7 @@ class ContextExporter:
         elif fmt == ExportFormat.RST:
             exported_content = self._to_rst(content)
         return ExportedContext(
-            format=fmt,
-            content=exported_content,
-            created_at=datetime.now().isoformat()
+            format=fmt, content=exported_content, created_at=datetime.now().isoformat()
         )
 
     def _to_html(self, content: str) -> str:
@@ -82,8 +84,16 @@ class ContextExporter:
         """Convert markdown to RST."""
         rst = content
         # Convert headers
-        rst = re.sub(r"^# (.+)$", lambda m: m.group(1) + "\n" +
-                     "=" * len(m.group(1)), rst, flags=re.M)
-        rst = re.sub(r"^## (.+)$", lambda m: m.group(1) + "\n" +
-                     "-" * len(m.group(1)), rst, flags=re.M)
+        rst = re.sub(
+            r"^# (.+)$",
+            lambda m: m.group(1) + "\n" + "=" * len(m.group(1)),
+            rst,
+            flags=re.M,
+        )
+        rst = re.sub(
+            r"^## (.+)$",
+            lambda m: m.group(1) + "\n" + "-" * len(m.group(1)),
+            rst,
+            flags=re.M,
+        )
         return rst

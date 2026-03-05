@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_contextmanager_exists():
     """Test that ContextManager class exists and is importable."""
-    assert 'ContextManager' in dir()
+    assert "ContextManager" in dir()
 
 
 def test_get_context_manager_exists():
@@ -59,4 +59,3 @@ def test_restore_context_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

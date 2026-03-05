@@ -1,8 +1,8 @@
-
 """
 Ruff Complexity Parser: Parses Ruff JSON output to extract and rank cyclomatic complexity violations.
 Ported from temp/check_complexity.py for re-use in the PyAgent analysis suite.
 """
+
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -68,8 +68,15 @@ def parse_ruff_complexity(json_file: str, threshold: int = 25):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Parse Ruff complexity reports.")
-    parser.add_argument("--input", type=str, default="ruff_output.json", help="Path to ruff_output.json.")
-    parser.add_argument("--threshold", type=int, default=25, help="Highlight threshold.")
+    parser.add_argument(
+        "--input",
+        type=str,
+        default="ruff_output.json",
+        help="Path to ruff_output.json.",
+    )
+    parser.add_argument(
+        "--threshold", type=int, default=25, help="Highlight threshold."
+    )
 
     args = parser.parse_args()
     parse_ruff_complexity(args.input, args.threshold)

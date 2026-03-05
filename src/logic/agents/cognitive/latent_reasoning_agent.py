@@ -73,13 +73,15 @@ class LatentReasoningAgent(BaseAgent):
 
         return {
             "is_consistent": not potential_bias,
-            "detected_bias": "English-centered reasoning drift"
-            if potential_bias
-            else "None",
+            "detected_bias": (
+                "English-centered reasoning drift" if potential_bias else "None"
+            ),
             "confidence": 0.98 if is_high_resource else 0.65,
-            "recommendation": "Safe to proceed"
-            if not potential_bias
-            else "Re-run COT in English and compare results.",
+            "recommendation": (
+                "Safe to proceed"
+                if not potential_bias
+                else "Re-run COT in English and compare results."
+            ),
         }
 
     @as_tool

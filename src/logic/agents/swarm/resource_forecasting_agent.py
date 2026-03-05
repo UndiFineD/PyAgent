@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,12 +41,17 @@ class ResourceForecastingAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def log_usage_snapshot(self, cpu: float, memory: float, tokens: float) -> None:
         """Logs a snapshot of resource usage for forecasting (Phase 92)."""
-        logging.info(f"Resource Usage Snapshot: CPU={cpu}%, MEM={memory}MB, TOK={tokens}")
+        logging.info(
+            f"Resource Usage Snapshot: CPU={cpu}%, MEM={memory}MB, TOK={tokens}"
+        )
 
     def predict_future_needs(self, horizon_hours: int = 1) -> dict[str, Any]:
         """Predicts future resource needs (Phase 92)."""
         _ = horizon_hours
-        return {"status": "Success", "prediction": {"compute": 15.0, "storage": 120.0, "network": 60.0}}
+        return {
+            "status": "Success",
+            "prediction": {"compute": 15.0, "storage": 120.0, "network": 60.0},
+        }
 
     def get_scaling_recommendation(self) -> list[str]:
         """Returns scaling recommendation based on predictions (Phase 92)."""

@@ -21,8 +21,13 @@ import threading
 from typing import Any, Callable, Dict, List, Optional
 
 from .base import ChatTemplate
-from .config import (BUILTIN_TEMPLATES, MODEL_TEMPLATE_MAP, TemplateConfig,
-                     TemplateInfo, TemplateType)
+from .config import (
+    BUILTIN_TEMPLATES,
+    MODEL_TEMPLATE_MAP,
+    TemplateConfig,
+    TemplateInfo,
+    TemplateType,
+)
 from .jinja import JinjaTemplate
 
 logger = logging.getLogger(__name__)
@@ -128,7 +133,9 @@ class ChatTemplateRegistry:
                 result = resolver(model_name)
                 if result:
                     return result
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning(f"Resolver error: {e}")
 
         # Default to ChatML

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,7 +36,9 @@ DEFAULT_TEMPLATES: list[ImprovementTemplate] = [
         name="add_tests",
         category=ImprovementCategory.TESTING,
         title_pattern="Add tests for {function_name}",
-        description_template=("Add unit tests to cover {function_name} including edge cases and error handling."),
+        description_template=(
+            "Add unit tests to cover {function_name} including edge cases and error handling."
+        ),
         default_effort=EffortEstimate.SMALL,
     ),
     ImprovementTemplate(
@@ -99,7 +102,9 @@ class ImprovementManager:
     ) -> Improvement:
         """Add a new improvement."""
         final_path = file_path if file_path is not None else self.base_file_path
-        improvement_id = hashlib.md5(f"{title}:{final_path}:{datetime.now().isoformat()}".encode()).hexdigest()[:8]
+        improvement_id = hashlib.md5(
+            f"{title}:{final_path}:{datetime.now().isoformat()}".encode()
+        ).hexdigest()[:8]
 
         improvement = Improvement(
             id=improvement_id,
@@ -123,7 +128,9 @@ class ImprovementManager:
         self._improvements = []
         current_priority = ImprovementPriority.MEDIUM
 
-        item_re = re.compile(r"^\s*-\s*\[([\sxX✓○\-/])] \*\*(.*?)\*\* \((.*?)\)(?:\s*<!--\s*id:\s*(\w+)\s*-->)?")
+        item_re = re.compile(
+            r"^\s*-\s*\[([\sxX✓○\-/])] \*\*(.*?)\*\* \((.*?)\)(?:\s*<!--\s*id:\s*(\w+)\s*-->)?"
+        )
         desc_re = re.compile(r"^\s+-\s*(.*)")
         section_re = re.compile(r"^##\s+(.*)")
 
@@ -159,7 +166,10 @@ class ImprovementManager:
                 category = ImprovementCategory.OTHER
                 cat_part = category_val.split(",")[0].strip()
                 for cat in ImprovementCategory:
-                    if cat.value.lower() == cat_part.lower() or cat.name.lower() == cat_part.lower():
+                    if (
+                        cat.value.lower() == cat_part.lower()
+                        or cat.name.lower() == cat_part.lower()
+                    ):
                         category = cat
                         break
 
@@ -215,7 +225,9 @@ class ImprovementManager:
                 continue
             try:
                 total += int(imp.effort.value)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
         return total
 

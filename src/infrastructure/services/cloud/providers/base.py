@@ -17,6 +17,7 @@ class RateLimitError(CloudProviderError):
 
 class CloudProviderBase:
     """Minimal base class for cloud providers used by tests."""
+
     def __init__(self, *args: Any, **kwargs: Any):
         pass
 

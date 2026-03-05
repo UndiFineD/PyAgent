@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ReduceOp"), "ReduceOp missing"
     assert hasattr(mod, "NCCLCommunicator"), "NCCLCommunicator missing"
     assert hasattr(mod, "CustomAllReduce"), "CustomAllReduce missing"
-

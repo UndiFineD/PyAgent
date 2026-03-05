@@ -16,8 +16,10 @@ import logging
 import re
 import zlib
 
+
 class ConflictResolution(Enum):
     """Strategies for merge conflict resolution."""
+
     OURS = "ours"
     THEIRS = "theirs"
     MANUAL = "manual"

@@ -4,12 +4,13 @@ import logging
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
+
 class RealityGraftingAgent(BaseAgent):
     """
     Phase 34: Reality Grafting.
     Automatically 'grafts' successful logic paths from DreamState simulations into production.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -23,11 +24,13 @@ class RealityGraftingAgent(BaseAgent):
         """
         Takes synthesized intelligence from a dream cycle and implements it.
         """
-        logging.info(f"RealityGrafting: Attempting to graft skill for '{focus_area}' into reality.")
-        
+        logging.info(
+            f"RealityGrafting: Attempting to graft skill for '{focus_area}' into reality."
+        )
+
         # In a production system, this would call SpecToolAgent to generate code.
         # For this implementation, we formalize the 'grafting' into a persistent log.
-        
+
         report = (
             f"### Reality Grafting Report\n"
             f"- **Focus Area**: {focus_area}\n"
@@ -35,7 +38,7 @@ class RealityGraftingAgent(BaseAgent):
             f"- **Logic Grafted**: {dream_output[:100]}...\n"
             f"- **Result**: New capability identified and prepared for deployment."
         )
-        
+
         logging.info(f"Grafting successful for {focus_area}")
         return report
 

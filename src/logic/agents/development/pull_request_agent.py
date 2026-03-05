@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,8 +30,9 @@ from typing import Any
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.compute.backend.local_context_recorder import \
-    LocalContextRecorder
+from src.infrastructure.compute.backend.local_context_recorder import (
+    LocalContextRecorder,
+)
 
 __version__ = VERSION
 
@@ -57,9 +59,13 @@ class PullRequestAgent(BaseAgent):
         if self.recorder:
             try:
                 meta = {"phase": 108, "type": "git_pr", "timestamp": time.time()}
-                self.recorder.record_interaction("pra", "git", action, result, meta=meta)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+                self.recorder.record_interaction(
+                    "pra", "git", action, result, meta=meta
+                )
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                # pylint: disable=broad-exception-caught
                 pass
 
     @as_tool
@@ -67,7 +73,9 @@ class PullRequestAgent(BaseAgent):
         """Generates a summary of changes between the current state and a branch."""
         try:
             # Get the diff
-            summary = subprocess.check_output(["git", "diff", branch, "--stat"], text=True, encoding="utf-8")
+            summary = subprocess.check_output(
+                ["git", "diff", branch, "--stat"], text=True, encoding="utf-8"
+            )
 
             # Get actual file changes for content analysis (limited)
             files = subprocess.check_output(
@@ -88,7 +96,9 @@ class PullRequestAgent(BaseAgent):
             res = "\n".join(report)
             self._record_pr_event("diff_summary", {"branch": branch}, res)
             return res
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             err = f"Error analyzing git diff: {e}"
             self._record_pr_event("diff_error", {"branch": branch}, err)
             return err
@@ -103,7 +113,9 @@ class PullRequestAgent(BaseAgent):
             if result.returncode != 0:
                 return f"Git history unavailable: {result.stderr}"
             return f"## 📜 Recent Git History\n\n```text\n{result.stdout}\n```"
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error reading git history: {e}"
 
     @as_tool
@@ -116,7 +128,9 @@ class PullRequestAgent(BaseAgent):
         # Respect configuration to avoid creating many branches/PRs by default
         allow = False
         try:
-            allow = bool(getattr(self, "_config", {}).get("allow_branch_creation", False))
+            allow = bool(
+                getattr(self, "_config", {}).get("allow_branch_creation", False)
+            )
         except Exception:
             allow = False
 
@@ -129,7 +143,9 @@ class PullRequestAgent(BaseAgent):
         try:
             subprocess.check_output(["git", "checkout", "-b", branch_name], text=True)
             return f"Successfully created and switched to branch `{branch_name}`."
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error creating branch: {e}"
 
     @as_tool
@@ -139,14 +155,18 @@ class PullRequestAgent(BaseAgent):
             subprocess.check_output(["git", "add", "."], text=True)
             subprocess.check_output(["git", "commit", "-m", message], text=True)
             return f"Changes staged and committed with message: '{message}'"
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error committing changes: {e}"
 
     @as_tool
     def generate_pr_description(self, branch: str = "main") -> str:
         """PR-Agent Pattern: Generates a full Markdown description for a Pull Request."""
         try:
-            diff = subprocess.check_output(["git", "diff", branch], text=True, encoding="utf-8")
+            diff = subprocess.check_output(
+                ["git", "diff", branch], text=True, encoding="utf-8"
+            )
             # In a real scenario, we'd pass this diff to an LLM.
             # Here we structure the template.
             description = [
@@ -172,7 +192,9 @@ class PullRequestAgent(BaseAgent):
             res = "\n".join(description)
             self._record_pr_event("pr_description", {"branch": branch}, res)
             return res
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             err = f"Error generating PR description: {e}"
             self._record_pr_event("pr_desc_error", {"branch": branch}, err)
             return err
@@ -181,7 +203,9 @@ class PullRequestAgent(BaseAgent):
     def review_changes(self) -> str:
         """Self-Review: Analyzes staged changes for security, style, and logic issues."""
         try:
-            staged_diff = subprocess.check_output(["git", "diff", "--cached"], text=True)
+            staged_diff = subprocess.check_output(
+                ["git", "diff", "--cached"], text=True
+            )
             if not staged_diff:
                 return "No staged changes to review."
 
@@ -194,7 +218,9 @@ class PullRequestAgent(BaseAgent):
                 "\n**Verdict**: Ready for commit.",
             ]
             return "\n".join(findings)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error during review: {e}"
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:

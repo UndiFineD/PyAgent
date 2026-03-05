@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ResourcePool shim for pytest collection."""
 
+
 class ResourcePool:
     def __init__(self):
         self._resources = []

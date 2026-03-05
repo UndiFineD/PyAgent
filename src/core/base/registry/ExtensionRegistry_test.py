@@ -33,32 +33,32 @@ except ImportError as e:
 
 def test_extensionmanager_exists():
     """Test that ExtensionManager class exists and is importable."""
-    assert 'ExtensionManager' in dir()
+    assert "ExtensionManager" in dir()
 
 
 def test_typedextensionmanager_exists():
     """Test that TypedExtensionManager class exists and is importable."""
-    assert 'TypedExtensionManager' in dir()
+    assert "TypedExtensionManager" in dir()
 
 
 def test_extensioninfo_exists():
     """Test that ExtensionInfo class exists and is importable."""
-    assert 'ExtensionInfo' in dir()
+    assert "ExtensionInfo" in dir()
 
 
 def test_multiextensionmanager_exists():
     """Test that MultiExtensionManager class exists and is importable."""
-    assert 'MultiExtensionManager' in dir()
+    assert "MultiExtensionManager" in dir()
 
 
 def test_lazyextensionmanager_exists():
     """Test that LazyExtensionManager class exists and is importable."""
-    assert 'LazyExtensionManager' in dir()
+    assert "LazyExtensionManager" in dir()
 
 
 def test_globalregistry_exists():
     """Test that GlobalRegistry class exists and is importable."""
-    assert 'GlobalRegistry' in dir()
+    assert "GlobalRegistry" in dir()
 
 
 def test_get_global_registry_exists():
@@ -89,4 +89,3 @@ def test_create_lazy_registry_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

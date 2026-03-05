@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "Precision"), "Precision missing"
     assert hasattr(mod, "HopperConfig"), "HopperConfig missing"
     assert hasattr(mod, "HopperSim"), "HopperSim missing"
-

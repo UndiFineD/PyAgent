@@ -33,35 +33,34 @@ except ImportError as e:
 
 def test_inferencerequest_exists():
     """Test that InferenceRequest class exists and is importable."""
-    assert 'InferenceRequest' in dir()
+    assert "InferenceRequest" in dir()
 
 
 def test_inferenceresponse_exists():
     """Test that InferenceResponse class exists and is importable."""
-    assert 'InferenceResponse' in dir()
+    assert "InferenceResponse" in dir()
 
 
 def test_cloudproviderbase_exists():
     """Test that CloudProviderBase class exists and is importable."""
-    assert 'CloudProviderBase' in dir()
+    assert "CloudProviderBase" in dir()
 
 
 def test_cloudprovidererror_exists():
     """Test that CloudProviderError class exists and is importable."""
-    assert 'CloudProviderError' in dir()
+    assert "CloudProviderError" in dir()
 
 
 def test_ratelimiterror_exists():
     """Test that RateLimitError class exists and is importable."""
-    assert 'RateLimitError' in dir()
+    assert "RateLimitError" in dir()
 
 
 def test_authenticationerror_exists():
     """Test that AuthenticationError class exists and is importable."""
-    assert 'AuthenticationError' in dir()
+    assert "AuthenticationError" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

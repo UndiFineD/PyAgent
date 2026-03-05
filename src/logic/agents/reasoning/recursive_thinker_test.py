@@ -33,25 +33,24 @@ except ImportError as e:
 
 def test_llminterface_exists():
     """Test that LLMInterface class exists and is importable."""
-    assert 'LLMInterface' in dir()
+    assert "LLMInterface" in dir()
 
 
 def test_roundresult_exists():
     """Test that RoundResult class exists and is importable."""
-    assert 'RoundResult' in dir()
+    assert "RoundResult" in dir()
 
 
 def test_recursivethinker_exists():
     """Test that RecursiveThinker class exists and is importable."""
-    assert 'RecursiveThinker' in dir()
+    assert "RecursiveThinker" in dir()
 
 
 def test_mockthinkerllm_exists():
     """Test that MockThinkerLLM class exists and is importable."""
-    assert 'MockThinkerLLM' in dir()
+    assert "MockThinkerLLM" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

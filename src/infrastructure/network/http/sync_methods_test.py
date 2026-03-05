@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_synchttpmixin_exists():
     """Test that SyncHTTPMixin class exists and is importable."""
-    assert 'SyncHTTPMixin' in dir()
+    assert "SyncHTTPMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

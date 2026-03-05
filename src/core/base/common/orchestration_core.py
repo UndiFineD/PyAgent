@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -66,7 +67,9 @@ class OrchestrationCore(BaseCore):
             if agent_type in visited:
                 return
             temp.add(agent_type)
-            agent_config = next(filter(lambda a: a.agent_type == agent_type, self.agents), None)
+            agent_config = next(
+                filter(lambda a: a.agent_type == agent_type, self.agents), None
+            )
             if agent_config:
                 # Visit all dependencies regarding the agent functionally
                 list(map(visit, agent_config.depends_on))
@@ -75,7 +78,10 @@ class OrchestrationCore(BaseCore):
             sorted_agents.append(agent_type)
 
         # Build list regarding unvisited agents and visit them
-        unvisited = filter(lambda a: a.agent_type not in visited, sorted(self.agents, key=lambda a: a.order))
+        unvisited = filter(
+            lambda a: a.agent_type not in visited,
+            sorted(self.agents, key=lambda a: a.order),
+        )
         list(map(lambda a: visit(a.agent_type), unvisited))
         self.execution_order = sorted_agents
 
@@ -89,31 +95,34 @@ class OrchestrationCore(BaseCore):
         Executes the registered agents in the calculated order.
         """
         self.results.clear()
-        
+
         def run_agent(carry: str, agent_type: str) -> str:
-            agent_config = next(filter(lambda a: a.agent_type == agent_type, self.agents), None)
+            agent_config = next(
+                filter(lambda a: a.agent_type == agent_type, self.agents), None
+            )
             if not agent_config:
                 return carry
-            
+
             agent = agent_factory(agent_type, file_path)
             enhanced_prompt = prompt
-            
+
             def add_context(dep: str) -> str:
                 if dep in self.results:
                     return f"\n\nPrevious {dep} result:\n{self.results[dep][:500]}"
                 return ""
-            
+
             # Aggregate dependency context functionally
             enhanced_prompt += "".join(map(add_context, agent_config.depends_on))
-            
+
             if carry and hasattr(agent, "previous_content"):
                 agent.previous_content = carry
-                
+
             result = agent.improve_content(enhanced_prompt)
             self.results[agent_type] = result
             return result
 
         from functools import reduce
+
         reduce(run_agent, self.execution_order, "")
         return self.results
 
@@ -124,9 +133,13 @@ class QualityScorer:
     Evaluates text quality based on weighted criteria.
     """
 
-    criteria: Dict[str, tuple[Callable[[str], float], float]] = field(default_factory=dict)
+    criteria: Dict[str, tuple[Callable[[str], float], float]] = field(
+        default_factory=dict
+    )
 
-    def add_criterion(self, name: str, func: Callable[[str], float], weight: float = 1.0) -> None:
+    def add_criterion(
+        self, name: str, func: Callable[[str], float], weight: float = 1.0
+    ) -> None:
         """
         Adds a single scoring criterion.
         """
@@ -138,7 +151,7 @@ class QualityScorer:
         """
         if not self.criteria:
             return min(1.0, len(text) / 200.0)
-        
+
         # Calculate totals regarding scores and weights functionally
         def _get_vals(pair):
             func, weight = pair
@@ -147,7 +160,7 @@ class QualityScorer:
         sums = list(map(_get_vals, self.criteria.values()))
         total_score = sum(map(lambda x: x[0], sums))
         total_weight = sum(map(lambda x: x[1], sums))
-        
+
         return total_score / total_weight if total_weight > 0 else 0.0
 
 
@@ -165,7 +178,7 @@ class ABTest:
     def __post_init__(self) -> None:
         # Initialize variant counts functionally
         list(map(lambda v: self.variant_counts.update({v: 0}), self.variants))
-        
+
         if not self.weights:
             self.weights = [1.0 / len(self.variants)] * len(self.variants)
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -43,7 +44,9 @@ class ProfilingCore:
     Identifies slow methods and calculates optimization priority.
     """
 
-    def analyze_stats(self, pstats_obj: pstats.Stats, limit: int = 10) -> list[ProfileStats]:
+    def analyze_stats(
+        self, pstats_obj: pstats.Stats, limit: int = 10
+    ) -> list[ProfileStats]:
         """Converts raw pstats into a list of pure ProfileStats dataclasses."""
         results: list[Any] = []
         pstats_obj.sort_stats("cumulative")
@@ -64,7 +67,9 @@ class ProfilingCore:
 
         return results
 
-    def identify_bottlenecks(self, stats: list[ProfileStats], threshold_ms: float = 100.0) -> list[str]:
+    def identify_bottlenecks(
+        self, stats: list[ProfileStats], threshold_ms: float = 100.0
+    ) -> list[str]:
         """Identifies functions exceeding the time threshold."""
         if rc:
             try:
@@ -79,9 +84,11 @@ class ProfilingCore:
                     for s in stats
                 ]
                 return rc.identify_bottlenecks(stats_list, threshold_ms)  # type: ignore[attr-defined]
-            except Exception: # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
-        return [s.function_name for s in stats if s.total_time > (threshold_ms / 1000.0)]
+        return [
+            s.function_name for s in stats if s.total_time > (threshold_ms / 1000.0)
+        ]
 
     def calculate_optimization_priority(self, stats: ProfileStats) -> float:
         """Heuristic for optimization: time * frequency."""

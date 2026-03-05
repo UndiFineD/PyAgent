@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,7 +35,9 @@ def test_ecosystem_features() -> None:
     fleet = FleetManager(str(root))
 
     print("--- Phase 10: Human-Agent Teaming ---")
-    approval_id = fleet.hitl.request_approval("KernelAgent", "Delete Root Directory", {"path": "/"})
+    approval_id = fleet.hitl.request_approval(
+        "KernelAgent", "Delete Root Directory", {"path": "/"}
+    )
     print(f"Requested HITL Approval: {approval_id}")
     status = fleet.hitl.check_approval_status(approval_id)
 
@@ -48,7 +51,9 @@ def test_ecosystem_features() -> None:
     spec = fleet.api_engine.generate_openapi_spec()
     print(f"OpenAPI Spec (Sample): {spec[:100]}...")
 
-    ext_msg = fleet.api_engine.register_external_tool({"name": "SlackNotifier", "url": "https://api.slack.com"})
+    ext_msg = fleet.api_engine.register_external_tool(
+        {"name": "SlackNotifier", "url": "https://api.slack.com"}
+    )
     print(ext_msg)
 
     print("\nEcosystem features validation COMPLETED.")

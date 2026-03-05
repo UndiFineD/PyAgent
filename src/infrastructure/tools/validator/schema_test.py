@@ -49,4 +49,3 @@ def test_validate_argument_type_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

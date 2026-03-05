@@ -2,6 +2,7 @@
 try:
     from src.infrastructure.services.dev.agent_tests.debugging import *  # type: ignore
 except Exception:
+
     def ExecutionReplayer(*a, **k):
         raise RuntimeError("debugging not available")
 
@@ -13,5 +14,6 @@ except Exception:
 
     def TestReplayer(*a, **k):
         raise RuntimeError("debugging not available")
+
 
 __all__ = ["ExecutionReplayer", "TestProfiler", "TestRecorder", "TestReplayer"]

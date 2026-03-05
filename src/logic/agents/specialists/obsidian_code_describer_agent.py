@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,6 +43,7 @@ __version__ = VERSION
 
 class NoteType(Enum):
     """Types of notes in the Obsidian vault."""
+
     FILE = "file"
     CLASS = "class"
     FUNCTION = "function"
@@ -146,7 +148,11 @@ class ObsidianCodeDescriberAgent(BaseAgent):
 
     @as_tool
     async def describe_directory_to_vault(
-        self, source_dir: str, vault_path: str, file_pattern: str = "*.py", recursive: bool = True
+        self,
+        source_dir: str,
+        vault_path: str,
+        file_pattern: str = "*.py",
+        recursive: bool = True,
     ) -> Dict[str, Any]:
         """Documents an entire directory to an Obsidian vault."""
         source = Path(source_dir)
@@ -171,9 +177,13 @@ class ObsidianCodeDescriberAgent(BaseAgent):
                     include_classes=True,
                     include_functions=False,  # Only top-level for bulk
                 )
-                results.append({"file": str(file_path), "success": result.get("success")})
+                results.append(
+                    {"file": str(file_path), "success": result.get("success")}
+                )
             except (AttributeError, RuntimeError, TypeError, IOError) as e:
-                results.append({"file": str(file_path), "success": False, "error": str(e)})
+                results.append(
+                    {"file": str(file_path), "success": False, "error": str(e)}
+                )
 
         # Generate index note
         index_note = self._generate_index_note(source.name, results)
@@ -183,11 +193,13 @@ class ObsidianCodeDescriberAgent(BaseAgent):
             "success": True,
             "files_processed": len(files),
             "results": results,
-            "vault_path": str(self._vault_path)
+            "vault_path": str(self._vault_path),
         }
 
     @as_tool
-    async def generate_concept_note(self, concept: str, related_files: List[str], vault_path: str) -> Dict[str, Any]:
+    async def generate_concept_note(
+        self, concept: str, related_files: List[str], vault_path: str
+    ) -> Dict[str, Any]:
         """Generates a concept note linking multiple code files."""
         self._vault_path = Path(vault_path)
         self._vault_path.mkdir(parents=True, exist_ok=True)
@@ -204,7 +216,12 @@ class ObsidianCodeDescriberAgent(BaseAgent):
             f"Related code files:\n"
             + "\n".join([f"- {f['path']}" for f in file_contents])
             + "\n\nCode excerpts:\n"
-            + "\n---\n".join([f"**{f['path']}**:\n```python\n{f['content']}\n```" for f in file_contents])
+            + "\n---\n".join(
+                [
+                    f"**{f['path']}**:\n```python\n{f['content']}\n```"
+                    for f in file_contents
+                ]
+            )
             + "\n\nCreate a comprehensive concept note that:\n"
             "1. Explains the concept\n"
             "2. Links to the related files using [[wikilinks]]\n"
@@ -228,10 +245,17 @@ class ObsidianCodeDescriberAgent(BaseAgent):
 
         saved_path = self._save_note(note)
 
-        return {"success": True, "note_path": saved_path, "concept": concept, "related_files": len(related_files)}
+        return {
+            "success": True,
+            "note_path": saved_path,
+            "concept": concept,
+            "related_files": len(related_files),
+        }
 
     @as_tool
-    async def update_frontmatter(self, note_path: str, frontmatter_updates: Dict[str, Any]) -> Dict[str, Any]:
+    async def update_frontmatter(
+        self, note_path: str, frontmatter_updates: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Updates the YAML frontmatter of an existing note."""
         path = Path(note_path)
         if not path.exists():
@@ -290,7 +314,9 @@ class ObsidianCodeDescriberAgent(BaseAgent):
 
         return entities
 
-    async def _generate_file_note(self, target: Path, code: str, entities: List[CodeEntity]) -> VaultNote:
+    async def _generate_file_note(
+        self, target: Path, code: str, entities: List[CodeEntity]
+    ) -> VaultNote:
         """Generates a note for a file."""
         entity_links = ", ".join([f"[[{e.name}]]" for e in entities])
 
@@ -348,7 +374,9 @@ class ObsidianCodeDescriberAgent(BaseAgent):
 
         return VaultNote(
             title=entity.name,
-            note_type=NoteType.CLASS if entity.entity_type == "class" else NoteType.FUNCTION,
+            note_type=(
+                NoteType.CLASS if entity.entity_type == "class" else NoteType.FUNCTION
+            ),
             content=content,
             frontmatter={
                 "type": entity.entity_type,
@@ -369,7 +397,11 @@ class ObsidianCodeDescriberAgent(BaseAgent):
             title=f"{name} MOC",
             note_type=NoteType.INDEX,
             content=content,
-            frontmatter={"type": "moc", "created": time.strftime("%Y-%m-%d"), "tags": ["moc", "index"]},
+            frontmatter={
+                "type": "moc",
+                "created": time.strftime("%Y-%m-%d"),
+                "tags": ["moc", "index"],
+            },
         )
 
     def _generate_index_note(self, name: str, results: List[Dict]) -> VaultNote:

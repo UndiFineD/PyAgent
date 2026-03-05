@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_rsscollector_exists():
     """Test that RssCollector class exists and is importable."""
-    assert 'RssCollector' in dir()
+    assert "RssCollector" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,47 +33,47 @@ except ImportError as e:
 
 def test_metrictype_exists():
     """Test that MetricType class exists and is importable."""
-    assert 'MetricType' in dir()
+    assert "MetricType" in dir()
 
 
 def test_alertlevel_exists():
     """Test that AlertLevel class exists and is importable."""
-    assert 'AlertLevel' in dir()
+    assert "AlertLevel" in dir()
 
 
 def test_metricsconfig_exists():
     """Test that MetricsConfig class exists and is importable."""
-    assert 'MetricsConfig' in dir()
+    assert "MetricsConfig" in dir()
 
 
 def test_blockmetricsstate_exists():
     """Test that BlockMetricsState class exists and is importable."""
-    assert 'BlockMetricsState' in dir()
+    assert "BlockMetricsState" in dir()
 
 
 def test_kvcacheevictionevent_exists():
     """Test that KVCacheEvictionEvent class exists and is importable."""
-    assert 'KVCacheEvictionEvent' in dir()
+    assert "KVCacheEvictionEvent" in dir()
 
 
 def test_cachealert_exists():
     """Test that CacheAlert class exists and is importable."""
-    assert 'CacheAlert' in dir()
+    assert "CacheAlert" in dir()
 
 
 def test_cachemetricssummary_exists():
     """Test that CacheMetricsSummary class exists and is importable."""
-    assert 'CacheMetricsSummary' in dir()
+    assert "CacheMetricsSummary" in dir()
 
 
 def test_kvcachemetricscollector_exists():
     """Test that KVCacheMetricsCollector class exists and is importable."""
-    assert 'KVCacheMetricsCollector' in dir()
+    assert "KVCacheMetricsCollector" in dir()
 
 
 def test_batchmetricscollector_exists():
     """Test that BatchMetricsCollector class exists and is importable."""
-    assert 'BatchMetricsCollector' in dir()
+    assert "BatchMetricsCollector" in dir()
 
 
 def test_create_metrics_collector_exists():
@@ -84,4 +84,3 @@ def test_create_metrics_collector_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_turntracker_exists():
     """Test that TurnTracker class exists and is importable."""
-    assert 'TurnTracker' in dir()
+    assert "TurnTracker" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

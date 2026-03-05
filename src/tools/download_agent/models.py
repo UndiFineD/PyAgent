@@ -23,6 +23,7 @@ from typing import Dict
 @dataclass
 class DownloadResult:
     """Result of a download operation."""
+
     url: str
     success: bool
     destination: str
@@ -35,6 +36,7 @@ class DownloadResult:
 @dataclass
 class DownloadConfig:
     """Configuration for download operations."""
+
     urls_file: str = "docs/download/urls.txt"
     base_dir: str = "."
     max_retries: int = 3

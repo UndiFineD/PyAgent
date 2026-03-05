@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_mergeconflict_exists():
     """Test that MergeConflict class exists and is importable."""
-    assert 'MergeConflict' in dir()
+    assert "MergeConflict" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

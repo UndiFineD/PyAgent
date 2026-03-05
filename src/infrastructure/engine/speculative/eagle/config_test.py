@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "EagleMethod"), "EagleMethod missing"
     assert hasattr(mod, "AttentionBackend"), "AttentionBackend missing"
     assert hasattr(mod, "EagleConfig"), "EagleConfig missing"
-

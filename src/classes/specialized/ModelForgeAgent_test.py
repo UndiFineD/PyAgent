@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_modelforgeagent_exists():
     """Test that ModelForgeAgent class exists and is importable."""
-    assert 'ModelForgeAgent' in dir()
+    assert "ModelForgeAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

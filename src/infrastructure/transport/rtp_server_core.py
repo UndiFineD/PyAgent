@@ -18,9 +18,11 @@ import struct
 from dataclasses import dataclass, field
 from typing import Dict, Optional, Callable, Any, Tuple
 
+
 @dataclass
 class RTPSession:
     """Represents an active RTP session for a call."""
+
     call_id: str
     local_port: int
     socket: socket.socket
@@ -35,19 +37,19 @@ class RTPSession:
     frames_received: int = 0
     frames_processed: int = 0
 
+
 class RTPServerCore:
     """
     Core logic for handling bidirectional RTP audio streams.
     Harvested from .external/Asterisk-AI-Voice-Agent
     """
+
     RTP_VERSION = 2
     RTP_HEADER_SIZE = 12
     SAMPLE_RATE = 8000  # Default G.711 rate
-    
+
     def __init__(
-        self,
-        host: str = "0.0.0.0",
-        port_range: Tuple[int, int] = (10000, 20000)
+        self, host: str = "0.0.0.0", port_range: Tuple[int, int] = (10000, 20000)
     ):
         self.host = host
         self.port_range = port_range
@@ -70,7 +72,7 @@ class RTPServerCore:
     def allocate_session(self, call_id: str) -> int:
         """Allocates a port and creates a new RTP session."""
         # Port allocation logic here
-        return 10000 # Placeholder
+        return 10000  # Placeholder
 
     def handle_packet(self, data: bytes, addr: Tuple[str, int]):
         """Parses and processes an incoming RTP packet."""
@@ -87,12 +89,12 @@ class RTPServerCore:
         seq_num = struct.unpack("!H", data[2:4])[0]
         timestamp = struct.unpack("!I", data[4:8])[0]
         ssrc = struct.unpack("!I", data[8:12])[0]
-        payload = data[self.RTP_HEADER_SIZE:]
+        payload = data[self.RTP_HEADER_SIZE :]
 
         return {
             "payload_type": payload_type,
             "seq_num": seq_num,
             "timestamp": timestamp,
             "ssrc": ssrc,
-            "payload": payload
+            "payload": payload,
         }

@@ -16,17 +16,19 @@ import asyncio
 from typing import List, Dict, Optional, Any
 from pydantic import BaseModel
 
+
 class MemoryItem(BaseModel):
     id: str
     content: str
     metadata: Dict[str, Any] = {}
+
 
 class MetacognitiveMemoryCore:
     """
     Core logic for agents to manage their own session memory using tool calls.
     Harvested from .external/agno
     """
-    
+
     def __init__(self, agent_id: str):
         self.agent_id = agent_id
         self.memories: Dict[str, MemoryItem] = {}
@@ -37,9 +39,9 @@ class MetacognitiveMemoryCore:
         self.counter += 1
         m_id = f"mem_{self.counter}_{self.agent_id}"
         self.memories[m_id] = MemoryItem(
-            id=m_id, 
-            content=content, 
-            metadata={"importance": importance, "created_at": "now"}
+            id=m_id,
+            content=content,
+            metadata={"importance": importance, "created_at": "now"},
         )
         return f"Memory stored as {m_id}"
 
@@ -74,11 +76,17 @@ class MetacognitiveMemoryCore:
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "content": {"type": "string", "description": "The fact to remember."},
-                        "importance": {"type": "number", "description": "Scale 0.0 to 1.0."}
+                        "content": {
+                            "type": "string",
+                            "description": "The fact to remember.",
+                        },
+                        "importance": {
+                            "type": "number",
+                            "description": "Scale 0.0 to 1.0.",
+                        },
                     },
-                    "required": ["content"]
-                }
+                    "required": ["content"],
+                },
             },
             {
                 "name": "delete_memory",
@@ -86,9 +94,12 @@ class MetacognitiveMemoryCore:
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "m_id": {"type": "string", "description": "The ID of the memory to delete."}
+                        "m_id": {
+                            "type": "string",
+                            "description": "The ID of the memory to delete.",
+                        }
                     },
-                    "required": ["m_id"]
-                }
-            }
+                    "required": ["m_id"],
+                },
+            },
         ]

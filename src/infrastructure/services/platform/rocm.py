@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,8 +25,14 @@ import logging
 from typing import List, Set
 
 from .base import Platform
-from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
-                     MemoryInfo, PlatformType, QuantizationType)
+from .models import (
+    AttentionBackend,
+    DeviceCapability,
+    DeviceFeature,
+    MemoryInfo,
+    PlatformType,
+    QuantizationType,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -93,7 +100,11 @@ class RocmPlatform(Platform):
         features = DeviceFeature.FP16 | DeviceFeature.BF16 | DeviceFeature.INT8
         name = self.get_device_name(device_id).lower()
         if "mi250" in name or "mi300" in name:
-            features |= DeviceFeature.TENSOR_CORES | DeviceFeature.FLASH_ATTENTION | DeviceFeature.INFINITY_FABRIC
+            features |= (
+                DeviceFeature.TENSOR_CORES
+                | DeviceFeature.FLASH_ATTENTION
+                | DeviceFeature.INFINITY_FABRIC
+            )
         if self.get_device_count() > 1:
             features |= DeviceFeature.MULTI_GPU
         return features
@@ -122,5 +133,7 @@ class RocmPlatform(Platform):
         torch = self._get_torch()
         torch.cuda.synchronize()
 
-    def select_attention_backend(self, capability: DeviceCapability) -> AttentionBackend:
+    def select_attention_backend(
+        self, capability: DeviceCapability
+    ) -> AttentionBackend:
         return AttentionBackend.ROCM

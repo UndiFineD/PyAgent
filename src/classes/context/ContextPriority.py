@@ -16,8 +16,10 @@ import logging
 import re
 import zlib
 
+
 class ContextPriority(Enum):
     """Priority levels for context relevance."""
+
     CRITICAL = 5
     HIGH = 4
     MEDIUM = 3

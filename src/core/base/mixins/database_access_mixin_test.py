@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_databaseaccessmixin_exists():
     """Test that DatabaseAccessMixin class exists and is importable."""
-    assert 'DatabaseAccessMixin' in dir()
+    assert "DatabaseAccessMixin" in dir()
 
 
 def test_databaseaccessmixin_instantiation():
@@ -45,4 +45,3 @@ def test_databaseaccessmixin_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

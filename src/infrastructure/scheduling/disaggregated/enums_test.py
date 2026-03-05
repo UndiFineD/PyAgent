@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_instancerole_exists():
     """Test that InstanceRole class exists and is importable."""
-    assert 'InstanceRole' in dir()
+    assert "InstanceRole" in dir()
 
 
 def test_schedulingpolicy_exists():
     """Test that SchedulingPolicy class exists and is importable."""
-    assert 'SchedulingPolicy' in dir()
+    assert "SchedulingPolicy" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

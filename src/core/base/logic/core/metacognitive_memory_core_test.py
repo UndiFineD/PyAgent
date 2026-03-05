@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_memoryitem_exists():
     """Test that MemoryItem class exists and is importable."""
-    assert 'MemoryItem' in dir()
+    assert "MemoryItem" in dir()
 
 
 def test_metacognitivememorycore_exists():
     """Test that MetacognitiveMemoryCore class exists and is importable."""
-    assert 'MetacognitiveMemoryCore' in dir()
+    assert "MetacognitiveMemoryCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

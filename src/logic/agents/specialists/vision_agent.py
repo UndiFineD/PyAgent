@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -55,7 +56,9 @@ class VisionAgent(BaseAgent):
         self._analysis_cache: Dict[str, Dict] = {}
 
     @as_tool
-    async def analyze_image(self, image_source: str, query: str = "Describe this image in detail.") -> Dict[str, Any]:
+    async def analyze_image(
+        self, image_source: str, query: str = "Describe this image in detail."
+    ) -> Dict[str, Any]:
         """
         Analyzes an image and answers a query about it.
         image_source: Either a base64 string, file path, or URL.
@@ -94,7 +97,11 @@ class VisionAgent(BaseAgent):
 
         result = await self.improve_content(prompt)
 
-        return {"extracted_text": result, "word_count": len(result.split()), "status": "success"}
+        return {
+            "extracted_text": result,
+            "word_count": len(result.split()),
+            "status": "success",
+        }
 
     @as_tool
     async def analyze_code_screenshot(self, image_source: str) -> Dict[str, Any]:
@@ -140,7 +147,9 @@ class VisionAgent(BaseAgent):
         }
 
     @as_tool
-    async def analyze_diagram(self, image_source: str, diagram_type: str = "auto") -> Dict[str, Any]:
+    async def analyze_diagram(
+        self, image_source: str, diagram_type: str = "auto"
+    ) -> Dict[str, Any]:
         """Analyzes flowcharts, UML diagrams, architecture diagrams, etc."""
         b64_data = await self._resolve_image_source(image_source)
         if not b64_data:
@@ -158,7 +167,9 @@ class VisionAgent(BaseAgent):
         return {"diagram_type": diagram_type, "analysis": result, "status": "success"}
 
     @as_tool
-    async def compare_images(self, image1_source: str, image2_source: str) -> Dict[str, Any]:
+    async def compare_images(
+        self, image1_source: str, image2_source: str
+    ) -> Dict[str, Any]:
         """Compares two images and identifies differences."""
         b64_1 = await self._resolve_image_source(image1_source)
         b64_2 = await self._resolve_image_source(image2_source)
@@ -178,7 +189,9 @@ class VisionAgent(BaseAgent):
         return {"comparison": result, "status": "success"}
 
     @as_tool
-    async def detect_objects(self, image_source: str, target_objects: Optional[List[str]] = None) -> Dict[str, Any]:
+    async def detect_objects(
+        self, image_source: str, target_objects: Optional[List[str]] = None
+    ) -> Dict[str, Any]:
         """Detects and locates objects in an image."""
         b64_data = await self._resolve_image_source(image_source)
         if not b64_data:
@@ -198,7 +211,11 @@ class VisionAgent(BaseAgent):
 
         result = await self.improve_content(prompt)
 
-        return {"target_objects": target_objects, "detections": result, "status": "success"}
+        return {
+            "target_objects": target_objects,
+            "detections": result,
+            "status": "success",
+        }
 
     # pylint: disable=too-many-return-statements
     async def _resolve_image_source(self, source: str) -> Optional[str]:
@@ -214,7 +231,7 @@ class VisionAgent(BaseAgent):
         path = Path(source)
         if path.exists() and path.is_file():
             try:
-                with open(path, 'rb') as f:
+                with open(path, "rb") as f:
                     return base64.b64encode(f.read()).decode("utf-8")
             except (IOError, OSError, AttributeError) as e:
                 logging.error(f"VisionAgent: Failed to read file {source}: {e}")
@@ -222,14 +239,18 @@ class VisionAgent(BaseAgent):
 
         # URL
         if source.startswith(("http://", "https://")):
-            from src.infrastructure.security.network.firewall import ReverseProxyFirewall
+            from src.infrastructure.security.network.firewall import (
+                ReverseProxyFirewall,
+            )
 
             firewall = ReverseProxyFirewall()
             try:
                 response = firewall.get(source, timeout=10)
                 if response.status_code == 200:
                     return base64.b64encode(response.content).decode("utf-8")
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"VisionAgent: Failed to fetch URL {source}: {e}")
                 return None
 

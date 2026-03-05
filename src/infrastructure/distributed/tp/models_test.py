@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_parallelmode_exists():
     """Test that ParallelMode class exists and is importable."""
-    assert 'ParallelMode' in dir()
+    assert "ParallelMode" in dir()
 
 
 def test_parallelconfig_exists():
     """Test that ParallelConfig class exists and is importable."""
-    assert 'ParallelConfig' in dir()
+    assert "ParallelConfig" in dir()
 
 
 def test_rankinfo_exists():
     """Test that RankInfo class exists and is importable."""
-    assert 'RankInfo' in dir()
+    assert "RankInfo" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

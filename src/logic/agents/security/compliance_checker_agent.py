@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -39,7 +40,9 @@ class ComplianceChecker:
     SECURITY_KEYWORDS = ["vulnerability", "cve", "security", "patch", "exploit"]
     LEGAL_KEYWORDS = ["license", "copyright", "trademark", "patent"]
 
-    def check_security_compliance(self, entries: list[ChangelogEntry]) -> ComplianceResult:
+    def check_security_compliance(
+        self, entries: list[ChangelogEntry]
+    ) -> ComplianceResult:
         """Check security compliance.
 
         Args:
@@ -54,8 +57,12 @@ class ComplianceChecker:
         for entry in entries:
             if any(kw in entry.description.lower() for kw in self.SECURITY_KEYWORDS):
                 if entry.category != "Security":
-                    issues.append(f"Security-related entry not in Security category: {entry.description[:50]}")
-                    recommendations.append("Move security-related entries to the Security section")
+                    issues.append(
+                        f"Security-related entry not in Security category: {entry.description[:50]}"
+                    )
+                    recommendations.append(
+                        "Move security-related entries to the Security section"
+                    )
         return ComplianceResult(
             category=ComplianceCategory.SECURITY,
             passed=not issues,
@@ -78,7 +85,9 @@ class ComplianceChecker:
         for entry in entries:
             if any(kw in entry.description.lower() for kw in self.LEGAL_KEYWORDS):
                 issues.append(f"Entry may need legal review: {entry.description[:50]}")
-                recommendations.append("Have legal team review license / copyright changes")
+                recommendations.append(
+                    "Have legal team review license / copyright changes"
+                )
         return ComplianceResult(
             category=ComplianceCategory.LEGAL,
             passed=not issues,

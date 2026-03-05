@@ -16,9 +16,11 @@ import logging
 import re
 import zlib
 
+
 @dataclass
 class ValidationRule:
     """Rule for validating context content."""
+
     name: str
     pattern: str
     message: str

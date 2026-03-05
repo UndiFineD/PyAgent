@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,8 +28,10 @@ __version__ = VERSION
 if TYPE_CHECKING:
     from src.core.base.BaseAgent import BaseAgent
 
+
 class AgentRegistry:
     """Singleton registry to track all active agents."""
+
     _instance: AgentRegistry | None = None
     _agents: dict[str, BaseAgent] = {}
 
@@ -39,7 +42,7 @@ class AgentRegistry:
 
     def register(self, agent: BaseAgent) -> None:
         """Register an agent instance."""
-        name = getattr(agent, 'agent_name', str(id(agent)))
+        name = getattr(agent, "agent_name", str(id(agent)))
         self._agents[name] = agent
         logging.debug(f"Agent '{name}' registered.")
 

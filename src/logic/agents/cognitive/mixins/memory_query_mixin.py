@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,7 +20,6 @@ from __future__ import annotations
 # limitations under the License.
 
 
-
 """
 MemoryQueryMixin: Provides hierarchical memory query logic for Memory Agents in PyAgent.
 Supports multi-level memory search, retrieval, and query optimization.
@@ -32,7 +32,9 @@ from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.base_utilities import as_tool
 
 if TYPE_CHECKING:
-    from src.logic.agents.cognitive.hierarchical_memory_agent import HierarchicalMemoryAgent
+    from src.logic.agents.cognitive.hierarchical_memory_agent import (
+        HierarchicalMemoryAgent,
+    )
 
     __version__ = VERSION
 

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_pipelineparalleltransfer_exists():
     """Test that PipelineParallelTransfer class exists and is importable."""
-    assert 'PipelineParallelTransfer' in dir()
+    assert "PipelineParallelTransfer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

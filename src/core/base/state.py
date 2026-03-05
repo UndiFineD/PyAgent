@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,10 +30,13 @@ from typing import Dict, Any, Optional, List
 
 __version__ = VERSION
 
+
 class EmergencyEventLog:
     """Phase 278: Ring buffer recording the last 10 filesystem actions for recovery."""
-    
-    def __init__(self, log_path: Path = Path("data/logs/emergency_recovery.log")) -> None:
+
+    def __init__(
+        self, log_path: Path = Path("data/logs/emergency_recovery.log")
+    ) -> None:
         self.log_path = log_path
         self.buffer = collections.deque(maxlen=10)
         self._load_buffer()
@@ -54,12 +58,14 @@ class EmergencyEventLog:
         except Exception as e:
             logging.error(f"StructuredLogger: Failed to write emergency log: {e}")
 
+
 # Global instance for easy access (Phase 278)
 EMERGENCY_LOG = EmergencyEventLog()
 
+
 class StateTransaction:
     """Phase 267: Transactional context manager for agent file operations."""
-    
+
     def __init__(self, target_files: list[Path]) -> None:
         self.target_files = target_files
         self.backups: dict[Path, Path] = {}
@@ -69,19 +75,22 @@ class StateTransaction:
 
     def __enter__(self) -> StateTransaction:
         import time
+
         for file in self.target_files:
             if file.exists():
                 backup_path = self.temp_dir / f"{file.name}_{self.id}.bak"
                 shutil.copy2(file, backup_path)
                 self.backups[file] = backup_path
-        logging.info(f"Transaction {self.id} started. {len(self.backups)} files backed up.")
+        logging.info(
+            f"Transaction {self.id} started. {len(self.backups)} files backed up."
+        )
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         if exc_type is not None:
-             self.rollback()
+            self.rollback()
         else:
-             self.commit()
+            self.commit()
 
     def commit(self) -> None:
         """Discard backups after successful transaction."""
@@ -98,11 +107,19 @@ class StateTransaction:
                 backup.unlink()
         logging.warning(f"Transaction {self.id} ROLLED BACK. Files restored.")
 
+
 class AgentStateManager:
     """Manages saving and loading agent state to/from disk."""
-    
+
     @staticmethod
-    def save_state(file_path: Path, current_state: str, token_usage: int, state_data: dict[str, Any], history_len: int, path: Path | None = None) -> None:
+    def save_state(
+        file_path: Path,
+        current_state: str,
+        token_usage: int,
+        state_data: dict[str, Any],
+        history_len: int,
+        path: Path | None = None,
+    ) -> None:
         """Save agent state to disk."""
         state_path: Path = path or file_path.with_suffix(".state.json")
         state: dict[str, Any] = {

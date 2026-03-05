@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "Source"), "Source missing"
     assert hasattr(mod, "EssayOutline"), "EssayOutline missing"
     assert hasattr(mod, "WebSearchEssayAgent"), "WebSearchEssayAgent missing"
-

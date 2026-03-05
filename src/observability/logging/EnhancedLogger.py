@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 """
 EnhancedLogger - Extended logging with deduplication and scope control.
 
@@ -22,6 +23,7 @@ LogScope = Literal["process", "global", "local"]
 
 class LogScopeEnum(Enum):
     """Enum for log scope types."""
+
     PROCESS = "process"
     GLOBAL = "global"
     LOCAL = "local"
@@ -30,6 +32,7 @@ class LogScopeEnum(Enum):
 # ============================================================================
 # Core deduplication functions
 # ============================================================================
+
 
 @lru_cache(maxsize=10000)
 def _dedupe_debug(logger: logging.Logger, msg: str, *args: Hashable) -> None:
@@ -59,41 +62,45 @@ def _dedupe_error(logger: logging.Logger, msg: str, *args: Hashable) -> None:
 # Scope checking (for distributed systems)
 # ============================================================================
 
+
 def _should_log_with_scope(scope: LogScope) -> bool:
     """
     Determine whether to log based on scope.
-    
+
     Args:
         scope: Logging scope
             - "process": Always log (default)
             - "global": Only log on global first rank
             - "local": Only log on local first rank
-            
+
     Returns:
         True if logging should proceed
     """
     if scope == "process":
         return True
-    
+
     # For distributed systems, check rank
     # These functions should be provided by the distributed module
     try:
         if scope == "global":
             from src.infrastructure.distributed import is_global_first_rank
+
             return is_global_first_rank()
         elif scope == "local":
             from src.infrastructure.distributed import is_local_first_rank
+
             return is_local_first_rank()
     except ImportError:
         # Not in distributed mode, always log
         return True
-    
+
     return True
 
 
 # ============================================================================
 # Logger extension methods
 # ============================================================================
+
 
 def debug_once(
     self: logging.Logger,
@@ -103,7 +110,7 @@ def debug_once(
 ) -> None:
     """
     Log debug message only once per unique (msg, args) combination.
-    
+
     Args:
         msg: Log message (can include % formatting)
         *args: Arguments for % formatting (must be hashable)
@@ -122,7 +129,7 @@ def info_once(
 ) -> None:
     """
     Log info message only once per unique (msg, args) combination.
-    
+
     Args:
         msg: Log message (can include % formatting)
         *args: Arguments for % formatting (must be hashable)
@@ -141,7 +148,7 @@ def warning_once(
 ) -> None:
     """
     Log warning message only once per unique (msg, args) combination.
-    
+
     Args:
         msg: Log message (can include % formatting)
         *args: Arguments for % formatting (must be hashable)
@@ -160,7 +167,7 @@ def error_once(
 ) -> None:
     """
     Log error message only once per unique (msg, args) combination.
-    
+
     Args:
         msg: Log message (can include % formatting)
         *args: Arguments for % formatting (must be hashable)
@@ -175,16 +182,17 @@ def error_once(
 # Logger patching
 # ============================================================================
 
+
 def patch_logger(logger: logging.Logger) -> logging.Logger:
     """
     Patch a logger instance with _once methods.
-    
+
     Adds debug_once, info_once, warning_once, error_once methods
     to the logger instance.
-    
+
     Args:
         logger: Logger to patch
-        
+
     Returns:
         The patched logger (same instance)
     """
@@ -198,10 +206,10 @@ def patch_logger(logger: logging.Logger) -> logging.Logger:
 def init_logger(name: str) -> logging.Logger:
     """
     Initialize a logger with enhanced methods.
-    
+
     Args:
         name: Logger name (typically __name__)
-        
+
     Returns:
         Logger with debug_once, info_once, warning_once, error_once methods
     """
@@ -213,13 +221,14 @@ def init_logger(name: str) -> logging.Logger:
 # Logger adapter for clean API
 # ============================================================================
 
+
 class EnhancedLoggerAdapter(logging.LoggerAdapter):
     """
     Logger adapter providing enhanced logging methods.
-    
+
     Provides a clean API without patching the underlying logger.
     """
-    
+
     def __init__(
         self,
         logger: logging.Logger,
@@ -227,7 +236,7 @@ class EnhancedLoggerAdapter(logging.LoggerAdapter):
     ):
         super().__init__(logger, extra or {})
         self._logged_messages: set[tuple[str, tuple[Hashable, ...]]] = set()
-    
+
     def debug_once(
         self,
         msg: str,
@@ -241,7 +250,7 @@ class EnhancedLoggerAdapter(logging.LoggerAdapter):
         if key not in self._logged_messages:
             self._logged_messages.add(key)
             self.debug(msg, *args)
-    
+
     def info_once(
         self,
         msg: str,
@@ -255,7 +264,7 @@ class EnhancedLoggerAdapter(logging.LoggerAdapter):
         if key not in self._logged_messages:
             self._logged_messages.add(key)
             self.info(msg, *args)
-    
+
     def warning_once(
         self,
         msg: str,
@@ -269,7 +278,7 @@ class EnhancedLoggerAdapter(logging.LoggerAdapter):
         if key not in self._logged_messages:
             self._logged_messages.add(key)
             self.warning(msg, *args)
-    
+
     def error_once(
         self,
         msg: str,
@@ -283,11 +292,11 @@ class EnhancedLoggerAdapter(logging.LoggerAdapter):
         if key not in self._logged_messages:
             self._logged_messages.add(key)
             self.error(msg, *args)
-    
+
     def reset_once_cache(self) -> None:
         """Clear the deduplication cache."""
         self._logged_messages.clear()
-    
+
     def get_logged_count(self) -> int:
         """Get number of unique messages logged."""
         return len(self._logged_messages)
@@ -299,11 +308,11 @@ def create_enhanced_logger(
 ) -> EnhancedLoggerAdapter:
     """
     Create an enhanced logger adapter.
-    
+
     Args:
         name: Logger name
         extra: Extra context to include in log records
-        
+
     Returns:
         EnhancedLoggerAdapter with _once methods
     """
@@ -314,6 +323,7 @@ def create_enhanced_logger(
 # ============================================================================
 # Global deduplication cache management
 # ============================================================================
+
 
 def clear_dedup_cache() -> None:
     """Clear the global deduplication caches."""
@@ -337,13 +347,14 @@ def get_dedup_cache_info() -> dict[str, Any]:
 # Convenience class for type hints
 # ============================================================================
 
+
 class EnhancedLogger(logging.Logger):
     """
     Type hint class for enhanced logger.
-    
+
     Not for direct instantiation - use init_logger() or patch_logger().
     """
-    
+
     def debug_once(
         self,
         msg: str,
@@ -352,7 +363,7 @@ class EnhancedLogger(logging.Logger):
     ) -> None:
         """Log debug message only once."""
         ...
-    
+
     def info_once(
         self,
         msg: str,
@@ -361,7 +372,7 @@ class EnhancedLogger(logging.Logger):
     ) -> None:
         """Log info message only once."""
         ...
-    
+
     def warning_once(
         self,
         msg: str,
@@ -370,7 +381,7 @@ class EnhancedLogger(logging.Logger):
     ) -> None:
         """Log warning message only once."""
         ...
-    
+
     def error_once(
         self,
         msg: str,

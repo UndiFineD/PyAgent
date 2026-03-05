@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -135,11 +136,11 @@ class ChangesAgent(
 {self.previous_content}"""
             self.current_content = fallback_suggestions
             return self.current_content
-        # For other prompts, call the BaseAgent's subagent path directly.
-        #
-        # This intentionally bypasses BaseAgent.improve_content() caching so
-        # tests that monkeypatch base_agent.BaseAgent.run_subagent remain
-        # deterministic even when earlier test runs have populated caches.
+            # For other prompts, call the BaseAgent's subagent path directly.
+            #
+            # This intentionally bypasses BaseAgent.improve_content() caching so
+            # tests that monkeypatch base_agent.BaseAgent.run_subagent remain
+            # deterministic even when earlier test runs have populated caches.
             from src.core.base.BaseAgent import entrypoint as _base_agent
 
         try:

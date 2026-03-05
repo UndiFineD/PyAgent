@@ -9,9 +9,10 @@ from typing import Dict, List, Any, Optional
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
+
 class MessagingAgent(BaseAgent):
     """Integrates with messaging platforms for fleet notifications."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -34,5 +35,8 @@ class MessagingAgent(BaseAgent):
 
     if __name__ == "__main__":
         from src.classes.base_agent.utilities import create_main_function
-        main = create_main_function(MessagingAgent, "Messaging Agent", "Messaging history path")
+
+        main = create_main_function(
+            MessagingAgent, "Messaging Agent", "Messaging history path"
+        )
         main()

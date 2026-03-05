@@ -4,14 +4,16 @@ import time
 from typing import Dict, List, Optional, Any
 from .config import AdapterSlot
 
+
 class LoRASlotManager:
     """Manages GPU slots for LoRA adapters."""
+
     def __init__(self, num_slots: int = 8):
         self.num_slots = num_slots
         self._slots = [AdapterSlot(i) for i in range(num_slots)]
         self._adapter_to_slot: Dict[str, int] = {}
         self._lock = threading.Lock()
-    
+
     def allocate(self, adapter_name: str, memory: int = 0) -> Optional[int]:
         with self._lock:
             if adapter_name in self._adapter_to_slot:
@@ -23,24 +25,31 @@ class LoRASlotManager:
                     self._fill_slot(s, adapter_name, memory)
                     return s.slot_id
             oldest = None
-            otime = float('inf')
+            otime = float("inf")
             for s in self._slots:
                 if not s.is_active and s.assigned_at < otime:
                     oldest, otime = s, s.assigned_at
             if oldest:
-                if oldest.adapter_name: del self._adapter_to_slot[oldest.adapter_name]
+                if oldest.adapter_name:
+                    del self._adapter_to_slot[oldest.adapter_name]
                 self._fill_slot(oldest, adapter_name, memory)
                 return oldest.slot_id
             return None
-    
+
     def _fill_slot(self, slot: AdapterSlot, name: str, mem: int):
-        slot.adapter_name, slot.is_active, slot.memory_allocated, slot.assigned_at = name, True, mem, time.time()
+        slot.adapter_name, slot.is_active, slot.memory_allocated, slot.assigned_at = (
+            name,
+            True,
+            mem,
+            time.time(),
+        )
         self._adapter_to_slot[name] = slot.slot_id
-        
+
     def release(self, name: str):
         with self._lock:
-            if name in self._adapter_to_slot: self._slots[self._adapter_to_slot[name]].is_active = False
-            
+            if name in self._adapter_to_slot:
+                self._slots[self._adapter_to_slot[name]].is_active = False
+
     def evict(self, name: str) -> bool:
         with self._lock:
             if name in self._adapter_to_slot:
@@ -49,12 +58,18 @@ class LoRASlotManager:
                 del self._adapter_to_slot[name]
                 return True
             return False
-            
+
     def get_active_adapters(self) -> List[str]:
-        with self._lock: return [s.adapter_name for s in self._slots if s.adapter_name and s.is_active]
-    
+        with self._lock:
+            return [
+                s.adapter_name for s in self._slots if s.adapter_name and s.is_active
+            ]
+
     def get_stats(self) -> Dict[str, Any]:
         with self._lock:
-            return {"total_slots": self.num_slots, "free_slots": sum(1 for s in self._slots if s.is_free),
-                    "active_slots": sum(1 for s in self._slots if s.is_active),
-                    "loaded_adapters": len(self._adapter_to_slot)}
+            return {
+                "total_slots": self.num_slots,
+                "free_slots": sum(1 for s in self._slots if s.is_free),
+                "active_slots": sum(1 for s in self._slots if s.is_active),
+                "loaded_adapters": len(self._adapter_to_slot),
+            }

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,7 +32,9 @@ from src.core.base.common.models._factories import _empty_agent_event_handlers
 class EventManager:
     """Manages agent events. (Facade)"""
 
-    handlers: dict[AgentEvent, list[Callable[..., None]]] = field(default_factory=_empty_agent_event_handlers)
+    handlers: dict[AgentEvent, list[Callable[..., None]]] = field(
+        default_factory=_empty_agent_event_handlers
+    )
 
     def on(self, event: AgentEvent, handler: Callable[..., None]) -> None:
         """Register an event handler."""
@@ -42,11 +45,13 @@ class EventManager:
     def emit(self, event: AgentEvent, data: Any = None) -> None:
         """Emit an event to all registered handlers."""
         if event in self.handlers:
+
             def invoke_handler(handler):
                 if data is not None:
                     handler(data)
                 else:
                     handler()
+
             list(map(invoke_handler, self.handlers[event]))
 
 
@@ -61,12 +66,14 @@ class StatePersistence:
     def save(self, state: dict[str, Any]) -> None:
         """Save the agent state."""
         import json
+
         with open(self.state_file, "w", encoding="utf-8") as f:
             json.dump(state, f)
 
     def load(self, default: dict[str, Any] | None = None) -> dict[str, Any]:
         """Load the agent state."""
         import json
+
         p = Path(self.state_file)
         if p.exists():
             with open(p, "r", encoding="utf-8") as f:
@@ -80,6 +87,7 @@ class FilePriorityManager:
 
     def __init__(self, config: Any = None) -> None:
         from src.core.base.common.priority_core import PriorityCore
+
         self._core = PriorityCore(config)
 
     def get_priority(self, path: Path) -> Any:
@@ -91,8 +99,11 @@ class FilePriorityManager:
 class HealthChecker:
     """Checks system health. (Facade)"""
 
-    def __init__(self, workspace_root: Path | None = None, repo_root: Path | None = None) -> None:
+    def __init__(
+        self, workspace_root: Path | None = None, repo_root: Path | None = None
+    ) -> None:
         from src.core.base.common.health_core import HealthCore
+
         self.workspace_root = workspace_root or repo_root
         self.repo_root = self.workspace_root  # Legacy alias
         self._core = HealthCore(self.workspace_root)
@@ -117,14 +128,16 @@ class HealthChecker:
         return {
             "status": "HEALTHY" if is_healthy else "UNHEALTHY",
             "is_healthy": is_healthy,
-            "results": results
+            "results": results,
         }
 
     def run_all_checks(self) -> dict[str, Any]:
         """Run all registered health checks."""
         return self._core.run_all()
 
-    def record_request(self, agent_id: str = "default", success: bool = True, latency_ms: float = 0.0) -> None:
+    def record_request(
+        self, agent_id: str = "default", success: bool = True, latency_ms: float = 0.0
+    ) -> None:
         """Record a request regarding health tracking."""
         # pylint: disable=unused-argument
         # Some tests pass agent_id as first pos arg, some pass success as keyword
@@ -141,12 +154,14 @@ class HealthChecker:
             results = self.run_all_checks()
 
         print("\n=== PyAgent Health Report ===")
+
         def report_check(item):
             name, check = item
             status_str = "OK" if check.status.name == "HEALTHY" else "FAIL"
             print(f"[{status_str}] {name}: {check.response_time_ms:.1f}ms")
             if check.error_message:
                 print(f"      Error: {check.error_message}")
+
         list(map(report_check, results.items()))
         print("=============================\n")
 
@@ -157,6 +172,7 @@ class ProfileManager:
 
     def __init__(self) -> None:
         from src.core.base.common.profile_core import ProfileCore
+
         self._core = ProfileCore()
         self._profiles = self._core.profiles
 
@@ -171,10 +187,15 @@ class ProfileManager:
     def get_active_config(self) -> Any:
         """Return the configuration regarding the active profile."""
         from src.core.base.common.config_core import ConfigObject
+
         profile = self._core.active_profile
         if profile:
             config_data = getattr(profile, "config", {})
-            return ConfigObject(config_data) if isinstance(config_data, dict) else config_data
+            return (
+                ConfigObject(config_data)
+                if isinstance(config_data, dict)
+                else config_data
+            )
         return ConfigObject({})
 
     def set_active(self, name: str) -> None:
@@ -196,6 +217,7 @@ class ResponseCache:
 
     def __init__(self, cache_dir: Path | None = None) -> None:
         from src.core.base.common.cache_core import CacheCore
+
         self._core = CacheCore(cache_dir)
 
     def get(self, key: str) -> Any:

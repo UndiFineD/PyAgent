@@ -24,4 +24,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "BenchmarkResult"), "BenchmarkResult missing"
     assert hasattr(mod, "benchmark_serialization"), "benchmark_serialization missing"
     assert hasattr(mod, "MSGSPEC_AVAILABLE"), "MSGSPEC_AVAILABLE missing"
-

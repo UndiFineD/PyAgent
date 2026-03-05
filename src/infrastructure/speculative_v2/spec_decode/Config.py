@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -11,6 +12,7 @@ from enum import Enum, auto
 
 class VerificationStrategy(Enum):
     """Verification strategy for speculative decoding."""
+
     REJECTION_SAMPLING = auto()  # Standard rejection sampling
     TYPICAL_ACCEPTANCE = auto()  # Typical acceptance sampling
     TOP_K_SAMPLING = auto()  # Top-k based acceptance
@@ -19,6 +21,7 @@ class VerificationStrategy(Enum):
 
 class AcceptancePolicy(Enum):
     """Policy for accepting draft tokens."""
+
     GREEDY = auto()  # Accept if draft == target argmax
     STOCHASTIC = auto()  # Probabilistic acceptance
     THRESHOLD = auto()  # Accept if probability above threshold
@@ -28,6 +31,7 @@ class AcceptancePolicy(Enum):
 @dataclass(frozen=True, slots=True)
 class SpecDecodeConfig:
     """Configuration for speculative decoding verification."""
+
     strategy: VerificationStrategy = VerificationStrategy.REJECTION_SAMPLING
     policy: AcceptancePolicy = AcceptancePolicy.STOCHASTIC
     acceptance_threshold: float = 0.0

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,15 +19,13 @@ Localization agent.py module.
 """
 
 
-
 import logging
 import re
 from typing import Any
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.intelligence.core.localization_core import \
-    LocalizationCore
+from src.logic.agents.intelligence.core.localization_core import LocalizationCore
 
 __version__ = VERSION
 
@@ -55,7 +54,9 @@ class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         Translates a single agent comment using the core's formatting.
         """
         if target_lang not in self.supported_locales:
-            logging.warning(f"Target language {target_lang} not in core supported list.")
+            logging.warning(
+                f"Target language {target_lang} not in core supported list."
+            )
 
         request = self.core.format_translation_request(text, target_lang)
         # In a real scenario, this would call self.improve_content or an API
@@ -77,7 +78,9 @@ class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             logging.error(f"LocalizationAgent: Error reading {file_path}: {e}")
         return found_strings
 
-    def generate_translation_file(self, locale: str, strings: list[str]) -> dict[str, str]:
+    def generate_translation_file(
+        self, locale: str, strings: list[str]
+    ) -> dict[str, str]:
         """Generates a JSON translation dictionary for a specific locale."""
         if locale not in self.supported_locales:
             logging.warning(f"Locale {locale} not officially supported.")
@@ -87,4 +90,6 @@ class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     async def solve_translation_task(self, prompt: str) -> str:
         """Uses LLM to help with complex translation tasks."""
-        return await self.improve_content(f"Translate the following content preserving formatting: {prompt}")
+        return await self.improve_content(
+            f"Translate the following content preserving formatting: {prompt}"
+        )

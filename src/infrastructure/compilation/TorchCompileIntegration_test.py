@@ -33,47 +33,47 @@ except ImportError as e:
 
 def test_compilemode_exists():
     """Test that CompileMode class exists and is importable."""
-    assert 'CompileMode' in dir()
+    assert "CompileMode" in dir()
 
 
 def test_compilebackend_exists():
     """Test that CompileBackend class exists and is importable."""
-    assert 'CompileBackend' in dir()
+    assert "CompileBackend" in dir()
 
 
 def test_compileconfig_exists():
     """Test that CompileConfig class exists and is importable."""
-    assert 'CompileConfig' in dir()
+    assert "CompileConfig" in dir()
 
 
 def test_compilestats_exists():
     """Test that CompileStats class exists and is importable."""
-    assert 'CompileStats' in dir()
+    assert "CompileStats" in dir()
 
 
 def test_compilerinterface_exists():
     """Test that CompilerInterface class exists and is importable."""
-    assert 'CompilerInterface' in dir()
+    assert "CompilerInterface" in dir()
 
 
 def test_torchcompiler_exists():
     """Test that TorchCompiler class exists and is importable."""
-    assert 'TorchCompiler' in dir()
+    assert "TorchCompiler" in dir()
 
 
 def test_compilationcounter_exists():
     """Test that CompilationCounter class exists and is importable."""
-    assert 'CompilationCounter' in dir()
+    assert "CompilationCounter" in dir()
 
 
 def test_incrementalcompiler_exists():
     """Test that IncrementalCompiler class exists and is importable."""
-    assert 'IncrementalCompiler' in dir()
+    assert "IncrementalCompiler" in dir()
 
 
 def test_profileguidedcompiler_exists():
     """Test that ProfileGuidedCompiler class exists and is importable."""
-    assert 'ProfileGuidedCompiler' in dir()
+    assert "ProfileGuidedCompiler" in dir()
 
 
 def test_profileguidedcompiler_instantiation():
@@ -105,4 +105,3 @@ def test_with_compiler_context_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

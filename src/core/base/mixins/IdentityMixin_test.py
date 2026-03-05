@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_identitymixin_exists():
     """Test that IdentityMixin class exists and is importable."""
-    assert 'IdentityMixin' in dir()
+    assert "IdentityMixin" in dir()
 
 
 def test_identitymixin_instantiation():
@@ -45,4 +45,3 @@ def test_identitymixin_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

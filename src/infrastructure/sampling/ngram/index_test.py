@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_suffixindex_exists():
     """Test that SuffixIndex class exists and is importable."""
-    assert 'SuffixIndex' in dir()
+    assert "SuffixIndex" in dir()
 
 
 def test_suffixtreeproposer_exists():
     """Test that SuffixTreeProposer class exists and is importable."""
-    assert 'SuffixTreeProposer' in dir()
+    assert "SuffixTreeProposer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

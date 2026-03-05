@@ -18,9 +18,16 @@
 Speculative decoding verification package.
 """
 
-from .config import AcceptancePolicy, SpecDecodeConfig, VerificationStrategy  # noqa: F401
-from .metadata import (SpecDecodeMetadataFactory, SpecDecodeMetadataV2,  # noqa: F401
-                       TreeVerificationMetadata)
+from .config import (
+    AcceptancePolicy,
+    SpecDecodeConfig,
+    VerificationStrategy,
+)  # noqa: F401
+from .metadata import (
+    SpecDecodeMetadataFactory,
+    SpecDecodeMetadataV2,  # noqa: F401
+    TreeVerificationMetadata,
+)
 from .verification import (
     BatchVerifier,
     SpecDecodeVerifier,  # noqa: F401

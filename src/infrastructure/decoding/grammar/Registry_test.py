@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_grammarcompiler_exists():
     """Test that GrammarCompiler class exists and is importable."""
-    assert 'GrammarCompiler' in dir()
+    assert "GrammarCompiler" in dir()
 
 
 def test_structuredoutputmanager_exists():
     """Test that StructuredOutputManager class exists and is importable."""
-    assert 'StructuredOutputManager' in dir()
+    assert "StructuredOutputManager" in dir()
 
 
 def test_compile_grammar_exists():
@@ -54,4 +54,3 @@ def test_validate_structured_output_params_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

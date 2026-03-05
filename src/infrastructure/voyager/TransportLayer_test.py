@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_voyagertransport_exists():
     """Test that VoyagerTransport class exists and is importable."""
-    assert 'VoyagerTransport' in dir()
+    assert "VoyagerTransport" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

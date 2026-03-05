@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_gossipprotocolorchestrator_exists():
     """Test that GossipProtocolOrchestrator class exists and is importable."""
-    assert 'GossipProtocolOrchestrator' in dir()
+    assert "GossipProtocolOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -29,7 +29,11 @@ class DeepSeekReasoningParser(ReasoningParser):
     """Parser for DeepSeek R1-style <think>...</think> blocks."""
 
     def __init__(self) -> None:
-        super().__init__(reasoning_format=ReasoningFormat.DEEPSEEK_R1, start_marker="<think>", end_marker="</think>")
+        super().__init__(
+            reasoning_format=ReasoningFormat.DEEPSEEK_R1,
+            start_marker="<think>",
+            end_marker="</think>",
+        )
         self._pattern = re.compile(r"<think>(.*?)</think>", re.DOTALL)
 
     def extract_thinking(self, text: str) -> Tuple[str, List[ThinkingBlock]]:
@@ -52,7 +56,9 @@ class DeepSeekReasoningParser(ReasoningParser):
         content_parts.append(text[last_end:])
         return "".join(content_parts).strip(), blocks
 
-    def parse_streaming(self, token_stream: Iterator[str]) -> Generator[Tuple[str, bool], None, ParseResult]:
+    def parse_streaming(
+        self, token_stream: Iterator[str]
+    ) -> Generator[Tuple[str, bool], None, ParseResult]:
         content_buffer = []
         thinking_buffer = []
         current_block_start = 0
@@ -126,7 +132,11 @@ class QwenReasoningParser(ReasoningParser):
     """Parser for Qwen3-style reasoning with enable_thinking flag."""
 
     def __init__(self, enable_thinking: bool = True) -> None:
-        super().__init__(reasoning_format=ReasoningFormat.QWEN3, start_marker="<think>", end_marker="</think>")
+        super().__init__(
+            reasoning_format=ReasoningFormat.QWEN3,
+            start_marker="<think>",
+            end_marker="</think>",
+        )
         self.enable_thinking = enable_thinking
         self._pattern = re.compile(r"<think>(.*?)</think>", re.DOTALL)
 
@@ -146,7 +156,9 @@ class QwenReasoningParser(ReasoningParser):
                 start_position=match.start(),
                 end_position=match.end(),
                 model_format=self.reasoning_format,
-                step_count=len([line for line in thinking_content.split("\n") if line.strip()]),
+                step_count=len(
+                    [line for line in thinking_content.split("\n") if line.strip()]
+                ),
             )
             blocks.append(block)
             last_end = match.end()
@@ -154,7 +166,9 @@ class QwenReasoningParser(ReasoningParser):
         content_parts.append(text[last_end:])
         return "".join(content_parts).strip(), blocks
 
-    def parse_streaming(self, token_stream: Iterator[str]) -> Generator[Tuple[str, bool], None, ParseResult]:
+    def parse_streaming(
+        self, token_stream: Iterator[str]
+    ) -> Generator[Tuple[str, bool], None, ParseResult]:
         deepseek = DeepSeekReasoningParser()
         deepseek.reasoning_format = self.reasoning_format
 
@@ -163,16 +177,29 @@ class QwenReasoningParser(ReasoningParser):
                 continue
             yield (token, is_thinking)
 
-        return ParseResult(content="", thinking_blocks=deepseek.thinking_blocks, raw_text="")
+        return ParseResult(
+            content="", thinking_blocks=deepseek.thinking_blocks, raw_text=""
+        )
 
 
 class GenericReasoningParser(ReasoningParser):
     """Configurable parser for any reasoning format."""
 
-    def __init__(self, start_marker: str = "<think>", end_marker: str = "</think>", nested: bool = False) -> None:
-        super().__init__(reasoning_format=ReasoningFormat.GENERIC, start_marker=start_marker, end_marker=end_marker)
+    def __init__(
+        self,
+        start_marker: str = "<think>",
+        end_marker: str = "</think>",
+        nested: bool = False,
+    ) -> None:
+        super().__init__(
+            reasoning_format=ReasoningFormat.GENERIC,
+            start_marker=start_marker,
+            end_marker=end_marker,
+        )
         self.nested = nested
-        self._pattern = re.compile(re.escape(start_marker) + r"(.*?)" + re.escape(end_marker), re.DOTALL)
+        self._pattern = re.compile(
+            re.escape(start_marker) + r"(.*?)" + re.escape(end_marker), re.DOTALL
+        )
 
     def extract_thinking(self, text: str) -> Tuple[str, List[ThinkingBlock]]:
         blocks = []
@@ -191,7 +218,9 @@ class GenericReasoningParser(ReasoningParser):
         content_parts.append(text[last_end:])
         return "".join(content_parts).strip(), blocks
 
-    def parse_streaming(self, token_stream: Iterator[str]) -> Generator[Tuple[str, bool], None, ParseResult]:
+    def parse_streaming(
+        self, token_stream: Iterator[str]
+    ) -> Generator[Tuple[str, bool], None, ParseResult]:
         content = []
         thinking = []
         position = 0
@@ -253,7 +282,9 @@ class OpenAIToolParser(ToolParser):
 
     def __init__(self, strict: bool = False) -> None:
         super().__init__(ToolCallFormat.OPENAI, strict)
-        self._function_pattern = re.compile(r'"function_call"\s*:\s*\{[^}]+\}', re.DOTALL)
+        self._function_pattern = re.compile(
+            r'"function_call"\s*:\s*\{[^}]+\}', re.DOTALL
+        )
 
     def parse_tool_calls(self, text: str) -> List[ToolCall]:
         calls = []
@@ -265,7 +296,9 @@ class OpenAIToolParser(ToolParser):
                         call = ToolCall(
                             id=tc.get("id", self.generate_call_id()),
                             name=tc.get("function", {}).get("name", ""),
-                            arguments=json.loads(tc.get("function", {}).get("arguments", "{}")),
+                            arguments=json.loads(
+                                tc.get("function", {}).get("arguments", "{}")
+                            ),
                             raw_text=json.dumps(tc),
                             format=self.tool_format,
                         )

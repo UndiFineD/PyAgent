@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_tensorparallelgroup_exists():
     """Test that TensorParallelGroup class exists and is importable."""
-    assert 'TensorParallelGroup' in dir()
+    assert "TensorParallelGroup" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

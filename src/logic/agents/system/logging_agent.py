@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -66,11 +67,13 @@ class LoggingAgent(BaseAgent):
 
             def init_syslog() -> str:
                 try:
-                    self.syslog_handler = logging.handlers.SysLogHandler(address=(syslog_host, syslog_port))
-                    return (
-                        f"LoggingAgent: Configured SysLog to {syslog_host}:{syslog_port} and Aggregator URL to {url}."
+                    self.syslog_handler = logging.handlers.SysLogHandler(
+                        address=(syslog_host, syslog_port)
                     )
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                    return f"LoggingAgent: Configured SysLog to {syslog_host}:{syslog_port} and Aggregator URL to {url}."
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                     return f"LoggingAgent: Failed to configure SysLog: {e}"
 
             return await asyncio.to_thread(init_syslog)
@@ -124,7 +127,9 @@ class LoggingAgent(BaseAgent):
 
             # 2. Forward to HTTP Aggregator (Mocked/Future-proofed)
             if self.log_aggregator_url:
-                logging.debug(f"LoggingAgent: Forwarding to {self.log_aggregator_url} -> {message}")
+                logging.debug(
+                    f"LoggingAgent: Forwarding to {self.log_aggregator_url} -> {message}"
+                )
 
         await asyncio.to_thread(forward)
         return "Log broadcasted successfully."

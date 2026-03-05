@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,9 +24,10 @@ from src.core.base.utilities import create_main_function
 
 __version__ = VERSION
 
+
 class LintingAgent(BaseAgent):
     """Ensures code adheres to quality standards by running linters."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -44,10 +46,15 @@ class LintingAgent(BaseAgent):
             result = subprocess.run(
                 ["flake8", "--max-line-length=120", "--ignore=E203,W503", target_path],
                 capture_output=True,
-                text=True
+                text=True,
             )
             # Phase 108: Record linting result
-            self._record(f"flake8 {target_path}", f"RC={result.returncode}\n{result.stdout[:500]}", provider="Shell", model="flake8")
+            self._record(
+                f"flake8 {target_path}",
+                f"RC={result.returncode}\n{result.stdout[:500]}",
+                provider="Shell",
+                model="flake8",
+            )
 
             if not result.stdout:
                 return "✅ No linting issues found by flake8."
@@ -63,7 +70,7 @@ class LintingAgent(BaseAgent):
             result = subprocess.run(
                 ["mypy", "--ignore-missing-imports", target_path],
                 capture_output=True,
-                text=True
+                text=True,
             )
             if "Success: no issues found" in result.stdout:
                 return "✅ No type issues found by mypy."
@@ -79,12 +86,9 @@ class LintingAgent(BaseAgent):
         path = prompt if prompt else "."
         flake8_res = self.run_flake8(path)
         mypy_res = self.run_mypy(path)
-        
-        return (
-            f"## Quality Audit for: {path}\n\n"
-            f"{flake8_res}\n\n"
-            f"{mypy_res}"
-        )
+
+        return f"## Quality Audit for: {path}\n\n" f"{flake8_res}\n\n" f"{mypy_res}"
+
 
 if __name__ == "__main__":
     main = create_main_function(LintingAgent, "Linting Agent", "Path to audit")

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_complexityanalysismixin_exists():
     """Test that ComplexityAnalysisMixin class exists and is importable."""
-    assert 'ComplexityAnalysisMixin' in dir()
+    assert "ComplexityAnalysisMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

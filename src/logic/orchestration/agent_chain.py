@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -75,7 +76,9 @@ class AgentChain:
         self._steps.append(step)
         return self
 
-    def execute(self, initial_input: Any, agent_executor: Callable[[str, Any], Any]) -> list[dict[str, Any]]:
+    def execute(
+        self, initial_input: Any, agent_executor: Callable[[str, Any], Any]
+    ) -> list[dict[str, Any]]:
         """Execute the chain.
 
         Args:
@@ -125,7 +128,9 @@ class AgentChain:
 
                 current_input = output
 
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 self._results.append(
                     {
                         "agent": step.agent_name,

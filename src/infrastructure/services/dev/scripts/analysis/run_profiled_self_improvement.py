@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,7 +38,9 @@ from datetime import datetime
 from pathlib import Path
 
 # Ensure project root is in path FIRST
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", ".."))
+project_root = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
+)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
@@ -59,7 +62,11 @@ class RustFunctionStats:
 
     @property
     def avg_time_us(self) -> float:
-        return (self.total_time_ns / self.call_count / 1000.0) if self.call_count > 0 else 0.0
+        return (
+            (self.total_time_ns / self.call_count / 1000.0)
+            if self.call_count > 0
+            else 0.0
+        )
 
     @property
     def total_time_ms(self) -> float:
@@ -102,7 +109,6 @@ try:
             if callable(original):
 
                 @functools.wraps(original)
-
                 def profiled_func(*args, **kwargs):
                     start_time_ns = time.perf_counter_ns()
                     try:
@@ -172,13 +178,23 @@ class ComprehensiveProfileAnalyzer:
         stats = pstats.Stats(self.profiler, stream=stream)
 
         # Extract raw stats
-        raw_stats = stats.stats  # Dict of (filename, line, func) -> (ncalls, totcalls, tottime, cumtime, callers)
+        raw_stats = (
+            stats.stats
+        )  # Dict of (filename, line, func) -> (ncalls, totcalls, tottime, cumtime, callers)
 
         # Filter and process for src/ only
         src_functions = []
-        module_stats = defaultdict(lambda: {"call_count": 0, "total_time_s": 0.0, "functions": set()})
+        module_stats = defaultdict(
+            lambda: {"call_count": 0, "total_time_s": 0.0, "functions": set()}
+        )
 
-        for (filename, _line, func_name), (ncalls, totcalls, tottime, cumtime, _callers) in raw_stats.items():
+        for (filename, _line, func_name), (
+            ncalls,
+            totcalls,
+            tottime,
+            cumtime,
+            _callers,
+        ) in raw_stats.items():
             if self._is_src_file(filename):
                 module = self._clean_filename(filename)
                 qualified_name = f"{module}.{func_name}"
@@ -224,7 +240,12 @@ class ComprehensiveProfileAnalyzer:
         rust_stats = rust_profiler.get_stats()
         rust_by_time = sorted(
             [
-                {"function": k, "calls": v.call_count, "total_ms": v.total_time_ms, "avg_us": v.avg_time_us}
+                {
+                    "function": k,
+                    "calls": v.call_count,
+                    "total_ms": v.total_time_ms,
+                    "avg_us": v.avg_time_us,
+                }
                 for k, v in rust_stats.items()
             ],
             key=lambda x: x["total_ms"],
@@ -279,7 +300,9 @@ class ComprehensiveProfileAnalyzer:
                 name = item["function"]
                 if len(name) > 50:
                     name = "..." + name[-47:]
-                print(f"  {name:<50} {item['ncalls']:>8,} {item['cumtime_ms']:>10.2f} {item['tottime_ms']:>10.2f}")
+                print(
+                    f"  {name:<50} {item['ncalls']:>8,} {item['cumtime_ms']:>10.2f} {item['tottime_ms']:>10.2f}"
+                )
 
         # Top by own time (excluding child calls)
         if report["python_by_tottime"]:
@@ -292,7 +315,9 @@ class ComprehensiveProfileAnalyzer:
                 name = item["function"]
                 if len(name) > 50:
                     name = "..." + name[-47:]
-                print(f"  {name:<50} {item['ncalls']:>8,} {item['tottime_ms']:>10.2f} {item['avg_us']:>10.1f}")
+                print(
+                    f"  {name:<50} {item['ncalls']:>8,} {item['tottime_ms']:>10.2f} {item['avg_us']:>10.1f}"
+                )
 
         # Top by call count
         if report["python_by_calls"]:
@@ -348,8 +373,9 @@ print("🐍 Python profiling enabled - using cProfile for src/ code")
 analyzer = ComprehensiveProfileAnalyzer(src_path, project_root)
 
 # Import the self-improvement script AFTER setting up profiling
-from src.infrastructure.services.dev.scripts.analysis.run_fleet_self_improvement import \
-    main as run_self_improvement_main  # noqa: E402
+from src.infrastructure.services.dev.scripts.analysis.run_fleet_self_improvement import (
+    main as run_self_improvement_main,
+)  # noqa: E402
 
 
 def save_profile_report() -> None:

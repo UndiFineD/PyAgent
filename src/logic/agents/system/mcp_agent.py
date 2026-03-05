@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 """
 Module: mcp_agent
 Implements Model Context Protocol (MCP) agent logic for PyAgent core base.
@@ -30,6 +31,7 @@ from pathlib import Path
 from typing import Any
 
 from src.core.base.common.base_utilities import as_tool
+
 BaseAgent = None  # Will be imported locally to avoid circular import
 from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.mcp_connector import MCPConnector
@@ -44,6 +46,7 @@ class MCPAgent:
         global BaseAgent
         if BaseAgent is None:
             from src.core.base.lifecycle.base_agent import BaseAgent as _BaseAgent
+
             BaseAgent = _BaseAgent
         self._base = BaseAgent(file_path)
 
@@ -70,29 +73,41 @@ class MCPAgent:
             report = ["## 🔌 Discovered MCP Servers"]
             for cfg in mcp_configs:
                 try:
-                    with open(cfg, encoding='utf-8') as f:
+                    with open(cfg, encoding="utf-8") as f:
                         data = json.load(f)
-                        for server_name, server_config in data.get("mjs_servers", {}).items():
-                            report.append(f"- **{server_name}**: {server_config.get('command')}")
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                        for server_name, server_config in data.get(
+                            "mjs_servers", {}
+                        ).items():
+                            report.append(
+                                f"- **{server_name}**: {server_config.get('command')}"
+                            )
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                     report.append(f"- Error reading `{cfg}`: {e}")
             return "\n".join(report)
 
         return await asyncio.to_thread(discover)
 
     @as_tool
-    async def call_mcp_tool(self, server_name: str, tool_name: str, arguments: dict[str, Any]) -> str:
+    async def call_mcp_tool(
+        self, server_name: str, tool_name: str, arguments: dict[str, Any]
+    ) -> str:
         """Calls an MCP tool via the live connector."""
         if server_name not in self.connectors:
             return f"Error: MCP Server '{server_name}' not initialized. Call 'initialize_mcp_server' first."
 
         # Intelligence Harvesting (Phase 108)
         if hasattr(self, "recorder") and self.recorder:
-            self.recorder.record_lesson("mcp_tool_call", {"server": server_name, "tool": tool_name})
+            self.recorder.record_lesson(
+                "mcp_tool_call", {"server": server_name, "tool": tool_name}
+            )
 
         connector = self.connectors[server_name]
         # MCPConnector might be sync, so wrap in thread
-        response = await asyncio.to_thread(connector.call, "tools/call", {"name": tool_name, "arguments": arguments})
+        response = await asyncio.to_thread(
+            connector.call, "tools/call", {"name": tool_name, "arguments": arguments}
+        )
 
         if "error" in response:
             if hasattr(self, "recorder") and self.recorder:
@@ -116,11 +131,15 @@ class MCPAgent:
         if connector.is_running:
             self.connectors[name] = connector
             if hasattr(self, "recorder") and self.recorder:
-                self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "success"})
+                self.recorder.record_lesson(
+                    "mcp_server_init", {"name": name, "status": "success"}
+                )
             return f"Successfully started MCP server '{name}'"
         else:
             if hasattr(self, "recorder") and self.recorder:
-                self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "failed"})
+                self.recorder.record_lesson(
+                    "mcp_server_init", {"name": name, "status": "failed"}
+                )
             return f"Failed to start MCP server '{name}'"
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:

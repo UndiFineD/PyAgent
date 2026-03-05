@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_coreresolutionmixin_exists():
     """Test that CoreResolutionMixin class exists and is importable."""
-    assert 'CoreResolutionMixin' in dir()
+    assert "CoreResolutionMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

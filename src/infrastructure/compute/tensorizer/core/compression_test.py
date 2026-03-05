@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "compress_data"), "compress_data missing"
     assert hasattr(mod, "decompress_data"), "decompress_data missing"
-

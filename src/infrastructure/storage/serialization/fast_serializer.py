@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -126,7 +127,9 @@ class Serializer(ABC):
                 self._stats.bytes_serialized += len(data)
                 self._stats.total_serialize_time_ns += time.perf_counter_ns() - start
             return data
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             with self._lock:
                 self._stats.errors += 1
             raise
@@ -149,7 +152,9 @@ class Serializer(ABC):
                 self._stats.bytes_deserialized += len(data)
                 self._stats.total_deserialize_time_ns += time.perf_counter_ns() - start
             return obj
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             with self._lock:
                 self._stats.errors += 1
             raise
@@ -498,7 +503,10 @@ class BinarySerializer(Serializer):
         elif tag == self.TAG_DICT:
             length = struct.unpack_from("<I", data, offset[0])[0]
             offset[0] += 4
-            return {self._decode_value(data, offset): self._decode_value(data, offset) for _ in range(length)}
+            return {
+                self._decode_value(data, offset): self._decode_value(data, offset)
+                for _ in range(length)
+            }
 
         else:
             raise ValueError(f"Unknown tag: {tag}")
@@ -537,7 +545,9 @@ class SerializerRegistry:
         """Get default serializer."""
         return self._serializers[self._default]
 
-    def serialize(self, obj: Any, format: Optional[SerializationFormat] = None) -> bytes:
+    def serialize(
+        self, obj: Any, format: Optional[SerializationFormat] = None
+    ) -> bytes:
         """Serialize using specified or default format."""
         serializer = self._serializers.get(format) if format else self.default
         return serializer.serialize(obj)

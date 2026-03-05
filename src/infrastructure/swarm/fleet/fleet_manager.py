@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,12 +27,20 @@ from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.agent_registry import AgentRegistry
 from src.infrastructure.swarm.fleet.fleet_consensus_manager import FleetConsensusManager
 from src.infrastructure.swarm.fleet.fleet_execution_core import FleetExecutionCore
-from src.infrastructure.swarm.fleet.fleet_interaction_recorder import FleetInteractionRecorder
+from src.infrastructure.swarm.fleet.fleet_interaction_recorder import (
+    FleetInteractionRecorder,
+)
 from src.infrastructure.swarm.fleet.fleet_lifecycle_manager import FleetLifecycleManager
 from src.infrastructure.swarm.fleet.fleet_routing_core import FleetRoutingCore
-from src.infrastructure.swarm.fleet.mixins.fleet_delegation_mixin import FleetDelegationMixin
-from src.infrastructure.swarm.fleet.mixins.fleet_discovery_mixin import FleetDiscoveryMixin
-from src.infrastructure.swarm.fleet.mixins.fleet_lifecycle_mixin import FleetLifecycleMixin
+from src.infrastructure.swarm.fleet.mixins.fleet_delegation_mixin import (
+    FleetDelegationMixin,
+)
+from src.infrastructure.swarm.fleet.mixins.fleet_discovery_mixin import (
+    FleetDiscoveryMixin,
+)
+from src.infrastructure.swarm.fleet.mixins.fleet_lifecycle_mixin import (
+    FleetLifecycleMixin,
+)
 from src.infrastructure.swarm.fleet.mixins.fleet_lookup_mixin import FleetLookupMixin
 from src.infrastructure.swarm.fleet.mixins.fleet_routing_mixin import FleetRoutingMixin
 from src.infrastructure.swarm.fleet.mixins.fleet_task_mixin import FleetTaskMixin
@@ -75,7 +84,9 @@ class FleetManager(
 
         # Load agents from registry (also lazy)
         # Pass self so agents can register utils/tools upon lazy instantiation
-        self.agents = AgentRegistry.get_agent_map(self.workspace_root, fleet_instance=self)
+        self.agents = AgentRegistry.get_agent_map(
+            self.workspace_root, fleet_instance=self
+        )
 
         # Phase 320: LAN Discovery
         self.init_discovery(agent_id=f"fleet-{self.workspace_root.name}")

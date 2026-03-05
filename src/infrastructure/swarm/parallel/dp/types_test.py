@@ -20,4 +20,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "WorkerState"), "WorkerState missing"
     assert hasattr(mod, "StepState"), "StepState missing"
     assert hasattr(mod, "WaveState"), "WaveState missing"
-

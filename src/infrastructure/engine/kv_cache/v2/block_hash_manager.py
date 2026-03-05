@@ -72,4 +72,7 @@ class BlockHashManager:
 
     def get_stats(self) -> Dict[str, int]:
         """Returns statistics on hash registry usage."""
-        return {"registered_hashes": len(self.hash_to_block), "tracked_blocks": len(self.block_to_hash)}
+        return {
+            "registered_hashes": len(self.hash_to_block),
+            "tracked_blocks": len(self.block_to_hash),
+        }

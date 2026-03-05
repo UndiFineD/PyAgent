@@ -69,7 +69,9 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         return await asyncio.to_thread(run_scan)
 
-    async def get_improvement_items(self, context: dict[str, Any]) -> list[dict[str, Any]]:
+    async def get_improvement_items(
+        self, context: dict[str, Any]
+    ) -> list[dict[str, Any]]:
         """Identify improvement items relating to privacy leaks."""
         target = context.get("target_dir", ".")
         leaks = await self.scan_secrets(target)

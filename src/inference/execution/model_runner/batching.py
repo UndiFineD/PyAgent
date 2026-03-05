@@ -30,7 +30,12 @@ class BatchedAsyncRunner:
     Beyond vLLM: Automatic micro-batching regarding efficiency.
     """
 
-    def __init__(self, runner: AsyncModelRunner, max_batch_size: int = 32, batch_timeout_ms: float = 5.0) -> None:
+    def __init__(
+        self,
+        runner: AsyncModelRunner,
+        max_batch_size: int = 32,
+        batch_timeout_ms: float = 5.0,
+    ) -> None:
         self._runner = runner
         self._max_batch_size = max_batch_size
         self._batch_timeout_ms = batch_timeout_ms
@@ -79,13 +84,23 @@ class BatchedAsyncRunner:
             outputs = await self._runner.execute_model_async(scheduler_output)
 
             # Phase 411: Functional future resolution
-            list(map(lambda item: item[0].set_result(item[1]) if not item[0].done() else None, zip(futures, outputs)))
+            list(
+                map(
+                    lambda item: (
+                        item[0].set_result(item[1]) if not item[0].done() else None
+                    ),
+                    zip(futures, outputs),
+                )
+            )
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             # Phase 412: Functional error resolution
             def set_error(f: asyncio.Future) -> None:
                 if not f.done():
                     f.set_result(ModelOutput(request_id="error", error=str(e)))
+
             list(map(set_error, futures))
 
     async def run_batch_loop(self) -> None:

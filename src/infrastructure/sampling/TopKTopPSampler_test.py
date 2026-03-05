@@ -33,42 +33,42 @@ except ImportError as e:
 
 def test_samplingbackend_exists():
     """Test that SamplingBackend class exists and is importable."""
-    assert 'SamplingBackend' in dir()
+    assert "SamplingBackend" in dir()
 
 
 def test_nucleussamplingvariant_exists():
     """Test that NucleusSamplingVariant class exists and is importable."""
-    assert 'NucleusSamplingVariant' in dir()
+    assert "NucleusSamplingVariant" in dir()
 
 
 def test_temperatureschedule_exists():
     """Test that TemperatureSchedule class exists and is importable."""
-    assert 'TemperatureSchedule' in dir()
+    assert "TemperatureSchedule" in dir()
 
 
 def test_samplingconfig_exists():
     """Test that SamplingConfig class exists and is importable."""
-    assert 'SamplingConfig' in dir()
+    assert "SamplingConfig" in dir()
 
 
 def test_samplingstate_exists():
     """Test that SamplingState class exists and is importable."""
-    assert 'SamplingState' in dir()
+    assert "SamplingState" in dir()
 
 
 def test_basesampler_exists():
     """Test that BaseSampler class exists and is importable."""
-    assert 'BaseSampler' in dir()
+    assert "BaseSampler" in dir()
 
 
 def test_topktoppsampler_exists():
     """Test that TopKTopPSampler class exists and is importable."""
-    assert 'TopKTopPSampler' in dir()
+    assert "TopKTopPSampler" in dir()
 
 
 def test_batchtopktoppsampler_exists():
     """Test that BatchTopKTopPSampler class exists and is importable."""
-    assert 'BatchTopKTopPSampler' in dir()
+    assert "BatchTopKTopPSampler" in dir()
 
 
 def test_batchtopktoppsampler_instantiation():
@@ -79,7 +79,7 @@ def test_batchtopktoppsampler_instantiation():
 
 def test_gumbelsoftmaxsampler_exists():
     """Test that GumbelSoftmaxSampler class exists and is importable."""
-    assert 'GumbelSoftmaxSampler' in dir()
+    assert "GumbelSoftmaxSampler" in dir()
 
 
 def test_create_sampler_exists():
@@ -95,4 +95,3 @@ def test_apply_top_k_top_p_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

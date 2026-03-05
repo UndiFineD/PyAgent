@@ -33,22 +33,22 @@ except ImportError as e:
 
 def test_thinkinground_exists():
     """Test that ThinkingRound class exists and is importable."""
-    assert 'ThinkingRound' in dir()
+    assert "ThinkingRound" in dir()
 
 
 def test_cortresult_exists():
     """Test that CoRTResult class exists and is importable."""
-    assert 'CoRTResult' in dir()
+    assert "CoRTResult" in dir()
 
 
 def test_cortreasoningcore_exists():
     """Test that CoRTReasoningCore class exists and is importable."""
-    assert 'CoRTReasoningCore' in dir()
+    assert "CoRTReasoningCore" in dir()
 
 
 def test_cortagentmixin_exists():
     """Test that CoRTAgentMixin class exists and is importable."""
-    assert 'CoRTAgentMixin' in dir()
+    assert "CoRTAgentMixin" in dir()
 
 
 def test_cortagentmixin_instantiation():
@@ -60,4 +60,3 @@ def test_cortagentmixin_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -9,6 +9,7 @@ from typing import Any, Dict, List, Optional
 
 class TemplateType(Enum):
     """Chat template types."""
+
     CHATML = "chatml"
     LLAMA2 = "llama2"
     LLAMA3 = "llama3"
@@ -29,6 +30,7 @@ class TemplateType(Enum):
 
 class ModelType(Enum):
     """Model types for template resolution."""
+
     TEXT = "text"
     CHAT = "chat"
     INSTRUCT = "instruct"
@@ -137,6 +139,7 @@ MODEL_TEMPLATE_MAP: Dict[str, TemplateType] = {
 @dataclass
 class TemplateConfig:
     """Chat template configuration."""
+
     template_type: TemplateType
     template_string: Optional[str] = None
     template_path: Optional[str] = None
@@ -160,6 +163,7 @@ class TemplateConfig:
 @dataclass
 class TemplateInfo:
     """Template metadata."""
+
     name: str
     template_type: TemplateType
     description: str = ""
@@ -182,6 +186,7 @@ class TemplateInfo:
 @dataclass
 class RenderOptions:
     """Template rendering options."""
+
     add_generation_prompt: bool = True
     add_special_tokens: bool = True
     strip_whitespace: bool = True
@@ -206,4 +211,3 @@ DEFAULT_CONFIG = TemplateConfig(
     add_eos_token=True,
     add_generation_prompt=True,
 )
-

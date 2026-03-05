@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,7 +37,9 @@ def test_visualization_and_memory() -> None:
     root = Path(str(Path(__file__).resolve().parents[5]) + "")
     viz = VisualizerAgent(str(root / "src/logic/agents/cognitive/visualizer_agent.py"))
 
-    mem = GraphMemoryAgent(str(root / "src/logic/agents/cognitive/graph_memory_agent.py"))
+    mem = GraphMemoryAgent(
+        str(root / "src/logic/agents/cognitive/graph_memory_agent.py")
+    )
 
     # 1. Test Integration
 
@@ -50,7 +53,9 @@ def test_visualization_and_memory() -> None:
 
     # 2. Test MultiModal (Simulated)
 
-    mm = MultiModalContextAgent(str(root / "src\\logic\agents\\system\\multi_modal_context_agent.py"))
+    mm = MultiModalContextAgent(
+        str(root / "src\\logic\agents\\system\\multi_modal_context_agent.py")
+    )
 
     # Create a dummy file for testing
     dummy_img = root / "dummy_ui.png"

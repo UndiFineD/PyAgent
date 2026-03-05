@@ -32,6 +32,7 @@ import time
 
 class DnsRecordType(Enum):
     """DNS record types"""
+
     A = 1
     AAAA = 28
     CNAME = 5
@@ -45,6 +46,7 @@ class DnsRecordType(Enum):
 
 class FilterAction(Enum):
     """DNS filtering actions"""
+
     ALLOW = "allow"
     BLOCK = "block"
     REDIRECT = "redirect"
@@ -53,6 +55,7 @@ class FilterAction(Enum):
 
 class QueryResult(Enum):
     """DNS query results"""
+
     ALLOWED = "allowed"
     BLOCKED = "blocked"
     FILTERED = "filtered"
@@ -62,6 +65,7 @@ class QueryResult(Enum):
 @dataclass
 class DnsQuery:
     """DNS query representation"""
+
     domain: str
     record_type: DnsRecordType
     client_ip: str
@@ -75,6 +79,7 @@ class DnsQuery:
 @dataclass
 class FilterRule:
     """DNS filtering rule"""
+
     pattern: str
     action: FilterAction
     priority: int = 0
@@ -87,6 +92,7 @@ class FilterRule:
 @dataclass
 class DnsStatistics:
     """DNS statistics container"""
+
     total_queries: int = 0
     blocked_queries: int = 0
     allowed_queries: int = 0
@@ -145,11 +151,17 @@ class DnsSecurityCore:
         """Load default filtering rules"""
         # Ad/tracking blocking rules
         default_rules = [
-            FilterRule("*.doubleclick.net", FilterAction.BLOCK, 100, "Google DoubleClick ads"),
-            FilterRule("*.googlesyndication.com", FilterAction.BLOCK, 100, "Google AdSense"),
+            FilterRule(
+                "*.doubleclick.net", FilterAction.BLOCK, 100, "Google DoubleClick ads"
+            ),
+            FilterRule(
+                "*.googlesyndication.com", FilterAction.BLOCK, 100, "Google AdSense"
+            ),
             FilterRule("*.googleadservices.com", FilterAction.BLOCK, 100, "Google Ads"),
             FilterRule("*.facebook.com", FilterAction.BLOCK, 90, "Facebook tracking"),
-            FilterRule("*.amazon-adsystem.com", FilterAction.BLOCK, 90, "Amazon advertising"),
+            FilterRule(
+                "*.amazon-adsystem.com", FilterAction.BLOCK, 90, "Amazon advertising"
+            ),
             FilterRule("analytics.*", FilterAction.BLOCK, 80, "Analytics tracking"),
             FilterRule("tracking.*", FilterAction.BLOCK, 80, "General tracking"),
         ]
@@ -176,7 +188,9 @@ class DnsSecurityCore:
                 if "*" not in rule.pattern:
                     self.blocked_domains.add(rule.pattern)
 
-            self.logger.info(f"Added filter rule: {rule.pattern} -> {rule.action.value}")
+            self.logger.info(
+                f"Added filter rule: {rule.pattern} -> {rule.action.value}"
+            )
             return True
 
         except Exception as e:
@@ -202,7 +216,9 @@ class DnsSecurityCore:
             self.logger.error(f"Failed to remove filter rule: {e}")
             return False
 
-    async def check_domain_filter(self, domain: str) -> Tuple[FilterAction, Optional[str]]:
+    async def check_domain_filter(
+        self, domain: str
+    ) -> Tuple[FilterAction, Optional[str]]:
         """Check if a domain should be filtered"""
         try:
             # Normalize domain
@@ -244,10 +260,7 @@ class DnsSecurityCore:
             return False
 
     async def process_dns_query(
-        self,
-        domain: str,
-        record_type: DnsRecordType,
-        client_ip: str
+        self, domain: str, record_type: DnsRecordType, client_ip: str
     ) -> DnsQuery:
         """Process a DNS query through the security filters"""
         start_time = time.time()
@@ -262,7 +275,7 @@ class DnsSecurityCore:
                 record_type=record_type,
                 client_ip=client_ip,
                 timestamp=datetime.utcnow(),
-                response_time=time.time() - start_time
+                response_time=time.time() - start_time,
             )
 
             # Determine result
@@ -288,7 +301,7 @@ class DnsSecurityCore:
                 client_ip=client_ip,
                 timestamp=datetime.utcnow(),
                 result=QueryResult.ERROR,
-                response_time=time.time() - start_time
+                response_time=time.time() - start_time,
             )
             self.query_log.append(query)
             self._update_statistics(query)
@@ -307,15 +320,21 @@ class DnsSecurityCore:
 
         # Update domain stats
         domain = query.domain
-        self.statistics.queries_by_domain[domain] = self.statistics.queries_by_domain.get(domain, 0) + 1
+        self.statistics.queries_by_domain[domain] = (
+            self.statistics.queries_by_domain.get(domain, 0) + 1
+        )
 
         # Update client stats
         client = query.client_ip
-        self.statistics.queries_by_client[client] = self.statistics.queries_by_client.get(client, 0) + 1
+        self.statistics.queries_by_client[client] = (
+            self.statistics.queries_by_client.get(client, 0) + 1
+        )
 
         # Update type stats
         qtype = query.record_type.name
-        self.statistics.queries_by_type[qtype] = self.statistics.queries_by_type.get(qtype, 0) + 1
+        self.statistics.queries_by_type[qtype] = (
+            self.statistics.queries_by_type.get(qtype, 0) + 1
+        )
 
         # Update response times
         if query.response_time:
@@ -333,25 +352,34 @@ class DnsSecurityCore:
                 "allowed_queries": self.statistics.allowed_queries,
                 "error_queries": self.statistics.error_queries,
                 "block_percentage": (
-                    (self.statistics.blocked_queries / self.statistics.total_queries * 100)
-                    if self.statistics.total_queries > 0 else 0
+                    (
+                        self.statistics.blocked_queries
+                        / self.statistics.total_queries
+                        * 100
+                    )
+                    if self.statistics.total_queries > 0
+                    else 0
                 ),
                 "top_domains": sorted(
                     self.statistics.queries_by_domain.items(),
                     key=lambda x: x[1],
-                    reverse=True
+                    reverse=True,
                 )[:10],
                 "top_clients": sorted(
                     self.statistics.queries_by_client.items(),
                     key=lambda x: x[1],
-                    reverse=True
+                    reverse=True,
                 )[:10],
                 "queries_by_type": self.statistics.queries_by_type,
                 "average_response_time": (
-                    sum(self.statistics.response_times) / len(self.statistics.response_times)
-                    if self.statistics.response_times else 0
+                    sum(self.statistics.response_times)
+                    / len(self.statistics.response_times)
+                    if self.statistics.response_times
+                    else 0
                 ),
-                "uptime_seconds": (datetime.utcnow() - self.statistics.start_time).total_seconds(),
+                "uptime_seconds": (
+                    datetime.utcnow() - self.statistics.start_time
+                ).total_seconds(),
                 "filter_rules_count": len(self.filter_rules),
                 "active_filters": len([r for r in self.filter_rules if r.enabled]),
             }
@@ -392,9 +420,24 @@ class DnsSecurityCore:
             if enabled:
                 # Add safe search rules
                 safe_search_rules = [
-                    FilterRule("www.google.com", FilterAction.REWRITE, 200, "Safe search for Google"),
-                    FilterRule("www.bing.com", FilterAction.REWRITE, 200, "Safe search for Bing"),
-                    FilterRule("www.youtube.com", FilterAction.REWRITE, 200, "Safe search for YouTube"),
+                    FilterRule(
+                        "www.google.com",
+                        FilterAction.REWRITE,
+                        200,
+                        "Safe search for Google",
+                    ),
+                    FilterRule(
+                        "www.bing.com",
+                        FilterAction.REWRITE,
+                        200,
+                        "Safe search for Bing",
+                    ),
+                    FilterRule(
+                        "www.youtube.com",
+                        FilterAction.REWRITE,
+                        200,
+                        "Safe search for YouTube",
+                    ),
                 ]
                 self.filter_rules.extend(safe_search_rules)
 
@@ -417,7 +460,12 @@ class DnsSecurityCore:
                     FilterRule("*.sex", FilterAction.BLOCK, 150, "Adult content"),
                     FilterRule("*.adult", FilterAction.BLOCK, 150, "Adult content"),
                     FilterRule("*.gambling", FilterAction.BLOCK, 140, "Gambling sites"),
-                    FilterRule("social-media.*", FilterAction.BLOCK, 130, "Social media restrictions"),
+                    FilterRule(
+                        "social-media.*",
+                        FilterAction.BLOCK,
+                        130,
+                        "Social media restrictions",
+                    ),
                 ]
                 self.filter_rules.extend(parental_rules)
 
@@ -444,7 +492,7 @@ class DnsSecurityCore:
                 for rule in self.filter_rules
             ]
 
-            with open(filepath, 'w') as f:
+            with open(filepath, "w") as f:
                 json.dump(rules_data, f, indent=2)
 
             self.logger.info(f"Exported {len(rules_data)} filter rules to {filepath}")
@@ -457,7 +505,7 @@ class DnsSecurityCore:
     async def import_filter_rules(self, filepath: str) -> bool:
         """Import filter rules from a file"""
         try:
-            with open(filepath, 'r') as f:
+            with open(filepath, "r") as f:
                 rules_data = json.load(f)
 
             imported_count = 0
@@ -495,7 +543,9 @@ class DnsSecurityCore:
         """Get cache information"""
         try:
             now = datetime.utcnow()
-            valid_entries = sum(1 for _, (_, expiry) in self.cache.items() if expiry > now)
+            valid_entries = sum(
+                1 for _, (_, expiry) in self.cache.items() if expiry > now
+            )
 
             return {
                 "total_entries": len(self.cache),

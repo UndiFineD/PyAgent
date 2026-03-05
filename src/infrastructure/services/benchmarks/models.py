@@ -39,7 +39,9 @@ class BenchmarkResult:
     @property
     def latency_ms_per_token(self) -> float:
         """Average latency in milliseconds per token."""
-        return (self.duration / self.total_tokens * 1000) if self.total_tokens > 0 else 0.0
+        return (
+            (self.duration / self.total_tokens * 1000) if self.total_tokens > 0 else 0.0
+        )
 
     @property
     def latency_ms(self) -> float:

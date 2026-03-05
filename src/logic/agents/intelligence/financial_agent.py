@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -51,7 +52,9 @@ class FinancialAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             {"task": "Compare with sector average", "status": "pending"},
         ]
 
-        return f"Research plan created with {len(self.research_plan)} tasks for: {query}"
+        return (
+            f"Research plan created with {len(self.research_plan)} tasks for: {query}"
+        )
 
     @as_tool
     def validate_sufficiency(self, data: dict[str, Any]) -> str:
@@ -73,5 +76,7 @@ class FinancialAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
 
 if __name__ == "__main__":
-    main = create_main_function(FinancialAgent, "Financial Agent", "File containing financial data or topic")
+    main = create_main_function(
+        FinancialAgent, "Financial Agent", "File containing financial data or topic"
+    )
     main()

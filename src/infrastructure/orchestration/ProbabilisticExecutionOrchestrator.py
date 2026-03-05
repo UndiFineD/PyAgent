@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,6 +24,7 @@ __version__ = VERSION
 if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
 
+
 class ProbabilisticExecutionOrchestrator:
     """
     Implements 'Wave-function collapse' execution for Phase 28.
@@ -36,7 +38,9 @@ class ProbabilisticExecutionOrchestrator:
         """
         Executes a task multiple times and collapses the results into a single high-confidence output.
         """
-        logging.info(f"ProbabilisticExecutionOrchestrator: Executing task '{task}' with {variations} variations.")
+        logging.info(
+            f"ProbabilisticExecutionOrchestrator: Executing task '{task}' with {variations} variations."
+        )
 
         results = []
         for i in range(variations):
@@ -62,7 +66,7 @@ class ProbabilisticExecutionOrchestrator:
             "status": "success",
             "final_result": collapsed_result,
             "variations_run": len(results),
-            "confidence": confidence
+            "confidence": confidence,
         }
 
     def _collapse(self, task: str, results: list[Any]) -> Any:
@@ -71,7 +75,7 @@ class ProbabilisticExecutionOrchestrator:
         If RealityAnchorAgent is available, it uses it for verification.
         """
         # Attempt to use RealityAnchorAgent for grounding if it exists in the fleet
-        if hasattr(self.fleet, 'reality_anchor') and self.fleet.reality_anchor:
+        if hasattr(self.fleet, "reality_anchor") and self.fleet.reality_anchor:
             best_result = None
             highest_score = -1.0
 
@@ -88,8 +92,8 @@ class ProbabilisticExecutionOrchestrator:
             if best_result is not None:
                 return best_result
 
-        # Fallback: Pick the most frequent result (simplistic consensus)
-        # For non-string objects, we convert to string for comparison
+                # Fallback: Pick the most frequent result (simplistic consensus)
+                # For non-string objects, we convert to string for comparison
                 from collections import Counter
         str_results = [str(r) for r in results]
         most_common_str = Counter(str_results).most_common(1)[0][0]

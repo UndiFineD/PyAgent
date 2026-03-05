@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_causalconv1d_exists():
     """Test that CausalConv1d class exists and is importable."""
-    assert 'CausalConv1d' in dir()
+    assert "CausalConv1d" in dir()
 
 
 def test_selectivescan_exists():
     """Test that SelectiveScan class exists and is importable."""
-    assert 'SelectiveScan' in dir()
+    assert "SelectiveScan" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

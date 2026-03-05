@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,7 +39,9 @@ class SwarmDistillationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.version = VERSION
         logging.info("SwarmDistillationAgent initialized (Placeholder).")
 
-    async def distill_agent_knowledge(self, agent_id: str, knowledge_shard: dict[str, Any]) -> dict[str, Any]:
+    async def distill_agent_knowledge(
+        self, agent_id: str, knowledge_shard: dict[str, Any]
+    ) -> dict[str, Any]:
         """Distills knowledge from an agent into a compressed format (Phase 76)."""
         _ = knowledge_shard
         logging.info(f"Distilling knowledge for {agent_id}")
@@ -46,4 +49,7 @@ class SwarmDistillationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def get_unified_context(self) -> dict[str, Any]:
         """Returns the unified distilled context of the swarm (Phase 76)."""
-        return {"distilled_indices": ["CoderAgent", "TesterAgent"], "total_compression": 0.65}
+        return {
+            "distilled_indices": ["CoderAgent", "TesterAgent"],
+            "total_compression": 0.65,
+        }

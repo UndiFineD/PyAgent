@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_profilingcategory_exists():
     """Test that ProfilingCategory class exists and is importable."""
-    assert 'ProfilingCategory' in dir()
+    assert "ProfilingCategory" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -22,7 +22,10 @@ class FleetRoutingMixin:
     """Mixin for task routing and remote node registration in FleetManager."""
 
     def register_remote_node(
-        self: FleetManager, node_url: str, agent_names: list[str], remote_version: str = "1.0.0"
+        self: FleetManager,
+        node_url: str,
+        agent_names: list[str],
+        remote_version: str = "1.0.0",
     ) -> None:
         """
         Registers a remote node and its available agents.
@@ -30,7 +33,9 @@ class FleetRoutingMixin:
         """
 
         if not VersionGate.is_compatible(SDK_VERSION, remote_version):
-            logging.warning(f"Fleet: Rejecting remote node {node_url} (Incompatible version {remote_version})")
+            logging.warning(
+                f"Fleet: Rejecting remote node {node_url} (Incompatible version {remote_version})"
+            )
             return
 
         self.remote_nodes.append(node_url)

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ from typing import Dict, List, Any, Optional, Callable
 
 try:
     import rust_core as rc
+
     RUST_AVAILABLE = True
 except ImportError:
     rc = None
@@ -53,7 +55,9 @@ class RustBridge:
             return {}
         try:
             return rc.calculate_metrics_rust(content)  # type: ignore
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error("RustBridge: calculate_metrics failed: %s", e)
             return {}
 
@@ -61,13 +65,27 @@ class RustBridge:
     def calculate_shard_id(key: str, shard_count: int) -> int:
         """Audited sharding logic (MD5-based)."""
         if shard_count <= 0:
-            logger.warning("RustBridge: shard_count must be positive, defaulting to 1024")
+            logger.warning(
+                "RustBridge: shard_count must be positive, defaulting to 1024"
+            )
             shard_count = 1024
-        return RustBridge._calculate_shard_id_fallback(key, shard_count) if not RustBridge._can_use_rust('calculate_interaction_shard_md5') else RustBridge._try_rust_call('calculate_interaction_shard_md5', key, shard_count, fallback=lambda: RustBridge._calculate_shard_id_fallback(key, shard_count))
+        return (
+            RustBridge._calculate_shard_id_fallback(key, shard_count)
+            if not RustBridge._can_use_rust("calculate_interaction_shard_md5")
+            else RustBridge._try_rust_call(
+                "calculate_interaction_shard_md5",
+                key,
+                shard_count,
+                fallback=lambda: RustBridge._calculate_shard_id_fallback(
+                    key, shard_count
+                ),
+            )
+        )
 
     @staticmethod
     def _calculate_shard_id_fallback(key: str, shard_count: int) -> int:
         import hashlib
+
         h = hashlib.md5(key.encode()).digest()
         seed = int.from_bytes(h[:8], "big")
         return seed % shard_count
@@ -77,10 +95,17 @@ class RustBridge:
         return RUST_AVAILABLE and hasattr(rc, attr)
 
     @staticmethod
-    def _try_rust_call(attr: str, *args: Any, fallback: Optional[Callable[[], Any]] = None, **kwargs: Any) -> Any:
+    def _try_rust_call(
+        attr: str,
+        *args: Any,
+        fallback: Optional[Callable[[], Any]] = None,
+        **kwargs: Any,
+    ) -> Any:
         try:
             return getattr(rc, attr)(*args, **kwargs)  # type: ignore
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"RustBridge: {attr} failed: {e}")
             if fallback:
                 return fallback()
@@ -91,7 +116,18 @@ class RustBridge:
         """Audited parallel text replacement."""
         if not replacements:
             return content
-        return RustBridge._bulk_replace_fallback(content, replacements) if not RustBridge._can_use_rust('bulk_replace_rust') else RustBridge._try_rust_call('bulk_replace_rust', content, replacements, fallback=lambda: RustBridge._bulk_replace_fallback(content, replacements))
+        return (
+            RustBridge._bulk_replace_fallback(content, replacements)
+            if not RustBridge._can_use_rust("bulk_replace_rust")
+            else RustBridge._try_rust_call(
+                "bulk_replace_rust",
+                content,
+                replacements,
+                fallback=lambda: RustBridge._bulk_replace_fallback(
+                    content, replacements
+                ),
+            )
+        )
 
     @staticmethod
     def _bulk_replace_fallback(content: str, replacements: Dict[str, str]) -> str:
@@ -101,14 +137,29 @@ class RustBridge:
         return result
 
     @staticmethod
-    def bulk_replace_files(file_paths: List[str], replacements: Dict[str, str]) -> Dict[str, bool]:
+    def bulk_replace_files(
+        file_paths: List[str], replacements: Dict[str, str]
+    ) -> Dict[str, bool]:
         """Audited parallel file modification."""
         if not file_paths or not replacements:
             return {p: False for p in file_paths} if file_paths else {}
-        return RustBridge._bulk_replace_files_fallback(file_paths, replacements) if not RustBridge._can_use_rust('bulk_replace_files_rust') else RustBridge._try_rust_call('bulk_replace_files_rust', file_paths, replacements, fallback=lambda: RustBridge._bulk_replace_files_fallback(file_paths, replacements))
+        return (
+            RustBridge._bulk_replace_files_fallback(file_paths, replacements)
+            if not RustBridge._can_use_rust("bulk_replace_files_rust")
+            else RustBridge._try_rust_call(
+                "bulk_replace_files_rust",
+                file_paths,
+                replacements,
+                fallback=lambda: RustBridge._bulk_replace_files_fallback(
+                    file_paths, replacements
+                ),
+            )
+        )
 
     @staticmethod
-    def _bulk_replace_files_fallback(file_paths: List[str], replacements: Dict[str, str]) -> Dict[str, bool]:
+    def _bulk_replace_files_fallback(
+        file_paths: List[str], replacements: Dict[str, str]
+    ) -> Dict[str, bool]:
         results = {}
         for path in file_paths:
             try:
@@ -123,7 +174,9 @@ class RustBridge:
                     with open(path, "w", encoding="utf-8") as f:
                         f.write(text)
                 results[path] = changed
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 results[path] = False
         return results
 

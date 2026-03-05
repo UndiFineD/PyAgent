@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_simulationcore_exists():
     """Test that SimulationCore class exists and is importable."""
-    assert 'SimulationCore' in dir()
+    assert "SimulationCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

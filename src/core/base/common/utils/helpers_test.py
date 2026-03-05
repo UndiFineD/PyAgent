@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "HAS_REQUESTS"), "HAS_REQUESTS missing"
     assert hasattr(mod, "HAS_TQDM"), "HAS_TQDM missing"
     assert hasattr(mod, "tqdm"), "tqdm missing"
-

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_mathagent_exists():
     """Test that MathAgent class exists and is importable."""
-    assert 'MathAgent' in dir()
+    assert "MathAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

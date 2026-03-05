@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_stopchecker_exists():
     """Test that StopChecker class exists and is importable."""
-    assert 'StopChecker' in dir()
+    assert "StopChecker" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_genetichardeningagent_exists():
     """Test that GeneticHardeningAgent class exists and is importable."""
-    assert 'GeneticHardeningAgent' in dir()
+    assert "GeneticHardeningAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -20,9 +20,11 @@ from dataclasses import dataclass, field
 try:
     from censys.search import CensysHosts, CensysCerts
     from censys.common.exceptions import CensysException
+
     CENSYS_AVAILABLE = True
 except ImportError:
     CENSYS_AVAILABLE = False
+
 
 @dataclass
 class CensysResult:
@@ -30,6 +32,7 @@ class CensysResult:
     subdomains: Set[str] = field(default_factory=set)
     host_details: Dict[str, Any] = field(default_factory=dict)
     related_ips: Set[str] = field(default_factory=set)
+
 
 class CensysIntelligence:
     """
@@ -41,7 +44,7 @@ class CensysIntelligence:
         self.logger = logging.getLogger(__name__)
         self.api_id = api_id or os.getenv("CENSYS_API_ID")
         self.api_secret = api_secret or os.getenv("CENSYS_API_SECRET")
-        
+
         if not CENSYS_AVAILABLE:
             self.logger.warning("censys library not installed. Censys logic disabled.")
             self.available = False
@@ -52,8 +55,12 @@ class CensysIntelligence:
             self.available = False
         else:
             self.available = True
-            self.hosts_client = CensysHosts(api_id=self.api_id, api_secret=self.api_secret)
-            self.certs_client = CensysCerts(api_id=self.api_id, api_secret=self.api_secret)
+            self.hosts_client = CensysHosts(
+                api_id=self.api_id, api_secret=self.api_secret
+            )
+            self.certs_client = CensysCerts(
+                api_id=self.api_id, api_secret=self.api_secret
+            )
 
     async def find_subdomains(self, domain: str) -> Set[str]:
         """
@@ -64,13 +71,15 @@ class CensysIntelligence:
 
         subdomains = set()
         query = f"names: {domain}"
-        
+
         try:
             # Run blocking SDK in executor
             loop = asyncio.get_event_loop()
             results = await loop.run_in_executor(
-                None, 
-                lambda: list(self.certs_client.search(query, per_page=100, pages=5)) # Limit pages to avoid quota burn
+                None,
+                lambda: list(
+                    self.certs_client.search(query, per_page=100, pages=5)
+                ),  # Limit pages to avoid quota burn
             )
 
             for page in results:
@@ -80,13 +89,13 @@ class CensysIntelligence:
                     names = page.get("names", [])
                     if isinstance(names, list):
                         for name in names:
-                            if name.endswith(domain) and '*' not in name:
+                            if name.endswith(domain) and "*" not in name:
                                 subdomains.add(name)
                 elif isinstance(page, list):
-                     for hit in page:
+                    for hit in page:
                         names = hit.get("names", [])
                         for name in names:
-                             if name.endswith(domain) and '*' not in name:
+                            if name.endswith(domain) and "*" not in name:
                                 subdomains.add(name)
 
         except Exception as e:
@@ -108,11 +117,10 @@ class CensysIntelligence:
         try:
             loop = asyncio.get_event_loop()
             host_data = await loop.run_in_executor(
-                None,
-                lambda: self.hosts_client.view(ip)
+                None, lambda: self.hosts_client.view(ip)
             )
             result.host_details = host_data
-            
+
             # Simple aggregation logic (lite version of Censeye)
             # Extract TLS cert fingerprints to find other hosts using same cert
             services = host_data.get("services", [])
@@ -120,16 +128,22 @@ class CensysIntelligence:
                 tls = service.get("tls", {})
                 cert = tls.get("certificate", {})
                 sha256 = cert.get("parsed", {}).get("fingerprint_sha256")
-                
+
                 if sha256 and depth > 0:
                     # Search for other hosts with this cert
-                    query = f"services.tls.certificate.parsed.fingerprint_sha256: {sha256}"
+                    query = (
+                        f"services.tls.certificate.parsed.fingerprint_sha256: {sha256}"
+                    )
                     search_hits = await loop.run_in_executor(
                         None,
-                        lambda: list(self.hosts_client.search(query, per_page=50, pages=1))
+                        lambda: list(
+                            self.hosts_client.search(query, per_page=50, pages=1)
+                        ),
                     )
-                    
-                    for hit in [h for sublist in search_hits for h in sublist]: # Flatten if paginated
+
+                    for hit in [
+                        h for sublist in search_hits for h in sublist
+                    ]:  # Flatten if paginated
                         found_ip = hit.get("ip")
                         if found_ip and found_ip != ip:
                             result.related_ips.add(found_ip)
@@ -138,6 +152,7 @@ class CensysIntelligence:
             self.logger.error(f"Censys host enrichment failed for {ip}: {e}")
 
         return result
+
 
 # Example check
 async def main():
@@ -149,7 +164,9 @@ async def main():
     else:
         print("Censys Not Configured")
 
+
 if __name__ == "__main__":
     import asyncio
-    from typing import Any # Fix undefined Any
+    from typing import Any  # Fix undefined Any
+
     asyncio.run(main())

@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "create_inits"), "create_inits missing"
     assert hasattr(mod, "fix_imports"), "fix_imports missing"
     assert hasattr(mod, "main"), "main missing"
-

@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_mambamixer_exists():
     """Test that MambaMixer class exists and is importable."""
-    assert 'MambaMixer' in dir()
+    assert "MambaMixer" in dir()
 
 
 def test_mamba2mixer_exists():
     """Test that Mamba2Mixer class exists and is importable."""
-    assert 'Mamba2Mixer' in dir()
+    assert "Mamba2Mixer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

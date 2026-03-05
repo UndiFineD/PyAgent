@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_swarmdeploymentagent_exists():
     """Test that SwarmDeploymentAgent class exists and is importable."""
-    assert 'SwarmDeploymentAgent' in dir()
+    assert "SwarmDeploymentAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

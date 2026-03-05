@@ -19,4 +19,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "lazy_import"), "lazy_import missing"
     assert hasattr(mod, "optional_import"), "optional_import missing"
     assert hasattr(mod, "require_import"), "require_import missing"
-

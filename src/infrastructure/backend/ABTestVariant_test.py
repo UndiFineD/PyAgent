@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_abtestvariant_exists():
     """Test that ABTestVariant class exists and is importable."""
-    assert 'ABTestVariant' in dir()
+    assert "ABTestVariant" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_structuredoutputmanager_exists():
     """Test that StructuredOutputManager class exists and is importable."""
-    assert 'StructuredOutputManager' in dir()
+    assert "StructuredOutputManager" in dir()
 
 
 def test_simplebackend_exists():
     """Test that SimpleBackend class exists and is importable."""
-    assert 'SimpleBackend' in dir()
+    assert "SimpleBackend" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

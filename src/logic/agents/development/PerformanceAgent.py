@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ import re
 
 __version__ = VERSION
 
+
 class PerformanceAgent:
     """Identifies and suggests code optimizations.
 
@@ -39,15 +41,24 @@ class PerformanceAgent:
     """
 
     OPTIMIZATION_PATTERNS: list[tuple[str, OptimizationType, str, str]] = [
-        (r"for\s+\w+\s+in\s+range\(len\((\w+)\)\)", OptimizationType.ALGORITHMIC,
-         "Use enumerate() instead of range(len())",
-         "for idx, item in enumerate({0}):"),
-        (r"\+=\s*.*?for\s+", OptimizationType.MEMORY,
-         "String concatenation in loop is inefficient",
-         "Use ''.join() or list comprehension"),
-        (r"time\.sleep\(\d+\)", OptimizationType.CONCURRENCY,
-         "Blocking sleep may hurt performance",
-         "Consider asyncio.sleep() for async code"),
+        (
+            r"for\s+\w+\s+in\s+range\(len\((\w+)\)\)",
+            OptimizationType.ALGORITHMIC,
+            "Use enumerate() instead of range(len())",
+            "for idx, item in enumerate({0}):",
+        ),
+        (
+            r"\+=\s*.*?for\s+",
+            OptimizationType.MEMORY,
+            "String concatenation in loop is inefficient",
+            "Use ''.join() or list comprehension",
+        ),
+        (
+            r"time\.sleep\(\d+\)",
+            OptimizationType.CONCURRENCY,
+            "Blocking sleep may hurt performance",
+            "Consider asyncio.sleep() for async code",
+        ),
     ]
 
     def __init__(self) -> None:
@@ -64,19 +75,23 @@ class PerformanceAgent:
             List of optimization suggestions.
         """
         self.suggestions = []
-        lines = content.split('\n')
+        lines = content.split("\n")
 
         for i, line in enumerate(lines, 1):
             for pattern, opt_type, desc, fix in self.OPTIMIZATION_PATTERNS:
                 match = re.search(pattern, line)
                 if match:
-                    self.suggestions.append(OptimizationSuggestion(
-                        type=opt_type,
-                        description=desc,
-                        impact="medium",
-                        code_location=f"line {i}",
-                        before_snippet=line.strip(),
-                        after_snippet=fix.format(*match.groups()) if match.groups() else fix
-                    ))
+                    self.suggestions.append(
+                        OptimizationSuggestion(
+                            type=opt_type,
+                            description=desc,
+                            impact="medium",
+                            code_location=f"line {i}",
+                            before_snippet=line.strip(),
+                            after_snippet=(
+                                fix.format(*match.groups()) if match.groups() else fix
+                            ),
+                        )
+                    )
 
         return self.suggestions

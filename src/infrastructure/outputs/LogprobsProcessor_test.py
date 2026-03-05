@@ -33,42 +33,42 @@ except ImportError as e:
 
 def test_tokenlogprob_exists():
     """Test that TokenLogprob class exists and is importable."""
-    assert 'TokenLogprob' in dir()
+    assert "TokenLogprob" in dir()
 
 
 def test_toplogprobs_exists():
     """Test that TopLogprobs class exists and is importable."""
-    assert 'TopLogprobs' in dir()
+    assert "TopLogprobs" in dir()
 
 
 def test_logprobslists_exists():
     """Test that LogprobsLists class exists and is importable."""
-    assert 'LogprobsLists' in dir()
+    assert "LogprobsLists" in dir()
 
 
 def test_logprobstensors_exists():
     """Test that LogprobsTensors class exists and is importable."""
-    assert 'LogprobsTensors' in dir()
+    assert "LogprobsTensors" in dir()
 
 
 def test_asynccputransfer_exists():
     """Test that AsyncCPUTransfer class exists and is importable."""
-    assert 'AsyncCPUTransfer' in dir()
+    assert "AsyncCPUTransfer" in dir()
 
 
 def test_sampleroutput_exists():
     """Test that SamplerOutput class exists and is importable."""
-    assert 'SamplerOutput' in dir()
+    assert "SamplerOutput" in dir()
 
 
 def test_modelrunneroutput_exists():
     """Test that ModelRunnerOutput class exists and is importable."""
-    assert 'ModelRunnerOutput' in dir()
+    assert "ModelRunnerOutput" in dir()
 
 
 def test_streaminglogprobscollector_exists():
     """Test that StreamingLogprobsCollector class exists and is importable."""
-    assert 'StreamingLogprobsCollector' in dir()
+    assert "StreamingLogprobsCollector" in dir()
 
 
 def test_extract_top_k_logprobs_rust_exists():
@@ -84,4 +84,3 @@ def test_batch_logprobs_to_cpu_rust_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

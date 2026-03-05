@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_offloadingbackend_exists():
     """Test that OffloadingBackend class exists and is importable."""
-    assert 'OffloadingBackend' in dir()
+    assert "OffloadingBackend" in dir()
 
 
 def test_offloadingmanager_exists():
     """Test that OffloadingManager class exists and is importable."""
-    assert 'OffloadingManager' in dir()
+    assert "OffloadingManager" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

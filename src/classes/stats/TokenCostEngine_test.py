@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_tokencostengine_exists():
     """Test that TokenCostEngine class exists and is importable."""
-    assert 'TokenCostEngine' in dir()
+    assert "TokenCostEngine" in dir()
 
 
 def test_tokencostengine_instantiation():
@@ -45,4 +45,3 @@ def test_tokencostengine_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

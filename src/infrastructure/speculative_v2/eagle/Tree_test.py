@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_treenode_exists():
     """Test that TreeNode class exists and is importable."""
-    assert 'TreeNode' in dir()
+    assert "TreeNode" in dir()
 
 
 def test_speculativetree_exists():
     """Test that SpeculativeTree class exists and is importable."""
-    assert 'SpeculativeTree' in dir()
+    assert "SpeculativeTree" in dir()
 
 
 def test_talontreebuilder_exists():
     """Test that TalonTreeBuilder class exists and is importable."""
-    assert 'TalonTreeBuilder' in dir()
+    assert "TalonTreeBuilder" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

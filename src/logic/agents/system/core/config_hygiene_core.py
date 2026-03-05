@@ -49,11 +49,15 @@ class ConfigHygieneCore:
                         return False, f"Missing required field: {req}"
 
             return True, "Validation successful."
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             return False, str(e)
 
     @staticmethod
-    def extract_env_vars(config_data: dict[str, Any], prefix: str = "PYAGENT_") -> dict[str, str]:
+    def extract_env_vars(
+        config_data: dict[str, Any], prefix: str = "PYAGENT_"
+    ) -> dict[str, str]:
         """
         Helper to flatten nested config into env-style key-value pairs.
         """
@@ -67,12 +71,16 @@ class ConfigHygieneCore:
         return ConfigHygieneCore._extract_env_vars_python(config_data, prefix)
 
     @staticmethod
-    def _extract_env_vars_python(config_data: dict[str, Any], prefix: str) -> dict[str, str]:
+    def _extract_env_vars_python(
+        config_data: dict[str, Any], prefix: str
+    ) -> dict[str, str]:
         env_vars = {}
         for k, v in config_data.items():
             if isinstance(v, (str, int, float, bool)):
                 env_vars[f"{prefix}{k.upper()}"] = str(v)
             elif isinstance(v, dict):
-                sub = ConfigHygieneCore._extract_env_vars_python(v, f"{prefix}{k.upper()}_")
+                sub = ConfigHygieneCore._extract_env_vars_python(
+                    v, f"{prefix}{k.upper()}_"
+                )
                 env_vars.update(sub)
         return env_vars

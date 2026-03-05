@@ -21,4 +21,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "HybridMambaMixer"), "HybridMambaMixer missing"
     assert hasattr(mod, "CausalConv1d"), "CausalConv1d missing"
     assert hasattr(mod, "SelectiveScan"), "SelectiveScan missing"
-

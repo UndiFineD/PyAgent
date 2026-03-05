@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "get_mcp_agent"), "get_mcp_agent missing"
     assert hasattr(mod, "LazyAgentMap"), "LazyAgentMap missing"
     assert hasattr(mod, "AgentRegistry"), "AgentRegistry missing"
-

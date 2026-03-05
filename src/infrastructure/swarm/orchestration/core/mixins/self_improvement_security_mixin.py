@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +26,9 @@ from typing import Any, Dict, List
 class SelfImprovementSecurityMixin:
     """Mixin for security-related analysis."""
 
-    def _analyze_security(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
+    def _analyze_security(
+        self, content: str, file_path_rel: str
+    ) -> List[Dict[str, Any]]:
         """Scans for dangerous patterns and security risks."""
         findings = []
 
@@ -36,9 +39,13 @@ class SelfImprovementSecurityMixin:
 
         if rust_accel and rc is not None:
             try:
-                rust_findings = rc.analyze_security_patterns_rust(content, dangerous_patterns)
+                rust_findings = rc.analyze_security_patterns_rust(
+                    content, dangerous_patterns
+                )
                 for line_num, pattern, msg in rust_findings:
-                    if "SelfImprovementCore" in content and pattern in str(dangerous_patterns):
+                    if "SelfImprovementCore" in content and pattern in str(
+                        dangerous_patterns
+                    ):
                         continue
                     findings.append(
                         {
@@ -49,7 +56,9 @@ class SelfImprovementSecurityMixin:
                         }
                     )
                 return findings
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         lines = content.split("\n")
@@ -58,7 +67,9 @@ class SelfImprovementSecurityMixin:
                 if re.search(pattern, line):
                     if "# nosec" in line:
                         continue
-                    if "SelfImprovementCore" in content and pattern in str(dangerous_patterns):
+                    if "SelfImprovementCore" in content and pattern in str(
+                        dangerous_patterns
+                    ):
                         continue
 
                     findings.append(

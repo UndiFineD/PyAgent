@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,6 +21,7 @@ import zlib
 
 try:
     from rust_core import partition_to_shards_rust
+
     _RUST_ACCEL = True
 except ImportError:
     partition_to_shards_rust = None
@@ -28,7 +30,6 @@ except ImportError:
 
 class CorePartitionMixin:
     """Methods for partitioning and bloat detection."""
-
 
     def partition_memory(
         self, memory: dict[str, Any], max_entries_per_shard: int = 1000
@@ -48,7 +49,6 @@ class CorePartitionMixin:
             else:
                 shards["default"][category] = data
         return shards
-
 
     def _shard_category(
         self, category: str, data: dict, shards: dict, max_entries: int
@@ -79,7 +79,6 @@ class CorePartitionMixin:
             if shard_name not in shards:
                 shards[shard_name] = {}
             shards[shard_name][key] = val
-
 
     def detect_shard_bloat(
         self, shards: dict[str, dict[str, Any]], size_threshold_bytes: int = 5_000_000

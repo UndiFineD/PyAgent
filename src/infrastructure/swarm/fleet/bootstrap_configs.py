@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -53,13 +54,21 @@ def get_bootstrap_agents() -> dict[str, tuple[str, str, str | None]]:
             None,
         ),
         "Logging": ("src.logic.agents.system.logging_agent", "LoggingAgent", None),
-        "Telemetry": ("src.logic.agents.system.telemetry_agent", "TelemetryAgent", None),
+        "Telemetry": (
+            "src.logic.agents.system.telemetry_agent",
+            "TelemetryAgent",
+            None,
+        ),
         "FleetDeployer": (
             "src.logic.agents.swarm.fleet_deployer_agent",
             "FleetDeployerAgent",
             None,
         ),
-        "agent_dao": ("src.infrastructure.swarm.orchestration.system.agent_dao", "AgentDAO", None),
+        "agent_dao": (
+            "src.infrastructure.swarm.orchestration.system.agent_dao",
+            "AgentDAO",
+            None,
+        ),
         "weight_orchestrator": (
             "src.infrastructure.swarm.orchestration.system.weight_orchestrator",
             "WeightOrchestrator",
@@ -96,8 +105,14 @@ BOOTSTRAP_ORCHESTRATORS = {
         "src.infrastructure.swarm.orchestration.intel.phase_orchestrator",
         "PhaseOrchestrator",
     ),
-    "registry": ("src.infrastructure.swarm.orchestration.system.tool_registry", "ToolRegistry"),
-    "signals": ("src.infrastructure.swarm.orchestration.signals.signal_registry", "SignalRegistry"),
+    "registry": (
+        "src.infrastructure.swarm.orchestration.system.tool_registry",
+        "ToolRegistry",
+    ),
+    "signals": (
+        "src.infrastructure.swarm.orchestration.signals.signal_registry",
+        "SignalRegistry",
+    ),
     "recorder": (
         "src.infrastructure.compute.backend.local_context_recorder",
         "LocalContextRecorder",
@@ -117,7 +132,10 @@ BOOTSTRAP_ORCHESTRATORS = {
         "GossipProtocolOrchestrator",
     ),
     "sharding": ("src.infrastructure.swarm.fleet.shard_manager", "ShardManager"),
-    "load_balancer": ("src.infrastructure.services.api.fleet_load_balancer", "FleetLoadBalancer"),
+    "load_balancer": (
+        "src.infrastructure.services.api.fleet_load_balancer",
+        "FleetLoadBalancer",
+    ),
     "fallback_engine": (
         "src.observability.stats.analysis",
         "ModelFallbackEngine",

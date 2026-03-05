@@ -16,6 +16,7 @@ import logging
 import re
 import zlib
 
+
 @dataclass
 class ContextDiff:
     """Diff between context versions.
@@ -28,6 +29,7 @@ class ContextDiff:
         modified_sections: List of modified section names.
         change_summary: Brief summary of changes.
     """
+
     version_from: str
     version_to: str
     added_sections: List[str] = field(default_factory=lambda: [])

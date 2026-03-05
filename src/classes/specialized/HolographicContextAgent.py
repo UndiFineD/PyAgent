@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,13 +25,14 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
 class HolographicContextAgent(BaseAgent):
     """
     Agent that manages multi-perspective context snapshots (Holograms).
     Allows agents to view the same project state from different architectural angles
     (e.g., Security, Performance, Maintainability, UX).
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.holograms: dict[str, dict[str, Any]] = {}
@@ -41,24 +43,31 @@ class HolographicContextAgent(BaseAgent):
         )
 
     @as_tool
-    def create_hologram(self, name: str, state_data: dict[str, Any], angles: list[str] = ["security", "performance"]) -> str:
+    def create_hologram(
+        self,
+        name: str,
+        state_data: dict[str, Any],
+        angles: list[str] = ["security", "performance"],
+    ) -> str:
         """
         Creates a multi-angle 'hologram' of the provided state data.
         """
         hologram = {
             "timestamp": time.time(),
             "source_data": state_data,
-            "perspectives": {}
+            "perspectives": {},
         }
-        
+
         for angle in angles:
             # In a real system, this would call specialized agents or use specific prompts to 're-view' the data
             hologram["perspectives"][angle] = {
                 "summary": f"Perspective on {angle} for {name}",
-                "metrics": {angle: random.uniform(0.1, 1.0) if 'random' in globals() else 0.5},
-                "recommendations": [f"Improve {angle} by doing X."]
+                "metrics": {
+                    angle: random.uniform(0.1, 1.0) if "random" in globals() else 0.5
+                },
+                "recommendations": [f"Improve {angle} by doing X."],
             }
-            
+
         self.holograms[name] = hologram
         logging.info(f"Hologram created: {name} with {len(angles)} perspectives.")
         return f"Successfully created hologram '{name}'."
@@ -70,7 +79,9 @@ class HolographicContextAgent(BaseAgent):
         """
         if name in self.holograms:
             h = self.holograms[name]
-            return h["perspectives"].get(angle, {"error": f"Angle '{angle}' not found in hologram '{name}'."})
+            return h["perspectives"].get(
+                angle, {"error": f"Angle '{angle}' not found in hologram '{name}'."}
+            )
         return {"error": f"Hologram '{name}' not found."}
 
     @as_tool

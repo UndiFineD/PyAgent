@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "SuffixProposer"), "SuffixProposer missing"
     assert hasattr(mod, "EagleProposer"), "EagleProposer missing"
     assert hasattr(mod, "HybridDrafter"), "HybridDrafter missing"
-

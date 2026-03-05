@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,7 +34,6 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from types import TracebackType
 from typing import Iterator, Optional
-
 
 
 @dataclass
@@ -121,6 +121,7 @@ def _capture_python_memory(snapshot: MemorySnapshot) -> None:
 def _capture_system_memory(snapshot: MemorySnapshot) -> None:
     try:
         import psutil
+
         process = psutil.Process(os.getpid())
         mem_info = process.memory_info()  # type: ignore
         snapshot.rss_mb = mem_info.rss / (1024 * 1024)
@@ -132,6 +133,7 @@ def _capture_system_memory(snapshot: MemorySnapshot) -> None:
 def _capture_gpu_memory(snapshot: MemorySnapshot) -> None:
     try:
         import torch
+
         if torch.cuda.is_available():
             snapshot.gpu_allocated_mb = torch.cuda.memory_allocated() / (1024 * 1024)
             snapshot.gpu_reserved_mb = torch.cuda.memory_reserved() / (1024 * 1024)
@@ -204,7 +206,9 @@ class MemoryProfiler:
 
 
 @contextmanager
-def memory_profile(name: str = "profile", include_gpu: bool = True) -> Iterator[MemoryProfiler]:
+def memory_profile(
+    name: str = "profile", include_gpu: bool = True
+) -> Iterator[MemoryProfiler]:
     """
     Convenience context manager for memory profiling.
 
@@ -271,7 +275,9 @@ class GCDebugger:
             if phase == "start":
                 self._gc_start_time = time.time()
             elif phase == "stop":
-                elapsed_ms: gc.Any | float = (time.time() - getattr(self, "_gc_start_time", time.time())) * 1000
+                elapsed_ms: gc.Any | float = (
+                    time.time() - getattr(self, "_gc_start_time", time.time())
+                ) * 1000
 
                 self.total_collections += 1
                 self.total_collected += info.get("collected", 0)
@@ -316,7 +322,9 @@ class GCDebugger:
             "total_collected": self.total_collected,
             "total_uncollectable": self.total_uncollectable,
             "total_time_ms": round(self.total_time_ms, 2),
-            "avg_collection_time_ms": round(self.total_time_ms / max(1, self.total_collections), 2),
+            "avg_collection_time_ms": round(
+                self.total_time_ms / max(1, self.total_collections), 2
+            ),
             "current_gc_counts": gc.get_count(),
             "total_objects": len(gc.get_objects()),
             "collection_log": self.collections[-10:] if self.collections else [],

@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_saasgateway_exists():
     """Test that SaaSGateway class exists and is importable."""
-    assert 'SaaSGateway' in dir()
+    assert "SaaSGateway" in dir()
 
 
 def test_saasgateway_instantiation():
@@ -45,4 +45,3 @@ def test_saasgateway_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

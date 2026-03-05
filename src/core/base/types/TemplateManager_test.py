@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_templatemanager_exists():
     """Test that TemplateManager class exists and is importable."""
-    assert 'TemplateManager' in dir()
+    assert "TemplateManager" in dir()
 
 
 def test_templatemanager_instantiation():
@@ -45,4 +45,3 @@ def test_templatemanager_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

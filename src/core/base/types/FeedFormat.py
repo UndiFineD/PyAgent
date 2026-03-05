@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,8 +22,10 @@ from enum import Enum
 
 __version__ = VERSION
 
+
 class FeedFormat(Enum):
     """Feed format types for RSS / Atom generation."""
+
     RSS_20 = "rss_20"
     ATOM_10 = "atom_10"
     JSON_FEED = "json_feed"

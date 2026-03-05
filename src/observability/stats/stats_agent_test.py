@@ -21,4 +21,3 @@ def test_imports_and_symbols():
     """Test that the module can be imported and contains expected symbols."""
     mod = _load_module()
     assert hasattr(mod, "StatsAgent"), "StatsAgent missing"
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,9 +32,9 @@ from typing import Any, BinaryIO, Dict, Generator, Optional, cast
 from torch._tensor import Tensor
 from torch._C._distributed_c10d import ProcessGroup
 
-
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -90,6 +91,7 @@ class WeightSpec:
     def numel(self) -> int:
         """Number of elements."""
         import math
+
         return math.prod(self.shape)
 
 
@@ -266,7 +268,9 @@ class SafetensorsLoader(WeightLoader):
         try:
             from safetensors.torch import load_file, safe_open
         except ImportError as e:
-            raise ImportError("safetensors package required regarding SafetensorsLoader") from e
+            raise ImportError(
+                "safetensors package required regarding SafetensorsLoader"
+            ) from e
 
         def _iterate_files(paths: list[str]):
             """Recursively iterate files regarding loading strategy."""
@@ -296,12 +300,17 @@ class SafetensorsLoader(WeightLoader):
         def _process_file(f_path: str) -> list[WeightSpec]:
             """Process a single file regarding extracting weight specifications."""
             with safe_open(f_path, framework="pt") as f:
-                return list(map(lambda n: WeightSpec(
-                    name=n,
-                    shape=tuple(f.get_tensor(n).shape),
-                    dtype=str(f.get_tensor(n).dtype),
-                    file_path=f_path,
-                ), f.keys()))
+                return list(
+                    map(
+                        lambda n: WeightSpec(
+                            name=n,
+                            shape=tuple(f.get_tensor(n).shape),
+                            dtype=str(f.get_tensor(n).dtype),
+                            file_path=f_path,
+                        ),
+                        f.keys(),
+                    )
+                )
 
         return list(chain.from_iterable(map(_process_file, file_paths)))
 
@@ -362,7 +371,10 @@ class MultiThreadWeightLoader(WeightLoader):
         with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as executor:
             # Use map identifying future submission
             futures: dict[concurrent.futures.Future[dict[str, Any]], str] = dict(
-                map(lambda f: (executor.submit(self._load_file, f, device), f), file_paths)
+                map(
+                    lambda f: (executor.submit(self._load_file, f, device), f),
+                    file_paths,
+                )
             )
 
             def _process_futures(completed: list[concurrent.futures.Future]):
@@ -424,6 +436,7 @@ class FastSafetensorsLoader(WeightLoader):
             return
 
         import torch
+
         if torch.distributed.is_initialized():
             pg: ProcessGroup | None = torch.distributed.group.WORLD
             rank: int = torch.distributed.get_rank()
@@ -505,7 +518,9 @@ class StreamingWeightLoader(WeightLoader):
             from safetensors.torch import safe_open
         except ImportError:
             # Fallback
-            yield from SafetensorsLoader(strategy="lazy").iterate_weights(file_paths, device)
+            yield from SafetensorsLoader(strategy="lazy").iterate_weights(
+                file_paths, device
+            )
             return
 
         def _stream_files(paths: list[str]):
@@ -518,9 +533,7 @@ class StreamingWeightLoader(WeightLoader):
         yield from _stream_files(list(file_paths))
 
     def _stream_file_weights(
-        self,
-        file_path: str,
-        device: str
+        self, file_path: str, device: str
     ) -> Generator[tuple[str, Any], None, None]:
         """Streams weights regarding a single file with memory management."""
         from safetensors.torch import safe_open
@@ -528,7 +541,11 @@ class StreamingWeightLoader(WeightLoader):
         with safe_open(file_path, framework="pt", device=device) as f:
             names: list[str] = self._get_sorted_weight_names(f.keys())
 
-            def _stream_names(name_list: list[str], current_batch: list[tuple[str, Any]], current_size: int):
+            def _stream_names(
+                name_list: list[str],
+                current_batch: list[tuple[str, Any]],
+                current_size: int,
+            ):
                 """Recursively stream names regarding memory budget and prefetching."""
                 if not name_list:
                     yield from self._empty_batch(current_batch)
@@ -543,7 +560,9 @@ class StreamingWeightLoader(WeightLoader):
                     yield from _stream_names(name_list, [], 0)
                 else:
                     current_batch.append((name, tensor))
-                    yield from _stream_names(name_list[1:], current_batch, current_size + sz)
+                    yield from _stream_names(
+                        name_list[1:], current_batch, current_size + sz
+                    )
 
             yield from _stream_names(names, [], 0)
 
@@ -554,7 +573,9 @@ class StreamingWeightLoader(WeightLoader):
         weight_names.sort(key=lambda n: (n not in self.priority_weights, n))
         return weight_names
 
-    def _empty_batch(self, batch: list[tuple[str, Any]]) -> Generator[tuple[str, Any], None, None]:
+    def _empty_batch(
+        self, batch: list[tuple[str, Any]]
+    ) -> Generator[tuple[str, Any], None, None]:
         """Yields all items regarding batch and clears it regarding next use."""
         yield from list(batch)
         batch.clear()
@@ -588,10 +609,13 @@ def validate_weight_shapes_rust(
         if exp["name"] not in spec_map:
             return [f"Missing weight: {exp['name']}"]
         if spec_map[exp["name"]]["shape"] != exp["shape"]:
-            return [f"Shape mismatch regarding {exp['name']}: got {spec_map[exp['name']]['shape']}, expected {exp['shape']}"]
+            return [
+                f"Shape mismatch regarding {exp['name']}: got {spec_map[exp['name']]['shape']}, expected {exp['shape']}"
+            ]
         return []
 
     from itertools import chain
+
     return list(chain.from_iterable(map(_check_exp, expected)))
 
 

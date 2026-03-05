@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -61,7 +62,9 @@ class HierarchicalDPCoordinator:
         self._next_coordinator = 0
         self._lock = threading.Lock()
 
-    def route_request(self, request_id: str, hint_locality: Optional[int] = None) -> Tuple[int, int]:
+    def route_request(
+        self, request_id: str, hint_locality: Optional[int] = None
+    ) -> Tuple[int, int]:
         """Route request to coordinator and worker."""
         with self._lock:
             if hint_locality is not None and 0 <= hint_locality < self._num_local:
@@ -74,10 +77,18 @@ class HierarchicalDPCoordinator:
             worker_id = coordinator.assign_request(request_id)
             return (coord_idx, worker_id)
 
-    def complete_request(self, coordinator_idx: int, worker_id: int, latency_ms: float, success: bool = True) -> None:
+    def complete_request(
+        self,
+        coordinator_idx: int,
+        worker_id: int,
+        latency_ms: float,
+        success: bool = True,
+    ) -> None:
         """Mark request complete."""
         if 0 <= coordinator_idx < self._num_local:
-            self._local_coordinators[coordinator_idx].complete_request(worker_id, latency_ms, success)
+            self._local_coordinators[coordinator_idx].complete_request(
+                worker_id, latency_ms, success
+            )
 
     def global_step_sync(self) -> int:
         """Synchronize all coordinators at step boundary."""

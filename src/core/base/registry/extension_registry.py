@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,6 +31,7 @@ class ExtensionManager:
     """
     A registry for managing pluggable extension classes.
     """
+
     def __init__(self, name: str = "default") -> None:
         self.name: str = name
         self._name2class: dict[str, type] = {}
@@ -39,12 +41,16 @@ class ExtensionManager:
         """
         Decorator to register a class with the given name.
         """
+
         def wrap(cls_to_register: _T) -> _T:
             with self._lock:
                 if name in self._name2class:
-                    logger.warning("Overwriting existing registration '%s' in %s", name, self.name)
+                    logger.warning(
+                        "Overwriting existing registration '%s' in %s", name, self.name
+                    )
                 self._name2class[name] = cls_to_register
             return cls_to_register
+
         return wrap
 
     def register_class(self, name: str, cls: type) -> None:
@@ -53,7 +59,9 @@ class ExtensionManager:
         """
         with self._lock:
             if name in self._name2class:
-                logger.warning("Overwriting existing registration '%s' in %s", name, self.name)
+                logger.warning(
+                    "Overwriting existing registration '%s' in %s", name, self.name
+                )
             self._name2class[name] = cls
 
     def load(self, name: str, *args, **kwargs) -> object:
@@ -63,7 +71,9 @@ class ExtensionManager:
         with self._lock:
             cls = self._name2class.get(name)
             if cls is None:
-                raise KeyError(f"No class found/not found under name '{name}' in {self.name}")
+                raise KeyError(
+                    f"No class found/not found under name '{name}' in {self.name}"
+                )
             return cls(*args, **kwargs)
 
     def get_class(self, name: str) -> type:
@@ -73,7 +83,9 @@ class ExtensionManager:
         with self._lock:
             cls = self._name2class.get(name)
             if cls is None:
-                raise KeyError(f"No class registered under name '{name}' in {self.name}")
+                raise KeyError(
+                    f"No class registered under name '{name}' in {self.name}"
+                )
             return cls
 
     def has(self, name: str) -> bool:
@@ -117,14 +129,20 @@ class TypedExtensionManager(ExtensionManager, Generic[T_co]):
 
     def register(self, name: str) -> Callable[[_T], _T]:
         """Register a class, ensuring it's a subclass of base_type."""
+
         def wrap(cls_to_register: _T) -> _T:
             if self.base_type and not issubclass(cls_to_register, self.base_type):
-                raise TypeError(f"{cls_to_register} must be a subclass of {self.base_type}")
+                raise TypeError(
+                    f"{cls_to_register} must be a subclass of {self.base_type}"
+                )
             with self._lock:
                 if name in self._name2class:
-                    logger.warning("Overwriting existing registration '%s' in %s", name, self.name)
+                    logger.warning(
+                        "Overwriting existing registration '%s' in %s", name, self.name
+                    )
                 self._name2class[name] = cls_to_register
             return cls_to_register
+
         return wrap
 
     def register_class(self, name: str, cls: type) -> None:
@@ -133,7 +151,9 @@ class TypedExtensionManager(ExtensionManager, Generic[T_co]):
             raise TypeError(f"{cls} must be a subclass of {self.base_type}")
         with self._lock:
             if name in self._name2class:
-                logger.warning("Overwriting existing registration '%s' in %s", name, self.name)
+                logger.warning(
+                    "Overwriting existing registration '%s' in %s", name, self.name
+                )
             self._name2class[name] = cls
 
 
@@ -142,11 +162,14 @@ class MultiExtensionManager:
 
     def __init__(self, name: str = "multi"):
         self.name = name
-        self._entries: dict[str, list[tuple[int, type]]] = {}  # key -> [(priority, class), ...]
+        self._entries: dict[str, list[tuple[int, type]]] = (
+            {}
+        )  # key -> [(priority, class), ...]
         self._lock = threading.RLock()
 
     def register(self, key: str, priority: int = 0) -> Callable[[_T], _T]:
         """Register a class with a priority level for a key."""
+
         def wrap(cls_to_register: _T) -> _T:
             with self._lock:
                 if key not in self._entries:
@@ -155,6 +178,7 @@ class MultiExtensionManager:
                 # Sort by priority (highest first)
                 self._entries[key].sort(key=lambda x: -x[0])
             return cls_to_register
+
         return wrap
 
     def register_class(self, key: str, cls: type, priority: int = 0) -> None:
@@ -198,7 +222,9 @@ class LazyExtensionManager(ExtensionManager):
         super().__init__(name)
         self._module_paths: dict[str, str] = {}
 
-    def register_lazy(self, name: str, module_spec: str, class_name: str | None = None) -> None:
+    def register_lazy(
+        self, name: str, module_spec: str, class_name: str | None = None
+    ) -> None:
         """Register a class to be imported lazily.
 
         Supports two formats:
@@ -208,7 +234,9 @@ class LazyExtensionManager(ExtensionManager):
         if class_name is None:
             # Format: "module:ClassName"
             if ":" not in module_spec:
-                raise ValueError(f"Expected 'module:ClassName' format, got '{module_spec}'")
+                raise ValueError(
+                    f"Expected 'module:ClassName' format, got '{module_spec}'"
+                )
             self._module_paths[name] = module_spec
         else:
             # Format: "module", "ClassName"
@@ -228,10 +256,13 @@ class LazyExtensionManager(ExtensionManager):
 
             # Otherwise, load it
             if name not in self._module_paths:
-                raise KeyError(f"No class registered under name '{name}' in {self.name}")
+                raise KeyError(
+                    f"No class registered under name '{name}' in {self.name}"
+                )
 
             module_path, class_name = self._module_paths[name].split(":")
             import importlib
+
             module = importlib.import_module(module_path)
             cls = getattr(module, class_name)
             self._name2class[name] = cls
@@ -241,6 +272,7 @@ class LazyExtensionManager(ExtensionManager):
         """Load a class and instantiate it."""
         cls = self.get_class(name)
         return cls(*args, **kwargs)
+
 
 # ============================================================================
 # FACTORY FUNCTIONS & GLOBAL REGISTRY
@@ -280,10 +312,11 @@ def create_multi_registry() -> MultiExtensionManager:
 
 class GlobalRegistry(ExtensionManager):
     """Global singleton registry with additional convenience methods."""
-    _instance: Optional['GlobalRegistry'] = None
+
+    _instance: Optional["GlobalRegistry"] = None
     _initialized: bool = False
 
-    def __new__(cls) -> 'GlobalRegistry':
+    def __new__(cls) -> "GlobalRegistry":
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance._initialized = False
@@ -295,6 +328,6 @@ class GlobalRegistry(ExtensionManager):
             self._initialized = True
 
     @classmethod
-    def instance(cls) -> 'GlobalRegistry':
+    def instance(cls) -> "GlobalRegistry":
         """Get the singleton instance."""
         return cls()

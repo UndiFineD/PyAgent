@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_dependencytype_exists():
     """Test that DependencyType class exists and is importable."""
-    assert 'DependencyType' in dir()
+    assert "DependencyType" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

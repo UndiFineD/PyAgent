@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -8,6 +9,7 @@ from pathlib import Path
 
 if TYPE_CHECKING:
     from src.logic.agents.development.AccessibilityAgent import AccessibilityAgent
+
 
 class AccessibilityLogicMixin:
     """Mixin for entry-point analysis logic and rule management in AccessibilityAgent."""

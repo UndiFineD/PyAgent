@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "GuidedDecoder"), "GuidedDecoder missing"
     assert hasattr(mod, "generate_json"), "generate_json missing"
     assert hasattr(mod, "generate_choice"), "generate_choice missing"
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -56,7 +57,9 @@ class TelemetryCollector:
         self._current_span: TelemetrySpan | None = None
 
     @contextmanager
-    def span(self, name: str, attributes: dict[str, Any] | None = None) -> Iterator[SpanContext]:
+    def span(
+        self, name: str, attributes: dict[str, Any] | None = None
+    ) -> Iterator[SpanContext]:
         """Create a telemetry span.
 
         Args:
@@ -67,7 +70,9 @@ class TelemetryCollector:
             SpanContext for adding attributes and events.
         """
         parent_id = self._current_span.span_id if self._current_span else None
-        trace_id = self._current_span.trace_id if self._current_span else str(uuid.uuid4())
+        trace_id = (
+            self._current_span.trace_id if self._current_span else str(uuid.uuid4())
+        )
 
         span = TelemetrySpan(
             name=name,
@@ -83,7 +88,9 @@ class TelemetryCollector:
 
         try:
             yield context
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             context.add_event("exception", {"message": str(e)})
             raise
         finally:
@@ -111,7 +118,11 @@ class TelemetryCollector:
                     "parent_id": span.parent_id,
                     "start_time": span.start_time,
                     "end_time": span.end_time,
-                    "duration_ms": (span.end_time - span.start_time) * 1000 if span.end_time else None,
+                    "duration_ms": (
+                        (span.end_time - span.start_time) * 1000
+                        if span.end_time
+                        else None
+                    ),
                     "attributes": span.attributes,
                     "events": span.events,
                 }

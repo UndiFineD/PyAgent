@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_fusedmoemethodbase_exists():
     """Test that FusedMoEMethodBase class exists and is importable."""
-    assert 'FusedMoEMethodBase' in dir()
+    assert "FusedMoEMethodBase" in dir()
 
 
 def test_unquantizedfusedmoemethod_exists():
     """Test that UnquantizedFusedMoEMethod class exists and is importable."""
-    assert 'UnquantizedFusedMoEMethod' in dir()
+    assert "UnquantizedFusedMoEMethod" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

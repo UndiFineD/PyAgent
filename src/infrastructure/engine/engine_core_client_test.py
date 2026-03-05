@@ -20,4 +20,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "SyncMPClient"), "SyncMPClient missing"
     assert hasattr(mod, "AsyncMPClient"), "AsyncMPClient missing"
     assert hasattr(mod, "create_client"), "create_client missing"
-

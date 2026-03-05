@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_distributedsyncprovider_exists():
     """Test that DistributedSyncProvider class exists and is importable."""
-    assert 'DistributedSyncProvider' in dir()
+    assert "DistributedSyncProvider" in dir()
 
 
 def test_nixlsyncprovider_exists():
     """Test that NixlSyncProvider class exists and is importable."""
-    assert 'NixlSyncProvider' in dir()
+    assert "NixlSyncProvider" in dir()
 
 
 def test_tcpsyncprovider_exists():
     """Test that TCPSyncProvider class exists and is importable."""
-    assert 'TCPSyncProvider' in dir()
+    assert "TCPSyncProvider" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

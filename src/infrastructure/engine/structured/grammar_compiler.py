@@ -215,10 +215,13 @@ class GrammarCompiler:
         with self._lock:
             # Evict regarding memory pressure
             estimated_size = len(grammar.grammar_spec) * 2
-            
+
             # Phase 362: Functional cache eviction regarding memory pressure
             def evict_if_needed() -> None:
-                if self._cache_size_bytes + estimated_size > self.cache_limit_bytes and self._cache:
+                if (
+                    self._cache_size_bytes + estimated_size > self.cache_limit_bytes
+                    and self._cache
+                ):
                     old_key = next(iter(self._cache))
                     old_grammar = self._cache.pop(old_key)
                     self._cache_size_bytes -= len(old_grammar.grammar_spec) * 2

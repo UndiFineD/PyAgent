@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_reduceop_exists():
     """Test that ReduceOp class exists and is importable."""
-    assert 'ReduceOp' in dir()
+    assert "ReduceOp" in dir()
 
 
 def test_ncclconfig_exists():
     """Test that NCCLConfig class exists and is importable."""
-    assert 'NCCLConfig' in dir()
+    assert "NCCLConfig" in dir()
 
 
 def test_ncclstats_exists():
     """Test that NCCLStats class exists and is importable."""
-    assert 'NCCLStats' in dir()
+    assert "NCCLStats" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

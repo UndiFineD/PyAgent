@@ -4,8 +4,10 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Tuple
 
+
 class ExecutorBackend(Enum):
     """Executor backend types."""
+
     MULTIPROC = auto()
     RAY = auto()
     UNIPROC = auto()
@@ -14,6 +16,7 @@ class ExecutorBackend(Enum):
 
 class WorkerState(Enum):
     """Worker process states."""
+
     STARTING = auto()
     READY = auto()
     BUSY = auto()
@@ -24,6 +27,7 @@ class WorkerState(Enum):
 @dataclass
 class WorkerInfo:
     """Information about a worker process."""
+
     worker_id: int
     pid: Optional[int] = None
     state: WorkerState = WorkerState.STARTING
@@ -38,6 +42,7 @@ class WorkerInfo:
 @dataclass
 class TaskMessage:
     """Message for task execution."""
+
     task_id: str
     func_name: str
     args: Tuple[Any, ...]
@@ -49,6 +54,7 @@ class TaskMessage:
 @dataclass
 class ResultMessage:
     """Message for task result."""
+
     task_id: str
     worker_id: int
     success: bool

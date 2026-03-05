@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_linearquantizer_exists():
     """Test that LinearQuantizer class exists and is importable."""
-    assert 'LinearQuantizer' in dir()
+    assert "LinearQuantizer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

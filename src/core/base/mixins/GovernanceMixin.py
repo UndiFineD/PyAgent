@@ -3,7 +3,11 @@
 import asyncio
 import logging
 from typing import Any
-from src.core.base.managers.ResourceQuotaManager import ResourceQuotaManager, QuotaConfig
+from src.core.base.managers.ResourceQuotaManager import (
+    ResourceQuotaManager,
+    QuotaConfig,
+)
+
 
 class GovernanceMixin:
     """Handles resource quotas, preemption, and security clearance."""
@@ -48,6 +52,7 @@ class GovernanceMixin:
 
         try:
             from src.logic.agents.security.FirewallAgent import FirewallAgent
+
             firewall = None
             if hasattr(self, "fleet") and self.fleet:
                 firewall = self.fleet.agents.get("FirewallAgent")

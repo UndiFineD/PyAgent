@@ -4,6 +4,7 @@
 This file mirrors src.core.base.version to support imports that use the
 uppercase module name `Version`.
 """
+
 from src.core.base.lifecycle.version import (
     VERSION,
     SDK_VERSION,

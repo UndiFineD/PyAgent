@@ -26,6 +26,7 @@ def test_imports_and_symbols():
     assert hasattr(mod, "FastSafetensorsLoader"), "FastSafetensorsLoader missing"
     assert hasattr(mod, "StreamingWeightLoader"), "StreamingWeightLoader missing"
     assert hasattr(mod, "compute_weight_hash_rust"), "compute_weight_hash_rust missing"
-    assert hasattr(mod, "validate_weight_shapes_rust"), "validate_weight_shapes_rust missing"
+    assert hasattr(
+        mod, "validate_weight_shapes_rust"
+    ), "validate_weight_shapes_rust missing"
     assert hasattr(mod, "filter_shared_tensors"), "filter_shared_tensors missing"
-

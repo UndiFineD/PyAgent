@@ -36,4 +36,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "CachedResult"), "CachedResult missing"
     assert hasattr(mod, "TelemetrySpan"), "TelemetrySpan missing"
     assert hasattr(mod, "SpanContext"), "SpanContext missing"
-

@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_sovereigntyorchestrator_exists():
     """Test that SovereigntyOrchestrator class exists and is importable."""
-    assert 'SovereigntyOrchestrator' in dir()
+    assert "SovereigntyOrchestrator" in dir()
 
 
 def test_sovereigntyorchestrator_instantiation():
@@ -45,4 +45,3 @@ def test_sovereigntyorchestrator_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

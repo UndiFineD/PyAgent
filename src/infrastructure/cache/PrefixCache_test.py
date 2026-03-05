@@ -33,32 +33,32 @@ except ImportError as e:
 
 def test_evictionpolicy_exists():
     """Test that EvictionPolicy class exists and is importable."""
-    assert 'EvictionPolicy' in dir()
+    assert "EvictionPolicy" in dir()
 
 
 def test_prefixcacheconfig_exists():
     """Test that PrefixCacheConfig class exists and is importable."""
-    assert 'PrefixCacheConfig' in dir()
+    assert "PrefixCacheConfig" in dir()
 
 
 def test_cacheblock_exists():
     """Test that CacheBlock class exists and is importable."""
-    assert 'CacheBlock' in dir()
+    assert "CacheBlock" in dir()
 
 
 def test_prefixcachestats_exists():
     """Test that PrefixCacheStats class exists and is importable."""
-    assert 'PrefixCacheStats' in dir()
+    assert "PrefixCacheStats" in dir()
 
 
 def test_prefixcachemanager_exists():
     """Test that PrefixCacheManager class exists and is importable."""
-    assert 'PrefixCacheManager' in dir()
+    assert "PrefixCacheManager" in dir()
 
 
 def test_blockhasher_exists():
     """Test that BlockHasher class exists and is importable."""
-    assert 'BlockHasher' in dir()
+    assert "BlockHasher" in dir()
 
 
 def test_compute_block_hash_exists():
@@ -79,4 +79,3 @@ def test_get_request_block_hasher_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

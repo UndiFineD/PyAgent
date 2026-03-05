@@ -1,5 +1,10 @@
-from .config import (DraftProposal, SpecDecodingMetrics, SpecMethod,
-                     SpeculativeConfig, VerificationResult)
+from .config import (
+    DraftProposal,
+    SpecDecodingMetrics,
+    SpecMethod,
+    SpeculativeConfig,
+    VerificationResult,
+)
 from .engine import SpeculativeDecoder, create_speculative_decoder
 from .proposers import DraftProposer, NgramProposer, SuffixProposer
 from .verification import TreeSpeculator

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -96,13 +97,11 @@ def _should_log_with_scope(scope: LogScope) -> bool:
     # These functions should be provided by the distributed module
     try:
         if scope == "global":
-            from src.infrastructure.swarm.distributed import \
-                is_global_first_rank
+            from src.infrastructure.swarm.distributed import is_global_first_rank
 
             return is_global_first_rank()
         elif scope == "local":
-            from src.infrastructure.swarm.distributed import \
-                is_local_first_rank
+            from src.infrastructure.swarm.distributed import is_local_first_rank
 
             return is_local_first_rank()
     except ImportError:

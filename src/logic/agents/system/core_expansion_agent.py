@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 """
 Core expansion agent.py module.
 """
-
 
 
 import logging
@@ -50,7 +50,9 @@ class CoreExpansionAgent(BaseAgent):
         """
         Attempts to install a missing Python package using pip.
         """
-        logging.info(f"CoreExpansionAgent: Attempting to install package: {package_name}")
+        logging.info(
+            f"CoreExpansionAgent: Attempting to install package: {package_name}"
+        )
 
         try:
             # Use subprocess to run pip
@@ -64,12 +66,16 @@ class CoreExpansionAgent(BaseAgent):
             logging.info(f"CoreExpansionAgent: Successfully installed {package_name}")
 
             # Phase 108: Record intelligence for future dependency graph learning
-            self._record(cmd_str, f"Success\n{result.stdout}", provider="Shell", model="pip")
+            self._record(
+                cmd_str, f"Success\n{result.stdout}", provider="Shell", model="pip"
+            )
 
             return f"Success: {package_name} installed.\nStdout: {result.stdout}"
         except subprocess.CalledProcessError as e:
             err_msg = e.stderr or str(e)
-            logging.error(f"CoreExpansionAgent: Failed to install {package_name}. Error: {err_msg}")
+            logging.error(
+                f"CoreExpansionAgent: Failed to install {package_name}. Error: {err_msg}"
+            )
 
             # Phase 108: Record failure as a lesson
             self._record(
@@ -90,12 +96,15 @@ class CoreExpansionAgent(BaseAgent):
         # 1. Try standard importlib.metadata (Python 3.8+)
         try:
             from importlib.metadata import distributions
+
             results = []
             for dist in distributions():
                 try:
                     name = "Unknown"
                     if dist.metadata:
-                        name = dist.metadata.get("Name") or getattr(dist, "name", "Unknown")
+                        name = dist.metadata.get("Name") or getattr(
+                            dist, "name", "Unknown"
+                        )
                     else:
                         name = getattr(dist, "name", "Unknown")
                     results.append(f"{name}=={dist.version}")
@@ -109,12 +118,19 @@ class CoreExpansionAgent(BaseAgent):
         # 2. Last resort fallback (pkg_resources is deprecated)
         try:
             import warnings
+
             with warnings.catch_warnings():
                 # Filter both DeprecationWarning and UserWarning for pkg_resources
                 warnings.filterwarnings("ignore", category=DeprecationWarning)
-                warnings.filterwarnings("ignore", category=UserWarning, message=".*pkg_resources.*")
+                warnings.filterwarnings(
+                    "ignore", category=UserWarning, message=".*pkg_resources.*"
+                )
                 import pkg_resources  # pylint: disable=import-outside-toplevel
 
             return [f"{d.project_name}=={d.version}" for d in pkg_resources.working_set]
-        except (ImportError, AttributeError, Exception):  # pylint: disable=broad-exception-caught
+        except (
+            ImportError,
+            AttributeError,
+            Exception,
+        ):  # pylint: disable=broad-exception-caught
             return ["Error: Could not retrieve environment metadata."]

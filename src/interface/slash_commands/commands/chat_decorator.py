@@ -237,7 +237,9 @@ def _format_message(
 
     # Label
     if label:
-        label_style = _clean_style(styles.get(f"label_{role}", styles.get("label_human", "")))
+        label_style = _clean_style(
+            styles.get(f"label_{role}", styles.get("label_human", ""))
+        )
         parts.append(f'<span style="{label_style}">{_escape_html(label)}</span>')
 
     # Language badge for code
@@ -536,7 +538,9 @@ def cmd_chat(ctx: CommandContext) -> CommandResult:
     Multiple exchanges can be separated by |||.
     """
     if not ctx.args:
-        return CommandResult.fail("Usage: /chat <human message> ||| <ai response>\nUse ||| to separate messages.")
+        return CommandResult.fail(
+            "Usage: /chat <human message> ||| <ai response>\nUse ||| to separate messages."
+        )
 
     full_text = " ".join(ctx.args)
     parts = [p.strip() for p in full_text.split("|||")]

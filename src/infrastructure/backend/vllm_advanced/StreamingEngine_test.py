@@ -33,30 +33,29 @@ except ImportError as e:
 
 def test_streamcallback_exists():
     """Test that StreamCallback class exists and is importable."""
-    assert 'StreamCallback' in dir()
+    assert "StreamCallback" in dir()
 
 
 def test_streamingconfig_exists():
     """Test that StreamingConfig class exists and is importable."""
-    assert 'StreamingConfig' in dir()
+    assert "StreamingConfig" in dir()
 
 
 def test_streamtoken_exists():
     """Test that StreamToken class exists and is importable."""
-    assert 'StreamToken' in dir()
+    assert "StreamToken" in dir()
 
 
 def test_tokenstreamiterator_exists():
     """Test that TokenStreamIterator class exists and is importable."""
-    assert 'TokenStreamIterator' in dir()
+    assert "TokenStreamIterator" in dir()
 
 
 def test_streamingvllmengine_exists():
     """Test that StreamingVllmEngine class exists and is importable."""
-    assert 'StreamingVllmEngine' in dir()
+    assert "StreamingVllmEngine" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_costrecord_exists():
     """Test that CostRecord class exists and is importable."""
-    assert 'CostRecord' in dir()
+    assert "CostRecord" in dir()
 
 
 def test_budgetalert_exists():
     """Test that BudgetAlert class exists and is importable."""
-    assert 'BudgetAlert' in dir()
+    assert "BudgetAlert" in dir()
 
 
 def test_budgetmanager_exists():
     """Test that BudgetManager class exists and is importable."""
-    assert 'BudgetManager' in dir()
+    assert "BudgetManager" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

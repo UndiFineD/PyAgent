@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_agentlanguagemixin_exists():
     """Test that AgentLanguageMixin class exists and is importable."""
-    assert 'AgentLanguageMixin' in dir()
+    assert "AgentLanguageMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

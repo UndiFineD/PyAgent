@@ -133,13 +133,18 @@ class FormulaCore:
             raise
 
     @classmethod
-    def _try_rust_evaluate(cls, expression: str, variables: dict[str, float]) -> float | None:
+    def _try_rust_evaluate(
+        cls, expression: str, variables: dict[str, float]
+    ) -> float | None:
         if rc and hasattr(rc, "evaluate_formula"):
             try:
                 safe_vars = {k: float(v) for k, v in variables.items()}
                 return float(rc.evaluate_formula(expression, safe_vars))
             except (RuntimeError, ValueError) as e:
-                logger.warning("FormulaCore: Rust evaluate_formula failed: %s. Falling back to Python.", e)
+                logger.warning(
+                    "FormulaCore: Rust evaluate_formula failed: %s. Falling back to Python.",
+                    e,
+                )
         return None
 
     @classmethod

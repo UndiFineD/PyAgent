@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -200,14 +201,20 @@ class RequestMetrics:
     @property
     def is_complete(self) -> bool:
         """Check if request has finished (success, fail, or cancel)."""
-        return self.state in (RequestState.COMPLETED, RequestState.FAILED, RequestState.CANCELLED)
+        return self.state in (
+            RequestState.COMPLETED,
+            RequestState.FAILED,
+            RequestState.CANCELLED,
+        )
 
     @property
     def is_success(self) -> bool:
         """Check if request completed successfully."""
         return self.state == RequestState.COMPLETED
 
-    def record_phase(self, phase_name: str, start_time: float, end_time: Optional[float] = None) -> None:
+    def record_phase(
+        self, phase_name: str, start_time: float, end_time: Optional[float] = None
+    ) -> None:
         """Record a custom timing phase."""
         end: float = end_time or time.time()
         self._phase_times[phase_name] = (end - start_time) * 1000
@@ -309,7 +316,9 @@ class RequestMetricsAggregator:
         """Calculate latency statistics."""
         total_times = [m.total_time_ms for m in self.metrics if m.total_time_ms]
         queue_times = [m.time_in_queue_ms for m in self.metrics if m.time_in_queue_ms]
-        ttft_times = [m.time_to_first_token_ms for m in self.metrics if m.time_to_first_token_ms]
+        ttft_times = [
+            m.time_to_first_token_ms for m in self.metrics if m.time_to_first_token_ms
+        ]
 
         if not total_times:
             return {"error": "no_data"}
@@ -359,7 +368,9 @@ class RequestMetricsAggregator:
             "total_requests": len(completed),
             "total_tokens_generated": total_tokens,
             "total_tokens_input": total_input_tokens,
-            "requests_per_second": self._requests_per_second(len(completed), duration_s),
+            "requests_per_second": self._requests_per_second(
+                len(completed), duration_s
+            ),
             "tokens_per_second": self._tokens_per_second_stats(tps_list),
             "duration_seconds": duration_s,
         }

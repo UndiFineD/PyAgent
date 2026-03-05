@@ -50,7 +50,9 @@ class MemoryProfiler:
                 stats = rc.memory_profile_rust()
                 usage = stats.get("current_usage", 0)
                 frag = stats.get("fragmentation", 0.0)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.debug(f"Rust profiling failed: {e}")
 
         self.peak_memory = max(self.peak_memory, usage)
@@ -72,7 +74,8 @@ class MemoryProfiler:
         return {
             "duration": time.time() - self.start_time,
             "peak_mb": self.peak_memory / (1024 * 1024),
-            "avg_fragmentation": sum(s["fragmentation"] for s in self.snapshots) / len(self.snapshots),
+            "avg_fragmentation": sum(s["fragmentation"] for s in self.snapshots)
+            / len(self.snapshots),
             "snapshot_count": len(self.snapshots),
         }
 

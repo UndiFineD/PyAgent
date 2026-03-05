@@ -33,57 +33,57 @@ except ImportError as e:
 
 def test_vectorstoretype_exists():
     """Test that VectorStoreType class exists and is importable."""
-    assert 'VectorStoreType' in dir()
+    assert "VectorStoreType" in dir()
 
 
 def test_retrievalstrategy_exists():
     """Test that RetrievalStrategy class exists and is importable."""
-    assert 'RetrievalStrategy' in dir()
+    assert "RetrievalStrategy" in dir()
 
 
 def test_documenttype_exists():
     """Test that DocumentType class exists and is importable."""
-    assert 'DocumentType' in dir()
+    assert "DocumentType" in dir()
 
 
 def test_document_exists():
     """Test that Document class exists and is importable."""
-    assert 'Document' in dir()
+    assert "Document" in dir()
 
 
 def test_retrievalconfig_exists():
     """Test that RetrievalConfig class exists and is importable."""
-    assert 'RetrievalConfig' in dir()
+    assert "RetrievalConfig" in dir()
 
 
 def test_ragtoolconfig_exists():
     """Test that RAGToolConfig class exists and is importable."""
-    assert 'RAGToolConfig' in dir()
+    assert "RAGToolConfig" in dir()
 
 
 def test_retrievalresult_exists():
     """Test that RetrievalResult class exists and is importable."""
-    assert 'RetrievalResult' in dir()
+    assert "RetrievalResult" in dir()
 
 
 def test_ragquery_exists():
     """Test that RAGQuery class exists and is importable."""
-    assert 'RAGQuery' in dir()
+    assert "RAGQuery" in dir()
 
 
 def test_vectorstoreinterface_exists():
     """Test that VectorStoreInterface class exists and is importable."""
-    assert 'VectorStoreInterface' in dir()
+    assert "VectorStoreInterface" in dir()
 
 
 def test_basevectorstore_exists():
     """Test that BaseVectorStore class exists and is importable."""
-    assert 'BaseVectorStore' in dir()
+    assert "BaseVectorStore" in dir()
 
 
 def test_ragcore_exists():
     """Test that RAGCore class exists and is importable."""
-    assert 'RAGCore' in dir()
+    assert "RAGCore" in dir()
 
 
 def test_ragcore_instantiation():
@@ -94,10 +94,9 @@ def test_ragcore_instantiation():
 
 def test_mockvectorstore_exists():
     """Test that MockVectorStore class exists and is importable."""
-    assert 'MockVectorStore' in dir()
+    assert "MockVectorStore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

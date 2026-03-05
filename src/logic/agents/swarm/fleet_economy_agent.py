@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 """
 Fleet economy agent.py module.
 """
-
 
 
 import logging
@@ -59,7 +59,9 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                     "CURRENT_TIMESTAMP, agent_id TEXT, tokens INTEGER, tps REAL, savings_usd REAL)"
                 )
                 conn.commit()
-            logging.info(f"FleetEconomyAgent: Persistent ledger initialized at {self.db_path}")
+            logging.info(
+                f"FleetEconomyAgent: Persistent ledger initialized at {self.db_path}"
+            )
         except (sqlite3.Error, OSError) as e:
             logging.error(f"FleetEconomyAgent: DB initialization failed: {e}")
 
@@ -71,15 +73,21 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 "ON CONFLICT(agent_id) DO UPDATE SET balance = balance + ?",
                 (agent_id, amount, amount),
             )
-            cursor = conn.execute("SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,))
+            cursor = conn.execute(
+                "SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,)
+            )
             balance = cursor.fetchone()[0]
             conn.commit()
         return {"agent": agent_id, "balance": balance}
 
-    def place_bid(self, agent_id: str, task_id: str, bid_amount: float, priority: int = 1) -> dict[str, Any]:
+    def place_bid(
+        self, agent_id: str, task_id: str, bid_amount: float, priority: int = 1
+    ) -> dict[str, Any]:
         """Places a bid for compute resources (Phase 284)."""
         with sqlite3.connect(self.db_path) as conn:
-            cursor = conn.execute("SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,))
+            cursor = conn.execute(
+                "SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,)
+            )
             row = cursor.fetchone()
             balance = row[0] if row else 0.0
 
@@ -127,7 +135,9 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             )
 
             # Close all bids for this task
-            conn.execute("UPDATE bids SET status = 'closed' WHERE task_id = ?", (task_id,))
+            conn.execute(
+                "UPDATE bids SET status = 'closed' WHERE task_id = ?", (task_id,)
+            )
             conn.commit()
 
         return {
@@ -141,7 +151,9 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         """Resolves all pending auctions (Phase 77)."""
         allocated = []
         with sqlite3.connect(self.db_path) as conn:
-            cursor = conn.execute("SELECT DISTINCT task_id FROM bids WHERE status = 'active'")
+            cursor = conn.execute(
+                "SELECT DISTINCT task_id FROM bids WHERE status = 'active'"
+            )
             tasks = [row[0] for row in cursor.fetchall()]
 
         for task_id in tasks:
@@ -160,7 +172,9 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 summary[agent_id] = balance
         return summary
 
-    def log_hardware_savings(self, agent_id: str, tokens: int, tps: float, savings_usd: float) -> None:
+    def log_hardware_savings(
+        self, agent_id: str, tokens: int, tps: float, savings_usd: float
+    ) -> None:
         """Logs the efficiency and economic data for oxidized operations."""
         try:
             with sqlite3.connect(self.db_path) as conn:
@@ -169,7 +183,9 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                     (agent_id, tokens, tps, savings_usd),
                 )
                 conn.commit()
-            logging.info(f"FleetEconomyAgent: Logged ${savings_usd:.6f} hardware savings for {agent_id}")
+            logging.info(
+                f"FleetEconomyAgent: Logged ${savings_usd:.6f} hardware savings for {agent_id}"
+            )
         except (sqlite3.Error, RuntimeError) as e:
             logging.debug(f"FleetEconomyAgent: Failed to log savings: {e}")
 

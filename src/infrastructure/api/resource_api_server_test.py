@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "vllm_infer"), "vllm_infer missing"
     assert hasattr(mod, "ollama_infer"), "ollama_infer missing"
     assert hasattr(mod, "npu_task"), "npu_task missing"
-

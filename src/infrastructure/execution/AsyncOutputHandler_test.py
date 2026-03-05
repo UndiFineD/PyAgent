@@ -33,37 +33,37 @@ except ImportError as e:
 
 def test_asyncstate_exists():
     """Test that AsyncState class exists and is importable."""
-    assert 'AsyncState' in dir()
+    assert "AsyncState" in dir()
 
 
 def test_cudaevent_exists():
     """Test that CudaEvent class exists and is importable."""
-    assert 'CudaEvent' in dir()
+    assert "CudaEvent" in dir()
 
 
 def test_cudastream_exists():
     """Test that CudaStream class exists and is importable."""
-    assert 'CudaStream' in dir()
+    assert "CudaStream" in dir()
 
 
 def test_asyncoutput_exists():
     """Test that AsyncOutput class exists and is importable."""
-    assert 'AsyncOutput' in dir()
+    assert "AsyncOutput" in dir()
 
 
 def test_asyncbarrier_exists():
     """Test that AsyncBarrier class exists and is importable."""
-    assert 'AsyncBarrier' in dir()
+    assert "AsyncBarrier" in dir()
 
 
 def test_asyncoutputhandler_exists():
     """Test that AsyncOutputHandler class exists and is importable."""
-    assert 'AsyncOutputHandler' in dir()
+    assert "AsyncOutputHandler" in dir()
 
 
 def test_doublebuffer_exists():
     """Test that DoubleBuffer class exists and is importable."""
-    assert 'DoubleBuffer' in dir()
+    assert "DoubleBuffer" in dir()
 
 
 def test_async_copy_to_np_exists():
@@ -84,4 +84,3 @@ def test_async_barrier_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

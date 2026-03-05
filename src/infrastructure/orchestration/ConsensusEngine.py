@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,12 +31,13 @@ from .ConsensusCore import ConsensusCore
 
 __version__ = VERSION
 
+
 class ConsensusEngine:
     """
     Manages voting and agreement between multiple agents.
     Shell for ConsensusCore.
     """
-    
+
     def __init__(self, fleet_manager) -> None:
         self.fleet = fleet_manager
         self.core = ConsensusCore()
@@ -46,7 +48,7 @@ class ConsensusEngine:
         logging.info(f"CONSENSUS: Requesting agreement on '{task}' from {agent_names}")
         proposals: list[str] = []
         valid_agents: list[str] = []
-        
+
         for name in agent_names:
             # Check registry
             agent = getattr(self.fleet.agents, name, None)
@@ -57,17 +59,19 @@ class ConsensusEngine:
                     valid_agents.append(name)
                 except Exception as e:
                     logging.error(f"Agent {name} failed during consensus: {e}")
-        
+
         if not proposals:
             return "Consensus failed: No valid proposals received."
-            
+
         # Phase 119: Inject weighted reliability scores
         weights = self.fleet.telemetry.get_reliability_weights(valid_agents)
-        
+
         winner = self.core.calculate_winner(proposals, weights=weights)
         score = self.core.get_agreement_score(proposals, winner)
-        
-        logging.info(f"CONSENSUS: Multi-agent agreement reached (Score: {score:.2f}). Winner: {winner[:50]}...")
+
+        logging.info(
+            f"CONSENSUS: Multi-agent agreement reached (Score: {score:.2f}). Winner: {winner[:50]}..."
+        )
         return winner
 
     def get_consensus_report(self) -> str:

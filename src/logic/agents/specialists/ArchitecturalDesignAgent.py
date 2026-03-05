@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # ArchitecturalDesignAgent: Implementation of Multi-Stage Architectural GenAI Framework
 # Based on research: arXiv:2601.10696 and ScienceDirect S2090447925006203 (Jiang et al., 2026)
@@ -14,6 +15,7 @@ from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
 
+
 class DesignPhase(Enum):
     PRE_DESIGN_ANALYSIS = "Pre-design Analysis"
     ENVIRONMENTAL_SIMULATION = "Environmental Simulation"
@@ -23,19 +25,23 @@ class DesignPhase(Enum):
     DESIGN_PRODUCTION = "Design Production"
     POST_PRODUCTION = "Post-production/Presentation"
 
+
 class DesignExpertise(Enum):
     NOVICE = "novice"
     EXPERT = "expert"
+
 
 class ArchitecturalDesignAgent(BaseAgent):
     """
     Agent specializing in hierarchical architectural design workflows.
     Implements the 5-stage framework identified in 2026 empirical studies
-    (arXiv:2601.10696, ScienceDirect S2090447925006203) regarding cognitive load 
+    (arXiv:2601.10696, ScienceDirect S2090447925006203) regarding cognitive load
     reduction and performance enhancement in AI-aided design.
     """
 
-    def __init__(self, file_path: str, expertise: DesignExpertise = DesignExpertise.EXPERT) -> None:
+    def __init__(
+        self, file_path: str, expertise: DesignExpertise = DesignExpertise.EXPERT
+    ) -> None:
         super().__init__(file_path)
         self.expertise = expertise
         self.current_phase = DesignPhase.PRE_DESIGN_ANALYSIS
@@ -45,13 +51,13 @@ class ArchitecturalDesignAgent(BaseAgent):
             "layouts": [],
             "visualizations": [],
             "feedback_history": [],
-            "critique_passed": False
+            "critique_passed": False,
         }
         self.metrics = {
             "jct_start": asyncio.get_event_loop().time(),
             "cognitive_load_index": 0.0,
             "aesthetic_delta": 0.14,
-            "constructability_score": 0.0
+            "constructability_score": 0.0,
         }
         self._system_prompt = (
             "You are the Architectural Design Agent, specializing in the multi-stage "
@@ -73,7 +79,7 @@ class ArchitecturalDesignAgent(BaseAgent):
         requirements = await self.run_subagent("extracting requirements", prompt)
         self.design_state["requirements"] = requirements
         self.current_phase = DesignPhase.PRE_DESIGN_ANALYSIS
-        self.metrics["cognitive_load_index"] += 0.1 # Simulated tracking
+        self.metrics["cognitive_load_index"] += 0.1  # Simulated tracking
         return {"phase": self.current_phase.value, "requirements": requirements}
 
     @as_tool
@@ -84,7 +90,7 @@ class ArchitecturalDesignAgent(BaseAgent):
         """
         if not self.design_state["requirements"]:
             return {"error": "Requirements must be processed first."}
-            
+
         prompt = f"Perform environmental simulation (sun/wind/terrain) for: {self.design_state['requirements']}"
         analysis = await self.run_subagent("environmental simulation", prompt)
         self.design_state["environmental_analysis"] = analysis
@@ -92,7 +98,9 @@ class ArchitecturalDesignAgent(BaseAgent):
         return {"phase": self.current_phase.value, "analysis": analysis}
 
     @as_tool
-    async def generate_spatial_concept(self, refinement: Optional[str] = None) -> Dict[str, Any]:
+    async def generate_spatial_concept(
+        self, refinement: Optional[str] = None
+    ) -> Dict[str, Any]:
         """
         Phase 2: Concept Generation. Generates spatial logic and massing options.
         Leverages hierarchical reasoning to maintain global design coherence.
@@ -100,48 +108,52 @@ class ArchitecturalDesignAgent(BaseAgent):
         """
         if not self.design_state["requirements"]:
             return {"error": "Requirements must be processed first."}
-            
+
         initial_prompt = (
             f"Based on requirements: {self.design_state['requirements']}, "
             f"generate a spatial concept. Refinement: {refinement or 'None'}. "
             "Focus on circulation, sun orientation, and volume distribution."
         )
-        
+
         # GAAD Loop (Generator-Critic)
-        concept = await self.run_subagent("generator: producing spatial concept", initial_prompt)
-        
+        concept = await self.run_subagent(
+            "generator: producing spatial concept", initial_prompt
+        )
+
         critic_prompt = (
             f"Critique this architectural concept based on functional constraints: {concept}. "
             f"Verify against requirements: {self.design_state['requirements']}. "
             "Identify weaknesses in circulation or structural feasibility."
         )
         critique = await self.run_subagent("critic: evaluating concept", critic_prompt)
-        
+
         refinement_prompt = (
             f"Refine the following concept: '{concept}' based on this critique: '{critique}'. "
             "Produce the final optimized GAAD concept."
         )
-        final_concept = await self.run_subagent("generator: refining concept", refinement_prompt)
-        
+        final_concept = await self.run_subagent(
+            "generator: refining concept", refinement_prompt
+        )
+
         self.design_state["concepts"].append(final_concept)
         self.current_phase = DesignPhase.CONCEPT_GENERATION
         return {
-            "phase": self.current_phase.value, 
+            "phase": self.current_phase.value,
             "initial_concept": concept,
             "internal_critique": critique,
-            "final_optimized_concept": final_concept
+            "final_optimized_concept": final_concept,
         }
 
     @as_tool
     async def iterative_visual_refinement(self, visual_feedback: str) -> Dict[str, Any]:
         """
-        Phase 2.5: Visual Refinement Loop. 
+        Phase 2.5: Visual Refinement Loop.
         Implements the iterative visual feedback loop from arXiv:2601.10696.
         Reducing cognitive load through multi-turn visual refinement.
         """
         if self.current_phase != DesignPhase.CONCEPT_GENERATION:
             return {"error": "Must generate a concept before refinement."}
-            
+
         latest_concept = self.design_state["concepts"][-1]
         prompt = (
             f"Apply visual feedback: '{visual_feedback}' to the architectural concept: '{latest_concept}'. "
@@ -149,7 +161,7 @@ class ArchitecturalDesignAgent(BaseAgent):
         )
         refined_concept = await self.run_subagent("visual refinement", prompt)
         self.design_state["concepts"].append(refined_concept)
-        self.metrics["cognitive_load_index"] -= 0.05 # Reductions per arXiv:2601.10696
+        self.metrics["cognitive_load_index"] -= 0.05  # Reductions per arXiv:2601.10696
         self.current_phase = DesignPhase.VISUAL_REFINEMENT
         return {"phase": self.current_phase.value, "refined_concept": refined_concept}
 
@@ -162,27 +174,36 @@ class ArchitecturalDesignAgent(BaseAgent):
         self.design_state["feedback_history"].append(critique)
         if "approved" in critique.lower() or "proceed" in critique.lower():
             self.design_state["critique_passed"] = True
-            return {"status": "Critique Accepted", "next_step": "Proceed to Design Development"}
-        
+            return {
+                "status": "Critique Accepted",
+                "next_step": "Proceed to Design Development",
+            }
+
         self.design_state["critique_passed"] = False
         return {"status": "Critique Pending", "action": "Refine Concept"}
 
     @as_tool
-    async def coordinate_visual_verification(self, concept_index: int) -> Dict[str, Any]:
+    async def coordinate_visual_verification(
+        self, concept_index: int
+    ) -> Dict[str, Any]:
         """
         Phase 3: Design Development. Simulates agent coordination for visual output.
         Translates qualitative concepts into quantitative parameters.
         """
         if not self.design_state["critique_passed"]:
-             return {"error": "Must pass critical engagement buffer first."}
+            return {"error": "Must pass critical engagement buffer first."}
 
         concept = self.design_state["concepts"][concept_index]
         verification_prompt = (
             f"Transform conceptual logic '{concept}' into geometric parameters. "
             f"Verify against functional requirements: {self.design_state['requirements']}."
         )
-        strategy = await self.run_subagent("coordinating visual verification", verification_prompt)
-        self.design_state["visualizations"].append({"concept": concept, "strategy": strategy})
+        strategy = await self.run_subagent(
+            "coordinating visual verification", verification_prompt
+        )
+        self.design_state["visualizations"].append(
+            {"concept": concept, "strategy": strategy}
+        )
         self.current_phase = DesignPhase.DESIGN_DEVELOPMENT
         return {"phase": self.current_phase.value, "verification_strategy": strategy}
 
@@ -194,26 +215,31 @@ class ArchitecturalDesignAgent(BaseAgent):
         """
         if self.current_phase != DesignPhase.DESIGN_DEVELOPMENT:
             logging.warning("Advancing to Production phase without full development.")
-            
+
         prompt = f"Generate production specs/ urban context match for: {json.dumps(self.design_state)}"
         specs = await self.run_subagent("finalizing production specs", prompt)
-        
+
         # Simulated Constructability Score calculation based on spec complexity
-        score_prompt = f"Evaluate the constructability (0.0 to 1.0) of these specs: {specs}"
+        score_prompt = (
+            f"Evaluate the constructability (0.0 to 1.0) of these specs: {specs}"
+        )
         score_str = await self.run_subagent("evaluating constructability", score_prompt)
         try:
             # Attempt to extract a float from the response
             import re
+
             match = re.search(r"(\d\.\d+)", score_str)
-            self.metrics["constructability_score"] = float(match.group(1)) if match else 0.85
+            self.metrics["constructability_score"] = (
+                float(match.group(1)) if match else 0.85
+            )
         except:
             self.metrics["constructability_score"] = 0.85
 
         self.current_phase = DesignPhase.DESIGN_PRODUCTION
         return {
-            "phase": self.current_phase.value, 
-            "specs": specs, 
-            "constructability_score": self.metrics["constructability_score"]
+            "phase": self.current_phase.value,
+            "specs": specs,
+            "constructability_score": self.metrics["constructability_score"],
         }
 
     @as_tool
@@ -228,7 +254,9 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     def get_dpo_metrics(self) -> Dict[str, float]:
         """Returns the Design Performance Optimization metrics."""
-        self.metrics["cognitive_load_index"] = round(self.metrics["cognitive_load_index"], 2)
+        self.metrics["cognitive_load_index"] = round(
+            self.metrics["cognitive_load_index"], 2
+        )
         return self.metrics
 
     def get_acceleration_metrics(self) -> Dict[str, Any]:
@@ -241,5 +269,5 @@ class ArchitecturalDesignAgent(BaseAgent):
             "kv_cache_efficiency": "94.2%",  # High reuse due to hierarchical design tokens
             "hierarchical_depth": 4,
             "streaming_status": "enabled",
-            "coordination_overhead": "low"
+            "coordination_overhead": "low",
         }

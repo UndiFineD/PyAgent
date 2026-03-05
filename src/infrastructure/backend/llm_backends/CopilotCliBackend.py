@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,6 +39,7 @@ class CopilotCliBackend(LLMBackend):
 
         timeout_s = kwargs.get("timeout_s", 30)
         import time
+
         start_t = time.time()
         try:
             # Phase 141 Fix: Windows command line length limit (WinError 206)
@@ -61,7 +63,9 @@ class CopilotCliBackend(LLMBackend):
 
                 # Phase 317 Protection: Detecting gh-copilot deprecation message
                 if "gh-copilot extension has been deprecated" in content:
-                    logging.warning("Copilot CLI detected deprecation message. Skipping backend.")
+                    logging.warning(
+                        "Copilot CLI detected deprecation message. Skipping backend."
+                    )
                     self._update_status("copilot_cli", False)
                     return ""
 

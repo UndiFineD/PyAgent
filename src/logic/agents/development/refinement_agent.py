@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -62,7 +63,9 @@ class RefinementAgent(BaseAgent):
         return analysis
 
     @as_tool
-    def propose_prompt_update(self, agent_class_name: str, performance_feedback: str) -> str:
+    def propose_prompt_update(
+        self, agent_class_name: str, performance_feedback: str
+    ) -> str:
         """Generates a new optimized system prompt for an agent.
         Args:
             agent_class_name: The name of the agent class to refine.
@@ -109,5 +112,7 @@ class RefinementAgent(BaseAgent):
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(RefinementAgent, "Refinement Agent", "Autonomous logic optimizer")
+    main = create_main_function(
+        RefinementAgent, "Refinement Agent", "Autonomous logic optimizer"
+    )
     main()

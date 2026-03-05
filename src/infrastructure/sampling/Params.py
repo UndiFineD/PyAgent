@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
@@ -8,6 +9,7 @@ Sampling parameters and state tracking.
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 import numpy as np
+
 
 @dataclass
 class SamplingParams:
@@ -29,6 +31,7 @@ class SamplingParams:
         ignore_eos: Whether to ignore EOS token.
         logprobs: Number of top logprobs to return per token.
     """
+
     temperature: float = 1.0
     top_k: int = -1  # -1 or 0 means disabled
     top_p: float = 1.0
@@ -89,11 +92,12 @@ class SamplingState:
         token_counts: Count of each token ID generated (for frequency penalty)
         prompt_token_ids: Original prompt token IDs (optional)
     """
+
     request_id: str
     generated_ids: List[int] = field(default_factory=list)
     token_counts: Dict[int, int] = field(default_factory=dict)
     prompt_token_ids: Optional[List[int]] = None
-    
+
     # Random state for reproducibility
     rng: Optional[np.random.Generator] = None
 
@@ -116,5 +120,7 @@ class SamplingState:
     @classmethod
     def from_seed(cls, request_id: str, seed: Optional[int] = None) -> "SamplingState":
         """Create a state with a specific random seed."""
-        rng = np.random.default_rng(seed) if seed is not None else np.random.default_rng()
+        rng = (
+            np.random.default_rng(seed) if seed is not None else np.random.default_rng()
+        )
         return cls(request_id=request_id, rng=rng)

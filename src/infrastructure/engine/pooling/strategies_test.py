@@ -23,4 +23,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "MatryoshkaPooler"), "MatryoshkaPooler missing"
     assert hasattr(mod, "MultiVectorPooler"), "MultiVectorPooler missing"
     assert hasattr(mod, "StepPooler"), "StepPooler missing"
-

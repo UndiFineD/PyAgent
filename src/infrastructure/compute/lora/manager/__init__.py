@@ -17,8 +17,15 @@ Manager package.
 """
 
 from .adapter import LoRAAdapter, get_lora_info, load_lora_adapter  # noqa: F401
-from .config import (AdapterSlot, AdapterStatus, LoRAConfig, LoRAInfo,  # noqa: F401
-                     LoRAMethod, LoRARequest, TargetModule)
+from .config import (
+    AdapterSlot,
+    AdapterStatus,
+    LoRAConfig,
+    LoRAInfo,  # noqa: F401
+    LoRAMethod,
+    LoRARequest,
+    TargetModule,
+)
 from .engine import LoRAManager  # noqa: F401
 from .registry import LoRARegistry  # noqa: F401
 from .slot import LoRASlotManager  # noqa: F401

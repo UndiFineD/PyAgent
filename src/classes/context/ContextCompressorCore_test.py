@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_contextcompressorcore_exists():
     """Test that ContextCompressorCore class exists and is importable."""
-    assert 'ContextCompressorCore' in dir()
+    assert "ContextCompressorCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

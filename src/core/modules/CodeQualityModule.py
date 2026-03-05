@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@ import re
 from typing import Any, Dict, List
 from src.core.base.modules import BaseModule
 
+
 class CodeQualityModule(BaseModule):
     """
     Consolidated core module for code quality analysis.
@@ -26,8 +28,7 @@ class CodeQualityModule(BaseModule):
         """Load quality thresholds and regex patterns."""
         return super().initialize()
 
-    def execute(self, source:
-        str, language: str = "python") -> list[dict[str, Any]]:
+    def execute(self, source: str, language: str = "python") -> list[dict[str, Any]]:
         """
         Analyzes source code quality for a specific language.
         """
@@ -42,45 +43,68 @@ class CodeQualityModule(BaseModule):
             return self.analyze_js_source(source)
         return []
 
-    def calculate_score(self, issues_count:
-        int) -> int:
+    def calculate_score(self, issues_count: int) -> int:
         """Calculates a quality score based on the number of issues."""
         return max(0, 100 - (issues_count * 5))
 
-    def check_python_source_quality(self, source:
-        str) -> list[dict[str, Any]]:
+    def check_python_source_quality(self, source: str) -> list[dict[str, Any]]:
         """Analyzes Python source code for style issues."""
         issues = []
         lines = source.splitlines()
         for i, line in enumerate(lines, 1):
             if len(line) > 120:
-                issues.append({
-                    "line": i, 
-                    "type": "Style", 
-                    "message": "Line too long (>120 chars)"
-                })
+                issues.append(
+                    {
+                        "line": i,
+                        "type": "Style",
+                        "message": "Line too long (>120 chars)",
+                    }
+                )
         return issues
 
-    def analyze_rust_source(self, source:
-        str) -> list[dict[str, Any]]:
+    def analyze_rust_source(self, source: str) -> list[dict[str, Any]]:
         """Analyzes Rust source for common patterns/issues."""
         issues = []
         if not source or len(source.strip()) < 5:
-            issues.append({"type": "Suggestion", "message": "clippy: source too sparse for deep analysis."})
+            issues.append(
+                {
+                    "type": "Suggestion",
+                    "message": "clippy: source too sparse for deep analysis.",
+                }
+            )
         if "unwrap()" in source:
-            issues.append({"type": "Safety", "message": "Avoid '.unwrap()', use proper error handling or '.expect()'."})
+            issues.append(
+                {
+                    "type": "Safety",
+                    "message": "Avoid '.unwrap()', use proper error handling or '.expect()'.",
+                }
+            )
         if "match" in source and source.count("=>") == 1:
-            issues.append({"type": "Suggestion", "message": "Consider using 'if let' instead of 'match' for single pattern."})
+            issues.append(
+                {
+                    "type": "Suggestion",
+                    "message": "Consider using 'if let' instead of 'match' for single pattern.",
+                }
+            )
         return issues
 
-    def analyze_js_source(self, source:
-        str) -> list[dict[str, Any]]:
+    def analyze_js_source(self, source: str) -> list[dict[str, Any]]:
         """Analyzes JavaScript source for common patterns/issues."""
         issues = []
         if re.search(r"\bvar\s+", source):
-            issues.append({"type": "Insecure", "message": "Avoid using 'var', use 'let' or 'const' instead."})
+            issues.append(
+                {
+                    "type": "Insecure",
+                    "message": "Avoid using 'var', use 'let' or 'const' instead.",
+                }
+            )
         if "==" in source and "===" not in source:
-            issues.append({"type": "Style", "message": "Use '===' instead of '==' for strict equality check."})
+            issues.append(
+                {
+                    "type": "Style",
+                    "message": "Use '===' instead of '==' for strict equality check.",
+                }
+            )
         return issues
 
     def shutdown(self) -> bool:

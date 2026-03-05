@@ -33,32 +33,32 @@ except ImportError as e:
 
 def test_shardpattern_exists():
     """Test that ShardPattern class exists and is importable."""
-    assert 'ShardPattern' in dir()
+    assert "ShardPattern" in dir()
 
 
 def test_shardedtensor_exists():
     """Test that ShardedTensor class exists and is importable."""
-    assert 'ShardedTensor' in dir()
+    assert "ShardedTensor" in dir()
 
 
 def test_subtensorfilter_exists():
     """Test that SubtensorFilter class exists and is importable."""
-    assert 'SubtensorFilter' in dir()
+    assert "SubtensorFilter" in dir()
 
 
 def test_shardedstateloader_exists():
     """Test that ShardedStateLoader class exists and is importable."""
-    assert 'ShardedStateLoader' in dir()
+    assert "ShardedStateLoader" in dir()
 
 
 def test_incrementalshardloader_exists():
     """Test that IncrementalShardLoader class exists and is importable."""
-    assert 'IncrementalShardLoader' in dir()
+    assert "IncrementalShardLoader" in dir()
 
 
 def test_asyncshardloader_exists():
     """Test that AsyncShardLoader class exists and is importable."""
-    assert 'AsyncShardLoader' in dir()
+    assert "AsyncShardLoader" in dir()
 
 
 def test_compute_shard_assignment_rust_exists():
@@ -74,4 +74,3 @@ def test_validate_shard_shapes_rust_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

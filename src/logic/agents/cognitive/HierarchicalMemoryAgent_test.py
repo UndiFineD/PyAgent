@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_hierarchicalmemoryagent_exists():
     """Test that HierarchicalMemoryAgent class exists and is importable."""
-    assert 'HierarchicalMemoryAgent' in dir()
+    assert "HierarchicalMemoryAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

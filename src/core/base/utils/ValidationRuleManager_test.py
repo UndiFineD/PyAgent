@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_validationrulemanager_exists():
     """Test that ValidationRuleManager class exists and is importable."""
-    assert 'ValidationRuleManager' in dir()
+    assert "ValidationRuleManager" in dir()
 
 
 def test_validationrulemanager_instantiation():
@@ -45,4 +45,3 @@ def test_validationrulemanager_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

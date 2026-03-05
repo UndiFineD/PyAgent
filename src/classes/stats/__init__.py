@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 """Auto-generated module exports.
 
 Prefer the observability implementation where available; fall back to

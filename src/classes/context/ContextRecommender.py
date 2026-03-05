@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,14 @@ from __future__ import annotations
 """Auto-extracted class from agent_context.py"""
 
 from src.core.base.version import VERSION
-from src.logic.agents.cognitive.context.models.ContextRecommendation import ContextRecommendation
+from src.logic.agents.cognitive.context.models.ContextRecommendation import (
+    ContextRecommendation,
+)
 from typing import Dict, List, Optional, Tuple
 import re
 
 __version__ = VERSION
+
 
 class ContextRecommender:
     """Recommends context improvements based on similar files.
@@ -53,7 +57,7 @@ class ContextRecommender:
     def recommend(
         self,
         content_or_target_file: str,
-        similar_contexts: dict[str, str] | None = None
+        similar_contexts: dict[str, str] | None = None,
     ) -> list[ContextRecommendation]:
         """Generate context recommendations.
 
@@ -62,7 +66,9 @@ class ContextRecommender:
         - Otherwise, content_or_target_file is treated as the target content
           and reference_files are used as the corpus.
         """
-        corpus = similar_contexts if similar_contexts is not None else self.reference_files
+        corpus = (
+            similar_contexts if similar_contexts is not None else self.reference_files
+        )
         target_content = content_or_target_file
 
         recommendations: list[ContextRecommendation] = []
@@ -77,14 +83,20 @@ class ContextRecommender:
             for section in sections:
                 section_counts[section] = section_counts.get(section, 0) + 1
 
-        common_sections: list[tuple[str, int]] = sorted(section_counts.items(), key=lambda x: x[1], reverse=True)
-        suggested = [name for name, _ in common_sections if name not in target_sections][:5]
+        common_sections: list[tuple[str, int]] = sorted(
+            section_counts.items(), key=lambda x: x[1], reverse=True
+        )
+        suggested = [
+            name for name, _ in common_sections if name not in target_sections
+        ][:5]
         if suggested:
-            recommendations.append(ContextRecommendation(
-                source_file=list(corpus.keys())[0],
-                suggested_sections=suggested,
-                reason="Common sections in similar files",
-                confidence=0.8
-            ))
+            recommendations.append(
+                ContextRecommendation(
+                    source_file=list(corpus.keys())[0],
+                    suggested_sections=suggested,
+                    reason="Common sections in similar files",
+                    confidence=0.8,
+                )
+            )
 
         return recommendations

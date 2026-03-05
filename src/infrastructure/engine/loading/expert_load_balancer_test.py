@@ -21,7 +21,12 @@ def test_imports_and_symbols():
     assert hasattr(mod, "LocalityAwarePolicy"), "LocalityAwarePolicy missing"
     assert hasattr(mod, "ExpertLoadBalancer"), "ExpertLoadBalancer missing"
     assert hasattr(mod, "AsyncExpertRebalancer"), "AsyncExpertRebalancer missing"
-    assert hasattr(mod, "compute_balanced_packing_rust"), "compute_balanced_packing_rust missing"
-    assert hasattr(mod, "compute_expert_replication_rust"), "compute_expert_replication_rust missing"
-    assert hasattr(mod, "compute_load_imbalance_rust"), "compute_load_imbalance_rust missing"
-
+    assert hasattr(
+        mod, "compute_balanced_packing_rust"
+    ), "compute_balanced_packing_rust missing"
+    assert hasattr(
+        mod, "compute_expert_replication_rust"
+    ), "compute_expert_replication_rust missing"
+    assert hasattr(
+        mod, "compute_load_imbalance_rust"
+    ), "compute_load_imbalance_rust missing"

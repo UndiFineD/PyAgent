@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_contextvisualizer_exists():
     """Test that ContextVisualizer class exists and is importable."""
-    assert 'ContextVisualizer' in dir()
+    assert "ContextVisualizer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

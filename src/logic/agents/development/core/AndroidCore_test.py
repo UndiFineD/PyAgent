@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_androidcore_exists():
     """Test that AndroidCore class exists and is importable."""
-    assert 'AndroidCore' in dir()
+    assert "AndroidCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

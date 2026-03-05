@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -39,7 +40,10 @@ class DraftModelWrapper(ABC):
 
     @abstractmethod
     def forward(
-        self, input_ids: list[int], positions: list[int], hidden_states: list[list[float]] | None = None
+        self,
+        input_ids: list[int],
+        positions: list[int],
+        hidden_states: list[list[float]] | None = None,
     ) -> DraftOutput:
         """Run draft model forward pass."""
         raise NotImplementedError
@@ -58,15 +62,25 @@ class SimpleDraftModel(DraftModelWrapper):
         self.hidden_size = hidden_size
 
     def forward(
-        self, input_ids: list[int], positions: list[int], hidden_states: list[list[float]] | None = None
+        self,
+        input_ids: list[int],
+        positions: list[int],
+        hidden_states: list[list[float]] | None = None,
     ) -> DraftOutput:
         """Mock forward pass regarding Phase 336."""
         import random
 
         n = len(input_ids)
         # Generate random tokens and logits regarding testing
-        token_ids = list(map(lambda _: random.randint(0, self.vocab_size - 1), range(n)))
-        logits = list(map(lambda _: list(map(lambda __: random.random(), range(self.vocab_size))), range(n)))
+        token_ids = list(
+            map(lambda _: random.randint(0, self.vocab_size - 1), range(n))
+        )
+        logits = list(
+            map(
+                lambda _: list(map(lambda __: random.random(), range(self.vocab_size))),
+                range(n),
+            )
+        )
         return DraftOutput(token_ids=token_ids, logits=logits)
 
     def get_hidden_size(self) -> int:

@@ -2,9 +2,11 @@
 """Compatibility shim for `src.classes.improvements` package.
 Prefer observability implementation when available.
 """
+
 try:
     from src.observability.improvements import *  # type: ignore
 except Exception:
+
     class ImprovementsAgent:  # minimal placeholder
         pass
 

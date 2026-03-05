@@ -33,40 +33,39 @@ except ImportError as e:
 
 def test_temperaturesampler_exists():
     """Test that TemperatureSampler class exists and is importable."""
-    assert 'TemperatureSampler' in dir()
+    assert "TemperatureSampler" in dir()
 
 
 def test_topksampler_exists():
     """Test that TopKSampler class exists and is importable."""
-    assert 'TopKSampler' in dir()
+    assert "TopKSampler" in dir()
 
 
 def test_toppsampler_exists():
     """Test that TopPSampler class exists and is importable."""
-    assert 'TopPSampler' in dir()
+    assert "TopPSampler" in dir()
 
 
 def test_topktoppsampler_exists():
     """Test that TopKTopPSampler class exists and is importable."""
-    assert 'TopKTopPSampler' in dir()
+    assert "TopKTopPSampler" in dir()
 
 
 def test_gumbelsampler_exists():
     """Test that GumbelSampler class exists and is importable."""
-    assert 'GumbelSampler' in dir()
+    assert "GumbelSampler" in dir()
 
 
 def test_repetitionpenaltysampler_exists():
     """Test that RepetitionPenaltySampler class exists and is importable."""
-    assert 'RepetitionPenaltySampler' in dir()
+    assert "RepetitionPenaltySampler" in dir()
 
 
 def test_penaltysampler_exists():
     """Test that PenaltySampler class exists and is importable."""
-    assert 'PenaltySampler' in dir()
+    assert "PenaltySampler" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

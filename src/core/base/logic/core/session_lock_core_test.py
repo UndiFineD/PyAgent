@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_sessionlockcore_exists():
     """Test that SessionLockCore class exists and is importable."""
-    assert 'SessionLockCore' in dir()
+    assert "SessionLockCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

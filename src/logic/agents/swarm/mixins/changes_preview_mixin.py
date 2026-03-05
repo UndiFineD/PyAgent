@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,7 +38,11 @@ class ChangesPreviewMixin:
 
     def get_preview(self) -> str:
         """Get the preview of changes without applying them."""
-        return self._preview_content if getattr(self, "_preview_content", "") else getattr(self, "current_content", "")
+        return (
+            self._preview_content
+            if getattr(self, "_preview_content", "")
+            else getattr(self, "current_content", "")
+        )
 
     def preview_changes(self, content: str) -> Dict[str, Any]:
         """Preview changes and return a summary."""
@@ -48,7 +53,9 @@ class ChangesPreviewMixin:
         new_lines = content.split("\n")
 
         added = len([line for line in new_lines if line and line not in original_lines])
-        removed = len([line for line in original_lines if line and line not in new_lines])
+        removed = len(
+            [line for line in original_lines if line and line not in new_lines]
+        )
 
         return {
             "original_lines": len(original_lines),

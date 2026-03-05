@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Phase 320: Fleet Discovery Mixin
 
@@ -23,14 +24,14 @@ class FleetDiscoveryMixin:
 
         metadata = {
             "version": getattr(self, "version", "unknown"),
-            "capabilities": list(getattr(self, "_capability_hints", {}).keys())[:10]
+            "capabilities": list(getattr(self, "_capability_hints", {}).keys())[:10],
         }
 
         self._discovery = LANDiscovery(
             agent_id=agent_id,
             service_port=service_port,
             secret_key=secret,
-            metadata=metadata
+            metadata=metadata,
         )
         self._discovery.start()
         logger.info(f"FleetDiscovery: Initialized discovery for {agent_id}")
@@ -79,7 +80,11 @@ class FleetDiscoveryMixin:
                                 # Logic to update local discovery with merged peers
                                 if hasattr(self, "_discovery"):
                                     # Merge remote peer into local discovery registry
-                                    peer_obj = PeerInfo(**rp) if isinstance(rp, dict) else rp
+                                    peer_obj = (
+                                        PeerInfo(**rp) if isinstance(rp, dict) else rp
+                                    )
                                     self._discovery._peers[peer_obj.agent_id] = peer_obj
                 except Exception as e:
-                    logger.debug(f"FleetDiscovery: Failed to sync with {peer.agent_id}: {e}")
+                    logger.debug(
+                        f"FleetDiscovery: Failed to sync with {peer.agent_id}: {e}"
+                    )

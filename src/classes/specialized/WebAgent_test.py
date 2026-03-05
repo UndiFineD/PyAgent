@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_webagent_exists():
     """Test that WebAgent class exists and is importable."""
-    assert 'WebAgent' in dir()
+    assert "WebAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

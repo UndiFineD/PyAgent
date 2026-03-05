@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,16 +19,20 @@ from src.core.base.version import VERSION
 import logging
 from typing import Dict, List, Any
 from src.infrastructure.api.core.GatewayCore import GatewayCore
-from src.infrastructure.fleet.core.LoadBalancerCore import LoadBalancerCore, AgentMetrics
+from src.infrastructure.fleet.core.LoadBalancerCore import (
+    LoadBalancerCore,
+    AgentMetrics,
+)
 
 __version__ = VERSION
+
 
 class FleetLoadBalancer:
     """
     GUI Improvements: Load Balancer for multi-interface traffic.
     Integrated with LoadBalancerCore for cognitive pressure distribution.
     """
-    
+
     def __init__(self, fleet) -> None:
         self.fleet = fleet
         self.gateway_core = GatewayCore()
@@ -40,29 +45,31 @@ class FleetLoadBalancer:
         Routes the request to the most available resource or queues it.
         Assigns model based on Interface Affinity.
         """
-        logging.info(f"LoadBalancer: Incoming request from {interface}: {command[:30]}...")
-        
+        logging.info(
+            f"LoadBalancer: Incoming request from {interface}: {command[:30]}..."
+        )
+
         assigned_model = self.core.resolve_model_by_affinity(interface)
-        
+
         # Simple simulation: If queue is large, increase latency or reject
         if len(self.request_queue) > 100:
             return {"status": "REJECTED", "reason": "High Traffic Load"}
-            
-        self.request_queue.append({
-            "interface": interface,
-            "command": command,
-            "model": assigned_model
-        })
-        
+
+        self.request_queue.append(
+            {"interface": interface, "command": command, "model": assigned_model}
+        )
+
         return {
             "status": "ACCEPTED",
             "interface": interface,
             "assigned_model": assigned_model,
-            "estimated_wait_ms": len(self.request_queue) * 10
+            "estimated_wait_ms": len(self.request_queue) * 10,
         }
 
     def get_stats(self) -> dict[str, Any]:
         return {
             "queue_depth": len(self.request_queue),
-            "interface_diversity": list(set(r["interface"] for r in self.request_queue))
+            "interface_diversity": list(
+                set(r["interface"] for r in self.request_queue)
+            ),
         }

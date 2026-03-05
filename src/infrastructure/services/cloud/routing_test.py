@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ProviderMetrics"), "ProviderMetrics missing"
     assert hasattr(mod, "RoutingConstraints"), "RoutingConstraints missing"
     assert hasattr(mod, "IntelligentRouter"), "IntelligentRouter missing"
-

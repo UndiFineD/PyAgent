@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_speculativetoken_exists():
     """Test that SpeculativeToken class exists and is importable."""
-    assert 'SpeculativeToken' in dir()
+    assert "SpeculativeToken" in dir()
 
 
 def test_speculativetree_exists():
     """Test that SpeculativeTree class exists and is importable."""
-    assert 'SpeculativeTree' in dir()
+    assert "SpeculativeTree" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

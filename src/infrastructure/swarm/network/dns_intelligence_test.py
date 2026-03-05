@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_dnsscanresult_exists():
     """Test that DNSScanResult class exists and is importable."""
-    assert 'DNSScanResult' in dir()
+    assert "DNSScanResult" in dir()
 
 
 def test_dnsintelligence_exists():
     """Test that DNSIntelligence class exists and is importable."""
-    assert 'DNSIntelligence' in dir()
+    assert "DNSIntelligence" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

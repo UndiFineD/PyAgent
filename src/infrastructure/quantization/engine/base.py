@@ -8,19 +8,20 @@ from .tensor import QuantizedTensor
 if TYPE_CHECKING:
     from numpy.typing import NDArray
 
+
 class Quantizer(ABC):
     """Base class for quantization algorithms."""
-    
+
     def __init__(self, config: QuantConfig):
         self.config = config
-    
+
     @abstractmethod
     def quantize(
         self,
         weight: NDArray[np.float32],
     ) -> QuantizedTensor:
         pass
-    
+
     @abstractmethod
     def dequantize(
         self,

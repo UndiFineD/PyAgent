@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_neoxrotaryembedding_exists():
     """Test that NeoxRotaryEmbedding class exists and is importable."""
-    assert 'NeoxRotaryEmbedding' in dir()
+    assert "NeoxRotaryEmbedding" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

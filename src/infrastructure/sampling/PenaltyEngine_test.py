@@ -33,32 +33,32 @@ except ImportError as e:
 
 def test_penaltytype_exists():
     """Test that PenaltyType class exists and is importable."""
-    assert 'PenaltyType' in dir()
+    assert "PenaltyType" in dir()
 
 
 def test_penaltyschedule_exists():
     """Test that PenaltySchedule class exists and is importable."""
-    assert 'PenaltySchedule' in dir()
+    assert "PenaltySchedule" in dir()
 
 
 def test_penaltyconfig_exists():
     """Test that PenaltyConfig class exists and is importable."""
-    assert 'PenaltyConfig' in dir()
+    assert "PenaltyConfig" in dir()
 
 
 def test_penaltystate_exists():
     """Test that PenaltyState class exists and is importable."""
-    assert 'PenaltyState' in dir()
+    assert "PenaltyState" in dir()
 
 
 def test_penaltyengine_exists():
     """Test that PenaltyEngine class exists and is importable."""
-    assert 'PenaltyEngine' in dir()
+    assert "PenaltyEngine" in dir()
 
 
 def test_batchpenaltyengine_exists():
     """Test that BatchPenaltyEngine class exists and is importable."""
-    assert 'BatchPenaltyEngine' in dir()
+    assert "BatchPenaltyEngine" in dir()
 
 
 def test_apply_repetition_penalty_exists():
@@ -79,4 +79,3 @@ def test_apply_presence_penalty_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

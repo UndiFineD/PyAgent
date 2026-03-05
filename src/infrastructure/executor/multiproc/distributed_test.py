@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_distributedexecutor_exists():
     """Test that DistributedExecutor class exists and is importable."""
-    assert 'DistributedExecutor' in dir()
+    assert "DistributedExecutor" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

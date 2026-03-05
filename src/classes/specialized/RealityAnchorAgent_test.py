@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_realityanchoragent_exists():
     """Test that RealityAnchorAgent class exists and is importable."""
-    assert 'RealityAnchorAgent' in dir()
+    assert "RealityAnchorAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -71,7 +72,14 @@ class OllamaBackend(LLMBackend):
             response.raise_for_status()
             content = response.json().get("response", "")
             latency = time.time() - start_t
-            self._record("ollama", model, prompt, content, system_prompt=system_prompt, latency_s=latency)
+            self._record(
+                "ollama",
+                model,
+                prompt,
+                content,
+                system_prompt=system_prompt,
+                latency_s=latency,
+            )
             self._update_status("ollama", True)
             return content
         except Exception as e:
@@ -79,11 +87,11 @@ class OllamaBackend(LLMBackend):
             logging.debug(f"Ollama call failed: {e}")
             self._update_status("ollama", False)
             self._record(
-                "ollama", 
+                "ollama",
                 model,
                 prompt,
                 f"ERROR: {str(e)}",
                 system_prompt=system_prompt,
-                latency_s=time.time() - start_t
+                latency_s=time.time() - start_t,
             )
             return ""

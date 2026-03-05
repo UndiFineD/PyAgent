@@ -1,7 +1,7 @@
-
 """
 Lan discovery.py module.
 """
+
 # Copyright 2026 PyAgent Authors
 # Phase 320: LAN Discovery & Peer Synchronization
 
@@ -17,6 +17,7 @@ from dataclasses import asdict, dataclass
 from typing import Any, Dict, List, Optional, Callable
 
 from src.infrastructure.swarm.network.network_utils import get_local_network_ip
+
 # from src.observability.structured_logger import StructuredLogger
 import logging
 
@@ -74,10 +75,14 @@ class LANDiscovery:
         if auto_find_port and not self._test_port_available(self.discovery_port):
             available_port = self.find_available_port(self.discovery_port + 1)
             if available_port:
-                logger.info(f"LANDiscovery: Port {self.discovery_port} unavailable, using {available_port}")
+                logger.info(
+                    f"LANDiscovery: Port {self.discovery_port} unavailable, using {available_port}"
+                )
                 self.discovery_port = available_port
             else:
-                logger.warning(f"LANDiscovery: No available ports found, using {self.discovery_port} anyway")
+                logger.warning(
+                    f"LANDiscovery: No available ports found, using {self.discovery_port} anyway"
+                )
 
         self.registry: Dict[str, PeerInfo] = {}
         self._running = False
@@ -94,6 +99,7 @@ class LANDiscovery:
         # Sleep/wakeup support for the announce loop
         self._sleep_event = threading.Event()
         if sleep_fn is None:
+
             def _wait(secs: float) -> None:
                 self._sleep_event.wait(secs)
 
@@ -120,7 +126,9 @@ class LANDiscovery:
         except OSError:
             return False
 
-    def find_available_port(self, start_port: int, max_attempts: int = 100) -> Optional[int]:
+    def find_available_port(
+        self, start_port: int, max_attempts: int = 100
+    ) -> Optional[int]:
         """
         Find an available port starting from start_port.
 
@@ -154,6 +162,7 @@ class LANDiscovery:
         # Sleep/wakeup support for the announce loop
         self._sleep_event = threading.Event()
         if sleep_fn is None:
+
             def _wait(secs: float) -> None:
                 self._sleep_event.wait(secs)
 
@@ -172,11 +181,13 @@ class LANDiscovery:
             # Get local IP
             local_ip = self.local_ip
             if local_ip == "0.0.0.0" or local_ip.startswith("127."):
-                logger.warning("LANDiscovery: Cannot detect subnet for localhost/unknown IP")
+                logger.warning(
+                    "LANDiscovery: Cannot detect subnet for localhost/unknown IP"
+                )
                 return None
 
             # Parse IP and create subnet broadcast
-            ip_parts = local_ip.split('.')
+            ip_parts = local_ip.split(".")
             if len(ip_parts) != 4:
                 logger.warning(f"LANDiscovery: Invalid IPv4 address format: {local_ip}")
                 return None
@@ -223,7 +234,9 @@ class LANDiscovery:
     def _sign(self, data: str) -> str:
         if not self.secret_key:
             return "unsigned"
-        return hmac.new(self.secret_key.encode(), data.encode(), hashlib.sha256).hexdigest()
+        return hmac.new(
+            self.secret_key.encode(), data.encode(), hashlib.sha256
+        ).hexdigest()
 
     def _verify(self, data: str, signature: str) -> bool:
         if not self.secret_key:
@@ -262,20 +275,26 @@ class LANDiscovery:
                 if self.auto_find_port:
                     available_port = self.find_available_port(self.discovery_port + 1)
                     if available_port:
-                        logger.info(f"LANDiscovery: Port {self.discovery_port} unavailable, using {available_port}")
+                        logger.info(
+                            f"LANDiscovery: Port {self.discovery_port} unavailable, using {available_port}"
+                        )
                         self.discovery_port = available_port
                     else:
-                        logger.error("LANDiscovery: No available ports found for discovery")
+                        logger.error(
+                            "LANDiscovery: No available ports found for discovery"
+                        )
                         return
                 else:
-                    logger.error(f"LANDiscovery: Port {self.discovery_port} is not available")
+                    logger.error(
+                        f"LANDiscovery: Port {self.discovery_port} is not available"
+                    )
                     return
 
             self._running = True
             self._listen_thread = threading.Thread(
                 target=self._listen_loop,
                 daemon=True,
-                name=f"LANDiscovery-Listen-{self.agent_id[:8]}"
+                name=f"LANDiscovery-Listen-{self.agent_id[:8]}",
             )
             self._listen_thread.start()
 
@@ -283,16 +302,19 @@ class LANDiscovery:
                 self._announce_thread = threading.Thread(
                     target=self._announce_loop,
                     daemon=True,
-                    name=f"LANDiscovery-Announce-{self.agent_id[:8]}"
+                    name=f"LANDiscovery-Announce-{self.agent_id[:8]}",
                 )
                 self._announce_thread.start()
 
-            logger.info(f"LANDiscovery: Started on port {self.discovery_port} (broadcast: {self.enable_broadcast})")
+            logger.info(
+                f"LANDiscovery: Started on port {self.discovery_port} (broadcast: {self.enable_broadcast})"
+            )
 
         except Exception as e:
             logger.error(f"LANDiscovery: Failed to start: {e}")
             self._running = False
             raise
+
     def get_network_info(self) -> Dict[str, Any]:
         """
         Get information about the current network configuration.
@@ -310,7 +332,7 @@ class LANDiscovery:
             "enable_broadcast": self.enable_broadcast,
             "subnet_detected": self._subnet_broadcast is not None,
             "peers_discovered": len(self.registry),
-            "connectivity": connectivity
+            "connectivity": connectivity,
         }
 
     def test_network_connectivity(self) -> Dict[str, Any]:
@@ -325,7 +347,7 @@ class LANDiscovery:
             "can_bind_socket": False,
             "broadcast_reachable": False,
             "subnet_detected": self._subnet_broadcast is not None,
-            "local_ip_valid": False
+            "local_ip_valid": False,
         }
 
         # Test socket binding
@@ -341,9 +363,9 @@ class LANDiscovery:
         # Test local IP validity
         local_ip = self.local_ip
         results["local_ip_valid"] = (
-            local_ip != "0.0.0.0" and
-            not local_ip.startswith("127.") and
-            len(local_ip.split('.')) == 4
+            local_ip != "0.0.0.0"
+            and not local_ip.startswith("127.")
+            and len(local_ip.split(".")) == 4
         )
 
         # Test broadcast reachability (basic connectivity test)
@@ -391,7 +413,9 @@ class LANDiscovery:
             logger.warning(f"LANDiscovery: Network connectivity test failed: {e}")
             return False
 
-    def find_available_port(self, start_port: int = 31415, max_attempts: int = 100) -> Optional[int]:
+    def find_available_port(
+        self, start_port: int = 31415, max_attempts: int = 100
+    ) -> Optional[int]:
         """
         Find an available port for discovery.
 
@@ -413,7 +437,9 @@ class LANDiscovery:
             except OSError:
                 continue
 
-        logger.warning(f"LANDiscovery: No available ports found in range {start_port}-{start_port + max_attempts}")
+        logger.warning(
+            f"LANDiscovery: No available ports found in range {start_port}-{start_port + max_attempts}"
+        )
         return None
 
     def stop(self):
@@ -434,7 +460,9 @@ class LANDiscovery:
         try:
             msg = self._create_message("ANNOUNCE")
             sock.sendto(msg, (broadcast_addr, self.discovery_port))
-            logger.debug(f"LANDiscovery: Sent initial announcement to {broadcast_addr}:{self.discovery_port}")
+            logger.debug(
+                f"LANDiscovery: Sent initial announcement to {broadcast_addr}:{self.discovery_port}"
+            )
         except Exception as exc:  # pylint: disable=broad-exception-caught
             logger.error(f"LANDiscovery: Initial announcement failed: {exc}")
 
@@ -458,7 +486,9 @@ class LANDiscovery:
         with self._lock:
             # Send top 10 most recent peers
             peers_list = sorted(
-                [p.to_dict() for p in self.registry.values()], key=lambda x: x["last_seen"], reverse=True
+                [p.to_dict() for p in self.registry.values()],
+                key=lambda x: x["last_seen"],
+                reverse=True,
             )[:10]
 
         msg = self._create_message("SYNC", {"peers": peers_list})
@@ -473,7 +503,9 @@ class LANDiscovery:
             sock.bind(("", self.discovery_port))
             logger.info(f"LANDiscovery: Listening on port {self.discovery_port}")
         except Exception as exc:  # pylint: disable=broad-exception-caught
-            logger.error(f"LANDiscovery: Failed to bind to port {self.discovery_port}: {exc}")
+            logger.error(
+                f"LANDiscovery: Failed to bind to port {self.discovery_port}: {exc}"
+            )
             return
 
         while self._running:
@@ -527,8 +559,12 @@ class LANDiscovery:
                 # Direct respond to announcer
                 resp = self._create_message("ACK")
                 self._ping_times[remote_agent_id] = now
-                socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(resp, (addr[0], self.DISCOVERY_PORT))
-                logger.info(f"LANDiscovery: New peer announced: {remote_agent_id} at {addr[0]}")
+                socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(
+                    resp, (addr[0], self.DISCOVERY_PORT)
+                )
+                logger.info(
+                    f"LANDiscovery: New peer announced: {remote_agent_id} at {addr[0]}"
+                )
 
             elif msg_type == "ACK":
                 # Calculate latency if we sent the request

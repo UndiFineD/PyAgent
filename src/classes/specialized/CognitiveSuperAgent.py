@@ -2,11 +2,13 @@ from typing import Dict, List, Any
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
+
 class CognitiveSuperAgent(BaseAgent):
     """
-    Cognitive Super-Agent: A fused agent combining Reasoning and Reflection 
+    Cognitive Super-Agent: A fused agent combining Reasoning and Reflection
     capabilities for high-performance cognitive workflows.
     """
+
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path

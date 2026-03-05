@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,8 +28,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel
 
 from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.services.api.fleet_load_balancer import \
-    FleetLoadBalancer
+from src.infrastructure.services.api.fleet_load_balancer import FleetLoadBalancer
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
@@ -69,7 +69,9 @@ class TelemetryManager:
         for connection in self.active_connections:
             try:
                 await connection.send_text(message)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
 
@@ -88,7 +90,9 @@ async def root() -> dict[str, Any]:
 
 @app.get("/agents")
 async def list_agents() -> dict[str, Any]:
-    return {"agents": [{"id": k, "type": type(v).__name__} for k, v in fleet.agents.items()]}
+    return {
+        "agents": [{"id": k, "type": type(v).__name__} for k, v in fleet.agents.items()]
+    }
 
 
 @app.get("/discovery/peers")

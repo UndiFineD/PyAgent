@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "validate_tool_call"), "validate_tool_call missing"
     assert hasattr(mod, "validate_tool_schema"), "validate_tool_schema missing"
     assert hasattr(mod, "validate_argument_type"), "validate_argument_type missing"
-

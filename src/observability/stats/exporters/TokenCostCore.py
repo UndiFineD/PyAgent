@@ -8,8 +8,9 @@ MODEL_COSTS = {
     "claude-3-opus": {"input": 0.015, "output": 0.075},
     "gemini-1-5-pro": {"input": 0.0035, "output": 0.0105},
     "gemini-2-0-flash": {"input": 0.0001, "output": 0.0004},
-    "default": {"input": 0.002, "output": 0.002}
+    "default": {"input": 0.002, "output": 0.002},
 }
+
 
 class TokenCostCore:
     """
@@ -21,11 +22,11 @@ class TokenCostCore:
         """Returns the estimated cost in USD."""
         model_key = model.lower()
         pricing = self._find_pricing(model_key)
-        
+
         # Cost per 1k tokens
         input_cost = (input_tokens / 1000) * pricing["input"]
         output_cost = (output_tokens / 1000) * pricing["output"]
-        
+
         return round(input_cost + output_cost, 6)
 
     def _find_pricing(self, model_key: str) -> Dict[str, float]:

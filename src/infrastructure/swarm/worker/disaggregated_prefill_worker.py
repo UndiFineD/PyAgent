@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,13 +39,15 @@ from typing import TYPE_CHECKING, Any, Dict, Optional
 
 from src.core.lazy_loader import LazyLoader
 from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
-    KVConnectorRole, KVTransferConfig)
+    KVConnectorRole,
+    KVTransferConfig,
+)
 
 if TYPE_CHECKING:
-    from src.infrastructure.storage.cache.kv_cache_manager import \
-        KVCacheManager
-    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import \
-        KVConnectorBase
+    from src.infrastructure.storage.cache.kv_cache_manager import KVCacheManager
+    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
+        KVConnectorBase,
+    )
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -141,7 +144,9 @@ class DisaggregatedPrefillWorker:
             "active_requests": len(self._requests_in_prefill),
             "tokens_prefilled": self.tokens_prefilled,
             "requests_completed": self.requests_completed,
-            "connector_health": self.kv_connector.get_health_report() if self.kv_connector else None,
+            "connector_health": (
+                self.kv_connector.get_health_report() if self.kv_connector else None
+            ),
         }
 
     def shutdown(self) -> None:
@@ -153,4 +158,7 @@ class DisaggregatedPrefillWorker:
 
 
 # Lazy loading registration
-_worker = LazyLoader("src.infrastructure.swarm.worker.disaggregated_prefill_worker", "DisaggregatedPrefillWorker")
+_worker = LazyLoader(
+    "src.infrastructure.swarm.worker.disaggregated_prefill_worker",
+    "DisaggregatedPrefillWorker",
+)

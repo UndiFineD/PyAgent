@@ -31,4 +31,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "generate_cache_salt"), "generate_cache_salt missing"
     assert hasattr(mod, "render_prompt"), "render_prompt missing"
     assert hasattr(mod, "truncate_prompt"), "truncate_prompt missing"
-

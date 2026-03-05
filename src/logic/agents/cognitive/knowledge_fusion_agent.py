@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -60,12 +61,16 @@ class KnowledgeFusionAgent(BaseAgent):
             with open(temp_path, "w", encoding="utf-8") as f:
                 json.dump(graph, f, indent=2)
             temp_path.replace(self.global_graph_path)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             if temp_path.exists():
                 try:
                     temp_path.unlink()
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                    # pylint: disable=broad-exception-caught
                     pass
             logging.error(f"KnowledgeFusion: Atomic save failed: {e}")
             raise
@@ -101,7 +106,9 @@ class KnowledgeFusionAgent(BaseAgent):
                         graph["nodes"].append(item)
                         added_nodes += 1
 
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"KnowledgeFusion: Error processing shard {path}: {e}")
 
         self._save_global_graph(graph)

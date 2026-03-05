@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # ClassificationAgent: Taxonomy and Categorization Specialist - Phase 319 Enhanced
 
@@ -14,27 +15,33 @@ from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
 
+
 class ClassificationType(Enum):
     SINGLE_LABEL = "single_label"
     MULTI_LABEL = "multi_label"
     HIERARCHICAL = "hierarchical"
     BINARY = "binary"
 
+
 @dataclass
 class ClassificationResult:
     """Represents a classification result with confidence."""
+
     category: str
     confidence: float
     parent_category: Optional[str] = None
     subcategories: List[str] = field(default_factory=list)
 
+
 @dataclass
 class Taxonomy:
     """Represents a hierarchical category taxonomy."""
+
     name: str
     categories: List[str]
     hierarchy: Dict[str, List[str]] = field(default_factory=dict)  # parent -> children
     descriptions: Dict[str, str] = field(default_factory=dict)
+
 
 class ClassificationAgent(BaseAgent):
     """
@@ -59,32 +66,32 @@ class ClassificationAgent(BaseAgent):
         name: str,
         categories: List[str],
         hierarchy: Optional[Dict[str, List[str]]] = None,
-        descriptions: Optional[Dict[str, str]] = None
+        descriptions: Optional[Dict[str, str]] = None,
     ) -> Dict[str, Any]:
         """Registers a taxonomy for reuse."""
         taxonomy = Taxonomy(
             name=name,
             categories=categories,
             hierarchy=hierarchy or {},
-            descriptions=descriptions or {}
+            descriptions=descriptions or {},
         )
         self._taxonomies[name] = taxonomy
-        
+
         return {
             "success": True,
             "taxonomy_name": name,
             "category_count": len(categories),
-            "hierarchical": bool(hierarchy)
+            "hierarchical": bool(hierarchy),
         }
 
     @as_tool
     async def classify(
-        self, 
-        content: str, 
+        self,
+        content: str,
         categories: Optional[List[str]] = None,
         taxonomy_name: Optional[str] = None,
         classification_type: str = "single_label",
-        top_k: int = 3
+        top_k: int = 3,
     ) -> Dict[str, Any]:
         """Classifies content into one or more categories."""
         # Get categories from taxonomy or parameter
@@ -97,104 +104,115 @@ class ClassificationAgent(BaseAgent):
             cats = categories or ["positive", "negative", "neutral"]
             hierarchy = {}
             descriptions = {}
-        
+
         cls_type = ClassificationType(classification_type)
-        
+
         # Build prompt based on classification type
         if cls_type == ClassificationType.BINARY:
             prompt = self._build_binary_prompt(content, cats)
         elif cls_type == ClassificationType.MULTI_LABEL:
             prompt = self._build_multi_label_prompt(content, cats, descriptions, top_k)
         elif cls_type == ClassificationType.HIERARCHICAL:
-            prompt = self._build_hierarchical_prompt(content, cats, hierarchy, descriptions)
+            prompt = self._build_hierarchical_prompt(
+                content, cats, hierarchy, descriptions
+            )
         else:
             prompt = self._build_single_label_prompt(content, cats, descriptions)
-        
+
         res = await self.improve_content(prompt)
-        
+
         try:
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 data = json.loads(match.group(1))
-                
+
                 # Validate confidence threshold
                 confidence = data.get("confidence", 0.0)
-                if isinstance(confidence, (int, float)) and confidence < self._confidence_threshold:
+                if (
+                    isinstance(confidence, (int, float))
+                    and confidence < self._confidence_threshold
+                ):
                     data["below_threshold"] = True
                     data["threshold"] = self._confidence_threshold
-                
+
                 # Record classification
-                self._classification_history.append({
-                    "content_preview": content[:100],
-                    "result": data,
-                    "type": classification_type
-                })
-                
+                self._classification_history.append(
+                    {
+                        "content_preview": content[:100],
+                        "result": data,
+                        "type": classification_type,
+                    }
+                )
+
                 return data
         except Exception as e:
             logging.debug(f"ClassificationAgent: Parse error: {e}")
-        
+
         return {"category": "unknown", "confidence": 0.0, "raw": res}
 
     @as_tool
     async def classify_batch(
-        self, 
-        contents: List[str], 
+        self,
+        contents: List[str],
         categories: List[str],
-        classification_type: str = "single_label"
+        classification_type: str = "single_label",
     ) -> Dict[str, Any]:
         """Classifies multiple items in batch."""
         results = []
-        
+
         for idx, content in enumerate(contents):
             result = await self.classify(
                 content=content,
                 categories=categories,
-                classification_type=classification_type
+                classification_type=classification_type,
             )
-            results.append({
-                "index": idx,
-                "content_preview": content[:50],
-                **result
-            })
-        
+            results.append({"index": idx, "content_preview": content[:50], **result})
+
         # Compute distribution
         category_counts = {}
         for r in results:
             cat = r.get("category", "unknown")
             category_counts[cat] = category_counts.get(cat, 0) + 1
-        
+
         return {
             "results": results,
             "total": len(contents),
             "distribution": category_counts,
-            "avg_confidence": sum(r.get("confidence", 0) for r in results) / len(results) if results else 0
+            "avg_confidence": (
+                sum(r.get("confidence", 0) for r in results) / len(results)
+                if results
+                else 0
+            ),
         }
 
     @as_tool
-    async def suggest_categories(self, sample_content: List[str], num_categories: int = 5) -> Dict[str, Any]:
+    async def suggest_categories(
+        self, sample_content: List[str], num_categories: int = 5
+    ) -> Dict[str, Any]:
         """Suggests categories based on sample content."""
         samples = "\n".join([f"- {c[:200]}" for c in sample_content[:10]])
-        
+
         prompt = (
             f"Based on these content samples, suggest {num_categories} distinct categories:\n\n"
             f"{samples}\n\n"
             "Output JSON: {'categories': ['cat1', 'cat2', ...], 'descriptions': {'cat1': 'description', ...}}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         try:
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
         except:
             pass
-        
+
         return {"raw": res}
 
     @as_tool
-    async def explain_classification(self, content: str, assigned_category: str, categories: List[str]) -> Dict[str, Any]:
+    async def explain_classification(
+        self, content: str, assigned_category: str, categories: List[str]
+    ) -> Dict[str, Any]:
         """Explains why content was classified into a category."""
         prompt = (
             f"Content: {content[:500]}\n\n"
@@ -206,16 +224,16 @@ class ClassificationAgent(BaseAgent):
             "3. Why other categories were rejected\n"
             "Output JSON: {'explanation': '...', 'key_features': [...], 'rejected_categories': {...}}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         try:
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
         except:
             pass
-        
+
         return {"raw_explanation": res}
 
     @as_tool
@@ -231,29 +249,33 @@ class ClassificationAgent(BaseAgent):
         """Returns classification statistics."""
         if not self._classification_history:
             return {"total_classifications": 0}
-        
+
         categories = {}
         confidences = []
-        
+
         for item in self._classification_history:
             result = item.get("result", {})
             cat = result.get("category", "unknown")
             conf = result.get("confidence", 0.0)
-            
+
             categories[cat] = categories.get(cat, 0) + 1
             if isinstance(conf, (int, float)):
                 confidences.append(conf)
-        
+
         return {
             "total_classifications": len(self._classification_history),
             "category_distribution": categories,
             "avg_confidence": sum(confidences) / len(confidences) if confidences else 0,
             "confidence_threshold": self._confidence_threshold,
-            "registered_taxonomies": list(self._taxonomies.keys())
+            "registered_taxonomies": list(self._taxonomies.keys()),
         }
 
-    def _build_single_label_prompt(self, content: str, categories: List[str], descriptions: Dict[str, str]) -> str:
-        cat_desc = "\n".join([f"- {c}: {descriptions.get(c, 'No description')}" for c in categories])
+    def _build_single_label_prompt(
+        self, content: str, categories: List[str], descriptions: Dict[str, str]
+    ) -> str:
+        cat_desc = "\n".join(
+            [f"- {c}: {descriptions.get(c, 'No description')}" for c in categories]
+        )
         return (
             f"Classify this content into exactly ONE category:\n\n"
             f"Content: {content}\n\n"
@@ -261,8 +283,16 @@ class ClassificationAgent(BaseAgent):
             "Output JSON: {'category': 'selected', 'confidence': 0.0-1.0, 'reasoning': '...'}"
         )
 
-    def _build_multi_label_prompt(self, content: str, categories: List[str], descriptions: Dict[str, str], top_k: int) -> str:
-        cat_desc = "\n".join([f"- {c}: {descriptions.get(c, 'No description')}" for c in categories])
+    def _build_multi_label_prompt(
+        self,
+        content: str,
+        categories: List[str],
+        descriptions: Dict[str, str],
+        top_k: int,
+    ) -> str:
+        cat_desc = "\n".join(
+            [f"- {c}: {descriptions.get(c, 'No description')}" for c in categories]
+        )
         return (
             f"Classify this content into UP TO {top_k} relevant categories:\n\n"
             f"Content: {content}\n\n"
@@ -270,8 +300,19 @@ class ClassificationAgent(BaseAgent):
             "Output JSON: {'categories': [{'category': '...', 'confidence': 0.0-1.0}], 'reasoning': '...'}"
         )
 
-    def _build_hierarchical_prompt(self, content: str, categories: List[str], hierarchy: Dict[str, List[str]], descriptions: Dict[str, str]) -> str:
-        hier_str = "\n".join([f"- {parent} -> {', '.join(children)}" for parent, children in hierarchy.items()])
+    def _build_hierarchical_prompt(
+        self,
+        content: str,
+        categories: List[str],
+        hierarchy: Dict[str, List[str]],
+        descriptions: Dict[str, str],
+    ) -> str:
+        hier_str = "\n".join(
+            [
+                f"- {parent} -> {', '.join(children)}"
+                for parent, children in hierarchy.items()
+            ]
+        )
         return (
             f"Classify this content hierarchically:\n\n"
             f"Content: {content}\n\n"

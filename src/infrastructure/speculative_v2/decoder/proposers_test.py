@@ -33,25 +33,24 @@ except ImportError as e:
 
 def test_proposerstats_exists():
     """Test that ProposerStats class exists and is importable."""
-    assert 'ProposerStats' in dir()
+    assert "ProposerStats" in dir()
 
 
 def test_speculativeproposer_exists():
     """Test that SpeculativeProposer class exists and is importable."""
-    assert 'SpeculativeProposer' in dir()
+    assert "SpeculativeProposer" in dir()
 
 
 def test_ngramproposer_exists():
     """Test that NgramProposer class exists and is importable."""
-    assert 'NgramProposer' in dir()
+    assert "NgramProposer" in dir()
 
 
 def test_medusaproposer_exists():
     """Test that MedusaProposer class exists and is importable."""
-    assert 'MedusaProposer' in dir()
+    assert "MedusaProposer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

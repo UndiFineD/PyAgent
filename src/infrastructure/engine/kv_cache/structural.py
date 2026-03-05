@@ -92,7 +92,9 @@ class BlockHashCache:
     """Cache mapping block hashes to blocks for prefix caching."""
 
     def __init__(self) -> None:
-        self._cache: Dict[BlockHashWithGroupId, KVCacheBlock | Dict[int, KVCacheBlock]] = {}
+        self._cache: Dict[
+            BlockHashWithGroupId, KVCacheBlock | Dict[int, KVCacheBlock]
+        ] = {}
 
     def get(self, key: BlockHashWithGroupId) -> Optional[KVCacheBlock]:
         """Look up a block by its hash."""
@@ -113,7 +115,9 @@ class BlockHashCache:
         else:
             entry[block.block_id] = block
 
-    def remove(self, key: BlockHashWithGroupId, block_id: int) -> Optional[KVCacheBlock]:
+    def remove(
+        self, key: BlockHashWithGroupId, block_id: int
+    ) -> Optional[KVCacheBlock]:
         """Remove a block-hash association from the cache."""
         entry = self._cache.get(key)
         if entry is None:
@@ -136,7 +140,10 @@ class BlockPool:
     """Manages allocation, caching, and eviction of KV cache blocks."""
 
     def __init__(
-        self, num_blocks: int, enable_caching: bool = True, eviction_policy: EvictionPolicy = EvictionPolicy.LRU
+        self,
+        num_blocks: int,
+        enable_caching: bool = True,
+        eviction_policy: EvictionPolicy = EvictionPolicy.LRU,
     ) -> None:
         self.num_blocks = num_blocks
         self.enable_caching = enable_caching
@@ -197,7 +204,9 @@ class BlockPool:
             block.reset()
             self.free_queue.append(block)
 
-    def cache_block(self, block: KVCacheBlock, block_hash: BlockHashWithGroupId) -> None:
+    def cache_block(
+        self, block: KVCacheBlock, block_hash: BlockHashWithGroupId
+    ) -> None:
         """Enable prefix caching for a block by associating it with a hash."""
         if not self.enable_caching:
             return

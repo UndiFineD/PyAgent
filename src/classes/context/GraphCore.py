@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,8 +26,10 @@ from typing import Dict, List, Set, Any, Tuple
 
 __version__ = VERSION
 
+
 class CodeGraphVisitor(ast.NodeVisitor):
     """AST visitor to extract imports, classes, and function calls."""
+
     def __init__(self, file_path: str) -> None:
         self.file_path = file_path
         self.imports: set[str] = set()
@@ -62,6 +65,7 @@ class CodeGraphVisitor(ast.NodeVisitor):
             self.calls.add(node.func.attr)
         self.generic_visit(node)
 
+
 class GraphCore:
     """Pure logic for managing code relationship graphs."""
 
@@ -77,7 +81,7 @@ class GraphCore:
                 "imports": list(visitor.imports),
                 "classes": visitor.classes,
                 "inherits": visitor.bases,
-                "calls": list(visitor.calls)
+                "calls": list(visitor.calls),
             }
         except Exception:
             return {
@@ -85,7 +89,7 @@ class GraphCore:
                 "imports": [],
                 "classes": [],
                 "inherits": {},
-                "calls": []
+                "calls": [],
             }
 
     @staticmethod
@@ -96,14 +100,14 @@ class GraphCore:
         """
         edges = []
         rel_path = analysis["rel_path"]
-        
+
         # File level dependencies
         for imp in analysis["imports"]:
             edges.append((rel_path, imp, "imports"))
-            
+
         # Class level edges
         for cls, bases in analysis["inherits"].items():
             for base in bases:
                 edges.append((f"{rel_path}::{cls}", base, "inherits"))
-                
+
         return edges

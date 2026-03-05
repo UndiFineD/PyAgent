@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_jsontoolparser_exists():
     """Test that JsonToolParser class exists and is importable."""
-    assert 'JsonToolParser' in dir()
+    assert "JsonToolParser" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

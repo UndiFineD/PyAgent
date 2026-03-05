@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,6 +23,7 @@ from collections.abc import Callable
 
 __version__ = VERSION
 
+
 class NotificationManager:
     """Notifies subscribers about improvement changes."""
 
@@ -40,7 +42,9 @@ class NotificationManager:
     def on_notification(self, callback: Callable[[dict[str, Any]], None]) -> None:
         self._callbacks.append(callback)
 
-    def notify_status_change(self, improvement_id: str, old_status: str, new_status: str) -> None:
+    def notify_status_change(
+        self, improvement_id: str, old_status: str, new_status: str
+    ) -> None:
         payload = {
             "improvement_id": improvement_id,
             "old_status": old_status,

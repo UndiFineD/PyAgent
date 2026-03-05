@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "MediaType"), "MediaType missing"
     assert hasattr(mod, "CacheBackend"), "CacheBackend missing"
     assert hasattr(mod, "HashAlgorithm"), "HashAlgorithm missing"
-

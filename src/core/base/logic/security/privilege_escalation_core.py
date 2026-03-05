@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -52,7 +53,7 @@ class LUID_AND_ATTRIBUTES(ctypes.Structure):
 class TOKEN_PRIVILEGES(ctypes.Structure):
     _fields_ = [
         ("PrivilegeCount", wintypes.DWORD),
-        ("Privileges", LUID_AND_ATTRIBUTES * 1)
+        ("Privileges", LUID_AND_ATTRIBUTES * 1),
     ]
 
 
@@ -67,7 +68,7 @@ class PROCESSENTRY32(ctypes.Structure):
         ("th32ParentProcessID", wintypes.DWORD),
         ("pcPriClassBase", wintypes.LONG),
         ("dwFlags", wintypes.DWORD),
-        ("szExeFile", wintypes.CHAR * 260)
+        ("szExeFile", wintypes.CHAR * 260),
     ]
 
 
@@ -86,7 +87,7 @@ class PrivilegeEscalationCore:
             if not self.advapi32.OpenProcessToken(
                 self.kernel32.GetCurrentProcess(),
                 TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
-                ctypes.byref(token_handle)
+                ctypes.byref(token_handle),
             ):
                 return False
 
@@ -132,7 +133,7 @@ class PrivilegeEscalationCore:
                 return None
 
             while True:
-                exe_name = entry.szExeFile.decode('utf-8', errors='ignore')
+                exe_name = entry.szExeFile.decode("utf-8", errors="ignore")
                 if exe_name.lower() == process_name.lower():
                     self.kernel32.CloseHandle(snapshot)
                     return entry.th32ProcessID
@@ -146,7 +147,9 @@ class PrivilegeEscalationCore:
         except Exception:
             return None
 
-    def impersonate_process_token(self, process_id: int) -> Tuple[bool, Optional[wintypes.HANDLE]]:
+    def impersonate_process_token(
+        self, process_id: int
+    ) -> Tuple[bool, Optional[wintypes.HANDLE]]:
         """Impersonate the token of a target process."""
         try:
             # Open target process
@@ -160,8 +163,11 @@ class PrivilegeEscalationCore:
             token_handle = wintypes.HANDLE()
             if not self.advapi32.OpenProcessToken(
                 process_handle,
-                TOKEN_DUPLICATE | TOKEN_ASSIGN_PRIMARY | TOKEN_QUERY | TOKEN_IMPERSONATE,
-                ctypes.byref(token_handle)
+                TOKEN_DUPLICATE
+                | TOKEN_ASSIGN_PRIMARY
+                | TOKEN_QUERY
+                | TOKEN_IMPERSONATE,
+                ctypes.byref(token_handle),
             ):
                 self.kernel32.CloseHandle(process_handle)
                 return False, None
@@ -170,11 +176,14 @@ class PrivilegeEscalationCore:
             dup_token = wintypes.HANDLE()
             if not self.advapi32.DuplicateTokenEx(
                 token_handle,
-                TOKEN_DUPLICATE | TOKEN_ASSIGN_PRIMARY | TOKEN_QUERY | TOKEN_IMPERSONATE,
+                TOKEN_DUPLICATE
+                | TOKEN_ASSIGN_PRIMARY
+                | TOKEN_QUERY
+                | TOKEN_IMPERSONATE,
                 None,
                 SECURITY_IMPERSONATION,
                 TOKEN_TYPE_IMPERSONATION,
-                ctypes.byref(dup_token)
+                ctypes.byref(dup_token),
             ):
                 self.kernel32.CloseHandle(token_handle)
                 self.kernel32.CloseHandle(process_handle)

@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_workflownode_exists():
     """Test that WorkflowNode class exists and is importable."""
-    assert 'WorkflowNode' in dir()
+    assert "WorkflowNode" in dir()
 
 
 def test_dagworkflowcore_exists():
     """Test that DAGWorkflowCore class exists and is importable."""
-    assert 'DAGWorkflowCore' in dir()
+    assert "DAGWorkflowCore" in dir()
 
 
 def test_dagworkflowcore_instantiation():
@@ -50,4 +50,3 @@ def test_dagworkflowcore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

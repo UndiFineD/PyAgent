@@ -16,9 +16,11 @@ import logging
 import re
 import zlib
 
+
 @dataclass
 class ContextTag:
     """A tag for categorizing context."""
+
     name: str
     description: str = ""
     color: str = "#666666"

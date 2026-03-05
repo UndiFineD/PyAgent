@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,9 +27,10 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
 class VoiceAgent(BaseAgent):
     """Handles voice interactions and audio processing with paralinguistic support."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -39,17 +41,26 @@ class VoiceAgent(BaseAgent):
         )
 
     @as_tool
-    def synthesize_advanced_speech(self, text: str, reference_voice_path: str | None = None, language_code: str = "en") -> str:
+    def synthesize_advanced_speech(
+        self,
+        text: str,
+        reference_voice_path: str | None = None,
+        language_code: str = "en",
+    ) -> str:
         """
         Synthesizes speech with paralinguistic tags and multilingual support (Toucan Pattern).
         Supports expressive markers: [laugh], [chuckle], [sigh], [breath].
         """
-        logging.info(f"VoiceAgent: Synthesizing speech in {language_code} with tags. Text: {text}")
-        
+        logging.info(
+            f"VoiceAgent: Synthesizing speech in {language_code} with tags. Text: {text}"
+        )
+
         # Toucan/Chatterbox Turbo pattern: 350M params, zero-shot cloning
         if any(tag in text for tag in ["[laugh]", "[chuckle]", "[sigh]"]):
-            logging.info("Detected paralinguistic emotion markers. Applying expressive prosody.")
-            
+            logging.info(
+                "Detected paralinguistic emotion markers. Applying expressive prosody."
+            )
+
         return f"Advanced Multilingual Audio Stream generated (Lang: {language_code}, Quality: 44.1kHz)"
 
     @as_tool
@@ -59,15 +70,19 @@ class VoiceAgent(BaseAgent):
         return "Zero-shot speaker profile injected successfully."
 
     @as_tool
-    def transcribe_audio(self, audio_file_path: str, strategy: str = "whisper-gpu") -> str:
+    def transcribe_audio(
+        self, audio_file_path: str, strategy: str = "whisper-gpu"
+    ) -> str:
         """
-        Transcribes an audio file into text. 
+        Transcribes an audio file into text.
         Supports multiple strategies (Handy/Whisper patterns):
         - whisper-gpu: High-accuracy Large/Turbo models (GPU)
         - parakeet-v3: CPU-optimized fast transcription
         - silero-vad: Voice Activity Detection preprocessing
         """
-        logging.info(f"VoiceAgent: Transcribing {audio_file_path} using strategy: {strategy}")
+        logging.info(
+            f"VoiceAgent: Transcribing {audio_file_path} using strategy: {strategy}"
+        )
         # Implementation would use local models as per Handy.computer patterns
         return f"Simulated transcription using {strategy}: 'Hello fleet, please check the system status.'"
 
@@ -86,7 +101,9 @@ class VoiceAgent(BaseAgent):
     def improve_content(self, prompt: str) -> str:
         return "VoiceAgent active and ready for multimedia tasks."
 
+
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function
+
     main = create_main_function(VoiceAgent, "Voice Agent", "Voice logs path")
     main()

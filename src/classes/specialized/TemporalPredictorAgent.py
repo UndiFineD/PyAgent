@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,6 +31,7 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
 class TemporalPredictorAgent(BaseAgent):
     """Predicts future states and potential failures based on temporal patterns."""
 
@@ -38,7 +40,7 @@ class TemporalPredictorAgent(BaseAgent):
         self.history_file = Path("data/logs/temporal_history.json")
         self.history_file.parent.mkdir(parents=True, exist_ok=True)
         self.prediction_log = []
-        
+
         self._system_prompt = (
             "You are the Temporal Predictor Agent. Your specialty is Predictive Execution. "
             "You analyze historical execution logs, error patterns, and system metrics "
@@ -67,14 +69,16 @@ class TemporalPredictorAgent(BaseAgent):
             logging.error(f"TemporalPredictor: Failed to save history: {e}")
 
     @as_tool
-    def record_execution_event(self, event_type: str, status: str, metadata: dict[str, Any]) -> str:
+    def record_execution_event(
+        self, event_type: str, status: str, metadata: dict[str, Any]
+    ) -> str:
         """Records an execution event for future temporal analysis."""
         history = self._load_history()
         event = {
             "timestamp": datetime.now().isoformat(),
             "type": event_type,
             "status": status,
-            "metadata": metadata
+            "metadata": metadata,
         }
         history.append(event)
         # Keep only last 1000 events for local analysis
@@ -86,12 +90,18 @@ class TemporalPredictorAgent(BaseAgent):
         """Analyzes history to predict the next likely failure point."""
         history = self._load_history()
         if not history:
-            return {"status": "insufficient_data", "prediction": "No historical data available."}
+            return {
+                "status": "insufficient_data",
+                "prediction": "No historical data available.",
+            }
 
         # Mock predictive logic: Check for recurring error types or specific time windows
         failures = [e for e in history if e["status"] == "failed"]
         if not failures:
-            return {"status": "stable", "prediction": "No failures detected in recent history."}
+            return {
+                "status": "stable",
+                "prediction": "No failures detected in recent history.",
+            }
 
         # Simple pattern: If many failures happen in a short burst, predict high risk
         last_failures = failures[-5:]
@@ -99,29 +109,35 @@ class TemporalPredictorAgent(BaseAgent):
             return {
                 "status": "high_risk",
                 "prediction": f"High probability of failure in the next 30 minutes based on recent {len(last_failures)} errors.",
-                "recommendation": "Initiate anticipatory cache clearing and connection pooling reset."
+                "recommendation": "Initiate anticipatory cache clearing and connection pooling reset.",
             }
 
         return {
             "status": "nominal",
-            "prediction": "Low probability of immediate failure. Continue monitoring."
+            "prediction": "Low probability of immediate failure. Continue monitoring.",
         }
 
     @as_tool
     def suggest_preemptive_fix(self, failure_prediction: str) -> str:
         """Suggests a preemptive action to avoid a predicted failure."""
-        logging.info(f"TemporalPredictor: Generating preemptive fix for: {failure_prediction}")
-        
+        logging.info(
+            f"TemporalPredictor: Generating preemptive fix for: {failure_prediction}"
+        )
+
         if "high_risk" in failure_prediction.lower():
             return "RECOMMENDATION: Scale up VM instances on CloudSwarm and enable aggressive retries."
-        
+
         return "No immediate preemptive actions required. System state is nominal."
 
     def improve_content(self, prompt: str) -> str:
         """General predictive guidance."""
         return "Temporal analysis active. I am forecasting system stability and bottleneck risks."
 
+
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function
-    main = create_main_function(TemporalPredictorAgent, "Temporal Predictor Agent", "Predictive execution tool")
+
+    main = create_main_function(
+        TemporalPredictorAgent, "Temporal Predictor Agent", "Predictive execution tool"
+    )
     main()

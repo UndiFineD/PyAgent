@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "SynapticAdapter"), "SynapticAdapter missing"
     assert hasattr(mod, "LatentLinkManager"), "LatentLinkManager missing"
     assert hasattr(mod, "SynapticLink"), "SynapticLink missing"
-

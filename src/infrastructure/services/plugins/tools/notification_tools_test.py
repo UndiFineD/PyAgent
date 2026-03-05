@@ -14,5 +14,6 @@ def _load_module():
 def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "send_slack_notification"), "send_slack_notification missing"
-    assert hasattr(mod, "send_discord_notification"), "send_discord_notification missing"
-
+    assert hasattr(
+        mod, "send_discord_notification"
+    ), "send_discord_notification missing"

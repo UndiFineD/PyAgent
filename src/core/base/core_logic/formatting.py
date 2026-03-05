@@ -8,6 +8,7 @@ try:
 except ImportError:
     rc = None
 
+
 class FormattingCore:
     def fix_markdown(self, content: str) -> str:
         """Pure logic to normalize markdown content."""
@@ -33,7 +34,9 @@ class FormattingCore:
         """Logic for generating a unified diff."""
         old_lines = old_content.splitlines(keepends=True)
         new_lines = new_content.splitlines(keepends=True)
-        diff_lines = list(difflib.unified_diff(
-            old_lines, new_lines, fromfile=f"a/{filename}", tofile=f"b/{filename}"
-        ))
+        diff_lines = list(
+            difflib.unified_diff(
+                old_lines, new_lines, fromfile=f"a/{filename}", tofile=f"b/{filename}"
+            )
+        )
         return "".join(diff_lines)

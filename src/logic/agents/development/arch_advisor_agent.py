@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,8 +23,9 @@ from __future__ import annotations
 from src.core.base.common.base_utilities import create_main_function
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.engines.graph_context_engine import \
-    GraphContextEngine
+from src.logic.agents.cognitive.context.engines.graph_context_engine import (
+    GraphContextEngine,
+)
 from src.logic.agents.development.arch_core import ArchCore
 
 __version__ = VERSION
@@ -59,7 +61,9 @@ class ArchAdvisorAgent(BaseAgent):
 
         # Hotspots (High Out-degree)
         report.append("### 🚩 Dependency Hotspots (High Out-degree)")
-        report.append("These files depend on many other things and might be too complex:")
+        report.append(
+            "These files depend on many other things and might be too complex:"
+        )
 
         for node, degree in top_out:
             report.append(f"- **{node}**: {degree} dependencies")
@@ -67,7 +71,9 @@ class ArchAdvisorAgent(BaseAgent):
         # Central Hubs (High In-degree)
         report.append("\n### 🏗️ Central Hubs (High In-degree)")
 
-        report.append("These files are used by many other modules. Changes here have high impact:")
+        report.append(
+            "These files are used by many other modules. Changes here have high impact:"
+        )
         for node, degree in top_in:
             report.append(f"- **{node}**: {degree} dependers")
 

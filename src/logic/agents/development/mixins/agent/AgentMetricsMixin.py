@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,19 +25,28 @@ from src.core.base.types.CodeMetrics import CodeMetrics
 from src.core.base.types.QualityScore import QualityScore
 from src.core.base.types.CodeSmell import CodeSmell
 
+
 class AgentMetricsMixin:
     """Mixin for code metrics, quality scoring, and smell detection."""
 
     def calculate_metrics(self, content: str | None = None) -> CodeMetrics:
         """Calculate code metrics for the content."""
         if content is None:
-            content = getattr(self, "current_content", "") or getattr(self, "previous_content", "") or ""
+            content = (
+                getattr(self, "current_content", "")
+                or getattr(self, "previous_content", "")
+                or ""
+            )
         self._metrics = self.core.calculate_metrics(content)
         return self._metrics
 
     def _get_test_coverage(self) -> float:
         """Attempt to calculate test coverage for the current file."""
-        if not hasattr(self, "_is_python_file") or not self._is_python_file or not self.file_path.exists():
+        if (
+            not hasattr(self, "_is_python_file")
+            or not self._is_python_file
+            or not self.file_path.exists()
+        ):
             return 0.0
 
         # Heuristic: Check common test locations
@@ -91,7 +101,11 @@ class AgentMetricsMixin:
     def calculate_quality_score(self, content: str | None = None) -> QualityScore:
         """Calculate an overall code quality score."""
         if content is None:
-            content = getattr(self, "current_content", "") or getattr(self, "previous_content", "") or ""
+            content = (
+                getattr(self, "current_content", "")
+                or getattr(self, "previous_content", "")
+                or ""
+            )
         metrics = self.calculate_metrics(content)
         style_violations = self.check_style(content)
         code_smells = self.detect_code_smells(content)
@@ -105,6 +119,10 @@ class AgentMetricsMixin:
     def detect_code_smells(self, content: str | None = None) -> list[CodeSmell]:
         """Detect code smells in the content."""
         if content is None:
-            content = getattr(self, "current_content", "") or getattr(self, "previous_content", "") or ""
+            content = (
+                getattr(self, "current_content", "")
+                or getattr(self, "previous_content", "")
+                or ""
+            )
         self._code_smells = self.core.detect_code_smells(content)
         return self._code_smells

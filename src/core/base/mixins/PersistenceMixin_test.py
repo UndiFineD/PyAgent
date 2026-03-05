@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_persistencemixin_exists():
     """Test that PersistenceMixin class exists and is importable."""
-    assert 'PersistenceMixin' in dir()
+    assert "PersistenceMixin" in dir()
 
 
 def test_persistencemixin_instantiation():
@@ -45,4 +45,3 @@ def test_persistencemixin_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

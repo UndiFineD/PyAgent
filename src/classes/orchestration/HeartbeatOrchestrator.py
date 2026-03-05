@@ -5,12 +5,13 @@ import time
 import threading
 from typing import Dict, List, Any, Optional
 
+
 class HeartbeatOrchestrator:
     """
     Ensures the swarm processes remain alive via a distributed watchdog system.
     Monitors agent health and attempts to respawn or alert on failure.
     """
-    
+
     def __init__(self, fleet) -> None:
         self.fleet = fleet
         self.last_seen: Dict[str, float] = {}
@@ -29,8 +30,10 @@ class HeartbeatOrchestrator:
         while not self._stop_event.is_set():
             now = time.time()
             for agent_name, last_time in list(self.last_seen.items()):
-                if now - last_time > 300: # 5 minutes threshold
-                    logging.warning(f"Heartbeat: Agent {agent_name} seems dead (Last seen {now - last_time:.1f}s ago)")
+                if now - last_time > 300:  # 5 minutes threshold
+                    logging.warning(
+                        f"Heartbeat: Agent {agent_name} seems dead (Last seen {now - last_time:.1f}s ago)"
+                    )
                     # In a real system, we'd trigger a respawn here
             self._stop_event.wait(timeout=60)
 

@@ -7,9 +7,10 @@ from typing import Dict, List, Any, Optional
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import create_main_function
 
+
 class ReasoningAgent(BaseAgent):
     """Analyzes complex problems and provides a logical blueprint before action."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -28,7 +29,7 @@ class ReasoningAgent(BaseAgent):
         self._track_tokens(len(problem) // 4 + 100, 500)
         # In a real scenario, this would be a specific CoT prompt to an LLM.
         # Here we provide a structured template based on typical reasoning patterns.
-        
+
         analysis = [
             f"## Reasoning Blueprint: {problem[:50]}...",
             "",
@@ -49,51 +50,70 @@ class ReasoningAgent(BaseAgent):
             "- **Performance**: Negligible impact on latency.",
             "",
             "---",
-            "*Reasoning complete. Ready for implementation.*"
+            "*Reasoning complete. Ready for implementation.*",
         ]
-        
+
         return "\n".join(analysis)
 
     def analyze_tot(self, problem: str) -> str:
         """Performs Tree-of-Thought reasoning by exploring multiple solution paths."""
         self._track_tokens(500, 1500)
-        
+
         paths = [
-            {"path": "A", "strategy": "Direct implementation in existing files", "pros": "Fast, minimal changes", "cons": "Risk of side effects, tech debt"},
-            {"path": "B", "strategy": "Create new modular components", "pros": "Clean, testable, future-proof", "cons": "More files to manage, integration overhead"},
-            {"path": "C", "strategy": "Refactor core architecture", "pros": "Solves underlying issues", "cons": "Highest risk, longest time to implement"}
+            {
+                "path": "A",
+                "strategy": "Direct implementation in existing files",
+                "pros": "Fast, minimal changes",
+                "cons": "Risk of side effects, tech debt",
+            },
+            {
+                "path": "B",
+                "strategy": "Create new modular components",
+                "pros": "Clean, testable, future-proof",
+                "cons": "More files to manage, integration overhead",
+            },
+            {
+                "path": "C",
+                "strategy": "Refactor core architecture",
+                "pros": "Solves underlying issues",
+                "cons": "Highest risk, longest time to implement",
+            },
         ]
-        
+
         analysis = [
             f"# 🌳 Tree-of-Thought Analysis: {problem[:50]}...",
             "",
             "## 🛣️ Explored Paths",
         ]
-        
+
         for p in paths:
-            analysis.extend([
-                f"### Path {p['path']}: {p['strategy']}",
-                f"- ✅ **Pros**: {p['pros']}",
-                f"- ❌ **Cons**: {p['cons']}",
-                ""
-            ])
-            
-        analysis.extend([
-            "## ⚖️ Evaluation & Consolidation",
-            "Path B is selected as the optimal balance between code quality and speed.",
-            "Path A is kept as a fallback for high-urgency patches.",
-            "",
-            "## 🎯 Final Recommendation",
-            "Implement a new modular class under `src/classes/` to handle this logic."
-        ])
-        
+            analysis.extend(
+                [
+                    f"### Path {p['path']}: {p['strategy']}",
+                    f"- ✅ **Pros**: {p['pros']}",
+                    f"- ❌ **Cons**: {p['cons']}",
+                    "",
+                ]
+            )
+
+        analysis.extend(
+            [
+                "## ⚖️ Evaluation & Consolidation",
+                "Path B is selected as the optimal balance between code quality and speed.",
+                "Path A is kept as a fallback for high-urgency patches.",
+                "",
+                "## 🎯 Final Recommendation",
+                "Implement a new modular class under `src/classes/` to handle this logic.",
+            ]
+        )
+
         return "\n".join(analysis)
 
     def improve_content(self, prompt: str) -> str:
         """Perform a reasoning analysis."""
         return self.analyze(prompt)
 
+
 if __name__ == "__main__":
     main = create_main_function(ReasoningAgent, "Reasoning Agent", "Problem to analyze")
     main()
-

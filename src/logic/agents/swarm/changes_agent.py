@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -66,7 +67,9 @@ class ChangesAgent(
         self._check_associated_file()
         self._template: ChangelogTemplate | None = None
         self._versioning_strategy: VersioningStrategy = VersioningStrategy.SEMVER
-        self._validation_rules: list[ValidationRule] = self.DEFAULT_VALIDATION_RULES.copy()
+        self._validation_rules: list[ValidationRule] = (
+            self.DEFAULT_VALIDATION_RULES.copy()
+        )
         self._preview_mode: bool = False
         self._preview_content: str = ""
         self._entries: list[ChangelogEntry] = []
@@ -91,7 +94,9 @@ class ChangesAgent(
                 candidate = self.file_path.parent / (base_name + ext)
                 if candidate.exists() and candidate != self.file_path:
                     return
-            logging.warning(f"Could not find associated code file for {self.file_path.name}")
+            logging.warning(
+                f"Could not find associated code file for {self.file_path.name}"
+            )
 
     def update_file(self) -> bool:
         """Override update_file to support preview mode."""
@@ -117,7 +122,9 @@ class ChangesAgent(
             "### Fixed\n"
             "### Security\n"
         )
-        description = f"Improve the changelog for {self.file_path.stem.replace('.changes', '')}"
+        description = (
+            f"Improve the changelog for {self.file_path.stem.replace('.changes', '')}"
+        )
         # For changelog improvement, provide specific change tracking suggestions
         if any(keyword in prompt.lower() for keyword in ["improve", "change", "log"]):
             fallback_suggestions = f"""# AI Changelog Improvement Suggestions
@@ -141,7 +148,9 @@ class ChangesAgent(
             full_prompt = enhanced_prompt
 
             from src.infrastructure.compute import backend as _backend
-        improvement = _backend.run_subagent(description, full_prompt, self.previous_content) or ""
+        improvement = (
+            _backend.run_subagent(description, full_prompt, self.previous_content) or ""
+        )
 
         for processor in self._post_processors:
             improvement = processor(improvement)

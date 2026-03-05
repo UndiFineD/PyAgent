@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,6 +24,7 @@ from typing import List, Dict, Any
 import fnmatch
 
 __version__ = VERSION
+
 
 class ValidationRuleManager:
     """Manage custom validation rules per file type.
@@ -80,19 +82,23 @@ class ValidationRuleManager:
             if fnmatch.fnmatch(file_path.name, rule.file_pattern):
                 try:
                     passed = rule.validator(content, file_path)
-                    results.append({
-                        "rule": rule.name,
-                        "passed": passed,
-                        "severity": rule.severity,
-                        "message": None if passed else rule.error_message,
-                    })
+                    results.append(
+                        {
+                            "rule": rule.name,
+                            "passed": passed,
+                            "severity": rule.severity,
+                            "message": None if passed else rule.error_message,
+                        }
+                    )
                 except Exception as e:
-                    results.append({
-                        "rule": rule.name,
-                        "passed": False,
-                        "severity": "error",
-                        "message": f"Validation error: {e}",
-                    })
+                    results.append(
+                        {
+                            "rule": rule.name,
+                            "passed": False,
+                            "severity": "error",
+                            "message": f"Validation error: {e}",
+                        }
+                    )
 
         return results
 
@@ -106,6 +112,7 @@ class ValidationRuleManager:
             List of applicable rules.
         """
         return [
-            rule for rule in self._rules.values()
+            rule
+            for rule in self._rules.values()
             if fnmatch.fnmatch(file_path.name, rule.file_pattern)
         ]

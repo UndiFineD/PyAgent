@@ -33,25 +33,24 @@ except ImportError as e:
 
 def test_batchitem_exists():
     """Test that BatchItem class exists and is importable."""
-    assert 'BatchItem' in dir()
+    assert "BatchItem" in dir()
 
 
 def test_batchstats_exists():
     """Test that BatchStats class exists and is importable."""
-    assert 'BatchStats' in dir()
+    assert "BatchStats" in dir()
 
 
 def test_asyncmicrobatcher_exists():
     """Test that AsyncMicrobatcher class exists and is importable."""
-    assert 'AsyncMicrobatcher' in dir()
+    assert "AsyncMicrobatcher" in dir()
 
 
 def test_syncmicrobatcher_exists():
     """Test that SyncMicrobatcher class exists and is importable."""
-    assert 'SyncMicrobatcher' in dir()
+    assert "SyncMicrobatcher" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

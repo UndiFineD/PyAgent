@@ -33,45 +33,44 @@ except ImportError as e:
 
 def test_modelcapability_exists():
     """Test that ModelCapability class exists and is importable."""
-    assert 'ModelCapability' in dir()
+    assert "ModelCapability" in dir()
 
 
 def test_modelarchitecture_exists():
     """Test that ModelArchitecture class exists and is importable."""
-    assert 'ModelArchitecture' in dir()
+    assert "ModelArchitecture" in dir()
 
 
 def test_quantizationtype_exists():
     """Test that QuantizationType class exists and is importable."""
-    assert 'QuantizationType' in dir()
+    assert "QuantizationType" in dir()
 
 
 def test_modelformat_exists():
     """Test that ModelFormat class exists and is importable."""
-    assert 'ModelFormat' in dir()
+    assert "ModelFormat" in dir()
 
 
 def test_modelconfig_exists():
     """Test that ModelConfig class exists and is importable."""
-    assert 'ModelConfig' in dir()
+    assert "ModelConfig" in dir()
 
 
 def test_architecturespec_exists():
     """Test that ArchitectureSpec class exists and is importable."""
-    assert 'ArchitectureSpec' in dir()
+    assert "ArchitectureSpec" in dir()
 
 
 def test_modelinfo_exists():
     """Test that ModelInfo class exists and is importable."""
-    assert 'ModelInfo' in dir()
+    assert "ModelInfo" in dir()
 
 
 def test_vramestimate_exists():
     """Test that VRAMEstimate class exists and is importable."""
-    assert 'VRAMEstimate' in dir()
+    assert "VRAMEstimate" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

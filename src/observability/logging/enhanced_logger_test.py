@@ -25,4 +25,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "clear_dedup_cache"), "clear_dedup_cache missing"
     assert hasattr(mod, "get_dedup_cache_info"), "get_dedup_cache_info missing"
     assert hasattr(mod, "EnhancedLogger"), "EnhancedLogger missing"
-

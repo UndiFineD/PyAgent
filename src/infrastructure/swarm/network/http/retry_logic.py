@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -49,17 +50,23 @@ class RetryHTTPMixin:
             try:
                 with self.get_response(url, timeout=timeout) as r:
                     if r.status_code in self.retry_on and attempt < self.max_retries:
-                        logger.warning(f"Retry {attempt + 1}/{self.max_retries} for {url} (status {r.status_code})")
+                        logger.warning(
+                            f"Retry {attempt + 1}/{self.max_retries} for {url} (status {r.status_code})"
+                        )
                         # Use an interruptible wait to avoid direct blocking time.sleep calls
                         threading.Event().wait(delay)
                         delay *= self.retry_backoff
                         continue
                     r.raise_for_status()
                     return r.json()
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 last_error = e
                 if attempt < self.max_retries:
-                    logger.warning(f"Retry {attempt + 1}/{self.max_retries} for {url}: {e}")
+                    logger.warning(
+                        f"Retry {attempt + 1}/{self.max_retries} for {url}: {e}"
+                    )
                     threading.Event().wait(delay)
         raise last_error or RuntimeError("Max retries exceeded")
 
@@ -79,7 +86,9 @@ class RetryHTTPMixin:
             try:
                 async with await self.async_get_response(url, timeout=timeout) as r:
                     if r.status in self.retry_on and attempt < self.max_retries:
-                        logger.warning(f"Retry {attempt + 1}/{self.max_retries} for {url} (status {r.status})")
+                        logger.warning(
+                            f"Retry {attempt + 1}/{self.max_retries} for {url} (status {r.status})"
+                        )
                         await asyncio.sleep(delay)
                         delay *= self.retry_backoff
                         continue
@@ -88,7 +97,9 @@ class RetryHTTPMixin:
             except aiohttp.ClientError as e:
                 last_error = e
                 if attempt < self.max_retries:
-                    logger.warning(f"Retry {attempt + 1}/{self.max_retries} for {url}: {e}")
+                    logger.warning(
+                        f"Retry {attempt + 1}/{self.max_retries} for {url}: {e}"
+                    )
                     await asyncio.sleep(delay)
                     delay *= self.retry_backoff
 

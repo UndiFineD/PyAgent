@@ -7,9 +7,11 @@ from pathlib import Path
 
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
+
 
 class KnowledgeSymbolMixin:
     """Methods for symbol extraction from various formats."""
@@ -40,7 +42,9 @@ class KnowledgeSymbolMixin:
                 pass
         return self.extract_symbols(content, r"\[\[(.*?)\]\]")
 
-    def build_symbol_map(self, directory: Any, patterns: dict[str, str]) -> dict[str, list[str]]:
+    def build_symbol_map(
+        self, directory: Any, patterns: dict[str, str]
+    ) -> dict[str, list[str]]:
         """Scans a directory for symbols according to provided patterns."""
         symbol_map: dict[str, list[str]] = {}
         dir_path = Path(directory)

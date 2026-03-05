@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 """
 HTTPClient - Unified sync/async HTTP client with session reuse.
 
@@ -13,10 +14,12 @@ from src.infrastructure.network.http.retry_logic import RetryHTTPMixin
 
 # Convenience aliases
 
+
 class HTTPClient(HTTPConnection):
     """
     Alias for HTTPConnection with sync-focused interface.
     """
+
     pass
 
 
@@ -24,6 +27,7 @@ class AsyncHTTPClient(HTTPConnection):
     """
     Alias for HTTPConnection with async-focused interface.
     """
+
     pass
 
 
@@ -31,7 +35,7 @@ class RetryableHTTPClient(HTTPConnection, RetryHTTPMixin):
     """
     HTTP client with automatic retry on failures.
     """
-    
+
     def __init__(
         self,
         *,

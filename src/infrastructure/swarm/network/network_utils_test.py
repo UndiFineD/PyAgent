@@ -31,7 +31,9 @@ def test_imports_and_symbols():
     assert hasattr(mod, "wait_for_port"), "wait_for_port missing"
     assert hasattr(mod, "find_process_using_port"), "find_process_using_port missing"
     assert hasattr(mod, "get_tcp_uri"), "get_tcp_uri missing"
-    assert hasattr(mod, "get_distributed_init_method"), "get_distributed_init_method missing"
+    assert hasattr(
+        mod, "get_distributed_init_method"
+    ), "get_distributed_init_method missing"
     assert hasattr(mod, "parse_uri"), "parse_uri missing"
     assert hasattr(mod, "get_zmq_ipc_path"), "get_zmq_ipc_path missing"
     assert hasattr(mod, "get_zmq_inproc_path"), "get_zmq_inproc_path missing"
@@ -42,4 +44,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "get_network_interfaces"), "get_network_interfaces missing"
     assert hasattr(mod, "get_primary_interface"), "get_primary_interface missing"
     assert hasattr(mod, "HAS_ZMQ"), "HAS_ZMQ missing"
-

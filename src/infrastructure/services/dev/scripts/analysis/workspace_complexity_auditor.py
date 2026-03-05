@@ -54,7 +54,9 @@ def run_audit(target_dir: str, threshold: int = 25, limit: int = 20):
                     comp = rc.calculate_cyclomatic_complexity(content)
                     if comp > threshold:
                         targets.append({"file": str(rel_path), "complexity": comp})
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logging.debug(f"Failed to analyze {rel_path}: {e}")
 
     targets.sort(key=lambda x: x["complexity"], reverse=True)
@@ -67,9 +69,15 @@ def run_audit(target_dir: str, threshold: int = 25, limit: int = 20):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Audit workspace code complexity.")
-    parser.add_argument("--dir", type=str, default="src", help="Directory to scan (relative to root).")
-    parser.add_argument("--threshold", type=int, default=25, help="Complexity threshold.")
-    parser.add_argument("--limit", type=int, default=20, help="Number of results to display.")
+    parser.add_argument(
+        "--dir", type=str, default="src", help="Directory to scan (relative to root)."
+    )
+    parser.add_argument(
+        "--threshold", type=int, default=25, help="Complexity threshold."
+    )
+    parser.add_argument(
+        "--limit", type=int, default=20, help="Number of results to display."
+    )
 
     args = parser.parse_args()
     run_audit(args.dir, args.threshold, args.limit)

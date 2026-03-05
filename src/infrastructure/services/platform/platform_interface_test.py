@@ -34,6 +34,7 @@ def test_imports_and_symbols():
     assert hasattr(mod, "get_device_count"), "get_device_count missing"
     assert hasattr(mod, "get_device_capability"), "get_device_capability missing"
     assert hasattr(mod, "get_memory_info"), "get_memory_info missing"
-    assert hasattr(mod, "is_quantization_supported"), "is_quantization_supported missing"
+    assert hasattr(
+        mod, "is_quantization_supported"
+    ), "is_quantization_supported missing"
     assert hasattr(mod, "select_attention_backend"), "select_attention_backend missing"
-

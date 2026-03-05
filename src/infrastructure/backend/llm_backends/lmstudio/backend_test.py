@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_lmstudiobackend_exists():
     """Test that LMStudioBackend class exists and is importable."""
-    assert 'LMStudioBackend' in dir()
+    assert "LMStudioBackend" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

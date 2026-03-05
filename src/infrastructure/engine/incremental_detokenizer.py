@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -190,7 +191,9 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
         super().__init__()
 
         # Extract sampling params
-        sampling_params: dict[str, Any] = getattr(request, "sampling_params", None) or {}
+        sampling_params: dict[str, Any] = (
+            getattr(request, "sampling_params", None) or {}
+        )
         if hasattr(sampling_params, "__dict__"):
             sampling_params = sampling_params.__dict__
         elif not isinstance(sampling_params, dict):
@@ -198,8 +201,12 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
 
         self.request_id = getattr(request, "request_id", "unknown")
         self.stop: list[str] = sampling_params.get("stop", []) or []
-        self.include_stop_str_in_output: bool = sampling_params.get("include_stop_str_in_output", False)
-        self.skip_special_tokens: bool = sampling_params.get("skip_special_tokens", True)
+        self.include_stop_str_in_output: bool = sampling_params.get(
+            "include_stop_str_in_output", False
+        )
+        self.skip_special_tokens: bool = sampling_params.get(
+            "skip_special_tokens", True
+        )
         self.min_tokens: int = sampling_params.get("min_tokens", 0)
 
         # Stop buffer - keep last N chars to check for stop strings spanning tokens
@@ -210,7 +217,9 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
         if not new_token_ids:
             return None
 
-        processed_tokens = self._prepare_tokens_for_detokenization(new_token_ids, stop_terminated)
+        processed_tokens = self._prepare_tokens_for_detokenization(
+            new_token_ids, stop_terminated
+        )
         stop_check_offset = self._detokenize_tokens(processed_tokens)
 
         if stop_terminated and not self.include_stop_str_in_output:
@@ -219,7 +228,9 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
 
         return self._check_for_stop_strings(stop_check_offset)
 
-    def _prepare_tokens_for_detokenization(self, new_token_ids: list[int], stop_terminated: bool) -> list[int]:
+    def _prepare_tokens_for_detokenization(
+        self, new_token_ids: list[int], stop_terminated: bool
+    ) -> list[int]:
         """Prepare tokens for detokenization, handling stop termination."""
         if stop_terminated and not self.include_stop_str_in_output:
             # Skip last token from detokenization
@@ -307,8 +318,9 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
         elif not isinstance(sampling_params, dict):
             sampling_params = {}
 
-        self.spaces_between_special_tokens = self.skip_special_tokens or sampling_params.get(
-            "spaces_between_special_tokens", True
+        self.spaces_between_special_tokens = (
+            self.skip_special_tokens
+            or sampling_params.get("spaces_between_special_tokens", True)
         )
 
         # Track added tokens for special handling
@@ -415,14 +427,20 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
                     prompt_token_ids[-INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET - 2 :],
                     skip_special_tokens=self.skip_special_tokens,
                 )
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                self.tokens = [""] * min(INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET + 2, len(prompt_token_ids))
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                # pylint: disable=broad-exception-caught
+                self.tokens = [""] * min(
+                    INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET + 2, len(prompt_token_ids)
+                )
         else:
             self.tokens = []
 
         self.read_offset = len(self.tokens)
-        self.prefix_offset = max(self.read_offset - INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET, 0)
+        self.prefix_offset = max(
+            self.read_offset - INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET, 0
+        )
 
         # Copy prompt IDs to token_ids
         self.token_ids = list(prompt_token_ids)
@@ -434,7 +452,9 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
         elif not isinstance(sampling_params, dict):
             sampling_params = {}
 
-        self.spaces_between_special_tokens = sampling_params.get("spaces_between_special_tokens", True)
+        self.spaces_between_special_tokens = sampling_params.get(
+            "spaces_between_special_tokens", True
+        )
 
     @property
     def output_token_ids(self) -> list[int]:
@@ -451,8 +471,12 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
         # 2. Convert tokens to string and handle prefix
         # Get prefix and new text
         try:
-            prefix_text: str = self.tokenizer.convert_tokens_to_string(output_tokens[self.prefix_offset : self.read_offset])
-            new_text: str = self.tokenizer.convert_tokens_to_string(output_tokens[self.prefix_offset :])
+            prefix_text: str = self.tokenizer.convert_tokens_to_string(
+                output_tokens[self.prefix_offset : self.read_offset]
+            )
+            new_text: str = self.tokenizer.convert_tokens_to_string(
+                output_tokens[self.prefix_offset :]
+            )
         except Exception:  # pylint: disable=broad-exception-caught
             return ""
 

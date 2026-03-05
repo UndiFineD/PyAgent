@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -8,11 +9,14 @@ from src.core.base.BaseUtilities import as_tool
 if TYPE_CHECKING:
     from src.logic.agents.system.TopologicalNavigator import TopologicalNavigator
 
+
 class GraphAnalysisMixin:
     """Mixin for graph analysis and impact assessment in TopologicalNavigator."""
 
     @as_tool
-    def find_impact_zone(self: TopologicalNavigator, entity_id: str, depth: int = 2) -> dict[str, Any]:
+    def find_impact_zone(
+        self: TopologicalNavigator, entity_id: str, depth: int = 2
+    ) -> dict[str, Any]:
         """Identifies which parts of the codebase depend on the given entity."""
         # Need reverse graph to find dependents
         if not self.reverse_graph:

@@ -144,7 +144,10 @@ class CachingMetrics:
         self.aggregated_query_hit += stats.hits
 
         # Maintain window size
-        while len(self.query_queue) > 1 and self.aggregated_requests > self.max_recent_requests:
+        while (
+            len(self.query_queue) > 1
+            and self.aggregated_requests > self.max_recent_requests
+        ):
             old_reqs, old_queries, old_hits = self.query_queue.popleft()
             self.aggregated_requests -= old_reqs
             self.aggregated_query_total -= old_queries
@@ -349,7 +352,9 @@ class PercentileTracker:
         f = int(k)
         c = f + 1 if f < len(self._sorted_cache) - 1 else f
 
-        return self._sorted_cache[f] + (k - f) * (self._sorted_cache[c] - self._sorted_cache[f])
+        return self._sorted_cache[f] + (k - f) * (
+            self._sorted_cache[c] - self._sorted_cache[f]
+        )
 
     @property
     def p50(self) -> float:
@@ -566,7 +571,9 @@ class MetricsCollector:
                     }
                     for name, tracker in self.histograms.items()
                 },
-                "trends": {name: analyzer.get_trend() for name, analyzer in self.trends.items()},
+                "trends": {
+                    name: analyzer.get_trend() for name, analyzer in self.trends.items()
+                },
                 "cache": {
                     "hit_rate": self.cache_metrics.hit_rate,
                 },

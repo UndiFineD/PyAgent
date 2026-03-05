@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,14 @@ from __future__ import annotations
 """Auto-extracted class from agent_context.py"""
 
 from src.core.base.version import VERSION
-from src.logic.agents.cognitive.context.models.VisualizationType import VisualizationType
+from src.logic.agents.cognitive.context.models.VisualizationType import (
+    VisualizationType,
+)
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Tuple
 
 __version__ = VERSION
+
 
 @dataclass
 class VisualizationData:
@@ -33,6 +37,7 @@ class VisualizationData:
         edges: List of edge connections.
         layout: Layout algorithm to use.
     """
+
     viz_type: VisualizationType
     nodes: list[dict[str, Any]] = field(default_factory=lambda: [])
     edges: list[tuple[str, str]] = field(default_factory=lambda: [])

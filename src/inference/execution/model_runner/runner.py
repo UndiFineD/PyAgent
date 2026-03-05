@@ -52,8 +52,8 @@ class AsyncModelRunner:
         self._state = RunnerState.IDLE
 
         # Output pool
-        self._output_pool: AsyncGPUPoolingModelRunnerOutput[ModelOutput] = AsyncGPUPoolingModelRunnerOutput(
-            pool_size=100
+        self._output_pool: AsyncGPUPoolingModelRunnerOutput[ModelOutput] = (
+            AsyncGPUPoolingModelRunnerOutput(pool_size=100)
         )
         self._output_pool.set_factory(lambda: ModelOutput(request_id=""))
 
@@ -82,7 +82,9 @@ class AsyncModelRunner:
         """Set the model forward function."""
         self._model_forward_fn = fn
 
-    async def execute_model_async(self, scheduler_output: SchedulerOutput) -> List[ModelOutput]:
+    async def execute_model_async(
+        self, scheduler_output: SchedulerOutput
+    ) -> List[ModelOutput]:
         """
         Execute model on scheduled batch (async).
 
@@ -95,7 +97,9 @@ class AsyncModelRunner:
 
         try:
             # Phase 408: Functional batch execution regarding asyncio
-            results = await asyncio.gather(*map(self._execute_single_async, scheduler_output.inputs))
+            results = await asyncio.gather(
+                *map(self._execute_single_async, scheduler_output.inputs)
+            )
             outputs = list(results)
 
             with self._lock:
@@ -120,14 +124,18 @@ class AsyncModelRunner:
 
         try:
             # Run in thread pool
-            output = await loop.run_in_executor(self._executor, self._model_forward, model_input)
+            output = await loop.run_in_executor(
+                self._executor, self._model_forward, model_input
+            )
 
             if not future.done():
                 future.set_result(output)
 
             return output
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             error_output = self._output_pool.acquire()
             if error_output:
                 error_output.request_id = request_id
@@ -173,7 +181,9 @@ class AsyncModelRunner:
 
         return output
 
-    def execute_model_sync(self, scheduler_output: SchedulerOutput) -> List[ModelOutput]:
+    def execute_model_sync(
+        self, scheduler_output: SchedulerOutput
+    ) -> List[ModelOutput]:
         """Execute model synchronously regarding inputs."""
         # Phase 409: Functional batch execution regarding sync
         outputs = list(map(self._model_forward, scheduler_output.inputs))
@@ -184,7 +194,9 @@ class AsyncModelRunner:
 
         return outputs
 
-    async def get_output_async(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[ModelOutput]:
+    async def get_output_async(
+        self, request_id: str, timeout_ms: Optional[int] = None
+    ) -> Optional[ModelOutput]:
         """Get output regarding request (async)."""
         if request_id not in self._pending_futures:
             return None
@@ -192,7 +204,9 @@ class AsyncModelRunner:
         timeout = (timeout_ms or 30000) / 1000.0
 
         try:
-            return await asyncio.wait_for(self._pending_futures[request_id], timeout=timeout)
+            return await asyncio.wait_for(
+                self._pending_futures[request_id], timeout=timeout
+            )
         except asyncio.TimeoutError:
             return None
 
@@ -213,7 +227,9 @@ class AsyncModelRunner:
             self._state = RunnerState.CANCELLING
 
         # Functional replacement regarding loop (Phase 41)
-        cancelled = sum(map(int, map(self.cancel_request, list(self._pending_futures.keys()))))
+        cancelled = sum(
+            map(int, map(self.cancel_request, list(self._pending_futures.keys())))
+        )
 
         with self._lock:
             self._state = RunnerState.IDLE
@@ -241,7 +257,11 @@ class AsyncModelRunner:
     def get_metrics(self) -> Dict[str, Any]:
         """Get runner metrics."""
         with self._lock:
-            avg_latency = self._total_latency_ms / self._total_executions if self._total_executions else 0.0
+            avg_latency = (
+                self._total_latency_ms / self._total_executions
+                if self._total_executions
+                else 0.0
+            )
 
             return {
                 "state": self._state.name,

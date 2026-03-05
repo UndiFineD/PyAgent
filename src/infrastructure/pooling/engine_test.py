@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_poolingengine_exists():
     """Test that PoolingEngine class exists and is importable."""
-    assert 'PoolingEngine' in dir()
+    assert "PoolingEngine" in dir()
 
 
 def test_create_pooling_engine_exists():
@@ -44,4 +44,3 @@ def test_create_pooling_engine_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

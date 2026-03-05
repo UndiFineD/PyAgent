@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -48,7 +49,9 @@ class GraphContextEngine:
         key = f"{source}->{target}"
         self.metadata[key] = {"type": relationship}
 
-    def add_node(self, node_id: str, node_type: str, metadata: dict[str, Any] | None = None) -> None:
+    def add_node(
+        self, node_id: str, node_type: str, metadata: dict[str, Any] | None = None
+    ) -> None:
         """Add a node and its metadata to the graph (Phase 72)."""
         if node_id not in self.graph:
             self.graph[node_id] = set()

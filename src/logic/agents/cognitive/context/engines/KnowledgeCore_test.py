@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_knowledgecore_exists():
     """Test that KnowledgeCore class exists and is importable."""
-    assert 'KnowledgeCore' in dir()
+    assert "KnowledgeCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

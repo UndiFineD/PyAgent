@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "compute_perplexity"), "compute_perplexity missing"
     assert hasattr(mod, "compute_entropy"), "compute_entropy missing"
     assert hasattr(mod, "normalize_logprobs"), "normalize_logprobs missing"
-

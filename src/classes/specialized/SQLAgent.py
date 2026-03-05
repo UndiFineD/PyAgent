@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,9 +26,10 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
 class SQLQueryAgent(BaseAgent):
     """Enables the fleet to interact with relational databases and unified data sources (MindsDB style)."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.connection: sqlite3.Connection | None = None
@@ -64,7 +66,7 @@ class SQLQueryAgent(BaseAgent):
         """Executes a Read-Only SQL query and returns the results."""
         if not self.connection:
             return "Error: No database connection active."
-        
+
         # Security check: Block destructive commands in execute_query (read-only by intent)
         destructive = ["drop", "delete", "truncate", "alter", "update", "insert"]
         if any(cmd in query.lower() for cmd in destructive):
@@ -96,7 +98,9 @@ class SQLQueryAgent(BaseAgent):
         """SQL generation helper."""
         return f"SQLAgent: Ready to query database. Connection active: {self.connection is not None}."
 
+
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function
+
     main = create_main_function(SQLQueryAgent, "SQL Agent", "Database path")
     main()

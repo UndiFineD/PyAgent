@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,12 +23,13 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
 class NeuralAnchorAgent(BaseAgent):
     """
     Agent responsible for anchoring reasoning to verified external sources of truth.
     Validates agent statements against documentation, specifications, and issues.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.anchors: dict[str, Any] = {}
@@ -38,14 +40,16 @@ class NeuralAnchorAgent(BaseAgent):
         )
 
     @as_tool
-    def load_anchor_source(self, source_name: str, content: str, source_type: str = "doc") -> str:
+    def load_anchor_source(
+        self, source_name: str, content: str, source_type: str = "doc"
+    ) -> str:
         """
         Registers a verified source of truth to be used for anchoring.
         """
         self.anchors[source_name] = {
             "content": content,
             "type": source_type,
-            "verified": True
+            "verified": True,
         }
         return f"Source '{source_name}' loaded as an anchor."
 
@@ -59,25 +63,25 @@ class NeuralAnchorAgent(BaseAgent):
             if src in self.anchors:
                 anchor = self.anchors[src]
                 # Simple keyword/regex check for validation in this stub
-                keywords = re.findall(r'\b\w+\b', claim.lower())
+                keywords = re.findall(r"\b\w+\b", claim.lower())
                 matches = [k for k in keywords if k in anchor["content"].lower()]
-                
+
                 score = len(matches) / len(keywords) if keywords else 0
-                results.append({
-                    "source": src,
-                    "overlap_score": score,
-                    "confidence": "High" if score > 0.5 else "Low"
-                })
-        
+                results.append(
+                    {
+                        "source": src,
+                        "overlap_score": score,
+                        "confidence": "High" if score > 0.5 else "Low",
+                    }
+                )
+
         grounded = any(r["overlap_score"] > 0.1 for r in results)
-        return {
-            "claim": claim,
-            "is_grounded": grounded,
-            "validations": results
-        }
+        return {"claim": claim, "is_grounded": grounded, "validations": results}
 
     @as_tool
-    def anchor_reasoning_step(self, reasoning_chain: list[str], sources: list[str]) -> list[dict[str, Any]]:
+    def anchor_reasoning_step(
+        self, reasoning_chain: list[str], sources: list[str]
+    ) -> list[dict[str, Any]]:
         """
         Iteratively validates a chain of reasoning steps.
         """

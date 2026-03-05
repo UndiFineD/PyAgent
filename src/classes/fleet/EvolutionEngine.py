@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 from .EvolutionCore import EvolutionCore
 
+
 class EvolutionEngine:
     """
     Manages the autonomous generation of new agent types.
@@ -22,16 +23,18 @@ class EvolutionEngine:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.core = EvolutionCore()
 
-    def generate_agent(self, name: str, capabilities: str, base_type: str = "BaseAgent") -> str:
+    def generate_agent(
+        self, name: str, capabilities: str, base_type: str = "BaseAgent"
+    ) -> str:
         """Generates a new agent class file based on a name and capabilities description."""
         agent_filename = f"{name.lower()}_agent.py"
         target_path = self.output_dir / agent_filename
 
         template = self.core.generate_agent_template(name, capabilities, base_type)
-        
+
         with open(target_path, "w") as f:
             f.write(template)
-            
+
         logging.info(f"Evolution: Generated new agent {name} at {target_path}")
         return str(target_path)
 

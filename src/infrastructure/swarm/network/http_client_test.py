@@ -24,4 +24,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "async_get_json"), "async_get_json missing"
     assert hasattr(mod, "HTTPConnection"), "HTTPConnection missing"
     assert hasattr(mod, "global_http_connection"), "global_http_connection missing"
-

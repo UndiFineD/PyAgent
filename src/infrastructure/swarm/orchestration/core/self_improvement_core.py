@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,8 +24,7 @@ import re
 from typing import Any, Dict, List, Optional
 
 from .mixins.self_improvement_quality_mixin import SelfImprovementQualityMixin
-from .mixins.self_improvement_security_mixin import \
-    SelfImprovementSecurityMixin
+from .mixins.self_improvement_security_mixin import SelfImprovementSecurityMixin
 
 try:
     import rust_core as rc
@@ -53,12 +53,18 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
                 "shell=True in subprocess can lead to command injection.",
             ),  # nosec
             (r"os\.system\(", "os.system() is deprecated and insecure."),  # nosec
-            (r"yaml\.load\(", "Unsafe YAML loading detected. Use yaml.safe_load()."),  # nosec
+            (
+                r"yaml\.load\(",
+                "Unsafe YAML loading detected. Use yaml.safe_load().",
+            ),  # nosec
             (
                 r"pickle\.load\(",
                 "Pickle can execute arbitrary code. Use JSON if possible.",
             ),  # nosec
-            (r"requests\.get\(.*verify=False", "SSL verification is disabled."),  # nosec
+            (
+                r"requests\.get\(.*verify=False",
+                "SSL verification is disabled.",
+            ),  # nosec
         ]
 
         # IO patterns for intelligence gap detection
@@ -67,12 +73,15 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
             r"subprocess\.(run|call|Popen|check_call|check_output)\(|adb shell)"
         )
 
-    def analyze_content(self, content: str, file_path_rel: str, allow_triton_check: bool = True) -> List[Dict[str, Any]]:
+    def analyze_content(
+        self, content: str, file_path_rel: str, allow_triton_check: bool = True
+    ) -> List[Dict[str, Any]]:
         """
         Performs multi-dimensional analysis on file content using Rust if available.
         Returns a list of findings.
         """
         import json
+
         if _RUST_ACCEL and rc is not None:
             try:
                 # Use the Rust PyO3 function directly
@@ -87,13 +96,21 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
         findings.extend(self._analyze_complexity(content, file_path_rel))
         findings.extend(self._analyze_documentation(content, file_path_rel))
         findings.extend(self._analyze_typing(content, file_path_rel))
-        findings.extend(self._analyze_robustness_and_perf(content, file_path_rel, allow_triton_check=allow_triton_check))
+        findings.extend(
+            self._analyze_robustness_and_perf(
+                content, file_path_rel, allow_triton_check=allow_triton_check
+            )
+        )
         return findings
 
-    def _analyze_via_rust(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
+    def _analyze_via_rust(
+        self, content: str, file_path_rel: str
+    ) -> List[Dict[str, Any]]:
         """Uses Rust accelerator for high-performance analysis."""
         try:
-            rust_findings = rc.analyze_code_quality_rust(content, file_path_rel, self.dangerous_patterns)
+            rust_findings = rc.analyze_code_quality_rust(
+                content, file_path_rel, self.dangerous_patterns
+            )
             findings = []
             for issue_type, message, line_num in rust_findings:
                 finding = {

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from src.core.base.lifecycle.version import SDK_VERSION, VERSION
+
 MCPAgent = None  # Will be imported locally to avoid circular import
 
 from .agent_registry_core import AgentRegistryCore
@@ -35,14 +37,15 @@ from .resilient_stubs import ResilientStub
 if TYPE_CHECKING:
     from .fleet_manager import FleetManager
 
-
     # Import local version for gatekeeping
     __version__ = VERSION
+
 
 def get_mcp_agent(*args: Any, **kwargs: Any) -> Any:
     global MCPAgent
     if MCPAgent is None:
         from src.logic.agents.system.mcp_agent import MCPAgent as _MCPAgent
+
         MCPAgent = _MCPAgent
     return MCPAgent(*args, **kwargs)
 
@@ -70,10 +73,12 @@ class LazyAgentMap(dict):
         # 2. Dynamic Discovery (The most lazy/flexible)
         # Pre-scan ensures we know what's available without guessing inside __getitem__
         discovered_files = self._scan_workspace_for_agents()
-        self._discovered_configs: dict[str, tuple[str, str, str | None]] = self.core.process_discovered_files(
-            discovered_files
+        self._discovered_configs: dict[str, tuple[str, str, str | None]] = (
+            self.core.process_discovered_files(discovered_files)
         )
-        logging.info(f"Registry: Discovered {len(self._discovered_configs)} agents dynamically.")
+        logging.info(
+            f"Registry: Discovered {len(self._discovered_configs)} agents dynamically."
+        )
 
     def _scan_workspace_for_agents(self) -> list[str]:
         """Performs the I/O-bound scanning regarding the workspace."""
@@ -103,28 +108,53 @@ class LazyAgentMap(dict):
                 root, _, files = step
                 # Phase 117: Exclude non-agent directories
                 parts = Path(root).parts
-                is_excluded_dir = any(map(lambda p: p in ["context", "models", "utils", "mixins"], parts))
+                is_excluded_dir = any(
+                    map(lambda p: p in ["context", "models", "utils", "mixins"], parts)
+                )
                 if is_excluded_dir:
                     return []
 
                 def is_valid_agent_file(file: str) -> bool:
                     # Phase 130: Exclude known data classes/enums/utilities
                     excluded_files = [
-                        "validation_rule.py", "changelog_entry.py", "changelog_template.py",
-                        "versioning_strategy.py", "ValidationRule.py", "ChangelogEntry.py",
+                        "validation_rule.py",
+                        "changelog_entry.py",
+                        "changelog_template.py",
+                        "versioning_strategy.py",
+                        "ValidationRule.py",
+                        "ChangelogEntry.py",
                         "VersioningStrategy.py",
                     ]
                     if file in excluded_files:
                         return False
-                    return file.endswith(".py") and not file.startswith("__") and not file.endswith("_mixin.py")
+                    return (
+                        file.endswith(".py")
+                        and not file.startswith("__")
+                        and not file.endswith("_mixin.py")
+                    )
 
                 valid_files = filter(is_valid_agent_file, files)
-                return list(map(lambda f: str((Path(root) / f).relative_to(self.workspace_root)), valid_files))
+                return list(
+                    map(
+                        lambda f: str(
+                            (Path(root) / f).relative_to(self.workspace_root)
+                        ),
+                        valid_files,
+                    )
+                )
 
             all_steps = list(os.walk(search_root))
-            return list(importlib.import_module("itertools").chain.from_iterable(map(process_walk_step, all_steps)))
+            return list(
+                importlib.import_module("itertools").chain.from_iterable(
+                    map(process_walk_step, all_steps)
+                )
+            )
 
-        return list(importlib.import_module("itertools").chain.from_iterable(map(get_files_in_subdir, subdirs)))
+        return list(
+            importlib.import_module("itertools").chain.from_iterable(
+                map(get_files_in_subdir, subdirs)
+            )
+        )
 
     def _load_manifests(self) -> dict[str, tuple]:
         """Loads additional configurations regarding plugins/manifest.json or similar."""
@@ -138,11 +168,15 @@ class LazyAgentMap(dict):
         def try_load_manifest(m_path: Path) -> None:
             if m_path.exists():
                 try:
-                    with open(m_path, encoding='utf-8') as f:
+                    with open(m_path, encoding="utf-8") as f:
                         data = json.load(f)
-                        configs: dict[str, tuple[str, str, str | None]] = self.core.parse_manifest(data)
+                        configs: dict[str, tuple[str, str, str | None]] = (
+                            self.core.parse_manifest(data)
+                        )
                         manifest_configs.update(configs)
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logging.error(f"Failed to load plugin manifest {m_path}: {e}")
 
         list(map(try_load_manifest, manifest_paths))
@@ -183,7 +217,12 @@ class LazyAgentMap(dict):
         def get_deps(agent_name_cfg: tuple[str, Any]) -> tuple[str, list[str]]:
             agent_name, cfg = agent_name_cfg
             cfg_str = str(cfg).lower()
-            deps = list(filter(lambda other: other.lower() in cfg_str and other != agent_name, all_configs))
+            deps = list(
+                filter(
+                    lambda other: other.lower() in cfg_str and other != agent_name,
+                    all_configs,
+                )
+            )
             return agent_name, deps
 
         dep_graph = dict(map(get_deps, all_configs.items()))
@@ -191,11 +230,15 @@ class LazyAgentMap(dict):
         cycles = self.core.detect_circular_dependencies(dep_graph)
 
         def report_cycle(cycle: list[str]) -> None:
-            logging.error(f"REGISTRY CRITICAL: Circular dependency detected: {' -> '.join(cycle)}")
+            logging.error(
+                f"REGISTRY CRITICAL: Circular dependency detected: {' -> '.join(cycle)}"
+            )
 
         if cycles:
             list(map(report_cycle, cycles))
-            raise RecursionError(f"Circular dependencies detected in Agent Registry: {cycles[0]}")
+            raise RecursionError(
+                f"Circular dependencies detected in Agent Registry: {cycles[0]}"
+            )
 
     def keys(self) -> list[str]:
         # Combine all potential keys
@@ -244,8 +287,9 @@ class LazyAgentMap(dict):
         def matches_norm(d_key: str) -> bool:
             return d_key.lower().replace("_", "") == k_norm
 
-        return any(map(matches_norm, self._discovered_configs.keys())) or \
-               any(map(matches_norm, self.registry_configs.keys()))
+        return any(map(matches_norm, self._discovered_configs.keys())) or any(
+            map(matches_norm, self.registry_configs.keys())
+        )
 
     def __getitem__(self, key: str) -> Any:
         # 0. Check regarding manual overrides/instances first
@@ -272,17 +316,21 @@ class LazyAgentMap(dict):
         k_norm = key.lower().replace("_", "")
 
         def find_match() -> Any:
-            matches = list(filter(
-                lambda item: item[0].lower().replace("_", "") == k_norm,
-                self._discovered_configs.items()
-            ))
+            matches = list(
+                filter(
+                    lambda item: item[0].lower().replace("_", "") == k_norm,
+                    self._discovered_configs.items(),
+                )
+            )
             return self._instantiate(key, matches[0][1]) if matches else None
 
         res = find_match()
         if res:
             return res
 
-        raise KeyError(f"Agent '{key}' not found in registry (including dynamic scans).")
+        raise KeyError(
+            f"Agent '{key}' not found in registry (including dynamic scans)."
+        )
 
     def __getattr__(self, name: str) -> Any:
         """Attribute-based access regarding typed IDE support and cleaner code."""
@@ -296,7 +344,9 @@ class LazyAgentMap(dict):
             n_low = name.lower().replace("_", "")
 
             def get_matching_key() -> str | None:
-                matches = list(filter(lambda k: k.lower().replace("_", "") == n_low, self.keys()))
+                matches = list(
+                    filter(lambda k: k.lower().replace("_", "") == n_low, self.keys())
+                )
                 return matches[0] if matches else None
 
             match_k = get_matching_key()
@@ -331,12 +381,18 @@ class LazyAgentMap(dict):
             return instance
 
         except (ImportError, SyntaxError) as e:
-            logging.error(f"Critical load error regarding agent {key} from {module_path}: {e}")
+            logging.error(
+                f"Critical load error regarding agent {key} from {module_path}: {e}"
+            )
             stub = ResilientStub(key, str(e))
             self._instances[key] = stub
             return stub
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(f"Failed to lazy-load agent {key} regarding {module_path}: {e}")
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            logging.error(
+                f"Failed to lazy-load agent {key} regarding {module_path}: {e}"
+            )
             return None
 
     def _handle_mcp_agent(self, key: str, class_name: str) -> Any:
@@ -345,7 +401,9 @@ class LazyAgentMap(dict):
             instance = MCPAgent(class_name)
             self._instances[key] = instance
             return instance
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to start MCP Agent {key}: {e}")
             stub = ResilientStub(key, str(e))
             self._instances[key] = stub
@@ -353,9 +411,13 @@ class LazyAgentMap(dict):
 
     def _check_compatibility(self, key: str, module: Any) -> bool:
         """Checks if the agent module is compatible regarding current SDK version."""
-        min_sdk = getattr(module, "SDK_REQUIRED", getattr(module, "__min_sdk__", "1.0.0"))
+        min_sdk = getattr(
+            module, "SDK_REQUIRED", getattr(module, "__min_sdk__", "1.0.0")
+        )
         if not self.core.is_compatible(min_sdk):
-            error_msg = f"Agent '{key}' requires SDK {min_sdk}, but current is {SDK_VERSION}."
+            error_msg = (
+                f"Agent '{key}' requires SDK {min_sdk}, but current is {SDK_VERSION}."
+            )
             logging.warning(error_msg)
             self._instances[key] = ResilientStub(key, error_msg)
             return False
@@ -368,7 +430,9 @@ class LazyAgentMap(dict):
             results = list(filter(None, map(lambda n: getattr(module, n, None), names)))
             if results:
                 return results[0]
-            raise AttributeError(f"Module '{module.__name__}' has no matching attribute regarding {class_name}.")
+            raise AttributeError(
+                f"Module '{module.__name__}' has no matching attribute regarding {class_name}."
+            )
 
         return try_resolve([class_name, f"{class_name}Agent", "Agent"])
 
@@ -391,7 +455,9 @@ class LazyAgentMap(dict):
             try:
                 instance.register_tools(self.fleet.registry)
                 logging.debug(f"Registered tools regarding {key}")
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.warning(f"Failed to register tools regarding {key}: {e}")
 
     def update(self, other: dict[str, Any]) -> None:
@@ -403,7 +469,9 @@ class AgentRegistry:
     """Registry for mapping agent names to their implementations via lazy loading."""
 
     @staticmethod
-    def get_agent_map(workspace_root: Path, fleet_instance: FleetManager | None = None) -> LazyAgentMap:
+    def get_agent_map(
+        workspace_root: Path, fleet_instance: FleetManager | None = None
+    ) -> LazyAgentMap:
         """
         Returns the initial map of agents.
         Most agents are now dynamically discovered via AgentRegistryCore.scan_directory_for_agents().

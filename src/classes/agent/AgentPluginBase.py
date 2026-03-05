@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@ import logging
 
 __version__ = VERSION
 
+
 class AgentPluginBase(ABC):
     """Abstract base class for agent plugins.
 
@@ -37,8 +39,12 @@ class AgentPluginBase(ABC):
         config: Plugin configuration.
     """
 
-    def __init__(self, name: str, priority: AgentPriority = AgentPriority.NORMAL,
-                 config: dict[str, Any] | None = None) -> None:
+    def __init__(
+        self,
+        name: str,
+        priority: AgentPriority = AgentPriority.NORMAL,
+        config: dict[str, Any] | None = None,
+    ) -> None:
         """Initialize the plugin.
 
         Args:
@@ -83,7 +89,4 @@ class AgentPluginBase(ABC):
         Returns:
             AgentHealthCheck: Health check result.
         """
-        return AgentHealthCheck(
-            agent_name=self.name,
-            status=HealthStatus.HEALTHY
-        )
+        return AgentHealthCheck(agent_name=self.name, status=HealthStatus.HEALTHY)

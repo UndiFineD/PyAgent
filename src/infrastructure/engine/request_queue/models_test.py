@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "RequestPriority"), "RequestPriority missing"
     assert hasattr(mod, "QueuedRequest"), "QueuedRequest missing"
-

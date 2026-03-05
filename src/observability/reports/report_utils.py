@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +13,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 
 import ast
@@ -140,7 +140,9 @@ def _find_issues(tree: ast.AST, source: str) -> list[str]:
         if isinstance(node, ast.FunctionDef):
             for default in node.args.defaults:
                 if isinstance(default, (ast.List, ast.Dict, ast.Set)):
-                    issues.append(f"Function `{node.name}` has a mutable default argument (list / dict / set).")
+                    issues.append(
+                        f"Function `{node.name}` has a mutable default argument (list / dict / set)."
+                    )
                     break  # One per function is enough
     # 2. Bare excepts
     for node in ast.walk(tree):
@@ -150,7 +152,9 @@ def _find_issues(tree: ast.AST, source: str) -> list[str]:
     for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):
             # Check args
-            missing_arg_type: bool = any(arg.annotation is None for arg in node.args.args if arg.arg != "self")
+            missing_arg_type: bool = any(
+                arg.annotation is None for arg in node.args.args if arg.arg != "self"
+            )
             # Check return
             missing_return_type: bool = node.returns is None
             if missing_arg_type or missing_return_type:
@@ -159,7 +163,6 @@ def _find_issues(tree: ast.AST, source: str) -> list[str]:
     if "TODO" in source or "FIXME" in source:
         issues.append("Contains TODO or FIXME comments.")
     return issues
-
 
 
 class ReportUtils:

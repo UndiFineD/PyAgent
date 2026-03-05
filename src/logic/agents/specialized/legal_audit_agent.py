@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,7 +43,9 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "Apache-2.0",
             "MIT",
         ]
-        self.header_pattern = re.compile(r"Licensed under the Apache License, Version 2.0")
+        self.header_pattern = re.compile(
+            r"Licensed under the Apache License, Version 2.0"
+        )
 
     def scan_licensing(self, content: str) -> dict[str, Any]:
         """Identifies licenses and flags copyleft risks (Phase 59)."""
@@ -59,7 +62,9 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         return {
             "detected_licenses": detected,
-            "risk_level": "high" if any(lic in ["GPL", "AGPL"] for lic in detected) else "low",
+            "risk_level": (
+                "high" if any(lic in ["GPL", "AGPL"] for lic in detected) else "low"
+            ),
             "summary": f"Detected: {', '.join(detected) if detected else 'None'}",
         }
 
@@ -92,7 +97,9 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                                 }
                             )
                     except (IOError, UnicodeDecodeError) as e:
-                        results["non_compliant"].append({"file": path, "issue": f"Error reading file: {str(e)}"})
+                        results["non_compliant"].append(
+                            {"file": path, "issue": f"Error reading file: {str(e)}"}
+                        )
             return results
 
         return await asyncio.to_thread(walk_and_check)
@@ -100,9 +107,15 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def verify_smart_contract(self, contract_code: str) -> dict[str, Any]:
         """Verifies a smart contract for legal commonalities and risks (Phase 59)."""
         _ = contract_code
-        return {"risk_level": "low", "findings": ["Standard ERC20 implementation detected."], "compliant": True}
+        return {
+            "risk_level": "low",
+            "findings": ["Standard ERC20 implementation detected."],
+            "compliant": True,
+        }
 
-    async def get_improvement_items(self, context: dict[str, Any]) -> list[dict[str, Any]]:
+    async def get_improvement_items(
+        self, context: dict[str, Any]
+    ) -> list[dict[str, Any]]:
         """Provides improvements for files missing license headers."""
         target = context.get("target_dir", ".")
         audit = await self.run_audit(target)
@@ -124,7 +137,9 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         if os.path.isfile(path):
             with open(path, "r", encoding="utf-8") as f:
                 res = self.scan_licensing(f.read())
-            return f"Legal Audit for {path}: {res['summary']} (Risk: {res['risk_level']})"
+            return (
+                f"Legal Audit for {path}: {res['summary']} (Risk: {res['risk_level']})"
+            )
 
         audit = await self.run_audit(path)
         return f"Audit for {path}: {len(audit['compliant'])} Compliant, {len(audit['non_compliant'])} Issues."

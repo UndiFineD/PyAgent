@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@ import re
 from typing import List
 from re import Pattern
 
+
 class LoggingCore:
     """
     Pure logic for log formatting and sensitive data masking.
@@ -25,9 +27,9 @@ class LoggingCore:
 
     # Static patterns for ultra-fast masking (used in shell)
     DEFAULT_SENSITIVE_PATTERNS: list[str] = [
-        r"sk-[a-zA-Z0-9]{32,}",                # OpenAI
-        r"Bearer\s+[a-zA-Z0-9\-\._~+/]+=*",     # JWT/Generic Bearer
-        r"gh[ps]_[a-zA-Z0-9]{36}"               # GitHub
+        r"sk-[a-zA-Z0-9]{32,}",  # OpenAI
+        r"Bearer\s+[a-zA-Z0-9\-\._~+/]+=*",  # JWT/Generic Bearer
+        r"gh[ps]_[a-zA-Z0-9]{36}",  # GitHub
     ]
 
     def __init__(self, custom_patterns: list[str] = None) -> None:
@@ -46,5 +48,6 @@ class LoggingCore:
     def format_rfc3339(timestamp_ms: int) -> str:
         """Logic for timestamp formatting (shell implementation)."""
         import datetime
+
         dt = datetime.datetime.fromtimestamp(timestamp_ms / 1000.0, tz=datetime.UTC)
-        return dt.isoformat(timespec='milliseconds').replace("+00:00", "Z")
+        return dt.isoformat(timespec="milliseconds").replace("+00:00", "Z")

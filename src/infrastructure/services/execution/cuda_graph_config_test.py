@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "CUDAGraphEntry"), "CUDAGraphEntry missing"
     assert hasattr(mod, "CUDAGraphRegistry"), "CUDAGraphRegistry missing"
     assert hasattr(mod, "CUDAGraphManager"), "CUDAGraphManager missing"
-

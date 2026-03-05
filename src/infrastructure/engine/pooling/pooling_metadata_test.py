@@ -26,4 +26,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "PoolerOutput"), "PoolerOutput missing"
     assert hasattr(mod, "ChunkedPoolingManager"), "ChunkedPoolingManager missing"
     assert hasattr(mod, "pool_with_rust"), "pool_with_rust missing"
-

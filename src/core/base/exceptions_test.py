@@ -33,40 +33,39 @@ except ImportError as e:
 
 def test_pyagentexception_exists():
     """Test that PyAgentException class exists and is importable."""
-    assert 'PyAgentException' in dir()
+    assert "PyAgentException" in dir()
 
 
 def test_infrastructureerror_exists():
     """Test that InfrastructureError class exists and is importable."""
-    assert 'InfrastructureError' in dir()
+    assert "InfrastructureError" in dir()
 
 
 def test_logicerror_exists():
     """Test that LogicError class exists and is importable."""
-    assert 'LogicError' in dir()
+    assert "LogicError" in dir()
 
 
 def test_securityerror_exists():
     """Test that SecurityError class exists and is importable."""
-    assert 'SecurityError' in dir()
+    assert "SecurityError" in dir()
 
 
 def test_modelerror_exists():
     """Test that ModelError class exists and is importable."""
-    assert 'ModelError' in dir()
+    assert "ModelError" in dir()
 
 
 def test_configurationerror_exists():
     """Test that ConfigurationError class exists and is importable."""
-    assert 'ConfigurationError' in dir()
+    assert "ConfigurationError" in dir()
 
 
 def test_cycleinterrupt_exists():
     """Test that CycleInterrupt class exists and is importable."""
-    assert 'CycleInterrupt' in dir()
+    assert "CycleInterrupt" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

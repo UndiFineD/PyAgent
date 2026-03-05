@@ -33,37 +33,37 @@ except ImportError as e:
 
 def test_cachetier_exists():
     """Test that CacheTier class exists and is importable."""
-    assert 'CacheTier' in dir()
+    assert "CacheTier" in dir()
 
 
 def test_evictionpolicy_exists():
     """Test that EvictionPolicy class exists and is importable."""
-    assert 'EvictionPolicy' in dir()
+    assert "EvictionPolicy" in dir()
 
 
 def test_cacheconfig_exists():
     """Test that CacheConfig class exists and is importable."""
-    assert 'CacheConfig' in dir()
+    assert "CacheConfig" in dir()
 
 
 def test_cacheentry_exists():
     """Test that CacheEntry class exists and is importable."""
-    assert 'CacheEntry' in dir()
+    assert "CacheEntry" in dir()
 
 
 def test_cachestats_exists():
     """Test that CacheStats class exists and is importable."""
-    assert 'CacheStats' in dir()
+    assert "CacheStats" in dir()
 
 
 def test_encodercachemanager_exists():
     """Test that EncoderCacheManager class exists and is importable."""
-    assert 'EncoderCacheManager' in dir()
+    assert "EncoderCacheManager" in dir()
 
 
 def test_multitierencodercache_exists():
     """Test that MultiTierEncoderCache class exists and is importable."""
-    assert 'MultiTierEncoderCache' in dir()
+    assert "MultiTierEncoderCache" in dir()
 
 
 def test_create_encoder_cache_exists():
@@ -74,4 +74,3 @@ def test_create_encoder_cache_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

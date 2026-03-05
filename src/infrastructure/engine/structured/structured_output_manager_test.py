@@ -25,4 +25,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ChoiceGrammar"), "ChoiceGrammar missing"
     assert hasattr(mod, "StructuredOutputManager"), "StructuredOutputManager missing"
     assert hasattr(mod, "SimpleBackend"), "SimpleBackend missing"
-

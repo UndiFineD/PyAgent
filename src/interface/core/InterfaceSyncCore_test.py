@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_interfacesynccore_exists():
     """Test that InterfaceSyncCore class exists and is importable."""
-    assert 'InterfaceSyncCore' in dir()
+    assert "InterfaceSyncCore" in dir()
 
 
 def test_interfacesynccore_instantiation():
@@ -45,4 +45,3 @@ def test_interfacesynccore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

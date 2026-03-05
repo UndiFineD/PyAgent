@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_signalagent_exists():
     """Test that SignalAgent class exists and is importable."""
-    assert 'SignalAgent' in dir()
+    assert "SignalAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

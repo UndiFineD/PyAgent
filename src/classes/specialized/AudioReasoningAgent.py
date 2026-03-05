@@ -2,12 +2,13 @@ import json
 from typing import Dict, List, Any, Optional
 from src.classes.base_agent import BaseAgent
 
+
 class AudioReasoningAgent(BaseAgent):
     """
     Phase 58: Advanced Multimedia Grounding.
     Mocks transcription and reasoning over audio telemetry.
     """
-    
+
     def __init__(self, path: str) -> None:
         super().__init__(path)
 
@@ -21,11 +22,16 @@ class AudioReasoningAgent(BaseAgent):
         return {
             "intent": "diagnostic_report",
             "entities": ["engine", "clicking_sound", "belt"],
-            "urgency": "medium"
+            "urgency": "medium",
         }
 
-    def correlate_with_telemetry(self, audio_analysis: Dict[str, Any], sensor_data: Dict[str, Any]) -> str:
+    def correlate_with_telemetry(
+        self, audio_analysis: Dict[str, Any], sensor_data: Dict[str, Any]
+    ) -> str:
         """Correlates audio findings with numerical sensor data."""
-        if "engine" in audio_analysis["entities"] and sensor_data.get("vibration_level", 0) > 0.8:
+        if (
+            "engine" in audio_analysis["entities"]
+            and sensor_data.get("vibration_level", 0) > 0.8
+        ):
             return "Audio finding confirmed by high vibration sensors."
         return "Audio finding remains unconfirmed by numerical telemetry."

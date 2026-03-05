@@ -45,11 +45,17 @@ class ImportHealerCore:
             for file in files:
                 if file.endswith(".py") and not file.startswith("__"):
                     rel_path = os.path.relpath(os.path.join(root, file), directory)
-                    with open(os.path.join(root, file), encoding="utf-8", errors="ignore") as f:
+                    with open(
+                        os.path.join(root, file), encoding="utf-8", errors="ignore"
+                    ) as f:
                         content = f.read()
                         # Find internal imports (src.xxx)
-                        imports = re.findall(r"^from\s+(src\.[a-zA-Z0-9_\.]+)", content, re.MULTILINE)
-                        imports += re.findall(r"^import\s+(src\.[a-zA-Z0-9_\.]+)", content, re.MULTILINE)
+                        imports = re.findall(
+                            r"^from\s+(src\.[a-zA-Z0-9_\.]+)", content, re.MULTILINE
+                        )
+                        imports += re.findall(
+                            r"^import\s+(src\.[a-zA-Z0-9_\.]+)", content, re.MULTILINE
+                        )
                         if imports:
                             import_map[rel_path] = list(set(imports))
         return import_map

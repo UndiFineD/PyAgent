@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,6 +30,7 @@ import re
 
 __version__ = VERSION
 
+
 class SecurityScanner:
     """Scans code for security vulnerabilities.
 
@@ -43,30 +45,48 @@ class SecurityScanner:
     """
 
     SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [
-        (r'password\s*=\s*[\'"][^\'"]+[\'"]',
-         SecurityIssueType.HARDCODED_SECRET, "high",
-         "Hardcoded password detected",
-         "Use environment variables or secure vault"),
-        (r'api_key\s*=\s*[\'"][^\'"]+[\'"]',
-         SecurityIssueType.HARDCODED_SECRET, "high",
-         "Hardcoded API key detected",
-         "Use environment variables or secure vault"),
-        (r"os\.system\s*\([^)]*\+",
-         SecurityIssueType.COMMAND_INJECTION, "critical",
-         "Potential command injection vulnerability",
-         "Use subprocess with shell=False and proper escaping"),
-        (r"ev" + r"al\s*\(",
-         SecurityIssueType.INSECURE_DESERIALIZATION, "critical",
-         "Use of ev" + "al() is dangerous",
-         "Avoid ev" + "al() or use ast.literal_eval() for safe parsing"),
-        (r"random\.(random|randint|choice)\s*\(",
-         SecurityIssueType.INSECURE_RANDOM, "medium",
-         "Insecure random number generation for security context",
-         "Use secrets module for cryptographic randomness"),
-        (r"open\s*\([^)]*\+",
-         SecurityIssueType.PATH_TRAVERSAL, "high",
-         "Potential path traversal vulnerability",
-         "Validate and sanitize file paths"),
+        (
+            r'password\s*=\s*[\'"][^\'"]+[\'"]',
+            SecurityIssueType.HARDCODED_SECRET,
+            "high",
+            "Hardcoded password detected",
+            "Use environment variables or secure vault",
+        ),
+        (
+            r'api_key\s*=\s*[\'"][^\'"]+[\'"]',
+            SecurityIssueType.HARDCODED_SECRET,
+            "high",
+            "Hardcoded API key detected",
+            "Use environment variables or secure vault",
+        ),
+        (
+            r"os\.system\s*\([^)]*\+",
+            SecurityIssueType.COMMAND_INJECTION,
+            "critical",
+            "Potential command injection vulnerability",
+            "Use subprocess with shell=False and proper escaping",
+        ),
+        (
+            r"ev" + r"al\s*\(",
+            SecurityIssueType.INSECURE_DESERIALIZATION,
+            "critical",
+            "Use of ev" + "al() is dangerous",
+            "Avoid ev" + "al() or use ast.literal_eval() for safe parsing",
+        ),
+        (
+            r"random\.(random|randint|choice)\s*\(",
+            SecurityIssueType.INSECURE_RANDOM,
+            "medium",
+            "Insecure random number generation for security context",
+            "Use secrets module for cryptographic randomness",
+        ),
+        (
+            r"open\s*\([^)]*\+",
+            SecurityIssueType.PATH_TRAVERSAL,
+            "high",
+            "Potential path traversal vulnerability",
+            "Validate and sanitize file paths",
+        ),
     ]
 
     def __init__(self) -> None:
@@ -83,24 +103,34 @@ class SecurityScanner:
             List of detected vulnerabilities.
         """
         self.vulnerabilities = []
-        lines = content.split('\n')
+        lines = content.split("\n")
 
         for i, line in enumerate(lines, 1):
             for pattern, issue_type, severity, desc, fix in self.SECURITY_PATTERNS:
                 if re.search(pattern, line, re.I):
-                    self.vulnerabilities.append(SecurityVulnerability(
-                        type=issue_type,
-                        severity=severity,
-                        description=desc,
-                        line_number=i,
-                        fix_suggestion=fix
-                    ))
+                    self.vulnerabilities.append(
+                        SecurityVulnerability(
+                            type=issue_type,
+                            severity=severity,
+                            description=desc,
+                            line_number=i,
+                            fix_suggestion=fix,
+                        )
+                    )
 
         # Phase 108: Intelligence Recording
         try:
-            from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+            from src.infrastructure.backend.LocalContextRecorder import (
+                LocalContextRecorder,
+            )
+
             recorder = LocalContextRecorder(user_context="SecurityScanner")
-            recorder.record_interaction("Internal", "SecurityScanner", "Source Scan", f"Detected {len(self.vulnerabilities)} vulnerabilities.")
+            recorder.record_interaction(
+                "Internal",
+                "SecurityScanner",
+                "Source Scan",
+                f"Detected {len(self.vulnerabilities)} vulnerabilities.",
+            )
         except Exception:
             pass
 

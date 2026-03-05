@@ -33,6 +33,7 @@ class EngineState(Enum):
     """
     Possible states for the EngineCoordinator.
     """
+
     STARTING = 0
     RUNNING = 1
     COOLDOWN = 2
@@ -88,4 +89,8 @@ class EngineCoordinator:
 
     def is_healthy(self) -> bool:
         """Returns True if the engine is in a functional state."""
-        return self.state in [EngineState.RUNNING, EngineState.STARTING, EngineState.COOLDOWN]
+        return self.state in [
+            EngineState.RUNNING,
+            EngineState.STARTING,
+            EngineState.COOLDOWN,
+        ]

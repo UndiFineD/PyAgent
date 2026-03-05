@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -120,7 +121,9 @@ class ErrorsAgent(BaseAgent):
                 candidate = self.file_path.parent / (base_name + ext)
                 if candidate.exists() and candidate != self.file_path:
                     return
-            logging.warning(f"Could not find associated code file for {self.file_path.name}")
+            logging.warning(
+                f"Could not find associated code file for {self.file_path.name}"
+            )
 
     # ========== Error Management ==========
     def add_error(
@@ -134,7 +137,9 @@ class ErrorsAgent(BaseAgent):
         suggested_fix: str = "",
     ) -> ErrorEntry:
         """Add a new error entry."""
-        error_id = hashlib.md5(f"{message}:{file_path}:{line_number}".encode()).hexdigest()[:8]
+        error_id = hashlib.md5(
+            f"{message}:{file_path}:{line_number}".encode()
+        ).hexdigest()[:8]
         error = ErrorEntry(
             id=error_id,
             message=message,
@@ -199,7 +204,9 @@ class ErrorsAgent(BaseAgent):
 
     def prioritize_errors(self) -> list[ErrorEntry]:
         """Return errors sorted by priority (highest first)."""
-        return sorted(self._errors, key=lambda e: self.calculate_severity_score(e), reverse=True)
+        return sorted(
+            self._errors, key=lambda e: self.calculate_severity_score(e), reverse=True
+        )
 
     # ========== Error Clustering ==========
     def cluster_similar_errors(self) -> dict[str, ErrorCluster]:
@@ -259,7 +266,9 @@ class ErrorsAgent(BaseAgent):
                     self._patterns[idx].occurrences += 1
                     return self._patterns[idx]
                 return None
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass  # Fall back to Python
 
         # Python fallback
@@ -336,7 +345,9 @@ class ErrorsAgent(BaseAgent):
                 patterns = [r.pattern for r in active_rules]
                 is_match, _ = check_suppression_rust(error.message, patterns)
                 return is_match
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass  # Fall back to Python
 
         # Python fallback
@@ -355,7 +366,9 @@ class ErrorsAgent(BaseAgent):
         """Add an annotation to an error."""
         if error_id not in self._annotations:
             self._annotations[error_id] = []
-        self._annotations[error_id].append(f"[{datetime.now().isoformat()}] {annotation}")
+        self._annotations[error_id].append(
+            f"[{datetime.now().isoformat()}] {annotation}"
+        )
         return True
 
     def get_annotations(self, error_id: str) -> list[str]:
@@ -421,7 +434,9 @@ class ErrorsAgent(BaseAgent):
                 docs.append(f"### {category.value.title()}\n")
                 for error in errors:
                     status = "✓" if error.resolved else "✗"
-                    docs.append(f"- [{status}] {error.message} (line {error.line_number})")
+                    docs.append(
+                        f"- [{status}] {error.message} (line {error.line_number})"
+                    )
                 docs.append("")
         return "\n".join(docs)
 

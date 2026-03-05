@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Minimal FileSystemIsolator shim."""
 
+
 class FileSystemIsolator:
     def __init__(self, *_, **__):
         pass
@@ -10,5 +11,6 @@ class FileSystemIsolator:
 
     def teardown(self):
         return None
+
 
 __all__ = ["FileSystemIsolator"]

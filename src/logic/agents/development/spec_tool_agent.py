@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -96,7 +97,9 @@ class SpecToolAgent(BaseAgent):
         change_dir = Path("openspec/changes") / name.replace(" ", "-").lower()
         change_dir.mkdir(parents=True, exist_ok=True)
 
-        (change_dir / "proposal.md").write_text(f"# Proposal: {name}\n\n## Intent\n{intent}", encoding="utf-8")
+        (change_dir / "proposal.md").write_text(
+            f"# Proposal: {name}\n\n## Intent\n{intent}", encoding="utf-8"
+        )
         (change_dir / "tasks.md").write_text(
             "## Tasks\n- [ ] 1.1 Implement core logic\n- [ ] 1.2 Add tests",
             encoding="utf-8",
@@ -177,7 +180,9 @@ class SpecToolAgent(BaseAgent):
 
             return f"Successfully generated tool: {output_path}. Methods: {len(paths)}"
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Spec generation failed: {e}")
             return f"Error parsing spec: {e}"
 

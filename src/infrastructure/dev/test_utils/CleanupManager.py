@@ -9,6 +9,7 @@ Provides a minimal `CleanupManager` class to satisfy imports in
 `src.infrastructure.dev.test_utils` during iterative repair.
 """
 
+
 class CleanupManager:
     def __init__(self, *_, **__):
         self._items = []

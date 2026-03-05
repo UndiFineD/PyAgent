@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@ import ast
 import math
 from src.core.base.types.CodeMetrics import CodeMetrics
 
+
 class CoderMetricsMixin:
     """Mixin for CoderCore to handle complex metrics calculations."""
 
@@ -30,14 +32,18 @@ class CoderMetricsMixin:
                     length = node.end_lineno - node.lineno + 1
                     function_lengths.append(length)
                     # Use the complexity calculation from the main class (will be provided via self)
-                    metrics.cyclomatic_complexity += self._calculate_cyclomatic_complexity(node)
+                    metrics.cyclomatic_complexity += (
+                        self._calculate_cyclomatic_complexity(node)
+                    )
             elif isinstance(node, ast.ClassDef):
                 metrics.class_count += 1
             elif isinstance(node, (ast.Import, ast.ImportFrom)):
                 metrics.import_count += 1
 
         if function_lengths:
-            metrics.average_function_length = sum(function_lengths) / len(function_lengths)
+            metrics.average_function_length = sum(function_lengths) / len(
+                function_lengths
+            )
             metrics.max_function_length = max(function_lengths)
 
         return metrics
@@ -54,5 +60,11 @@ class CoderMetricsMixin:
         loc = metrics.lines_of_code
         cm = metrics.lines_of_comments
 
-        mi = 171 - 5.2 * math.log(halstead_volume + 1) - 0.23 * cc - 16.2 * math.log(loc + 1) + 50 * math.sin(math.sqrt(2.4 * (cm / (loc + cm + 1))))
+        mi = (
+            171
+            - 5.2 * math.log(halstead_volume + 1)
+            - 0.23 * cc
+            - 16.2 * math.log(loc + 1)
+            + 50 * math.sin(math.sqrt(2.4 * (cm / (loc + cm + 1))))
+        )
         return max(0, min(100, mi))

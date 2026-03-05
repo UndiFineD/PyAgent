@@ -16,9 +16,11 @@ import logging
 import re
 import zlib
 
+
 @dataclass
 class ContextVersion:
     """Version information for context."""
+
     version: str
     timestamp: str
     content_hash: str

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 """
 SovereigntyOrchestrator: Management of federated data and privacy boundaries.
 

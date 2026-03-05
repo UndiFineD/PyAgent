@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -140,7 +141,9 @@ class VisualizerAgent(BaseAgent):
             with open(temp_path, "w", encoding="utf-8") as f:
                 json.dump(workflow_data, f, indent=2)
             temp_path.replace(output_path)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             if temp_path.exists():
                 temp_path.unlink()
             raise
@@ -217,7 +220,9 @@ class VisualizerAgent(BaseAgent):
         ]
 
         return (
-            "## 🗺️ Fleet Architecture Map\n\n```mermaid\n" + "\n".join(diagram) + "\n```"
+            "## 🗺️ Fleet Architecture Map\n\n```mermaid\n"
+            + "\n".join(diagram)
+            + "\n```"
         )
 
     @as_tool

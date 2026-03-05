@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -47,16 +48,16 @@ if TYPE_CHECKING:
     import torch
 
     __all__ = [
-    "LogitsProcessor",
-    "LogitsProcessorList",
-    "TemperatureProcessor",
-    "TopKProcessor",
-    "TopPProcessor",
-    "RepetitionPenaltyProcessor",
-    "NoBadWordsProcessor",
-    "MinLengthProcessor",
-    "apply_processors",
-]
+        "LogitsProcessor",
+        "LogitsProcessorList",
+        "TemperatureProcessor",
+        "TopKProcessor",
+        "TopPProcessor",
+        "RepetitionPenaltyProcessor",
+        "NoBadWordsProcessor",
+        "MinLengthProcessor",
+        "apply_processors",
+    ]
 
 
 class LogitsProcessor(Protocol):
@@ -119,7 +120,11 @@ class LogitsProcessorList:
         """Apply all processors in sequence."""
         from functools import reduce
 
-        return reduce(lambda curr_logits, proc: proc(input_ids, curr_logits), self.processors, logits)
+        return reduce(
+            lambda curr_logits, proc: proc(input_ids, curr_logits),
+            self.processors,
+            logits,
+        )
 
     def __len__(self) -> int:
         return len(self.processors)
@@ -276,7 +281,9 @@ class RepetitionPenaltyProcessor:
         # Use Rust acceleration if available
         if RUST_AVAILABLE and hasattr(rust_core, "apply_repetition_penalty_rust"):
             l_list = logits.tolist() if hasattr(logits, "tolist") else logits
-            res = rust_core.apply_repetition_penalty_rust(l_list, list(input_ids), self.penalty)
+            res = rust_core.apply_repetition_penalty_rust(
+                l_list, list(input_ids), self.penalty
+            )
             if hasattr(logits, "device"):
                 import torch
 
@@ -354,7 +361,9 @@ class NoBadWordsProcessor:
         """Initialize static bias regarding single-token bad words."""
         vocab_size = logits.shape[-1]
 
-        self._word_bias = torch.zeros(vocab_size, dtype=logits.dtype, device=logits.device)
+        self._word_bias = torch.zeros(
+            vocab_size, dtype=logits.dtype, device=logits.device
+        )
 
         def _set_bias(bad_ids):
             if len(bad_ids) == 1:
@@ -457,7 +466,7 @@ class FrequencyPenaltyProcessor:
         if self.penalty == 0.0 or not input_ids:
             return logits
 
-        # Count frequencies
+            # Count frequencies
             from collections import Counter
 
         freq = Counter(input_ids)
@@ -484,7 +493,9 @@ def apply_processors(
     """
     from functools import reduce
 
-    return reduce(lambda curr_logits, proc: proc(input_ids, curr_logits), processors, logits)
+    return reduce(
+        lambda curr_logits, proc: proc(input_ids, curr_logits), processors, logits
+    )
 
 
 def create_processor_chain(

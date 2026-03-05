@@ -4,6 +4,7 @@ from functools import reduce
 from src.core.base.utils.jsontree.types import JSONTree, _JSONTree, _T, _U
 from src.core.base.utils.jsontree.iteration import json_iter_leaves
 
+
 @overload
 def json_reduce_leaves(
     func: Callable[[_T, _T], _T],
@@ -53,14 +54,14 @@ def json_reduce_leaves(
 ) -> _T | _U:
     """
     Apply a function of two arguments cumulatively to each leaf.
-    
+
     Reduces all leaves to a single value, from left to right.
-    
+
     Args:
         func: A binary function (accumulator, leaf) -> result.
         value: A nested JSON structure.
         initial: Optional initial value for the reduction.
-        
+
     Returns:
         The reduced value.
     """

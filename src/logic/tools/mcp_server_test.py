@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "confirm_proceed"), "confirm_proceed missing"
     assert hasattr(mod, "create_task"), "create_task missing"
     assert hasattr(mod, "store_memory"), "store_memory missing"
-

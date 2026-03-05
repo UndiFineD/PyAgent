@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_observabilityengine_exists():
     """Test that ObservabilityEngine class exists and is importable."""
-    assert 'ObservabilityEngine' in dir()
+    assert "ObservabilityEngine" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

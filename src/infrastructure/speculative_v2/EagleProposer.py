@@ -6,7 +6,12 @@ from .eagle.Config import EagleConfig, EagleMethod, AttentionBackend
 from .eagle.Models import DraftOutput, DraftModelWrapper, SimpleDraftModel
 from .eagle.Tree import TreeNode, SpeculativeTree
 from .eagle.Stats import AcceptanceStats
-from .eagle.Base import AttentionMetadata, InputBuffer, CpuGpuBuffer, TreeAttentionMetadata
+from .eagle.Base import (
+    AttentionMetadata,
+    InputBuffer,
+    CpuGpuBuffer,
+    TreeAttentionMetadata,
+)
 from .eagle.Proposer import EagleProposer, EagleProposerFactory, AsyncEagleProposer
 
 __all__ = [

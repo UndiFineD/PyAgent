@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -56,7 +57,9 @@ class ExecLoopMixin:
         if hasattr(self, "execute_callbacks"):
             self.execute_callbacks("agent_complete", getattr(self, "metrics", {}))
         if hasattr(self, "send_webhook_notification"):
-            self.send_webhook_notification("agent_complete", getattr(self, "metrics", {}))
+            self.send_webhook_notification(
+                "agent_complete", getattr(self, "metrics", {})
+            )
 
     def run(self) -> None:
         """Run the main agent loop."""
@@ -66,13 +69,17 @@ class ExecLoopMixin:
             self.logger = StructuredLogger(agent_id=self.__class__.__name__)
 
         self.logger.info("Entering agent.run()")
-        if getattr(self, "enable_async", False) or getattr(self, "enable_multiprocessing", False):
+        if getattr(self, "enable_async", False) or getattr(
+            self, "enable_multiprocessing", False
+        ):
             self.run_with_parallel_execution()
         else:
             if not hasattr(self, "find_code_files"):
                 return
             code_files = self.find_code_files()
-            self.logger.info(f"Found {len(code_files)} code files to process", count=len(code_files))
+            self.logger.info(
+                f"Found {len(code_files)} code files to process", count=len(code_files)
+            )
             loop_count = getattr(self, "loop", 1)
             for loop_iteration in range(1, loop_count + 1):
                 logging.info(f"Starting loop iteration {loop_iteration}/{loop_count}")
@@ -87,4 +94,6 @@ class ExecLoopMixin:
             if hasattr(self, "execute_callbacks"):
                 self.execute_callbacks("agent_complete", getattr(self, "metrics", {}))
             if hasattr(self, "send_webhook_notification"):
-                self.send_webhook_notification("agent_complete", getattr(self, "metrics", {}))
+                self.send_webhook_notification(
+                    "agent_complete", getattr(self, "metrics", {})
+                )

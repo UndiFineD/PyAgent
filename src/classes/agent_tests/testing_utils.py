@@ -19,6 +19,10 @@ except Exception:
         def __init__(self, *a, **k):
             raise RuntimeError("testing_utils not available")
 
+
 __all__ = [
-    "VisualRegressionTester", "ContractTestRunner", "ResultAggregator", "TestMetricsCollector"
+    "VisualRegressionTester",
+    "ContractTestRunner",
+    "ResultAggregator",
+    "TestMetricsCollector",
 ]

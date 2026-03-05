@@ -14,6 +14,7 @@ def _load_module():
     spec = importlib.util.spec_from_file_location(module_name, p)
     mod = importlib.util.module_from_spec(spec)
     import sys
+
     sys.modules[spec.name] = mod
     spec.loader.exec_module(mod)
     return mod
@@ -29,4 +30,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "cmd_chat"), "cmd_chat missing"
     assert hasattr(mod, "cmd_chat_theme"), "cmd_chat_theme missing"
     assert hasattr(mod, "cmd_chat_preview"), "cmd_chat_preview missing"
-

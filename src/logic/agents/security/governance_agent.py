@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -39,9 +40,14 @@ class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.proposals_dir = Path(self._workspace_root) / "data/memory/agent_store/governance/proposals"
+        self.proposals_dir = (
+            Path(self._workspace_root) / "data/memory/agent_store/governance/proposals"
+        )
         self.proposals_dir.mkdir(parents=True, exist_ok=True)
-        self.policies_path = Path(self._workspace_root) / "data/memory/agent_store/governance/policies.json"
+        self.policies_path = (
+            Path(self._workspace_root)
+            / "data/memory/agent_store/governance/policies.json"
+        )
         self._system_prompt = (
             "You are the Governance Agent. Your role is to oversee the democratic processes "
             "of the fleet. You manage proposals for resource allocation, task prioritization, "
@@ -93,7 +99,9 @@ class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return proposal_id
 
     @as_tool
-    def cast_vote(self, proposal_id: str, voter: str, choice: str, rationale: str = "") -> str:
+    def cast_vote(
+        self, proposal_id: str, voter: str, choice: str, rationale: str = ""
+    ) -> str:
         """Casts a vote on an active proposal.
 
         Args:
@@ -121,7 +129,9 @@ class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 if v["agent"] == voter:
                     return f"Error: Agent {voter} has already voted on this proposal."
 
-        proposal["votes"][choice].append({"agent": voter, "rationale": rationale, "timestamp": time.time()})
+        proposal["votes"][choice].append(
+            {"agent": voter, "rationale": rationale, "timestamp": time.time()}
+        )
 
         with open(path, "w", encoding="utf-8") as f:
             json.dump(proposal, f, indent=4)
@@ -168,5 +178,7 @@ class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(GovernanceAgent, "Governance Agent", "Swarm DAO Management")
+    main = create_main_function(
+        GovernanceAgent, "Governance Agent", "Swarm DAO Management"
+    )
     main()

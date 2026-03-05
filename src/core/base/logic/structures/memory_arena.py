@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -455,7 +456,12 @@ class SlabAllocator(Generic[T]):
         self._slabs.append(slab)
 
         # Add all slots to free list
-        list(map(lambda i: self._free_list.append((slab_idx, i * self._object_size)), range(self._slab_size)))
+        list(
+            map(
+                lambda i: self._free_list.append((slab_idx, i * self._object_size)),
+                range(self._slab_size),
+            )
+        )
 
     def alloc(self) -> memoryview:
         """
@@ -497,7 +503,7 @@ class SlabAllocator(Generic[T]):
                     self._free_list.append((idx, offset))
                     return True
                 return find_slab(idx + 1)
-            
+
             find_slab(0)
 
     def reset(self) -> None:
@@ -506,11 +512,19 @@ class SlabAllocator(Generic[T]):
             self._free_list.clear()
 
             # Rebuild free list
-            list(map(lambda slab_idx: 
-                list(map(lambda i: 
-                    self._free_list.append((slab_idx, i * self._object_size)), 
-                    range(self._slab_size))), 
-                range(len(self._slabs))))
+            list(
+                map(
+                    lambda slab_idx: list(
+                        map(
+                            lambda i: self._free_list.append(
+                                (slab_idx, i * self._object_size)
+                            ),
+                            range(self._slab_size),
+                        )
+                    ),
+                    range(len(self._slabs)),
+                )
+            )
 
             self._stats.resets += 1
 

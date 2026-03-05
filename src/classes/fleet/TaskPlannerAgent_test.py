@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_taskplanneragent_exists():
     """Test that TaskPlannerAgent class exists and is importable."""
-    assert 'TaskPlannerAgent' in dir()
+    assert "TaskPlannerAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_rebirthcore_exists():
     """Test that RebirthCore class exists and is importable."""
-    assert 'RebirthCore' in dir()
+    assert "RebirthCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

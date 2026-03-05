@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "StatsAnnotationManager"), "StatsAnnotationManager missing"
     assert hasattr(mod, "SubscriptionManager"), "SubscriptionManager missing"
     assert hasattr(mod, "StatsSubscriptionManager"), "StatsSubscriptionManager missing"
-

@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_taskstats_exists():
     """Test that TaskStats class exists and is importable."""
-    assert 'TaskStats' in dir()
+    assert "TaskStats" in dir()
 
 
 def test_scheduledtask_exists():
     """Test that ScheduledTask class exists and is importable."""
-    assert 'ScheduledTask' in dir()
+    assert "ScheduledTask" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

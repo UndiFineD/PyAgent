@@ -28,4 +28,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ArchitectureDetector"), "ArchitectureDetector missing"
     assert hasattr(mod, "VRAMEstimator"), "VRAMEstimator missing"
     assert hasattr(mod, "ModelRegistry"), "ModelRegistry missing"
-

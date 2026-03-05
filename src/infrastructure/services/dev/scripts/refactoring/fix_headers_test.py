@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "fix_header"), "fix_header missing"
     assert hasattr(mod, "process_directory"), "process_directory missing"
-

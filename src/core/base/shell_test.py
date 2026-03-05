@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_environmentsanitizer_exists():
     """Test that EnvironmentSanitizer class exists and is importable."""
-    assert 'EnvironmentSanitizer' in dir()
+    assert "EnvironmentSanitizer" in dir()
 
 
 def test_shellexecutor_exists():
     """Test that ShellExecutor class exists and is importable."""
-    assert 'ShellExecutor' in dir()
+    assert "ShellExecutor" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

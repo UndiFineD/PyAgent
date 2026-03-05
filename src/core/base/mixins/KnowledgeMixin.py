@@ -4,6 +4,7 @@ from typing import Any
 from pathlib import Path
 from src.core.base.ShardedKnowledgeCore import ShardedKnowledgeCore
 
+
 class KnowledgeMixin:
     """Handles knowledge engines, memory, sharded storage, and templates."""
 
@@ -11,6 +12,7 @@ class KnowledgeMixin:
         # Knowledge Trinity initialization
         try:
             from src.core.knowledge.knowledge_engine import KnowledgeEngine
+
             self.knowledge = KnowledgeEngine(
                 agent_id=agent_name, base_path=Path("data/agents")
             )
@@ -20,6 +22,7 @@ class KnowledgeMixin:
         # Memory
         try:
             from src.logic.agents.cognitive.LongTermMemory import LongTermMemory
+
             self.memory = LongTermMemory(agent_name=agent_name)
         except (ImportError, ModuleNotFoundError):
             self.memory = None
@@ -61,7 +64,12 @@ class KnowledgeMixin:
 
     def _build_prompt_with_history(self, prompt: str) -> str:
         history = self.get_history()
-        history_text = "\n".join([f"{getattr(m, 'role', 'user')}: {getattr(m, 'content', m)}" for m in history])
+        history_text = "\n".join(
+            [
+                f"{getattr(m, 'role', 'user')}: {getattr(m, 'content', m)}"
+                for m in history
+            ]
+        )
         return f"{history_text}\nUSER: {prompt}"
 
     @property
@@ -77,6 +85,7 @@ class KnowledgeMixin:
                 from src.logic.agents.cognitive.context.engines.GlobalContextEngine import (
                     GlobalContextEngine,
                 )
+
                 self._local_global_context = GlobalContextEngine(self._workspace_root)
             except (ImportError, ValueError):
                 pass

@@ -33,25 +33,24 @@ except ImportError as e:
 
 def test_guidedmode_exists():
     """Test that GuidedMode class exists and is importable."""
-    assert 'GuidedMode' in dir()
+    assert "GuidedMode" in dir()
 
 
 def test_guidedconfig_exists():
     """Test that GuidedConfig class exists and is importable."""
-    assert 'GuidedConfig' in dir()
+    assert "GuidedConfig" in dir()
 
 
 def test_regexpattern_exists():
     """Test that RegexPattern class exists and is importable."""
-    assert 'RegexPattern' in dir()
+    assert "RegexPattern" in dir()
 
 
 def test_choiceconstraint_exists():
     """Test that ChoiceConstraint class exists and is importable."""
-    assert 'ChoiceConstraint' in dir()
+    assert "ChoiceConstraint" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

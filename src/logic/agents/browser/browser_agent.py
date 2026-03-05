@@ -68,7 +68,9 @@ class BrowserAgent(BaseAgent):
         # Browser configuration
         self.screen_width = 1440
         self.screen_height = 900
-        self.headless = kwargs.get("headless", True)  # Default to headless for server use
+        self.headless = kwargs.get(
+            "headless", True
+        )  # Default to headless for server use
 
     def setup_browser(self):
         """Initialize Playwright browser."""
@@ -101,7 +103,8 @@ class BrowserAgent(BaseAgent):
         timestamp = datetime.now().strftime("%H%M%S")
         desc_suffix = f"_{description.replace(' ', '_')}" if description else ""
         screenshot_path = (
-            self.screenshot_dir / f"screenshot_{self.screenshot_counter:03d}_{timestamp}{desc_suffix}.png"
+            self.screenshot_dir
+            / f"screenshot_{self.screenshot_counter:03d}_{timestamp}{desc_suffix}.png"
         )
 
         try:
@@ -150,7 +153,8 @@ class BrowserAgent(BaseAgent):
         """Search for text on the current page."""
         try:
             # Highlight search results
-            result = self.page.evaluate(f"""
+            result = self.page.evaluate(
+                f"""
                 (query) => {{
                     const elements = document.querySelectorAll('*');
                     let matches = [];
@@ -177,7 +181,9 @@ class BrowserAgent(BaseAgent):
                         matches: matches.slice(0, 10) // Limit results
                     }};
                 }}
-            """, query)
+            """,
+                query,
+            )
 
             if result["found"]:
                 self.take_screenshot(f"search_{query.replace(' ', '_')}")
@@ -245,17 +251,15 @@ class BrowserAgent(BaseAgent):
         if not self.browser:
             self.setup_browser()
 
-        results = {
-            "session_id": self.session_id,
-            "screenshots": [],
-            "actions": []
-        }
+        results = {"session_id": self.session_id, "screenshots": [], "actions": []}
 
         try:
             # Navigate to URL if provided
             if url:
                 if self.navigate_to_url(url):
-                    results["actions"].append({"action": "navigate", "url": url, "success": True})
+                    results["actions"].append(
+                        {"action": "navigate", "url": url, "success": True}
+                    )
                     current_url = self.page.url
                     results["current_url"] = current_url
                 else:
@@ -266,17 +270,21 @@ class BrowserAgent(BaseAgent):
             if search_query:
                 search_results = self.search_on_page(search_query)
                 results["search_results"] = search_results
-                results["actions"].append({
-                    "action": "search",
-                    "query": search_query,
-                    "found": search_results.get("found", False)
-                })
+                results["actions"].append(
+                    {
+                        "action": "search",
+                        "query": search_query,
+                        "found": search_results.get("found", False),
+                    }
+                )
 
             # Extract text content if requested
             if extract_text:
                 text_content = self.extract_text_content()
                 results["text_content"] = text_content[:5000]  # Limit content length
-                results["actions"].append({"action": "extract_text", "length": len(text_content)})
+                results["actions"].append(
+                    {"action": "extract_text", "length": len(text_content)}
+                )
 
             # Take final screenshot
             final_screenshot = self.take_screenshot("final")
@@ -300,7 +308,7 @@ class BrowserAgent(BaseAgent):
             "session_id": self.session_id,
             "screenshots_taken": self.screenshot_counter,
             "screenshot_dir": str(self.screenshot_dir),
-            "current_url": self.page.url if self.page else None
+            "current_url": self.page.url if self.page else None,
         }
 
     def __del__(self):

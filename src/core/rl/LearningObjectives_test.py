@@ -33,27 +33,27 @@ except ImportError as e:
 
 def test_objectivestatus_exists():
     """Test that ObjectiveStatus class exists and is importable."""
-    assert 'ObjectiveStatus' in dir()
+    assert "ObjectiveStatus" in dir()
 
 
 def test_objectivetype_exists():
     """Test that ObjectiveType class exists and is importable."""
-    assert 'ObjectiveType' in dir()
+    assert "ObjectiveType" in dir()
 
 
 def test_learningobjective_exists():
     """Test that LearningObjective class exists and is importable."""
-    assert 'LearningObjective' in dir()
+    assert "LearningObjective" in dir()
 
 
 def test_objectiveconstraint_exists():
     """Test that ObjectiveConstraint class exists and is importable."""
-    assert 'ObjectiveConstraint' in dir()
+    assert "ObjectiveConstraint" in dir()
 
 
 def test_objectivetracker_exists():
     """Test that ObjectiveTracker class exists and is importable."""
-    assert 'ObjectiveTracker' in dir()
+    assert "ObjectiveTracker" in dir()
 
 
 def test_objectivetracker_instantiation():
@@ -65,4 +65,3 @@ def test_objectivetracker_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

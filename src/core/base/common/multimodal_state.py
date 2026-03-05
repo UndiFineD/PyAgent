@@ -14,6 +14,7 @@
 
 """Multimodal state definitions."""
 
+
 class StreamState:
     """State management for incomplete modality tags in a stream."""
 

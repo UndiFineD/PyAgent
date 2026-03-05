@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,8 +22,10 @@ from enum import Enum
 
 __version__ = VERSION
 
+
 class AnalysisToolType(Enum):
     """Types of code analysis tools."""
+
     LINTER = "linter"
     TYPE_CHECKER = "type_checker"
     SECURITY_SCANNER = "security_scanner"

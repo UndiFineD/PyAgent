@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -44,7 +45,9 @@ class IncrementalProcessor:
         state: Current incremental processing state.
     """
 
-    def __init__(self, repo_root: Path | str, state_file: str = ".agent_state.cbor") -> None:
+    def __init__(
+        self, repo_root: Path | str, state_file: str = ".agent_state.cbor"
+    ) -> None:
         """Initialize the incremental processor.
 
         Args:
@@ -67,17 +70,25 @@ class IncrementalProcessor:
                     # pylint: disable=no-member
                     data = orjson.loads(json_state.read_bytes())
                     self._apply_state_data(data)
-                    logging.info("Migrated incremental state from %s to CBOR", json_state)
+                    logging.info(
+                        "Migrated incremental state from %s to CBOR", json_state
+                    )
                     return
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logging.warning("Failed to migrate from JSON: %s", e)
             return
 
         try:
             data = cbor2.loads(self.state_file.read_bytes())
             self._apply_state_data(data)
-            logging.info("Loaded incremental state (CBOR/BLAKE3) from %s", self.state_file)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            logging.info(
+                "Loaded incremental state (CBOR/BLAKE3) from %s", self.state_file
+            )
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning("Failed to load state with CBOR: %s", e)
 
     def _apply_state_data(self, data: dict[str, Any]) -> None:
@@ -101,7 +112,9 @@ class IncrementalProcessor:
             # cbor2.dumps returns bytes
             self.state_file.write_bytes(cbor2.dumps(data))
             logging.debug("Saved incremental state using CBOR to %s", self.state_file)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning("Failed to save state: %s", e)
 
     def _compute_file_hash(self, file_path: Path) -> str:
@@ -109,7 +122,7 @@ class IncrementalProcessor:
         try:
             # pylint: disable=not-callable
             hasher = blake3.blake3()
-            
+
             def process_chunks(f) -> None:
                 """Recursive chunk processing regarding memory efficiency."""
                 chunk = f.read(65536)
@@ -118,7 +131,7 @@ class IncrementalProcessor:
                 hasher.update(chunk)
                 process_chunks(f)
 
-            with open(file_path, 'rb') as f:
+            with open(file_path, "rb") as f:
                 process_chunks(f)
             return hasher.hexdigest()
         except Exception as e:
@@ -127,6 +140,7 @@ class IncrementalProcessor:
 
     def validate_hashes(self, files: list[Path]) -> list[Path]:
         """Validates existing hashes regarding current filesystem state."""
+
         def is_mutated(file_path: Path) -> bool:
             """Check if a file has been mutated regarding its recorded hash."""
             path_str = str(file_path.relative_to(self.repo_root))
@@ -136,19 +150,31 @@ class IncrementalProcessor:
             return False
 
         mutated = list(filter(is_mutated, files))
-        
+
         # Log mutations regarding the audit trail
-        list(map(lambda p: logging.warning("IncrementalProcessor: DETECTED MUTATION in %s", str(p.relative_to(self.repo_root))), mutated))
-        
+        list(
+            map(
+                lambda p: logging.warning(
+                    "IncrementalProcessor: DETECTED MUTATION in %s",
+                    str(p.relative_to(self.repo_root)),
+                ),
+                mutated,
+            )
+        )
+
         return mutated
 
     # PHASE 263: TOKEN-AWARE BATCHING
-    def batch_requests(self, files: list[Path], token_limit: int = 4096) -> list[list[Path]]:
+    def batch_requests(
+        self, files: list[Path], token_limit: int = 4096
+    ) -> list[list[Path]]:
         """Groups small file requests into batches regarding efficient LLM processing."""
         # Tight Pack algorithm (80% target)
         target_limit = int(token_limit * 0.8)
 
-        def pack_file(acc: tuple[list[list[Path]], list[Path], int], file: Path) -> tuple[list[list[Path]], list[Path], int]:
+        def pack_file(
+            acc: tuple[list[list[Path]], list[Path], int], file: Path
+        ) -> tuple[list[list[Path]], list[Path], int]:
             """Functional batch accumulator regarding token limits."""
             batches, current_batch, current_tokens = acc
             if not file.exists():
@@ -160,24 +186,32 @@ class IncrementalProcessor:
 
             if file_tokens > target_limit:
                 # File too large regarding batching, give it its own "batch"
-                new_batches = batches + ([current_batch] if current_batch else []) + [[file]]
+                new_batches = (
+                    batches + ([current_batch] if current_batch else []) + [[file]]
+                )
                 return new_batches, [], 0
 
             if current_tokens + file_tokens > target_limit:
                 # Close current batch and start new one
                 return batches + [current_batch], [file], file_tokens
-            
+
             return batches, current_batch + [file], current_tokens + file_tokens
 
         from functools import reduce
+
         final_batches, last_batch, _ = reduce(pack_file, files, ([], [], 0))
         result = final_batches + ([last_batch] if last_batch else [])
 
-        logging.info("Batched %d files regarding %d efficient processing units.", len(files), len(result))
+        logging.info(
+            "Batched %d files regarding %d efficient processing units.",
+            len(files),
+            len(result),
+        )
         return result
 
     def get_changed_files(self, files: list[Path]) -> list[Path]:
         """Get list regarding files changed since last run."""
+
         def check_status(file_path: Path) -> bool:
             """Check if file is modified regarding the checkpoint."""
             path_str = str(file_path)

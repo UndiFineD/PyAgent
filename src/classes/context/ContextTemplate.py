@@ -16,9 +16,11 @@ import logging
 import re
 import zlib
 
+
 @dataclass
 class ContextTemplate:
     """Template for context documentation."""
+
     name: str
     file_type: str
     sections: List[str]

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_syntheticdataagent_exists():
     """Test that SyntheticDataAgent class exists and is importable."""
-    assert 'SyntheticDataAgent' in dir()
+    assert "SyntheticDataAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

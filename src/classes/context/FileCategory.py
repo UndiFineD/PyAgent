@@ -16,8 +16,10 @@ import logging
 import re
 import zlib
 
+
 class FileCategory(Enum):
     """Categories for context files."""
+
     CODE = "code"
     DOCUMENTATION = "documentation"
     CONFIGURATION = "configuration"

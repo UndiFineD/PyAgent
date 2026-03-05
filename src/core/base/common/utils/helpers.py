@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,8 +23,13 @@ from typing import TYPE_CHECKING, Any, Final, TypeVar
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.models._factories import (
-    _empty_dict_str_any, _empty_dict_str_float, _empty_dict_str_int,
-    _empty_dict_str_str, _empty_list_dict_str_any, _empty_list_str)
+    _empty_dict_str_any,
+    _empty_dict_str_float,
+    _empty_dict_str_int,
+    _empty_dict_str_str,
+    _empty_list_dict_str_any,
+    _empty_list_str,
+)
 
 __version__ = VERSION
 

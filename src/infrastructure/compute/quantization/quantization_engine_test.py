@@ -27,4 +27,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "compute_scales_minmax"), "compute_scales_minmax missing"
     assert hasattr(mod, "quantize_tensor"), "quantize_tensor missing"
     assert hasattr(mod, "get_quantization_error"), "get_quantization_error missing"
-

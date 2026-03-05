@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "TimestampedValue"), "TimestampedValue missing"
     assert hasattr(mod, "TimeSeriesBuffer"), "TimeSeriesBuffer missing"
     assert hasattr(mod, "SlidingWindowAggregator"), "SlidingWindowAggregator missing"
-

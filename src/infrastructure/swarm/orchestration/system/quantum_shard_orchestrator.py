@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -58,14 +59,14 @@ class QuantumShardOrchestrator(BaseAgent):
         try:
             current_field: dict[str, Any] = {}
             if self.state_file.exists():
-                with open(self.state_file, encoding='utf-8') as f:
+                with open(self.state_file, encoding="utf-8") as f:
                     content = f.read()
                     if content:
                         current_field = json.loads(content)
 
             current_field.update(self.shared_state)
 
-            with open(self.state_file, 'w', encoding='utf-8') as f:
+            with open(self.state_file, "w", encoding="utf-8") as f:
                 json.dump(current_field, f, indent=4)
         except (IOError, json.JSONDecodeError) as e:
             logging.error(f"QuantumShard: Sync failed: {e}")
@@ -84,7 +85,7 @@ class QuantumShardOrchestrator(BaseAgent):
         """Collapses the quantum state to measure the current value of a key."""
         if self.state_file.exists():
             try:
-                with open(self.state_file, encoding='utf-8') as f:
+                with open(self.state_file, encoding="utf-8") as f:
                     data = json.load(f)
                     return data.get(key)
             except (IOError, json.JSONDecodeError):

@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_voyagerpeerlistener_exists():
     """Test that VoyagerPeerListener class exists and is importable."""
-    assert 'VoyagerPeerListener' in dir()
+    assert "VoyagerPeerListener" in dir()
 
 
 def test_discoverynode_exists():
     """Test that DiscoveryNode class exists and is importable."""
-    assert 'DiscoveryNode' in dir()
+    assert "DiscoveryNode" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

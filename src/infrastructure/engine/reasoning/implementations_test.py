@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "GenericReasoningParser"), "GenericReasoningParser missing"
     assert hasattr(mod, "OpenAIToolParser"), "OpenAIToolParser missing"
     assert hasattr(mod, "HermesToolParser"), "HermesToolParser missing"
-

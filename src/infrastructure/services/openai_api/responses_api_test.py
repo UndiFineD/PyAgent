@@ -38,4 +38,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ToolDefinition"), "ToolDefinition missing"
     assert hasattr(mod, "ToolType"), "ToolType missing"
     assert hasattr(mod, "parse_response_request"), "parse_response_request missing"
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,7 +32,6 @@ Builds and scores dependency graphs to identify impact scope and refactoring opp
 """
 Dependency graph agent.py module.
 """
-
 
 
 import ast
@@ -78,7 +78,9 @@ class DependencyGraphAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                     full_path = Path(root) / file
                     try:
                         rel_path = full_path.relative_to(self.workspace_path)
-                        self.dependency_map[str(rel_path)] = self._extract_imports(full_path)
+                        self.dependency_map[str(rel_path)] = self._extract_imports(
+                            full_path
+                        )
                     except ValueError:
                         continue
 
@@ -125,7 +127,11 @@ class DependencyGraphAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return {
             "node_count": len(self.dependency_map),
             "edge_count": total_links,
-            "density": total_links / (len(self.dependency_map) ** 2) if self.dependency_map else 0,
+            "density": (
+                total_links / (len(self.dependency_map) ** 2)
+                if self.dependency_map
+                else 0
+            ),
         }
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
@@ -135,11 +141,17 @@ class DependencyGraphAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         impact = self.get_impact_scope(module)
 
         if not impact:
-            return f"✅ No modules directly depend on {module} according to current scan."
+            return (
+                f"✅ No modules directly depend on {module} according to current scan."
+            )
 
-        return f"## Dependency Impact for: {module}\n" + "\n".join([f"- {m}" for m in impact])
+        return f"## Dependency Impact for: {module}\n" + "\n".join(
+            [f"- {m}" for m in impact]
+        )
 
 
 if __name__ == "__main__":
-    main = create_main_function(DependencyGraphAgent, "Dependency Agent", "Module to analyze")
+    main = create_main_function(
+        DependencyGraphAgent, "Dependency Agent", "Module to analyze"
+    )
     main()

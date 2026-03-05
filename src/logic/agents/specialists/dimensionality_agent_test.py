@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ReductionMethod"), "ReductionMethod missing"
     assert hasattr(mod, "EmbeddingStats"), "EmbeddingStats missing"
     assert hasattr(mod, "DimensionalityAgent"), "DimensionalityAgent missing"
-

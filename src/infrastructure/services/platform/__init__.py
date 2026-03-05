@@ -22,25 +22,25 @@ from .base import Platform  # noqa: F401
 from .cpu import CpuPlatform  # noqa: F401
 from .cuda import CudaPlatform  # noqa: F401
 from .models import (
-  AttentionBackend,
-  CpuArchitecture,
-  DeviceCapability,  # noqa: F401
-  DeviceFeature,
-  DeviceInfo,
-  MemoryInfo,
-  PlatformConfig,
-  PlatformType,
-  QuantizationType,
+    AttentionBackend,
+    CpuArchitecture,
+    DeviceCapability,  # noqa: F401
+    DeviceFeature,
+    DeviceInfo,
+    MemoryInfo,
+    PlatformConfig,
+    PlatformType,
+    QuantizationType,
 )
 from .registry import (
-  PlatformRegistry,
-  detect_platform,
-  get_current_platform,  # noqa: F401
-  get_device_capability,
-  get_device_count,
-  get_memory_info,
-  is_quantization_supported,
-  select_attention_backend,
+    PlatformRegistry,
+    detect_platform,
+    get_current_platform,  # noqa: F401
+    get_device_capability,
+    get_device_count,
+    get_memory_info,
+    is_quantization_supported,
+    select_attention_backend,
 )
 from .rocm import RocmPlatform  # noqa: F401
 from .tpu import TpuPlatform  # noqa: F401

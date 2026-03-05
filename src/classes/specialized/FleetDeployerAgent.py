@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,6 +33,7 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
 class FleetDeployerAgent(BaseAgent):
     """Manages the lifecycle of fleet nodes, including containerization and deployment."""
 
@@ -46,9 +48,11 @@ class FleetDeployerAgent(BaseAgent):
         )
 
     @as_tool
-    async def generate_dockerfile(self, agent_type: str, python_version: str = "3.10-slim") -> str:
+    async def generate_dockerfile(
+        self, agent_type: str, python_version: str = "3.10-slim"
+    ) -> str:
         """Generates a specialized Dockerfile for an agent type.
-        
+
         Args:
             agent_type: The type of agent (e.g., 'LinguisticAgent').
             python_version: Base image Python version.
@@ -65,42 +69,45 @@ ENV AGENT_TYPE={agent_type}
 CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
 """
         path = self.deploy_dir / f"Dockerfile.{agent_type}"
-        # Phase 287: Use asyncio.to_thread for blocking I/O if needed, 
+
+        # Phase 287: Use asyncio.to_thread for blocking I/O if needed,
         # but small writes are usually fine. However, we'll be consistent.
         def write_file() -> str:
             with open(path, "w", encoding="utf-8") as f:
                 f.write(dockerfile_content)
-        
+
         await asyncio.to_thread(write_file)
-            
+
         logging.info(f"FleetDeployer: Generated Dockerfile for {agent_type}")
         return str(path)
 
     @as_tool
     async def spawn_node(self, agent_name: str, agent_type: str) -> str:
         """Simulates spawning a new agent node in the infrastructure.
-        
+
         Args:
             agent_name: Unique name for the new node.
             agent_type: The agent class to instantiate.
         """
-        logging.info(f"FleetDeployer: Spawning new node '{agent_name}' of type '{agent_type}'")
-        
+        logging.info(
+            f"FleetDeployer: Spawning new node '{agent_name}' of type '{agent_type}'"
+        )
+
         spawn_log = {
             "node_id": agent_name,
             "type": agent_type,
             "status": "provisioning",
-            "timestamp": time.time() if 'time' in globals() else 0
+            "timestamp": time.time() if "time" in globals() else 0,
         }
-        
+
         log_path = self.deploy_dir / "provisioning_logs.jsonl"
-        
+
         def append_log() -> str:
             with open(log_path, "a", encoding="utf-8") as f:
                 f.write(json.dumps(spawn_log) + "\n")
-        
+
         await asyncio.to_thread(append_log)
-            
+
         return f"Node '{agent_name}' ({agent_type}) provisioning initialized."
 
     @as_tool
@@ -109,7 +116,7 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
         log_path = self.deploy_dir / "provisioning_logs.jsonl"
         if not log_path.exists():
             return []
-            
+
         def read_logs() -> str:
             nodes = []
             with open(log_path, encoding="utf-8") as f:
@@ -117,9 +124,10 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
                     try:
                         data = json.loads(line)
                         nodes.append(data.get("node_id", "unknown"))
-                    except: continue
+                    except:
+                        continue
             return nodes
-            
+
         return await asyncio.to_thread(read_logs)
 
     @as_tool

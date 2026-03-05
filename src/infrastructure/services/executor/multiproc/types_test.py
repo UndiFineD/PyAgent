@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "WorkerInfo"), "WorkerInfo missing"
     assert hasattr(mod, "TaskMessage"), "TaskMessage missing"
     assert hasattr(mod, "ResultMessage"), "ResultMessage missing"
-

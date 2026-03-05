@@ -5,6 +5,7 @@ import json
 import logging
 from pathlib import Path
 
+
 class ConfigValidator:
     """Phase 278: Validates configuration files and detects orphaned references."""
 

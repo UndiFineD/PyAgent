@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_loralayerweights_exists():
     """Test that LoRALayerWeights class exists and is importable."""
-    assert 'LoRALayerWeights' in dir()
+    assert "LoRALayerWeights" in dir()
 
 
 def test_packedloraweights_exists():
     """Test that PackedLoRAWeights class exists and is importable."""
-    assert 'PackedLoRAWeights' in dir()
+    assert "PackedLoRAWeights" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

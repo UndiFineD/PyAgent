@@ -19,4 +19,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "LoadStoreSpec"), "LoadStoreSpec missing"
     assert hasattr(mod, "OffloadingEvent"), "OffloadingEvent missing"
     assert hasattr(mod, "PrepareStoreOutput"), "PrepareStoreOutput missing"
-

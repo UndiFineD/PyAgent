@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_responsesapiserver_exists():
     """Test that ResponsesAPIServer class exists and is importable."""
-    assert 'ResponsesAPIServer' in dir()
+    assert "ResponsesAPIServer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

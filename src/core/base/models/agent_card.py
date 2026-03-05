@@ -16,12 +16,14 @@ from typing import List, Optional, Dict, Any
 from dataclasses import dataclass, field
 from pydantic import BaseModel
 
+
 class AgentCard(BaseModel):
     """
     Standardized metadata for an agent in the fleet.
     Enables cross-agent discovery and orchestration.
     Harvested from .external/agentic_design_patterns pattern.
     """
+
     id: str
     name: str
     version: str = "1.0.0"

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_agentgithandler_exists():
     """Test that AgentGitHandler class exists and is importable."""
-    assert 'AgentGitHandler' in dir()
+    assert "AgentGitHandler" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

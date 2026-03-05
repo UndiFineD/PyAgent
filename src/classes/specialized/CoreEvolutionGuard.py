@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,21 +22,23 @@ from typing import Dict, List, Any, Optional
 
 __version__ = VERSION
 
+
 class CoreEvolutionGuard:
     """
     Monitors and validates changes to the agent's core source code.
     Prevents unintended mutations or malicious injections into the agent logic.
     """
+
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
-        self.code_fingerprints: dict[str, str] = {} # path -> hash
+        self.code_fingerprints: dict[str, str] = {}  # path -> hash
         self.security_threshold = 0.8
-        
+
     def hash_file(self, file_path: str) -> str | None:
         """Calculates SHA256 hash of a file."""
         hasher = hashlib.sha256()
         try:
-            with open(file_path, 'rb') as f:
+            with open(file_path, "rb") as f:
                 buf = f.read()
                 hasher.update(buf)
             return hasher.hexdigest()
@@ -71,23 +74,31 @@ class CoreEvolutionGuard:
 
         if rel_path not in self.code_fingerprints:
             return {"status": "untracked", "risk": "medium", "file": rel_path}
-            
-        full_path = os.path.join(self.workspace_path, rel_path) if not os.path.isabs(rel_path) else rel_path
+
+        full_path = (
+            os.path.join(self.workspace_path, rel_path)
+            if not os.path.isabs(rel_path)
+            else rel_path
+        )
         new_hash = self.hash_file(full_path)
         old_hash = self.code_fingerprints[rel_path]
-        
+
         if new_hash == old_hash:
             return {"status": "unchanged", "risk": "none", "file": rel_path}
-            
+
         # Simulated heuristic check
         # In a real scenario, this would analyze AST changes or use LLM classification
-        risk = "high" if "src/classes" in rel_path or "agent" in rel_path.lower() else "low"
-        
+        risk = (
+            "high"
+            if "src/classes" in rel_path or "agent" in rel_path.lower()
+            else "low"
+        )
+
         return {
             "status": "modified",
             "risk": risk,
             "requires_review": True,
-            "file": rel_path
+            "file": rel_path,
         }
 
     def generate_hardening_report(self) -> dict[str, Any]:
@@ -96,5 +107,5 @@ class CoreEvolutionGuard:
             "uptime_integrity": 1.0,
             "failed_validations": 0,
             "last_scan": time.time(),
-            "monitored_files_count": len(self.code_fingerprints)
+            "monitored_files_count": len(self.code_fingerprints),
         }

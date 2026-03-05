@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "TreeNode"), "TreeNode missing"
     assert hasattr(mod, "SpeculativeTree"), "SpeculativeTree missing"
     assert hasattr(mod, "TalonTreeBuilder"), "TalonTreeBuilder missing"
-

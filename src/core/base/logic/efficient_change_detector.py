@@ -32,6 +32,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ChangeRecord:
     """Record of a file system change"""
+
     path: str
     change_type: str  # 'created', 'modified', 'deleted'
     timestamp: float
@@ -42,6 +43,7 @@ class ChangeRecord:
 @dataclass
 class FileMetadata:
     """Metadata for efficient change detection"""
+
     path: str
     size: int
     mtime: float
@@ -62,7 +64,12 @@ class EfficientChangeDetector:
         self.current_usn = 0
         self.metadata_cache: Dict[str, FileMetadata] = {}
         self.change_history: List[ChangeRecord] = []
-        self.excluded_patterns: Set[str] = {'.git', '__pycache__', '.pytest_cache', 'node_modules'}
+        self.excluded_patterns: Set[str] = {
+            ".git",
+            "__pycache__",
+            ".pytest_cache",
+            "node_modules",
+        }
 
     def _should_exclude(self, path: Path) -> bool:
         """Check if path should be excluded from monitoring"""
@@ -78,7 +85,7 @@ class EfficientChangeDetector:
             return None
 
         try:
-            with open(path, 'rb') as f:
+            with open(path, "rb") as f:
                 return hashlib.sha256(f.read()).hexdigest()
         except (OSError, IOError):
             return None
@@ -93,7 +100,7 @@ class EfficientChangeDetector:
                 mtime=stat.st_mtime,
                 usn=self.current_usn,
                 hash=self._calculate_file_hash(path),
-                last_checked=time.time()
+                last_checked=time.time(),
             )
         except (OSError, FileNotFoundError):
             return None
@@ -144,42 +151,53 @@ class EfficientChangeDetector:
         for path_str, current_meta in current_metadata.items():
             if path_str not in self.metadata_cache:
                 # New file
-                changes.append(ChangeRecord(
-                    path=path_str,
-                    change_type='created',
-                    timestamp=time.time(),
-                    usn=self.current_usn,
-                    metadata={'size': current_meta.size, 'mtime': current_meta.mtime}
-                ))
-            else:
-                # Check for modifications
-                cached_meta = self.metadata_cache[path_str]
-                if (current_meta.mtime > cached_meta.mtime or
-                    current_meta.size != cached_meta.size or
-                    (self.enable_hashing and current_meta.hash != cached_meta.hash)):
-                    changes.append(ChangeRecord(
+                changes.append(
+                    ChangeRecord(
                         path=path_str,
-                        change_type='modified',
+                        change_type="created",
                         timestamp=time.time(),
                         usn=self.current_usn,
                         metadata={
-                            'old_size': cached_meta.size,
-                            'new_size': current_meta.size,
-                            'old_mtime': cached_meta.mtime,
-                            'new_mtime': current_meta.mtime
-                        }
-                    ))
+                            "size": current_meta.size,
+                            "mtime": current_meta.mtime,
+                        },
+                    )
+                )
+            else:
+                # Check for modifications
+                cached_meta = self.metadata_cache[path_str]
+                if (
+                    current_meta.mtime > cached_meta.mtime
+                    or current_meta.size != cached_meta.size
+                    or (self.enable_hashing and current_meta.hash != cached_meta.hash)
+                ):
+                    changes.append(
+                        ChangeRecord(
+                            path=path_str,
+                            change_type="modified",
+                            timestamp=time.time(),
+                            usn=self.current_usn,
+                            metadata={
+                                "old_size": cached_meta.size,
+                                "new_size": current_meta.size,
+                                "old_mtime": cached_meta.mtime,
+                                "new_mtime": current_meta.mtime,
+                            },
+                        )
+                    )
 
         # Find deleted files
         for path_str, cached_meta in self.metadata_cache.items():
             if path_str not in current_metadata:
-                changes.append(ChangeRecord(
-                    path=path_str,
-                    change_type='deleted',
-                    timestamp=time.time(),
-                    usn=self.current_usn,
-                    metadata={'size': cached_meta.size, 'mtime': cached_meta.mtime}
-                ))
+                changes.append(
+                    ChangeRecord(
+                        path=path_str,
+                        change_type="deleted",
+                        timestamp=time.time(),
+                        usn=self.current_usn,
+                        metadata={"size": cached_meta.size, "mtime": cached_meta.mtime},
+                    )
+                )
 
         # Update cache
         self.metadata_cache = current_metadata
@@ -193,8 +211,12 @@ class EfficientChangeDetector:
 
         return changes
 
-    async def monitor_changes(self, callback: Callable[[List[ChangeRecord]], None],
-                            interval: float = 30.0, max_iterations: Optional[int] = None):
+    async def monitor_changes(
+        self,
+        callback: Callable[[List[ChangeRecord]], None],
+        interval: float = 30.0,
+        max_iterations: Optional[int] = None,
+    ):
         """
         Monitor for changes asynchronously
         Calls callback with list of changes when detected
@@ -219,28 +241,34 @@ class EfficientChangeDetector:
     def get_change_statistics(self) -> Dict[str, Any]:
         """Get statistics about detected changes"""
         if not self.change_history:
-            return {'total_changes': 0}
+            return {"total_changes": 0}
 
         change_types = {}
         for change in self.change_history:
-            change_types[change.change_type] = change_types.get(change.change_type, 0) + 1
+            change_types[change.change_type] = (
+                change_types.get(change.change_type, 0) + 1
+            )
 
         return {
-            'total_changes': len(self.change_history),
-            'change_types': change_types,
-            'time_range': {
-                'oldest': min(c.timestamp for c in self.change_history),
-                'newest': max(c.timestamp for c in self.change_history)
+            "total_changes": len(self.change_history),
+            "change_types": change_types,
+            "time_range": {
+                "oldest": min(c.timestamp for c in self.change_history),
+                "newest": max(c.timestamp for c in self.change_history),
             },
-            'current_usn': self.current_usn,
-            'monitored_files': len(self.metadata_cache)
+            "current_usn": self.current_usn,
+            "monitored_files": len(self.metadata_cache),
         }
 
-    def filter_changes_by_type(self, changes: List[ChangeRecord], change_type: str) -> List[ChangeRecord]:
+    def filter_changes_by_type(
+        self, changes: List[ChangeRecord], change_type: str
+    ) -> List[ChangeRecord]:
         """Filter changes by type"""
         return [c for c in changes if c.change_type == change_type]
 
-    def filter_changes_by_path(self, changes: List[ChangeRecord], path_pattern: str) -> List[ChangeRecord]:
+    def filter_changes_by_path(
+        self, changes: List[ChangeRecord], path_pattern: str
+    ) -> List[ChangeRecord]:
         """Filter changes by path pattern"""
         return [c for c in changes if path_pattern in c.path]
 

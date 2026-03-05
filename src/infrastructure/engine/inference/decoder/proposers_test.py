@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "SuffixNode"), "SuffixNode missing"
     assert hasattr(mod, "SuffixProposer"), "SuffixProposer missing"
     assert hasattr(mod, "ngram_match"), "ngram_match missing"
-

@@ -1,4 +1,3 @@
-
 """
 Core logic for Resource Curation (Phase 173).
 Handles pruning of temporary directories and old files.
@@ -7,6 +6,7 @@ Handles pruning of temporary directories and old files.
 import os
 import shutil
 import time
+
 
 class CurationCore:
     @staticmethod
@@ -17,11 +17,11 @@ class CurationCore:
         """
         if not os.path.exists(directory):
             return 0
-            
+
         count = 0
         now = time.time()
         max_age_seconds = max_age_days * 86400
-        
+
         for root, dirs, files in os.walk(directory):
             for file in files:
                 file_path = os.path.join(root, file)
@@ -31,7 +31,7 @@ class CurationCore:
                         count += 1
                 except OSError:
                     continue
-                    
+
         return count
 
     @staticmethod

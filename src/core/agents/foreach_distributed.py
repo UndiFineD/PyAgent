@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0
 
@@ -91,7 +92,9 @@ class Worker:
         shards = manifest.get("shards", [])
         shard = None
         for s in shards:
-            if s.get("worker") == self.worker_id or s.get("id") == int(self.worker_id.replace("worker-", "")):
+            if s.get("worker") == self.worker_id or s.get("id") == int(
+                self.worker_id.replace("worker-", "")
+            ):
                 shard = s
                 break
         if not shard:
@@ -99,7 +102,9 @@ class Worker:
             return False
 
         files = shard.get("files", [])
-        self._write_status("claiming", {"shard_id": shard.get("id"), "num_files": len(files)})
+        self._write_status(
+            "claiming", {"shard_id": shard.get("id"), "num_files": len(files)}
+        )
 
         start = time.time()
         per_file_timeout = max(1.0, float(self.worker_timeout) / max(1, len(files)))
@@ -122,7 +127,10 @@ class Worker:
                 return False
 
         # All locks acquired
-        self._write_status("locked", {"acquired": len(self.acquired_locks), "shard_id": shard.get("id")})
+        self._write_status(
+            "locked",
+            {"acquired": len(self.acquired_locks), "shard_id": shard.get("id")},
+        )
         return True
 
     def claim_shard_with_retries(
@@ -151,10 +159,14 @@ class Worker:
                 cur_delay *= float(backoff)
         return False
 
-    async def claim_shard_async(self, manifest_path: str | Path, retries: int = 3, delay: float = 0.1) -> bool:
+    async def claim_shard_async(
+        self, manifest_path: str | Path, retries: int = 3, delay: float = 0.1
+    ) -> bool:
         """Async wrapper that runs claim_shard_with_retries in a thread pool."""
         loop = asyncio.get_running_loop()
-        return await loop.run_in_executor(None, self.claim_shard_with_retries, manifest_path, retries, delay)
+        return await loop.run_in_executor(
+            None, self.claim_shard_with_retries, manifest_path, retries, delay
+        )
 
     def release_locks(self) -> None:
         """Release any locks this worker holds."""
@@ -169,7 +181,9 @@ class Worker:
                 pass
         self._write_status("released", {"remaining": len(self.acquired_locks)})
 
-    def report_progress(self, message: str, meta: Optional[Dict[str, Any]] = None) -> None:
+    def report_progress(
+        self, message: str, meta: Optional[Dict[str, Any]] = None
+    ) -> None:
         """Append a short progress update to the worker status."""
         self._write_status("progress", {"msg": message, "meta": meta or {}})
 
@@ -202,7 +216,9 @@ class Coordinator:
         self.worker_timeout = float(worker_timeout)
         # leader_ttl defaults to worker_timeout when not supplied so tests may
         # set worker_timeout to control leader leasing.
-        self.leader_ttl = float(leader_ttl) if leader_ttl is not None else float(self.worker_timeout)
+        self.leader_ttl = (
+            float(leader_ttl) if leader_ttl is not None else float(self.worker_timeout)
+        )
         self._fs = FileSystemCore()
         self._fs.ensure_directory(self.scratch_dir)
         self._leader_file = self.scratch_dir / "leader.json"
@@ -220,7 +236,9 @@ class Coordinator:
             manifest["enforce_tests"] = True
         return manifest
 
-    def monitor_workers_and_merge(self, wait_for_completion: float = 30.0) -> Dict[str, Any]:
+    def monitor_workers_and_merge(
+        self, wait_for_completion: float = 30.0
+    ) -> Dict[str, Any]:
         """Poll worker status files and return an aggregated report.
 
         wait_for_completion sets the maximum wall-clock time to wait for all
@@ -244,11 +262,16 @@ class Coordinator:
                         data = json.loads(status_path.read_text(encoding="utf-8"))
                         st = data.get("status")
                         if st == "done":
-                            shard_status[sid] = {"status": "done", "merge": {"shard_id": sid}}
+                            shard_status[sid] = {
+                                "status": "done",
+                                "merge": {"shard_id": sid},
+                            }
                             pending.remove(sid)
                         elif st == "locked":
                             # still working; leave for next poll
-                            shard_status.setdefault(sid, {}).update({"status": "locked"})
+                            shard_status.setdefault(sid, {}).update(
+                                {"status": "locked"}
+                            )
                         elif st == "lock_failed":
                             shard_status[sid] = {"status": "lock_failed"}
                             pending.remove(sid)
@@ -271,7 +294,10 @@ class Coordinator:
                 )
             except (OSError, RuntimeError):
                 logger.debug("Failed to write reassign marker for shard %s", sid)
-        return {"manifest_id": manifest.get("manifest_id"), "shard_status": shard_status}
+        return {
+            "manifest_id": manifest.get("manifest_id"),
+            "shard_status": shard_status,
+        }
 
     def elect_leader(self, leader_name: str) -> bool:
         """Attempt to acquire leadership for the given `leader_name`.

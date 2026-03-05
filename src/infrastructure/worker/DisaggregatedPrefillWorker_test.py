@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_disaggregatedprefillworker_exists():
     """Test that DisaggregatedPrefillWorker class exists and is importable."""
-    assert 'DisaggregatedPrefillWorker' in dir()
+    assert "DisaggregatedPrefillWorker" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

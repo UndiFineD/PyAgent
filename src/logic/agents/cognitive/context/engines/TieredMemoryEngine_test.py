@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_tieredmemoryengine_exists():
     """Test that TieredMemoryEngine class exists and is importable."""
-    assert 'TieredMemoryEngine' in dir()
+    assert "TieredMemoryEngine" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

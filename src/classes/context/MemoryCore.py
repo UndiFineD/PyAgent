@@ -8,20 +8,28 @@ Handles episode structuring, utility scoring, and rank-based filtering.
 from typing import Dict, List, Any, Optional
 from datetime import datetime
 
+
 class MemoryCore:
     def __init__(self, baseline_utility: float = 0.5) -> None:
         self.baseline_utility = baseline_utility
 
-    def create_episode(self, agent_name: str, task: str, outcome: str, success: bool, metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def create_episode(
+        self,
+        agent_name: str,
+        task: str,
+        outcome: str,
+        success: bool,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
         """Pure logic to construct an episode and calculate utility."""
         timestamp = datetime.now().isoformat()
         utility_score = self.baseline_utility
-        
+
         if success:
             utility_score += 0.2
         else:
             utility_score -= 0.3
-            
+
         return {
             "timestamp": timestamp,
             "agent": agent_name,
@@ -29,7 +37,7 @@ class MemoryCore:
             "outcome": outcome,
             "success": success,
             "utility_score": max(0.0, min(1.0, utility_score)),
-            "metadata": metadata or {}
+            "metadata": metadata or {},
         }
 
     def format_for_indexing(self, episode: Dict[str, Any]) -> str:
@@ -45,6 +53,8 @@ class MemoryCore:
         """Logic for utility score decay/boost."""
         return max(0.0, min(1.0, old_score + increment))
 
-    def filter_relevant_memories(self, memories: List[Dict[str, Any]], min_utility: float = 0.3) -> List[Dict[str, Any]]:
+    def filter_relevant_memories(
+        self, memories: List[Dict[str, Any]], min_utility: float = 0.3
+    ) -> List[Dict[str, Any]]:
         """Filters memories by utility threshold."""
-        return [m for m in memories if m.get('utility_score', 0.0) >= min_utility]
+        return [m for m in memories if m.get("utility_score", 0.0) >= min_utility]

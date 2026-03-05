@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 """
 Phase 45: ARC Offload Backends
 Backends for block storage in the ARC offloading system.
@@ -6,42 +7,46 @@ Backends for block storage in the ARC offloading system.
 
 import threading
 from abc import ABC, abstractmethod
-from src.infrastructure.kv_transfer.arc.types import BlockStatus, BlockState, OffloadMedium, LoadStoreSpec, BlockHash
+from src.infrastructure.kv_transfer.arc.types import (
+    BlockStatus,
+    BlockState,
+    OffloadMedium,
+    LoadStoreSpec,
+    BlockHash,
+)
 
 
 class Backend(ABC):
     """Abstract backend for block storage."""
-    
+
     @abstractmethod
     def get_num_free_blocks(self) -> int:
         """Get number of free blocks."""
         pass
-    
+
     @abstractmethod
     def allocate_blocks(self, block_hashes: list[BlockHash]) -> list[BlockStatus]:
         """Allocate blocks for given hashes."""
         pass
-    
+
     @abstractmethod
     def free(self, block: BlockStatus) -> None:
         """Free a block."""
         pass
-    
+
     @abstractmethod
     def get_load_store_spec(
-        self,
-        block_hashes: list[BlockHash],
-        blocks: list[BlockStatus]
+        self, block_hashes: list[BlockHash], blocks: list[BlockStatus]
     ) -> LoadStoreSpec:
         """Get load/store specification."""
         pass
-    
+
     @property
     @abstractmethod
     def block_size(self) -> int:
         """Get block size in tokens."""
         pass
-    
+
     @property
     @abstractmethod
     def medium(self) -> OffloadMedium:
@@ -51,12 +56,12 @@ class Backend(ABC):
 
 class SimpleBackend(Backend):
     """Simple in-memory backend for testing."""
-    
+
     def __init__(
         self,
         num_blocks: int = 1000,
         block_size: int = 16,
-        medium: OffloadMedium = OffloadMedium.CPU
+        medium: OffloadMedium = OffloadMedium.CPU,
     ):
         self._num_blocks = num_blocks
         self._block_size = block_size
@@ -64,11 +69,11 @@ class SimpleBackend(Backend):
         self._allocated: dict[BlockHash, BlockStatus] = {}
         self._next_id = 0
         self._lock = threading.Lock()
-    
+
     def get_num_free_blocks(self) -> int:
         with self._lock:
             return self._num_blocks - len(self._allocated)
-    
+
     def allocate_blocks(self, block_hashes: list[BlockHash]) -> list[BlockStatus]:
         blocks = []
         with self._lock:
@@ -77,13 +82,13 @@ class SimpleBackend(Backend):
                     block = BlockStatus(
                         block_id=self._next_id,
                         medium=self._medium,
-                        state=BlockState.PENDING
+                        state=BlockState.PENDING,
                     )
                     self._allocated[h] = block
                     self._next_id += 1
                 blocks.append(self._allocated[h])
         return blocks
-    
+
     def free(self, block: BlockStatus) -> None:
         with self._lock:
             # Find and remove block
@@ -94,23 +99,21 @@ class SimpleBackend(Backend):
                     break
             if to_remove:
                 del self._allocated[to_remove]
-    
+
     def get_load_store_spec(
-        self,
-        block_hashes: list[BlockHash],
-        blocks: list[BlockStatus]
+        self, block_hashes: list[BlockHash], blocks: list[BlockStatus]
     ) -> LoadStoreSpec:
         return LoadStoreSpec(
             block_hashes=list(block_hashes),
             blocks=list(blocks),
             source_medium=self._medium,
-            target_medium=OffloadMedium.GPU
+            target_medium=OffloadMedium.GPU,
         )
-    
+
     @property
     def block_size(self) -> int:
         return self._block_size
-    
+
     @property
     def medium(self) -> OffloadMedium:
         return self._medium

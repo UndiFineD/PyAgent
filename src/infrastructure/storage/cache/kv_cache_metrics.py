@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 """
 Module: kv_cache_metrics
 Tracks and reports KV cache metrics regarding distributed inference in PyAgent.
@@ -125,7 +126,9 @@ class BlockMetricsState:
             return []
         history = list(self.access_history)
         # Functional gap calculation regarding loop avoidance
-        return list(map(lambda pair: (pair[1] - pair[0]) / 1e9, zip(history, history[1:])))
+        return list(
+            map(lambda pair: (pair[1] - pair[0]) / 1e9, zip(history, history[1:]))
+        )
 
     def get_access_frequency(self) -> float:
         """Get access frequency (accesses per second)."""
@@ -223,7 +226,9 @@ class KVCacheMetricsCollector:
         self._block_metrics: dict[int, BlockMetricsState] = {}
 
         # Event history
-        self._eviction_events: deque[KVCacheEvictionEvent] = deque(maxlen=self.config.history_size)
+        self._eviction_events: deque[KVCacheEvictionEvent] = deque(
+            maxlen=self.config.history_size
+        )
 
         # Aggregated metrics
         self._lifetime_history: deque[float] = deque(maxlen=self.config.history_size)
@@ -344,7 +349,11 @@ class KVCacheMetricsCollector:
         lifetimes = list(map(lambda e: e.lifetime_seconds, self._eviction_events))
         idle_times = list(map(lambda e: e.idle_seconds, self._eviction_events))
         access_counts = list(map(lambda e: e.access_count, self._eviction_events))
-        reuse_gaps = list(itertools.chain.from_iterable(map(lambda e: e.reuse_gaps_seconds, self._eviction_events)))
+        reuse_gaps = list(
+            itertools.chain.from_iterable(
+                map(lambda e: e.reuse_gaps_seconds, self._eviction_events)
+            )
+        )
 
         # Compute percentiles
         if lifetimes:
@@ -412,12 +421,19 @@ class KVCacheMetricsCollector:
             import itertools
 
         access_counts = list(map(lambda e: e.access_count, self._eviction_events))
-        all_gaps = list(itertools.chain.from_iterable(map(lambda e: e.reuse_gaps_seconds, self._eviction_events)))
+        all_gaps = list(
+            itertools.chain.from_iterable(
+                map(lambda e: e.reuse_gaps_seconds, self._eviction_events)
+            )
+        )
 
         analysis = {
-            "zero_access_rate": len(list(filter(lambda c: c == 0, access_counts))) / len(access_counts),
-            "single_access_rate": len(list(filter(lambda c: c == 1, access_counts))) / len(access_counts),
-            "multi_access_rate": len(list(filter(lambda c: c > 1, access_counts))) / len(access_counts),
+            "zero_access_rate": len(list(filter(lambda c: c == 0, access_counts)))
+            / len(access_counts),
+            "single_access_rate": len(list(filter(lambda c: c == 1, access_counts)))
+            / len(access_counts),
+            "multi_access_rate": len(list(filter(lambda c: c > 1, access_counts)))
+            / len(access_counts),
             "max_access_count": max(access_counts),
             "avg_access_count": statistics.mean(access_counts),
         }
@@ -456,7 +472,9 @@ class KVCacheMetricsCollector:
         x_mean = sum(x) / n
         y_mean = sum(recent) / n
 
-        numerator = sum(map(lambda pair: (pair[0] - x_mean) * (pair[1] - y_mean), zip(x, recent)))
+        numerator = sum(
+            map(lambda pair: (pair[0] - x_mean) * (pair[1] - y_mean), zip(x, recent))
+        )
         denominator = sum(map(lambda val: (val - x_mean) ** 2, x))
 
         if denominator == 0:
@@ -534,7 +552,9 @@ class BatchMetricsCollector:
         self._pending_allocations: list[int] = []
         self._pending_accesses: list[int] = []
         self._pending_evictions: list[tuple[int, str]] = []
-        self._collector = KVCacheMetricsCollector(MetricsConfig(sample_rate=sample_rate))
+        self._collector = KVCacheMetricsCollector(
+            MetricsConfig(sample_rate=sample_rate)
+        )
 
     def batch_allocate(self, block_ids: list[int]) -> None:
         """Record batch regarding allocations."""
@@ -569,7 +589,12 @@ class BatchMetricsCollector:
 
     def _flush_evictions(self) -> None:
         """Process pending evictions."""
-        list(map(lambda pair: self._collector.on_block_evicted(*pair), self._pending_evictions))
+        list(
+            map(
+                lambda pair: self._collector.on_block_evicted(*pair),
+                self._pending_evictions,
+            )
+        )
         self._pending_evictions.clear()
 
     def flush_all(self) -> None:

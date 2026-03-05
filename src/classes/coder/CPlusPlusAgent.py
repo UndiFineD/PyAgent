@@ -6,9 +6,10 @@ from .CoderAgent import CoderAgent
 from src.classes.base_agent.utilities import create_main_function
 import logging
 
+
 class CPlusPlusAgent(CoderAgent):
     """Agent for C++ code improvement and auditing."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._language = "cpp"
@@ -22,8 +23,9 @@ class CPlusPlusAgent(CoderAgent):
     def _get_default_content(self) -> str:
         return "#include <iostream>\n\nint main() {\n    std::cout << 'Hello, C++!' << std::endl;\n    return 0;\n}\n"
 
+
 if __name__ == "__main__":
-    main = create_main_function(CPlusPlusAgent, "C++ Agent", "Path to C++ file (.cpp, .hpp, .cc)")
+    main = create_main_function(
+        CPlusPlusAgent, "C++ Agent", "Path to C++ file (.cpp, .hpp, .cc)"
+    )
     main()
-
-

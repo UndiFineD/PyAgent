@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -86,7 +87,9 @@ class AgentCommunicationBus:
                 except (zmq.ContextTerminated, zmq.ZMQError, asyncio.CancelledError):
                     self._running = False
                     break
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                     if self._running:
                         logging.error(f"AgentBus Error: {e}")
                         await asyncio.sleep(0.1)
@@ -141,7 +144,9 @@ if __name__ == "__main__":
         try:
             listener = asyncio.create_task(bus.start())
             await bus.broadcast("telemetry", {"status": "online"})
-            await asyncio.wait([listener, stop_event.wait()], return_when=asyncio.FIRST_COMPLETED)
+            await asyncio.wait(
+                [listener, stop_event.wait()], return_when=asyncio.FIRST_COMPLETED
+            )
         except (KeyboardInterrupt, asyncio.CancelledError):
             handle_stop()
         finally:

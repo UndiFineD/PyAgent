@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -66,7 +67,7 @@ try:
     BRIDGE = get_bridge()
     HAS_RUST = hasattr(BRIDGE, "batch_write_indices_rust")
 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+    # pylint: disable=broad-exception-caught
     HAS_RUST = False
     BRIDGE = None
 
@@ -199,14 +200,20 @@ class StagedBatchWriter:
         # Allocate index buffer
         if self._index_buffer is None or self._index_buffer.numel() < self.capacity:
             self._index_buffer = torch.empty(
-                self.capacity, dtype=torch.long, device="cpu", pin_memory=HAS_TORCH and torch.cuda.is_available()
+                self.capacity,
+                dtype=torch.long,
+                device="cpu",
+                pin_memory=HAS_TORCH and torch.cuda.is_available(),
             )
 
         # Allocate value buffer (match target dtype)
         dtype = self.target.dtype if self.target is not None else torch.float32
         if self._value_buffer is None or self._value_buffer.numel() < self.capacity:
             self._value_buffer = torch.empty(
-                self.capacity, dtype=dtype, device="cpu", pin_memory=HAS_TORCH and torch.cuda.is_available()
+                self.capacity,
+                dtype=dtype,
+                device="cpu",
+                pin_memory=HAS_TORCH and torch.cuda.is_available(),
             )
 
     def stage_write(
@@ -251,6 +258,7 @@ class StagedBatchWriter:
             raise ValueError("indices and values must have same length")
 
         with self._lock:
+
             def _stage(v):
                 idx, val = v
                 self._staged.append(
@@ -260,7 +268,7 @@ class StagedBatchWriter:
                         priority=priority,
                     )
                 )
-            
+
             list(map(_stage, zip(indices, values)))
             self.stats.total_writes += len(indices)
 
@@ -285,11 +293,12 @@ class StagedBatchWriter:
 
         # Group by index
         index_to_writes: dict[int, list[StagedWrite]] = {}
+
         def _group(write):
             if write.index not in index_to_writes:
                 index_to_writes[write.index] = []
             index_to_writes[write.index].append(write)
-        
+
         list(map(_group, self._staged))
 
         # Resolve conflicts
@@ -389,7 +398,9 @@ class StagedBatchWriter:
 
             # Fill buffers
             self._index_buffer[:n_writes].copy_(torch.tensor(indices, dtype=torch.long))
-            self._value_buffer[:n_writes].copy_(torch.tensor(values, dtype=target.dtype))
+            self._value_buffer[:n_writes].copy_(
+                torch.tensor(values, dtype=target.dtype)
+            )
 
             # Apply writes
             if stream is not None:
@@ -595,8 +606,10 @@ def coalesce_write_indices(
     if HAS_RUST and BRIDGE is not None:
         try:
             return BRIDGE.coalesce_writes_rust(indices, block_size)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            # pylint: disable=broad-exception-caught
             pass
 
     # Python fallback

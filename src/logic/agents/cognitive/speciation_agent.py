@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,7 +42,9 @@ class SpeciationAgent(BaseAgent):
         )
 
     @as_tool
-    async def evolve_specialized_agent(self, base_agent_name: str, niche_domain: str) -> str:
+    async def evolve_specialized_agent(
+        self, base_agent_name: str, niche_domain: str
+    ) -> str:
         """
         Creates a new agent class file that specializes in a specific niche.
         e.g., 'CoderAgent' -> 'ReactSpecialistAgent'

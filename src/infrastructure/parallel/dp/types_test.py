@@ -33,40 +33,39 @@ except ImportError as e:
 
 def test_dprole_exists():
     """Test that DPRole class exists and is importable."""
-    assert 'DPRole' in dir()
+    assert "DPRole" in dir()
 
 
 def test_workerhealth_exists():
     """Test that WorkerHealth class exists and is importable."""
-    assert 'WorkerHealth' in dir()
+    assert "WorkerHealth" in dir()
 
 
 def test_loadbalancestrategy_exists():
     """Test that LoadBalanceStrategy class exists and is importable."""
-    assert 'LoadBalanceStrategy' in dir()
+    assert "LoadBalanceStrategy" in dir()
 
 
 def test_dpconfig_exists():
     """Test that DPConfig class exists and is importable."""
-    assert 'DPConfig' in dir()
+    assert "DPConfig" in dir()
 
 
 def test_workerstate_exists():
     """Test that WorkerState class exists and is importable."""
-    assert 'WorkerState' in dir()
+    assert "WorkerState" in dir()
 
 
 def test_stepstate_exists():
     """Test that StepState class exists and is importable."""
-    assert 'StepState' in dir()
+    assert "StepState" in dir()
 
 
 def test_wavestate_exists():
     """Test that WaveState class exists and is importable."""
-    assert 'WaveState' in dir()
+    assert "WaveState" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

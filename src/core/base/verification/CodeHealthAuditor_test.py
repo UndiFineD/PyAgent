@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_codehealthauditor_exists():
     """Test that CodeHealthAuditor class exists and is importable."""
-    assert 'CodeHealthAuditor' in dir()
+    assert "CodeHealthAuditor" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

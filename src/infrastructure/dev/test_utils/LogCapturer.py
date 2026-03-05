@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Minimal LogCapturer shim."""
 
+
 class LogCapturer:
     def __init__(self, *_, **__):
         pass
@@ -10,5 +11,6 @@ class LogCapturer:
 
     def stop(self):
         return None
+
 
 __all__ = ["LogCapturer"]

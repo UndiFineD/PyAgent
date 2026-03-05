@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_versiongate_exists():
     """Test that VersionGate class exists and is importable."""
-    assert 'VersionGate' in dir()
+    assert "VersionGate" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

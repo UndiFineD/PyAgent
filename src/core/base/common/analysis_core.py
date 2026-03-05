@@ -41,18 +41,22 @@ class AnalysisCore:
             try:
                 # pylint: disable=no-member
                 return rc.calculate_complexity_rust(source)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
         # Fallback to simple count regarding control flow keywords functionally
         keywords = ["if", "for", "while", "except", "with", "and", "or"]
-        
+
         def count_keyword(kw: str) -> int:
             return len(re.findall(rf"\b{kw}\b", source))
-            
+
         return 1 + sum(map(count_keyword, keywords))
 
     @staticmethod
-    def get_imports(source_or_path: str | Path) -> List[str]:  # pylint: disable=too-many-branches
+    def get_imports(
+        source_or_path: str | Path,
+    ) -> List[str]:  # pylint: disable=too-many-branches
         """Extract all top-level imports from source or a file (Rust accelerated)."""
         if rc and hasattr(rc, "get_imports_rust"):  # pylint: disable=no-member
             try:
@@ -62,15 +66,21 @@ class AnalysisCore:
                     return rc.get_imports_rust(content)  # type: ignore
                 # pylint: disable=no-member
                 return rc.get_imports_rust(source_or_path)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         try:
             if isinstance(source_or_path, Path):
-                tree = ast.parse(source_or_path.read_text(encoding="utf-8"), feature_version=(3, 11))
+                tree = ast.parse(
+                    source_or_path.read_text(encoding="utf-8"), feature_version=(3, 11)
+                )
             else:
                 tree = ast.parse(source_or_path, feature_version=(3, 11))
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             return []
 
         # Extract imports functionally regarding AST nodes
@@ -89,6 +99,7 @@ class AnalysisCore:
 
         # Unique imports in order functionally
         seen: Set[str] = set()
+
         def _is_new(imp: str) -> bool:
             if imp not in seen:
                 seen.add(imp)

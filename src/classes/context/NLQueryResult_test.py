@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_nlqueryresult_exists():
     """Test that NLQueryResult class exists and is importable."""
-    assert 'NLQueryResult' in dir()
+    assert "NLQueryResult" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

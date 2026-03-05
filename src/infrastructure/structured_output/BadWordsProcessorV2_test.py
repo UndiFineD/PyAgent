@@ -33,22 +33,22 @@ except ImportError as e:
 
 def test_badwordspenaltymode_exists():
     """Test that BadWordsPenaltyMode class exists and is importable."""
-    assert 'BadWordsPenaltyMode' in dir()
+    assert "BadWordsPenaltyMode" in dir()
 
 
 def test_trienode_exists():
     """Test that TrieNode class exists and is importable."""
-    assert 'TrieNode' in dir()
+    assert "TrieNode" in dir()
 
 
 def test_badwordsprocessorv2_exists():
     """Test that BadWordsProcessorV2 class exists and is importable."""
-    assert 'BadWordsProcessorV2' in dir()
+    assert "BadWordsProcessorV2" in dir()
 
 
 def test_badphrasesprocessor_exists():
     """Test that BadPhrasesProcessor class exists and is importable."""
-    assert 'BadPhrasesProcessor' in dir()
+    assert "BadPhrasesProcessor" in dir()
 
 
 def test_apply_bad_words_exists():
@@ -64,4 +64,3 @@ def test_apply_bad_words_with_drafts_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -54,8 +55,9 @@ class NgramConfig:
     recency_weight: float = 0.1  # Weight regarding recency (0 = no recency bias)
     min_match_frequency: int = 1  # Minimum match frequency to consider
     use_suffix_tree: bool = True  # Use suffix tree regarding fast lookup
-    parallel_threshold: int = 8192  # Token count threshold regarding parallel processing
-
+    parallel_threshold: int = (
+        8192  # Token count threshold regarding parallel processing
+    )
 
     def __post_init__(self) -> None:
         if self.min_n < 1:
@@ -85,7 +87,9 @@ class ProposalStats:
 
         # Update running average
         prev_total = self.average_proposal_length * (self.total_proposals - 1)
-        self.average_proposal_length = (prev_total + proposal_length) / self.total_proposals
+        self.average_proposal_length = (
+            prev_total + proposal_length
+        ) / self.total_proposals
 
         # Track n-gram sizes
         self.ngram_sizes_used[ngram_size] = self.ngram_sizes_used.get(ngram_size, 0) + 1

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,13 +23,16 @@ from src.core.base.models import AuthConfig, AuthMethod, _empty_dict_str_str
 
 __version__ = VERSION
 
+
 class AuthenticationManager:
     """Manager for authentication methods."""
 
     def __init__(self, config: AuthConfig | None = None) -> None:
         self.config = config or AuthConfig()
         self.token_cache: dict[str, str] = {}
-        logging.debug(f"AuthenticationManager initialized with method={self.config.method.value}")
+        logging.debug(
+            f"AuthenticationManager initialized with method={self.config.method.value}"
+        )
 
     def get_headers(self) -> dict[str, str]:
         headers: dict[str, str] = {}
@@ -38,6 +42,7 @@ class AuthenticationManager:
             headers["Authorization"] = f"Bearer {self.config.token}"
         elif self.config.method == AuthMethod.BASIC_AUTH:
             import base64
+
             credentials = f"{self.config.username}:{self.config.password}"
             encoded = base64.b64encode(credentials.encode()).decode()
             headers["Authorization"] = f"Basic {encoded}"
@@ -53,8 +58,8 @@ class AuthenticationManager:
             return self.token_cache[cache_key]
         token = self.config.token
         if not token:
-             logging.error(f"OAuth token missing for {cache_key}")
-             return ""
+            logging.error(f"OAuth token missing for {cache_key}")
+            return ""
         self.token_cache[cache_key] = token
         return token
 
@@ -77,9 +82,11 @@ class AuthenticationManager:
             return bool(self.config.oauth_client_id and self.config.oauth_client_secret)
         return True
 
+
 @dataclass
 class AuthManager:
     """Manages authentication."""
+
     method: AuthMethod | str | None = None
     credentials: dict[str, str] = field(default_factory=_empty_dict_str_str)
     custom_headers: dict[str, str] = field(default_factory=_empty_dict_str_str)

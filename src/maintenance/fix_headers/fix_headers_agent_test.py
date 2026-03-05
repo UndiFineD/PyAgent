@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_fixheadersagent_exists():
     """Test that FixHeadersAgent class exists and is importable."""
-    assert 'FixHeadersAgent' in dir()
+    assert "FixHeadersAgent" in dir()
 
 
 def test_main_exists():
@@ -44,4 +44,3 @@ def test_main_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

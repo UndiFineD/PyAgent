@@ -13,6 +13,7 @@ def _load_module():
 
 def test_imports_and_symbols():
     mod = _load_module()
-    assert hasattr(mod, "ImmuneResponseOrchestrator"), "ImmuneResponseOrchestrator missing"
+    assert hasattr(
+        mod, "ImmuneResponseOrchestrator"
+    ), "ImmuneResponseOrchestrator missing"
     assert hasattr(mod, "HoneypotAgent"), "HoneypotAgent missing"
-

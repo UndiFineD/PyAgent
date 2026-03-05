@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -77,7 +78,9 @@ class FlashAttentionBackend(AttentionBackend[None]):
             from flash_attn import flash_attn_func
         except ImportError:
             logger.warning("flash_attn not available, falling back to SDPA")
-            return TorchSDPABackend().forward(query, key, value, kv_cache, metadata, scale)
+            return TorchSDPABackend().forward(
+                query, key, value, kv_cache, metadata, scale
+            )
 
         q = query.unsqueeze(0)  # Add batch dim
         k = key.unsqueeze(0)
@@ -90,7 +93,11 @@ class FlashAttentionBackend(AttentionBackend[None]):
             v,
             softmax_scale=scale,
             causal=(metadata.attn_type != AttentionType.ENCODER),
-            window_size=(metadata.sliding_window, metadata.sliding_window) if metadata.sliding_window else (-1, -1),
+            window_size=(
+                (metadata.sliding_window, metadata.sliding_window)
+                if metadata.sliding_window
+                else (-1, -1)
+            ),
         )
 
         return output.squeeze(0)

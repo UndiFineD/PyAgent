@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_orchestratorregistrycore_exists():
     """Test that OrchestratorRegistryCore class exists and is importable."""
-    assert 'OrchestratorRegistryCore' in dir()
+    assert "OrchestratorRegistryCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

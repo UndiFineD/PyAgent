@@ -33,32 +33,32 @@ except ImportError as e:
 
 def test_cachetier_exists():
     """Test that CacheTier class exists and is importable."""
-    assert 'CacheTier' in dir()
+    assert "CacheTier" in dir()
 
 
 def test_prefixcacheconfig_exists():
     """Test that PrefixCacheConfig class exists and is importable."""
-    assert 'PrefixCacheConfig' in dir()
+    assert "PrefixCacheConfig" in dir()
 
 
 def test_prefixentry_exists():
     """Test that PrefixEntry class exists and is importable."""
-    assert 'PrefixEntry' in dir()
+    assert "PrefixEntry" in dir()
 
 
 def test_cachehitresult_exists():
     """Test that CacheHitResult class exists and is importable."""
-    assert 'CacheHitResult' in dir()
+    assert "CacheHitResult" in dir()
 
 
 def test_radixtreenode_exists():
     """Test that RadixTreeNode class exists and is importable."""
-    assert 'RadixTreeNode' in dir()
+    assert "RadixTreeNode" in dir()
 
 
 def test_prefixtree_exists():
     """Test that PrefixTree class exists and is importable."""
-    assert 'PrefixTree' in dir()
+    assert "PrefixTree" in dir()
 
 
 def test_prefixtree_instantiation():
@@ -69,10 +69,9 @@ def test_prefixtree_instantiation():
 
 def test_prefixcacheoptimizer_exists():
     """Test that PrefixCacheOptimizer class exists and is importable."""
-    assert 'PrefixCacheOptimizer' in dir()
+    assert "PrefixCacheOptimizer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

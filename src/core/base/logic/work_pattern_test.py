@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_baseworkpattern_exists():
     """Test that BaseWorkPattern class exists and is importable."""
-    assert 'BaseWorkPattern' in dir()
+    assert "BaseWorkPattern" in dir()
 
 
 def test_peerreviewpattern_exists():
     """Test that PeerReviewPattern class exists and is importable."""
-    assert 'PeerReviewPattern' in dir()
+    assert "PeerReviewPattern" in dir()
 
 
 def test_peerreviewpattern_instantiation():
@@ -50,4 +50,3 @@ def test_peerreviewpattern_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

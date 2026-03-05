@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_filecategory_exists():
     """Test that FileCategory class exists and is importable."""
-    assert 'FileCategory' in dir()
+    assert "FileCategory" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

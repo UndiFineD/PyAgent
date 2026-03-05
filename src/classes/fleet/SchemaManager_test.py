@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_schemamanager_exists():
     """Test that SchemaManager class exists and is importable."""
-    assert 'SchemaManager' in dir()
+    assert "SchemaManager" in dir()
 
 
 def test_schemamanager_instantiation():
@@ -45,4 +45,3 @@ def test_schemamanager_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

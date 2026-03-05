@@ -33,42 +33,42 @@ except ImportError as e:
 
 def test_channeltype_exists():
     """Test that ChannelType class exists and is importable."""
-    assert 'ChannelType' in dir()
+    assert "ChannelType" in dir()
 
 
 def test_messagetype_exists():
     """Test that MessageType class exists and is importable."""
-    assert 'MessageType' in dir()
+    assert "MessageType" in dir()
 
 
 def test_sessionactivationmode_exists():
     """Test that SessionActivationMode class exists and is importable."""
-    assert 'SessionActivationMode' in dir()
+    assert "SessionActivationMode" in dir()
 
 
 def test_channelmessage_exists():
     """Test that ChannelMessage class exists and is importable."""
-    assert 'ChannelMessage' in dir()
+    assert "ChannelMessage" in dir()
 
 
 def test_gatewaypresence_exists():
     """Test that GatewayPresence class exists and is importable."""
-    assert 'GatewayPresence' in dir()
+    assert "GatewayPresence" in dir()
 
 
 def test_channelprovider_exists():
     """Test that ChannelProvider class exists and is importable."""
-    assert 'ChannelProvider' in dir()
+    assert "ChannelProvider" in dir()
 
 
 def test_gatewaysession_exists():
     """Test that GatewaySession class exists and is importable."""
-    assert 'GatewaySession' in dir()
+    assert "GatewaySession" in dir()
 
 
 def test_gatewayprotocol_exists():
     """Test that GatewayProtocol class exists and is importable."""
-    assert 'GatewayProtocol' in dir()
+    assert "GatewayProtocol" in dir()
 
 
 def test_gatewayprotocol_instantiation():
@@ -79,10 +79,9 @@ def test_gatewayprotocol_instantiation():
 
 def test_multichannelgatewaycore_exists():
     """Test that MultiChannelGatewayCore class exists and is importable."""
-    assert 'MultiChannelGatewayCore' in dir()
+    assert "MultiChannelGatewayCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

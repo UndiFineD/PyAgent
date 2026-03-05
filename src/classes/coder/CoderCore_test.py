@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_codercore_exists():
     """Test that CoderCore class exists and is importable."""
-    assert 'CoderCore' in dir()
+    assert "CoderCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

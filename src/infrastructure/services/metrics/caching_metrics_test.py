@@ -24,4 +24,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "PrefixCacheStats"), "PrefixCacheStats missing"
     assert hasattr(mod, "MultiLevelCacheMetrics"), "MultiLevelCacheMetrics missing"
     assert hasattr(mod, "observe_with_rust"), "observe_with_rust missing"
-

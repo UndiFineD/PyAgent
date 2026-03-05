@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,6 +36,7 @@ import cbor2
 
 __version__ = VERSION
 
+
 class IncrementalProcessor:
     """Processes only files changed since last run.
 
@@ -69,7 +71,9 @@ class IncrementalProcessor:
                 try:
                     data = orjson.loads(json_state.read_bytes())
                     self._apply_state_data(data)
-                    logging.info(f"Migrated incremental state from {json_state} to CBOR")
+                    logging.info(
+                        f"Migrated incremental state from {json_state} to CBOR"
+                    )
                     return
                 except Exception as e:
                     logging.warning(f"Failed to migrate from JSON: {e}")
@@ -78,27 +82,29 @@ class IncrementalProcessor:
         try:
             data = cbor2.loads(self.state_file.read_bytes())
             self._apply_state_data(data)
-            logging.info(f"Loaded incremental state (CBOR/BLAKE3) from {self.state_file}")
+            logging.info(
+                f"Loaded incremental state (CBOR/BLAKE3) from {self.state_file}"
+            )
         except Exception as e:
             logging.warning(f"Failed to load state with CBOR: {e}")
 
     def _apply_state_data(self, data: dict[str, Any]) -> None:
         """Applies loaded data to the IncrementalState model."""
         self.state = IncrementalState(
-            last_run_timestamp=data.get('last_run_timestamp', 0),
-            processed_files=data.get('processed_files', {}),
-            file_hashes=data.get('file_hashes', {}),
-            pending_files=data.get('pending_files', [])
+            last_run_timestamp=data.get("last_run_timestamp", 0),
+            processed_files=data.get("processed_files", {}),
+            file_hashes=data.get("file_hashes", {}),
+            pending_files=data.get("pending_files", []),
         )
 
     def _save_state(self) -> None:
         """Save state to disk using optimized CBOR (Phase 271)."""
         try:
             data: dict[str, Any] = {
-                'last_run_timestamp': self.state.last_run_timestamp,
-                'processed_files': self.state.processed_files,
-                'file_hashes': self.state.file_hashes,
-                'pending_files': self.state.pending_files
+                "last_run_timestamp": self.state.last_run_timestamp,
+                "processed_files": self.state.processed_files,
+                "file_hashes": self.state.file_hashes,
+                "pending_files": self.state.pending_files,
             }
             # cbor2.dumps returns bytes
             self.state_file.write_bytes(cbor2.dumps(data))
@@ -129,28 +135,32 @@ class IncrementalProcessor:
             if path_str in self.state.file_hashes:
                 current_hash = self._compute_file_hash(file_path)
                 if current_hash != self.state.file_hashes[path_str]:
-                    logging.warning(f"IncrementalProcessor: DETECTED MUTATION in {path_str}")
+                    logging.warning(
+                        f"IncrementalProcessor: DETECTED MUTATION in {path_str}"
+                    )
                     mutated.append(file_path)
         return mutated
 
     # PHASE 263: TOKEN-AWARE BATCHING
-    def batch_requests(self, files: list[Path], token_limit: int = 4096) -> list[list[Path]]:
+    def batch_requests(
+        self, files: list[Path], token_limit: int = 4096
+    ) -> list[list[Path]]:
         """Groups small file requests into batches for efficient LLM processing."""
         batches: list[list[Path]] = []
         current_batch: list[Path] = []
         current_tokens = 0
-        
+
         # Tight Pack algorithm (80% target)
         target_limit = int(token_limit * 0.8)
-        
+
         for file in files:
             if not file.exists():
                 continue
-            
+
             # Simple approximation: 4 characters per token
             file_size = file.stat().st_size
             file_tokens = int(file_size / 4)
-            
+
             if file_tokens > target_limit:
                 # File too large for batching, give it its own "batch"
                 if current_batch:
@@ -159,7 +169,7 @@ class IncrementalProcessor:
                 batches.append([file])
                 current_tokens = 0
                 continue
-                
+
             if current_tokens + file_tokens > target_limit:
                 # Close current batch and start new one
                 batches.append(current_batch)
@@ -168,11 +178,13 @@ class IncrementalProcessor:
             else:
                 current_batch.append(file)
                 current_tokens += file_tokens
-                
+
         if current_batch:
             batches.append(current_batch)
-            
-        logging.info(f"Batched {len(files)} files into {len(batches)} efficient processing units.")
+
+        logging.info(
+            f"Batched {len(files)} files into {len(batches)} efficient processing units."
+        )
         return batches
 
     def get_changed_files(self, files: list[Path]) -> list[Path]:

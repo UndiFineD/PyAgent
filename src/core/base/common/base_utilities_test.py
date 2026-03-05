@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "setup_logging"), "setup_logging missing"
     assert hasattr(mod, "as_tool"), "as_tool missing"
     assert hasattr(mod, "create_main_function"), "create_main_function missing"
-

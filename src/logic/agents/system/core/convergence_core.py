@@ -59,7 +59,9 @@ class ConvergenceCore:
             content = f.read()
 
         # Regex to find VERSION = "..."
-        new_content = re.sub(r'VERSION\s*=\s*["\'].*?["\']', f'VERSION = "{new_version}"', content)
+        new_content = re.sub(
+            r'VERSION\s*=\s*["\'].*?["\']', f'VERSION = "{new_version}"', content
+        )
 
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(new_content)

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -149,17 +150,14 @@ def create_context(
 ) -> ConversationContext:
     """Convenience function to create a context using the global manager."""
     return get_context_manager().create_context(
-        context_id=context_id,
-        config=config,
-        context_class=context_class,
-        **kwargs
+        context_id=context_id, config=config, context_class=context_class, **kwargs
     )
 
 
 def merge_contexts(
     primary: ConversationContext,
     secondary: ConversationContext,
-    deduplicate: bool = True
+    deduplicate: bool = True,
 ) -> ConversationContext:
     """Merge turns from secondary into primary context."""
     seen_ids = {t.id for t in primary.turns} if deduplicate else set()

@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "SpecDecodeVerifier"), "SpecDecodeVerifier missing"
     assert hasattr(mod, "BatchVerifier"), "BatchVerifier missing"
     assert hasattr(mod, "StreamingVerifier"), "StreamingVerifier missing"
-

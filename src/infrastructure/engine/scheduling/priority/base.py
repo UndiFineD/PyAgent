@@ -61,7 +61,9 @@ class PriorityScheduler:
         self._enable_work_stealing: bool = enable_work_stealing
 
         # Priority queues (one per priority level)
-        self._queues: Dict[TaskPriority, List[ScheduledTask]] = {p: [] for p in TaskPriority}
+        self._queues: Dict[TaskPriority, List[ScheduledTask]] = {
+            p: [] for p in TaskPriority
+        }
 
         self._lock: LockType = threading.Lock()
         self._not_empty = threading.Condition(self._lock)
@@ -198,7 +200,9 @@ class PriorityScheduler:
         except TimeoutError:
             self._handle_timeout(task)
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             task.state = TaskState.FAILED
             task.error = e
 
@@ -221,7 +225,9 @@ class PriorityScheduler:
         def wrapper() -> None:
             try:
                 result_container.append(func())
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 error_container.append(e)
             finally:
                 completed.set()

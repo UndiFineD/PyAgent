@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_compliancecategory_exists():
     """Test that ComplianceCategory class exists and is importable."""
-    assert 'ComplianceCategory' in dir()
+    assert "ComplianceCategory" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
@@ -20,6 +21,7 @@ except ImportError:
 @dataclass
 class BeamSearchConfig:
     """Configuration for beam search."""
+
     beam_width: int = 4
     length_penalty: float = 1.0
     early_stopping: bool = True
@@ -29,6 +31,7 @@ class BeamSearchConfig:
 @dataclass
 class BeamHypothesis:
     """A hypothesis in beam search."""
+
     token_ids: List[int] = field(default_factory=list)
     score: float = 0.0
     finished: bool = False
@@ -38,9 +41,11 @@ class BeamHypothesis:
         return len(self.token_ids)
 
     def normalized_score(self, length_penalty: float = 1.0) -> float:
-        if self.length == 0: return self.score
-        if HAS_RUST: return beam_score_rust(self.score, self.length, length_penalty)
-        return self.score / (self.length ** length_penalty)
+        if self.length == 0:
+            return self.score
+        if HAS_RUST:
+            return beam_score_rust(self.score, self.length, length_penalty)
+        return self.score / (self.length**length_penalty)
 
     def extend(self, token_id: int, log_prob: float) -> "BeamHypothesis":
         return BeamHypothesis(
@@ -59,6 +64,7 @@ class BeamHypothesis:
 
 class BeamSearchSampler(Sampler):
     """Beam search sampler."""
+
     def __init__(self, config: Optional[BeamSearchConfig] = None):
         self.config = config or BeamSearchConfig()
         self._beams: List[BeamHypothesis] = []
@@ -81,16 +87,20 @@ class BeamSearchSampler(Sampler):
         logits: np.ndarray,
         eos_token_id: Optional[int] = None,
     ) -> List[BeamHypothesis]:
-        if not self._beams: self.reset()
+        if not self._beams:
+            self.reset()
         log_probs = _log_softmax(logits)
         candidates: List[Tuple[float, int, BeamHypothesis]] = []
-        
+
         for beam_idx, beam in enumerate(self._beams):
-            if beam.finished: continue
-            beam_log_probs = log_probs[beam_idx] if len(log_probs) > beam_idx else log_probs[0]
+            if beam.finished:
+                continue
+            beam_log_probs = (
+                log_probs[beam_idx] if len(log_probs) > beam_idx else log_probs[0]
+            )
             top_k = min(self.config.beam_width * 2, len(beam_log_probs))
             top_indices = np.argpartition(beam_log_probs, -top_k)[-top_k:]
-            
+
             for token_id in top_indices:
                 log_prob = float(beam_log_probs[token_id])
                 new_beam = beam.extend(token_id, log_prob)
@@ -99,16 +109,22 @@ class BeamSearchSampler(Sampler):
                 else:
                     score = new_beam.normalized_score(self.config.length_penalty)
                     candidates.append((score, len(candidates), new_beam))
-        
+
         candidates.sort(key=lambda x: -x[0])
-        self._beams = [c[2] for c in candidates[:self.config.beam_width]]
+        self._beams = [c[2] for c in candidates[: self.config.beam_width]]
         return self._beams
 
     def get_best_hypothesis(self) -> Optional[BeamHypothesis]:
         all_beams = self._finished_beams + self._beams
-        if not all_beams: return None
-        return sorted(all_beams, key=lambda b: b.normalized_score(self.config.length_penalty), reverse=True)[0]
+        if not all_beams:
+            return None
+        return sorted(
+            all_beams,
+            key=lambda b: b.normalized_score(self.config.length_penalty),
+            reverse=True,
+        )[0]
 
     def is_finished(self) -> bool:
-        if self.config.early_stopping: return all(b.finished for b in self._beams)
+        if self.config.early_stopping:
+            return all(b.finished for b in self._beams)
         return len(self._finished_beams) >= self.config.beam_width

@@ -33,52 +33,52 @@ except ImportError as e:
 
 def test_cachetype_exists():
     """Test that CacheType class exists and is importable."""
-    assert 'CacheType' in dir()
+    assert "CacheType" in dir()
 
 
 def test_evictionreason_exists():
     """Test that EvictionReason class exists and is importable."""
-    assert 'EvictionReason' in dir()
+    assert "EvictionReason" in dir()
 
 
 def test_cacheevent_exists():
     """Test that CacheEvent class exists and is importable."""
-    assert 'CacheEvent' in dir()
+    assert "CacheEvent" in dir()
 
 
 def test_evictionevent_exists():
     """Test that EvictionEvent class exists and is importable."""
-    assert 'EvictionEvent' in dir()
+    assert "EvictionEvent" in dir()
 
 
 def test_cachestats_exists():
     """Test that CacheStats class exists and is importable."""
-    assert 'CacheStats' in dir()
+    assert "CacheStats" in dir()
 
 
 def test_slidingwindowstats_exists():
     """Test that SlidingWindowStats class exists and is importable."""
-    assert 'SlidingWindowStats' in dir()
+    assert "SlidingWindowStats" in dir()
 
 
 def test_slidingwindowmetrics_exists():
     """Test that SlidingWindowMetrics class exists and is importable."""
-    assert 'SlidingWindowMetrics' in dir()
+    assert "SlidingWindowMetrics" in dir()
 
 
 def test_cachingmetrics_exists():
     """Test that CachingMetrics class exists and is importable."""
-    assert 'CachingMetrics' in dir()
+    assert "CachingMetrics" in dir()
 
 
 def test_prefixcachestats_exists():
     """Test that PrefixCacheStats class exists and is importable."""
-    assert 'PrefixCacheStats' in dir()
+    assert "PrefixCacheStats" in dir()
 
 
 def test_multilevelcachemetrics_exists():
     """Test that MultiLevelCacheMetrics class exists and is importable."""
-    assert 'MultiLevelCacheMetrics' in dir()
+    assert "MultiLevelCacheMetrics" in dir()
 
 
 def test_observe_with_rust_exists():
@@ -89,4 +89,3 @@ def test_observe_with_rust_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

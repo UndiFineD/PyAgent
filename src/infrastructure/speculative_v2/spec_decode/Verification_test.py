@@ -33,25 +33,24 @@ except ImportError as e:
 
 def test_verificationresult_exists():
     """Test that VerificationResult class exists and is importable."""
-    assert 'VerificationResult' in dir()
+    assert "VerificationResult" in dir()
 
 
 def test_specdecodeverifier_exists():
     """Test that SpecDecodeVerifier class exists and is importable."""
-    assert 'SpecDecodeVerifier' in dir()
+    assert "SpecDecodeVerifier" in dir()
 
 
 def test_batchverifier_exists():
     """Test that BatchVerifier class exists and is importable."""
-    assert 'BatchVerifier' in dir()
+    assert "BatchVerifier" in dir()
 
 
 def test_streamingverifier_exists():
     """Test that StreamingVerifier class exists and is importable."""
-    assert 'StreamingVerifier' in dir()
+    assert "StreamingVerifier" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -22,7 +22,8 @@ def test_imports_and_symbols():
     assert hasattr(mod, "init_none_hash"), "init_none_hash missing"
     assert hasattr(mod, "PrefixCacheManager"), "PrefixCacheManager missing"
     assert hasattr(mod, "compute_prefix_match"), "compute_prefix_match missing"
-    assert hasattr(mod, "compute_prefix_match_rust"), "compute_prefix_match_rust missing"
+    assert hasattr(
+        mod, "compute_prefix_match_rust"
+    ), "compute_prefix_match_rust missing"
     assert hasattr(mod, "compute_cache_keys"), "compute_cache_keys missing"
     assert hasattr(mod, "compute_cache_keys_rust"), "compute_cache_keys_rust missing"
-

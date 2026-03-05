@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_deduplicationcore_exists():
     """Test that DeduplicationCore class exists and is importable."""
-    assert 'DeduplicationCore' in dir()
+    assert "DeduplicationCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

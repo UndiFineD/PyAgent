@@ -33,42 +33,42 @@ except ImportError as e:
 
 def test_bufferstate_exists():
     """Test that BufferState class exists and is importable."""
-    assert 'BufferState' in dir()
+    assert "BufferState" in dir()
 
 
 def test_bufferspec_exists():
     """Test that BufferSpec class exists and is importable."""
-    assert 'BufferSpec' in dir()
+    assert "BufferSpec" in dir()
 
 
 def test_bufferentry_exists():
     """Test that BufferEntry class exists and is importable."""
-    assert 'BufferEntry' in dir()
+    assert "BufferEntry" in dir()
 
 
 def test_bufferpool_exists():
     """Test that BufferPool class exists and is importable."""
-    assert 'BufferPool' in dir()
+    assert "BufferPool" in dir()
 
 
 def test_simplebufferpool_exists():
     """Test that SimpleBufferPool class exists and is importable."""
-    assert 'SimpleBufferPool' in dir()
+    assert "SimpleBufferPool" in dir()
 
 
 def test_inputslot_exists():
     """Test that InputSlot class exists and is importable."""
-    assert 'InputSlot' in dir()
+    assert "InputSlot" in dir()
 
 
 def test_inputbuffermanager_exists():
     """Test that InputBufferManager class exists and is importable."""
-    assert 'InputBufferManager' in dir()
+    assert "InputBufferManager" in dir()
 
 
 def test_hierarchicalbufferpool_exists():
     """Test that HierarchicalBufferPool class exists and is importable."""
-    assert 'HierarchicalBufferPool' in dir()
+    assert "HierarchicalBufferPool" in dir()
 
 
 def test_hierarchicalbufferpool_instantiation():
@@ -79,7 +79,7 @@ def test_hierarchicalbufferpool_instantiation():
 
 def test_predictivebuffermanager_exists():
     """Test that PredictiveBufferManager class exists and is importable."""
-    assert 'PredictiveBufferManager' in dir()
+    assert "PredictiveBufferManager" in dir()
 
 
 def test_predictivebuffermanager_instantiation():
@@ -96,4 +96,3 @@ def test_create_input_buffer_manager_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -19,10 +19,12 @@ class FormattingCore:
     def fix_markdown(self, content: str) -> str:
         """Pure logic to normalize markdown content."""
         lines = content.splitlines()
+
         def fix_line(line):
             if line.startswith("#") and not line.startswith("# "):
                 return re.sub(r"^(#+)", r"\1 ", line)
             return line
+
         fixed_lines = list(map(fix_line, lines))
         return "\n".join(fixed_lines)
 
@@ -32,8 +34,10 @@ class FormattingCore:
             try:
                 # pylint: disable=no-member
                 return rc.normalize_response(response)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                # pylint: disable=broad-exception-caught
                 pass
         normalized = response.strip().replace("\r\n", "\n")
         return " ".join(normalized.split())
@@ -43,13 +47,21 @@ class FormattingCore:
         if rc and hasattr(rc, "generate_unified_diff_rust"):
             try:
                 # pylint: disable=no-member
-                diff_text, _, _ = rc.generate_unified_diff_rust(old_content, new_content, filename, 3)
+                diff_text, _, _ = rc.generate_unified_diff_rust(
+                    old_content, new_content, filename, 3
+                )
                 return diff_text
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                # pylint: disable=broad-exception-caught
                 pass
 
         old_lines = old_content.splitlines(keepends=True)
         new_lines = new_content.splitlines(keepends=True)
-        diff_lines = list(difflib.unified_diff(old_lines, new_lines, fromfile=f"a/{filename}", tofile=f"b/{filename}"))
+        diff_lines = list(
+            difflib.unified_diff(
+                old_lines, new_lines, fromfile=f"a/{filename}", tofile=f"b/{filename}"
+            )
+        )
         return "".join(diff_lines)

@@ -33,17 +33,17 @@ except ImportError as e:
 
 def test_loopanalysisresult_exists():
     """Test that LoopAnalysisResult class exists and is importable."""
-    assert 'LoopAnalysisResult' in dir()
+    assert "LoopAnalysisResult" in dir()
 
 
 def test_loopanalysisconfig_exists():
     """Test that LoopAnalysisConfig class exists and is importable."""
-    assert 'LoopAnalysisConfig' in dir()
+    assert "LoopAnalysisConfig" in dir()
 
 
 def test_loopanalyzer_exists():
     """Test that LoopAnalyzer class exists and is importable."""
-    assert 'LoopAnalyzer' in dir()
+    assert "LoopAnalyzer" in dir()
 
 
 def test_print_analysis_report_exists():
@@ -54,4 +54,3 @@ def test_print_analysis_report_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

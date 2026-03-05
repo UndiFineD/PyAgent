@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_verificationstrategy_exists():
     """Test that VerificationStrategy class exists and is importable."""
-    assert 'VerificationStrategy' in dir()
+    assert "VerificationStrategy" in dir()
 
 
 def test_acceptancepolicy_exists():
     """Test that AcceptancePolicy class exists and is importable."""
-    assert 'AcceptancePolicy' in dir()
+    assert "AcceptancePolicy" in dir()
 
 
 def test_specdecodeconfig_exists():
     """Test that SpecDecodeConfig class exists and is importable."""
-    assert 'SpecDecodeConfig' in dir()
+    assert "SpecDecodeConfig" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

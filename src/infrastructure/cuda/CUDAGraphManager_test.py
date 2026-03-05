@@ -33,32 +33,32 @@ except ImportError as e:
 
 def test_cudagraphmode_exists():
     """Test that CUDAGraphMode class exists and is importable."""
-    assert 'CUDAGraphMode' in dir()
+    assert "CUDAGraphMode" in dir()
 
 
 def test_batchdescriptor_exists():
     """Test that BatchDescriptor class exists and is importable."""
-    assert 'BatchDescriptor' in dir()
+    assert "BatchDescriptor" in dir()
 
 
 def test_cudagraphentry_exists():
     """Test that CUDAGraphEntry class exists and is importable."""
-    assert 'CUDAGraphEntry' in dir()
+    assert "CUDAGraphEntry" in dir()
 
 
 def test_cudagraphoptions_exists():
     """Test that CUDAGraphOptions class exists and is importable."""
-    assert 'CUDAGraphOptions' in dir()
+    assert "CUDAGraphOptions" in dir()
 
 
 def test_cudagraphstats_exists():
     """Test that CUDAGraphStats class exists and is importable."""
-    assert 'CUDAGraphStats' in dir()
+    assert "CUDAGraphStats" in dir()
 
 
 def test_mockcudagraph_exists():
     """Test that MockCUDAGraph class exists and is importable."""
-    assert 'MockCUDAGraph' in dir()
+    assert "MockCUDAGraph" in dir()
 
 
 def test_mockcudagraph_instantiation():
@@ -69,12 +69,12 @@ def test_mockcudagraph_instantiation():
 
 def test_cudagraphwrapper_exists():
     """Test that CUDAGraphWrapper class exists and is importable."""
-    assert 'CUDAGraphWrapper' in dir()
+    assert "CUDAGraphWrapper" in dir()
 
 
 def test_adaptivecudagraphwrapper_exists():
     """Test that AdaptiveCUDAGraphWrapper class exists and is importable."""
-    assert 'AdaptiveCUDAGraphWrapper' in dir()
+    assert "AdaptiveCUDAGraphWrapper" in dir()
 
 
 def test_cudagraph_context_exists():
@@ -90,4 +90,3 @@ def test_get_cudagraph_sizes_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

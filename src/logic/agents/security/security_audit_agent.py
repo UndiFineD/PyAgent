@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,7 +33,6 @@ Implements advanced analysis and reporting for system security posture.
 """
 Security audit agent.py module.
 """
-
 
 
 import os
@@ -72,7 +72,9 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             # Rust acceleration for secret scanning
             try:
                 from rust_core import (  # type: ignore[attr-defined]
-                    scan_hardcoded_secrets_rust, scan_insecure_patterns_rust)
+                    scan_hardcoded_secrets_rust,
+                    scan_insecure_patterns_rust,
+                )
 
                 # Scan for hardcoded secrets
                 secret_findings = scan_hardcoded_secrets_rust(content)
@@ -152,7 +154,10 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                             }
                         )
 
-                if re.search(r"shell\s*=\s*True", content) and "SecurityAuditAgent" not in content:
+                if (
+                    re.search(r"shell\s*=\s*True", content)
+                    and "SecurityAuditAgent" not in content
+                ):
                     shell_match = re.search(r".*shell\s*=\s*True.*", content)
                     if shell_match and "# nosec" not in shell_match.group(0):
                         findings.append(
@@ -192,7 +197,10 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         for root, dirs, files in os.walk(self.workspace_path):
             # Skip hidden dirs and common excludes
             dirs[:] = [
-                d for d in dirs if not d.startswith(".") and d not in ["node_modules", "__pycache__", ".venv", "venv"]
+                d
+                for d in dirs
+                if not d.startswith(".")
+                and d not in ["node_modules", "__pycache__", ".venv", "venv"]
             ]
 
             for file in files:

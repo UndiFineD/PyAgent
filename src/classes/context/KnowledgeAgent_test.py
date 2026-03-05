@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_knowledgeagent_exists():
     """Test that KnowledgeAgent class exists and is importable."""
-    assert 'KnowledgeAgent' in dir()
+    assert "KnowledgeAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

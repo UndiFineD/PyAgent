@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,8 +29,7 @@ from abc import ABC, abstractmethod
 from typing import Callable, Optional
 
 from .config import WorkerIdentity, WorkerState
-from .messages import (ControlMessage, MetricsMessage, RequestMessage,
-                       ResponseMessage)
+from .messages import ControlMessage, MetricsMessage, RequestMessage, ResponseMessage
 
 logger = logging.getLogger(__name__)
 
@@ -122,7 +122,9 @@ class WorkerProcess:
             daemon=True,
         )
         self._process.start()
-        logger.info("Started worker process %d (pid=%d)", self.worker_id, self._process.pid)
+        logger.info(
+            "Started worker process %d (pid=%d)", self.worker_id, self._process.pid
+        )
 
     @staticmethod
     def _worker_main(
@@ -174,7 +176,9 @@ class WorkerProcess:
                         response = worker.process(request)
                         response.latency_ms = (time.time() - start) * 1000
                         worker._total_processed += 1
-                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                    except (
+                        Exception
+                    ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                         response = ResponseMessage(
                             request_id=request.request_id,
                             error=str(e),
@@ -198,7 +202,9 @@ class WorkerProcess:
         self._process.join(timeout=timeout)
 
         if self._process.is_alive():
-            logger.warning("Worker %d did not stop gracefully, terminating", self.worker_id)
+            logger.warning(
+                "Worker %d did not stop gracefully, terminating", self.worker_id
+            )
             self._process.terminate()
             self._process.join(timeout=1.0)
 

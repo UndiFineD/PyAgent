@@ -13,8 +13,7 @@ from typing import Any, Dict, List, Optional
 
 from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.voyager.discovery_node import DiscoveryNode
-from src.infrastructure.swarm.voyager.remote_neural_synapse import \
-    RemoteNeuralSynapse
+from src.infrastructure.swarm.voyager.remote_neural_synapse import RemoteNeuralSynapse
 from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION
@@ -36,9 +35,13 @@ class InterFleetBridgeOrchestrator:
         self.zmq_port = 5555
         self.shared_state_cache: List[str] = []
 
-        self.discovery_node = DiscoveryNode(port=self.mDNS_port, transport_port=self.zmq_port)
+        self.discovery_node = DiscoveryNode(
+            port=self.mDNS_port, transport_port=self.zmq_port
+        )
         self.synapse = RemoteNeuralSynapse(
-            fleet_manager, transport_port=self.zmq_port, discovery_node=self.discovery_node
+            fleet_manager,
+            transport_port=self.zmq_port,
+            discovery_node=self.discovery_node,
         )
         self.is_active = False
         logger.info("InterFleetBridgeOrchestrator (Voyager) initialized.")
@@ -54,11 +57,17 @@ class InterFleetBridgeOrchestrator:
             await self.discovery_node.start_discovery()
 
             self.is_active = True
-            logger.info("Voyager: Constellation synchronization and transport server active.")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            logger.info(
+                "Voyager: Constellation synchronization and transport server active."
+            )
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Voyager: Failed to start constellation sync: {e}")
 
-    def broadcast_signal(self, signal_name: str, payload: Dict[str, Any] = None) -> None:
+    def broadcast_signal(
+        self, signal_name: str, payload: Dict[str, Any] = None
+    ) -> None:
         """Broadcasts a signal to all connected peers and local cache."""
         logger.info(f"Voyager: Broadcasting signal {signal_name}")
         self.shared_state_cache.append(signal_name)
@@ -120,10 +129,16 @@ class InterFleetBridgeOrchestrator:
             return {"status": "error", "message": "Peer not found"}
 
         peer_ip, peer_port = target
-        payload = {"type": signal_type, "data": data, "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown")}
+        payload = {
+            "type": signal_type,
+            "data": data,
+            "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown"),
+        }
         return await self.synapse.transport.send_to_peer(peer_ip, peer_port, payload)
 
-    def find_best_offload_target(self, required_cpu: int, required_ram: float) -> Optional[tuple[str, int]]:
+    def find_best_offload_target(
+        self, required_cpu: int, required_ram: float
+    ) -> Optional[tuple[str, int]]:
         """
         Voyager Phase 4.0: Finds the best peer node for task offloading based on resources.
         Returns (ip, port) or None.
@@ -151,16 +166,20 @@ class InterFleetBridgeOrchestrator:
                             best_peer = (addrs[0], port)
             except (ValueError, TypeError):
                 continue
-        
+
         return best_peer
 
-    async def offload_task(self, task_description: str, required_cpu: int = 1, required_ram: float = 2.0) -> Optional[Dict[str, Any]]:
+    async def offload_task(
+        self, task_description: str, required_cpu: int = 1, required_ram: float = 2.0
+    ) -> Optional[Dict[str, Any]]:
         """
         Attempts to offload a task to a capable peer in the constellation.
         """
         target = self.find_best_offload_target(required_cpu, required_ram)
         if not target:
-            logger.warning(f"Voyager: No suitable peer found for task offload (CPU:{required_cpu}, RAM:{required_ram})")
+            logger.warning(
+                f"Voyager: No suitable peer found for task offload (CPU:{required_cpu}, RAM:{required_ram})"
+            )
             return None
 
         peer_ip, peer_port = target
@@ -170,25 +189,29 @@ class InterFleetBridgeOrchestrator:
             "type": "task_offload",
             "task": task_description,
             "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown"),
-            "requirements": {"cpu": required_cpu, "ram": required_ram}
+            "requirements": {"cpu": required_cpu, "ram": required_ram},
         }
 
         # Send via Synapse
         return await self.synapse.transport.send_to_peer(peer_ip, peer_port, payload)
 
-    async def query_federated_memory(self, query: str, limit_per_peer: int = 3) -> List[Dict[str, Any]]:
+    async def query_federated_memory(
+        self, query: str, limit_per_peer: int = 3
+    ) -> List[Dict[str, Any]]:
         """
         Broadcasting query to the 'Experience Buffers' of the entire constellation.
         Returns aggregated list of results.
         """
         peers = self.discovery_node.get_active_peers()
-        logger.info(f"Voyager: Querying federated memory across {len(peers)} peers: '{query}'")
+        logger.info(
+            f"Voyager: Querying federated memory across {len(peers)} peers: '{query}'"
+        )
 
         payload = {
             "type": "memory_query",
             "query": query,
             "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown"),
-             "limit": limit_per_peer
+            "limit": limit_per_peer,
         }
 
         tasks = []
@@ -206,7 +229,7 @@ class InterFleetBridgeOrchestrator:
         # Gather results with timeout
         results = await asyncio.gather(*tasks, return_exceptions=True)
         aggregated = []
-        
+
         for res in results:
             if isinstance(res, dict) and res.get("status") == "success":
                 items = res.get("results", [])
@@ -216,10 +239,14 @@ class InterFleetBridgeOrchestrator:
 
         return aggregated
 
-    async def broadcast_task(self, task_description: str, metadata: Optional[Dict[str, Any]] = None):
+    async def broadcast_task(
+        self, task_description: str, metadata: Optional[Dict[str, Any]] = None
+    ):
         """Broadcasts a task opportunity to all discovered peers."""
         peers = self.get_known_peers()
-        logger.info(f"Voyager: Broadcasting task to {len(peers)} peers: {task_description[:30]}...")
+        logger.info(
+            f"Voyager: Broadcasting task to {len(peers)} peers: {task_description[:30]}..."
+        )
 
         payload = {
             "type": "task_broadcast",

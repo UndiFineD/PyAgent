@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 
 import re
@@ -7,6 +8,7 @@ from src.core.base.types.AccessibilityIssue import AccessibilityIssue
 from src.core.base.types.AccessibilityIssueType import AccessibilityIssueType
 from src.core.base.types.AccessibilitySeverity import AccessibilitySeverity
 from src.core.base.types.WCAGLevel import WCAGLevel
+
 
 class HtmlAccessibilityMixin:
     """Mixin for HTML accessibility analysis."""

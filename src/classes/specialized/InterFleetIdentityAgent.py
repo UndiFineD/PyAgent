@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +27,7 @@ __version__ = VERSION
 
 class InterFleetIdentityAgent(BaseAgent):
     """
-    Tier 3 (Orchestration) - Inter-Fleet Identity Agent: Manages federated 
+    Tier 3 (Orchestration) - Inter-Fleet Identity Agent: Manages federated
     identities for agents across multiple fleets using cryptographic signing and DID.
     """
 
@@ -36,9 +37,9 @@ class InterFleetIdentityAgent(BaseAgent):
         self.core = IdentityCore()
         self.fleet_id = str(uuid.uuid4())
         self.known_fleets: dict[Any, Any] = {}  # fleet_id -> {pub_key, metadata}
-        self.authorized_agents: dict[
-            Any, Any
-        ] = {}  # agent_id -> {fleet_id, permissions}
+        self.authorized_agents: dict[Any, Any] = (
+            {}
+        )  # agent_id -> {fleet_id, permissions}
         self.session_tokens: dict[Any, Any] = {}  # token -> {agent_id, expiry}
 
     def generate_fleet_handshake(self) -> dict[str, Any]:

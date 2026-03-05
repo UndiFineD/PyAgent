@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
@@ -41,7 +42,7 @@ if TYPE_CHECKING:
 class TensorParallelTransfer:
     """
     Orchestrator for TP-aware KV transfer.
-    
+
     Handles the complexities of sharded KV caches where multiple TP ranks
     must coordinate their independent transfers to respective TP ranks
     in the destination group.
@@ -56,9 +57,10 @@ class TensorParallelTransfer:
         self.tp_rank = tp_rank
         self.tp_size = tp_size
         self.local_connector = local_connector
-        
-        logger.info("TensorParallelTransfer initialized for rank %d/%d", 
-                    tp_rank, tp_size)
+
+        logger.info(
+            "TensorParallelTransfer initialized for rank %d/%d", tp_rank, tp_size
+        )
 
     def _aggregate_tp_metadata_rust(self, metadata_shards: List[bytes]) -> bytes:
         """Rust-accelerated aggregation of TP rank metadata."""
@@ -68,7 +70,7 @@ class TensorParallelTransfer:
     def shard_aware_push(self, layer_name: str, kv_shard: Any, attn_metadata: Any):
         """
         Push a shard of the KV cache.
-        
+
         Each TP rank calls this for its portion of the KV heads.
         """
         # The connector handles the actual transport
@@ -86,5 +88,8 @@ class TensorParallelTransfer:
         # Typically involves an All-Reduce or All-Gather on checksums
         return True
 
+
 # Lazy loading registration
-_orchestrator = LazyLoader("src.infrastructure.kv_transfer.TensorParallelTransfer", "TensorParallelTransfer")
+_orchestrator = LazyLoader(
+    "src.infrastructure.kv_transfer.TensorParallelTransfer", "TensorParallelTransfer"
+)

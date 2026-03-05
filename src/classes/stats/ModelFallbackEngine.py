@@ -5,13 +5,16 @@ from typing import List, Optional, Dict, Any
 from src.classes.stats.TokenCostEngine import TokenCostEngine
 from .ModelFallbackCore import ModelFallbackCore
 
+
 class ModelFallbackEngine:
     """
     Manages model redundancy and fallback strategies.
     Shell for ModelFallbackCore.
     """
 
-    def __init__(self, cost_engine: Optional[TokenCostEngine] = None, fleet: Optional[Any] = None) -> None:
+    def __init__(
+        self, cost_engine: Optional[TokenCostEngine] = None, fleet: Optional[Any] = None
+    ) -> None:
         if fleet and hasattr(fleet, "telemetry") and not cost_engine:
             self.cost_engine = fleet.telemetry.cost_engine
         else:
@@ -19,9 +22,13 @@ class ModelFallbackEngine:
         self.core = ModelFallbackCore()
         self.max_retries = 3
 
-    def get_fallback_model(self, current_model: str, failure_reason: str = "") -> Optional[str]:
+    def get_fallback_model(
+        self, current_model: str, failure_reason: str = ""
+    ) -> Optional[str]:
         """Determines the next model to use after a failure."""
-        logging.warning(f"Fallback requested for {current_model}. Reason: {failure_reason}")
+        logging.warning(
+            f"Fallback requested for {current_model}. Reason: {failure_reason}"
+        )
         next_model = self.core.determine_next_model(current_model)
         if next_model:
             logging.info(f"Stepping to next model: {next_model}")
@@ -32,13 +39,16 @@ class ModelFallbackEngine:
         price_map = {}
         if self.cost_engine:
             price_map = self.cost_engine.MODEL_COSTS
-            
+
         ranked = self.core.rank_models_by_cost(models, price_map)
         return ranked[0]
+
 
 if __name__ == "__main__":
     cost_engine = TokenCostEngine()
     fallback = ModelFallbackEngine(cost_engine)
-    
+
     print(f"Fallback for gpt-4o: {fallback.get_fallback_model('gpt-4o')}")
-    print(f"Cheapest of [gpt-4o, gpt-4o-mini]: {fallback.get_cheapest_model(['gpt-4o', 'gpt-4o-mini'])}")
+    print(
+        f"Cheapest of [gpt-4o, gpt-4o-mini]: {fallback.get_cheapest_model(['gpt-4o', 'gpt-4o-mini'])}"
+    )

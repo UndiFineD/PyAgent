@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -53,12 +54,12 @@ if TYPE_CHECKING:
     import torch
 
     __all__ = [
-    "ZeroCopyEncoder",
-    "ZeroCopyDecoder",
-    "encode_with_buffers",
-    "decode_with_buffers",
-    "MSGSPEC_AVAILABLE",
-]
+        "ZeroCopyEncoder",
+        "ZeroCopyDecoder",
+        "encode_with_buffers",
+        "decode_with_buffers",
+        "MSGSPEC_AVAILABLE",
+    ]
 
 # Custom extension type codes
 CUSTOM_TYPE_PICKLE = 1
@@ -158,9 +159,13 @@ class ZeroCopyEncoder:
             return {"__enum__": type(obj).__name__, "value": obj.value}
 
         # Fallback to pickle for unknown types
-        return msgpack.Ext(CUSTOM_TYPE_PICKLE, pickle.dumps(obj, protocol=pickle.HIGHEST_PROTOCOL))
+        return msgpack.Ext(
+            CUSTOM_TYPE_PICKLE, pickle.dumps(obj, protocol=pickle.HIGHEST_PROTOCOL)
+        )
 
-    def _encode_tensor(self, tensor: "torch.Tensor") -> tuple[str, tuple[int, ...], int | memoryview]:
+    def _encode_tensor(
+        self, tensor: "torch.Tensor"
+    ) -> tuple[str, tuple[int, ...], int | memoryview]:
         """Encode a torch tensor."""
 
         assert self._aux_buffers is not None
@@ -184,7 +189,9 @@ class ZeroCopyEncoder:
         dtype_str = str(tensor.dtype).removeprefix("torch.")
         return dtype_str, tuple(tensor.shape), data
 
-    def _encode_ndarray(self, arr: "np.ndarray") -> tuple[str, tuple[int, ...], int | memoryview]:
+    def _encode_ndarray(
+        self, arr: "np.ndarray"
+    ) -> tuple[str, tuple[int, ...], int | memoryview]:
         """Encode a numpy array."""
         assert self._aux_buffers is not None
 
@@ -320,7 +327,9 @@ class ZeroCopyDecoder:
         return tensor
 
 
-def encode_with_buffers(obj: Any, size_threshold: int = 256) -> Sequence[bytes | memoryview]:
+def encode_with_buffers(
+    obj: Any, size_threshold: int = 256
+) -> Sequence[bytes | memoryview]:
     """
     Convenience function to encode with zero-copy.
 

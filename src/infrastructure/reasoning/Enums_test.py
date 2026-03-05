@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_reasoningformat_exists():
     """Test that ReasoningFormat class exists and is importable."""
-    assert 'ReasoningFormat' in dir()
+    assert "ReasoningFormat" in dir()
 
 
 def test_toolcallformat_exists():
     """Test that ToolCallFormat class exists and is importable."""
-    assert 'ToolCallFormat' in dir()
+    assert "ToolCallFormat" in dir()
 
 
 def test_parsestate_exists():
     """Test that ParseState class exists and is importable."""
-    assert 'ParseState' in dir()
+    assert "ParseState" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

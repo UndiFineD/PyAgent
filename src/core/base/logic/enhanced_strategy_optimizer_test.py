@@ -33,22 +33,22 @@ except ImportError as e:
 
 def test_optimizationstrategy_exists():
     """Test that OptimizationStrategy class exists and is importable."""
-    assert 'OptimizationStrategy' in dir()
+    assert "OptimizationStrategy" in dir()
 
 
 def test_optimizationresult_exists():
     """Test that OptimizationResult class exists and is importable."""
-    assert 'OptimizationResult' in dir()
+    assert "OptimizationResult" in dir()
 
 
 def test_strategytrial_exists():
     """Test that StrategyTrial class exists and is importable."""
-    assert 'StrategyTrial' in dir()
+    assert "StrategyTrial" in dir()
 
 
 def test_enhancedstrategyoptimizer_exists():
     """Test that EnhancedStrategyOptimizer class exists and is importable."""
-    assert 'EnhancedStrategyOptimizer' in dir()
+    assert "EnhancedStrategyOptimizer" in dir()
 
 
 def test_enhancedstrategyoptimizer_instantiation():
@@ -60,4 +60,3 @@ def test_enhancedstrategyoptimizer_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

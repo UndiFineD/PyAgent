@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_federatedknowledgeorchestrator_exists():
     """Test that FederatedKnowledgeOrchestrator class exists and is importable."""
-    assert 'FederatedKnowledgeOrchestrator' in dir()
+    assert "FederatedKnowledgeOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

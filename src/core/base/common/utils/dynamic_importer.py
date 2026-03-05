@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -89,7 +90,9 @@ def import_from_path(
     if file_path.suffix != ".py":
         raise ImportError(f"Expected .py file, got: {file_path}")
 
-    spec: ModuleSpec | None = importlib.util.spec_from_file_location(module_name, file_path)
+    spec: ModuleSpec | None = importlib.util.spec_from_file_location(
+        module_name, file_path
+    )
     if spec is None or spec.loader is None:
         raise ImportError(f"Could not create module spec for: {file_path}")
 
@@ -97,7 +100,6 @@ def import_from_path(
 
     if add_to_sys_modules:
         sys.modules[module_name] = module
-
 
     try:
         spec.loader.exec_module(module)
@@ -181,7 +183,6 @@ def resolve_obj_by_qualname_parts(
     """
     module: ModuleType = importlib.import_module(module_path)
     obj: ModuleType = module
-
 
     for attr_name in attr_path.split("."):
         obj = getattr(obj, attr_name)
@@ -590,7 +591,9 @@ def require_module(
     if min_version is not None:
         version: Any | str = getattr(module, "__version__", "0.0.0")
         if _compare_versions(version, min_version) < 0:
-            msg: str = f"Module '{module_name}' version {version} is too old. Minimum required: {min_version}."
+            msg: str = (
+                f"Module '{module_name}' version {version} is too old. Minimum required: {min_version}."
+            )
             if install_hint:
                 msg += f" Upgrade with: {install_hint}"
             raise ImportError(msg)
@@ -605,7 +608,6 @@ def _compare_versions(v1: str, v2: str) -> int:
     Returns:
         -1 if v1 < v2, 0 if v1 == v2, 1 if v1 > v2.
     """
-
 
     def normalize(v: str) -> tuple[int, ...]:
         return tuple(int(x) for x in v.split(".")[:3])

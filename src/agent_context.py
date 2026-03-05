@@ -21,9 +21,9 @@ from src.logic.agents.cognitive.ContextAgent import ContextAgent
 # Create main function using the helper
 main = create_main_function(
     ContextAgent,
-    'Context Agent: Maintains and improves context/description files',
-    'Path to the context file (e.g., file.description.md)'
+    "Context Agent: Maintains and improves context/description files",
+    "Path to the context file (e.g., file.description.md)",
 )
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

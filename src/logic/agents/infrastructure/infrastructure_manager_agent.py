@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -63,7 +64,9 @@ class InfrastructureManagerAgent(BaseAgent):
         )
 
     @as_tool
-    def control_homeassistant_device(self, entity_id: str, action: str, api_url: str, _token: str) -> str:
+    def control_homeassistant_device(
+        self, entity_id: str, action: str, api_url: str, _token: str
+    ) -> str:
         """Controls a HomeAssistant device (light, switch, etc.).
         Args:
             entity_id: The HA entity ID (e.g., 'light.living_room').
@@ -91,8 +94,12 @@ class InfrastructureManagerAgent(BaseAgent):
             "uptime": "14 days, 3 hours",
         }
 
-    async def improve_content(self, prompt: str, target_file: str | None = None,
-                              task_context: dict[str, Any] | None = None) -> str:
+    async def improve_content(
+        self,
+        prompt: str,
+        target_file: str | None = None,
+        task_context: dict[str, Any] | None = None,
+    ) -> str:
         """Standard async method for generic improvement/response (Infrastructure)."""
         _ = target_file, task_context
         return "Infrastructure Manager ready. Provide Proxmox or HomeAssistant credentials to begin orchestration."
@@ -101,5 +108,7 @@ class InfrastructureManagerAgent(BaseAgent):
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(InfrastructureManagerAgent, "Infra Manager", "Infra logs")
+    main = create_main_function(
+        InfrastructureManagerAgent, "Infra Manager", "Infra logs"
+    )
     main()

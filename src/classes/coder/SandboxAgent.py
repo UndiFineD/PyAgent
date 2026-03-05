@@ -11,9 +11,10 @@ from typing import Dict, List, Any, Optional
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
+
 class SandboxAgent(BaseAgent):
     """Executes untrusted code in a controlled environment."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -29,10 +30,15 @@ class SandboxAgent(BaseAgent):
         In production, this would use a Docker container or gVisor.
         """
         logging.info("Executing code in sandbox...")
-        
+
         # Phase 108: Record sandboxed execution intent
-        self._record(f"Sandbox run: {code[:100]}", "Simulated Success", provider="Sandbox", model="Docker-Mock")
-        
+        self._record(
+            f"Sandbox run: {code[:100]}",
+            "Simulated Success",
+            provider="Sandbox",
+            model="Docker-Mock",
+        )
+
         # Simulated execution
         return "Execution Output: Success\n(Simulated Output)"
 
@@ -45,18 +51,21 @@ class SandboxAgent(BaseAgent):
             return "Prediction: DANGER. Code attempts to delete files."
         return "Prediction: SAFE. Code appears to be computational."
         logging.info("SandboxAgent: Running sandboxed Python...")
-        
+
         # simulated sandbox execution
         # process = subprocess.Popen(["docker", "run", "--rm", "python:3.10-slim", "python", "-c", code], ...)
-        
+
         return f"### Sandboxed Execution Results\n\n- Environment: Docker (python:3.10-slim)\n- Code Length: {len(code)} characters\n- Output: Hello from the sandbox!\n- Status: Success"
 
     def improve_content(self, prompt: str) -> str:
         """Sandboxing helper."""
         return "I am ready to execute code. Use 'run_python_sandboxed' to begin."
 
+
 if __name__ == "__main__":
     from src.classes.base_agent.utilities import create_main_function
-    main = create_main_function(SandboxAgent, "Sandbox Agent", "Sandboxed execution tool")
-    main()
 
+    main = create_main_function(
+        SandboxAgent, "Sandbox Agent", "Sandboxed execution tool"
+    )
+    main()

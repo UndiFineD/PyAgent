@@ -46,7 +46,9 @@ class ReasoningParser(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def parse_streaming(self, token_stream: Iterator[str]) -> Generator[Tuple[str, bool], None, ParseResult]:
+    def parse_streaming(
+        self, token_stream: Iterator[str]
+    ) -> Generator[Tuple[str, bool], None, ParseResult]:
         """Parse streaming tokens, yield (token, is_thinking)."""
         raise NotImplementedError
 

@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_payloadgeneratormixin_exists():
     """Test that PayloadGeneratorMixin class exists and is importable."""
-    assert 'PayloadGeneratorMixin' in dir()
+    assert "PayloadGeneratorMixin" in dir()
 
 
 def test_payloadgeneratormixin_instantiation():
@@ -45,4 +45,3 @@ def test_payloadgeneratormixin_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

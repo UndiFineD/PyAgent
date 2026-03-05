@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_samplingparams_exists():
     """Test that SamplingParams class exists and is importable."""
-    assert 'SamplingParams' in dir()
+    assert "SamplingParams" in dir()
 
 
 def test_samplingstate_exists():
     """Test that SamplingState class exists and is importable."""
-    assert 'SamplingState' in dir()
+    assert "SamplingState" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

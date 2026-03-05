@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,12 +26,13 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
 class WorldModelAgent(BaseAgent):
     """
     Agent responsible for maintaining a 'World Model' of the workspace and environment.
     It can simulate actions and predict outcomes without executing them on the real system.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -46,27 +48,31 @@ class WorldModelAgent(BaseAgent):
         impacted_symbols = []
         if not os.path.exists(file_path):
             return ["File non-existent"]
-            
+
         try:
-            with open(file_path, encoding='utf-8') as f:
+            with open(file_path, encoding="utf-8") as f:
                 tree = ast.parse(f.read())
-                
+
             for node in ast.walk(tree):
                 if isinstance(node, (ast.FunctionDef, ast.ClassDef)):
                     impacted_symbols.append(node.name)
         except Exception as e:
             return [f"AST Error: {str(e)}"]
-            
+
         return impacted_symbols
 
     @as_tool
-    def predict_action_outcome(self, action_description: str, current_context: str) -> dict[str, Any]:
+    def predict_action_outcome(
+        self, action_description: str, current_context: str
+    ) -> dict[str, Any]:
         """
         Predicts the outcome of a proposed action based on current context.
         Returns a dictionary with predicted success, side effects, and risk level.
         """
-        logging.info(f"WorldModelAgent: Predicting outcome for action: {action_description}")
-        
+        logging.info(
+            f"WorldModelAgent: Predicting outcome for action: {action_description}"
+        )
+
         # In a real implementation, this would involve lookahead reasoning
         # and checking the file tree/project graph.
         prompt = (
@@ -74,7 +80,7 @@ class WorldModelAgent(BaseAgent):
             f"Predict the outcome of this action: {action_description}\n"
             "Format your response as a JSON object with keys: 'success_probability', 'predicted_changes', 'risks', 'validation_steps'."
         )
-        
+
         response = self.think(prompt)
         try:
             return json.loads(response)
@@ -83,7 +89,7 @@ class WorldModelAgent(BaseAgent):
                 "success_probability": 0.8,
                 "predicted_changes": ["Hypothetical changes based on description"],
                 "risks": ["Potential hallucination in prediction"],
-                "validation_steps": ["Verify manually"]
+                "validation_steps": ["Verify manually"],
             }
 
     @as_tool
@@ -92,22 +98,28 @@ class WorldModelAgent(BaseAgent):
         Simulates the state of the workspace after a set of hypothetical changes.
         Useful for 'what-if' analysis.
         """
-        logging.info(f"WorldModelAgent: Simulating workspace state with {len(hypothetical_changes)} changes.")
-        
+        logging.info(
+            f"WorldModelAgent: Simulating workspace state with {len(hypothetical_changes)} changes."
+        )
+
         simulation = "SIMULATED WORKSPACE STATE:\n"
         for change in hypothetical_changes:
             simulation += f"- [SIMULATED] {change}\n"
-            
+
         return simulation
 
     @as_tool
-    def simulate_agent_interaction(self, agent_a: str, agent_b: str, shared_goal: str) -> dict[str, Any]:
+    def simulate_agent_interaction(
+        self, agent_a: str, agent_b: str, shared_goal: str
+    ) -> dict[str, Any]:
         """
         Recursive World Modeling: Simulates how two agents will interact to solve a goal.
         Predicts potential conflicts, cooperative strategies, and final throughput.
         """
-        logging.info(f"WorldModelAgent: Simulating interaction between {agent_a} and {agent_b} for goal: {shared_goal}")
-        
+        logging.info(
+            f"WorldModelAgent: Simulating interaction between {agent_a} and {agent_b} for goal: {shared_goal}"
+        )
+
         prompt = (
             f"Simulate the interaction between Agent A ({agent_a}) and Agent B ({agent_b}) "
             f"collaborating on this goal: {shared_goal}.\n"
@@ -117,14 +129,17 @@ class WorldModelAgent(BaseAgent):
             "3. Probability of successful convergence.\n"
             "Format your response as a JSON object."
         )
-        
+
         response = self.think(prompt)
         try:
             return json.loads(response)
         except Exception:
             return {
                 "bottlenecks": ["Communication overhead"],
-                "division_of_labor": {agent_a: "Primary executor", agent_b: "QA/Validator"},
+                "division_of_labor": {
+                    agent_a: "Primary executor",
+                    agent_b: "QA/Validator",
+                },
                 "convergence_probability": 0.95,
-                "note": "Simulation based on standard cooperation patterns."
+                "note": "Simulation based on standard cooperation patterns.",
             }

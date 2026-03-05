@@ -114,26 +114,37 @@ class WorkspaceCore:
 
         if rc and hasattr(rc, "parse_codeignore_rust"):
             try:
-                patterns = rc.parse_codeignore_rust(str(ignore_path))  # pylint: disable=no-member
+                patterns = rc.parse_codeignore_rust(
+                    str(ignore_path)
+                )  # pylint: disable=no-member
                 return set(patterns)
-            except RuntimeError as err:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                RuntimeError
+            ) as err:  # pylint: disable=broad-exception-caught, unused-variable
                 self.logger.warning("Rust ignore parsing failed: %s", err)
 
         try:
             mtime = ignore_path.stat().st_mtime
-            if cache_key in self._ignore_cache and self._ignore_cache_time.get(cache_key) == mtime:
+            if (
+                cache_key in self._ignore_cache
+                and self._ignore_cache_time.get(cache_key) == mtime
+            ):
                 return self._ignore_cache[cache_key]
 
             content = ignore_path.read_text(encoding="utf-8")
             patterns = {
-                line.strip() for line in content.split("\n") if line.strip() and not line.strip().startswith("#")
+                line.strip()
+                for line in content.split("\n")
+                if line.strip() and not line.strip().startswith("#")
             }
 
             self._ignore_cache[cache_key] = patterns
             self._ignore_cache_time[cache_key] = mtime
             return patterns
 
-        except OSError as err:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            OSError
+        ) as err:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.warning("Failed to read .codeignore: %s", err)
             return set()
 

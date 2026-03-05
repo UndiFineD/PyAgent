@@ -31,6 +31,7 @@ from dataclasses import dataclass
 @dataclass
 class AIServiceConfig:
     """Configuration for AI service providers."""
+
     provider: str
     api_key: Optional[str] = None
     base_url: Optional[str] = None
@@ -50,10 +51,7 @@ class AIServiceProvider(ABC):
 
     @abstractmethod
     async def process_request(
-        self,
-        service_type: str,
-        data: Union[str, bytes, Dict[str, Any]],
-        **kwargs
+        self, service_type: str, data: Union[str, bytes, Dict[str, Any]], **kwargs
     ) -> Dict[str, Any]:
         """Process a request for the specified service type."""
         pass
@@ -67,10 +65,7 @@ class OpenAIProvider(AIServiceProvider):
     """OpenAI API provider."""
 
     async def process_request(
-        self,
-        service_type: str,
-        data: Union[str, bytes, Dict[str, Any]],
-        **kwargs
+        self, service_type: str, data: Union[str, bytes, Dict[str, Any]], **kwargs
     ) -> Dict[str, Any]:
         # Implementation would use OpenAI SDK
         # This is a placeholder showing the pattern
@@ -109,7 +104,7 @@ class CloudflareProvider(AIServiceProvider):
         "translation": "@cf/meta/m2m100-1.2b",
         "text_classification": "@cf/huggingface/distilbert-sst-2-int8",
         "image_classification": "@cf/microsoft/resnet-50",
-        "text_embeddings": "@cf/baai/bge-base-en-v1.5"
+        "text_embeddings": "@cf/baai/bge-base-en-v1.5",
     }
 
     def __init__(self, config: AIServiceConfig):
@@ -118,10 +113,7 @@ class CloudflareProvider(AIServiceProvider):
         self.config.models.update(self.DEFAULT_MODELS)
 
     async def process_request(
-        self,
-        service_type: str,
-        data: Union[str, bytes, Dict[str, Any]],
-        **kwargs
+        self, service_type: str, data: Union[str, bytes, Dict[str, Any]], **kwargs
     ) -> Dict[str, Any]:
         start_time = time.time()
 
@@ -135,7 +127,7 @@ class CloudflareProvider(AIServiceProvider):
 
             headers = {
                 "Authorization": f"Bearer {self.config.api_key}",
-                "Content-Type": self._get_content_type(data)
+                "Content-Type": self._get_content_type(data),
             }
 
             # Prepare request body
@@ -156,9 +148,9 @@ class CloudflareProvider(AIServiceProvider):
 
     def _build_gateway_url(self, model: str) -> str:
         """Build Cloudflare AI Gateway URL."""
-        account_id = getattr(self.config, 'account_id', 'account')
-        gateway_slug = getattr(self.config, 'gateway_slug', 'gateway')
-        provider = getattr(self.config, 'gateway_provider', 'workers-ai')
+        account_id = getattr(self.config, "account_id", "account")
+        gateway_slug = getattr(self.config, "gateway_slug", "gateway")
+        provider = getattr(self.config, "gateway_provider", "workers-ai")
 
         base_url = self.config.base_url or "https://gateway.ai.cloudflare.com/v1"
         return f"{base_url}/{account_id}/{gateway_slug}/{provider}/{model}"
@@ -173,27 +165,18 @@ class CloudflareProvider(AIServiceProvider):
             return "text/plain"
 
     def _prepare_request_body(
-        self,
-        service_type: str,
-        data: Union[str, bytes, Dict[str, Any]],
-        **kwargs
+        self, service_type: str, data: Union[str, bytes, Dict[str, Any]], **kwargs
     ) -> Union[str, bytes, Dict[str, Any]]:
         """Prepare request body for different service types."""
         if service_type == "text_generation":
-            return {
-                "prompt": data if isinstance(data, str) else str(data),
-                **kwargs
-            }
+            return {"prompt": data if isinstance(data, str) else str(data), **kwargs}
         elif service_type in ["speech_recognition", "image_classification"]:
             return data  # Raw bytes
         else:
             return data
 
     async def _mock_api_call(
-        self,
-        url: str,
-        headers: Dict[str, str],
-        body: Union[str, bytes, Dict[str, Any]]
+        self, url: str, headers: Dict[str, str], body: Union[str, bytes, Dict[str, Any]]
     ) -> Dict[str, Any]:
         """Mock API call - in real implementation, use aiohttp."""
         # Simulate network delay
@@ -231,7 +214,7 @@ class MultimodalAIService:
         service_type: str,
         data: Union[str, bytes, Dict[str, Any]],
         provider: str = "default",
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """
         Process a multimodal AI request.
@@ -272,7 +255,7 @@ class MultimodalAIService:
         """Get service statistics."""
         return {
             "providers": list(self.providers.keys()),
-            "total_providers": len(self.providers)
+            "total_providers": len(self.providers),
         }
 
 
@@ -280,7 +263,7 @@ class MultimodalAIService:
 async def transcribe_audio(
     audio_data: bytes,
     provider: str = "default",
-    service: Optional[MultimodalAIService] = None
+    service: Optional[MultimodalAIService] = None,
 ) -> str:
     """Convenience function for audio transcription."""
     if service is None:
@@ -293,7 +276,7 @@ async def generate_text(
     prompt: str,
     provider: str = "default",
     service: Optional[MultimodalAIService] = None,
-    **kwargs
+    **kwargs,
 ) -> str:
     """Convenience function for text generation."""
     if service is None:
@@ -306,10 +289,12 @@ async def translate_text(
     text: str,
     target_language: str,
     provider: str = "default",
-    service: Optional[MultimodalAIService] = None
+    service: Optional[MultimodalAIService] = None,
 ) -> str:
     """Convenience function for text translation."""
     if service is None:
         service = MultimodalAIService()
-    result = await service.process("translation", text, provider, target_language=target_language)
+    result = await service.process(
+        "translation", text, provider, target_language=target_language
+    )
     return result.get("translated_text", "")

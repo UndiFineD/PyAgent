@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_blackboardmodule_exists():
     """Test that BlackboardModule class exists and is importable."""
-    assert 'BlackboardModule' in dir()
+    assert "BlackboardModule" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

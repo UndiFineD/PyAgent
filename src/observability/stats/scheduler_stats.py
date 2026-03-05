@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -146,7 +147,9 @@ class SpecDecodingStats:
     def position_acceptance_rates(self) -> list[float]:
         if not self.num_drafts:
             return [0.0] * len(self.num_accepted_tokens_per_pos)
-        rates: list[float] = [count / self.num_drafts for count in self.num_accepted_tokens_per_pos]
+        rates: list[float] = [
+            count / self.num_drafts for count in self.num_accepted_tokens_per_pos
+        ]
         return rates
 
     def reset(self) -> None:
@@ -411,7 +414,11 @@ class SchedulerStats:
         )
 
     def _clone_prefix_cache_stats(self) -> PrefixCacheStats:
-        return self.prefix_cache_stats.clone() if self.prefix_cache_stats else PrefixCacheStats()
+        return (
+            self.prefix_cache_stats.clone()
+            if self.prefix_cache_stats
+            else PrefixCacheStats()
+        )
 
     def _clone_spec_decoding_stats(self) -> SpecDecodingStats | None:
         return self.spec_decoding_stats.clone() if self.spec_decoding_stats else None
@@ -503,7 +510,9 @@ class SchedulerStatsCollector:
         avg_running_reqs = sum(s.num_running_reqs for s in self._history) / n
         avg_waiting_reqs = sum(s.num_waiting_reqs for s in self._history) / n
         avg_kv_usage = sum(s.kv_cache_usage for s in self._history) / n
-        avg_prefix_hit_rate = sum(s.prefix_cache_stats.hit_rate for s in self._history) / n
+        avg_prefix_hit_rate = (
+            sum(s.prefix_cache_stats.hit_rate for s in self._history) / n
+        )
         result = {
             "avg_running_reqs": avg_running_reqs,
             "avg_waiting_reqs": avg_waiting_reqs,
@@ -514,7 +523,9 @@ class SchedulerStatsCollector:
 
     def drain_events(self) -> list[KVCacheEvictionEvent]:
         """Get and clear eviction events."""
-        events: list[KVCacheEvictionEvent] = list(self._current.kv_cache_eviction_events)
+        events: list[KVCacheEvictionEvent] = list(
+            self._current.kv_cache_eviction_events
+        )
         self._current.kv_cache_eviction_events.clear()
         return events
 

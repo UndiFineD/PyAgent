@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_knowledgesymbolmixin_exists():
     """Test that KnowledgeSymbolMixin class exists and is importable."""
-    assert 'KnowledgeSymbolMixin' in dir()
+    assert "KnowledgeSymbolMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

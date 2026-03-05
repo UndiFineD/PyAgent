@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_matchingstrategy_exists():
     """Test that MatchingStrategy class exists and is importable."""
-    assert 'MatchingStrategy' in dir()
+    assert "MatchingStrategy" in dir()
 
 
 def test_ngramconfig_exists():
     """Test that NgramConfig class exists and is importable."""
-    assert 'NgramConfig' in dir()
+    assert "NgramConfig" in dir()
 
 
 def test_proposalstats_exists():
     """Test that ProposalStats class exists and is importable."""
-    assert 'ProposalStats' in dir()
+    assert "ProposalStats" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

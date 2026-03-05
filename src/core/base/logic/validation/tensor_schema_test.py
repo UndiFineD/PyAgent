@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "validate_tensor"), "validate_tensor missing"
     assert hasattr(mod, "validate_tensor_shape"), "validate_tensor_shape missing"
     assert hasattr(mod, "DynamicDim"), "DynamicDim missing"
-

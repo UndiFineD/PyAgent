@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -78,7 +79,9 @@ class QuantumReasonerAgent(BaseAgent):
         # Each branch reviews the others for logical consistency
         for i, branch in enumerate(branches):
             others = [b["content"] for j, b in enumerate(branches) if i != j]
-            interference_score = await self._calculate_interference(branch["content"], others)
+            interference_score = await self._calculate_interference(
+                branch["content"], others
+            )
             branch["amplitude"] = interference_score
 
         # 3. Wave Function Collapse (Pick highest amplitude)

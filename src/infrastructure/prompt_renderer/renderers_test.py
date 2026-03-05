@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_completionrenderer_exists():
     """Test that CompletionRenderer class exists and is importable."""
-    assert 'CompletionRenderer' in dir()
+    assert "CompletionRenderer" in dir()
 
 
 def test_chatrenderer_exists():
     """Test that ChatRenderer class exists and is importable."""
-    assert 'ChatRenderer' in dir()
+    assert "ChatRenderer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

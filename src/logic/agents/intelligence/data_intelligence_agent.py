@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -59,7 +60,9 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             return f"Error connecting to database: {e}"
 
     @as_tool
-    def execute_query(self, sql: str, read_only: bool = True) -> str:  # pylint: disable=too-many-return-statements
+    def execute_query(
+        self, sql: str, read_only: bool = True
+    ) -> str:  # pylint: disable=too-many-return-statements
         """Executes a SQL query and returns results.
 
         Args:
@@ -115,7 +118,9 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 cols = cursor.fetchall()
                 cols_str = ", ".join([f"{c[1]} ({c[2]})" for c in cols])
                 schema_info.append(f"Table: {t_name} | Columns: {cols_str}")
-            return "\n".join(schema_info) if schema_info else "Database holds no tables."
+            return (
+                "\n".join(schema_info) if schema_info else "Database holds no tables."
+            )
         except (sqlite3.Error, RuntimeError) as e:
             return f"Error retrieving schema: {e}"
 
@@ -150,7 +155,12 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             with open(path, "r", encoding="utf-8", errors="ignore") as f:
                 lines = f.readlines()
                 header = lines[0].strip().split(",") if lines else []
-                return {"type": "csv", "rows": len(lines), "header": header, "note": "Basic parse"}
+                return {
+                    "type": "csv",
+                    "rows": len(lines),
+                    "header": header,
+                    "note": "Basic parse",
+                }
 
     def _parse_excel(self, path: Path, mode: str) -> dict[str, Any]:
         _ = mode  # pylint: disable=unused-argument
@@ -185,7 +195,10 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 "missing_values": {"target": 0, "features": 12},
                 "correlations": {"feature_a_vs_b": 0.85},
             },
-            "insights": ["High correlation detected between features A and B.", "Target variable is balanced."],
+            "insights": [
+                "High correlation detected between features A and B.",
+                "Target variable is balanced.",
+            ],
         }
 
     @as_tool

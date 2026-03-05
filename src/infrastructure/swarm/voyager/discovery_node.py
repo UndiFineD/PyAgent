@@ -1,7 +1,7 @@
-
 """
 Discovery node.py module.
 """
+
 # Copyright 2026 PyAgent Authors
 # Phase 319: Multi-Cloud Teleportation (Discovery Node)
 
@@ -29,7 +29,9 @@ class VoyagerPeerListener(ServiceListener):
 
     def add_service(self, zc: Any, type_: str, name: str) -> None:
         """Called by Zeroconf when a new service is discovered."""
-        asyncio.run_coroutine_threadsafe(self._async_add_service(zc, type_, name), self.loop)
+        asyncio.run_coroutine_threadsafe(
+            self._async_add_service(zc, type_, name), self.loop
+        )
 
     async def _async_add_service(self, zc: Any, type_: str, name: str) -> None:
         """Asynchronously retrieves service info and notifies the callback."""
@@ -54,7 +56,12 @@ class DiscoveryNode:
 
     SERVICE_TYPE = "_pyagentv._tcp.local."
 
-    def __init__(self, node_name: Optional[str] = None, port: int = 8000, transport_port: int = 5555) -> None:
+    def __init__(
+        self,
+        node_name: Optional[str] = None,
+        port: int = 8000,
+        transport_port: int = 5555,
+    ) -> None:
         self.node_id: str = str(uuid.uuid4())[:8]
         self.node_name: str = node_name or f"PyAgent-{self.node_id}"
         self.port: int = port
@@ -115,7 +122,9 @@ class DiscoveryNode:
             server=f"{self.node_name}.local.",
         )
 
-        logger.info(f"Voyager: Advertising node {self.node_name} at {self.local_ip}:{self.port}")
+        logger.info(
+            f"Voyager: Advertising node {self.node_name} at {self.local_ip}:{self.port}"
+        )
         await self.aiozc.zeroconf.async_register_service(self.info)
 
     async def start_discovery(self) -> None:
@@ -126,14 +135,18 @@ class DiscoveryNode:
         logger.info("Voyager: Starting peer discovery browser...")
         loop: asyncio.AbstractEventLoop = asyncio.get_running_loop()
         self.browser = ServiceBrowser(
-            self.aiozc.zeroconf, self.SERVICE_TYPE, VoyagerPeerListener(self._peer_discovered, loop)
+            self.aiozc.zeroconf,
+            self.SERVICE_TYPE,
+            VoyagerPeerListener(self._peer_discovered, loop),
         )
 
     def _peer_discovered(self, info: ServiceInfo) -> None:
         """Internal callback for when a peer is discovered via Zeroconf."""
         if info.name not in self.peers:
             self.peers[info.name] = info
-            logger.info(f"Voyager: Peer Registry updated. Total peers: {len(self.peers)}")
+            logger.info(
+                f"Voyager: Peer Registry updated. Total peers: {len(self.peers)}"
+            )
 
     async def stop(self) -> None:
         """Stops advertising and discovery."""
@@ -154,7 +167,9 @@ class DiscoveryNode:
                     "addresses": info.parsed_addresses(),
                     "port": info.port,
                     "properties": {
-                        k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v
+                        k.decode() if isinstance(k, bytes) else k: (
+                            v.decode() if isinstance(v, bytes) else v
+                        )
                         for k, v in info.properties.items()
                     },
                 }
@@ -167,15 +182,26 @@ class DiscoveryNode:
         This enables decentralized routing without hardcoded IPs.
         """
         for name, info in self.peers.items():
-            props: Dict[str | bytearray | memoryview[_I], str | bytearray | memoryview[_I] | None] = {
-                k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v
+            props: Dict[
+                str | bytearray | memoryview[_I],
+                str | bytearray | memoryview[_I] | None,
+            ] = {
+                k.decode() if isinstance(k, bytes) else k: (
+                    v.decode() if isinstance(v, bytes) else v
+                )
                 for k, v in info.properties.items()
             }
 
             # Match by node_name, node_id, or mDNS service name
-            if peer_name == props.get("node_id") or peer_name == name.split(".")[0] or peer_name in name:
+            if (
+                peer_name == props.get("node_id")
+                or peer_name == name.split(".")[0]
+                or peer_name in name
+            ):
                 addrs: List[str] = info.parsed_addresses()
-                t_port: str | bytearray | memoryview[_I] | None = props.get("transport_port")
+                t_port: str | bytearray | memoryview[_I] | None = props.get(
+                    "transport_port"
+                )
                 if addrs and t_port:
                     return (addrs[0], int(t_port))
 

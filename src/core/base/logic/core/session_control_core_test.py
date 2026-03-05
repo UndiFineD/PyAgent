@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_sessionsignal_exists():
     """Test that SessionSignal class exists and is importable."""
-    assert 'SessionSignal' in dir()
+    assert "SessionSignal" in dir()
 
 
 def test_sessioncontrolcore_exists():
     """Test that SessionControlCore class exists and is importable."""
-    assert 'SessionControlCore' in dir()
+    assert "SessionControlCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_ebnfgrammar_exists():
     """Test that EBNFGrammar class exists and is importable."""
-    assert 'EBNFGrammar' in dir()
+    assert "EBNFGrammar" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

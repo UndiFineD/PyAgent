@@ -11,13 +11,15 @@ from typing import Dict, Any, Optional
 
 try:
     import psutil
+
     HAS_PSUTIL = True
 except ImportError:
     HAS_PSUTIL = False
 
+
 class ResourceMonitor:
     """Monitors local system load to inform agent execution strategies."""
-    
+
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
         self.stats_file = self.workspace_root / ".system_stats.json"
@@ -29,20 +31,20 @@ class ResourceMonitor:
             "cpu_usage_pct": 0,
             "memory_usage_pct": 0,
             "disk_free_gb": 0,
-            "status": "UNAVAILABLE"
+            "status": "UNAVAILABLE",
         }
-        
+
         if not HAS_PSUTIL:
             return stats
-            
+
         try:
             stats["cpu_usage_pct"] = psutil.cpu_percent(interval=None)
             mem = psutil.virtual_memory()
             stats["memory_usage_pct"] = mem.percent
-            
+
             disk = psutil.disk_usage(str(self.workspace_root))
             stats["disk_free_gb"] = round(disk.free / (1024**3), 2)
-            
+
             # Simple threshold logic
             if stats["cpu_usage_pct"] > 90 or stats["memory_usage_pct"] > 90:
                 stats["status"] = "CRITICAL"
@@ -50,11 +52,11 @@ class ResourceMonitor:
                 stats["status"] = "WARNING"
             else:
                 stats["status"] = "HEALTHY"
-                
+
         except Exception as e:
             logging.error(f"Failed to gather resource stats: {e}")
             stats["status"] = "ERROR"
-            
+
         return stats
 
     def save_stats(self) -> str:
@@ -73,6 +75,7 @@ class ResourceMonitor:
         elif stats["status"] == "WARNING":
             return "CAUTION: Elevated load. Run tasks sequentially rather than in parallel."
         return "PROCEED: System resources are sufficient."
+
 
 if __name__ == "__main__":
     mon = ResourceMonitor("c:/DEV/PyAgent")

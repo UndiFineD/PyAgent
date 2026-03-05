@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_coreexpansionagent_exists():
     """Test that CoreExpansionAgent class exists and is importable."""
-    assert 'CoreExpansionAgent' in dir()
+    assert "CoreExpansionAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

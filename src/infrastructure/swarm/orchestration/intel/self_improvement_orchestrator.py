@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,8 +25,9 @@ import requests
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.orchestration.core.self_improvement_core import \
-    SelfImprovementCore
+from src.infrastructure.swarm.orchestration.core.self_improvement_core import (
+    SelfImprovementCore,
+)
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
@@ -41,7 +43,9 @@ if TYPE_CHECKING:
     __version__ = VERSION
 
 
-class SelfImprovementOrchestrator(BaseAgent, OrchestratorCycleMixin, OrchestratorScanMixin, OrchestratorResultsMixin):
+class SelfImprovementOrchestrator(
+    BaseAgent, OrchestratorCycleMixin, OrchestratorScanMixin, OrchestratorResultsMixin
+):
     """
     Orchestrates the fleet's self-improvement cycle: scanning for tech debt,
     security leaks, and quality issues, and applying autonomous fixes.
@@ -65,23 +69,31 @@ class SelfImprovementOrchestrator(BaseAgent, OrchestratorCycleMixin, Orchestrato
         # We pass workspace_root as the file_path for BaseAgent context
         super().__init__(self.workspace_root)
         self.active_tasks: list[dict[str, Any]] = []
-        self.improvement_log: str = os.path.join(self.workspace_root, "data/logs", "self_improvement_audit.jsonl")
-        self.research_doc: str = os.path.join(self.workspace_root, "docs", "IMPROVEMENT_RESEARCH.md")
+        self.improvement_log: str = os.path.join(
+            self.workspace_root, "data/logs", "self_improvement_audit.jsonl"
+        )
+        self.research_doc: str = os.path.join(
+            self.workspace_root, "docs", "IMPROVEMENT_RESEARCH.md"
+        )
         os.makedirs(os.path.dirname(self.improvement_log), exist_ok=True)
 
         # Phase 107: AI-assisted refactoring
 
         self.ai: LLMClient = LLMClient(requests, workspace_root=self.workspace_root)
-        self.core: SelfImprovementCore = SelfImprovementCore(workspace_root=self.workspace_root)
-        self.analysis: SelfImprovementAnalysis = SelfImprovementAnalysis(workspace_root=self.workspace_root)
-        
+        self.core: SelfImprovementCore = SelfImprovementCore(
+            workspace_root=self.workspace_root
+        )
+        self.analysis: SelfImprovementAnalysis = SelfImprovementAnalysis(
+            workspace_root=self.workspace_root
+        )
+
         # Inject Profiling Agent into Analysis
         if self.fleet:
             try:
                 self.analysis.profiling_agent = self.fleet.agents.ProfilingAgent
             except (AttributeError, KeyError):
                 pass
-        
+
         self.fixer: SelfImprovementFixer = SelfImprovementFixer(
             ai=self.ai, core=self.core, workspace_root=self.workspace_root
         )

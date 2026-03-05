@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_cpuplatform_exists():
     """Test that CpuPlatform class exists and is importable."""
-    assert 'CpuPlatform' in dir()
+    assert "CpuPlatform" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

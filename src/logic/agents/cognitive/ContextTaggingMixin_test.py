@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_contexttaggingmixin_exists():
     """Test that ContextTaggingMixin class exists and is importable."""
-    assert 'ContextTaggingMixin' in dir()
+    assert "ContextTaggingMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

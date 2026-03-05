@@ -19,4 +19,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "PoolingResult"), "PoolingResult missing"
     assert hasattr(mod, "EmbeddingOutput"), "EmbeddingOutput missing"
     assert hasattr(mod, "ClassificationOutput"), "ClassificationOutput missing"
-

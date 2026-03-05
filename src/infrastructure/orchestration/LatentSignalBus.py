@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,41 +32,42 @@ __version__ = VERSION
 if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
 
+
 class LatentSignalBus:
     """
     Implements Telepathic Signal Compression (Phase 30).
     Facilitates high-bandwidth inter-agent communication using compressed 'latent vectors'
     (simulated as base64-encoded state payloads) instead of plain natural language.
     """
-    
+
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
-        self.latent_space: dict[str, Any] = {} # channel -> latent_vector
+        self.latent_space: dict[str, Any] = {}  # channel -> latent_vector
 
     def transmit_latent(self, channel: str, state_payload: dict[str, Any]) -> str:
         """
         Compresses a complex state payload into a 'latent signal' and transmits it.
         """
         logging.info(f"LatentSignalBus: Encoding state for channel '{channel}'")
-        
+
         # In a real implementation, this would use a VAE or Autoencoder to minify state.
         # Here we simulate with minified JSON + base64 encoding.
-        raw_json = json.dumps(state_payload, separators=(',', ':'))
+        raw_json = json.dumps(state_payload, separators=(",", ":"))
         latent_vector = base64.b64encode(raw_json.encode()).decode()
-        
+
         self.latent_space[channel] = {
             "vector": latent_vector,
             "timestamp": datetime.now().isoformat(),
-            "origin": "telepathic_compression_v1"
+            "origin": "telepathic_compression_v1",
         }
-        
+
         # Emit signal to notify listeners of latent update
-        if hasattr(self.fleet, 'signals'):
-            self.fleet.signals.emit("LATENT_SIGNAL_RECEIVED", {
-                "channel": channel,
-                "latent_checksum": hash(latent_vector)
-            })
-            
+        if hasattr(self.fleet, "signals"):
+            self.fleet.signals.emit(
+                "LATENT_SIGNAL_RECEIVED",
+                {"channel": channel, "latent_checksum": hash(latent_vector)},
+            )
+
         return latent_vector
 
     def receive_latent(self, channel: str) -> dict[str, Any] | None:
@@ -74,12 +76,14 @@ class LatentSignalBus:
         """
         if channel not in self.latent_space:
             return None
-            
+
         latent_data = self.latent_space[channel]
         vector = latent_data["vector"]
-        
-        logging.info(f"LatentSignalBus: Decoding latent signal from channel '{channel}'")
-        
+
+        logging.info(
+            f"LatentSignalBus: Decoding latent signal from channel '{channel}'"
+        )
+
         try:
             decoded_json = base64.b64decode(vector).decode()
             return json.loads(decoded_json)

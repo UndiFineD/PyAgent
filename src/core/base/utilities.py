@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +15,6 @@ from __future__ import annotations
 # limitations under the License.
 
 
-
 try:
     from src.classes.base_agent.utilities import (
         as_tool,
@@ -27,6 +27,7 @@ except Exception:  # pragma: no cover - best-effort shim
     def as_tool(priority: int = 0, category: str | None = None):
         def decorator(f):
             return f
+
         if callable(priority):
             return decorator(priority)
         return decorator
@@ -34,9 +35,11 @@ except Exception:  # pragma: no cover - best-effort shim
     def create_main_function(agent_class, description: str, context_help: str):
         def main():
             raise RuntimeError("create_main_function shim called during collection")
+
         return main
 
     def setup_logging(verbosity_arg: int = 0) -> None:  # no-op
         return
+
 
 __all__ = ["as_tool", "create_main_function", "setup_logging"]

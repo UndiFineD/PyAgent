@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -49,7 +50,9 @@ class AgentCommandHandler:
         self.recorder: Any = recorder
         self.shell = ShellCore(repo_root=repo_root)
 
-    def _record(self, action: str, result: str, meta: dict[str, Any] | None = None) -> None:
+    def _record(
+        self, action: str, result: str, meta: dict[str, Any] | None = None
+    ) -> None:
         """Internal helper to record shell operations if recorder is available."""
         if self.recorder:
             self.recorder.record_interaction(
@@ -70,7 +73,9 @@ class AgentCommandHandler:
         # Retry logic handled internally or via loop
         result = None
         for i in range(max_retries):
-            logging.debug("Running command: %s... (timeout=%ss)", " ".join(local_cmd[:3]), timeout)
+            logging.debug(
+                "Running command: %s... (timeout=%ss)", " ".join(local_cmd[:3]), timeout
+            )
 
             res = self.shell.execute(local_cmd, timeout=timeout, env=env)
 
@@ -79,7 +84,10 @@ class AgentCommandHandler:
 
             # Convert ShellResult to CompletedProcess for compatibility
             result = subprocess.CompletedProcess(
-                args=res.command, returncode=res.returncode, stdout=res.stdout, stderr=res.stderr
+                args=res.command,
+                returncode=res.returncode,
+                stdout=res.stdout,
+                stderr=res.stderr,
             )
 
             if result.returncode == 0 or i == max_retries - 1:
@@ -97,10 +105,14 @@ class AgentCommandHandler:
 
         if result is None:
             # Fallback for static analysis, though flow ensures it's set
-            return subprocess.CompletedProcess(args=cmd, returncode=1, stdout="", stderr="Execution failed")
+            return subprocess.CompletedProcess(
+                args=cmd, returncode=1, stdout="", stderr="Execution failed"
+            )
         return result
 
-    def _prepare_command_environment(self, cmd: list[str]) -> tuple[list[str], dict[str, str]]:
+    def _prepare_command_environment(
+        self, cmd: list[str]
+    ) -> tuple[list[str], dict[str, str]]:
         """Prepares the command and environment for execution, detecting sub-agents."""
         local_cmd = list(cmd)
         env = os.environ.copy()
@@ -109,10 +121,14 @@ class AgentCommandHandler:
         is_agent_script = False
         try:
             is_agent_script = (
-                len(local_cmd) > 1 and local_cmd[0] == sys.executable and Path(local_cmd[1]).name.startswith("agent_")
+                len(local_cmd) > 1
+                and local_cmd[0] == sys.executable
+                and Path(local_cmd[1]).name.startswith("agent_")
             )
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            # pylint: disable=broad-exception-caught
             pass
 
         if is_agent_script:
@@ -122,11 +138,17 @@ class AgentCommandHandler:
 
             try:
                 script_name = Path(local_cmd[1]).name
-                agent_name = script_name[len("agent_") : -3] if script_name.endswith(".py") else None
+                agent_name = (
+                    script_name[len("agent_") : -3]
+                    if script_name.endswith(".py")
+                    else None
+                )
                 if agent_name:
                     env.update(self._get_agent_env_vars(agent_name))
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                # pylint: disable=broad-exception-caught
                 pass
 
         return local_cmd, env
@@ -167,13 +189,19 @@ class AgentCommandHandler:
 
             if spec and isinstance(spec, dict):
                 if "provider" in spec:
-                    os.environ["DV_AGENT_MODEL_PROVIDER"] = str(spec.get("provider", ""))
+                    os.environ["DV_AGENT_MODEL_PROVIDER"] = str(
+                        spec.get("provider", "")
+                    )
                 if "model" in spec:
                     os.environ["DV_AGENT_MODEL_NAME"] = str(spec.get("model", ""))
                 if "temperature" in spec:
-                    os.environ["DV_AGENT_MODEL_TEMPERATURE"] = str(spec.get("temperature", ""))
+                    os.environ["DV_AGENT_MODEL_TEMPERATURE"] = str(
+                        spec.get("temperature", "")
+                    )
                 if "max_tokens" in spec:
-                    os.environ["DV_AGENT_MODEL_MAX_TOKENS"] = str(spec.get("max_tokens", ""))
+                    os.environ["DV_AGENT_MODEL_MAX_TOKENS"] = str(
+                        spec.get("max_tokens", "")
+                    )
 
             yield
         finally:

@@ -33,40 +33,39 @@ except ImportError as e:
 
 def test_kvconnectorrole_exists():
     """Test that KVConnectorRole class exists and is importable."""
-    assert 'KVConnectorRole' in dir()
+    assert "KVConnectorRole" in dir()
 
 
 def test_kvtransfermode_exists():
     """Test that KVTransferMode class exists and is importable."""
-    assert 'KVTransferMode' in dir()
+    assert "KVTransferMode" in dir()
 
 
 def test_kvtransferconfig_exists():
     """Test that KVTransferConfig class exists and is importable."""
-    assert 'KVTransferConfig' in dir()
+    assert "KVTransferConfig" in dir()
 
 
 def test_kvconnectormetadata_exists():
     """Test that KVConnectorMetadata class exists and is importable."""
-    assert 'KVConnectorMetadata' in dir()
+    assert "KVConnectorMetadata" in dir()
 
 
 def test_kvcacheblocks_exists():
     """Test that KVCacheBlocks class exists and is importable."""
-    assert 'KVCacheBlocks' in dir()
+    assert "KVCacheBlocks" in dir()
 
 
 def test_forwardcontext_exists():
     """Test that ForwardContext class exists and is importable."""
-    assert 'ForwardContext' in dir()
+    assert "ForwardContext" in dir()
 
 
 def test_request_exists():
     """Test that Request class exists and is importable."""
-    assert 'Request' in dir()
+    assert "Request" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

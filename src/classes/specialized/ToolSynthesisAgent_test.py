@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_toolsynthesisagent_exists():
     """Test that ToolSynthesisAgent class exists and is importable."""
-    assert 'ToolSynthesisAgent' in dir()
+    assert "ToolSynthesisAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

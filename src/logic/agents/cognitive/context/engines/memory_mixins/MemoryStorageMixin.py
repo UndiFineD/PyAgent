@@ -7,9 +7,11 @@ from typing import Any
 
 try:
     import chromadb
+
     HAS_CHROMA = True
 except Exception:
     HAS_CHROMA = False
+
 
 class MemoryStorageMixin:
     """Methods for storage and DB initialization."""

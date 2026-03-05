@@ -1,4 +1,3 @@
-
 """
 Core logic for Entropy Measurement (Phase 172).
 Calculates structural complexity metrics.
@@ -6,6 +5,7 @@ Calculates structural complexity metrics.
 
 import os
 import ast
+
 
 class EntropyCore:
     @staticmethod
@@ -18,10 +18,12 @@ class EntropyCore:
             tree = ast.parse(code)
         except SyntaxError:
             return 0
-            
+
         complexity = 1
         for node in ast.walk(tree):
-            if isinstance(node, (ast.If, ast.While, ast.For, ast.And, ast.Or, ast.ExceptHandler)):
+            if isinstance(
+                node, (ast.If, ast.While, ast.For, ast.And, ast.Or, ast.ExceptHandler)
+            ):
                 complexity += 1
         return complexity
 
@@ -32,14 +34,14 @@ class EntropyCore:
         """
         if not os.path.exists(file_path):
             return {}
-            
+
         with open(file_path, encoding="utf-8", errors="ignore") as f:
             content = f.read()
-            
+
         return {
             "size_bytes": len(content),
             "lines": len(content.splitlines()),
-            "complexity": EntropyCore.calculate_cyclomatic_complexity(content)
+            "complexity": EntropyCore.calculate_cyclomatic_complexity(content),
         }
 
     @staticmethod
@@ -54,14 +56,14 @@ class EntropyCore:
                     metrics = EntropyCore.get_file_metrics(os.path.join(root, file))
                     if metrics:
                         all_metrics.append(metrics)
-                        
+
         if not all_metrics:
             return {}
-            
+
         count = len(all_metrics)
         return {
-            "avg_size": sum(m['size_bytes'] for m in all_metrics) / count,
-            "avg_complexity": sum(m['complexity'] for m in all_metrics) / count,
-            "max_complexity": max(m['complexity'] for m in all_metrics),
-            "file_count": count
+            "avg_size": sum(m["size_bytes"] for m in all_metrics) / count,
+            "avg_complexity": sum(m["complexity"] for m in all_metrics) / count,
+            "max_complexity": max(m["complexity"] for m in all_metrics),
+            "file_count": count,
         }

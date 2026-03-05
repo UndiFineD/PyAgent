@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_lmstudioapiclient_exists():
     """Test that LMStudioAPIClient class exists and is importable."""
-    assert 'LMStudioAPIClient' in dir()
+    assert "LMStudioAPIClient" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

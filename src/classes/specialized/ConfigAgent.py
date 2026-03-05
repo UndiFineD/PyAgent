@@ -12,9 +12,10 @@ from typing import Dict, List, Any, Optional
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
+
 class ConfigAgent(BaseAgent):
     """Ensures the agent fleet has all necessary configurations and API keys."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
@@ -30,13 +31,13 @@ class ConfigAgent(BaseAgent):
         """Checks for required environment variables."""
         required = ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", "WORKSPACE_ROOT"]
         missing = [key for key in required if key not in os.environ]
-        
+
         report = ["## ⚙️ Environment Validation\n"]
         if not missing:
             report.append("✅ All required environment variables are set.")
         else:
             report.append(f"❌ **Missing variables**: {', '.join(missing)}")
-            
+
         return "\n".join(report)
 
     @as_tool
@@ -45,14 +46,16 @@ class ConfigAgent(BaseAgent):
         config_path = self.workspace_root / "config" / "models.yaml"
         if not config_path.exists():
             return "❌ `config/models.yaml` not found."
-            
+
         try:
             with open(config_path, "r") as f:
                 data = yaml.safe_load(f)
-            
+
             # Simple structure check
             if "models" in data and isinstance(data["models"], list):
-                return f"✅ `models.yaml` is valid. Detected {len(data['models'])} models."
+                return (
+                    f"✅ `models.yaml` is valid. Detected {len(data['models'])} models."
+                )
             else:
                 return "❌ `models.yaml` has invalid structure (missing 'models' list)."
         except Exception as e:

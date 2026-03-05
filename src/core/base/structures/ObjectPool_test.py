@@ -33,37 +33,37 @@ except ImportError as e:
 
 def test_resettable_exists():
     """Test that Resettable class exists and is importable."""
-    assert 'Resettable' in dir()
+    assert "Resettable" in dir()
 
 
 def test_poolstats_exists():
     """Test that PoolStats class exists and is importable."""
-    assert 'PoolStats' in dir()
+    assert "PoolStats" in dir()
 
 
 def test_objectpool_exists():
     """Test that ObjectPool class exists and is importable."""
-    assert 'ObjectPool' in dir()
+    assert "ObjectPool" in dir()
 
 
 def test_typedobjectpool_exists():
     """Test that TypedObjectPool class exists and is importable."""
-    assert 'TypedObjectPool' in dir()
+    assert "TypedObjectPool" in dir()
 
 
 def test_bufferpool_exists():
     """Test that BufferPool class exists and is importable."""
-    assert 'BufferPool' in dir()
+    assert "BufferPool" in dir()
 
 
 def test_tieredbufferpool_exists():
     """Test that TieredBufferPool class exists and is importable."""
-    assert 'TieredBufferPool' in dir()
+    assert "TieredBufferPool" in dir()
 
 
 def test_pooledcontextmanager_exists():
     """Test that PooledContextManager class exists and is importable."""
-    assert 'PooledContextManager' in dir()
+    assert "PooledContextManager" in dir()
 
 
 def test_get_list_pool_exists():
@@ -99,4 +99,3 @@ def test_pooled_set_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -12,6 +12,7 @@ import os
 import logging
 from typing import Dict, Any, Optional, List
 
+
 class ShardedKnowledgeCore:
     """Pure logic for sharding and retrieving knowledge at scale."""
 
@@ -20,9 +21,11 @@ class ShardedKnowledgeCore:
 
     def get_shard_id(self, entity_name: str) -> int:
         """Determines the shard ID for a given entity using stable hashing."""
-        return zlib.adler32(entity_name.encode('utf-8')) % self.shard_count
+        return zlib.adler32(entity_name.encode("utf-8")) % self.shard_count
 
-    def merge_knowledge(self, base: Dict[str, Any], delta: Dict[str, Any]) -> Dict[str, Any]:
+    def merge_knowledge(
+        self, base: Dict[str, Any], delta: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Merges new knowledge into existing structure with conflict resolution."""
         for key, value in delta.items():
             if key in base and isinstance(base[key], dict) and isinstance(value, dict):
@@ -31,9 +34,11 @@ class ShardedKnowledgeCore:
                 base[key] = value
         return base
 
-    def filter_stable_knowledge(self, data: Dict[str, Any], threshold_confidence: float = 0.8) -> Dict[str, Any]:
+    def filter_stable_knowledge(
+        self, data: Dict[str, Any], threshold_confidence: float = 0.8
+    ) -> Dict[str, Any]:
         """
-        Filters knowledge that is considered stable enough for the 'trillion parameter' 
+        Filters knowledge that is considered stable enough for the 'trillion parameter'
         HuggingFace export format.
         """
         stable = {}

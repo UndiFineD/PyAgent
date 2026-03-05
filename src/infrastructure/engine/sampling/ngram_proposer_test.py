@@ -21,4 +21,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "AdaptiveNgramProposer"), "AdaptiveNgramProposer missing"
     assert hasattr(mod, "SuffixTreeProposer"), "SuffixTreeProposer missing"
     assert hasattr(mod, "create_ngram_proposer"), "create_ngram_proposer missing"
-

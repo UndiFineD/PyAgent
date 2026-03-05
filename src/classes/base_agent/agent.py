@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -54,12 +55,19 @@ if TYPE_CHECKING:
     from src.core.base.verification import AgentVerifier
     from src.core.base.delegation import AgentDelegator
     from src.core.base.shell import ShellExecutor
+
     # from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder # Moved to __init__
-    from src.core.base.managers.ResourceQuotaManager import ResourceQuotaManager, QuotaConfig
-    from src.infrastructure.compute.backend.LocalContextRecorder import LocalContextRecorder
+    from src.core.base.managers.ResourceQuotaManager import (
+        ResourceQuotaManager,
+        QuotaConfig,
+    )
+    from src.infrastructure.compute.backend.LocalContextRecorder import (
+        LocalContextRecorder,
+    )
 
 try:
     import requests
+
     HAS_REQUESTS = True
 except ImportError:
     requests = None
@@ -129,32 +137,43 @@ class BaseAgent:
         - Supports multiple AI backends via execution_engine (Phase 314)
         - Can be used as context manager for automatic cleanup
     """
+
     # Class-level attributes for shared state
     _prompt_templates: dict[str, PromptTemplate] = {}
     _response_cache: dict[str, CacheEntry] = {}
     _plugins: dict[str, Any] = {}
     _event_hooks: dict[EventType, list[Callable[[dict[str, Any]], None]]] = {}
 
-
     def _register_capabilities(self) -> None:
         """Emits a signal with agent capabilities for discovery."""
         try:
             import asyncio
             from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
+
             signals = SignalRegistry()
             # Schedule the async emit to run in the background
             try:
                 loop = asyncio.get_event_loop()
                 if loop.is_running():
-                    asyncio.create_task(signals.emit("agent_capability_registration", {
-                        "agent": self.__class__.__name__,
-                        "capabilities": self.get_capabilities()
-                    }))
+                    asyncio.create_task(
+                        signals.emit(
+                            "agent_capability_registration",
+                            {
+                                "agent": self.__class__.__name__,
+                                "capabilities": self.get_capabilities(),
+                            },
+                        )
+                    )
                 else:
-                    loop.run_until_complete(signals.emit("agent_capability_registration", {
-                        "agent": self.__class__.__name__,
-                        "capabilities": self.get_capabilities()
-                    }))
+                    loop.run_until_complete(
+                        signals.emit(
+                            "agent_capability_registration",
+                            {
+                                "agent": self.__class__.__name__,
+                                "capabilities": self.get_capabilities(),
+                            },
+                        )
+                    )
             except RuntimeError:
                 # No event loop available, skip signal emission
                 pass
@@ -175,31 +194,34 @@ class BaseAgent:
         self.file_path = Path(file_path)
         self.previous_content: str = ""
         self.current_content: str = ""
-        self.fleet: Any = None # FleetManager reference
-        self.capabilities: list[str] = ["base"] # Phase 241: Default capabilities
-        
+        self.fleet: Any = None  # FleetManager reference
+        self.capabilities: list[str] = ["base"]  # Phase 241: Default capabilities
+
         # Phase 260: Priority and Preemption
         self.priority: AgentPriority = AgentPriority.NORMAL
         self._suspended: bool = False
-        
+
         # Knowledge Trinity initialization (Phase 126)
         try:
             from src.core.knowledge.knowledge_engine import KnowledgeEngine
+
             agent_name = self.__class__.__name__.lower().replace("agent", "") or "base"
-            self.knowledge = KnowledgeEngine(agent_id=agent_name, base_path=Path("data/agents"))
+            self.knowledge = KnowledgeEngine(
+                agent_id=agent_name, base_path=Path("data/agents")
+            )
         except (ImportError, ModuleNotFoundError):
             self.knowledge = None
-        
+
         # Phase 241: Auto-register capabilities if SignalRegistry is available
         self._register_capabilities()
-        
+
         # Strategy for agent execution (Phase 130: Lazy-loaded to avoid core-on-logic dependency)
         self._strategy: Any | None = None
 
         # New attributes for enhanced functionality
         self._state: AgentState = AgentState.INITIALIZED
         self._conversation_history: list[ConversationMessage] = []
-        self._scratchpad: list[str] = [] # Confucius-style persistent notes (Phase 128)
+        self._scratchpad: list[str] = []  # Confucius-style persistent notes (Phase 128)
         self._config: AgentConfig = self._load_config()
         self._token_usage = 0
         self._state_data: dict[str, Any] = {}
@@ -207,18 +229,22 @@ class BaseAgent:
         self._model: str | None = None
         self._is_stop_requested = False
         self._system_prompt: str = "You are a helpful AI assistant."
-        
+
         # Phase 245: RESOURCE QUOTAS & BUDGETS
         self.quotas = ResourceQuotaManager(
             config=QuotaConfig(
-                max_tokens=getattr(self._config, 'max_tokens_per_session', None),
-                max_time_seconds=getattr(self._config, 'max_time_per_session', None)
+                max_tokens=getattr(self._config, "max_tokens_per_session", None),
+                max_time_seconds=getattr(self._config, "max_time_per_session", None),
             )
         )
-        
+
         # Determine Workspace Root (Phase 108: Robust detection delegated to Core)
-        self._workspace_root = str(self.file_path.parent) if self.file_path.parent != self.file_path else str(Path.cwd())
-        
+        self._workspace_root = (
+            str(self.file_path.parent)
+            if self.file_path.parent != self.file_path
+            else str(Path.cwd())
+        )
+
         self._local_global_context = None
 
         # Initialize Core Logic (Potential Rust Target)
@@ -228,8 +254,10 @@ class BaseAgent:
         # Advanced features
         # Derive agent name for data isolation (e.g., CoderAgent -> "coder")
         self.agent_name = self.__class__.__name__.lower().replace("agent", "") or "base"
-        self.memory: LongTermMemory | None = LongTermMemory(agent_name=self.agent_name) if LongTermMemory else None
-        
+        self.memory: LongTermMemory | None = (
+            LongTermMemory(agent_name=self.agent_name) if LongTermMemory else None
+        )
+
         # Phase 143: Sharded Knowledge initialization
         self.sharded_knowledge = ShardedKnowledgeCore(base_path=Path("data/agents"))
 
@@ -237,13 +265,17 @@ class BaseAgent:
         self.tool_registry: ToolRegistry | None = ToolRegistry() if ToolRegistry else None  # type: ignore
 
         # Intelligence Harvesting (Phase 108)
-        self.recorder = LocalContextRecorder(Path(self._workspace_root), f"{self.__class__.__name__}_Agent")
+        self.recorder = LocalContextRecorder(
+            Path(self._workspace_root), f"{self.__class__.__name__}_Agent"
+        )
 
     # PHASE 260: Preemption Logic
     def suspend(self) -> None:
         """Gracefully suspends the agent's work."""
         if not self._suspended:
-            logging.warning(f"Agent {self.__class__.__name__} SUSPENDED due to preemption.")
+            logging.warning(
+                f"Agent {self.__class__.__name__} SUSPENDED due to preemption."
+            )
             self._suspended = True
 
     def resume(self) -> None:
@@ -268,6 +300,7 @@ class BaseAgent:
             # Deferred import to break core-on-logic dependency
             try:
                 from src.logic.strategies import plan_executor as agent_strategies
+
                 self._strategy = agent_strategies.DirectStrategy()
             except (ImportError, ModuleNotFoundError):
                 # Fallback if logic is not available
@@ -279,29 +312,38 @@ class BaseAgent:
         """Set the strategy for agent execution."""
         self._strategy = value
 
-    def _run_command(self, cmd: list[str], timeout: int = 120, max_retries: int = 1) -> subprocess.CompletedProcess[str]:
+    def _run_command(
+        self, cmd: list[str], timeout: int = 120, max_retries: int = 1
+    ) -> subprocess.CompletedProcess[str]:
         """Run a command with timeout, error handling, retry logic, and logging."""
         return ShellExecutor.run_command(
             cmd=cmd,
             workspace_root=self._workspace_root,
             agent_name=self.__class__.__name__,
-            models_config=getattr(self, 'models', None),
-            recorder=getattr(self, 'recorder', None),
+            models_config=getattr(self, "models", None),
+            recorder=getattr(self, "recorder", None),
             timeout=timeout,
-            max_retries=max_retries
+            max_retries=max_retries,
         )
 
     @property
     def global_context(self) -> str:
         """Lazy-loaded GlobalContextEngine, preferring Fleet's shared instance."""
         # Prefer fleet-injected context
-        if hasattr(self, 'fleet') and self.fleet and hasattr(self.fleet, 'global_context'):
+        if (
+            hasattr(self, "fleet")
+            and self.fleet
+            and hasattr(self.fleet, "global_context")
+        ):
             return self.fleet.global_context
-            
+
         # Fallback to local lazy loading
         if self._local_global_context is None:
             try:
-                from src.logic.agents.cognitive.context.engines.GlobalContextEngine import GlobalContextEngine
+                from src.logic.agents.cognitive.context.engines.GlobalContextEngine import (
+                    GlobalContextEngine,
+                )
+
                 self._local_global_context = GlobalContextEngine(self._workspace_root)
             except (ImportError, ValueError):
                 pass
@@ -319,23 +361,24 @@ class BaseAgent:
             return
 
         import inspect
+
         for name, method in inspect.getmembers(self, predicate=inspect.ismethod):
-            if hasattr(method, '_is_tool') and method._is_tool:
+            if hasattr(method, "_is_tool") and method._is_tool:
                 # Default category from class name (e.g. LinguisticAgent -> linguistic)
-                category: str = self.__class__.__name__.replace('Agent', '').lower()
-                
+                category: str = self.__class__.__name__.replace("Agent", "").lower()
+
                 # Check for explicit category overridden on method
-                if hasattr(method, '_tool_category'):
+                if hasattr(method, "_tool_category"):
                     category = method._tool_category
-                
+
                 # Check for priority
-                priority: int = getattr(method, '_tool_priority', 0)
-                    
+                priority: int = getattr(method, "_tool_priority", 0)
+
                 registry.register_tool(
                     func=method,
                     owner_name=self.__class__.__name__,
                     category=category,
-                    priority=priority
+                    priority=priority,
                 )
 
     def calculate_anchoring_strength(self, result: str) -> float:
@@ -343,7 +386,9 @@ class BaseAgent:
         Calculates the 'Anchoring Strength' metric (Stanford Research 2025).
         Delegates to pure logic core.
         """
-        return self.agent_logic_core.calculate_anchoring_strength(result, getattr(self, 'context_pool', {}))
+        return self.agent_logic_core.calculate_anchoring_strength(
+            result, getattr(self, "context_pool", {})
+        )
 
     def verify_self(self, result: str) -> tuple[bool, str]:
         """
@@ -394,7 +439,7 @@ class BaseAgent:
         self._last_token_usage = {
             "input": input_tokens,
             "output": output_tokens,
-            "model": self.get_model() or "gpt-4o"
+            "model": self.get_model() or "gpt-4o",
         }
 
     def get_model(self) -> str | None:
@@ -437,14 +482,14 @@ class BaseAgent:
 
     def register_webhook(self, url: str) -> None:
         """Registers a webhook URL for notifications."""
-        if not hasattr(self, '_webhooks'):
-             self._webhooks = []
+        if not hasattr(self, "_webhooks"):
+            self._webhooks = []
         if url not in self._webhooks:
             self._webhooks.append(url)
 
     def run(self, prompt: str = "") -> None:
         """Standard execution loop for the agent.
-        
+
         This method is primarily used by the GUI to run any agent in a thread.
         It calls improve_content() and then update_file() if not stopped.
         """
@@ -454,16 +499,18 @@ class BaseAgent:
             if not self._is_stop_requested:
                 self.update_file()
             else:
-                logging.info(f"Update skipped for {self.__class__.__name__} due to stop request.")
-            
+                logging.info(
+                    f"Update skipped for {self.__class__.__name__} due to stop request."
+                )
+
             # Phase 123: Trigger completion event for webhooks
             event_data = {
                 "event": "agent_complete",
                 "status": "success",
                 "file": str(self.file_path),
-                "timestamp": time.time()
+                "timestamp": time.time(),
             }
-            webhooks = getattr(self, '_webhooks', [])
+            webhooks = getattr(self, "_webhooks", [])
             for url in webhooks:
                 try:
                     if HAS_REQUESTS and requests:
@@ -471,7 +518,7 @@ class BaseAgent:
                         logging.info(f"Webhook sent to {url}")
                 except Exception as e:
                     logging.error(f"Failed to send webhook to {url}: {e}")
-                    
+
         except Exception as e:
             logging.error(f"Error running {self.__class__.__name__}: {e}")
             raise
@@ -499,8 +546,10 @@ class BaseAgent:
         if self.file_path.is_file():
             try:
                 logging.debug(f"Reading content from {self.file_path}")
-                self.previous_content: str = self.file_path.read_text(encoding='utf-8')
-                logging.info(f"Read {len(self.previous_content)} bytes from {self.file_path.name}")
+                self.previous_content: str = self.file_path.read_text(encoding="utf-8")
+                logging.info(
+                    f"Read {len(self.previous_content)} bytes from {self.file_path.name}"
+                )
             except Exception as e:
                 # Diagnostic logging for file read failures
                 error_info = []
@@ -510,21 +559,29 @@ class BaseAgent:
                     stats: os.stat_result = self.file_path.stat()
                     error_info.append(f"Size: {stats.st_size} bytes")
                 except Exception:
-                    logging.warning(f"Could not retrieve additional stats for {self.file_path}")
-                
+                    logging.warning(
+                        f"Could not retrieve additional stats for {self.file_path}"
+                    )
+
                 diag_msg: str = f"Failed to read file {self.file_path}: {e}"
                 if error_info:
                     diag_msg += f" ({'; '.join(error_info)})"
                 logging.error(diag_msg)
                 self.previous_content: str = ""
         elif self.file_path.is_dir():
-            logging.debug(f"Target path {self.file_path} is a directory, using default content.")
+            logging.debug(
+                f"Target path {self.file_path} is a directory, using default content."
+            )
             self.previous_content: str = self._get_default_content()
         else:
-            logging.debug(f"File does not exist, using default content: {self.file_path}")
+            logging.debug(
+                f"File does not exist, using default content: {self.file_path}"
+            )
             self.previous_content: str = self._get_default_content()
 
-        self._trigger_event(EventType.POST_READ, {"content_length": len(self.previous_content)})
+        self._trigger_event(
+            EventType.POST_READ, {"content_length": len(self.previous_content)}
+        )
         return self.previous_content
 
     def _get_default_content(self) -> str:
@@ -552,22 +609,24 @@ class BaseAgent:
         Useful for planning, data generation, or internal reasoning.
         """
         self._state: AgentState = AgentState.THINKING
-        
+
         # Broadcast thought to SignalBus if available
-        if hasattr(self, 'registry') and self.registry:
+        if hasattr(self, "registry") and self.registry:
             try:
                 # We can't use self.signal_bus directly here easily as it's in FleetManager usually
                 # But we can emit a signal via the registry if it exists
-                self.registry.emit("thought_stream", {
-                    "agent": self.__class__.__name__,
-                    "thought": prompt[:100] + "..."
-                })
+                self.registry.emit(
+                    "thought_stream",
+                    {"agent": self.__class__.__name__, "thought": prompt[:100] + "..."},
+                )
             except Exception:
                 logging.debug("Registry signal emission failed in think().")
 
         description: str = f"Reasoning for {self.__class__.__name__}"
-        result: str = self.run_subagent(description, prompt, system_prompt or self._system_prompt)
-        
+        result: str = self.run_subagent(
+            description, prompt, system_prompt or self._system_prompt
+        )
+
         self._state: AgentState = AgentState.IDLE
         return result
 
@@ -579,10 +638,13 @@ class BaseAgent:
         # Phase 279/278: Mutation detection (Validation before processing)
         try:
             from src.core.base.IncrementalProcessor import IncrementalProcessor
+
             proc = IncrementalProcessor(repo_root=self._workspace_root)
             mutated = proc.validate_hashes([self.file_path])
             if mutated:
-                logging.warning(f"BaseAgent: Mutation detected in {self.file_path} during processing. Reloading content.")
+                logging.warning(
+                    f"BaseAgent: Mutation detected in {self.file_path} during processing. Reloading content."
+                )
                 if self.file_path.exists():
                     self.previous_content = self.file_path.read_text(encoding="utf-8")
         except Exception as e:
@@ -590,7 +652,7 @@ class BaseAgent:
 
         # Phase 260: Preemption check
         await self._check_preemption()
-        
+
         # Phase 245: Increment cycle count
         self.quotas.update_usage(cycles=1)
 
@@ -603,7 +665,7 @@ class BaseAgent:
             self.current_content: str = cached.response
             return self.current_content
 
-        class_name: str = self.__class__.__name__.replace('Agent', '').lower()
+        class_name: str = self.__class__.__name__.replace("Agent", "").lower()
         description: str = f"Improve the {class_name} for {self.file_path.stem}"
         try:
             logging.info(f"Improving content with prompt: {prompt[:50]}...")
@@ -612,11 +674,19 @@ class BaseAgent:
             memory_context: str = ""
             if self.memory:
                 try:
-                    memories: list[dict[str, Any]] = self.memory.query(prompt, n_results=3)
+                    memories: list[dict[str, Any]] = self.memory.query(
+                        prompt, n_results=3
+                    )
                     if memories:
-                        memory_docs: list[Any] = [m.get("content", "") for m in memories]
-                        memory_context: str = "\n\n### Related Past Memories\n" + "\n".join(memory_docs)
-                        logging.info(f"Found {len(memories)} relevant memories for context.")
+                        memory_docs: list[Any] = [
+                            m.get("content", "") for m in memories
+                        ]
+                        memory_context: str = (
+                            "\n\n### Related Past Memories\n" + "\n".join(memory_docs)
+                        )
+                        logging.info(
+                            f"Found {len(memories)} relevant memories for context."
+                        )
                 except Exception as me:
                     logging.warning(f"Memory retrieval failed: {me}")
 
@@ -624,14 +694,16 @@ class BaseAgent:
             full_prompt: str = self._build_prompt_with_history(prompt) + memory_context
 
             # Define backend callable for strategy (Phase 287: Async refactor)
-            async def backend_callable(p: str, sp: str | None = None, h: list[dict[str, str]] | None = None) -> str:
+            async def backend_callable(
+                p: str, sp: str | None = None, h: list[dict[str, str]] | None = None
+            ) -> str:
                 return await self.run_subagent(description, p, self.previous_content)
 
             # Execute strategy
             improvement: str = await self.strategy.execute(
                 prompt=full_prompt,
                 context=self.previous_content,
-                backend_call=backend_callable
+                backend_call=backend_callable,
             )
 
             # Apply post-processors
@@ -642,10 +714,15 @@ class BaseAgent:
             quality: ResponseQuality = self._score_response_quality(improvement)
 
             # Retry if quality is poor
-            if quality.value <= ResponseQuality.POOR.value and self._config.retry_count > 0:
+            if (
+                quality.value <= ResponseQuality.POOR.value
+                and self._config.retry_count > 0
+            ):
                 logging.warning(f"Response quality {quality.name}, retrying...")
                 for _ in range(self._config.retry_count):
-                    improvement: str = await self.run_subagent(description, full_prompt, self.previous_content)
+                    improvement: str = await self.run_subagent(
+                        description, full_prompt, self.previous_content
+                    )
                     quality: ResponseQuality = self._score_response_quality(improvement)
                     if quality.value >= ResponseQuality.ACCEPTABLE.value:
                         break
@@ -658,33 +735,39 @@ class BaseAgent:
                     key=cache_key,
                     response=improvement,
                     timestamp=time.time(),
-                    quality_score=quality.value
+                    quality_score=quality.value,
                 )
 
             # Add to conversation history
-            self._conversation_history.append(ConversationMessage(role=MessageRole.USER, content=prompt))
-            self._conversation_history.append(ConversationMessage(
-                role=MessageRole.ASSISTANT, content=improvement[:500]))
+            self._conversation_history.append(
+                ConversationMessage(role=MessageRole.USER, content=prompt)
+            )
+            self._conversation_history.append(
+                ConversationMessage(
+                    role=MessageRole.ASSISTANT, content=improvement[:500]
+                )
+            )
 
             logging.info(f"Content improved successfully ({len(improvement)} bytes)")
             self._trigger_event(EventType.POST_IMPROVE, {"quality": quality.name})
-            
+
             # Emit signal for success
             if self.registry:
                 try:
-                    self.registry.emit("improvement_ready", self.__class__.__name__, {
-                        "file": str(self.file_path),
-                        "prompt": prompt[:100]
-                    })
+                    self.registry.emit(
+                        "improvement_ready",
+                        self.__class__.__name__,
+                        {"file": str(self.file_path), "prompt": prompt[:100]},
+                    )
                 except Exception as se:
                     logging.warning(f"Signal emission failed: {se}")
-            
+
             # Save to memory if significant
             if self.memory and len(self.current_content) > 100:
                 try:
                     self.memory.store(
                         f"Agent {self.__class__.__name__} improved {self.file_path.name} based on prompt: {prompt[:100]}",
-                        {"file": str(self.file_path), "action": "improve"}
+                        {"file": str(self.file_path), "action": "improve"},
                     )
                 except Exception as me:
                     logging.warning(f"Memory storage failed: {me}")
@@ -692,29 +775,33 @@ class BaseAgent:
             # Phase 108: Record interaction for logic harvesting
             self._record(
                 prompt=f"Task: {description}\nContext: {prompt}\nMem: {memory_context[:100]}",
-                result=self.current_content[:1000] + ("..." if len(self.current_content) > 1000 else ""),
+                result=self.current_content[:1000]
+                + ("..." if len(self.current_content) > 1000 else ""),
                 provider="AI-Backend",
-                model=self.__class__.__name__
+                model=self.__class__.__name__,
             )
 
             return self.current_content
         except Exception as e:
             logging.warning(f"Failed to improve content: {e}")
-            
+
             # Emit signal for failure
             if self.registry:
                 try:
-                    self.registry.emit("agent_fail", self.__class__.__name__, {
-                        "file": str(self.file_path),
-                        "error": str(e)
-                    })
+                    self.registry.emit(
+                        "agent_fail",
+                        self.__class__.__name__,
+                        {"file": str(self.file_path), "error": str(e)},
+                    )
                 except Exception:
                     pass
 
             self.current_content: str = self.previous_content
             return self.current_content
 
-    async def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str:
+    async def run_subagent(
+        self, description: str, prompt: str, original_content: str = ""
+    ) -> str:
         """Run a subagent using one of several AI backends.
 
         Delegates to the execution_engine which selects the appropriate
@@ -751,12 +838,14 @@ class BaseAgent:
             sys.path.append(str(Path(__file__).parent.parent.parent))
             from src.infrastructure.backend import execution_engine as ab
 
-        result: str | None = await asyncio.to_thread(ab.run_subagent, description, prompt, original_content)
+        result: str | None = await asyncio.to_thread(
+            ab.run_subagent, description, prompt, original_content
+        )
 
         # Update quota usage (estimated tokens)
         self.quotas.update_usage(
             tokens_input=len(prompt) // 4,
-            tokens_output=len(result or "") // 4 if result else 0
+            tokens_output=len(result or "") // 4 if result else 0,
         )
 
         if result is None:
@@ -764,6 +853,7 @@ class BaseAgent:
             logging.info("Subagent returned None, using fallback response")
             return original_content or self._get_fallback_response()
         return result
+
 
 @staticmethod
 def get_backend_status() -> dict[str, Any]:
@@ -786,6 +876,7 @@ def get_backend_status() -> dict[str, Any]:
         sys.path.append(str(Path(__file__).parent.parent.parent))
         from src.infrastructure.backend import execution_engine as ab
     return ab.get_backend_status()
+
 
 @staticmethod
 def describe_backends() -> str:
@@ -836,9 +927,7 @@ def describe_backends() -> str:
             str: Unified diff string.
         """
         return self.core.calculate_diff(
-            self.previous_content,
-            self.current_content,
-            filename=str(self.file_path)
+            self.previous_content, self.current_content, filename=str(self.file_path)
         )
 
     def update_file(self) -> bool:
@@ -868,29 +957,37 @@ def describe_backends() -> str:
         # normalization to source code can corrupt it.
         suffix: str = self.file_path.suffix.lower()
         is_markdown: bool = suffix in {
-            '.md', '.markdown'} or self.file_path.name.lower().endswith('.plan.md')
+            ".md",
+            ".markdown",
+        } or self.file_path.name.lower().endswith(".plan.md")
         if is_markdown:
             logging.debug(f"Applying markdown formatting to {self.file_path.name}")
             content_to_write: str = self.core.fix_markdown(content_to_write)
 
         # Security Check: Validate content safety before writing (Phase 108)
         if not self.core.validate_content_safety(content_to_write):
-            logging.error(f"Security violation detected in content for {self.file_path.name}. Write aborted!")
+            logging.error(
+                f"Security violation detected in content for {self.file_path.name}. Write aborted!"
+            )
             return False
 
         # Phase 262: Dry-Run Protocol
-        if getattr(self._config, 'dry_run', False):
-            logging.info(f"DRY RUN: Skipping write to {self.file_path.name}. Diff saved to temp/dry_runs/")
+        if getattr(self._config, "dry_run", False):
+            logging.info(
+                f"DRY RUN: Skipping write to {self.file_path.name}. Diff saved to temp/dry_runs/"
+            )
             return self._write_dry_run_diff()
 
         logging.info(f"Writing {len(content_to_write)} bytes to {self.file_path.name}")
         # Ensure parent directory exists
         try:
             self.file_path.parent.mkdir(parents=True, exist_ok=True)
-            self.file_path.write_text(content_to_write, encoding='utf-8')
+            self.file_path.write_text(content_to_write, encoding="utf-8")
             return True
         except Exception as e:
-            logging.error(f"Self-Healing: File write failed for {self.file_path.name}: {e}")
+            logging.error(
+                f"Self-Healing: File write failed for {self.file_path.name}: {e}"
+            )
             # Potential self-healing: Try to clear locks or use a temp file
             return False
 
@@ -899,17 +996,19 @@ def describe_backends() -> str:
         diff = self.get_diff()
         if not diff:
             return True
-            
+
         dry_run_dir = Path("temp/dry_runs")
         dry_run_dir.mkdir(parents=True, exist_ok=True)
-        
+
         # Create a unique filename based on the original path
-        safe_name = str(self.file_path).replace("/", "_").replace("\\", "_").replace(":", "_")
+        safe_name = (
+            str(self.file_path).replace("/", "_").replace("\\", "_").replace(":", "_")
+        )
         timestamp = int(time.time())
         diff_path = dry_run_dir / f"{safe_name}_{timestamp}.diff"
-        
+
         try:
-            diff_path.write_text(diff, encoding='utf-8')
+            diff_path.write_text(diff, encoding="utf-8")
             logging.info(f"Dry-run diff saved to {diff_path}")
             return True
         except Exception as e:
@@ -940,9 +1039,7 @@ def describe_backends() -> str:
         """
         logging.debug("Generating diff between previous and current content")
         diff_str: str = self.core.calculate_diff(
-            self.previous_content,
-            self.current_content,
-            filename=self.file_path.name
+            self.previous_content, self.current_content, filename=self.file_path.name
         )
         if diff_str:
             logging.debug(f"Generated {len(diff_str)} bytes of diff")
@@ -991,7 +1088,9 @@ def describe_backends() -> str:
         if not template:
             raise ValueError(f"Template not found: {template_id}")
 
-        prompt: str = template.template.format(**variables, content=self.previous_content)
+        prompt: str = template.template.format(
+            **variables, content=self.previous_content
+        )
         return self.improve_content(prompt)
 
     # ========== Conversation History ==========
@@ -1008,7 +1107,9 @@ def describe_backends() -> str:
             role_enum = MessageRole(role_value)
         except ValueError:
             role_enum: MessageRole = MessageRole.SYSTEM
-        self._conversation_history.append(ConversationMessage(role=role_enum, content=content))
+        self._conversation_history.append(
+            ConversationMessage(role=role_enum, content=content)
+        )
 
     def clear_history(self) -> None:
         """Clear conversation history."""
@@ -1031,7 +1132,10 @@ def describe_backends() -> str:
         if not self._conversation_history:
             return prompt
 
-        history = [{"role": m.role.value, "content": m.content} for m in self._conversation_history]
+        history = [
+            {"role": m.role.value, "content": m.content}
+            for m in self._conversation_history
+        ]
         return self.core.build_prompt_with_history(prompt, history)
 
     # ========== Response Post-Processing ==========
@@ -1122,7 +1226,7 @@ def describe_backends() -> str:
         return {
             "entries": len(cls._response_cache),
             "total_hits": total_hits,
-            "avg_quality": avg_quality
+            "avg_quality": avg_quality,
         }
 
     # ========== Token Budget Management ==========
@@ -1168,7 +1272,14 @@ def describe_backends() -> str:
         if event in cls._event_hooks and callback in cls._event_hooks[event]:
             cls._event_hooks[event].remove(callback)
 
-    def _record(self, prompt: str, result: str, provider: str = "auto", model: str = "auto", meta: dict[str, Any] = None) -> None:
+    def _record(
+        self,
+        prompt: str,
+        result: str,
+        provider: str = "auto",
+        model: str = "auto",
+        meta: dict[str, Any] = None,
+    ) -> None:
         """Helper to record interactions to the LocalContextRecorder (Phase 108)."""
         try:
             if hasattr(self, "recorder") and self.recorder:
@@ -1177,7 +1288,7 @@ def describe_backends() -> str:
                     model=model,
                     prompt=prompt,
                     result=result,
-                    meta=meta
+                    meta=meta,
                 )
         except Exception as e:
             logging.debug(f"Interaction recording failed: {e}")
@@ -1246,7 +1357,7 @@ def describe_backends() -> str:
                 "backends": backend_status,
                 "cache_entries": len(cls._response_cache),
                 "plugins": list(cls._plugins.keys()),
-            }
+            },
         )
 
     # ========== State Persistence ==========
@@ -1259,7 +1370,7 @@ def describe_backends() -> str:
             token_usage=self._token_usage,
             state_data=self._state_data,
             history_len=len(self._conversation_history),
-            path=path
+            path=path,
         )
 
     def load_state(self, path: Path | None = None) -> bool:
@@ -1283,7 +1394,9 @@ def describe_backends() -> str:
 
     # ========== Agent Delegation ==========
 
-    def delegate_to(self, agent_type: str, prompt: str, target_file: str | None = None) -> str:
+    def delegate_to(
+        self, agent_type: str, prompt: str, target_file: str | None = None
+    ) -> str:
         """Launches another agent to perform a sub-task."""
         return AgentDelegator.delegate(
             agent_type=agent_type,
@@ -1291,5 +1404,5 @@ def describe_backends() -> str:
             current_agent_name=self.__class__.__name__,
             current_file_path=self.file_path,
             current_model=self.get_model(),
-            target_file=target_file
+            target_file=target_file,
         )

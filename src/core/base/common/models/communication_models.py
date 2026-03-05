@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,6 +34,7 @@ from .core_enums import FilePriority, InputType, MessageRole
 @dataclass(slots=True)
 class WorkState:
     """Mutable storage regarding intermediate results in a multi-agent pipeline."""
+
     results: dict[str, Any] = field(default_factory=dict)
     shared_data: dict[str, Any] = field(default_factory=dict)
     artifacts: list[Path] = field(default_factory=list)
@@ -46,6 +48,7 @@ class WorkState:
         if path not in self.artifacts:
             self.artifacts.append(path)
 
+
 @dataclass(slots=True)
 class CascadeContext:
     """Context for tracking cascade operations and preventing infinite recursion."""
@@ -55,15 +58,20 @@ class CascadeContext:
     depth_limit: int = 10
     tenant_id: str = ""
     security_scope: list[str] = field(default_factory=_empty_list_str)
-    failure_history: list[dict[str, Any]] = field(default_factory=_empty_list_dict_str_any)
+    failure_history: list[dict[str, Any]] = field(
+        default_factory=_empty_list_dict_str_any
+    )
     agent_name: str = ""  # added so BaseAgent can attach its name without slot errors
 
     def __post_init__(self) -> None:
         """Validate and normalize failure history after initialization functionally."""
         if self.cascade_depth >= self.depth_limit:
-            raise RecursionError(f"Recursion depth limit ({self.depth_limit}) exceeded at depth {self.cascade_depth}")
+            raise RecursionError(
+                f"Recursion depth limit ({self.depth_limit}) exceeded at depth {self.cascade_depth}"
+            )
 
         if self.failure_history:
+
             def _normalize(item: Any) -> dict[str, Any] | None:
                 if not isinstance(item, dict):
                     return None
@@ -77,22 +85,35 @@ class CascadeContext:
                 return norm
 
             # Filter and normalize regarding schema integrity
-            self.failure_history = list(filter(None, map(_normalize, self.failure_history)))
+            self.failure_history = list(
+                filter(None, map(_normalize, self.failure_history))
+            )
 
-    def next_level(self, child_task_id: str = "", agent_id: str = "") -> 'CascadeContext':
+    def next_level(
+        self, child_task_id: str = "", agent_id: str = ""
+    ) -> "CascadeContext":
         """Create a child context at the next cascade level."""
         # Support both child_task_id and agent_id for backwards compatibility
         task_id = child_task_id or agent_id
 
         if self.is_bursting():
-            raise RecursionError("Recursive Improvement Loop Detected - Cascade depth limit reached")
+            raise RecursionError(
+                "Recursive Improvement Loop Detected - Cascade depth limit reached"
+            )
 
         # Check regarding recursive improvement loops functionally
-        recursive_improvements = len(list(
-            filter(lambda e: e.get("failure_type") == "recursive_improvement", self.failure_history)
-        ))
+        recursive_improvements = len(
+            list(
+                filter(
+                    lambda e: e.get("failure_type") == "recursive_improvement",
+                    self.failure_history,
+                )
+            )
+        )
         if recursive_improvements >= 2:
-            raise RecursionError("Recursive Improvement Loop Detected - Multiple recursive improvement failures")
+            raise RecursionError(
+                "Recursive Improvement Loop Detected - Multiple recursive improvement failures"
+            )
 
         return CascadeContext(
             task_id=task_id,
@@ -100,30 +121,34 @@ class CascadeContext:
             depth_limit=self.depth_limit,
             tenant_id=self.tenant_id,
             security_scope=self.security_scope.copy(),
-            failure_history=self.failure_history.copy()
+            failure_history=self.failure_history.copy(),
         )
 
-    def log_failure(self, stage: str, error: str, failure_type: str = "unknown") -> None:
+    def log_failure(
+        self, stage: str, error: str, failure_type: str = "unknown"
+    ) -> None:
         """Log a failure in the cascade context."""
         entry = {
             "stage": stage,
             "error": error,
             "failure_type": failure_type,
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }
 
         # Check regarding repeating errors functionally (circuit breaker)
-        recent_matches = list(filter(
-            lambda e: e.get("error") == error and e.get("stage") == stage, 
-            self.failure_history[-2:]
-        ))
+        recent_matches = list(
+            filter(
+                lambda e: e.get("error") == error and e.get("stage") == stage,
+                self.failure_history[-2:],
+            )
+        )
         if len(recent_matches) >= 2:
             # Replace the third occurrence with a circuit breaker
             entry = {
                 "stage": "circuit_breaker_repeating",
                 "error": f"Exact Repeating Error: {error} (Circuit Breaker Triggered)",
                 "failure_type": "circuit_breaker",
-                "timestamp": time.time()
+                "timestamp": time.time(),
             }
 
         self.failure_history.append(entry)
@@ -240,12 +265,16 @@ class ExpertProfile:
     agent_id: str
     domains: list[str] = field(default_factory=_empty_list_str)
     performance_score: float = 1.0  # 0.0 to 1.0
-    specialization_vector: list[float] = field(default_factory=_empty_list_str)  # Embedding
+    specialization_vector: list[float] = field(
+        default_factory=_empty_list_str
+    )  # Embedding
     model_family: str = "unknown"
     max_tokens: int = 4096
     is_replica: bool = False
     parent_id: str | None = None
-    acceleration_type: str = "standard"  # standard, fp8_bitnet, h100_tensor, etc. (Phase 74)
+    acceleration_type: str = (
+        "standard"  # standard, fp8_bitnet, h100_tensor, etc. (Phase 74)
+    )
 
 
 @dataclass(slots=True)

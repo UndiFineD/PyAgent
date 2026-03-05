@@ -18,12 +18,14 @@ from enum import Enum
 from typing import Dict, Any, Optional
 from dataclasses import dataclass, field
 
+
 class JobStatus(Enum):
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
     FAILED = "failed"
     CANCELLED = "cancelled"
+
 
 @dataclass
 class AgentJob:
@@ -33,11 +35,13 @@ class AgentJob:
     result: Optional[Any] = None
     error: Optional[str] = None
 
+
 class JobManagerCore:
     """
     Manages the lifecycle of persistent agent jobs (sessions).
     Harvested from LiveKit Agents patterns.
     """
+
     def __init__(self):
         self._jobs: Dict[str, AgentJob] = {}
 
@@ -46,7 +50,9 @@ class JobManagerCore:
         self._jobs[job.id] = job
         return job.id
 
-    async def update_job_status(self, job_id: str, status: JobStatus, result: Any = None, error: str = None):
+    async def update_job_status(
+        self, job_id: str, status: JobStatus, result: Any = None, error: str = None
+    ):
         if job_id in self._jobs:
             job = self._jobs[job_id]
             job.status = status
@@ -59,4 +65,8 @@ class JobManagerCore:
         return self._jobs.get(job_id)
 
     async def list_active_jobs(self) -> list[AgentJob]:
-        return [j for j in self._jobs.values() if j.status in (JobStatus.PENDING, JobStatus.RUNNING)]
+        return [
+            j
+            for j in self._jobs.values()
+            if j.status in (JobStatus.PENDING, JobStatus.RUNNING)
+        ]

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +31,9 @@ class ArchitectureMapper:
 
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
-        self.output_path: Path = self.workspace_root / "docs" / "architecture" / "system_context.md"
+        self.output_path: Path = (
+            self.workspace_root / "docs" / "architecture" / "system_context.md"
+        )
 
     def generate_diagram(self) -> str:
         """Constructs the Mermaid C4 diagram string."""

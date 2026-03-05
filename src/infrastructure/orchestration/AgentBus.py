@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -69,7 +70,7 @@ class AgentCommunicationBus:
                     result = await self.subscriber.recv_multipart()
                     if not result:
                         break
-                    
+
                     topic_bytes, payload_bytes = result
                     topic = topic_bytes.decode()
                     data = orjson.loads(payload_bytes)["data"]
@@ -95,11 +96,11 @@ class AgentCommunicationBus:
         """Stops the bus and cleans up sockets."""
 
         self._running = False
-        if hasattr(self, 'publisher') and not self.publisher.closed:
+        if hasattr(self, "publisher") and not self.publisher.closed:
             self.publisher.close(linger=0)
-        if hasattr(self, 'subscriber') and not self.subscriber.closed:
+        if hasattr(self, "subscriber") and not self.subscriber.closed:
             self.subscriber.close(linger=0)
-        if hasattr(self, 'context'):
+        if hasattr(self, "context"):
             self.context.term()
 
 
@@ -108,7 +109,7 @@ if __name__ == "__main__":
     import sys
 
     # ZeroMQ on Windows requires SelectorEventLoop
-    if sys.platform == 'win32':
+    if sys.platform == "win32":
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
     async def run_example() -> None:
@@ -135,11 +136,13 @@ if __name__ == "__main__":
             pass
 
         print("AgentBus running. Press Ctrl+C to stop.")
-        
+
         try:
             listener = asyncio.create_task(bus.start())
             await bus.broadcast("telemetry", {"status": "online"})
-            await asyncio.wait([listener, stop_event.wait()], return_when=asyncio.FIRST_COMPLETED)
+            await asyncio.wait(
+                [listener, stop_event.wait()], return_when=asyncio.FIRST_COMPLETED
+            )
         except (KeyboardInterrupt, asyncio.CancelledError):
             handle_stop()
         finally:

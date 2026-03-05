@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,7 +51,12 @@ except ImportError:  # Allow tests to import without full qdrant client installe
     UnexpectedResponse = Exception  # type: ignore[misc,assignment]
 
 try:  # Allow tests to import without full qdrant client installed
-    from qdrant_client.models import Distance, PayloadSchemaType, PointStruct, VectorParams
+    from qdrant_client.models import (
+        Distance,
+        PayloadSchemaType,
+        PointStruct,
+        VectorParams,
+    )
 except Exception:  # pragma: no cover - degraded import path
     try:
         from qdrant_client.http import models as _qmodels
@@ -65,11 +71,13 @@ except Exception:  # pragma: no cover - degraded import path
 
 # Provide a simple PointStruct shim for tests/environments lacking qdrant models
 if PointStruct is None:  # pragma: no cover - test shim
+
     class PointStruct:  # type: ignore[no-redef]
         def __init__(self, id: str, vector: List[float], payload: Dict[str, Any]):
             self.id = id
             self.vector = vector
             self.payload = payload
+
 
 # Optional Werkzeug HTTPException shim
 try:
@@ -114,6 +122,7 @@ for logger_name in ["werkzeug", "flask.app"]:
 @dataclass
 class MemoryConfig:
     """Configuration for AutoMem memory system."""
+
     falkordb_url: str = "redis://localhost:6379"
     qdrant_url: str = "http://localhost:6333"
     collection_name: str = "pyagent_memories"
@@ -127,6 +136,7 @@ class MemoryConfig:
 @dataclass
 class Memory:
     """Represents a single memory with metadata."""
+
     id: str
     content: str
     tags: List[str] = field(default_factory=list)
@@ -174,12 +184,19 @@ class AutoMemCore:
                 collection_name=self.config.collection_name,
                 vectors_config=qdrant_models.VectorParams(
                     size=self.config.vector_dim,
-                    distance=getattr(qdrant_models.Distance, self.config.distance_metric)
-                )
+                    distance=getattr(
+                        qdrant_models.Distance, self.config.distance_metric
+                    ),
+                ),
             )
 
-    def store_memory(self, content: str, tags: Optional[List[str]] = None,
-                    importance: float = 1.0, metadata: Optional[Dict[str, Any]] = None) -> str:
+    def store_memory(
+        self,
+        content: str,
+        tags: Optional[List[str]] = None,
+        importance: float = 1.0,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> str:
         """
         Store a new memory in the hybrid system.
 
@@ -201,9 +218,9 @@ class AutoMemCore:
             id=memory_id,
             content=content,
             tags=tags,
-            tag_prefixes=[tag.split(':')[0] for tag in tags if ':' in tag],
+            tag_prefixes=[tag.split(":")[0] for tag in tags if ":" in tag],
             importance=importance,
-            metadata=metadata
+            metadata=metadata,
         )
 
         # Store in graph database
@@ -235,14 +252,14 @@ class AutoMemCore:
             """
 
             params = {
-                'id': memory.id,
-                'content': memory.content,
-                'tags': memory.tags,
-                'tag_prefixes': memory.tag_prefixes,
-                'timestamp': memory.timestamp.isoformat(),
-                'importance': memory.importance,
-                'confidence': memory.confidence,
-                'metadata': json.dumps(memory.metadata)
+                "id": memory.id,
+                "content": memory.content,
+                "tags": memory.tags,
+                "tag_prefixes": memory.tag_prefixes,
+                "timestamp": memory.timestamp.isoformat(),
+                "importance": memory.importance,
+                "confidence": memory.confidence,
+                "metadata": json.dumps(memory.metadata),
             }
 
             graph.query(query, params)
@@ -265,16 +282,16 @@ class AutoMemCore:
                         id=memory.id,
                         vector=vector,
                         payload={
-                            'content': memory.content,
-                            'tags': memory.tags,
-                            'tag_prefixes': memory.tag_prefixes,
-                            'timestamp': memory.timestamp.isoformat(),
-                            'importance': memory.importance,
-                            'confidence': memory.confidence,
-                            'metadata': memory.metadata
-                        }
+                            "content": memory.content,
+                            "tags": memory.tags,
+                            "tag_prefixes": memory.tag_prefixes,
+                            "timestamp": memory.timestamp.isoformat(),
+                            "importance": memory.importance,
+                            "confidence": memory.confidence,
+                            "metadata": memory.metadata,
+                        },
                     )
-                ]
+                ],
             )
 
         except Exception as e:
@@ -287,8 +304,13 @@ class AutoMemCore:
         # In production, this would call OpenAI, local model, etc.
         return [random.random() for _ in range(self.config.vector_dim)]
 
-    def recall_memories(self, query: str, tags: Optional[List[str]] = None,
-                       limit: int = 10, min_score: float = 0.0) -> List[Dict[str, Any]]:
+    def recall_memories(
+        self,
+        query: str,
+        tags: Optional[List[str]] = None,
+        limit: int = 10,
+        min_score: float = 0.0,
+    ) -> List[Dict[str, Any]]:
         """
         Recall memories using 9-component hybrid scoring.
 
@@ -309,7 +331,7 @@ class AutoMemCore:
             collection_name=self.config.collection_name,
             query_vector=query_vector,
             limit=limit * 2,  # Get more for reranking
-            score_threshold=min_score
+            score_threshold=min_score,
         )
 
         # Apply tag filtering if specified
@@ -327,17 +349,20 @@ class AutoMemCore:
         filtered = []
         for result in results:
             payload = result.payload
-            if self._matches_tag_filter(payload.get('tags', []), tags):
+            if self._matches_tag_filter(payload.get("tags", []), tags):
                 filtered.append(result)
         return filtered
 
-    def _matches_tag_filter(self, memory_tags: List[str], filter_tags: List[str]) -> bool:
+    def _matches_tag_filter(
+        self, memory_tags: List[str], filter_tags: List[str]
+    ) -> bool:
         """Check if memory tags match filter criteria."""
         # Simple implementation - check if any filter tag is in memory tags
         return any(tag in memory_tags for tag in filter_tags)
 
-    def _hybrid_score(self, query: str, query_vector: List[float],
-                     vector_results: List) -> List[Dict[str, Any]]:
+    def _hybrid_score(
+        self, query: str, query_vector: List[float], vector_results: List
+    ) -> List[Dict[str, Any]]:
         """
         Apply 9-component hybrid scoring system.
 
@@ -357,51 +382,53 @@ class AutoMemCore:
             vector_score = result.score
 
             # Keyword matching score
-            keyword_score = self._calculate_keyword_score(query, payload['content'])
+            keyword_score = self._calculate_keyword_score(query, payload["content"])
 
             # Graph relationship score
-            graph_score = self._calculate_graph_score(payload['id'])
+            graph_score = self._calculate_graph_score(payload["id"])
 
             # Temporal relevance score
-            temporal_score = self._calculate_temporal_score(payload['timestamp'])
+            temporal_score = self._calculate_temporal_score(payload["timestamp"])
 
             # Lexical similarity score
-            lexical_score = self._calculate_lexical_score(query, payload['content'])
+            lexical_score = self._calculate_lexical_score(query, payload["content"])
 
             # Importance and confidence
-            importance = payload.get('importance', 1.0)
-            confidence = payload.get('confidence', 1.0)
+            importance = payload.get("importance", 1.0)
+            confidence = payload.get("confidence", 1.0)
 
             # Calculate final hybrid score
             final_score = (
-                vector_score * 0.25 +
-                keyword_score * 0.15 +
-                graph_score * 0.25 +
-                temporal_score * 0.15 +
-                lexical_score * 0.10 +
-                importance * 0.05 +
-                confidence * 0.05
+                vector_score * 0.25
+                + keyword_score * 0.15
+                + graph_score * 0.25
+                + temporal_score * 0.15
+                + lexical_score * 0.10
+                + importance * 0.05
+                + confidence * 0.05
             )
 
-            scored.append({
-                'id': result.id,
-                'content': payload['content'],
-                'tags': payload.get('tags', []),
-                'timestamp': payload['timestamp'],
-                'score': final_score,
-                'components': {
-                    'vector': vector_score,
-                    'keyword': keyword_score,
-                    'graph': graph_score,
-                    'temporal': temporal_score,
-                    'lexical': lexical_score,
-                    'importance': importance,
-                    'confidence': confidence
+            scored.append(
+                {
+                    "id": result.id,
+                    "content": payload["content"],
+                    "tags": payload.get("tags", []),
+                    "timestamp": payload["timestamp"],
+                    "score": final_score,
+                    "components": {
+                        "vector": vector_score,
+                        "keyword": keyword_score,
+                        "graph": graph_score,
+                        "temporal": temporal_score,
+                        "lexical": lexical_score,
+                        "importance": importance,
+                        "confidence": confidence,
+                    },
                 }
-            })
+            )
 
         # Sort by final score
-        scored.sort(key=lambda x: x['score'], reverse=True)
+        scored.sort(key=lambda x: x["score"], reverse=True)
         return scored
 
     def _calculate_keyword_score(self, query: str, content: str) -> float:
@@ -419,7 +446,7 @@ class AutoMemCore:
     def _calculate_temporal_score(self, timestamp_str: str) -> float:
         """Calculate temporal relevance score."""
         try:
-            timestamp = datetime.fromisoformat(timestamp_str.replace('Z', '+00:00'))
+            timestamp = datetime.fromisoformat(timestamp_str.replace("Z", "+00:00"))
             now = datetime.now(timezone.utc)
             age_days = (now - timestamp).days
 
@@ -444,8 +471,13 @@ class AutoMemCore:
         union = query_set.union(content_set)
         return len(intersection) / len(union) if union else 0.0
 
-    def associate_memories(self, memory_id1: str, memory_id2: str,
-                          relationship: str = "related", strength: float = 1.0):
+    def associate_memories(
+        self,
+        memory_id1: str,
+        memory_id2: str,
+        relationship: str = "related",
+        strength: float = 1.0,
+    ):
         """
         Create association between two memories in the graph.
 
@@ -464,21 +496,25 @@ class AutoMemCore:
             """
 
             params = {
-                'id1': memory_id1,
-                'id2': memory_id2,
-                'relationship': relationship,
-                'strength': strength,
-                'timestamp': datetime.now(timezone.utc).isoformat()
+                "id1": memory_id1,
+                "id2": memory_id2,
+                "relationship": relationship,
+                "strength": strength,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
             }
 
             graph.query(query, params)
-            self.logger.info(f"Associated memories {memory_id1} -> {memory_id2} ({relationship})")
+            self.logger.info(
+                f"Associated memories {memory_id1} -> {memory_id2} ({relationship})"
+            )
 
         except Exception as e:
             self.logger.error(f"Failed to associate memories: {e}")
             raise
 
-    def get_bridge_connections(self, memory_id: str, max_depth: int = 3) -> List[Dict[str, Any]]:
+    def get_bridge_connections(
+        self, memory_id: str, max_depth: int = 3
+    ) -> List[Dict[str, Any]]:
         """
         Find multi-hop bridge connections for reasoning.
 
@@ -500,17 +536,14 @@ class AutoMemCore:
             LIMIT 20
             """
 
-            params = {'memory_id': memory_id, 'max_depth': max_depth}
+            params = {"memory_id": memory_id, "max_depth": max_depth}
             result = graph.query(query, params)
 
             connections = []
             for record in result.result_set:
                 path = record[0]
                 depth = record[1]
-                connections.append({
-                    'path': path,
-                    'depth': depth
-                })
+                connections.append({"path": path, "depth": depth})
 
             return connections
 

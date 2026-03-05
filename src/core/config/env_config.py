@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -134,7 +135,9 @@ class EnvVar(Generic[T]):
 
         # Validate the value
         if self.validator and not self.validator(value):
-            raise ValueError(f"Invalid value for {self.name}: {raw_value} (validation failed)")
+            raise ValueError(
+                f"Invalid value for {self.name}: {raw_value} (validation failed)"
+            )
 
         self._cached_value = value
         self._is_cached = True
@@ -230,7 +233,9 @@ def _convert_env_value(raw_value: str, target_type: type[T], default: T) -> T:
         try:
             return converter(raw_value)  # type: ignore
         except (ValueError, json.JSONDecodeError):
-            logger.warning(f"Invalid {target_type.__name__} for env var: {raw_value}, using default")
+            logger.warning(
+                f"Invalid {target_type.__name__} for env var: {raw_value}, using default"
+            )
             return default
 
     # Try JSON parsing for complex types
@@ -272,7 +277,9 @@ def get_env_float(name: str, default: float = 0.0) -> float:
         return default
 
 
-def get_env_list(name: str, default: list[str] | None = None, sep: str = ",") -> list[str]:
+def get_env_list(
+    name: str, default: list[str] | None = None, sep: str = ","
+) -> list[str]:
     """
     Get a list environment variable (comma-separated by default).
 
@@ -375,7 +382,9 @@ class EnvConfig:
             if isinstance(attr, EnvVar):
                 try:
                     result[attr.name] = attr.get()
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                     result[attr.name] = f"<error: {e}>"
         return result
 
@@ -389,7 +398,9 @@ class EnvConfig:
 
         for meta in cls.get_metadata():
             value = cls._get_config_value(meta)
-            masked_value = cls._mask_secret_value(value, meta, secret_patterns, mask_secrets)
+            masked_value = cls._mask_secret_value(
+                value, meta, secret_patterns, mask_secrets
+            )
             status = "[DEPRECATED]" if meta.deprecated else ""
             print(f"  {meta.name}: {masked_value} {status}")
 
@@ -403,7 +414,9 @@ class EnvConfig:
             if attr_name:
                 return getattr(cls, attr_name)
             return "<not found>"
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             return "<error>"
 
     @classmethod
@@ -416,7 +429,13 @@ class EnvConfig:
         return None
 
     @classmethod
-    def _mask_secret_value(cls, value: Any, meta: EnvConfigMeta, secret_patterns: set[str], mask_secrets: bool) -> Any:
+    def _mask_secret_value(
+        cls,
+        value: Any,
+        meta: EnvConfigMeta,
+        secret_patterns: set[str],
+        mask_secrets: bool,
+    ) -> Any:
         """Mask secret values if masking is enabled."""
         if not mask_secrets:
             return value
@@ -480,7 +499,9 @@ class NamespacedConfig:
         """Get a float environment variable."""
         return get_env_float(self._full_name(name), default)
 
-    def get_list(self, name: str, default: list[str] | None = None, sep: str = ",") -> list[str]:
+    def get_list(
+        self, name: str, default: list[str] | None = None, sep: str = ","
+    ) -> list[str]:
         """Get a list environment variable."""
         return get_env_list(self._full_name(name), default, sep)
 

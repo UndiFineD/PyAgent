@@ -17,8 +17,11 @@ def test_imports_and_symbols():
     assert hasattr(mod, "DetokenizeResult"), "DetokenizeResult missing"
     assert hasattr(mod, "StopChecker"), "StopChecker missing"
     assert hasattr(mod, "IncrementalDetokenizer"), "IncrementalDetokenizer missing"
-    assert hasattr(mod, "FastIncrementalDetokenizer"), "FastIncrementalDetokenizer missing"
-    assert hasattr(mod, "SlowIncrementalDetokenizer"), "SlowIncrementalDetokenizer missing"
+    assert hasattr(
+        mod, "FastIncrementalDetokenizer"
+    ), "FastIncrementalDetokenizer missing"
+    assert hasattr(
+        mod, "SlowIncrementalDetokenizer"
+    ), "SlowIncrementalDetokenizer missing"
     assert hasattr(mod, "create_detokenizer"), "create_detokenizer missing"
     assert hasattr(mod, "detokenize_incrementally"), "detokenize_incrementally missing"
-

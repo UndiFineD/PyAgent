@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,9 +32,10 @@ from pathlib import Path
 
 __version__ = VERSION
 
+
 class MarkdownAgent(CoderAgent):
     """Agent for Markdown documentation improvement."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._language = "markdown"
@@ -53,25 +55,31 @@ class MarkdownAgent(CoderAgent):
         )
 
     def _get_default_content(self) -> str:
-        return "---\ntags: []\n---\n# New Document\n\nStarting point for documentation.\n"
+        return (
+            "---\ntags: []\n---\n# New Document\n\nStarting point for documentation.\n"
+        )
 
     def convert_to_wikilinks(self, content: str) -> str:
         """Converts [Text](Link.md) to [[Link|Text]] or [[Link]] if text matches."""
         # Simple regex for markdown links
         pattern = r"\[([^\]]+)\]\(([^)]+)\.md\)"
+
         def replace(match) -> str:
             text, link = match.groups()
             if text == link:
                 return f"[[{link}]]"
             return f"[[{link}|{text}]]"
+
         return re.sub(pattern, replace, content)
 
-    def format_as_callout(self, content: str, callout_type: str = "INFO", title: str = "") -> str:
+    def format_as_callout(
+        self, content: str, callout_type: str = "INFO", title: str = ""
+    ) -> str:
         """Wraps content in an Obsidian callout block."""
         header = f"> [!{callout_type.upper()}]"
         if title:
             header += f" {title}"
-        
+
         lines = content.strip().split("\n")
         callout_lines = [header] + [f"> {line}" for line in lines]
         return "\n".join(callout_lines)
@@ -80,7 +88,7 @@ class MarkdownAgent(CoderAgent):
         """Ensures the content has a YAML frontmatter block."""
         if content.startswith("---"):
             return content
-        
+
         props = default_props or {"created": None, "tags": []}
         frontmatter = "---\n" + yaml.dump(props, sort_keys=False) + "---\n"
         return frontmatter + content
@@ -96,14 +104,16 @@ class MarkdownAgent(CoderAgent):
     def insert_knowledge_graph(self) -> str:
         """Inserts a Mermaid representation of the workspace knowledge graph."""
         graph = self._knowledge_agent.get_graph_mermaid()
-        return "\n## Workspace Knowledge Graph\n\n" + self.add_mermaid_diagram("", graph)
+        return "\n## Workspace Knowledge Graph\n\n" + self.add_mermaid_diagram(
+            "", graph
+        )
 
     def insert_backlinks(self) -> str:
         """Inserts a list of notes linking to this one."""
         backlinks = self._knowledge_agent.find_backlinks(self.file_path.name)
         if not backlinks:
             return ""
-        
+
         links_str = "\n".join([f"- [[{Path(b).stem}]]" for b in backlinks])
         return f"\n## Backlinks\n\n{links_str}\n"
 
@@ -111,10 +121,11 @@ class MarkdownAgent(CoderAgent):
         """Converts leading lines like 'TODO:' or 'WARNING:' to Obsidian Callouts."""
         # Regex to match leading TODO:, WARNING:, INFO:, TIP: etc.
         pattern = r"^(TODO|WARNING|INFO|TIP|ABSTRACT|QUOTE): (.*)$"
+
         def replace(match) -> str:
             ctype, ctext = match.groups()
             return self.format_as_callout(ctext, ctype)
-        
+
         # Apply line-by-line
         lines = content.split("\n")
         new_lines = []
@@ -127,10 +138,10 @@ class MarkdownAgent(CoderAgent):
         """Overrides improve_content to ensure Obsidian compatibility is applied."""
         # Check if user specifically wants a graph or backlinks
         enhanced_prompt = prompt
-        
+
         if any(w in prompt.lower() for w in ["graph", "visualize", "relationships"]):
             enhanced_prompt += "\n\nNOTE: You can suggest using a Mermaid graph to visualize relationships."
-            
+
         if "backlink" in prompt.lower():
             enhanced_prompt += "\n\nNOTE: You can suggest adding a Backlinks section."
 
@@ -140,12 +151,15 @@ class MarkdownAgent(CoderAgent):
             "[[wikilinks]], > [!CALLOUTS], #tags, and YAML frontmatter."
         )
         result = super().improve_content(enhanced_prompt)
-        
+
         # Post-process to insert actual data if requested by tags in result?
         # For now, let's keep it tool-assisted or manual.
-        
+
         return result
 
+
 if __name__ == "__main__":
-    main = create_main_function(MarkdownAgent, "Markdown Agent", "Path to Markdown file (.md)")
+    main = create_main_function(
+        MarkdownAgent, "Markdown Agent", "Path to Markdown file (.md)"
+    )
     main()

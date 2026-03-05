@@ -20,4 +20,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "LoRARequest"), "LoRARequest missing"
     assert hasattr(mod, "LoRAInfo"), "LoRAInfo missing"
     assert hasattr(mod, "AdapterSlot"), "AdapterSlot missing"
-
