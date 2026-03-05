@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-<<<<<<< HEAD:test_resilience_community.py
-import sys
-=======
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,7 +16,6 @@ Test Resilience Community module.
 """
 
 #!/usr/bin/env python3
->>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/community/test_resilience_community.py
 import logging
 from pathlib import Path
 
@@ -31,12 +27,12 @@ def test_broken_community_plugin() -> None:
     print(f"--- Running Broken Plugin Resilience Test ---")
     workspace = Path('.').resolve()
     agents = AgentRegistry.get_agent_map(workspace)
-    
+
     print("Attempting to load BrokenCommunity...")
     try:
         agent = agents["BrokenCommunity"]
         print(f"Agent Type: {type(agent).__name__}")
-        
+
         # This should fail gracefully or show it's a stub
         from src.classes.fleet.ResilientStubs import ResilientStub
         if isinstance(agent, ResilientStub):
@@ -46,13 +42,8 @@ def test_broken_community_plugin() -> None:
             print(f"Stub Error Detail: {status['error']}")
         else:
             print("Wait, it loaded? (Unexpected)")
-<<<<<<< HEAD:test_resilience_community.py
-            
-    except Exception as e:
-=======
 
     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
->>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/community/test_resilience_community.py
         print(f"Script crashed (Unexpected): {e}")
 
     print("\nVerifying that other agents still work...")

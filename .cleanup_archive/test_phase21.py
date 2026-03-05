@@ -1,26 +1,24 @@
+#!/usr/bin/env python3
+
 import sys
 from pathlib import Path
-<<<<<<< HEAD:test_phase21.py
-<<<<<<< HEAD:test_phase21.py
-sys.path.append(str(Path(__file__).parent / "src"))
-=======
->>>>>>> 0777c397c (phase 320):tests/phases/test_phase21.py
-=======
->>>>>>> d6712a17b (phase 320):tests/phases/test_phase21.py
+from src.classes.fleet.FleetManager import FleetManager
 
-from classes.fleet.FleetManager import FleetManager
+sys.path.append(str(Path(__file__).parent / "src"))
+
 
 def test_phase21() -> None:
+    """Test the core functionalities of Phase 21: World Model & Speciation."""
     print("--- Phase 21 Verification: World Model & Speciation ---")
     workspace_root = Path(__file__).parent
     fleet = FleetManager(str(workspace_root))
-    
+
     # 1. Test World Model
     print("\n[1/2] Testing World Model Prediction...")
     action = "Refactor the BaseAgent to use async/await"
     context = "Source code uses synchronous standard library calls."
     prediction = fleet.world_model.predict_action_outcome(action, context)
-    
+
     if "success_probability" in prediction:
         print(f"✅ Prediction received. Risk level: {prediction.get('risks', ['unknown'])[0]}")
     else:
@@ -31,7 +29,7 @@ def test_phase21() -> None:
     base_agent = "CoderAgent"
     niche = "asyncio threading"
     result = fleet.speciation.evolve_specialized_agent(base_agent, niche)
-    
+
     expected_file = Path("src/classes/specialized/asynciothreadingCoderAgent.py")
     if expected_file.exists():
         print(f"✅ Speciation confirmed: {result}")
@@ -39,6 +37,7 @@ def test_phase21() -> None:
         expected_file.unlink()
     else:
         print(f"❌ Speciation failed. Expected {expected_file}")
+
 
 if __name__ == "__main__":
     test_phase21()

@@ -1,6 +1,3 @@
-<<<<<<< HEAD:test_phase24.py
-import sys
-=======
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,23 +15,19 @@ import sys
 Test Phase24 module.
 """
 
->>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/phases/test_phase24.py
+import sys
 from pathlib import Path
-<<<<<<< HEAD:test_phase24.py
-<<<<<<< HEAD:test_phase24.py
-sys.path.append(str(Path(__file__).parent / "src"))
-=======
->>>>>>> 0777c397c (phase 320):tests/phases/test_phase24.py
-=======
->>>>>>> d6712a17b (phase 320):tests/phases/test_phase24.py
+from src.classes.fleet.FleetManager import FleetManager
 
-from classes.fleet.FleetManager import FleetManager
+sys.path.append(str(Path(__file__).parent / "src"))
+
 
 def test_phase24() -> None:
+    """Test the core functionalities of Phase 24: Swarm Immortality & Temporal Sharding."""
     print("--- Phase 24 Verification: Swarm Immortality & Temporal Sharding ---")
     workspace_root = Path(__file__).parent
     fleet = FleetManager(str(workspace_root))
-    
+
     # 1. Test Heartbeat
     print("\n[1/2] Testing Heartbeat Verification...")
     fleet.heartbeat.record_heartbeat("Reasoner")
@@ -50,6 +43,7 @@ def test_phase24() -> None:
         print(f"✅ Temporal context retrieved: {context}")
     else:
         print("❌ Temporal sharding failed.")
+
 
 if __name__ == "__main__":
     test_phase24()

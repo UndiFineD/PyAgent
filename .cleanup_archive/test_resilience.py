@@ -1,8 +1,3 @@
-<<<<<<< HEAD:test_resilience.py
-<<<<<<< HEAD:test_resilience.py
-=======
-=======
->>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/unit/infrastructure/test_resilience.py
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +14,6 @@
 
 """Unit tests for AgentRegistry resilience and lazy mapping."""
 
->>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/unit/infrastructure/test_resilience.py
 import os
 import sys
 import logging
@@ -32,18 +26,18 @@ from src.classes.fleet.AgentRegistry import AgentRegistry
 def test_resilience():
     logging.basicConfig(level=logging.INFO)
     print("🧪 Testing Resilience of AgentRegistry...")
-    
+
     workspace_root = Path(os.getcwd())
     agents = AgentRegistry.get_agent_map(workspace_root)
-    
+
     print("\n--- Attempting to load BrokenImportAgent ---")
     broken_agent = agents.get("BrokenImport")
-    
+
     if broken_agent:
         print(f"✅ Found agent: {type(broken_agent).__name__}")
         res = broken_agent.improve_content("test")
         print(f"✅ Mock response: {res}")
-        
+
         if "ERROR: Component 'BrokenImport' failed to load" in res:
             print("✅ ResilientStub successfully handled the broken import.")
         else:
