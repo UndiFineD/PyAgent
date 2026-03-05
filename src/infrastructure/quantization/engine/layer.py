@@ -3,7 +3,7 @@ import numpy as np
 from typing import TYPE_CHECKING, Optional
 from .tensor import QuantizedTensor
 
-    from numpy.typing import NDArray
+from numpy.typing import NDArray
 
 
 class DequantizedLinear:

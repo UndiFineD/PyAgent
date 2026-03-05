@@ -24,6 +24,7 @@ import logging
 import time
 from typing import Any, TYPE_CHECKING
 
+if TYPE_CHECKING:
     from .fleet_manager import FleetManager
 
 from src.core.base.common.models import AgentPriority

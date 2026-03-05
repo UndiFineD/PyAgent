@@ -26,9 +26,9 @@ from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
 import numpy as np
 
-    from numpy.typing import NDArray
+from numpy.typing import NDArray
 
-    # Try to import rust_core for acceleration
+# Try to import rust_core for acceleration
 try:
     import rust_core
     HAS_RUST = True

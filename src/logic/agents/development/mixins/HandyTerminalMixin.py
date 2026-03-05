@@ -7,7 +7,7 @@ import subprocess
 from typing import TYPE_CHECKING
 from src.core.base.BaseUtilities import as_tool
 
-    from src.logic.agents.development.HandyAgent import HandyAgent
+from src.logic.agents.development.HandyAgent import HandyAgent
 
 
 class HandyTerminalMixin:

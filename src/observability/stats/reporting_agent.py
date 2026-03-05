@@ -25,7 +25,7 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 
 from .transparency_agent import TransparencyAgent
 
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 class ReportingAgent(BaseAgent):

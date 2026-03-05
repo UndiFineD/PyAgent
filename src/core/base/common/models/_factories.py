@@ -18,7 +18,9 @@ from __future__ import annotations
 from .core_enums import AgentEvent, FilePriority
 from typing import TYPE_CHECKING, Any, Callable
 
-from .base_models import ConfigProfile, ModelConfig
+# avoid circular imports by only importing type hints during type checking
+if TYPE_CHECKING:
+    from .base_models import ConfigProfile, ModelConfig
 
 
 

@@ -51,15 +51,6 @@ _is_otel_imported = False
 HAS_RUST = False
 otel_import_error_traceback: str | None = None
 
-# Type aliases for fallback/optional usage
-else:
-    Context = Any
-    Tracer = Any
-    SpanKind = Any
-    Span = Any
-    SpanExporter = Any
-    Status = Any
-    StatusCode = Any
 
 try:
     from opentelemetry import trace  # pylint: disable=unused-import
