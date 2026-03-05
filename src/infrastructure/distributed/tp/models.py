@@ -6,7 +6,6 @@ Models and configuration for tensor parallelism.
 
 import logging
 import os
-from .coordinator import GroupCoordinator
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import TYPE_CHECKING

@@ -22,30 +22,60 @@ Phase 31: Extends PyAgent's vLLM integration with:
 - Guided decoding for structured output (JSON, regex)
 """
 
-from .AsyncVllmEngine import (
-    AsyncVllmEngine,
-    AsyncEngineConfig,
-    AsyncRequestHandle,
-)
-from .StreamingEngine import (
-    StreamingVllmEngine,
-    StreamingConfig,
-    StreamCallback,
-    TokenStreamIterator,
-)
-from .LoraManager import (
-    LoraManager,
-    LoraAdapter,
-    LoraConfig,
-    LoraRegistry,
-)
-from .GuidedDecoder import (
-    GuidedDecoder,
-    GuidedConfig,
-    JsonSchema,
-    RegexPattern,
-    ChoiceConstraint,
-)
+# Guarded imports to prevent package-level failures when optional dependencies (like vllm)
+# are not installed. Each submodule is imported individually with try/except, allowing the
+# package to be imported successfully even if some features are unavailable.
+try:
+    from .AsyncVllmEngine import (
+        AsyncVllmEngine,
+        AsyncEngineConfig,
+        AsyncRequestHandle,
+    )
+except ImportError:  # pragma: no cover - optional dependency
+    AsyncVllmEngine = None
+    AsyncEngineConfig = None
+    AsyncRequestHandle = None
+
+try:
+    from .StreamingEngine import (
+        StreamingVllmEngine,
+        StreamingConfig,
+        StreamCallback,
+        TokenStreamIterator,
+    )
+except ImportError:  # pragma: no cover - optional dependency
+    StreamingVllmEngine = None
+    StreamingConfig = None
+    StreamCallback = None
+    TokenStreamIterator = None
+
+try:
+    from .LoraManager import (
+        LoraManager,
+        LoraAdapter,
+        LoraConfig,
+        LoraRegistry,
+    )
+except ImportError:  # pragma: no cover
+    LoraManager = None
+    LoraAdapter = None
+    LoraConfig = None
+    LoraRegistry = None
+
+try:
+    from .GuidedDecoder import (
+        GuidedDecoder,
+        GuidedConfig,
+        JsonSchema,
+        RegexPattern,
+        ChoiceConstraint,
+    )
+except ImportError:  # pragma: no cover
+    GuidedDecoder = None
+    GuidedConfig = None
+    JsonSchema = None
+    RegexPattern = None
+    ChoiceConstraint = None
 
 __all__ = [
     # Async Engine

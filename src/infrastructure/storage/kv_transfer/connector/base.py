@@ -22,10 +22,10 @@ Abstract base class for all KV transfer connectors.
 
 import logging
 import threading
-from src.infrastructure.storage.kv_transfer.connector.types import (
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
+from src.infrastructure.storage.kv_transfer.connector.types import (
         ForwardContext,
         KVCacheBlocks,
         KVConnectorMetadata,

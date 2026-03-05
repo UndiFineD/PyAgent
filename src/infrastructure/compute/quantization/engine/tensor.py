@@ -19,7 +19,7 @@ import numpy as np
 
 from .config import QuantConfig
 
-    from numpy.typing import NDArray
+from numpy.typing import NDArray
 
 """
 Tensor.py module.

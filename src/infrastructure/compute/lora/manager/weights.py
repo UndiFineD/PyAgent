@@ -12,7 +12,12 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from .adapter import LoRAAdapter
+# The adapter import is only needed for type hints. At runtime we avoid
+# importing it to break a circular dependency with `adapter.py`.
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .adapter import LoRAAdapter
 
 """
 Weights.py module.

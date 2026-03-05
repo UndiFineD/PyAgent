@@ -23,7 +23,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Tuple
 
 import numpy as np
 
-    from numpy.typing import NDArray
+from numpy.typing import NDArray
 
 
 class SuffixIndex:

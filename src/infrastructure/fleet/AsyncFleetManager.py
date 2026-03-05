@@ -283,8 +283,8 @@ class AsyncFleetManager(FleetManager):
             {"agent": "S1", "action": "improve_content", "args": ["clean code"]},
         ]
 
-    async def run_test() -> None:
-        report = await afleet.execute_workflow_async("Parallel Test", wf)
-        print(report)
+        async def run_test() -> None:
+            report = await afleet.execute_workflow_async("Parallel Test", wf)
+            print(report)
 
-    asyncio.run(run_test())
+        asyncio.run(run_test())

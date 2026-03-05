@@ -2,7 +2,11 @@ from __future__ import annotations
 
 import hashlib
 import logging
-from PIL import Image
+# PIL is optional; some environments may not have it installed (e.g. CI). Guard import.
+try:
+    from PIL import Image
+except ImportError:
+    Image = None  # type: ignore[assignment]
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum, auto

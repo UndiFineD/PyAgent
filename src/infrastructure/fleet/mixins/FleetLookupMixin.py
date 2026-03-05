@@ -4,28 +4,40 @@ from __future__ import annotations
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 import logging
-from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
-from src.infrastructure.backend.SqlMetadataHandler import SqlMetadataHandler
-from src.observability.stats.MetricsEngine import MetricsEngine
+# LocalContextRecorder lives under the classes backend package
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
+# SqlMetadataHandler not present in infrastructure; orchestration layer already provides it via orchestrators
+# so we don't need to import it here
+# MetricsEngine imported previously but not used in this mixin
 from typing import Any, TYPE_CHECKING
 
-from src.infrastructure.orchestration.system.ToolRegistry import ToolRegistry
-from src.infrastructure.orchestration.signals.SignalRegistry import SignalRegistry
-from src.infrastructure.orchestration.healing.SelfHealingOrchestrator import (
-    SelfHealingOrchestrator,
-)
-from src.infrastructure.orchestration.intel.SelfImprovementOrchestrator import (
-    SelfImprovementOrchestrator,
-)
-from src.logic.agents.cognitive.context.engines.GlobalContextEngine import (
-    GlobalContextEngine,
-)
+# ToolRegistry is only needed for type hints in some properties; defer import to TYPE_CHECKING to
+# avoid circular import with FleetManager.
+# from src.infrastructure.orchestration.ToolRegistry import ToolRegistry
+# The following imports were used for type hints only but caused import errors or circular
+# dependencies. The associated properties are annotated as Any instead.
+# from src.infrastructure.orchestration.signals.SignalRegistry import SignalRegistry
+# from src.infrastructure.orchestration.healing.SelfHealingOrchestrator import (
+#     SelfHealingOrchestrator,
+# )
+# from src.infrastructure.orchestration.intel.SelfImprovementOrchestrator import (
+#     SelfImprovementOrchestrator,
+# )
+# from src.logic.agents.cognitive.context.engines.GlobalContextEngine import (
+#     GlobalContextEngine,
+# )
 
 if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
     # These are used only as return types for properties
     from src.observability.stats import ObservabilityEngine
     from src.core.base.models import ModelFallbackEngine
+    from src.infrastructure.orchestration.ToolRegistry import ToolRegistry
+    # Type hints for other orchestrator components
+    # from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
+    # from src.infrastructure.orchestration.SelfHealingOrchestrator import SelfHealingOrchestrator
+    # from src.infrastructure.orchestration.SelfImprovementOrchestrator import SelfImprovementOrchestrator
+    # from src.logic.agents.cognitive.context.utils.GlobalContextEngine import GlobalContextEngine
 
 
 class FleetLookupMixin:
@@ -94,15 +106,16 @@ class FleetLookupMixin:
         raise AttributeError(f"'FleetManager' object has no attribute '{name}'")
 
     @property
-    def telemetry(self: FleetManager) -> ObservabilityEngine:
+    def telemetry(self: FleetManager) -> Any:
         return self.orchestrators.telemetry
 
     @property
-    def registry(self: FleetManager) -> ToolRegistry:
+    # return type annotated as Any to avoid import cycles
+    def registry(self: FleetManager) -> Any:
         return self.orchestrators.registry
 
     @property
-    def signals(self: FleetManager) -> SignalRegistry:
+    def signals(self: FleetManager) -> Any:
         return self.orchestrators.signals
 
     @property
@@ -110,19 +123,20 @@ class FleetLookupMixin:
         return self.orchestrators.recorder
 
     @property
-    def sql_metadata(self: FleetManager) -> SqlMetadataHandler:
+    # SqlMetadataHandler type isn't available here; use Any to avoid import issues
+    def sql_metadata(self: FleetManager) -> Any:
         return self.orchestrators.sql_metadata
 
     @property
-    def self_healing(self: FleetManager) -> SelfHealingOrchestrator:
+    def self_healing(self: FleetManager) -> Any:
         return self.orchestrators.self_healing
 
     @property
-    def self_improvement(self: FleetManager) -> SelfImprovementOrchestrator:
+    def self_improvement(self: FleetManager) -> Any:
         return self.orchestrators.self_improvement
 
     @property
-    def global_context(self: FleetManager) -> GlobalContextEngine:
+    def global_context(self: FleetManager) -> Any:
         return self.orchestrators.global_context
 
     @property

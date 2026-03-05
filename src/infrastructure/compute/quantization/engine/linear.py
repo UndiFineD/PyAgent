@@ -21,7 +21,7 @@ from .base import Quantizer
 from .config import QuantStrategy
 from .tensor import QuantizedTensor
 
-    from numpy.typing import NDArray
+from numpy.typing import NDArray
 
 """
 Linear.py module.

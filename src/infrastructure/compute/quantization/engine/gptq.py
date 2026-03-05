@@ -27,7 +27,7 @@ from .config import QuantConfig
 from .linear import LinearQuantizer
 from .tensor import QuantizedTensor
 
-    from numpy.typing import NDArray
+from numpy.typing import NDArray
 
 
 class GPTQQuantizer(Quantizer):

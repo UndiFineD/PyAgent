@@ -29,7 +29,7 @@ from typing import TYPE_CHECKING, Any, Callable, Generic, TypeVar
 
 import numpy as np
 
-    from numpy.typing import NDArray
+from numpy.typing import NDArray
 
     # Try to import rust_core for acceleration
 try:

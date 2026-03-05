@@ -26,7 +26,7 @@ import numpy as np
 from .config import QuantConfig
 from .tensor import QuantizedTensor
 
-    from numpy.typing import NDArray
+from numpy.typing import NDArray
 
 
 class Quantizer(ABC):

@@ -25,7 +25,7 @@ import numpy as np
 
 from .config import QuantConfig, QuantScheme, QuantStrategy
 
-    from numpy.typing import NDArray
+from numpy.typing import NDArray
 
 
 def quantize_tensor(

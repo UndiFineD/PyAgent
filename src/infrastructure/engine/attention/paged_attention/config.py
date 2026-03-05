@@ -27,7 +27,7 @@ import numpy as np
 
 from .enums import KVCacheDtype
 
-    from numpy.typing import NDArray
+from numpy.typing import NDArray
 
 
 @dataclass
