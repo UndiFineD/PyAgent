@@ -10,7 +10,7 @@ import hashlib
 from abc import ABC, abstractmethod
 from typing import BinaryIO, Optional, Tuple, Union
 
- from .models import (
+from .models import (
     AudioData,
     ImageData,
     MediaLoadConfig,

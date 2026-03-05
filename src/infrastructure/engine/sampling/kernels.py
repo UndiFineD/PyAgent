@@ -20,9 +20,9 @@ Core sampling kernels and strategies regarding production inference.
 """
 
 
- from typing import Optional
+from typing import Optional
 
- import numpy as np
+import numpy as np
 
 from .base import HAS_RUST, Sampler, _softmax
 from .params import SamplingParams, SamplingState

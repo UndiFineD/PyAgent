@@ -18,7 +18,7 @@ Mamba Mixer - State Space Model Layer.
 Refactored to modular package structure for Phase 317.
 """
 
- from src.infrastructure.compute.ssm.mamba.config import (MambaConfig,
+from src.infrastructure.compute.ssm.mamba.config import (MambaConfig,
                                                          MambaOutput,
                                                          MambaState)
 from src.infrastructure.compute.ssm.mamba.hybrid import HybridMambaMixer

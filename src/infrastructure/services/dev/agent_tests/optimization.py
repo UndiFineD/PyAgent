@@ -17,11 +17,11 @@ from __future__ import annotations
 """Test optimization and coverage analysis."""
 
 
- from typing import Any
+from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .models import TestCase
+from .models import TestCase
 
 __version__ = VERSION
 

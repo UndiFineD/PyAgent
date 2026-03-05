@@ -23,7 +23,7 @@ Federation mixin.py module.
 from pathlib import Path
 from typing import TYPE_CHECKING
 
- from src.core.base.common.base_utilities import as_tool
+from src.core.base.common.base_utilities import as_tool
 
 if TYPE_CHECKING:
     from src.logic.agents.system.topological_navigator import \

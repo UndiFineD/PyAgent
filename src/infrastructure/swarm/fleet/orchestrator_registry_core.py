@@ -21,7 +21,7 @@ Orchestrator registry core.py module.
 import os
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 # Rust acceleration
 try:

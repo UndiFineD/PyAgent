@@ -6,7 +6,7 @@ Tokenizer protocols.
 """
 
 
- from typing import List, Optional, Protocol, Sequence, runtime_checkable
+from typing import List, Optional, Protocol, Sequence, runtime_checkable
 
 
 @runtime_checkable

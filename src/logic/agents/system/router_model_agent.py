@@ -21,7 +21,7 @@ Handles dynamic routing logic and model selection within the PyAgent swarm.
 
 
 
- from typing import Any
+from typing import Any
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION

@@ -25,7 +25,7 @@ except (ImportError, RuntimeError, Exception):
     plt = None
     has_matplotlib = False
 
- from .StatsAgent import StatsAgent
+from .StatsAgent import StatsAgent
 
 def main() -> None:
     """CLI entry point for the Stats Agent."""

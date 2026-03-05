@@ -23,7 +23,7 @@ import asyncio
 from contextlib import asynccontextmanager
 from typing import AsyncIterator, Dict, Optional
 
- from src.core.base.common.lock_core import LockCore
+from src.core.base.common.lock_core import LockCore
 
 
 class LockManager:

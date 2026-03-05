@@ -33,7 +33,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
- import numpy as np
+import numpy as np
 
 # Try to import Rust accelerators
 try:

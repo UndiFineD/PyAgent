@@ -19,7 +19,7 @@ Meta optimizer.py module.
 import logging
 from typing import Any, Dict, List
 
- from src.infrastructure.swarm.orchestration.swarm.telemetry import \
+from src.infrastructure.swarm.orchestration.swarm.telemetry import \
     SwarmTelemetryService
 
 logger = logging.getLogger(__name__)

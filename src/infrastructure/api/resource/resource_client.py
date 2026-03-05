@@ -16,7 +16,7 @@
 ResourceClient: Interacts with remote resource_api_server instances.
 """
 
- import httpx
+import httpx
 
 class ResourceClient:
     def __init__(self, base_url):

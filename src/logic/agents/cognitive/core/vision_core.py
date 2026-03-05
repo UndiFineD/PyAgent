@@ -16,9 +16,9 @@ from __future__ import annotations
 
 
 
- import hashlib
+import hashlib
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

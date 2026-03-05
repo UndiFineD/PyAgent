@@ -21,7 +21,7 @@ Provides connectors for transferring KV cache between prefill and decode instanc
 Inspired by vLLM's distributed/kv_transfer/ architecture.
 """
 
- from .kv_transfer_connector import (DecodeBenchConnector, KVCacheBlocks,  # noqa: F401
+from .kv_transfer_connector import (DecodeBenchConnector, KVCacheBlocks,  # noqa: F401
                                     KVConnectorBase, KVConnectorMetadata,
                                     KVConnectorRole, KVTransferConfig,
                                     get_kv_connector, list_kv_connectors,

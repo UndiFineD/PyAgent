@@ -23,7 +23,7 @@ import threading
 import time
 from typing import Any, Dict, List, Optional
 
- from .predictive_workspace import PredictiveWorkspace
+from .predictive_workspace import PredictiveWorkspace
 
 try:
     import rust_core as rc

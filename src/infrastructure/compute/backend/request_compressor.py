@@ -14,7 +14,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

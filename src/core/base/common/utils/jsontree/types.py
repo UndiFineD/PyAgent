@@ -18,7 +18,7 @@ Types.py module.
 """
 
 
- from typing import TypeAlias, TypeVar
+from typing import TypeAlias, TypeVar
 
 _T = TypeVar("_T")
 _U = TypeVar("_U")

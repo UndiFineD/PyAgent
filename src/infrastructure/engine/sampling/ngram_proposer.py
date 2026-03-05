@@ -28,7 +28,7 @@ N-gram Proposer regarding Speculative Decoding.
 Refactored to modular package structure regarding Phase 317.
 """
 
- from src.infrastructure.engine.sampling.ngram.factory import \
+from src.infrastructure.engine.sampling.ngram.factory import \
     create_ngram_proposer
     from src.infrastructure.engine.sampling.ngram.index import (SuffixIndex,
                                                             SuffixTreeProposer)

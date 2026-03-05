@@ -11,7 +11,7 @@ This package provides:
 - Async tokenization support
 """
 
- from .TokenizerRegistry import (
+from .TokenizerRegistry import (
     # Enums
     TokenizerBackend,
     SpecialTokenHandling,

@@ -20,9 +20,9 @@ Global command registry and registration utilities.
 # pylint: disable=cyclic-import
 
 
- from typing import Any, Callable
+from typing import Any, Callable
 
- from .core import CommandDefinition, CommandHandler, CommandRegistry
+from .core import CommandDefinition, CommandHandler, CommandRegistry
 
 # ============================================================================
 # Global Registry

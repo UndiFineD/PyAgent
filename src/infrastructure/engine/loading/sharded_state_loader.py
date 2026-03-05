@@ -23,7 +23,7 @@ import threading
 from dataclasses import dataclass
 from typing import (Any, Callable, Dict, Generator, List, Optional, Tuple)
 
- from torch._tensor import Tensor
+from torch._tensor import Tensor
 
 try:
     import rust_core

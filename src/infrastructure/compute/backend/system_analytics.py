@@ -21,9 +21,9 @@ import threading
 import time
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .usage_record import UsageRecord
+from .usage_record import UsageRecord
 
 __version__ = VERSION
 

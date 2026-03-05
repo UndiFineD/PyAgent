@@ -16,7 +16,7 @@ from __future__ import annotations
 """Byzantine core for handling byzantine faults and consensus in distributed deployments."""
 
 
- from typing import Any
+from typing import Any
 
 try:
     import rust_core as rc

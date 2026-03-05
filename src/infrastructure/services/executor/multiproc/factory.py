@@ -18,7 +18,7 @@ Factory.py module.
 """
 
 
- from typing import Any, Callable, Dict
+from typing import Any, Callable, Dict
 
 from src.infrastructure.services.executor.multiproc.base import Executor
 from src.infrastructure.services.executor.multiproc.distributed import \

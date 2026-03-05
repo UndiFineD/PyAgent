@@ -6,7 +6,7 @@ Agent bar.py module.
 # Copyright 2026 PyAgent Authors
 # AgentBar: Real-time status and control component for Phase 51 Multimedia.
 
- from typing import Any, Dict
+from typing import Any, Dict
 
 
 class AgentBar:

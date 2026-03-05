@@ -13,7 +13,7 @@ import time
 from pathlib import Path
 from typing import Callable
 
- from src.observability.structured_logger import StructuredLogger
+from src.observability.structured_logger import StructuredLogger
 
 logger = StructuredLogger(__name__)
 

@@ -6,7 +6,7 @@ Factory for incremental detokenizers.
 """
 
 
- from typing import (
+from typing import (
     List,
     Optional,
     Set,

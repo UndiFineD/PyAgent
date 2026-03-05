@@ -21,11 +21,11 @@ from __future__ import annotations
 """Agent management logic for the PyAgent GUI."""
 
 
- from typing import Any
+from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .agent_column import AgentColumn
+from .agent_column import AgentColumn
 
 __version__ = VERSION
 

@@ -15,7 +15,7 @@ from __future__ import annotations
 
 """Data manipulation logic for GlobalContextEngine."""
 
- from typing import Any
+from typing import Any
 
 class ContextDataMixin:
     """Mixin for fundamental context data operations."""

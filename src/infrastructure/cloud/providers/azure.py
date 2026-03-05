@@ -12,7 +12,7 @@ import json
 import logging
 from typing import AsyncIterator, List, Optional, Dict, Any
 
- from ..base import (
+from ..base import (
     CloudProviderBase,
     InferenceRequest,
     InferenceResponse,

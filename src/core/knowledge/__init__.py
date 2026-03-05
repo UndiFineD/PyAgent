@@ -19,7 +19,7 @@ Designed to handle high-volume parameters with efficient access patterns.
 """
 
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 from .btree_store import BTreeKnowledgeStore  # noqa: F401
 from .graph_store import GraphKnowledgeStore  # noqa: F401

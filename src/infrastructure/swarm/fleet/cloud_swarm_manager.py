@@ -23,7 +23,7 @@ import logging
 from pathlib import Path
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

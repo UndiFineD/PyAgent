@@ -18,7 +18,7 @@ Graph relational agent.py module.
 """
 
 
- from typing import Any
+from typing import Any
 
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent

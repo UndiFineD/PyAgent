@@ -21,7 +21,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
- from .enums import ReasoningFormat, ToolCallFormat
+from .enums import ReasoningFormat, ToolCallFormat
 
 
 @dataclass

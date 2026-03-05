@@ -17,11 +17,11 @@ from __future__ import annotations
 """Auto-extracted class from agent_changes.py"""
 
 
- from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .changelog_entry import ChangelogEntry
+from .changelog_entry import ChangelogEntry
 
 __version__ = VERSION
 

@@ -17,6 +17,6 @@ Manager for entry templates.
 (Facade for src.core.base.common.template_core)
 """
 
- from src.core.base.common.template_core import TemplateCore as TemplateManager
+from src.core.base.common.template_core import TemplateCore as TemplateManager
 
 __all__ = ["TemplateManager"]

@@ -23,7 +23,7 @@ Provides structural typing (Protocols) for agents, orchestrators, and components
 from pathlib import Path
 from typing import Any, Protocol, runtime_checkable
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

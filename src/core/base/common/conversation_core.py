@@ -18,7 +18,7 @@ Core logic for conversation history and message management.
 """
 
 
- from typing import List
+from typing import List
 
 from .base_core import BaseCore
 from .models import ConversationMessage, MessageRole

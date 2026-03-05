@@ -22,7 +22,7 @@ import json
 import logging
 from typing import TYPE_CHECKING, Any
 
- from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.base_agent import BaseAgent
 
 if TYPE_CHECKING:
     from src.core.knowledge.GlobalContext import GlobalContext

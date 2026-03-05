@@ -18,7 +18,7 @@
 EagleProposer: Wrapper regarding modular EAGLE-style speculative decoding components.
 """
 
- from .eagle.base import (AttentionMetadata, CpuGpuBuffer, InputBuffer,
+from .eagle.base import (AttentionMetadata, CpuGpuBuffer, InputBuffer,
                          TreeAttentionMetadata)
 from .eagle.config import AttentionBackend, EagleConfig, EagleMethod
 from .eagle.models import DraftModelWrapper, DraftOutput, SimpleDraftModel

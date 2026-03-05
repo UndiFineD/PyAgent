@@ -23,7 +23,7 @@ Inspired by ADSyncDump-BOF database connection patterns.
 import platform
 from typing import Any, Dict, List, Optional
 
- from src.core.base.logic.processing.database_access_core import DatabaseAccessCore
+from src.core.base.logic.processing.database_access_core import DatabaseAccessCore
 
 
 class DatabaseAccessMixin:

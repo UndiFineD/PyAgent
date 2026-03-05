@@ -22,7 +22,7 @@ Validator.py module.
 import json
 from typing import Any
 
- from .config import StructuredOutputConfig, ValidationResult
+from .config import StructuredOutputConfig, ValidationResult
 
 
 class StructuredOutputValidator:

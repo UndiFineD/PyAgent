@@ -17,7 +17,7 @@ from __future__ import annotations
 """Test agent functionality - extracted classes."""
 
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 from .agents import TestsAgent  # noqa: F401
 from .debugging import (ExecutionReplayer, TestProfiler, TestRecorder,  # noqa: F401

@@ -11,7 +11,7 @@ This package provides:
 - VRAM estimation
 """
 
- from .ModelRegistry import (
+from .ModelRegistry import (
     # Enums
     ModelCapability,
     ModelArchitecture,

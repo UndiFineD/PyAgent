@@ -4,7 +4,7 @@ import logging
 from typing import Any
 from contextlib import contextmanager
 
- from .coordinator import GroupCoordinator
+from .coordinator import GroupCoordinator
 
 logger = logging.getLogger(__name__)
 

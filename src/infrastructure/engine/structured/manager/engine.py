@@ -22,7 +22,7 @@ import threading
 from concurrent.futures import Future, ThreadPoolExecutor
 from typing import Any, Callable, Dict, List, Optional, Sequence, Union
 
- import numpy as np
+import numpy as np
 
 from .base import StructuredOutputBackend, StructuredOutputGrammar
 from .config import GrammarSpec, GrammarType, ValidationResult

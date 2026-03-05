@@ -19,7 +19,7 @@ imports during pytest collection.
 """
 
 
- from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any
 
 __all__: list[str] = []
 

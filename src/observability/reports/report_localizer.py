@@ -17,9 +17,9 @@ from __future__ import annotations
 """Auto-extracted class from generate_agent_reports.py"""
 
 
- import logging
+import logging
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 from .locale_code import LocaleCode
 from .localized_string import LocalizedString

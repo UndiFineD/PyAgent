@@ -19,7 +19,7 @@ EvolutionCore logic for agent fleet adaptation.
 Contains pure logic for template generation and hyperparameter optimization.
 """
 
- from typing import Dict
+from typing import Dict
 
 class EvolutionCore:
     """

@@ -17,7 +17,7 @@ from __future__ import annotations
 """Agent specializing in self-healing through telemetry analysis and error correction."""
 
 
- from typing import Any
+from typing import Any
 
 from src.core.base.common.base_utilities import as_tool, create_main_function
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -63,9 +63,9 @@ class SelfHealingAgent(BaseAgent):
                     self._system_prompt += f"\n\nProject Context:\n{overview}"
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 # Log but don't fail - dynamic prompt is optional enhancement
-            import logging
-
+                import logging
                 logging.getLogger(__name__).debug("Failed to load dynamic prompt: %s", e)
+
 
     @as_tool
     async def discover_peers_and_budget(self) -> str:

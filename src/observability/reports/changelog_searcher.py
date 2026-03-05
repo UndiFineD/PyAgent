@@ -17,7 +17,7 @@ from __future__ import annotations
 """Auto-extracted class from agent_changes.py"""
 
 
- import re
+import re
 
 from src.core.base.common.types.search_result import SearchResult
 from src.core.base.lifecycle.version import VERSION

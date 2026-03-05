@@ -24,9 +24,9 @@ import re
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Set
 
- import numpy as np
+import numpy as np
 
- from .base import StructuredOutputGrammar
+from .base import StructuredOutputGrammar
 
 
 @dataclass

@@ -20,7 +20,7 @@ This module provides tools to detect and resolve conflicts in context files
 using automated or specified resolution strategies.
 """
 
- import re
+import re
 
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.utils.conflict_resolution import (

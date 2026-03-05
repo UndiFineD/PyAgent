@@ -20,7 +20,7 @@ from __future__ import annotations
 import logging
 import re
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 from .report_search_result import ReportSearchResult
 from .report_type import ReportType

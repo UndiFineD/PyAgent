@@ -21,7 +21,7 @@ import subprocess
 from datetime import datetime
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 from .blame_info import BlameInfo
 from .error_entry import ErrorEntry

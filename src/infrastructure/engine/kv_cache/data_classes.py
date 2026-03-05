@@ -21,7 +21,7 @@ import time
 from dataclasses import dataclass, field
 from typing import List, Optional, Sequence, Tuple
 
- from .enums import AllocationStrategy, CacheGroupType, EvictionPolicy
+from .enums import AllocationStrategy, CacheGroupType, EvictionPolicy
 
 
 @dataclass(frozen=True)

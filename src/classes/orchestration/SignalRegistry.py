@@ -6,7 +6,7 @@ import logging
 from typing import Dict, List, Callable, Any, Optional
 from datetime import datetime
 
- from .SignalCore import SignalCore
+from .SignalCore import SignalCore
 
 class SignalRegistry:
     """

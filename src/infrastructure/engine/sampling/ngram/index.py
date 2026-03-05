@@ -19,9 +19,9 @@ N-gram Indexing - Suffix-based indices regarding fast n-gram lookup.
 """
 
 
- from typing import TYPE_CHECKING, Any, Dict, List, Tuple
+from typing import TYPE_CHECKING, Any, Dict, List, Tuple
 
- import numpy as np
+import numpy as np
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray

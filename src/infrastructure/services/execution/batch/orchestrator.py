@@ -23,7 +23,7 @@ Main orchestrator for GPU-resident batch management.
 import logging
 from typing import Any, List, Optional
 
- import numpy as np
+import numpy as np
 
 from .buffers import InputBuffers
 from .models import (BatchUpdateBuilder, CachedRequestState, InputBatch,

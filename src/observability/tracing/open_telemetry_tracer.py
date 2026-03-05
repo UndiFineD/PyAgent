@@ -69,22 +69,26 @@ else:
 try:
     from opentelemetry import trace  # pylint: disable=unused-import
     from opentelemetry.context.context import Context
-    from opentelemetry.sdk.environment_variables import \
-        OTEL_EXPORTER_OTLP_TRACES_PROTOCOL
-        from opentelemetry.sdk.trace import TracerProvider
-        from opentelemetry.sdk.trace.export import (BatchSpanProcessor,
-                                                SimpleSpanProcessor,
-                                                SpanExporter)
-                                                from opentelemetry.trace import (Span, SpanKind, Status, StatusCode,
-                                     Tracer, get_current_span,
-                                     get_tracer_provider, set_tracer_provider)
-                                     from opentelemetry.trace.propagation.tracecontext import \
-        TraceContextTextMapPropagator
+    from opentelemetry.sdk.environment_variables import OTEL_EXPORTER_OTLP_TRACES_PROTOCOL
+    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace.export import (
+        BatchSpanProcessor,
+        SimpleSpanProcessor,
+        SpanExporter)
+    from opentelemetry.trace import (
+        Span, 
+        SpanKind, 
+        Status, 
+        StatusCode,
+        Tracer, 
+        get_current_span,
+        get_tracer_provider, 
+        set_tracer_provider)
+    from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
 
     _is_otel_imported = True
 except ImportError:
-import traceback
-
+    import traceback
     otel_import_error_traceback = traceback.format_exc()
 
 try:
@@ -101,8 +105,6 @@ T = TypeVar("T")
 # ============================================================================
 # Span Attributes (Standard names for LLM operations)
 # ============================================================================
-
-
 class SpanAttributes:
     """
     Standard span attribute names for LLM and AI operations.
@@ -156,8 +158,6 @@ class SpanAttributes:
 # ============================================================================
 # Core Functions
 # ============================================================================
-
-
 _CACHED_PROPAGATOR: TraceContextTextMapPropagator | None = None
 
 
@@ -269,8 +269,6 @@ def get_tracer(name: str = __name__) -> Tracer | None:
 # ============================================================================
 # Trace Context Propagation
 # ============================================================================
-
-
 def extract_trace_context(headers: Mapping[str, str] | None) -> Context | None:
     """
     Extract trace context from HTTP headers.
@@ -322,9 +320,6 @@ def contains_trace_headers(headers: Mapping[str, str]) -> bool:
 # ============================================================================
 # Span Context Managers
 # ============================================================================
-
-
-
 def _select_tracer(tracer: Tracer | None) -> Tracer | None:
     """Select the tracer to use, falling back to global if not provided."""
     if tracer is not None:
@@ -447,8 +442,6 @@ def traced(
 # ============================================================================
 # Span Helpers
 # ============================================================================
-
-
 def get_current_span_safe() -> Span | None:
     """Get the current span, or None if not available."""
     if not is_otel_available():
@@ -505,8 +498,6 @@ def record_exception(exception: Exception, escaped: bool = True) -> None:
 # ============================================================================
 # Logging Integration
 # ============================================================================
-
-
 _TRACING_DISABLED_LOGGED = False
 
 
@@ -521,8 +512,6 @@ def log_tracing_disabled_warning() -> None:
 # ============================================================================
 # Timing Utilities
 # ============================================================================
-
-
 @dataclass
 class SpanTiming:
     """Helper for tracking timing within a span regarding performance metrics."""
@@ -554,7 +543,7 @@ class SpanTiming:
         """Apply timing attributes to a span."""
         if span is None:
             return
-        
+
         def set_attr(item: tuple[str, float]) -> None:
             span.set_attribute(item[0], item[1])
 
@@ -583,8 +572,6 @@ def timed_span(
 # ============================================================================
 # Null Tracer (for testing)
 # ============================================================================
-
-
 class NullSpan:
     """A no-op span for testing or when tracing is disabled."""
 
@@ -639,7 +626,6 @@ def get_null_tracer() -> NullTracer:
 # ============================================================================
 # Exports
 # ============================================================================
-
 __all__: list[str] = [
     # Constants
     "TRACE_HEADERS",

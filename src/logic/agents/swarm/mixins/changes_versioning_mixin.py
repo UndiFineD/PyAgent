@@ -22,7 +22,7 @@ import logging
 import re
 from datetime import datetime
 
- from ..versioning_strategy import VersioningStrategy
+from ..versioning_strategy import VersioningStrategy
 
 
 class ChangesVersioningMixin:

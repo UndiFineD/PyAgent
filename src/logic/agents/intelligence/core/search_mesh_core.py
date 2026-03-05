@@ -18,7 +18,7 @@ Search mesh core.py module.
 """
 
 
- from typing import Any
+from typing import Any
 
 try:
     import rust_core

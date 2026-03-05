@@ -7,7 +7,7 @@ Integrates shellcheck for linting generated scripts.
 import subprocess
 import os
 
- from src.core.base.interfaces import ContextRecorderInterface
+from src.core.base.interfaces import ContextRecorderInterface
 
 class BashCore:
     @staticmethod

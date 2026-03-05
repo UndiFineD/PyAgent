@@ -27,7 +27,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 
- from src.core.base.common.base_core import BaseCore
+from src.core.base.common.base_core import BaseCore
 
 
 class GoalStatus(str, Enum):

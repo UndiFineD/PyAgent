@@ -23,7 +23,7 @@ Merge conflict mixin.py module.
 """
 
 
- from typing import Any
+from typing import Any
 
 
 class MergeConflictMixin:

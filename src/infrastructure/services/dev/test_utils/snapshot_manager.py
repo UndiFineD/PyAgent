@@ -22,7 +22,7 @@ import difflib
 from pathlib import Path
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 from .snapshot_comparison_result import SnapshotComparisonResult
 from .test_snapshot import TestSnapshot

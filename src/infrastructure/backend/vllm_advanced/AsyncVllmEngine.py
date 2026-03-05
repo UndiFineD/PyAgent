@@ -8,7 +8,7 @@ import uuid
 from dataclasses import dataclass, field
 from enum import Enum, auto
 
- from typing import (
+from typing import (
     TYPE_CHECKING,
     Any,
     AsyncIterator,

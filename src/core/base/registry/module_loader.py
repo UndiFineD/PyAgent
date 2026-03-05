@@ -22,7 +22,7 @@ from pathlib import Path
 from types import ModuleType
 from typing import Any, Type
 
- from ..lifecycle.version import VERSION
+from ..lifecycle.version import VERSION
 
 __version__: str = VERSION
 

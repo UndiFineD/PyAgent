@@ -24,7 +24,7 @@ from typing import Any, Dict, List, Optional
 import zmq
 import zmq.asyncio
 
- from .locality_manager import LocalityManager
+from .locality_manager import LocalityManager
 
 try:
     import rust_core as rc

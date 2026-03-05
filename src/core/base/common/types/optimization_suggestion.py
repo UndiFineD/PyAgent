@@ -17,7 +17,7 @@ from __future__ import annotations
 """Auto-extracted class from agent_coder.py"""
 
 
- from dataclasses import dataclass
+from dataclasses import dataclass
 
 from src.core.base.common.types.optimization_type import OptimizationType
 from src.core.base.lifecycle.version import VERSION

@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 
- from .memory_core import MemoryCore  # type: ignore
+from .memory_core import MemoryCore  # type: ignore
 
 __all__ = ["MemoryCore"]
 

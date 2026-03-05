@@ -20,12 +20,12 @@ Demonstrates the Core/Shell pattern.
 """
 
 
- import logging
+import logging
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
- from .community_core import CommunityCore
+from .community_core import CommunityCore
 
 __version__ = VERSION
 

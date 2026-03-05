@@ -5,7 +5,7 @@ N-gram Accelerators - Numba and Rust-based high-performance matching.
 """
 
 
- import numpy as np
+import numpy as np
 
 # Try to import rust_core for acceleration
 try:

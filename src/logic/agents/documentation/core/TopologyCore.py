@@ -4,7 +4,7 @@ Core logic for Swarm Topology Generation (Phase 169).
 This module is designed to be side-effect free and a candidate for Rust acceleration.
 """
 
- from typing import Dict, List
+from typing import Dict, List
 
 class TopologyCore:
     @staticmethod

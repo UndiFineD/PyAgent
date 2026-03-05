@@ -22,7 +22,7 @@ Decomposed into types, base, implementations, and factory modules.
 import logging
 from typing import Any, Dict, List, Optional, Tuple
 
- from src.infrastructure.kv_transfer.connector.types import (
+from src.infrastructure.kv_transfer.connector.types import (
     KVConnectorRole, KVTransferMode, KVTransferConfig,
     KVConnectorMetadata, KVCacheBlocks, ForwardContext, Request
 )

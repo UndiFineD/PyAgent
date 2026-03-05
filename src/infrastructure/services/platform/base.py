@@ -25,7 +25,7 @@ import threading
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Set
 
- from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
+from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
                      DeviceInfo, MemoryInfo, PlatformType, QuantizationType)
 
 logger = logging.getLogger(__name__)

@@ -20,7 +20,7 @@ Stop condition checker for detokenization.
 """
 
 
- from typing import List, Optional, Set, Tuple
+from typing import List, Optional, Set, Tuple
 
 # Try to import Rust accelerations
 try:

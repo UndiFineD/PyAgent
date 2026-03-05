@@ -26,7 +26,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 from pathlib import Path
 
- from src.core.base.common.models.communication_models import CascadeContext
+from src.core.base.common.models.communication_models import CascadeContext
 
 
 @dataclass

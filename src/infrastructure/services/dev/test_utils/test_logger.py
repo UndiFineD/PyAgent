@@ -21,9 +21,9 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .test_log_entry import TestLogEntry
+from .test_log_entry import TestLogEntry
 
 __version__ = VERSION
 

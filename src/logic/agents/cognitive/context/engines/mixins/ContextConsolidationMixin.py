@@ -15,7 +15,7 @@ from __future__ import annotations
 
 """Consolidation and summary logic for GlobalContextEngine."""
 
- from typing import Any
+from typing import Any
 
 class ContextConsolidationMixin:
     """Mixin for summarizing memory and consolidating episodes."""

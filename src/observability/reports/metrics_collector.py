@@ -20,9 +20,9 @@ from __future__ import annotations
 import logging
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .report_metric import ReportMetric
+from .report_metric import ReportMetric
 
 __version__ = VERSION
 

@@ -5,7 +5,7 @@
 Schema validation for tool calls.
 """
 
- from .schema import (
+from .schema import (
     validate_tool_call,
     validate_tool_schema,
     validate_argument_type,

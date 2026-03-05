@@ -22,7 +22,7 @@ Handles deployment and lifecycle of agent-specific containers.
 import json
 import logging
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

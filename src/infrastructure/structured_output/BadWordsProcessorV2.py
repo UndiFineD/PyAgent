@@ -39,7 +39,7 @@ try:
 except ImportError:
     HAS_RUST = False
 
- from .LogitsProcessorV2 import (
+from .LogitsProcessorV2 import (
     BatchUpdate,
     LogitsProcessor,
     MoveDirectionality,

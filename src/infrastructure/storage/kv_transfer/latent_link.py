@@ -18,7 +18,7 @@ LatentLink: Cross-model KV alignment for latent communication.
 Implemented based on arXiv:2601.06123 (Latent space communication for multi-agent systems).
 """
 
- from typing import Dict, Tuple
+from typing import Dict, Tuple
 
 import torch
 import torch.nn as nn

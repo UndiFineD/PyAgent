@@ -20,7 +20,7 @@ import hashlib
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional
 
- from .config import RenderOptions, TemplateConfig, TemplateInfo, TemplateType
+from .config import RenderOptions, TemplateConfig, TemplateInfo, TemplateType
 
 
 class ChatTemplate(ABC):

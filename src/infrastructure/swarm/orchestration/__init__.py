@@ -17,9 +17,9 @@ Orchestration package.
 """
 
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from . import system
+from . import system
 
 __version__ = VERSION
 __all__ = ["VERSION", "system"]

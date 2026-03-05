@@ -14,7 +14,7 @@
 
 """Mixin for agent configuration access."""
 
- from typing import Any
+from typing import Any
 
 from src.core.base.common.config_core import ConfigCore
 from src.core.base.configuration.config_manager import config

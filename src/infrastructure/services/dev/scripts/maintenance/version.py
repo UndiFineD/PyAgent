@@ -20,7 +20,7 @@ Version.py module.
 # This file serves as the source of truth for the project's current maturity level.
 
 
- from typing import Any
+from typing import Any
 
 VERSION = "2.1.8-stable"
 EVOLUTION_PHASE = 119

@@ -19,7 +19,7 @@ Refactored to modular package structure for Phase 317.
 Original monolithic implementation delegated to src.core.base.common.utils.jsontree modules.
 """
 
- from src.core.base.common.utils.jsontree.iteration import (
+from src.core.base.common.utils.jsontree.iteration import (
     json_iter_leaves, json_iter_leaves_with_path)
     from src.core.base.common.utils.jsontree.mapping import (json_map_leaves,
                                                          json_map_leaves_async)

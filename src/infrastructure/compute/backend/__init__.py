@@ -16,7 +16,7 @@ from __future__ import annotations
 """Auto-generated module exports."""
 
 
- from src.core.base.lifecycle.version import VERSION as VERSION
+from src.core.base.lifecycle.version import VERSION as VERSION
 
 from src.infrastructure.compute.backend.ab_test_variant import ABTestVariant  # noqa: F401
 from src.infrastructure.compute.backend.ab_tester import ABTester  # noqa: F401

@@ -9,7 +9,7 @@ Utility functions and loaders for prompt rendering.
 import base64
 from typing import Any, Dict, List, Optional, Tuple
 
- from .models import (
+from .models import (
     EmbeddingInput,
     PromptConfig,
     RenderResult,

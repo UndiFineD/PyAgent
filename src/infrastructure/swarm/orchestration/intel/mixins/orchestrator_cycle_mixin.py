@@ -8,7 +8,7 @@ Orchestrator cycle mixin.py module.
 import logging
 from typing import Any
 
- from src.core.base.lifecycle.version import is_gate_open, STABILITY_SCORE
+from src.core.base.lifecycle.version import is_gate_open, STABILITY_SCORE
 
 
 class OrchestratorCycleMixin:

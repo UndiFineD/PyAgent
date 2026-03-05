@@ -17,7 +17,7 @@
 import logging
 from typing import Callable, Dict, Generic, List, TypeVar
 
- from .base_core import BaseCore
+from .base_core import BaseCore
 
 T = TypeVar("T")
 

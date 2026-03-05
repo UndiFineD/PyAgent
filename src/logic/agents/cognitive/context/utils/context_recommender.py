@@ -20,7 +20,7 @@ This module provides tools to suggest improvements and section additions
 to context files by analyzing similar reference contexts and patterns.
 """
 
- import re
+import re
 
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.context_recommendation import (

@@ -19,9 +19,9 @@ Provides support for interleaved modality tags and streaming sessions.
 """
 
 
- from typing import Any, Dict, List
+from typing import Any, Dict, List
 
- from src.core.base.common.multimodal_core import (MultimodalCore,
+from src.core.base.common.multimodal_core import (MultimodalCore,
                                                   MultimodalStreamSession)
 
 

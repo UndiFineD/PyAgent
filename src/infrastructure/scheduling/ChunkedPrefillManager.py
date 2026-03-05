@@ -25,7 +25,7 @@ import time
 from typing import Any, Callable, Optional, Iterator, TypeVar
 import uuid
 
- from src.infrastructure.scheduling.chunked_prefill.types import (
+from src.infrastructure.scheduling.chunked_prefill.types import (
     ChunkState,
     ChunkPriority,
     ChunkMetrics,

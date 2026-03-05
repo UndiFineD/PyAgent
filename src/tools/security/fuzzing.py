@@ -14,7 +14,6 @@ from __future__ import annotations
 # limitations under the License.
 
 
-
 import asyncio
 import json
 import logging
@@ -33,7 +32,7 @@ from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup
 
- from src.core.base.models.communication_models import CascadeContext
+from src.core.base.models.communication_models import CascadeContext
 
 logger = logging.getLogger("pyagent.security.fuzzing")
 

@@ -43,9 +43,9 @@ import math
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
- import numpy as np
+import numpy as np
 
- from src.infrastructure.engine.multimodal import (Muxer, QuantizedMultimediaEngine)
+from src.infrastructure.engine.multimodal import (Muxer, QuantizedMultimediaEngine)
 
 from .base_core import BaseCore
 from .multimodal_state import StreamState

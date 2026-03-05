@@ -1,7 +1,7 @@
 # Copyright 2026 PyAgent Authors
 # Logic for analyzing tech debt and structural issues in the fleet.
 
- import os
+import os
 
 from .mixins.StructuralAnalysisMixin import StructuralAnalysisMixin
 from .mixins.ResearchAnalysisMixin import ResearchAnalysisMixin

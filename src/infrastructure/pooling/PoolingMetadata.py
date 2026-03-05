@@ -18,7 +18,7 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Callable, Dict, Generic, List, Optional, Tuple, TypeVar, Union
 
- import numpy as np
+import numpy as np
 
 # Try to import rust_core for acceleration
 try:

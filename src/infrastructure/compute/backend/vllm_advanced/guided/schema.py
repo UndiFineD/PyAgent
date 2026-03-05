@@ -23,7 +23,7 @@ JSON Schema builder for guided decoding.
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Union
 
- from .models import GuidedConfig, GuidedMode
+from .models import GuidedConfig, GuidedMode
 
 
 @dataclass

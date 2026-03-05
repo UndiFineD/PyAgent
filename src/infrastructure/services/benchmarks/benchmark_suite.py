@@ -29,7 +29,7 @@ try:
 except ImportError:
     rc = None
 
- from src.infrastructure.engine.tokenization.tokenizer_registry import \
+from src.infrastructure.engine.tokenization.tokenizer_registry import \
     estimate_token_count
 from src.infrastructure.services.benchmarks.models import BenchmarkResult
 

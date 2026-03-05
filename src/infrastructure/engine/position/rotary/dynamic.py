@@ -16,7 +16,7 @@
 Dynamic.py module.
 """
 
- from typing import Any, Optional, Tuple
+from typing import Any, Optional, Tuple
 
 from .base import HAS_NUMPY, HAS_TORCH, RotaryEmbeddingBase
 from .config import RoPEConfig

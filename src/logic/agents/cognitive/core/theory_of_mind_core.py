@@ -20,9 +20,9 @@ Pure logic for modeling agent mental states and capabilities. Analyzes agent
 profiles and observations to maintain a model of the swarm's collective intelligence.
 """
 
- from typing import Any
+from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

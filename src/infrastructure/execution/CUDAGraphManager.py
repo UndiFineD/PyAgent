@@ -21,7 +21,7 @@ from enum import Enum, auto
 from typing import Any, Callable, NamedTuple
 from collections import OrderedDict
 
- import numpy as np
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

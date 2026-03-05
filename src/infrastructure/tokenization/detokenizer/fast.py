@@ -6,7 +6,7 @@ Fast incremental detokenization for HuggingFace fast tokenizers.
 """
 
 
- from typing import (
+from typing import (
     List,
     Optional,
     Set,

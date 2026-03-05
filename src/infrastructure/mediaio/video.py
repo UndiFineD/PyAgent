@@ -6,9 +6,9 @@ Video loader implementation.
 """
 
 
- from typing import BinaryIO, Tuple, Union
+from typing import BinaryIO, Tuple, Union
 
- import numpy as np
+import numpy as np
 
 from .base import MediaLoader
 from .models import (

@@ -16,11 +16,11 @@
 Image.py module.
 """
 
- from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple
 
- import numpy as np
+import numpy as np
 
- from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
+from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
 
 
 class ImageProcessor(BaseMultiModalProcessor[Any]):

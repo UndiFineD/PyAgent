@@ -28,7 +28,7 @@ Execution engine regarding the sampling pipeline.
 from functools import reduce
 from typing import List, Optional
 
- import numpy as np
+import numpy as np
 
 from .base import Sampler, _sample_from_probs, _softmax
 from .kernels import (GumbelSampler, PenaltySampler, RepetitionPenaltySampler,

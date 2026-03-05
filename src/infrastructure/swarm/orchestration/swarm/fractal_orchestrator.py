@@ -22,7 +22,7 @@ Handles recursive task delegation to specialized fleet clusters.
 import logging
 from typing import TYPE_CHECKING, Any, Dict, List
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager

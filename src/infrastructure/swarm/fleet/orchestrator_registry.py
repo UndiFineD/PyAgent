@@ -26,7 +26,7 @@ import os
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
- from src.core.base.lifecycle.version import SDK_VERSION, VERSION
+from src.core.base.lifecycle.version import SDK_VERSION, VERSION
 
 from .bootstrap_configs import BOOTSTRAP_ORCHESTRATORS
 from .orchestrator_registry_core import OrchestratorRegistryCore

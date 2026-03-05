@@ -21,7 +21,7 @@ Automatically handles device selection and stream cycling.
 """
 
 
- from typing import List, Optional
+from typing import List, Optional
 
 try:
     import torch

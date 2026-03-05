@@ -20,7 +20,7 @@ Config.py module.
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
- from .constraints import (ChoiceConstraint, GrammarConstraint,
+from .constraints import (ChoiceConstraint, GrammarConstraint,
                           JsonSchemaConstraint, OutputConstraint,
                           RegexConstraint)
 from .enums import (GuidedDecodingBackend, StructuredOutputType,

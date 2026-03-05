@@ -22,7 +22,7 @@ import json
 import sys
 from pathlib import Path
 
- from src.infrastructure.swarm.orchestration.signals.signal_registry import \
+from src.infrastructure.swarm.orchestration.signals.signal_registry import \
     SignalRegistry
 
 sys.path.append(str(Path(__file__).parent.parent.parent.parent))

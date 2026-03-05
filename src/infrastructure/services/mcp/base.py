@@ -25,7 +25,7 @@ import uuid
 from abc import ABC, abstractmethod
 from typing import AsyncIterator, Dict, List, Optional
 
- from .models import (MCPServerConfig, MCPSession, SessionState, ToolCall,
+from .models import (MCPServerConfig, MCPSession, SessionState, ToolCall,
                      ToolResult, ToolSchema)
 
 logger = logging.getLogger(__name__)

@@ -5,7 +5,7 @@ System Health Monitor.
 (Facade for src.core.base.common.health_core)
 """
 
- from src.core.base.common.health_core import HealthCore as StandardHealthCore
+from src.core.base.common.health_core import HealthCore as StandardHealthCore
 
 
 class SystemHealthMonitor(StandardHealthCore):

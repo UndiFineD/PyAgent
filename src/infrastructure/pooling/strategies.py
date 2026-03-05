@@ -11,7 +11,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, Optional
 import numpy as np
 
- from .models import PoolingConfig
+from .models import PoolingConfig
 
 
 __all__ = [

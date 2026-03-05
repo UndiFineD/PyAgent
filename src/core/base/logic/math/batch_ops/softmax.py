@@ -15,7 +15,7 @@
 Softmax activation operations regarding batch processing.
 """
 
- from typing import Any
+from typing import Any
 
 try:
     import torch

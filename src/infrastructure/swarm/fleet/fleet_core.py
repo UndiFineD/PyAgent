@@ -23,7 +23,7 @@ Contains pure logic for tool scoring, capability mapping, and state transition v
 from functools import lru_cache
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

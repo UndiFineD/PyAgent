@@ -17,11 +17,11 @@ from __future__ import annotations
 """Auto-extracted class from agent_test_utils.py"""
 
 
- from dataclasses import dataclass
+from dataclasses import dataclass
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .test_data_type import TestDataType
+from .test_data_type import TestDataType
 
 __version__ = VERSION
 

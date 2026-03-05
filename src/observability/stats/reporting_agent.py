@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
- from __future__ import annotations
+from __future__ import annotations
 
 import logging
 import os
@@ -21,9 +21,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
 
- from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.base_agent import BaseAgent
 
- from .transparency_agent import TransparencyAgent
+from .transparency_agent import TransparencyAgent
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager

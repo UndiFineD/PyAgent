@@ -5,7 +5,7 @@ ModelFallbackCore logic for redundancy and cost optimization.
 Pure logic for selecting fallback models and price comparisons.
 """
 
- from typing import List, Dict, Optional, Any
+from typing import List, Dict, Optional, Any
 
 class ModelFallbackCore:
     """Pure logic core for model fallback strategies."""

@@ -17,9 +17,9 @@ from __future__ import annotations
 """Enums for test agent functionality."""
 
 
- from enum import Enum
+from enum import Enum
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

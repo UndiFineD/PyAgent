@@ -14,7 +14,7 @@ from typing import (
     Union,
 )
 
- from src.infrastructure.tokenization.detokenizer.types import (
+from src.infrastructure.tokenization.detokenizer.types import (
     TokenizerLike,
     DetokenizeResult,
 )

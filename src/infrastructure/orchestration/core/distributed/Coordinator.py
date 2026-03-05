@@ -13,7 +13,7 @@ from typing import (
     Optional,
 )
 
- import numpy as np
+import numpy as np
 
 from .Config import EngineIdentity, EngineState, LoadBalancingStrategy, ParallelConfig
 from .Messages import MetricsMessage

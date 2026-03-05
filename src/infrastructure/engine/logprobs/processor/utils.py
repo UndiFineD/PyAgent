@@ -21,7 +21,7 @@ Utils.py module.
 import math
 from typing import Sequence
 
- import numpy as np
+import numpy as np
 
 
 def compute_perplexity(logprobs: Sequence[float]) -> float:

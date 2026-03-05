@@ -12,7 +12,7 @@ Phase 29: Execution Context, Batching & Async Streaming
 from dataclasses import dataclass, field
 from typing import Any, Optional, List, Dict, Sequence
 
- import numpy as np
+import numpy as np
 
 
 # ============================================================================

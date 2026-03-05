@@ -17,9 +17,9 @@ Core logic for Swarm Resource Auctioning.
 Implements the VCG auction model for truthful bidding.
 """
 
- from typing import Any, Dict, List
+from typing import Any, Dict, List
 
- from .base_core import BaseCore
+from .base_core import BaseCore
 
 try:
     import rust_core as rc

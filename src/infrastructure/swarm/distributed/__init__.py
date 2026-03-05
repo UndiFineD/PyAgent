@@ -22,7 +22,7 @@ Phase 33 modules:
 - NCCLCommunicator: NCCL collective operations
 """
 
- from .nccl_communicator import (
+from .nccl_communicator import (
     CustomAllReduce,
     NCCLCommunicator,
     NCCLConfig,  # noqa: F401

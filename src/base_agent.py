@@ -14,7 +14,7 @@ if str(root / "src") not in sys.path:
 # Modular imports from the new class hierarchy
 # import agent_backend
 
- from src.classes.base_agent import *
+from src.classes.base_agent import *
 
 try:
     from src.core.base.utilities import create_main_function

@@ -23,7 +23,7 @@ import logging
 import uuid
 from typing import TYPE_CHECKING
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

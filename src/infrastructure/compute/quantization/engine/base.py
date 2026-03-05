@@ -21,7 +21,7 @@ Base.py module.
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
- import numpy as np
+import numpy as np
 
 from .config import QuantConfig
 from .tensor import QuantizedTensor

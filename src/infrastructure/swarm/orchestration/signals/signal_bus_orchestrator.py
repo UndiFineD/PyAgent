@@ -20,7 +20,7 @@ Signal bus for agent-to-agent communication.
 import logging
 import queue
 
- from src.core.base.common.signal_core import SignalCore as StandardSignalCore
+from src.core.base.common.signal_core import SignalCore as StandardSignalCore
 
 
 class SignalBusOrchestrator(StandardSignalCore):

@@ -11,9 +11,9 @@ Chain of thought strategy.py module.
 import logging
 from typing import TYPE_CHECKING
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .agent_strategy import AgentStrategy
+from .agent_strategy import AgentStrategy
 
 if TYPE_CHECKING:
     from collections.abc import Callable

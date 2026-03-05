@@ -26,7 +26,7 @@ from typing import Any, AsyncGenerator, Dict, List, Optional, Type, TypeVar
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 
- from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field
 
 from src.core.base.common.base_core import BaseCore
 from src.core.base.common.models.communication_models import CascadeContext

@@ -17,7 +17,7 @@ Unified Model Provider Registry.
 Ports the extensive provider list from .code_puppy's models.dev integration.
 """
 
- from typing import Dict, List, TypedDict
+from typing import Dict, List, TypedDict
 
 class ModelSpec(TypedDict):
     id: str

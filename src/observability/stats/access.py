@@ -8,7 +8,7 @@ Access.py module.
 # Access control for stats.
 
 
- import fnmatch
+import fnmatch
 
 
 class StatsAccessController:

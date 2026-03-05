@@ -16,7 +16,7 @@ from __future__ import annotations
 """Compliance audit agent for performing detailed compliance audits and reporting."""
 
 
- from typing import Any
+from typing import Any
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION

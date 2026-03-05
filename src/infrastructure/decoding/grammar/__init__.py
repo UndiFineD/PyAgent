@@ -4,7 +4,7 @@
 Grammar-constrained decoding package.
 """
 
- from .Base import (
+from .Base import (
     StructuredOutputGrammar,
     StructuredOutputOptions,
     StructuredOutputsParams,

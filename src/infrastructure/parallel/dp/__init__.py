@@ -3,7 +3,7 @@
 DataParallelCoordinator Package.
 """
 
- from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .types import DPRole, WorkerHealth, LoadBalanceStrategy, DPConfig, WorkerState, StepState, WaveState

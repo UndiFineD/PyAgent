@@ -23,9 +23,9 @@ import functools
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
- import numpy as np
+import numpy as np
 
- from .tree import SpeculativeTree
+from .tree import SpeculativeTree
 
 
 @dataclass

@@ -9,7 +9,7 @@ import logging
 from pathlib import Path
 from typing import List, Dict, Any
 
- from .KnowledgeTransferCore import KnowledgeTransferCore
+from .KnowledgeTransferCore import KnowledgeTransferCore
 
 class KnowledgeTransferEngine:
     """

@@ -16,7 +16,7 @@
 Versioning strategy.py module.
 """
 
- from enum import Enum
+from enum import Enum
 
 
 class VersioningStrategy(Enum):

@@ -21,7 +21,7 @@ This module provides a backward-compatible interface to the modularized
 chat template registry implementation.
 """
 
- from .registry import (DEFAULT_CONFIG, MODEL_TEMPLATE_MAP, ChatTemplate,
+from .registry import (DEFAULT_CONFIG, MODEL_TEMPLATE_MAP, ChatTemplate,
                        ChatTemplateRegistry, JinjaTemplate, ModelType,
                        RenderOptions, TemplateConfig, TemplateInfo,
                        TemplateResolver, TemplateType, detect_template_type,

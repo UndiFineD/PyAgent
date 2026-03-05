@@ -21,7 +21,7 @@ Extracted from BaseAgent for decomposition.
 import logging
 from typing import TYPE_CHECKING
 
- from src.core.base.common.models import ConversationMessage, MessageRole
+from src.core.base.common.models import ConversationMessage, MessageRole
 
 if TYPE_CHECKING:
     from src.core.base.lifecycle.agent_core import BaseCore

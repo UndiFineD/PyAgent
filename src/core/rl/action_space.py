@@ -11,7 +11,7 @@ import random
 from dataclasses import dataclass
 from typing import Any, Dict, List, Tuple, Union
 
- import numpy as np
+import numpy as np
 
 
 @dataclass

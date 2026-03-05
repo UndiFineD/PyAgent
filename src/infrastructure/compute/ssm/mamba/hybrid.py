@@ -21,11 +21,11 @@ Hybrid Mamba Mixer - Combining SSM with Attention.
 # pylint: disable=invalid-name
 
 
- import math
+import math
 
- import numpy as np
+import numpy as np
 
- from src.infrastructure.compute.ssm.mamba.config import (MambaConfig,
+from src.infrastructure.compute.ssm.mamba.config import (MambaConfig,
                                                          MambaOutput,
                                                          MambaState)
 from src.infrastructure.compute.ssm.mamba.mixer import MambaMixer

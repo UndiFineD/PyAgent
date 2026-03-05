@@ -23,7 +23,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
- from .enums import InstanceRole, SchedulingPolicy
+from .enums import InstanceRole, SchedulingPolicy
 
 
 @dataclass

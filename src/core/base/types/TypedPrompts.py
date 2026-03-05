@@ -9,9 +9,9 @@ Phase 24: Advanced Observability & Parsing
 """
 
 
- from typing import Any, Generic, Literal, TypeAlias, TypeVar
+from typing import Any, Generic, Literal, TypeAlias, TypeVar
 
- from typing_extensions import NotRequired, TypedDict, TypeIs
+from typing_extensions import NotRequired, TypedDict, TypeIs
 
 
 # ============================================================================

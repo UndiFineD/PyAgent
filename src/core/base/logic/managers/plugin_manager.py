@@ -19,7 +19,7 @@ Manager regarding plugin discovery, loading, and registration.
 """
 
 
- from src.core.base.common.plugin_core import (
+from src.core.base.common.plugin_core import (
     PluginCore as StandardPluginManager,
     PluginMetadata as StandardPluginMetadata,
 )

@@ -34,7 +34,7 @@ import time
 from dataclasses import dataclass
 from typing import Callable, Generic, ParamSpec, TypeVar
 
- from src.core.base.logic.connectivity_manager import ConnectivityManager
+from src.core.base.logic.connectivity_manager import ConnectivityManager
 
 P = ParamSpec("P")
 R = TypeVar("R")

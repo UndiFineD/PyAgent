@@ -17,7 +17,7 @@ from __future__ import annotations
 """Auto-extracted class from agent_coder.py"""
 
 
- import re
+import re
 
 from src.core.base.common.base_utilities import as_tool, create_main_function
 from src.core.base.common.types.review_category import ReviewCategory

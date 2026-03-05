@@ -18,7 +18,7 @@ Slash commands package.
 """
 
 
- from typing import Any, Callable
+from typing import Any, Callable
 
 # Certain test modules import this package under the name
 # `src.interface.commands` which breaks normal relative imports.  To avoid

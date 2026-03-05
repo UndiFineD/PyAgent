@@ -3,7 +3,7 @@
 Incremental detokenization for streaming text generation.
 """
 
- from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .types import TokenizerLike, DetokenizeResult

@@ -5,7 +5,7 @@ Facade for Tokenizer Registry.
 Delegates to modularized sub-packages in src/infrastructure/tokenizer/.
 """
 
- from .models import (
+from .models import (
     TokenizerBackend,
     SpecialTokenHandling,
     TruncationStrategy,

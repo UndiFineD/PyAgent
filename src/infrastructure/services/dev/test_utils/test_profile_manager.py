@@ -21,9 +21,9 @@ import logging
 import os
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .test_profile import TestProfile
+from .test_profile import TestProfile
 
 __version__ = VERSION
 

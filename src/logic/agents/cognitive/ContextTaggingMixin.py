@@ -3,7 +3,7 @@ from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
- from src.logic.agents.cognitive.context.models.ContextTag import ContextTag
+from src.logic.agents.cognitive.context.models.ContextTag import ContextTag
 
 
 class ContextTaggingMixin:

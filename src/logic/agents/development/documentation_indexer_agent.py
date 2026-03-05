@@ -19,7 +19,7 @@ from __future__ import annotations
 # pylint: disable=too-many-ancestors
 
 
- from pathlib import Path
+from pathlib import Path
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION

@@ -21,7 +21,7 @@ import time
 import uuid
 from dataclasses import dataclass, field
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

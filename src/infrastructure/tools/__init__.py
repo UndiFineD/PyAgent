@@ -40,13 +40,13 @@ from .parser import (
     extract_json_from_text,
 )
 
- from .validator import (
+from .validator import (
     validate_tool_call,
     validate_tool_schema,
     validate_argument_type,
 )
 
- from .registry import (
+from .registry import (
     ToolParserRegistry,
     StreamingToolParser,
     parse_tool_call,

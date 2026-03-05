@@ -23,7 +23,7 @@ import random
 from abc import ABC, abstractmethod
 from typing import List, Optional
 
- from .config import InstanceInfo, ScheduledRequest
+from .config import InstanceInfo, ScheduledRequest
 
 
 class InstanceSelector(ABC):

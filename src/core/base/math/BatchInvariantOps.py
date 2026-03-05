@@ -18,7 +18,7 @@ import logging
 import math
 from typing import Any
 
- import numpy as np
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

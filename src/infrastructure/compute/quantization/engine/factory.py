@@ -18,11 +18,11 @@ Factory.py module for quantization orchestration.
 """
 
 
- from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING
 
- import numpy as np
+import numpy as np
 
- from .config import QuantConfig, QuantScheme, QuantStrategy
+from .config import QuantConfig, QuantScheme, QuantStrategy
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray

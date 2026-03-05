@@ -16,7 +16,7 @@
 Enums.py module.
 """
 
- from enum import Enum, auto
+from enum import Enum, auto
 
 
 class ReasoningFormat(Enum):

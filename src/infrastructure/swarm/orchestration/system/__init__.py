@@ -13,6 +13,6 @@
 
 """System orchestration components."""
 
- from .lock_manager import LockManager
+from .lock_manager import LockManager
 
 __all__ = ["LockManager"]

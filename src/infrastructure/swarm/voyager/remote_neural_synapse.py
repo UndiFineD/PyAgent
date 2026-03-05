@@ -8,7 +8,7 @@ Remote neural synapse.py module.
 import asyncio
 from typing import Any, Dict, List, Optional
 
- from src.infrastructure.swarm.voyager.teleportation_engine import \
+from src.infrastructure.swarm.voyager.teleportation_engine import \
     TeleportationEngine
 from src.infrastructure.swarm.voyager.transport_layer import VoyagerTransport
 from src.observability.structured_logger import StructuredLogger

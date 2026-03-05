@@ -11,7 +11,7 @@ Focus on low-risk, testable behaviors: replacement helpers, logging setup,
 and tool wrappers that record interactions to the fleet recorder when present.
 """
 
- import os
+import os
 
 from pathlib import Path
 import re

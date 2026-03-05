@@ -22,9 +22,9 @@ import logging
 from datetime import datetime
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from ..observability_core import ExportDestination, Metric
+from ..observability_core import ExportDestination, Metric
 
 __version__ = VERSION
 

@@ -16,7 +16,7 @@ from __future__ import annotations
 import logging
 import threading
 
- from src.core.base.version import VERSION
+from src.core.base.version import VERSION
 
 from .system_health_status import SystemHealthStatus
 from .system_state import SystemState

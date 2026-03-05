@@ -21,7 +21,7 @@ Core logic for performance-based routing and task distribution.
 import os
 from typing import Any, Dict, Optional
 
- from .base_core import BaseCore
+from .base_core import BaseCore
 
 try:
     import rust_core as rc  # pylint: disable=import-error

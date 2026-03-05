@@ -19,7 +19,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
- from .observability_core import StatsSnapshot
+from .observability_core import StatsSnapshot
 
 logger: logging.Logger = logging.getLogger(__name__)
 

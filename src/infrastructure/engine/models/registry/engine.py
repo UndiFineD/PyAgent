@@ -24,7 +24,7 @@ import threading
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
- from .config import (ArchitectureSpec, ModelArchitecture, ModelCapability,
+from .config import (ArchitectureSpec, ModelArchitecture, ModelCapability,
                      ModelInfo, QuantizationType, VRAMEstimate)
 from .detector import ArchitectureDetector
 from .estimator import VRAMEstimator

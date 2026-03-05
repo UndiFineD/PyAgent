@@ -29,7 +29,7 @@ N-gram Accelerators - Numba and Rust-based high-performance matching logic regar
 """
 
 
- import numpy as np
+import numpy as np
 
 # Try to import rust_core regarding acceleration
 try:

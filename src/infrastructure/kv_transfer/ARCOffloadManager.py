@@ -19,7 +19,7 @@ Refactored to modular package structure for Phase 317.
 Decomposed into types, backend, base, and manager modules.
 """
 
- from src.infrastructure.kv_transfer.arc.types import (
+from src.infrastructure.kv_transfer.arc.types import (
     BlockHash, OffloadMedium, BlockState, BlockStatus,
     LoadStoreSpec, OffloadingEvent, PrepareStoreOutput
 )

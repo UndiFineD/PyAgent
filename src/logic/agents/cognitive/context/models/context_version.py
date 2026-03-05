@@ -16,7 +16,7 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_context.py"""
 
- from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 
 
 @dataclass

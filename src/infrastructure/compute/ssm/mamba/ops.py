@@ -21,9 +21,9 @@ Mamba Operations - Causal Convolution and Selective Scan.
 # pylint: disable=invalid-name, too-many-function-args
 
 
- import math
+import math
 
- import numpy as np
+import numpy as np
 
 
 class CausalConv1d:

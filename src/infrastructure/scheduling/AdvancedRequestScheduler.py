@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Facade for advanced request scheduler modular implementation."""
 
- from .advanced import (
+from .advanced import (
     RequestPriority,
     RequestState,
     PreemptionReason,

@@ -7,7 +7,7 @@ budget management, and health-aware failover.
 """
 
 
- from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 # Lazy imports for performance
 __all__ = [

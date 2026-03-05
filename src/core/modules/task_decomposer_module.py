@@ -20,7 +20,7 @@ Task decomposer module.py module.
 from dataclasses import dataclass, field
 from typing import Any
 
- from src.core.base.common.base_modules import BaseModule
+from src.core.base.common.base_modules import BaseModule
 
 
 @dataclass

@@ -4,7 +4,7 @@
 Facade for GuidedDecoder.
 """
 
- from .guided import (
+from .guided import (
     ChoiceConstraint,
     generate_choice,
     generate_json,

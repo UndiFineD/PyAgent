@@ -10,7 +10,7 @@ import argparse
 import logging
 from pathlib import Path
 
- from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
+from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).parent.parent

@@ -33,7 +33,7 @@ import contextlib
 import logging
 from typing import TYPE_CHECKING
 
- import numpy as np
+import numpy as np
 
 from src.infrastructure.engine.sampling.ngram.accelerators import HAS_RUST
 from src.infrastructure.engine.sampling.ngram.index import SuffixIndex

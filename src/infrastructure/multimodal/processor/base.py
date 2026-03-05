@@ -18,7 +18,7 @@ from typing import (
     Union,
 )
 
- import numpy as np
+import numpy as np
 
 if TYPE_CHECKING:
     try:

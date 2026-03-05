@@ -8,9 +8,9 @@ Direct strategy.py module.
 # Apache 2.0 License
 
 
- from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 from .agent_strategy import AgentStrategy # noqa: F401
 import logging

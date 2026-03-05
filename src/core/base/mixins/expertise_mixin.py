@@ -17,9 +17,9 @@ Expertise Mixin (Phase 61).
 Allows agents to declare their domains and performance metrics for MoE routing.
 """
 
- from typing import Any, List, Optional
+from typing import Any, List, Optional
 
- from src.core.base.common.models.communication_models import ExpertProfile
+from src.core.base.common.models.communication_models import ExpertProfile
 
 
 class ExpertiseMixin:

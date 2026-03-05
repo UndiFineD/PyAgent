@@ -27,7 +27,7 @@ import time
 import uuid
 from typing import Callable, Dict, Generic, List, Optional, TypeVar
 
- from .config import (EngineIdentity, LoadBalancingStrategy, ParallelConfig,
+from .config import (EngineIdentity, LoadBalancingStrategy, ParallelConfig,
                      WorkerIdentity)
 from .coordinator import DPCoordinator
 from .messages import RequestMessage, ResponseMessage

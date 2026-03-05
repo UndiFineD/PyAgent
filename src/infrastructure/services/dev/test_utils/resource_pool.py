@@ -20,9 +20,9 @@ from __future__ import annotations
 import threading
 import time
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .resource_handle import ResourceHandle
+from .resource_handle import ResourceHandle
 
 __version__ = VERSION
 

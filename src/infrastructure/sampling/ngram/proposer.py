@@ -8,9 +8,9 @@ N-gram Proposers - Implementation of speculative decoding token proposers.
 import logging
 from typing import TYPE_CHECKING, Any
 
- import numpy as np
+import numpy as np
 
- from src.infrastructure.sampling.ngram.types import (
+from src.infrastructure.sampling.ngram.types import (
     MatchingStrategy, NgramConfig, ProposalStats
 )
 from src.infrastructure.sampling.ngram.index import SuffixIndex

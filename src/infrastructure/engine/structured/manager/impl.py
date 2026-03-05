@@ -22,7 +22,7 @@ import contextlib
 import json
 from typing import Callable, Dict, List, Optional, Sequence
 
- import numpy as np
+import numpy as np
 
 from .base import StructuredOutputGrammar
 from .config import GrammarSpec

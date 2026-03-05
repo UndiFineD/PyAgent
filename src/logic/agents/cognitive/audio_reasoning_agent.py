@@ -16,7 +16,7 @@
 Audio Reasoning Agent for multimedia grounding.
 """
 
- from typing import Any
+from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent

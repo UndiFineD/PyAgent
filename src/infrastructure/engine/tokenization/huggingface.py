@@ -20,7 +20,7 @@ HuggingFace tokenizer implementation.
 """
 
 
- from typing import Dict, List, Optional, Sequence
+from typing import Dict, List, Optional, Sequence
 
 from .base import BaseTokenizer
 from .models import TokenizerBackend, TokenizerConfig, TokenizerInfo

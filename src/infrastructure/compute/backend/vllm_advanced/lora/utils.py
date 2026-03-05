@@ -23,7 +23,7 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
- from .models import HAS_LORA
+from .models import HAS_LORA
 
 if HAS_LORA:
     from vllm.lora.request import LoRARequest

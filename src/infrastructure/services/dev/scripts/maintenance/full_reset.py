@@ -20,7 +20,7 @@ Re-scaffolds the entire swarm structure from a manifest.
 import os
 import time
 
- from src.infrastructure.services.dev.core.rebirth_core import RebirthCore
+from src.infrastructure.services.dev.core.rebirth_core import RebirthCore
 
 
 def full_reset() -> None:

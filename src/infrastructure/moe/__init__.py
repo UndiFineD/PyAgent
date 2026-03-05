@@ -9,7 +9,7 @@ Modules:
     MoEConfig: Configuration for MoE layers
 """
 
- from src.infrastructure.moe.FusedMoELayer import (
+from src.infrastructure.moe.FusedMoELayer import (
     FusedMoEConfig,
     FusedMoEParallelConfig,
     ExpertPlacementStrategy,
@@ -20,7 +20,7 @@ Modules:
     DenseDispatcher,
 )
 
- from src.infrastructure.moe.ExpertRouter import (
+from src.infrastructure.moe.ExpertRouter import (
     RoutingMethod,
     RouterConfig,
     RouterOutput,

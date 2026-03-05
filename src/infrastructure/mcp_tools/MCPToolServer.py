@@ -5,7 +5,7 @@ Facade for MCP Tool Server Integration.
 Delegates to modularized sub-packages in src/infrastructure/mcp_tools/.
 """
 
- from .models import (
+from .models import (
     MCPServerConfig,
     MCPServerType,
     ToolStatus,

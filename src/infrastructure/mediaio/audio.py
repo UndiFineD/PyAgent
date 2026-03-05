@@ -10,7 +10,7 @@ import io
 from pathlib import Path
 from typing import BinaryIO, Tuple, Union
 
- import numpy as np
+import numpy as np
 
 from .base import MediaLoader
 from .models import (

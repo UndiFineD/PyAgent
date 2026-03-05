@@ -17,11 +17,11 @@ from __future__ import annotations
 """Auto-extracted class from agent_errors.py"""
 
 
- from datetime import datetime, timedelta
+from datetime import datetime, timedelta
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .error_budget import ErrorBudget
+from .error_budget import ErrorBudget
 
 __version__ = VERSION
 

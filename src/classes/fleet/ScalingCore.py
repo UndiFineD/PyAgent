@@ -5,7 +5,7 @@ ScalingCore logic for fleet expansion.
 Pure logic for computing moving averages and scaling decisions.
 """
 
- from typing import Dict, List, Optional
+from typing import Dict, List, Optional
 
 class ScalingCore:
     def __init__(self, scale_threshold: float = 5.0, window_size: int = 10) -> None:

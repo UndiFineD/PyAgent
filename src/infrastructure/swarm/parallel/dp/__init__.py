@@ -17,7 +17,7 @@
 DataParallelCoordinator Package.
 """
 
- from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .balancer import P2CLoadBalancer

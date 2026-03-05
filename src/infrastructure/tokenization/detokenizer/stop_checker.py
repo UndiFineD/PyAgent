@@ -6,7 +6,7 @@ Stop condition checker for detokenization.
 """
 
 
- from typing import (
+from typing import (
     List,
     Optional,
     Set,

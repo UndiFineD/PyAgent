@@ -6,7 +6,7 @@ Facade for Platform Abstraction.
 Delegates to modularized sub-packages in src/infrastructure/platform/.
 """
 
- from .models import (
+from .models import (
     DeviceCapability as DeviceCapability,
     PlatformConfig as PlatformConfig,
 )

@@ -21,7 +21,7 @@ import logging
 import time
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 from .report_subscription import ReportSubscription
 from .report_type import ReportType

@@ -19,7 +19,7 @@ Testgenerated agent.py module.
 
 
 
- import logging
+import logging
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION

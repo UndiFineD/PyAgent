@@ -21,7 +21,7 @@ import asyncio
 import logging
 from typing import Any, Dict, Optional
 
- from src.infrastructure.swarm.orchestration.swarm.expert_fusion import \
+from src.infrastructure.swarm.orchestration.swarm.expert_fusion import \
     WeightedExpertFusion
     from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import \
     MoEGatekeeper

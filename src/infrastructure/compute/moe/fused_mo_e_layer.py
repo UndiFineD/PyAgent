@@ -16,7 +16,7 @@
 Fused mo e layer.py module.
 """
 
- from .fused import (AdaptiveMoELayer, DenseDispatcher, ExpertPlacementStrategy,
+from .fused import (AdaptiveMoELayer, DenseDispatcher, ExpertPlacementStrategy,
                     FusedMoEConfig, FusedMoELayer, FusedMoEMethodBase,
                     FusedMoEParallelConfig, FusedMoEQuantConfig,
                     HierarchicalMoELayer, SparseDispatcher,

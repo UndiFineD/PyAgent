@@ -10,7 +10,7 @@ Fleet task mixin.py module.
 import logging
 from typing import TYPE_CHECKING, Any
 
- from src.core.base.common.models import AgentPriority
+from src.core.base.common.models import AgentPriority
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager

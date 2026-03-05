@@ -28,7 +28,7 @@ Provides robust handling for OpenAI-style `function` objects and direct
 import json
 from typing import Any, Dict, List, Optional, Tuple
 
- from .base import (StreamingToolState, ToolCall, ToolParser, ToolParseResult,
+from .base import (StreamingToolState, ToolCall, ToolParser, ToolParseResult,
                    ToolParserType, extract_json_from_text)
 
 

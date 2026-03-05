@@ -5,7 +5,7 @@ Self improvement analysis.py module.
 # Copyright 2026 PyAgent Authors
 # Logic for analyzing tech debt and structural issues in the fleet.
 
- import os
+import os
 
 from .mixins.complexity_analysis_mixin import ComplexityAnalysisMixin
 from .mixins.profiling_analysis_mixin import ProfilingAnalysisMixin

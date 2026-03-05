@@ -22,9 +22,9 @@ import shutil
 import tempfile
 from pathlib import Path
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .test_fixture import TestFixture
+from .test_fixture import TestFixture
 
 __version__ = VERSION
 

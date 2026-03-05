@@ -22,9 +22,9 @@ import hashlib
 from pathlib import Path
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .storage_base import KnowledgeStore
+from .storage_base import KnowledgeStore
 
 __version__ = VERSION
 

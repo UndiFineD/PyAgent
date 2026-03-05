@@ -5,7 +5,7 @@ N-gram Proposer Factory - Helper functions to instantiate proposers.
 """
 
 
- from typing import Any
+from typing import Any
 
 from src.infrastructure.sampling.ngram.types import MatchingStrategy, NgramConfig
 from src.infrastructure.sampling.ngram.proposer import NgramProposer, AdaptiveNgramProposer

@@ -17,7 +17,7 @@ from __future__ import annotations
 """Auto-extracted class from agent_coder.py"""
 
 
- import re
+import re
 
 from src.core.base.common.types.security_issue_type import SecurityIssueType
 from src.core.base.common.types.security_vulnerability import \

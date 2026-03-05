@@ -24,7 +24,7 @@ import time
 from collections.abc import Callable
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

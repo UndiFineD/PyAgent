@@ -17,7 +17,7 @@ from __future__ import annotations
 """Agent for long-term goal setting, roadmap prioritization, and project management."""
 
 
- from typing import Any
+from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent

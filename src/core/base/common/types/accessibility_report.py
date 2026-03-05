@@ -17,7 +17,7 @@ from __future__ import annotations
 """Auto-extracted class from agent_coder.py"""
 
 
- from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 
 from src.core.base.common.types.accessibility_issue import AccessibilityIssue
 from src.core.base.common.types.wcag_level import WCAGLevel

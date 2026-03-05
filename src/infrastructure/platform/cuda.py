@@ -9,7 +9,7 @@ NVIDIA CUDA platform implementation.
 import logging
 from typing import List, Set, Optional
 
- from .models import (
+from .models import (
     PlatformType,
     DeviceCapability,
     MemoryInfo,

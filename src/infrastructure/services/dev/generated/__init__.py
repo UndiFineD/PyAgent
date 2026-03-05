@@ -17,7 +17,7 @@ Generated package.
 """
 
 
- from src.core.base.lifecycle.version import VERSION as VERSION
+from src.core.base.lifecycle.version import VERSION as VERSION
 
 __version__ = VERSION
 

@@ -23,7 +23,7 @@ Base classes for attention backends.
 from abc import ABC, abstractmethod
 from typing import Any, Generic, TypeVar
 
- from .models import AttentionCapabilities, AttentionMetadata, AttentionType
+from .models import AttentionCapabilities, AttentionMetadata, AttentionType
 
 # Type variable for backend implementations
 T = TypeVar("T")

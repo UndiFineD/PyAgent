@@ -18,7 +18,7 @@ Adaptive.py module.
 """
 
 
- import numpy as np
+import numpy as np
 
 from .config import FusedMoEConfig
 from .layer import FusedMoELayer

@@ -29,9 +29,9 @@ try:
 except ImportError:
     rc = None
 
- from src.core.base.common.models import ValidationRule
+from src.core.base.common.models import ValidationRule
 
- from .base_core import BaseCore
+from .base_core import BaseCore
 
 logger = logging.getLogger("pyagent.validation")
 

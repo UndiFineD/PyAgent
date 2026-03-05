@@ -5,7 +5,7 @@ ConsensusCore logic for multi-agent voting.
 Contains pure logic for tallying votes, handling ties, and selecting winners.
 """
 
- from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional
 
 class ConsensusCore:
     """Pure logic core for consensus protocols."""

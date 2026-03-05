@@ -17,7 +17,7 @@ Fleet package.
 """
 
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 from .async_fleet_manager import AsyncFleetManager
 from .fleet_manager import FleetManager

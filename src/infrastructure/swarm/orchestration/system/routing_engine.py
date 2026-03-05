@@ -20,7 +20,7 @@ Routing engine for task distribution.
 import os
 from typing import Any
 
- from src.core.base.common.routing_core import \
+from src.core.base.common.routing_core import \
     RoutingCore as StandardRoutingCore
 
 # Assuming BackendHandlers should be imported or mocked if not found

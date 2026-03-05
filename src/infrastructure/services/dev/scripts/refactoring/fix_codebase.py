@@ -23,7 +23,7 @@ Part of the Fleet Healer autonomous recovery pattern.
 import os
 import re
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

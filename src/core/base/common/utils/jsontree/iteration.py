@@ -18,9 +18,9 @@ Iteration.py module.
 """
 
 
- from collections.abc import Iterable
+from collections.abc import Iterable
 
- from src.core.base.common.utils.jsontree.types import _T, JSONTree
+from src.core.base.common.utils.jsontree.types import _T, JSONTree
 
 
 def json_iter_leaves(value: JSONTree[_T]) -> Iterable[_T]:

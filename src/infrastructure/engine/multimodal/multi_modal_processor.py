@@ -16,7 +16,7 @@
 Multi modal processor.py module.
 """
 
- from .processor import (MULTIMODAL_REGISTRY, AudioProcessor,
+from .processor import (MULTIMODAL_REGISTRY, AudioProcessor,
                         BaseMultiModalProcessor, ImageProcessor, ModalityType,
                         MultiModalConfig, MultiModalData, MultiModalInputs,
                         MultiModalRegistry, PlaceholderInfo,

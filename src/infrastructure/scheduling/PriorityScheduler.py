@@ -5,7 +5,7 @@ Priority Scheduler Facade.
 Redirects to the modular implementation in .priority
 """
 
- from .priority import (
+from .priority import (
     TaskPriority,
     TaskState,
     TaskStats,

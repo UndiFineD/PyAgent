@@ -18,7 +18,7 @@
 EAGLE speculative decoding implementation.
 """
 
- from .base import (AttentionMetadata, CpuGpuBuffer, InputBuffer,  # noqa: F401
+from .base import (AttentionMetadata, CpuGpuBuffer, InputBuffer,  # noqa: F401
                    TreeAttentionMetadata)
 from .config import AttentionBackend, EagleConfig, EagleMethod  # noqa: F401
 from .models import DraftModelWrapper, DraftOutput, SimpleDraftModel  # noqa: F401

@@ -21,7 +21,7 @@ Core logic for inference, tokenization, and model adaptation.
 import logging
 from typing import Any, Dict, List, Optional
 
- from ....infrastructure.engine.tokenization.utils import (estimate_token_count,
+from ....infrastructure.engine.tokenization.utils import (estimate_token_count,
                                                           get_tokenizer)
 from .base_core import BaseCore
 from .models.communication_models import PromptTemplate

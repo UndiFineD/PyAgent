@@ -20,9 +20,9 @@ from __future__ import annotations
 import threading
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .ab_test_variant import ABTestVariant
+from .ab_test_variant import ABTestVariant
 
 __version__ = VERSION
 

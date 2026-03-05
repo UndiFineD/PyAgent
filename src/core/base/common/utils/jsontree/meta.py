@@ -22,9 +22,9 @@ filtering leaves by predicate, and validating leaf values.
 """
 
 
- from typing import Callable
+from typing import Callable
 
- from src.core.base.common.utils.jsontree.iteration import (
+from src.core.base.common.utils.jsontree.iteration import (
     json_iter_leaves, json_iter_leaves_with_path)
 from src.core.base.common.utils.jsontree.types import _T, JSONTree
 

@@ -24,7 +24,7 @@ Mistral AI tool call parser.
 import json
 from typing import Optional, Tuple
 
- from .base import (StreamingToolState, ToolCall, ToolParser, ToolParseResult,
+from .base import (StreamingToolState, ToolCall, ToolParser, ToolParseResult,
                    ToolParserType)
 
 

@@ -19,7 +19,7 @@ Uses curate_dependencies logic to comment out unused requirements.
 """
 
 
- from pathlib import Path
+from pathlib import Path
 
 # Unused dependencies extracted from curate_dependencies.py output
 UNUSED = {

@@ -18,7 +18,7 @@ Multi cloud bridge orchestrator.py module.
 
 
 
- from typing import Any
+from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 from src.observability.structured_logger import StructuredLogger

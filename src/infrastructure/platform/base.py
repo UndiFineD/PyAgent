@@ -11,7 +11,7 @@ import threading
 from abc import ABC, abstractmethod
 from typing import Dict, List, Optional, Tuple, Any
 
- from .models import (
+from .models import (
     PlatformType,
     DeviceCapability,
     MemoryInfo,

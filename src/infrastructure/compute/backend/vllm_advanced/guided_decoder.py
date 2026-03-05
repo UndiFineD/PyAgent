@@ -18,7 +18,7 @@
 Facade for GuidedDecoder.
 """
 
- from .guided import (ChoiceConstraint, GuidedConfig, GuidedDecoder, GuidedMode,
+from .guided import (ChoiceConstraint, GuidedConfig, GuidedDecoder, GuidedMode,
                      JsonSchema, RegexPattern, generate_choice, generate_json)
 
 __all__ = [

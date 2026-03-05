@@ -20,7 +20,7 @@ from __future__ import annotations
 from datetime import datetime
 from pathlib import Path
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 from .improvement import Improvement
 from .improvement_status import ImprovementStatus

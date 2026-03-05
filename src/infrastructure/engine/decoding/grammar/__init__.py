@@ -18,7 +18,7 @@
 Grammar-constrained decoding package.
 """
 
- from .base import (StructuredOutputGrammar, StructuredOutputOptions,  # noqa: F401
+from .base import (StructuredOutputGrammar, StructuredOutputOptions,  # noqa: F401
                    StructuredOutputsParams)
 from .ebnf_grammar import EBNFGrammar, GrammarRule  # noqa: F401
 from .json_constraint import JSONSchemaGrammar  # noqa: F401

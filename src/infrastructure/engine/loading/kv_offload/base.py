@@ -23,7 +23,7 @@ Base classes for KV offloading backends and managers.
 from abc import ABC, abstractmethod
 from typing import Iterable, List, Optional
 
- from .models import BlockHash, BlockStatus, LoadStoreSpec, PrepareStoreOutput
+from .models import BlockHash, BlockStatus, LoadStoreSpec, PrepareStoreOutput
 
 
 class OffloadingBackend(ABC):

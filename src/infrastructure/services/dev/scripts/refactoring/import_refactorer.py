@@ -26,7 +26,7 @@ import re
 from pathlib import Path
 from typing import Dict, List, Optional
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

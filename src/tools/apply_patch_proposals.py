@@ -26,7 +26,7 @@ automatically in CI or overnight runs.
 import shutil
 from pathlib import Path
 
- from src.tools import prepare_refactor_patches as prep
+from src.tools import prepare_refactor_patches as prep
 
 ROOT = Path(__file__).resolve().parents[2]
 PATCH_DIR = ROOT / '.external' / 'patches'

@@ -21,7 +21,7 @@ Model cache for LM Studio handles.
 import time
 from typing import Any
 
- from .models import CachedModel
+from .models import CachedModel
 
 
 class ModelCache:

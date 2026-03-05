@@ -27,7 +27,7 @@ import logging
 import time
 from typing import TYPE_CHECKING, Any, Callable, Iterator, Sequence
 
- import httpx
+import httpx
 
 from ..llm_backend import LLMBackend
 from .api import LMStudioAPIClient

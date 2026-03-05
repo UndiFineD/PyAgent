@@ -23,9 +23,9 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .cleanup_strategy import CleanupStrategy
+from .cleanup_strategy import CleanupStrategy
 
 __version__ = VERSION
 

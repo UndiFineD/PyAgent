@@ -12,7 +12,7 @@ if str(root) not in sys.path:
 if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
- from src.classes.reports import *
+from src.classes.reports import *
 
 def _sha256_text(text: str) -> str:
     """Helper for legacy tests."""

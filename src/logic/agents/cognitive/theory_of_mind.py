@@ -17,7 +17,7 @@ from __future__ import annotations
 """Models the mental states and knowledge domains of other agents."""
 
 
- from typing import Any
+from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 from .core.theory_of_mind_core import TheoryOfMindCore

@@ -16,7 +16,7 @@ from dataclasses import dataclass, field
 from enum import IntEnum, auto
 from typing import Any, Generator, NamedTuple, Optional
 
- import numpy as np
+import numpy as np
 
 
 # ============================================================================

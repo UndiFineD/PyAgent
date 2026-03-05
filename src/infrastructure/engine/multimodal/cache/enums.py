@@ -16,7 +16,7 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Enums for multimodal caching."""
 
- from enum import Enum, auto
+from enum import Enum, auto
 
 
 class MediaType(Enum):

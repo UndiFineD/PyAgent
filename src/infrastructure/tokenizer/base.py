@@ -9,7 +9,7 @@ Base class for tokenizers.
 from abc import ABC, abstractmethod
 from typing import Dict, List, Optional, Sequence
 
- from .models import TokenizerConfig, TokenizerInfo, TokenizeResult
+from .models import TokenizerConfig, TokenizerInfo, TokenizeResult
 
 
 class BaseTokenizer(ABC):

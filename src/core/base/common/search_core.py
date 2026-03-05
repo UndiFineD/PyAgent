@@ -22,7 +22,7 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, List
 
- from .base_core import BaseCore
+from .base_core import BaseCore
 
 try:
     import rust_core as rc  # pylint: disable=import-error

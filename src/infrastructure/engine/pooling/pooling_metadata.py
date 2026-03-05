@@ -31,7 +31,7 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Dict, List, Optional, TypeVar
 
- import numpy as np
+import numpy as np
 
 # Try to import rust_core for acceleration
 try:

@@ -12,7 +12,7 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
- from src.core.base.version import VERSION as VERSION
+from src.core.base.version import VERSION as VERSION
 
 __version__ = VERSION
 

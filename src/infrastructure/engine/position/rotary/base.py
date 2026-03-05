@@ -34,7 +34,7 @@ try:
 except ImportError:
     HAS_NUMPY = False
 
- from .config import RoPEConfig
+from .config import RoPEConfig
 
 
 class RotaryEmbeddingBase(ABC):

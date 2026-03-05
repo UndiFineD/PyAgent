@@ -27,7 +27,7 @@ Beyond vLLM:
 - Multi-stream dispatch
 """
 
- from .cuda_graph_manager import (
+from .cuda_graph_manager import (
   AdaptiveCUDAGraphWrapper,
   BatchDescriptor,  # noqa: F401
   CUDAGraphEntry,

@@ -19,9 +19,9 @@ Manager regarding response post-processing and multimodal inputs.
 """
 
 
- from typing import Any
+from typing import Any
 
- from src.core.base.common.models import ResponsePostProcessor
+from src.core.base.common.models import ResponsePostProcessor
 
 __all__ = ["MultimodalProcessor", "ResponsePostProcessor", "SerializationManager"]
 

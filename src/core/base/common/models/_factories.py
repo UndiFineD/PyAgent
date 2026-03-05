@@ -18,7 +18,7 @@ Factory functions for dataclass default fields.
 Isolated from model definitions to prevent circularity during analysis.
 """
 
- from typing import TYPE_CHECKING, Any, Callable
+from typing import TYPE_CHECKING, Any, Callable
 
 if TYPE_CHECKING:
     from .base_models import ConfigProfile, ModelConfig

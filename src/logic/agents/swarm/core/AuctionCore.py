@@ -4,7 +4,7 @@ Core logic for Swarm Resource Auctioning (Phase 184).
 Implements the VCG auction model for truthful bidding.
 """
 
- from typing import List, Dict, Any
+from typing import List, Dict, Any
 
 class AuctionCore:
     @staticmethod

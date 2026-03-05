@@ -19,7 +19,7 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Callable, Optional, TYPE_CHECKING
 
- import numpy as np
+import numpy as np
 
 # Optional torch import
 try:

@@ -21,7 +21,7 @@ import logging
 import threading
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 from .load_balance_strategy import LoadBalanceStrategy
 from .provider_type import ProviderType

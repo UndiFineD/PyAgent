@@ -16,7 +16,7 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Facade for Engine Core modular implementation."""
 
- from .core import (EngineCore, EngineCoreOutput, EngineCoreOutputs,
+from .core import (EngineCore, EngineCoreOutput, EngineCoreOutputs,
                    EngineCoreProc, Executor, FinishReason, MockExecutor,
                    ModelRunnerOutput, Request, RequestStatus, Scheduler,
                    SchedulerOutput, SimpleScheduler, create_engine_core)

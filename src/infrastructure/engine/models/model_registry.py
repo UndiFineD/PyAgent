@@ -16,7 +16,7 @@
 Model registry.py module.
 """
 
- from .registry import (ArchitectureDetector, ArchitectureSpec,
+from .registry import (ArchitectureDetector, ArchitectureSpec,
                        ModelArchitecture, ModelCapability, ModelConfig,
                        ModelFormat, ModelInfo, ModelRegistry, QuantizationType,
                        VRAMEstimate, VRAMEstimator)

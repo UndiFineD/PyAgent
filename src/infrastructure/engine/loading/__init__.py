@@ -19,7 +19,7 @@ Loading package.
 # Weight Loading Module
 # Phase 37: Weight Loading, KV Offload & Expert Load Balancing
 
- from .expert_load_balancer import (AbstractEplbPolicy, AsyncExpertRebalancer,  # noqa: F401
+from .expert_load_balancer import (AbstractEplbPolicy, AsyncExpertRebalancer,  # noqa: F401
                                    DefaultEplbPolicy, EplbMetrics,
                                    ExpertLoadBalancer, ExpertMapping,
                                    ExpertType, LocalityAwarePolicy)

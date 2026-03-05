@@ -4,7 +4,7 @@ LoRA Stats and Request State Tracking.
 Refactored to modular package structure for Phase 317.
 """
 
- from src.infrastructure.metrics.lora.types import (
+from src.infrastructure.metrics.lora.types import (
     LoRALoadState, RequestStatus, LoRAAdapterInfo,
     LoRARequestState, LoRAStats
 )

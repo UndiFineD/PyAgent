@@ -24,7 +24,7 @@ from concurrent.futures import Future
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, Generic, Optional, TypeVar
 
- from .enums import TaskPriority, TaskState
+from .enums import TaskPriority, TaskState
 
 R = TypeVar("R")
 

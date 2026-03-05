@@ -21,9 +21,9 @@ import logging
 import time
 from pathlib import Path
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .archived_report import ArchivedReport
+from .archived_report import ArchivedReport
 
 __version__ = VERSION
 

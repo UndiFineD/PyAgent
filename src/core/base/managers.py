@@ -20,6 +20,6 @@ from __future__ import annotations
 
 """Manager and utility classes for BaseAgent (Facade)."""
 
- from src.core.base.version import VERSION
+from src.core.base.version import VERSION
 
 __version__ = VERSION

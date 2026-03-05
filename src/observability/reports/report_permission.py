@@ -17,11 +17,11 @@ from __future__ import annotations
 """Auto-extracted class from generate_agent_reports.py"""
 
 
- from dataclasses import dataclass
+from dataclasses import dataclass
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .permission_level import PermissionLevel
+from .permission_level import PermissionLevel
 
 __version__: str = VERSION
 

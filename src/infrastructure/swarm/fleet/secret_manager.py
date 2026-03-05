@@ -27,7 +27,7 @@ from typing import Any
 from src.core.base.common.secret_core import SecretCore as StandardSecretCore
 from src.core.base.lifecycle.version import VERSION
 
- from .secret_core import SecretCore
+from .secret_core import SecretCore
 
 __version__ = VERSION
 

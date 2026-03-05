@@ -19,9 +19,9 @@ Core logic for scaling.
 """
 
 
- import time
+import time
 
- from src.core.base.common.scaling_core import \
+from src.core.base.common.scaling_core import \
     ScalingCore as StandardScalingCore
 from src.core.base.lifecycle.version import VERSION
 

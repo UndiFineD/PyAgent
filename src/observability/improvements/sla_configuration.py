@@ -17,11 +17,11 @@ from __future__ import annotations
 """Auto-extracted class from agent_improvements.py"""
 
 
- from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .sla_level import SLALevel
+from .sla_level import SLALevel
 
 __version__ = VERSION
 

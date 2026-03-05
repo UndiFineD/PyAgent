@@ -22,7 +22,7 @@ Handles credential masking, policy validation, and naming standards.
 import re
 from typing import List
 
- from src.core.base.common.base_core import BaseCore
+from src.core.base.common.base_core import BaseCore
 
 try:
     import rust_core as rc  # pylint: disable=import-error

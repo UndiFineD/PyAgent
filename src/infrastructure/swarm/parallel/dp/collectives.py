@@ -20,9 +20,9 @@ Async collective operations for data parallel coordination.
 """
 
 
- import asyncio
+import asyncio
 
- from src.infrastructure.swarm.parallel.dp.engine import DPEngineCoreProc
+from src.infrastructure.swarm.parallel.dp.engine import DPEngineCoreProc
 
 
 async def dp_collective_all_reduce(

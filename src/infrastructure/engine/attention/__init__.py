@@ -25,7 +25,7 @@ Phase 34 modules:
 - BatchDCPWrapper: Batch disaggregated prefill-decode wrappers
 """
 
- from .attention_backend_registry import (AttentionBackend,  # noqa: F401
+from .attention_backend_registry import (AttentionBackend,  # noqa: F401
                                          AttentionBackendEnum,
                                          AttentionBackendRegistry,
                                          AttentionCapabilities,

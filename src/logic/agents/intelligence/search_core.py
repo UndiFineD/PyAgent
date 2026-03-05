@@ -19,9 +19,9 @@ SearchCore logic for PyAgent.
 """
 
 
- from typing import Any
+from typing import Any
 
- from src.core.base.common.search_core import SearchCore as StandardSearchCore
+from src.core.base.common.search_core import SearchCore as StandardSearchCore
 
 try:
     import rust_core as rc

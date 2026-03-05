@@ -1,8 +1,8 @@
 from __future__ import annotations
 
- import numpy as np
+import numpy as np
 
- from .config import DraftProposal, VerificationResult
+from .config import DraftProposal, VerificationResult
 
 
 class TreeSpeculator:

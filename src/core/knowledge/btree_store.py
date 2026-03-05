@@ -26,7 +26,7 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 from src.observability.structured_logger import StructuredLogger
 
- from .storage_base import KnowledgeStore
+from .storage_base import KnowledgeStore
 
 __version__ = VERSION
 

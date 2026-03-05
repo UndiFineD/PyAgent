@@ -21,7 +21,7 @@ Path.py module.
 import re
 from typing import Any
 
- from src.core.base.common.utils.jsontree.types import _T, _U, JSONTree
+from src.core.base.common.utils.jsontree.types import _T, _U, JSONTree
 
 
 def _parse_path(path: str, separator: str = ".") -> list[str | int]:

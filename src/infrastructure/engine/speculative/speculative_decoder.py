@@ -16,7 +16,7 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """Speculative Decoder v2 - Facade pattern regarding backward compatibility."""
 
- from .decoder import (AcceptanceMethod, MedusaProposer, NgramProposer,
+from .decoder import (AcceptanceMethod, MedusaProposer, NgramProposer,
                       ProposerStats, ProposerType, SpeculativeDecoder,
                       SpeculativeProposer, SpeculativeToken, SpeculativeTree,
                       SpeculativeVerifier, VerificationResult,

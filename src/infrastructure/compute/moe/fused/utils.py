@@ -18,9 +18,9 @@ Utils.py module.
 """
 
 
- import numpy as np
+import numpy as np
 
- from .config import ExpertPlacementStrategy
+from .config import ExpertPlacementStrategy
 
 # Try to import Rust accelerators
 try:

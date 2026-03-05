@@ -24,7 +24,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
- from src.infrastructure.swarm.fleet.agent_registry import LazyAgentMap
+from src.infrastructure.swarm.fleet.agent_registry import LazyAgentMap
 
 
 class OrchestrationMixin:

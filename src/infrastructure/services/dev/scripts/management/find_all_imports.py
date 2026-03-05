@@ -16,9 +16,9 @@ from __future__ import annotations
 """Script for finding all legacy import patterns across the workspace."""
 
 
- import os
+import os
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 results = []

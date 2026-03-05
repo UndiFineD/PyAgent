@@ -11,7 +11,7 @@ import re
 import threading
 from typing import Dict, List, Optional, Pattern, Tuple, Type
 
- from ..parser import (
+from ..parser import (
     ToolParser,
     ToolParserType,
     ToolCall,

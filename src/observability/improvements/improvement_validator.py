@@ -19,9 +19,9 @@ Validates improvements with automated testing.
 """
 
 
- from typing import Any, Callable
+from typing import Any, Callable
 
- from src.core.base.common.validation_core import ValidationCore
+from src.core.base.common.validation_core import ValidationCore
 
 from .improvement import Improvement
 from .validation_result import ValidationResult

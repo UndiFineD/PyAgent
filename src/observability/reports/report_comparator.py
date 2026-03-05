@@ -17,11 +17,11 @@ from __future__ import annotations
 """Auto-extracted class from generate_agent_reports.py"""
 
 
- from pathlib import Path
+from pathlib import Path
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .report_comparison import ReportComparison
+from .report_comparison import ReportComparison
 
 __version__ = VERSION
 

@@ -23,7 +23,7 @@ Cache salt generation for prompt rendering.
 import hashlib
 from typing import Any, Dict, Optional
 
- from .models import PromptConfig, TruncationStrategy
+from .models import PromptConfig, TruncationStrategy
 
 
 class CacheSaltGenerator:

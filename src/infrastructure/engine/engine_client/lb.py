@@ -23,7 +23,7 @@ import random
 import threading
 from typing import TYPE_CHECKING, Optional
 
- from src.infrastructure.engine.engine_client.types import WorkerState
+from src.infrastructure.engine.engine_client.types import WorkerState
 
 if TYPE_CHECKING:
     from src.infrastructure.engine.engine_client.types import WorkerInfo

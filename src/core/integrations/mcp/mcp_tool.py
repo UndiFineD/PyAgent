@@ -20,9 +20,9 @@ Provides register_tool decorator compatible with mcp.mcp_tool.
 import inspect
 from typing import Any, Callable, Dict, Optional, get_type_hints
 
- from mcp.server.fastapi import serve_app
+from mcp.server.fastapi import serve_app
 
- from aenv.core.tool import get_registry
+from aenv.core.tool import get_registry
 
 
 def register_tool(

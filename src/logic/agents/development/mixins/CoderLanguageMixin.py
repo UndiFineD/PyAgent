@@ -15,7 +15,7 @@ from __future__ import annotations
 
 """Language detection and validation logic for CoderAgent."""
 
- from src.core.base.types.CodeLanguage import CodeLanguage
+from src.core.base.types.CodeLanguage import CodeLanguage
 
 class CoderLanguageMixin:
     """Mixin for code language detection and syntax validation."""

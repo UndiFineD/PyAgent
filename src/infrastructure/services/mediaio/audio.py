@@ -25,7 +25,7 @@ from pathlib import Path
 from typing import BinaryIO, Tuple, Union
 import tempfile
 
- import numpy as np
+import numpy as np
 
 try:
     import rust_core as rc

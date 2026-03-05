@@ -8,7 +8,7 @@ Accessibility core mixin.py module.
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 
- from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from src.core.base.common.types.accessibility_issue import AccessibilityIssue
 from src.core.base.common.types.accessibility_severity import \

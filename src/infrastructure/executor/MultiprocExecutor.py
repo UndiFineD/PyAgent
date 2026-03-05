@@ -6,7 +6,7 @@ Refactored to modular package structure for Phase 317.
 Decomposed into types, future, base, and specific implementation modules.
 """
 
- from src.infrastructure.executor.multiproc.types import (
+from src.infrastructure.executor.multiproc.types import (
     ExecutorBackend, WorkerState, WorkerInfo, TaskMessage, ResultMessage
 )
 from src.infrastructure.executor.multiproc.future import FutureWrapper

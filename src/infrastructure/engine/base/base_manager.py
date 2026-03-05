@@ -21,7 +21,7 @@ Base manager.py module.
 import logging
 from abc import ABC
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

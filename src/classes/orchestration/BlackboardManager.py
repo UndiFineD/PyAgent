@@ -5,7 +5,7 @@
 import logging
 from typing import Dict, Any, List
 
- from .BlackboardCore import BlackboardCore
+from .BlackboardCore import BlackboardCore
 
 class BlackboardManager:
     """

@@ -19,7 +19,7 @@ Manager for file locking.
 """
 
 
- from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional
 
 
 class LockProxy:

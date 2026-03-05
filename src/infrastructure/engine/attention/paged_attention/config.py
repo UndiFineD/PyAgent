@@ -23,9 +23,9 @@ import math
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
- import numpy as np
+import numpy as np
 
- from .enums import KVCacheDtype
+from .enums import KVCacheDtype
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray

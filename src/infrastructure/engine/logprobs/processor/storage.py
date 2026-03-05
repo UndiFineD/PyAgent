@@ -22,9 +22,9 @@ import contextlib
 from dataclasses import dataclass, field
 from typing import Any, List, Optional, Sequence
 
- import numpy as np
+import numpy as np
 
- from .config import LogprobEntry, TopLogprob
+from .config import LogprobEntry, TopLogprob
 
 
 @dataclass

@@ -19,7 +19,7 @@ Tenant bridge.py module.
 import logging
 from typing import Any, Dict
 
- from src.infrastructure.swarm.orchestration.swarm.trace_synthesis import \
+from src.infrastructure.swarm.orchestration.swarm.trace_synthesis import \
     SwarmTraceSynthesizer
 
 logger = logging.getLogger(__name__)

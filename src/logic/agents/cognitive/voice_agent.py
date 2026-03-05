@@ -17,7 +17,7 @@ from __future__ import annotations
 """Agent specializing in voice-to-text and multimedia processing."""
 
 
- import logging
+import logging
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent

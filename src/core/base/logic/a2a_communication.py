@@ -31,7 +31,7 @@ from typing import Any, Dict, List, Optional, Callable, Union, Protocol
 from dataclasses import dataclass, field
 from enum import Enum
 
- from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator
 
 logger = logging.getLogger(__name__)
 

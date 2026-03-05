@@ -4,6 +4,6 @@ from __future__ import annotations
 `src.core.base.AgentScratchpad` to match older import paths.
 """
 
- from src.core.base.state.agent_scratchpad import AgentScratchpad  # type: ignore
+from src.core.base.state.agent_scratchpad import AgentScratchpad  # type: ignore
 
 __all__ = ["AgentScratchpad"]

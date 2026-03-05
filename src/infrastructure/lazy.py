@@ -41,9 +41,9 @@ Available lazy imports:
 """
 
 
- from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING, Type
 
- from src.core.lazy_loader import lazy_import
+from src.core.lazy_loader import lazy_import
 
 __all__ = [
     "get_eagle_proposer",

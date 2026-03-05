@@ -24,9 +24,9 @@ Mathematical models for "Superposition Prompting" and probability modeling
 for high-dimensional intent spaces.
 """
 
- import math
+import math
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

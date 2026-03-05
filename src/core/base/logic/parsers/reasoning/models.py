@@ -19,7 +19,7 @@ Models.py module.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
- from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 
 
 @dataclass

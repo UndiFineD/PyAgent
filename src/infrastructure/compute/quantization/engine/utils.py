@@ -18,9 +18,9 @@ Utils.py module.
 """
 
 
- from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING
 
- import numpy as np
+import numpy as np
 
 
 if TYPE_CHECKING:

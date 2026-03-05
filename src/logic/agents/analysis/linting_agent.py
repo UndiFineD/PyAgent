@@ -17,7 +17,7 @@ from __future__ import annotations
 """Agent specializing in code quality, linting, and style enforcement."""
 
 
- import subprocess
+import subprocess
 
 from src.core.base.common.base_utilities import create_main_function
 from src.core.base.lifecycle.base_agent import BaseAgent

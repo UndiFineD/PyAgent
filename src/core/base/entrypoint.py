@@ -18,6 +18,6 @@ Legacy entrypoint facade for agent CLI bootstrapping.
 Delegates to src.core.base.common.base_utilities.
 """
 
- from .common.base_utilities import create_main_function
+from .common.base_utilities import create_main_function
 
 __all__ = ["create_main_function"]

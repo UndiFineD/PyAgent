@@ -1,7 +1,7 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
- import ast
+import ast
 
 class StubDetectorMixin:
     """Methods for detecting stub nodes in the AST."""

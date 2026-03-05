@@ -8,7 +8,11 @@ def _load_module():
     """Dynamically load the module under test."""
     p = pathlib.Path(__file__).parent / "analysis_core.py"
     spec = importlib.util.spec_from_file_location("_mod_under_test", p)
+    if spec is None:
+        raise ValueError(f"Failed to load spec from {p}")
     mod = importlib.util.module_from_spec(spec)
+    if spec.loader is None:
+        raise ValueError(f"Failed to get loader from spec for {p}")
     spec.loader.exec_module(mod)
     return mod
 

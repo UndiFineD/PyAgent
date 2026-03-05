@@ -17,7 +17,7 @@ from __future__ import annotations
 """Auto-extracted class from agent_coder.py"""
 
 
- import logging
+import logging
 
 from src.core.base.common.types.accessibility_issue import AccessibilityIssue
 from src.core.base.common.types.accessibility_issue_type import \

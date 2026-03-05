@@ -19,7 +19,7 @@ Identity.py module.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
- from typing import Any, ClassVar, Sequence
+from typing import Any, ClassVar, Sequence
 
 from ..base import ReasoningParser
 from ..models import ReasoningResult, StreamingReasoningState

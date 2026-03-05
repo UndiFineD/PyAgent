@@ -19,9 +19,9 @@ Manager for agent templates.
 """
 
 
- from typing import Any
+from typing import Any
 
- from src.core.base.common.template_core import TemplateCore
+from src.core.base.common.template_core import TemplateCore
 
 
 class Template:

@@ -26,7 +26,7 @@ Utility functions for Mamba computation.
 import math
 from dataclasses import dataclass
 
- import numpy as np
+import numpy as np
 
 # Try to import Rust accelerators
 try:

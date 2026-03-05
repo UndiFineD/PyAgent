@@ -18,7 +18,7 @@ Distributed.py module.
 """
 
 
- from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 from src.infrastructure.services.executor.multiproc.base import Executor
 from src.infrastructure.services.executor.multiproc.future import FutureWrapper

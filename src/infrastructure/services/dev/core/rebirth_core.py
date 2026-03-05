@@ -21,7 +21,7 @@ import os
 import shutil
 from typing import Any
 
- import yaml
+import yaml
 
 
 class RebirthCore:

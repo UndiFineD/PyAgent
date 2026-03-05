@@ -7,7 +7,7 @@ Fleet lifecycle mixin.py module.
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 
- from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from src.core.base.lifecycle.base_agent import BaseAgent

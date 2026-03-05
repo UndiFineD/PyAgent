@@ -24,7 +24,7 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 from .branch_comparison import BranchComparison
 from .branch_comparison_status import BranchComparisonStatus

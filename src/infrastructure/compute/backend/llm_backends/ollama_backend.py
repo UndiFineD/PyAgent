@@ -19,11 +19,11 @@ Ollama backend.py module.
 
 
 
- import logging
+import logging
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .llm_backend import LLMBackend
+from .llm_backend import LLMBackend
 
 __version__ = VERSION
 

@@ -21,7 +21,7 @@ import logging
 import time
 from typing import Any, Dict, Optional
 
- from src.infrastructure.engine.models.similarity import \
+from src.infrastructure.engine.models.similarity import \
     EmbeddingSimilarityService
 
 logger: logging.Logger = logging.getLogger(__name__)

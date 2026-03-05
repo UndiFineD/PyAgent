@@ -21,7 +21,7 @@ Delegates to modularized sub-packages in src/infrastructure/mcp_tools/.
 """
 
 
- from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from .adapter import SchemaAdapter
 from .base import MCPToolServer as MCPToolServerBase

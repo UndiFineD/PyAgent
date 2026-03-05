@@ -16,7 +16,7 @@
 Wrappers regarding grammar integration with inference engine.
 """
 
- from typing import List, Optional
+from typing import List, Optional
 
 try:
     import numpy as np  # noqa: F401

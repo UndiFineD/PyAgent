@@ -19,7 +19,7 @@ Events.py module.
 import logging
 from typing import Any, Callable, Dict, List, Optional
 
- from src.core.base.common.models import ConversationMessage, EventType
+from src.core.base.common.models import ConversationMessage, EventType
 
 logger = logging.getLogger(__name__)
 

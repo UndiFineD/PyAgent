@@ -22,7 +22,7 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 from .performance_metric import PerformanceMetric
 from .performance_metric_type import PerformanceMetricType

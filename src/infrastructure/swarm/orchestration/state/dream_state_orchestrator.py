@@ -24,7 +24,7 @@ import logging
 import os
 from typing import TYPE_CHECKING, Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.async_fleet_manager import \

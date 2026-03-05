@@ -20,7 +20,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
- from src.core.base.common.utils.helpers import (_empty_dict_str_any,
+from src.core.base.common.utils.helpers import (_empty_dict_str_any,
                                                 _empty_list_str)
 from src.core.base.lifecycle.version import VERSION
 

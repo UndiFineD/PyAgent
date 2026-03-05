@@ -32,7 +32,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Callable, Dict, List, Optional, Set, Tuple
 
- import numpy as np  # noqa: F401
+import numpy as np  # noqa: F401
 
 # =============================================================================
 # Data Classes

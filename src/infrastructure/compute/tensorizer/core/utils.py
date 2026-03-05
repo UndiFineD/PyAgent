@@ -20,7 +20,7 @@ import os
 from pathlib import Path
 from typing import Any, Dict, Union
 
- import numpy as np
+import numpy as np
 
 from .config import CompressionType, TensorizerConfig
 from .reader import TensorizerReader

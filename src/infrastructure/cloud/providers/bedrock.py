@@ -16,7 +16,7 @@ from typing import AsyncIterator, List, Optional, Dict, Any
 import aioboto3
 from botocore.exceptions import ClientError
 
- from ..base import (
+from ..base import (
     CloudProviderBase,
     InferenceRequest,
     InferenceResponse,

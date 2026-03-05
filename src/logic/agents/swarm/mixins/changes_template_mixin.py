@@ -21,7 +21,7 @@ Template management logic for ChangesAgent.
 import logging
 from typing import List
 
- from ..changelog_template import ChangelogTemplate
+from ..changelog_template import ChangelogTemplate
 
 
 class ChangesTemplateMixin:

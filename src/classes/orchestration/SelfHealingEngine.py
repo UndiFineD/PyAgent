@@ -9,7 +9,7 @@ import traceback
 from typing import Dict, List, Any, Optional, Type
 from src.classes.base_agent import BaseAgent
 
- from .SelfHealingEngineCore import SelfHealingEngineCore
+from .SelfHealingEngineCore import SelfHealingEngineCore
 
 class SelfHealingEngine:
     """

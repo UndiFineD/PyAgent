@@ -13,11 +13,11 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
- from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING
 
- import numpy as np
+import numpy as np
 
- from .config import QuantConfig
+from .config import QuantConfig
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray

@@ -24,7 +24,7 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
- import numpy as np
+import numpy as np
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray

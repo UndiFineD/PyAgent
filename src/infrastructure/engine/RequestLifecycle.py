@@ -7,7 +7,7 @@ This module provides a backward-compatible interface to the modularized
 request lifecycle management implementation.
 """
 
- from .lifecycle import (
+from .lifecycle import (
     FinishReason,
     RequestStatus,
     RequestEventType,

@@ -7,7 +7,7 @@ Delegates to modularized sub-packages in src/infrastructure/conversation/context
 """
 
 
- from .context import (
+from .context import (
     ContextConfig,
     ContextState,
     ContextSnapshot,

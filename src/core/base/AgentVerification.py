@@ -18,7 +18,7 @@ Verification logic for agent outputs.
 Implements Stanford Reseach 'Anchoring Strength' and Keio University 'Self-Verification' paths.
 """
 
- from src.core.base.Version import VERSION
+from src.core.base.Version import VERSION
 
 # Phase 317: Modularized Verification Classes
 from .verification.AgentVerifier import AgentVerifier as AgentVerifier

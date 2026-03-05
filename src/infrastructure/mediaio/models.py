@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, List, Optional, Tuple, Union
 
- import numpy as np
+import numpy as np
 
 
 class MediaType(Enum):

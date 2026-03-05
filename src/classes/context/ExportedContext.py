@@ -4,7 +4,7 @@ from __future__ import annotations
 """Auto-extracted class from agent_context.py"""
 
 
- from .ExportFormat import ExportFormat
+from .ExportFormat import ExportFormat
 
 from src.classes.base_agent import BaseAgent
 from dataclasses import dataclass, field

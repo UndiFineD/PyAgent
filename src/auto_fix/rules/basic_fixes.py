@@ -24,12 +24,12 @@ an empty list if no changes are required or a single-fix list containing the
 updated text.
 """
 
- from __future__ import annotations
+from __future__ import annotations
 
 import re
 from typing import List
 
- from auto_fix.rule_engine import Fix
+from auto_fix.rule_engine import Fix
 
 
 # --- helper functions copied/adapted from the older script ------------------

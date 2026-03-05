@@ -18,7 +18,7 @@ Stability core.py module.
 """
 
 
- from dataclasses import dataclass
+from dataclasses import dataclass
 
 try:
     import rust_core as rc

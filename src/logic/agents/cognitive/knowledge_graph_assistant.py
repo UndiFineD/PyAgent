@@ -16,7 +16,7 @@
 Assistant for managing the knowledge graph and impact radius.
 """
 
- from typing import Set
+from typing import Set
 
 
 class KnowledgeGraphAssistant:

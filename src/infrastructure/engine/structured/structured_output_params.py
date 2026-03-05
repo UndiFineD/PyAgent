@@ -20,7 +20,7 @@ Enhanced structured output configuration and validation.
 Now modularized into the 'params' subpackage.
 """
 
- from .params import (ChoiceConstraint, ConstraintBuilder, ConstraintType,
+from .params import (ChoiceConstraint, ConstraintBuilder, ConstraintType,
                      GrammarConstraint, GuidedDecodingBackend,
                      JsonSchemaConstraint, OutputConstraint, RegexConstraint,
                      SchemaFormat, StructuredOutputConfig,

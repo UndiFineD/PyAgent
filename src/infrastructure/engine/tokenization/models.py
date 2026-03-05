@@ -24,7 +24,7 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Tuple
 
- import numpy as np
+import numpy as np
 
 
 class TokenizerBackend(Enum):

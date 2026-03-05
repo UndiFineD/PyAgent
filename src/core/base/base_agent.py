@@ -20,6 +20,6 @@ This module re-exports the modern BaseAgent implementation located under
 external code and tests.
 """
 
- from src.core.base.lifecycle.base_agent import BaseAgent  # noqa: F401
+from src.core.base.lifecycle.base_agent import BaseAgent  # noqa: F401
 
 __all__ = ["BaseAgent"]

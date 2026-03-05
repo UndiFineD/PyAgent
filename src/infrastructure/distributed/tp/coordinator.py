@@ -7,7 +7,7 @@ Process group coordinator for distributed operations.
 import logging
 from typing import Any
 
- from .models import ParallelConfig, RankInfo, ParallelMode
+from .models import ParallelConfig, RankInfo, ParallelMode
 
 logger = logging.getLogger(__name__)
 

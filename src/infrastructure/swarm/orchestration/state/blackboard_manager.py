@@ -20,9 +20,9 @@ from __future__ import annotations
 import logging
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .blackboard_core import BlackboardCore
+from .blackboard_core import BlackboardCore
 
 __version__ = VERSION
 

@@ -16,7 +16,7 @@ import sys
 from pathlib import Path
 from typing import TYPE_CHECKING
 
- import pytest
+import pytest
 
 # Add src to path for imports
 src_path = Path(__file__).parent.parent.parent

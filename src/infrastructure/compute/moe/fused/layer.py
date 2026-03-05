@@ -21,7 +21,7 @@ Layer.py module.
 import threading
 from typing import Any
 
- import numpy as np
+import numpy as np
 
 from .config import FusedMoEConfig, FusedMoEParallelConfig, FusedMoEQuantConfig
 from .dispatcher import SparseDispatcher

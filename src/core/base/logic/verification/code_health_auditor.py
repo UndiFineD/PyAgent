@@ -16,7 +16,7 @@
 Code health auditor.py module.
 """
 
- from src.core.rust_bridge import RustBridge
+from src.core.rust_bridge import RustBridge
 
 from .mixins.stub_detector_mixin import StubDetectorMixin
 from .mixins.workspace_auditor_mixin import WorkspaceAuditorMixin

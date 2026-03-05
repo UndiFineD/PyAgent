@@ -24,9 +24,9 @@ import logging
 from pathlib import Path
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .agent_bar import AgentBar
+from .agent_bar import AgentBar
 
 __version__: str = VERSION
 

@@ -16,7 +16,7 @@
 Enums for structured output engine.
 """
 
- from enum import Enum, auto
+from enum import Enum, auto
 
 
 class GrammarType(Enum):

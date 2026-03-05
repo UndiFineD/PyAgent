@@ -9,7 +9,7 @@ Main orchestrator for GPU-resident batch management.
 import logging
 from typing import Any, List, Optional
 
- import numpy as np
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ except ImportError:
     HAS_TORCH = False
     torch = None  # type: ignore
 
- from .models import (
+from .models import (
     BatchUpdateBuilder,
     CachedRequestState,
     InputBatch,

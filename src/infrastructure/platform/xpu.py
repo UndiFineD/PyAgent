@@ -6,9 +6,9 @@ Intel XPU (GPU/Accelerator) platform implementation.
 """
 
 
- from typing import List, Set
+from typing import List, Set
 
- from .models import (
+from .models import (
     PlatformType,
     DeviceCapability,
     MemoryInfo,

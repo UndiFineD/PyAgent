@@ -22,9 +22,9 @@ Validator for report data integrity.
 import hashlib
 from typing import Any
 
- from src.core.base.common.validation_core import ValidationCore
+from src.core.base.common.validation_core import ValidationCore
 
- from .validation_result import ValidationResult
+from .validation_result import ValidationResult
 
 
 class ReportValidator(ValidationCore):

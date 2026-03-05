@@ -8,9 +8,9 @@ Namespaces.py module.
 # Metric namespace management engine.
 
 
- from typing import Any
+from typing import Any
 
- from .metrics import MetricNamespace
+from .metrics import MetricNamespace
 
 
 class MetricNamespaceManager:

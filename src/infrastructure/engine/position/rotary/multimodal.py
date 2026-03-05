@@ -16,7 +16,7 @@
 Multimodal.py module.
 """
 
- from typing import Any, Tuple
+from typing import Any, Tuple
 
 from .base import HAS_TORCH, RotaryEmbeddingBase
 from .config import RoPEConfig

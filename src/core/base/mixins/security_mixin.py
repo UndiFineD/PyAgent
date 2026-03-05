@@ -19,9 +19,9 @@ Security mixin for BaseAgent, implementing API security patterns for agent commu
 """
 
 
- from typing import Any, Dict
+from typing import Any, Dict
 
- from src.core.base.logic.security.api_security_core import (
+from src.core.base.logic.security.api_security_core import (
     APISecurityCore, AgentCredentials, RateLimitConfig, SecurityEvent
 )
 

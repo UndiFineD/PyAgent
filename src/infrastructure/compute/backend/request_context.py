@@ -22,9 +22,9 @@ import uuid
 from dataclasses import dataclass, field
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .request_priority import RequestPriority
+from .request_priority import RequestPriority
 
 __version__ = VERSION
 

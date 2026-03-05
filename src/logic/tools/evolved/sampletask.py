@@ -16,7 +16,7 @@ from __future__ import annotations
 """A sample automated GUI task."""
 
 
- import pyautogui
+import pyautogui
 
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.version import VERSION

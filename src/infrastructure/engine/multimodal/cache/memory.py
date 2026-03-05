@@ -20,7 +20,7 @@ import threading
 from collections import Counter, OrderedDict
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
- import numpy as np
+import numpy as np
 
 from .base import MultiModalCache
 from .data import CacheEntry, MediaHash

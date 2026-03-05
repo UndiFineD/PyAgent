@@ -1,7 +1,7 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
- from pathlib import Path
+from pathlib import Path
 
 class KnowledgeSearchMixin:
     """Methods for workspace search and snippet extraction."""

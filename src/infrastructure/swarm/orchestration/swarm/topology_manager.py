@@ -11,7 +11,7 @@ import asyncio
 import logging
 from typing import Any, Dict, List
 
- from src.core.base.common.models.communication_models import ExpertProfile
+from src.core.base.common.models.communication_models import ExpertProfile
 
 logger = logging.getLogger(__name__)
 

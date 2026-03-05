@@ -42,7 +42,7 @@ from typing import (
     overload,
 )
 
- from typing_extensions import TypeIs
+from typing_extensions import TypeIs
 
 T = TypeVar("T")
 K = TypeVar("K", bound=Hashable)

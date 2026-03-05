@@ -23,9 +23,9 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .recorded_interaction import RecordedInteraction
+from .recorded_interaction import RecordedInteraction
 
 __version__ = VERSION
 

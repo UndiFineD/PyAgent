@@ -20,7 +20,7 @@ from __future__ import annotations
 import contextlib
 import logging
 
- import requests
+import requests
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.connectivity_manager import ConnectivityManager

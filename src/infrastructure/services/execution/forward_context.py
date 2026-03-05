@@ -29,7 +29,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import Any, Generator, NamedTuple, Optional
 
- import numpy as np
+import numpy as np
 
 # ============================================================================
 # Batch Descriptor

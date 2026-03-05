@@ -24,9 +24,9 @@ from __future__ import annotations
 import tkinter as tk
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .constants import BMAD_AGENTS
+from .constants import BMAD_AGENTS
 
 __version__ = VERSION
 

@@ -17,7 +17,7 @@
 Mamba SSM Package - Implementation of State Space Models.
 """
 
- from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .config import MambaConfig, MambaOutput, MambaState

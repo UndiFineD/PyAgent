@@ -14,9 +14,9 @@
 
 """Unified Autonomy and Self-Model core."""
 
- from typing import List, Optional
+from typing import List, Optional
 
- from .base_core import BaseCore
+from .base_core import BaseCore
 
 try:
     import rust_core as rc

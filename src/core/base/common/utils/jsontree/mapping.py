@@ -18,9 +18,9 @@ Mapping.py module.
 """
 
 
- from typing import Any, Callable, overload
+from typing import Any, Callable, overload
 
- from src.core.base.common.utils.jsontree.types import (_T, _U, JSONTree,
+from src.core.base.common.utils.jsontree.types import (_T, _U, JSONTree,
                                                        _JSONTree)
 
 

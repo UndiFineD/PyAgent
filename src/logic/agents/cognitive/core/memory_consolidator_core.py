@@ -23,7 +23,7 @@ of memory fragments during the consolidation process.
 import time
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 try:
     from rust_core import filter_memory_by_query_rust

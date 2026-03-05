@@ -20,7 +20,7 @@ Doc gen module.py module.
 import ast
 import os
 
- from src.core.base.common.base_modules import BaseModule
+from src.core.base.common.base_modules import BaseModule
 
 
 class DocGenModule(BaseModule):

@@ -24,7 +24,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
- from .base_core import BaseCore
+from .base_core import BaseCore
 
 try:
     import rust_core as rc

@@ -18,11 +18,11 @@ Layer.py module.
 """
 
 
- from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING
 
- import numpy as np
+import numpy as np
 
- from .tensor import QuantizedTensor
+from .tensor import QuantizedTensor
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray

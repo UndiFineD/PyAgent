@@ -27,7 +27,7 @@ from pathlib import Path
 from typing import (BinaryIO, Callable, Dict, Iterator, List, Optional, Tuple,
                     Union)
 
- import numpy as np
+import numpy as np
 
 from .compression import decompress_data
 from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION,

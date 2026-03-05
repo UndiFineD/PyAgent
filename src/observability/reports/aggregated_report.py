@@ -21,9 +21,9 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .code_issue import CodeIssue
+from .code_issue import CodeIssue
 
 __version__ = VERSION
 

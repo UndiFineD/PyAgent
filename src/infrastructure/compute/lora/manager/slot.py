@@ -23,7 +23,7 @@ import threading
 import time
 from typing import Any, Dict, List, Optional
 
- from .config import AdapterSlot
+from .config import AdapterSlot
 
 
 class LoRASlotManager:

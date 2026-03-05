@@ -21,7 +21,7 @@ Delegates to modularized sub-packages in src/infrastructure/multimodal/cache/.
 """
 
 
- from .cache import (CacheBackend, CacheEntry, CacheStats, HashAlgorithm,
+from .cache import (CacheBackend, CacheEntry, CacheStats, HashAlgorithm,
                     IPCMultiModalCache, MediaHash, MediaType,
                     MemoryMultiModalCache, MultiModalCache, MultiModalHasher,
                     PerceptualCache, PlaceholderRange, PrefetchMultiModalCache,

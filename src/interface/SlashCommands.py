@@ -5,7 +5,7 @@ Provides backward compatibility for the moved SlashCommands implementation.
 Moved to src/interface/commands/
 """
 
- from .commands import (
+from .commands import (
     CommandParser,
     SlashCommands,
     CommandContext,

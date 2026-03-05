@@ -21,7 +21,7 @@ Weights.py module.
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, List, Optional, Set
 
- import numpy as np
+import numpy as np
 
 if TYPE_CHECKING:
     from .adapter import LoRAAdapter

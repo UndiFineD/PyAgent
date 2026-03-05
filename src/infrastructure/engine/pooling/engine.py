@@ -23,7 +23,7 @@ Core Pooling Engine implementation.
 import logging
 from typing import Any, Dict, Optional, Type
 
- import numpy as np
+import numpy as np
 
 from .models import PoolingConfig, PoolingResult, PoolingStrategy
 from .strategies import (AttentionPooler, BasePooler, CLSPooler,

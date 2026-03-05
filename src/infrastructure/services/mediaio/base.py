@@ -24,7 +24,7 @@ import hashlib
 from abc import ABC, abstractmethod
 from typing import BinaryIO, Union
 
- from .models import AudioData, ImageData, MediaLoadConfig, MediaType, VideoData
+from .models import AudioData, ImageData, MediaLoadConfig, MediaType, VideoData
 
 
 class MediaLoader(ABC):

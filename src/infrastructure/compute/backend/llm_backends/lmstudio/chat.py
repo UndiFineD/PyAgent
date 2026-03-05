@@ -22,7 +22,7 @@ import logging
 import time
 from typing import TYPE_CHECKING, Any, Callable, Optional
 
- from .api import LMStudioAPIClient
+from .api import LMStudioAPIClient
 
 if TYPE_CHECKING:
     import lmstudio

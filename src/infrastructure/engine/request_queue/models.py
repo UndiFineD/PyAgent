@@ -23,7 +23,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Optional
 
- from .enums import RequestStatus
+from .enums import RequestStatus
 
 
 @dataclass

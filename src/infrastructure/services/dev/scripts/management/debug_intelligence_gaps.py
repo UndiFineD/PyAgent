@@ -22,7 +22,7 @@ Debug script to identify intelligence gaps where IO/Shell operations are not rec
 import os
 import re
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

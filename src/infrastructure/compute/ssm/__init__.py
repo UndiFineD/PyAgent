@@ -22,7 +22,7 @@ Modules:
     MambaUtils: Utilities for Mamba computation
 """
 
- from src.infrastructure.compute.ssm.mamba_mixer import (CausalConv1d,
+from src.infrastructure.compute.ssm.mamba_mixer import (CausalConv1d,
                                                         HybridMambaMixer,
                                                         Mamba2Mixer,
                                                         MambaConfig,

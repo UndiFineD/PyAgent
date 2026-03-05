@@ -17,9 +17,9 @@ from __future__ import annotations
 """Mutation testing functionality."""
 
 
- import hashlib
+import hashlib
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 from .enums import MutationOperator
 from .models import Mutation

@@ -31,7 +31,7 @@ import time
 from dataclasses import dataclass
 from typing import Any, Callable, Optional, Set
 
- from .request_lifecycle import (FinishReason, Request, RequestQueue,
+from .request_lifecycle import (FinishReason, Request, RequestQueue,
                                 RequestTracker)
 
 logger = logging.getLogger(__name__)

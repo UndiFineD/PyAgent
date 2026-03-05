@@ -17,11 +17,11 @@ from __future__ import annotations
 """Auto-extracted class from agent_improvements.py"""
 
 
- from typing import Any
+from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .rollback_point import RollbackPoint
+from .rollback_point import RollbackPoint
 
 __version__ = VERSION
 

@@ -21,9 +21,9 @@ import time
 from collections.abc import Callable
 from typing import Any
 
- from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
- from .parallel_test_result import ParallelTestResult
+from .parallel_test_result import ParallelTestResult
 
 __version__ = VERSION
 

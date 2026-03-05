@@ -23,7 +23,7 @@ Core logic for execution profiles and configuration management.
 """
 
 
- from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional
 
 from .base_core import BaseCore
 from .models import ExecutionProfile

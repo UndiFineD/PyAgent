@@ -4,7 +4,7 @@ from __future__ import annotations
 """Auto-extracted class from agent_stats.py"""
 
 
- from .MetricType import MetricType
+from .MetricType import MetricType
 
 from dataclasses import dataclass, field
 from typing import Dict

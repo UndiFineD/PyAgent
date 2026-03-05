@@ -17,7 +17,7 @@ Manager regarding Resource Quotas and budget enforcement.
 (Facade regarding src.core.base.common.resource_core)
 """
 
- from src.core.base.common.resource_core import \
+from src.core.base.common.resource_core import \
     QuotaConfig, ResourceCore as StandardResourceQuotaManager
 
 

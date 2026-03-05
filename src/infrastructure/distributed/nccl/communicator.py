@@ -9,7 +9,7 @@ import time
 from typing import Any, Callable
 from contextlib import contextmanager
 
- from .models import NCCLConfig, NCCLStats, ReduceOp
+from .models import NCCLConfig, NCCLStats, ReduceOp
 
 logger = logging.getLogger(__name__)
 

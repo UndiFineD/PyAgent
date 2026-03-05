@@ -21,9 +21,9 @@ import logging
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
- import numpy as np
+import numpy as np
 
- from src.infrastructure.swarm.orchestration.swarm.audit_logger import SwarmAuditLogger
+from src.infrastructure.swarm.orchestration.swarm.audit_logger import SwarmAuditLogger
 
 logger = logging.getLogger(__name__)
 
