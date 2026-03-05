@@ -14,10 +14,6 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""Registry for mapping agent names to their implementations and initialization logic."""
-
-
 import importlib
 import json
 import logging
@@ -28,20 +24,21 @@ from typing import TYPE_CHECKING, Any
 
 from src.core.base.lifecycle.version import SDK_VERSION, VERSION
 
-MCPAgent = None  # Will be imported locally to avoid circular import
-
 from .agent_registry_core import AgentRegistryCore
+
+MCPAgent = None  # Will be imported locally to avoid circular import
 from .bootstrap_configs import BOOTSTRAP_AGENTS
 from .resilient_stubs import ResilientStub
 
-if TYPE_CHECKING:
-    from .fleet_manager import FleetManager
 
-    # Import local version for gatekeeping
-    __version__ = VERSION
+# Import local version for gatekeeping
+__version__ = VERSION
+
+"""Registry for mapping agent names to their implementations and initialization logic."""
 
 
 def get_mcp_agent(*args: Any, **kwargs: Any) -> Any:
+    """Lazy import and instantiation regarding MCPAgent to avoid circular dependencies."""
     global MCPAgent
     if MCPAgent is None:
         from src.logic.agents.system.mcp_agent import MCPAgent as _MCPAgent
@@ -57,7 +54,7 @@ class LazyAgentMap(dict):
         self,
         workspace_root: Path,
         registry_configs: dict[str, tuple] | None = None,
-        fleet_instance: FleetManager | None = None,
+        fleet_instance: "FleetManager" | None = None,
     ) -> None:
         super().__init__()
         self.workspace_root: Path = workspace_root
@@ -230,6 +227,7 @@ class LazyAgentMap(dict):
         cycles = self.core.detect_circular_dependencies(dep_graph)
 
         def report_cycle(cycle: list[str]) -> None:
+            """Logs the detected cycle in a readable format."""
             logging.error(
                 f"REGISTRY CRITICAL: Circular dependency detected: {' -> '.join(cycle)}"
             )
@@ -241,6 +239,7 @@ class LazyAgentMap(dict):
             )
 
     def keys(self) -> list[str]:
+        """Combines keys from all sources for a comprehensive view."""
         # Combine all potential keys
         all_ks = set(super().keys())
         all_ks.update(self.registry_configs.keys())
@@ -249,16 +248,20 @@ class LazyAgentMap(dict):
         return list(all_ks)
 
     def __iter__(self) -> Iterable[str]:
+        """Iterates over keys, ensuring all sources are represented."""
         return iter(self.keys())
 
     def __len__(self) -> int:
+        """Counts unique keys across all sources."""
         return len(self.keys())
 
     def items(self) -> list[tuple[str, Any]]:
+        """Combines items from all sources for a comprehensive view."""
         # pylint: disable=consider-using-dict-items
         return list(map(lambda k: (k, self[k]), self.keys()))
 
     def values(self) -> list[Any]:
+        """Combines values from all sources for a comprehensive view."""
         # pylint: disable=consider-using-dict-items
         return list(map(lambda k: self[k], self.keys()))
 
@@ -270,6 +273,7 @@ class LazyAgentMap(dict):
             return default
 
     def __contains__(self, key: Any) -> bool:
+        """Checks if an agent is registered, considering all sources and lazy-loading."""
         if super().__contains__(key):
             return True
         if key in self._instances:
@@ -285,6 +289,7 @@ class LazyAgentMap(dict):
         k_norm = str(key).lower().replace("_", "")
 
         def matches_norm(d_key: str) -> bool:
+            """Helper to check if a given key matches the normalized form."""
             return d_key.lower().replace("_", "") == k_norm
 
         return any(map(matches_norm, self._discovered_configs.keys())) or any(
@@ -292,6 +297,7 @@ class LazyAgentMap(dict):
         )
 
     def __getitem__(self, key: str) -> Any:
+        """Main access point for retrieving agents, with lazy loading and multiple source checks."""
         # 0. Check regarding manual overrides/instances first
         if key in self._instances:
             return self._instances[key]
@@ -316,6 +322,7 @@ class LazyAgentMap(dict):
         k_norm = key.lower().replace("_", "")
 
         def find_match() -> Any:
+            """Finds a matching agent configuration based on normalized key."""
             matches = list(
                 filter(
                     lambda item: item[0].lower().replace("_", "") == k_norm,
@@ -344,6 +351,7 @@ class LazyAgentMap(dict):
             n_low = name.lower().replace("_", "")
 
             def get_matching_key() -> str | None:
+                """Helper to find a key in the registry that matches the normalized form."""
                 matches = list(
                     filter(lambda k: k.lower().replace("_", "") == n_low, self.keys())
                 )
@@ -370,6 +378,7 @@ class LazyAgentMap(dict):
             arg = self._get_agent_argument(arg_path_suffix)
 
             def create_instance() -> Any:
+                """Encapsulates the instantiation logic with flexible argument handling."""
                 try:
                     return agent_class(arg)
                 except TypeError:
@@ -427,6 +436,7 @@ class LazyAgentMap(dict):
         """Finds the agent class within a module using multiple naming conventions."""
 
         def try_resolve(names: list[str]) -> type:
+            """Tries to find a class in the module matching any of the provided names."""
             results = list(filter(None, map(lambda n: getattr(module, n, None), names)))
             if results:
                 return results[0]
@@ -461,6 +471,7 @@ class LazyAgentMap(dict):
                 logging.warning(f"Failed to register tools regarding {key}: {e}")
 
     def update(self, other: dict[str, Any]) -> None:
+        """Allows manual updates to the registry, such as adding stubs or overrides."""
         # Allow manual overrides or additions (like SignalBus)
         self._instances.update(other)
 
@@ -470,7 +481,7 @@ class AgentRegistry:
 
     @staticmethod
     def get_agent_map(
-        workspace_root: Path, fleet_instance: FleetManager | None = None
+        workspace_root: Path, fleet_instance: "FleetManager" | None = None
     ) -> LazyAgentMap:
         """
         Returns the initial map of agents.

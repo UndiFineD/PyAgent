@@ -44,9 +44,6 @@ from typing import (
     Union,
 )
 
-if TYPE_CHECKING:
-    import torch
-    import numpy as np
 
 try:
     import rust_core
@@ -441,6 +438,8 @@ class AsyncShardLoader:
 
 
 # Rust-accelerated functions
+import torch
+import numpy as np
 def compute_shard_assignment_rust(
     num_params: int,
     num_ranks: int,

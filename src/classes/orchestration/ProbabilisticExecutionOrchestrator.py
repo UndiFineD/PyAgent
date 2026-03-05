@@ -4,12 +4,9 @@ from __future__ import annotations
 import logging
 import json
 import random
+from src.classes.fleet.FleetManager import FleetManager
 from typing import Dict, List, Any, Optional, TYPE_CHECKING
 from src.classes.base_agent import BaseAgent
-
-if TYPE_CHECKING:
-    from src.classes.fleet.FleetManager import FleetManager
-
 
 class ProbabilisticExecutionOrchestrator:
     """

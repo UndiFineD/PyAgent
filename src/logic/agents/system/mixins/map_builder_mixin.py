@@ -23,13 +23,12 @@ Map builder mixin.py module.
 import ast
 import logging
 import os
+from src.logic.agents.system.topological_navigator import \
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 from src.core.base.common.base_utilities import as_tool
 
-if TYPE_CHECKING:
-    from src.logic.agents.system.topological_navigator import \
         TopologicalNavigator
 
 

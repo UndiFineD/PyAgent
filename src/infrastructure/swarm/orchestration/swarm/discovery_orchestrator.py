@@ -24,6 +24,7 @@ import logging
 import socket
 import threading
 import time
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 from typing import TYPE_CHECKING, Any
 
 from zeroconf import (IPVersion, ServiceBrowser, ServiceInfo, ServiceListener,
@@ -32,10 +33,6 @@ from zeroconf import (IPVersion, ServiceBrowser, ServiceInfo, ServiceListener,
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
-if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-
 
 class DiscoveryOrchestrator:
     """Handles peer-to-peer discovery of fleet nodes using mDNS/Zeroconf."""

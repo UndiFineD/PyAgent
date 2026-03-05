@@ -4,13 +4,9 @@ from __future__ import annotations
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 import json
+from src.logic.agents.cognitive.HierarchicalMemoryAgent import HierarchicalMemoryAgent
 from typing import TYPE_CHECKING
 from src.core.base.BaseUtilities import as_tool
-
-if TYPE_CHECKING:
-    from src.logic.agents.cognitive.HierarchicalMemoryAgent import (
-        HierarchicalMemoryAgent,
-    )
 
 
 class MemoryQueryMixin:

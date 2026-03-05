@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import logging
+from PIL import Image
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum, auto
@@ -20,11 +21,7 @@ from typing import (
 
 import numpy as np
 
-if TYPE_CHECKING:
-    try:
-        from PIL import Image
-    except ImportError:
-        Image = Any  # type: ignore
+
 
 logger = logging.getLogger(__name__)
 

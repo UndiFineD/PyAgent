@@ -22,16 +22,13 @@ import os
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 import requests
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.orchestration.core.self_improvement_core import (
     SelfImprovementCore,
 )
-
-if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-
     from src.infrastructure.compute.backend.llm_client import LLMClient
 
     from .mixins.orchestrator_cycle_mixin import OrchestratorCycleMixin
@@ -40,7 +37,7 @@ if TYPE_CHECKING:
     from .self_improvement_analysis import SelfImprovementAnalysis
     from .self_improvement_fixer import SelfImprovementFixer
 
-    __version__ = VERSION
+__version__ = VERSION
 
 
 class SelfImprovementOrchestrator(

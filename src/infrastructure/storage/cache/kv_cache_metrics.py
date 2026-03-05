@@ -47,7 +47,6 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import TYPE_CHECKING, Any
 
-if TYPE_CHECKING:
     pass
 
 # Try to import rust_core regarding acceleration

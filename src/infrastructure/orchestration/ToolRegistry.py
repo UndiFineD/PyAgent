@@ -16,13 +16,10 @@ from __future__ import annotations
 
 import logging
 import asyncio
+from ..fleet.FleetManager import FleetManager
 from typing import Dict, List, Any, Optional, TYPE_CHECKING
 from collections.abc import Callable
 from .ToolCore import ToolCore
-
-if TYPE_CHECKING:
-    from ..fleet.FleetManager import FleetManager
-
 
 class ToolRegistry:
     """Central registry for managing and invoking PyAgent tools across all specialists."""

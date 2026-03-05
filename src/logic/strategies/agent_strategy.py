@@ -12,6 +12,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from collections.abc import Callable
 
 
 """Auto-extracted class from agent_strategies.py"""
@@ -22,12 +23,9 @@ from typing import TYPE_CHECKING
 
 from src.core.base.lifecycle.version import VERSION
 
-if TYPE_CHECKING:
-    from collections.abc import Callable
+BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 
-    BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
-
-    __version__ = VERSION
+__version__ = VERSION
 
 
 class AgentStrategy(ABC):

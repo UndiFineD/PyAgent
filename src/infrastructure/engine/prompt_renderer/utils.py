@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import base64
 import contextlib
+from .renderers import ChatRenderer, CompletionRenderer
 from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
 
 from .models import (
@@ -27,10 +28,6 @@ from .models import (
 )
 from .salt import CacheSaltGenerator
 from .truncation import TruncationManager
-
-if TYPE_CHECKING:
-    from .renderers import ChatRenderer, CompletionRenderer
-
 """
 Utility functions and loaders for prompt rendering.
 """

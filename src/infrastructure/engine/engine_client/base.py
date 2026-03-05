@@ -23,11 +23,10 @@ Abstract base class for all engine client implementations.
 import logging
 import threading
 import uuid
+from src.infrastructure.engine.engine_client.types import EngineClientConfig
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Generic, Optional, TypeVar
 
-if TYPE_CHECKING:
-    from src.infrastructure.engine.engine_client.types import EngineClientConfig
 
 logger = logging.getLogger(__name__)
 

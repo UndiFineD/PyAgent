@@ -47,9 +47,6 @@ from typing import (
 from contextlib import contextmanager
 import json
 
-if TYPE_CHECKING:
-    import numpy as np
-    import torch
 
 try:
     import rust_core
@@ -518,6 +515,8 @@ class StreamingWeightLoader(WeightLoader):
 
 
 # Rust-accelerated functions
+import numpy as np
+import torch
 def compute_weight_hash_rust(data: bytes) -> int:
     """Fast weight data hashing using Rust xxHash."""
     if HAS_RUST and hasattr(rust_core, "weight_hash_compute_rust"):

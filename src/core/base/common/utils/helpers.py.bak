@@ -42,7 +42,6 @@ __all__ = [
     "_empty_plugin_config_list",
 ]
 
-if TYPE_CHECKING:
     from src.core.base.common.models.agent_models import AgentPluginConfig
 
 # Import optional dependencies

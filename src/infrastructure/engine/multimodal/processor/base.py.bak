@@ -28,7 +28,6 @@ from typing import (TYPE_CHECKING, Any, Dict, Generic, List, Optional, Tuple,
 
 import numpy as np
 
-if TYPE_CHECKING:
     try:
         from PIL import Image
     except ImportError:

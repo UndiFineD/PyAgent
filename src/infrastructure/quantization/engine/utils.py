@@ -7,7 +7,6 @@ from .linear import LinearQuantizer
 from .awq import AWQQuantizer
 from .gptq import GPTQQuantizer
 
-if TYPE_CHECKING:
     from numpy.typing import NDArray
 
 

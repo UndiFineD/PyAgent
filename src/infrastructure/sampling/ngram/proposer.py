@@ -22,10 +22,9 @@ try:
 except ImportError:
     pass
 
-if TYPE_CHECKING:
     from numpy.typing import NDArray
 
-    logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class NgramProposer:

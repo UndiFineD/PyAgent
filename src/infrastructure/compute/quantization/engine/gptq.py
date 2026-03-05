@@ -27,7 +27,6 @@ from .config import QuantConfig
 from .linear import LinearQuantizer
 from .tensor import QuantizedTensor
 
-if TYPE_CHECKING:
     from numpy.typing import NDArray
 
 

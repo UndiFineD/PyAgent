@@ -20,13 +20,10 @@ Config.py module.
 
 
 import math
+from src.core.base.logic.structures.flat_logprobs import FlatLogprobs
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import TYPE_CHECKING, Iterator, List, Optional, Sequence, Tuple
-
-if TYPE_CHECKING:
-    from src.core.base.logic.structures.flat_logprobs import FlatLogprobs
-
 
 class LogprobFormat(Enum):
     """Logprobs output format."""

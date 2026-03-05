@@ -4,7 +4,7 @@ try:
     from src.infrastructure.services.dev.agent_tests.enums import *  # type: ignore
 except Exception:
     # Minimal placeholders if infra module not available
-from enum import Enum
+    from enum import Enum
 
     class CoverageType(Enum):
         UNIT = "unit"

@@ -16,14 +16,11 @@ No commands will be executed.
 
 import logging
 import time
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 from typing import TYPE_CHECKING, Dict
 
 from src.core.base.lifecycle.version import VERSION
-
-if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-
-    __version__ = VERSION
+__version__ = VERSION
 
 
 class HeartbeatOrchestrator:

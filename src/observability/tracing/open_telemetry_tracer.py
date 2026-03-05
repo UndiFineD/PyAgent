@@ -52,11 +52,6 @@ HAS_RUST = False
 otel_import_error_traceback: str | None = None
 
 # Type aliases for fallback/optional usage
-if TYPE_CHECKING:
-    from opentelemetry.context.context import Context
-    from opentelemetry.sdk.trace import TracerProvider
-    from opentelemetry.sdk.trace.export import SpanExporter
-    from opentelemetry.trace import Span, SpanKind, Status, StatusCode, Tracer
 else:
     Context = Any
     Tracer = Any
@@ -626,6 +621,10 @@ def get_null_tracer() -> NullTracer:
 # ============================================================================
 # Exports
 # ============================================================================
+from opentelemetry.context.context import Context
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import SpanExporter
+from opentelemetry.trace import Span, SpanKind, Status, StatusCode, Tracer
 __all__: list[str] = [
     # Constants
     "TRACE_HEADERS",

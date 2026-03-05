@@ -22,16 +22,12 @@ Single-GPU in-process execution.
 
 import asyncio
 import logging
+from src.infrastructure.engine.engine_client.types import (EngineClientConfig, EngineOutput, SchedulerOutput)
 from typing import TYPE_CHECKING, Callable, Optional
 
 from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
 from src.infrastructure.engine.engine_client.types import EngineOutput
 
-if TYPE_CHECKING:
-    from src.infrastructure.engine.engine_client.types import (
-        EngineClientConfig,
-        SchedulerOutput,
-    )
 
 logger = logging.getLogger(__name__)
 

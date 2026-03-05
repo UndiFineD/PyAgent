@@ -22,11 +22,8 @@ Privacy assessment mixin.py module.
 
 
 import time
+from src.logic.agents.security.compliance_agent import ComplianceAgent
 from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from src.logic.agents.security.compliance_agent import ComplianceAgent
-
 
 class PrivacyAssessmentMixin:
     """Mixin for conducting Privacy Impact Assessments in ComplianceAgent."""

@@ -672,8 +672,7 @@ exclude_lines =
     raise AssertionError
     raise NotImplementedError
     if __name__ == .__main__.:
-    if TYPE_CHECKING:
-    @abstractmethod
+        @abstractmethod
     @abc.abstractmethod
     except ImportError
 precision = 2

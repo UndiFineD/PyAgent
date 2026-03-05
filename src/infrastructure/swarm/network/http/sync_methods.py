@@ -13,6 +13,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from src.infrastructure.swarm.network.http.connection import HTTPConnection
 
 """
 Sync methods.py module.
@@ -21,10 +22,6 @@ Sync methods.py module.
 
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Callable, Mapping
-
-if TYPE_CHECKING:
-    from src.infrastructure.swarm.network.http.connection import HTTPConnection
-
 
 class SyncHTTPMixin:
     """Mixin providing synchronous HTTP methods."""

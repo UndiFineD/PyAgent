@@ -21,18 +21,15 @@ ZMQ-based synchronous client.
 
 
 import logging
+import zmq
 from typing import TYPE_CHECKING, Optional
 
 from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
 from src.infrastructure.engine.engine_client.types import EngineOutput
-
-if TYPE_CHECKING:
-    import zmq
-
-    from src.infrastructure.engine.engine_client.types import (
-        EngineClientConfig,
-        SchedulerOutput,
-    )
+from src.infrastructure.engine.engine_client.types import (
+    EngineClientConfig,
+    SchedulerOutput,
+)
 
 logger = logging.getLogger(__name__)
 

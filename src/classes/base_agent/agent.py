@@ -19,6 +19,15 @@ from src.core.base.utilities import as_tool
 from src.core.base.exceptions import CycleInterrupt
 import logging
 from src.core.base.ConnectivityManager import ConnectivityManager
+from src.core.base.models import AgentPriority
+from src.core.base.AgentCore import BaseCore
+from src.core.base.BaseAgentCore import BaseAgentCore
+from src.core.base.registry import AgentRegistry
+from src.core.base.ShardedKnowledgeCore import ShardedKnowledgeCore
+from src.core.base.state.agent_state_manager import AgentStateManager
+from src.core.base.verification import AgentVerifier
+from src.core.base.delegation import AgentDelegator
+from src.core.base.shell import ShellExecutor
 import os
 import asyncio
 import subprocess
@@ -30,40 +39,16 @@ from types import TracebackType
 from typing import Any, Dict, List, Optional, cast, TYPE_CHECKING
 from collections.abc import Callable
 
-if TYPE_CHECKING:
-    from src.logic.agents.cognitive.LongTermMemory import LongTermMemory
-    from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
-    from src.infrastructure.orchestration.ToolRegistry import ToolRegistry
-    from src.core.base.models import (
-        AgentConfig,
-        AgentState,
-        CacheEntry,
-        ConversationMessage,
-        EventHook,
-        EventType,
-        HealthCheckResult,
-        MessageRole,
-        PromptTemplate,
-        ResponseQuality,
-        AgentPriority,
-    )
-    from src.core.base.AgentCore import BaseCore
-    from src.core.base.BaseAgentCore import BaseAgentCore
-    from src.core.base.registry import AgentRegistry
-    from src.core.base.ShardedKnowledgeCore import ShardedKnowledgeCore
-    from src.core.base.state.agent_state_manager import AgentStateManager
-    from src.core.base.verification import AgentVerifier
-    from src.core.base.delegation import AgentDelegator
-    from src.core.base.shell import ShellExecutor
 
-    # from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder # Moved to __init__
-    from src.core.base.managers.ResourceQuotaManager import (
-        ResourceQuotaManager,
-        QuotaConfig,
-    )
-    from src.infrastructure.compute.backend.LocalContextRecorder import (
-        LocalContextRecorder,
-    )
+
+# from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder # Moved to __init__
+from src.core.base.managers.ResourceQuotaManager import (
+    ResourceQuotaManager,
+    QuotaConfig,
+)
+from src.infrastructure.compute.backend.LocalContextRecorder import (
+    LocalContextRecorder,
+)
 
 try:
     import requests
@@ -91,6 +76,11 @@ try:
 except Exception:
     DEFAULT_PROMPT_TEMPLATES = []
 
+# Advanced components (Lazy loaded or optional)
+from src.logic.agents.cognitive.LongTermMemory import LongTermMemory
+from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
+from src.infrastructure.orchestration.ToolRegistry import ToolRegistry
+
 
 def fix_markdown_content(content: str) -> str:
     """Fix markdown formatting in content."""
@@ -98,7 +88,6 @@ def fix_markdown_content(content: str) -> str:
     return content
 
 
-# Advanced components (Lazy loaded or optional)
 class BaseAgent:
     """Base class for all AI-powered agents.
 

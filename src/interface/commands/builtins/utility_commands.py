@@ -12,6 +12,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from ..registry import CommandRegistry
 
 """
 Utility commands for slash commands.
@@ -21,10 +22,6 @@ Utility commands for slash commands.
 from typing import TYPE_CHECKING
 
 from ..base import CommandContext, CommandResult
-
-if TYPE_CHECKING:
-    from ..registry import CommandRegistry
-
 
 def register_utility_commands(registry: CommandRegistry) -> None:
     """Register utility-related built-in commands."""

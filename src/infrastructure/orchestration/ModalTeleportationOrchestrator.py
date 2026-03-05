@@ -22,13 +22,10 @@ from __future__ import annotations
 
 from src.core.base.version import VERSION
 import logging
+from src.infrastructure.fleet.FleetManager import FleetManager
 from typing import Any, TYPE_CHECKING
 
 __version__ = VERSION
-
-if TYPE_CHECKING:
-    from src.infrastructure.fleet.FleetManager import FleetManager
-
 
 class ModalTeleportationOrchestrator:
     """

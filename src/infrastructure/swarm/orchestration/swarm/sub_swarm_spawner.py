@@ -21,15 +21,12 @@ Sub swarm spawner.py module.
 
 import logging
 import uuid
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 from typing import TYPE_CHECKING
 
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
-if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-
 
 class SubSwarm:
     """A lightweight sub-swarm with a subset of capabilities."""

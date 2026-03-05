@@ -13,18 +13,17 @@
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
+from .balancer import P2CLoadBalancer
+from .collectives import dp_collective_all_reduce
+from .engine import DPEngineCoreProc
+from .hierarchical import HierarchicalDPCoordinator
+from .types import (DPConfig, DPRole, LoadBalanceStrategy, StepState,
 """
 DataParallelCoordinator Package.
 """
 
 from typing import TYPE_CHECKING, Any
 
-if TYPE_CHECKING:
-    from .balancer import P2CLoadBalancer
-    from .collectives import dp_collective_all_reduce
-    from .engine import DPEngineCoreProc
-    from .hierarchical import HierarchicalDPCoordinator
-    from .types import (DPConfig, DPRole, LoadBalanceStrategy, StepState,
                         WaveState, WorkerHealth, WorkerState)
 
 

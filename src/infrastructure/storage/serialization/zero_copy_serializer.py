@@ -49,10 +49,6 @@ try:
 except ImportError:
     NUMPY_AVAILABLE = False
     np = None
-
-if TYPE_CHECKING:
-    import torch
-
     __all__ = [
         "ZeroCopyEncoder",
         "ZeroCopyDecoder",
@@ -363,6 +359,7 @@ def decode_with_buffers(
 
 
 # Helper functions
+import torch
 
 
 @lru_cache(maxsize=32)

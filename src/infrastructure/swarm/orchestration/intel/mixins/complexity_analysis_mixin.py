@@ -9,10 +9,9 @@ Complexity analysis mixin.py module.
 
 import logging
 import os
+from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import (
 from typing import TYPE_CHECKING, Any
 
-if TYPE_CHECKING:
-    from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import (
         SelfImprovementAnalysis,
     )
 

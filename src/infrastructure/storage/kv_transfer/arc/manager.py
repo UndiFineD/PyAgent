@@ -21,6 +21,7 @@ Implementation of Adaptive Replacement Cache (ARC) and variants.
 
 import threading
 import time
+import torch
 from collections import OrderedDict
 from typing import TYPE_CHECKING, Any, Optional
 
@@ -30,10 +31,6 @@ from src.infrastructure.storage.kv_transfer.arc.types import (
     BlockHash, BlockState, BlockStatus, OffloadingEvent, PrepareStoreOutput)
     from src.infrastructure.storage.kv_transfer.k_vzap import (KVzapConfig,
                                                            KVzapPruner)
-
-if TYPE_CHECKING:
-    import torch
-
     from src.infrastructure.storage.kv_transfer.arc.backend import Backend
     from src.infrastructure.storage.kv_transfer.arc.types import LoadStoreSpec
 

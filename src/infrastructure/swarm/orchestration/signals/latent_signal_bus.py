@@ -22,16 +22,13 @@ Latent signal bus.py module.
 import base64
 import json
 import logging
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
-if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-
 
 class LatentSignalBus:
     """

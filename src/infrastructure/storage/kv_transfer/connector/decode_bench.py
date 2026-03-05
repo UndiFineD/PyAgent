@@ -21,13 +21,12 @@ KV Connector for decode instance benchmarking.
 
 
 import logging
+from src.infrastructure.storage.kv_transfer.connector.types import (
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
 from src.infrastructure.storage.kv_transfer.connector.base import KVConnectorBase
 from src.infrastructure.storage.kv_transfer.connector.types import KVConnectorMetadata
 
-if TYPE_CHECKING:
-    from src.infrastructure.storage.kv_transfer.connector.types import (
         ForwardContext,
         KVCacheBlocks,
         KVTransferConfig,

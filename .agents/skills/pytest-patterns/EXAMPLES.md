@@ -622,7 +622,7 @@ def configure_logging():
     logger.info("Test session completed")
 
 def test_logging_works():
-    logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
     logger.info("Test is running")
     assert True
 ```

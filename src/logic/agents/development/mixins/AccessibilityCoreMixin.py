@@ -2,16 +2,13 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
+from src.logic.agents.development.AccessibilityAgent import AccessibilityAgent
 
 from typing import TYPE_CHECKING
 from src.core.base.types.ColorContrastResult import ColorContrastResult
 from src.core.base.types.AccessibilitySeverity import AccessibilitySeverity
 from src.core.base.types.WCAGLevel import WCAGLevel
 from src.core.base.types.AccessibilityIssue import AccessibilityIssue
-
-if TYPE_CHECKING:
-    from src.logic.agents.development.AccessibilityAgent import AccessibilityAgent
-
 
 class AccessibilityCoreMixin:
     """Mixin for core accessibility calculations and filtering in AccessibilityAgent."""

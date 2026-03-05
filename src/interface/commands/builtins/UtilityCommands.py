@@ -1,4 +1,5 @@
 from __future__ import annotations
+from ..Registry import CommandRegistry
 
 """
 Utility commands for slash commands.
@@ -7,10 +8,6 @@ Utility commands for slash commands.
 
 from typing import TYPE_CHECKING
 from ..Base import CommandContext, CommandResult
-
-if TYPE_CHECKING:
-    from ..Registry import CommandRegistry
-
 
 def register_utility_commands(registry: CommandRegistry) -> None:
     """Register utility-related built-in commands."""

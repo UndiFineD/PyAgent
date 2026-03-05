@@ -20,6 +20,7 @@ Self healing orchestrator.py module.
 
 import logging
 import time
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -28,11 +29,7 @@ from src.core.base.logic.agent_verification import (CodeHealthAuditor,
                                                     CodeIntegrityVerifier)
 
 from .self_healing_core import SelfHealingCore
-
-if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-
-    __version__ = VERSION
+__version__ = VERSION
 
 
 class SelfHealingOrchestrator:

@@ -10,7 +10,6 @@ from typing import Dict, List, Any, Optional, Type, TYPE_CHECKING
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
 
 # Type Hinting Imports (Phase 106)
-if TYPE_CHECKING:
 from src.classes.backend.LocalContextRecorder import LocalContextRecorder
 from src.classes.backend.SqlAgent import SqlAgent
 from src.classes.stats.ObservabilityEngine import ObservabilityEngine

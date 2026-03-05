@@ -10,18 +10,17 @@ from typing import Dict, List, Any, Optional, Type, TYPE_CHECKING
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
 
 # Type Hinting Imports (Phase 106)
-if TYPE_CHECKING:
-    from src.classes.backend.LocalContextRecorder import LocalContextRecorder
-    from src.classes.backend.SqlAgent import SqlAgent
-    from src.classes.stats.ObservabilityEngine import ObservabilityEngine
-    from src.classes.orchestration.ToolRegistry import ToolRegistry
-    from src.classes.orchestration.SignalRegistry import SignalRegistry
-    from src.classes.stats.ModelFallbackEngine import ModelFallbackEngine
-    from src.classes.context.GlobalContextEngine import GlobalContextEngine
-    from src.classes.orchestration.SelfHealingOrchestrator import (
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
+from src.classes.backend.SqlAgent import SqlAgent
+from src.classes.stats.ObservabilityEngine import ObservabilityEngine
+from src.classes.orchestration.ToolRegistry import ToolRegistry
+from src.classes.orchestration.SignalRegistry import SignalRegistry
+from src.classes.stats.ModelFallbackEngine import ModelFallbackEngine
+from src.classes.context.GlobalContextEngine import GlobalContextEngine
+from src.classes.orchestration.SelfHealingOrchestrator import (
+from src.classes.orchestration.SelfImprovementOrchestrator import (
         SelfHealingOrchestrator,
     )
-    from src.classes.orchestration.SelfImprovementOrchestrator import (
         SelfImprovementOrchestrator,
     )
 

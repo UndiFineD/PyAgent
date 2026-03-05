@@ -21,15 +21,12 @@ Tool registry.py module.
 import asyncio
 import inspect
 import logging
+from ..fleet.FleetManager import FleetManager
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 from collections import namedtuple
 
 from .tool_core import ToolCore
-
-if TYPE_CHECKING:
-    from ..fleet.FleetManager import FleetManager
-
 
 class ToolRegistry:
     """Central registry for managing and invoking PyAgent tools across all specialists."""

@@ -25,6 +25,7 @@ Separates concerns into:
 
 import logging
 import time
+import lmstudio
 from typing import TYPE_CHECKING, Any, Callable, Iterator, Sequence
 
 import httpx
@@ -36,11 +37,7 @@ from .chat import ChatHandler
 from .chat_stream import StreamingChatHandler
 from .mcp_client import MCPClient
 from .models import LMStudioConfig
-
-if TYPE_CHECKING:
-    import lmstudio
-
-    logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class LMStudioBackend(LLMBackend):

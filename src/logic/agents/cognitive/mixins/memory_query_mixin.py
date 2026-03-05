@@ -27,16 +27,15 @@ Provides strategies for searching across multiple memory tiers (short, mid, long
 """
 
 import json
+from src.logic.agents.cognitive.hierarchical_memory_agent import (
 from typing import TYPE_CHECKING
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.base_utilities import as_tool
 
-if TYPE_CHECKING:
-    from src.logic.agents.cognitive.hierarchical_memory_agent import (
         HierarchicalMemoryAgent,
     )
 
-    __version__ = VERSION
+__version__ = VERSION
 
 
 class MemoryQueryMixin:

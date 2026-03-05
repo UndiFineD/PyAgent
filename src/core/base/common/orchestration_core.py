@@ -31,7 +31,6 @@ from typing import TYPE_CHECKING, Any, Callable, Dict, List
 from .base_core import BaseCore
 from .models import ComposedAgent
 
-if TYPE_CHECKING:
     pass
 
 

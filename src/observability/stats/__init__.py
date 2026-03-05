@@ -2,21 +2,14 @@
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
-
-"""Lazy-loading entry point for observability.stats."""
+from .ab_engine import ABComparator, ABComparison, ABComparisonEngine, ABComparisonResult, ABSignificanceResult
 
 from typing import Any, TYPE_CHECKING
 from src.core.base.lifecycle.version import VERSION
 from src.core.lazy_loader import ModuleLazyLoader
 
-if TYPE_CHECKING:
-    from .ab_engine import (
-        ABComparator,
-        ABComparison,
-        ABComparisonEngine,
-        ABComparisonResult,
-        ABSignificanceResult,
-    )
+    # type-only imports
+    pass
 
 from .api import APIEndpoint, StatsAPIServer
 from .observability_core import (

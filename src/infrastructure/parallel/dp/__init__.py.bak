@@ -5,7 +5,6 @@ DataParallelCoordinator Package.
 
 from typing import TYPE_CHECKING, Any
 
-if TYPE_CHECKING:
 from .types import DPRole, WorkerHealth, LoadBalanceStrategy, DPConfig, WorkerState, StepState, WaveState
 from .balancer import P2CLoadBalancer
 from .engine import DPEngineCoreProc

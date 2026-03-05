@@ -40,7 +40,6 @@ from src.infrastructure.kv_transfer.KVTransferConnector import (
     KVConnectorRole,
 )
 
-if TYPE_CHECKING:
     from src.infrastructure.kv_transfer.KVTransferConnector import KVConnectorBase
 from src.infrastructure.cache.KVCacheManager import KVCacheManager
 

@@ -39,7 +39,6 @@ try:
 except ImportError:
     docker = None
 
-if TYPE_CHECKING:
     pass
 
 

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
+from .auto_fix_suggester import AutoFixSuggester
 
 """Lazy-loading entry point for observability.errors."""
 
@@ -9,8 +10,6 @@ from typing import Any, TYPE_CHECKING
 from src.core.base.lifecycle.version import VERSION
 from src.core.lazy_loader import ModuleLazyLoader
 
-if TYPE_CHECKING:
-    from .auto_fix_suggester import AutoFixSuggester
 try:
     from .blame_info import BlameInfo
 except Exception:  # pragma: no cover - optional component may be absent

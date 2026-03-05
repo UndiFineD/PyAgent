@@ -50,7 +50,6 @@ try:
 except ImportError:
     HAS_RUST = False
 
-if TYPE_CHECKING:
     pass
 
 

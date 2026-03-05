@@ -607,8 +607,7 @@ exclude_lines =
     raise AssertionError
     raise NotImplementedError
     if __name__ == .__main__.:
-    if TYPE_CHECKING:
-```
+    ```
 
 ### Coverage in Code
 

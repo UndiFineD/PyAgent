@@ -1,3 +1,4 @@
+import torch as torch_type
 from typing import Tuple, Any, TYPE_CHECKING
 from .base import HAS_TORCH, HAS_NUMPY, RotaryEmbeddingBase
 from .config import RoPEConfig
@@ -11,10 +12,6 @@ if HAS_NUMPY:
     import numpy as np
 else:
     np = None
-
-if TYPE_CHECKING:
-    import torch as torch_type
-
 
 class GptJRotaryEmbedding(RotaryEmbeddingBase):
     """GPT-J style rotary position embedding.

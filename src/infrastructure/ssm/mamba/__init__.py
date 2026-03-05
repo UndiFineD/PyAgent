@@ -1,16 +1,13 @@
 # SPDX-License-Identifier: Apache-2.0
+from .config import MambaConfig, MambaState, MambaOutput
+from .mixer import MambaMixer, Mamba2Mixer
+from .hybrid import HybridMambaMixer
+from .ops import CausalConv1d, SelectiveScan
 """
 Mamba SSM Package - Implementation of State Space Models.
 """
 
 from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from .config import MambaConfig, MambaState, MambaOutput
-    from .mixer import MambaMixer, Mamba2Mixer
-    from .hybrid import HybridMambaMixer
-    from .ops import CausalConv1d, SelectiveScan
-
 def __getattr__(name: str) -> Any:
     if name in ("MambaConfig", "MambaState", "MambaOutput"):
         from .config import MambaConfig, MambaState, MambaOutput

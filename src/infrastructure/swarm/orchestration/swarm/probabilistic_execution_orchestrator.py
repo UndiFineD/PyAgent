@@ -20,15 +20,12 @@ Probabilistic execution orchestrator.py module.
 
 
 import logging
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 from typing import TYPE_CHECKING, Any
 
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
-if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-
 
 class ProbabilisticExecutionOrchestrator:
     """

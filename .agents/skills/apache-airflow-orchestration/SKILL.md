@@ -1414,7 +1414,7 @@ import logging
 
 @task
 def monitored_task():
-    logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
     logger.info("Starting data processing", extra={
         'process_id': 'abc123',

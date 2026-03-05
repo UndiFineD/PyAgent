@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 import os
+from src.infrastructure.fleet.fleet_manager import FleetManager
 from pathlib import Path
 from typing import Any, TYPE_CHECKING
 
@@ -27,11 +28,7 @@ from src.infrastructure.backend.llm_client import LLMClient
 from .mixins.orchestrator_cycle_mixin import OrchestratorCycleMixin
 from .mixins.orchestrator_scan_mixin import OrchestratorScanMixin
 from .mixins.orchestrator_results_mixin import OrchestratorResultsMixin
-
-if TYPE_CHECKING:
-    from src.infrastructure.fleet.fleet_manager import FleetManager
-
-    __version__ = VERSION
+__version__ = VERSION
 
 
 class SelfImprovementOrchestrator(

@@ -25,7 +25,6 @@ except ImportError:
     NUMPY_AVAILABLE = False
     np = None
 
-if TYPE_CHECKING:
     import numpy as np
 import torch
 

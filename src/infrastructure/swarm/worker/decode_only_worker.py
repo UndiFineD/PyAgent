@@ -43,9 +43,6 @@ from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
     KVTransferConfig,
 )
 
-if TYPE_CHECKING:
-    from src.infrastructure.storage.cache.kv_cache_manager import KVCacheManager
-    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
         KVConnectorBase,
     )
 
@@ -147,6 +144,8 @@ class DecodeOnlyWorker:
 
 
 # Lazy loading registration
+from src.infrastructure.storage.cache.kv_cache_manager import KVCacheManager
+from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
 _worker = LazyLoader(
     "src.infrastructure.swarm.worker.decode_only_worker", "DecodeOnlyWorker"
 )

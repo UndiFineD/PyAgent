@@ -18,16 +18,13 @@ from __future__ import annotations
 
 
 import os
+from .subagent_runner import SubagentRunner
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
-if TYPE_CHECKING:
-    from .subagent_runner import SubagentRunner
-
 
 class SubagentStatus:
     """Delegated status/diagnostic manager for SubagentRunner."""

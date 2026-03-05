@@ -50,7 +50,6 @@ from src.infrastructure.swarm.fleet.workflow_state import WorkflowState
 from src.observability.structured_logger import StructuredLogger
 
 # Type Hinting Imports (Phase 106)
-if TYPE_CHECKING:
     pass
 
 # Core Components

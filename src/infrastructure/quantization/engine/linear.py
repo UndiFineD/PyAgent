@@ -5,8 +5,7 @@ from .config import QuantStrategy
 from .base import Quantizer
 from .tensor import QuantizedTensor
 
-if TYPE_CHECKING:
-    from numpy.typing import NDArray
+from numpy.typing import NDArray
 
 
 class LinearQuantizer(Quantizer):

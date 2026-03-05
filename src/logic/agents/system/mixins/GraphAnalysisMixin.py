@@ -2,13 +2,10 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
+from src.logic.agents.system.TopologicalNavigator import TopologicalNavigator
 
 from typing import TYPE_CHECKING, Any
 from src.core.base.BaseUtilities import as_tool
-
-if TYPE_CHECKING:
-    from src.logic.agents.system.TopologicalNavigator import TopologicalNavigator
-
 
 class GraphAnalysisMixin:
     """Mixin for graph analysis and impact assessment in TopologicalNavigator."""

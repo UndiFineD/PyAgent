@@ -12,17 +12,15 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# Factory functions for dataclass default fields.
+# Isolated from model definitions to prevent circularity during analysis.
 
-"""
-Factory functions for dataclass default fields.
-Isolated from model definitions to prevent circularity during analysis.
-"""
-
+from .core_enums import AgentEvent, FilePriority
 from typing import TYPE_CHECKING, Any, Callable
 
-if TYPE_CHECKING:
-    from .base_models import ConfigProfile, ModelConfig
-    from .core_enums import AgentEvent, FilePriority
+from .base_models import ConfigProfile, ModelConfig
+
+
 
 
 def _empty_agent_event_handlers() -> dict[AgentEvent, list[Callable[..., None]]]:
@@ -30,7 +28,7 @@ def _empty_agent_event_handlers() -> dict[AgentEvent, list[Callable[..., None]]]
     return {}
 
 
-def _empty_dict_str_configprofile() -> dict[str, ConfigProfile]:
+def _empty_dict_str_configprofile() -> dict[str, "ConfigProfile"]:
     """Factory for ConfigProfile dict."""
     return {}
 
@@ -40,7 +38,7 @@ def _empty_dict_str_filepriority() -> dict[str, FilePriority]:
     return {}
 
 
-def _empty_dict_str_modelconfig() -> dict[str, ModelConfig]:
+def _empty_dict_str_modelconfig() -> dict[str, "ModelConfig"]:
     """Factory for ModelConfig dict."""
     return {}
 

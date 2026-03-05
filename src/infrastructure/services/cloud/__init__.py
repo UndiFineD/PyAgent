@@ -16,6 +16,7 @@ Cloud Infrastructure Module shim.
 
 Lightweight shim that exposes a few names lazily for tests. Avoids heavy
 imports during pytest collection.
+from .base import CloudProviderBase, InferenceRequest, InferenceResponse
 """
 
 
@@ -30,8 +31,4 @@ def __getattr__(name: str) -> Any:
 
         return {"CloudProviderBase": CloudProviderBase, "InferenceRequest": InferenceRequest, "InferenceResponse": InferenceResponse}[name]
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
-
-
-if TYPE_CHECKING:
-    from .base import CloudProviderBase, InferenceRequest, InferenceResponse
 

@@ -19,14 +19,14 @@ import json
 import logging
 import os
 import sys
+from src.core.base.AgentPluginBase import AgentPluginBase
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Type, TYPE_CHECKING
 
 from src.core.base.version import VERSION, SDK_VERSION
 
-if TYPE_CHECKING:
-    from src.core.base.AgentPluginBase import AgentPluginBase
+    pass
 
     # Optional import for VersionGate
 try:

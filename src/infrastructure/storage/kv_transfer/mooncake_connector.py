@@ -56,8 +56,6 @@ except ImportError:
         KVTransferConfig,
     )
 
-if TYPE_CHECKING:
-    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
         ForwardContext,
     )
 
@@ -384,6 +382,7 @@ class MooncakeConnector(KVConnectorBase):
 
 
 # Lazy loading registration
+from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
 _connector = LazyLoader(
     "src.infrastructure.storage.kv_transfer.mooncake_connector", "MooncakeConnector"
 )

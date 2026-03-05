@@ -1,10 +1,7 @@
 from __future__ import annotations
+from src.infrastructure.network.http.connection import HTTPConnection
 from pathlib import Path
 from typing import Any, Callable, Mapping, TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from src.infrastructure.network.http.connection import HTTPConnection
-
 
 class SyncHTTPMixin:
     """Mixin providing synchronous HTTP methods."""

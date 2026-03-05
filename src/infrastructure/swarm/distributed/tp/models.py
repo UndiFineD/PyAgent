@@ -24,7 +24,6 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
     pass
 
 logger = logging.getLogger(__name__)

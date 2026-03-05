@@ -37,8 +37,8 @@ class LLMClient:
         self._max_cache_size = 1000
 
     def _get_cache_key(self, provider: str, model: str, prompt: str, system_prompt: str) -> str:
-    import hashlib
         combined = f"{provider}:{model}:{system_prompt}:{prompt}"
+        import hashlib
         return hashlib.sha256(combined.encode()).hexdigest()
 
     def _load_conn_status(self) -> Dict[str, Dict[str, Any]]:

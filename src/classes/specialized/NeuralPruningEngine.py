@@ -26,14 +26,11 @@ import time
 import os
 import re
 import numpy as np
+from src.infrastructure.fleet.FleetManager import FleetManager
 from typing import Dict, List, Set, Tuple, Any, TYPE_CHECKING
 from src.core.base.core.PruningCore import PruningCore, SynapticWeight
 
 __version__ = VERSION
-
-if TYPE_CHECKING:
-    from src.infrastructure.fleet.FleetManager import FleetManager
-
 
 class NeuralPruningEngine:
     """

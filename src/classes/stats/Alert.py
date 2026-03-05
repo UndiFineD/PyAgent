@@ -5,7 +5,7 @@ except Exception:
     try:
         from src.observability.stats.ab_engine import Alert as _Alert
     except Exception:
-from src.observability.stats.analysis import Alert as _Alert
+    from src.observability.stats.analysis import Alert as _Alert
 
 Alert = _Alert
 

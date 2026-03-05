@@ -41,7 +41,6 @@ _T = TypeVar("_T", bound=type)
 _V = TypeVar("_V")
 _Base = TypeVar("_Base")
 
-if TYPE_CHECKING:
     from typing import ClassVar
 
     _T = TypeVar("_T", bound=type)

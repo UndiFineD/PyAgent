@@ -20,30 +20,6 @@ from typing import (
     Union,
 )
 
-if TYPE_CHECKING:
-    from vllm.engine.async_llm_engine import AsyncLLMEngine
-    from vllm.engine.arg_utils import AsyncEngineArgs
-
-    # Copyright 2026 PyAgent Authors
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-
-"""
-Async vLLM Engine Integration.
-
-Provides high-throughput async inference using vLLM's AsyncLLMEngine.
-Inspired by vLLM's v1/engine/async_llm_engine.py patterns.
-"""
-
 
 
 # Check vLLM availability
@@ -59,6 +35,13 @@ except ImportError:
     HAS_ASYNC_VLLM = False
     AsyncEngineArgs = None
     SamplingParams = None
+
+"""
+Async vLLM Engine Integration.
+
+Provides high-throughput async inference using vLLM's AsyncLLMEngine.
+Inspired by vLLM's v1/engine/async_llm_engine.py patterns.
+"""
 
 
 class RequestState(Enum):
@@ -520,6 +503,8 @@ class AsyncVllmEngine:
 
 
 # Convenience function for quick async generation
+from vllm.engine.async_llm_engine import AsyncLLMEngine
+from vllm.engine.arg_utils import AsyncEngineArgs
 async def async_generate(
     prompt: str,
     model: str = "meta-llama/Llama-3-8B-Instruct",

@@ -32,7 +32,6 @@ from pathlib import Path
 from typing import Any, Optional, Type, TYPE_CHECKING
 from collections.abc import Callable
 
-if TYPE_CHECKING:
     from .agent import BaseAgent
 
 try:

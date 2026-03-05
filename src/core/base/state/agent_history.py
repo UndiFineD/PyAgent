@@ -19,13 +19,12 @@ Extracted from BaseAgent for decomposition.
 
 
 import logging
+from src.core.base.lifecycle.agent_core import BaseCore
+from src.core.base.lifecycle.base_agent_core import BaseAgentCore
 from typing import TYPE_CHECKING
 
 from src.core.base.common.models import ConversationMessage, MessageRole
 
-if TYPE_CHECKING:
-    from src.core.base.lifecycle.agent_core import BaseCore
-    from src.core.base.lifecycle.base_agent_core import BaseAgentCore
 
 
 class AgentConversationHistory:

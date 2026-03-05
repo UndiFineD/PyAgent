@@ -13,25 +13,21 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Built-in system commands for slash commands.
-"""
-
-
 import os
 import platform
 import sys
 import time
+from ..registry import CommandRegistry
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING
 
 from ..base import CommandContext, CommandResult
 
-if TYPE_CHECKING:
-    from ..registry import CommandRegistry
+"""
+Built-in system commands for slash commands.
+"""
 
-
-    _builtins_registered = False
+_builtins_registered = False
 
 
 def register_system_commands(registry: CommandRegistry, start_time: float) -> None:

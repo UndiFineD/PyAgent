@@ -7,6 +7,10 @@ Implementation of Adaptive Replacement Cache (ARC) and variants.
 
 import time
 import threading
+import torch
+from src.infrastructure.kv_transfer.arc.backend import Backend
+from src.infrastructure.kv_transfer.arc.types import LoadStoreSpec
+from src.infrastructure.kv_transfer.KVzap import KVzapPruner, KVzapConfig
 from collections import OrderedDict
 from typing import Any, Optional, TYPE_CHECKING
 from src.infrastructure.kv_transfer.arc.base import OffloadingManager
@@ -17,12 +21,6 @@ from src.infrastructure.kv_transfer.arc.types import (
     OffloadingEvent,
     PrepareStoreOutput,
 )
-
-if TYPE_CHECKING:
-    import torch
-    from src.infrastructure.kv_transfer.arc.backend import Backend
-    from src.infrastructure.kv_transfer.arc.types import LoadStoreSpec
-    from src.infrastructure.kv_transfer.KVzap import KVzapPruner, KVzapConfig
 
 
 class ARCOffloadManager(OffloadingManager):

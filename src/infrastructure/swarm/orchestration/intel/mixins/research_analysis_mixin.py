@@ -10,10 +10,9 @@ Research analysis mixin.py module.
 import contextlib
 import os
 import time
+from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import (
 from typing import TYPE_CHECKING, Any
 
-if TYPE_CHECKING:
-    from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import (
         SelfImprovementAnalysis,
     )
 

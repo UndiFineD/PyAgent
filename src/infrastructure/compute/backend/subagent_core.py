@@ -20,6 +20,7 @@ from __future__ import annotations
 import logging
 import os
 import time
+from .subagent_runner import SubagentRunner
 from typing import TYPE_CHECKING, Any
 
 from src.core.base.lifecycle.version import VERSION  # pylint: disable=import-error
@@ -28,8 +29,6 @@ from .runner_backends import BackendHandlers
 
 __version__ = VERSION
 
-if TYPE_CHECKING:
-    from .subagent_runner import SubagentRunner
 
 
 class SubagentCore:

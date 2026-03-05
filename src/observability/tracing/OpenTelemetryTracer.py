@@ -43,11 +43,6 @@ TRACE_HEADERS = ["traceparent", "tracestate"]
 
 # Track if OpenTelemetry is available
 OTEL_IMPORT_ERROR_TRACEBACK: str | None = None
-
-if TYPE_CHECKING:
-    from opentelemetry.context.context import Context
-    from opentelemetry.trace import SpanKind, Tracer, Span, get_current_span
-
 # Type stubs for when otel is not available (runtime)
 if not TYPE_CHECKING:
     Context = Any
@@ -582,6 +577,8 @@ def get_null_tracer() -> NullTracer:
 # ============================================================================
 # Exports
 # ============================================================================
+from opentelemetry.context.context import Context
+from opentelemetry.trace import SpanKind, Tracer, Span, get_current_span
 __all__ = [
     # Constants
     "TRACE_HEADERS",

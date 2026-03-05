@@ -12,6 +12,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from .adapter import LoRAAdapter
 
 """
 Weights.py module.
@@ -22,10 +23,6 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, List, Optional, Set
 
 import numpy as np
-
-if TYPE_CHECKING:
-    from .adapter import LoRAAdapter
-
 
 @dataclass
 class LoRAWeights:

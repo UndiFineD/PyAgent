@@ -8,11 +8,8 @@ Fleet routing mixin.py module.
 
 
 import logging
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-
     from src.core.base.lifecycle.version import SDK_VERSION
     from src.infrastructure.swarm.fleet.remote_agent_proxy import RemoteAgentProxy
     from src.infrastructure.swarm.fleet.version_gate import VersionGate

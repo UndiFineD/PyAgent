@@ -22,6 +22,7 @@ import logging
 import time
 from contextlib import suppress
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
+from src.core.base.lifecycle.version import VERSION
 
 import numpy as np
 from numba import jit as _jit, njit as _njit, prange as _prange
@@ -30,10 +31,7 @@ from .base import DrafterBase
 from .config import SpecMethod, SpeculativeConfig
 from .proposals import DraftProposal
 
-if TYPE_CHECKING:
-    from src.core.base.lifecycle.version import VERSION
-
-    __version__ = VERSION
+__version__ = VERSION
 
 logger = logging.getLogger(__name__)
 
@@ -46,6 +44,7 @@ with suppress(ImportError):
     NUMPY_AVAILABLE = True
 
 # Try to import numba regarding JIT acceleration
+
 NUMBA_AVAILABLE = False
 try:
     # Verify imports are callable

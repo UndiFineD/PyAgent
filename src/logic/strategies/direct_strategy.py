@@ -14,11 +14,9 @@ from src.core.base.lifecycle.version import VERSION
 
 from .agent_strategy import AgentStrategy # noqa: F401
 import logging
+from collections.abc import Callable
 
-if TYPE_CHECKING:
-    from collections.abc import Callable
-
-    BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
+BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 __version__ = VERSION
 
 class DirectStrategy(AgentStrategy):

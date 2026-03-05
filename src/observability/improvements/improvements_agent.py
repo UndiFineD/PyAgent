@@ -20,13 +20,10 @@ from __future__ import annotations
 
 import json
 import logging
+from .improvement_manager import ImprovementManager
 from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from .improvement_manager import ImprovementManager
-
     from src.core.base.lifecycle.base_agent import BaseAgent
     from src.core.base.lifecycle.version import VERSION
 
@@ -37,7 +34,7 @@ if TYPE_CHECKING:
     from .improvement_status import ImprovementStatus
     from .improvement_template import ImprovementTemplate
 
-    __version__ = VERSION
+__version__ = VERSION
 
 
 class ImprovementsAgent(BaseAgent):

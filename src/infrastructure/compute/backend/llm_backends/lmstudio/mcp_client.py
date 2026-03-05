@@ -20,12 +20,9 @@ LM Studio MCP client and SDK session management.
 
 import inspect
 import logging
+import lmstudio
 from typing import TYPE_CHECKING, Any, Optional
-
-if TYPE_CHECKING:
-    import lmstudio
-
-    logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class MCPClient:

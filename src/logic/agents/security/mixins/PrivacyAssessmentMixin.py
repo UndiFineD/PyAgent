@@ -4,11 +4,8 @@ from __future__ import annotations
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 import time
+from src.logic.agents.security.ComplianceAgent import ComplianceAgent
 from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from src.logic.agents.security.ComplianceAgent import ComplianceAgent
-
 
 class PrivacyAssessmentMixin:
     """Mixin for conducting Privacy Impact Assessments in ComplianceAgent."""

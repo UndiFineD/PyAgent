@@ -20,14 +20,13 @@ import logging
 import time
 import inspect
 import asyncio
+from .FleetManager import FleetManager
 from typing import Any, TYPE_CHECKING
 from src.core.base.models import AgentPriority
 from src.infrastructure.fleet.WorkflowState import WorkflowState
 
 __version__ = VERSION
 
-if TYPE_CHECKING:
-    from .FleetManager import FleetManager
 
 
 class FleetExecutionCore:
@@ -42,7 +41,6 @@ class FleetExecutionCore:
         if ethics_report["status"] == "rejected":
             logging.error(f"Ethics Review REJECTED: {ethics_report['violations']}")
             # Fire-and-forget signal (it's sync but emit is usually async-safe or handled)
-            import asyncio
 
             try:
                 loop = asyncio.get_running_loop()
@@ -180,7 +178,6 @@ class FleetExecutionCore:
         if not agent:
             err = f"Error: Agent '{agent_name}' not found."
             # Fire-and-forget signal emmission
-            import asyncio
 
             try:
                 loop = asyncio.get_running_loop()
@@ -212,8 +209,6 @@ class FleetExecutionCore:
         self.fleet.telemetry.start_trace(trace_id)
 
         # Signal start
-        # Signal start
-        import asyncio
 
         try:
             loop = asyncio.get_running_loop()

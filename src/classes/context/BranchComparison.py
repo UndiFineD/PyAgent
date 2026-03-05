@@ -1,23 +1,20 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+from src.classes.base_agent import BaseAgent
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+import hashlib
+import json
+import logging
+import re
+import zlib
 
 """Auto-extracted class from agent_context.py"""
 
 
 from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from src.classes.base_agent import BaseAgent
-    from dataclasses import dataclass, field
-    from datetime import datetime
-    from enum import Enum
-    from pathlib import Path
-    import hashlib
-    import json
-    import logging
-    import re
-    import zlib
-
 
 @dataclass
 class BranchComparison:

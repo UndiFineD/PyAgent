@@ -44,7 +44,6 @@ from src.infrastructure.kv_transfer.KVTransferConnector import (
     KVConnectorMetadata,
 )
 
-if TYPE_CHECKING:
     from src.infrastructure.kv_transfer.KVTransferConnector import ForwardContext
 
 logger = logging.getLogger(__name__)

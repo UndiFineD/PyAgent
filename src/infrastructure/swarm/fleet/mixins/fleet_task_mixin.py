@@ -8,13 +8,10 @@ Fleet task mixin.py module.
 
 
 import logging
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 from typing import TYPE_CHECKING, Any
 
 from src.core.base.common.models import AgentPriority
-
-if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-
 
 class FleetTaskMixin:
     """Mixin for task execution, preemption, and consensus management in FleetManager."""

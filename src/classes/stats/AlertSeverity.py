@@ -5,7 +5,7 @@ except Exception:
     try:
         from src.observability.stats.ab_engine import AlertSeverity as _AlertSeverity
     except Exception:
-from src.observability.stats.analysis import AlertSeverity as _AlertSeverity
+    from src.observability.stats.analysis import AlertSeverity as _AlertSeverity
 
 AlertSeverity = _AlertSeverity
 

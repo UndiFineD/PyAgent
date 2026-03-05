@@ -8,8 +8,7 @@ from dataclasses import dataclass
 import numpy as np
 from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from numpy.typing import NDArray
+from numpy.typing import NDArray
 
 
 @dataclass

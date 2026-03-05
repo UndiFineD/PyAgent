@@ -12,6 +12,8 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import numpy as np
+import torch
 
 """
 CpuGpuBuffer - Efficient CPU-GPU tensor transfer utilities.
@@ -40,11 +42,6 @@ try:
 except ImportError:
     NUMPY_AVAILABLE = False
     np = None
-
-if TYPE_CHECKING:
-    import numpy as np
-    import torch
-
     __all__ = [
     "CpuGpuBuffer",
     "is_pin_memory_available",

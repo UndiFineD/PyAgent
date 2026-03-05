@@ -19,12 +19,11 @@ from typing import TYPE_CHECKING
 import pytest
 
 # Add src to path for imports
+from infrastructure.dev import test_utils as test_utils_init
 src_path = Path(__file__).parent.parent.parent
 if str(src_path) not in sys.path:
     sys.path.insert(0, str(src_path))
 
-if TYPE_CHECKING:
-    from infrastructure.dev import test_utils as test_utils_init
 else:
     try:
         from infrastructure.dev import test_utils

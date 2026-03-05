@@ -31,7 +31,6 @@ from src.infrastructure.storage.kv_transfer.arc.types import (
 from src.infrastructure.storage.kv_transfer.k_vzap import (KVzapConfig,
                                                            KVzapPruner)
 
-if TYPE_CHECKING:
     import torch
 
 from src.infrastructure.storage.kv_transfer.arc.backend import Backend

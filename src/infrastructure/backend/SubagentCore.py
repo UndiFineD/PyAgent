@@ -21,13 +21,12 @@ from src.core.base.Version import VERSION
 import logging
 import os
 import time
+from .SubagentRunner import SubagentRunner
 from typing import TYPE_CHECKING
 from .RunnerBackends import BackendHandlers
 
 __version__ = VERSION
 
-if TYPE_CHECKING:
-    from .SubagentRunner import SubagentRunner
 
 
 class SubagentCore:

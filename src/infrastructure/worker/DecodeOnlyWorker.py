@@ -40,12 +40,7 @@ from src.infrastructure.kv_transfer.KVTransferConnector import (
     KVTransferConfig,
     KVConnectorRole,
 )
-
-if TYPE_CHECKING:
-    from src.infrastructure.kv_transfer.KVTransferConnector import KVConnectorBase
-    from src.infrastructure.cache.KVCacheManager import KVCacheManager
-
-    logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class DecodeOnlyWorker:
@@ -142,4 +137,6 @@ class DecodeOnlyWorker:
 
 
 # Lazy loading registration
+from src.infrastructure.kv_transfer.KVTransferConnector import KVConnectorBase
+from src.infrastructure.cache.KVCacheManager import KVCacheManager
 _worker = LazyLoader("src.infrastructure.worker.DecodeOnlyWorker", "DecodeOnlyWorker")

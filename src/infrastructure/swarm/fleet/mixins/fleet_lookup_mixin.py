@@ -8,16 +8,15 @@ Fleet lookup mixin.py module.
 
 
 import logging
+from src.infrastructure.compute.backend.local_context_recorder import (
+from src.infrastructure.compute.backend.sql_metadata_handler import (
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 from typing import TYPE_CHECKING, Any
 
-if TYPE_CHECKING:
-    from src.infrastructure.compute.backend.local_context_recorder import (
         LocalContextRecorder,
     )
-    from src.infrastructure.compute.backend.sql_metadata_handler import (
         SqlMetadataHandler,
     )
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
     # Note: runtime imports avoided to prevent circular imports; type-only imports above
     from src.infrastructure.swarm.orchestration.healing.self_healing_orchestrator import (

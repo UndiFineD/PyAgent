@@ -22,11 +22,8 @@ Privacy scanner mixin.py module.
 
 
 import re
+from src.logic.agents.security.compliance_agent import ComplianceAgent
 from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from src.logic.agents.security.compliance_agent import ComplianceAgent
-
 
 class PrivacyScannerMixin:
     """Mixin for PII scanning and masking in ComplianceAgent."""

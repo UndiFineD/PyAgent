@@ -1,4 +1,7 @@
 from __future__ import annotations
+from .bedrock import AWSBedrockConnector
+from .gemini import GeminiConnector
+from .groq import GroqConnector
 
 
 from typing import TYPE_CHECKING, Any
@@ -26,7 +29,3 @@ def __getattr__(name: str) -> Any:
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
-if TYPE_CHECKING:
-    from .bedrock import AWSBedrockConnector
-    from .gemini import GeminiConnector
-    from .groq import GroqConnector

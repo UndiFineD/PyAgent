@@ -13,9 +13,6 @@ from src.infrastructure.kv_transfer.arc.types import (
     PrepareStoreOutput,
 )
 
-if TYPE_CHECKING:
-    pass
-
 
 class OffloadingManager(ABC):
     """Abstract base for offloading managers."""

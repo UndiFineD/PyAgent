@@ -12,6 +12,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
+from src.core.base.common.batch_core import BatchCore
 
 """
 Manager regarding batch processing.
@@ -21,13 +22,9 @@ Manager regarding batch processing.
 
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
-
 from src.core.base.common.models import BatchRequest
 
-if TYPE_CHECKING:
-    from src.core.base.common.batch_core import BatchCore
-
-    __all__ = ["BatchRequest", "RequestBatcher"]
+__all__ = ["BatchRequest", "RequestBatcher"]
 
 
 @dataclass

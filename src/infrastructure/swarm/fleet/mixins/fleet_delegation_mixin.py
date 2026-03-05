@@ -8,11 +8,8 @@ Fleet delegation mixin.py module.
 
 
 import logging
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-
     import asyncio
 
 

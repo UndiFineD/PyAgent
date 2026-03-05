@@ -33,7 +33,6 @@ except ImportError:
     NUMPY_AVAILABLE = False
     np = None
 
-if TYPE_CHECKING:
     import torch
 
 __all__ = [

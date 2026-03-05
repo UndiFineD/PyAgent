@@ -20,13 +20,10 @@ Config.py module.
 
 
 import hashlib
+from src.infrastructure.engine.decoding.grammar.base import StructuredOutputGrammar
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import TYPE_CHECKING, Optional
-
-if TYPE_CHECKING:
-    from src.infrastructure.engine.decoding.grammar.base import StructuredOutputGrammar
-
 
 class GrammarType(Enum):
     """Types of grammar constraints supported."""

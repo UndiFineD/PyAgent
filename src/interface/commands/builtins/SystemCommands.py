@@ -8,14 +8,11 @@ import os
 import platform
 import sys
 import time
+from ..Registry import CommandRegistry
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING
 
 from ..Base import CommandContext, CommandResult
-
-if TYPE_CHECKING:
-    from ..Registry import CommandRegistry
-
 
     _builtins_registered = False
 

@@ -13,6 +13,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
+import torch
 
 """
 LogitsProcessor - Composable token filtering pipeline.
@@ -43,10 +44,6 @@ try:
 except ImportError:
     RUST_AVAILABLE = False
     rust_core = None
-
-if TYPE_CHECKING:
-    import torch
-
     __all__ = [
         "LogitsProcessor",
         "LogitsProcessorList",

@@ -6,17 +6,15 @@ KV Connector for decode instance benchmarking.
 """
 
 import logging
-from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
-from src.infrastructure.kv_transfer.connector.base import KVConnectorBase
-from src.infrastructure.kv_transfer.connector.types import KVConnectorMetadata
-
-if TYPE_CHECKING:
-    from src.infrastructure.kv_transfer.connector.types import (
+from src.infrastructure.kv_transfer.connector.types import (
         KVTransferConfig,
         ForwardContext,
         Request,
         KVCacheBlocks,
     )
+from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
+from src.infrastructure.kv_transfer.connector.base import KVConnectorBase
+from src.infrastructure.kv_transfer.connector.types import KVConnectorMetadata
 
 logger = logging.getLogger(__name__)
 

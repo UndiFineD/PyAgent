@@ -22,6 +22,7 @@ import importlib
 import logging
 import os
 import json
+from .FleetManager import FleetManager
 from typing import Any, TYPE_CHECKING
 from collections.abc import Iterable
 from pathlib import Path
@@ -30,12 +31,8 @@ from src.logic.agents.system.MCPAgent import MCPAgent
 from .AgentRegistryCore import AgentRegistryCore
 from .BootstrapConfigs import BOOTSTRAP_AGENTS
 from src.core.base.Version import SDK_VERSION
-
-if TYPE_CHECKING:
-    from .FleetManager import FleetManager
-
     # Import local version for gatekeeping
-    __version__ = VERSION
+__version__ = VERSION
 
 
 class LazyAgentMap(dict):

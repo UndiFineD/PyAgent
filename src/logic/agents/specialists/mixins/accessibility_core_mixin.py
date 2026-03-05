@@ -6,6 +6,7 @@ Accessibility core mixin.py module.
 """
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
+from src.logic.agents.specialists.accessibility_agent import \
 
 
 from typing import TYPE_CHECKING
@@ -17,8 +18,6 @@ from src.core.base.common.types.accessibility_severity import \
     ColorContrastResult
 from src.core.base.common.types.wcag_level import WCAGLevel
 
-if TYPE_CHECKING:
-    from src.logic.agents.specialists.accessibility_agent import \
         AccessibilityAgent
 
 

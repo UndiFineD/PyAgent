@@ -21,15 +21,12 @@ Knowledge pruning engine.py module.
 
 import logging
 import time
+from .knowledge_engine import KnowledgeEngine
 from typing import TYPE_CHECKING, Any
 
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-if TYPE_CHECKING:
-    from .knowledge_engine import KnowledgeEngine
-
-
 class KnowledgePruningEngine:
     """
     Implements neural-inspired pruning for agent knowledge stores (Phase 127).

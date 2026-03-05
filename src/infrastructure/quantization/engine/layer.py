@@ -3,7 +3,6 @@ import numpy as np
 from typing import TYPE_CHECKING, Optional
 from .tensor import QuantizedTensor
 
-if TYPE_CHECKING:
     from numpy.typing import NDArray
 
 

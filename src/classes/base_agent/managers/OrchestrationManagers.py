@@ -18,16 +18,13 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 import random
+from ..agent import BaseAgent
 from dataclasses import dataclass, field
 from typing import Dict, List, TYPE_CHECKING
 from collections.abc import Callable
 from src.core.base.models import ModelConfig, ComposedAgent, _empty_list_float
 
 __version__ = VERSION
-
-if TYPE_CHECKING:
-    from ..agent import BaseAgent
-
 
 class AgentComposer:
     """Composer for multi-agent workflows."""

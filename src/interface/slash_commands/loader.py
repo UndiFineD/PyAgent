@@ -21,12 +21,9 @@ Command loader - discovers and loads command modules.
 
 import importlib
 import importlib.util
+from src.interface.slash_commands.core import CommandRegistry
 from pathlib import Path
 from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from src.interface.slash_commands.core import CommandRegistry
-
     # Track loaded modules
 _loaded_modules: set[str] = set()
 _COMMANDS_LOADED = False

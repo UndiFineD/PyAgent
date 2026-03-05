@@ -28,11 +28,10 @@ from enum import Enum, auto
 from typing import TYPE_CHECKING, Any, Callable
 
 import numpy as np
+from numpy.typing import NDArray
 
-if TYPE_CHECKING:
-    from numpy.typing import NDArray
 
-    # Try to import rust_core for acceleration
+# Try to import rust_core for acceleration
 try:
     import rust_core
     HAS_RUST = True

@@ -2,12 +2,11 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
+from src.infrastructure.fleet.FleetManager import FleetManager
+from src.core.base.BaseAgent import BaseAgent
 
 from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from src.infrastructure.fleet.FleetManager import FleetManager
-    from src.core.base.BaseAgent import BaseAgent
 
 
 class FleetLifecycleMixin:

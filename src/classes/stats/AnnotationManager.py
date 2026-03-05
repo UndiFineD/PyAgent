@@ -5,7 +5,7 @@ except Exception:
     try:
         from src.observability.stats.ab_engine import AnnotationManager as _AnnotationManager
     except Exception:
-from src.observability.stats.analysis import AnnotationManager as _AnnotationManager
+    from src.observability.stats.analysis import AnnotationManager as _AnnotationManager
 
 AnnotationManager = _AnnotationManager
 

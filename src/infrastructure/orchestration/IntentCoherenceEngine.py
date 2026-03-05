@@ -22,14 +22,11 @@ from __future__ import annotations
 
 from src.core.base.version import VERSION
 import logging
+from src.infrastructure.fleet.FleetManager import FleetManager
 from typing import Dict, List, Any, Optional, TYPE_CHECKING
 from datetime import datetime
 
 __version__ = VERSION
-
-if TYPE_CHECKING:
-    from src.infrastructure.fleet.FleetManager import FleetManager
-
 
 class IntentCoherenceEngine:
     """

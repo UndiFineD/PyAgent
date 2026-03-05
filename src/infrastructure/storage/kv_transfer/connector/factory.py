@@ -20,16 +20,13 @@ Registry and factory for KV transfer connectors.
 
 
 import logging
+from src.infrastructure.storage.kv_transfer.connector.base import KVConnectorBase
+from src.infrastructure.storage.kv_transfer.connector.types import KVTransferConfig
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from src.infrastructure.storage.kv_transfer.connector.decode_bench import \
     DecodeBenchConnector
-
-if TYPE_CHECKING:
-    from src.infrastructure.storage.kv_transfer.connector.base import KVConnectorBase
-    from src.infrastructure.storage.kv_transfer.connector.types import KVTransferConfig
-
-    logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
     # ==============================
     # Connector Registry (Beyond vLLM)

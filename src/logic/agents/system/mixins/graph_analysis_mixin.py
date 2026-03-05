@@ -18,14 +18,13 @@ Graph analysis mixin.py module.
 """
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
+from src.logic.agents.system.topological_navigator import \
 
 
 from typing import TYPE_CHECKING, Any
 
 from src.core.base.common.base_utilities import as_tool
 
-if TYPE_CHECKING:
-    from src.logic.agents.system.topological_navigator import \
         TopologicalNavigator
 
 

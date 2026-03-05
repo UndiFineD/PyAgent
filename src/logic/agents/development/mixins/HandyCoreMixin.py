@@ -4,11 +4,8 @@ from __future__ import annotations
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 import time
+from src.logic.agents.development.HandyAgent import HandyAgent
 from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from src.logic.agents.development.HandyAgent import HandyAgent
-
 
 class HandyCoreMixin:
     """Mixin for core recording and evaluation logic in HandyAgent."""

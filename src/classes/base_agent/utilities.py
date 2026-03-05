@@ -29,13 +29,10 @@ import logging
 import argparse
 import os
 import sys
+from .agent import BaseAgent
 from pathlib import Path
 from typing import Any, Optional, Type, TYPE_CHECKING
 from collections.abc import Callable
-
-if TYPE_CHECKING:
-    from .agent import BaseAgent
-
 try:
     from src.logic.strategies import plan_executor as agent_strategies
 except ImportError:

@@ -37,7 +37,6 @@ except ImportError:
     RUST_AVAILABLE = False
     rust_core = None
 
-if TYPE_CHECKING:
     import torch
 
 __all__ = [

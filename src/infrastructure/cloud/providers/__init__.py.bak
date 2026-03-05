@@ -47,7 +47,6 @@ def __getattr__(name: str):
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
-if TYPE_CHECKING:
     from .gemini import GeminiConnector
 from .bedrock import AWSBedrockConnector
 from .groq import GroqConnector

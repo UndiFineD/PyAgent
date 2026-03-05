@@ -23,12 +23,9 @@ import asyncio
 import logging
 import time
 import threading
+from src.infrastructure.swarm.network.http.connection import HTTPConnection
 from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from src.infrastructure.swarm.network.http.connection import HTTPConnection
-
-    logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class RetryHTTPMixin:

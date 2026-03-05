@@ -12,12 +12,8 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-Phase 45: Engine Client Factory
-Factory functions for creating engine clients.
-"""
-
+from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
+from src.infrastructure.engine.engine_client.types import (ClientMode, EngineClientConfig)
 
 from typing import TYPE_CHECKING, Callable, Optional
 
@@ -25,15 +21,13 @@ from src.infrastructure.engine.engine_client.async_mp import AsyncMPClient
 from src.infrastructure.engine.engine_client.dp_async import DPAsyncMPClient
 from src.infrastructure.engine.engine_client.inproc import InprocClient
 from src.infrastructure.engine.engine_client.sync_mp import SyncMPClient
-from src.infrastructure.engine.engine_client.types import (ClientMode,
-                                                           EngineClientConfig)
 
-if TYPE_CHECKING:
-    from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
-    from src.infrastructure.engine.engine_client.types import (
-        EngineOutput,
-        SchedulerOutput,
-    )
+
+
+"""
+Phase 45: Engine Client Factory
+Factory functions for creating engine clients.
+"""
 
 
 def auto_select_client_mode(num_gpus: int = 1, use_dp: bool = False) -> ClientMode:

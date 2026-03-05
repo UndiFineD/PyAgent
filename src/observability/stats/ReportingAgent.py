@@ -22,7 +22,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 from src.core.base.BaseAgent import BaseAgent
 
-if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
 
 

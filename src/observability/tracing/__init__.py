@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
+from .open_telemetry_tracer import (
 
 """Lazy-loading entry point for observability.tracing."""
 
@@ -9,8 +10,6 @@ from typing import Any, TYPE_CHECKING
 from src.core.base.lifecycle.version import VERSION
 from src.core.lazy_loader import ModuleLazyLoader
 
-if TYPE_CHECKING:
-    from .open_telemetry_tracer import (
         NullSpan,
         NullTracer,
         SpanAttributes,

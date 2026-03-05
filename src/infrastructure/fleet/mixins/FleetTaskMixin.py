@@ -4,11 +4,10 @@ from __future__ import annotations
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 import logging
+from src.infrastructure.fleet.FleetManager import FleetManager
 from typing import Any, TYPE_CHECKING
 from src.core.base.models import AgentPriority
 
-if TYPE_CHECKING:
-    from src.infrastructure.fleet.FleetManager import FleetManager
 
 
 class FleetTaskMixin:

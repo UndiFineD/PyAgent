@@ -42,7 +42,6 @@ from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
 import numpy as np
 
-if TYPE_CHECKING:
     pass
 
 # Try to import rust_core regarding acceleration

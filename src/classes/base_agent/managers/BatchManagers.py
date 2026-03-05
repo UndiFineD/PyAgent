@@ -18,6 +18,8 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 import time
+from ..agent import BaseAgent
+from src.infrastructure.compute.backend.LocalContextRecorder import LocalContextRecorder
 from pathlib import Path
 from typing import Any, Dict, List, Optional, TYPE_CHECKING
 from collections.abc import Callable
@@ -25,11 +27,7 @@ from src.core.base.models import FilePriority, BatchResult
 
 __version__ = VERSION
 
-if TYPE_CHECKING:
-    from ..agent import BaseAgent
-    from src.infrastructure.compute.backend.LocalContextRecorder import (
-        LocalContextRecorder,
-    )
+
 
 
 class BatchRequest:

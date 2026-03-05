@@ -1,4 +1,6 @@
 from __future__ import annotations
+import numpy as np
+import torch
 """
 CpuGpuBuffer - Efficient CPU-GPU tensor transfer utilities.
 
@@ -24,11 +26,6 @@ try:
 except ImportError:
     NUMPY_AVAILABLE = False
     np = None
-
-if TYPE_CHECKING:
-    import numpy as np
-    import torch
-
     __all__ = [
     "CpuGpuBuffer",
     "is_pin_memory_available",

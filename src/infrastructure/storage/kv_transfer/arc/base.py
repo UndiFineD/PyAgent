@@ -25,7 +25,6 @@ from typing import TYPE_CHECKING
 from src.infrastructure.storage.kv_transfer.arc.types import (
     BlockHash, LoadStoreSpec, PrepareStoreOutput)
 
-if TYPE_CHECKING:
     pass
 
 

@@ -54,8 +54,6 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
-if TYPE_CHECKING:
-    from numpy.random import Generator
     from numpy.typing import NDArray
 
     # Try to import rust_core regarding acceleration
@@ -573,6 +571,7 @@ class GumbelSoftmaxSampler:
 
 
 # Factory functions
+from numpy.random import Generator
 def create_sampler(
     backend: str = "numpy",
     variant: str = "standard",

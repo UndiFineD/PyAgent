@@ -38,7 +38,7 @@ class GitHubModelsBackend:
     ) -> None:
         """
         Initializes the GitHubModelsBackend.
-        """"
+        """
         self.session = session
         self.connectivity = connectivity
         self.recorder = recorder

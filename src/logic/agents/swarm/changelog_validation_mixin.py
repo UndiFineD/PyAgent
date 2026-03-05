@@ -25,11 +25,8 @@ Changelog validation mixin.py module.
 
 
 import re
+from .changelog_entry import ChangelogEntry
 from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from .changelog_entry import ChangelogEntry
-
 
 class ChangelogValidationMixin:
     """Mixin for validating changelog entries and content."""

@@ -20,14 +20,11 @@ Meta orchestrator agent.py module.
 
 import json
 import logging
+from src.core.knowledge.GlobalContext import GlobalContext
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 from typing import TYPE_CHECKING, Any
 
 from src.core.base.lifecycle.base_agent import BaseAgent
-
-if TYPE_CHECKING:
-    from src.core.knowledge.GlobalContext import GlobalContext
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-
 
 class MetaOrchestratorAgent(BaseAgent):
     """

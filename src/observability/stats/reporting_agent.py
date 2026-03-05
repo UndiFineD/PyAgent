@@ -25,7 +25,6 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 
 from .transparency_agent import TransparencyAgent
 
-if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 

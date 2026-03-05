@@ -10,7 +10,6 @@ Fleet lookup mixin.py module.
 import logging
 from typing import TYPE_CHECKING, Any
 
-if TYPE_CHECKING:
 from src.infrastructure.compute.backend.local_context_recorder import \
         LocalContextRecorder
 from src.infrastructure.compute.backend.sql_metadata_handler import SqlMetadataHandler

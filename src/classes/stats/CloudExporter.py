@@ -5,7 +5,7 @@ except Exception:
     try:
         from src.observability.stats.ab_engine import CloudExporter as _CloudExporter
     except Exception:
-from src.observability.stats.analysis import CloudExporter as _CloudExporter
+    from src.observability.stats.analysis import CloudExporter as _CloudExporter
 
 CloudExporter = _CloudExporter
 

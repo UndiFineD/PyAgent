@@ -1,18 +1,15 @@
 # SPDX-License-Identifier: Apache-2.0
+from .types import TokenizerLike, DetokenizeResult
+from .stop_checker import StopChecker
+from .base import IncrementalDetokenizer
+from .fast import FastIncrementalDetokenizer
+from .slow import SlowIncrementalDetokenizer
+from .factory import create_detokenizer, detokenize_incrementally
 """
 Incremental detokenization for streaming text generation.
 """
 
 from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from .types import TokenizerLike, DetokenizeResult
-    from .stop_checker import StopChecker
-    from .base import IncrementalDetokenizer
-    from .fast import FastIncrementalDetokenizer
-    from .slow import SlowIncrementalDetokenizer
-    from .factory import create_detokenizer, detokenize_incrementally
-
 def __getattr__(name: str) -> Any:
     if name == "TokenizerLike":
         from .types import TokenizerLike

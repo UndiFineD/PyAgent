@@ -257,8 +257,7 @@ def require_import(module_name: str, package_name: str | None = None) -> Any:
 # Type checking imports pattern
 # Use this pattern in modules for type hints without runtime import cost:
 #
-# if TYPE_CHECKING:
-#     from heavy_module import HeavyClass
+# #     from heavy_module import HeavyClass
 # else:
 #     HeavyClass = None  # or use lazy_import
 

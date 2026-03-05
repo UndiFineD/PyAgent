@@ -14,9 +14,7 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Fleet execution core.py module.
-"""
+# Fleet execution core.py module.
 
 
 import asyncio
@@ -24,7 +22,9 @@ import contextlib
 import inspect
 import logging
 import time
-from typing import TYPE_CHECKING, Any
+from typing import Any, TYPE_CHECKING
+
+    from .fleet_manager import FleetManager
 
 from src.core.base.common.models import AgentPriority
 from src.core.base.lifecycle.version import VERSION
@@ -32,14 +32,11 @@ from src.infrastructure.swarm.fleet.workflow_state import WorkflowState
 
 __version__ = VERSION
 
-if TYPE_CHECKING:
-    from .fleet_manager import FleetManager
-
 
 class FleetExecutionCore:
     """Handles core workflow execution and task reliability logic for the Fleet."""
 
-    def __init__(self, fleet: FleetManager) -> None:
+    def __init__(self, fleet: "FleetManager") -> None:
         self.fleet = fleet
 
     def _check_ethics(self, task: str) -> dict[str, Any]:

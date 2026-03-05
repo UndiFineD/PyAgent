@@ -14,22 +14,21 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Consensus management for the FleetManager."""
+# Consensus management for the FleetManager.
 
 
 import asyncio
 import logging
 import time
-from typing import TYPE_CHECKING, Any
+from typing import Any, TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from .FleetManager import FleetManager
+    from .fleet_manager import FleetManager
 
 
 class FleetConsensusManager:
     """Manages multi-agent consensus workflows."""
 
-    def __init__(self, fleet: FleetManager) -> None:
+    def __init__(self, fleet: "FleetManager") -> None:
         self.fleet = fleet
 
     def execute_with_consensus(

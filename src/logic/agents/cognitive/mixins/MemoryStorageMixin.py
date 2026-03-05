@@ -6,13 +6,9 @@ from __future__ import annotations
 import json
 import time
 import logging
+from src.logic.agents.cognitive.HierarchicalMemoryAgent import HierarchicalMemoryAgent
 from typing import TYPE_CHECKING
 from src.core.base.BaseUtilities import as_tool
-
-if TYPE_CHECKING:
-    from src.logic.agents.cognitive.HierarchicalMemoryAgent import (
-        HierarchicalMemoryAgent,
-    )
 
 
 class MemoryStorageMixin:

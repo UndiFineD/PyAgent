@@ -12,6 +12,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from .tensor import QuantizedTensor
 
 """
 Factory.py module for quantization orchestration.
@@ -24,9 +25,7 @@ import numpy as np
 
 from .config import QuantConfig, QuantScheme, QuantStrategy
 
-if TYPE_CHECKING:
     from numpy.typing import NDArray
-    from .tensor import QuantizedTensor
 
 
 def quantize_tensor(

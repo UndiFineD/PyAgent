@@ -65,6 +65,9 @@ ALGORITHM
           3. Additionally, run a targeted "class-body method repair" pass that
              detects `def NAME(self` lines outside the expected class body indent
              and shifts them (and their body) to the right by the needed amount.
+          4. A new post-processing step fixes lines immediately following an
+             `except` clause that were accidentally dedented.  This ensures any
+             non-blank content in the except block is indented one level.
 
     Phase 3 - Verify:
         Re-compile every file that was modified and report pass/fail.
@@ -339,6 +342,48 @@ def pass_fix_orphan_imports(
 
     return result, changes
 
+def pass_indent_after_except(
+    lines: list[str],
+    verbose: bool = False,
+    focus_lines: set[int] | None = None,
+) -> tuple[list[str], int]:
+    """
+    Ensure the first non-blank line after any `except ...:` is indented
+    one step deeper than the except line itself.  This handles a common
+    code-gen defect where the block header is present but the body loses
+    its leading whitespace.
+
+    If ``focus_lines`` is provided we only examine areas near the reported
+    line numbers (within two lines), keeping the pass efficient for
+    targeting known failures.
+    """
+    result = list(lines)
+    changes = 0
+
+    for i, line in enumerate(lines[:-1]):
+        if _is_blank_or_comment(line):
+            continue
+
+        # optional focus filtering
+        if focus_lines is not None:
+            lineno = i + 1
+            if not any(abs(lineno - f) <= 2 for f in focus_lines):
+                continue
+
+        stripped = line.lstrip()
+        if stripped.startswith("except") and stripped.rstrip().endswith(":"):
+            next_line = result[i + 1]
+            if _is_blank_or_comment(next_line):
+                continue
+            expected_indent = _indent(line) + MIN_INDENT_STEP
+            if _indent(next_line) < expected_indent:
+                result[i + 1] = " " * expected_indent + next_line.lstrip()
+                changes += 1
+                if verbose:
+                    print(
+                        f"        indent-after-except: line {i+2} -> {expected_indent} spaces"
+                    )
+    return result, changes
 
 # ---------------------------------------------------------------------------
 # Pass 2: Fix streams of consecutive wrong-indent lines (not just imports)
@@ -684,13 +729,20 @@ def repair_file(
             lines, verbose=verbose, focus_lines=focus_lines
         )
 
-        pass_stats.append((pass_num, c1, c2, c3))
-        pass_total = c1 + c2 + c3
+        # new pass to fix dedented content after except:
+        if verbose:
+            print(f"      [pass {pass_num}/D] indent-after-except")
+        lines, c4 = pass_indent_after_except(
+            lines, verbose=verbose, focus_lines=focus_lines
+        )
+
+        pass_stats.append((pass_num, c1, c2, c3, c4))
+        pass_total = c1 + c2 + c3 + c4
         total_changes += pass_total
 
         if verbose:
             print(f"      pass {pass_num} result: {pass_total} change(s)  "
-                  f"[A={c1} B={c2} C={c3}]")
+                  f"[A={c1} B={c2} C={c3} D={c4}]")
 
         if lines == prev_lines:
             if verbose:
@@ -701,7 +753,10 @@ def repair_file(
     if verbose and pass_stats:
         print(f"    total passes run: {len(pass_stats)}, total line changes: {total_changes}")
         print("    per-pass summary: " +
-              ", ".join(f"pass{p}={c1+c2+c3}(A={c1},B={c2},C={c3})" for p, c1, c2, c3 in pass_stats))
+              ", ".join(
+                  f"pass{p}={c1+c2+c3+c4}(A={c1},B={c2},C={c3},D={c4})"
+                  for p, c1, c2, c3, c4 in pass_stats
+              ))
 
     return total_changes, _compile_check_lines(lines) is None, lines
 

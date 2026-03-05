@@ -16,13 +16,10 @@ from __future__ import annotations
 
 import logging
 import json
+from src.infrastructure.fleet.FleetManager import FleetManager
+from src.core.knowledge.GlobalContext import GlobalContext
 from typing import Dict, List, Any, TYPE_CHECKING
 from src.core.base.BaseAgent import BaseAgent
-
-if TYPE_CHECKING:
-    from src.infrastructure.fleet.FleetManager import FleetManager
-    from src.core.knowledge.GlobalContext import GlobalContext
-
 
 class MetaOrchestratorAgent(BaseAgent):
     """

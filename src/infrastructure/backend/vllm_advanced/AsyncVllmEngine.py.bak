@@ -20,7 +20,6 @@ from typing import (
     Union,
 )
 
-if TYPE_CHECKING:
     from vllm.engine.async_llm_engine import AsyncLLMEngine
 from vllm.engine.arg_utils import AsyncEngineArgs
 

@@ -34,5 +34,4 @@ def __getattr__(name: str):
         return AzureAIConnector
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
-if TYPE_CHECKING:
     pass

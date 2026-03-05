@@ -33,6 +33,7 @@ except ImportError:
     np = None
 
 # Try Rust acceleration
+import torch
 try:
     import rust_core
 
@@ -40,10 +41,6 @@ try:
 except ImportError:
     RUST_AVAILABLE = False
     rust_core = None
-
-if TYPE_CHECKING:
-    import torch
-
     __all__ = [
         "LogitsProcessor",
         "LogitsProcessorList",

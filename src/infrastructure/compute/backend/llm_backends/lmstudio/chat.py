@@ -20,14 +20,11 @@ LM Studio chat completion handler.
 
 import logging
 import time
+import lmstudio
 from typing import TYPE_CHECKING, Any, Callable, Optional
 
 from .api import LMStudioAPIClient
-
-if TYPE_CHECKING:
-    import lmstudio
-
-    logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class ChatHandler:

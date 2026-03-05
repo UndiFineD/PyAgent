@@ -4,16 +4,13 @@ from __future__ import annotations
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 import logging
+from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+from src.infrastructure.backend.SqlMetadataHandler import SqlMetadataHandler
+from src.observability.stats.MetricsEngine import MetricsEngine
 from typing import Any, TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from src.infrastructure.fleet.FleetManager import FleetManager
-    from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
-    from src.infrastructure.backend.SqlMetadataHandler import SqlMetadataHandler
-    from src.observability.stats.MetricsEngine import (
-        ObservabilityEngine,
-        ModelFallbackEngine,
-    )
+
 from src.infrastructure.orchestration.system.ToolRegistry import ToolRegistry
 from src.infrastructure.orchestration.signals.SignalRegistry import SignalRegistry
 from src.infrastructure.orchestration.healing.SelfHealingOrchestrator import (

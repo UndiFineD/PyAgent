@@ -12,6 +12,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 """Engine for Self-Referential Swarm Optimization.
@@ -22,11 +23,7 @@ Monitors fleet performance and suggests structural or configuration changes.
 from typing import TYPE_CHECKING, Any
 
 from src.core.base.lifecycle.version import VERSION
-
-if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-
-    __version__ = VERSION
+__version__ = VERSION
 
 
 class SwarmOptimizer:

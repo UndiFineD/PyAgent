@@ -18,13 +18,12 @@ from typing import Any
 import importlib
 import json
 import logging
+from src.core.base.AgentPluginBase import AgentPluginBase
 from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING
 from src.core.base.Version import SDK_VERSION
 
-if TYPE_CHECKING:
-    from src.core.base.AgentPluginBase import AgentPluginBase
 
     # Optional import for VersionGate
 try:

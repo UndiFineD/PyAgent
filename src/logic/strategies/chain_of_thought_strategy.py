@@ -9,16 +9,14 @@ Chain of thought strategy.py module.
 
 
 import logging
+from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 from src.core.base.lifecycle.version import VERSION
 
 from .agent_strategy import AgentStrategy
 
-if TYPE_CHECKING:
-    from collections.abc import Callable
-
-    BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
+BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 __version__ = VERSION # This line was moved out of the TYPE_CHECKING block for runtime access.
 
 class ChainOfThoughtStrategy(AgentStrategy):

@@ -2,12 +2,9 @@ from __future__ import annotations
 import asyncio
 import logging
 import time
+from src.infrastructure.network.http.connection import HTTPConnection
 from typing import Any, TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from src.infrastructure.network.http.connection import HTTPConnection
-
-    logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class RetryHTTPMixin:

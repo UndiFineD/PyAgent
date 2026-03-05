@@ -50,7 +50,6 @@ from src.core.rust_bridge import RustBridge
 from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
     KVConnectorBase, KVTransferConfig)
 
-if TYPE_CHECKING:
     from src.infrastructure.storage.kv_transfer.kv_transfer_connector import \
         ForwardContext
 

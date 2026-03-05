@@ -4,11 +4,8 @@ from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 
 import re
+from .ChangelogEntry import ChangelogEntry
 from typing import Any, TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from .ChangelogEntry import ChangelogEntry
-
 
 class ChangelogValidationMixin:
     """Mixin for validating changelog entries and content."""

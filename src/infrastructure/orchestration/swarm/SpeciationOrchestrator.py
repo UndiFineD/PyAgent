@@ -20,13 +20,10 @@ Analyzes task patterns to suggest when new specialized agent types should be cre
 """
 
 import logging
+from src.infrastructure.fleet.FleetManager import FleetManager
 from typing import Dict, List, TYPE_CHECKING
 from src.core.base.Version import VERSION
-
-if TYPE_CHECKING:
-    from src.infrastructure.fleet.FleetManager import FleetManager
-
-    __version__ = VERSION
+__version__ = VERSION
 
 
 class SpeciationOrchestrator:

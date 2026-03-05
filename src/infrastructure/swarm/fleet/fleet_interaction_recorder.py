@@ -14,21 +14,20 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Logic for recording fleet interactions and justifying actions."""
+# Logic for recording fleet interactions and justifying actions.
 
 
 import contextlib
 import time
 from typing import TYPE_CHECKING, Any
 
-if TYPE_CHECKING:
     from .fleet_manager import FleetManager
 
 
 class FleetInteractionRecorder:
     """Handles recording of agent successes and explainability traces."""
 
-    def __init__(self, fleet: FleetManager) -> None:
+    def __init__(self, fleet: "FleetManager") -> None:
         self.fleet = fleet
 
     async def record_success(

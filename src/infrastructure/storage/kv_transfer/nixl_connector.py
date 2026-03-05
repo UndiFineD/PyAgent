@@ -53,8 +53,6 @@ from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
     KVTransferConfig,
 )
 
-if TYPE_CHECKING:
-    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
         ForwardContext,
     )
 
@@ -261,6 +259,7 @@ class NixlConnector(KVConnectorBase):
 
 
 # Lazy loading registration
+from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
 _connector = LazyLoader(
     "src.infrastructure.storage.kv_transfer.nixl_connector", "NixlConnector"
 )

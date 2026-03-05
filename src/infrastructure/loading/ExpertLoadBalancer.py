@@ -41,9 +41,6 @@ from typing import (
     Union,
 )
 
-if TYPE_CHECKING:
-    import torch
-    import numpy as np
 
 try:
     import rust_core
@@ -609,6 +606,8 @@ class AsyncExpertRebalancer:
 
 
 # Rust-accelerated functions
+import torch
+import numpy as np
 def compute_balanced_packing_rust(
     weights: List[List[float]],
     num_packs: int,

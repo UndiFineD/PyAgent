@@ -6,7 +6,6 @@ from .linear import LinearQuantizer
 from .tensor import QuantizedTensor
 from .config import QuantConfig
 
-if TYPE_CHECKING:
     from numpy.typing import NDArray
 
 

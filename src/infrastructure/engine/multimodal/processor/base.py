@@ -23,16 +23,11 @@ import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import (TYPE_CHECKING, Any, Dict, Generic, List, Optional, Tuple,
+from typing import (Any, Dict, Generic, List, Optional, Tuple,
                     TypeVar)
 
 import numpy as np
 
-if TYPE_CHECKING:
-    try:
-        from PIL import Image
-    except ImportError:
-        Image = Any  # type: ignore
 
 logger = logging.getLogger(__name__)
 

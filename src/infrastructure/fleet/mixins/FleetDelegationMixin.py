@@ -8,11 +8,9 @@ from typing import Any, TYPE_CHECKING, TypeVar, Dict
 import logging
 from pathlib import Path
 import asyncio
+from src.infrastructure.fleet.FleetManager import FleetManager
 
-if TYPE_CHECKING:
-    from src.infrastructure.fleet.FleetManager import FleetManager
-
-    T = TypeVar("T", bound="FleetDelegationMixin")
+T = TypeVar("T", bound="FleetDelegationMixin")
 
 
 class FleetDelegationMixin:

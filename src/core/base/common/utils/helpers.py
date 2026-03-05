@@ -13,6 +13,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from src.core.base.common.models.agent_models import AgentPluginConfig
 
 
 """Helper functions for dataclass default factories."""
@@ -47,10 +48,6 @@ __all__ = [
     "_empty_list_dict_str_any",
     "_empty_plugin_config_list",
 ]
-
-if TYPE_CHECKING:
-    from src.core.base.common.models.agent_models import AgentPluginConfig
-
     # Import optional dependencies
 try:
     import requests as _requests

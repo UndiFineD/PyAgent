@@ -9,11 +9,8 @@ Handy core mixin.py module.
 
 
 import time
+from src.logic.agents.specialists.handy_agent import HandyAgent
 from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from src.logic.agents.specialists.handy_agent import HandyAgent
-
 
 class HandyCoreMixin:
     """Mixin for core recording and evaluation logic in HandyAgent."""

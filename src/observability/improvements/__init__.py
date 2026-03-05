@@ -2,74 +2,71 @@
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
+from .access_controller import AccessController
+from .analysis_tool_type import AnalysisToolType
+from .analytics_engine import AnalyticsEngine
+from .archive_manager import ArchiveManager
+from .archived_improvement import ArchivedImprovement
+from .assignment_manager import AssignmentManager
+from .branch_comparer import BranchComparer
+from .branch_comparison import BranchComparison
+from .branch_comparison_status import BranchComparisonStatus
+from .bulk_manager import BulkManager
+from .bulk_operation_result import BulkOperationResult
+from .code_analyzer import CodeAnalyzer
+from .completion_trend import CompletionTrend
+from .conflict_resolution import ConflictResolution
+from .dependency_resolver import DependencyResolver
+from .doc_generator import DocGenerator
+from .effort_estimate import EffortEstimate
+from .effort_estimate_result import EffortEstimateResult
+from .effort_estimator import EffortEstimator
+from .impact_scorer import ImpactScorer
+from .improvement import Improvement
+from .improvement_archive import ImprovementArchive
+from .improvement_category import ImprovementCategory
+from .improvement_dashboard import ImprovementDashboard
+from .improvement_diff import ImprovementDiff
+from .improvement_diff_type import ImprovementDiffType
+from .improvement_exporter import ImprovementExporter
+from .improvement_manager import ImprovementManager, DEFAULT_TEMPLATES
+from .improvement_priority import ImprovementPriority
+from .improvement_scheduler import ImprovementScheduler
+from .improvement_status import ImprovementStatus
+from .improvement_template import ImprovementTemplate
+from .improvement_validator import ImprovementValidator
+from .improvements_agent import ImprovementsAgent
+from .merge_candidate import MergeCandidate
+from .merge_detector import MergeDetector
+from .notification_manager import NotificationManager
+from .progress_dashboard import ProgressDashboard
+from .progress_report import ProgressReport
+from .resource_allocation import ResourceAllocation
+from .rollback_manager import RollbackManager
+from .rollback_point import RollbackPoint
+from .rollback_record import RollbackRecord
+from .rollback_tracker import RollbackTracker
+from .sla_configuration import SLAConfiguration
+from .sla_level import SLALevel
+from .sla_manager import SLAManager
+from .sla_policy import SLAPolicy
+from .schedule_status import ScheduleStatus
+from .scheduled_entry import ScheduledEntry
+from .scheduled_improvement import ScheduledImprovement
+from .tool_integration import ToolIntegration
+from .tool_suggestion import ToolSuggestion
+from .transition_result import TransitionResult
+from .validation_result import ValidationResult
+from .validation_severity import ValidationSeverity
+from .voting_system import VotingSystem
+from .workflow_engine import WorkflowEngine
+from .schedule_store import _ScheduleStore
 
 """Lazy-loading entry point for observability.improvements."""
 
 from typing import Any, TYPE_CHECKING
 from src.core.base.lifecycle.version import VERSION
 from src.core.lazy_loader import ModuleLazyLoader
-
-if TYPE_CHECKING:
-    from .access_controller import AccessController
-    from .analysis_tool_type import AnalysisToolType
-    from .analytics_engine import AnalyticsEngine
-    from .archive_manager import ArchiveManager
-    from .archived_improvement import ArchivedImprovement
-    from .assignment_manager import AssignmentManager
-    from .branch_comparer import BranchComparer
-    from .branch_comparison import BranchComparison
-    from .branch_comparison_status import BranchComparisonStatus
-    from .bulk_manager import BulkManager
-    from .bulk_operation_result import BulkOperationResult
-    from .code_analyzer import CodeAnalyzer
-    from .completion_trend import CompletionTrend
-    from .conflict_resolution import ConflictResolution
-    from .dependency_resolver import DependencyResolver
-    from .doc_generator import DocGenerator
-    from .effort_estimate import EffortEstimate
-    from .effort_estimate_result import EffortEstimateResult
-    from .effort_estimator import EffortEstimator
-    from .impact_scorer import ImpactScorer
-    from .improvement import Improvement
-    from .improvement_archive import ImprovementArchive
-    from .improvement_category import ImprovementCategory
-    from .improvement_dashboard import ImprovementDashboard
-    from .improvement_diff import ImprovementDiff
-    from .improvement_diff_type import ImprovementDiffType
-    from .improvement_exporter import ImprovementExporter
-    from .improvement_manager import ImprovementManager, DEFAULT_TEMPLATES
-    from .improvement_priority import ImprovementPriority
-    from .improvement_scheduler import ImprovementScheduler
-    from .improvement_status import ImprovementStatus
-    from .improvement_template import ImprovementTemplate
-    from .improvement_validator import ImprovementValidator
-    from .improvements_agent import ImprovementsAgent
-    from .merge_candidate import MergeCandidate
-    from .merge_detector import MergeDetector
-    from .notification_manager import NotificationManager
-    from .progress_dashboard import ProgressDashboard
-    from .progress_report import ProgressReport
-    from .resource_allocation import ResourceAllocation
-    from .rollback_manager import RollbackManager
-    from .rollback_point import RollbackPoint
-    from .rollback_record import RollbackRecord
-    from .rollback_tracker import RollbackTracker
-    from .sla_configuration import SLAConfiguration
-    from .sla_level import SLALevel
-    from .sla_manager import SLAManager
-    from .sla_policy import SLAPolicy
-    from .schedule_status import ScheduleStatus
-    from .scheduled_entry import ScheduledEntry
-    from .scheduled_improvement import ScheduledImprovement
-    from .tool_integration import ToolIntegration
-    from .tool_suggestion import ToolSuggestion
-    from .transition_result import TransitionResult
-    from .validation_result import ValidationResult
-    from .validation_severity import ValidationSeverity
-    from .voting_system import VotingSystem
-    from .workflow_engine import WorkflowEngine
-    from .schedule_store import _ScheduleStore
-
 _LAZY_REGISTRY = {
     "AccessController": (
         "src.observability.improvements.access_controller",
