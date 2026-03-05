@@ -8,16 +8,18 @@ Fleet delegation mixin.py module.
 
 
 import logging
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+import asyncio
 from typing import TYPE_CHECKING
-    import asyncio
+
+if TYPE_CHECKING:
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 class FleetDelegationMixin:
     """Mixin for agent delegation logic in FleetManager."""
 
     async def delegate_to(
-        self: FleetManager, agent_type: str, prompt: str, target_file: str | None = None
+        self: "FleetManager", agent_type: str, prompt: str, target_file: str | None = None
     ) -> str:
         """Synaptic Delegation: Hands off a sub-task to a specialized agent."""
         logging.info(f"Fleet: Delegating {agent_type} (Target: {target_file})")

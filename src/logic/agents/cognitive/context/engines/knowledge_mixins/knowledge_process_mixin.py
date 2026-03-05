@@ -13,14 +13,11 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-
 import re
 
 
 class KnowledgeProcessMixin:
     """Methods for processing file content and computing similarity."""
-
 
     def extract_python_symbols(self, content: str) -> list[str]:
         """Extracts Python function, class, and variable names from content."""
@@ -33,7 +30,6 @@ class KnowledgeProcessMixin:
         symbols.extend(re.findall(r"^(\w+)\s*=", content, re.MULTILINE))
         return symbols
 
-
     def extract_markdown_backlinks(self, content: str) -> list[str]:
         """Extracts markdown links (both [[wikilink]] and [text](url) formats)."""
         links = []
@@ -42,7 +38,6 @@ class KnowledgeProcessMixin:
         # Match [text](url) format
         links.extend(re.findall(r"\[([^\]]+)\]\(([^)]+)\)", content))
         return links
-
 
     def process_file_content(
         self, rel_path: str, content: str, extension: str
@@ -64,7 +59,6 @@ class KnowledgeProcessMixin:
                 )
 
         return results
-
 
     def compute_similarity(self, text_a: str, text_b: str) -> float:
         """Computes basic string similarity (Jaccard) for symbol matching."""

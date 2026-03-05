@@ -27,8 +27,8 @@ import time
 from dataclasses import dataclass
 from typing import Dict, Optional
 
-from .base_core import BaseCore
-from .models import AuthConfig, AuthMethod
+from src.core.base.common.base_core import BaseCore
+from src.core.base.models.communication_models import AuthConfig, AuthMethod
 
 try:
     import rust_core as rc
@@ -41,7 +41,6 @@ logger = logging.getLogger("pyagent.auth")
 @dataclass(frozen=True)
 class AuthProof:
     """Authentication proof container for agent validation."""
-
     timestamp: float
     challenge: str
     proof: str
@@ -54,6 +53,7 @@ class AuthCore(BaseCore):
     """
 
     def __init__(self, name: str = "AuthCore", root_path: Optional[str] = None) -> None:
+        """Initialize the AuthCore."""
         super().__init__(name=name, repo_root=root_path)
         self.token_cache: Dict[str, str] = {}
 

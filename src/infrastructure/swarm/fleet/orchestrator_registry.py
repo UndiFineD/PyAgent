@@ -23,9 +23,11 @@ Orchestrator registry.py module.
 import json
 import logging
 import os
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 from src.core.base.lifecycle.version import SDK_VERSION, VERSION
 
@@ -38,7 +40,7 @@ __version__ = VERSION
 class LazyOrchestratorMap:
     """A dictionary-like object that instantiates orchestrators only when accessed."""
 
-    def __init__(self, fleet_instance: FleetManager) -> None:
+    def __init__(self, fleet_instance: "FleetManager") -> None:
         self.fleet = fleet_instance
         self.workspace_root = Path(fleet_instance.workspace_root)
         self._instances: dict[Any, Any] = {}

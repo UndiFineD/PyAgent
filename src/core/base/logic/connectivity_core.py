@@ -39,7 +39,7 @@ class BinaryTransport:
         import msgpack
         packed = msgpack.packb(data, use_bin_type=True)
         if compress:
-        import zlib
+            import zlib
             packed = zlib.compress(packed)
         return packed
 

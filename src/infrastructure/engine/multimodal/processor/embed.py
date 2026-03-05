@@ -33,6 +33,7 @@ class TextEmbedProcessor(BaseMultiModalProcessor[np.ndarray]):
         data: np.ndarray,
         **kwargs: Any,
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
+        """Processes pre-computed text embeddings, ensuring correct shape and type."""
         if data.ndim == 1:
             data = data.reshape(1, -1)
 
@@ -44,6 +45,7 @@ class TextEmbedProcessor(BaseMultiModalProcessor[np.ndarray]):
         return data.astype(np.float32), metadata
 
     def get_placeholder_count(self, data: np.ndarray, **kwargs: Any) -> int:
+        """Determines the number of placeholder tokens needed based on the input data shape."""
         if data.ndim == 1:
             return 1
         return data.shape[0]

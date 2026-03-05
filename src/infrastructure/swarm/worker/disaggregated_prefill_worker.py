@@ -43,8 +43,10 @@ from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
     KVTransferConfig,
 )
 
-        KVConnectorBase,
-    )
+if TYPE_CHECKING:
+    # runtime import deferred to bottom for lazy loading
+    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import KVConnectorBase
+
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -156,7 +158,8 @@ class DisaggregatedPrefillWorker:
 
 # Lazy loading registration
 from src.infrastructure.storage.cache.kv_cache_manager import KVCacheManager
-from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
+from src.infrastructure.storage.kv_transfer.kv_transfer_connector import KVConnectorBase
+
 _worker = LazyLoader(
     "src.infrastructure.swarm.worker.disaggregated_prefill_worker",
     "DisaggregatedPrefillWorker",

@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 from src.core.base.BaseAgent import BaseAgent
 
-    from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.FleetManager import FleetManager
 
 
 class ReportingAgent(BaseAgent):

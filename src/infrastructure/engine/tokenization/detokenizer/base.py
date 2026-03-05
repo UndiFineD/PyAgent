@@ -13,22 +13,16 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""
-Base class for incremental detokenization.
-"""
-
-
 from abc import ABC, abstractmethod
 from typing import List, Optional, Tuple, Union
 
-from src.infrastructure.engine.tokenization.detokenizer.stop_checker import \
-    StopChecker
+from src.infrastructure.engine.tokenization.detokenizer.stop_checker import StopChecker
 from src.infrastructure.engine.tokenization.detokenizer.types import (
     DetokenizeResult,
     TokenizerLike,
 )
+
+"""Base class for incremental detokenization."""
 
 
 class IncrementalDetokenizer(ABC):
@@ -43,6 +37,7 @@ class IncrementalDetokenizer(ABC):
         spaces_between_special_tokens: bool = True,
         stop_checker: Optional[StopChecker] = None,
     ) -> None:
+        """Initialize the detokenizer."""
         self.tokenizer = tokenizer
         self.skip_special_tokens = skip_special_tokens
         self.spaces_between_special_tokens = spaces_between_special_tokens

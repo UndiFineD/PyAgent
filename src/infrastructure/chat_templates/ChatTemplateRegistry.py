@@ -42,5 +42,3 @@ __all__ = [
     "render_template",
     "detect_template_type",
 ]
-
-

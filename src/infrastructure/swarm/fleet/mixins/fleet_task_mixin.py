@@ -8,10 +8,12 @@ Fleet task mixin.py module.
 
 
 import logging
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 from typing import TYPE_CHECKING, Any
 
-from src.core.base.common.models import AgentPriority
+if TYPE_CHECKING:
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
+from src.core.base.common.models.core_enums import AgentPriority
 
 class FleetTaskMixin:
     """Mixin for task execution, preemption, and consensus management in FleetManager."""
@@ -41,16 +43,16 @@ class FleetTaskMixin:
         """Executes a task using the 7-phase inner loop and linguistic articulation."""
         return await self.execution_core.execute_reliable_task(task, priority=priority)
 
-    async def record_success(self: FleetManager, res_or_prompt: Any, *args: Any, **kwargs: Any) -> None:
+    async def record_success(self: "FleetManager", res_or_prompt: Any, *args: Any, **kwargs: Any) -> None:
         """Records the success of a workflow step (Delegated)."""
         await self.interaction_recorder.record_success(res_or_prompt, *args, **kwargs)
 
-    async def record_failure(self: FleetManager, prompt: str, error: str, model: str) -> None:
+    async def record_failure(self: "FleetManager", prompt: str, error: str, model: str) -> None:
         """Records errors, failures, and mistakes (Delegated)."""
         await self.interaction_recorder.record_failure(prompt, error, model)
 
     async def execute_workflow(
-        self: FleetManager,
+        self: "FleetManager",
         task: str,
         workflow_steps: list[dict[str, Any]],
         priority: AgentPriority = AgentPriority.NORMAL,
@@ -59,7 +61,7 @@ class FleetTaskMixin:
         return await self.execution_core.execute_workflow(task, workflow_steps, priority=priority)
 
     def execute_with_consensus(
-        self: FleetManager,
+        self: "FleetManager",
         task: str,
         primary_agent: str | None = None,
         secondary_agents: list[str] | None = None,

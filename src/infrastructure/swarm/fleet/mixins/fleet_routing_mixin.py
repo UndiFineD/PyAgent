@@ -8,18 +8,20 @@ Fleet routing mixin.py module.
 
 
 import logging
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-from typing import TYPE_CHECKING, Any
-    from src.core.base.lifecycle.version import SDK_VERSION
-    from src.infrastructure.swarm.fleet.remote_agent_proxy import RemoteAgentProxy
-    from src.infrastructure.swarm.fleet.version_gate import VersionGate
+from typing import Any, TYPE_CHECKING
+from src.core.base.lifecycle.version import SDK_VERSION
+from src.infrastructure.swarm.fleet.remote_agent_proxy import RemoteAgentProxy
+from src.infrastructure.swarm.fleet.version_gate import VersionGate
+
+if TYPE_CHECKING:
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 class FleetRoutingMixin:
     """Mixin for task routing and remote node registration in FleetManager."""
 
     def register_remote_node(
-        self: FleetManager,
+        self: "FleetManager",
         node_url: str,
         agent_names: list[str],
         remote_version: str = "1.0.0",
@@ -45,11 +47,11 @@ class FleetRoutingMixin:
             self.agents[f"remote_{name}"] = proxy
             logging.info(f"Registered remote agent proxy: remote_{name} at {node_url}")
 
-    async def call_by_capability(self: FleetManager, goal: str, **kwargs: Any) -> str:
+    async def call_by_capability(self: "FleetManager", goal: str, **kwargs: Any) -> str:
         """Finds an agent with the required capability and executes it with RL optimization."""
         return await self.routing_core.call_by_capability(goal, **kwargs)
 
-    def route_task(self: FleetManager, task_type: str, task_data: Any) -> str:
+    def route_task(self: "FleetManager", task_type: str, task_data: Any) -> str:
         """
         Routes tasks based on system load and hardware availability (Phase 126).
         """

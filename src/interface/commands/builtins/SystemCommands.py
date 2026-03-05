@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING
 
 from ..Base import CommandContext, CommandResult
 
-    _builtins_registered = False
+_builtins_registered = False
 
 
 def register_system_commands(registry: CommandRegistry, start_time: float) -> None:

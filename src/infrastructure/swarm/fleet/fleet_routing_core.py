@@ -21,8 +21,11 @@ import asyncio
 import inspect
 import logging
 import time
-from .fleet_manager import FleetManager
 from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from .fleet_manager import FleetManager
+
 
 class FleetRoutingCore:
     """Handles task routing and capability-based agent selection."""

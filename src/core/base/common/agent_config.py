@@ -23,12 +23,23 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.models.agent_models import AgentPluginConfig
 from src.core.base.common.models.fleet_models import RateLimitConfig
-from .utils.helpers import (
-    _empty_dict_str_any,
-    _empty_dict_str_int,
-    _empty_list_str,
-    _empty_plugin_config_list,
-)
+# When this file is loaded directly via importlib.spec_from_file_location in tests,
+# the package context may be missing, causing relative imports to fail.  We attempt
+# the relative import first and fall back to the absolute path if necessary.
+try:
+    from .utils.helpers import (
+        _empty_dict_str_any,
+        _empty_dict_str_int,
+        _empty_list_str,
+        _empty_plugin_config_list,
+    )
+except ImportError:  # pragma: no cover - only in test environment
+    from src.core.base.common.utils.helpers import (
+        _empty_dict_str_any,
+        _empty_dict_str_int,
+        _empty_list_str,
+        _empty_plugin_config_list,
+    )
 
 __version__ = VERSION
 

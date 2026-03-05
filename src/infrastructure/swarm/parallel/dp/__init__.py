@@ -17,14 +17,21 @@ from .balancer import P2CLoadBalancer
 from .collectives import dp_collective_all_reduce
 from .engine import DPEngineCoreProc
 from .hierarchical import HierarchicalDPCoordinator
-from .types import (DPConfig, DPRole, LoadBalanceStrategy, StepState,
 """
 DataParallelCoordinator Package.
 """
 
-from typing import TYPE_CHECKING, Any
+from .types import (
+    DPConfig,
+    DPRole,
+    LoadBalanceStrategy,
+    StepState,
+    WaveState,
+    WorkerHealth,
+    WorkerState,
+)
 
-                        WaveState, WorkerHealth, WorkerState)
+from typing import TYPE_CHECKING, Any
 
 
 def __getattr__(name: str) -> Any:

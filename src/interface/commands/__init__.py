@@ -52,8 +52,11 @@ def _load_local(module_name: str):
 
 # load the pieces we need
 _base_mod = _load_local("base")
-_parser_mod = _load_local("parser")
+# registry must come before parser because parser imports builtins which
+# in turn perform relative imports back to the registry.  If registry isn't
+# loaded yet the relative import will fail with ModuleNotFoundError.
 _registry_mod = _load_local("registry")
+_parser_mod = _load_local("parser")
 
 AsyncCommandHandler = _base_mod.AsyncCommandHandler
 CommandContext = _base_mod.CommandContext

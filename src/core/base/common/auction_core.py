@@ -19,7 +19,7 @@ Implements the VCG auction model for truthful bidding.
 
 from typing import Any, Dict, List
 
-from .base_core import BaseCore
+from src.core.base.common.base_core import BaseCore
 
 try:
     import rust_core as rc
@@ -45,8 +45,7 @@ class AuctionCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.calculate_vcg_auction(bids, slots)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception as e:
                 pass
 
         if not bids:
@@ -74,7 +73,6 @@ class AuctionCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.enforce_vram_quota(agent_vram_request, total_available, quota_percent)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception as e:
                 pass
         return agent_vram_request <= (total_available * quota_percent)

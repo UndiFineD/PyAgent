@@ -35,8 +35,12 @@ def _load_local(name: str):
     # name may contain path separators to refer to subpackages
     relpath = name.replace(os.sep, "/")
     path = os.path.join(_pkg_dir, *relpath.split("/")) + ".py"
-    # construct a valid module name by replacing separators with dots
-    mod_name = f"{__name__}.{relpath.replace('/', '.') }"
+    # construct a valid module name without the 'parser' suffix to keep modules in the
+    # commands package namespace.  Otherwise relative imports (e.g. ``from ..registry``)
+    # resolve to ``src.interface.commands.parser.registry`` which fails because
+    # ``src.interface.commands.parser`` isn't a package.  Use the parent package name.
+    parent_pkg = __name__.rsplit('.', 1)[0]
+    mod_name = f"{parent_pkg}.{relpath.replace('/', '.')}"
     spec = importlib.util.spec_from_file_location(mod_name, path)
     if spec is None or spec.loader is None:
         raise ImportError(f"cannot load module {name} from {path}")
