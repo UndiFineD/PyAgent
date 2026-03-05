@@ -41,11 +41,7 @@ _T = TypeVar("_T", bound=type)
 _V = TypeVar("_V")
 _Base = TypeVar("_Base")
 
-    from typing import ClassVar
 
-    _T = TypeVar("_T", bound=type)
-    _V = TypeVar("_V")
-    _Base = TypeVar("_Base")
 
 
 # ============================================================================

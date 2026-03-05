@@ -22,8 +22,10 @@ import importlib
 import logging
 import os
 import json
-from .FleetManager import FleetManager
 from typing import Any, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .FleetManager import FleetManager
 from collections.abc import Iterable
 from pathlib import Path
 from .ResilientStubs import ResilientStub

@@ -21,8 +21,10 @@ Fleet lifecycle manager.py module.
 
 import logging
 import time
-from .fleet_manager import FleetManager
 from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .fleet_manager import FleetManager
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION

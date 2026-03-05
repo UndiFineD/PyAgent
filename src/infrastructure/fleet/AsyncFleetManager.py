@@ -20,8 +20,8 @@ import asyncio
 import inspect
 import time
 from typing import Dict, List, Any, Optional
-from .FleetManager import FleetManager
-from .WorkflowState import WorkflowState
+from src.infrastructure.fleet.FleetManager import FleetManager
+from src.classes.fleet.WorkflowState import WorkflowState
 from src.core.base.DependencyGraph import DependencyGraph
 
 __version__ = VERSION

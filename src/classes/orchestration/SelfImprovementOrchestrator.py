@@ -285,7 +285,7 @@ class SelfImprovementOrchestrator(BaseAgent):
                 })
 
         # 10. Robustness: Syntax Check (Phase 108)
-                import py_compile
+        import py_compile
         try:
             py_compile.compile(file_path, doraise=True)
         except py_compile.PyCompileError as e:

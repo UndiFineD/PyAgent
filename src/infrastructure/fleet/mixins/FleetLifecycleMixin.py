@@ -2,10 +2,13 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
-from src.infrastructure.fleet.FleetManager import FleetManager
-from src.core.base.BaseAgent import BaseAgent
 
 from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    # Runtime imports would create a cycle with FleetManager, so only import for type hints
+    from src.infrastructure.fleet.FleetManager import FleetManager
+    from src.core.base.BaseAgent import BaseAgent
 
 
 
