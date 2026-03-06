@@ -12,24 +12,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Coordinator for multi-group KV cache management."""
-
-# SPDX-License-Identifier: Apache-2.0
 from typing import Any, Dict, List, Tuple
 
-from .data_classes import (BlockHash, BlockHashWithGroupId, CacheConfig,
-                           CacheGroupSpec, KVCacheBlock, KVCacheBlocks)
+from .data_classes import (
+    BlockHash,
+    BlockHashWithGroupId,
+    CacheConfig,
+    CacheGroupSpec,
+    KVCacheBlock,
+    KVCacheBlocks,
+)
 from .enums import CacheGroupType
-from .managers import (CrossAttentionManager, FullAttentionManager,
-                       SingleTypeKVCacheManager, SlidingWindowManager)
+from .managers import (
+    CrossAttentionManager,
+    FullAttentionManager,
+    SingleTypeKVCacheManager,
+    SlidingWindowManager,
+)
 from .pack_kv import PackKVManager
 from .structural import BlockPool
+
+"""Coordinator for multi-group KV cache management."""
 
 
 class KVCacheCoordinator:
     """Coordinates multiple KV cache groups for complex attention patterns."""
 
     def __init__(self, config: CacheConfig, max_model_len: int) -> None:
+        """Initializes the coordinator with specified cache configuration and model length."""
         self.config = config
         self.max_model_len = max_model_len
         self.block_pool = BlockPool(
@@ -67,7 +77,9 @@ class KVCacheCoordinator:
         """Number of cache groups being coordinated."""
         return len(self.managers)
 
-    def get_num_blocks_to_allocate(self, request_id: str, num_tokens: int, num_encoder_tokens: int = 0) -> int:
+    def get_num_blocks_to_allocate(
+        self, request_id: str, num_tokens: int, num_encoder_tokens: int = 0
+    ) -> int:
         """Calculate total number of blocks needed across all groups."""
         _ = request_id  # Unused argument
         total = 0
@@ -78,7 +90,9 @@ class KVCacheCoordinator:
             total += manager.get_num_blocks_needed(num_needed)
         return total
 
-    def allocate(self, request_id: str, num_tokens: int, num_encoder_tokens: int = 0) -> KVCacheBlocks:
+    def allocate(
+        self, request_id: str, num_tokens: int, num_encoder_tokens: int = 0
+    ) -> KVCacheBlocks:
         """Allocate blocks for a request across all cache groups."""
         blocks_per_group = []
         for i, manager in enumerate(self.managers):
@@ -98,7 +112,9 @@ class KVCacheCoordinator:
 
     def get_blocks(self, request_id: str) -> KVCacheBlocks:
         """Retrieve allocated blocks for a specific request."""
-        blocks_per_group = [tuple(manager.get_blocks(request_id)) for manager in self.managers]
+        blocks_per_group = [
+            tuple(manager.get_blocks(request_id)) for manager in self.managers
+        ]
         return KVCacheBlocks(tuple(blocks_per_group))
 
     def get_compression_metadata(self, _request_id: str) -> Dict[int, Dict[str, Any]]:
@@ -111,14 +127,18 @@ class KVCacheCoordinator:
                 metadata.update(getattr(manager, "compression_metadata"))
         return metadata
 
-    def cache_blocks(self, request_id: str, block_hashes: List[BlockHash], group_id: int = 0) -> None:
+    def cache_blocks(
+        self, request_id: str, block_hashes: List[BlockHash], group_id: int = 0
+    ) -> None:
         """Associate hashes with blocks to enable future prefix caching hits."""
         blocks = self.managers[group_id].get_blocks(request_id)
         for block, hash_ in zip(blocks, block_hashes):
             hash_with_group = BlockHashWithGroupId(hash_, group_id)
             self.block_pool.cache_block(block, hash_with_group)
 
-    def find_cached_blocks(self, block_hashes: List[BlockHash], group_id: int = 0) -> Tuple[List[KVCacheBlock], int]:
+    def find_cached_blocks(
+        self, block_hashes: List[BlockHash], group_id: int = 0
+    ) -> Tuple[List[KVCacheBlock], int]:
         """Look up sequence of hashes in prefix cache to find usable blocks."""
         cached = []
         num_hits = 0

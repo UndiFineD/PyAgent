@@ -12,19 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Histogram - Efficient percentile and distribution tracking.
-
-Goes beyond vLLM with production-grade metrics:
-- HDR Histogram-style logarithmic buckets
-- Constant memory regardless of sample count
-- O(1) add, O(buckets) percentile queries
-- Mergeable for distributed aggregation
-
-Phase 18: Beyond vLLM - Advanced Metrics
-"""
-# pylint: disable=protected-access
-
 from __future__ import annotations
 
 from _thread import LockType
@@ -129,7 +116,11 @@ class Histogram:
 
             idx = int((log_val - log_min) / (log_max - log_min) * self._num_buckets)
         else:
-            idx = int((value - self._min_value) / (self._max_value - self._min_value) * self._num_buckets)
+            idx = int(
+                (value - self._min_value)
+                / (self._max_value - self._min_value)
+                * self._num_buckets
+            )
 
         return max(0, min(idx, self._num_buckets - 1))
 
@@ -146,12 +137,14 @@ class Histogram:
             self._add_to_bucket(value, count)
 
     def _update_basic_stats(self, value: float, count: int) -> None:
+        """Update count, sum, min, max."""
         self._count += count
         self._sum += value * count
         self._min = min(self._min, value)
         self._max = max(self._max, value)
 
     def _add_to_bucket(self, value: float, count: int) -> None:
+        """Add count to the appropriate bucket."""
         idx: int = self._find_bucket_index(value)
         if idx < 0:
             self._underflow += count
@@ -176,6 +169,7 @@ class Histogram:
             return self._calculate_percentile(p)
 
     def _calculate_percentile(self, p: float) -> float:
+        """Calculate percentile value based on bucket counts."""
         target: float = self._count * p / 100
         cumulative: int = self._underflow
 
@@ -211,6 +205,16 @@ class Histogram:
         """Get maximum observed value."""
         return self._max if self._count > 0 else 0.0
 
+    @property
+    def max_value(self) -> float:
+        """Get maximum trackable value."""
+        return self._max_value
+
+    @property
+    def min_value(self) -> float:
+        """Get minimum trackable value."""
+        return self._min_value
+
     def merge(self, other: "Histogram") -> "Histogram":
         """
         Merge with another histogram.
@@ -220,23 +224,23 @@ class Histogram:
         """
         # Create new histogram with same configuration
         merged = Histogram(
-            min_value=min(self._min_value, other._min_value),
-            max_value=max(self._max_value, other._max_value),
+            min_value=min(self.min_value, other.min_value),
+            max_value=max(self.max_value, other.max_value),
             num_buckets=self._num_buckets,
             logarithmic=self._logarithmic,
         )
 
         # Note: This is approximate due to bucket boundary differences
-        merged._count = self._count + other._count
+        merged._count = self.count + other.count
         merged._sum = self._sum + other._sum
         merged._min = min(self._min, other._min)
         merged._max = max(self._max, other._max)
         merged._underflow = self._underflow + other._underflow
         merged._overflow = self._overflow + other._overflow
 
-        for i, (b1, b2) in enumerate(zip(self._buckets, other._buckets)):
-            merged._buckets[i].count = b1.count + b2.count
-
+        other_counts = other._get_bucket_counts()
+        for i, bucket in enumerate(other._buckets):
+            merged._buckets[i].count = self._buckets[i].count + bucket.count
         return merged
 
     def get_buckets(self) -> list[tuple[float, float, int]]:

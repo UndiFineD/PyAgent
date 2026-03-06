@@ -12,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Command registry for slash commands.
-"""
-
 from __future__ import annotations
 
 from typing import Callable
@@ -27,6 +23,7 @@ class CommandRegistry:
     """Registry for slash commands."""
 
     def __init__(self) -> None:
+        """Initialize the command registry."""
         self._commands: dict[str, CommandDefinition] = {}
         self._aliases: dict[str, str] = {}
 
@@ -66,7 +63,9 @@ class CommandRegistry:
 
     def list_commands(self, include_hidden: bool = False) -> list[CommandDefinition]:
         """List all registered commands."""
-        return [cmd for cmd in self._commands.values() if include_hidden or not cmd.hidden]
+        return [
+            cmd for cmd in self._commands.values() if include_hidden or not cmd.hidden
+        ]
 
     def command(
         self,
@@ -81,6 +80,7 @@ class CommandRegistry:
         """Decorator to register a command."""
 
         def decorator(handler: CommandHandler) -> CommandHandler:
+            """Decorator to register a command handler."""
             self.register(
                 name,
                 handler,

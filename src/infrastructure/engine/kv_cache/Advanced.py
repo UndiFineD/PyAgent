@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Advanced KV cache coordinators for complex use cases."""
-
-# SPDX-License-Identifier: Apache-2.0
 import threading
 from collections import defaultdict
 from typing import Dict, List, Tuple
@@ -22,16 +19,25 @@ from typing import Dict, List, Tuple
 from .coordinator import KVCacheCoordinator
 from .data_classes import CacheConfig, KVCacheBlocks
 
+"""Advanced KV cache coordinators for complex use cases."""
+
 
 class HierarchicalKVCacheCoordinator(KVCacheCoordinator):
     """Hierarchical coordinator for complex model architectures."""
 
-    def __init__(self, config: CacheConfig, max_model_len: int, num_layers: int) -> None:
+    def __init__(
+        self, config: CacheConfig, max_model_len: int, num_layers: int
+    ) -> None:
+        """Initializes the hierarchical coordinator with layer-specific tracking."""
         super().__init__(config, max_model_len)
         self.num_layers = num_layers
-        self.layer_stats: Dict[int, Dict[str, int]] = defaultdict(lambda: {"allocations": 0, "hits": 0})
+        self.layer_stats: Dict[int, Dict[str, int]] = defaultdict(
+            lambda: {"allocations": 0, "hits": 0}
+        )
 
-    def allocate_for_layer(self, request_id: str, num_tokens: int, layer_idx: int) -> KVCacheBlocks:
+    def allocate_for_layer(
+        self, request_id: str, num_tokens: int, layer_idx: int
+    ) -> KVCacheBlocks:
         """Allocate KV cache specifically for a specific model layer."""
         blocks = self.allocate(request_id, num_tokens)
         self.layer_stats[layer_idx]["allocations"] += 1
@@ -41,7 +47,10 @@ class HierarchicalKVCacheCoordinator(KVCacheCoordinator):
 class PredictiveKVCacheCoordinator(KVCacheCoordinator):
     """Coordinator with predictive allocation based on request patterns."""
 
-    def __init__(self, config: CacheConfig, max_model_len: int, memory_budget_bytes: int) -> None:
+    def __init__(
+        self, config: CacheConfig, max_model_len: int, memory_budget_bytes: int
+    ) -> None:
+        """Initializes the predictive coordinator with memory budget and usage tracking."""
         super().__init__(config, max_model_len)
         self.memory_budget = memory_budget_bytes
         self._length_history: List[int] = []
@@ -60,7 +69,9 @@ class PredictiveKVCacheCoordinator(KVCacheCoordinator):
             self._length_history = self._length_history[-500:]
         self._avg_length = sum(self._length_history) / len(self._length_history)
 
-    def allocate_predictive(self, request_id: str, current_tokens: int, prompt_length: int) -> KVCacheBlocks:
+    def allocate_predictive(
+        self, request_id: str, current_tokens: int, prompt_length: int
+    ) -> KVCacheBlocks:
         """Allocate KV cache based on predicted future demand."""
         predicted = self.predict_length(prompt_length)
         target_tokens = max(current_tokens, predicted)
@@ -70,13 +81,18 @@ class PredictiveKVCacheCoordinator(KVCacheCoordinator):
 class AsyncPrefetchCoordinator(KVCacheCoordinator):
     """Coordinator with async prefetch support."""
 
-    def __init__(self, config: CacheConfig, max_model_len: int, prefetch_queue_size: int = 100) -> None:
+    def __init__(
+        self, config: CacheConfig, max_model_len: int, prefetch_queue_size: int = 100
+    ) -> None:
+        """Initializes the async prefetch coordinator with a queue for pending requests."""
         super().__init__(config, max_model_len)
         self.prefetch_queue_size = prefetch_queue_size
         self._prefetch_requests: List[Tuple[str, int]] = []
         self._prefetch_lock = threading.Lock()
 
-    def queue_prefetch(self, request_id: str, expected_tokens: int, priority: int = 0) -> None:
+    def queue_prefetch(
+        self, request_id: str, expected_tokens: int, priority: int = 0
+    ) -> None:
         """Queue a prefetch request for future allocation."""
         _ = priority  # Unused argument
         with self._prefetch_lock:

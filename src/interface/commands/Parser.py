@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Slash command parser and executor.
-"""
-
 from __future__ import annotations
 
+import os
+import sys
+import importlib.util
 import logging
 import re
 import time
@@ -26,15 +25,28 @@ from typing import Any, ClassVar
 # Imports can fail when the package is referenced via the
 # `src.` prefix in sys.path.  We attempt a normal relative import first
 # then fall back to dynamically loading the module files by path.
-import importlib.util, os, sys
+
 _pkg_dir = os.path.dirname(__file__)
 
+"""
+Slash command parser and executor.
+"""
+
+
 def _load_local(name: str):
+    """Dynamically load a local module by file path
+    to avoid import issues when the package is named
+    with a prefix (e.g. `src.interface.commands`).
+    """
     # name may contain path separators to refer to subpackages
     relpath = name.replace(os.sep, "/")
     path = os.path.join(_pkg_dir, *relpath.split("/")) + ".py"
-    # construct a valid module name by replacing separators with dots
-    mod_name = f"{__name__}.{relpath.replace('/', '.') }"
+    # construct a valid module name without the 'parser' suffix to keep modules in the
+    # commands package namespace.  Otherwise relative imports (e.g. ``from ..registry``)
+    # resolve to ``src.interface.commands.parser.registry`` which fails because
+    # ``src.interface.commands.parser`` isn't a package.  Use the parent package name.
+    parent_pkg = __name__.rsplit('.', 1)[0]
+    mod_name = f"{parent_pkg}.{relpath.replace('/', '.')}"
     spec = importlib.util.spec_from_file_location(mod_name, path)
     if spec is None or spec.loader is None:
         raise ImportError(f"cannot load module {name} from {path}")
@@ -42,6 +54,7 @@ def _load_local(name: str):
     sys.modules[spec.name] = mod
     spec.loader.exec_module(mod)  # type: ignore[attr-defined]
     return mod
+
 
 # Always load local modules via file path to avoid confusing the
 # import system when the package name contains ``src.``
@@ -65,7 +78,9 @@ logger = logging.getLogger(__name__)
 
 
 # Pattern: /command or /command arg1 arg2 (up to newline or next command)
-COMMAND_PATTERN = re.compile(r"/([a-zA-Z_][a-zA-Z0-9_]*)(?:\s+([^/\n]+?))?(?=\s*/[a-zA-Z]|\s*$|\n)", re.MULTILINE)
+COMMAND_PATTERN = re.compile(
+    r"/([a-zA-Z_][a-zA-Z0-9_]*)(?:\s+([^/\n]+?))?(?=\s*/[a-zA-Z]|\s*$|\n)", re.MULTILINE
+)
 
 
 def parse_commands(prompt: str) -> list[ParsedCommand]:
@@ -126,7 +141,9 @@ class CommandParser:
             prefix: Command prefix (default: "/")
             include_builtins: Whether to include built-in commands
         """
-        self.registry = registry or (self._global_registry if include_builtins else CommandRegistry())
+        self.registry = registry or (
+            self._global_registry if include_builtins else CommandRegistry()
+        )
         self.prefix = prefix
 
         # Ensure builtins are registered
@@ -139,7 +156,9 @@ class CommandParser:
         """Parse commands from prompt without executing."""
         return parse_commands(prompt)
 
-    def execute(self, command: str, args: list[str] | None = None, **metadata: Any) -> CommandResult:
+    def execute(
+        self, command: str, args: list[str] | None = None, **metadata: Any
+    ) -> CommandResult:
         """
         Execute a single command.
 
@@ -156,7 +175,9 @@ class CommandParser:
             return CommandResult.fail(f"Unknown command: {command}")
 
         if defn.requires_args and not args:
-            return CommandResult.fail(f"Command /{command} requires arguments. Usage: {defn.usage}")
+            return CommandResult.fail(
+                f"Command /{command} requires arguments. Usage: {defn.usage}"
+            )
 
         ctx = CommandContext(
             command=command,
