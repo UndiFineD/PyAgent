@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 import glob, pathlib, subprocess, sys
 
+# repair imports
+subprocess.run([sys.executable, 'scripts/fix_leading_imports.py'], check=True)
+
 # compile check
 had_error = False
 for path in glob.glob('**/*.py', recursive=True):
