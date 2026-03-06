@@ -16,3 +16,8 @@ repos:
         entry: python scripts/check_and_test.py
         language: system
         pass_filenames: false
+      - id: fix-leading-imports
+        name: fix-leading-imports
+        entry: python scripts/fix_leading_imports.py
+        language: system
+        pass_filenames: false
