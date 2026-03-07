@@ -1,5 +1,4 @@
-from __future__ import annotations
-
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,6 +39,7 @@ Example usage:
         return _lazy_modules.load(name)
 """
 
+from __future__ import annotations
 
 import importlib
 from functools import lru_cache

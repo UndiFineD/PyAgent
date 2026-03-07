@@ -44,6 +44,7 @@ class FileSystemCore:
     """
 
     def __init__(self, lock_manager: Optional[FileLockManager] = None) -> None:
+        """Initializes the FileSystemCore with an optional FileLockManager instance."""
         self.logger = logging.getLogger("pyagent.fs")
         self.lock_manager = lock_manager or FileLockManager()
         self.storage = StorageCore()
@@ -65,6 +66,7 @@ class FileSystemCore:
         return self._python_discover_files(root, patterns, ignore)
 
     def _can_use_rust_discover(self) -> bool:
+        """Checks if the Rust-backed discover_files implementation can be used."""
         return rc and hasattr(rc, "discover_files_rust")
 
     def _try_rust_discover_files(

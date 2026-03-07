@@ -19,7 +19,6 @@
 """Unified Error Mapping core."""
 
 from typing import Dict, Optional
-
 from src.core.base.common.base_core import BaseCore
 
 
@@ -55,6 +54,7 @@ class ErrorMappingCore(BaseCore):
     }
 
     def __init__(self, repo_root: Optional[str] = None) -> None:
+        """Initializes the ErrorMappingCore with an optional repo_root."""
         super().__init__(name="ErrorMapping", repo_root=repo_root)
 
     @classmethod

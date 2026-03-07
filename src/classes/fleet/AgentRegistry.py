@@ -14,26 +14,24 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""Registry for mapping agent names to their implementations and initialization logic."""
-
-from src.core.base.Version import VERSION
 import importlib
 import logging
 import os
 import json
 from typing import Any, TYPE_CHECKING
+from pathlib import Path
+
+from src.core.base.Version import VERSION
 
 if TYPE_CHECKING:
     from .FleetManager import FleetManager
 from collections.abc import Iterable
-from pathlib import Path
 from .ResilientStubs import ResilientStub
 from src.logic.agents.system.MCPAgent import MCPAgent
 from .AgentRegistryCore import AgentRegistryCore
 from .BootstrapConfigs import BOOTSTRAP_AGENTS
-from src.core.base.Version import SDK_VERSION
-    # Import local version for gatekeeping
+
+# Import local version for gatekeeping
 __version__ = VERSION
 
 
@@ -46,13 +44,14 @@ class LazyAgentMap(dict):
         registry_configs: dict[str, tuple] | None = None,
         fleet_instance: FleetManager | None = None,
     ) -> None:
+        """Initializes the LazyAgentMap with workspace root, optional registry configs, and fleet reference."""
         super().__init__()
         self.workspace_root: Path = workspace_root
         self.registry_configs = registry_configs or BOOTSTRAP_AGENTS
         self.fleet = fleet_instance
         self._instances: dict[str, Any] = {}
         # Refactored: Logic delegated to Core (Rust-ready)
-        self.core = AgentRegistryCore(SDK_VERSION)
+        self.core = AgentRegistryCore(VERSION)
 
         # 1. Load Manifest (Plugins)
         self._manifest_configs = self._load_manifests()
@@ -130,7 +129,7 @@ class LazyAgentMap(dict):
                             self.core.parse_manifest(data)
                         )
                         manifest_configs.update(configs)
-                except Exception as e:
+                except Exception:
                     logging.error(f"Failed to load plugin manifest {m_path}: {e}")
         return manifest_configs
 
@@ -181,6 +180,7 @@ class LazyAgentMap(dict):
             )
 
     def __contains__(self, key: object) -> bool:
+        """Checks if an agent key exists in any of the config layers or instances."""
         if super().__contains__(key):
             return True
         return (
@@ -190,6 +190,7 @@ class LazyAgentMap(dict):
         )
 
     def keys(self) -> list[str]:
+        """Returns a combined list of all agent keys from configs and instances."""
         # Combine all potential keys
         all_ks = set(super().keys())
         all_ks.update(self.registry_configs.keys())
@@ -198,18 +199,23 @@ class LazyAgentMap(dict):
         return list(all_ks)
 
     def __iter__(self) -> Iterable[str]:
+        """Iterates over all agent keys available in the registry."""
         return iter(self.keys())
 
     def __len__(self) -> int:
+        """Returns the total count of unique agent keys available."""
         return len(self.keys())
 
     def items(self) -> list[tuple[str, Any]]:
+        """Returns a list of (key, instance) pairs for all agents, instantiating them if needed."""
         return [(k, self[k]) for k in self.keys()]
 
     def values(self) -> list[Any]:
+        """Returns a list of all agent instances, instantiating them if needed."""
         return [self[k] for k in self.keys()]
 
     def __getitem__(self, key: str) -> Any:
+        """Returns the agent instance for the given key, instantiating it if necessary."""
         # 0. Check for manual overrides/instances first
         if key in self._instances:
             return self._instances[key]
@@ -294,7 +300,7 @@ class LazyAgentMap(dict):
         )
         if not self.core.is_compatible(min_sdk):
             error_msg = (
-                f"Agent '{key}' requires SDK {min_sdk}, but current is {SDK_VERSION}."
+                f"Agent '{key}' requires SDK {min_sdk}, but current is {VERSION}."
             )
             logging.warning(error_msg)
             self._instances[key] = ResilientStub(key, error_msg)
@@ -334,12 +340,14 @@ class LazyAgentMap(dict):
                 logging.warning(f"Failed to register tools for {key}: {e}")
 
     def get(self, key: str, default: Any = None) -> Any:
+        """Safe get method that returns default if key is not found or fails to load."""
         try:
             return self[key]
         except KeyError:
             return default
 
     def update(self, other: dict[str, Any]) -> None:
+        """Allows manual updates to the registry, such as adding stubs or overrides."""
         # Allow manual overrides or additions (like SignalBus)
         self._instances.update(other)
 

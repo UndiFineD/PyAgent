@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Core logic for multi-agent orchestration and workflow management."""
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
@@ -19,11 +20,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Core logic for multi-agent orchestration and workflow management.
-"""
-
-
 import random
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any, Callable, Dict, List
@@ -38,6 +34,7 @@ class OrchestrationCore(BaseCore):
     """
 
     def __init__(self) -> None:
+        """Initializes the OrchestrationCore with empty agent registry and results."""
         super().__init__()
         self.agents: List[ComposedAgent] = []
         self.results: Dict[str, str] = {}
@@ -59,6 +56,7 @@ class OrchestrationCore(BaseCore):
         temp: set[str] = set()
 
         def visit(agent_type: str) -> None:
+            """Visits an agent type for topological sorting, checking for circular dependencies."""
             if agent_type in temp:
                 raise ValueError(f"Circular dependency regarding {agent_type}")
             if agent_type in visited:
@@ -94,6 +92,8 @@ class OrchestrationCore(BaseCore):
         self.results.clear()
 
         def run_agent(carry: str, agent_type: str) -> str:
+            """Runs a single agent regarding the given type, passing along results as needed.
+            """
             agent_config = next(
                 filter(lambda a: a.agent_type == agent_type, self.agents), None
             )
@@ -104,6 +104,7 @@ class OrchestrationCore(BaseCore):
             enhanced_prompt = prompt
 
             def add_context(dep: str) -> str:
+                """Adds context regarding a dependency if available."""
                 if dep in self.results:
                     return f"\n\nPrevious {dep} result:\n{self.results[dep][:500]}"
                 return ""
@@ -151,6 +152,7 @@ class QualityScorer:
 
         # Calculate totals regarding scores and weights functionally
         def _get_vals(pair):
+            """Helper to apply scoring function and extract weight."""
             func, weight = pair
             return func(text) * weight, weight
 
@@ -173,6 +175,9 @@ class ABTest:
     variant_counts: Dict[str, int] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
+        """Initializes the A/B test,
+        ensuring weights are set and variant counts are initialized.
+        """
         # Initialize variant counts functionally
         list(map(lambda v: self.variant_counts.update({v: 0}), self.variants))
 

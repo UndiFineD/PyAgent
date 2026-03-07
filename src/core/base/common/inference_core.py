@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Core logic for inference, tokenization, and model adaptation."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,18 +14,17 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Core logic for inference, tokenization, and model adaptation.
-"""
-
-
 import logging
 from typing import Any, Dict, List, Optional
 
-from ....infrastructure.engine.tokenization.utils import (estimate_token_count,
-                                                          get_tokenizer)
-from .base_core import BaseCore
-from .models.communication_models import PromptTemplate
+# Use absolute import so pytest can load the module regardless of package context
+from src.infrastructure.engine.tokenization.utils import (
+    estimate_token_count,
+    get_tokenizer,
+)
+# import other components with absolute paths so the module can be executed via importlib
+from src.core.base.common.base_core import BaseCore
+from src.core.base.models.communication_models import PromptTemplate
 
 try:
     import rust_core as rc
@@ -41,6 +41,7 @@ class InferenceCore(BaseCore):
     """
 
     def __init__(self, name: str = "InferenceCore", repo_root: Optional[str] = None) -> None:
+        """Initializes the InferenceCore with an optional name and repository root."""
         super().__init__(name=name, repo_root=repo_root)
         self.templates: Dict[str, PromptTemplate] = {}
 
@@ -65,8 +66,8 @@ class InferenceCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.count_tokens_rust(text, model_name)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+                # pylint: disable=broad-exception-caught
                 pass
         return estimate_token_count(text, model_name)
 
@@ -75,7 +76,6 @@ class InferenceCore(BaseCore):
         return get_tokenizer(model_name)
 
     # --- Adapter Management (Rust Acceleration Target) ---
-
     def apply_lora_adapters(self, base_model: Any, adapters: List[str]) -> Any:
         """
         Applies LoRA adapters to a base model.

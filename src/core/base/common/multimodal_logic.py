@@ -46,7 +46,6 @@ from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 
 from src.infrastructure.engine.multimodal import (Muxer, QuantizedMultimediaEngine)
-
 from .base_core import BaseCore
 from .multimodal_state import StreamState
 
@@ -66,6 +65,7 @@ class MultimodalCore(BaseCore):
     """
 
     def __init__(self, name: str = "MultimodalCore", root_path: Optional[str] = None) -> None:
+        """Initializes the MultimodalCore with an optional name and repository root."""
         super().__init__(name=name, repo_root=root_path)
         self.registry: Dict[str, str] = {}  # Tag -> URI/Path
         self._stream_states: Dict[str, StreamState] = {}

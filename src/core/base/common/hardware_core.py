@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Core logic for Hardware Acceleration and NPU interaction."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,11 +13,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-Core logic for Hardware Acceleration and NPU interaction.
-"""
-
 
 import logging
 from typing import Optional
@@ -37,6 +33,7 @@ class HardwareCore(BaseCore):
     """
 
     def __init__(self, name: str = "HardwareCore", repo_root: Optional[str] = None) -> None:
+        """Initializes the HardwareCore with optional name and repo_root."""
         super().__init__(name=name, repo_root=repo_root)
         self._npu_status = False
 

@@ -16,9 +16,7 @@
 
 import logging
 from typing import Callable, Dict, Generic, List, TypeVar
-
 from .base_core import BaseCore
-
 T = TypeVar("T")
 
 try:
@@ -36,6 +34,7 @@ class RegistryCore(BaseCore, Generic[T]):
     """
 
     def __init__(self, name: str = "generic") -> None:
+        """Initializes the RegistryCore with an optional name."""
         BaseCore.__init__(self, name=name)
         self._items: Dict[str, T] = {}
         self._hooks: Dict[str, List[Callable[[str, T], None]]] = {"on_register": [], "on_unregister": []}
@@ -47,7 +46,12 @@ class RegistryCore(BaseCore, Generic[T]):
             return result
         return self._python_detect_cycles(nodes, edges)
 
-    def _try_rust_detect_cycles(self, nodes: list[str], edges: list[tuple[str, str]]) -> bool | None:
+    def _try_rust_detect_cycles(
+        self,
+        nodes: list[str],
+        edges: list[tuple[str, str]]
+    ) -> bool | None:
+        """Attempts to use Rust for cycle detection, falling back to Python if unavailable or on error."""
         if rc and hasattr(rc, "detect_cycles_rust"):
             try:
                 return rc.detect_cycles_rust(nodes, edges)  # type: ignore
@@ -56,13 +60,16 @@ class RegistryCore(BaseCore, Generic[T]):
         return None
 
     def _python_detect_cycles(self, nodes: list[str], edges: list[tuple[str, str]]) -> bool:
+        """Detects cycles in a directed graph using depth-first search."""
         visited = set()
         path = set()
         adj = {n: [] for n in nodes}
         for u, v in edges:
             if u in adj:
                 adj[u].append(v)
+
         def has_cycle(v) -> bool:
+            """Helper function to perform DFS and detect cycles."""
             visited.add(v)
             path.add(v)
             for neighbor in adj.get(v, []):
@@ -86,7 +93,12 @@ class RegistryCore(BaseCore, Generic[T]):
             return result
         return self._python_topological_sort(nodes, edges)
 
-    def _try_rust_topological_sort(self, nodes: list[str], edges: list[tuple[str, str]]) -> list[str] | None:
+    def _try_rust_topological_sort(
+        self,
+        nodes: list[str],
+        edges: list[tuple[str, str]]
+    ) -> list[str] | None:
+        """Attempts to use Rust for topological sorting, falling back to Python if unavailable or on error."""
         if rc and hasattr(rc, "topological_sort_rust"):
             try:
                 return rc.topological_sort_rust(nodes, edges)  # type: ignore
@@ -94,7 +106,12 @@ class RegistryCore(BaseCore, Generic[T]):
                 logger.debug("RegistryCore: Rust topological_sort_rust failed: %s", e)
         return None
 
-    def _python_topological_sort(self, nodes: list[str], edges: list[tuple[str, str]]) -> list[str]:
+    def _python_topological_sort(
+        self,
+        nodes: list[str],
+        edges: list[tuple[str, str]]
+    ) -> list[str]:
+        """Performs topological sort using Kahn's algorithm."""
         in_degree = {n: 0 for n in nodes}
         adj = {n: [] for n in nodes}
         for u, v in edges:

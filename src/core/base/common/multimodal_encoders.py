@@ -15,7 +15,6 @@
 """Multimodal encoders logic."""
 
 from typing import List, Optional, Tuple, Union
-
 try:
     import rust_core as rc
 except ImportError:
@@ -30,6 +29,7 @@ class StreamingVisionEncoder:
     """
 
     def __init__(self, base_threshold: int = 15) -> None:
+        """Initializes the StreamingVisionEncoder with a base threshold for delta encoding."""
         self.prev_frame: Optional[bytes] = None
         self.threshold = base_threshold
         self.base_threshold = base_threshold
@@ -73,6 +73,7 @@ class StreamingAudioProcessor:
     """
 
     def __init__(self, sample_rate: int = 16000, frame_size: int = 512) -> None:
+        """Initializes the StreamingAudioProcessor with sample rate and frame size."""
         self.sample_rate = sample_rate
         self.frame_size = frame_size
         self.buffer: List[float] = []

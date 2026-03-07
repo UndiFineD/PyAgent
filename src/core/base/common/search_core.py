@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Core logic for semantic and literal search across the codebase."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,17 +14,10 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Core logic for semantic and literal search across the codebase.
-"""
-
-
 import logging
 from pathlib import Path
 from typing import Any, Dict, List
-
 from .base_core import BaseCore
-
 try:
     import rust_core as rc  # pylint: disable=import-error
 except ImportError:
@@ -77,9 +71,10 @@ class SearchCore(BaseCore):
             return rc.vector_search_rust(query_vec, index, top_k)  # pylint: disable=no-member
 
         # Simple Python cosine similarity fallback
-            import math  # pylint: disable=import-outside-toplevel
+        import math  # pylint: disable=import-outside-toplevel
 
         def cosine_sim(v1: list[float], v2: list[float]) -> float:
+            """Calculate cosine similarity between two vectors."""
             dot = sum(a * b for a, b in zip(v1, v2))
             mag1 = math.sqrt(sum(a * a for a in v1))
             mag2 = math.sqrt(sum(a * a for a in v2))

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
+"""Unified Git Core for PyAgent. Standardizes branch management, commits, and status retrieval."""
 from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,16 +13,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-"""
-Unified Git Core for PyAgent.
-Standardizes branch management, commits, and status retrieval.
-"""
-
 
 from pathlib import Path
 from typing import List, Optional
@@ -43,6 +33,7 @@ class GitCore(BaseCore):
     """
 
     def __init__(self, repo_root: Path, no_git: bool = False) -> None:
+        """Initializes the GitCore with a repository root and an optional no_git flag."""
         super().__init__()
         self.repo_root = repo_root
         self.no_git = no_git
@@ -57,10 +48,7 @@ class GitCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.git_commit_rust(str(self.repo_root), message, files)  # type: ignore
-            except (
-                Exception
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
-                # pylint: disable=broad-exception-caught
+            except Exception:
                 pass
 
         if files:

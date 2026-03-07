@@ -13,12 +13,6 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Manager for file locking.
-(Facade for src.core.base.common.lock_core)
-"""
-
-
 from typing import Any, Dict, Optional
 
 
@@ -37,6 +31,7 @@ class FileLockManager:
     """
 
     def __init__(self, core: Optional[Any] = None) -> None:
+        """Initializes the FileLockManager with an optional LockCore instance."""
         from src.core.base.common.lock_core import LockCore
         self._core = core or LockCore()
         self.lock_timeout = 300.0

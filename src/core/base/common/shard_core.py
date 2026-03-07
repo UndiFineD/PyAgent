@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Core logic for fleet sharding and partitioning."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,13 +14,7 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Core logic for fleet sharding and partitioning.
-"""
-
-
 from .base_core import BaseCore
-
 try:
     import rust_core as rc  # pylint: disable=import-error
 except ImportError:
@@ -42,8 +37,8 @@ class ShardCore(BaseCore):
                 return rc.calculate_shard_id_rust(  # pylint: disable=no-member
                     key, shard_count
                 )  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+                # pylint: disable=broad-exception-caught
                 pass
 
         # Fallback to simple hash-based sharding
@@ -63,16 +58,16 @@ class ShardCore(BaseCore):
             # (MD5 of test_key -> ... % 10) - value depends on implementation but must be consistent
             test_key = "test_key"
             shard_count = 10
-            
+
             id1 = self.calculate_shard_id(test_key, shard_count)
             id2 = self.calculate_shard_id(test_key, shard_count)
-            
+
             if id1 != id2:
                 return False
-                
+
             if not isinstance(id1, int) or id1 < 0 or id1 >= shard_count:
                 return False
-                
+
             return True
         except Exception:  # pylint: disable=broad-exception-caught
             return False

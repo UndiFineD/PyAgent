@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,12 +12,10 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Enums for test agent functionality."""
 
-
+from __future__ import annotations
 from enum import Enum
-
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
@@ -26,35 +23,26 @@ __version__ = VERSION
 
 class TestPriority(Enum):
     """Test priority levels."""
-
     __test__ = False
-
     CRITICAL = 5
-
     HIGH = 4
-
     MEDIUM = 3
-
     LOW = 2
     SKIP = 1
 
 
 class TestStatus(Enum):
     """Test execution status."""
-
     __test__ = False
-
     PASSED = "passed"
     FAILED = "failed"
     SKIPPED = "skipped"
-
     ERROR = "error"
     FLAKY = "flaky"
 
 
 class CoverageType(Enum):
     """Types of coverage to track."""
-
     LINE = "line"
     BRANCH = "branch"
     FUNCTION = "function"
@@ -63,18 +51,15 @@ class CoverageType(Enum):
 
 class BrowserType(Enum):
     """Browser types for cross-browser testing."""
-
     CHROME = "chrome"
     FIREFOX = "firefox"
     SAFARI = "safari"
-
     EDGE = "edge"
     IE = "ie"
 
 
 class TestSourceType(Enum):
     """Types of test result sources for aggregation."""
-
     __test__ = False
     PYTEST = "pytest"
     UNITTEST = "unittest"
@@ -85,7 +70,6 @@ class TestSourceType(Enum):
 
 class MutationOperator(Enum):
     """Mutation operators for mutation testing."""
-
     ARITHMETIC = "arithmetic"
     RELATIONAL = "relational"
     LOGICAL = "logical"
@@ -95,7 +79,6 @@ class MutationOperator(Enum):
 
 class ExecutionMode(Enum):
     """Test execution replay modes."""
-
     STEP_BY_STEP = "step_by_step"
     FULL_REPLAY = "full_replay"
     BREAKPOINT = "breakpoint"

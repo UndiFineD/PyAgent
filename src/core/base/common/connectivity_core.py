@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""CacheCore: Authoritative engine for result caching, with optional Rust acceleration."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,12 +13,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-Unified Connectivity and Networking Core.
-Handles low-level host networking and high-level agent communication.
-"""
-
 
 import contextlib
 import logging
@@ -41,12 +36,16 @@ class ConnectivityCore(BaseCore):
     Handles low-level host networking and high-level agent communication.
     """
 
-    def __init__(self, name: str = "ConnectivityCore", repo_root: Optional[str] = None) -> None:
+    def __init__(
+        self, 
+        name: str = "ConnectivityCore", 
+        repo_root: Optional[str] = None
+    ) -> None:
+        """Initializes the ConnectivityCore with optional name and repo_root."""
         super().__init__(name=name, repo_root=repo_root)
         self.connections: Dict[str, Any] = {}
 
     # --- Agent-to-Agent Logic ---
-
     def establish_connection(self, target_agent: str, protocol: str = "binary") -> bool:
         """
         Logic for establishing a connection.
@@ -88,7 +87,7 @@ class ConnectivityCore(BaseCore):
         try:
             with urllib.request.urlopen(target_url, timeout=2) as response:
                 return response.status == 200
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             # pylint: disable=broad-exception-caught
             return False
 
@@ -109,7 +108,7 @@ class ConnectivityCore(BaseCore):
             with socket.socket(af, socket.SOCK_DGRAM) as s:
                 s.connect(target)
                 return s.getsockname()[0]
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             # pylint: disable=broad-exception-caught
             return "127.0.0.1"
 
@@ -124,6 +123,7 @@ class ConnectivityCore(BaseCore):
     def find_open_port(start_port: int = 10000, end_port: int = 60000) -> int:
         """Find an available port in the specified range."""
         def check_port(port: int) -> int:
+            """Recursively check ports until an open one is found."""
             if port > end_port:
                 raise RuntimeError(f"No open ports found in range {start_port}-{end_port}")
             if not ConnectivityCore.is_port_open(port):

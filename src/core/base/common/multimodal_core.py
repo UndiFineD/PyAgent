@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Core logic for multimodal alignment, synchronization, and streaming."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +14,6 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 import logging
 import math
 import re
@@ -27,7 +27,7 @@ from src.infrastructure.engine.multimodal import (Muxer, QuantizedMultimediaEngi
 from .base_core import BaseCore
 from .multimodal_buffer import TemporalModalityBuffer
 from .multimodal_encoders import StreamingAudioProcessor, StreamingVisionEncoder
-from .multimodal_logic import MultimodalCore
+from .multimodal_logic import MultimodalCore as MultimodalLogicCore
 from .multimodal_session import MultimodalStreamSession
 from .multimodal_state import StreamState
 
@@ -108,7 +108,6 @@ class MultimodalCore(BaseCore):
             "Psi": "default",
         }
 
-
     def set_active_channel(self, modality: str, channel_id: str) -> None:
         """
         Switch the active channel for a specific modality (e.g. switch Audio to 'EN').
@@ -116,14 +115,12 @@ class MultimodalCore(BaseCore):
         self.active_channels[modality] = channel_id
         logger.info("Modality %s channel switched to: %s", modality, channel_id)
 
-
     def parse_and_filter_stream(self, stream_id: str, chunk: str) -> List[Dict[str, Any]]:
         """
         Incrementally parse and automatically filter for active channels.
         """
         fragments = self.parse_stream_incremental(stream_id, chunk)
         return self.select_channels(fragments, self.active_channels)
-
 
     def parse_stream_incremental(self, stream_id: str, chunk: str) -> List[Dict[str, Any]]:
         """
@@ -150,11 +147,9 @@ class MultimodalCore(BaseCore):
 
         return self.parse_stream(to_parse)
 
-
     def register_media(self, tag: str, uri: str) -> None:
         """Associate a media tag with a resolved URI."""
         self.registry[tag] = uri
-
 
     def mux_dvd_channels(self, audio: bytes, video: bytes, text: str) -> bytes:
         """
@@ -163,16 +158,13 @@ class MultimodalCore(BaseCore):
         """
         return self.muxer.synchronize_tick(audio, video, text)
 
-
     def apply_scaling(self, activations: Any, scaling: Any) -> Any:
         """Applies IA3 scaling via the QuantizedMultimediaEngine."""
         return self.q_engine.apply_stream_ia3(activations, scaling)
 
-
     def resolve_tag(self, tag: str) -> Optional[str]:
         """Get URI for a specific tag."""
         return self.registry.get(tag)
-
 
     def calculate_audio_features(self, samples: List[float], num_bins: int = 80) -> List[float]:
         """
@@ -184,7 +176,6 @@ class MultimodalCore(BaseCore):
         # Fallback: simple energy distribution
         chunks = np.array_split(samples, num_bins)
         return [float(np.log10(np.mean(c**2) + 1e-10)) for c in chunks]
-
 
     def synchronize_streams(
         self, transcriptions: List[Tuple[float, str]], responses: List[Tuple[float, str]]
@@ -202,7 +193,6 @@ class MultimodalCore(BaseCore):
             closest = min(responses, key=lambda x, t=t_time: abs(x[0] - t), default=(0, ""))
             synced.append((t_time, t_text, closest[1] if abs(closest[0] - t_time) < 2.0 else ""))
         return synced
-
 
     def project_alignment(
         self, embedding: List[float], weights: List[float], bias: Optional[List[float]] = None
@@ -225,7 +215,6 @@ class MultimodalCore(BaseCore):
             res += np.array(bias)
         return res.tolist()
 
-
     def quantize_audio(self, samples: List[float]) -> List[int]:
         """
         Reduce audio bit-depth for low-latency streaming.
@@ -233,7 +222,6 @@ class MultimodalCore(BaseCore):
         if rc and hasattr(rc, "audio_quantize_int8_rust"):
             return rc.audio_quantize_int8_rust(samples)
         return [int(max(-1.0, min(1.0, s)) * 127) for s in samples]
-
 
     def split_image_grid(self, pixels: bytes, width: int, height: int, rows: int = 2, cols: int = 2) -> List[bytes]:
         """
@@ -255,7 +243,6 @@ class MultimodalCore(BaseCore):
                 tiles.append(bytes(tile))
         return tiles
 
-
     def get_modality_weights(self, audio_energy: float, text_density: float) -> Tuple[float, float]:
         """
         Calculate importance weights for fusing modalities.
@@ -266,7 +253,6 @@ class MultimodalCore(BaseCore):
         ea, et = math.exp(audio_energy), math.exp(text_density)
         s = ea + et
         return ea / s, et / s
-
 
     def parse_stream(self, content: str) -> List[Dict[str, Any]]:
         """
@@ -339,7 +325,6 @@ class MultimodalCore(BaseCore):
 
         return parts
 
-
     def select_channels(self, fragments: List[Dict[str, Any]], channels: Dict[str, str]) -> List[Dict[str, Any]]:
         """
         Filter a multi-channel stream to show only active tracks (e.g. EN audio, Angle 1 video).
@@ -373,7 +358,6 @@ class MultimodalCore(BaseCore):
                     output.append(f)
         return output
 
-
     def create_mosaic(self, feeds: List[bytes], width: int, height: int, rows: int, cols: int) -> bytes:
         """
         Combine multiple camera feeds into a single mosaic.
@@ -391,13 +375,11 @@ class MultimodalCore(BaseCore):
         mosaic = np.vstack(row_images)
         return mosaic.tobytes()
 
-
     def detect_motion(self, prev: bytes, curr: bytes, threshold: float = 10.0) -> bool:
         """Check for significant visual changes."""
         if rc and hasattr(rc, "detect_motion_rust"):
             return rc.detect_motion_rust(list(prev), list(curr), threshold)
         return False  # Fallback to always process if Rust is missing
-
 
     def mix_audio(self, tracks: List[List[float]], weights: Optional[List[float]] = None) -> List[float]:
         """Mix multiple audio streams (DVD-style)."""
@@ -415,13 +397,11 @@ class MultimodalCore(BaseCore):
                 output[j] += s * w
         return [max(-1.0, min(1.0, s)) for s in output]
 
-
     def get_av_sync_score(self, audio_energy: List[float], visual_motion: List[float]) -> float:
         """Measure temporal alignment between audio and video frames."""
         if rc and hasattr(rc, "calculate_av_alignment_score_rust"):
             return rc.calculate_av_alignment_score_rust(audio_energy, visual_motion)
         return 1.0  # Default to perfect sync if unable to measure
-
 
     def detect_scene_change(self, prev_hist: List[float], curr_hist: List[float], threshold: float = 0.5) -> bool:
         """Detect when a video stream switches camera angles."""
@@ -429,13 +409,11 @@ class MultimodalCore(BaseCore):
             return rc.detect_visual_scene_change_rust(prev_hist, curr_hist, threshold)
         return False
 
-
     def get_saliency_map(self, pixels: bytes, width: int, height: int, grid_size: int = 16) -> List[float]:
         """Generate a heatmap of visual energy (focal points)."""
         if rc and hasattr(rc, "calculate_vision_saliency_rust"):
             return rc.calculate_vision_saliency_rust(list(pixels), width, height, grid_size)
         return []
-
 
     def extract_roi(self, pixels: bytes, width: int, height: int, x: int, y: int, rw: int, rh: int) -> bytes:
         """
@@ -454,7 +432,6 @@ class MultimodalCore(BaseCore):
             roi.extend(pixels[start : start + rw * 3])
         return bytes(roi)
 
-
     def calculate_audio_direction(self, left: List[float], right: List[float], sample_rate: int = 16000) -> float:
         """
         Estimate source angle (-90 to 90) using Interaural Time Difference (ITD).
@@ -462,7 +439,6 @@ class MultimodalCore(BaseCore):
         if rc and hasattr(rc, "calculate_audio_direction_rust"):
             return rc.calculate_audio_direction_rust(left, right, sample_rate)
         return 0.0  # Fallback: straight ahead
-
 
     def overlay_vision(
         self,
@@ -489,7 +465,6 @@ class MultimodalCore(BaseCore):
             return bytes(res)
         return base  # Fallback: return base if untransformable
 
-
     def transform_vision(
         self,
         pixels: bytes,
@@ -506,7 +481,6 @@ class MultimodalCore(BaseCore):
             return bytes(res)
         return pixels
 
-
     def apply_visual_filter(self, pixels: bytes, filter_type: str, intensity: float = 1.0) -> bytes:
         """Apply a visual filter (e.g. grayscale, inverse) to a feed."""
         if rc and hasattr(rc, "apply_vision_filter_rust"):
@@ -514,13 +488,11 @@ class MultimodalCore(BaseCore):
             return bytes(res)
         return pixels
 
-
     def synchronize_color_profiles(self, pixels: bytes, reference: bytes) -> bytes:
         """Match the color/brightness of a feed to a reference feed (unify cameras)."""
         if rc and hasattr(rc, "match_vision_color_profiles_rust"):
             return bytes(rc.match_vision_color_profiles_rust(list(pixels), list(reference)))
         return pixels
-
 
     def apply_layout(
         self, feeds: List[bytes], sizes: List[Tuple[int, int]], target_size: Tuple[int, int], template: str = "grid"
@@ -536,7 +508,6 @@ class MultimodalCore(BaseCore):
         if template == "grid":
             return self.create_mosaic(feeds, sizes[0][0], sizes[0][1], 2, 2)
         return feeds[0] if feeds else b""
-
 
     def fuse_modalities(self, vision_emb: List[float], audio_emb: List[float], dim: int = 4096) -> List[float]:
         """Apply cross-modality gating (Logic: Audio weights Vision tokens)."""

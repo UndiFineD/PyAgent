@@ -35,6 +35,7 @@ class LockCore(BaseCore):
     """
 
     def __init__(self) -> None:
+        """Initializes the LockCore with in-memory lock tracking."""
         super().__init__()
         self.active_locks: Dict[str, float] = {}
         self.shared_counts: Dict[str, int] = {}

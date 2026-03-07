@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
+"""Core logic for system health monitoring and diagnostics."""
 from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,11 +13,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-Core logic for system health monitoring and diagnostics.
-"""
-
 
 import subprocess
 import sys
@@ -40,6 +35,7 @@ class HealthCore(BaseCore):
     """
 
     def __init__(self, workspace_root: Optional[Union[str, Path]] = None) -> None:
+        """Initializes the HealthCore with an optional workspace root."""
         super().__init__(repo_root=workspace_root)
         self.workspace_root = self.repo_root
         self.results: Dict[str, AgentHealthCheck] = {}
@@ -141,6 +137,7 @@ class HealthCore(BaseCore):
 
         # Phase 42 Integration: Also check regarding core agent scripts functionally
         def _check_agent(agent_name: str) -> None:
+            """Helper to check if agent script exists."""
             agent_file = self.workspace_root / "src" / f"agent_{agent_name}.py"
             status = (
                 HealthStatus.HEALTHY if agent_file.exists() else HealthStatus.UNHEALTHY

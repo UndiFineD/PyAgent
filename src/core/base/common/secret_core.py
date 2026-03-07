@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Unified Secret Core for PyAgent. Handles credential masking, policy validation, and naming standards."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,17 +14,9 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Unified Secret Core for PyAgent.
-Handles credential masking, policy validation, and naming standards.
-"""
-
-
 import re
 from typing import List
-
 from src.core.base.common.base_core import BaseCore
-
 try:
     import rust_core as rc  # pylint: disable=import-error
 except ImportError:
@@ -37,6 +30,7 @@ class SecretCore(BaseCore):
     """
 
     def __init__(self) -> None:
+        """Initializes the SecretCore with regex patterns for masking."""
         super().__init__()
         self.mask_patterns: List[re.Pattern] = [
             re.compile(r"(api_key=)([a-zA-Z0-9\-_]{5,})"),

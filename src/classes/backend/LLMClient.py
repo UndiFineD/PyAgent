@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """Centralized LLM client for various backends."""
 
-from functools import lru_cache
+from __future__ import annotations
 
-import json
-import logging
-import time
 import os
+import time
+import logging
+# import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional
-from .LocalContextRecorder import LocalContextRecorder
-from ..base_agent.ConnectivityManager import ConnectivityManager
+from typing import Any, Dict, Optional  # List
+from functools import lru_cache
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
+from src.classes.base_agent.ConnectivityManager import ConnectivityManager
+from .VllmNativeEngine import VllmNativeEngine
+
 
 class LLMClient:
     """Handles direct HTTP calls to LLM providers."""
@@ -25,13 +26,13 @@ class LLMClient:
             # Security Patch 115.1: Harden session against decompression bombs and redirect chains
             self.session.max_redirects = 5
         else:
-            self.session = requests_lib # Fallback if someone passed a mock
-            
+            self.session = requests_lib  # Fallback if someone passed a mock
+
         # Auto-init recorder if workspace provided, else None
         self.workspace_root = workspace_root
         self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
         self.connectivity = ConnectivityManager(workspace_root)
-        
+
         # Phase 108: Result Caching (Speed optimization for repeated calls)
         self._result_cache: Dict[str, str] = {}
         self._max_cache_size = 1000
@@ -57,7 +58,14 @@ class LLMClient:
         """Updates the connection status via central ConnectivityManager."""
         self.connectivity.update_status(provider_id, working)
 
-    def _record(self, provider: str, model: str, prompt: str, result: str, system_prompt: str = "") -> str:
+    def _record(
+        self,
+        provider: str,
+        model: str,
+        prompt: str,
+        result: str,
+        system_prompt: str = ""
+    ) -> str:
         """
         Helper to record interactions if recorder is active.
         Optimized for future trillion-parameter community data ingestion.
@@ -74,6 +82,7 @@ class LLMClient:
             except Exception as e:
                 # Silently fail logging so we don't block the actual logic
                 logging.error(f"Failed to record interaction: {e}")
+        return result
 
     def llm_chat_via_github_models(
         self,
@@ -118,12 +127,16 @@ class LLMClient:
         if not resolved_token:
             logging.warning("GitHub Models: Missing token. Skipping.")
             return ""
-        
-        resolved_base_url = (base_url or os.environ.get("GITHUB_MODELS_BASE_URL") or "https://models.inference.ai.azure.com").strip()
+
+        resolved_base_url = (
+            base_url 
+            or os.environ.get("GITHUB_MODELS_BASE_URL") 
+            or "https://models.inference.ai.azure.com"
+        ).strip()
         if not resolved_base_url:
             logging.warning("GitHub Models: Missing base URL. Skipping.")
             return ""
-        
+
         url = resolved_base_url.rstrip("/") + "/v1/chat/completions"
         payload: Dict[str, Any] = {
             "model": model,
@@ -133,12 +146,12 @@ class LLMClient:
             ],
             "stream": stream
         }
-        
+
         headers = {
             "Authorization": f"Bearer {resolved_token}",
             "Content-Type": "application/json",
         }
-        
+
         for attempt in range(max_retries + 1):
             try:
                 response = self.session.post(url, headers=headers, json=payload, timeout=timeout_s)
@@ -147,7 +160,7 @@ class LLMClient:
                     logging.error("GitHub Models: Unauthorized (401). Check GITHUB_TOKEN.")
                     self._update_connection_status("github_models", False)
                     return ""
-                
+
                 response.raise_for_status()
                 data = response.json()
                 content = data["choices"][0]["message"]["content"].strip()
@@ -164,7 +177,7 @@ class LLMClient:
                     self._update_connection_status("github_models", False)
                     # Record failure as a lesson for future self-improvement (Phase 108)
                     self._record("github_models", model, prompt, f"ERROR: {str(e)}", system_prompt=system_prompt)
-                    return "" # Return empty rather than raising to keep the fleet moving
+                    return ""  # Return empty rather than raising to keep the fleet moving
         return ""
 
     def llm_chat_via_ollama(
@@ -178,7 +191,7 @@ class LLMClient:
         """Call a local Ollama instance."""
         if self.requests is None:
             raise RuntimeError("Missing dependency: install 'requests' for Ollama")
-        
+
         # Connection Cache Check (Phase 108)
         if not self._is_connection_working("ollama"):
             logging.debug("Ollama skipped due to connection cache.")
@@ -191,7 +204,7 @@ class LLMClient:
             "prompt": prompt,
             "stream": False
         }
-        
+
         try:
             response = self.session.post(url, json=payload, timeout=timeout_s)
             response.raise_for_status()
@@ -217,7 +230,7 @@ class LLMClient:
         """Call a local vLLM instance (OpenAI-compatible)."""
         if self.requests is None:
             raise RuntimeError("Missing dependency: install 'requests' for vLLM")
-            
+
         # Connection Cache Check (Phase 108)
         if not self._is_connection_working("vllm"):
             logging.debug("vLLM skipped due to connection cache.")
@@ -231,9 +244,14 @@ class LLMClient:
                 {"role": "user", "content": prompt}
             ]
         }
-        
+
         try:
-            response = self.session.post(url, headers={"Content-Type": "application/json"}, json=payload, timeout=timeout_s)
+            response = self.session.post(
+                url, 
+                headers={"Content-Type": "application/json"}, 
+                json=payload, 
+                timeout=timeout_s
+            )
             response.raise_for_status()
             content = response.json()["choices"][0]["message"]["content"]
             self._record("vllm", model, prompt, content, system_prompt=system_prompt)
@@ -257,11 +275,10 @@ class LLMClient:
         Records context, prompt, and result to the local training shards (Phase 108).
         """
         try:
-            from .VllmNativeEngine import VllmNativeEngine
             engine = VllmNativeEngine.get_instance(model_name=model or "meta-llama/Llama-3-8B-Instruct")
             if not engine.enabled:
                 return ""
-            
+
             result = engine.generate(prompt, system_prompt=system_prompt)
             if result:
                 # Direct recording for 'Own AI' training
@@ -293,7 +310,12 @@ class LLMClient:
         # Phase 108: Check for Preferred working endpoint first (15m TTL)
         preferred = self.connectivity.get_preferred_endpoint("llm_backends")
         if preferred:
-            result = getattr(self, f"llm_chat_via_{preferred}")(prompt, model=local_model if "local" in preferred else external_model, system_prompt=system_prompt)
+            result = getattr(
+                self, 
+                f"llm_chat_via_{preferred}")(
+                    prompt, model=local_model if "local" in preferred else external_model,
+                    system_prompt=system_prompt
+                )
             if result:
                 self._result_cache[cache_key] = result
                 return result
@@ -343,6 +365,3 @@ class LLMClient:
             self._result_cache[cache_key] = result
 
         return result
-
-        import os
-

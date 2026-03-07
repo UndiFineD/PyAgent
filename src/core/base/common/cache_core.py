@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""CacheCore: Authoritative engine for result caching, with optional Rust acceleration."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,11 +13,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-Core logic for response caching and prompt prefix mapping.
-"""
-
 
 import hashlib
 import json
@@ -40,6 +36,7 @@ class CacheCore(BaseCore):
     """
 
     def __init__(self, cache_dir: Optional[Path] = None) -> None:
+        """Initializes the CacheCore with an optional cache directory."""
         super().__init__()
         self.cache_dir = cache_dir or Path("data/cache")
         self.cache_dir.mkdir(parents=True, exist_ok=True)
@@ -48,12 +45,13 @@ class CacheCore(BaseCore):
         self.logger = logging.getLogger("pyagent.cache_core")
 
     def _get_cache_key(self, content: str) -> str:
+        """Generates a cache key, using Rust acceleration if available."""
         if rc and hasattr(rc, "fast_cache_key_rust"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
                 return rc.fast_cache_key_rust(content)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+                # pylint: disable=broad-exception-caught
                 pass
         return hashlib.md5(content.encode()).hexdigest()
 
@@ -102,7 +100,7 @@ class CacheCore(BaseCore):
                         "ttl": data["ttl"],
                     }
                     return data["response"]
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+                # pylint: disable=broad-exception-caught
                 pass
         return None

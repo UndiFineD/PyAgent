@@ -82,7 +82,7 @@ NOTES
 from __future__ import annotations
 
 import argparse
-import ast
+# import ast
 import re
 import sys
 import time
@@ -342,6 +342,7 @@ def pass_fix_orphan_imports(
 
     return result, changes
 
+
 def pass_indent_after_except(
     lines: list[str],
     verbose: bool = False,
@@ -384,6 +385,7 @@ def pass_indent_after_except(
                         f"        indent-after-except: line {i+2} -> {expected_indent} spaces"
                     )
     return result, changes
+
 
 # ---------------------------------------------------------------------------
 # Pass 2: Fix streams of consecutive wrong-indent lines (not just imports)
@@ -557,7 +559,7 @@ def pass_fix_escaped_methods(
     # For each class, look for `def ... (self` / `async def ... (self` at
     # column 0 that appear AFTER the class definition, suggesting they slipped.
     last_class_idx = class_stack[-1][0]
-    last_class_body_indent = class_stack[-1][1]
+    # last_class_body_indent = class_stack[-1][1]
 
     i = 0
     while i < len(result):
