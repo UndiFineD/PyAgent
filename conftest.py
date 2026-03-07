@@ -21,6 +21,11 @@ from collections.abc import Callable
 
 # root directory of repository, used by various helpers
 ROOT = Path(__file__).resolve().parent
+# ensure top-level src directory is on sys.path so imports like
+# ``infrastructure.swarm`` resolve correctly during tests
+SRC_DIR = ROOT / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
 
 import pytest
 
