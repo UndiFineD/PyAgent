@@ -21,11 +21,21 @@ from collections.abc import Callable
 
 # root directory of repository, used by various helpers
 ROOT = Path(__file__).resolve().parent
-# ensure top-level src directory is on sys.path so imports like
-# ``infrastructure.swarm`` resolve correctly during tests
-SRC_DIR = ROOT / "src"
-if str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
+# We *used* to insert the ``src`` folder onto ``sys.path`` so that
+# ``import infrastructure`` would work during ad-hoc experimentation.
+#
+# The package hierarchy in this repository is deliberately rooted at
+# ``src`` (i.e. modules are imported as ``src.foo``).  Having both the
+# workspace root AND the ``src`` directory on ``sys.path`` creates the
+# possibility of loading the same file under two different module names
+# (``infrastructure.foo`` vs ``src.infrastructure.foo``) which leads to
+# the “partially initialized module” errors we observed earlier.  Simply
+# leaving the workspace root on ``sys.path`` is sufficient for the
+# canonical imports, so we no longer need this helper.
+#
+# SRC_DIR = ROOT / "src"
+# if str(SRC_DIR) not in sys.path:
+#     sys.path.insert(0, str(SRC_DIR))
 
 import pytest
 
@@ -51,18 +61,83 @@ class ImportlibPatcher:
         importlib.util.module_from_spec = self._patched_module
 
     def _patched_spec(self, name, location, *args, **kwargs):
-        """Patched version of `spec_from_file_location` that infers and sets"""
+        """Patched version of ``spec_from_file_location`` that infers both the
+        canonical module name and the package.
+
+        Tests load modules using a dummy name (``_mod_under_test``) so that the
+        resulting module object does not collide with any existing entry in
+        ``sys.modules``.  That strategy is convenient until the module under
+        test itself performs imports from sibling packages; the import
+        machinery then tries to load a second copy of the same file under the
+        real package path, leading to ``ImportError: cannot import name ...
+        from partially initialized module`` when circular references exist.
+
+        By assigning the spec a proper name derived from the file path we
+        guarantee that the module is registered under its canonical package
+        path.  Combined with our ``module_from_spec`` patch (which inserts the
+        module into ``sys.modules`` immediately) this ensures a single Python
+        object per file and prevents spurious import errors.
+        """
         spec = self._orig_spec(name, location, *args, **kwargs)
         if spec and spec.loader:
+            # we keep ``spec.name`` unchanged; rewriting it previously caused
+            # the loader instance itself to carry the wrong name, leading to
+            # ImportError later when Python tried to import the canonical module
+            # name.  Instead we update the loader's ``name`` attribute and perform
+            # aliasing in ``_patched_module``.
+            #
+            # ``__package__`` is still set because relative imports rely on it.
+
             pkg = self._infer_package(spec.origin)
             if pkg is not None:
                 spec.__package__ = pkg
+            # If the caller used the dummy placeholder we also want the loader to
+            # advertise the canonical name.  ``SourceFileLoader`` checks its
+            # ``name`` attribute when ``get_code`` is invoked, which explains the
+            # ImportError we saw earlier.  Overwriting the loader's name here is a
+            # lightweight way to make it accept imports for the real package.
+            if name == "_mod_under_test" and spec.origin:
+                try:
+                    p = Path(spec.origin).resolve()
+                    root = ROOT / "src"
+                    if root in p.parents or p == root:
+                        rel = p.relative_to(root)
+                        canon = "src." + ".".join(rel.with_suffix("").parts)
+                        spec.loader.name = canon
+                except Exception:
+                    pass
         return spec
 
     def _patched_module(self, spec):
-        """Patched version of `module_from_spec` that ensures the created module has"""
+        """Patched version of ``module_from_spec`` that sets ``__package__`` and
+        registers the newly created module in ``sys.modules`` immediately.
+
+        When tests call ``spec_from_file_location('_mod_under_test', path)`` the
+        returned specification carries a meaningless name.  We must ensure the
+        executed module is visible under *both* that placeholder and the real
+        package name; otherwise sibling imports will create a second module
+        object and circular dependencies blow up.  Additionally we update the
+        module's ``__name__`` so dataclasses, logging, and other introspection
+        code see the correct package path.
+        """
         mod = self._orig_module(spec)
         mod.__package__ = getattr(spec, "__package__", "") or ""
+        import sys
+        # register under the spec name first
+        sys.modules[spec.name] = mod
+        # if this is the dummy placeholder we also register under the canonical
+        # import path and rename the module object accordingly
+        if spec.name == "_mod_under_test" and spec.origin:
+            try:
+                p = Path(spec.origin).resolve()
+                root = ROOT / "src"
+                if root in p.parents or p == root:
+                    rel = p.relative_to(root)
+                    canon = "src." + ".".join(rel.with_suffix("" ).parts)
+                    sys.modules[canon] = mod
+                    mod.__name__ = canon
+            except Exception:
+                pass
         return mod
 
     def _infer_package(self, origin: str) -> str | None:
@@ -72,9 +147,9 @@ class ImportlibPatcher:
             parts = list(p.parts)
             if "src" in parts:
                 idx = parts.index("src")
-                pkg = ".".join(parts[idx + 1 : -1])
-                if pkg.startswith("src."):
-                    pkg = pkg[len("src.") :]
+                # keep the leading "src." so that the package matches the
+                # canonical import path used throughout the repository.
+                pkg = ".".join(parts[idx : -1])
                 return pkg
         except Exception:
             pass
