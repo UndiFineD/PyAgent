@@ -44,7 +44,7 @@ class IntelligenceOrchestrator:
 
         # Phase 108: Native AI for collective synthesis
 import requests
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+from src.infrastructure.fleet.FleetManager import FleetManager
 
 from src.infrastructure.compute.backend.llm_client import LLMClient
 

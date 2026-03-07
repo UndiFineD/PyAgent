@@ -1,19 +1,14 @@
 #!/usr/bin/env python3
+"""Storage engine.py module."""
 from __future__ import annotations
-
-"""
-Storage engine.py module.
-"""
 # Copyright 2026 PyAgent Authors
 # Backup, snapshot, and compression engine.
 # Phase 16: Rust acceleration for JSON serialization and compression
-
 
 import contextlib
 import json
 import logging
 import zlib
-import functools
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -26,9 +21,9 @@ logger: logging.Logger = logging.getLogger(__name__)
 # Phase 16: Rust acceleration imports
 try:
     import rust_core
-
     _RUST_AVAILABLE = True
 except ImportError:
+    rust_core = None
     _RUST_AVAILABLE = False
     logging.debug("rust_core not available, using Python fallback for StorageEngine")
 
@@ -46,15 +41,18 @@ class StatsBackupManager:
     """Manages backups of stats."""
 
     def __init__(self, backup_dir: str | Path | None = None) -> None:
+        """Initializes the StatsBackupManager with an optional backup directory."""
         self.backup_dir: Path | None = Path(backup_dir) if backup_dir is not None else None
         if self.backup_dir:
             self.backup_dir.mkdir(parents=True, exist_ok=True)
         self.backups: dict[str, dict[str, Any]] = {}
 
     def _safe_name(self, name: str) -> str:
+        """Sanitize the backup name to create a safe filename."""
         return "".join(ch if ch.isalnum() or ch in "-_" else "_" for ch in name) or "backup"
 
     def create_backup(self, name: str, data: dict[str, Any]) -> StatsBackup:
+        """Create a backup with the given name and data."""
         timestamp: str = datetime.now().isoformat()
         self.backups[name] = {"data": data, "timestamp": timestamp}
         path: Path = (
@@ -88,20 +86,22 @@ class StatsBackupManager:
         """Helper to load backups from disk not already in memory."""
         if not self.backup_dir or not self.backup_dir.exists():
             return []
-        
+
         def process_file(f: Path) -> StatsBackup | None:
+            """Process a single backup file, returning a StatsBackup if valid."""
             name = f.stem
             if name in self.backups:
                 return None
             try:
                 payload = json.loads(f.read_text(encoding="utf-8"))
                 return StatsBackup(name=name, path=f, timestamp=payload.get("timestamp", ""))
-            except Exception:
+            except (json.JSONDecodeError, OSError, UnicodeDecodeError):
                 return None
 
         return list(filter(None, map(process_file, self.backup_dir.glob("*.json"))))
 
     def restore(self, name: str) -> dict[str, Any] | None:
+        """Restore a backup by name."""
         if name in self.backups:
             return self.backups[name]["data"]
 
@@ -121,12 +121,14 @@ class StatsSnapshotManager:
     """Manages snapshots of stats state."""
 
     def __init__(self, snapshot_dir: str | Path | None = None) -> None:
+        """Initializes the StatsSnapshotManager with an optional snapshot directory."""
         self.snapshot_dir: Path | None = Path(snapshot_dir) if snapshot_dir is not None else None
         if self.snapshot_dir:
             self.snapshot_dir.mkdir(parents=True, exist_ok=True)
         self.snapshots: dict[str, StatsSnapshot] = {}
 
     def create_snapshot(self, name: str, data: dict[str, Any]) -> StatsSnapshot:
+        """Create a snapshot with the given name and data."""
         snapshot = StatsSnapshot(name=name, data=data, timestamp=datetime.now().isoformat())
         self.snapshots[name] = snapshot
         if self.snapshot_dir:
@@ -152,6 +154,7 @@ class StatsSnapshotManager:
             return []
 
         def process_snap(f: Path) -> StatsSnapshot | None:
+            """Process a single snapshot file, returning a StatsSnapshot if valid."""
             name = f.stem
             if name in self.snapshots:
                 return None
@@ -162,7 +165,7 @@ class StatsSnapshotManager:
                     data=payload.get("data", {}),
                     timestamp=payload.get("timestamp", ""),
                 )
-            except Exception:
+            except (json.JSONDecodeError, OSError, UnicodeDecodeError):
                 return None
 
         return list(filter(None, map(process_snap, self.snapshot_dir.glob("*.json"))))
@@ -193,6 +196,7 @@ class StatsCompressor:
     """Compresses metric data."""
 
     def compress(self, data: Any) -> bytes:
+        """Compresses data using zlib, with optional Rust acceleration for JSON serialization."""
         # Phase 16: Try Rust-accelerated JSON serialization + compression
         if _RUST_AVAILABLE and hasattr(rust_core, "compress_json_rust"):
             with contextlib.suppress(Exception):
@@ -207,6 +211,7 @@ class StatsCompressor:
         return zlib.compress(payload)
 
     def decompress(self, data: bytes) -> Any:
+        """Decompresses data using zlib, with optional Rust acceleration for JSON parsing."""
         # Phase 16: Try Rust-accelerated decompression + JSON parsing
         if _RUST_AVAILABLE and hasattr(rust_core, "decompress_json_rust"):
             with contextlib.suppress(Exception):

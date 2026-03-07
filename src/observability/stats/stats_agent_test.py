@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Test suite for storage_engine.py."""
 # Auto-synced test for observability/stats/stats_agent.py
 import importlib.util
 import pathlib

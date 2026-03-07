@@ -1,15 +1,6 @@
 #!/usr/bin/env python3
+"""Pytest configuration for the repository."""
 from __future__ import annotations
-
-"""Pytest configuration for the repository.
-
-This module defines a small object-oriented framework for our custom
-`pytest` shims.  Each responsibility is encapsulated in a class and the
-public functions at the bottom simply delegate to a single manager
-instance.  The goal is maintainability – the previous procedural file
-grew unwieldy and produced flake8 errors; the new design avoids global
-state and clarifies intent.
-"""
 
 import sys
 import logging
@@ -328,6 +319,16 @@ class SessionManager:
                 subprocess.run([sys.executable, "scripts/fix_leading_imports.py"], check=True)
             except Exception as exc:  # pragma: no cover
                 logging.getLogger("pytest-shim").warning("import fixer invocation failed: %s", exc)
+
+        # third-party libraries (chromadb/pydantic) emit a Python 3.14
+        # compatibility warning which pollutes the test output.  Suppress it
+        # globally here since we cannot fix upstream.
+        import warnings
+
+        warnings.filterwarnings(
+            "ignore",
+            message="Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater",
+        )
 
         self.star_imports.preimport()
 

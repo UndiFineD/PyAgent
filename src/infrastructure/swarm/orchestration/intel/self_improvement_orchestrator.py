@@ -22,7 +22,7 @@ import os
 from pathlib import Path
 from typing import Any
 import requests
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+from src.infrastructure.fleet.FleetManager import FleetManager
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION

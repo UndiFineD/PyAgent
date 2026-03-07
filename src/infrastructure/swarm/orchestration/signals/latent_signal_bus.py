@@ -22,7 +22,7 @@ Latent signal bus.py module.
 import base64
 import json
 import logging
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+from src.infrastructure.fleet.FleetManager import FleetManager
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
 

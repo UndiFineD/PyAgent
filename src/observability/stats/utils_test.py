@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Auto-synced test for observability/stats/utils.py."""
 # Auto-synced test for observability/stats/utils.py
 import importlib.util
 import pathlib

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Utils.py module."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,24 +14,13 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Utils.py module.
-"""
-
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-
-
 import argparse
 import contextlib
 import json
 import logging
 import sys
 
-from src.core.base.lifecycle.version import VERSION
-
+from ...core.base.lifecycle.version import VERSION
 from .stats_agent import StatsAgent
 
 __version__ = VERSION

@@ -21,7 +21,7 @@ Sub swarm spawner.py module.
 
 import logging
 import uuid
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+from src.infrastructure.fleet.FleetManager import FleetManager
 from typing import TYPE_CHECKING
 
 from src.core.base.lifecycle.version import VERSION

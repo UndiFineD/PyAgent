@@ -16,7 +16,7 @@ No commands will be executed.
 
 import logging
 import time
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+from src.infrastructure.fleet.FleetManager import FleetManager
 from typing import TYPE_CHECKING, Dict
 
 from src.core.base.lifecycle.version import VERSION

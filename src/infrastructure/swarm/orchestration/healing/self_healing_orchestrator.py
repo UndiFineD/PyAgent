@@ -20,7 +20,7 @@ Self healing orchestrator.py module.
 
 import logging
 import time
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+from src.infrastructure.fleet.FleetManager import FleetManager
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 

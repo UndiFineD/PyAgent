@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""UsageMessage dataclass for structured usage telemetry."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,20 +14,9 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-UsageMessage - Structured telemetry for platform detection and async reporting.
-
-Inspired by vLLM's UsageMessage pattern for collecting environment information
-and reporting usage statistics with privacy-respecting opt-out support.
-
-Phase 24: Advanced Observability & Parsing
-"""
-
-
 import contextlib
 import os
 import platform
-import functools
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
@@ -35,8 +25,6 @@ from threading import Thread
 from typing import Any
 from uuid import uuid4
 
-from psutil import virtual_memory
-
 # ============================================================================
 # Constants and configuration
 # ============================================================================
@@ -44,7 +32,6 @@ from psutil import virtual_memory
 _CONFIG_HOME: str = os.environ.get("PYAGENT_CONFIG_ROOT", str(Path.home() / ".config" / "pyagent"))
 _USAGE_STATS_JSON_PATH: str = os.path.join(_CONFIG_HOME, "usage_stats.json")
 _DO_NOT_TRACK_PATH: str = os.path.join(_CONFIG_HOME, "do_not_track")
-_USAGE_STATS_ENABLED: bool | None = None
 
 # Environment variables to collect
 _ENV_VARS_TO_COLLECT: list[str] = [
@@ -56,6 +43,35 @@ _ENV_VARS_TO_COLLECT: list[str] = [
 
 # Global runtime data
 _GLOBAL_RUNTIME_DATA: dict[str, str | int | bool] = {}
+
+
+class _UsageStatsConfig:
+    """Thread-safe configuration for usage stats."""
+
+    _enabled: bool | None = None
+
+    @classmethod
+    def is_enabled(cls) -> bool:
+        """Check if usage statistics collection is enabled."""
+        if cls._enabled is None:
+            opts = [
+                os.environ.get("PYAGENT_DO_NOT_TRACK", "0") == "1",
+                os.environ.get("DO_NOT_TRACK", "0") == "1",
+                os.environ.get("PYAGENT_NO_USAGE_STATS", "0") == "1",
+                os.path.exists(_DO_NOT_TRACK_PATH)
+            ]
+            cls._enabled = not any(opts)
+        return cls._enabled
+
+    @classmethod
+    def disable(cls) -> None:
+        """Programmatically disable usage stats collection."""
+        cls._enabled = False
+
+    @classmethod
+    def enable(cls) -> None:
+        """Programmatically enable usage stats collection."""
+        cls._enabled = True
 
 
 class UsageContext(str, Enum):
@@ -113,30 +129,17 @@ def is_usage_stats_enabled() -> bool:
     Returns:
         True if usage stats are enabled, False otherwise
     """
-    global _USAGE_STATS_ENABLED
-
-    if _USAGE_STATS_ENABLED is None:
-        opts = [
-            os.environ.get("PYAGENT_DO_NOT_TRACK", "0") == "1",
-            os.environ.get("DO_NOT_TRACK", "0") == "1",
-            os.environ.get("PYAGENT_NO_USAGE_STATS", "0") == "1",
-            os.path.exists(_DO_NOT_TRACK_PATH)
-        ]
-        _USAGE_STATS_ENABLED = not any(opts)
-
-    return _USAGE_STATS_ENABLED
+    return _UsageStatsConfig.is_enabled()
 
 
 def disable_usage_stats() -> None:
     """Programmatically disable usage stats collection."""
-    global _USAGE_STATS_ENABLED
-    _USAGE_STATS_ENABLED = False
+    _UsageStatsConfig.disable()
 
 
 def enable_usage_stats() -> None:
     """Programmatically enable usage stats collection."""
-    global _USAGE_STATS_ENABLED
-    _USAGE_STATS_ENABLED = True
+    _UsageStatsConfig.enable()
 
 
 # ============================================================================
@@ -175,7 +178,9 @@ def detect_cloud_provider() -> str:
             if os.path.isfile(vendor_file):
                 with open(vendor_file, 'r', encoding='utf-8') as f:
                     content: str = f.read().lower()
-                    return next((provider for identifier, provider in cloud_identifiers.items() if identifier in content), None)
+                    return next(
+                        (provider for identifier, provider in cloud_identifiers.items() if identifier in content),
+                        None)
         except (IOError, PermissionError):
             pass
         return None
@@ -233,14 +238,21 @@ def get_gpu_info() -> dict[str, Any]:
     try:
         import torch
 
-        if torch.cuda.is_available():
+        cuda = getattr(torch, "cuda", None)
+        if cuda is not None and cuda.is_available():
+            cuda_version = None
+            # Try to get CUDA version from torch.version.cuda
+            version_attr = getattr(torch, "version", None)
+            if version_attr is not None:
+                cuda_version = getattr(version_attr, "cuda", None)
+
             return {
-                "count": torch.cuda.device_count(),
-                "name": torch.cuda.get_device_name(0),
-                "memory": torch.cuda.get_device_properties(0).total_memory,
-                "cuda_version": torch.version.cuda,
+                "count": cuda.device_count(),
+                "name": cuda.get_device_name(0),
+                "memory": cuda.get_device_properties(0).total_memory,
+                "cuda_version": cuda_version,
             }
-    except ImportError:
+    except (ImportError, AttributeError):
         pass
 
     return {}
@@ -310,6 +322,8 @@ class UsageMessage:
 
     def collect_environment_info(self) -> None:
         """Collect all environment information."""
+        import json
+
         # Platform
         self.provider = detect_cloud_provider()
         self.architecture = platform.machine()
@@ -334,8 +348,6 @@ class UsageMessage:
             self.cuda_version = gpu_info.get("cuda_version")
 
         # Environment variables
-            import json
-
         env_data: dict[str, str | None] = {var: os.environ.get(var) for var in _ENV_VARS_TO_COLLECT if os.environ.get(var)}
         if env_data:
             self.env_var_json = json.dumps(env_data)

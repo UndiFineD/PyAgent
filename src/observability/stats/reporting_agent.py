@@ -19,13 +19,10 @@ import os
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import TYPE_CHECKING
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-
+from src.core.base.base_agent import BaseAgent
 from .transparency_agent import TransparencyAgent
-
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+from src.infrastructure.fleet.FleetManager import FleetManager
 
 
 class ReportingAgent(BaseAgent):
@@ -49,7 +46,6 @@ class ReportingAgent(BaseAgent):
         from src.logic.agents.development.pull_request_agent import PullRequestAgent
         from src.logic.agents.development.spec_tool_agent import SpecToolAgent
         from src.logic.agents.development.tool_evolution_agent import ToolEvolutionAgent
-        from src.logic.agents.system.config_agent import ConfigAgent
         from src.logic.agents.system.kernel_agent import KernelAgent
 
         self.fleet.register_agent(
@@ -76,11 +72,6 @@ class ReportingAgent(BaseAgent):
             "PR",
             PullRequestAgent,
             str(self.workspace_root / "src/logic/agents/development/pull_request_agent.py"),
-        )
-        self.fleet.register_agent(
-            "Config",
-            ConfigAgent,
-            str(self.workspace_root / "src/logic/agents/system/config_agent.py"),
         )
         self.fleet.register_agent(
             "Evolution",
@@ -112,7 +103,6 @@ class ReportingAgent(BaseAgent):
 
         workflow = [
             {"agent": "Consolidator", "action": "consolidate_all", "args": []},
-            {"agent": "Config", "action": "validate_env", "args": []},
             {"agent": "Kernel", "action": "get_system_info", "args": []},
             {"agent": "Transparency", "action": "generate_audit_trail", "args": []},
             {
@@ -150,10 +140,8 @@ class ReportingAgent(BaseAgent):
 if __name__ == "__main__":
     # Local test
     import asyncio
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager  # noqa: F811
-    from src.observability.structured_logger import StructuredLogger
 
-    logger = StructuredLogger(__name__)
+    logger = logging.getLogger(__name__)
     f = FleetManager(workspace_root=os.getcwd())
     agent = ReportingAgent(f)
     logger.info(asyncio.run(agent.generate_dashboard()))

@@ -3,8 +3,26 @@
 from __future__ import annotations
 
 from typing import Any
-from src.core.base.lifecycle.version import VERSION
-from src.core.lazy_loader import ModuleLazyLoader
+
+try:
+    from src.interface.lazy_loader import ModuleLazyLoader
+except ImportError:
+    # Fallback for when lazy_loader is not available
+    class ModuleLazyLoader:
+        """Simple fallback lazy loader that raises an error 
+        if used without the actual implementation.
+        """
+        def __init__(self, registry):
+            """Initialize with a registry of module paths and attributes."""
+            self.registry = registry
+
+        def load(self, name: str):
+            """Load the specified attribute from the registered module."""
+            if name not in self.registry:
+                raise AttributeError(f"module has no attribute '{name}'")
+            module_path, attr_name = self.registry[name]
+            mod = __import__(module_path, fromlist=[attr_name])
+            return getattr(mod, attr_name)
 
 from .open_telemetry_tracer import (
         NullSpan,
@@ -111,7 +129,6 @@ def __getattr__(name: str) -> Any:
 
 
 __all__ = [
-    "VERSION",
     "NullSpan",
     "NullTracer",
     "SpanAttributes",

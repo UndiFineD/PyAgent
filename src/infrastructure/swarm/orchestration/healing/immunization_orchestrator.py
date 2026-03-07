@@ -21,7 +21,7 @@ Immunization orchestrator.py module.
 
 import logging
 import re
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+from src.infrastructure.fleet.FleetManager import FleetManager
 from typing import TYPE_CHECKING, Any
 
 from src.core.base.lifecycle.version import VERSION

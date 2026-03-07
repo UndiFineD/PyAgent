@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+"""Helper script to fix leading spaces/tabs before import statements in src/ files."""
 # this wrapper simply forwards to the more robust fixer in strip_leading_import_spaces
 # to keep both scripts in sync; the pytest shim calls this file for historical reasons.
 from __future__ import annotations

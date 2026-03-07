@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Auto-synced test for observability/stats/streaming.py."""
 # Auto-synced test for observability/stats/streaming.py
 import importlib.util
 import pathlib
