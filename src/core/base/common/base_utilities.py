@@ -27,14 +27,21 @@ from src.core.base.common.file_system_core import FileSystemCore
 
 # Regex for matching ANSI escape sequences (CSI codes)
 _ansi_re = re.compile(r"\x1B\[[0-?]*[ -/]*[@-~]")
+_fs = FileSystemCore()
+
 
 def strip_ansi_codes(text: str) -> str:
     """Remove ANSI escape sequences from a string."""
     return _ansi_re.sub("", text)
 
-_fs = FileSystemCore()
 
-def _bulk_replace_python_fallback(file_paths: list[Union[str, Path]], old_pattern: str, new_string: str, use_regex: bool) -> dict[str, bool]:
+def _bulk_replace_python_fallback(
+    file_paths: list[Union[str, Path]],
+    old_pattern: str,
+    new_string: str,
+    use_regex: bool
+) -> dict[str, bool]:
+    """Python fallback for bulk_replace when Rust acceleration is not available."""
     results = {}
     for path_in in file_paths:
         path = Path(path_in)
@@ -54,6 +61,7 @@ def _bulk_replace_python_fallback(file_paths: list[Union[str, Path]], old_patter
         else:
             results[str(path)] = False
     return results
+
 
 def bulk_replace_files(
     file_paths: list[Union[str, Path]],
@@ -79,6 +87,7 @@ def bulk_replace_files(
         return RustBridge.bulk_replace_files(str_paths, replacements)
 
     return _bulk_replace_python_fallback(file_paths, old_pattern, new_string, use_regex)
+
 
 def bulk_replace(
     file_paths: list[str | Path],
@@ -167,6 +176,7 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
 
             @wraps(func)
             async def wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:
+                """Async wrapper for tool methods, with interaction recording."""
                 # Phase 108: Enhanced Traceability
                 logging.debug("Executing async tool %s on %s", func.__name__, self.__class__.__name__)
 
@@ -186,6 +196,7 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
 
             @wraps(func)
             def wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:
+                """Sync wrapper for tool methods, with interaction recording."""
                 # Phase 108: Enhanced Traceability
 
                 logging.debug("Executing tool %s on %s", func.__name__, self.__class__.__name__)

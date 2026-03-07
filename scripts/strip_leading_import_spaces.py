@@ -61,6 +61,7 @@ def fix_file(path: Path, dry_run: bool = False, verbose: bool = False) -> bool:
 
 
 def main() -> None:
+    """Scan .py files and fix leading spaces before imports."""
     p = argparse.ArgumentParser(description="Strip stray leading spaces before imports")
     p.add_argument("--path", "-p", default="src", help="root directory to scan")
     p.add_argument("--dry-run", action="store_true")

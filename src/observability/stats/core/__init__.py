@@ -12,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Core package.
-"""
-
 from .profiling_core import ProfileStats, ProfilingCore  # noqa: F401
 from .stability_core import FleetMetrics, StabilityCore  # noqa: F401
 from .tracing_core import TracingCore  # noqa: F401

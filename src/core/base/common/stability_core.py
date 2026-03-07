@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Core logic for fleet stability, health monitoring, and anomaly detection."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,28 +14,20 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Core logic for fleet stability, health monitoring, and anomaly detection.
-"""
-
-
 import contextlib
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
-
+from .base_core import BaseCore
 try:
     import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
-from .base_core import BaseCore
-
 
 @dataclass
 class HealthStatus:
     """Status tracking for individual agents or components."""
-
     component_id: str
     is_alive: bool = True
     last_seen: float = field(default_factory=time.time)
@@ -51,6 +44,7 @@ class StabilityCore(BaseCore):
     """
 
     def __init__(self, name: str = "StabilityCore", repo_root: Optional[str] = None) -> None:
+        """Initializes the StabilityCore with optional name and repo_root."""
         super().__init__(name=name, repo_root=repo_root)
         self.timeout_seconds: float = 30.0
         self.max_errors: int = 5

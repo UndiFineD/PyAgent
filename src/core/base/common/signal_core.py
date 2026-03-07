@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Core logic for signal broadcasting and pub-sub messaging."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,16 +14,10 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Core logic for signal broadcasting and pub-sub messaging.
-"""
-
-
 import logging
 import queue
 import threading
 from typing import Any, Callable, Dict, List
-
 from .base_core import BaseCore
 
 logger = logging.getLogger("pyagent.signal")
@@ -35,6 +30,7 @@ class SignalCore(BaseCore):
     """
 
     def __init__(self) -> None:
+        """Initializes the SignalCore with an empty subscriber registry and a processing thread."""
         super().__init__()
         self._subscribers: Dict[str, List[Callable[[Any, str], None]]] = {}
         self._queue: queue.Queue[Dict[str, Any]] = queue.Queue()

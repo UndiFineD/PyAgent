@@ -14,11 +14,6 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Profiling core.py module.
-"""
-
-
 import pstats
 from dataclasses import dataclass
 from typing import Any
@@ -31,6 +26,7 @@ except ImportError:  # type: ignore[assignment]
 
 @dataclass(frozen=True)
 class ProfileStats:
+    """Structured profiling data for a single function."""
     function_name: str
     call_count: int
     total_time: float
@@ -53,7 +49,8 @@ class ProfilingCore:
 
         # pstats stores data in a complex tuple structure
         # (cc, nc, tt, ct, callers)
-        for func, (cc, nc, tt, ct, callers) in pstats_obj.stats.items():
+        stats_dict = pstats_obj.stats  # type: ignore[attr-defined]
+        for func, (cc, nc, tt, ct, callers) in stats_dict.items():
             if len(results) >= limit:
                 break
             results.append(

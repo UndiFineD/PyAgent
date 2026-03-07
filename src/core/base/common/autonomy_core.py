@@ -15,7 +15,6 @@
 """Unified Autonomy and Self-Model core."""
 
 from typing import List, Optional
-
 # Use absolute import to avoid issues when module is executed in isolation
 from src.core.base.common.base_core import BaseCore
 
@@ -32,6 +31,7 @@ class AutonomyCore(BaseCore):
     """
 
     def __init__(self, agent_id: str, repo_root: Optional[str] = None) -> None:
+        """Initializes the AutonomyCore with an optional repository root for context."""
         super().__init__(name=f"Autonomy-{agent_id}", repo_root=repo_root)
         self.agent_id = agent_id
         self.performance_history: List[float] = []
@@ -40,10 +40,8 @@ class AutonomyCore(BaseCore):
         """Rust-accelerated autonomy evaluation."""
         if rc and hasattr(rc, "evaluate_autonomy_score"):  # pylint: disable=no-member
             try:
-                # pylint: disable=no-member
-                return rc.evaluate_autonomy_score(agent_id, stats)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+                return rc.evaluate_autonomy_score(agent_id, stats)
+            except Exception as e: 
                 pass
         return 0.5  # Default fallback
 

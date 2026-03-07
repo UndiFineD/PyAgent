@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,25 +11,16 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-Run self-improvement with comprehensive profiling enabled.
-Tracks ALL function calls in src/ and rust_core during execution.
-
-Uses Python's built-in cProfile for accurate function profiling,
-plus custom rust_core wrapper for Rust function tracking.
-"""
-
+from __future__ import annotations
 
 import atexit
 import cProfile
 import functools
-import io
 import json
 import os
-import pstats
 import sys
 import time
+
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime
@@ -46,12 +35,15 @@ if project_root not in sys.path:
 
 src_path = os.path.join(project_root, "src")
 
+# Import from absolute module path
+from src.infrastructure.services.dev.scripts.run_fleet_self_improvement import (
+    main as run_self_improvement_main
+)
+
 
 # =============================================================================
 # RUST PROFILER (Custom wrapper)
 # =============================================================================
-
-
 @dataclass
 class RustFunctionStats:
     """Statistics for a Rust function."""
@@ -62,6 +54,7 @@ class RustFunctionStats:
 
     @property
     def avg_time_us(self) -> float:
+        """Average time per call in microseconds."""
         return (
             (self.total_time_ns / self.call_count / 1000.0)
             if self.call_count > 0
@@ -70,27 +63,31 @@ class RustFunctionStats:
 
     @property
     def total_time_ms(self) -> float:
+        """Total time in milliseconds."""
         return self.total_time_ns / 1_000_000.0
 
 
 class RustProfiler:
     """Profiler specifically for rust_core function calls."""
-
     _instance = None
+    _stats: dict[str, RustFunctionStats] = {}
 
     def __new__(cls) -> RustProfiler:
+        """Singleton pattern to ensure one global profiler instance."""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance._stats = {}
         return cls._instance
 
     def record_call(self, func_name: str, elapsed_ns: int) -> None:
+        """Record a call to a Rust function."""
         if func_name not in self._stats:
             self._stats[func_name] = RustFunctionStats(name=func_name)
         self._stats[func_name].call_count += 1
         self._stats[func_name].total_time_ns += elapsed_ns
 
     def get_stats(self) -> dict[str, RustFunctionStats]:
+        """Get stats for all profiled Rust functions."""
         return {k: v for k, v in self._stats.items() if v.call_count > 0}
 
 
@@ -104,12 +101,14 @@ try:
         """Wrapper that profiles all rust_core function calls."""
 
         def __getattr__(self, name: str) -> object:
+            """Intercept attribute access to wrap callable functions for profiling."""
             original = getattr(_original_rc, name)
 
             if callable(original):
 
                 @functools.wraps(original)
                 def profiled_func(*args, **kwargs):
+                    """Profile a call to a Rust function and record it in the RustProfiler."""
                     start_time_ns = time.perf_counter_ns()
                     try:
                         return original(*args, **kwargs)
@@ -129,12 +128,11 @@ except ImportError:
 # =============================================================================
 # COMPREHENSIVE PROFILE ANALYZER
 # =============================================================================
-
-
 class ComprehensiveProfileAnalyzer:
     """Analyzes cProfile results and filters for src/ code."""
 
     def __init__(self, src_dir: str, proj_root: str) -> None:
+        """Initialize with src/ directory to focus on and project root for path normalization."""
         self._src_dir = src_dir
         self._proj_root = proj_root
         self.profiler = cProfile.Profile()
@@ -173,28 +171,32 @@ class ComprehensiveProfileAnalyzer:
 
     def analyze(self) -> dict:
         """Analyze profiling results and return structured data."""
-        # Get stats
-        stream = io.StringIO()
-        stats = pstats.Stats(self.profiler, stream=stream)
-
         # Extract raw stats
         raw_stats = (
-            stats.stats
-        )  # Dict of (filename, line, func) -> (ncalls, totcalls, tottime, cumtime, callers)
+            self.profiler.getstats()
+        )  # List of profiler_entry tuples
 
         # Filter and process for src/ only
         src_functions = []
-        module_stats = defaultdict(
+        module_stats: dict[str, dict[str, int | float | set[str]]] = defaultdict(
             lambda: {"call_count": 0, "total_time_s": 0.0, "functions": set()}
         )
 
-        for (filename, _line, func_name), (
-            ncalls,
-            totcalls,
-            tottime,
-            cumtime,
-            _callers,
-        ) in raw_stats.items():
+        for entry in raw_stats:
+            # Handle both code objects and string filenames
+            if isinstance(entry.code, str):
+                filename = entry.code
+                func_name = "unknown"
+            else:
+                filename = entry.code.co_filename
+                _line = entry.code.co_firstlineno
+                func_name = entry.code.co_name
+            (ncalls, totcalls, tottime, cumtime) = (
+                entry.callcount,
+                entry.callcount,
+                entry.inlinetime,
+                entry.totaltime,
+            )
             if self._is_src_file(filename):
                 module = self._clean_filename(filename)
                 qualified_name = f"{module}.{func_name}"
@@ -212,9 +214,20 @@ class ComprehensiveProfileAnalyzer:
                     }
                 )
 
-                module_stats[module]["call_count"] += ncalls
-                module_stats[module]["total_time_s"] += tottime
-                module_stats[module]["functions"].add(func_name)
+                # Safely extract and update call_count (always int)
+                current_call_count = module_stats[module]["call_count"]
+                assert isinstance(current_call_count, int)
+                module_stats[module]["call_count"] = current_call_count + ncalls
+
+                # Safely extract and update total_time_s (always float)
+                current_total_time = module_stats[module]["total_time_s"]
+                assert isinstance(current_total_time, float)
+                module_stats[module]["total_time_s"] = current_total_time + tottime
+
+                # Safely extract and update functions (always set)
+                functions_set = module_stats[module]["functions"]
+                assert isinstance(functions_set, set)
+                functions_set.add(func_name)
 
         # Sort by cumulative time
         by_cumtime = sorted(src_functions, key=lambda x: x["cumtime_s"], reverse=True)
@@ -227,8 +240,8 @@ class ComprehensiveProfileAnalyzer:
                 {
                     "module": k,
                     "call_count": v["call_count"],
-                    "total_time_ms": v["total_time_s"] * 1000,
-                    "function_count": len(v["functions"]),
+                    "total_time_ms": float(v["total_time_s"]) * 1000 if isinstance(v["total_time_s"], (int, float)) else 0.0,
+                    "function_count": len(v["functions"]) if isinstance(v["functions"], set) else 0,
                 }
                 for k, v in module_stats.items()
             ],
@@ -366,16 +379,9 @@ class ComprehensiveProfileAnalyzer:
 # =============================================================================
 # MAIN
 # =============================================================================
-
 print("🐍 Python profiling enabled - using cProfile for src/ code")
-
 # Initialize analyzer
 analyzer = ComprehensiveProfileAnalyzer(src_path, project_root)
-
-# Import the self-improvement script AFTER setting up profiling
-from src.infrastructure.services.dev.scripts.analysis.run_fleet_self_improvement import (
-    main as run_self_improvement_main,
-)  # noqa: E402
 
 
 def save_profile_report() -> None:

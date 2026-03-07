@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+"""Orchestrator for the fleet's self-improvement cycle, 
+including tech debt scanning, security analysis, and autonomous fixes.
+"""
 import os
 import json
 import logging
@@ -7,6 +11,7 @@ from typing import Dict, List, Any
 from src.classes.base_agent import BaseAgent
 from src.classes.backend.LLMClient import LLMClient
 from version import is_gate_open
+
 
 class SelfImprovementOrchestrator(BaseAgent):
     """
@@ -21,7 +26,7 @@ class SelfImprovementOrchestrator(BaseAgent):
         self.improvement_log = os.path.join(self.workspace_root, "logs", "self_improvement_audit.jsonl")
         self.research_doc = os.path.join(self.workspace_root, "docs", "IMPROVEMENT_RESEARCH.md")
         os.makedirs(os.path.dirname(self.improvement_log), exist_ok=True)
-        
+
         # Phase 107: AI-assisted refactoring
         import requests
         self.ai = LLMClient(requests, workspace_root=self.workspace_root)
@@ -31,11 +36,13 @@ class SelfImprovementOrchestrator(BaseAgent):
         # Gatekeeping Check (Phase 108)
         from version import STABILITY_SCORE
         if not is_gate_open(100) or STABILITY_SCORE < 0.8:
-            logging.error(f"Self-Improvement: System stability too low ({STABILITY_SCORE}) for autonomous code modification.")
+            logging.error(
+                f"Self-Improvement: System stability too low ({STABILITY_SCORE}) for autonomous code modification."
+            )
             return {"error": "Stability gate closed - system requires manual stabilization"}
 
         logging.info(f"Self-Improvement: Starting cycle for {target_dir}...")
-        
+
         # Phase 108: Ingest actionable tasks from Collective Intelligence
         self.active_tasks = []
         if hasattr(self.fleet, 'intelligence'):
@@ -92,23 +99,23 @@ class SelfImprovementOrchestrator(BaseAgent):
             if lessons:
                 results["lessons_learned"] = len(lessons)
                 logging.info(f"Self-Improvement: Extracted {len(lessons)} new lessons from local training shards.")
-            
+
             # Fetch summary for research document
             intelligence_summary = self.fleet.sql_metadata.get_intelligence_summary()
             results["intelligence_summary"] = intelligence_summary
         except Exception as e:
             logging.error(f"Intelligence: Lessons review failed: {e}")
-        
+
         # Phase 108: Relational Maintenance (Aggressive optimization for trillion-param scale)
         try:
             logging.info("Self-Improvement: Optimizing relational metadata indices...")
             self.fleet.sql_metadata.optimize_db()
         except Exception as e:
             logging.error(f"Maintenance: Database optimization failed: {e}")
-        
+
         # Self-Research: Update the roadmap (Phase 104)
         self.update_research_report(results)
-        
+
         return results
 
     def update_research_report(self, results: Dict[str, Any]) -> str:
@@ -125,7 +132,7 @@ class SelfImprovementOrchestrator(BaseAgent):
         summary += f"- **Issues Identified**: {results['issues_found']}\n"
         summary += f"- **Autonomous Fixes**: {results['fixes_applied']}\n"
         summary += f"- **Stability Gate Status**: {'OPEN (Green)' if is_gate_open(100) else 'CLOSED (Red)'}\n"
-        
+
         if results['details']:
             summary += "\n#### Top Issues Discovered\n"
             # Sort by issue count
@@ -148,13 +155,13 @@ class SelfImprovementOrchestrator(BaseAgent):
 
         with open(self.research_doc, "w", encoding="utf-8") as f:
             f.write(new_content)
-        
+
         logging.info("Self-Improvement: Updated IMPROVEMENT_RESEARCH.md")
 
     def _analyze_and_fix(self, file_path: str) -> List[Dict[str, Any]]:
         """Uses specialized agents to analyze and potentially fix a file."""
         findings = []
-        
+
         # 0. Versioning Gatekeeping (Phase 106)
         version_file = os.path.join(self.workspace_root, "version.py")
         if not os.path.exists(version_file):
@@ -198,7 +205,7 @@ class SelfImprovementOrchestrator(BaseAgent):
                         # Simple heuristic: Avoid flagging the scanner file if it matches its own definition strings
                         if "SelfImprovementOrchestrator" in content and pattern in str(dangerous_patterns):
                             continue
-                        
+
                         findings.append({
                             "type": "Security Risk",
                             "message": f"{msg} (Pattern: {pattern})",
@@ -252,7 +259,7 @@ class SelfImprovementOrchestrator(BaseAgent):
                 "message": "Found time.sleep() in non-test code. Possible blocking bottleneck.",
                 "file": file_path
             })
-        
+
         # 7. Speed: Missing Cache usage for expensive patterns
         expensive_patterns = [r"os\.walk\(", r"pathlib\.Path\.glob\(", r"requests\.get\(", r"requests\.post\("]
         for pattern in expensive_patterns:
@@ -262,7 +269,7 @@ class SelfImprovementOrchestrator(BaseAgent):
                     "message": f"Repeated expensive call '{pattern}' detected. Implement caching (lru_cache) or persistent storage.",
                     "file": file_path
                 })
-        
+
         # 8. Intelligence Feedback: Missing shard recording (Phase 108)
         # We look for actual calls, avoiding matching type hints like subprocess.CompletedProcess
         io_pattern = r"(requests\.(get|post|put|delete|patch|head)\(|self\.ai|subprocess\.(run|call|Popen|check_call|check_output)\(|adb shell)"
@@ -272,13 +279,13 @@ class SelfImprovementOrchestrator(BaseAgent):
                 "message": "Component performs AI/IO or Shell operations without recording context to shards. Future self-improvement requires logic harvesting.",
                 "file": file_path
             })
-        
+
         # 9. Robustness: HTTP Connection Pooling (Phase 108)
         # Smarter check: look for actual usage of requests module, not just the word in docstrings
         if (re.search(r"requests\.(get|post|put|delete|patch|request)\(", content) or "http.client" in content):
             # Check for caching indicators (Phase 108: TTL, ConnectivityManager, status_cache)
             if "TTL" not in content and "status_cache" not in content.lower() and "ConnectivityManager" not in content:
-                 findings.append({
+                findings.append({
                     "type": "Resilience Issue",
                     "message": "Direct HTTP calls detected without connection status caching. Use 15-minute TTL status checks or ConnectivityManager.",
                     "file": file_path
@@ -323,23 +330,23 @@ class SelfImprovementOrchestrator(BaseAgent):
         # Autonomous Fixes (Self-Healing)
         fixed_count = 0
         new_content = content
-        
+
         for issue in findings:
             issue["fixed"] = False
-            
+
             # Simple fix for bare excepts
             if issue["type"] == "Robustness Issue":
                 new_content = re.sub(r"^(\s*)except:(\s*)(#.*)?$", r"\1except Exception:\2\3", new_content, flags=re.MULTILINE)
                 issue["fixed"] = True
                 fixed_count += 1
-            
+
             # Simple fix for unsafe YAML
             if "yaml.load(" in content and "yaml.safe_load(" not in content: # nosec
                 if "import yaml" in content:
                     new_content = new_content.replace("yaml.load(", "yaml.safe_load(") # nosec
                     issue["fixed"] = True
                     fixed_count += 1
-            
+
             # Fixed: Common Robustness and Speed issues (Phase 108)
             if issue["type"] == "Resilience Issue":
                 if "import requests" in new_content and "ConnectivityManager" not in new_content:
@@ -357,10 +364,10 @@ class SelfImprovementOrchestrator(BaseAgent):
                     new_content = new_content.replace("import ", "from functools import lru_cache\nimport ", 1)
                     # Find expensive looking function and tag it
                     if "def " in new_content:
-                         new_content = re.sub(r"def (\w+)\(([^)]*)\):", r"@lru_cache(maxsize=128)\ndef \1(\2):", new_content, count=1)
-                         issue["fixed"] = True
-                         fixed_count += 1
-                         logging.info(f"Self-Healing: Added @lru_cache to {file_path}")
+                        new_content = re.sub(r"def (\w+)\(([^)]*)\):", r"@lru_cache(maxsize=128)\ndef \1(\2):", new_content, count=1)
+                        issue["fixed"] = True
+                        fixed_count += 1
+                        logging.info(f"Self-Healing: Added @lru_cache to {file_path}")
 
             # Phase 107: AI-Assisted Fixes for Complex Issues (Security & Speed)
             if not issue["fixed"] and issue["type"] in ["Security Risk", "Speed Issue"]:
@@ -370,17 +377,17 @@ class SelfImprovementOrchestrator(BaseAgent):
                 context_end = min(len(lines), issue.get('line', 0) + 5)
                 prompt += "\n".join(lines[context_start:context_end])
                 prompt += "\n\nProvide ONLY the replacement code for the affected lines."
-                
+
                 fix_suggestion = self.ai.smart_chat(prompt, system_prompt="You are a senior Python security and performance engineer. Provide concise code fixes.")
                 if fix_suggestion and "```" not in fix_suggestion and len(fix_suggestion) < 200:
                     # Apply if it's a simple line replacement
                     old_line = lines[issue.get('line', 1)-1]
                     if old_line.strip() in fix_suggestion or fix_suggestion.strip() in old_line:
-                         # We'll be cautious here, but for simple things like verify=False -> verify=True
-                         new_content = new_content.replace(old_line, fix_suggestion)
-                         issue["fixed"] = True
-                         fixed_count += 1
-                         logging.info(f"Self-Healing: AI fixed {issue['type']} in {file_path}")
+                        # We'll be cautious here, but for simple things like verify=False -> verify=True
+                        new_content = new_content.replace(old_line, fix_suggestion)
+                        issue["fixed"] = True
+                        fixed_count += 1
+                        logging.info(f"Self-Healing: AI fixed {issue['type']} in {file_path}")
 
             # Phase 107: Speed Issue - Auto Lazy Loading
             if issue["type"] == "Speed Issue" and not issue["fixed"]:
@@ -395,30 +402,30 @@ class SelfImprovementOrchestrator(BaseAgent):
             if issue["type"] == "Rust Readiness Task":
                 # 1. AI-Driven Massive Type Inference (Phase 108)
                 if not issue["fixed"] and "Found" in issue["message"]:
-                     # Use the whole file context if it's missing lots of types
-                     prompt = f"Add comprehensive Python type hints (return types and arguments) to ALL untyped functions in the following code for Rust FFI stability. Return ONLY the modified code:\n\n{new_content[:8000]}"
-                     try:
-                         ai_typed_code = self.ai.smart_chat(prompt, system_prompt="You are a senior Rust/Python integration expert. Your task is to add perfect type hints to make Python code ready for binding with Rust.")
-                         if ai_typed_code and "def " in ai_typed_code and "->" in ai_typed_code:
-                              # Extract code from Markdown if AI wraps it
-                              if "```python" in ai_typed_code:
-                                   ai_typed_code = ai_typed_code.split("```python")[1].split("```")[0].strip()
-                              elif "```" in ai_typed_code:
-                                   ai_typed_code = ai_typed_code.split("```")[1].split("```")[0].strip()
-                              
-                              new_content = ai_typed_code
-                              issue["fixed"] = True
-                              fixed_count += 1
-                              logging.info(f"Self-Healing: AI performed mass-scale type inference in {file_path}")
-                     except Exception as e:
-                         logging.error(f"AI Typing failed for {file_path}: {e}")
+                    # Use the whole file context if it's missing lots of types
+                    prompt = f"Add comprehensive Python type hints (return types and arguments) to ALL untyped functions in the following code for Rust FFI stability. Return ONLY the modified code:\n\n{new_content[:8000]}"
+                    try:
+                        ai_typed_code = self.ai.smart_chat(prompt, system_prompt="You are a senior Rust/Python integration expert. Your task is to add perfect type hints to make Python code ready for binding with Rust.")
+                        if ai_typed_code and "def " in ai_typed_code and "->" in ai_typed_code:
+                            # Extract code from Markdown if AI wraps it
+                            if "```python" in ai_typed_code:
+                                ai_typed_code = ai_typed_code.split("```python")[1].split("```")[0].strip()
+                            elif "```" in ai_typed_code:
+                                ai_typed_code = ai_typed_code.split("```")[1].split("```")[0].strip()
+
+                            new_content = ai_typed_code
+                            issue["fixed"] = True
+                            fixed_count += 1
+                            logging.info(f"Self-Healing: AI performed mass-scale type inference in {file_path}")
+                    except Exception as e:
+                        logging.error(f"AI Typing failed for {file_path}: {e}")
 
                 # 2. Simple Constructor typing (fallback)
                 if not issue["fixed"] and "def __init__" in new_content and "def __init__(self" in new_content and "-> None" not in new_content:
                     new_content = re.sub(r"def __init__\((self[^)]*)\):", r"def __init__(\1) -> None:", new_content)
                     issue["fixed"] = True
                     fixed_count += 1
-                
+
                 # ... (rest of simple inference kept for robustness)
                 if not issue["fixed"] and ("return True" in new_content or "return False" in new_content):
                     # Match untyped functions that return bool literals
@@ -447,15 +454,15 @@ class SelfImprovementOrchestrator(BaseAgent):
                 try:
                     hive_fixed_code = self.ai.smart_chat(prompt, system_prompt="You are an expert AI software architect. Apply specialized swarm intelligence lessons to source code.")
                     if hive_fixed_code and ("def " in hive_fixed_code or "class " in hive_fixed_code):
-                         if "```python" in hive_fixed_code:
-                              hive_fixed_code = hive_fixed_code.split("```python")[1].split("```")[0].strip()
-                         elif "```" in hive_fixed_code:
-                              hive_fixed_code = hive_fixed_code.split("```")[1].split("```")[0].strip()
-                         
-                         new_content = hive_fixed_code
-                         issue["fixed"] = True
-                         fixed_count += 1
-                         logging.info(f"Self-Healing: Applied Swarm Intelligence Fix to {file_path}")
+                        if "```python" in hive_fixed_code:
+                            hive_fixed_code = hive_fixed_code.split("```python")[1].split("```")[0].strip()
+                        elif "```" in hive_fixed_code:
+                            hive_fixed_code = hive_fixed_code.split("```")[1].split("```")[0].strip()
+
+                        new_content = hive_fixed_code
+                        issue["fixed"] = True
+                        fixed_count += 1
+                        logging.info(f"Self-Healing: Applied Swarm Intelligence Fix to {file_path}")
                 except Exception as e:
                     logging.error(f"Hive Fix failed for {file_path}: {e}")
 
@@ -496,24 +503,24 @@ class SelfImprovementOrchestrator(BaseAgent):
         import json
 
         lessons = []
-        
+
         # 1. Query SQL metadata for recent failed tasks
         try:
             failed_tasks = self.fleet.sql_metadata.query_interactions("success = 0 LIMIT 10")
             shards_dir = os.path.join(self.workspace_root, "logs", "external_ai_learning")
-            
+
             for task in failed_tasks:
                 shard_id = task.get('shard_id', -1)
                 interaction_id = task.get('id', 'unknown')
-                
+
                 # Try to find the shard file
                 shard_pattern = f"shard_*_{shard_id:03d}.jsonl.gz"
                 import glob
                 matching_shards = glob.glob(os.path.join(shards_dir, shard_pattern))
-                
+
                 if not matching_shards:
                     continue
-                    
+
                 # Read the shard to get the prompt/result
                 deep_reason = "Unknown failure"
                 try:
@@ -524,7 +531,7 @@ class SelfImprovementOrchestrator(BaseAgent):
                                 # Found the record!
                                 prompt_start = data.get("prompt", "")[:200]
                                 result_err = data.get("result", "")[:200]
-                                
+
                                 # Use AI to diagnose if possible
                                 diag_prompt = f"Analyze this failed interaction and provide a one-sentence lesson:\nPrompt: {prompt_start}\nResult/Error: {result_err}"
                                 deep_reason = self.ai.smart_chat(diag_prompt, system_prompt="You are a Meta-Cognitive Analyzer. Summarize the intelligence lesson.")
@@ -534,7 +541,7 @@ class SelfImprovementOrchestrator(BaseAgent):
 
                 lesson_text = f"Intelligence Shard {shard_id}: {deep_reason}"
                 lessons.append(lesson_text)
-                
+
                 # Persist to Relational Intelligence Table
                 try:
                     self.fleet.sql_metadata.record_lesson(
@@ -556,5 +563,5 @@ class SelfImprovementOrchestrator(BaseAgent):
                     f.write("\n\n### 🧠 AI Lessons Derived from Deep Shard Analysis (Phase 108)\n")
                     for lesson in lessons:
                         f.write(f"- {lesson}\n")
-        
+
         return lessons

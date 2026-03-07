@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
+"""Core logic for conversation history and message management."""
 from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,12 +13,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-Unified Diff Generation Core for PyAgent.
-Standardizes text comparison and patch generation.
-"""
-
 
 import difflib
 from pathlib import Path
@@ -44,6 +38,7 @@ class DiffCore(BaseCore):
         output_format: DiffOutputFormat = DiffOutputFormat.UNIFIED,
         context_lines: int = 3,
     ) -> None:
+        """Initializes the DiffCore with optional output_format and context_lines settings."""
         super().__init__()
         self.output_format = output_format
         self.context_lines = context_lines
@@ -120,7 +115,7 @@ class DiffCore(BaseCore):
             diff_lines=diff_text.splitlines() if diff_text else [],
             additions=additions,
             deletions=deletions,
-            changes=additions + deletions,
+            changes=additions + deletions
         )
 
     def format_diff(

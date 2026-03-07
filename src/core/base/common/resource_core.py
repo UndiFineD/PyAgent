@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Core logic for Resource Quotas and budget enforcement."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,22 +14,15 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Core logic for Resource Quotas and budget enforcement.
-"""
-
-
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional, Tuple
-
 from .base_core import BaseCore
 
 
 @dataclass
 class QuotaConfig:
     """Configuration for agent resource quotas."""
-
     max_tokens: Optional[int] = None
     max_time_seconds: Optional[int] = None
     max_cycles: Optional[int] = None
@@ -37,7 +31,6 @@ class QuotaConfig:
 @dataclass
 class ResourceUsage:
     """Current resource usage for an agent session."""
-
     tokens_input: int = 0
     tokens_output: int = 0
     start_time: float = field(default_factory=time.time)
@@ -60,6 +53,7 @@ class ResourceCore(BaseCore):
     """
 
     def __init__(self, config: Optional[QuotaConfig] = None) -> None:
+        """Initializes the ResourceCore with an optional QuotaConfig."""
         super().__init__()
         self.config = config or QuotaConfig()
         self.usage = ResourceUsage()

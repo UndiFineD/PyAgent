@@ -50,6 +50,7 @@ class IdentityCore(BaseCore):
     def __init__(
         self, agent_type: str = "generic", repo_root: Optional[str] = None
     ) -> None:
+        """Initializes the IdentityCore with an agent type and optional repository root."""
         super().__init__(name=f"Identity-{agent_type}", repo_root=repo_root)
         self.agent_type = agent_type
         self.sdk_version = SDK_VERSION
@@ -85,9 +86,7 @@ class IdentityCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.generate_agent_id(public_key, metadata)  # type: ignore
-            except (
-                Exception
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 # pylint: disable=broad-exception-caught
                 pass
         seed = f"{public_key}_{metadata.get('type', 'generic')}_{metadata.get('birth_cycle', 0)}"
@@ -99,9 +98,7 @@ class IdentityCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.sign_payload(payload, secret_key)  # type: ignore
-            except (
-                Exception
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 # pylint: disable=broad-exception-caught
                 pass
         return hmac.new(
@@ -114,9 +111,7 @@ class IdentityCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.verify_signature(payload, signature, public_key)  # type: ignore
-            except (
-                Exception
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 # pylint: disable=broad-exception-caught
                 pass
         # In a real implementation, this would use asymmetrical crypto.

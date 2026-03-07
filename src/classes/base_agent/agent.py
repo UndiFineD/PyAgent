@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,10 +12,24 @@ from __future__ import annotations
 
 """BaseAgent main class and core agent logic."""
 
+from __future__ import annotations
+
+import os
+import asyncio
+import subprocess
+import sys
+import time
+import logging
+
+from datetime import datetime
+from pathlib import Path
+from types import TracebackType
+from typing import Any, Dict, List, Optional, cast, TYPE_CHECKING
+from collections.abc import Callable
+
 from src.core.base.version import VERSION
 from src.core.base.utilities import as_tool
 from src.core.base.exceptions import CycleInterrupt
-import logging
 from src.core.base.ConnectivityManager import ConnectivityManager
 from src.core.base.models import AgentPriority
 from src.core.base.AgentCore import BaseCore
@@ -28,26 +40,13 @@ from src.core.base.state.agent_state_manager import AgentStateManager
 from src.core.base.verification import AgentVerifier
 from src.core.base.delegation import AgentDelegator
 from src.core.base.shell import ShellExecutor
-import os
-import asyncio
-import subprocess
-import sys
-import time
-from datetime import datetime
-from pathlib import Path
-from types import TracebackType
-from typing import Any, Dict, List, Optional, cast, TYPE_CHECKING
-from collections.abc import Callable
 
-
-
-# from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder # Moved to __init__
 from src.core.base.managers.ResourceQuotaManager import (
     ResourceQuotaManager,
-    QuotaConfig,
+    QuotaConfig
 )
 from src.infrastructure.compute.backend.LocalContextRecorder import (
-    LocalContextRecorder,
+    LocalContextRecorder
 )
 
 try:
@@ -72,14 +71,14 @@ __version__ = VERSION
 
 # Backwards-compatible default prompt templates
 try:
-    from src.core.base.common.base_defaults import DEFAULT_PROMPT_TEMPLATES  # type: ignore
+    from src.core.base.common.base_defaults import DEFAULT_PROMPT_TEMPLATES
 except Exception:
     DEFAULT_PROMPT_TEMPLATES = []
 
 # Advanced components (Lazy loaded or optional)
 from src.logic.agents.cognitive.LongTermMemory import LongTermMemory
-from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
 from src.infrastructure.orchestration.ToolRegistry import ToolRegistry
+from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
 
 
 def fix_markdown_content(content: str) -> str:
@@ -136,9 +135,6 @@ class BaseAgent:
     def _register_capabilities(self) -> None:
         """Emits a signal with agent capabilities for discovery."""
         try:
-            import asyncio
-            from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
-
             signals = SignalRegistry()
             # Schedule the async emit to run in the background
             try:

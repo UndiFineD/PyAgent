@@ -57,6 +57,7 @@ class FleetManager:
         raise AttributeError(f"'FleetManager' object has no attribute '{name}'")
 
     def __init__(self, workspace_root: str) -> None:
+        """Initializes the FleetManager with lazy-loaded orchestrators and agents."""
         self.workspace_root = Path(workspace_root)
 
         # New: Lazy Orchestrators (replaces ~50 direct instantiations)
@@ -85,48 +86,59 @@ class FleetManager:
 
     @property
     def telemetry(self) -> "ObservabilityEngine":
+        """Provides access to the telemetry engine for tracing and metrics."""
         return self.orchestrators.telemetry
 
     @property
     def registry(self) -> "ToolRegistry":
+        """Provides access to the central tool registry for dynamic tool management."""
         return self.orchestrators.registry
 
     @property
     def signals(self) -> "SignalRegistry":
+        """Provides access to the signal registry for inter-agent communication and event handling."""
         return self.orchestrators.signals
 
     @property
     def recorder(self) -> "LocalContextRecorder":
+        """Provides access to the local context recorder for logging interactions and results."""
         return self.orchestrators.recorder
 
     @property
     def sql_metadata(self) -> "SqlAgent":
+        """Provides access to the SQL agent for database interactions and metadata management."""
         return self.orchestrators.sql_metadata
 
     @property
     def self_healing(self) -> "SelfHealingOrchestrator":
+        """Provides access to the self-healing orchestrator for automatic error recovery and fallback strategies."""
         return self.orchestrators.self_healing
 
     @property
     def self_improvement(self) -> "SelfImprovementOrchestrator":
+        """Provides access to the self-improvement orchestrator for continuous learning and system optimization."""
         # Imported lazily here to avoid circular dependency with BaseAgent
         from src.classes.orchestration.SelfImprovementOrchestrator import SelfImprovementOrchestrator  # type: ignore
         return self.orchestrators.self_improvement
 
     @property
     def global_context(self) -> "GlobalContextEngine":
+        """Provides access to the global context engine for shared knowledge and collective intelligence across agents."""
         return self.orchestrators.global_context
 
     @property
     def fallback(self) -> "ModelFallbackEngine":
+        """Provides access to the model fallback engine for intelligent model selection and self-healing strategies."""
         return self.orchestrators.fallback_engine
 
     @property
     def core(self) -> Any:
+        """Provides access to the core logic for tool selection, scoring, and other high-performance operations."""
         return self.orchestrators.core
 
     @property
     def rl_selector(self) -> Any:
+        """Provides access to the reinforcement learning selector for optimizing tool and model choices based on past performance and feedback."""
         return getattr(self.orchestrators, "r_l_selector", None) or getattr(
             self.orchestrators, "rl_selector", None
         )

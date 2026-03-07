@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Unified Execution Core for PyAgent. Handles concurrent, parallel, and serial task orchestration."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,11 +18,6 @@ from __future__ import annotations
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-"""
-Unified Execution Core for PyAgent.
-Handles concurrent, parallel, and serial task orchestration.
-"""
-
 
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
@@ -42,6 +38,7 @@ class ExecutionCore(BaseCore):
     """
 
     def __init__(self, max_workers: int = 4) -> None:
+        """Initializes the ExecutionCore with an optional max_workers setting."""
         super().__init__()
         self.max_workers = max_workers
         self._thread_pool = ThreadPoolExecutor(max_workers=max_workers)

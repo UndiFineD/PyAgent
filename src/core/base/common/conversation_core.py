@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Core logic for conversation history and message management."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,11 +14,6 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Core logic for conversation history and message management.
-"""
-
-
 from typing import List
 
 from src.core.base.common.base_core import BaseCore
@@ -30,6 +26,7 @@ class ConversationCore(BaseCore):
     """
 
     def __init__(self, max_messages: int = 100) -> None:
+        """Initializes the ConversationCore with an optional max_messages limit."""
         super().__init__()
         self.messages: List[ConversationMessage] = []
         self.max_messages = max_messages

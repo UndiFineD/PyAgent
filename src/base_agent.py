@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
+"""Base Agent: Provides core functionality for AI-powered file improvement."""
 
-from src.version import VERSION
 import sys
 from pathlib import Path
+from src.version import VERSION
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).parent.parent
@@ -13,8 +14,7 @@ if str(root / "src") not in sys.path:
 
 # Modular imports from the new class hierarchy
 # import agent_backend
-
-from src.classes.base_agent import *
+from src.classes.base_agent import BaseAgent
 
 try:
     from src.core.base.utilities import create_main_function

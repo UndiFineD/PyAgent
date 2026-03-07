@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Unified Scaling Core for PyAgent."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,17 +14,9 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Unified Scaling Core for PyAgent.
-Handles resource calculation, fleet expansion logic, and anti-flapping protocols.
-"""
-
-
 import math
 from typing import List
-
 from src.core.base.common.base_core import BaseCore
-
 try:
     import rust_core as rc  # pylint: disable=import-error
 except ImportError:
@@ -37,6 +30,7 @@ class ScalingCore(BaseCore):
     """
 
     def __init__(self) -> None:
+        """Initializes the ScalingCore with an empty load history."""
         super().__init__()
         self.load_history: List[float] = []
 

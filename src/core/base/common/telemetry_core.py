@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Centralized Telemetry and Metrics Core."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,31 +14,22 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Centralized Telemetry and Metrics Core.
-Provides high-performance aggregation, alerting, and cross-tier observability.
-"""
-
-
 import logging
 import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
-
+from .base_core import BaseCore
 try:
     import rust_core as rc
 except ImportError:
     rc = None
-
-from .base_core import BaseCore
 
 logger = logging.getLogger("pyagent.telemetry")
 
 
 class MetricType(Enum):
     """Enumeration of supported metric types."""
-
     COUNTER = "counter"
     GAUGE = "gauge"
     HISTOGRAM = "histogram"
@@ -47,7 +39,6 @@ class MetricType(Enum):
 @dataclass
 class Metric:
     """Representation of a single metric data point."""
-
     name: str
     value: float
     metric_type: MetricType = MetricType.GAUGE
@@ -58,10 +49,14 @@ class Metric:
 
     # Compatibility: some tests treat history entries as (timestamp, value) tuples.
     def __iter__(self) -> Any:
+        """Allows unpacking as (timestamp, value) for legacy compatibility in tests."""
         yield self.timestamp
         yield self.value
 
     def __getitem__(self, index: int) -> Any:
+        """Allows indexing as [0] for timestamp and [1] 
+        for value for legacy compatibility in tests.
+        """
         return (self.timestamp, self.value)[index]
 
 
@@ -72,6 +67,7 @@ class TelemetryCore(BaseCore):
     """
 
     def __init__(self) -> None:
+        """Initializes the TelemetryCore with an empty metrics buffer and alert list."""
         super().__init__()
         self._metrics_buffer: List[Metric] = []
         self._alerts: List[Dict[str, Any]] = []

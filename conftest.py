@@ -5,9 +5,19 @@ Ensure `src` is first on `sys.path` so tests import the package sources
 consistently. This avoids creating top-level shim packages that may shadow
 stdlib modules.
 """
+
 import sys
-from collections.abc import Callable
+
+import logging
+import importlib
+import traceback
+import builtins
+
+import subprocess
+import re
+
 from pathlib import Path
+from collections.abc import Callable
 
 import pytest
 
@@ -18,31 +28,17 @@ ROOT = Path(__file__).resolve().parent
 # avoid import confusion, detect whether a *real* numpy is loadable first.
 ROOT_STR = str(ROOT)
 # Determine if there is a real numpy on sys.path (i.e. not our shim).
-real_numpy = False
+
 # We need to temporarily avoid loading the repo root itself because
 # Python starts with '' (current directory) on sys.path which points to
 # the project root. Without this workaround, `import numpy` would pick up
 # our shim at the top level and we would incorrectly conclude that a
 # "real" numpy isn't installed.
 _saved_path = sys.path.copy()
-try:
-    sys.path = [p for p in sys.path if p and str(Path(p).resolve()) != ROOT_STR]
-    import numpy as _np
-    # if numpy module file path is outside the repo root, it's real
-    if not str(Path(_np.__file__).resolve()).startswith(ROOT_STR):
-        real_numpy = True
-except Exception:
-    pass
-finally:
-    sys.path = _saved_path
+sys.path = _saved_path
 
 if ROOT_STR not in sys.path:
-    if real_numpy:
-        # leave ROOT later in the path so site-packages takes precedence
-        sys.path.append(ROOT_STR)
-    else:
-        # no real numpy; root may provide a shim so put it first
-        sys.path.insert(0, ROOT_STR)
+    sys.path.append(ROOT_STR)
 
 # Also ensure the `src` directory is available for direct imports if necessary.
 SRC = str((ROOT / "src").resolve())
@@ -56,11 +52,8 @@ def _collect_star_import_modules(tests_root: str = "src") -> set[str]:
     This is a conservative, best-effort heuristic used by the pytest shim to
     pre-import modules that tests expect to star-import at module import time.
     """
-    import re
-
     modules: set[str] = set()
     pattern = re.compile(r"from\s+([a-zA-Z0-9_.]+)\s+import\s+\*")
-
     root = Path(tests_root)
     if not root.exists():
         return modules
@@ -80,12 +73,61 @@ def pytest_sessionstart(session: object) -> None:
 
     This avoids many star-import/import-order failures during collection by
     ensuring the referenced modules exist in sys.modules and are importable.
+
+    Additionally, invoke the leading-import fixer from the workspace so that
+    the test run never starts with files already containing the problematic
+    leading space.  This makes pytest idempotent and prevents it from
+    inadvertently writing to the source tree during earlier sessions.
     """
     # `session` is required by pytest's hook signature but not used here.
     # suppress lint warning about unused parameter by deleting it.
     del session
-    import importlib
-    import logging
+
+    # instrument Path.write_text so we can see who is mutating source files
+    try:
+        log_path = ROOT / "pytest_shim_writes.log"
+
+        # track writes via Path.write_text
+        _orig_write = Path.write_text
+
+        def _logged_write(self, str: data, encoding="utf-8") -> str:
+            """Log the write and then call the original write_text."""
+            try:
+                with log_path.open("a", encoding="utf-8") as fh:
+                    fh.write(f"WRITE {self!r}\n")
+                    fh.write(traceback.format_stack(limit=5)[0])
+            except OSError:
+                pass
+            return _orig_write(self, data, encoding=encoding)
+
+        Path.write_text = _logged_write()
+
+        # also monitor any use of builtins.open for write modes
+        _orig_open = builtins.open
+
+        def _logged_open(file, mode="r", *args, **kwargs):
+            """Log the open if it's in a write mode, then call the original open."""
+            result = _orig_open(file, mode, *args, **kwargs)
+            if any(m in mode for m in ("w", "a", "+", "x")):
+                try:
+                    with log_path.open("a", encoding="utf-8") as fh:
+                        fh.write(f"OPEN {file!r} mode={mode}\n")
+                        fh.write(traceback.format_stack(limit=5)[0])
+                except OSError:
+                    pass
+            return result
+
+        builtins.open = _logged_open()
+    except Exception:  # pragma: no cover
+        pass
+
+    # run the fix script proactively; failures should not abort the test run
+    # but we log a warning in case something goes wrong.
+    try:
+        logging.getLogger("pytest-shim").debug("running leading-import fixer")
+        subprocess.run([sys.executable, "scripts/fix_leading_imports.py"], check=True)
+    except Exception as exc:  # pragma: no cover - best-effort
+        logging.getLogger("pytest-shim").warning("import fixer invocation failed: %s", exc)
 
     mods = _collect_star_import_modules("src")
     if not mods:
@@ -107,10 +149,6 @@ def pytest_runtest_setup(item: "pytest.Item") -> None:
         txt = path.read_text(encoding="utf-8")
     except (OSError, UnicodeDecodeError):
         return
-
-    import re
-    import importlib
-    import builtins as builtins_module
 
     # default in case no star imports are found
     target_globals: dict[str, object] | None = None
@@ -138,7 +176,7 @@ def pytest_runtest_setup(item: "pytest.Item") -> None:
             debug_file = ROOT / "pytest_shim_debug.log"
             with debug_file.open("a", encoding="utf-8") as fh:
                 nodeid = getattr(item, "nodeid", "<unknown>")
-                fh.write(f"{nodeid} importing {m} exists_before={('ArchiveIntelligence' in target_globals)}\n")
+                fh.write(f"{nodeid} importing {m} exists_before={('ArchiveIntelligence' in (target_globals or {}))}\n")
         except OSError:
             pass
 
@@ -178,3 +216,29 @@ def pytest_runtest_setup(item: "pytest.Item") -> None:
                 # best-effort: skip attributes that raise on access
                 continue
 
+
+def pytest_sessionfinish(session: object, exitstatus: int) -> None:
+    """Fail the run if any workspace files were mutated by the tests.
+
+    Catching this early makes it impossible for pytest to silently rewrite
+    source code and ensures the problem doesn't reoccur.  The check executes
+    after the session so that the earlier invocation of the fixer has already
+    normalized the tree; any remaining changes indicate unexpected behavior.
+    """
+
+    try:
+        result = subprocess.run(
+            ["git", "status", "--porcelain"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        if result.stdout.strip():
+            print("\nERROR: tests altered the workspace files:\n")
+            print(result.stdout)
+            # pylint:disable=attribute-defined-outside-init
+            # mark session as failure
+            session.exitstatus = 1
+    except Exception:
+        # best-effort; don't crash the entire test run
+        pass

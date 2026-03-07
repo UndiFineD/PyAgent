@@ -13,13 +13,6 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""
-Core protocols and interfaces for the PyAgent framework.
-Provides structural typing (Protocols) for agents, orchestrators, and components.
-"""
-
-
 from pathlib import Path
 from typing import Any, Protocol, runtime_checkable
 
@@ -34,11 +27,8 @@ class AgentInterface(Protocol):
     Core interface for all AI-powered agents.
     Defining this as a Protocol facilitates future Rust implementation (PyO3).
     """
-
     file_path: Path
-
     previous_content: str
-
     current_content: str
 
     def read_previous_content(self) -> str:
@@ -58,7 +48,6 @@ class AgentInterface(Protocol):
         raise NotImplementedError()
 
     # Advanced features that might be offloaded to Rust later
-
     def calculate_metrics(self, content: str | None = None) -> Any:
         """Calculates complexity and quality metrics."""
         raise NotImplementedError()
@@ -135,6 +124,5 @@ class Saveable(Protocol):  # pylint: disable=too-few-public-methods
 @runtime_checkable
 class Component(Protocol):  # pylint: disable=too-few-public-methods
     """Base interface for all PyAgent components with a name and version."""
-
     name: str
     version: str

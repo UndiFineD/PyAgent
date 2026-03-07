@@ -15,9 +15,7 @@
 """Unified Fleet Convergence and Health core."""
 
 from typing import Any, Dict, List, Optional
-
 from src.core.base.common.base_core import BaseCore
-
 try:
     import rust_core as rc
 except ImportError:
@@ -31,6 +29,7 @@ class ConvergenceCore(BaseCore):
     """
 
     def __init__(self, workspace_root: Optional[str] = None) -> None:
+        """Initializes the ConvergenceCore with an optional workspace_root."""
         super().__init__(name="Convergence", repo_root=workspace_root)
 
     def verify_fleet_health(self, agent_reports: Dict[str, bool]) -> Dict[str, Any]:
@@ -40,8 +39,8 @@ class ConvergenceCore(BaseCore):
                 # Use Rust for high-throughput health checking
                 # pylint: disable=no-member
                 return rc.verify_fleet_health(agent_reports)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+                # pylint: disable=broad-exception-caught
                 pass
 
         healthy_count = sum(map(int, agent_reports.values()))
@@ -49,6 +48,7 @@ class ConvergenceCore(BaseCore):
         all_passed = healthy_count == total_count if total_count > 0 else False
 
         def get_failed(item):
+            """Helper to extract failed agent names."""
             name, status = item
             return name if not status else None
 

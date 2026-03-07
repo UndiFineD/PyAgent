@@ -15,7 +15,6 @@
 """Multimodal buffer management."""
 
 from typing import List
-
 try:
     import rust_core as rc
 except ImportError:
@@ -29,6 +28,7 @@ class TemporalModalityBuffer:
     """
 
     def __init__(self, max_size: int = 10) -> None:
+        """Initializes the TemporalModalityBuffer with a maximum size."""
         self.max_size = max_size
         self.frames: List[bytes] = []
         self.timestamps: List[float] = []

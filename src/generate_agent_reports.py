@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
-from src.version import VERSION
 import sys
 from pathlib import Path
+from src.version import VERSION
+from src.classes.reports import (ReportGenerator, ReportExporter, ExportFormat)
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).parent.parent
@@ -12,12 +13,12 @@ if str(root) not in sys.path:
 if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
-from src.classes.reports import *
 
 def _sha256_text(text: str) -> str:
     """Helper for legacy tests."""
     import hashlib
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
 
 def main() -> None:
     """Main function to generate agent reports."""
@@ -40,6 +41,7 @@ def main() -> None:
     (output_dir / "PROGRESS_DASHBOARD.md").write_text(report, encoding="utf-8")
     
     print(f"Reports generated in {args.output}")
+
 
 if __name__ == '__main__':
     main()

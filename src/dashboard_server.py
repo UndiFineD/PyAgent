@@ -1,24 +1,43 @@
+#!/usr/bin/env python3
 # some environments have incompatible FastAPI/pydantic versions, so
 # wrap imports in a try/except. we also prefer functools.lru_cache
+
 from functools import lru_cache
+
 try:
     from fastapi import FastAPI, HTTPException
     from fastapi.middleware.cors import CORSMiddleware
 except Exception:
     # FastAPI not available or pydantic version mismatch; define dummies
     HTTPException = Exception
+
     class _DummyApp:
-        def __init__(self, *args, **kwargs):
+        """Dummy FastAPI app for environments without FastAPI or with incompatible pydantic versions."""
+
+        def __init__(self, *args, **kwargs) -> None:
+            """No-op constructor."""
             pass
-        def add_middleware(self, *args, **kwargs):
+
+        def add_middleware(self, *args, **kwargs) -> None:
+            """No-op middleware adder."""
             pass
-        def get(self, *args, **kwargs):
-            def decorator(func):
+
+        def get(self, *args, **kwargs) -> None:
+
+            """Decorator for GET endpoints (no-op)."""
+            def decorator(func) -> None:
+                """No-op endpoint decorator."""
                 return func
+
             return decorator
+
     FastAPI = _DummyApp
+
     class CORSMiddleware:
-        def __init__(self, *args, **kwargs):
+        """Dummy CORS middleware."""
+
+        def __init__(self, *args, **kwargs) -> None:
+            """No-op middleware."""
             pass
 
 from typing import List, Dict, Any
@@ -42,9 +61,12 @@ app.add_middleware(
 
 LOG_FILE = Path("logs/episodic_memory.jsonl")
 
+
 @app.get("/api/status")
 async def get_status() -> Dict[str, Any]:
+    """Returns current status of the agent."""
     return {"status": "online", "agent": "PyAgent", "version": "2026.1.0"}
+
 
 @app.get("/api/thoughts")
 async def get_thoughts(limit: int = 50) -> List[Dict[str, Any]]:
@@ -63,6 +85,7 @@ async def get_thoughts(limit: int = 50) -> List[Dict[str, Any]]:
     
     return thoughts[::-1] # Return newest first
 
+
 @app.get("/api/artifacts")
 async def list_artifacts() -> List[Dict[str, Any]]:
     """List files in the 'src/classes/generated' or 'logs/screenshots' folders."""
@@ -80,6 +103,7 @@ async def list_artifacts() -> List[Dict[str, Any]]:
                         "modified": item.stat().st_mtime
                     })
     return artifacts
+
 
 if __name__ == "__main__":
     import uvicorn

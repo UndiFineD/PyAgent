@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
+
 """Lift non-typing imports from TYPE_CHECKING blocks to top-level."""
+
 import pathlib
 
-def process_file(path: pathlib.Path):
+
+def process_file(path: pathlib.Path) -> bool:
+    """Process a single file, lifting non-typing imports out of TYPE_CHECKING blocks."""
     try:
         text = path.read_text()
     except UnicodeDecodeError:
@@ -49,13 +53,15 @@ def process_file(path: pathlib.Path):
     return False
 
 
-def main():
+def main() -> None:
+    """Scan .py files and fix leading spaces before imports."""
     root = pathlib.Path('src')
     for path in root.rglob('*.py'):
         try:
             process_file(path)
         except Exception as e:
             print(f"Skipped {path} due to error: {e}")
+
 
 if __name__ == '__main__':
     main()

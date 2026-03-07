@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""ConsensusCore: Authoritative engine for multi-agent voting and consensus, with optional Rust acceleration."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,12 +13,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-Core logic for multi-agent voting and consensus.
-Supports weighted voting and tie-breaking algorithms.
-"""
-
 
 from typing import Dict, List, Optional
 
@@ -36,6 +31,7 @@ class ConsensusCore(BaseCore):
     """
 
     def __init__(self, name: str = "ConsensusCore", repo_root: Optional[str] = None) -> None:
+        """Initializes the ConsensusCore with optional name and repo_root."""
         super().__init__(name=name, repo_root=repo_root)
 
     def calculate_winner(self, proposals: List[str], weights: Optional[List[float]] = None) -> str:
@@ -44,8 +40,8 @@ class ConsensusCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.calculate_consensus_winner(proposals, weights)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+                # pylint: disable=broad-exception-caught
                 pass
 
         if not proposals:

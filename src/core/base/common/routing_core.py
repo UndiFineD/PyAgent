@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Core logic for performance-based routing and task distribution."""
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,16 +14,9 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Core logic for performance-based routing and task distribution.
-"""
-
-
 import os
 from typing import Any, Dict, Optional
-
 from .base_core import BaseCore
-
 try:
     import rust_core as rc  # pylint: disable=import-error
 except ImportError:
@@ -36,6 +30,7 @@ class RoutingCore(BaseCore):
     """
 
     def __init__(self) -> None:
+        """Initializes the RoutingCore with a list of providers."""
         super().__init__()
         self.providers = [
             "github_models",
@@ -60,8 +55,8 @@ class RoutingCore(BaseCore):
                 return rc.select_provider_rust(  # pylint: disable=no-member
                     task_type, priority, performance_report or {}
                 )  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+                # pylint: disable=broad-exception-caught
                 pass
 
         # Default logic (can be expanded with weighted averages)
