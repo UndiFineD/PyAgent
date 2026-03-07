@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Helper script to append verification methods to the canonical module."""
 from pathlib import Path
 
 content = '''
