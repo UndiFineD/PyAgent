@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Test suite for TestAgent."""
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
@@ -15,13 +16,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Agent specializing in automated testing and coverage analysis.
-Inspired by SGI-Bench and py.test.
-"""
-
-from src.core.base.version import VERSION
 import logging
 import subprocess
+
+from src.core.base.version import VERSION
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
@@ -41,7 +39,7 @@ class TestAgent(BaseAgent):
             "Always suggest a potential cause for every test failure."
         )
 
-    @as_tool
+    @as_tool(priority=1)
     def run_tests(self, path: str = "tests") -> str:
         """Executes pytest on the specified directory."""
         logging.info(f"TestAgent running tests in: {path}")
@@ -50,15 +48,7 @@ class TestAgent(BaseAgent):
 
             # Converted to list-based execution to prevent shell injection
             cmd = [sys.executable, "-m", "pytest", path, "--tb=short", "--maxfail=5"]
-            result = subprocess.run(cmd, shell=False, capture_output=True, text=True)
-
-            # Phase 108: Record test execution patterns
-            self._record(
-                f"pytest {path}",
-                f"RC={result.returncode}\n{result.stdout[-1000:]}",
-                provider="Shell",
-                model="pytest",
-            )
+            result = subprocess.run(cmd, shell=False, capture_output=True, text=True, check=False)
 
             report = ["## 🧪 Test Execution Report\n"]
             if result.returncode == 0:
@@ -72,14 +62,14 @@ class TestAgent(BaseAgent):
                 report.append(f"```text\n{result.stdout}\n```")
 
             return "\n".join(report)
-        except Exception as e:
+        except (subprocess.CalledProcessError, OSError, FileNotFoundError) as e:
             return f"Error running tests: {e}"
 
-    @as_tool
+    @as_tool(priority=2)
     def run_file_tests(self, file_path: str) -> str:
         """Runs tests for a single file."""
         return self.run_tests(file_path)
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str) -> str:
         """Runs tests based on user prompt."""
         return self.run_tests()

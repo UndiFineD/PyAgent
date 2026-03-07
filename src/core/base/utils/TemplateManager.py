@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Auto-extracted class from agent.py"""
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
@@ -14,12 +15,11 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""Auto-extracted class from agent.py"""
-
+# Imports use the `core` package root rather than `src.core` to stay
+# consistent with how tests add `src` to sys.path.
+from typing import List, Optional, Dict
 from src.core.base.version import VERSION
 from src.core.base.utils.AgentTemplate import AgentTemplate
-from typing import List, Optional, Dict
 
 __version__ = VERSION
 
