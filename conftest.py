@@ -121,6 +121,7 @@ class WriteTracker:
         builtins.open = logged_open
 
     def __exit__(self, exc_type, exc, tb):
+        """Restores the original Path.write_text and built-in open functions."""
         Path.write_text = self._orig_write
         builtins.open = self._orig_open
 
@@ -137,9 +138,11 @@ class StarImportManager:
     pattern = re.compile(r"from\s+([a-zA-Z0-9_.]+)\s+import\s+\*")
 
     def __init__(self, root: Path):
+        """Initializes the StarImportManager with the root directory to scan for test files."""
         self.tests_root = root / "src"
 
     def collect_modules(self) -> set[str]:
+        """Scans test files for `from X import *` patterns and collects the module names."""
         modules: set[str] = set()
         if not self.tests_root.exists():
             return modules
@@ -153,6 +156,7 @@ class StarImportManager:
         return modules
 
     def preimport(self) -> None:
+        """Pre-imports all modules collected from test files to ensure they are available for star imports."""
         mods = self.collect_modules()
         logger = logging.getLogger("pytest-shim")
         for m in sorted(mods):
@@ -162,6 +166,7 @@ class StarImportManager:
                 logger.debug("pytest-shim: failed to import %s: %s", m, e)
 
     def inject_globals(self, item: "pytest.Item") -> None:
+        """Injects names from pre-imported modules into the test's global namespace if it contains star imports."""
         try:
             path = Path(item.fspath)
             txt = path.read_text(encoding="utf-8")
@@ -197,6 +202,7 @@ class StarImportManager:
                     continue
 
     def _debug_log(self, item, module_name, target_globals):
+        """Logs the attempt to import a module for star import, including whether the target globals already contain a key from that module."""
         try:
             debug_file = ROOT / "pytest_shim_debug.log"
             with debug_file.open("a", encoding="utf-8") as fh:
@@ -206,6 +212,7 @@ class StarImportManager:
             pass
 
     def _make_shim_dir(self, tg: dict[str, object]) -> Callable[[object | None], list[str]]:
+        """Creates a shim for the `dir` function that returns the keys of the target globals when called with None, and otherwise behaves like the normal `dir` function."""
         def _shim_dir(obj: object = None) -> list[str]:
             if obj is None:
                 return sorted(list(tg.keys()))
@@ -218,11 +225,16 @@ class StarImportManager:
 # ---------------------------------------------------------------------------
 
 class SessionManager:
+    """Manages pytest session hooks for setup and teardown, including file write tracking and star import support.
+    """
+
     def __init__(self, root: Path):
+        """Initializes the SessionManager with the root directory and creates a StarImportManager."""
         self.root = root
         self.star_imports = StarImportManager(root)
 
     def session_start(self, session: object) -> None:
+        """Runs at the start of the pytest session, applying the WriteTracker and pre-importing star import modules."""
         del session  # unused
 
         with WriteTracker(self.root):
@@ -235,9 +247,11 @@ class SessionManager:
         self.star_imports.preimport()
 
     def runtest_setup(self, item: "pytest.Item") -> None:
+        """Runs before each test, injecting star import names into the test's global namespace."""
         self.star_imports.inject_globals(item)
 
     def session_finish(self, session: object, exitstatus: int) -> None:
+        """Runs at the end of the pytest session, checking for any file writes that occurred during testing and logging them."""
         try:
             result = subprocess.run(
                 ["git", "status", "--porcelain"],
@@ -257,13 +271,16 @@ class SessionManager:
 _mgr = SessionManager(Path(__file__).resolve().parent)
 
 def pytest_sessionstart(session):
+    """Pytest hook that runs at the start of the session, delegating to the SessionManager."""
     _mgr.session_start(session)
 
 
 def pytest_runtest_setup(item):
+    """Pytest hook that runs before each test, delegating to the SessionManager."""
     _mgr.runtest_setup(item)
 
 
 def pytest_sessionfinish(session, exitstatus):
+    """Pytest hook that runs at the end of the session, delegating to the SessionManager."""
     _mgr.session_finish(session, exitstatus)
 

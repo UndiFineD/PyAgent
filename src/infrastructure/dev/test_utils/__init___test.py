@@ -14,21 +14,22 @@
 
 import sys
 from pathlib import Path
-from typing import TYPE_CHECKING
+import importlib.util
 
-import pytest
+# we will dynamically load the package to avoid path issues
 
-# Add src to path for imports
-from infrastructure.dev import test_utils as test_utils_init
-src_path = Path(__file__).parent.parent.parent
-if str(src_path) not in sys.path:
-    sys.path.insert(0, str(src_path))
+# compute path to the package directory (src/infrastructure/dev/test_utils)
+base = Path(__file__).parent
+package_dir = base
+init_file = package_dir / "__init__.py"
 
-else:
-    try:
-        from infrastructure.dev import test_utils
-    except ImportError as e:
-        pytest.skip(f"Cannot import module: {e}", allow_module_level=True)
+spec = importlib.util.spec_from_file_location("infrastructure.dev.test_utils", init_file)
+if spec is None or spec.loader is None:
+    raise ImportError(f"cannot create spec for {init_file}")
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)  # type: ignore
+
+test_utils_init = mod  # alias for consistency
 
 
 def test_module_imports():
