@@ -5,14 +5,38 @@ from __future__ import annotations
 import sys
 import logging
 import importlib
+from importlib import util
+from contextlib import suppress
 import traceback
 import builtins
 import subprocess
 import re
 from pathlib import Path
 from collections.abc import Callable
+from types import ModuleType
+from importlib.machinery import ModuleSpec
+from os import PathLike
+from typing import Protocol, Any, IO, Optional, Union, cast
 
 import pytest
+
+
+# ---------------------------------------------------------------------------
+# typing protocols
+# ---------------------------------------------------------------------------
+
+class _SessionWithExitStatus(Protocol):
+    """Minimal protocol for pytest session objects with exitstatus."""
+    exitstatus: int
+
+
+class _PytestItemLike(Protocol):
+    """Minimal protocol for pytest item objects used in inject_globals."""
+    fspath: Any  # pytest can use py.path or pathlib.Path depending on version
+    function: Any | None  # optional test function
+    module: Any | None  # optional test module
+    nodeid: str  # test node identifier
+
 
 # root directory of repository, used by various helpers
 ROOT = Path(__file__).resolve().parent
@@ -44,16 +68,23 @@ class ImportlibPatcher:
 
     def __init__(self) -> None:
         """Saves original functions for later use."""
-        self._orig_spec = importlib.util.spec_from_file_location
-        self._orig_module = importlib.util.module_from_spec
+        self._orig_spec = util.spec_from_file_location
+        self._orig_module = util.module_from_spec
 
     def patch(self) -> None:
         """Applies the monkey‑patches to `importlib.util` functions.
         """
-        importlib.util.spec_from_file_location = self._patched_spec
-        importlib.util.module_from_spec = self._patched_module
+        util.spec_from_file_location = self._patched_spec
+        util.module_from_spec = self._patched_module
 
-    def _patched_spec(self, name, location, *args, **kwargs):
+    def _patched_spec(
+        self,
+        name: str,
+        location: Optional[Union[str, bytes, PathLike[str], PathLike[bytes]]] = None,
+        *,
+        loader: Any = None,
+        submodule_search_locations: list[str] | None = None,
+    ) -> ModuleSpec | None:
         """Patched version of ``spec_from_file_location`` that infers both the
         canonical module name and the package.
 
@@ -71,7 +102,12 @@ class ImportlibPatcher:
         module into ``sys.modules`` immediately) this ensures a single Python
         object per file and prevents spurious import errors.
         """
-        spec = self._orig_spec(name, location, *args, **kwargs)
+        spec = self._orig_spec(
+            name,
+            location,
+            loader=loader,
+            submodule_search_locations=submodule_search_locations,
+        )
         if spec and spec.loader:
             # we keep ``spec.name`` unchanged; rewriting it previously caused
             # the loader instance itself to carry the wrong name, leading to
@@ -83,25 +119,23 @@ class ImportlibPatcher:
 
             pkg = self._infer_package(spec.origin)
             if pkg is not None:
-                spec.__package__ = pkg
+                spec.__package__ = pkg  # type: ignore[attr-defined]
             # If the caller used the dummy placeholder we also want the loader to
             # advertise the canonical name.  ``SourceFileLoader`` checks its
             # ``name`` attribute when ``get_code`` is invoked, which explains the
             # ImportError we saw earlier.  Overwriting the loader's name here is a
             # lightweight way to make it accept imports for the real package.
             if name == "_mod_under_test" and spec.origin:
-                try:
+                with suppress(Exception):
                     p = Path(spec.origin).resolve()
                     root = ROOT / "src"
                     if root in p.parents or p == root:
                         rel = p.relative_to(root)
                         canon = "src." + ".".join(rel.with_suffix("").parts)
-                        spec.loader.name = canon
-                except Exception:
-                    pass
+                        spec.loader.name = canon  # type: ignore[attr-defined]
         return spec
 
-    def _patched_module(self, spec):
+    def _patched_module(self, spec: ModuleSpec) -> ModuleType:
         """Patched version of ``module_from_spec`` that sets ``__package__`` and
         registers the newly created module in ``sys.modules`` immediately.
 
@@ -115,27 +149,29 @@ class ImportlibPatcher:
         """
         mod = self._orig_module(spec)
         mod.__package__ = getattr(spec, "__package__", "") or ""
-        import sys
         # register under the spec name first
         sys.modules[spec.name] = mod
         # if this is the dummy placeholder we also register under the canonical
         # import path and rename the module object accordingly
         if spec.name == "_mod_under_test" and spec.origin:
-            try:
+            with suppress(Exception):
                 p = Path(spec.origin).resolve()
                 root = ROOT / "src"
                 if root in p.parents or p == root:
                     rel = p.relative_to(root)
-                    canon = "src." + ".".join(rel.with_suffix("" ).parts)
+                    canon = "src." + ".".join(rel.with_suffix("").parts)
                     sys.modules[canon] = mod
                     mod.__name__ = canon
-            except Exception:
-                pass
         return mod
 
-    def _infer_package(self, origin: str) -> str | None:
-        """Infers the package name from the file path of the module being imported."""
-        try:
+    def _infer_package(self, origin: Optional[str]) -> str | None:
+        """Infers the package name from the file path of the module being imported.
+
+        ``origin`` can be ``None`` when the spec did not include a path.
+        """
+        if origin is None:
+            return None
+        with suppress(Exception):
             p = Path(origin).resolve()
             parts = list(p.parts)
             if "src" in parts:
@@ -144,8 +180,6 @@ class ImportlibPatcher:
                 # canonical import path used throughout the repository.
                 pkg = ".".join(parts[idx : -1])
                 return pkg
-        except Exception:
-            pass
         return None
 
 
@@ -166,19 +200,36 @@ class WriteTracker:
         self._orig_write = Path.write_text
         self._orig_open = builtins.open
 
-    def __enter__(self):
+    def __enter__(self) -> None:
         """Monkey-patches Path.write_text and built-in open to log file writes."""
-        def logged_write(self, data, encoding="utf-8"):
+        tracker = self
+        orig_write = tracker._orig_write
+
+        def logged_write(
+            self: Path,
+            data: str,
+            * _args: Any,
+            encoding: str | None = None,
+            errors: str | None = None,
+            newline: str | None = None,
+            ** _kwargs: Any,
+        ) -> int:
             """Logged version of Path.write_text that records the file being written and a stack trace."""
             try:
-                with self.log_path.open("a", encoding="utf-8") as fh:
+                with tracker.log_path.open("a", encoding="utf-8") as fh:
                     fh.write(f"WRITE {self!r}\n")
                     fh.write(traceback.format_stack(limit=5)[0])
             except OSError:
                 pass
-            return self._orig_write(self, data, encoding=encoding)
+            return orig_write(
+                self,
+                data,
+                encoding=encoding,
+                errors=errors,
+                newline=newline,
+            )
 
-        def logged_open(file, mode="r", *args, **kwargs):
+        def logged_open(file: Any, *args: Any, mode: str = "r", **kwargs: Any) -> IO[Any]:
             """Logged version of built-in open that records files opened in write modes and a stack trace."""
             result = self._orig_open(file, mode, *args, **kwargs)
             if any(m in mode for m in ("w", "a", "+", "x")):
@@ -190,12 +241,17 @@ class WriteTracker:
                     pass
             return result
 
-        Path.write_text = logged_write
-        builtins.open = logged_open
+        Path.write_text = logged_write  # type: ignore[method-assign]
+        builtins.open = logged_open  # type: ignore[assignment]
 
-    def __exit__(self, exc_type, exc, tb):
+    def __exit__(
+        self,
+        exc_type: type | None,
+        exc: BaseException | None,
+        tb: Any,
+    ) -> None:
         """Restores the original Path.write_text and built-in open functions."""
-        Path.write_text = self._orig_write
+        Path.write_text = self._orig_write  # type: ignore[method-assign]
         builtins.open = self._orig_open
 
 
@@ -239,7 +295,9 @@ class StarImportManager:
                 logger.debug("pytest-shim: failed to import %s: %s", m, e)
 
     def inject_globals(self, item: "pytest.Item") -> None:
-        """Injects names from pre-imported modules into the test's global namespace if it contains star imports."""
+        """Injects names from pre-imported modules
+        into the test's global namespace if it contains star imports.
+        """
         try:
             path = Path(item.fspath)
             txt = path.read_text(encoding="utf-8")
@@ -261,7 +319,7 @@ class StarImportManager:
                 if target_module is None:
                     continue
                 target_globals = target_module.__dict__
-            self._debug_log(item, m, target_globals)
+            self._debug_log(cast(_PytestItemLike, item), m, target_globals)
         if target_globals is None or mod is None:
             return
         target_globals["dir"] = self._make_shim_dir(target_globals)
@@ -274,19 +332,29 @@ class StarImportManager:
                 except (AttributeError, TypeError):
                     continue
 
-    def _debug_log(self, item, module_name, target_globals):
-        """Logs the attempt to import a module for star import, including whether the target globals already contain a key from that module."""
+    def _debug_log(
+        self,
+        item: _PytestItemLike,
+        module_name: str,
+        target_globals: dict[str, object] | None,
+    ) -> None:
+        """Logs the attempt to import a module for star import.
+        Includes whether the target globals already contain a key from that module.
+        """
         try:
             debug_file = ROOT / "pytest_shim_debug.log"
             with debug_file.open("a", encoding="utf-8") as fh:
                 nodeid = getattr(item, "nodeid", "<unknown>")
-                fh.write(f"{nodeid} importing {module_name} exists_before={('ArchiveIntelligence' in (target_globals or {}))}\n")
+                fh.write(
+                    f"{nodeid} importing {module_name} "
+                    f"exists_before={('ArchiveIntelligence' in (target_globals or {}))}\n"
+                )
         except OSError:
             pass
 
     def _make_shim_dir(self, tg: dict[str, object]) -> Callable[[object | None], list[str]]:
-        """Creates a shim for the `dir` function 
-        that returns the keys of the target globals when called with None, 
+        """Creates a shim for the `dir` function
+        that returns the keys of the target globals when called with None,
         and otherwise behaves like the normal `dir` function.
         """
         def _shim_dir(obj: object = None) -> list[str]:
@@ -309,16 +377,38 @@ class SessionManager:
         self.root = root
         self.star_imports = StarImportManager(root)
 
+    def _resolve_import_fixer(self) -> Path | None:
+        """Resolve the leading-import fixer script path.
+
+        New layout keeps active utilities in ``scripts/`` and archives legacy
+        ones in ``scripts-old/``. Use whichever exists, preferring ``scripts``.
+        """
+        candidates = [
+            self.root / "scripts" / "fix_leading_imports.py",
+            self.root / "scripts-old" / "fix_leading_imports.py",
+        ]
+        for candidate in candidates:
+            if candidate.exists():
+                return candidate
+        return None
+
     def session_start(self, session: object) -> None:
         """Runs at the start of the pytest session, applying the WriteTracker and pre-importing star import modules."""
         del session  # unused
 
         with WriteTracker(self.root):
             logging.getLogger("pytest-shim").debug("running leading-import fixer")
-            try:
-                subprocess.run([sys.executable, "scripts/fix_leading_imports.py"], check=True)
-            except Exception as exc:  # pragma: no cover
-                logging.getLogger("pytest-shim").warning("import fixer invocation failed: %s", exc)
+            fixer_path = self._resolve_import_fixer()
+            if fixer_path is None:
+                logging.getLogger("pytest-shim").info(
+                    "skipping import fixer: no fix_leading_imports.py found in scripts/ or scripts-old/"
+                )
+            else:
+                # catching CalledProcessError is sufficient
+                try:
+                    subprocess.run([sys.executable, str(fixer_path)], check=True)
+                except subprocess.CalledProcessError as exc:  # pragma: no cover
+                    logging.getLogger("pytest-shim").warning("import fixer invocation failed: %s", exc)
 
         # third-party libraries (chromadb/pydantic) emit a Python 3.14
         # compatibility warning which pollutes the test output.  Suppress it
@@ -336,11 +426,11 @@ class SessionManager:
         """Runs before each test, injecting star import names into the test's global namespace."""
         self.star_imports.inject_globals(item)
 
-    def session_finish(self, session: object, exitstatus: int) -> None:
-        """Runs at the end of the pytest session, 
+    def session_finish(self, session: object, _exitstatus: int) -> None:
+        """Runs at the end of the pytest session,
         checking for any file writes that occurred during testing and logging them.
         """
-        try:
+        with suppress(Exception):
             result = subprocess.run(
                 ["git", "status", "--porcelain"],
                 check=True,
@@ -350,9 +440,7 @@ class SessionManager:
             if result.stdout.strip():
                 print("\nERROR: tests altered the workspace files:\n")
                 print(result.stdout)
-                session.exitstatus = 1
-        except Exception:
-            pass
+                cast(_SessionWithExitStatus, session).exitstatus = 1
 
 
 # instantiate manager and expose hooks

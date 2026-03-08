@@ -31,16 +31,17 @@ Every Python file should have the following header once:
 ```
 
 - **Naming**:
-  - **Modules**: Always use `snake_case` for filenames (e.g., `coder_agent.py`, `identity_mixin.py`).
+  use pep8 standard, prefer `PascalCase`
+  - **Modules**: Always use `PascalCase` for filenames (e.g., `PascalCase.py`).
   - **Classes**: Always use `PascalCase` (e.g., `CoderAgent`).
-  - **Specific Naming Rules**:
-    - `QuantumScalingCoderAgent` must be in `quantum_scaling_coder_agent.py`.
-    - Tests for it must be in `quantum_scaling_coder_agent_test.py`.
-  - **Variables/Methods**: Use `snake_case`.
-- **Imports**: Modules should be imported using their `snake_case` filenames, even on Windows.
-- **Concurrency**: Use `asyncio` for all I/O, network requests, and subprocess execution.
-- **Transactional FS**: Use `StateTransaction` from `src/core/base/agent_state_manager.py` for all file-system modifications to ensure atomicity and rollback capability.
-- **Context Lineage**: Use `CascadeContext` from `src/core/base/models/communication_models.py` to prevent infinite recursion and ensure task attribution in the swarm.
+  **Imports**: Modules should be imported using their `PascalCase` filenames, even on Windows.
+- **Concurrency**: Use `asyncio` for all I/O, network requests, and subprocess execution. use `PascalCase` - uuid to track what we are working on.
+- Memory, Storage, Processing, Context
+  use `PascalCase` - uuid to track what we are working on.
+- **MemoryTransaction**: Use `MemoryTransaction` from `MemoryTransactionManager.py` for all memory-system modifications to ensure atomicity and fast operations.
+- **StorageTransaction**: Use `StorageTransaction` from `StorageTransactionManager.py` for all file-system modifications to ensure atomicity and rollback capability.
+- **ProcessTransaction**: Use `ProcessTransaction` from `ProcessTransactionManager.py` for all process execution
+- **Context Lineage**: Use `ContextTransaction` from `ContextTransactionManager.py` to prevent infinite recursion and ensure task attribution in the swarm.
 
 ## Workflows & Tools
 - **Testing**: Run comprehensive tests using `pytest src/`. Use fixtures from `tests/conftest.py` for agent sandboxing.
