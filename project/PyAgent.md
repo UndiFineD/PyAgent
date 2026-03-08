@@ -18,7 +18,7 @@ PyAgent avoids monolithic design by utilizing a **Synaptic Modularization** patt
 - **Specialized Agents**:
   - **Quantum Scaling Coder**: Optimizes code for extreme performance and scalability.
   - **Legal Audit**: Ensures compliance and legal safety in autonomous operations.
-  - **Operational Cost**: Monitored resource utilization and token efficiency.
+  - **Operational Cost**: Monitors resource utilization and token efficiency.
 - **Mixins**:
   - **ReflectionMixin**: Enables autonomous self-critique and logic verification.
 - **KnowledgeMixin**: Accesses the "Knowledge Trinity" (Structured, Semantic, and Relational memory).
