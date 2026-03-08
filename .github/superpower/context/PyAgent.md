@@ -99,20 +99,77 @@ python -m pytest tests/unit/
 
 ---
 
-## 🗺️ Roadmap "VOYAGER"
-- [ ] **Decentralized Transport**: Zero-broker P2P swarms with mDNS discovery.
-- [ ] **Synaptic Pruning**: Exponential knowledge decay for high-efficiency memory.
-- [ ] **Holographic Memory**: Distributed vector weights across the fleet.
-- [ ] **Multimodal AI Integration**: Async task queues for image generation and processing, with background artifact cleanup (inspired by 4o-ghibli-at-home).
-- [ ] **MARKOV Decision Processes**: Implementation of RL environments for self-optimization.
-- [ ] **Multi-Model Speculation**: Federated speculative decoding across multiple nodes.
-- [ ] **MARKOV Decision Processes**: Implementation of RL environments for self-optimization.
-- [ ] **Multi-Model Speculation**: Federated speculative decoding across multiple nodes.
+## Changelog
+
+### 2026-03-08: FLM (Fastflow Language Model) Integration
+
+**New Feature**: Local NPU-optimized inference provider via OpenAI-compatible API
+
+**What is FLM?** 
+FLM (Fastflow Language Model) is a local, OpenAI-compatible model server optimized for NPU-backed inference. PyAgent now supports FLM as a first-class provider alongside cloud and Ollama-like runtimes.
+
+**Key Components Added**:
+- **Provider Configuration**: `src/core/providers/FlmProviderConfig.py` - Config validation with required fields (`base_url`, `default_model`, `timeout`, `max_retries`) and optional paths (`health_path`, `chat_path`)
+- **Chat Adapter**: `src/core/providers/FlmChatAdapter.py` - OpenAI SDK-compatible adapter supporting:
+  - Standard chat completions (`chat.completions.create`)
+  - Deterministic tool-call loop with bounded iterations
+  - Runtime diagnostics (endpoint availability, model checks)
+  - Contextual error handling with actionable messages
+
+**Architecture Design Principles**:
+- OpenAI API compatibility first - no custom protocol lock-in
+- Local-first reliability - works without cloud dependencies
+- NPU-aware performance - optimized for low-overhead local serving
+- Deterministic tool-call loop - explicit, testable turn transitions
+- Clear operational diagnostics - endpoint/model/timeout logging
+
+**Test Coverage**:
+- `tests/test_flm_provider_docs.py` - Documentation verification
+- `tests/test_flm_provider_config.py` - Config schema validation (6 tests)
+- `tests/test_flm_chat_adapter.py` - Basic adapter functionality (2 tests)
+- `tests/test_flm_tool_loop.py` - Tool-call loop and guard triggers (3 tests)
+- `tests/test_flm_runtime_errors.py` - Error handling scenarios (2 tests)
+
+**Request/Response Contract**:
+1. Client sends completion with `model`, `messages`, `max_tokens`
+2. If response contains `tool_calls`: append assistant+tool messages and repeat
+3. If no `tool_calls`: return final assistant content
+4. Bounded loop guard prevents infinite tool iterations
+
+**Usage Example**:
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="http://127.0.0.1:52625/v1/",
+    api_key="dummy"  # local placeholder
+)
+
+response = client.chat.completions.create(
+    model="llama3.2:1b",
+    messages=[{"role": "user", "content": "Hello"}],
+    max_tokens=100
+)
+```
+
+**Security Considerations**:
+- FLM is local-network by default
+- Compatible with OpenAI client API key handling
+- No sensitive content persistence without explicit policy
+
+**Future Enhancements**:
+- Dynamic model capability probe (`/models`)
+- Streaming response support
+- Health-check gate before first inference
+- Provider fallback chain (FLM → Ollama → cloud)
+
+**Documentation**:
+- Design: `.github/superpower/brainstorm/2026-03-08-flm-design.md`
+- Implementation Plan: `.github/superpower/plan/2026-03-08-flm-plan.md`
 
 ---
-*Locked under GOLDEN_MASTER_SEAL (v4.0.0-VOYAGER)*
 
-## Changelog (2026-03-01)
+### 2026-03-01: Multimodal Tokenizer
 
 - **Multimodal tokenizer added**: A new `MultimodalTokenizer` provides a unified token space for text, image, audio, and video tokens. It supports pluggable modality-specific tokenizers and a simple fallback implementation. See: `src/infrastructure/engine/tokenization/detokenizer/types.py` and `src/infrastructure/engine/tokenization/detokenizer/simple_tokenizer.py`.
 

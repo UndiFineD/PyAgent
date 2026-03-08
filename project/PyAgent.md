@@ -99,19 +99,6 @@ python -m pytest tests/unit/
 
 ---
 
-## 🗺️ Roadmap "VOYAGER"
-- [ ] **Decentralized Transport**: Zero-broker P2P swarms with mDNS discovery.
-- [ ] **Synaptic Pruning**: Exponential knowledge decay for high-efficiency memory.
-- [ ] **Holographic Memory**: Distributed vector weights across the fleet.
-- [ ] **Multimodal AI Integration**: Async task queues for image generation and processing, with background artifact cleanup (inspired by 4o-ghibli-at-home).
-- [ ] **MARKOV Decision Processes**: Implementation of RL environments for self-optimization.
-- [ ] **Multi-Model Speculation**: Federated speculative decoding across multiple nodes.
-- [ ] **MARKOV Decision Processes**: Implementation of RL environments for self-optimization.
-- [ ] **Multi-Model Speculation**: Federated speculative decoding across multiple nodes.
-
----
-*Locked under GOLDEN_MASTER_SEAL (v4.0.0-VOYAGER)*
-
 ## Changelog
 
 ### 2026-03-08: FLM (Fastflow Language Model) Integration
