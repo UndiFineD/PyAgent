@@ -376,6 +376,7 @@ class SessionManager:
         """Initializes the SessionManager with the root directory and creates a StarImportManager."""
         self.root = root
         self.star_imports = StarImportManager(root)
+        self._baseline_git_status: set[str] = set()
 
     def _resolve_import_fixer(self) -> Path | None:
         """Resolve the leading-import fixer script path.
@@ -420,6 +421,19 @@ class SessionManager:
             message="Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater",
         )
 
+        # Snapshot current git status so only test-session-introduced changes
+        # fail the run; pre-existing local edits are ignored.
+        with suppress(Exception):
+            result = subprocess.run(
+                ["git", "status", "--porcelain"],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            self._baseline_git_status = {
+                line.strip() for line in result.stdout.splitlines() if line.strip()
+            }
+
         self.star_imports.preimport()
 
     def runtest_setup(self, item: "pytest.Item") -> None:
@@ -437,9 +451,13 @@ class SessionManager:
                 capture_output=True,
                 text=True,
             )
-            if result.stdout.strip():
+            current_status = {
+                line.strip() for line in result.stdout.splitlines() if line.strip()
+            }
+            new_changes = sorted(current_status - self._baseline_git_status)
+            if new_changes:
                 print("\nERROR: tests altered the workspace files:\n")
-                print(result.stdout)
+                print("\n".join(new_changes))
                 cast(_SessionWithExitStatus, session).exitstatus = 1
 
 
