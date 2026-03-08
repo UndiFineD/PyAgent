@@ -12,6 +12,8 @@ import re
 from pathlib import Path
 from collections.abc import Callable
 
+import pytest
+
 # root directory of repository, used by various helpers
 ROOT = Path(__file__).resolve().parent
 # We *used* to insert the ``src`` folder onto ``sys.path`` so that
@@ -29,8 +31,6 @@ ROOT = Path(__file__).resolve().parent
 # SRC_DIR = ROOT / "src"
 # if str(SRC_DIR) not in sys.path:
 #     sys.path.insert(0, str(SRC_DIR))
-
-import pytest
 
 
 # ---------------------------------------------------------------------------
