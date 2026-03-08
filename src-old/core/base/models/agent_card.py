@@ -12,6 +12,90 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/models/agent_card.description.md
+
+# agent_card
+
+**File**: `src\core\base\models\agent_card.py`  
+**Type**: Python Module  
+**Summary**: 2 classes, 0 functions, 7 imports  
+**Lines**: 38  
+**Complexity**: 0 (simple)
+
+## Overview
+
+Python module containing implementation for agent_card.
+
+## Classes (2)
+
+### `AgentCard`
+
+**Inherits from**: BaseModel
+
+Standardized metadata for an agent in the fleet.
+Enables cross-agent discovery and orchestration.
+Harvested from .external/agentic_design_patterns pattern.
+
+### `Config`
+
+Class Config implementation.
+
+## Dependencies
+
+**Imports** (7):
+- `dataclasses.dataclass`
+- `dataclasses.field`
+- `pydantic.BaseModel`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/models/agent_card.improvements.md
+
+# Improvements for agent_card
+
+**File**: `src\core\base\models\agent_card.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 38 lines (small)  
+**Complexity**: 0 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Class Documentation
+- [!] **1 undocumented classes**: Config
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `agent_card_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from typing import List, Optional, Dict, Any
 from dataclasses import dataclass, field
 from pydantic import BaseModel

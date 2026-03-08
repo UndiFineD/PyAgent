@@ -1,4 +1,84 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/logic/processing/database_access_core.description.md
+
+# database_access_core
+
+**File**: `src\core\base\logic\processing\database_access_core.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 7 imports  
+**Lines**: 154  
+**Complexity**: 6 (moderate)
+
+## Overview
+
+Module: database_access_core
+Core logic for ODBC database operations.
+Implements database connection and query patterns from ADSyncDump-BOF.
+
+## Classes (1)
+
+### `DatabaseAccessCore`
+
+Core class for ODBC database operations.
+
+**Methods** (6):
+- `__init__(self)`
+- `connect(self, connection_string)`
+- `execute_query(self, query)`
+- `disconnect(self)`
+- `get_last_error(self)`
+- `_get_error_message(self)`
+
+## Dependencies
+
+**Imports** (7):
+- `__future__.annotations`
+- `ctypes`
+- `ctypes.wintypes`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/logic/processing/database_access_core.improvements.md
+
+# Improvements for database_access_core
+
+**File**: `src\core\base\logic\processing\database_access_core.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 154 lines (medium)  
+**Complexity**: 6 score (moderate)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `database_access_core_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

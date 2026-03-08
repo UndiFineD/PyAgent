@@ -12,6 +12,92 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/logic/core/browser_outline_core.description.md
+
+# browser_outline_core
+
+**File**: `src\core\base\logic\core\browser_outline_core.py`  
+**Type**: Python Module  
+**Summary**: 2 classes, 0 functions, 6 imports  
+**Lines**: 78  
+**Complexity**: 3 (simple)
+
+## Overview
+
+Python module containing implementation for browser_outline_core.
+
+## Classes (2)
+
+### `BrowserElement`
+
+Class BrowserElement implementation.
+
+### `BrowserOutlineCore`
+
+Transforms raw DOM/CDP data into a high-density 'Outline' for efficient LLM navigation.
+Reduces token usage by replacing complex selectors with simple labels (e.g., [l1]).
+Harvested from .external/AI-Auto-browser pattern.
+
+**Methods** (3):
+- `__init__(self)`
+- `generate_outline(self, raw_elements)`
+- `resolve_label(self, label)`
+
+## Dependencies
+
+**Imports** (6):
+- `dataclasses.dataclass`
+- `re`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/logic/core/browser_outline_core.improvements.md
+
+# Improvements for browser_outline_core
+
+**File**: `src\core\base\logic\core\browser_outline_core.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 78 lines (small)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Class Documentation
+- [!] **1 undocumented classes**: BrowserElement
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `browser_outline_core_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 import re
 from typing import List, Dict, Optional, Any
 from dataclasses import dataclass

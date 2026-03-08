@@ -1,4 +1,78 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/development/mixins/CoderMetricsMixin.description.md
+
+# CoderMetricsMixin
+
+**File**: `src\logic\agents\development\mixins\CoderMetricsMixin.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 4 imports  
+**Lines**: 58  
+**Complexity**: 2 (simple)
+
+## Overview
+
+Python module containing implementation for CoderMetricsMixin.
+
+## Classes (1)
+
+### `CoderMetricsMixin`
+
+Mixin for CoderCore to handle complex metrics calculations.
+
+**Methods** (2):
+- `_analyze_python_ast(self, tree, metrics)`
+- `compute_maintainability_index(self, metrics)`
+
+## Dependencies
+
+**Imports** (4):
+- `__future__.annotations`
+- `ast`
+- `math`
+- `src.core.base.types.CodeMetrics.CodeMetrics`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/development/mixins/CoderMetricsMixin.improvements.md
+
+# Improvements for CoderMetricsMixin
+
+**File**: `src\logic\agents\development\mixins\CoderMetricsMixin.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 58 lines (small)  
+**Complexity**: 2 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `CoderMetricsMixin_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

@@ -1,6 +1,92 @@
 #!/usr/bin/env python3
 
 """
+LLM_CONTEXT_START
+
+## Source: src-old/observability/stats/exporters/ObservabilityCore.description.md
+
+# ObservabilityCore
+
+**File**: `src\observability\stats\exporters\ObservabilityCore.py`  
+**Type**: Python Module  
+**Summary**: 2 classes, 0 functions, 9 imports  
+**Lines**: 68  
+**Complexity**: 4 (simple)
+
+## Overview
+
+ObservabilityCore logic for metric aggregation and auditing.
+Pure logic for summarizing agent performance and costs.
+
+## Classes (2)
+
+### `AgentMetric`
+
+Class AgentMetric implementation.
+
+### `ObservabilityCore`
+
+Pure logic for processing agent telemetry data.
+
+**Methods** (4):
+- `__init__(self)`
+- `process_metric(self, metric)`
+- `summarize_performance(self)`
+- `filter_by_time(self, start_iso, end_iso)`
+
+## Dependencies
+
+**Imports** (9):
+- `dataclasses.asdict`
+- `dataclasses.dataclass`
+- `dataclasses.field`
+- `datetime.datetime`
+- `json`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+
+---
+*Auto-generated documentation*
+## Source: src-old/observability/stats/exporters/ObservabilityCore.improvements.md
+
+# Improvements for ObservabilityCore
+
+**File**: `src\observability\stats\exporters\ObservabilityCore.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 68 lines (small)  
+**Complexity**: 4 score (simple)
+
+## Suggested Improvements
+
+### Class Documentation
+- [!] **1 undocumented classes**: AgentMetric
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `ObservabilityCore_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
+"""
 ObservabilityCore logic for metric aggregation and auditing.
 Pure logic for summarizing agent performance and costs.
 """

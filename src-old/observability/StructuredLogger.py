@@ -1,4 +1,94 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/observability/StructuredLogger.description.md
+
+# StructuredLogger
+
+**File**: `src\observability\StructuredLogger.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 13 imports  
+**Lines**: 178  
+**Complexity**: 10 (moderate)
+
+## Overview
+
+StructuredLogger: JSON-based logging for Phase 144 observability.
+Ensures machine-readable logs with mandatory AgentID and TraceID fields.
+
+## Classes (1)
+
+### `StructuredLogger`
+
+JSON logger for PyAgent swarm observability.
+Phase 277: Added log hygiene with automated GZIP compression.
+
+**Methods** (10):
+- `__init__(self, agent_id, trace_id, log_file)`
+- `_ensure_log_dir(self)`
+- `_compress_logs(self)`
+- `_mask_sensitive(self, text)`
+- `log(self, level, message)`
+- `info(self, message)`
+- `error(self, message)`
+- `warning(self, message)`
+- `debug(self, message)`
+- `success(self, message)`
+
+## Dependencies
+
+**Imports** (13):
+- `__future__.annotations`
+- `datetime.datetime`
+- `datetime.timezone`
+- `gzip`
+- `json`
+- `logging`
+- `pathlib.Path`
+- `re`
+- `rust_core`
+- `shutil`
+- `src.core.base.Version.VERSION`
+- `time`
+- `typing.Any`
+
+---
+*Auto-generated documentation*
+## Source: src-old/observability/StructuredLogger.improvements.md
+
+# Improvements for StructuredLogger
+
+**File**: `src\observability\StructuredLogger.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 178 lines (medium)  
+**Complexity**: 10 score (moderate)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `StructuredLogger_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

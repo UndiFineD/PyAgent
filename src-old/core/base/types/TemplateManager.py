@@ -1,4 +1,89 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/types/TemplateManager.description.md
+
+# TemplateManager
+
+**File**: `src\core\base\types\TemplateManager.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 6 imports  
+**Lines**: 101  
+**Complexity**: 4 (simple)
+
+## Overview
+
+Auto-extracted class from agent_changes.py
+
+## Classes (1)
+
+### `TemplateManager`
+
+Manages entry templates with placeholders.
+
+Provides template storage and application functionality.
+
+Attributes:
+    templates: Dictionary of templates by name.
+
+Example:
+    >>> manager=TemplateManager()
+    >>> manager.add_template("bug_fix", "Fixed {issue} in {component}")
+    >>> text=manager.apply_template("bug_fix", {"issue": "#123", "component": "auth"})
+
+**Methods** (4):
+- `__init__(self)`
+- `add_template(self, name, template_text, description)`
+- `apply_template(self, name, values)`
+- `get_template_placeholders(self, name)`
+
+## Dependencies
+
+**Imports** (6):
+- `EntryTemplate.EntryTemplate`
+- `__future__.annotations`
+- `re`
+- `src.core.base.version.VERSION`
+- `typing.Dict`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/types/TemplateManager.improvements.md
+
+# Improvements for TemplateManager
+
+**File**: `src\core\base\types\TemplateManager.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 101 lines (medium)  
+**Complexity**: 4 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `TemplateManager_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

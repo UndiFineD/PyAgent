@@ -1,4 +1,85 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/InfrastructureManagerAgent.description.md
+
+# InfrastructureManagerAgent
+
+**File**: `src\classes\specialized\InfrastructureManagerAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 8 imports  
+**Lines**: 96  
+**Complexity**: 5 (moderate)
+
+## Overview
+
+Agent specializing in infrastructure management, Proxmox orchestration, and HomeAssistant IoT control.
+Provides tools for remote system administration and automated environment scaling.
+
+## Classes (1)
+
+### `InfrastructureManagerAgent`
+
+**Inherits from**: BaseAgent
+
+Manages remote infrastructure including Proxmox virtualization and HomeAssistant IoT.
+
+**Methods** (5):
+- `__init__(self, file_path)`
+- `list_proxmox_vms(self, host, token_id, secret)`
+- `control_homeassistant_device(self, entity_id, action, api_url, token)`
+- `get_system_metrics(self, server_ip)`
+- `improve_content(self, prompt)`
+
+## Dependencies
+
+**Imports** (8):
+- `__future__.annotations`
+- `logging`
+- `src.core.base.BaseAgent.BaseAgent`
+- `src.core.base.utilities.as_tool`
+- `src.core.base.utilities.create_main_function`
+- `src.core.base.version.VERSION`
+- `typing.Any`
+- `typing.Dict`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/InfrastructureManagerAgent.improvements.md
+
+# Improvements for InfrastructureManagerAgent
+
+**File**: `src\classes\specialized\InfrastructureManagerAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 96 lines (small)  
+**Complexity**: 5 score (moderate)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `InfrastructureManagerAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

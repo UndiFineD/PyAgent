@@ -1,4 +1,90 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/MorphologicalEvolutionAgent.description.md
+
+# MorphologicalEvolutionAgent
+
+**File**: `src\classes\specialized\MorphologicalEvolutionAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 9 imports  
+**Lines**: 94  
+**Complexity**: 5 (moderate)
+
+## Overview
+
+Python module containing implementation for MorphologicalEvolutionAgent.
+
+## Classes (1)
+
+### `MorphologicalEvolutionAgent`
+
+**Inherits from**: BaseAgent
+
+Phase 37: Morphological Code Generation.
+Analyzes API usage patterns and evolves the fleet's class structures.
+Integrated with MorphologyCore for Agent DNA and Splitting/Merging logic.
+
+**Methods** (5):
+- `__init__(self, file_path)`
+- `generate_agent_dna(self, agent_instance)`
+- `check_for_merge_opportunity(self, agent_a_paths, agent_b_paths)`
+- `analyze_api_morphology(self, agent_name, call_logs)`
+- `improve_content(self, prompt)`
+
+## Dependencies
+
+**Imports** (9):
+- `__future__.annotations`
+- `logging`
+- `src.core.base.BaseAgent.BaseAgent`
+- `src.core.base.utilities.as_tool`
+- `src.core.base.version.VERSION`
+- `src.logic.agents.system.core.MorphologyCore.MorphologyCore`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/MorphologicalEvolutionAgent.improvements.md
+
+# Improvements for MorphologicalEvolutionAgent
+
+**File**: `src\classes\specialized\MorphologicalEvolutionAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 94 lines (small)  
+**Complexity**: 5 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `MorphologicalEvolutionAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

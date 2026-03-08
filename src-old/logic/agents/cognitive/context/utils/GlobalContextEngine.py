@@ -1,4 +1,84 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/cognitive/context/utils/GlobalContextEngine.description.md
+
+# GlobalContextEngine
+
+**File**: `src\logic\agents\cognitive\context\utils\GlobalContextEngine.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 9 imports  
+**Lines**: 64  
+**Complexity**: 1 (simple)
+
+## Overview
+
+Advanced Long-Term Memory (LTM) for agents.
+Consolidates episodic memories into semantic knowledge and persistent preferences.
+Inspired by mem0 and BabyAGI patterns.
+
+## Classes (1)
+
+### `GlobalContextEngine`
+
+**Inherits from**: ContextShardMixin, ContextDataMixin, ContextEntityMixin, ContextConsolidationMixin
+
+Manages persistent project-wide knowledge and agent preferences.
+Shell for GlobalContextCore.
+
+**Methods** (1):
+- `__init__(self, workspace_root, fleet)`
+
+## Dependencies
+
+**Imports** (9):
+- `__future__.annotations`
+- `mixins.ContextConsolidationMixin.ContextConsolidationMixin`
+- `mixins.ContextDataMixin.ContextDataMixin`
+- `mixins.ContextEntityMixin.ContextEntityMixin`
+- `mixins.ContextShardMixin.ContextShardMixin`
+- `pathlib.Path`
+- `src.core.base.Version.VERSION`
+- `src.logic.agents.cognitive.context.engines.GlobalContextCore.GlobalContextCore`
+- `typing.Any`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/cognitive/context/utils/GlobalContextEngine.improvements.md
+
+# Improvements for GlobalContextEngine
+
+**File**: `src\logic\agents\cognitive\context\utils\GlobalContextEngine.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 64 lines (small)  
+**Complexity**: 1 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `GlobalContextEngine_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

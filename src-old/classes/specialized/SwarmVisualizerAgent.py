@@ -1,3 +1,82 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/SwarmVisualizerAgent.description.md
+
+# SwarmVisualizerAgent
+
+**File**: `src\classes\specialized\SwarmVisualizerAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 5 imports  
+**Lines**: 83  
+**Complexity**: 5 (moderate)
+
+## Overview
+
+Python module containing implementation for SwarmVisualizerAgent.
+
+## Classes (1)
+
+### `SwarmVisualizerAgent`
+
+Generates topological maps and visualizations of agent interactions.
+Tracks message flows, agent dependencies, and swarm health metrics.
+
+**Methods** (5):
+- `__init__(self, workspace_path)`
+- `log_interaction(self, from_agent, to_agent, message_type)`
+- `generate_topology_map(self)`
+- `update_agent_position(self, agent_id, x, y)`
+- `get_visualization_data(self)`
+
+## Dependencies
+
+**Imports** (5):
+- `__future__.annotations`
+- `src.core.base.version.VERSION`
+- `time`
+- `typing.Any`
+- `typing.Dict`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/SwarmVisualizerAgent.improvements.md
+
+# Improvements for SwarmVisualizerAgent
+
+**File**: `src\classes\specialized\SwarmVisualizerAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 83 lines (small)  
+**Complexity**: 5 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `SwarmVisualizerAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

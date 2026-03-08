@@ -1,4 +1,81 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/development/SelfOptimizerAgent.description.md
+
+# SelfOptimizerAgent
+
+**File**: `src\logic\agents\development\SelfOptimizerAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 6 imports  
+**Lines**: 122  
+**Complexity**: 4 (simple)
+
+## Overview
+
+Agent specializing in self-optimization and roadmap refinement.
+
+## Classes (1)
+
+### `SelfOptimizerAgent`
+
+**Inherits from**: BaseAgent
+
+Analyses the workspace status and suggests strategic improvements.
+
+**Methods** (4):
+- `__init__(self, file_path)`
+- `_get_default_content(self)`
+- `analyze_roadmap(self, improvements_path)`
+- `improve_content(self, prompt)`
+
+## Dependencies
+
+**Imports** (6):
+- `__future__.annotations`
+- `src.core.base.BaseAgent.BaseAgent`
+- `src.core.base.BaseUtilities.create_main_function`
+- `src.core.base.Version.VERSION`
+- `src.observability.stats.MetricsEngine.ObservabilityEngine`
+- `src.observability.stats.Monitoring.ResourceMonitor`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/development/SelfOptimizerAgent.improvements.md
+
+# Improvements for SelfOptimizerAgent
+
+**File**: `src\logic\agents\development\SelfOptimizerAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 122 lines (medium)  
+**Complexity**: 4 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `SelfOptimizerAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

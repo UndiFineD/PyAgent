@@ -1,3 +1,87 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/orchestration/ToolCore.description.md
+
+# ToolCore
+
+**File**: `src\classes\orchestration\ToolCore.py`  
+**Type**: Python Module  
+**Summary**: 2 classes, 0 functions, 7 imports  
+**Lines**: 52  
+**Complexity**: 2 (simple)
+
+## Overview
+
+Python module containing implementation for ToolCore.
+
+## Classes (2)
+
+### `ToolMetadata`
+
+**Inherits from**: BaseModel
+
+Metadata for a registered tool.
+
+### `ToolCore`
+
+Pure logic for tool registration and invocation.
+Handles parameter introspection and argument filtering.
+
+**Methods** (2):
+- `extract_metadata(self, owner_name, func, category, priority)`
+- `filter_arguments(self, func, args_dict)`
+
+## Dependencies
+
+**Imports** (7):
+- `inspect`
+- `pydantic.BaseModel`
+- `typing.Any`
+- `typing.Callable`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/orchestration/ToolCore.improvements.md
+
+# Improvements for ToolCore
+
+**File**: `src\classes\orchestration\ToolCore.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 52 lines (small)  
+**Complexity**: 2 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `ToolCore_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 import inspect
 from typing import Dict, List, Any, Callable, Optional
 from pydantic import BaseModel

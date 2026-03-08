@@ -1,6 +1,82 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/cognitive/context/engines/knowledge_mixins/KnowledgeSymbolMixin.description.md
+
+# KnowledgeSymbolMixin
+
+**File**: `src\logic\agents\cognitive\context\engines\knowledge_mixins\KnowledgeSymbolMixin.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 4 imports  
+**Lines**: 57  
+**Complexity**: 4 (simple)
+
+## Overview
+
+Python module containing implementation for KnowledgeSymbolMixin.
+
+## Classes (1)
+
+### `KnowledgeSymbolMixin`
+
+Methods for symbol extraction from various formats.
+
+**Methods** (4):
+- `extract_symbols(self, content, pattern)`
+- `extract_python_symbols(self, content)`
+- `extract_markdown_backlinks(self, content)`
+- `build_symbol_map(self, directory, patterns)`
+
+## Dependencies
+
+**Imports** (4):
+- `pathlib.Path`
+- `re`
+- `rust_core`
+- `typing.Any`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/cognitive/context/engines/knowledge_mixins/KnowledgeSymbolMixin.improvements.md
+
+# Improvements for KnowledgeSymbolMixin
+
+**File**: `src\logic\agents\cognitive\context\engines\knowledge_mixins\KnowledgeSymbolMixin.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 57 lines (small)  
+**Complexity**: 4 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `KnowledgeSymbolMixin_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 import re
 from typing import Any
 from pathlib import Path

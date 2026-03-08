@@ -11,6 +11,99 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/interpreter/safe_executor.description.md
+
+# safe_executor
+
+**File**: `src\logic\agents\interpreter\safe_executor.py`  
+**Type**: Python Module  
+**Summary**: 2 classes, 0 functions, 13 imports  
+**Lines**: 133  
+**Complexity**: 4 (simple)
+
+## Overview
+
+Python module containing implementation for safe_executor.
+
+## Classes (2)
+
+### `ExecutionResult`
+
+Class ExecutionResult implementation.
+
+### `SafeLocalInterpreter`
+
+Safely executes Python code within the agent's context.
+Ported from 0xSojalSec-cai/cai/agents/meta/local_python_executor.py
+
+**Methods** (4):
+- `__init__(self, safe_globals)`
+- `_get_safe_builtins(self)`
+- `_setup_allowed_modules(self)`
+- `_execute_sync(self, code)`
+
+## Dependencies
+
+**Imports** (13):
+- `ast`
+- `asyncio`
+- `builtins`
+- `dataclasses.dataclass`
+- `io`
+- `logging`
+- `sys`
+- `traceback`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+- `typing.Union`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/interpreter/safe_executor.improvements.md
+
+# Improvements for safe_executor
+
+**File**: `src\logic\agents\interpreter\safe_executor.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 133 lines (medium)  
+**Complexity**: 4 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Class Documentation
+- [!] **1 undocumented classes**: ExecutionResult
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `safe_executor_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 import ast
 import builtins
 import logging

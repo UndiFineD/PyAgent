@@ -1,4 +1,72 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/observability/reports/ExportFormat.description.md
+
+# ExportFormat
+
+**File**: `src\observability\reports\ExportFormat.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 3 imports  
+**Lines**: 30  
+**Complexity**: 0 (simple)
+
+## Overview
+
+Auto-extracted class from generate_agent_reports.py
+
+## Classes (1)
+
+### `ExportFormat`
+
+**Inherits from**: Enum
+
+Export formats for reports.
+
+## Dependencies
+
+**Imports** (3):
+- `__future__.annotations`
+- `enum.Enum`
+- `src.core.base.version.VERSION`
+
+---
+*Auto-generated documentation*
+## Source: src-old/observability/reports/ExportFormat.improvements.md
+
+# Improvements for ExportFormat
+
+**File**: `src\observability\reports\ExportFormat.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 30 lines (small)  
+**Complexity**: 0 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `ExportFormat_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

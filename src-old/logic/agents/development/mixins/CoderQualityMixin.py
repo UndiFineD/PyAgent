@@ -1,4 +1,78 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/development/mixins/CoderQualityMixin.description.md
+
+# CoderQualityMixin
+
+**File**: `src\logic\agents\development\mixins\CoderQualityMixin.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 7 imports  
+**Lines**: 122  
+**Complexity**: 2 (simple)
+
+## Overview
+
+Quality scoring and refactoring suggestion logic for CoderCore.
+
+## Classes (1)
+
+### `CoderQualityMixin`
+
+Mixin for computing quality scores and refactoring suggestions.
+
+**Methods** (2):
+- `calculate_quality_score(self, metrics, violations, smells, coverage)`
+- `suggest_refactorings(self, content)`
+
+## Dependencies
+
+**Imports** (7):
+- `__future__.annotations`
+- `src.core.base.types.CodeMetrics.CodeMetrics`
+- `src.core.base.types.CodeSmell.CodeSmell`
+- `src.core.base.types.QualityScore.QualityScore`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/development/mixins/CoderQualityMixin.improvements.md
+
+# Improvements for CoderQualityMixin
+
+**File**: `src\logic\agents\development\mixins\CoderQualityMixin.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 122 lines (medium)  
+**Complexity**: 2 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `CoderQualityMixin_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

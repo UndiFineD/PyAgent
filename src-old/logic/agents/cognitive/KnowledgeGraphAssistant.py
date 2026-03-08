@@ -1,6 +1,81 @@
 # Copyright 2026 PyAgent Authors
 # Assistant for managing the knowledge graph and impact radius.
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/cognitive/KnowledgeGraphAssistant.description.md
+
+# KnowledgeGraphAssistant
+
+**File**: `src\logic\agents\cognitive\KnowledgeGraphAssistant.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 2 imports  
+**Lines**: 46  
+**Complexity**: 5 (moderate)
+
+## Overview
+
+Python module containing implementation for KnowledgeGraphAssistant.
+
+## Classes (1)
+
+### `KnowledgeGraphAssistant`
+
+Handles backlinks, dependency tracking, and graph visualization.
+
+**Methods** (5):
+- `__init__(self, workspace_root)`
+- `get_impact_radius(self, query)`
+- `find_backlinks(self, target_file, index)`
+- `generate_mermaid(self, index)`
+- `generate_mermaid_graph(self)`
+
+## Dependencies
+
+**Imports** (2):
+- `pathlib.Path`
+- `typing.Set`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/cognitive/KnowledgeGraphAssistant.improvements.md
+
+# Improvements for KnowledgeGraphAssistant
+
+**File**: `src\logic\agents\cognitive\KnowledgeGraphAssistant.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 46 lines (small)  
+**Complexity**: 5 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `KnowledgeGraphAssistant_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from typing import Set
 
 class KnowledgeGraphAssistant:

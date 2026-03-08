@@ -1,3 +1,89 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/InterFleetIdentityAgent.description.md
+
+# InterFleetIdentityAgent
+
+**File**: `src\classes\specialized\InterFleetIdentityAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 8 imports  
+**Lines**: 99  
+**Complexity**: 7 (moderate)
+
+## Overview
+
+Python module containing implementation for InterFleetIdentityAgent.
+
+## Classes (1)
+
+### `InterFleetIdentityAgent`
+
+**Inherits from**: BaseAgent
+
+Tier 3 (Orchestration) - Inter-Fleet Identity Agent: Manages federated 
+identities for agents across multiple fleets using cryptographic signing and DID.
+
+**Methods** (7):
+- `__init__(self, workspace_path)`
+- `generate_fleet_handshake(self)`
+- `secure_handshake(self, payload, secret)`
+- `register_remote_fleet(self, fleet_id, metadata)`
+- `authorize_remote_agent(self, agent_id, remote_fleet_id, permissions)`
+- `verify_token(self, token)`
+- `get_identity_report(self)`
+
+## Dependencies
+
+**Imports** (8):
+- `__future__.annotations`
+- `hashlib`
+- `src.core.base.BaseAgent.BaseAgent`
+- `src.core.base.Version.VERSION`
+- `src.core.base.core.IdentityCore.IdentityCore`
+- `time`
+- `typing.Any`
+- `uuid`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/InterFleetIdentityAgent.improvements.md
+
+# Improvements for InterFleetIdentityAgent
+
+**File**: `src\classes\specialized\InterFleetIdentityAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 99 lines (small)  
+**Complexity**: 7 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `InterFleetIdentityAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

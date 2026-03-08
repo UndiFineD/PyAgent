@@ -1,4 +1,81 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/context/ContextCompressorCore.description.md
+
+# ContextCompressorCore
+
+**File**: `src\classes\context\ContextCompressorCore.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 5 imports  
+**Lines**: 97  
+**Complexity**: 5 (moderate)
+
+## Overview
+
+ContextCompressorCore logic for PyAgent.
+Pure logic for reducing the size of source files while preserving structural context.
+No I/O or side effects.
+
+## Classes (1)
+
+### `ContextCompressorCore`
+
+Pure logic core for code and document compression.
+
+**Methods** (5):
+- `compress_python(content)`
+- `regex_fallback_compress(content)`
+- `summarize_markdown(content)`
+- `get_summary_header(filename, mode)`
+- `decide_compression_mode(filename)`
+
+## Dependencies
+
+**Imports** (5):
+- `__future__.annotations`
+- `ast`
+- `re`
+- `src.core.base.version.VERSION`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/context/ContextCompressorCore.improvements.md
+
+# Improvements for ContextCompressorCore
+
+**File**: `src\classes\context\ContextCompressorCore.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 97 lines (small)  
+**Complexity**: 5 score (moderate)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `ContextCompressorCore_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

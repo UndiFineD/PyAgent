@@ -12,6 +12,93 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/logic/core/inference_scaling_core.description.md
+
+# inference_scaling_core
+
+**File**: `src\core\base\logic\core\inference_scaling_core.py`  
+**Type**: Python Module  
+**Summary**: 2 classes, 0 functions, 7 imports  
+**Lines**: 88  
+**Complexity**: 2 (simple)
+
+## Overview
+
+Python module containing implementation for inference_scaling_core.
+
+## Classes (2)
+
+### `ScalingStrategy`
+
+**Inherits from**: BaseModel
+
+Class ScalingStrategy implementation.
+
+### `InferenceScalingCore`
+
+Implements inference-time scaling patterns (multi-candidate, self-critique).
+Harvested from .external/agentic-patterns
+
+**Methods** (2):
+- `__init__(self, strategy)`
+- `estimate_difficulty(self, task_description)`
+
+## Dependencies
+
+**Imports** (7):
+- `asyncio`
+- `pydantic.BaseModel`
+- `typing.Any`
+- `typing.Callable`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/logic/core/inference_scaling_core.improvements.md
+
+# Improvements for inference_scaling_core
+
+**File**: `src\core\base\logic\core\inference_scaling_core.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 88 lines (small)  
+**Complexity**: 2 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Class Documentation
+- [!] **1 undocumented classes**: ScalingStrategy
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `inference_scaling_core_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 import asyncio
 from typing import List, Dict, Optional, Any, Callable
 from pydantic import BaseModel

@@ -12,6 +12,99 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/logic/core/response_modifier_core.description.md
+
+# response_modifier_core
+
+**File**: `src\core\base\logic\core\response_modifier_core.py`  
+**Type**: Python Module  
+**Summary**: 3 classes, 0 functions, 10 imports  
+**Lines**: 291  
+**Complexity**: 1 (simple)
+
+## Overview
+
+Python module containing implementation for response_modifier_core.
+
+## Classes (3)
+
+### `ResponseModificationRule`
+
+Rule for modifying HTTP responses
+
+### `ModifiedResponse`
+
+Container for modified response data
+
+### `ResponseModifierCore`
+
+**Inherits from**: BaseCore
+
+HTTP Response Modifier Core for security testing and analysis.
+
+Provides capabilities to modify HTTP response codes and content
+for testing purposes, similar to Burp Suite extensions.
+Useful for bypassing client-side validations and testing error handling.
+
+**Methods** (1):
+- `__init__(self)`
+
+## Dependencies
+
+**Imports** (10):
+- `asyncio`
+- `dataclasses.dataclass`
+- `re`
+- `src.core.base.logic.core.base_core.BaseCore`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+- `typing.Tuple`
+- `urllib.parse.urlparse`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/logic/core/response_modifier_core.improvements.md
+
+# Improvements for response_modifier_core
+
+**File**: `src\core\base\logic\core\response_modifier_core.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 291 lines (medium)  
+**Complexity**: 1 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `response_modifier_core_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 # Response Modifier Core - HTTP Response Code Manipulation
 # Based on patterns from 200-OK-Modifier Burp extension
 

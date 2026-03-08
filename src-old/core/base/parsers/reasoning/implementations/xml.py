@@ -1,6 +1,91 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/parsers/reasoning/implementations/xml.description.md
+
+# xml
+
+**File**: `src\core\base\parsers\reasoning\implementations\xml.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 7 imports  
+**Lines**: 116  
+**Complexity**: 6 (moderate)
+
+## Overview
+
+Python module containing implementation for xml.
+
+## Classes (1)
+
+### `XMLReasoningParser`
+
+**Inherits from**: ReasoningParser
+
+Parser for XML-style think blocks.
+
+Extracts reasoning from <think>...</think> or <reasoning>...</reasoning> tags.
+
+**Methods** (6):
+- `__init__(self, tokenizer)`
+- `is_reasoning_end(self, input_ids)`
+- `extract_content_ids(self, input_ids)`
+- `_extract_content(self, text)`
+- `extract_reasoning(self, model_output, request)`
+- `extract_reasoning_streaming(self, previous_text, current_text, delta_text, previous_token_ids, current_token_ids, delta_token_ids, state)`
+
+## Dependencies
+
+**Imports** (7):
+- `base.ReasoningParser`
+- `models.ReasoningResult`
+- `models.StreamingReasoningState`
+- `re`
+- `typing.Any`
+- `typing.ClassVar`
+- `typing.Sequence`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/parsers/reasoning/implementations/xml.improvements.md
+
+# Improvements for xml
+
+**File**: `src\core\base\parsers\reasoning\implementations\xml.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 116 lines (medium)  
+**Complexity**: 6 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `xml_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 import re
 from typing import Any, ClassVar, Sequence
 from ..base import ReasoningParser

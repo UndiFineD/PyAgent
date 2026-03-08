@@ -12,6 +12,144 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/swarm/security_analysis_mixin.description.md
+
+# security_analysis_mixin
+
+**File**: `src\logic\agents\swarm\security_analysis_mixin.py`  
+**Type**: Python Module  
+**Summary**: 5 classes, 0 functions, 12 imports  
+**Lines**: 546  
+**Complexity**: 26 (complex)
+
+## Overview
+
+Security analysis and threat modeling for PyAgent workflows.
+
+## Classes (5)
+
+### `SecurityVulnerability`
+
+Represents a security vulnerability in an agent workflow.
+
+### `WorkflowAnalysis`
+
+Analysis results for an agent workflow.
+
+### `WorkflowSecurityAnalyzer`
+
+Security analyzer for PyAgent workflows.
+
+Inspired by Agent-Wiz's threat modeling capabilities, this analyzer
+performs static analysis of agent workflows to identify security
+vulnerabilities and provide mitigation recommendations.
+
+**Methods** (13):
+- `__init__(self)`
+- `_load_vulnerability_database(self)`
+- `analyze_workflow_code(self, code, filename)`
+- `_analyze_security_issues(self, analyzer)`
+- `_has_prompt_injection_risk(self, analyzer)`
+- `_has_tool_execution_risk(self, analyzer)`
+- `_has_data_exposure_risk(self, analyzer)`
+- `_has_infinite_loop_risk(self, analyzer)`
+- `_has_untrusted_tool_risk(self, analyzer)`
+- `_calculate_security_score(self, vulnerabilities)`
+- ... and 3 more methods
+
+### `WorkflowASTAnalyzer`
+
+**Inherits from**: NodeVisitor
+
+AST analyzer for extracting workflow components from Python code.
+
+Based on Agent-Wiz's AST parsing approach for workflow extraction.
+
+**Methods** (8):
+- `__init__(self)`
+- `visit_Import(self, node)`
+- `visit_ImportFrom(self, node)`
+- `visit_ClassDef(self, node)`
+- `visit_FunctionDef(self, node)`
+- `visit_Call(self, node)`
+- `_get_docstring(self, node)`
+- `_is_external_tool(self, node)`
+
+### `SecurityAnalysisMixin`
+
+Mixin to add security analysis capabilities to PyAgent orchestrators.
+
+This mixin provides methods to analyze workflows for security vulnerabilities
+and generate security reports, inspired by Agent-Wiz's threat modeling.
+
+**Methods** (5):
+- `__init__(self)`
+- `analyze_workflow_security(self, workflow_code, workflow_name)`
+- `generate_security_report(self, analysis)`
+- `get_security_score(self, workflow_code)`
+- `check_security_threshold(self, workflow_code, threshold)`
+
+## Dependencies
+
+**Imports** (12):
+- `ast`
+- `dataclasses.dataclass`
+- `dataclasses.field`
+- `datetime.datetime`
+- `json`
+- `logging`
+- `src.logic.agents.swarm.orchestrator_work_pattern_mixin.OrchestratorWorkPatternMixin`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+- `typing.Set`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/swarm/security_analysis_mixin.improvements.md
+
+# Improvements for security_analysis_mixin
+
+**File**: `src\logic\agents\swarm\security_analysis_mixin.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 546 lines (large)  
+**Complexity**: 26 score (complex)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `security_analysis_mixin_test.py` with pytest tests
+
+### Code Organization
+- [TIP] **5 classes in one file** - Consider splitting into separate modules
+
+### File Complexity
+- [!] **Large file** (546 lines) - Consider refactoring
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 """Security analysis and threat modeling for PyAgent workflows."""
 
 import ast

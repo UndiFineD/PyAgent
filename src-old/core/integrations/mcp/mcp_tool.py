@@ -13,6 +13,98 @@
 # limitations under the License.
 
 """
+LLM_CONTEXT_START
+
+## Source: src-old/core/integrations/mcp/mcp_tool.description.md
+
+# mcp_tool
+
+**File**: `src\core\integrations\mcp\mcp_tool.py`  
+**Type**: Python Module  
+**Summary**: 0 classes, 3 functions, 8 imports  
+**Lines**: 132  
+**Complexity**: 3 (simple)
+
+## Overview
+
+MCP-based tool registration using official mcp library.
+Provides register_tool decorator compatible with mcp.mcp_tool.
+
+## Functions (3)
+
+### `register_tool(name, description)`
+
+Decorator to register a function as a tool using MCP format.
+Compatible with mcp.mcp_tool descriptor.
+
+Args:
+    name: Optional custom tool name
+    description: Optional custom description
+
+### `_generate_mcp_schema(func)`
+
+Generate MCP-compatible JSON schema from function signature.
+
+### `create_mcp_server(name, version)`
+
+Create MCP server with registered tools.
+
+Args:
+    name: Server name
+    version: Server version
+
+Returns:
+    MCP server instance
+
+## Dependencies
+
+**Imports** (8):
+- `aenv.core.tool.get_registry`
+- `inspect`
+- `mcp.server.fastapi.serve_app`
+- `typing.Any`
+- `typing.Callable`
+- `typing.Dict`
+- `typing.Optional`
+- `typing.get_type_hints`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/integrations/mcp/mcp_tool.improvements.md
+
+# Improvements for mcp_tool
+
+**File**: `src\core\integrations\mcp\mcp_tool.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 132 lines (medium)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `mcp_tool_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
+"""
 MCP-based tool registration using official mcp library.
 Provides register_tool decorator compatible with mcp.mcp_tool.
 """

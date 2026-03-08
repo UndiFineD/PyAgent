@@ -45,24 +45,57 @@ LLM_CONTEXT_START = "LLM_CONTEXT_START"
 LLM_CONTEXT_END = "LLM_CONTEXT_END"
 
 
-def _build_llms_root_text() -> str:
-    """Build root llms.txt content with pointers to tiered context files."""
-    return "\n".join(
-        [
-            "# PyAgent LLM Context",
-            "",
-            "PyAgent is a multi-agent swarm system optimized for autonomous code improvement.",
-            "",
-            "## Tiered context files",
-            "- llms-architecture.txt",
-            "- llms-improvements.txt",
-            "",
-            "## Notes",
-            "Use llms-architecture.txt for architecture and layout rules.",
-            "Use llms-improvements.txt for consolidated improvements and lessons.",
-            "",
-        ]
-    )
+def _build_llms_root_text(repo_root: Path) -> str:
+    """Build root llms.txt content with pointers to tiered context files.
+
+    The file begins with the README (if present) and then appends all
+    architecture markdown files verbatim.  Finally it emits the standard
+    pointer section.  The resulting text is truncated at 32 000 bytes to
+    prevent excessively large LLM context.
+    """
+    # build the preamble using README and architecture data
+    body_lines: list[str] = []
+
+    readme = repo_root / "README.md"
+    if readme.exists():
+        body_lines.append("# Project README")
+        body_lines.extend(_safe_read_text(readme).splitlines())
+        body_lines.append("")
+
+    for path in _discover_architecture_files(repo_root):
+        body_lines.append(f"## {path.relative_to(repo_root).as_posix()}")
+        body_lines.extend(_safe_read_text(path).splitlines())
+        body_lines.append("")
+
+    body = "\n".join(body_lines).rstrip()
+    if body:
+        body += "\n\n"
+
+    # pointer section is always included in full
+    pointers_lines = [
+        "## Tiered context files",
+        "- llms-architecture.txt",
+        "- llms-improvements.txt",
+        "",
+        "## Notes",
+        "Use llms-architecture.txt for architecture and layout rules.",
+        "Use llms-improvements.txt for consolidated improvements and lessons.",
+        "",
+    ]
+    pointers_text = "\n".join(pointers_lines).rstrip() + "\n"
+
+    max_bytes = 32000
+    pointers_bytes = pointers_text.encode("utf-8")
+    if len(pointers_bytes) >= max_bytes:
+        # pointers themselves exceed the limit; just truncate them
+        return pointers_bytes[:max_bytes].decode("utf-8", errors="ignore")
+
+    available = max_bytes - len(pointers_bytes)
+    body_bytes = body.encode("utf-8")
+    if len(body_bytes) > available:
+        body = body_bytes[:available].decode("utf-8", errors="ignore")
+
+    return body + pointers_text
 
 
 def _build_architecture_text() -> str:
@@ -287,7 +320,7 @@ def run(config: ConsolidationConfig) -> int:
     skipped_sources: list[Path] = []
     errors: list[str] = []
 
-    _write_text(output_dir / "llms.txt", _build_llms_root_text())
+    _write_text(output_dir / "llms.txt", _build_llms_root_text(config.repo_root))
 
     architecture_paths = _discover_architecture_files(config.repo_root)
     architecture_sections = []

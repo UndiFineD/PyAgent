@@ -1,4 +1,69 @@
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/tools/fix_version_bottom.description.md
+
+# fix_version_bottom
+
+**File**: `src\tools\fix_version_bottom.py`  
+**Type**: Python Module  
+**Summary**: 0 classes, 1 functions, 1 imports  
+**Lines**: 46  
+**Complexity**: 1 (simple)
+
+## Overview
+
+Python module containing implementation for fix_version_bottom.
+
+## Functions (1)
+
+### `fix_file(path)`
+
+## Dependencies
+
+**Imports** (1):
+- `os`
+
+---
+*Auto-generated documentation*
+## Source: src-old/tools/fix_version_bottom.improvements.md
+
+# Improvements for fix_version_bottom
+
+**File**: `src\tools\fix_version_bottom.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 46 lines (small)  
+**Complexity**: 1 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `fix_version_bottom_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 import os
 
 def fix_file(path):

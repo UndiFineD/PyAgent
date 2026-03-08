@@ -1,3 +1,82 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/modules/DocGenModule.description.md
+
+# DocGenModule
+
+**File**: `src\core\modules\DocGenModule.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 4 imports  
+**Lines**: 79  
+**Complexity**: 4 (simple)
+
+## Overview
+
+Python module containing implementation for DocGenModule.
+
+## Classes (1)
+
+### `DocGenModule`
+
+**Inherits from**: BaseModule
+
+Consolidated core module for generating documentation.
+Migrated from DocGenCore.
+
+**Methods** (4):
+- `initialize(self)`
+- `execute(self, source_code, file_name)`
+- `get_doc_filename(self, rel_path)`
+- `shutdown(self)`
+
+## Dependencies
+
+**Imports** (4):
+- `__future__.annotations`
+- `ast`
+- `os`
+- `src.core.base.modules.BaseModule`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/modules/DocGenModule.improvements.md
+
+# Improvements for DocGenModule
+
+**File**: `src\core\modules\DocGenModule.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 79 lines (small)  
+**Complexity**: 4 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `DocGenModule_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

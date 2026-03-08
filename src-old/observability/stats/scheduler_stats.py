@@ -1,4 +1,32 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/observability/stats/scheduler_stats.description.md
+
+# Description: src/observability/stats/scheduler_stats.py
+
+Module overview:
+- Contains classes and dataclasses for scheduler-related statistics: `PrefixCacheStats`, `SpecDecodingStats`, `CUDAGraphStats`, `PerfStats`, etc.
+- Provides methods to record and summarize scheduler-level metrics used for LLM inference orchestration.
+
+Behavioral notes:
+- Designed for high-resolution telemetry and performance analysis of scheduling and speculative decoding.
+- Includes convenience methods to convert stats to dictionaries and clone/reset state.
+## Source: src-old/observability/stats/scheduler_stats.improvements.md
+
+# Improvements: src/observability/stats/scheduler_stats.py
+
+Potential improvements:
+- Add unit tests for `PrefixCacheStats`, `SpecDecodingStats`, and `CUDAGraphStats` to validate hit rates, acceptance rates, and averages.
+- Use `time.monotonic()` for timing measurements to avoid system clock changes affecting durations.
+- Document units for all timing fields (ms assumed) and consider consistent naming like `_ms` suffix.
+- Provide serialization helpers and compact summaries for telemetry export.
+- Add optional limits or thresholds to prevent unbounded list growth in `num_accepted_tokens_per_pos`.
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

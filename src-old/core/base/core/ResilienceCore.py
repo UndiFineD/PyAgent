@@ -1,4 +1,78 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/core/ResilienceCore.description.md
+
+# ResilienceCore
+
+**File**: `src\core\base\core\ResilienceCore.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 2 imports  
+**Lines**: 86  
+**Complexity**: 3 (simple)
+
+## Overview
+
+Python module containing implementation for ResilienceCore.
+
+## Classes (1)
+
+### `ResilienceCore`
+
+Pure logic for Circuit Breaker and Retry mechanisms.
+Audited for Rust conversion.
+
+**Methods** (3):
+- `calculate_backoff(failure_count, threshold, base_timeout, multiplier, max_timeout, jitter_mode)`
+- `should_attempt_recovery(last_failure_time, current_time, timeout)`
+- `evaluate_state_transition(current_state, success_count, consecutive_successes_needed, failure_count, failure_threshold)`
+
+## Dependencies
+
+**Imports** (2):
+- `__future__.annotations`
+- `random`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/core/ResilienceCore.improvements.md
+
+# Improvements for ResilienceCore
+
+**File**: `src\core\base\core\ResilienceCore.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 86 lines (small)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `ResilienceCore_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");

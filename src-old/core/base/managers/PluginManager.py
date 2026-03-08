@@ -1,4 +1,101 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/managers/PluginManager.description.md
+
+# PluginManager
+
+**File**: `src\core\base\managers\PluginManager.py`  
+**Type**: Python Module  
+**Summary**: 2 classes, 0 functions, 12 imports  
+**Lines**: 271  
+**Complexity**: 10 (moderate)
+
+## Overview
+
+Python module containing implementation for PluginManager.
+
+## Classes (2)
+
+### `PluginMetadata`
+
+Strictly typed metadata for a plugin.
+
+**Methods** (1):
+- `get(self, key, default)`
+
+### `PluginManager`
+
+Modernized PluginManager (Phase 226).
+Handles discovery, manifest enforcement, health tracking, and graceful shutdown.
+
+**Methods** (9):
+- `__init__(self, workspace_root)`
+- `discover(self)`
+- `validate_version(self, required_version)`
+- `load_plugin(self, plugin_name)`
+- `_load_sandboxed_plugin(self, name, meta)`
+- `_setup_permission_proxy(self, name, meta)`
+- `shutdown_all(self)`
+- `activate_all(self)`
+- `deactivate(self, name)`
+
+## Dependencies
+
+**Imports** (12):
+- `__future__.annotations`
+- `dataclasses.dataclass`
+- `docker`
+- `importlib`
+- `json`
+- `logging`
+- `pathlib.Path`
+- `src.core.base.AgentPluginBase.AgentPluginBase`
+- `src.core.base.Version.SDK_VERSION`
+- `src.infrastructure.fleet.VersionGate.VersionGate`
+- `typing.Any`
+- `typing.TYPE_CHECKING`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/managers/PluginManager.improvements.md
+
+# Improvements for PluginManager
+
+**File**: `src\core\base\managers\PluginManager.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 271 lines (medium)  
+**Complexity**: 10 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `PluginManager_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

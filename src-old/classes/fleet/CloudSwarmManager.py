@@ -1,4 +1,82 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/fleet/CloudSwarmManager.description.md
+
+# CloudSwarmManager
+
+**File**: `src\classes\fleet\CloudSwarmManager.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 7 imports  
+**Lines**: 97  
+**Complexity**: 5 (moderate)
+
+## Overview
+
+Manager for cross-cloud swarm orchestration.
+Handles resource provisioning and agent deployment across AWS, Azure, and GCP.
+
+## Classes (1)
+
+### `CloudSwarmManager`
+
+Orchestrates resources and deployments across multiple cloud providers.
+
+**Methods** (5):
+- `__init__(self, config_path)`
+- `provision_resource(self, provider, resource_type, specs)`
+- `deploy_agent_to_cloud(self, agent_name, resource_id)`
+- `list_cloud_resources(self)`
+- `terminate_cloud_resource(self, resource_id)`
+
+## Dependencies
+
+**Imports** (7):
+- `__future__.annotations`
+- `logging`
+- `pathlib.Path`
+- `src.core.base.version.VERSION`
+- `typing.Any`
+- `typing.Dict`
+- `typing.Optional`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/fleet/CloudSwarmManager.improvements.md
+
+# Improvements for CloudSwarmManager
+
+**File**: `src\classes\fleet\CloudSwarmManager.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 97 lines (small)  
+**Complexity**: 5 score (moderate)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `CloudSwarmManager_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

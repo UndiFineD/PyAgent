@@ -1,4 +1,91 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/AttentionBufferAgent.description.md
+
+# AttentionBufferAgent
+
+**File**: `src\classes\specialized\AttentionBufferAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 8 imports  
+**Lines**: 123  
+**Complexity**: 4 (simple)
+
+## Overview
+
+Python module containing implementation for AttentionBufferAgent.
+
+## Classes (1)
+
+### `AttentionBufferAgent`
+
+**Inherits from**: BaseAgent
+
+Tier 2 (Cognitive Logic) - Attention Buffer Agent: Maintains a shared 
+attention context between humans and agents to ensure cohesive collaboration.
+
+Phase 14 Rust Optimizations:
+- sort_buffer_by_priority_rust: Fast priority-timestamp composite sorting
+- filter_stale_entries_rust: Optimized timestamp-based filtering
+
+**Methods** (4):
+- `__init__(self, file_path)`
+- `push_attention_point(self, source, content, priority)`
+- `get_attention_summary(self)`
+- `clear_stale_attention(self, age_seconds)`
+
+## Dependencies
+
+**Imports** (8):
+- `__future__.annotations`
+- `logging`
+- `rust_core`
+- `src.core.base.BaseAgent.BaseAgent`
+- `src.core.base.BaseUtilities.as_tool`
+- `src.core.base.Version.VERSION`
+- `time`
+- `typing.Any`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/AttentionBufferAgent.improvements.md
+
+# Improvements for AttentionBufferAgent
+
+**File**: `src\classes\specialized\AttentionBufferAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 123 lines (medium)  
+**Complexity**: 4 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `AttentionBufferAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

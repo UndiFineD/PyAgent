@@ -1,3 +1,84 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/ConsensusConflictAgent.description.md
+
+# ConsensusConflictAgent
+
+**File**: `src\classes\specialized\ConsensusConflictAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 5 imports  
+**Lines**: 104  
+**Complexity**: 5 (moderate)
+
+## Overview
+
+Python module containing implementation for ConsensusConflictAgent.
+
+## Classes (1)
+
+### `ConsensusConflictAgent`
+
+**Inherits from**: BaseAgent
+
+Tier 2 (Cognitive Logic) - Consensus Conflict Agent: Arbitrates disagreements 
+and resolves conflicts between agents in the swarm using voting systems.
+
+**Methods** (5):
+- `__init__(self, workspace_path)`
+- `initiate_dispute(self, dispute_id, context, options)`
+- `cast_vote(self, dispute_id, agent_id, option_index, reasoning)`
+- `resolve_dispute(self, dispute_id)`
+- `get_conflict_summary(self)`
+
+## Dependencies
+
+**Imports** (5):
+- `__future__.annotations`
+- `src.core.base.BaseAgent.BaseAgent`
+- `src.core.base.Version.VERSION`
+- `time`
+- `typing.Any`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/ConsensusConflictAgent.improvements.md
+
+# Improvements for ConsensusConflictAgent
+
+**File**: `src\classes\specialized\ConsensusConflictAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 104 lines (medium)  
+**Complexity**: 5 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `ConsensusConflictAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

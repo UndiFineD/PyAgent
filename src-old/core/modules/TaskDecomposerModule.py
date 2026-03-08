@@ -1,3 +1,93 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/modules/TaskDecomposerModule.description.md
+
+# TaskDecomposerModule
+
+**File**: `src\core\modules\TaskDecomposerModule.py`  
+**Type**: Python Module  
+**Summary**: 2 classes, 0 functions, 7 imports  
+**Lines**: 116  
+**Complexity**: 5 (moderate)
+
+## Overview
+
+Python module containing implementation for TaskDecomposerModule.
+
+## Classes (2)
+
+### `PlanStep`
+
+Class PlanStep implementation.
+
+### `TaskDecomposerModule`
+
+**Inherits from**: BaseModule
+
+Consolidated core module for task decomposition.
+Migrated from TaskDecomposerCore.
+
+**Methods** (5):
+- `initialize(self)`
+- `execute(self, request)`
+- `_to_dict(self, step)`
+- `summarize_plan(self, steps)`
+- `shutdown(self)`
+
+## Dependencies
+
+**Imports** (7):
+- `__future__.annotations`
+- `dataclasses.dataclass`
+- `dataclasses.field`
+- `src.core.base.modules.BaseModule`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/modules/TaskDecomposerModule.improvements.md
+
+# Improvements for TaskDecomposerModule
+
+**File**: `src\core\modules\TaskDecomposerModule.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 116 lines (medium)  
+**Complexity**: 5 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Class Documentation
+- [!] **1 undocumented classes**: PlanStep
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `TaskDecomposerModule_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

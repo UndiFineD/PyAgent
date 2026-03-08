@@ -1,4 +1,81 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/cognitive/TheoryOfMindCore.description.md
+
+# TheoryOfMindCore
+
+**File**: `src\classes\cognitive\TheoryOfMindCore.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 7 imports  
+**Lines**: 76  
+**Complexity**: 3 (simple)
+
+## Overview
+
+TheoryOfMindCore logic for PyAgent.
+Pure logic for modeling agent mental states and capabilities.
+No I/O or side effects.
+
+## Classes (1)
+
+### `TheoryOfMindCore`
+
+Pure logic core for Theory of Mind modeling.
+
+**Methods** (3):
+- `update_profile_logic(profile, observations)`
+- `estimate_knowledge_score(profile, topic)`
+- `rank_collaborators(profiles, task)`
+
+## Dependencies
+
+**Imports** (7):
+- `__future__.annotations`
+- `src.core.base.version.VERSION`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Set`
+- `typing.Tuple`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/cognitive/TheoryOfMindCore.improvements.md
+
+# Improvements for TheoryOfMindCore
+
+**File**: `src\classes\cognitive\TheoryOfMindCore.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 76 lines (small)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `TheoryOfMindCore_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

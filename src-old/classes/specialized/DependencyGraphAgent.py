@@ -1,3 +1,87 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/DependencyGraphAgent.description.md
+
+# DependencyGraphAgent
+
+**File**: `src\classes\specialized\DependencyGraphAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 10 imports  
+**Lines**: 90  
+**Complexity**: 5 (moderate)
+
+## Overview
+
+Python module containing implementation for DependencyGraphAgent.
+
+## Classes (1)
+
+### `DependencyGraphAgent`
+
+Maps and analyzes dependencies between agent modules and classes.
+Helps in understanding the impact of changes and optimizing imports.
+
+**Methods** (5):
+- `__init__(self, workspace_path)`
+- `scan_dependencies(self, start_dir)`
+- `_extract_imports(self, file_path)`
+- `get_impact_scope(self, module_name)`
+- `generate_graph_stats(self)`
+
+## Dependencies
+
+**Imports** (10):
+- `__future__.annotations`
+- `ast`
+- `os`
+- `pathlib.Path`
+- `src.core.base.version.VERSION`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Set`
+- `typing.Union`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/DependencyGraphAgent.improvements.md
+
+# Improvements for DependencyGraphAgent
+
+**File**: `src\classes\specialized\DependencyGraphAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 90 lines (small)  
+**Complexity**: 5 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `DependencyGraphAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

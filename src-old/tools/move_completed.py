@@ -1,4 +1,76 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/tools/move_completed.description.md
+
+# move_completed
+
+**File**: `src\tools\move_completed.py`  
+**Type**: Python Module  
+**Summary**: 0 classes, 3 functions, 3 imports  
+**Lines**: 94  
+**Complexity**: 3 (simple)
+
+## Overview
+
+Move completed rows from .external/tracking.md to .external/completed.md
+
+Idempotent: will not duplicate entries already present in completed.md.
+It treats table rows where the second column (status) contains
+case-insensitive 'completed'|'done'|'finished' as completed.
+
+## Functions (3)
+
+### `parse_row(line)`
+
+### `is_completed_status(s)`
+
+### `main()`
+
+## Dependencies
+
+**Imports** (3):
+- `__future__.annotations`
+- `datetime`
+- `pathlib.Path`
+
+---
+*Auto-generated documentation*
+## Source: src-old/tools/move_completed.improvements.md
+
+# Improvements for move_completed
+
+**File**: `src\tools\move_completed.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 94 lines (small)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `move_completed_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 """Move completed rows from .external/tracking.md to .external/completed.md

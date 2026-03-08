@@ -1,3 +1,87 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/StrategicPlanningAgent.description.md
+
+# StrategicPlanningAgent
+
+**File**: `src\classes\specialized\StrategicPlanningAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 6 imports  
+**Lines**: 99  
+**Complexity**: 7 (moderate)
+
+## Overview
+
+Python module containing implementation for StrategicPlanningAgent.
+
+## Classes (1)
+
+### `StrategicPlanningAgent`
+
+**Inherits from**: BaseAgent
+
+Strategic Planning Agent: Handles long-term goal setting, roadmap 
+prioritization, and autonomous project management for the fleet.
+
+**Methods** (7):
+- `__init__(self, workspace_path)`
+- `set_long_term_goal(self, goal_description, target_date)`
+- `add_milestone_to_goal(self, goal_id, milestone_description)`
+- `generate_roadmap(self)`
+- `_calculate_completion(self, goal)`
+- `mark_milestone_complete(self, goal_id, milestone_description)`
+- `get_strategic_summary(self)`
+
+## Dependencies
+
+**Imports** (6):
+- `__future__.annotations`
+- `src.core.base.BaseAgent.BaseAgent`
+- `src.core.base.version.VERSION`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/StrategicPlanningAgent.improvements.md
+
+# Improvements for StrategicPlanningAgent
+
+**File**: `src\classes\specialized\StrategicPlanningAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 99 lines (small)  
+**Complexity**: 7 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `StrategicPlanningAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

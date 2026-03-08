@@ -12,6 +12,83 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/logic/core/audio_stream_core.description.md
+
+# audio_stream_core
+
+**File**: `src\core\base\logic\core\audio_stream_core.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 3 imports  
+**Lines**: 61  
+**Complexity**: 5 (moderate)
+
+## Overview
+
+Python module containing implementation for audio_stream_core.
+
+## Classes (1)
+
+### `AudioStreamCore`
+
+Core logic for real-time audio processing and codec conversion.
+Harvested from .external/Asterisk-AI-Voice-Agent.
+
+**Methods** (5):
+- `__init__(self, target_sample_rate, target_width)`
+- `convert_ulaw_to_pcm(self, ulaw_data)`
+- `resample(self, pcm_data, source_rate)`
+- `normalize_volume(self, pcm_data, target_rms)`
+- `detect_voice(self, pcm_data, threshold)`
+
+## Dependencies
+
+**Imports** (3):
+- `audioop`
+- `typing.Optional`
+- `typing.Tuple`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/logic/core/audio_stream_core.improvements.md
+
+# Improvements for audio_stream_core
+
+**File**: `src\core\base\logic\core\audio_stream_core.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 61 lines (small)  
+**Complexity**: 5 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `audio_stream_core_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 import audioop
 from typing import Optional, Tuple
 

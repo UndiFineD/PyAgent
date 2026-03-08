@@ -1,3 +1,85 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/SecurityAuditAgent.description.md
+
+# SecurityAuditAgent
+
+**File**: `src\classes\specialized\SecurityAuditAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 8 imports  
+**Lines**: 130  
+**Complexity**: 3 (simple)
+
+## Overview
+
+Python module containing implementation for SecurityAuditAgent.
+
+## Classes (1)
+
+### `SecurityAuditAgent`
+
+**Inherits from**: BaseAgent
+
+Scans the workspace for potential security risks including hardcoded secrets,
+vulnerable patterns, and insecure file permissions.
+
+**Methods** (3):
+- `__init__(self, workspace_path)`
+- `scan_file(self, file_path)`
+- `audit_workspace(self)`
+
+## Dependencies
+
+**Imports** (8):
+- `__future__.annotations`
+- `os`
+- `re`
+- `src.core.base.BaseAgent.BaseAgent`
+- `src.core.base.version.VERSION`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/SecurityAuditAgent.improvements.md
+
+# Improvements for SecurityAuditAgent
+
+**File**: `src\classes\specialized\SecurityAuditAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 130 lines (medium)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `SecurityAuditAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

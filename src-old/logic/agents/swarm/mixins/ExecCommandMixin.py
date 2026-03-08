@@ -1,4 +1,80 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/swarm/mixins/ExecCommandMixin.description.md
+
+# ExecCommandMixin
+
+**File**: `src\logic\agents\swarm\mixins\ExecCommandMixin.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 6 imports  
+**Lines**: 89  
+**Complexity**: 5 (moderate)
+
+## Overview
+
+Command and git execution logic for OrchestratorAgent.
+
+## Classes (1)
+
+### `ExecCommandMixin`
+
+Mixin for fundamental command execution and git operations.
+
+**Methods** (5):
+- `_run_command(self, cmd, timeout, max_retries)`
+- `_with_agent_env(self, agent_name)`
+- `run_stats_update(self, files)`
+- `run_tests(self, code_file)`
+- `_commit_and_push(self, code_file)`
+
+## Dependencies
+
+**Imports** (6):
+- `__future__.annotations`
+- `contextlib.contextmanager`
+- `logging`
+- `pathlib.Path`
+- `subprocess`
+- `sys`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/swarm/mixins/ExecCommandMixin.improvements.md
+
+# Improvements for ExecCommandMixin
+
+**File**: `src\logic\agents\swarm\mixins\ExecCommandMixin.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 89 lines (small)  
+**Complexity**: 5 score (moderate)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `ExecCommandMixin_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

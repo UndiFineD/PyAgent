@@ -1,4 +1,27 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/observability/reports/report_comparison.description.md
+
+# Description: src/observability/reports/report_comparison.py
+
+Module overview:
+- `ReportComparison` dataclass represents the result of comparing two report versions (added/removed/changed items).
+
+Behavioral notes:
+- Lightweight container dataclass used by `ReportComparator`.
+## Source: src-old/observability/reports/report_comparison.improvements.md
+
+# Improvements: src/observability/reports/report_comparison.py
+
+Potential improvements:
+- Add unit tests for `ReportComparison` construction and equality-like semantics.
+- Add helper methods to serialize/deserialize comparisons and to produce summary text.
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");

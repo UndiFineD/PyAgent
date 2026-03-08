@@ -1,3 +1,78 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/stats/TokenCostCore.description.md
+
+# TokenCostCore
+
+**File**: `src\classes\stats\TokenCostCore.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 3 imports  
+**Lines**: 41  
+**Complexity**: 3 (simple)
+
+## Overview
+
+Python module containing implementation for TokenCostCore.
+
+## Classes (1)
+
+### `TokenCostCore`
+
+Pure logic for cost calculations.
+No I/O or state management.
+
+**Methods** (3):
+- `compute_usd(self, model, input_tokens, output_tokens)`
+- `_find_pricing(self, model_key)`
+- `list_models(self)`
+
+## Dependencies
+
+**Imports** (3):
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/stats/TokenCostCore.improvements.md
+
+# Improvements for TokenCostCore
+
+**File**: `src\classes\stats\TokenCostCore.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 41 lines (small)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `TokenCostCore_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from typing import Dict, Any, List
 
 # Constants for common models (Jan 2026 estimates)

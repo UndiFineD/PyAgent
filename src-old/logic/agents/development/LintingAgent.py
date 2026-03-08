@@ -1,4 +1,81 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/development/LintingAgent.description.md
+
+# LintingAgent
+
+**File**: `src\logic\agents\development\LintingAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 5 imports  
+**Lines**: 91  
+**Complexity**: 5 (moderate)
+
+## Overview
+
+Agent specializing in code quality, linting, and style enforcement.
+
+## Classes (1)
+
+### `LintingAgent`
+
+**Inherits from**: BaseAgent
+
+Ensures code adheres to quality standards by running linters.
+
+**Methods** (5):
+- `__init__(self, file_path)`
+- `_get_default_content(self)`
+- `run_flake8(self, target_path)`
+- `run_mypy(self, target_path)`
+- `improve_content(self, prompt)`
+
+## Dependencies
+
+**Imports** (5):
+- `__future__.annotations`
+- `src.core.base.BaseAgent.BaseAgent`
+- `src.core.base.utilities.create_main_function`
+- `src.core.base.version.VERSION`
+- `subprocess`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/development/LintingAgent.improvements.md
+
+# Improvements for LintingAgent
+
+**File**: `src\logic\agents\development\LintingAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 91 lines (small)  
+**Complexity**: 5 score (moderate)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `LintingAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

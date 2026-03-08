@@ -1,3 +1,84 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/CodeTranslationAgent.description.md
+
+# CodeTranslationAgent
+
+**File**: `src\classes\specialized\CodeTranslationAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 5 imports  
+**Lines**: 73  
+**Complexity**: 5 (moderate)
+
+## Overview
+
+Python module containing implementation for CodeTranslationAgent.
+
+## Classes (1)
+
+### `CodeTranslationAgent`
+
+**Inherits from**: BaseAgent
+
+Handles translation of codebases between different programming languages.
+Supports mapping logic, syntax transformations, and multi-file translation.
+
+**Methods** (5):
+- `__init__(self, workspace_path)`
+- `translate_file(self, source_code, from_lang, to_lang)`
+- `_mock_python_to_rust(self, code)`
+- `_mock_python_to_js(self, code)`
+- `get_translation_stats(self)`
+
+## Dependencies
+
+**Imports** (5):
+- `os`
+- `src.classes.base_agent.BaseAgent`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/CodeTranslationAgent.improvements.md
+
+# Improvements for CodeTranslationAgent
+
+**File**: `src\classes\specialized\CodeTranslationAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 73 lines (small)  
+**Complexity**: 5 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `CodeTranslationAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 import os
 from typing import Dict, List, Any
 from src.classes.base_agent import BaseAgent

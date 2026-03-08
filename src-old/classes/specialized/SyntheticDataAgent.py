@@ -1,4 +1,88 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/SyntheticDataAgent.description.md
+
+# SyntheticDataAgent
+
+**File**: `src\classes\specialized\SyntheticDataAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 8 imports  
+**Lines**: 91  
+**Complexity**: 4 (simple)
+
+## Overview
+
+Python module containing implementation for SyntheticDataAgent.
+
+## Classes (1)
+
+### `SyntheticDataAgent`
+
+**Inherits from**: BaseAgent
+
+Agent specializing in generating high-fidelity synthetic training data.
+Used to create datasets for fine-tuning local models (ModelForge).
+Integrated with SynthesisCore for edge-case generation.
+
+**Methods** (4):
+- `__init__(self, file_path)`
+- `generate_edge_case_dataset(self, count)`
+- `generate_training_data(self, topic, count)`
+- `augment_existing_data(self, input_file)`
+
+## Dependencies
+
+**Imports** (8):
+- `__future__.annotations`
+- `json`
+- `logging`
+- `os`
+- `src.core.base.BaseAgent.BaseAgent`
+- `src.core.base.utilities.as_tool`
+- `src.core.base.version.VERSION`
+- `src.logic.agents.intelligence.core.SynthesisCore.SynthesisCore`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/SyntheticDataAgent.improvements.md
+
+# Improvements for SyntheticDataAgent
+
+**File**: `src\classes\specialized\SyntheticDataAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 91 lines (small)  
+**Complexity**: 4 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `SyntheticDataAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

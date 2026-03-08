@@ -1,5 +1,81 @@
 #!/usr/bin/env python3
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/fleet/DeploymentManager.description.md
+
+# DeploymentManager
+
+**File**: `src\classes\fleet\DeploymentManager.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 7 imports  
+**Lines**: 64  
+**Complexity**: 4 (simple)
+
+## Overview
+
+Manager for automated deployment, containerization, and fleet-as-a-service scaling.
+
+## Classes (1)
+
+### `DeploymentManager`
+
+Automates the generation of infrastructure-as-code and container manifests for the fleet.
+
+**Methods** (4):
+- `__init__(self, workspace_root)`
+- `generate_docker_manifest(self, component)`
+- `generate_compose_orchestration(self, num_replicas)`
+- `get_deployment_status(self)`
+
+## Dependencies
+
+**Imports** (7):
+- `logging`
+- `os`
+- `pathlib.Path`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/fleet/DeploymentManager.improvements.md
+
+# Improvements for DeploymentManager
+
+**File**: `src\classes\fleet\DeploymentManager.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 64 lines (small)  
+**Complexity**: 4 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `DeploymentManager_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 """Manager for automated deployment, containerization, and fleet-as-a-service scaling."""
 
 import logging

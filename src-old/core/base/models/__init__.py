@@ -1,4 +1,78 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/models/__init__.description.md
+
+# __init__
+
+**File**: `src\core\base\models\__init__.py`  
+**Type**: Python Module  
+**Summary**: 0 classes, 0 functions, 73 imports  
+**Lines**: 125  
+**Complexity**: 0 (simple)
+
+## Overview
+
+Data models for PyAgent.
+Unified entry point for re-exporting all sub-modules.
+
+## Dependencies
+
+**Imports** (73):
+- `__future__.annotations`
+- `agent_models.AgentConfig`
+- `agent_models.AgentHealthCheck`
+- `agent_models.AgentParallel`
+- `agent_models.AgentPipeline`
+- `agent_models.AgentPluginConfig`
+- `agent_models.AgentRouter`
+- `agent_models.ComposedAgent`
+- `agent_models.ExecutionProfile`
+- `base_models.AuthConfig`
+- `base_models.CacheEntry`
+- `base_models.ConfigProfile`
+- `base_models.DiffResult`
+- `base_models.EventHook`
+- `base_models.ExecutionCondition`
+- ... and 58 more
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/models/__init__.improvements.md
+
+# Improvements for __init__
+
+**File**: `src\core\base\models\__init__.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 125 lines (medium)  
+**Complexity**: 0 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `__init___test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");

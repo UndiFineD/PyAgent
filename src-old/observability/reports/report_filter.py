@@ -1,4 +1,30 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/observability/reports/report_filter.description.md
+
+# Description: src/observability/reports/report_filter.py
+
+Module overview:
+- `ReportFilter` filters `CodeIssue` objects based on a `FilterCriteria` (severity, categories).
+- Exposes `matches` and `filter_issues` methods.
+
+Behavioral notes:
+- Simple predicate-based filtering; relies on `FilterCriteria` and `CodeIssue` definitions.
+## Source: src-old/observability/reports/report_filter.improvements.md
+
+# Improvements: src/observability/reports/report_filter.py
+
+Potential improvements:
+- Add unit tests for filtering logic across combinations of criteria.
+- Support more complex boolean filters (AND/OR), and negation for categories.
+- Allow filtering by filename, line ranges, and function names.
+- Support configurable default `FilterCriteria` via dependency injection.
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");

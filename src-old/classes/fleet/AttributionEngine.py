@@ -1,4 +1,89 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/fleet/AttributionEngine.description.md
+
+# AttributionEngine
+
+**File**: `src\classes\fleet\AttributionEngine.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 12 imports  
+**Lines**: 95  
+**Complexity**: 7 (moderate)
+
+## Overview
+
+Attribution Engine for PyAgent.
+Tracks the lineage and provenance of every generated piece of content or code.
+
+## Classes (1)
+
+### `AttributionEngine`
+
+Records the 'who, when, and how' for all system outputs (Phase 185).
+
+**Methods** (7):
+- `__init__(self, workspace_root)`
+- `_load(self)`
+- `apply_licensing(self, file_path)`
+- `record_attribution(self, agent_id, content, task_context)`
+- `_save(self)`
+- `get_lineage(self, content_hash)`
+- `get_summary(self)`
+
+## Dependencies
+
+**Imports** (12):
+- `__future__.annotations`
+- `hashlib`
+- `json`
+- `logging`
+- `os`
+- `pathlib.Path`
+- `src.core.base.version.VERSION`
+- `src.infrastructure.fleet.core.AttributionCore.AttributionCore`
+- `time`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/fleet/AttributionEngine.improvements.md
+
+# Improvements for AttributionEngine
+
+**File**: `src\classes\fleet\AttributionEngine.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 95 lines (small)  
+**Complexity**: 7 score (moderate)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `AttributionEngine_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

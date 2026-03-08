@@ -1,4 +1,33 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/observability/reports/report_cache_manager.description.md
+
+# Description: src/observability/reports/report_cache_manager.py
+
+Module overview:
+- `ReportCacheManager` persists and retrieves cached report content using a JSON file on disk.
+- Provides `get`, `set`, `invalidate_by_path`, and `invalidate` methods.
+
+Behavioral notes:
+- Uses `AGENT_DIR` to default the cache file location.
+- Handles JSON loading errors gracefully and warns on failures.
+## Source: src-old/observability/reports/report_cache_manager.improvements.md
+
+# Improvements: src/observability/reports/report_cache_manager.py
+
+Suggested improvements (automatically generated):
+- Add unit tests covering core behavior and edge cases.
+- Break large modules into smaller, testable components.
+- Avoid heavy imports at module import time; import lazily where appropriate.
+- Add type hints and explicit return types for public functions.
+- Add logging and better error handling for file and IO operations.
+- Consider dependency injection for filesystem and environment interactions.
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");

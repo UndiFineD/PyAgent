@@ -1,4 +1,94 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/backend/SqlAgent.description.md
+
+# SqlAgent
+
+**File**: `src\classes\backend\SqlAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 12 imports  
+**Lines**: 256  
+**Complexity**: 10 (moderate)
+
+## Overview
+
+Python module containing implementation for SqlAgent.
+
+## Classes (1)
+
+### `SqlMetadataHandler`
+
+Relational metadata overlay for compressed interaction shards.
+
+**Methods** (10):
+- `__init__(self, db_path, shards_dir, fleet)`
+- `_init_db(self)`
+- `optimize_db(self)`
+- `_rotate_metadata_shard(self)`
+- `record_lesson(self, interaction_id, text, category)`
+- `get_intelligence_summary(self)`
+- `index_shards(self)`
+- `query_interactions(self, sql_where)`
+- `record_debt(self, file_path, issue_type, message, fixed)`
+- `bulk_record_interactions(self, interaction_data)`
+
+## Dependencies
+
+**Imports** (12):
+- `__future__.annotations`
+- `gzip`
+- `json`
+- `logging`
+- `os`
+- `sqlite3`
+- `src.core.base.version.VERSION`
+- `time`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/backend/SqlAgent.improvements.md
+
+# Improvements for SqlAgent
+
+**File**: `src\classes\backend\SqlAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 256 lines (medium)  
+**Complexity**: 10 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `SqlAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

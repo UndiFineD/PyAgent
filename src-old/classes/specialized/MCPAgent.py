@@ -1,4 +1,85 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/MCPAgent.description.md
+
+# MCPAgent
+
+**File**: `src\classes\specialized\MCPAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 11 imports  
+**Lines**: 109  
+**Complexity**: 1 (simple)
+
+## Overview
+
+Agent specializing in Model Context Protocol (MCP) integration.
+Acts as a bridge between the PyAgent fleet and external MCP servers.
+Inspired by mcp-server-spec-driven-development and awesome-mcp-servers.
+
+## Classes (1)
+
+### `MCPAgent`
+
+**Inherits from**: BaseAgent
+
+Enables the fleet to discover and utilize external tools via the MCP protocol.
+
+**Methods** (1):
+- `__init__(self, file_path)`
+
+## Dependencies
+
+**Imports** (11):
+- `__future__.annotations`
+- `asyncio`
+- `json`
+- `pathlib.Path`
+- `src.core.base.BaseAgent.BaseAgent`
+- `src.core.base.utilities.as_tool`
+- `src.core.base.version.VERSION`
+- `src.infrastructure.fleet.MCPConnector.MCPConnector`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/MCPAgent.improvements.md
+
+# Improvements for MCPAgent
+
+**File**: `src\classes\specialized\MCPAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 109 lines (medium)  
+**Complexity**: 1 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `MCPAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

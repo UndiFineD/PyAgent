@@ -1,4 +1,88 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/agent/DiffGenerator.description.md
+
+# DiffGenerator
+
+**File**: `src\classes\agent\DiffGenerator.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 8 imports  
+**Lines**: 178  
+**Complexity**: 4 (simple)
+
+## Overview
+
+Auto-extracted class from agent.py
+
+## Classes (1)
+
+### `DiffGenerator`
+
+Generates diffs to preview changes before applying them.
+
+Creates human - readable diffs in various formats to allow
+users to review changes before they are applied.
+
+Attributes:
+    output_format: Default output format for diffs.
+    context_lines: Number of context lines in diff.
+
+**Methods** (4):
+- `__init__(self, output_format, context_lines)`
+- `generate_diff(self, file_path, original, modified)`
+- `format_diff(self, diff_result, output_format)`
+- `print_diff(self, diff_result)`
+
+## Dependencies
+
+**Imports** (8):
+- `__future__.annotations`
+- `difflib`
+- `pathlib.Path`
+- `rust_core`
+- `src.core.base.Version.VERSION`
+- `src.core.base.models.DiffOutputFormat`
+- `src.core.base.models.DiffResult`
+- `sys`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/agent/DiffGenerator.improvements.md
+
+# Improvements for DiffGenerator
+
+**File**: `src\classes\agent\DiffGenerator.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 178 lines (medium)  
+**Complexity**: 4 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `DiffGenerator_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

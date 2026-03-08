@@ -1,6 +1,93 @@
 # Copyright 2026 PyAgent Authors
 # SelfImprovementCoordinator: Automates the monitoring and implementation of improvements.
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/maintenance/SelfImprovementCoordinator.description.md
+
+# SelfImprovementCoordinator
+
+**File**: `src\maintenance\SelfImprovementCoordinator.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 19 imports  
+**Lines**: 318  
+**Complexity**: 2 (simple)
+
+## Overview
+
+Python module containing implementation for SelfImprovementCoordinator.
+
+## Classes (1)
+
+### `SelfImprovementCoordinator`
+
+Monitors improvements.md, roadmap.txt, context.txt, and prompt.txt.
+Automates the monitoring and implementation of improvements and healing.
+
+**Methods** (2):
+- `__init__(self, workspace_root)`
+- `_init_discovery(self)`
+
+## Dependencies
+
+**Imports** (19):
+- `asyncio`
+- `json`
+- `logging`
+- `os`
+- `pathlib.Path`
+- `re`
+- `src.core.base.ConnectivityManager.ConnectivityManager`
+- `src.infrastructure.cloud.budget.BudgetManager`
+- `src.infrastructure.mcp_tools.registry.MCPServerRegistry`
+- `src.infrastructure.network.LANDiscovery.LANDiscovery`
+- `src.infrastructure.orchestration.healing.SelfHealingOrchestrator.SelfHealingOrchestrator`
+- `src.infrastructure.orchestration.swarm.DirectorAgent.DirectorAgent`
+- `src.logic.agents.intelligence.ResearchAgent.ResearchAgent`
+- `traceback`
+- `typing.Any`
+- ... and 4 more
+
+---
+*Auto-generated documentation*
+## Source: src-old/maintenance/SelfImprovementCoordinator.improvements.md
+
+# Improvements for SelfImprovementCoordinator
+
+**File**: `src\maintenance\SelfImprovementCoordinator.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 318 lines (medium)  
+**Complexity**: 2 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `SelfImprovementCoordinator_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 import os
 import re
 import logging

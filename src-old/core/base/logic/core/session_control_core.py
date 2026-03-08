@@ -12,6 +12,93 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/logic/core/session_control_core.description.md
+
+# session_control_core
+
+**File**: `src\core\base\logic\core\session_control_core.py`  
+**Type**: Python Module  
+**Summary**: 2 classes, 0 functions, 5 imports  
+**Lines**: 69  
+**Complexity**: 6 (moderate)
+
+## Overview
+
+Python module containing implementation for session_control_core.
+
+## Classes (2)
+
+### `SessionSignal`
+
+**Inherits from**: Enum
+
+Signals for agent session lifecycle control.
+
+### `SessionControlCore`
+
+Manages session interrupt signals and shared state flags for long-running agent tasks.
+Enables orchestration layers to pause or stop agents mid-loop via filesystem or shared memory flags.
+Lesson harvested from .external/agentcloud pattern.
+
+**Methods** (6):
+- `__init__(self, storage_dir)`
+- `_get_signal_file(self, session_id)`
+- `set_signal(self, session_id, signal)`
+- `get_signal(self, session_id)`
+- `check_interrupt(self, session_id)`
+- `check_pause(self, session_id)`
+
+## Dependencies
+
+**Imports** (5):
+- `enum`
+- `json`
+- `pathlib.Path`
+- `typing.Dict`
+- `typing.Optional`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/logic/core/session_control_core.improvements.md
+
+# Improvements for session_control_core
+
+**File**: `src\core\base\logic\core\session_control_core.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 69 lines (small)  
+**Complexity**: 6 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `session_control_core_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 import enum
 import json
 from pathlib import Path

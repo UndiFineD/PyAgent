@@ -1,3 +1,79 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/observability/stats/core/TracingCore.description.md
+
+# TracingCore
+
+**File**: `src\observability\stats\core\TracingCore.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 4 imports  
+**Lines**: 39  
+**Complexity**: 3 (simple)
+
+## Overview
+
+Python module containing implementation for TracingCore.
+
+## Classes (1)
+
+### `TracingCore`
+
+TracingCore handles the logic for distributed tracing and latency breakdown.
+It prepares trace data for OpenTelemetry (OTel) exporters.
+
+**Methods** (3):
+- `create_span_context(self, trace_id, span_id)`
+- `calculate_latency_breakdown(self, total_time, network_time)`
+- `format_otel_log(self, name, attributes)`
+
+## Dependencies
+
+**Imports** (4):
+- `__future__.annotations`
+- `time`
+- `typing.Any`
+- `typing.Dict`
+
+---
+*Auto-generated documentation*
+## Source: src-old/observability/stats/core/TracingCore.improvements.md
+
+# Improvements for TracingCore
+
+**File**: `src\observability\stats\core\TracingCore.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 39 lines (small)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `TracingCore_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 from typing import Dict, Any

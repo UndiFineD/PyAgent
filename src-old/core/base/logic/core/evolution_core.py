@@ -12,6 +12,93 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/logic/core/evolution_core.description.md
+
+# evolution_core
+
+**File**: `src\core\base\logic\core\evolution_core.py`  
+**Type**: Python Module  
+**Summary**: 2 classes, 0 functions, 7 imports  
+**Lines**: 89  
+**Complexity**: 4 (simple)
+
+## Overview
+
+Python module containing implementation for evolution_core.
+
+## Classes (2)
+
+### `AgentMetadata`
+
+Class AgentMetadata implementation.
+
+### `EvolutionCore`
+
+Manages the lifecycle and evolution of agents based on task performance.
+Harvested from self-evolving-subagent patterns.
+
+**Methods** (4):
+- `__init__(self, sop_core)`
+- `record_usage(self, agent_name, success)`
+- `_check_promotion(self, meta)`
+- `propose_integration(self, agent_a_name, agent_b_name)`
+
+## Dependencies
+
+**Imports** (7):
+- `dataclasses.dataclass`
+- `dataclasses.field`
+- `time`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/logic/core/evolution_core.improvements.md
+
+# Improvements for evolution_core
+
+**File**: `src\core\base\logic\core\evolution_core.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 89 lines (small)  
+**Complexity**: 4 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Class Documentation
+- [!] **1 undocumented classes**: AgentMetadata
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `evolution_core_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, field
 import time

@@ -1,4 +1,83 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/development/SecurityCore.description.md
+
+# SecurityCore
+
+**File**: `src\logic\agents\development\SecurityCore.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 9 imports  
+**Lines**: 89  
+**Complexity**: 1 (simple)
+
+## Overview
+
+SecurityCore logic for workspace safety.
+Combines scanning for secrets, command auditing, shell script analysis, and injection detection.
+This is designed for high-performance static analysis and future Rust migration.
+
+## Classes (1)
+
+### `SecurityCore`
+
+**Inherits from**: SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterMixin
+
+Pure logic core for security and safety validation.
+
+**Methods** (1):
+- `__init__(self, workspace_root)`
+
+## Dependencies
+
+**Imports** (9):
+- `__future__.annotations`
+- `importlib.util`
+- `pathlib.Path`
+- `src.core.base.Version.VERSION`
+- `src.core.base.types.SecurityIssueType.SecurityIssueType`
+- `src.infrastructure.backend.LocalContextRecorder.LocalContextRecorder`
+- `src.logic.agents.development.mixins.SecurityAuditorMixin.SecurityAuditorMixin`
+- `src.logic.agents.development.mixins.SecurityReporterMixin.SecurityReporterMixin`
+- `src.logic.agents.development.mixins.SecurityScannerMixin.SecurityScannerMixin`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/development/SecurityCore.improvements.md
+
+# Improvements for SecurityCore
+
+**File**: `src\logic\agents\development\SecurityCore.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 89 lines (small)  
+**Complexity**: 1 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `SecurityCore_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

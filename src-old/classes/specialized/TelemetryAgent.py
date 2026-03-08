@@ -1,3 +1,88 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/TelemetryAgent.description.md
+
+# TelemetryAgent
+
+**File**: `src\classes\specialized\TelemetryAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 10 imports  
+**Lines**: 87  
+**Complexity**: 4 (simple)
+
+## Overview
+
+Python module containing implementation for TelemetryAgent.
+
+## Classes (1)
+
+### `TelemetryAgent`
+
+**Inherits from**: BaseAgent
+
+Tier 5 (Maintenance) - Telemetry Agent: Responsible for broadcasting fleet 
+telemetry and archiving interactions for swarm intelligence harvesting.
+
+**Methods** (4):
+- `__init__(self, api_url, workspace_root)`
+- `_record(self, event_type, data)`
+- `log_event(self, event_type, source, data)`
+- `get_recent_logs(self)`
+
+## Dependencies
+
+**Imports** (10):
+- `__future__.annotations`
+- `json`
+- `pathlib.Path`
+- `src.core.base.BaseAgent.BaseAgent`
+- `src.core.base.ConnectivityManager.ConnectivityManager`
+- `src.core.base.Version.VERSION`
+- `src.infrastructure.backend.LocalContextRecorder.LocalContextRecorder`
+- `src.observability.StructuredLogger.StructuredLogger`
+- `time`
+- `typing.Any`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/TelemetryAgent.improvements.md
+
+# Improvements for TelemetryAgent
+
+**File**: `src\classes\specialized\TelemetryAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 87 lines (small)  
+**Complexity**: 4 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `TelemetryAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

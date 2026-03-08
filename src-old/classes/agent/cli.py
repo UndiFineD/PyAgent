@@ -10,6 +10,95 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/agent/cli.description.md
+
+# cli
+
+**File**: `src\classes\agent\cli.py`  
+**Type**: Python Module  
+**Summary**: 0 classes, 3 functions, 13 imports  
+**Lines**: 251  
+**Complexity**: 3 (simple)
+
+## Overview
+
+Python module containing implementation for cli.
+
+## Functions (3)
+
+### `_parse_quick_flag(val)`
+
+format 'provider:model' or 'model'
+
+### `parse_model_overrides(raw_list)`
+
+Parse repeatable `--model` entries of form `agent=provider:model` or `agent=model`.
+
+Returns mapping agent -> spec dict.
+
+### `main()`
+
+CLI entry point for the Agent Orchestrator.
+
+## Dependencies
+
+**Imports** (13):
+- `Agent.Agent`
+- `HealthChecker.HealthChecker`
+- `RateLimitConfig.RateLimitConfig`
+- `argparse`
+- `json`
+- `logging`
+- `os`
+- `pathlib.Path`
+- `sys`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+- `utils.setup_logging`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/agent/cli.improvements.md
+
+# Improvements for cli
+
+**File**: `src\classes\agent\cli.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 251 lines (medium)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `cli_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 import argparse
 import logging
 import os

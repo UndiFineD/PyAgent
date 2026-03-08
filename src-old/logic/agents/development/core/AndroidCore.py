@@ -1,5 +1,81 @@
 
 """
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/development/core/AndroidCore.description.md
+
+# AndroidCore
+
+**File**: `src\logic\agents\development\core\AndroidCore.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 4 imports  
+**Lines**: 66  
+**Complexity**: 3 (simple)
+
+## Overview
+
+Core logic for Android ADB integration (Phase 175).
+Encapsulates ADB commands for UI testing.
+
+## Classes (1)
+
+### `AndroidCore`
+
+Class AndroidCore implementation.
+
+**Methods** (3):
+- `run_adb_command(command, serial, recorder)`
+- `list_devices(recorder)`
+- `take_screenshot(output_path, serial, recorder)`
+
+## Dependencies
+
+**Imports** (4):
+- `src.core.base.interfaces.ContextRecorderInterface`
+- `subprocess`
+- `typing.List`
+- `typing.Optional`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/development/core/AndroidCore.improvements.md
+
+# Improvements for AndroidCore
+
+**File**: `src\logic\agents\development\core\AndroidCore.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 66 lines (small)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Class Documentation
+- [!] **1 undocumented classes**: AndroidCore
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `AndroidCore_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
+"""
 Core logic for Android ADB integration (Phase 175).
 Encapsulates ADB commands for UI testing.
 """

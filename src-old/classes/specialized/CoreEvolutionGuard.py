@@ -1,3 +1,86 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/CoreEvolutionGuard.description.md
+
+# CoreEvolutionGuard
+
+**File**: `src\classes\specialized\CoreEvolutionGuard.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 9 imports  
+**Lines**: 100  
+**Complexity**: 5 (moderate)
+
+## Overview
+
+Python module containing implementation for CoreEvolutionGuard.
+
+## Classes (1)
+
+### `CoreEvolutionGuard`
+
+Monitors and validates changes to the agent's core source code.
+Prevents unintended mutations or malicious injections into the agent logic.
+
+**Methods** (5):
+- `__init__(self, workspace_path)`
+- `hash_file(self, file_path)`
+- `snapshot_core_logic(self, core_paths)`
+- `validate_code_integrity(self, file_path)`
+- `generate_hardening_report(self)`
+
+## Dependencies
+
+**Imports** (9):
+- `__future__.annotations`
+- `hashlib`
+- `os`
+- `src.core.base.version.VERSION`
+- `time`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/CoreEvolutionGuard.improvements.md
+
+# Improvements for CoreEvolutionGuard
+
+**File**: `src\classes\specialized\CoreEvolutionGuard.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 100 lines (medium)  
+**Complexity**: 5 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `CoreEvolutionGuard_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

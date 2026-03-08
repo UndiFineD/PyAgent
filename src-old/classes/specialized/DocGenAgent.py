@@ -1,3 +1,82 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/DocGenAgent.description.md
+
+# DocGenAgent
+
+**File**: `src\classes\specialized\DocGenAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 5 imports  
+**Lines**: 86  
+**Complexity**: 3 (simple)
+
+## Overview
+
+Python module containing implementation for DocGenAgent.
+
+## Classes (1)
+
+### `DocGenAgent`
+
+**Inherits from**: BaseAgent
+
+Autonomous Documentation Generator: Extracts docstrings from Python modules 
+and generates Markdown files compatible with Sphinx/Jekyll.
+
+**Methods** (3):
+- `__init__(self, workspace_path)`
+- `extract_docs(self, file_path)`
+- `generate_documentation_site(self, output_dir)`
+
+## Dependencies
+
+**Imports** (5):
+- `__future__.annotations`
+- `ast`
+- `os`
+- `src.core.base.BaseAgent.BaseAgent`
+- `src.core.base.version.VERSION`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/DocGenAgent.improvements.md
+
+# Improvements for DocGenAgent
+
+**File**: `src\classes\specialized\DocGenAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 86 lines (small)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `DocGenAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

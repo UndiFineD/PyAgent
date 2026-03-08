@@ -12,6 +12,97 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/verification.description.md
+
+# verification
+
+**File**: `src\core\base\verification.py`  
+**Type**: Python Module  
+**Summary**: 2 classes, 0 functions, 11 imports  
+**Lines**: 159  
+**Complexity**: 8 (moderate)
+
+## Overview
+
+Verification logic for agent outputs.
+Implements Stanford Reseach 'Anchoring Strength' and Keio University 'Self-Verification' paths.
+
+## Classes (2)
+
+### `ConfigValidator`
+
+Phase 278: Validates configuration files and detects orphaned references.
+
+**Methods** (1):
+- `validate_shard_mapping(mapping_path)`
+
+### `AgentVerifier`
+
+Handles quality and anchoring verification of agent responses.
+
+**Methods** (7):
+- `_get_embedding_model(cls)`
+- `calculate_anchoring_strength(cls, result, context_pool)`
+- `verify_self(result, anchoring_score)`
+- `fact_check(code_snippet, agent_id)`
+- `secondary_verify(result, primary_model)`
+- `jury_verification(agent_responses)`
+- `check_latent_reasoning(content)`
+
+## Dependencies
+
+**Imports** (11):
+- `__future__.annotations`
+- `json`
+- `logging`
+- `numpy`
+- `pathlib.Path`
+- `sentence_transformers.SentenceTransformer`
+- `src.core.base.version.VERSION`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/verification.improvements.md
+
+# Improvements for verification
+
+**File**: `src\core\base\verification.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 159 lines (medium)  
+**Complexity**: 8 score (moderate)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `verification_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from typing import Any, Dict
 
 """Verification module for PyAgent (Phase 257-258)."""

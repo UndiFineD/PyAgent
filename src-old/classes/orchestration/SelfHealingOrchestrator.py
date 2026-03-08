@@ -1,3 +1,86 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/orchestration/SelfHealingOrchestrator.description.md
+
+# SelfHealingOrchestrator
+
+**File**: `src\classes\orchestration\SelfHealingOrchestrator.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 7 imports  
+**Lines**: 90  
+**Complexity**: 6 (moderate)
+
+## Overview
+
+Python module containing implementation for SelfHealingOrchestrator.
+
+## Classes (1)
+
+### `SelfHealingOrchestrator`
+
+Advanced Self-Healing v3: Shell for fleet resilience logic.
+Delegates thresholds and strategy to SelfHealingCore.
+Uses AgentRegistry tools for re-loading failed plugins.
+
+**Methods** (6):
+- `__init__(self, fleet_manager)`
+- `register_heartbeat(self, agent_name, state, latency, error)`
+- `check_fleet_health(self)`
+- `attempt_recovery(self, agent_name)`
+- `get_recovery_status(self)`
+- `review_recovery_lessons(self)`
+
+## Dependencies
+
+**Imports** (7):
+- `SelfHealingCore.SelfHealingCore`
+- `logging`
+- `time`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/orchestration/SelfHealingOrchestrator.improvements.md
+
+# Improvements for SelfHealingOrchestrator
+
+**File**: `src\classes\orchestration\SelfHealingOrchestrator.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 90 lines (small)  
+**Complexity**: 6 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `SelfHealingOrchestrator_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 import time
 import logging
 from typing import Dict, List, Any, Optional

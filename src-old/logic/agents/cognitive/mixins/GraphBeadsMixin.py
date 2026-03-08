@@ -1,4 +1,75 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/cognitive/mixins/GraphBeadsMixin.description.md
+
+# GraphBeadsMixin
+
+**File**: `src\logic\agents\cognitive\mixins\GraphBeadsMixin.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 3 imports  
+**Lines**: 92  
+**Complexity**: 3 (simple)
+
+## Overview
+
+Beads task logic for GraphMemoryAgent.
+
+## Classes (1)
+
+### `GraphBeadsMixin`
+
+Mixin for Beads task graph logic.
+
+**Methods** (3):
+- `create_task(self, title, parent_id, priority)`
+- `add_dependency(self, blocker_id, blocked_id)`
+- `compact_memory(self, threshold_days)`
+
+## Dependencies
+
+**Imports** (3):
+- `__future__.annotations`
+- `logging`
+- `src.core.base.BaseUtilities.as_tool`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/cognitive/mixins/GraphBeadsMixin.improvements.md
+
+# Improvements for GraphBeadsMixin
+
+**File**: `src\logic\agents\cognitive\mixins\GraphBeadsMixin.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 92 lines (small)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `GraphBeadsMixin_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

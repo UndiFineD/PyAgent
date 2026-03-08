@@ -1,4 +1,81 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/development/mixins/CoderSmellMixin.description.md
+
+# CoderSmellMixin
+
+**File**: `src\logic\agents\development\mixins\CoderSmellMixin.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 7 imports  
+**Lines**: 154  
+**Complexity**: 5 (moderate)
+
+## Overview
+
+Code smell detection logic for CoderCore.
+
+## Classes (1)
+
+### `CoderSmellMixin`
+
+Mixin for detecting code smells.
+
+**Methods** (5):
+- `detect_code_smells(self, content)`
+- `_detect_python_smells(self, content)`
+- `_check_python_method_smells(self, node, smells)`
+- `_check_python_class_smells(self, node, smells)`
+- `_detect_generic_smells(self, content)`
+
+## Dependencies
+
+**Imports** (7):
+- `__future__.annotations`
+- `ast`
+- `src.core.base.types.CodeLanguage.CodeLanguage`
+- `src.core.base.types.CodeSmell.CodeSmell`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/development/mixins/CoderSmellMixin.improvements.md
+
+# Improvements for CoderSmellMixin
+
+**File**: `src\logic\agents\development\mixins\CoderSmellMixin.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 154 lines (medium)  
+**Complexity**: 5 score (moderate)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `CoderSmellMixin_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

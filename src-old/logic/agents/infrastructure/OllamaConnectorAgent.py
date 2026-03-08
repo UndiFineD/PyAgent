@@ -1,4 +1,79 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/infrastructure/OllamaConnectorAgent.description.md
+
+# OllamaConnectorAgent
+
+**File**: `src\logic\agents\infrastructure\OllamaConnectorAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 5 imports  
+**Lines**: 84  
+**Complexity**: 3 (simple)
+
+## Overview
+
+Agent for connecting to local Ollama instances on edge nodes (Phase 125).
+
+## Classes (1)
+
+### `OllamaConnectorAgent`
+
+**Inherits from**: BaseAgent
+
+Handles local inference requests via the Ollama API.
+
+**Methods** (3):
+- `__init__(self, file_path, endpoint)`
+- `check_availability(self)`
+- `generate_local(self, prompt, model)`
+
+## Dependencies
+
+**Imports** (5):
+- `__future__.annotations`
+- `requests`
+- `src.core.base.BaseAgent.BaseAgent`
+- `src.core.base.utilities.create_main_function`
+- `src.core.base.version.VERSION`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/infrastructure/OllamaConnectorAgent.improvements.md
+
+# Improvements for OllamaConnectorAgent
+
+**File**: `src\logic\agents\infrastructure\OllamaConnectorAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 84 lines (small)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `OllamaConnectorAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

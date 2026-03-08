@@ -1,4 +1,39 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/observability/tracing/open_telemetry_tracer.description.md
+
+# Description: src/observability/tracing/open_telemetry_tracer.py
+
+Module overview:
+- Implements OpenTelemetry integration and fallback behavior when OTEL packages are not installed.
+- Defines standardized `SpanAttributes` names for GenAI operations and various helpers to create, inject, extract, and manage spans.
+- Provides context managers (`create_span`), decorators (`traced`), tracer initialization (`init_tracer`), and utilities for exporters.
+
+Primary classes and APIs:
+- `SpanAttributes` (class): constant names for span attributes.
+- `is_otel_available()`, `init_tracer()`, `get_span_exporter()`, `create_span()`, `traced()` and propagation helpers.
+
+Behavioral notes:
+- Attempts to import OpenTelemetry at module import and records traceback if unavailable.
+- Gracefully yields None spans or no-op behaviors when OTEL is not installed.
+## Source: src-old/observability/tracing/open_telemetry_tracer.improvements.md
+
+# Improvements: src/observability/tracing/open_telemetry_tracer.py
+
+Potential improvements:
+- Add unit tests for `create_span`, `traced`, and propagation helpers that run in both OTEL-available and OTEL-missing environments (use monkeypatch to simulate availability).
+- Split into smaller modules (`attributes`, `tracer`, `propagation`, `decorators`) for maintainability and faster import times.
+- Document expected shapes for attributes dictionaries and context objects.
+- Provide clear fallbacks and no-op tracers so instrumentation code can assume a tracer is always present.
+- Add integration tests that validate exporters using a local OTLP collector (or a mock) to ensure export paths work.
+- Consider improving performance by lazy-importing heavy OTEL packages only when `init_tracer` is invoked.
+- Add type hints and mypy-friendly stubs for OpenTelemetry types to improve developer experience.
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");

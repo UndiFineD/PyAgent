@@ -1,3 +1,86 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/orchestration/StatusManager.description.md
+
+# StatusManager
+
+**File**: `src\classes\orchestration\StatusManager.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 7 imports  
+**Lines**: 75  
+**Complexity**: 8 (moderate)
+
+## Overview
+
+Python module containing implementation for StatusManager.
+
+## Classes (1)
+
+### `StatusManager`
+
+Manages project execution status for the DirectorAgent and GUI.
+
+**Methods** (8):
+- `__init__(self)`
+- `clear_status(self)`
+- `start_project(self, goal, steps_count)`
+- `add_step(self, agent, file, prompt)`
+- `update_step_status(self, index, status, result)`
+- `finish_project(self, success)`
+- `_read(self)`
+- `_write(self, data)`
+
+## Dependencies
+
+**Imports** (7):
+- `datetime.datetime`
+- `json`
+- `os`
+- `pathlib.Path`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/orchestration/StatusManager.improvements.md
+
+# Improvements for StatusManager
+
+**File**: `src\classes\orchestration\StatusManager.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 75 lines (small)  
+**Complexity**: 8 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `StatusManager_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 import json
 import os
 from pathlib import Path

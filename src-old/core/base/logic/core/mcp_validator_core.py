@@ -12,6 +12,87 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/logic/core/mcp_validator_core.description.md
+
+# mcp_validator_core
+
+**File**: `src\core\base\logic\core\mcp_validator_core.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 5 imports  
+**Lines**: 97  
+**Complexity**: 3 (simple)
+
+## Overview
+
+Python module containing implementation for mcp_validator_core.
+
+## Classes (1)
+
+### `McpValidatorCore`
+
+Validates MCP (Model Context Protocol) servers and tools for security.
+
+Harvested from .external/mcp-security:
+- Checks for prompt injection in descriptions.
+- Identifies high-risk tools.
+- Validates cleanup and lifecycle hooks.
+
+**Methods** (3):
+- `validate_tool_definition(self, tool_def)`
+- `check_metadata_isolation(self, mcp_server_config)`
+- `validate_environment_variables(self, env_vars)`
+
+## Dependencies
+
+**Imports** (5):
+- `re`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Tuple`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/logic/core/mcp_validator_core.improvements.md
+
+# Improvements for mcp_validator_core
+
+**File**: `src\core\base\logic\core\mcp_validator_core.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 97 lines (small)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `mcp_validator_core_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 import re
 from typing import List, Dict, Any, Tuple
 

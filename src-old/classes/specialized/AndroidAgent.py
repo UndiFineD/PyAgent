@@ -1,4 +1,91 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/AndroidAgent.description.md
+
+# AndroidAgent
+
+**File**: `src\classes\specialized\AndroidAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 11 imports  
+**Lines**: 113  
+**Complexity**: 5 (moderate)
+
+## Overview
+
+Python module containing implementation for AndroidAgent.
+
+## Classes (1)
+
+### `AndroidAgent`
+
+**Inherits from**: BaseAgent
+
+Automates Android devices using the 'Action-State' pattern (Accessibility Tree).
+95% cheaper and 5x faster than vision-based mobile automation.
+
+**Methods** (5):
+- `__init__(self, file_path)`
+- `_record(self, action, details)`
+- `dump_accessibility_tree(self)`
+- `execute_mobile_action(self, action_type, params)`
+- `run_mobile_workflow(self, goal)`
+
+## Dependencies
+
+**Imports** (11):
+- `__future__.annotations`
+- `logging`
+- `pathlib.Path`
+- `src.core.base.BaseAgent.BaseAgent`
+- `src.core.base.utilities.as_tool`
+- `src.core.base.version.VERSION`
+- `src.infrastructure.backend.LocalContextRecorder.LocalContextRecorder`
+- `src.logic.agents.development.core.AndroidCore.AndroidCore`
+- `time`
+- `typing.Any`
+- `typing.Dict`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/AndroidAgent.improvements.md
+
+# Improvements for AndroidAgent
+
+**File**: `src\classes\specialized\AndroidAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 113 lines (medium)  
+**Complexity**: 5 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `AndroidAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

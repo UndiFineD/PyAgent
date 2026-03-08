@@ -1,4 +1,98 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/maintenance/fix_headers/fix_headers_agent.description.md
+
+# fix_headers_agent
+
+**File**: `src\maintenance\fix_headers\fix_headers_agent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 1 functions, 7 imports  
+**Lines**: 286  
+**Complexity**: 9 (moderate)
+
+## Overview
+
+Fix Headers Agent for PyAgent.
+
+This agent ensures all Python files have proper Apache 2.0 license headers
+and copyright notices. It can process individual files or entire directory
+trees, making it useful for maintaining code quality across the PyAgent fleet.
+
+## Classes (1)
+
+### `FixHeadersAgent`
+
+Agent for fixing and standardizing license headers in Python files.
+
+This agent ensures all Python files in the PyAgent codebase have consistent
+Apache 2.0 license headers with proper copyright notices. It can process
+individual files, directories, or entire project trees.
+
+**Methods** (8):
+- `__init__(self, dry_run, verbose)`
+- `has_proper_header(self, content)`
+- `clean_existing_headers(self, content)`
+- `add_header(self, content)`
+- `process_file(self, filepath)`
+- `process_directory(self, directory, exclude_patterns)`
+- `get_summary(self)`
+- `run(self, target, exclude_patterns)`
+
+## Functions (1)
+
+### `main()`
+
+CLI entry point for the Fix Headers Agent.
+
+## Dependencies
+
+**Imports** (7):
+- `__future__.annotations`
+- `argparse`
+- `os`
+- `pathlib.Path`
+- `re`
+- `typing.List`
+- `typing.Set`
+
+---
+*Auto-generated documentation*
+## Source: src-old/maintenance/fix_headers/fix_headers_agent.improvements.md
+
+# Improvements for fix_headers_agent
+
+**File**: `src\maintenance\fix_headers\fix_headers_agent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 286 lines (medium)  
+**Complexity**: 9 score (moderate)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `fix_headers_agent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

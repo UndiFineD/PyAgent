@@ -1,6 +1,80 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/cognitive/context/engines/core_mixins/CoreResolutionMixin.description.md
+
+# CoreResolutionMixin
+
+**File**: `src\logic\agents\cognitive\context\engines\core_mixins\CoreResolutionMixin.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 2 imports  
+**Lines**: 58  
+**Complexity**: 4 (simple)
+
+## Overview
+
+Python module containing implementation for CoreResolutionMixin.
+
+## Classes (1)
+
+### `CoreResolutionMixin`
+
+Methods for conflict resolution and fact preparation.
+
+**Methods** (4):
+- `prepare_fact(self, key, value)`
+- `prepare_insight(self, insight, source_agent)`
+- `merge_entity_info(self, existing, new_attributes)`
+- `resolve_conflict(self, existing, incoming, strategy)`
+
+## Dependencies
+
+**Imports** (2):
+- `datetime.datetime`
+- `typing.Any`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/cognitive/context/engines/core_mixins/CoreResolutionMixin.improvements.md
+
+# Improvements for CoreResolutionMixin
+
+**File**: `src\logic\agents\cognitive\context\engines\core_mixins\CoreResolutionMixin.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 58 lines (small)  
+**Complexity**: 4 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `CoreResolutionMixin_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from typing import Any
 from datetime import datetime
 

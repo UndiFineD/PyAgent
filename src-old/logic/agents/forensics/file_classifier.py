@@ -11,6 +11,100 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/forensics/file_classifier.description.md
+
+# file_classifier
+
+**File**: `src\logic\agents\forensics\file_classifier.py`  
+**Type**: Python Module  
+**Summary**: 2 classes, 0 functions, 15 imports  
+**Lines**: 255  
+**Complexity**: 3 (simple)
+
+## Overview
+
+Python module containing implementation for file_classifier.
+
+## Classes (2)
+
+### `FileAnalysisResult`
+
+Class FileAnalysisResult implementation.
+
+### `FileClassifier`
+
+Analyzes files to determine type, calculate hashes, and identify suspicious content.
+Ported concepts from 0xSojalSec-Catalyzer and 0xSojalSec-CanaryTokenScanner.
+
+**Methods** (3):
+- `__init__(self)`
+- `_load_signatures(self)`
+- `_extract_and_scan_sync(self, path)`
+
+## Dependencies
+
+**Imports** (15):
+- `aiofiles`
+- `asyncio`
+- `dataclasses.dataclass`
+- `dataclasses.field`
+- `hashlib`
+- `json`
+- `pathlib.Path`
+- `re`
+- `shutil`
+- `tempfile`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+- `typing.Tuple`
+- `zipfile`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/forensics/file_classifier.improvements.md
+
+# Improvements for file_classifier
+
+**File**: `src\logic\agents\forensics\file_classifier.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 255 lines (medium)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Class Documentation
+- [!] **1 undocumented classes**: FileAnalysisResult
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `file_classifier_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 import hashlib
 import json
 import asyncio

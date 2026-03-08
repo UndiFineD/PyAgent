@@ -1,3 +1,86 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/IntentionPredictionAgent.description.md
+
+# IntentionPredictionAgent
+
+**File**: `src\classes\specialized\IntentionPredictionAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 9 imports  
+**Lines**: 95  
+**Complexity**: 5 (moderate)
+
+## Overview
+
+Python module containing implementation for IntentionPredictionAgent.
+
+## Classes (1)
+
+### `IntentionPredictionAgent`
+
+Predicts the future actions and goals of peer agents in the fleet.
+Integrated with MetacognitiveCore for intent prediction and pre-warming.
+
+**Methods** (5):
+- `__init__(self, workspace_path)`
+- `predict_and_prewarm(self, agent_id)`
+- `log_agent_action(self, agent_id, action_type, metadata)`
+- `predict_next_action(self, agent_id)`
+- `share_thought_signal(self, sender_id, receivers, thought_payload)`
+
+## Dependencies
+
+**Imports** (9):
+- `__future__.annotations`
+- `logging`
+- `random`
+- `src.core.base.version.VERSION`
+- `src.logic.agents.cognitive.core.MetacognitiveCore.MetacognitiveCore`
+- `time`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/IntentionPredictionAgent.improvements.md
+
+# Improvements for IntentionPredictionAgent
+
+**File**: `src\classes\specialized\IntentionPredictionAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 95 lines (small)  
+**Complexity**: 5 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `IntentionPredictionAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

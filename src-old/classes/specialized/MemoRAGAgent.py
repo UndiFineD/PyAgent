@@ -1,4 +1,86 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/MemoRAGAgent.description.md
+
+# MemoRAGAgent
+
+**File**: `src\classes\specialized\MemoRAGAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 8 imports  
+**Lines**: 105  
+**Complexity**: 5 (moderate)
+
+## Overview
+
+Agent implementing MemoRAG patterns for global context understanding.
+Generates 'clues' from global memory to improve retrieval accuracy.
+Ref: https://github.com/qhjqhj00/MemoRAG
+
+## Classes (1)
+
+### `MemoRAGAgent`
+
+**Inherits from**: BaseAgent
+
+Memory-Augmented RAG agent for deep context discovery with sharding.
+
+**Methods** (5):
+- `__init__(self, file_path)`
+- `memorise_to_shard(self, context, shard_name)`
+- `recall_clues_from_shard(self, query, shard_name)`
+- `list_shards(self)`
+- `improve_content(self, prompt)`
+
+## Dependencies
+
+**Imports** (8):
+- `__future__.annotations`
+- `logging`
+- `pathlib.Path`
+- `rust_core`
+- `src.core.base.BaseAgent.BaseAgent`
+- `src.core.base.BaseUtilities.as_tool`
+- `src.core.base.Version.VERSION`
+- `src.logic.agents.intelligence.core.SynthesisCore.SynthesisCore`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/MemoRAGAgent.improvements.md
+
+# Improvements for MemoRAGAgent
+
+**File**: `src\classes\specialized\MemoRAGAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 105 lines (medium)  
+**Complexity**: 5 score (moderate)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `MemoRAGAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

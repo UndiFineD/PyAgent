@@ -1,5 +1,49 @@
 # from src.version import VERSION
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/prompt_templates.description.md
+
+# Description: `prompt_templates.py`
+
+## Module purpose
+
+Vibe-Coding (2025) Specialized Prompt Templates.
+
+## Location
+- Path: `src\prompt_templates.py`
+
+## Public surface
+- Classes: (none)
+- Functions: (none)
+
+## Behavior summary
+- Pure module (no obvious CLI / side effects).
+
+## Key dependencies
+- (none)
+
+## Metadata
+
+- SHA256(source): `a1a4a349925a6caa`
+- Last updated: `2026-01-08 22:51:34`
+- File: `src\prompt_templates.py`
+## Source: src-old/prompt_templates.improvements.md
+
+# Improvements: `prompt_templates.py`
+
+## Suggested improvements
+
+- No obvious improvements detected by the lightweight scan
+
+## Notes
+- These are suggestions based on static inspection; validate behavior with tests / runs.
+- File: `src\prompt_templates.py`
+
+LLM_CONTEXT_END
+"""
+
 __logic_category__ = "General"
 """Vibe-Coding (2025) Specialized Prompt Templates."""
 

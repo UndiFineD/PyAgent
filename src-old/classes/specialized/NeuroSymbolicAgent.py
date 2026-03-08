@@ -1,4 +1,87 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/NeuroSymbolicAgent.description.md
+
+# NeuroSymbolicAgent
+
+**File**: `src\classes\specialized\NeuroSymbolicAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 9 imports  
+**Lines**: 76  
+**Complexity**: 3 (simple)
+
+## Overview
+
+Python module containing implementation for NeuroSymbolicAgent.
+
+## Classes (1)
+
+### `NeuroSymbolicAgent`
+
+**Inherits from**: BaseAgent
+
+Phase 36: Neuro-Symbolic Reasoning.
+Verifies probabilistic neural output against strict symbolic rules.
+
+**Methods** (3):
+- `__init__(self, file_path)`
+- `verify_and_correct(self, content)`
+- `improve_content(self, prompt)`
+
+## Dependencies
+
+**Imports** (9):
+- `__future__.annotations`
+- `logging`
+- `re`
+- `src.core.base.BaseAgent.BaseAgent`
+- `src.core.base.utilities.as_tool`
+- `src.core.base.version.VERSION`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/NeuroSymbolicAgent.improvements.md
+
+# Improvements for NeuroSymbolicAgent
+
+**File**: `src\classes\specialized\NeuroSymbolicAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 76 lines (small)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `NeuroSymbolicAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

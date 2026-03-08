@@ -1,4 +1,84 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/logic/security/web_security_scanner_core.description.md
+
+# web_security_scanner_core
+
+**File**: `src\core\base\logic\security\web_security_scanner_core.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 11 imports  
+**Lines**: 150  
+**Complexity**: 2 (simple)
+
+## Overview
+
+Module: web_security_scanner_core
+Core logic for web security scanning, refactored from aem-eye patterns.
+Implements asynchronous web application scanning with pattern matching for vulnerability detection.
+
+## Classes (1)
+
+### `WebSecurityScannerCore`
+
+Core logic for web security scanning operations.
+
+**Methods** (2):
+- `__init__(self, timeout, concurrency, rate_limit)`
+- `_normalize_url(self, host)`
+
+## Dependencies
+
+**Imports** (11):
+- `__future__.annotations`
+- `aiohttp`
+- `asyncio`
+- `re`
+- `time`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+- `typing.Set`
+- `urllib.parse.urlparse`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/logic/security/web_security_scanner_core.improvements.md
+
+# Improvements for web_security_scanner_core
+
+**File**: `src\core\base\logic\security\web_security_scanner_core.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 150 lines (medium)  
+**Complexity**: 2 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `web_security_scanner_core_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

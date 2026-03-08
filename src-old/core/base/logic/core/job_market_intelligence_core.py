@@ -12,6 +12,108 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/logic/core/job_market_intelligence_core.description.md
+
+# job_market_intelligence_core
+
+**File**: `src\core\base\logic\core\job_market_intelligence_core.py`  
+**Type**: Python Module  
+**Summary**: 3 classes, 0 functions, 15 imports  
+**Lines**: 488  
+**Complexity**: 4 (simple)
+
+## Overview
+
+Python module containing implementation for job_market_intelligence_core.
+
+## Classes (3)
+
+### `JobPosting`
+
+Represents a job posting with all relevant data
+
+**Methods** (3):
+- `__post_init__(self)`
+- `age_days(self)`
+- `salary_display(self)`
+
+### `JobMarketStats`
+
+Statistics about the job market
+
+### `JobMarketIntelligenceCore`
+
+**Inherits from**: BaseCore
+
+Job Market Intelligence Core for automated job data collection and analysis.
+
+Provides capabilities to collect, analyze, and present job market intelligence
+including salary trends, company hiring patterns, and market insights.
+
+**Methods** (1):
+- `__init__(self)`
+
+## Dependencies
+
+**Imports** (15):
+- `asyncio`
+- `csv`
+- `dataclasses.asdict`
+- `dataclasses.dataclass`
+- `datetime.datetime`
+- `datetime.timedelta`
+- `json`
+- `re`
+- `src.core.base.logic.core.base_core.BaseCore`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+- `typing.Tuple`
+- `urllib.parse.urlparse`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/logic/core/job_market_intelligence_core.improvements.md
+
+# Improvements for job_market_intelligence_core
+
+**File**: `src\core\base\logic\core\job_market_intelligence_core.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 488 lines (medium)  
+**Complexity**: 4 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `job_market_intelligence_core_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 # Job Market Intelligence Core - Automated Job Data Collection and Analysis
 # Based on patterns from 2026-SWE-College-Jobs repository
 

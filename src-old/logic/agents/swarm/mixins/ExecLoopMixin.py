@@ -1,4 +1,75 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/swarm/mixins/ExecLoopMixin.description.md
+
+# ExecLoopMixin
+
+**File**: `src\logic\agents\swarm\mixins\ExecLoopMixin.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 4 imports  
+**Lines**: 97  
+**Complexity**: 2 (simple)
+
+## Overview
+
+Execution loop logic for OrchestratorAgent.
+
+## Classes (1)
+
+### `ExecLoopMixin`
+
+Mixin for parallel execution strategies and main run loops.
+
+**Methods** (2):
+- `run_with_parallel_execution(self)`
+- `run(self)`
+
+## Dependencies
+
+**Imports** (4):
+- `__future__.annotations`
+- `asyncio`
+- `logging`
+- `src.observability.StructuredLogger.StructuredLogger`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/swarm/mixins/ExecLoopMixin.improvements.md
+
+# Improvements for ExecLoopMixin
+
+**File**: `src\logic\agents\swarm\mixins\ExecLoopMixin.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 97 lines (small)  
+**Complexity**: 2 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `ExecLoopMixin_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

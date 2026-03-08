@@ -1,6 +1,80 @@
 # c:\DEV\PyAgent\src\core\base\ArchitectureMapper.py
 # Evolution Phase 236: Documentation Architecture - Mermaid C4 System Context Diagram
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/ArchitectureMapper.description.md
+
+# ArchitectureMapper
+
+**File**: `src\core\base\ArchitectureMapper.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 2 imports  
+**Lines**: 90  
+**Complexity**: 3 (simple)
+
+## Overview
+
+Python module containing implementation for ArchitectureMapper.
+
+## Classes (1)
+
+### `ArchitectureMapper`
+
+Auto-generates a Mermaid C4 System Context Diagram based on the PyAgent project structure.
+Maps relations between Core, Infrastructure, Logic, and Observability.
+
+**Methods** (3):
+- `__init__(self, workspace_root)`
+- `generate_diagram(self)`
+- `run(self)`
+
+## Dependencies
+
+**Imports** (2):
+- `os`
+- `pathlib.Path`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/ArchitectureMapper.improvements.md
+
+# Improvements for ArchitectureMapper
+
+**File**: `src\core\base\ArchitectureMapper.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 90 lines (small)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `ArchitectureMapper_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 import os
 from pathlib import Path
 

@@ -1,5 +1,80 @@
 
 """
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/development/core/BashCore.description.md
+
+# BashCore
+
+**File**: `src\logic\agents\development\core\BashCore.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 4 imports  
+**Lines**: 65  
+**Complexity**: 2 (simple)
+
+## Overview
+
+Core logic for Bash script analysis (Phase 175).
+Integrates shellcheck for linting generated scripts.
+
+## Classes (1)
+
+### `BashCore`
+
+Class BashCore implementation.
+
+**Methods** (2):
+- `lint_script(script_path, recorder)`
+- `wrap_with_safety_flags(content)`
+
+## Dependencies
+
+**Imports** (4):
+- `json`
+- `os`
+- `src.core.base.interfaces.ContextRecorderInterface`
+- `subprocess`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/development/core/BashCore.improvements.md
+
+# Improvements for BashCore
+
+**File**: `src\logic\agents\development\core\BashCore.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 65 lines (small)  
+**Complexity**: 2 score (simple)
+
+## Suggested Improvements
+
+### Class Documentation
+- [!] **1 undocumented classes**: BashCore
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `BashCore_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
+"""
 Core logic for Bash script analysis (Phase 175).
 Integrates shellcheck for linting generated scripts.
 """

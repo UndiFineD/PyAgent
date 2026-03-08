@@ -1,4 +1,81 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/cognitive/ContextTemplateMixin.description.md
+
+# ContextTemplateMixin
+
+**File**: `src\logic\agents\cognitive\ContextTemplateMixin.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 3 imports  
+**Lines**: 194  
+**Complexity**: 6 (moderate)
+
+## Overview
+
+Python module containing implementation for ContextTemplateMixin.
+
+## Classes (1)
+
+### `ContextTemplateMixin`
+
+Template management methods for ContextAgent.
+
+**Methods** (6):
+- `set_template(self, template_name)`
+- `get_template_by_name(self, template_name)`
+- `get_template(self, template_name)`
+- `add_template(self, template)`
+- `get_template_for_file(self)`
+- `apply_template(self, template_name)`
+
+## Dependencies
+
+**Imports** (3):
+- `__future__.annotations`
+- `logging`
+- `src.logic.agents.cognitive.context.models.ContextTemplate.ContextTemplate`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/cognitive/ContextTemplateMixin.improvements.md
+
+# Improvements for ContextTemplateMixin
+
+**File**: `src\logic\agents\cognitive\ContextTemplateMixin.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 194 lines (medium)  
+**Complexity**: 6 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `ContextTemplateMixin_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

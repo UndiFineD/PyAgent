@@ -13,6 +13,75 @@
 # limitations under the License.
 
 """
+LLM_CONTEXT_START
+
+## Source: src-old/tools/download_agent/classifiers.description.md
+
+# classifiers
+
+**File**: `src\tools\download_agent\classifiers.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 3 imports  
+**Lines**: 88  
+**Complexity**: 1 (simple)
+
+## Overview
+
+URL classification logic for the Download Agent.
+
+## Classes (1)
+
+### `URLClassifier`
+
+Classifies URLs by type and determines appropriate download strategy.
+
+**Methods** (1):
+- `classify_url(url)`
+
+## Dependencies
+
+**Imports** (3):
+- `re`
+- `typing.Dict`
+- `typing.Tuple`
+
+---
+*Auto-generated documentation*
+## Source: src-old/tools/download_agent/classifiers.improvements.md
+
+# Improvements for classifiers
+
+**File**: `src\tools\download_agent\classifiers.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 88 lines (small)  
+**Complexity**: 1 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `classifiers_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
+"""
 URL classification logic for the Download Agent.
 """
 

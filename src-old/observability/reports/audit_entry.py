@@ -1,4 +1,32 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/observability/reports/audit_entry.description.md
+
+# Description: src/observability/reports/audit_entry.py
+
+Module overview:
+- Defines `AuditEntry` dataclass for representing audit log records related to report actions.
+
+Behavioral notes:
+- Dependencies: `AuditAction` enum/class from the same package.
+- Simple data container used by audit logging systems.
+## Source: src-old/observability/reports/audit_entry.improvements.md
+
+# Improvements: src/observability/reports/audit_entry.py
+
+Suggested improvements (automatically generated):
+- Add unit tests covering core behavior and edge cases.
+- Break large modules into smaller, testable components.
+- Avoid heavy imports at module import time; import lazily where appropriate.
+- Add type hints and explicit return types for public functions.
+- Add logging and better error handling for file and IO operations.
+- Consider dependency injection for filesystem and environment interactions.
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");

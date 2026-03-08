@@ -1,4 +1,85 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/fleet/HITLConnector.description.md
+
+# HITLConnector
+
+**File**: `src\classes\fleet\HITLConnector.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 11 imports  
+**Lines**: 98  
+**Complexity**: 4 (simple)
+
+## Overview
+
+Human-in-the-loop (HITL) connector for fleet approvals.
+Supports Slack and Discord notification patterns for critical agent decisions.
+
+## Classes (1)
+
+### `HITLConnector`
+
+Manages external communication with humans for high-stakes approvals.
+
+**Methods** (4):
+- `__init__(self, webhook_url, workspace_root)`
+- `request_approval(self, agent_id, task, context)`
+- `check_approval_status(self, approval_id)`
+- `get_pending_summary(self)`
+
+## Dependencies
+
+**Imports** (11):
+- `__future__.annotations`
+- `logging`
+- `pathlib.Path`
+- `src.core.base.ConnectivityManager.ConnectivityManager`
+- `src.core.base.version.VERSION`
+- `src.infrastructure.backend.LocalContextRecorder.LocalContextRecorder`
+- `time`
+- `typing.Any`
+- `typing.Dict`
+- `typing.Optional`
+- `urllib.parse`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/fleet/HITLConnector.improvements.md
+
+# Improvements for HITLConnector
+
+**File**: `src\classes\fleet\HITLConnector.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 98 lines (small)  
+**Complexity**: 4 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `HITLConnector_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

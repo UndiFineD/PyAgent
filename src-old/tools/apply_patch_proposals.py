@@ -11,6 +11,82 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/tools/apply_patch_proposals.description.md
+
+# apply_patch_proposals
+
+**File**: `src\tools\apply_patch_proposals.py`  
+**Type**: Python Module  
+**Summary**: 0 classes, 1 functions, 7 imports  
+**Lines**: 108  
+**Complexity**: 1 (simple)
+
+## Overview
+
+Apply conservative patch proposals generated from bandit findings.
+
+This script re-uses the heuristics in `prepare_refactor_patches.py` to
+produce safe, text-based replacements for flagged lines (e.g. comment out
+risky imports, replace eval/exec with a RuntimeError), writes a backup
+`*.bak` and updates the target file in-place.
+
+This is intentionally conservative and deterministic so it can run
+automatically in CI or overnight runs.
+
+## Functions (1)
+
+### `main()`
+
+## Dependencies
+
+**Imports** (7):
+- `__future__.annotations`
+- `json`
+- `pathlib.Path`
+- `shutil`
+- `src.tools.prepare_refactor_patches`
+- `sys`
+- `tools.prepare_refactor_patches`
+
+---
+*Auto-generated documentation*
+## Source: src-old/tools/apply_patch_proposals.improvements.md
+
+# Improvements for apply_patch_proposals
+
+**File**: `src\tools\apply_patch_proposals.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 108 lines (medium)  
+**Complexity**: 1 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `apply_patch_proposals_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 """Apply conservative patch proposals generated from bandit findings.
 

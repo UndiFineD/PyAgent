@@ -1,4 +1,83 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/api/APICore.description.md
+
+# APICore
+
+**File**: `src\classes\api\APICore.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 7 imports  
+**Lines**: 75  
+**Complexity**: 3 (simple)
+
+## Overview
+
+APICore logic for fleet communication.
+Pure logic for OpenAPI spec generation and tool contract validation.
+
+## Classes (1)
+
+### `APICore`
+
+Class APICore implementation.
+
+**Methods** (3):
+- `__init__(self, version)`
+- `build_openapi_json(self, tool_definitions)`
+- `validate_tool_contract(self, spec)`
+
+## Dependencies
+
+**Imports** (7):
+- `__future__.annotations`
+- `json`
+- `src.core.base.version.SDK_VERSION`
+- `src.core.base.version.VERSION`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/api/APICore.improvements.md
+
+# Improvements for APICore
+
+**File**: `src\classes\api\APICore.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 75 lines (small)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Class Documentation
+- [!] **1 undocumented classes**: APICore
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `APICore_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

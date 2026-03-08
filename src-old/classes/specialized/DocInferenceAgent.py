@@ -1,4 +1,91 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/DocInferenceAgent.description.md
+
+# DocInferenceAgent
+
+**File**: `src\classes\specialized\DocInferenceAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 12 imports  
+**Lines**: 137  
+**Complexity**: 7 (moderate)
+
+## Overview
+
+Agent specializing in layout-aware OCR and document reconstruction (Chandra Pattern).
+Converts images and PDFs into structured Markdown/JSON/HTML while preserving forms and tables.
+
+## Classes (1)
+
+### `DocInferenceAgent`
+
+**Inherits from**: BaseAgent
+
+Manages high-accuracy OCR and document layout reconstruction.
+
+**Methods** (7):
+- `__init__(self, file_path)`
+- `parse_pdf_text(self, pdf_path)`
+- `ingest_document_to_knowledge(self, doc_path, tags)`
+- `process_document(self, doc_path, format)`
+- `extract_form_data(self, image_path)`
+- `transcribe_handwriting(self, image_path)`
+- `improve_content(self, prompt)`
+
+## Dependencies
+
+**Imports** (12):
+- `__future__.annotations`
+- `json`
+- `logging`
+- `pathlib.Path`
+- `pypdf.PdfReader`
+- `src.core.base.BaseAgent.BaseAgent`
+- `src.core.base.utilities.as_tool`
+- `src.core.base.utilities.create_main_function`
+- `src.core.base.version.VERSION`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/DocInferenceAgent.improvements.md
+
+# Improvements for DocInferenceAgent
+
+**File**: `src\classes\specialized\DocInferenceAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 137 lines (medium)  
+**Complexity**: 7 score (moderate)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `DocInferenceAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

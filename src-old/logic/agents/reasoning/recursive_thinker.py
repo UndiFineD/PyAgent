@@ -11,6 +11,103 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/reasoning/recursive_thinker.description.md
+
+# recursive_thinker
+
+**File**: `src\logic\agents\reasoning\recursive_thinker.py`  
+**Type**: Python Module  
+**Summary**: 4 classes, 0 functions, 6 imports  
+**Lines**: 113  
+**Complexity**: 1 (simple)
+
+## Overview
+
+Python module containing implementation for recursive_thinker.
+
+## Classes (4)
+
+### `LLMInterface`
+
+**Inherits from**: Protocol
+
+Class LLMInterface implementation.
+
+### `RoundResult`
+
+Class RoundResult implementation.
+
+### `RecursiveThinker`
+
+Implements a recursive thinking pattern (CoRT) to improve agent responses by 
+generating alternatives and self-evaluating.
+Ported logic from 0xSojalSec-Chain-of-Recursive-Thoughts.
+
+**Methods** (1):
+- `__init__(self, llm)`
+
+### `MockThinkerLLM`
+
+Class MockThinkerLLM implementation.
+
+## Dependencies
+
+**Imports** (6):
+- `asyncio`
+- `dataclasses.dataclass`
+- `typing.Any`
+- `typing.List`
+- `typing.Optional`
+- `typing.Protocol`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/reasoning/recursive_thinker.improvements.md
+
+# Improvements for recursive_thinker
+
+**File**: `src\logic\agents\reasoning\recursive_thinker.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 113 lines (medium)  
+**Complexity**: 1 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Class Documentation
+- [!] **3 undocumented classes**: LLMInterface, RoundResult, MockThinkerLLM
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `recursive_thinker_test.py` with pytest tests
+
+### Code Organization
+- [TIP] **4 classes in one file** - Consider splitting into separate modules
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 import asyncio
 from typing import List, Optional, Protocol, Any
 from dataclasses import dataclass

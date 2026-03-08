@@ -1,3 +1,88 @@
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/specialized/FleetEconomyAgent.description.md
+
+# FleetEconomyAgent
+
+**File**: `src\classes\specialized\FleetEconomyAgent.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 10 imports  
+**Lines**: 112  
+**Complexity**: 6 (moderate)
+
+## Overview
+
+Python module containing implementation for FleetEconomyAgent.
+
+## Classes (1)
+
+### `FleetEconomyAgent`
+
+Manages internal agent "wallets", credits, and resource bidding mechanisms.
+Phase 284: Implemented persistent SQLite backend and Second-Price auctions.
+
+**Methods** (6):
+- `__init__(self, workspace_path)`
+- `_init_db(self)`
+- `deposit_credits(self, agent_id, amount)`
+- `place_bid(self, agent_id, task_id, bid_amount, priority)`
+- `resolve_auction(self, task_id)`
+- `get_wallet_summary(self)`
+
+## Dependencies
+
+**Imports** (10):
+- `__future__.annotations`
+- `logging`
+- `numpy`
+- `pathlib.Path`
+- `sqlite3`
+- `src.core.base.version.VERSION`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Union`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/specialized/FleetEconomyAgent.improvements.md
+
+# Improvements for FleetEconomyAgent
+
+**File**: `src\classes\specialized\FleetEconomyAgent.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 112 lines (medium)  
+**Complexity**: 6 score (moderate)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `FleetEconomyAgent_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

@@ -1,4 +1,85 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/observability/reports/ReportValidator.description.md
+
+# ReportValidator
+
+**File**: `src\observability\reports\ReportValidator.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 7 imports  
+**Lines**: 81  
+**Complexity**: 3 (simple)
+
+## Overview
+
+Auto-extracted class from generate_agent_reports.py
+
+## Classes (1)
+
+### `ReportValidator`
+
+Validator for report data integrity.
+Validates report structure, content, and checksums.
+Example:
+    validator=ReportValidator()
+    result=validator.validate(content)
+    if not result.valid:
+        print(result.errors)
+
+**Methods** (3):
+- `__init__(self)`
+- `validate(self, content)`
+- `verify_checksum(self, content, expected)`
+
+## Dependencies
+
+**Imports** (7):
+- `ValidationResult.ValidationResult`
+- `__future__.annotations`
+- `hashlib`
+- `logging`
+- `re`
+- `src.core.base.version.VERSION`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/observability/reports/ReportValidator.improvements.md
+
+# Improvements for ReportValidator
+
+**File**: `src\observability\reports\ReportValidator.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 81 lines (small)  
+**Complexity**: 3 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `ReportValidator_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

@@ -1,6 +1,86 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/parsers/reasoning/implementations/identity.description.md
+
+# identity
+
+**File**: `src\core\base\parsers\reasoning\implementations\identity.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 6 imports  
+**Lines**: 45  
+**Complexity**: 4 (simple)
+
+## Overview
+
+Python module containing implementation for identity.
+
+## Classes (1)
+
+### `IdentityReasoningParser`
+
+**Inherits from**: ReasoningParser
+
+No-op parser that returns the full output as content.
+
+**Methods** (4):
+- `is_reasoning_end(self, input_ids)`
+- `extract_content_ids(self, input_ids)`
+- `extract_reasoning(self, model_output, request)`
+- `extract_reasoning_streaming(self, previous_text, current_text, delta_text, previous_token_ids, current_token_ids, delta_token_ids, state)`
+
+## Dependencies
+
+**Imports** (6):
+- `base.ReasoningParser`
+- `models.ReasoningResult`
+- `models.StreamingReasoningState`
+- `typing.Any`
+- `typing.ClassVar`
+- `typing.Sequence`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/parsers/reasoning/implementations/identity.improvements.md
+
+# Improvements for identity
+
+**File**: `src\core\base\parsers\reasoning\implementations\identity.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 45 lines (small)  
+**Complexity**: 4 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `identity_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from typing import Any, ClassVar, Sequence
 from ..base import ReasoningParser
 from ..models import ReasoningResult, StreamingReasoningState

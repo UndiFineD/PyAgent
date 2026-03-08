@@ -1,4 +1,81 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/mixins/data_parsing_mixin.description.md
+
+# data_parsing_mixin
+
+**File**: `src\core\base\mixins\data_parsing_mixin.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 6 imports  
+**Lines**: 46  
+**Complexity**: 4 (simple)
+
+## Overview
+
+Module: data_parsing_mixin
+Data parsing mixin for BaseAgent, implementing XML and HTML parsing patterns.
+Inspired by ADSyncDump-BOF XML parsing techniques.
+
+## Classes (1)
+
+### `DataParsingMixin`
+
+Mixin providing data parsing features for structured data.
+
+**Methods** (4):
+- `__init__(self)`
+- `html_unescape(self, text)`
+- `extract_xml_value(self, xml, tag_pattern)`
+- `find_pattern(self, haystack, needle)`
+
+## Dependencies
+
+**Imports** (6):
+- `__future__.annotations`
+- `html`
+- `re`
+- `src.core.base.logic.processing.data_parsing_core.DataParsingCore`
+- `typing.Any`
+- `typing.Optional`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/mixins/data_parsing_mixin.improvements.md
+
+# Improvements for data_parsing_mixin
+
+**File**: `src\core\base\mixins\data_parsing_mixin.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 46 lines (small)  
+**Complexity**: 4 score (simple)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `data_parsing_mixin_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");

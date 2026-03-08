@@ -1,5 +1,79 @@
 
 """
+LLM_CONTEXT_START
+
+## Source: src-old/logic/agents/system/core/DependencyCore.description.md
+
+# DependencyCore
+
+**File**: `src\logic\agents\system\core\DependencyCore.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 3 imports  
+**Lines**: 81  
+**Complexity**: 2 (simple)
+
+## Overview
+
+Core logic for Dependency Management (Phase 176).
+Handles pip-audit execution and version pinning.
+
+## Classes (1)
+
+### `DependencyCore`
+
+Class DependencyCore implementation.
+
+**Methods** (2):
+- `run_pip_audit(recorder)`
+- `pin_requirements(file_path, recorder)`
+
+## Dependencies
+
+**Imports** (3):
+- `os`
+- `src.core.base.interfaces.ContextRecorderInterface`
+- `subprocess`
+
+---
+*Auto-generated documentation*
+## Source: src-old/logic/agents/system/core/DependencyCore.improvements.md
+
+# Improvements for DependencyCore
+
+**File**: `src\logic\agents\system\core\DependencyCore.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 81 lines (small)  
+**Complexity**: 2 score (simple)
+
+## Suggested Improvements
+
+### Class Documentation
+- [!] **1 undocumented classes**: DependencyCore
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `DependencyCore_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
+"""
 Core logic for Dependency Management (Phase 176).
 Handles pip-audit execution and version pinning.
 """

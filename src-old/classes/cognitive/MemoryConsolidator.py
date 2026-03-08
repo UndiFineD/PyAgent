@@ -1,4 +1,86 @@
 #!/usr/bin/env python3
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/classes/cognitive/MemoryConsolidator.description.md
+
+# MemoryConsolidator
+
+**File**: `src\classes\cognitive\MemoryConsolidator.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 9 imports  
+**Lines**: 93  
+**Complexity**: 6 (moderate)
+
+## Overview
+
+Shell for MemoryConsolidator, handling storage and orchestration.
+
+## Classes (1)
+
+### `MemoryConsolidator`
+
+Manages the 'Sleep & Consolidate' phase for agents.
+
+Acts as the I/O Shell for MemoryConsolidatorCore.
+
+**Methods** (6):
+- `__init__(self, storage_path)`
+- `record_interaction(self, agent, task, outcome)`
+- `sleep_and_consolidate(self)`
+- `_load_memory(self)`
+- `_save_memory(self, memory)`
+- `query_long_term_memory(self, query)`
+
+## Dependencies
+
+**Imports** (9):
+- `__future__.annotations`
+- `json`
+- `logging`
+- `pathlib.Path`
+- `src.core.base.version.VERSION`
+- `src.logic.cognitive.MemoryConsolidatorCore.MemoryConsolidatorCore`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+
+---
+*Auto-generated documentation*
+## Source: src-old/classes/cognitive/MemoryConsolidator.improvements.md
+
+# Improvements for MemoryConsolidator
+
+**File**: `src\classes\cognitive\MemoryConsolidator.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 93 lines (small)  
+**Complexity**: 6 score (moderate)
+
+## Suggested Improvements
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `MemoryConsolidator_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors

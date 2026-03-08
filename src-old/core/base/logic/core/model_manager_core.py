@@ -12,6 +12,82 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+LLM_CONTEXT_START
+
+## Source: src-old/core/base/logic/core/model_manager_core.description.md
+
+# model_manager_core
+
+**File**: `src\core\base\logic\core\model_manager_core.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 5 imports  
+**Lines**: 46  
+**Complexity**: 1 (simple)
+
+## Overview
+
+Python module containing implementation for model_manager_core.
+
+## Classes (1)
+
+### `ModelManagerCore`
+
+Manages the lifecycle of local/remote models (Ollama/VLLM).
+Handles dynamic context-length adjustments and health monitoring.
+Harvested from awesome-ollama patterns.
+
+**Methods** (1):
+- `__init__(self, provider)`
+
+## Dependencies
+
+**Imports** (5):
+- `asyncio`
+- `typing.Any`
+- `typing.Dict`
+- `typing.List`
+- `typing.Optional`
+
+---
+*Auto-generated documentation*
+## Source: src-old/core/base/logic/core/model_manager_core.improvements.md
+
+# Improvements for model_manager_core
+
+**File**: `src\core\base\logic\core\model_manager_core.py`  
+**Analysis Date**: 2026-03-01 00:18  
+**Size**: 46 lines (small)  
+**Complexity**: 1 score (simple)
+
+## Suggested Improvements
+
+### Documentation
+- [!] **Missing module docstring** - Add comprehensive module-level documentation
+
+### Type Annotations
+- [OK] Review and add type hints to all functions and methods for better IDE support
+
+### Testing
+- [!] **Missing test file** - Create `model_manager_core_test.py` with pytest tests
+
+## Best Practices Checklist
+
+- [x] All classes have docstrings
+- [x] All public methods have docstrings
+- [x] Type hints are present
+- [x] pytest tests cover main functionality
+- [x] Error handling is robust
+- [x] Code follows PEP 8 style guide
+- [x] No code duplication
+- [x] Proper separation of concerns
+
+---
+*Auto-generated improvement suggestions*
+
+LLM_CONTEXT_END
+"""
+
 from typing import Dict, Any, List, Optional
 import asyncio
 
