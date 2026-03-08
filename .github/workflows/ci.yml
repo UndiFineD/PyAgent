@@ -31,8 +31,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run tests
+      - name: Run Python tests
         run: pytest -q
+
+      - name: Run Rust unit tests
+        working-directory: rust_core
+        run: |
+          # ensure the rust core compiles and its unit tests pass
+          cargo test -- --test-threads=1
 
       - name: Upload tests directory as artifact
         if: always()

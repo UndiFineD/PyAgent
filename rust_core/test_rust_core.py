@@ -3,15 +3,12 @@
 - auto-generated from Rust source.
 """
 
-import json
 import os
 import re
 import sys
 import time
-import traceback
-from collections import defaultdict, Counter
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from collections import defaultdict
+from typing import Any, Dict, List, Tuple
 
 import rust_core
 
@@ -38,7 +35,7 @@ def print_section(title: str) -> None:
     print(f"{'─' * 100}")
 
 
-def _extract_functions_from_file(filepath: str, file: str, fn_pattern: Any) -> List[Dict[str, Any]]:
+def _extract_functions_from_file(filepath: str, fn_pattern: Any) -> List[Dict[str, Any]]:
     """Extract function definitions from a single Rust file."""
     functions = []
     try:
@@ -54,7 +51,7 @@ def _extract_functions_from_file(filepath: str, file: str, fn_pattern: Any) -> L
                     'params': params,
                     'arg_count': arg_count
                 })
-    except (OSError, AttributeError):
+    except (OSError, AttributeError, ValueError):
         pass
     return functions
 
@@ -69,20 +66,20 @@ def scan_rust_files(rust_src_path: str) -> Dict[str, List[Dict[str, Any]]]:
     # Pattern to match pub fn declarations (including async, generic params)
     fn_pattern = re.compile(r'pub\s+(?:async\s+)?fn\s+(\w+)\s*(?:<[^>]*>)?\s*\(([^)]*)\)')
 
-    for root, dirs, files in os.walk(rust_src_path):
-        for file in files:
-            if file.endswith('.rs'):
-                filepath = os.path.join(root, file)
-                functions = _extract_functions_from_file(filepath, file, fn_pattern)
-                functions_by_file[file].extend(functions)
+    for root, _, files in os.walk(rust_src_path):
+        for filename in files:
+            if filename.endswith('.rs'):
+                filepath = os.path.join(root, filename)
+                functions = _extract_functions_from_file(filepath, fn_pattern)
+                functions_by_file[filename].extend(functions)
 
     return functions_by_file
 
 
-def generate_test_args(func_name: str, arg_count: int = 1) -> List[Tuple[Any, ...]]:
+def generate_test_args(function_name: str, arg_count: int = 1) -> List[Tuple[Any, ...]]:
     """Generate intelligent test arguments for functions based on name patterns."""
     test_cases: List[Tuple[Any, ...]] = []
-    func_lower = func_name.lower()
+    func_lower = function_name.lower()
 
     # Grammar-based argument generation
     if any(x in func_lower for x in ['json', 'validate', 'check']):
@@ -131,23 +128,23 @@ def generate_test_args(func_name: str, arg_count: int = 1) -> List[Tuple[Any, ..
     return test_cases
 
 
-def safe_call_function(func: Any, args: Tuple, func_name: str) -> Tuple[bool, str, Any]:
+def safe_call_function(func_obj: Any, args: Tuple[Any, ...]) -> Tuple[bool, str, Any]:
     """Safely call a function with error handling and timing."""
     try:
         start_time = time.time()
-        result = func(*args)
+        func_result = func_obj(*args)
         duration = time.time() - start_time
-        return True, f"✓ Returned: {type(result).__name__} (took {duration*1000:.2f}ms)", result
+        return True, f"✓ Returned: {type(func_result).__name__} (took {duration*1000:.2f}ms)", func_result
     except TypeError as e:
-        error_msg = str(e)
-        if 'missing' in error_msg or 'required' in error_msg:
-            return False, f"⚠ MissingArgs: {error_msg[:60]}", None
-        return False, f"✗ TypeError: {error_msg[:70]}", None
+        type_error_msg = str(e)
+        if 'missing' in type_error_msg or 'required' in type_error_msg:
+            return False, f"⚠ MissingArgs: {type_error_msg[:60]}", None
+        return False, f"✗ TypeError: {type_error_msg[:70]}", None
     except ValueError as e:
         return False, f"✗ ValueError: {str(e)[:70]}", None
     except RuntimeError as e:
         return False, f"✗ RuntimeError: {str(e)[:70]}", None
-    except Exception as e:
+    except (AttributeError, OSError, KeyError) as e:
         exc_type = type(e).__name__
         return False, f"✗ {exc_type}: {str(e)[:65]}", None
 
@@ -202,10 +199,10 @@ for item in public_exports:
             function_exports.append(item)
         else:
             special_exports.append(item)
-    except Exception:
+    except (AttributeError, TypeError):
         pass
 
-print(f"\nExport Categories:")
+print("\nExport Categories:")
 print(f"  • Classes/Types: {len(class_exports):4d} ({100*len(class_exports)/(len(public_exports)):.1f}%)")
 print(f"  • Functions:     {len(function_exports):4d} ({100*len(function_exports)/(len(public_exports)):.1f}%)")
 print(f"  • Other:         {len(special_exports):4d} ({100*len(special_exports)/(len(public_exports)):.1f}%)")
@@ -219,11 +216,11 @@ print(f"Total Classes Found: {len(class_exports)}\n")
 for i, cls in enumerate(sorted(class_exports), 1):
     try:
         obj = getattr(rust_core, cls)
-        doc = ""
+        DOC_STR = ""
         if hasattr(obj, '__doc__') and obj.__doc__:
-            doc = obj.__doc__.strip().split('\n')[0][:60]
-        print(f"  {i:2d}. {cls:30s} {f'- {doc}' if doc else ''}")
-    except Exception:
+            DOC_STR = obj.__doc__.strip().split('\n')[0][:60]
+        print(f"  {i:2d}. {cls:30s} {f'- {DOC_STR}' if DOC_STR else ''}")
+    except (AttributeError, TypeError):
         pass
 
 # ============================================================================
@@ -236,17 +233,19 @@ prefixes: Dict[str, List[str]] = defaultdict(list)
 for func_name in function_exports:
     try:
         if '_' in func_name:
-            prefix = func_name.split('_')[0]
+            PREFIX = func_name.split('_')[0]
         else:
-            prefix = 'uncategorized'
-        prefixes[prefix].append(func_name)
-    except Exception:
+            PREFIX = 'uncategorized'
+        prefixes[PREFIX].append(func_name)
+    except (ValueError, IndexError):
         prefixes['uncategorized'].append(func_name)
 
 print(f"Function categories identified: {len(prefixes)}")
-print(f"Functions per category:\n")
+print("Functions per category:\n")
 
-sorted_prefixes = sorted(prefixes.items(), key=lambda x: len(x[1]), reverse=True)
+sorted_prefixes: List[Tuple[str, List[str]]] = sorted(
+    prefixes.items(), key=lambda x: len(x[1]), reverse=True
+)
 
 if sorted_prefixes:
     for prefix_name, funcs in sorted_prefixes[:15]:
@@ -279,62 +278,82 @@ if TEST_ALL_FUNCTIONS and len(test_functions) > MAX_FUNCTIONS_TO_TEST:
 print(f"Testing {len(test_functions)} functions from {len(function_exports)} total:\n")
 
 for i, func_name in enumerate(test_functions, 1):
-    if hasattr(rust_core, func_name):
-        func = getattr(rust_core, func_name)
+    try:
+        if hasattr(rust_core, func_name):
+            func = getattr(rust_core, func_name)
 
-        # Generate test arguments
-        test_args_list = generate_test_args(func_name, 1)
+            # Generate test arguments
+            test_args_list = generate_test_args(func_name, 1)
 
-        FUNC_SUCCESS = False
-        func_msg = ""
-        for test_args in test_args_list:
-            FUNC_SUCCESS, func_msg, result = safe_call_function(func, test_args, func_name)
+            FUNC_SUCCESS = False
+            FUNC_MESSAGE = ""
+            for test_args in test_args_list:
+                FUNC_SUCCESS, FUNC_MESSAGE, result = safe_call_function(func, test_args)
 
-            if FUNC_SUCCESS:
-                test_results['pass'] += 1
-                test_results['timings'].append(
-                    (func_name, func_msg.split('took ')[1].split('ms')[0] if 'took' in func_message else '0')
-                )
-                break
+                if FUNC_SUCCESS:
+                    test_results['pass'] += 1
+                    test_results['timings'].append(
+                        (func_name, FUNC_MESSAGE.split('took ')[1].split('ms')[0] if 'took' in FUNC_MESSAGE else '0')
+                    )
+                    break
 
-        if not FUNC_SUCCESS:
-            test_results['fail'] += 1
-            if not any(func_name in prev_error for prev_error, _ in test_results['errors']):
-                test_results['errors'].append((func_name, func_msg))
-            # Try with no args as fallback
-            FUNC_SUCCESS, func_msg, result = safe_call_function(func, (), func_name)
-            if FUNC_SUCCESS:
-                test_results['pass'] += 1
-                test_results['fail'] -= 1
+            if not FUNC_SUCCESS:
+                test_results['fail'] += 1
+                if not any(func_name in prev_error for prev_error, _ in test_results['errors']):
+                    test_results['errors'].append((func_name, FUNC_MESSAGE))
+                # Try with no args as fallback
+                FUNC_SUCCESS, FUNC_MESSAGE, result = safe_call_function(func, ())
+                if FUNC_SUCCESS:
+                    test_results['pass'] += 1
+                    test_results['fail'] -= 1
 
-        # Print progress every 10 functions
-        if i % 10 == 0 or i == len(test_functions):
-            PCT = 100 * (test_results['pass'] + test_results['fail']) / (test_results['pass'] + test_results['fail'] + 0.001)  # noqa: N806
-            pass_rate = 100 * test_results['pass'] / max(1, test_results['pass'] + test_results['fail'])
-            print(f"  Progress: {i}/{len(test_functions)} ({PCT:.0f}%) | Pass Rate: {pass_rate:.1f}%")
-    else:
+            # Print progress every 10 functions
+            if i % 10 == 0 or i == len(test_functions):
+                PCT = (
+                    100 *
+                    (test_results['pass'] + test_results['fail']) /
+                    (test_results['pass'] + test_results['fail'] + 0.001)  # noqa: N806
+                    )
+                pass_rate = (
+                    100 *
+                    test_results['pass'] /
+                    max(1, test_results['pass'] + test_results['fail'])
+                    )
+                print(f"  Progress: {i}/{len(test_functions)} ({PCT:.0f}%) | Pass Rate: {pass_rate:.1f}%")
+    except (AttributeError, TypeError):
         test_results['skip'] += 1
 
-print(f"\n" + "─" * 100)
+print("\n" + "─" * 100)
 
 # ============================================================================
-# STEP 5: CLASS INSTANTIATION TESTS  
+# STEP 5: CLASS INSTANTIATION TESTS
 # ============================================================================
 print_section("STEP 5: CLASS INSTANTIATION TESTS")
 
-key_classes = ["CoderCore", "CodeQualityCore", "WebCore", "ToolDraftingCore", 
-               "FlexibleNeuralNetwork", "NeuralTransformer", "KVCache"]
+key_classes = [
+    "CoderCore",
+    "CodeQualityCore",
+    "WebCore",
+    "ToolDraftingCore",
+    "FlexibleNeuralNetwork",
+    "NeuralTransformer",
+    "KVCache"
+]
 
 class_results = {'found': 0, 'missing': 0}
 
 for cls_name in key_classes:
-    if hasattr(rust_core, cls_name):
-        class_results['found'] += 1
-        cls_obj = getattr(rust_core, cls_name)
-        print(f"  ✓ {cls_name:30s} | Type: {type(cls_obj).__name__:15s} Callable: {callable(cls_obj)}")
-    else:
+    try:
+        if hasattr(rust_core, cls_name):
+            class_results['found'] += 1
+            cls_obj = getattr(rust_core, cls_name)
+            print(f"  ✓ {cls_name:30s} | Type: {type(cls_obj).__name__:15s} Callable: {callable(cls_obj)}")
+        else:
+            class_results['missing'] += 1
+            print(f"  ✗ {cls_name:30s} | NOT FOUND")
+    except (AttributeError, TypeError):
         class_results['missing'] += 1
-        print(f"  ✗ {cls_name:30s} | NOT FOUND")
+        print(f"  ✗ {cls_name:30s} | ERROR")
 
 # ============================================================================
 # STEP 6: DETAILED STATISTICS
@@ -349,26 +368,26 @@ print(f"  • Total Exports:       {len(public_exports):6d}")
 print(f"  • Classes/Types:       {len(class_exports):6d}")
 print(f"  • Functions:           {len(function_exports):6d}")
 
-print(f"\nFunction Test Statistics:")
+print("\nFunction Test Statistics:")
 print(f"  • Tested:              {TOTAL_FUNCTIONS_TESTED:6d}")
 print(f"  • Passed:              {test_results['pass']:6d} ({pass_rate:5.1f}%)")
 print(f"  • Failed:              {test_results['fail']:6d} ({100-pass_rate:5.1f}%)")
 print(f"  • Skipped:             {test_results['skip']:6d}")
 
-print(f"\nClass Statistics:")
+print("\nClass Statistics:")
 print(f"  • Key Classes Found:   {class_results['found']:6d}/{len(key_classes)}")
 print(f"  • Missing Classes:     {class_results['missing']:6d}/{len(key_classes)}")
 
 if test_results['timings']:
     timings = [float(t[1]) for t in test_results['timings'] if t[1].replace('.', '').isdigit()]
     if timings:
-        print(f"\nPerformance Metrics:")
+        print("\nPerformance Metrics:")
         print(f"  • Fastest Function:    {min(timings):7.3f} ms")
         print(f"  • Slowest Function:    {max(timings):7.3f} ms")
         print(f"  • Average Time:        {sum(timings)/len(timings):7.3f} ms")
 
 if test_results['errors']:
-    print(f"\nFailed Function Details (first 10):")
+    print("\nFailed Function Details (first 10):")
     for func_name, error_msg in test_results['errors'][:10]:
         print(f"  • {func_name:30s} | {error_msg}")
 
@@ -400,13 +419,13 @@ print_header("TEST SUITE SUMMARY", "=")
 STATUS_EMOJI = "✅" if passed_checks == len(health_checks) else "⚠️" if passed_checks >= 4 else "❌"
 print(f"Module Status: {STATUS_EMOJI}\n")
 
-print(f"Export Inventory:")
+print("Export Inventory:")
 print(f"  • Total Exports:              {len(public_exports):6d}")
 print(f"  • Classes:                    {len(class_exports):6d}")
 print(f"  • Functions:                  {len(function_exports):6d}")
 print(f"  • Function Categories:        {len(prefixes):6d}")
 
-print(f"\nTest Results:")
+print("\nTest Results:")
 print(f"  • Functions Tested:           {TOTAL_FUNCTIONS_TESTED:6d}")
 print(f"  • Success Rate:               {pass_rate:6.1f}%")
 print(f"  • Health Score:               {100*passed_checks/len(health_checks):6.1f}%")
@@ -415,5 +434,7 @@ print(f"\n{'=' * 100}")
 if TEST_ALL_FUNCTIONS:
     print(f"✅ rust_core v0.1.0 - Dynamic testing complete ({len(test_functions)} functions tested)".center(100))
 else:
-    print(f"✅ rust_core v0.1.0 - Diagnostic testing complete ({len(function_exports)} functions discovered)".center(100))
+    print(
+        f"✅ rust_core v0.1.0 - Diagnostic testing complete ({len(function_exports)} functions discovered)".center(100)
+        )
 print(f"{'=' * 100}\n")

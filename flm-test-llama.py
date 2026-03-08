@@ -13,7 +13,7 @@ from openai.types.chat import (
 
 client = OpenAI(
     base_url="http://127.0.0.1:52625/v1/",
-    api_key=os.environ["CUSTOM_OPENAI_API_KEY"],
+    api_key="dummy",
 )
 
 messages: list[ChatCompletionMessageParam] = [

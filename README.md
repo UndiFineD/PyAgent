@@ -1,142 +1,88 @@
-# 🤖 PyAgent: The Autonomous Swarm Intelligence (v4.0.0-VOYAGER)
+# PyAgent Project
 
-PyAgent is a high-performance, multi-agent swarm system optimized for autonomous code improvement, reasoning, and fleet-wide orchestration. It leverages a **Rust-accelerated core** and a **decentralized mixin architecture** to provide a secure, transactionally safe environment for agentic self-evolution.
+## Overview
+PyAgent is a comprehensive software development platform designed to streamline the development, testing, and deployment of secure and scalable applications.
 
----
+## Core Components
 
-## 🚀 The Core Pillars
+### GitHub Import System
+A robust system that processes lines from `user/import/github.md` to download repositories into `.external/github/<user>/<repository>/` and generate architecture documents with detailed file descriptions.
 
-### ⚡ Rust-Native Acceleration
-Computationally intensive tasks are delegated to a high-throughput **Rust FFI bridge** (`rust_core`).
-- **41% Performance Gain**: Offloads metrics calculation, complexity analysis, and regex FSM decoding to native code.
-- **DFA-Based Constraints**: LLM structured output decoding is accelerated via Rust-managed state machines and vectorized bitmasking.
-- **Fast Diffs & Patching**: Native Myers diff engine for high-speed code modification and transactional integrity.
+### Unified Transaction Manager
+A centralized service that manages all transaction operations across the system, ensuring consistency, reliability, and security.
 
-### 🐝 Swarm-Mixin Architecture
-PyAgent avoids monolithic design by utilizing a **Synaptic Modularization** pattern. Agents are composed of specialized mixins and categorized into functional swarms:
-- **Specialized Agents**:
-  - **Quantum Scaling Coder**: Optimizes code for extreme performance and scalability.
-  - **Legal Audit**: Ensures compliance and legal safety in autonomous operations.
-  - **Operational Cost**: Monitored resource utilization and token efficiency.
-- **Mixins**:
-  - **ReflectionMixin**: Enables autonomous self-critique and logic verification.
-- **KnowledgeMixin**: Accesses the "Knowledge Trinity" (Structured, Semantic, and Relational memory).
-- **IdentityMixin**: Decouples agent identity from implementation, enabling anonymous peer-to-peer transport.
-- **PersistenceMixin**: Manages atomic state serialization and binary shard snapshots (msgpack/blake3).
+### Hybrid LLM Security Core
+A security-first rewrite of the `rust_core` library, driven by Python integration tests. The new core provides inline encryption/decryption, transactional file operations, and monthly key rotation with full memory-safe Rust implementation.
 
-### 🛡️ Transactional FS & Security
-PyAgent operates with a **Safety-First** philosophy:
-- **State Transactions**: Every file modification is atomic. Automatic rollbacks are triggered if a reasoning chain fails or a collision is detected.
-- **Cascading Context**: Prevents infinite recursion and ensures task lineage (Task Parentage -> Result Attribution).
-- **Environment Sandbox**: Strict allow-list protocols for external shell operations and PII redaction.
+## Workflow
 
-### 🧠 Advanced LLM Engine (v0.14.0+)
-Fully integrated with **vLLM** and custom inference kernels:
-- **Speculative Decoding**: Multi-generational token prediction (Medusa/Eagle patterns).
-- **Grammar Constraints**: Pydantic-to-Regex-to-FSM conversion for 100% valid JSON/JSONSchema outputs.
-- **KV Cache Offloading**: Rust-accelerated RDMA transfer logic for disaggregated prefill/decode.
-- **Paged Attention**: Block-based KV management for handling extreme sequence lengths.
+### GitHub Import Process
+1. **Configuration Loading** - The system loads the `user/import/github.md` file to get the list of repositories to import.
+2. **Repository Parsing** - Each line in the file is parsed to extract the user and repository name in the format `user/repository`.
+3. **Repository Download** - For each repository, the system downloads it to the directory structure: `.external/github/<user>/<repository>/`.
+4. **File Description Generation** - The system creates a `*.desc.md` file for every file in every directory of the downloaded repository.
+5. **Architecture Compilation** - All the content from the `*.desc.md` files is combined into a single `architecture.md` file in the repository's directory.
 
----
+### Transaction Management Process
+1. **Request Ingestion** - External clients send transaction requests to the transaction service.
+2. **Validation** - The transaction validator checks the request against business rules and data integrity constraints.
+3. **Processing** - The transaction service coordinates the execution of the transaction, potentially involving multiple services or data stores.
+4. **Persistence** - The transaction repository stores the transaction data with ACID properties.
+5. **Monitoring** - The transaction monitor tracks the transaction status and logs events for auditing and analysis.
+6. **Completion** - Upon successful completion, the transaction is marked as complete and notifications are sent to relevant parties.
 
-## 🛠️ Project Ecosystem
+### Security Core Implementation Process
+1. **Add Failing Test** - Write a failing Python encryption round-trip test that verifies the presence of `encrypt_data` and `decrypt_data` functions.
+2. **Run Test** - Execute the test to verify it fails due to missing functions.
+3. **Implement Rust Functions** - Develop the Rust functions in `security/crypto.rs` to provide encryption and decryption capabilities.
+4. **Update Python Bindings** - Modify the Python bindings to expose the new Rust functions.
+5. **Verify Functionality** - Run the test again to confirm it passes, demonstrating successful integration.
 
-| Core Layer | Path | Description |
-| :--- | :--- | :--- |
-| **Swarm** | `src/logic/agents/` | Specialized agents (Coder, Analyst, **Quantum Scaling Coder**, etc.) |
-| **Logic** | `src/logic/` | Shared reasoning cores and metrics engines |
-| **Inference** | `src/inference/` | vLLM connectors, streaming, and decoding constraints |
-| **Core** | `src/core/base/` | Mixins, state managers, and transactional FS |
-| **Acceleration**| `rust_core/` | Native PyO3 modules (Performance Kernels) |
-| **Auto-Fix** | `src/auto_fix/` | Modular rule engine, transaction manager, and CLI for safe automated fixes |
+## Key Features
 
-| **Observability**| `src/observability/`| Prometheus metrics, stats, and health monitoring |
+### GitHub Import System
+- Detailed file description format with structured content (path, size, content summary, purpose, dependencies, usage context, version information, notes)
+- Comprehensive architecture document structure including repository overview, component breakdown, file system hierarchy, key files and functions, interactions and dependencies, design patterns and principles, and future enhancements
+- Robust error handling for file not found, parsing errors, download failures, file generation failures, and compilation failures
+- Security considerations including authentication, authorization, data privacy, and secure storage
+- Performance optimization through batch processing, parallel downloads, caching, and efficient file reading
 
----
+### Unified Transaction Manager
+- Core components: Transaction Service, Repository, Validator, Monitor, and Security Layer
+- Communication flow from request ingestion to completion
+- Key design principles focusing on consistency, reliability, and security
+- Failure handling mechanisms including rollback and retry strategies
+- Integration points with various system components
+- Future enhancement directions
 
-## 📦 Installation
+### Hybrid LLM Security Core
+- Rust FFI bridge (`rust_core/` crate) compiled as `cdylib` with `pyo3` bindings
+- New `security/crypto.rs` module housing encryption, transaction and key-management routines
+- Python test layer in `rust_core/tests/` exercising every security API, failing first then guiding the Rust implementation
+- Existing dynamic test generator remains, but focused tests live alongside it
 
-PyAgent requires **Python 3.12+** and a C++ compiler for the Rust bridge (Maturin).
+## Future Enhancements
 
-```powershell
-# Clone the fleet
-git clone https://github.com/UndiFineD/PyAgent
-cd PyAgent
+### GitHub Import System
+- Repository analysis to identify code quality issues, security vulnerabilities, and technical debt
+- AI-powered suggestions for code improvements, refactoring, and optimization
+- Version comparison to track changes over time
+- Dependency graph showing how files and components relate to each other
+- Multi-repository support for simultaneous import
+- Blockchain integration for immutable repository records
 
-# Initialize Environment
-python -m venv .venv
-.venv\Scripts\Activate.ps1
+### Unified Transaction Manager
+- Real-time analytics for transaction pattern analysis
+- Machine learning models for anomaly detection and fraud prevention
+- Multi-region support for distributed transaction processing across multiple regions
+- Blockchain integration for immutable transaction records
 
-# Install Dependencies (Secure Stack)
-pip install -r requirements.txt
-```
+### Hybrid LLM Security Core
+- Enhanced analysis of repository content to identify code quality issues, security vulnerabilities, and technical debt
+- Integration of AI models to provide suggestions for code improvements, refactoring, and optimization
+- Version comparison to track changes over time
+- Dependency graph showing how files and components relate to each other
+- Multi-repository support for simultaneous import
+- Blockchain integration for immutable repository records
 
-### 🔧 Building the Rust Core
-```powershell
-cd rust_core
-maturin develop --release
-```
-
----
-
-## 🚦 Quick Start
-
-### Start the Fleet Load Balancer (FastAPI)
-```powershell
-python -m src.interface.ui.web.py_agent_web --port 8000
-```
-
-### Run an Autonomous Task (CLI)
-```powershell
-python -m src.interface.ui.cli.pyagent_cli --task "Analyze dependencies and optimize imports" --priority HIGHEST
-```
-
-### Run Health Audit
-```powershell
-python -m pytest tests/unit/
-```
-
----
-
-## 🗺️ Roadmap "VOYAGER"
-- [x] **Decentralized Transport**: Zero-broker P2P swarms with mDNS discovery.
-- [x] **Synaptic Pruning**: Exponential knowledge decay for high-efficiency memory.
-- [x] **Holographic Memory**: Distributed vector weights across the fleet.
-- [x] **Multimodal AI Integration**: Async task queues for image generation and processing, with background artifact cleanup (inspired by 4o-ghibli-at-home).
-- [ ] **MARKOV Decision Processes**: Implementation of RL environments for self-optimization.
-- [ ] **Multi-Model Speculation**: Federated speculative decoding across multiple nodes.
-- [x] **MARKOV Decision Processes**: Implementation of RL environments for self-optimization.
-- [x] **Multi-Model Speculation**: Federated speculative decoding across multiple nodes.
-
----
-*Locked under GOLDEN_MASTER_SEAL (v4.0.0-VOYAGER)*
-
-## Changelog (2026-03-01)
-
-- **Multimodal tokenizer added**: A new `MultimodalTokenizer` provides a unified token space for text, image, audio, and video tokens. It supports pluggable modality-specific tokenizers and a simple fallback implementation. See: `src/infrastructure/engine/tokenization/detokenizer/types.py` and `src/infrastructure/engine/tokenization/detokenizer/simple_tokenizer.py`.
-
-- **Documentation generator fixed for Windows**: `scripts/generate_docs_and_tests.py` now avoids emoji/Unicode characters that fail on Windows consoles (cp1252). The script completed a full run over the repository and generates `.description.md`, `.improvements.md`, `.splice.md`, and `*_test.py` artifacts with a resumable checkpointing mechanism. Use `--dry-run` to preview changes or `--execute` to create files.
-
-- **New tests**: Added lightweight tests and standalone examples for the tokenizer components:
-  - `test_tokenizer_protocol.py` — demonstrates Protocol vs implementation
-  - `test_multimodal_tokenizer.py` — integration tests for multimodal tokenization
-  - `test_multimodal_standalone.py` — quick verification harness
-
-## How to try the new tokenizer
-
-1. Install dev dependencies and activate the virtualenv (see Installation above).
-2. Run the standalone verification (no package imports required):
-
-```powershell
-python test_multimodal_standalone.py
-```
-
-3. Or run the protocol demo and integration tests:
-
-```powershell
-python test_tokenizer_protocol.py
-python test_multimodal_tokenizer.py
-```
-
-If you deploy to CI, ensure `pyproject.toml` or your test runner includes these new tests.
-
+This platform provides a scalable, secure, and maintainable foundation for modern software development.

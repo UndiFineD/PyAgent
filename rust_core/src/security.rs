@@ -42,6 +42,8 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(crypto::rotate_keys, m)?)?;
     // key management helpers
     m.add_function(wrap_pyfunction!(crypto::export_keys, m)?)?;
+    m.add_function(wrap_pyfunction!(crypto::clear_keys, m)?)?;
+    m.add_function(wrap_pyfunction!(crypto::cleanup_transactions, m)?)?;
     // metrics endpoint
     m.add_function(wrap_pyfunction!(crypto::gather_metrics, m)?)?;
     Ok(())

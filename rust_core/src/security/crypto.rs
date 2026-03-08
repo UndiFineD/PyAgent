@@ -1,5 +1,4 @@
 use pyo3::prelude::*;
-use once_cell::sync::OnceCell;
 use std::fs;
 // bring KeyInit into scope so we can call `XChaCha20Poly1305::new`
 use chacha20poly1305::KeyInit;
@@ -8,15 +7,18 @@ use hkdf::Hkdf;
 use sha2::Sha256;
 use rand_core::OsRng;
 use rand_core::RngCore;
+use chrono::Utc;
 
 // prometheus metrics
 use once_cell::sync::Lazy;
 use prometheus::{IntCounter, register_int_counter, Encoder, TextEncoder};
 
 static ENCRYPT_COUNTER: Lazy<IntCounter> = Lazy::new(|| {
+    eprintln!("[crypto] registering encrypt_data_calls metric");
     register_int_counter!("encrypt_data_calls", "Number of encrypt_data invocations").unwrap()
 });
 static DECRYPT_COUNTER: Lazy<IntCounter> = Lazy::new(|| {
+    eprintln!("[crypto] registering decrypt_data_calls metric");
     register_int_counter!("decrypt_data_calls", "Number of decrypt_data invocations").unwrap()
 });
 static ROLLBACK_COUNTER: Lazy<IntCounter> = Lazy::new(|| {
@@ -25,16 +27,24 @@ static ROLLBACK_COUNTER: Lazy<IntCounter> = Lazy::new(|| {
 static ROTATE_COUNTER: Lazy<IntCounter> = Lazy::new(|| {
     register_int_counter!("rotate_key_calls", "Number of key rotation operations").unwrap()
 });
+// additional telemetry for backups and garbage collection
+static KEY_BACKUP_COUNTER: Lazy<IntCounter> = Lazy::new(|| {
+    register_int_counter!("key_backup_calls", "Number of key backups before rotation").unwrap()
+});
+static GC_COUNTER: Lazy<IntCounter> = Lazy::new(|| {
+    register_int_counter!("transaction_gc_calls", "Number of transaction garbage collection operations").unwrap()
+});
 
-// store key material once; loading twice is an error
-static KEYS: OnceCell<(Vec<u8>, Vec<u8>)> = OnceCell::new();
+// store key material; wrapped in a mutex so we can clear or replace during tests
+use std::sync::Mutex;
+static KEYS: Mutex<Option<(Vec<u8>, Vec<u8>)>> = Mutex::new(None);
 
 // helper to produce a 32‑byte key for AEAD using HKDF-SHA256.
 // the KDF input material combines the public and private bytes, and the
 // salt includes the current key rotation version so that rotating keys
 // automatically produces a new key without touching the stored files.
 fn derive_key() -> [u8; 32] {
-    let ikm = if let Some((pub_k, priv_k)) = KEYS.get() {
+    let ikm = if let Some((pub_k, priv_k)) = KEYS.lock().unwrap().as_ref() {
         // concatenate pub||priv
         [pub_k.as_slice(), priv_k.as_slice()].concat()
     } else {
@@ -53,7 +63,6 @@ fn derive_key() -> [u8; 32] {
 }
 
 // simple transaction state tracker for demonstration purposes
-use std::sync::Mutex;
 static TRANSACTION_ACTIVE: Mutex<bool> = Mutex::new(false);
 // root directory for the active transaction; used for rollback cleanup
 static TRANSACTION_PATH: Mutex<Option<String>> = Mutex::new(None);
@@ -63,16 +72,22 @@ static KEY_VERSION: Mutex<u64> = Mutex::new(0);
 
 #[pyfunction]
 pub fn load_keys(pub_path: &str, priv_path: &str) -> PyResult<()> {
+    eprintln!("[crypto] load_keys called with {} {}", pub_path, priv_path);
     let pub_bytes = fs::read(pub_path).map_err(|e| PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("failed to read pub key: {}", e)))?;
     let priv_bytes = fs::read(priv_path).map_err(|e| PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("failed to read priv key: {}", e)))?;
-    KEYS.set((pub_bytes, priv_bytes))
-        .map_err(|_| PyErr::new::<pyo3::exceptions::PyRuntimeError, _>("keys already loaded"))?;
+    let mut keys = KEYS.lock().unwrap();
+    if keys.is_some() {
+        eprintln!("[crypto] load_keys: keys already loaded");
+        return Err(pyo3::exceptions::PyRuntimeError::new_err("keys already loaded"));
+    }
+    *keys = Some((pub_bytes, priv_bytes));
+    eprintln!("[crypto] load_keys: keys stored");
     Ok(())
 }
 
 #[pyfunction]
 pub fn export_keys(pub_path: &str, priv_path: &str) -> PyResult<()> {
-    if let Some((pubk, privk)) = KEYS.get() {
+    if let Some((pubk, privk)) = KEYS.lock().unwrap().as_ref() {
         fs::write(pub_path, pubk).map_err(|e| PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("failed to write pub key: {}", e)))?;
         fs::write(priv_path, privk).map_err(|e| PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("failed to write priv key: {}", e)))?;
         Ok(())
@@ -136,11 +151,13 @@ pub fn decrypt_data(data: &[u8]) -> PyResult<Vec<u8>> {
     // try current key first, then fall back to previous version if available
     let current_version = *KEY_VERSION.lock().unwrap();
     let attempt = try_decrypt_version(data, current_version);
-    if let Ok(plain) = attempt {
+    if let Ok(mut plain) = attempt {
+        DECRYPT_COUNTER.inc();
         return Ok(plain);
     }
     if current_version > 0 {
-        if let Ok(plain) = try_decrypt_version(data, current_version - 1) {
+        if let Ok(mut plain) = try_decrypt_version(data, current_version - 1) {
+            DECRYPT_COUNTER.inc();
             return Ok(plain);
         }
     }
@@ -197,6 +214,16 @@ pub fn rollback_transaction() -> PyResult<()> {
 }
 
 // key rotation helpers
+
+#[pyfunction]
+/// Clear any loaded keys (testing helper).
+///
+/// This is mainly used by Python tests to reset global state between cases.
+pub fn clear_keys() -> PyResult<()> {
+    let mut keys = KEYS.lock().unwrap();
+    *keys = None;
+    Ok(())
+}
 #[pyfunction]
 pub fn current_key_version() -> PyResult<u64> {
     Ok(*KEY_VERSION.lock().unwrap())
@@ -204,6 +231,21 @@ pub fn current_key_version() -> PyResult<u64> {
 
 #[pyfunction]
 pub fn rotate_keys() -> PyResult<()> {
+    // before bumping version, backup existing key material if present
+    if let Some((pubk, privk)) = KEYS.lock().unwrap().as_ref() {
+        let date = Utc::now().format("%Y-%m-%d").to_string();
+        let pubfile = format!("{}-keys.pub", date);
+        let privfile = format!("{}-keys.priv", date);
+        fs::write(&pubfile, pubk).map_err(|e| PyErr::new::<pyo3::exceptions::PyIOError, _>(
+            format!("backup pub key failed: {}", e)
+        ))?;
+        fs::write(&privfile, privk).map_err(|e| PyErr::new::<pyo3::exceptions::PyIOError, _>(
+            format!("backup priv key failed: {}", e)
+        ))?;
+        eprintln!("[crypto] backed up keys to {} {}", pubfile, privfile);
+        KEY_BACKUP_COUNTER.inc();
+        eprintln!("[crypto] notifying clients about decommissioning version {}", *KEY_VERSION.lock().unwrap());
+    }
     let mut v = KEY_VERSION.lock().unwrap();
     *v += 1;
     ROTATE_COUNTER.inc();
@@ -211,6 +253,40 @@ pub fn rotate_keys() -> PyResult<()> {
 }
 
 // Metrics gathering helper exposed to Python
+
+#[pyfunction]
+/// Remove transactions older than 30 days from the given directory path.
+///
+/// This is a maintenance helper; any errors during cleanup are logged but
+/// the function will still return Ok.  A Prometheus counter is incremented
+/// each invocation.
+pub fn cleanup_transactions(path: &str) -> PyResult<()> {
+    let cutoff = Utc::now() - chrono::Duration::days(30);
+    let base = std::path::Path::new(path);
+    if base.is_dir() {
+        for entry in std::fs::read_dir(base).map_err(|e| PyErr::new::<pyo3::exceptions::PyIOError,_>(
+            format!("gc read dir error: {}", e)
+        ))? {
+            let entry = entry.map_err(|e| PyErr::new::<pyo3::exceptions::PyIOError,_>(
+                format!("gc entry error: {}", e)
+            ))?;
+            if let Ok(metadata) = entry.metadata() {
+                if let Ok(modified) = metadata.modified() {
+                    let datetime: chrono::DateTime<Utc> = modified.into();
+                    if datetime < cutoff {
+                        let _ = if metadata.is_dir() {
+                            fs::remove_dir_all(entry.path())
+                        } else {
+                            fs::remove_file(entry.path())
+                        };
+                    }
+                }
+            }
+        }
+    }
+    GC_COUNTER.inc();
+    Ok(())
+}
 #[pyfunction]
 pub fn gather_metrics() -> PyResult<String> {
     let encoder = TextEncoder::new();

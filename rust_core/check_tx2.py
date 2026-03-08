@@ -1,11 +1,17 @@
-import os, sys, glob, shutil, tempfile, pathlib
+#!/usr/bin/env python3
+"""Test the transaction mechanism in rust_core."""
+import os
+import sys
+import glob
+import shutil
+import tempfile
+import pathlib
+import rust_core
 
 sys.path.insert(0, os.path.join(os.getcwd(), 'target', 'debug'))
 for path in glob.glob(os.path.join(os.getcwd(), 'target', 'debug', '*.dll')):
     shutil.copyfile(path, path[:-4] + '.pyd')
     sys.path.insert(0, os.getcwd())
-
-import rust_core
 
 # simulate test
 base = pathlib.Path(tempfile.mkdtemp())

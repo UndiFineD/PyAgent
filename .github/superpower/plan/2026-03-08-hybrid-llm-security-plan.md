@@ -264,6 +264,42 @@ and monthly key rotation (zero‑trust/allow‑list model) with full memory‑sa
 
 ---
 
+## Implementation Completeness Register (2026-03-08)
+
+This section records current completion status against Tasks 1–15 in this plan.
+
+### Task-by-task status
+
+| Task | Status | Notes |
+|---|---|---|
+| 1 | ✅ Completed | Python roundtrip coverage exists in `rust_core/tests/security_core_test.py`. |
+| 2 | ✅ Completed | Rust crypto APIs are exposed and registered in `rust_core/src/security.rs`. |
+| 3 | ✅ Completed | Encryption/decryption implementation is present in `rust_core/src/security/crypto.rs` (AEAD + nonce prefix). |
+| 4 | ✅ Completed | Transaction rollback test exists in `rust_core/tests/security_core_test.py`. |
+| 5 | ✅ Completed | Transaction API functions implemented: `begin_transaction`, `commit_transaction`, `rollback_transaction`. |
+| 6 | ✅ Completed | Transaction test exercises on-disk file creation and rollback behavior. |
+| 7 | ✅ Completed | Rollback cleanup logic implemented and validated by tests. |
+| 8 | ✅ Completed | Python key-rotation test exists in `rust_core/tests/security_core_test.py`. |
+| 9 | ✅ Completed | Key versioning and rotation APIs implemented (`current_key_version`, `rotate_keys`). |
+| 10 | ✅ Completed | Rust unit tests added at `rust_core/src/security/crypto/crypto_tests.rs` (module form). |
+| 11 | ✅ Completed | Fresh verification run completed on 2026-03-08 (see evidence below). |
+| 12 | ◑ Partially completed (optional) | `rust_core/test_rust_core.py` was updated, but no explicit hardcoded pattern additions for security APIs were registered. |
+| 13 | ✅ Completed | Security API documented in `README.md`; Rust doc comments added for selected helpers. |
+| 14 | ✅ Completed | CI includes Rust tests in `.github/workflows/ci.yml` (`cargo test`). |
+| 15 | ⏳ Not completed | No `atomic.rs` (or equivalent explicit safety-net module) is present yet. |
+
+### Verification evidence (fresh)
+
+- Python integration tests: `python -m pytest -q tests/security_core_test.py` from `rust_core/` → **8 passed**.
+- Rust unit tests: `cargo test -- --test-threads=1` from `rust_core/` → **3 passed, 0 failed**.
+
+### Known caveats
+
+- Test workflow can create dated key backup files (`YYYY-MM-DD-keys.pub/.priv`) when key rotation runs; cleanup is not centralized for all paths.
+- Design roadmap items in the brainstorm document (e.g., AES-GCM fallback, external cryptography audit, broader benchmarking) remain roadmap work and are not marked complete by this register.
+
+---
+
 **Notes:**
 - Every Rust implementation step is preceded by a failing Python (or Rust) test, 
   fulfilling TDD discipline.

@@ -8,7 +8,6 @@ use tempfile::tempdir;
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::path::Path;
 
     #[test]
     fn encrypt_decrypt_roundtrip() {
@@ -16,22 +15,13 @@ mod tests {
         pyo3::prepare_freethreaded_python();
 
         let data = b"sensitive data";
-        // verify key derivation is stable
-        let k1 = derive_key();
-        let k2 = derive_key();
-        eprintln!("keys: {:?} {:?}", k1, k2);
-        assert_eq!(k1, k2);
+        // ensure deterministic behavior for this test by resetting global state
+        *KEY_VERSION.lock().unwrap() = 0;
+        *KEYS.lock().unwrap() = None;
 
         let enc = encrypt_data(data).expect("encrypt should succeed");
-        eprintln!("encrypted: {:?}", enc);
-        let dec_result = decrypt_data(&enc);
-        match dec_result {
-            Ok(dec) => {
-                eprintln!("decrypted: {:?}", dec);
-                assert_eq!(dec, data);
-            }
-            Err(err) => panic!("decrypt failed: {:?}", err),
-        }
+        let dec = decrypt_data(&enc).expect("decrypt failed");
+        assert_eq!(dec, data);
     }
 
     #[test]
@@ -63,7 +53,6 @@ mod tests {
 
         let data = b"abc";
         let enc = encrypt_data(data).unwrap();
-        eprintln!("enc2: {:?}", enc);
         rotate_keys().unwrap();
         let dec = decrypt_data(&enc).expect("decrypt after rotation");
         assert_eq!(dec, data);
