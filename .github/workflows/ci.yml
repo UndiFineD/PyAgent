@@ -42,9 +42,6 @@ jobs:
         run: pytest -q
 
       # build documentation to ensure no broken links or formatting errors
-      - name: Install mkdocs and plugins
-        run: |
-          pip install mkdocs mkdocs-material mkdocstrings
       - name: Build docs
         run: mkdocs build --strict --clean
 

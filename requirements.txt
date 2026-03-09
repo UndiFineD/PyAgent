@@ -78,6 +78,11 @@ yarl==1.22.0
 zipp==3.23.0
 zeroconf==0.148.0
 markdown
+mkdocs>=1.6
+mkdocs-material
+mkdocstrings
+mkdocstrings-python
+
 
 # Development, Testing & Build Tools
 build==1.4.0
