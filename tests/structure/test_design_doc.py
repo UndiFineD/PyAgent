@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Tests for the design document presence."""
 import os
 
 

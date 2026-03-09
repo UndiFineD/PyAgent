@@ -98,6 +98,10 @@ barrier for contributors and is a prerequisite for high‑confidence CI/CD.
 - `tests/conftest.py` will contain global fixtures (e.g. temporary
   `.agents/skills` directories, `ContextManager` instances).
 - Helper scripts under `scripts/` produce test fixtures and configure
+
+## Implementation Status
+
+Most of the infrastructure outlined above has now been implemented.  A `scripts/setup_tests.py` helper, comprehensive structure tests, and the context/skills/CORT packages exist.  CI is configured to run the suite and enforce coverage.
   environment variables used by tests (e.g. `TEST_LOG_LEVEL`).
 
 ## Notes

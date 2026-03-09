@@ -64,6 +64,15 @@ The swarm supports two complementary memory domains:
 Memory usage is included in the load metrics reported above; the scheduler
 considers both shared and local memory footprints when placing tasks.
 
+## Implementation Status
+
+This document currently serves as an architecture blueprint.  As of now no
+production code directly implements the full swarm registry, scheduler,
+or memory subsystems described above.  The only related components in the
+repository are the basic workflow engine and ContextManager/CORT packages
+(which form the foundation upon which a swarm could later be built).  Future
+phases will convert sections of this design into concrete plans and
+implementations.
 
 - **Swarm Dynamics**:
   - Dynamic allocation of agents based on workload demands

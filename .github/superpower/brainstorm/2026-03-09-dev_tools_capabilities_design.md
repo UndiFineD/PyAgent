@@ -58,3 +58,22 @@ By housing these scripts under `src/tools/` or `scripts/` with unit tests, the
 team can treat the development ecosystem as first‑class code.  Many of the
 above utilities will also be invoked by CI (e.g. SSL expiry check) so they
 need to be easily scriptable and have deterministic behavior.
+
+## Implementation Status
+
+A subset of the capabilities enumerated above has already been implemented:
+
+* Git & GitHub helpers are beginning to land in `src/tools/pm` (KPI/risk
+  email utilities) and the roadmap/roadmap CLI tools; these modules are
+  exercised by their own tests.
+* General-purpose bootstrappers reside under `src/roadmap` and `src/context_manager`
+  which were originally conceived as development utilities before being
+  promoted to core packages.
+* No FTP/SSH, SSL, or nginx-specific helpers have been written yet beyond the
+  generic scripts in `scripts/` (which are not network-aware).  Likewise,
+  netcalc, port forwarding, and polyglot bootstrappers remain on the future
+  work list.
+
+This list shows that the design is being followed in spirit: utilities are
+placed under `src/tools` and are testable, but many of the specific items
+remain to be created by the implementation plan that will follow.

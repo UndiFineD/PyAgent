@@ -145,3 +145,22 @@ already succeed if earlier tasks wrote files).
 
 Once tasks 1‑5 complete and all tests run green, the importer skeleton will be
 ready for incremental feature development against the more detailed design.
+
+## Implementation Status
+
+The core importer skeleton described above has already been implemented and
+verified by its unit tests:
+
+* `src/importer/config.py` with `parse_manifest` exists and is covered by
+  `tests/test_import_config.py`.
+* `src/importer/downloader.py` with the placeholder downloader is present and
+  `tests/test_downloader.py` passes.
+* `src/importer/describe.py` returns file metadata; `tests/test_describe.py`
+  confirms its behaviour.
+* `src/importer/compile.py` concatenates path values; validated by
+  `tests/test_compile.py`.
+* The end‑to‑end smoke test `tests/test_importer_flow.py` runs green using the
+  current stubs, demonstrating the basic flow is wired.
+
+With these files committed, the importer plan has been executed and the
+repository contains a working skeleton ready for further expansion.

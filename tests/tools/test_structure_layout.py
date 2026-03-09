@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Tests for the structure and layout of the tools directory."""
 import os
 
 

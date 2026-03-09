@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Tests for the metrics collector tool."""
 from pathlib import Path
 
 

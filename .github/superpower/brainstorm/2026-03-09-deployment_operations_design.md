@@ -196,6 +196,27 @@ jobs:
           terraform apply -auto-approve
 ```
 
+## Implementation Status
+
+The repository contains scaffolding that aligns with the early sections of this design:
+
+* A `Deployment/` directory with placeholders for development, staging, production,
+  and infrastructure environments is already part of the tree, matching the
+  environment structure diagram.
+* CI workflows (`ci.yml`, `pip-audit.yml`, and others) in `.github/workflows/`
+  demonstrate the lint, test, and deploy stages described under the automated
+  deployment workflow – these jobs currently run on this repo.
+* `scripts/setup_deployment.py` helps create the directory layout and has been
+  used during earlier tasks.
+* No actual Terraform or cloud provider configuration has been committed yet,
+  so the detailed provisioning steps remain future work.
+* The sample YAML pipeline snippet above appears verbatim in `ci.yml` with
+  slight variations (e.g. additional steps for coverage reporting), showing
+  that some of the example workflow is already active.
+
+In summary, foundational artifacts for deployment operations exist, but
+full infrastructure code and rollback automation still need to be implemented.
+
 ## Monitoring and Observability
 
 ### 1. System Monitoring

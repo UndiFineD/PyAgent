@@ -233,6 +233,10 @@ At present, no code exists; this file acts as a placeholder for research
 outcomes.  Once a topic moves to development, a new design/plan will be
 created and this document updated to link to it.
 
+## Implementation Status
+
+Empty package skeletons for `transport`, `memory`, `multimodal`, `rl`, and `speculation` were created under `src/`.  Corresponding placeholder tests exist and verified earlier plan execution.
+
 ## Notes
 
 This document can be referenced by architects when writing proposals or

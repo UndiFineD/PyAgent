@@ -38,6 +38,20 @@ Beyond KPIs, success is defined by meeting milestone acceptance criteria, mainta
 
 The intent is to maintain these documents in `project/` or `.github/` where they can be versioned alongside design artifacts.  None of the items involve programming changes, but developers may be asked to update scripts that generate reports or dashboards.
 
+To support automation we will build a small `src/tools/pm` package containing helper scripts and CLI entrypoints.  Example modules include:
+
+* `kpi.py` – functions to compute throughput, defect density, cycle time, and deployment frequency from CI logs and issue tracker exports.
+* `risk.py` – simple editor/serializer for the risk matrix (`project/risk.md`) with YAML/markdown interchange.
+* `email.py` – templates and a renderer for weekly status emails.
+
+Each tool will have unit tests under `tests/tools/test_pm_*.py` ensuring sample input produces expected output.  The implementation plan will flesh out those tests as the first TDD step.
+
+A companion `scripts/` directory may house simple utilities invoked by folder watchers or GitHub Actions (e.g. `scripts/generate_governance_templates.py`).  Templates for status emails, incident reports, and meeting agendas should reside under `project/templates/` and the script will copy them when a new milestone is created.
+
+CI workflows (`.github/workflows/pm.yml`) will run the PM tools daily or on demand to regenerate the dashboard, validate report formatting, and dispatch status emails (dry‑run mode).  A test will verify that the workflow file contains the expected steps.
+
+Wherever code is added, a corresponding test in the appropriate `tests/` subfolder will be written, following the pattern established by the earlier infrastructure tasks.
+
 ## Key Performance Indicators (KPIs)
 
 To measure progress and value we will track a small set of quantifiable KPIs, e.g.:
@@ -71,6 +85,22 @@ Clear, documented communication channels are essential:
 * **Documentation updates** – any design or plan change triggers a pull request; reviewers include engineering lead and at least one product manager.
 
 Templates for status emails, incident reports, and meeting agendas should be placed alongside the governance documents so they can be easily reused.
+
+## Implementation Considerations
+
+Even though the governance framework centers around documentation, an implementation plan will require several concrete deliverables:
+
+1. **PM tool package** (`src/tools/pm`) with CLI wrappers and core logic for computing KPIs, editing risk matrices, and rendering templates.  Tests are mandatory and will drive development.
+2. **Template directory** (`project/templates/`) containing boilerplate email/text documents; a generator script to instantiate them for new milestones.
+3. **CI workflow** (`.github/workflows/pm.yml`) with steps to execute the PM tools and validate their output; accompanied by a structure test similar to `tests/structure/*` used earlier.
+4. **Metadata files** (`project/milestones.md`, `project/risk.md`, etc.) initial stubs and specifications.
+5. **Sample dashboards** generated via scripts and optionally stored under `project/metrics/` with a README describing how to refresh them.
+
+These implementation notes will map directly to tasks in the upcoming plan, ensuring each code artifact is test‑driven and versioned.
+
+## Implementation Status
+
+Several components have been bootstrapped according to this design: a `src/tools/pm` package, generator scripts, metadata stubs in `project/`, and accompanying unit tests.  The governance CI workflow (`.github/workflows/pm.yml`) is in place and exercised by tests.
 
 ## 5W1H Summary
 

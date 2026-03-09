@@ -1,4 +1,5 @@
-
+#!/usr/bin/env python3
+"""Tests for the Deployment directory structure."""
 import os
 
 

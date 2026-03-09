@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Prioritization module for PyAgent."""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,5 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def score_feature(attrs):
+
+def score_feature(attrs) -> float:
+    """Calculate a priority score for a feature based on its attributes."""
     return attrs.get("impact", 0) / max(attrs.get("effort", 1), 1)

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Tests for the compile_diagrams script."""
 from pathlib import Path
 import subprocess
 
@@ -5,7 +7,7 @@ from typing import Any
 
 
 def test_compile_diagrams(tmp_path: Path, monkeypatch: Any) -> None:
-    """Test that the compile_diagrams script correctly 
+    """Test that the compile_diagrams script correctly
     processes .mmd files into .svg files.
     """
     # copy a simple diagram to the temp architecture directory

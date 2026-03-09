@@ -247,3 +247,7 @@ able to discover and load them at runtime.
 ## Notes
 
 These tasks are guiding artifacts, meant to be revisited periodically.  Implementation of features and performance improvements will be tracked separately once the roadmap is formalized.
+
+## Implementation Status
+
+Several pieces of this roadmap are already live: the `src/roadmap` modules with associated tests, the benchmarking infrastructure used by roadmap and testing plans, and the context/skill/CORT tooling discussed earlier.  Future work items will spawn their own plans as originally envisioned.
