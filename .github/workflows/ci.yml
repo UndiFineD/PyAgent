@@ -41,6 +41,9 @@ jobs:
       - name: Run Python tests
         run: pytest -q
 
+      - name: Run chat-specific tests
+        run: pytest tests/test_chat_* -q
+
       # build documentation to ensure no broken links or formatting errors
       - name: Build docs
         run: mkdocs build --strict --clean

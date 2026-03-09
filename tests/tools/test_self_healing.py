@@ -1,6 +1,8 @@
 from pathlib import Path
 
+
 def test_self_healing_detects(tmp_path: Path) -> None:
+    """The tools.self_heal module should be importable and its detect_misconfig function should return a dict."""
     from scripts.setup_structure import create_core_structure
     create_core_structure(str(tmp_path))
 

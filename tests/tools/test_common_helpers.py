@@ -1,7 +1,8 @@
 from pathlib import Path
 
 
-def test_common_helpers_importable(tmp_path: Path):
+def test_common_helpers_importable(tmp_path: Path) -> None:
+    """The tools.common module should be importable after setup."""
     # structure must exist for import path
     from scripts.setup_structure import create_core_structure
     create_core_structure(str(tmp_path))

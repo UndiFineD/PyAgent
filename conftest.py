@@ -20,6 +20,12 @@ from typing import Protocol, Any, IO, Optional, Union, cast
 
 import pytest
 
+# ensure src directory is on sys.path so pytest can import swarm modules
+root_dir = Path(__file__).resolve().parent
+src_dir = root_dir / "src"
+if str(src_dir) not in sys.path:
+    sys.path.insert(0, str(src_dir))
+
 
 # ---------------------------------------------------------------------------
 # typing protocols
@@ -455,9 +461,17 @@ class SessionManager:
                 line.strip() for line in result.stdout.splitlines() if line.strip()
             }
             new_changes = sorted(current_status - self._baseline_git_status)
-            if new_changes:
+            # if git status reports anything at all, mark failure; the baseline
+            # check avoids flagging pre-existing modifications, but we also
+            # guard against the odd test where baseline already contains the
+            # same entry (as happened in one of the unit tests).
+            if new_changes or result.stdout.strip():
                 print("\nERROR: tests altered the workspace files:\n")
-                print("\n".join(new_changes))
+                if new_changes:
+                    print("\n".join(new_changes))
+                else:
+                    # fall back to raw output when baseline masked the entry
+                    print(result.stdout)
                 cast(_SessionWithExitStatus, session).exitstatus = 1
 
 

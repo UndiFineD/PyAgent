@@ -1,6 +1,8 @@
 import os
 
-def test_governance_docs_missing(tmp_path, monkeypatch):
+
+def test_governance_docs_missing(tmp_path, monkeypatch) -> None:
+    """Before running the governance setup, the expected docs and directories should be absent."""
     # Ensure project directory is in workspace root
     root = os.path.abspath(os.path.join(os.getcwd(), "project"))
     # These files should not exist before initialization script

@@ -37,6 +37,23 @@ This document outlines the proposed community collaboration design for the PyAge
 | **Slack Channel** | Professional communication, project updates, team coordination |
 | **Mailing List** | Formal communication, announcements, community discussions |
 
+### 3. AI‑Human Chatrooms
+
+To blur the line between agents and contributors we host persistent chatrooms where both can participate. These rooms run on our internal chat infrastructure (e.g. Matrix server or custom web chat) with two kinds of participants:
+
+- **Project Rooms** – one room per active project/repository. Agents monitor PRs and issues, post summaries, run tests on demand, and suggest next steps. Humans drop in for status, ask questions, or seed ideas. The room archive forms a searchable log of agent decisions and community discussion.
+- **Personal Assistant Rooms** – each human developer gets a private room paired with their personal agent (e.g. `keimpe` ↔ `keimpe-pa`). The assistant agent tracks the human’s tasks, offers reminders, runs local proofs, and can escalate interesting findings to project rooms.
+
+Agents authenticate via service tokens. Humans use their GitHub account to join, with optional two-factor SSO. Rooms support threaded replies and can be configured to allow “agent-only” or “human-only” periods.
+
+Integration points:
+
+1. When a PR merges, the project room bot posts a digest and offers to run a regression check on request.
+2. Agents may raise a topic in the personal room when they detect stale branches, failing tests, or new design patterns.
+3. Humans can command their assistant (`@keimpe-pa please investigate issue #123`) which queues a task in the swarm system.
+
+These chatrooms promote transparency: decisions, experiments and chaotic brainstorming are visible, yet the agents perform the heavy lifting and keep state.
+
 ### 2. Secondary Communication Channels
 
 | Channel | Purpose |

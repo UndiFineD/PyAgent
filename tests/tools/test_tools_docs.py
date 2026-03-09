@@ -1,3 +1,5 @@
+
+
 def test_tools_document_exist() -> None:
     """`docs/tools.md` should exist and begin with a header."""
     import os

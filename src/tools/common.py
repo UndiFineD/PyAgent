@@ -13,6 +13,7 @@ def load_config(path: str) -> Dict[str, Any]:
 
 
 def get_logger(name: str) -> logging.Logger:
+    """Get a logger instance with the given name, configured to output to console."""
     logger = logging.getLogger(name)
     if not logger.handlers:
         handler = logging.StreamHandler()

@@ -58,6 +58,7 @@ collection_log.txt
 *.txt
 !README.md
 !requirements.txt
+!requirements-ci.txt
 !prompt.txt
 
 # Scratch runtime artifacts (do not commit runtime manifests or shards)
