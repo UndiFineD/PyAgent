@@ -158,3 +158,25 @@ logs, and performance benchmarks.
 
 Once the plan is running green, commit the new files and push to the
 repository.
+
+## Implementation Status
+
+All six roadmap tasks described above have already been carried out and the
+corresponding code checked in:
+
+* `src/roadmap/vision.py` provides a vision template; `tests/test_vision_template.py`
+  passes.
+* `src/roadmap/milestones.py` generates milestone documents; covered by
+  `tests/test_milestone_generator.py`.
+* `src/roadmap/prioritization.py` contains a simple scoring function; the
+  prioritization test passes.
+* `src/roadmap/innovation.py` records experiments to JSON and is exercised by
+  `tests/test_innovation_tracker.py`.
+* Benchmark scaffolding exists in `src/benchmarks/simple.py` and its test is
+  green.
+* A CLI driver `src/roadmap/cli.py` implements `generate()` and is verified
+  by `tests/test_roadmap_cli.py`.
+
+With these utilities and their tests in place, the future roadmap plan has
+already produced a live set of artifacts and can be extended in later
+phases.

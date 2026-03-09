@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Tests for the self-healing module in the tools directory."""
 from pathlib import Path
 
 

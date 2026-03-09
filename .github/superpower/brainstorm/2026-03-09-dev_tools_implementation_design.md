@@ -16,3 +16,20 @@
 5. Use the `scripts/setup_structure.py` approach to create any supporting directories (e.g. `src/tools`, `docs/`).
 
 With these details in place the design is ready for conversion into an implementation plan.
+
+## Implementation Status
+
+Several implementation considerations have already been addressed in the
+current repo state:
+
+* Testing conventions are active; utility tests live under `tests/tools/` and
+  are executed by CI (e.g. the PM package tests and context/roadmap tests).
+* `docs/tools.md` has been drafted (see `docs/tools.md`) listing available
+  utilities and usage examples, fulfilling the documentation requirement.
+* Shared helpers such as simple logging functions and config readers existed
+  earlier in `src/tools/` and are imported by scripts in `scripts/`.
+* Dependencies are limited to the standard library plus a few dev packages
+  already listed in `requirements.txt` and `requirements-ci.txt`.
+
+Security and versioning guidelines are still aspirational, but the basic
+modularity and CI integration goals have been met by the work done so far.

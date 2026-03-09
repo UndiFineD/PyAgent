@@ -180,6 +180,26 @@ These chatrooms promote transparency: decisions, experiments and chaotic brainst
 - Voting mechanisms are used for community-driven decisions
 - Escalation paths are defined for unresolved disputes
 
+## Implementation Status
+
+Most of the collaboration mechanisms described above are already
+supported by the existing GitHub-centric workflow:
+
+* GitHub Issues and Pull Requests serve as the primary channels; the
+  repository has issue templates and a `.github/` configuration for labels
+  and PR guidelines.
+* `CONTRIBUTING.md` at the root codifies the contribution workflow and review
+  process.
+* A Discord server and Slack channel are referenced in the docs (though the
+  actual chat infrastructure is external to this repo).
+* No specialized chatbots or AI‑human chatrooms have been deployed yet; the
+  system relies primarily on GitHub for transparent discussions.
+* Community events and engagement strategies are conceptual; only the
+  `docs/onboarding.md` file currently provides guidance to new contributors.
+
+Thus the foundational GitHub-based collaboration is in place, but the more
+advanced AI‑assisted chatroom and plugin ideas remain to be built.
+
 ### 2. Conflict Resolution
 
 - Clear conflict resolution procedures are established

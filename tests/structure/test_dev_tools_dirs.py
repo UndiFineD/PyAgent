@@ -1,4 +1,5 @@
-
+#!/usr/bin/env python3
+"""Tests for the development tools directory structure."""
 from pathlib import Path
 
 

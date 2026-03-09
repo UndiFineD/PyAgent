@@ -100,4 +100,19 @@ Once these tasks are complete the repository will contain working
 context‑management and skill‑registration libraries with tests guarding the
 basic behaviours referenced in the roadmap design.
 
+## Implementation Status
+
+The context manager and skills registry packages have already been
+implemented and are exercised by unit tests:
+
+* `tests/test_context_manager.py` verifies basic push/snapshot behaviour and
+  windowing logic, and passes against `src/context_manager/__init__.py`.
+* `tests/test_skills_registry.py` confirms that YAML files under
+  `.agents/skills` are discovered; the registry in `src/skills_registry/__init__.py`
+  satisfies the test.
+* `tests/test_system_integration.py` imports both modules together, which also
+  succeeds.
+
+All of the plan’s numbered tasks have been executed and the code is committed.
+
 After all tests pass, commit the new modules and tests.

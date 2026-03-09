@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Workflow engine for processing tasks."""
 import asyncio
 from typing import Optional
 from .task import Task

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Tests for important files in the project."""
 import os
 
 

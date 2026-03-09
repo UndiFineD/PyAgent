@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Task scheduler module for PyAgent."""
 import heapq
 import time
 import uuid

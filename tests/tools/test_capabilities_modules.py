@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Tests for the capabilities modules in the tools directory."""
 import importlib.util
 import sys
 from pathlib import Path
@@ -18,6 +20,7 @@ MODULES = [
 
 
 def test_modules_importable(tmp_path: Path) -> None:
+    """Test that all capability modules can be imported and have expected functions."""
     # ensure project structure exists for import path
     from scripts.setup_structure import create_core_structure
 

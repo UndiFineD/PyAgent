@@ -174,6 +174,39 @@
 
 ---
 
+## Implementation Status
+
+Most of the TDD steps outlined below have already been executed and have
+corresponding Python implementation plus tests in the repository:
+
+* **Task 1 (ChatRoom model)** – `src/chat/models.py` now contains a
+  working `ChatRoom` class with `post` and `history` methods; the
+  accompanying unit test (`tests/test_chat_models.py`) passes.
+* **Task 2 (FastAPI endpoints)** – `src/chat/api.py` implements the
+  `/rooms` and `/rooms/{room}/messages` endpoints along with history
+  retrieval. Integration tests (`tests/test_chat_api.py`) exercise room
+  creation, posting, and retrieval successfully.
+* **Task 3 (MCP tool)** – `src/chat/mcp_tools.py` exports
+  `send_chat_message` (aliased `send_message_tool`), and the test
+  verifies the correct HTTP request is constructed via monkeypatching.
+* **Task 4 (Webhook handler)** – `src/github_app.py` provides a basic
+  `/webhook` endpoint used by `tests/test_github_app.py`, which currently
+  confirms payload reception.
+* **Task 5 (MCP posting integration)** – Covered in the same API test by
+  calling `send_message_tool` and asserting the expected network call.
+* **Task 6 (Personal rooms)** – Utility `create_personal_room` in
+  `src/chat/utils.py` is implemented and tested (`tests/test_chat_utils.py`).
+* **Task 7 (Metrics)** – A Prometheus counter is defined in
+  `chat/api.py` and its increment is verified via a dedicated assertion
+  in `tests/test_chat_api.py`.
+
+The CI configuration already runs the new chat tests as part of the
+standard suite (see `ci.yml`).
+
+With these building blocks in place, the remaining work described in
+later tasks (e.g. real GitHub App integration, Redis persistence,
+advanced agent hooks) can proceed more smoothly.
+
 This plan converts the chatroom design into a sequence of TDD steps. 
 After you review and approve, I’ll save this file 
 and hand off to superpower-execute for implementation.

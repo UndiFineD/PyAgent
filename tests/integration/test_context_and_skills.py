@@ -1,9 +1,12 @@
+#!/usr/bin/env python3
+"""Integration tests for context management and skills registry."""
 from context_manager import ContextManager
 from skills_registry import SkillsRegistry
 from cort import ChainOfThought
 
 
-def test_context_and_skills(tmp_path):
+def test_context_and_skills(tmp_path) -> None:
+    """Test the integration of ContextManager, SkillsRegistry, and ChainOfThought."""
     cm = ContextManager(max_tokens=5)
     assert hasattr(cm, "push")
     registry = SkillsRegistry(tmp_path / "skills")

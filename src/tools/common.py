@@ -1,5 +1,5 @@
+#!/usr/bin/env python3
 """Shared helper functions used by development utilities."""
-
 from typing import Any, Dict
 import json
 import logging

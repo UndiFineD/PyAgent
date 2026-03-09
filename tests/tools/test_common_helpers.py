@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Tests for common helper functions in the tools directory."""
 from pathlib import Path
 
 

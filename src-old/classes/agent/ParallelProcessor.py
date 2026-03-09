@@ -91,7 +91,6 @@ from typing import List, Callable, Any, Optional
 
 try:
     from tqdm import tqdm
-
     HAS_TQDM = True
 except ImportError:
     HAS_TQDM = False
@@ -101,6 +100,7 @@ class ParallelProcessor:
     """Handles concurrent and parallel execution of tasks across files."""
 
     def __init__(self, max_workers: int = 4) -> None:
+        """Initialize the ParallelProcessor with a maximum number of worker threads."""
         self.max_workers = max_workers
 
     def process_files_threaded(
@@ -110,13 +110,9 @@ class ParallelProcessor:
         results = []
         with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
             if HAS_TQDM:
-                results = list(
-                    tqdm(
-                        executor.map(worker_func, files),
-                        total=len(files),
-                        desc="Processing (Threads)",
-                    )
-                )
+                # Ensure tqdm is available before using it
+                mapped_results = executor.map(worker_func, files)
+                results = list(tqdm(mapped_results, total=len(files), desc="Processing (Threads)"))
             else:
                 results = list(executor.map(worker_func, files))
         return [r for r in results if r is not None]

@@ -80,6 +80,24 @@ in Markdown.
 
 By turning this design into a plan we ensure that documentation is treated as a
 first‑class deliverable instead of an afterthought.
+
+## Implementation Status
+
+Several of the “assets” already exist in the repository, although they were
+created manually rather than via the automated processes described above:
+
+* `README.md` and `CONTRIBUTING.md` are present at the project root and
+  contain up-to-date guidance; the changelog script `scripts/changelog.py`
+  also exists and is used to append release notes.
+* `docs/setup.md` and `docs/onboarding.md` provide installation and
+  onboarding instructions respectively.
+* A handful of Mermaid diagrams live under `docs/architecture/`, and they
+  render correctly when run through the helper script (see
+  `scripts/compile_diagrams.py`).
+
+No tests currently validate the presence or formatting of these files – that
+will be the focus of the implementation plan.  The auto‑generation and
+registry components described in the design remain to be built.
 ## Notes
 
 This file serves as the specification for the non-code artifacts; developers will create MkDocs config, Sphinx `conf.py`, or similar once implementation begins.

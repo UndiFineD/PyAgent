@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Milestones module for PyAgent."""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def create(path, items):
+
+def create(path, items) -> None:
+    """Create a markdown file at *path* with a list of *items* as milestones."""
     with open(path, "w", encoding="utf-8") as f:
         f.write("# Technology Roadmap\n\n")
         for item in items:

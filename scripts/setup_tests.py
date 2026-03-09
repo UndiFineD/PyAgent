@@ -1,7 +1,10 @@
+#!/usr/bin/env python3
+"""Setup script for test environment."""
 import os
 
 
-def create_test_structure(root: str):
+def create_test_structure(root: str) -> None:
+    """Create a basic test structure under the given root."""
     base = os.path.join(root, "tests")
     for sub in ["core", "agents"]:
         os.makedirs(os.path.join(base, sub), exist_ok=True)

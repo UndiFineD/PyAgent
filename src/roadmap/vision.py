@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Vision module for PyAgent."""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,5 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def get_template():
+
+def get_template() -> str:
+    """Return a markdown template for the project vision statement."""
     return "# Vision\n\n<describe project vision here>\n"

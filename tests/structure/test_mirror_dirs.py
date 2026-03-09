@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Tests for the mirror directories in the tests structure."""
 
 
 def test_mirror_dirs_initial(tmp_path) -> None:

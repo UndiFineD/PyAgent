@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Tests for configuration files in the project."""
 import os
 
 
