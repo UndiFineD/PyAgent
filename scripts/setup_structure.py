@@ -25,6 +25,8 @@ def create_core_structure(root: str) -> None:
         "project/release",
         "project/scripts-old",
         "project/temp_output",
+        "src/tools",
+        "docs",
     ]
     for p in paths:
         os.makedirs(os.path.join(root, p), exist_ok=True)
@@ -37,6 +39,10 @@ def create_core_structure(root: str) -> None:
     ]:
         with open(os.path.join(root, "project", f), "a", encoding="utf-8"):
             pass
+    # dev tools README
+    tools_readme = os.path.join(root, "src", "tools", "README.md")
+    with open(tools_readme, "a", encoding="utf-8"):
+        pass
     cfg_dir = os.path.join(root, "project", "config")
     for f in ["pyproject.toml", ".gitignore", "environment.yaml"]:
         with open(os.path.join(cfg_dir, f), "a", encoding="utf-8"):
