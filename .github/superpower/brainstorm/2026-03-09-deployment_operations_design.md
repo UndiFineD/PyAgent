@@ -121,27 +121,80 @@ Deployment/
 
 ### 1. Continuous Integration/Continuous Deployment (CI/CD)
 
-- Automated build and deployment pipeline
-- Integration with version control system (Git)
-- Automated testing and validation
-- Deployment to target environment based on branch or tag
+- Automated build and deployment pipeline orchestrated by the chosen CI provider
+- Integration with Git; pipelines defined as code in `.github/workflows/`, `Jenkinsfile`, or similar
+- Test gates enforced at multiple stages (lint, unit, integration, security scanning)
+- Branch‑based deployment rules (e.g. `main` → staging, `release/*` → production)
+- Pull request validations that run the full suite and prevent merge on failure
 
 ### 2. Deployment Automation Tools
 
-- Jenkins: CI/CD automation platform
-- GitHub Actions: GitHub-native CI/CD automation
-- GitLab CI/CD: GitLab-native CI/CD automation
-- Argo CD: GitOps-based continuous deployment
+- **Jenkins**: self‑hosted pipeline agent with scripted/declarative pipelines;
+  used when complex orchestration or on‑premise runners are required
+- **GitHub Actions**: lightweight YAML workflows; favors open‑source and GitHub
+  integration; subsequent builds reuse the same matrix configuration used
+  by our `ci.yml` file
+- **GitLab CI/CD**: similar feature set when the repository is hosted on GitLab
+- **Argo CD**: GitOps continuous deployment for Kubernetes; watches a Git
+  repo of manifests and applies changes automatically
 
-### 3. Automated Deployment Workflow
+### 3. Automated Deployment Workflow (example using GitHub Actions)
 
-1. Code commit triggers pipeline execution
-2. Automated build process compiles code and creates executable
-3. Automated testing suite runs unit, integration, and end-to-end tests
-4. Test results are analyzed and pipeline continues if all tests pass
-5. Deployment to target environment is initiated
-6. Post-deployment validation checks are performed
-7. Deployment status is reported and pipeline completes
+1. **Commit / PR**: developer pushes code or opens a PR; workflow `ci.yml`
+   triggers on `push` and `pull_request` events.
+2. **Lint & Build**: actions run `flake8`/`black`, `mypy`, and build
+   `python -m build` to ensure packaging succeeds.
+3. **Unit tests**: `pytest src/core tests/unit` runs with coverage; failures
+   set `continue-on-error: false` to stop the pipeline.
+4. **Integration tests**: a separate job spins up required services (via
+   `docker-compose`) and runs `pytest tests/integration` in an ephemeral
+   environment.
+5. **Security/fuzz testing**: run `bandit`, `safety check`, or fuzz tests
+   (e.g. `pytest --runxfail security`).
+6. **Release build**: upon merge to `main`, package wheels are built and
+   uploaded to an internal registry or PyPI test.
+7. **Deployment job**: latest artifact is deployed to `development` using
+   `terraform apply` (invoked via workflow step); tagging the commit with
+   `staging` triggers deployment to staging, while `v*` tags trigger
+   production rollout.
+8. **Post‑deployment checks**: the workflow polls a health‑check endpoint and
+   runs smoke tests; any failure triggers an automatic rollback job.
+9. **Notifications**: results are reported to Slack/GitHub PR and a summary
+   comment is posted.
+
+_Pipeline snippet example (GitHub Actions):_
+```yaml
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Install dev dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install -r require-test.txt
+      - name: Lint
+        run: make lint
+      - name: Run unit tests
+        run: pytest tests/unit
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+  deploy:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Terraform Apply
+        run: |
+          cd infrastructure/terraform
+          terraform init
+          terraform apply -auto-approve
+```
 
 ## Monitoring and Observability
 

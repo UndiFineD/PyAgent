@@ -1,7 +1,7 @@
 # Core Project Structure Implementation Plan
 
 **Goal:**
-Create the directory hierarchy and starter files defined in the core project structure design document, with tests ensuring the layout exists and can be recreated.
+Create the directory hierarchy and starter files defined in the core project structure design document, with tests ensuring the layout exists and can be recreated.  Note that the repository root is `C:\dev\PyAgent`; the `project/` folder is a metadata area used by the design/tests rather than the actual source root (which remains under `src/`).
 
 **Architecture:**
 - Python test suite under `tests/structure/` to verify directories and files.
@@ -20,7 +20,8 @@ Python 3.11, `pytest`, standard library filesystem operations (`os`).
   ```python
   import os
 
-  def test_root_project_dir_exists(tmp_path):
+  def test_project_subdir_absent(tmp_path):
+      # the 'project' metadata folder should not exist initially
       root = tmp_path / "project"
       assert not root.exists()
   ```

@@ -8,6 +8,8 @@ This document outlines the proposed core project structure for the PyAgent syste
 
 ### Root Project Directory
 
+The repository root is `C:\dev\PyAgent` (not `project/`).  The `project/` subdirectory is a **metadata area** containing documentation, templates and configuration related to managing the PyAgent project; it does *not* house the application source.  The bulk of runnable code remains under `src/`.
+
 ```
 project/
 ```

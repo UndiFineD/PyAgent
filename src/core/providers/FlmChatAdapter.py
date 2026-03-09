@@ -45,6 +45,7 @@ class _ChatClient(Protocol):
 class _ClientProtocol(Protocol):
     """Protocol for the FLM client, which must provide a chat interface with completions."""
     chat: _ChatClient
+    models: Any
 
 
 ToolExecutor = Callable[[Any], str]
@@ -59,7 +60,10 @@ class FlmChatAdapter:
 
     def _create_client(self) -> _ClientProtocol:
         """Create a new FLM client instance using the provided factory and configuration."""
-        return self.client_factory(base_url=self.config.base_url, api_key=self.api_key)
+        return self.client_factory(
+            base_url=self.config.base_url,
+            api_key=self.api_key
+        )
 
     def check_endpoint_available(self) -> None:
         """Validate that FLM endpoint is reachable via model-list probing."""
