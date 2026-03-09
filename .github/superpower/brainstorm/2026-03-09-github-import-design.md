@@ -1,27 +1,140 @@
 # GitHub Import System Architecture
 
 ## Overview
-A GitHub import system that processes lines from `user/import/github.md` 
-to download repositories into `.external/github/<user>/<repository>/` 
-and generate architecture documents with detailed file descriptions.
+A GitHub import system that processes lines from `user/import/github.md` to
+download repositories into `.external/github/<user>/<repository>/` and generate
+architecture documents with detailed file descriptions.  This infrastructure
+is intended to bootstrap automated codebase analysis for onboarding,
+compliance audits, and research projects.
+
+The following sections capture motivation, candidate approaches, evaluation
+criteria, and risks for each major subsystem.  Once a direction is chosen, a
+separate implementation plan can be written using the TDD framework.
 
 ## System Components
 
 ### 1. Import Configuration Parser
-A component that reads and parses the `user/import/github.md` file 
-to extract repository lines in the format `user/repository`.
+
+**Motivation:** Provide a human‑editible manifest of repositories to import
+so that engineers or automated processes can control the scope without writing
+code.
+
+**Candidate approaches:**
+
+1. Simple line‑based parser (current design).
+2. YAML or TOML manifest with metadata (version, tags, include/exclude).
+3. Web UI backed by a service that stores the list and issues imports via API.
+
+**Success criteria:**
+
+* Parser tolerates blank lines and comments.
+* Can reload the configuration without restarting the service.
+* Emits structured events (`RepoAdded`, `RepoRemoved`) for downstream
+  subscribers.
+
+**Dependencies/Mapping:**
+
+- `src/importer/config.py` (new module).
+- Uses standard library `pathlib` & `re` or `toml` if YAML option chosen.
+- Hooked into a watcher (watchdog) when file changes.
+
+**Risks & Questions:**
+
+* Should the parser validate that the repository exists on GitHub?
+* How to handle authentication tokens for private repos?
+
+---
 
 ### 2. Repository Downloader
-A component that downloads each identified GitHub repository 
-to the designated directory structure: `.external/github/<user>/<repository>/`.
+
+**Motivation:** Retrieve a local copy of each repository to enable offline
+analysis and avoid rate‑limit issues when repeatedly querying GitHub.
+
+**Candidate approaches:**
+
+1. `git clone` with depth=1 for minimal history.
+2. Use the GitHub ZIP download API and unpack locally.
+3. Leverage `gh` CLI for cloning and authentication.
+
+**Success criteria:**
+
+* Cloning finishes within 30 s for repositories <100 MB.
+* Downloads are resumable and idempotent (re‑running does not redownload
+  unchanged commits).
+* Handles both public and private repos via token.
+
+**Dependencies/Mapping:**
+
+- `src/importer/downloader.py`.
+- Needs Git executable or HTTP client (requests) if using ZIP API.
+- Should report progress events for UI/monitoring.
+
+**Risks & Questions:**
+
+* Handling large monorepos that exceed disk quotas.
+* Dealing with submodules or LFS objects.
+
+---
 
 ### 3. File Descriptor Generator
-A component that creates detailed description files (`*.desc.md`) 
-for every file in every directory of the downloaded repository.
+
+**Motivation:** Produce machine‑readable summaries of every file to accelerate
+search, auditing, and architecture extraction without reading the entire
+source code each time.
+
+**Candidate approaches:**
+
+1. Walk the filesystem and compute metadata (size, mtime) plus first/last
+   lines for context.
+2. Use a language parser (tree‑sitter) to capture top‑level declarations.
+3. Generate metadata in JSON instead of Markdown for easier consumption by
+   other tools (the `.desc.md` format is human‑friendly but verbose).
+
+**Success criteria:**
+
+* Descriptor generation completes within 5 s for a 500‑file repo.
+* Contains enough information that a later architecture compiler can operate
+  purely on descriptors.
+
+**Dependencies/Mapping:**
+
+- `src/importer/describe.py`.
+- Optional dependency on `tree_sitter` or `pygments` for language heuristics.
+
+**Risks & Questions:**
+
+* Descriptor explosion if binary files are included (should be skipped).
+* Keeping descriptors in sync when the repo is updated.
+
+---
 
 ### 4. Architecture Document Compiler
-A component that combines all the file description content from `*.desc.md` files 
-into a single comprehensive architecture document (`architecture.md`).
+
+**Motivation:** Aggregate individual file descriptions into a single
+navigable document for humans and tools to quickly understand a codebase’s
+structure.
+
+**Candidate approaches:**
+
+1. Concatenate `*.desc.md` files with a generated table of contents.
+2. Produce a separate `architecture.json` that includes the same information
+   but structured; render Markdown from it when needed.
+3. Build a small static site generator that creates browsable HTML docs.
+
+**Success criteria:**
+
+* The compiled `architecture.md` clearly mirrors the repository hierarchy.
+* Compilation is incremental: only changed descriptors are reprocessed.
+
+**Dependencies/Mapping:**
+
+- `src/importer/compile.py`.
+- May reuse the same Markdown template engine used by docs elsewhere.
+
+**Risks & Questions:**
+
+* Dealing with paths that contain characters invalid in Markdown titles.
+* Size of the final document for very large repos (could exceed editors’ limits).
 
 ## Workflow
 
