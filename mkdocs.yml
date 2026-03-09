@@ -1,0 +1,13 @@
+site_name: PyAgent
+
+nav:
+  - Home: index.md
+  - API:
+      - Reference: api/index.md
+
+plugins:
+  - search
+  - mkdocstrings
+
+extra:
+  version: "0.1.0"

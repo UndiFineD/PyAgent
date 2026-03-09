@@ -41,6 +41,13 @@ jobs:
       - name: Run Python tests
         run: pytest -q
 
+      # build documentation to ensure no broken links or formatting errors
+      - name: Install mkdocs and plugins
+        run: |
+          pip install mkdocs mkdocs-material mkdocstrings
+      - name: Build docs
+        run: mkdocs build --strict --clean
+
       - name: Set up Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
