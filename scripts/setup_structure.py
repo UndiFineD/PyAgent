@@ -26,6 +26,7 @@ def create_core_structure(root: str) -> None:
         "project/scripts-old",
         "project/temp_output",
         "src/tools",
+        "src/tools/plugins",
         "docs",
     ]
     for p in paths:
