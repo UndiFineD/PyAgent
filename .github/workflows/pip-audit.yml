@@ -34,11 +34,6 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install pip-audit
 
-      - name: Build CI requirements files
-        run: |
-          grep -vE '^win32_setctime==' requirements.txt > requirements-ci.txt
-          grep -vE '^win32_setctime==' docs/architecture/requirements.txt > docs-architecture-requirements-ci.txt
-
       - name: Run pip-audit
         run: |
-          python -m pip_audit -r requirements-ci.txt -r docs-architecture-requirements-ci.txt
+          python -m pip_audit --disable-pip --no-deps -r requirements-ci.txt -r docs/architecture/requirements.txt
