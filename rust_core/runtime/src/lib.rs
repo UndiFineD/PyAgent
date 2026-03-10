@@ -1,4 +1,5 @@
 use pyo3::prelude::*;
+use pyo3::types::PyModule;
 use std::path::PathBuf;
 
 fn get_runtime() -> &'static tokio::runtime::Runtime {
@@ -19,7 +20,7 @@ fn _shutdown_runtime() -> PyResult<()> {
 }
 
 #[pymodule]
-fn runtime(py: Python, m: &PyModule) -> PyResult<()> {
+fn runtime(py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(spawn_task, m)?)?;
     m.add_function(wrap_pyfunction!(set_timeout, m)?)?;
     m.add_function(wrap_pyfunction!(create_queue, m)?)?;
@@ -47,7 +48,7 @@ mod tests {
 }
 
 #[pyfunction]
-fn spawn_task(py_coro: PyObject) -> PyResult<()> {
+fn spawn_task(py_coro: Py<PyAny>) -> PyResult<()> {
     // temporary implementation: schedule on Python's asyncio event loop
     Python::with_gil(|py| {
         let asyncio = py.import("asyncio")?;
@@ -58,7 +59,7 @@ fn spawn_task(py_coro: PyObject) -> PyResult<()> {
 }
 
 #[pyfunction]
-fn set_timeout(ms: u64, callback: PyObject) -> PyResult<()> {
+fn set_timeout(ms: u64, callback: Py<PyAny>) -> PyResult<()> {
     Python::with_gil(|py| {
         let asyncio = py.import("asyncio")?;
         let loop_obj = asyncio.call_method0("get_event_loop")?;
@@ -70,7 +71,7 @@ fn set_timeout(ms: u64, callback: PyObject) -> PyResult<()> {
 }
 
 #[pyfunction]
-fn create_queue(py: Python) -> PyResult<(PyObject, PyObject)> {
+fn create_queue(py: Python<'_>) -> PyResult<(Py<PyAny>, Py<PyAny>)> {
     // For simplicity we defer to Python's own asyncio.Queue rather than
     // reimplementing a channel in Rust.  This avoids touching the Tokio
     // runtime entirely and keeps the binding lightweight.  The queue plus its
