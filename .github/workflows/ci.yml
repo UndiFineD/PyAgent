@@ -40,6 +40,11 @@ jobs:
           pip install maturin
           maturin develop --release
 
+      - name: Install maturin & build runtime extension
+        run: |
+          pip install maturin
+          maturin develop --release
+
       - name: Run Python tests
         run: pytest -q
 
