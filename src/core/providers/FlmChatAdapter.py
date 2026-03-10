@@ -20,7 +20,7 @@ FLM stands for Fastflow Language Model.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Callable, Protocol
+from typing import Any, Callable, Protocol, cast
 
 from openai import OpenAI
 
@@ -48,7 +48,29 @@ class _ClientProtocol(Protocol):
     models: Any
 
 
-ToolExecutor = Callable[[Any], str]
+class _ClientFactory(Protocol):
+    """Protocol for FLM/OpenAI-compatible client factories."""
+
+    def __call__(self, *, base_url: str, api_key: str) -> _ClientProtocol:
+        """Create a protocol-compatible FLM client instance."""
+
+
+class _ToolFunctionProtocol(Protocol):
+    """Protocol for function payloads attached to tool calls."""
+
+    name: str
+    arguments: str | None
+
+
+class _ToolCallProtocol(Protocol):
+    """Protocol for assistant tool calls returned by chat completions."""
+
+    id: str
+    type: str
+    function: _ToolFunctionProtocol | None
+
+
+ToolExecutor = Callable[[_ToolCallProtocol], str]
 
 
 @dataclass
@@ -56,14 +78,15 @@ class FlmChatAdapter:
     """Adapter for Fastflow chat completion interactions."""
     config: FlmProviderConfig
     api_key: str = "dummy"
-    client_factory: Callable[..., Any] = OpenAI
+    client_factory: _ClientFactory = cast(_ClientFactory, OpenAI)
 
     def _create_client(self) -> _ClientProtocol:
         """Create a new FLM client instance using the provided factory and configuration."""
-        return self.client_factory(
+        client = self.client_factory(
             base_url=self.config.base_url,
-            api_key=self.api_key
+            api_key=self.api_key,
         )
+        return client
 
     def check_endpoint_available(self) -> None:
         """Validate that FLM endpoint is reachable via model-list probing."""
@@ -144,8 +167,11 @@ class FlmChatAdapter:
 
             choice = response.choices[0]
             assistant_message = choice.message
-            tool_calls = assistant_message.tool_calls or []
 
+            tool_calls = cast(
+                list[_ToolCallProtocol],
+                getattr(assistant_message, "tool_calls", None) or [],
+            )
             if not tool_calls:
                 return assistant_message.content or ""
 

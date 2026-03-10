@@ -118,16 +118,121 @@ pub fn calculate_mel_features_rust(
     n_fft: usize,
     hop_length: usize,
 ) -> Vec<Vec<f32>> {
-    // Simplified specific implementation or placeholder
-    if samples.len() < n_fft { return Vec::new(); }
+    if samples.len() < n_fft || n_fft == 0 || hop_length == 0 || n_mels == 0 {
+        return Vec::new();
+    }
     
     let num_frames = (samples.len() - n_fft) / hop_length + 1;
     let mut mels = Vec::with_capacity(num_frames);
-    
-    for _ in 0..num_frames {
-        let frame = vec![0.0f32; n_mels];
-        // TODO: Implement FFT and Mel filterbank application
-        mels.push(frame); 
+
+    let sample_rate = _sample_rate.max(1) as f32;
+    let n_freq_bins = n_fft / 2 + 1;
+
+    let hann_window: Vec<f32> = if n_fft == 1 {
+        vec![1.0]
+    } else {
+        (0..n_fft)
+            .map(|i| {
+                let phase = (2.0 * PI * i as f32) / (n_fft as f32 - 1.0);
+                0.5 - 0.5 * phase.cos()
+            })
+            .collect()
+    };
+
+    let hz_to_mel = |hz: f32| 2595.0 * (1.0 + hz / 700.0).log10();
+    let mel_to_hz = |mel: f32| 700.0 * (10f32.powf(mel / 2595.0) - 1.0);
+
+    let mel_min = hz_to_mel(0.0);
+    let mel_max = hz_to_mel(sample_rate * 0.5);
+    let mel_step = (mel_max - mel_min) / (n_mels + 1) as f32;
+
+    let mut bin_points = Vec::with_capacity(n_mels + 2);
+    for i in 0..(n_mels + 2) {
+        let mel = mel_min + mel_step * i as f32;
+        let hz = mel_to_hz(mel);
+        let mut bin = ((n_fft + 1) as f32 * hz / sample_rate).floor() as usize;
+        if bin >= n_freq_bins {
+            bin = n_freq_bins - 1;
+        }
+        bin_points.push(bin);
+    }
+
+    let mut filterbank: Vec<Vec<(usize, f32)>> = Vec::with_capacity(n_mels);
+    for m in 1..=n_mels {
+        let left = bin_points[m - 1];
+        let mut center = bin_points[m];
+        let mut right = bin_points[m + 1];
+
+        if center <= left {
+            center = (left + 1).min(n_freq_bins - 1);
+        }
+        if right <= center {
+            right = (center + 1).min(n_freq_bins);
+        }
+
+        let mut weights = Vec::new();
+
+        if center > left {
+            let denom = (center - left) as f32;
+            for k in left..center {
+                if k < n_freq_bins {
+                    weights.push((k, (k - left) as f32 / denom));
+                }
+            }
+        }
+        if right > center {
+            let denom = (right - center) as f32;
+            for k in center..right {
+                if k < n_freq_bins {
+                    weights.push((k, (right - k) as f32 / denom));
+                }
+            }
+        }
+
+        filterbank.push(weights);
+    }
+
+    let mut windowed = vec![0.0f32; n_fft];
+    let mut power_spectrum = vec![0.0f32; n_freq_bins];
+    let fft_norm = 1.0 / n_fft as f32;
+
+    for frame_idx in 0..num_frames {
+        let start = frame_idx * hop_length;
+        for i in 0..n_fft {
+            windowed[i] = samples[start + i] * hann_window[i];
+        }
+
+        for k in 0..n_freq_bins {
+            let omega = 2.0 * PI * k as f32 / n_fft as f32;
+            let cos_w = omega.cos();
+            let sin_w = omega.sin();
+
+            let mut c = 1.0f32;
+            let mut s = 0.0f32;
+            let mut re = 0.0f32;
+            let mut im = 0.0f32;
+
+            for &x in &windowed {
+                re += x * c;
+                im -= x * s;
+                let next_c = c * cos_w - s * sin_w;
+                s = s * cos_w + c * sin_w;
+                c = next_c;
+            }
+
+            power_spectrum[k] = (re * re + im * im) * fft_norm;
+        }
+
+        let mut frame = vec![0.0f32; n_mels];
+        for (m, band) in filterbank.iter().enumerate() {
+            let mut acc = 0.0f32;
+            for &(bin, w) in band {
+                acc += power_spectrum[bin] * w;
+            }
+            frame[m] = acc.max(1e-10).ln();
+        }
+
+        mels.push(frame);
     }
     mels
 }

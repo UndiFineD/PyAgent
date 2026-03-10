@@ -26,11 +26,14 @@ def test_tool_posts(monkeypatch) -> None:
         """Fake httpx.post that captures the URL and JSON payload."""
         captured['url'] = url
         captured['json'] = json
+
         class Dummy:
             status_code = 200
+
             def json(self_inner):
                 """Fake response JSON."""
                 return {"ok": True}
+
         return Dummy()
 
     monkeypatch.setattr("chat.mcp_tools.httpx.post", fake_post)

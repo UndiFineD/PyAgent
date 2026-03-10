@@ -15,21 +15,45 @@ fn analyze_code_quality_internal(
     content: &str,
 ) -> PyResult<HashMap<String, f64>> {
     let mut metrics: HashMap<String, f64> = HashMap::new();
-    
-    // Lines of code
-    let loc = content.lines().count() as f64;
-    metrics.insert("loc".to_string(), loc);
-    
-    // Comment ratio
-    let comment_lines = content.lines().filter(|l| l.trim().starts_with('#') || l.trim().starts_with("//")).count() as f64;
-    if loc > 0.0 {
-        metrics.insert("comment_ratio".to_string(), comment_lines / loc);
+
+    let mut loc: usize = 0;
+    let mut comment_lines: usize = 0;
+    let mut function_count: usize = 0;
+
+    for line in content.lines() {
+        loc += 1;
+        let trimmed = line.trim_start();
+        if trimmed.starts_with('#') || trimmed.starts_with("//") {
+            comment_lines += 1;
+        }
+        if trimmed.starts_with("def ") || trimmed.starts_with("fn ") {
+            function_count += 1;
+        }
+    }
+
+    let loc_f = loc as f64;
+    metrics.insert("loc".to_string(), loc_f);
+    if loc > 0 {
+        metrics.insert("comment_ratio".to_string(), comment_lines as f64 / loc_f);
     } else {
         metrics.insert("comment_ratio".to_string(), 0.0);
     }
-    
-    // TODO function count
-    let todo_count = content.to_lowercase().matches("todo").count() as f64;
+    metrics.insert("function_count".to_string(), function_count as f64);
+
+    let bytes = content.as_bytes();
+    let mut todo_hits: usize = 0;
+    if bytes.len() >= 4 {
+        for i in 0..=bytes.len() - 4 {
+            if bytes[i].eq_ignore_ascii_case(&b't')
+                && bytes[i + 1].eq_ignore_ascii_case(&b'o')
+                && bytes[i + 2].eq_ignore_ascii_case(&b'd')
+                && bytes[i + 3].eq_ignore_ascii_case(&b'o')
+            {
+                todo_hits += 1;
+            }
+        }
+    }
+    let todo_count = todo_hits as f64;
     metrics.insert("todo_count".to_string(), todo_count);
     
     Ok(metrics)
