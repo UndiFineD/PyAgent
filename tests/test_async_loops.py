@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Test that no synchronous loops are used in the src/ codebase."""
 import ast
 import pathlib
 import pytest
@@ -7,24 +9,29 @@ class LoopChecker(ast.NodeVisitor):
     """AST walker that flags any for/while loop inside a non-async function."""
 
     def __init__(self, path: pathlib.Path):
+        """Initialize with the file path for error reporting."""
         self.path = path
         self.errors: list[int] = []
 
     def visit(self, node):
+        """Override visit to set parent pointers for upward traversal."""
         # annotate parent pointers for upward traversal
         for child in ast.iter_child_nodes(node):
             child.parent = node  # type: ignore[attr-defined]
         super().visit(node)
 
     def visit_For(self, node: ast.For):
+        """Check for loops and record line number if in a sync function."""
         self._check_loop(node)
         self.generic_visit(node)
 
     def visit_While(self, node: ast.While):
+        """Check for loops and record line number if in a sync function."""
         self._check_loop(node)
         self.generic_visit(node)
 
     def _check_loop(self, node: ast.stmt) -> None:
+        """Check if the loop is inside a synchronous function and record error."""
         # climb until we hit a function definition or module
         ancestor = node
         while ancestor is not None and not isinstance(

@@ -44,6 +44,7 @@ mod attention;
 mod workspace;
 mod scheduling;
 mod distributed;
+mod formula;
 mod infrastructure {
     pub mod services {
         pub mod dev {
@@ -88,6 +89,7 @@ fn rust_core(m: &Bound<'_, PyModule>) -> PyResult<()> {
     workspace::register(m)?;
     scheduling::register(m)?;
     distributed::register(m)?;
+    m.add_function(pyo3::wrap_pyfunction!(formula::evaluate_formula, m)?)?;
     // Register the new fleet self-improvement module
     infrastructure::services::dev::scripts::run_fleet_self_improvement_rust::register_fleet_self_improvement(m)?;
     Ok(())

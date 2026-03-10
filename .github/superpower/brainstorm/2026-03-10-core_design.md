@@ -1,5 +1,6 @@
 # Async Runtime Update
-> **2026-03-10:** Project migrated to Node.js-like asynchronous runtime; synchronous loops are prohibited by automated tests.
+> **2026-03-10:** Project migrated to Node.js-like asynchronous runtime; 
+  synchronous loops are prohibited by automated tests.
 
 # Core Subsystem Design
 
@@ -49,13 +50,15 @@ the core philosophy:
 
 *Reuse guidelines text from `gemini.md` and examples from `src-old/core/base`.*
 
-Absolutely. Let's now **expand the plan** into a full, actionable, and well-structured implementation plan for the file:
+Absolutely. Let's now **expand the plan** into a full, actionable, 
+and well-structured implementation plan for the file:
 
 ```
 .github/superpower/brainstorm/design/core_design.md
 ```
 
-This file will serve as the **core design blueprint** for the PyAgent system — defining its architecture, key components, quality gates, and self-validation mechanisms.
+This file will serve as the **core design blueprint** for the PyAgent system 
+— defining its architecture, key components, quality gates, and self-validation mechanisms.
 
 We will ensure this document:
 - Clearly defines the **purpose, scope, and structure** of the core system.
@@ -69,15 +72,18 @@ We will ensure this document:
 ### `github/superpower/brainstorm/design/core_design.md`
 
 > **Title**: Core System Design & Quality Framework  
-> **Purpose**: Define the architecture, structure, quality gates, and self-validation mechanisms for the core of PyAgent.  
-> **Scope**: Covers the foundational components (runtime, agents, memory, task queue, observability) and their integration.  
+> **Purpose**: Define the architecture, structure, quality gates, 
+  and self-validation mechanisms for the core of PyAgent.  
+> **Scope**: Covers the foundational components 
+  (runtime, agents, memory, task queue, observability) and their integration.  
 > **Audience**: Architects, developers, QA engineers.  
 
 ---
 
 ### 1. Core System Architecture
 
-The core system is built as a **modular, composable, and observable** runtime that orchestrates agents, tasks, and memory.
+The core system is built as a **modular, composable, and observable** runtime 
+that orchestrates agents, tasks, and memory.
 
 #### Key Components
 
@@ -111,7 +117,8 @@ Every core component must pass the following **quality gates** before integratio
 
 ### 3. Self-Validation of Core System (Who Tests the Tester?)
 
-To ensure **the core system itself is reliable**, we implement a **self-validation mechanism** that runs on every merge.
+To ensure **the core system itself is reliable**,
+we implement a **self-validation mechanism** that runs on every merge.
 
 #### ✅ Self-Validation Suite (`test_core_quality.py`)
 
@@ -202,47 +209,60 @@ Would you like me to:
 
 ## Expanded Improvements (added 2026-03-10)
 
-Below are concrete improvements and prescriptive rules to include in the core design so implementers can produce CI-ready, safe, and performant core code.
+Below are concrete improvements and prescriptive rules to include in the core design 
+so implementers can produce CI-ready, safe, and performant core code.
 
 - Runtime rules & async patterns
-   - Allowed primitives: `asyncio` TaskGroup / Task, `asyncio` timeouts, and library-specific async clients only.
-   - Prohibit blocking calls on the event loop. Use `run_in_executor` adapters or move heavy CPU work to `rust_core`.
-   - Cancellation strategy: every long-running operation must accept a `CancellationToken`/timeout and cleanup resources.
+   - Allowed primitives: `asyncio` TaskGroup / Task, `asyncio` timeouts,
+     and library-specific async clients only.
+   - Prohibit blocking calls on the event loop. Use `run_in_executor` adapters
+     or move heavy CPU work to `rust_core`.
+   - Cancellation strategy: every long-running operation must accept
+     a `CancellationToken`/timeout and cleanup resources.
 
 - Public interface contracts
-   - Each Core must declare a minimal public API at the top of the file (docstring + typed signatures).
-   - Define a stable `CoreAPI` typed dataclass or Protocol for inputs and outputs where applicable.
+   - Each Core must declare a minimal public API at the top of the file
+     (docstring + typed signatures).
+   - Define a stable `CoreAPI` typed dataclass or Protocol for inputs
+     and outputs where applicable.
 
 - Plugin and registration model
-   - Implement a simple registry pattern: modules may register a `register_core(registry)` function which is called at startup.
+   - Implement a simple registry pattern: modules may register
+     a `register_core(registry)` function which is called at startup.
    - Plugins must declare capabilities and a semantic version string (major.minor.patch).
 
 - Transaction model
    - All state changes must go through `AgentStateManager` / `StorageTransaction` wrappers.
-   - Provide idempotency keys for externally-triggered operations; design compensating actions for non-idempotent flows.
+   - Provide idempotency keys for externally-triggered operations;
+     design compensating actions for non-idempotent flows.
 
 - Observability & SLOs
    - Each core component must emit metrics: request_count, request_duration_ms, error_count.
    - Use structured logs (JSON) with correlation IDs for request traces.
 
 - Security & secrets
-   - Secrets must be read via `SecretProvider` (Key Vault / environment fallback). No plaintext secrets in code.
+   - Secrets must be read via `SecretProvider` (Key Vault / environment fallback).
+     No plaintext secrets in code.
    - Audit logs for secret access and privilege escalation.
 
 - Backwards compatibility policy
    - Semantic versioning for cores; breaking changes require a deprecation window and migration guide.
 
 - Performance & benchmarking
-   - A standard harness in `rust_core/benchmarks` and `perf/` to measure Python vs Rust implementations.
-   - Thresholds defined for when to move logic to Rust (e.g., >5k ops/sec or >100ms median per operation).
+   - A standard harness in `rust_core/benchmarks` and `perf/`
+     to measure Python vs Rust implementations.
+   - Thresholds defined for when to move logic to Rust
+     (e.g., >5k ops/sec or >100ms median per operation).
 
 - CI quality gates (enforcement)
-   - Meta-tests (existence + content checks), ruff + mypy, and coverage per-module thresholds enforced in `quality.yml`.
+   - Meta-tests (existence + content checks), ruff + mypy,
+     and coverage per-module thresholds enforced in `quality.yml`.
 
 - Developer experience
    - Provide a `core/scaffold/` template with `__init__.py`, `core.py`, `tests/test_core.py`, and a sample `validate()`.
 
-These additions are now part of the reference design and can be used to generate PR templates, scaffolds, and CI gates.
+These additions are now part of the reference design
+and can be used to generate PR templates, scaffolds, and CI gates.
 
 ---
 

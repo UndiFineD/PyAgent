@@ -5,7 +5,6 @@ from dataclasses import dataclass, field
 from typing import Any, Dict
 
 
-@dataclass
 class TaskState(Enum):
     """Represents the state of a task in the workflow."""
     ACTIVE = "active"
@@ -33,5 +32,5 @@ def validate() -> None:
     t = Task(id="test")
     assert t.state == TaskState.ACTIVE
     t.transition(TaskState.COMPLETED)
-    if t.state != TaskState.COMPLETED:  # type: ignore[arg-type]
+    if t.state != TaskState.COMPLETED:
         raise AssertionError("state transition failed")

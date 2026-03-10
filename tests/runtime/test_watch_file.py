@@ -1,18 +1,22 @@
+#!/usr/bin/env python3
+"""Test the watch_file utility for monitoring file changes."""
 import asyncio
-import pytest
 from pathlib import Path
+import pytest
 
 from runtime_py import watch_file
 
 
 @pytest.mark.asyncio
 async def test_watch_file(tmp_path: Path) -> None:
+    """Test that watch_file detects changes to a file."""
     file = tmp_path / "foo.txt"
     file.write_text("initial")
 
     event = asyncio.Event()
 
     async def cb(_event_str: str) -> None:
+        """Callback for file change event."""
         # any notification from the watcher is sufficient for the test
         event.set()
 
