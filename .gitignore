@@ -65,7 +65,10 @@ collection_log.txt
 scratch/foreach_shards/
 
 # Rust
-rust_core/target/
+# Ignore all Cargo target directories. Some target artifacts were accidentally committed (large binaries); keep targets untracked.
+target/
+**/target/
+
 
 #__pycache__
 __pycache__
