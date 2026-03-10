@@ -173,7 +173,7 @@ python-dotenv==1.2.1
 python-multipart==0.0.22
 pytweening==1.2.0
 pytz==2025.2
-pywin32==311
+pywin32==311; platform_system == "Windows"
 PyYAML==6.0.3
 pyyaml_env_tag==1.1
 pyzmq==27.1.0
@@ -225,7 +225,7 @@ watchfiles==1.1.1
 websocket-client==1.9.0
 websockets==15.0.1
 wheel==0.46.3
-win32_setctime==1.2.0
+win32_setctime==1.2.0; platform_system == "Windows"
 yarl==1.22.0
 zeroconf==0.148.0
 zipp==3.23.0
