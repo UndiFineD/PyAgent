@@ -24,3 +24,5 @@ async def test_watch_file(tmp_path: Path) -> None:
     # modify the file and wait for callback
     file.write_text("changed")
     await asyncio.wait_for(event.wait(), timeout=1.0)
+    # ensure watcher triggered
+    assert event.is_set()

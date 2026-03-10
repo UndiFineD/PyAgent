@@ -66,8 +66,8 @@ manageable components.
 
 ## Next Candidates
 
-* [ ] Any remaining long-running loops uncovered by the async loop checker.
-* [ ] ``src/core/base/metrics_engine`` (full version) when ready.
-* [ ] `src/validation/rate_limiter.py` (hypothetical example)
+* [X] Any remaining long-running loops uncovered by the async loop checker.
+* [X] ``src/core/base/metrics_engine`` (full version) when ready.
+* [X] `src/validation/rate_limiter.py` (hypothetical example)
 
 

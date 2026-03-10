@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Core task and task state definitions for the workflow engine."""
 from enum import Enum
 from dataclasses import dataclass, field
 from typing import Any, Dict
@@ -24,3 +26,12 @@ class Task:
     def transition(self, new_state: TaskState) -> None:
         """Transition the task to a new state."""
         self.state = new_state
+
+
+def validate() -> None:
+    """Ensure Task and TaskState behave as expected for meta‑tests."""
+    t = Task(id="test")
+    assert t.state == TaskState.ACTIVE
+    t.transition(TaskState.COMPLETED)
+    if t.state != TaskState.COMPLETED:  # type: ignore[arg-type]
+        raise AssertionError("state transition failed")

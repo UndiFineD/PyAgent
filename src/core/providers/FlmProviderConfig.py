@@ -87,3 +87,20 @@ class FlmProviderConfig:
         if not path.startswith("/"):
             raise ValueError(f"FLM provider config '{key}' must start with '/'")
         return path
+
+
+def validate() -> None:
+    """Exercise the configuration parsing logic for the module.
+
+    Ensures `from_mapping` works with a minimal valid mapping.
+    """
+    _ = FlmProviderConfig.from_mapping(
+        {
+            "base_url": "http://localhost/",
+            "default_model": "mymodel",
+            "timeout": 5,
+            "max_retries": 1,
+            "health_path": "/health",
+            "chat_path": "/chat",
+        }
+    )

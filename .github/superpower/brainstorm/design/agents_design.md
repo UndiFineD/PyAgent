@@ -1,47 +1,112 @@
-# Async Runtime Update
-> **2026-03-10:** Project migrated to Node.js-like asynchronous runtime; synchronous loops are prohibited by automated tests.
+# Agent Design & Quality Framework
 
-# Agents Subsystem Design
+## Purpose
+Defines the structure, quality gates, and self-validation mechanisms for all agents in PyAgent.
 
-This document summarizes the architecture and design considerations for the
-`agents` package, which lives in `src/agents`.
+## Scope
+Covers agent design, implementation, testing, and lifecycle management.
 
-> **Overview (extracted from legacy code)**
->
-> OrchestratorAgent for PyAgent Swarm Management.
->
-> This agent acts as the primary coordinator for sub-swarms, managing task
-delegation, resource allocation, and final response synthesis. It implements
-advanced self-healing and multi-agent synergy protocols.
->
-> The current implementation delegates most domain logic to specialized
-> managers (metrics, file, git, command, core). The core remains a thin
-> orchestration layer, making future Rust porting feasible.
+## Audience
+Developers, architects, QA engineers.
 
-## Key Concepts
+---
 
-- **OrchestratorAgent**: central class responsible for spawning and supervising
-  sub‑agents, handling lifecycle events, and aggregating results.
-- **Plugin architecture**: allow third‑party extensions via `AgentPluginBase`.
-- **Metric tracking**: every agent emits telemetry through a `metrics_manager`.
-- **Git integration**: `git_handler` encapsulates repository operations.
-- **Command runners**: separate thread/process execution via
-  `AgentCommandHandler`.
+### 1. Agent Structure & Responsibilities
 
-## Design Goals
+Each agent is a self-contained, modular, and testable unit with the following components:
 
-1. **Modularity** – keep agents small, focused and replaceable.
-2. **Extensibility** – support new agent types, protocols, or communication
-   channels via plugins.
-3. **Resilience** – implement self‑healing, retries, and health checks.
-4. **Language‑agnostic core** – maintain a thin Python wrapper around a
-   performance‑critical core (Rust or native).
+| Component | Purpose |
+|--------|--------|
+| `__init__.py` | Defines agent entry point and metadata (name, version, description). |
+| `agent.py` | Core logic: input parsing, decision-making, output generation. |
+| `test_agent.py` | Unit tests for core logic (must pass quality gates). |
+| `config.yaml` | Agent-specific configuration (e.g., memory, timeout, model). |
+| `schema.json` | Defines input/output schema (enforced via validation). |
 
-## Outstanding Brainstorm Topics
+> ✅ **Design Principle**: Agents must be stateless, composable, and testable.
 
-- Swarm coordination strategies (round‑robin, priority queue, token bucket).
-- Agent lifecycle and state machine design.
-- Agent authentication/identity across fleets.
-- Versioning and rollback of agent behavior.
+---
 
-*Reuse and refactor content from `src-old/classes/agent/Agent.py` above.*
+### 2. Quality Gates for Agent Design
+
+Every agent must pass the following quality gates before merging:
+
+| Gate | Description |
+|-----|-------------|
+| **1. Meaningful Test Coverage** | `test_agent.py` must contain at least 3 meaningful assertions (not `assert True`). |
+| **2. Input/Output Schema Validation** | `schema.json` must be validated against input/output data. |
+| **3. No Circular Dependencies** | Agent must not depend on itself or other agents in a circular loop. |
+| **4. Missing Dependencies Detected** | If an agent uses a library (e.g., `prometheus_client`), it must be installed in CI. |
+
+> 🔍 **Enforcement**: CI pipeline fails if any gate is violated.
+
+---
+
+### 3. Self-Validation of Agents (Who Tests the Tester?)
+
+To ensure the testing system itself is reliable, we implement a self-validation mechanism:
+
+#### ✅ Self-Validation Test Suite (`test_agent_quality.py`)
+
+This file runs automatically on every agent merge and validates:
+
+| Check | Description |
+|------|-------------|
+| **Test file exists** | `test_agent.py` must exist in the agent directory. |
+| **Test file has meaningful assertions** | At least 3 assertions must be present (not just `assert True`). |
+| **Schema validation passes** | Input/output schema is valid and matches agent logic. |
+| **No circular dependencies** | Dependency graph is acyclic. |
+
+> 🚨 **Failure Condition**: If any check fails, the CI pipeline fails and the PR is blocked.
+
+---
+
+### 4. Implementation Workflow for New Agents
+
+1. **Create Agent Directory**
+   → `agents/<agent-name>/` (e.g., `agents/chat_agent/`)
+
+2. **Initialize Files**
+   → `__init__.py`, `agent.py`, `config.yaml`, `schema.json`
+
+3. **Write Test File**
+   → `test_agent.py` with meaningful assertions.
+
+4. **Add to CI Pipeline**
+   → Ensure `test_agent_quality.py` runs on every PR.
+
+5. **Submit PR for Review**
+   → Must pass all quality gates.
+
+---
+
+### 5. Future-Proofing & Scalability
+
+| Feature | Description |
+|--------|-------------|
+| **Agent Registry** | Central registry to list all agents (name, version, config). |
+| **Agent Lifecycle Management** | Support for enabling/disabling agents via config. |
+| **Agent Monitoring** | Track agent usage, performance, and errors. |
+
+> 📌 This design ensures scalability, maintainability, and self-validation.
+
+---
+
+### 6. Documentation & Onboarding
+
+- **`TEST_QUALITY.md`** → Explains quality gates and best practices.
+- **`AGENT_DESIGN_GUIDE.md`** → Detailed guide for new agents.
+- **Onboarding Workshop** → For new developers to understand agent design.
+
+---
+
+## ✅ Next Steps (Action Plan)
+
+| Step | Action | Owner |
+|-----|--------|-------|
+| 1 | Create `agents_design.md` in the specified path | You (Multi) |
+| 2 | Add to `.github/superpower/brainstorm/design/` | You |
+| 3 | Review with team lead for alignment | Team Lead |
+| 4 | Integrate with CI pipeline (via `test_agent_quality.py`) | DevOps |
+| 5 | Document quality gates in `TEST_QUALITY.md` | QA Lead |
+

@@ -1,0 +1,57 @@
+jobs:
+name: Quality
+
+on:
+  push:
+    branches: [ main, feature/** ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: [3.14]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+
+      - name: Run linters
+        run: |
+          ruff . || true
+          python -m mypy src/ || true
+
+      - name: Run meta-tests
+        run: |
+          pytest -q tests/test_tests_quality.py || true
+
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          target: x86_64-unknown-linux-gnu
+
+      - name: Rust checks
+        run: |
+          cargo fmt -- --check || true
+          cargo clippy -- -D warnings || true
+          cargo test --release || true

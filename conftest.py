@@ -461,18 +461,17 @@ class SessionManager:
                 line.strip() for line in result.stdout.splitlines() if line.strip()
             }
             new_changes = sorted(current_status - self._baseline_git_status)
-            # if git status reports anything at all, mark failure; the baseline
-            # check avoids flagging pre-existing modifications, but we also
-            # guard against the odd test where baseline already contains the
-            # same entry (as happened in one of the unit tests).
-            if new_changes or result.stdout.strip():
+            # if git status reports new changes compared to baseline, mark failure;
+            # baseline is intended to ignore pre-existing modifications.  Previously
+            # the check also failed whenever *any* git status output existed which
+            # triggered the workspace-mutation error even when nothing changed during
+            # the test run.
+            if new_changes:
                 print("\nERROR: tests altered the workspace files:\n")
-                if new_changes:
-                    print("\n".join(new_changes))
-                else:
-                    # fall back to raw output when baseline masked the entry
-                    print(result.stdout)
+                print("\n".join(new_changes))
                 cast(_SessionWithExitStatus, session).exitstatus = 1
+            # If there is git output but no new_changes, it means baseline already
+            # contained all entries; we assume tests didn't touch the workspace.
 
 
 # instantiate manager and expose hooks

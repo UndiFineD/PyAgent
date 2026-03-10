@@ -30,15 +30,21 @@ def test_session_finish_sets_exitstatus_when_git_dirty(
     """Verify session_finish sets exitstatus=1 when git status shows modifications."""
     _ = tmp_path
     _ = monkeypatch
-    mock_result = Mock()
-    mock_result.stdout = " M conftest.py\n"
+    # first call (during SessionManager init) returns clean status
+    mock_baseline = Mock()
+    mock_baseline.stdout = ""
+    # second call (during session_finish) shows a modification
+    mock_dirty = Mock()
+    mock_dirty.stdout = " M conftest.py\n"
 
-    mock_session = Mock()
-    mock_session.exitstatus = 0
-
-    with patch("subprocess.run", return_value=mock_result):
-        from conftest import _mgr
-        _mgr.session_finish(mock_session, 0)
+    with patch("subprocess.run", side_effect=[mock_baseline, mock_dirty]):
+        from conftest import SessionManager
+        mgr = SessionManager(tmp_path)
+        # simulate pytest_sessionstart hook to establish baseline
+        mgr.session_start(Mock())
+        mock_session = Mock()
+        mock_session.exitstatus = 0
+        mgr.session_finish(mock_session, 0)
         assert mock_session.exitstatus == 1, "exitstatus should be set to 1 when git shows changes"
 
 

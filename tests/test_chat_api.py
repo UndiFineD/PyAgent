@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Tests for the chat API."""
 from fastapi.testclient import TestClient
 
 # import the application under test
@@ -53,3 +55,25 @@ def test_metric_increment():
     client.post("/rooms", json={"name": "m2", "members": ["x"]})
     client.post("/rooms/m2/messages", json={"sender": "x", "text": "hey"})
     assert messages_counter._value.get() == 1
+
+
+def test_duplicate_room_fails() -> None:
+    """Creating a room with a name that already exists should return a 400 error."""
+    client = TestClient(app)
+    client.post("/rooms", json={"name": "dup", "members": []})
+    resp = client.post("/rooms", json={"name": "dup", "members": []})
+    assert resp.status_code == 400
+
+
+def test_post_to_missing_room() -> None:
+    """Posting a message to a room that doesn't exist should return a 404 error."""
+    client = TestClient(app)
+    resp = client.post("/rooms/nope/messages", json={"sender": "x", "text": "h"})
+    assert resp.status_code == 404
+
+
+def test_get_history_missing_room() -> None:
+    """Getting message history for a room that doesn't exist should return a 404 error."""
+    client = TestClient(app)
+    resp = client.get("/rooms/notfound/messages")
+    assert resp.status_code == 404
