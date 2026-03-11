@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/environment/__init__.description.md
 
 # __init__
 
-**File**: `src\core\base\environment\__init__.py`  
+**File**: `src\\core\base\\environment\\__init__.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 2 imports  
 **Lines**: 22  
@@ -42,7 +41,7 @@ Provides isolated execution environments for agents.
 
 # Improvements for __init__
 
-**File**: `src\core\base\environment\__init__.py`  
+**File**: `src\\core\base\\environment\\__init__.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 22 lines (small)  
 **Complexity**: 0 score (simple)

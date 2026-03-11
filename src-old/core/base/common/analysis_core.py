@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/analysis_core.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # you may not use this file except in compliance with the License.
@@ -61,8 +61,7 @@ except ImportError:
 
 
 class AnalysisCore:
-    """
-    Standardized tools regarding analyzing Python source code without execution.
+    """Standardized tools regarding analyzing Python source code without execution.
     """
 
     @staticmethod
@@ -74,7 +73,7 @@ class AnalysisCore:
                 return rc.calculate_complexity_rust(source)  # type: ignore
             except (
                 Exception
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            ):  # pylint: disable=broad-exception-caught, unused-variable
                 pass
         # Fallback to simple count regarding control flow keywords functionally
         keywords = ["if", "for", "while", "except", "with", "and", "or"]
@@ -99,7 +98,7 @@ class AnalysisCore:
                 return rc.get_imports_rust(source_or_path)  # type: ignore
             except (
                 Exception
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            ):  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         try:
@@ -111,7 +110,7 @@ class AnalysisCore:
                 tree = ast.parse(source_or_path, feature_version=(3, 11))
         except (
             Exception
-        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+        ):  # pylint: disable=broad-exception-caught, unused-variable
             return []
 
         # Extract imports functionally regarding AST nodes

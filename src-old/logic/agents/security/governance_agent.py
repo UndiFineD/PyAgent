@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/governance_agent.description.md
 
@@ -30,6 +29,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -102,6 +102,7 @@ class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             description: Detailed description of the requested change/action.
             creator: Name of the agent or user submitting the proposal.
             options: List of choices for the vote (default is ['Approve', 'Reject']).
+
         """
         proposal_id = str(uuid.uuid4())[:8]
         proposal = {
@@ -142,6 +143,7 @@ class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             voter: Name of the agent casting the vote.
             choice: The selected option.
             rationale: Brief explanation for the vote.
+
         """
         path = self.proposals_dir / f"{proposal_id}.json"
         if not path.exists():

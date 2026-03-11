@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/interface/ui/cli/tui_launcher.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -50,14 +50,14 @@ Provides a rich interactive console experience using 'rich.layout'.
 """
 
 import time
+from datetime import datetime
 
 # ...existing code...
 from rich.console import Console
 from rich.layout import Layout
-from rich.panel import Panel
 from rich.live import Live
+from rich.panel import Panel
 from rich.table import Table
-from datetime import datetime
 
 
 class PyAgentTUI:

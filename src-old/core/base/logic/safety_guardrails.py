@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/safety_guardrails.description.md
 
 # safety_guardrails
 
-**File**: `src\core\base\logic\safety_guardrails.py`  
+**File**: `src\\core\base\\logic\\safety_guardrails.py`  
 **Type**: Python Module  
 **Summary**: 11 classes, 2 functions, 25 imports  
 **Lines**: 575  
@@ -152,7 +151,7 @@ Decorator to validate function output against a schema.
 
 # Improvements for safety_guardrails
 
-**File**: `src\core\base\logic\safety_guardrails.py`  
+**File**: `src\\core\base\\logic\\safety_guardrails.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 575 lines (large)  
 **Complexity**: 12 score (moderate)
@@ -206,12 +205,11 @@ import json
 import logging
 import re
 import time
-from abc import ABC, abstractmethod
-from functools import wraps
-from typing import Any, Dict, List, Optional, Callable, Tuple, Union, TypeVar
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
+from functools import wraps
+from typing import Any, Callable, Dict, List, Optional, TypeVar
 
 from pydantic import BaseModel, Field, ValidationError, field_validator
 
@@ -222,6 +220,7 @@ T = TypeVar('T')
 
 class ValidationResult(BaseModel):
     """Result of a validation operation."""
+
     is_valid: bool
     message: str
     details: Optional[Dict[str, Any]] = None
@@ -230,6 +229,7 @@ class ValidationResult(BaseModel):
 
 class SafetyLevel(Enum):
     """Safety enforcement levels."""
+
     PERMISSIVE = "permissive"
     MODERATE = "moderate"
     STRICT = "strict"
@@ -238,6 +238,7 @@ class SafetyLevel(Enum):
 
 class ContentCategory(Enum):
     """Content categories for filtering."""
+
     VIOLENCE = "violence"
     HATE_SPEECH = "hate_speech"
     ADULT_CONTENT = "adult_content"
@@ -249,6 +250,7 @@ class ContentCategory(Enum):
 @dataclass
 class SafetyConfig:
     """Configuration for safety mechanisms."""
+
     level: SafetyLevel = SafetyLevel.MODERATE
     blocked_categories: List[ContentCategory] = field(default_factory=lambda: [
         ContentCategory.VIOLENCE,
@@ -572,7 +574,7 @@ class Guardrail:
             # Extract parameters - try kwargs first, then positional args
             input_content = kwargs.get(input_param)
             user_id = kwargs.get(user_id_param) if user_id_param else None
-            
+
             # If input_content not in kwargs, check positional args
             if input_content is None and input_param in func.__code__.co_varnames:
                 param_index = func.__code__.co_varnames.index(input_param)
@@ -701,6 +703,7 @@ class ResilienceDecorator:
 
 class ResearchSummary(BaseModel):
     """Schema for research summary outputs."""
+
     title: str = Field(..., description="A concise title for the research summary")
     key_findings: List[str] = Field(..., description="A list of 3-5 key findings")
     confidence_score: float = Field(..., ge=0.0, le=1.0, description="Confidence score from 0.0 to 1.0")
@@ -726,6 +729,7 @@ class ResearchSummary(BaseModel):
 
 class CodeReviewResult(BaseModel):
     """Schema for code review outputs."""
+
     overall_score: int = Field(..., ge=1, le=10, description="Overall code quality score")
     issues: List[Dict[str, str]] = Field(..., description="List of identified issues")
     recommendations: List[str] = Field(..., description="Improvement recommendations")

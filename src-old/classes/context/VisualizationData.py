@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/VisualizationData.description.md
 
@@ -82,6 +81,7 @@ Attributes:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -89,19 +89,11 @@ from __future__ import annotations
 """Auto-extracted class from agent_context.py"""
 
 
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Tuple
+
 from .VisualizationType import VisualizationType
 
-from src.classes.base_agent import BaseAgent
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-import hashlib
-import json
-import logging
-import re
-import zlib
 
 @dataclass
 class VisualizationData:
@@ -112,7 +104,9 @@ class VisualizationData:
         nodes: List of node data.
         edges: List of edge connections.
         layout: Layout algorithm to use.
+
     """
+
     viz_type: VisualizationType
     nodes: List[Dict[str, Any]] = field(default_factory=lambda: [])
     edges: List[Tuple[str, str]] = field(default_factory=lambda: [])

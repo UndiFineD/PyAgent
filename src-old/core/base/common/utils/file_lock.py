@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/file_lock.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -68,6 +68,7 @@ class FileLock:
         owner: Lock owner identifier.
         acquired_at: Timestamp when lock was acquired.
         expires_at: Timestamp when lock expires (optional).
+
     """
 
     file_path: Path

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/agent/CircuitBreaker.description.md
 
 # CircuitBreaker
 
-**File**: `src\classes\agent\CircuitBreaker.py`  
+**File**: `src\\classes\agent\\CircuitBreaker.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 11 imports  
 **Lines**: 169  
@@ -62,7 +61,7 @@ States:
 
 # Improvements for CircuitBreaker
 
-**File**: `src\classes\agent\CircuitBreaker.py`  
+**File**: `src\\classes\agent\\CircuitBreaker.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 169 lines (medium)  
 **Complexity**: 7 score (moderate)
@@ -109,8 +108,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
 
 __version__ = VERSION
@@ -127,9 +124,8 @@ __version__ = VERSION
 
 
 import logging
-import random
 import time
-from typing import Any, Callable, Optional, Dict
+from typing import Any, Callable, Dict, Optional
 
 from src.core.base.core.ResilienceCore import ResilienceCore
 from src.observability.stats.exporters.OTelManager import OTelManager
@@ -165,6 +161,7 @@ class CircuitBreaker:
             recovery_timeout: Base seconds to wait before attempting recovery
             backoff_multiplier: Multiplier for exponential backoff
             otel_manager: Optional OTel manager for telemetry
+
         """
         self.name = name
         self.failure_threshold = failure_threshold

@@ -13,8 +13,7 @@
 # limitations under the License.
 
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/bayesian_reasoning_agent.description.md
 
@@ -43,6 +42,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Agent specializing in Bayesian inference and decision-making under uncertainty.
@@ -52,9 +52,9 @@ Applies Bayes' theorem to update beliefs based on new evidence.
 import logging
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -77,8 +77,7 @@ class BayesianReasoningAgent(BaseAgent):
     def update_belief(
         self, concept: str, evidence_observed: str, likelihood: float
     ) -> dict[str, float]:
-        """
-        Updates the posterior probability of a concept given new evidence.
+        """Updates the posterior probability of a concept given new evidence.
         Formula: P(H|E) = (P(E|H) * P(H)) / P(E)
         """
         if concept not in self.beliefs:
@@ -106,8 +105,7 @@ class BayesianReasoningAgent(BaseAgent):
 
     @as_tool
     def calculate_expected_utility(self, actions: list[dict[str, Any]]) -> str:
-        """
-        Selects the action that maximizes expected utility.
+        """Selects the action that maximizes expected utility.
         Input format: [{"name": str, "utility": float, "success_prob_concept": str}]
         """
         best_action = None

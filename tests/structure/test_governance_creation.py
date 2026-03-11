@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Tests for governance documentation and templates."""
 import os
-from pathlib import Path
 import subprocess
+from pathlib import Path
 
 
 def run_setup_script() -> None:

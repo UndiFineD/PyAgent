@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/video_analyzer_core.description.md
 
 # video_analyzer_core
 
-**File**: `src\core\base\logic\core\video_analyzer_core.py`  
+**File**: `src\\core\base\\logic\\core\video_analyzer_core.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 56  
@@ -55,7 +54,7 @@ Harvested from .external/AskVideos-VideoCLIP.
 
 # Improvements for video_analyzer_core
 
-**File**: `src\core\base\logic\core\video_analyzer_core.py`  
+**File**: `src\\core\base\\logic\\core\video_analyzer_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 56 lines (small)  
 **Complexity**: 4 score (simple)
@@ -88,13 +87,12 @@ Harvested from .external/AskVideos-VideoCLIP.
 LLM_CONTEXT_END
 """
 
-from typing import List, Any
 import math
+from typing import Any, List
 
 
 class VideoAnalyzerCore:
-    """
-    Core logic for fragmenting and preparing video data for multi-modal inference.
+    """Core logic for fragmenting and preparing video data for multi-modal inference.
     Harvested from .external/AskVideos-VideoCLIP.
     """
 

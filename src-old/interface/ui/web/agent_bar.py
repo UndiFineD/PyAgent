@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/interface/ui/web/agent_bar.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -41,8 +41,7 @@ from typing import Any, Dict
 
 
 class AgentBar:
-    """
-    Floating UI component for real-time Agent Status and Multimodal Stream Control.
+    """Floating UI component for real-time Agent Status and Multimodal Stream Control.
     Integrates with the 120fps DVD-channel MUXer.
     """
 

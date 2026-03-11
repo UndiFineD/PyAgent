@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/strategies/direct_strategy.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -39,19 +39,20 @@ Direct strategy.py module.
 # Apache 2.0 License
 
 
-from typing import TYPE_CHECKING
+
+import logging
+from collections.abc import Callable
 
 from src.core.base.lifecycle.version import VERSION
 
-from .agent_strategy import AgentStrategy # noqa: F401
-import logging
-from collections.abc import Callable
+from .agent_strategy import AgentStrategy  # noqa: F401
 
 BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 __version__ = VERSION
 
 class DirectStrategy(AgentStrategy):
     """Standard Zero-Shot strategy: Prompt -> Response."""
+
     async def _safe_backend_call(
         self,
         step_name: str,
@@ -61,8 +62,7 @@ class DirectStrategy(AgentStrategy):
         history: list[dict[str, str]] | None,
         original_prompt_for_logging: str,
     ) -> str:
-        """
-        Helper method to encapsulate backend calls with error handling and logging.
+        """Helper method to encapsulate backend calls with error handling and logging.
         """
         try:
             response = await backend_call(call_prompt, system_prompt, history)

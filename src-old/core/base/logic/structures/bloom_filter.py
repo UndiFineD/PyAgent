@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/structures/bloom_filter.description.md
 
@@ -36,6 +35,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -75,8 +75,7 @@ RUST_AVAILABLE = False
 
 
 class BloomFilter:
-    """
-    Space-efficient probabilistic set membership test.
+    """Space-efficient probabilistic set membership test.
 
     Use cases:
     - Cache key existence checks before expensive lookups
@@ -92,6 +91,7 @@ class BloomFilter:
         >>>
         >>> "hello" in bf  # True (definitely added)
         >>> "foo" in bf    # False (probably not added)
+
     """
 
     def __init__(
@@ -101,14 +101,14 @@ class BloomFilter:
         bit_array: bytearray | None = None,
         num_hashes: int | None = None,
     ) -> None:
-        """
-        Initialize Bloom filter.
+        """Initialize Bloom filter.
 
         Args:
             expected_items: Expected number of items to add
             fp_rate: Desired false positive rate (0.0-1.0)
             bit_array: Optional pre-existing bit array
             num_hashes: Optional number of hash functions
+
         """
         if bit_array is not None:
             self._bits = bit_array
@@ -276,8 +276,7 @@ class BloomFilter:
 
 
 class CountingBloomFilter:
-    """
-    Bloom filter that supports removal by using counters.
+    """Bloom filter that supports removal by using counters.
 
     Uses more memory but allows items to be removed.
 
@@ -289,6 +288,7 @@ class CountingBloomFilter:
         >>>
         >>> cbf.remove("hello")
         >>> "hello" in cbf  # False
+
     """
 
     def __init__(
@@ -297,13 +297,13 @@ class CountingBloomFilter:
         fp_rate: float = 0.01,
         counter_bits: int = 4,
     ) -> None:
-        """
-        Initialize counting Bloom filter.
+        """Initialize counting Bloom filter.
 
         Args:
             expected_items: Expected number of items
             fp_rate: Desired false positive rate
             counter_bits: Bits per counter (max count = 2^bits - 1)
+
         """
         self._size = BloomFilter._optimal_size(expected_items, fp_rate)
         self._num_hashes = BloomFilter._optimal_num_hashes(self._size, expected_items)
@@ -339,11 +339,11 @@ class CountingBloomFilter:
         self._count += 1
 
     def remove(self, item: Any) -> bool:
-        """
-        Remove an item from the filter.
+        """Remove an item from the filter.
 
         Returns:
             True if item was possibly present, False if definitely not
+
         """
         positions = self._get_hash_positions(item)
 
@@ -383,8 +383,7 @@ class CountingBloomFilter:
 
 
 class ScalableBloomFilter:
-    """
-    Bloom filter that grows automatically as items are added.
+    """Bloom filter that grows automatically as items are added.
 
     Maintains target false positive rate across growth.
 
@@ -394,6 +393,7 @@ class ScalableBloomFilter:
         >>> list(map(lambda i: sbf.add(f"item_{i}"), range(100000)))
         >>>
         >>> print(sbf.get_stats())  # Shows multiple internal filters
+
     """
 
     def __init__(
@@ -403,14 +403,14 @@ class ScalableBloomFilter:
         growth_factor: int = 2,
         fp_tightening_ratio: float = 0.9,
     ) -> None:
-        """
-        Initialize scalable Bloom filter.
+        """Initialize scalable Bloom filter.
 
         Args:
             initial_capacity: Initial filter capacity
             fp_rate: Target false positive rate
             growth_factor: Capacity multiplier regarding new filters
             fp_tightening_ratio: Tighten FP rate regarding each filter
+
         """
         self._initial_capacity = initial_capacity
         self._fp_rate = fp_rate

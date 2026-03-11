@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/ContextExporter.description.md
 
@@ -82,6 +81,7 @@ Example:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -102,12 +102,12 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_context.py"""
 
-from src.core.base.version import VERSION
-from src.logic.agents.cognitive.context.models.ExportFormat import ExportFormat
-from src.logic.agents.cognitive.context.models.ExportedContext import ExportedContext
-from datetime import datetime
-from typing import List, Optional
 import re
+from datetime import datetime
+
+from src.core.base.version import VERSION
+from src.logic.agents.cognitive.context.models.ExportedContext import ExportedContext
+from src.logic.agents.cognitive.context.models.ExportFormat import ExportFormat
 
 __version__ = VERSION
 
@@ -120,6 +120,7 @@ class ContextExporter:
     Example:
         >>> exporter=ContextExporter()
         >>> exported=exporter.export(content, ExportFormat.HTML)
+
     """
 
     def __init__(self, default_format: ExportFormat = ExportFormat.MARKDOWN) -> None:
@@ -144,6 +145,7 @@ class ContextExporter:
 
         Returns:
             ExportedContext with exported content.
+
         """
         fmt = format if format is not None else self.default_format
 

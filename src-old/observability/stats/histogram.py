@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/histogram.description.md
 
@@ -49,13 +48,14 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
 
-from _thread import LockType
 import math
 import threading
+from _thread import LockType
 from dataclasses import dataclass
 
 
@@ -74,8 +74,7 @@ class HistogramBucket:
 
 
 class Histogram:
-    """
-    Fixed-bucket histogram for efficient distribution tracking.
+    """Fixed-bucket histogram for efficient distribution tracking.
 
     Provides approximate percentiles with constant memory.
 
@@ -86,6 +85,7 @@ class Histogram:
         ...     h.add(latency)
         >>>
         >>> print(f"P50: {h.percentile(50)}, P99: {h.percentile(99)}")
+
     """
 
     def __init__(
@@ -95,14 +95,14 @@ class Histogram:
         num_buckets: int = 100,
         logarithmic: bool = True,
     ) -> None:
-        """
-        Initialize histogram.
+        """Initialize histogram.
 
         Args:
             min_value: Minimum trackable value
             max_value: Maximum trackable value
             num_buckets: Number of buckets
             logarithmic: Use logarithmic bucket spacing
+
         """
         self._min_value: float = max(0.001, min_value)  # Avoid log(0)
         self._max_value: float = max_value
@@ -164,12 +164,12 @@ class Histogram:
         return max(0, min(idx, self._num_buckets - 1))
 
     def add(self, value: float, count: int = 1) -> None:
-        """
-        Add a value to the histogram.
+        """Add a value to the histogram.
 
         Args:
             value: Value to add
             count: Number of occurrences (default 1)
+
         """
         with self._lock:
             self._update_basic_stats(value, count)
@@ -193,14 +193,14 @@ class Histogram:
             self._buckets[idx].count += count
 
     def percentile(self, p: float) -> float:
-        """
-        Get percentile value.
+        """Get percentile value.
 
         Args:
             p: Percentile (0-100)
 
         Returns:
             Approximate percentile value
+
         """
         with self._lock:
             if self._count == 0:
@@ -255,11 +255,11 @@ class Histogram:
         return self._min_value
 
     def merge(self, other: "Histogram") -> "Histogram":
-        """
-        Merge with another histogram.
+        """Merge with another histogram.
 
         Returns:
             New merged histogram
+
         """
         # Create new histogram with same configuration
         merged = Histogram(
@@ -318,8 +318,7 @@ class Histogram:
 
 
 class ExponentialHistogram:
-    """
-    Histogram with exponentially growing bucket boundaries.
+    """Histogram with exponentially growing bucket boundaries.
 
     Based on OpenTelemetry exponential histogram spec.
     Better accuracy for wide value ranges.
@@ -331,6 +330,7 @@ class ExponentialHistogram:
         ...     h.add(v)
         >>>
         >>> print(h.get_stats())
+
     """
 
     def __init__(
@@ -338,12 +338,12 @@ class ExponentialHistogram:
         scale: int = 2,
         max_buckets: int = 160,
     ) -> None:
-        """
-        Initialize exponential histogram.
+        """Initialize exponential histogram.
 
         Args:
             scale: Resolution (higher = more buckets)
             max_buckets: Maximum number of buckets
+
         """
         self._scale: int = scale
         self._max_buckets: int = max_buckets
@@ -460,8 +460,7 @@ class ExponentialHistogram:
 
 
 class LatencyHistogram(Histogram):
-    """
-    Pre-configured histogram for latency tracking (microseconds to seconds).
+    """Pre-configured histogram for latency tracking (microseconds to seconds).
 
     Common for API response time monitoring.
 
@@ -473,6 +472,7 @@ class LatencyHistogram(Histogram):
         >>> latency.add((time.perf_counter() - start) * 1000)  # ms
         >>>
         >>> print(f"P99 latency: {latency.percentile(99):.2f}ms")
+
     """
 
     def __init__(self) -> None:
@@ -486,8 +486,7 @@ class LatencyHistogram(Histogram):
 
 
 class SizeHistogram(Histogram):
-    """
-    Pre-configured histogram for size tracking (bytes).
+    """Pre-configured histogram for size tracking (bytes).
 
     Common for request/response size monitoring.
 
@@ -497,6 +496,7 @@ class SizeHistogram(Histogram):
         >>> sizes.add(len(response_body))
         >>>
         >>> print(f"Median size: {sizes.percentile(50):.0f} bytes")
+
     """
 
     def __init__(self) -> None:

@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/workspace_core.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -58,8 +58,7 @@ except ImportError:
 
 
 class WorkspaceCore:
-    """
-    Centralized handler for workspace-wide path logic and file ignore rules.
+    """Centralized handler for workspace-wide path logic and file ignore rules.
     """
 
     _instance: Optional["WorkspaceCore"] = None
@@ -112,8 +111,7 @@ class WorkspaceCore:
             return str(p).replace("\\", "/")
 
     def is_ignored(self, file_path: str | Path) -> bool:
-        """
-        Check if a file path matches any patterns in .codeignore.
+        """Check if a file path matches any patterns in .codeignore.
         """
         path = Path(file_path)
         if path.is_absolute():

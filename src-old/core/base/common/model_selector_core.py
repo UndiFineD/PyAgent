@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/model_selector_core.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -65,8 +65,7 @@ from .models import ModelConfig
 
 @dataclass
 class ModelSelectorCore(BaseCore):
-    """
-    Authoritative engine for selecting models based on agent type and task size.
+    """Authoritative engine for selecting models based on agent type and task size.
     """
 
     models: Dict[str, ModelConfig] = field(
@@ -83,8 +82,7 @@ class ModelSelectorCore(BaseCore):
             self.models["default"] = ModelConfig(model_id="gpt-3.5-turbo")
 
     def select(self, agent_type: str, token_estimate: int = 0) -> ModelConfig:
-        """
-        Selects the best model based on agent type and workload size.
+        """Selects the best model based on agent type and workload size.
         """
         if agent_type == "coding" and token_estimate > 4000:
             logging.info("Routing high-token task (%d) to GLM-4.7.", token_estimate)

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/IncrementalProcessor.description.md
 
 # IncrementalProcessor
 
-**File**: `src\core\base\IncrementalProcessor.py`  
+**File**: `src\\core\base\\IncrementalProcessor.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 13 imports  
 **Lines**: 231  
@@ -66,7 +65,7 @@ Attributes:
 
 # Improvements for IncrementalProcessor
 
-**File**: `src\core\base\IncrementalProcessor.py`  
+**File**: `src\\core\base\\IncrementalProcessor.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 231 lines (medium)  
 **Complexity**: 11 score (moderate)
@@ -94,6 +93,7 @@ Attributes:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -114,17 +114,16 @@ from __future__ import annotations
 
 """Auto-extracted class from agent.py"""
 
-from src.core.base.version import VERSION
-from src.core.base.models import IncrementalState
-from pathlib import Path
-from typing import List, Any
 import logging
-import os
 import time
-import mmap
+from pathlib import Path
+from typing import Any
+
 import blake3
-import orjson
 import cbor2
+import orjson
+from src.core.base.models import IncrementalState
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -139,6 +138,7 @@ class IncrementalProcessor:
     Attributes:
         state_file: Path to state persistence file.
         state: Current incremental processing state.
+
     """
 
     def __init__(
@@ -149,6 +149,7 @@ class IncrementalProcessor:
         Args:
             repo_root: Repository root directory.
             state_file: Name of state file.
+
         """
         self.repo_root = Path(repo_root)
         # Support migration from .json to .cbor if needed, but default to .cbor
@@ -289,6 +290,7 @@ class IncrementalProcessor:
 
         Returns:
             List of files that have changed.
+
         """
         changed: list[Path] = []
 
@@ -319,6 +321,7 @@ class IncrementalProcessor:
 
         Args:
             file_path: Path to the processed file.
+
         """
         path_str = str(file_path)
         self.state.processed_files[path_str] = time.time()

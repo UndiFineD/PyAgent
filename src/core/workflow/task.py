@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Core task and task state definitions for the workflow engine."""
-from enum import Enum
 from dataclasses import dataclass, field
+from enum import Enum
 from typing import Any, Dict
 
 
 class TaskState(Enum):
     """Represents the state of a task in the workflow."""
+
     ACTIVE = "active"
     PAUSED = "paused"
     FAILED = "failed"
@@ -17,6 +18,7 @@ class TaskState(Enum):
 @dataclass
 class Task:
     """Represents a task in the workflow, with metadata, context, and state."""
+
     id: str
     metadata: Dict[str, Any] = field(default_factory=dict)
     context: Dict[str, Any] = field(default_factory=dict)
@@ -29,8 +31,9 @@ class Task:
 
 def validate() -> None:
     """Ensure Task and TaskState behave as expected for meta‑tests."""
-    t = Task(id="test")
-    assert t.state == TaskState.ACTIVE
+    t: Task = Task(id="test")
+    if t.state.value != TaskState.ACTIVE.value:
+        raise AssertionError("initial state should be active")
     t.transition(TaskState.COMPLETED)
-    if t.state != TaskState.COMPLETED:
+    if t.state.value != TaskState.COMPLETED.value:
         raise AssertionError("state transition failed")

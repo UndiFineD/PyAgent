@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/utils/changes.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -62,8 +63,7 @@ if str(root) not in sys.path:
 if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
-from src.core.base.common.base_utilities import \
-    create_main_function  # noqa: E402
+from src.core.base.common.base_utilities import create_main_function  # noqa: E402
 from src.logic.agents.swarm.changes_agent import ChangesAgent  # noqa: E402
 
 # Create main function using the helper

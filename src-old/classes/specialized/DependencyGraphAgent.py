@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/DependencyGraphAgent.description.md
 
@@ -84,6 +83,11 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import ast
+import os
+from pathlib import Path
+from typing import Any
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -96,20 +100,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import os
-import ast
-from pathlib import Path
-from typing import Dict, List, Set, Any, Union
 
 __version__ = VERSION
 
 
 class DependencyGraphAgent:
-    """
-    Maps and analyzes dependencies between agent modules and classes.
+    """Maps and analyzes dependencies between agent modules and classes.
     Helps in understanding the impact of changes and optimizing imports.
     """
 
@@ -118,8 +115,7 @@ class DependencyGraphAgent:
         self.dependency_map: dict[str, list[str]] = {}  # module -> list of imports
 
     def scan_dependencies(self, start_dir: str = "src") -> dict[str, Any]:
-        """
-        Scans a directory for Python files and extracts their imports.
+        """Scans a directory for Python files and extracts their imports.
         """
         search_path = self.workspace_path / start_dir
         if not search_path.exists():
@@ -157,8 +153,7 @@ class DependencyGraphAgent:
         return list(imports)
 
     def get_impact_scope(self, module_name: str) -> list[str]:
-        """
-        Identifies which modules depend on a given module.
+        """Identifies which modules depend on a given module.
         """
         dependents = []
         for mod, imps in self.dependency_map.items():

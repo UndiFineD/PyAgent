@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/fix_e701.description.md
 

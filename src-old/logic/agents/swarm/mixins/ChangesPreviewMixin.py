@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/mixins/ChangesPreviewMixin.description.md
 
 # ChangesPreviewMixin
 
-**File**: `src\logic\agents\swarm\mixins\ChangesPreviewMixin.py`  
+**File**: `src\\logic\agents\\swarm\\mixins\\ChangesPreviewMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 59  
@@ -42,7 +41,7 @@ Mixin for managing preview mode and changes.
 
 # Improvements for ChangesPreviewMixin
 
-**File**: `src\logic\agents\swarm\mixins\ChangesPreviewMixin.py`  
+**File**: `src\\logic\agents\\swarm\\mixins\\ChangesPreviewMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 59 lines (small)  
 **Complexity**: 4 score (simple)

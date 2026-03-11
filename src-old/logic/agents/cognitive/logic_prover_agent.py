@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/logic_prover_agent.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -55,8 +55,7 @@ __version__ = VERSION
 
 
 class LogicProverAgent:
-    """
-    Formally verifies agent reasoning chains and solves complex
+    """Formally verifies agent reasoning chains and solves complex
     spatial/temporal constraints.
     """
 
@@ -66,8 +65,7 @@ class LogicProverAgent:
     def verify_reasoning_step(
         self, hypothesis: str, evidence: list[str], conclusion: str
     ) -> dict[str, Any]:
-        """
-        Simulates formal logic verification (TPTP-like).
+        """Simulates formal logic verification (TPTP-like).
         """
         # Crude simulation of logical consistency
         if not evidence:
@@ -83,8 +81,7 @@ class LogicProverAgent:
     def solve_scheduling_constraints(
         self, tasks: list[str], deadlines: dict[str, float]
     ) -> dict[str, Any]:
-        """
-        Solves for an optimal schedule using simulated constraint satisfaction (CSP).
+        """Solves for an optimal schedule using simulated constraint satisfaction (CSP).
         """
         schedule = []
         # Sort by deadline (Earliest Deadline First simulation)
@@ -109,8 +106,7 @@ class LogicProverAgent:
     def generate_formal_proof_log(
         self, reasoning_chain: list[dict[str, Any]]
     ) -> dict[str, Any]:
-        """
-        Exports a log of verified steps for auditing.
+        """Exports a log of verified steps for auditing.
         """
         return {
             "chain_id": "logic_v1_001",

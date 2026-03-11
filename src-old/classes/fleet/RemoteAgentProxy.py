@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/RemoteAgentProxy.description.md
 
 # RemoteAgentProxy
 
-**File**: `src\classes\fleet\RemoteAgentProxy.py`  
+**File**: `src\\classes\fleet\\RemoteAgentProxy.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 12 imports  
 **Lines**: 135  
@@ -59,7 +58,7 @@ Intelligence (Phase 108): Records remote interactions to local shards.
 
 # Improvements for RemoteAgentProxy
 
-**File**: `src\classes\fleet\RemoteAgentProxy.py`  
+**File**: `src\\classes\fleet\\RemoteAgentProxy.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 135 lines (medium)  
 **Complexity**: 7 score (moderate)
@@ -109,14 +108,15 @@ from __future__ import annotations
 Allows FleetManager to transparently call tools on other machines.
 """
 
-from src.core.base.version import VERSION
-import requests
 import logging
 import os
-from typing import Dict, Any, Optional
+from typing import Any
+
+import requests
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.ConnectivityManager import ConnectivityManager
 from src.core.base.connectivity import BinaryTransport
+from src.core.base.ConnectivityManager import ConnectivityManager
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -174,8 +174,7 @@ class RemoteAgentProxy(BaseAgent):
     def call_remote_tool_binary(
         self, tool_name: str, compress: bool = True, **kwargs
     ) -> Any:
-        """
-        Calls a tool on the remote node using high-performance binary transport (Phase 255).
+        """Calls a tool on the remote node using high-performance binary transport (Phase 255).
         """
         if not self._is_node_working():
             return None

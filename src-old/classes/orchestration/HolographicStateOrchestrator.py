@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/HolographicStateOrchestrator.description.md
 
@@ -79,13 +78,11 @@ LLM_CONTEXT_END
 """
 
 import logging
-import hashlib
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
 
 
 class HolographicStateOrchestrator:
-    """
-    Phase 38: Holographic Memory Expansion.
+    """Phase 38: Holographic Memory Expansion.
     Manages distributed state shards across the fleet for resilient context reconstruction.
     """
 
@@ -94,8 +91,7 @@ class HolographicStateOrchestrator:
         self.shards: Dict[str, List[Dict[str, Any]]] = {}  # key -> list of shards
 
     def shard_state(self, key: str, value: Any, redundant_factor: int = 3) -> None:
-        """
-        Shards a state value and distributes it across the fleet.
+        """Shards a state value and distributes it across the fleet.
         In this simulation, we 'distribute' by assigning shards to different agent names.
         """
         serialized_value = str(value)
@@ -125,8 +121,7 @@ class HolographicStateOrchestrator:
         )
 
     def reconstruct_state(self, key: str) -> Optional[str]:
-        """
-        Reconstructs the state from available shards.
+        """Reconstructs the state from available shards.
         """
         if key not in self.shards:
             logging.warning(f"HolographicState: No shards found for key '{key}'")

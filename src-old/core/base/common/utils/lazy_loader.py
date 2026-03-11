@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/lazy_loader.description.md
 
@@ -34,6 +33,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -68,14 +68,14 @@ T = TypeVar("T")
 
 
 class LazyModule:
-    """
-    A lazy module wrapper that defers import until first access.
+    """A lazy module wrapper that defers import until first access.
 
     Example:
         >>> math = LazyModule('math')
         >>> # 'math' is not imported yet
         >>> result = math.sqrt(16)  # Now 'math' is imported
         >>> print(result)  # 4.0
+
     """
 
     __slots__ = ("_module_name", "_module", "_import_error")
@@ -124,8 +124,7 @@ class LazyModule:
 
 
 class LazyImport:
-    """
-    Descriptor for lazy attribute imports within a module.
+    """Descriptor for lazy attribute imports within a module.
 
     Used in __getattr__ pattern for package __init__.py files.
 
@@ -143,8 +142,7 @@ class LazyImport:
 
     @staticmethod
     def load(spec: str) -> Any:
-        """
-        Load an attribute from a module specification.
+        """Load an attribute from a module specification.
 
         Args:
             spec: Module specification in format 'module.path:attribute'
@@ -152,6 +150,7 @@ class LazyImport:
 
         Returns:
             The imported attribute or module.
+
         """
         if ":" in spec:
             module_path, attr_name = spec.rsplit(":", 1)
@@ -162,8 +161,7 @@ class LazyImport:
 
     @staticmethod
     def create_getattr(module_attrs: dict[str, str]) -> Callable[[str], Any]:
-        """
-        Create a __getattr__ function for lazy loading.
+        """Create a __getattr__ function for lazy loading.
 
         Args:
             module_attrs: Dict mapping attribute names to module specs
@@ -182,6 +180,7 @@ class LazyImport:
             }
 
             __getattr__ = LazyImport.create_getattr(_LAZY_ATTRS)
+
         """
         _cache: dict[str, Any] = {}
 
@@ -200,8 +199,7 @@ class LazyImport:
 
 
 class DeferredImport:
-    """
-    Context manager for deferring imports.
+    """Context manager for deferring imports.
 
     Useful for optional dependencies that may not be installed.
 
@@ -211,6 +209,7 @@ class DeferredImport:
         ...         tensor = torch.module.zeros(10)
         ...     else:
         ...         print("PyTorch not available")
+
     """
 
     __slots__ = ("_module_name", "_module", "_available")
@@ -243,8 +242,7 @@ class DeferredImport:
 
 
 def lazy_import(module_name: str) -> LazyModule:
-    """
-    Create a lazy module reference.
+    """Create a lazy module reference.
 
     Args:
         module_name: Full module path (e.g., 'numpy', 'torch.nn')
@@ -256,13 +254,13 @@ def lazy_import(module_name: str) -> LazyModule:
         >>> np = lazy_import('numpy')
         >>> # numpy not imported yet
         >>> arr = np.array([1, 2, 3])  # Now imported
+
     """
     return LazyModule(module_name)
 
 
 def optional_import(module_name: str, fallback: T = None) -> tuple[Any, bool]:
-    """
-    Import a module if available, with fallback.
+    """Import a module if available, with fallback.
 
     Args:
         module_name: Module to import
@@ -275,6 +273,7 @@ def optional_import(module_name: str, fallback: T = None) -> tuple[Any, bool]:
         >>> torch, has_torch = optional_import('torch')
         >>> if has_torch:
         ...     device = torch.device('cuda')
+
     """
     try:
         module = importlib.import_module(module_name)
@@ -284,8 +283,7 @@ def optional_import(module_name: str, fallback: T = None) -> tuple[Any, bool]:
 
 
 def require_import(module_name: str, package_name: str | None = None) -> Any:
-    """
-    Import a module or raise a helpful error.
+    """Import a module or raise a helpful error.
 
     Args:
         module_name: Module to import
@@ -296,6 +294,7 @@ def require_import(module_name: str, package_name: str | None = None) -> Any:
 
     Raises:
         ImportError: With helpful installation instructions
+
     """
     try:
         return importlib.import_module(module_name)

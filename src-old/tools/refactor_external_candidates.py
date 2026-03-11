@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/refactor_external_candidates.description.md
 
@@ -68,9 +67,9 @@ Python module containing implementation for refactor_external_candidates.
 LLM_CONTEXT_END
 """
 
-from pathlib import Path
-import re
 import json
+import re
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 SRC_DIR = ROOT / "src" / "external_candidates" / "auto"

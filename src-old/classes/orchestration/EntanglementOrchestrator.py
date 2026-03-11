@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/EntanglementOrchestrator.description.md
 
@@ -83,15 +82,14 @@ LLM_CONTEXT_END
 """
 
 import logging
-import json
 import threading
-from typing import Dict, Any, List, Optional
+from typing import Any, Dict
+
 from src.classes.orchestration.SignalBusOrchestrator import SignalBusOrchestrator
 
 
 class EntanglementOrchestrator:
-    """
-    Manages instantaneous state synchronization across distributed agent nodes.
+    """Manages instantaneous state synchronization across distributed agent nodes.
     Ensures that high-priority state changes in one node are mirrored to all entangled peers.
     """
 

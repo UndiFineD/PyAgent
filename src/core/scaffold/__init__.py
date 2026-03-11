@@ -40,6 +40,7 @@ class ExampleCore:
             payload: input payload
         Returns:
             result dict
+
         """
         # minimal example
         return {"status": "ok", "input_keys": list(payload.keys())}

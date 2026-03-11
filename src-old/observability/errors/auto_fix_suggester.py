@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/errors/auto_fix_suggester.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -66,6 +67,7 @@ class AutoFixSuggester:
 
     Attributes:
         fix_patterns: Map of error patterns to fix templates.
+
     """
 
     def __init__(self) -> None:
@@ -87,6 +89,7 @@ class AutoFixSuggester:
         Args:
             pattern: Regex pattern to match errors.
             fix_template: Template for the fix suggestion.
+
         """
         self.fix_patterns[pattern] = fix_template
 
@@ -98,6 +101,7 @@ class AutoFixSuggester:
 
         Returns:
             FixSuggestion if a fix is available, None otherwise.
+
         """
         for pattern, template in self.fix_patterns.items():
             match = re.search(pattern, error.message)

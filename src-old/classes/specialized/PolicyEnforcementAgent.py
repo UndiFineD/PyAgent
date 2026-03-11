@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/PolicyEnforcementAgent.description.md
 
@@ -80,6 +79,9 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import time
+from typing import Any
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -92,18 +94,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import time
-from typing import Dict, List, Any, Set
 
 __version__ = VERSION
 
 
 class PolicyEnforcementAgent:
-    """
-    Monitors agent activity against a set of governance-defined policies
+    """Monitors agent activity against a set of governance-defined policies
     and enforces restrictions (quarantining) if violations occur.
     """
 
@@ -120,8 +117,7 @@ class PolicyEnforcementAgent:
     def evaluate_action(
         self, agent_id: str, action_type: str, metadata: Any
     ) -> dict[str, Any]:
-        """
-        Evaluates if an agent action complies with active policies.
+        """Evaluates if an agent action complies with active policies.
         """
         violations = []
 
@@ -145,8 +141,7 @@ class PolicyEnforcementAgent:
         return {"status": "authorized"}
 
     def quarantine_agent(self, agent_id: str, reason: str) -> dict[str, Any]:
-        """
-        Isolates an agent from the fleet.
+        """Isolates an agent from the fleet.
         """
         self.quarantine_list.add(agent_id)
         return {"agent_id": agent_id, "status": "quarantined", "reason": reason}

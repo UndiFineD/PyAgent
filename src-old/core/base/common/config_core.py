@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/config_core.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -102,8 +102,7 @@ class ConfigObject:  # pylint: disable=too-few-public-methods
 
 
 class ConfigCore(BaseCore):
-    """
-    Standard implementation for configuration management.
+    """Standard implementation for configuration management.
     Handles multi-format loading and hierarchical merging.
     """
 
@@ -190,8 +189,7 @@ class ConfigCore(BaseCore):
             )
 
     def get(self, key: str, default: Any = None) -> Any:
-        """
-        Global getter with environment variable override support.
+        """Global getter with environment variable override support.
         Prefix: PYAGENT_ (e.g. models.coder.temperature -> PYAGENT_MODELS__CODER__TEMPERATURE)
         """
         import os

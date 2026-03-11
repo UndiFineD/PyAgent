@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/memory/automem_core.description.md
 
 # automem_core
 
-**File**: `src\core\memory\automem_core.py`  
+**File**: `src\\core\\memory\automem_core.py`  
 **Type**: Python Module  
 **Summary**: 5 classes, 0 functions, 44 imports  
 **Lines**: 597  
@@ -100,7 +99,7 @@ Class PointStruct implementation.
 
 # Improvements for automem_core
 
-**File**: `src\core\memory\automem_core.py`  
+**File**: `src\\core\\memory\automem_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 597 lines (large)  
 **Complexity**: 26 score (complex)
@@ -163,23 +162,16 @@ conversational memory capabilities.
 """
 
 
-import hashlib
 import json
 import logging
-import math
-import os
 import random
-import re
 import sys
 import time
 import uuid
-from collections import Counter
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezone
-from pathlib import Path
-from queue import Empty, Queue
-from threading import Event, Lock, Thread
-from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
+from datetime import datetime, timezone
+from threading import Thread
+from typing import Any, Dict, List, Optional
 
 from falkordb import FalkorDB
 from qdrant_client import QdrantClient
@@ -237,8 +229,6 @@ except ImportError:  # pragma: no cover - optional dependency
     spacy = None
 
 # Core internal imports (should be available in-workspace)
-from src.core.base.state import StateTransaction
-from src.core.base.models.communication_models import CascadeContext
 
 logging.basicConfig(
     level=logging.INFO,
@@ -289,8 +279,7 @@ class Memory:
 
 
 class AutoMemCore:
-    """
-    AutoMem Memory System Core.
+    """AutoMem Memory System Core.
 
     Implements graph-vector hybrid memory with FalkorDB + Qdrant.
     Based on the world's highest-performing memory system (90.53% LoCoMo benchmark).
@@ -337,8 +326,7 @@ class AutoMemCore:
         importance: float = 1.0,
         metadata: Optional[Dict[str, Any]] = None,
     ) -> str:
-        """
-        Store a new memory in the hybrid system.
+        """Store a new memory in the hybrid system.
 
         Args:
             content: The memory content to store
@@ -348,6 +336,7 @@ class AutoMemCore:
 
         Returns:
             Memory ID
+
         """
         memory_id = str(uuid.uuid4())
         tags = tags or []
@@ -451,8 +440,7 @@ class AutoMemCore:
         limit: int = 10,
         min_score: float = 0.0,
     ) -> List[Dict[str, Any]]:
-        """
-        Recall memories using 9-component hybrid scoring.
+        """Recall memories using 9-component hybrid scoring.
 
         Args:
             query: Search query
@@ -462,6 +450,7 @@ class AutoMemCore:
 
         Returns:
             List of memory results with scores
+
         """
         # Generate query embedding
         query_vector = self._generate_embedding(query)
@@ -503,8 +492,7 @@ class AutoMemCore:
     def _hybrid_score(
         self, query: str, query_vector: List[float], vector_results: List
     ) -> List[Dict[str, Any]]:
-        """
-        Apply 9-component hybrid scoring system.
+        """Apply 9-component hybrid scoring system.
 
         Components (weighted):
         - Vector similarity (25%)
@@ -618,14 +606,14 @@ class AutoMemCore:
         relationship: str = "related",
         strength: float = 1.0,
     ):
-        """
-        Create association between two memories in the graph.
+        """Create association between two memories in the graph.
 
         Args:
             memory_id1: First memory ID
             memory_id2: Second memory ID
             relationship: Type of relationship
             strength: Relationship strength (0.0-1.0)
+
         """
         try:
             graph = self.graph_store.select_graph("pyagent_memories")
@@ -655,8 +643,7 @@ class AutoMemCore:
     def get_bridge_connections(
         self, memory_id: str, max_depth: int = 3
     ) -> List[Dict[str, Any]]:
-        """
-        Find multi-hop bridge connections for reasoning.
+        """Find multi-hop bridge connections for reasoning.
 
         Args:
             memory_id: Starting memory ID
@@ -664,6 +651,7 @@ class AutoMemCore:
 
         Returns:
             List of bridge connections
+
         """
         try:
             graph = self.graph_store.select_graph("pyagent_memories")
@@ -693,8 +681,7 @@ class AutoMemCore:
 
 
 class MemoryConsolidator:
-    """
-    Memory consolidation system with neuroscience-inspired cycles.
+    """Memory consolidation system with neuroscience-inspired cycles.
 
     Implements decay, creative, cluster, and forget consolidation types.
     """

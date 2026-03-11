@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/improvements/branch_comparison.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -73,6 +74,7 @@ class BranchComparison:
         removed_count: Number of improvements removed.
         modified_count: Number of improvements modified.
         compared_at: Comparison timestamp.
+
     """
 
     source_branch: str

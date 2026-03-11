@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/audio_stream_core.description.md
 
 # audio_stream_core
 
-**File**: `src\core\base\logic\core\audio_stream_core.py`  
+**File**: `src\\core\base\\logic\\core\audio_stream_core.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 61  
@@ -56,7 +55,7 @@ Harvested from .external/Asterisk-AI-Voice-Agent.
 
 # Improvements for audio_stream_core
 
-**File**: `src\core\base\logic\core\audio_stream_core.py`  
+**File**: `src\\core\base\\logic\\core\audio_stream_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 61 lines (small)  
 **Complexity**: 5 score (moderate)
@@ -90,12 +89,10 @@ LLM_CONTEXT_END
 """
 
 import audioop
-from typing import Optional, Tuple
 
 
 class AudioStreamCore:
-    """
-    Core logic for real-time audio processing and codec conversion.
+    """Core logic for real-time audio processing and codec conversion.
     Harvested from .external/Asterisk-AI-Voice-Agent.
     """
 

@@ -1,4 +1,3 @@
-import os
 
 file_path = r"c:\DEV\PyAgent\src\infrastructure\tokenizer\TokenizerRegistry.py"
 new_content = """# SPDX-License-Identifier: Apache-2.0

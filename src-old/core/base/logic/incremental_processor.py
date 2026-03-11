@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/incremental_processor.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -57,7 +57,6 @@ from typing import Any
 import blake3
 import cbor2
 import orjson
-
 from src.core.base.common.models import IncrementalState
 from src.core.base.lifecycle.version import VERSION
 
@@ -74,6 +73,7 @@ class IncrementalProcessor:
     Attributes:
         state_file: Path to state persistence file.
         state: Current incremental processing state.
+
     """
 
     def __init__(
@@ -84,6 +84,7 @@ class IncrementalProcessor:
         Args:
             repo_root: Repository root directory.
             state_file: Name of state file.
+
         """
         self.repo_root = Path(repo_root)
         # Support migration from .json to .cbor if needed, but default to .cbor
@@ -269,6 +270,7 @@ class IncrementalProcessor:
 
         Args:
             file_path: Path to the processed file.
+
         """
         path_str = str(file_path)
         self.state.processed_files[path_str] = time.time()

@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/AccessibilityCoreMixin.description.md
 
 # AccessibilityCoreMixin
 
-**File**: `src\logic\agents\development\mixins\AccessibilityCoreMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\AccessibilityCoreMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 82  
@@ -44,7 +43,7 @@ Mixin for core accessibility calculations and filtering in AccessibilityAgent.
 
 # Improvements for AccessibilityCoreMixin
 
-**File**: `src\logic\agents\development\mixins\AccessibilityCoreMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\AccessibilityCoreMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 82 lines (small)  
 **Complexity**: 4 score (simple)
@@ -79,15 +78,15 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+from src.core.base.types.AccessibilityIssue import AccessibilityIssue
+from src.core.base.types.AccessibilitySeverity import AccessibilitySeverity
+from src.core.base.types.ColorContrastResult import ColorContrastResult
+from src.core.base.types.WCAGLevel import WCAGLevel
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 from src.logic.agents.development.AccessibilityAgent import AccessibilityAgent
 
-from typing import TYPE_CHECKING
-from src.core.base.types.ColorContrastResult import ColorContrastResult
-from src.core.base.types.AccessibilitySeverity import AccessibilitySeverity
-from src.core.base.types.WCAGLevel import WCAGLevel
-from src.core.base.types.AccessibilityIssue import AccessibilityIssue
 
 class AccessibilityCoreMixin:
     """Mixin for core accessibility calculations and filtering in AccessibilityAgent."""
@@ -107,6 +106,7 @@ class AccessibilityCoreMixin:
 
         Returns:
             Color contrast analysis result.
+
         """
         fg_luminance = self._relative_luminance(foreground)
         bg_luminance = self._relative_luminance(background)
@@ -138,6 +138,7 @@ class AccessibilityCoreMixin:
 
         Returns:
             Relative luminance value.
+
         """
         hex_color = hex_color.lstrip("#")
         if len(hex_color) == 3:

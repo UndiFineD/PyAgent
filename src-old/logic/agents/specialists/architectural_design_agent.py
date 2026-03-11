@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/architectural_design_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -92,8 +92,7 @@ class DesignExpertise(Enum):
 
 # pylint: disable=too-many-ancestors
 class ArchitecturalDesignAgent(BaseAgent):
-    """
-    Agent specializing in hierarchical architectural design workflows.
+    """Agent specializing in hierarchical architectural design workflows.
     Implements the 5-stage framework identified in 2026 empirical studies
     (arXiv:2601.10696, ScienceDirect S2090447925006203) regarding cognitive load
     reduction and performance enhancement in AI-aided design.
@@ -128,8 +127,7 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def process_requirements(self, brief: str) -> Dict[str, Any]:
-        """
-        Phase 1: Pre-design Analysis. Extracts site conditions and functional requirements.
+        """Phase 1: Pre-design Analysis. Extracts site conditions and functional requirements.
         Reduces initial cognitive load by automating constraints identification.
         """
         prompt = (
@@ -144,8 +142,7 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def simulate_environmental_impact(self) -> Dict[str, Any]:
-        """
-        Phase 1.5: Environmental Simulation. Analyze sun, wind, and terrain factors.
+        """Phase 1.5: Environmental Simulation. Analyze sun, wind, and terrain factors.
         Based on ScienceDirect S2090447925006203 recommendations for real-time analysis.
         """
         if not self.design_state["requirements"]:
@@ -159,8 +156,7 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def map_research_to_logic(self, research_data: str) -> str:
-        """
-        Maps research findings (summaries, papers) to specific Agent logic or infrastructure changes.
+        """Maps research findings (summaries, papers) to specific Agent logic or infrastructure changes.
         Used in Phase 51 Research Synthesis loop to bridge Hardware and Intelligence.
         """
         logging.info("ArchitecturalDesignAgent: Mapping research to system logic.")
@@ -179,8 +175,7 @@ class ArchitecturalDesignAgent(BaseAgent):
     async def generate_spatial_concept(
         self, refinement: Optional[str] = None
     ) -> Dict[str, Any]:
-        """
-        Phase 2: Concept Generation. Generates spatial logic and massing options.
+        """Phase 2: Concept Generation. Generates spatial logic and massing options.
         Leverages hierarchical reasoning to maintain global design coherence.
         Includes a GAAD (Generative-Adversarial Architecture Design) loop for internal refinement.
         """
@@ -226,8 +221,7 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def iterative_visual_refinement(self, visual_feedback: str) -> Dict[str, Any]:
-        """
-        Phase 2.5: Visual Refinement Loop.
+        """Phase 2.5: Visual Refinement Loop.
         Implements the iterative visual feedback loop from arXiv:2601.10696.
         Reducing cognitive load through multi-turn visual refinement.
         """
@@ -247,8 +241,7 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def critical_engagement_buffer(self, critique: str) -> Dict[str, Any]:
-        """
-        Mandatory Reflection State: Implements the 'Critical Engagement Buffer' from 2026 research.
+        """Mandatory Reflection State: Implements the 'Critical Engagement Buffer' from 2026 research.
         Ensures human or agent-based critique is integrated before development.
         """
         self.design_state["feedback_history"].append(critique)
@@ -266,8 +259,7 @@ class ArchitecturalDesignAgent(BaseAgent):
     async def coordinate_visual_verification(
         self, concept_index: int
     ) -> Dict[str, Any]:
-        """
-        Phase 3: Design Development. Simulates agent coordination for visual output.
+        """Phase 3: Design Development. Simulates agent coordination for visual output.
         Translates qualitative concepts into quantitative parameters.
         """
         if not self.design_state["critique_passed"]:
@@ -289,8 +281,7 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def finalize_production_specs(self) -> Dict[str, Any]:
-        """
-        Phase 4: Design Production. Generates technical specifications and urban context matching.
+        """Phase 4: Design Production. Generates technical specifications and urban context matching.
         Calculates the DPO Constructability Score.
         """
         if self.current_phase != DesignPhase.DESIGN_DEVELOPMENT:
@@ -322,8 +313,7 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def synthesize_presentation(self) -> Dict[str, Any]:
-        """
-        Phase 5: Post-production. Automated synthesis of presentation boards and urban viz.
+        """Phase 5: Post-production. Automated synthesis of presentation boards and urban viz.
         """
         prompt = f"Create automated presentation board layout for: {json.dumps(self.design_state)}"
         presentation = await self.run_subagent("synthesizing presentation", prompt)
@@ -332,8 +322,7 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def process_research_brief(self, research_content: str) -> Dict[str, Any]:
-        """
-        Specialized tool for Phase 51 Research Synthesis.
+        """Specialized tool for Phase 51 Research Synthesis.
         Parses Arxiv paper content and extracts architectural requirements for system evolution.
         """
         logging.info(
@@ -358,8 +347,7 @@ class ArchitecturalDesignAgent(BaseAgent):
         return self.metrics
 
     def get_acceleration_metrics(self) -> Dict[str, Any]:
-        """
-        Returns simulated inference optimization metrics.
+        """Returns simulated inference optimization metrics.
         In 2026, agents monitor KV cache efficiency and JCT (Job Completion Time).
         """
         # Placeholders for requested technical concepts

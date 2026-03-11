@@ -4,9 +4,9 @@
 This is conservative: it only indents a top-level import line when the previous
 non-empty non-comment line is indented (>=4 spaces) and the import is at column 0.
 """
-from pathlib import Path
-import re
 import argparse
+import re
+from pathlib import Path
 
 EXCLUDE_DIRS = {".venv", "venv", "dist", "build", "target", "__pycache__", ".git"}
 

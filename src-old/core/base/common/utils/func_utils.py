@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/func_utils.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -94,8 +94,7 @@ def identity(value: T, **_kwargs: Any) -> T:
 
 
 def run_once(f: Callable[P, None]) -> Callable[P, None]:
-    """
-    Decorator ensuring a function runs only once.
+    """Decorator ensuring a function runs only once.
 
     Thread-safe. Subsequent calls are silently ignored.
 
@@ -105,6 +104,7 @@ def run_once(f: Callable[P, None]) -> Callable[P, None]:
         ...     print("Initializing...")
         >>> init_system()  # Prints "Initializing..."
         >>> init_system()  # Does nothing
+
     """
     has_run = False
     lock = threading.Lock()
@@ -128,8 +128,7 @@ def run_once(f: Callable[P, None]) -> Callable[P, None]:
 
 
 def run_once_with_result(f: Callable[P, T]) -> Callable[P, T]:
-    """
-    Decorator ensuring a function runs only once, caching the result.
+    """Decorator ensuring a function runs only once, caching the result.
 
     Thread-safe. Subsequent calls return the cached result.
     """
@@ -162,8 +161,7 @@ def deprecate_args(
     is_deprecated: bool | Callable[[], bool] = True,
     additional_message: str | None = None,
 ) -> Callable[[F], F]:
-    """
-    Decorator to deprecate positional arguments starting at an index.
+    """Decorator to deprecate positional arguments starting at an index.
 
     Args:
         start_index: The index from which positional args are deprecated.
@@ -175,6 +173,7 @@ def deprecate_args(
         ... def foo(a, b, c=None, d=None):
         ...     pass
         >>> foo(1, 2, 3, 4)  # Warns about c and d being passed positionally
+
     """
     check_deprecated = (
         is_deprecated if callable(is_deprecated) else lambda: is_deprecated
@@ -213,8 +212,7 @@ def deprecate_kwargs(
     is_deprecated: bool | Callable[[], bool] = True,
     additional_message: str | None = None,
 ) -> Callable[[F], F]:
-    """
-    Decorator to mark specific keyword arguments as deprecated.
+    """Decorator to mark specific keyword arguments as deprecated.
 
     Args:
         *kws: Names of deprecated keyword arguments.
@@ -226,6 +224,7 @@ def deprecate_kwargs(
         ... def foo(new_param=None, old_param=None):
         ...     pass
         >>> foo(old_param=1)  # Warns about old_param
+
     """
     deprecated_kws = set(kws)
     check_deprecated = (
@@ -258,13 +257,13 @@ def deprecated(
     replacement: str | None = None,
     version: str | None = None,
 ) -> Callable[[F], F]:
-    """
-    Mark a function as deprecated.
+    """Mark a function as deprecated.
 
     Args:
         reason: Why the function is deprecated.
         replacement: Suggested replacement function.
         version: Version when it will be removed.
+
     """
 
     def wrapper(fn: F) -> F:
@@ -298,8 +297,7 @@ def supports_kw(
     requires_kw_only: bool = False,
     allow_var_kwargs: bool = True,
 ) -> bool:
-    """
-    Check if a keyword is a valid kwarg for a callable.
+    """Check if a keyword is a valid kwarg for a callable.
 
     Args:
         callable_obj: The callable to check.
@@ -309,6 +307,7 @@ def supports_kw(
 
     Returns:
         True if the callable accepts the keyword argument.
+
     """
     try:
         params = inspect.signature(callable_obj).parameters
@@ -348,8 +347,7 @@ def get_allowed_kwargs(
     requires_kw_only: bool = True,
     allow_var_kwargs: bool = False,
 ) -> dict[str, Any]:
-    """
-    Filter overrides to only include valid keyword arguments.
+    """Filter overrides to only include valid keyword arguments.
 
     Args:
         callable_obj: The callable to check against.
@@ -359,6 +357,7 @@ def get_allowed_kwargs(
 
     Returns:
         Dictionary of valid keyword arguments.
+
     """
     if not overrides:
         return {}
@@ -389,8 +388,7 @@ def get_allowed_kwargs(
 
 
 def memoize(fn: Callable[P, T]) -> Callable[P, T]:
-    """
-    Thread-safe memoization decorator.
+    """Thread-safe memoization decorator.
 
     Caches results based on arguments. Arguments must be hashable.
     """
@@ -419,8 +417,7 @@ def memoize(fn: Callable[P, T]) -> Callable[P, T]:
 
 
 def memoize_method(fn: Callable[..., T]) -> Callable[..., T]:
-    """
-    Memoization decorator for instance methods.
+    """Memoization decorator for instance methods.
 
     Stores cache on the instance to avoid memory leaks.
     """
@@ -449,8 +446,7 @@ def memoize_method(fn: Callable[..., T]) -> Callable[..., T]:
 
 
 def throttle(min_interval: float) -> Callable[[F], F]:
-    """
-    Throttle function calls to at most once per interval.
+    """Throttle function calls to at most once per interval.
 
     Args:
         min_interval: Minimum seconds between calls.
@@ -459,6 +455,7 @@ def throttle(min_interval: float) -> Callable[[F], F]:
         >>> @throttle(1.0)
         ... def log_status():
         ...     print("Status logged")
+
     """
 
     def wrapper(fn: F) -> F:
@@ -483,11 +480,11 @@ def throttle(min_interval: float) -> Callable[[F], F]:
 
 
 def debounce(wait: float) -> Callable[[F], F]:
-    """
-    Debounce function calls - only execute after wait period of no calls.
+    """Debounce function calls - only execute after wait period of no calls.
 
     Args:
         wait: Seconds to wait before executing.
+
     """
 
     def wrapper(fn: F) -> F:
@@ -525,8 +522,7 @@ def retry_on_exception(
     on_retry: Callable[[Exception, int], None] | None = None,
     sleep_fn: Callable[[float], None] | None = None,
 ) -> Callable[[F], F]:
-    """
-    Retry a function on specific exceptions.
+    """Retry a function on specific exceptions.
 
     The `sleep_fn` can be injected for a non-blocking wait (or testing). When
     not provided we use `threading.Event().wait` to avoid flagged calls to
@@ -609,8 +605,7 @@ def retry_on_exception(
 
 
 def call_limit(max_calls: int, period: float = 1.0) -> Callable[[F], F]:
-    """
-    Limit function to max_calls within a time period.
+    """Limit function to max_calls within a time period.
 
     Raises RuntimeError if limit is exceeded.
     """

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-
 from src.logic.agents.cognitive.context.engines.memory_mixins.MemorySearchMixin import (
     MemorySearchMixin,
 )

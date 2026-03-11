@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/utils/reference_link_manager.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -67,6 +67,7 @@ class ReferenceLinkManager:
     Example:
         >>> manager=ReferenceLinkManager()
         >>> manager.add_commit_reference("entry1", "abc123", "https://github.com/...")
+
     """
 
     def __init__(self) -> None:
@@ -86,6 +87,7 @@ class ReferenceLinkManager:
 
         Returns:
             The created LinkedReference.
+
         """
         ref = LinkedReference(
             ref_type="commit", ref_id=commit_sha[:7], url=url, title=title
@@ -108,6 +110,7 @@ class ReferenceLinkManager:
 
         Returns:
             The created LinkedReference.
+
         """
         ref = LinkedReference(
             ref_type="issue", ref_id=f"#{issue_number}", url=url, title=title
@@ -125,6 +128,7 @@ class ReferenceLinkManager:
 
         Returns:
             Formatted string of references.
+
         """
         refs = self.references.get(entry_id, [])
         if not refs:

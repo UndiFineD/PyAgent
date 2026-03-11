@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/SignalCore.description.md
 
@@ -74,13 +73,12 @@ Handles event structure and history windowing.
 LLM_CONTEXT_END
 """
 
-from typing import Dict, List, Any, Optional
 from datetime import datetime
+from typing import Any, Dict, List
 
 
 class SignalCore:
-    """
-    Pure logic for the Signal Registry.
+    """Pure logic for the Signal Registry.
     Handles event structure and history windowing.
     """
 

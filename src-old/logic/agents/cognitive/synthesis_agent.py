@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/synthesis_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -53,17 +53,16 @@ import logging
 import os
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 # pylint: disable=too-many-ancestors
 class SynthesisAgent(BaseAgent):
-    """
-    Tier 2 (Cognitive Logic) - Synthesis Agent: Responsible for Swarm Synthesis,
+    """Tier 2 (Cognitive Logic) - Synthesis Agent: Responsible for Swarm Synthesis,
     merging specialized agent capabilities into optimized super-agent architectures.
     """
 
@@ -85,12 +84,12 @@ class SynthesisAgent(BaseAgent):
     async def fuse_agents(
         self, agent_names: list[str], new_agent_name: str
     ) -> dict[str, Any]:
-        """
-        Creates a new agent that combines functionalities of multiple source agents.
+        """Creates a new agent that combines functionalities of multiple source agents.
 
         Args:
             agent_names: List of existing agent class names to fuse.
             new_agent_name: The name of the new fused agent class.
+
         """
         logging.info(f"SynthesisAgent: Fusing {agent_names} into {new_agent_name}")
 
@@ -149,8 +148,7 @@ class SynthesisAgent(BaseAgent):
     def analyze_fusion_candidates(
         self, fleet_agents: list[str]
     ) -> list[dict[str, Any]]:
-        """
-        Analyzes the fleet to suggest which agents should be fused based on usage patterns.
+        """Analyzes the fleet to suggest which agents should be fused based on usage patterns.
         """
         _ = fleet_agents
         logging.info("SynthesisAgent: Analyzing fleet for fusion candidates.")

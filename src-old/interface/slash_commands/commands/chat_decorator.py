@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/interface/slash_commands/commands/chat_decorator.description.md
 
@@ -49,6 +48,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -568,8 +568,7 @@ def cmd_codeblock(ctx: CommandContext) -> CommandResult:
     aliases=["conversation", "exchange", "dialog"],
 )
 def cmd_chat(ctx: CommandContext) -> CommandResult:
-    """
-    Format a conversation exchange.
+    """Format a conversation exchange.
 
     Usage: /chat <human message> ||| <ai response>
 

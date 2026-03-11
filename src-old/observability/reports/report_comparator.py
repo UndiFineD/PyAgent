@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/report_comparator.description.md
 
@@ -26,6 +25,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -58,29 +58,34 @@ AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
 
 class ReportComparator:
     """Compares report versions to show differences.
+
     Attributes:
         reports_dir: Directory containing reports.
+
     """
 
     def __init__(self, reports_dir: Path = AGENT_DIR) -> None:
         """Initialize comparator.
+
         Args:
             reports_dir: Directory containing report files.
-        """
 
+        """
         self.reports_dir = reports_dir
 
     def compare(self, old_path: str, new_path: str, old_content: str, new_content: str) -> ReportComparison:
         """Compare two report versions.
+
         Args:
             old_path: Path to old version.
             new_path: Path to new version.
             old_content: Previous report content.
             new_content: New report content.
+
         Returns:
             ReportComparison with differences.
-        """
 
+        """
         old_items = self._extract_items(old_content)
         new_items = self._extract_items(new_content)
         old_set = set(old_items)
@@ -99,7 +104,6 @@ class ReportComparator:
 
     def _extract_items(self, content: str) -> list[str]:
         """Extract list items from markdown content."""
-
         items: list[str] = []
         for line in content.split("\n"):
             line = line.strip()

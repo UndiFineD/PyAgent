@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/knowledge_fusion_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -51,14 +51,14 @@ from __future__ import annotations
 Consolidates individual agent memory shards into a unified global knowledge graph.
 """
 
-import logging
 import json
+import logging
 from pathlib import Path
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -101,7 +101,7 @@ class KnowledgeFusionAgent(BaseAgent):
                     temp_path.unlink()
                 except (
                     Exception
-                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                ):  # pylint: disable=broad-exception-caught, unused-variable
                     # pylint: disable=broad-exception-caught
                     pass
             logging.error(f"KnowledgeFusion: Atomic save failed: {e}")
@@ -110,8 +110,10 @@ class KnowledgeFusionAgent(BaseAgent):
     @as_tool
     def fuse_memory_shards(self, shard_paths: list[str]) -> str:
         """Aggregates multiple memory shards into the global knowledge graph.
+
         Args:
             shard_paths: List of file paths to agent-specific memory shards (JSON).
+
         """
         graph = self._load_global_graph()
         added_nodes = 0

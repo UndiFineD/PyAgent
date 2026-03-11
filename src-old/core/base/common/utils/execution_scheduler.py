@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/execution_scheduler.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -52,8 +52,8 @@ from __future__ import annotations
 import time
 from typing import Any
 
-from .scheduled_execution import ScheduledExecution
 from ...lifecycle.version import VERSION
+from .scheduled_execution import ScheduledExecution
 
 __version__ = VERSION
 
@@ -72,6 +72,7 @@ class ExecutionScheduler:
                 scheduler.mark_complete("nightly")
             # Avoid blocking sleep in production; using wait for example
             # threading.Event().wait(60)
+
     """
 
     def __init__(self) -> None:
@@ -90,6 +91,7 @@ class ExecutionScheduler:
             name: Schedule name.
             cron: Timing (hourly, daily, weekly, or HH:MM).
             agent_config: Agent configuration.
+
         """
         schedule = ScheduledExecution(
             name=name,
@@ -133,6 +135,7 @@ class ExecutionScheduler:
 
         Returns:
             True if due for execution.
+
         """
         if name not in self._schedules:
             return False
@@ -151,6 +154,7 @@ class ExecutionScheduler:
 
         Args:
             name: Schedule name.
+
         """
         if name in self._schedules:
             schedule = self._schedules[name]
@@ -165,6 +169,7 @@ class ExecutionScheduler:
 
         Returns:
             Agent configuration dict.
+
         """
         if name in self._schedules:
             return self._schedules[name].agent_config

@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/core/evolution_core.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -58,8 +58,7 @@ class EvolutionCore:
 
     @staticmethod
     def prompt_crossover(prompt1: str, prompt2: str) -> str:
-        """
-        Combines two prompts by interweaving their logical blocks.
+        """Combines two prompts by interweaving their logical blocks.
         """
         lines1 = prompt1.splitlines()
         lines2 = prompt2.splitlines()
@@ -73,15 +72,13 @@ class EvolutionCore:
 
     @staticmethod
     def calculate_prompt_sha(prompt: str) -> str:
-        """
-        Returns a short SHA hash of the prompt for lineage tracking.
+        """Returns a short SHA hash of the prompt for lineage tracking.
         """
         return hashlib.sha256(prompt.encode()).hexdigest()[:12]
 
     @staticmethod
     def mutate_prompt(prompt: str, mutation_rate: float = 0.1) -> str:
-        """
-        Randomly injects keywords or modifies tone.
+        """Randomly injects keywords or modifies tone.
         """
         modifiers = [
             "be more precise",

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/entropy_guard_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -78,8 +78,7 @@ __version__ = VERSION
 
 
 class EntropyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Phase 60: Quantum-Resistant Cryptographic Layer.
+    """Phase 60: Quantum-Resistant Cryptographic Layer.
     Manages simulated post-quantum cryptographic (PQC) keys and entropy pools.
     """
 

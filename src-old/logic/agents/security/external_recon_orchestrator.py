@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/external_recon_orchestrator.description.md
 
 # external_recon_orchestrator
 
-**File**: `src\logic\agents\security\external_recon_orchestrator.py`  
+**File**: `src\\logic\agents\\security\\external_recon_orchestrator.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 6 imports  
 **Lines**: 131  
@@ -58,7 +57,7 @@ Orchestrates external security tools similar to AutoRecon.
 
 # Improvements for external_recon_orchestrator
 
-**File**: `src\logic\agents\security\external_recon_orchestrator.py`  
+**File**: `src\\logic\agents\\security\\external_recon_orchestrator.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 131 lines (medium)  
 **Complexity**: 1 score (simple)
@@ -97,8 +96,8 @@ LLM_CONTEXT_END
 import asyncio
 import os
 import shutil
-from typing import List, Optional
 from dataclasses import dataclass
+from typing import Optional
 
 # Refactoring Note: Workflow ported from .external/0xSojalSec-AutoRecon/recon.sh
 # This orchestration replaces the bash script with a Pythonic, async-capable flow.
@@ -115,8 +114,7 @@ class ReconConfig:
 
 
 class ExternalReconOrchestrator:
-    """
-    Orchestrates external security tools similar to AutoRecon.
+    """Orchestrates external security tools similar to AutoRecon.
     """
 
     def __init__(self, config: ReconConfig):
@@ -125,8 +123,7 @@ class ExternalReconOrchestrator:
         os.makedirs(self.domain_dir, exist_ok=True)
 
     async def run_command(self, cmd: str, output_file: Optional[str] = None):
-        """
-        Run a shell command asynchronously and stream output.
+        """Run a shell command asynchronously and stream output.
         """
         print(f"[*] Running: {cmd}")
         process = await asyncio.create_subprocess_shell(
@@ -146,8 +143,7 @@ class ExternalReconOrchestrator:
             print(f"[+] Command finished: {cmd}")
 
     async def run_amass(self):
-        """
-        Run Amass for subdomain enumeration.
+        """Run Amass for subdomain enumeration.
         """
         if not shutil.which("amass"):
             print("[!] Amass not found in PATH")
@@ -159,8 +155,7 @@ class ExternalReconOrchestrator:
         await self.run_command(cmd)
 
     async def run_httprobe(self):
-        """
-        Run httprobe to find alive hosts.
+        """Run httprobe to find alive hosts.
         """
         if not shutil.which("httprobe"):
             print("[!] httprobe not found")
@@ -184,8 +179,7 @@ class ExternalReconOrchestrator:
         await self.run_command(cmd, output_file)
 
     async def run_nuclei(self):
-        """
-        Run Nuclei scanner.
+        """Run Nuclei scanner.
         """
         if not shutil.which("nuclei"):
             print("[!] Nuclei not found")
@@ -202,8 +196,7 @@ class ExternalReconOrchestrator:
         await self.run_command(cmd)
 
     async def execute_full_scan(self):
-        """
-        Execute the full recon pipeline.
+        """Execute the full recon pipeline.
         """
         if self.config.use_amass:
             await self.run_amass()

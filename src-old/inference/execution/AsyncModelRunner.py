@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/inference/execution/AsyncModelRunner.description.md
 
@@ -68,14 +67,14 @@ LLM_CONTEXT_END
 """Facade for Async Model Runner modular implementation."""
 
 from .model_runner import (
-    RunnerState,
-    ModelInput,
-    ModelOutput,
-    SchedulerOutput,
     AsyncGPUPoolingModelRunnerOutput,
-    ExecutionPipeline,
     AsyncModelRunner,
     BatchedAsyncRunner,
+    ExecutionPipeline,
+    ModelInput,
+    ModelOutput,
+    RunnerState,
+    SchedulerOutput,
 )
 
 __all__ = [

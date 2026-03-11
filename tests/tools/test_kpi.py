@@ -3,7 +3,7 @@
 from tools.pm import kpi
 
 
-def test_compute_throughput_function():
+def test_compute_throughput_function() -> None:
     """Test that the compute_throughput function exists and returns an integer."""
     assert hasattr(kpi, "compute_throughput")
     assert isinstance(kpi.compute_throughput([], []), int)

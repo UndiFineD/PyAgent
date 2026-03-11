@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/profile_core.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -61,8 +62,7 @@ from .models import ExecutionProfile
 
 
 class ProfileCore(BaseCore):
-    """
-    Authoritative engine for managing execution settings and profiles.
+    """Authoritative engine for managing execution settings and profiles.
     """
 
     def __init__(self) -> None:
@@ -90,23 +90,20 @@ class ProfileCore(BaseCore):
         self._profiles["ci"] = ExecutionProfile(name="ci", timeout=300, config={"dry_run": True})
 
     def activate(self, name: str) -> None:
-        """
-        Sets the specified profile as active.
+        """Sets the specified profile as active.
         """
         if name in self._profiles:
             self._active = name
 
     def add_profile(self, profile: Any) -> None:
-        """
-        Registers a new execution profile.
+        """Registers a new execution profile.
         Supports both ExecutionProfile and ConfigProfile.
         """
         name = getattr(profile, "name", str(profile))
         self._profiles[name] = profile
 
     def get_setting(self, key: str, default: Any = None) -> Any:
-        """
-        Retrieves a setting from the active profile, with inheritance support.
+        """Retrieves a setting from the active profile, with inheritance support.
         """
         profile = self.get_active_profile()
         if not profile:
@@ -132,16 +129,14 @@ class ProfileCore(BaseCore):
         return default
 
     def get_active_profile(self) -> Any:
-        """
-        Retrieves the currently active execution profile instance.
+        """Retrieves the currently active execution profile instance.
         """
         if self._active:
             return self._profiles.get(self._active)
         return self._profiles.get("default")
 
     def get_active(self) -> Optional[ExecutionProfile]:
-        """
-        Compatibility method for returning ExecutionProfile.
+        """Compatibility method for returning ExecutionProfile.
         """
         profile = self.get_active_profile()
         if isinstance(profile, ExecutionProfile):

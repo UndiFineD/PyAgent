@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/tracing/__init__.description.md
 
@@ -41,9 +40,10 @@ try:
 except ImportError:
     # Fallback for when lazy_loader is not available
     class ModuleLazyLoader:
-        """Simple fallback lazy loader that raises an error 
+        """Simple fallback lazy loader that raises an error
         if used without the actual implementation.
         """
+
         def __init__(self, registry):
             """Initialize with a registry of module paths and attributes."""
             self.registry = registry
@@ -57,30 +57,30 @@ except ImportError:
             return getattr(mod, attr_name)
 
 from .open_telemetry_tracer import (
-        NullSpan,
-        NullTracer,
-        SpanAttributes,
-        SpanTiming,
-        TRACE_HEADERS,
-        add_span_attributes,
-        add_span_event,
-        contains_trace_headers,
-        create_span,
-        extract_trace_context,
-        extract_trace_headers,
-        get_current_span_safe,
-        get_null_tracer,
-        get_span_exporter,
-        get_tracer,
-        init_tracer,
-        inject_trace_context,
-        is_otel_available,
-        log_tracing_disabled_warning,
-        otel_import_error_traceback,
-        record_exception,
-        timed_span,
-        traced,
-    )
+    TRACE_HEADERS,
+    NullSpan,
+    NullTracer,
+    SpanAttributes,
+    SpanTiming,
+    add_span_attributes,
+    add_span_event,
+    contains_trace_headers,
+    create_span,
+    extract_trace_context,
+    extract_trace_headers,
+    get_current_span_safe,
+    get_null_tracer,
+    get_span_exporter,
+    get_tracer,
+    init_tracer,
+    inject_trace_context,
+    is_otel_available,
+    log_tracing_disabled_warning,
+    otel_import_error_traceback,
+    record_exception,
+    timed_span,
+    traced,
+)
 
 _LAZY_REGISTRY = {
     "NullSpan": ("src.observability.tracing.open_telemetry_tracer", "NullSpan"),

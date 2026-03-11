@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/multimodal/cosy_voice_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -57,9 +57,9 @@ import time
 from dataclasses import dataclass
 from typing import Optional
 
+from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.base_utilities import as_tool
 
 try:
     import torch
@@ -81,8 +81,7 @@ class CosyVoiceConfig:
 
 
 class CosyVoiceAgent(BaseAgent):
-    """
-    Orchestrates the lifecycle of CosyVoice generation.
+    """Orchestrates the lifecycle of CosyVoice generation.
     Handles model loading, unloading, and inference requests.
     """
 
@@ -126,8 +125,7 @@ class CosyVoiceAgent(BaseAgent):
     def generate_speech(
         self, text: str, speaker_embedding_path: Optional[str] = None
     ) -> str:
-        """
-        Generates speech using the loaded CosyVoice model.
+        """Generates speech using the loaded CosyVoice model.
         Supports zero-shot cloning if speaker_embedding_path is provided.
         """
         if not self._model:

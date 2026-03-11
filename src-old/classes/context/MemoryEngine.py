@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/MemoryEngine.description.md
 
@@ -93,13 +92,15 @@ from __future__ import annotations
 
 """Engine for persistent episodic memory of agent actions and outcomes."""
 
-from src.core.base.Version import VERSION
 from pathlib import Path
 from typing import Any
+
+from src.core.base.Version import VERSION
 from src.logic.agents.cognitive.context.engines.MemoryCore import MemoryCore
-from .memory_mixins.MemoryStorageMixin import MemoryStorageMixin
+
 from .memory_mixins.MemoryEpisodeMixin import MemoryEpisodeMixin
 from .memory_mixins.MemorySearchMixin import MemorySearchMixin
+from .memory_mixins.MemoryStorageMixin import MemoryStorageMixin
 
 __version__ = VERSION
 

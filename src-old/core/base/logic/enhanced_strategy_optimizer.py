@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/enhanced_strategy_optimizer.description.md
 
 # enhanced_strategy_optimizer
 
-**File**: `src\core\base\logic\enhanced_strategy_optimizer.py`  
+**File**: `src\\core\base\\logic\\enhanced_strategy_optimizer.py`  
 **Type**: Python Module  
 **Summary**: 4 classes, 0 functions, 10 imports  
 **Lines**: 372  
@@ -84,7 +83,7 @@ Supports multiple optimization strategies for multi-metric evaluation
 
 # Improvements for enhanced_strategy_optimizer
 
-**File**: `src\core\base\logic\enhanced_strategy_optimizer.py`  
+**File**: `src\\core\base\\logic\\enhanced_strategy_optimizer.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 372 lines (medium)  
 **Complexity**: 13 score (moderate)
@@ -122,11 +121,10 @@ Enhanced Strategy Optimizer - AutoRAG-inspired optimization algorithms
 Based on AutoRAG's sophisticated strategy selection for multi-metric optimization
 """
 
-import numpy as np
-from typing import List, Dict, Any, Optional, Tuple, Callable
+import logging
 from dataclasses import dataclass
 from enum import Enum
-import logging
+from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -162,8 +160,7 @@ class StrategyTrial:
 
 
 class EnhancedStrategyOptimizer:
-    """
-    Enhanced strategy optimizer using AutoRAG-inspired algorithms
+    """Enhanced strategy optimizer using AutoRAG-inspired algorithms
     Supports multiple optimization strategies for multi-metric evaluation
     """
 
@@ -179,8 +176,7 @@ class EnhancedStrategyOptimizer:
         strategy: OptimizationStrategy = OptimizationStrategy.RECIPROCAL_RANK,
         weights: Optional[Dict[str, float]] = None,
     ) -> OptimizationResult:
-        """
-        Optimize strategies using specified algorithm
+        """Optimize strategies using specified algorithm
 
         Args:
             strategy: Optimization algorithm to use
@@ -188,6 +184,7 @@ class EnhancedStrategyOptimizer:
 
         Returns:
             OptimizationResult with best strategy and scores
+
         """
         if not self.trial_history:
             raise ValueError("No strategy trials available for optimization")

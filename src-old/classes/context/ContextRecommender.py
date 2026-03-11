@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/ContextRecommender.description.md
 
@@ -80,6 +79,7 @@ Example:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -100,12 +100,12 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_context.py"""
 
+import re
+
 from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.models.ContextRecommendation import (
     ContextRecommendation,
 )
-from typing import Dict, List, Optional, Tuple
-import re
 
 __version__ = VERSION
 
@@ -118,6 +118,7 @@ class ContextRecommender:
     Example:
         >>> recommender=ContextRecommender()
         >>> recommendations=recommender.recommend("auth.py", similar_contexts)
+
     """
 
     def __init__(self) -> None:

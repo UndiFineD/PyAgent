@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/core/multi_modal_core.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -58,8 +58,7 @@ class MultiModalCore:
 
     @staticmethod
     def encode_image(image_path: str) -> str:
-        """
-        Encodes an image file to base64.
+        """Encodes an image file to base64.
         """
         with open(image_path, "rb") as image_file:
             return base64.b64encode(image_file.read()).decode("utf-8")
@@ -68,8 +67,7 @@ class MultiModalCore:
     def construct_vision_payload(
         model: str, prompt: str, base64_image: str
     ) -> dict[str, Any]:
-        """
-        Constructs a payload for a vision model (OpenAI-style).
+        """Constructs a payload for a vision model (OpenAI-style).
         """
         return {
             "model": model,
@@ -92,8 +90,7 @@ class MultiModalCore:
 
     @staticmethod
     def parse_bug_report(vision_response: str) -> dict[str, Any]:
-        """
-        Simplifies vision response into a structured bug report.
+        """Simplifies vision response into a structured bug report.
         """
         # Heuristic parsing - in reality, we'd use JSON mode if supported
         is_bug = "bug" in vision_response.lower() or "error" in vision_response.lower()

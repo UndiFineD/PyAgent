@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/MarkdownAgent.description.md
 
 # MarkdownAgent
 
-**File**: `src\logic\agents\development\MarkdownAgent.py`  
+**File**: `src\\logic\agents\\development\\MarkdownAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 35  
@@ -48,7 +47,7 @@ MarkdownAgent specializing in technical documentation and markdown optimization.
 
 # Improvements for MarkdownAgent
 
-**File**: `src\logic\agents\development\MarkdownAgent.py`  
+**File**: `src\\logic\agents\\development\\MarkdownAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 35 lines (small)  
 **Complexity**: 2 score (simple)
@@ -93,16 +92,15 @@ For more information, visit:
 No commands will be executed.
 """
 
-from src.core.base.Version import VERSION
+
 from src.core.base.BaseAgent import BaseAgent
-import logging
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
 
 class MarkdownAgent(BaseAgent):
-    """
-    MarkdownAgent specializing in technical documentation and markdown optimization.
+    """MarkdownAgent specializing in technical documentation and markdown optimization.
     """
 
     def __init__(self, file_path: str, **kwargs) -> None:

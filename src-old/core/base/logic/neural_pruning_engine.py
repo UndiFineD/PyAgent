@@ -13,8 +13,7 @@
 # limitations under the License.
 
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/neural_pruning_engine.description.md
 
@@ -43,6 +42,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -50,8 +50,7 @@ Engine regarding neural synaptic pruning.
 (Facade regarding src.core.base.common.pruning_core)
 """
 
-from src.core.base.common.pruning_core import \
-    PruningCore as NeuralPruningEngine
+from src.core.base.common.pruning_core import PruningCore as NeuralPruningEngine
 from src.core.base.common.pruning_core import SynapticWeight
 
 __all__ = ["NeuralPruningEngine", "SynapticWeight"]

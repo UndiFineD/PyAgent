@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/job_manager_core.description.md
 
 # job_manager_core
 
-**File**: `src\core\base\logic\core\job_manager_core.py`  
+**File**: `src\\core\base\\logic\\core\\job_manager_core.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 8 imports  
 **Lines**: 62  
@@ -68,7 +67,7 @@ Harvested from LiveKit Agents patterns.
 
 # Improvements for job_manager_core
 
-**File**: `src\core\base\logic\core\job_manager_core.py`  
+**File**: `src\\core\base\\logic\\core\\job_manager_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 62 lines (small)  
 **Complexity**: 2 score (simple)
@@ -104,11 +103,10 @@ Harvested from LiveKit Agents patterns.
 LLM_CONTEXT_END
 """
 
-import asyncio
 import uuid
-from enum import Enum
-from typing import Dict, Any, Optional
 from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, Optional
 
 
 class JobStatus(Enum):
@@ -129,8 +127,7 @@ class AgentJob:
 
 
 class JobManagerCore:
-    """
-    Manages the lifecycle of persistent agent jobs (sessions).
+    """Manages the lifecycle of persistent agent jobs (sessions).
     Harvested from LiveKit Agents patterns.
     """
 

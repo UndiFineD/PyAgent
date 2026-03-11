@@ -1,14 +1,13 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/memory_mixins/MemoryStorageMixin.description.md
 
 # MemoryStorageMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\memory_mixins\MemoryStorageMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\memory_mixins\\MemoryStorageMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 50  
@@ -44,7 +43,7 @@ Methods for storage and DB initialization.
 
 # Improvements for MemoryStorageMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\memory_mixins\MemoryStorageMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\memory_mixins\\MemoryStorageMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 50 lines (small)  
 **Complexity**: 4 score (simple)

@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/ssrf_detector_mixin.description.md
 
 # ssrf_detector_mixin
 
-**File**: `src\core\base\mixins\ssrf_detector_mixin.py`  
+**File**: `src\\core\base\\mixins\\ssrf_detector_mixin.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 11 imports  
 **Lines**: 182  
@@ -84,7 +83,7 @@ HTTP handler for SSRF detection callbacks.
 
 # Improvements for ssrf_detector_mixin
 
-**File**: `src\core\base\mixins\ssrf_detector_mixin.py`  
+**File**: `src\\core\base\\mixins\\ssrf_detector_mixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 182 lines (medium)  
 **Complexity**: 16 score (moderate)
@@ -118,17 +117,16 @@ LLM_CONTEXT_END
 """
 
 import asyncio
+import random
+import string
 import threading
 import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from typing import Dict, List, Optional, Callable
-import random
-import string
+from typing import Dict, List, Optional
 
 
 class SSRFDetectorMixin:
-    """
-    Mixin providing SSRF detection capabilities using callback server pattern.
+    """Mixin providing SSRF detection capabilities using callback server pattern.
 
     Inspired by aem-hacker's detector server for SSRF vulnerability detection.
     """
@@ -189,8 +187,7 @@ class SSRFDetectorMixin:
                 self.end_headers()
 
     def start_ssrf_detector(self, host: str = "0.0.0.0", port: int = 8080) -> bool:
-        """
-        Start the SSRF detection server.
+        """Start the SSRF detection server.
 
         Args:
             host: Host to bind to
@@ -198,6 +195,7 @@ class SSRFDetectorMixin:
 
         Returns:
             True if started successfully
+
         """
         if self._server_running:
             return True
@@ -233,8 +231,7 @@ class SSRFDetectorMixin:
                 self._server_thread = None
 
     def get_ssrf_callback_url(self, host: str, port: int) -> str:
-        """
-        Get the callback URL for SSRF detection.
+        """Get the callback URL for SSRF detection.
 
         Args:
             host: External host for callbacks
@@ -242,12 +239,12 @@ class SSRFDetectorMixin:
 
         Returns:
             Callback URL pattern
+
         """
         return f"http://{host}:{port}/{self._ssrf_token}"
 
     def check_ssrf_triggered(self, key: str, timeout: int = 10) -> List[str]:
-        """
-        Check if SSRF was triggered for a specific key.
+        """Check if SSRF was triggered for a specific key.
 
         Args:
             key: The key to check
@@ -255,6 +252,7 @@ class SSRFDetectorMixin:
 
         Returns:
             List of values received for the key
+
         """
         if not self._server_running:
             return []

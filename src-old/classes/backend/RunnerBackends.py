@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/backend/RunnerBackends.description.md
 
 # RunnerBackends
 
-**File**: `src\classes\backend\RunnerBackends.py`  
+**File**: `src\\classes\backend\\RunnerBackends.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 10 imports  
 **Lines**: 232  
@@ -51,7 +50,7 @@ Namespace for backend execution logic.
 
 # Improvements for RunnerBackends
 
-**File**: `src\classes\backend\RunnerBackends.py`  
+**File**: `src\\classes\backend\\RunnerBackends.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 232 lines (medium)  
 **Complexity**: 7 score (moderate)
@@ -99,15 +98,15 @@ from __future__ import annotations
 
 """Backend implementation handlers for SubagentRunner."""
 
-from src.core.base.version import VERSION
-import logging
-import os
-import subprocess
 import asyncio
 import json
+import logging
+import os
 import re
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -253,6 +252,7 @@ class BackendHandlers:
 
         Returns:
             The response from gh copilot, or None if the call fails.
+
         """
         # Optimization: if not a command and not allowed, skip
         if not allow_non_command:
@@ -294,6 +294,7 @@ class BackendHandlers:
 
         Returns:
             The response from GitHub Models, or None if the call fails or token is not found.
+
         """
         if not requests_lib:
             return None
@@ -378,6 +379,7 @@ class BackendHandlers:
 
         Returns:
             The response from OpenAI, or None if the call fails or API key is not found.
+
         """
         if not requests_lib:
             return None

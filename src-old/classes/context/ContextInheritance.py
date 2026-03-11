@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/ContextInheritance.description.md
 
@@ -84,6 +83,7 @@ Example:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -104,11 +104,11 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_context.py"""
 
+import re
+
 from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.models.InheritanceMode import InheritanceMode
 from src.logic.agents.cognitive.context.models.InheritedContext import InheritedContext
-from typing import Dict, List, Optional
-import re
 
 __version__ = VERSION
 
@@ -119,9 +119,10 @@ class ContextInheritance:
         Provides functionality for child contexts to inherit
     from parent contexts.
 
-        Example:
+    Example:
             >>> inheritance=ContextInheritance()
             >>> inherited=inheritance.inherit_from("parent.description.md", "child.description.md")
+
     """
 
     def __init__(self) -> None:
@@ -161,6 +162,7 @@ class ContextInheritance:
 
         Returns:
             InheritedContext configuration.
+
         """
         inherited = InheritedContext(parent_path=parent_path, mode=mode)
         self.inheritance_map[child_path] = inherited
@@ -178,6 +180,7 @@ class ContextInheritance:
 
         Returns:
             Resolved content.
+
         """
         if mode == InheritanceMode.OVERRIDE:
             return child_content

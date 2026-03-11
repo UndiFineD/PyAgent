@@ -1,14 +1,13 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/parsers/reasoning/implementations/json.description.md
 
 # json
 
-**File**: `src\core\base\parsers\reasoning\implementations\json.py`  
+**File**: `src\\core\base\\parsers\reasoning\\implementations\\json.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 102  
@@ -54,7 +53,7 @@ Expects output in format:
 
 # Improvements for json
 
-**File**: `src\core\base\parsers\reasoning\implementations\json.py`  
+**File**: `src\\core\base\\parsers\reasoning\\implementations\\json.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 102 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -87,16 +86,16 @@ Expects output in format:
 LLM_CONTEXT_END
 """
 
-import re
 import json
+import re
 from typing import Any, ClassVar, Sequence
+
 from ..base import ReasoningParser
 from ..models import ReasoningResult, StreamingReasoningState
 
 
 class JSONReasoningParser(ReasoningParser):
-    """
-    Parser for JSON-structured reasoning outputs.
+    """Parser for JSON-structured reasoning outputs.
 
     Expects output in format:
     {"reasoning": "...", "answer": "..."}

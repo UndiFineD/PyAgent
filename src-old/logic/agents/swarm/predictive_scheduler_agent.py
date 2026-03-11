@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/predictive_scheduler_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -78,8 +78,7 @@ __version__ = VERSION
 
 
 class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Phase 53: Predictive Resource Forecasting.
+    """Phase 53: Predictive Resource Forecasting.
     Uses historical telemetry to forecast future token usage and compute needs.
     Phase 130: Neural Feedback Loop integration for adaptive weight balancing.
     """
@@ -97,8 +96,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def ingest_metrics(
         self, metrics: list[Any], actual_outcome: float | None = None
     ) -> None:
-        """
-        Ingests recent agent metrics for analysis.
+        """Ingests recent agent metrics for analysis.
         Phase 130: Adjusts weights using simple backpropagation logic if actual outcome is provided.
         """
         for m in metrics:
@@ -130,8 +128,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             self.usage_history = self.usage_history[-1000:]
 
     def forecast_usage(self) -> dict[str, Any]:
-        """
-        Forecasts usage for the next cycle.
+        """Forecasts usage for the next cycle.
         Phase 130: Weighted combination of average and trend based on neural feedback.
         """
         if len(self.usage_history) < 5:

@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/empathy_agent.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -50,17 +50,16 @@ Empathy Agent for emotional intelligence and soft-skill synthesis.
 import logging
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 # pylint: disable=too-many-ancestors
 class EmpathyAgent(BaseAgent):
-    """
-    Phase 61: Emotional Intelligence & Soft-Skill Synthesis.
+    """Phase 61: Emotional Intelligence & Soft-Skill Synthesis.
     Analyzes user sentiment and adjusts agent linguistic "tone" for better HITL collaboration.
     """
 

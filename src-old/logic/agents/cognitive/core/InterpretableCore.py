@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/core/InterpretableCore.description.md
 
 # InterpretableCore
 
-**File**: `src\logic\agents\cognitive\core\InterpretableCore.py`  
+**File**: `src\\logic\agents\\cognitive\\core\\InterpretableCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 96  
@@ -46,7 +45,7 @@ Phase 14 Rust Optimizations:
 
 # Improvements for InterpretableCore
 
-**File**: `src\logic\agents\cognitive\core\InterpretableCore.py`  
+**File**: `src\\logic\agents\\cognitive\\core\\InterpretableCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 96 lines (small)  
 **Complexity**: 4 score (simple)
@@ -80,8 +79,9 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
-from typing import Any
+
 import logging
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -95,8 +95,7 @@ except ImportError:
 
 
 class InterpretableCore:
-    """
-    InterpretableCore implements a logic-bridge for Sparse Autoencoders (SAE).
+    """InterpretableCore implements a logic-bridge for Sparse Autoencoders (SAE).
     It simulates the decomposition of LLM activations into human-interpretable features.
 
     Phase 14 Rust Optimizations:
@@ -108,8 +107,7 @@ class InterpretableCore:
         self.feature_count = feature_count
 
     def decompose_activations(self, mock_activations: list[float]) -> dict[str, Any]:
-        """
-        Simulates SAE decomposition.
+        """Simulates SAE decomposition.
         Identifies 'Active Neurons' and maps them to semantic labels.
 
         Uses Rust-accelerated top-K selection when available for O(n) instead of O(n log n).
@@ -154,8 +152,7 @@ class InterpretableCore:
         }
 
     def simulate_neural_trace(self, agent_name: str, decision: str) -> list[str]:
-        """
-        Generates a 'Neural Trace' trace-log explaining the logic path.
+        """Generates a 'Neural Trace' trace-log explaining the logic path.
         """
         trace = [
             f"Node: {agent_name} triggered by decision '{decision}'",

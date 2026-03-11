@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/report_annotation.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -59,6 +60,7 @@ __version__ = VERSION
 @dataclass
 class ReportAnnotation:
     """Annotation on a report.
+
     Attributes:
         annotation_id: Unique annotation identifier.
         report_id: Associated report ID.
@@ -66,6 +68,7 @@ class ReportAnnotation:
         content: Annotation content.
         line_number: Line number if applicable.
         created_at: Creation timestamp.
+
     """
 
     annotation_id: str

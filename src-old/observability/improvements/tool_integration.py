@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/improvements/tool_integration.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -68,6 +69,7 @@ class ToolIntegration:
     Attributes:
         tool_configs: Configuration for each tool.
         suggestions: List of tool suggestions.
+
     """
 
     def __init__(self) -> None:
@@ -82,6 +84,7 @@ class ToolIntegration:
             tool_name: Name of the tool (e.g., "pylint").
             tool_type: Type of the tool.
             command: Command to run the tool.
+
         """
         self.tool_configs[tool_name] = {"type": tool_type, "command": command}
 

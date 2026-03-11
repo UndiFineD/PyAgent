@@ -1,5 +1,6 @@
 """Minimal aioboto3 shim providing an async context manager client."""
 from __future__ import annotations
+
 import boto3
 
 

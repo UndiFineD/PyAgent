@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/download_agent/cli.description.md
 
 # cli
 
-**File**: `src\tools\download_agent\cli.py`  
+**File**: `src\tools\\download_agent\\cli.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 2 functions, 6 imports  
 **Lines**: 184  
@@ -55,7 +54,7 @@ Main CLI entry point.
 
 # Improvements for cli
 
-**File**: `src\tools\download_agent\cli.py`  
+**File**: `src\tools\\download_agent\\cli.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 184 lines (medium)  
 **Complexity**: 2 score (simple)
@@ -89,12 +88,12 @@ LLM_CONTEXT_END
 CLI interface for the Download Agent.
 """
 
-import sys
 import argparse
+import sys
+from typing import List
 
 from .core import DownloadAgent
 from .models import DownloadConfig, DownloadResult
-from typing import List
 
 
 def print_results_summary(results: List[DownloadResult]):

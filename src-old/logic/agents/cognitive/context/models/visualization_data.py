@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/models/visualization_data.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -48,12 +48,13 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_context.py"""
 
+from dataclasses import dataclass, field
+from typing import Any
+
 from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.models.VisualizationType import (
     VisualizationType,
 )
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Tuple
 
 __version__ = VERSION
 
@@ -67,6 +68,7 @@ class VisualizationData:
         nodes: List of node data.
         edges: List of edge connections.
         layout: Layout algorithm to use.
+
     """
 
     viz_type: VisualizationType

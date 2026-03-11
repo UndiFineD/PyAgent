@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/ResilientStubs.description.md
 
 # ResilientStubs
 
-**File**: `src\classes\fleet\ResilientStubs.py`  
+**File**: `src\\classes\fleet\\ResilientStubs.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 1 functions, 7 imports  
 **Lines**: 55  
@@ -57,7 +56,7 @@ Returns a ResilientStub if the import fails.
 
 # Improvements for ResilientStubs
 
-**File**: `src\classes\fleet\ResilientStubs.py`  
+**File**: `src\\classes\fleet\\ResilientStubs.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 55 lines (small)  
 **Complexity**: 8 score (moderate)
@@ -92,14 +91,13 @@ Resilient loading stubs for the PyAgent fleet.
 Provides placeholder objects when plugins fail to load due to missing dependencies.
 """
 
-import logging
 import importlib
-from typing import Any, Dict, List, Optional, Callable
+import logging
+from typing import Any, Callable, Dict, Optional
 
 
 def resilient_import(module_name: str, class_name: Optional[str] = None) -> Any:
-    """
-    Decorator/Utility to import a module or class resiliently.
+    """Decorator/Utility to import a module or class resiliently.
     Returns a ResilientStub if the import fails.
     """
     try:

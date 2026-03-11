@@ -13,8 +13,7 @@
 # limitations under the License.
 
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/sharded_knowledge_core.description.md
 
@@ -43,6 +42,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -50,7 +50,6 @@ Core logic for sharded knowledge management.
 (Facade for src.core.base.common.knowledge_core)
 """
 
-from src.core.base.common.knowledge_core import \
-    KnowledgeCore as ShardedKnowledgeCore
+from src.core.base.common.knowledge_core import KnowledgeCore as ShardedKnowledgeCore
 
 __all__ = ["ShardedKnowledgeCore"]

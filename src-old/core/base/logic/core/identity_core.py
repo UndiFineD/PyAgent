@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/identity_core.description.md
 
@@ -29,9 +28,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -51,14 +52,13 @@ Core logic regarding Agent Identity.
 """
 
 
-from src.core.base.common.identity_core import (
-    IdentityCore as StandardIdentityCore, AgentIdentity)
+from src.core.base.common.identity_core import AgentIdentity
+from src.core.base.common.identity_core import IdentityCore as StandardIdentityCore
 
 __all__ = ["IdentityCore", "AgentIdentity"]
 
 
 class IdentityCore(StandardIdentityCore):
-    """
-    Facade regarding StandardIdentityCore to maintain backward compatibility.
+    """Facade regarding StandardIdentityCore to maintain backward compatibility.
     Identity logic is now centralized in the Infrastructure/Common tier.
     """

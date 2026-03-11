@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-fix_indentation.py  -  Smart, multi-pass indentation fixer for PyAgent src/
+"""fix_indentation.py  -  Smart, multi-pass indentation fixer for PyAgent src/
 
 USAGE
     python scripts/fix_indentation.py [--path PATH] [--dry-run] [--verbose] [--max-passes N]
@@ -72,16 +71,19 @@ ALGORITHM
     Phase 3 - Verify:
         Re-compile every file that was modified and report pass/fail.
 
-NOTES
+Notes
+-----
     - Only lines whose stripped content does NOT start with `class ` at a higher
       nesting are touched, to avoid moving genuinely module-level code.
     - The script is idempotent: re-running is safe.
     - `--dry-run` prints what would change without writing.
+
 """
 
 from __future__ import annotations
 
 import argparse
+
 # import ast
 import re
 import sys
@@ -163,8 +165,7 @@ def _parse_error_log(log_path: Path, project_root: Path) -> dict[Path, set[int]]
 
 
 def _context_indent(lines: list[str], idx: int, window: int = CONTEXT_WINDOW) -> int:
-    """
-    Infer the expected indentation for lines[idx] by looking at the
+    """Infer the expected indentation for lines[idx] by looking at the
     surrounding `window` non-blank non-comment lines.
 
     Returns the most common indent value >= MIN_INDENT_STEP found in the
@@ -224,8 +225,7 @@ def _prev_nonblank_index(lines: list[str], idx: int) -> int:
 
 
 def _preceding_block_indent(lines: list[str], idx: int) -> int:
-    """
-    Walk backward from idx to find the nearest line that ends with ':'
+    """Walk backward from idx to find the nearest line that ends with ':'
     (opens a block).  Return THAT line's indent + MIN_INDENT_STEP so we
     know what the first line of the block should look like.
     Returns -1 if not found.
@@ -258,8 +258,7 @@ def pass_fix_orphan_imports(
     verbose: bool = False,
     focus_lines: set[int] | None = None,
 ) -> tuple[list[str], int]:
-    """
-    Fix lines at column 0 (or unexpectedly low indent) that are preceded and
+    """Fix lines at column 0 (or unexpectedly low indent) that are preceded and
     followed by higher-indented code.  Changes are applied conservatively.
 
     If ``focus_lines`` is provided the pass will only touch lines that are
@@ -348,8 +347,7 @@ def pass_indent_after_except(
     verbose: bool = False,
     focus_lines: set[int] | None = None,
 ) -> tuple[list[str], int]:
-    """
-    Ensure the first non-blank line after any `except ...:` is indented
+    """Ensure the first non-blank line after any `except ...:` is indented
     one step deeper than the except line itself.  This handles a common
     code-gen defect where the block header is present but the body loses
     its leading whitespace.
@@ -395,8 +393,7 @@ def pass_fix_misindented_blocks(
     verbose: bool = False,
     focus_lines: set[int] | None = None,
 ) -> tuple[list[str], int]:
-    """
-    Detects runs of consecutive lines at an unexpectedly low indent that are
+    """Detects runs of consecutive lines at an unexpectedly low indent that are
     sandwiched between higher-indented code.  Shifts the whole run upward.
 
     If ``focus_lines`` is provided the run will only be adjusted when it
@@ -527,8 +524,7 @@ def pass_fix_escaped_methods(
     verbose: bool = False,
     focus_lines: set[int] | None = None,
 ) -> tuple[list[str], int]:
-    """
-    Detects `def NAME(self, ...` and `async def NAME(self, ...` lines at column 0
+    """Detects `def NAME(self, ...` and `async def NAME(self, ...` lines at column 0
     (or lower than expected) that follow a class body.  Shifts the entire
     method (def + body) by the missing indentation.
 
@@ -628,8 +624,7 @@ def pass_fix_escaped_methods(
 
 
 def _infer_method_indent(lines: list[str], idx: int) -> int:
-    """
-    Look backward and forward for other `def ... (self` lines whose indent > 0,
+    """Look backward and forward for other `def ... (self` lines whose indent > 0,
     return the most common such indent value.
     """
     indents: list[int] = []
@@ -650,8 +645,7 @@ def _infer_method_indent(lines: list[str], idx: int) -> int:
 
 
 def _find_block_end(lines: list[str], start: int, base_indent: int) -> int:
-    """
-    Return the index of the first line after the block beginning at `start`
+    """Return the index of the first line after the block beginning at `start`
     that is at or below `base_indent` (exclusive), or end-of-file.
     """
     for i in range(start + 1, len(lines)):
@@ -667,8 +661,7 @@ def _find_block_end(lines: list[str], start: int, base_indent: int) -> int:
 # Pass 4: Ensure `load` alias is not accidentally introduced (idempotency fix)
 # ---------------------------------------------------------------------------
 def pass_dedup_method_aliases(lines: list[str]) -> tuple[list[str], int]:
-    """
-    Removes accidental duplicate `load = load_config` or `load = load` style
+    """Removes accidental duplicate `load = load_config` or `load = load` style
     alias lines introduced during earlier passes.  Very targeted.
     """
     # Not needed for the indentation fixer; placeholder for future use.
@@ -684,8 +677,7 @@ def repair_file(
     verbose: bool = False,
     focus_lines: set[int] | None = None,
 ) -> tuple[int, bool, list[str]]:
-    """
-    Repair a single file.  Returns (total_changes, now_valid, new_lines).
+    """Repair a single file.  Returns (total_changes, now_valid, new_lines).
     """
     try:
         original = path.read_text(encoding="utf-8", errors="replace")
@@ -776,8 +768,7 @@ def _compile_check_lines(lines: list[str]) -> Optional[SyntaxError]:
 # Main
 # ---------------------------------------------------------------------------
 def main() -> int:
-    """
-    Process command-line arguments and repair indentation errors in Python files.
+    """Process command-line arguments and repair indentation errors in Python files.
 
     Scans target directory for syntax errors, applies multi-pass indentation fixes,
     and reports results. Returns 0 on success or 1 if files remain broken.

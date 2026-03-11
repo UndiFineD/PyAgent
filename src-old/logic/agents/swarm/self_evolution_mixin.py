@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/self_evolution_mixin.description.md
 
 # self_evolution_mixin
 
-**File**: `src\logic\agents\swarm\self_evolution_mixin.py`  
+**File**: `src\\logic\agents\\swarm\\self_evolution_mixin.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 13 imports  
 **Lines**: 370  
@@ -82,7 +81,7 @@ feedback, inspired by EvoAgentX's self-evolution algorithms.
 
 # Improvements for self_evolution_mixin
 
-**File**: `src\logic\agents\swarm\self_evolution_mixin.py`  
+**File**: `src\\logic\agents\\swarm\\self_evolution_mixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 370 lines (medium)  
 **Complexity**: 13 score (moderate)
@@ -114,14 +113,11 @@ LLM_CONTEXT_END
 
 """Self-evolution mixin for PyAgent orchestrators."""
 
-import asyncio
-import json
-from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 from src.core.base.common.models.communication_models import CascadeContext, WorkState
-from src.core.base.work_patterns import WorkPattern
 
 
 @dataclass
@@ -147,8 +143,7 @@ class EvolutionHistory:
 
 
 class SelfEvolutionMixin:
-    """
-    Mixin that enables self-evolving capabilities for PyAgent orchestrators.
+    """Mixin that enables self-evolving capabilities for PyAgent orchestrators.
 
     This mixin implements automatic workflow optimization based on execution
     feedback, inspired by EvoAgentX's self-evolution algorithms.
@@ -176,8 +171,7 @@ class SelfEvolutionMixin:
     async def execute_with_evolution(
         self, context: CascadeContext, pattern_name: Optional[str] = None, **kwargs: Any
     ) -> Dict[str, Any]:
-        """
-        Execute a workflow with self-evolution capabilities.
+        """Execute a workflow with self-evolution capabilities.
 
         This method executes a workflow and automatically improves it based on
         performance feedback if evolution is enabled.
@@ -274,8 +268,7 @@ class SelfEvolutionMixin:
         current_metrics: EvolutionMetrics,
         iteration: int,
     ) -> Optional[Dict[str, Any]]:
-        """
-        Generate an evolved version of the workflow.
+        """Generate an evolved version of the workflow.
 
         This method analyzes the current workflow performance and suggests
         improvements based on common evolution patterns.

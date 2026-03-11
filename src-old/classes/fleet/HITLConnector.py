@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/HITLConnector.description.md
 
 # HITLConnector
 
-**File**: `src\classes\fleet\HITLConnector.py`  
+**File**: `src\\classes\fleet\\HITLConnector.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 11 imports  
 **Lines**: 98  
@@ -50,7 +49,7 @@ Manages external communication with humans for high-stakes approvals.
 
 # Improvements for HITLConnector
 
-**File**: `src\classes\fleet\HITLConnector.py`  
+**File**: `src\\classes\fleet\\HITLConnector.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 98 lines (small)  
 **Complexity**: 4 score (simple)
@@ -100,14 +99,15 @@ from __future__ import annotations
 Supports Slack and Discord notification patterns for critical agent decisions.
 """
 
-from src.core.base.version import VERSION
 import logging
 import time
-from typing import Dict, Any, Optional
-from pathlib import Path
 import urllib.parse
-from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+from pathlib import Path
+from typing import Any
+
 from src.core.base.ConnectivityManager import ConnectivityManager
+from src.core.base.version import VERSION
+from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 
 # Infrastructure
 __version__ = VERSION

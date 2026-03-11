@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/VoiceAgent.description.md
 
@@ -101,11 +100,11 @@ from __future__ import annotations
 Integrates with fleet for voice-driven commands.
 """
 
-from src.core.base.version import VERSION
 import logging
-from typing import Optional
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -129,8 +128,7 @@ class VoiceAgent(BaseAgent):
         reference_voice_path: str | None = None,
         language_code: str = "en",
     ) -> str:
-        """
-        Synthesizes speech with paralinguistic tags and multilingual support (Toucan Pattern).
+        """Synthesizes speech with paralinguistic tags and multilingual support (Toucan Pattern).
         Supports expressive markers: [laugh], [chuckle], [sigh], [breath].
         """
         logging.info(
@@ -155,8 +153,7 @@ class VoiceAgent(BaseAgent):
     def transcribe_audio(
         self, audio_file_path: str, strategy: str = "whisper-gpu"
     ) -> str:
-        """
-        Transcribes an audio file into text.
+        """Transcribes an audio file into text.
         Supports multiple strategies (Handy/Whisper patterns):
         - whisper-gpu: High-accuracy Large/Turbo models (GPU)
         - parakeet-v3: CPU-optimized fast transcription

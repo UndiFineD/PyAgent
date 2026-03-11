@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/KnowledgeTransferEngine.description.md
 
 # KnowledgeTransferEngine
 
-**File**: `src\classes\fleet\KnowledgeTransferEngine.py`  
+**File**: `src\\classes\fleet\\KnowledgeTransferEngine.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 50  
@@ -48,7 +47,7 @@ Shell for KnowledgeTransferCore.
 
 # Improvements for KnowledgeTransferEngine
 
-**File**: `src\classes\fleet\KnowledgeTransferEngine.py`  
+**File**: `src\\classes\fleet\\KnowledgeTransferEngine.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 50 lines (small)  
 **Complexity**: 4 score (simple)
@@ -85,13 +84,13 @@ Enables sharing lessons between decoupled fleet instances.
 import json
 import logging
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 from .KnowledgeTransferCore import KnowledgeTransferCore
 
+
 class KnowledgeTransferEngine:
-    """
-    Manages export and import of knowledge/lessons between fleets.
+    """Manages export and import of knowledge/lessons between fleets.
     Shell for KnowledgeTransferCore.
     """
 
@@ -104,10 +103,10 @@ class KnowledgeTransferEngine:
     def export_knowledge(self, fleet_id: str, knowledge_data: Dict[str, Any]) -> str:
         """Exports a fleet's knowledge (lessons, entities) to a shareable file."""
         export_file = self.export_path / f"knowledge_{fleet_id}.json"
-        
+
         with open(export_file, "w") as f:
             json.dump(knowledge_data, f, indent=2)
-            
+
         logging.info(f"KnowledgeTransfer: Exported knowledge for {fleet_id} to {export_file}")
         return str(export_file)
 
@@ -116,10 +115,10 @@ class KnowledgeTransferEngine:
         source_path = Path(source_file)
         if not source_path.exists():
             raise FileNotFoundError(f"Knowledge file not found: {source_file}")
-            
+
         with open(source_path, "r") as f:
             data = json.load(f)
-            
+
         logging.info(f"KnowledgeTransfer: Imported knowledge from {source_file}")
         return data
 

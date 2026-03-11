@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/core/MorphologyCore.description.md
 
 # MorphologyCore
 
-**File**: `src\logic\agents\system\core\MorphologyCore.py`  
+**File**: `src\\logic\agents\\system\\core\\MorphologyCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 48  
@@ -41,7 +40,7 @@ It identifies logical overlap and proposes architectural shifts.
 
 # Improvements for MorphologyCore
 
-**File**: `src\logic\agents\system\core\MorphologyCore.py`  
+**File**: `src\\logic\agents\\system\\core\\MorphologyCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 48 lines (small)  
 **Complexity**: 3 score (simple)
@@ -76,19 +75,16 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-from typing import Dict, List
 import json
 
 
 class MorphologyCore:
-    """
-    MorphologyCore handles agent splitting, merging, and DNA encoding.
+    """MorphologyCore handles agent splitting, merging, and DNA encoding.
     It identifies logical overlap and proposes architectural shifts.
     """
 
     def calculate_path_overlap(self, path_a: list[str], path_b: list[str]) -> float:
-        """
-        Calculates Jaccard similarity between two agent logic paths.
+        """Calculates Jaccard similarity between two agent logic paths.
         Overlap > 0.8 triggers a 'MERGE' proposal.
         """
         set_a, set_b = set(path_a), set(path_b)
@@ -101,8 +97,7 @@ class MorphologyCore:
     def encode_agent_dna(
         self, name: str, tools: list[str], prompt: str, model: str
     ) -> str:
-        """
-        Encodes the agent's DNA into a JSON string.
+        """Encodes the agent's DNA into a JSON string.
         """
         dna = {
             "name": name,
@@ -116,8 +111,7 @@ class MorphologyCore:
         return json.dumps(dna)
 
     def propose_split(self, load_stats: dict[str, float]) -> list[str]:
-        """
-        If an agent's load is too high, it proposes splitting into sub-specialists.
+        """If an agent's load is too high, it proposes splitting into sub-specialists.
         """
         proposals = []
         for agent, load in load_stats.items():

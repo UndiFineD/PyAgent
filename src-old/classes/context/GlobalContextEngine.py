@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/GlobalContextEngine.description.md
 
@@ -100,16 +99,18 @@ Consolidates episodic memories into semantic knowledge and persistent preference
 Inspired by mem0 and BabyAGI patterns.
 """
 
-from src.core.base.Version import VERSION
 from pathlib import Path
 from typing import Any
+
+from src.core.base.Version import VERSION
 from src.logic.agents.cognitive.context.engines.GlobalContextCore import (
     GlobalContextCore,
 )
-from .mixins.ContextShardMixin import ContextShardMixin
+
+from .mixins.ContextConsolidationMixin import ContextConsolidationMixin
 from .mixins.ContextDataMixin import ContextDataMixin
 from .mixins.ContextEntityMixin import ContextEntityMixin
-from .mixins.ContextConsolidationMixin import ContextConsolidationMixin
+from .mixins.ContextShardMixin import ContextShardMixin
 
 __version__ = VERSION
 
@@ -117,8 +118,7 @@ __version__ = VERSION
 class GlobalContextEngine(
     ContextShardMixin, ContextDataMixin, ContextEntityMixin, ContextConsolidationMixin
 ):
-    """
-    Manages persistent project-wide knowledge and agent preferences.
+    """Manages persistent project-wide knowledge and agent preferences.
     Shell for GlobalContextCore.
     """
 

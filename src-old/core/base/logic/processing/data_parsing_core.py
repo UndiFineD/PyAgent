@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/processing/data_parsing_core.description.md
 
 # data_parsing_core
 
-**File**: `src\core\base\logic\processing\data_parsing_core.py`  
+**File**: `src\\core\base\\logic\\processing\\data_parsing_core.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 65  
@@ -43,7 +42,7 @@ Core class for data parsing operations.
 
 # Improvements for data_parsing_core
 
-**File**: `src\core\base\logic\processing\data_parsing_core.py`  
+**File**: `src\\core\base\\logic\\processing\\data_parsing_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 65 lines (small)  
 **Complexity**: 3 score (simple)
@@ -96,7 +95,6 @@ Implements XML/HTML parsing patterns from ADSyncDump-BOF.
 
 
 import html
-import re
 from typing import Optional
 
 

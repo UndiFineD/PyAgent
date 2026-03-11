@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/FeatureStoreAgent.description.md
 
@@ -112,13 +111,14 @@ pre-computed embeddings, and specialized tool-discovery metadata.
 Inspired by MLOps best practices.
 """
 
-from src.core.base.version import VERSION
-import logging
 import json
+import logging
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 from src.logic.agents.intelligence.core.SynthesisCore import SynthesisCore
 
 __version__ = VERSION
@@ -137,8 +137,7 @@ class FeatureStoreAgent(BaseAgent):
 
     @as_tool
     def store_vectorized_insight(self, insight_text: str, tags: list[str]) -> str:
-        """
-        Vectorizes a text insight and stores it for swarm-wide retrieval.
+        """Vectorizes a text insight and stores it for swarm-wide retrieval.
         """
         vector = self.core.vectorize_insight(insight_text)
         feature_name = f"insight_{hash(insight_text)}"
@@ -148,8 +147,7 @@ class FeatureStoreAgent(BaseAgent):
 
     @as_tool
     def merge_swarm_insights(self, feature_names: list[str]) -> list[float]:
-        """
-        Merges multiple vectorized insights into a single 'Global Fleet Vector'.
+        """Merges multiple vectorized insights into a single 'Global Fleet Vector'.
         """
         vectors = []
         for name in feature_names:
@@ -169,6 +167,7 @@ class FeatureStoreAgent(BaseAgent):
             feature_name: Unique identifier for the feature (e.g., 'python_error_patterns').
             value: The data or logic representing the feature.
             metadata: Additional context (e.g., 'version', 'source_agent').
+
         """
         output_path = self.feature_dir / f"{feature_name}.json"
         try:

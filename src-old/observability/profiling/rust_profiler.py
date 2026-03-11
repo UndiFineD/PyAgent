@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/profiling/rust_profiler.description.md
 
@@ -30,6 +29,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -53,15 +53,14 @@ Tracks call counts, execution time, and generates optimization reports.
 """
 
 
-from _thread import LockType
-from argparse import Namespace
 import ast
 import functools
-
 import json
 import re
 import threading
 import time
+from _thread import LockType
+from argparse import Namespace
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
@@ -93,8 +92,7 @@ class FunctionStats:
 
 
 class RustProfiler:
-    """
-    Singleton profiler for tracking Rust function usage.
+    """Singleton profiler for tracking Rust function usage.
     Thread-safe and designed for production use.
     """
 
@@ -444,7 +442,7 @@ def profile_rust_call(func_name: str) -> Callable:
                 return result
             except (
                 Exception
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            ):  # pylint: disable=broad-exception-caught, unused-variable
                 elapsed: int = time.perf_counter_ns() - start
                 profiler.record_call(func_name, elapsed, used_rust=False)
                 raise
@@ -469,7 +467,7 @@ class RustUsageScanner:
             content: str = filepath.read_text(encoding="utf-8", errors="ignore")
         except (
             Exception
-        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+        ):  # pylint: disable=broad-exception-caught, unused-variable
             return findings
 
         # Check if file imports rust_core
@@ -605,8 +603,7 @@ class RustUsageScanner:
 
 
 def create_profiled_rust_core() -> None | "ProfiledRustCore":
-    """
-    Create a profiled wrapper around rust_core module.
+    """Create a profiled wrapper around rust_core module.
     Returns a module-like object that tracks all calls.
     """
     try:
@@ -634,7 +631,7 @@ def create_profiled_rust_core() -> None | "ProfiledRustCore":
                         return result
                     except (
                         Exception
-                    ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                    ):  # pylint: disable=broad-exception-caught, unused-variable
                         elapsed: int = time.perf_counter_ns() - start
                         profiler.record_call(name, elapsed, used_rust=False)
                         raise

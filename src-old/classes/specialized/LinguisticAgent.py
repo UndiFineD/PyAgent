@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/LinguisticAgent.description.md
 
@@ -79,6 +78,7 @@ Ensures that the LLM only verbalizes grounded results and never hallucinates new
 """
 
 import logging
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
@@ -99,11 +99,14 @@ class LinguisticAgent(BaseAgent):
     @as_tool
     def articulate_results(self, technical_report: str, user_query: str) -> str:
         """Converts raw expert outputs into a polite, natural response.
+
         Args:
             technical_report: The raw output from the StructuredOrchestrator.
             user_query: The original user question.
+
         Return:
             A natural language summary.
+
         """
         logging.info("LinguisticAgent: Articulating technical report...")
 

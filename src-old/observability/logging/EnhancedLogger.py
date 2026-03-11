@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/logging/EnhancedLogger.description.md
 
@@ -187,6 +186,7 @@ Returns:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -255,8 +255,7 @@ def _dedupe_error(logger: logging.Logger, msg: str, *args: Hashable) -> None:
 
 
 def _should_log_with_scope(scope: LogScope) -> bool:
-    """
-    Determine whether to log based on scope.
+    """Determine whether to log based on scope.
 
     Args:
         scope: Logging scope
@@ -266,6 +265,7 @@ def _should_log_with_scope(scope: LogScope) -> bool:
 
     Returns:
         True if logging should proceed
+
     """
     if scope == "process":
         return True
@@ -299,13 +299,13 @@ def debug_once(
     *args: Hashable,
     scope: LogScope = "process",
 ) -> None:
-    """
-    Log debug message only once per unique (msg, args) combination.
+    """Log debug message only once per unique (msg, args) combination.
 
     Args:
         msg: Log message (can include % formatting)
         *args: Arguments for % formatting (must be hashable)
         scope: Logging scope for distributed systems
+
     """
     if not _should_log_with_scope(scope):
         return
@@ -318,13 +318,13 @@ def info_once(
     *args: Hashable,
     scope: LogScope = "process",
 ) -> None:
-    """
-    Log info message only once per unique (msg, args) combination.
+    """Log info message only once per unique (msg, args) combination.
 
     Args:
         msg: Log message (can include % formatting)
         *args: Arguments for % formatting (must be hashable)
         scope: Logging scope for distributed systems
+
     """
     if not _should_log_with_scope(scope):
         return
@@ -337,13 +337,13 @@ def warning_once(
     *args: Hashable,
     scope: LogScope = "process",
 ) -> None:
-    """
-    Log warning message only once per unique (msg, args) combination.
+    """Log warning message only once per unique (msg, args) combination.
 
     Args:
         msg: Log message (can include % formatting)
         *args: Arguments for % formatting (must be hashable)
         scope: Logging scope for distributed systems
+
     """
     if not _should_log_with_scope(scope):
         return
@@ -356,13 +356,13 @@ def error_once(
     *args: Hashable,
     scope: LogScope = "process",
 ) -> None:
-    """
-    Log error message only once per unique (msg, args) combination.
+    """Log error message only once per unique (msg, args) combination.
 
     Args:
         msg: Log message (can include % formatting)
         *args: Arguments for % formatting (must be hashable)
         scope: Logging scope for distributed systems
+
     """
     if not _should_log_with_scope(scope):
         return
@@ -375,8 +375,7 @@ def error_once(
 
 
 def patch_logger(logger: logging.Logger) -> logging.Logger:
-    """
-    Patch a logger instance with _once methods.
+    """Patch a logger instance with _once methods.
 
     Adds debug_once, info_once, warning_once, error_once methods
     to the logger instance.
@@ -386,6 +385,7 @@ def patch_logger(logger: logging.Logger) -> logging.Logger:
 
     Returns:
         The patched logger (same instance)
+
     """
     logger.debug_once = MethodType(debug_once, logger)  # type: ignore
     logger.info_once = MethodType(info_once, logger)  # type: ignore
@@ -395,14 +395,14 @@ def patch_logger(logger: logging.Logger) -> logging.Logger:
 
 
 def init_logger(name: str) -> logging.Logger:
-    """
-    Initialize a logger with enhanced methods.
+    """Initialize a logger with enhanced methods.
 
     Args:
         name: Logger name (typically __name__)
 
     Returns:
         Logger with debug_once, info_once, warning_once, error_once methods
+
     """
     logger = logging.getLogger(name)
     return patch_logger(logger)
@@ -414,8 +414,7 @@ def init_logger(name: str) -> logging.Logger:
 
 
 class EnhancedLoggerAdapter(logging.LoggerAdapter):
-    """
-    Logger adapter providing enhanced logging methods.
+    """Logger adapter providing enhanced logging methods.
 
     Provides a clean API without patching the underlying logger.
     """
@@ -497,8 +496,7 @@ def create_enhanced_logger(
     name: str,
     extra: dict[str, Any] | None = None,
 ) -> EnhancedLoggerAdapter:
-    """
-    Create an enhanced logger adapter.
+    """Create an enhanced logger adapter.
 
     Args:
         name: Logger name
@@ -506,6 +504,7 @@ def create_enhanced_logger(
 
     Returns:
         EnhancedLoggerAdapter with _once methods
+
     """
     logger = logging.getLogger(name)
     return EnhancedLoggerAdapter(logger, extra)
@@ -540,8 +539,7 @@ def get_dedup_cache_info() -> dict[str, Any]:
 
 
 class EnhancedLogger(logging.Logger):
-    """
-    Type hint class for enhanced logger.
+    """Type hint class for enhanced logger.
 
     Not for direct instantiation - use init_logger() or patch_logger().
     """

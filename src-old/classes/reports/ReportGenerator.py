@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/reports/ReportGenerator.description.md
 
 # ReportGenerator
 
-**File**: `src\classes\reports\ReportGenerator.py`  
+**File**: `src\\classes\reports\\ReportGenerator.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 20 imports  
 **Lines**: 446  
@@ -61,7 +60,7 @@ Generates quality reports (description, errors, improvements) for agent files.
 
 # Improvements for ReportGenerator
 
-**File**: `src\classes\reports\ReportGenerator.py`  
+**File**: `src\\classes\reports\\ReportGenerator.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 446 lines (medium)  
 **Complexity**: 25 score (complex)
@@ -109,7 +108,6 @@ from __future__ import annotations
 
 """Report generation logic for agent source files."""
 
-from src.core.base.version import VERSION
 import ast
 import hashlib
 import logging
@@ -117,9 +115,12 @@ import os
 import re
 import sys
 import time
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, cast
 from collections.abc import Iterable
+from pathlib import Path
+from typing import Any, cast
+
+from src.core.base.version import VERSION
+
 from .CompileResult import CompileResult
 from .core.DeduplicationCore import DeduplicationCore
 
@@ -141,6 +142,7 @@ class ReportGenerator:
             agent_dir: Directory containing agent scripts.
             output_dir: Directory where reports should be written.
             recorder: Optional LocalContextRecorder.
+
         """
         self.recorder = recorder
         if agent_dir:

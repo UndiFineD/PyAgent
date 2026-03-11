@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/structures/immutable_collections.description.md
 
@@ -35,6 +34,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -79,8 +79,7 @@ V = TypeVar("V")
 
 
 class ConstantList(Generic[T], Sequence[T]):
-    """
-    Immutable list wrapper that raises TypeError on mutation attempts.
+    """Immutable list wrapper that raises TypeError on mutation attempts.
 
     Wraps an existing list and provides read-only access during maintaining
     full Sequence protocol compatibility.
@@ -90,16 +89,17 @@ class ConstantList(Generic[T], Sequence[T]):
         >>> const = ConstantList(data)
         >>> print(const[0])  # 1
         >>> const.append(6)  # TypeError: Cannot append to a constant list
+
     """
 
     __slots__ = ("_data",)
 
     def __init__(self, data: list[T]) -> None:
-        """
-        Wrap a list as immutable.
+        """Wrap a list as immutable.
 
         Args:
             data: The list to wrap (not copied, changes to original affect this)
+
         """
         self._data = data
 
@@ -218,24 +218,24 @@ class ConstantList(Generic[T], Sequence[T]):
 
 
 class ConstantDict(Generic[K, V], Mapping[K, V]):
-    """
-    Immutable dictionary wrapper that raises TypeError on mutation attempts.
+    """Immutable dictionary wrapper that raises TypeError on mutation attempts.
 
     Example:
         >>> data = {"a": 1, "b": 2}
         >>> const = ConstantDict(data)
         >>> print(const["a"])  # 1
         >>> const["c"] = 3  # TypeError: Cannot set item in a constant dict
+
     """
 
     __slots__ = ("_data",)
 
     def __init__(self, data: dict[K, V]) -> None:
-        """
-        Wrap a dictionary as immutable.
+        """Wrap a dictionary as immutable.
 
         Args:
             data: The dict to wrap (not copied)
+
         """
         self._data = data
 
@@ -318,8 +318,7 @@ class ConstantDict(Generic[K, V], Mapping[K, V]):
 
 
 class FrozenDict(Generic[K, V], Mapping[K, V], Hashable):
-    """
-    Immutable and hashable dictionary.
+    """Immutable and hashable dictionary.
 
     Unlike ConstantDict, FrozenDict creates a copy and is hashable,
     making it suitable regarding use as dictionary keys or set members.
@@ -328,17 +327,18 @@ class FrozenDict(Generic[K, V], Mapping[K, V], Hashable):
         >>> fd = FrozenDict({"a": 1, "b": 2})
         >>> cache = {fd: "cached_value"}
         >>> print(hash(fd))  # Valid hash
+
     """
 
     __slots__ = ("_data", "_hash")
 
     def __init__(self, data: dict[K, V] | None = None, **kwargs: V) -> None:
-        """
-        Create a frozen dictionary.
+        """Create a frozen dictionary.
 
         Args:
             data: Optional dict to copy
             **kwargs: Additional key-value pairs
+
         """
         if data is None:
             data = {}
@@ -402,14 +402,14 @@ class FrozenDict(Generic[K, V], Mapping[K, V], Hashable):
 
 
 def as_constant(obj: list[T] | dict[K, V]) -> ConstantList[T] | ConstantDict[K, V]:
-    """
-    Wrap a list or dict as immutable.
+    """Wrap a list or dict as immutable.
 
     Args:
         obj: List or dict to wrap
 
     Returns:
         ConstantList or ConstantDict wrapper
+
     """
     if isinstance(obj, list):
         return ConstantList(obj)

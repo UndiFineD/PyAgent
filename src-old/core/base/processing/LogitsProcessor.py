@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/processing/LogitsProcessor.description.md
 
 # LogitsProcessor
 
-**File**: `src\core\base\processing\LogitsProcessor.py`  
+**File**: `src\\core\base\\processing\\LogitsProcessor.py`  
 **Type**: Python Module  
 **Summary**: 11 classes, 2 functions, 15 imports  
 **Lines**: 506  
@@ -199,7 +198,7 @@ Returns:
 
 # Improvements for LogitsProcessor
 
-**File**: `src\core\base\processing\LogitsProcessor.py`  
+**File**: `src\\core\base\\processing\\LogitsProcessor.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 506 lines (large)  
 **Complexity**: 28 score (complex)
@@ -233,6 +232,7 @@ Returns:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -248,10 +248,8 @@ Phase 23: Advanced Serialization & Validation
 """
 
 
-from abc import ABC, abstractmethod
-from collections.abc import Callable, Sequence
-from dataclasses import dataclass, field
-from typing import Protocol, Any, TYPE_CHECKING
+from collections.abc import Sequence
+from typing import Protocol
 
 try:
     import torch
@@ -271,6 +269,7 @@ except ImportError:
 
 # Try Rust acceleration
 import torch
+
 try:
     import rust_core
 
@@ -292,8 +291,7 @@ except ImportError:
 
 
 class LogitsProcessor(Protocol):
-    """
-    Protocol for logits processors.
+    """Protocol for logits processors.
 
     A logits processor modifies the logits tensor before sampling.
     It receives the past token IDs and current logits, returning
@@ -305,8 +303,7 @@ class LogitsProcessor(Protocol):
         input_ids: Sequence[int],
         logits: "torch.Tensor",
     ) -> "torch.Tensor":
-        """
-        Process logits.
+        """Process logits.
 
         Args:
             input_ids: Previously generated token IDs
@@ -314,14 +311,15 @@ class LogitsProcessor(Protocol):
 
         Returns:
             Modified logits tensor
+
         """
         ...
 
 
 class LogitsProcessorList:
-    """
-    Composable list of logits processors.
+    """Composable list of logits processors.
     Applies processors in order, passing the output of each to the next.
+
     Example:
         >>> processors = LogitsProcessorList([
         ...     TemperatureProcessor(0.7),
@@ -329,6 +327,7 @@ class LogitsProcessorList:
         ...     TopPProcessor(0.9),
         ... ])
         >>> modified_logits = processors(input_ids, logits)
+
     """
 
     def __init__(self, processors: list[LogitsProcessor] | None = None):
@@ -360,8 +359,7 @@ class LogitsProcessorList:
 
 
 class TemperatureProcessor:
-    """
-    Apply temperature scaling to logits.
+    """Apply temperature scaling to logits.
     Temperature < 1.0 makes distribution sharper (more deterministic)
     Temperature > 1.0 makes distribution flatter (more random)
     Temperature = 1.0 is unchanged
@@ -388,8 +386,7 @@ class TemperatureProcessor:
 
 
 class TopKProcessor:
-    """
-    Keep only top-k logits, set others to -inf.
+    """Keep only top-k logits, set others to -inf.
     This limits sampling to the k most likely tokens.
     """
 
@@ -423,8 +420,7 @@ class TopKProcessor:
 
 
 class TopPProcessor:
-    """
-    Nucleus sampling - keep tokens with cumulative probability <= top_p.
+    """Nucleus sampling - keep tokens with cumulative probability <= top_p.
     This dynamically adjusts the number of considered tokens based on
     their cumulative probability.
     """
@@ -459,8 +455,7 @@ class TopPProcessor:
 
 
 class RepetitionPenaltyProcessor:
-    """
-    Penalize tokens that have already appeared.
+    """Penalize tokens that have already appeared.
     penalty > 1.0 discourages repetition
     penalty < 1.0 encourages repetition
     penalty = 1.0 is unchanged
@@ -498,8 +493,7 @@ class RepetitionPenaltyProcessor:
 
 
 class NoBadWordsProcessor:
-    """
-    Block specific token sequences from being generated.
+    """Block specific token sequences from being generated.
     Given a list of "bad word" token sequences, this processor sets
     their logits to -inf when they would complete a bad sequence.
     """
@@ -508,9 +502,9 @@ class NoBadWordsProcessor:
     _NEUTRAL_LOGIT = 0.0
 
     def __init__(self, bad_words_ids: list[list[int]]):
-        """
-        Args:
-            bad_words_ids: List of token ID sequences to block
+        """Args:
+        bad_words_ids: List of token ID sequences to block
+
         """
         self.bad_words_ids = bad_words_ids
         self._word_bias: "torch.Tensor | None" = None
@@ -565,8 +559,7 @@ class NoBadWordsProcessor:
 
 
 class MinLengthProcessor:
-    """
-    Prevent EOS token before minimum length is reached.
+    """Prevent EOS token before minimum length is reached.
     """
 
     def __init__(self, min_length: int, eos_token_id: int):
@@ -586,8 +579,7 @@ class MinLengthProcessor:
 
 
 class MaxLengthProcessor:
-    """
-    Force EOS token after maximum length is reached.
+    """Force EOS token after maximum length is reached.
     """
 
     def __init__(self, max_length: int, eos_token_id: int):
@@ -608,8 +600,7 @@ class MaxLengthProcessor:
 
 
 class PresencePenaltyProcessor:
-    """
-    Additive penalty for tokens that have appeared.
+    """Additive penalty for tokens that have appeared.
 
     Unlike RepetitionPenalty (multiplicative), this adds a flat penalty
     to any token that has appeared at least once.
@@ -636,8 +627,7 @@ class PresencePenaltyProcessor:
 
 
 class FrequencyPenaltyProcessor:
-    """
-    Penalty proportional to token frequency.
+    """Penalty proportional to token frequency.
     Tokens that appear more often receive a larger penalty.
     """
 
@@ -669,15 +659,16 @@ def apply_processors(
     logits: "torch.Tensor",
     *processors: LogitsProcessor,
 ) -> "torch.Tensor":
-    """
-    Apply multiple processors to logits.
+    """Apply multiple processors to logits.
     Convenience function for one-off processing.
+
     Args:
         input_ids: Past token IDs
         logits: Logits tensor
         *processors: Processors to apply
     Returns:
         Modified logits
+
     """
     for processor in processors:
         logits = processor(input_ids, logits)
@@ -696,10 +687,11 @@ def create_processor_chain(
     max_length: int | None = None,
     eos_token_id: int | None = None,
 ) -> LogitsProcessorList:
-    """
-    Create a standard processor chain from common parameters.
+    """Create a standard processor chain from common parameters.
+
     Returns:
         LogitsProcessorList with configured processors
+
     """
     processors = LogitsProcessorList()
 

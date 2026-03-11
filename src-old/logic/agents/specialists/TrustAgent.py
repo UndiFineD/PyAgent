@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/TrustAgent.description.md
 
 # TrustAgent
 
-**File**: `src\logic\agents\specialists\TrustAgent.py`  
+**File**: `src\\logic\agents\\specialists\\TrustAgent.py`  
 **Type**: Python Module  
 **Summary**: 5 classes, 0 functions, 15 imports  
 **Lines**: 260  
@@ -78,7 +77,7 @@ emotional intelligence, and maintaining trust scores for interaction safety.
 
 # Improvements for TrustAgent
 
-**File**: `src\logic\agents\specialists\TrustAgent.py`  
+**File**: `src\\logic\agents\\specialists\\TrustAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 260 lines (medium)  
 **Complexity**: 7 score (moderate)
@@ -119,19 +118,20 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# TrustAgent: Multi-dimensional Socio-Emotional Analysis Agent - Phase 319 Enhanced
-
-from src.core.base.Version import VERSION
-import logging
-import time
-import re
 import json
-from typing import Any, Dict, List, Optional
+import logging
+import re
+import time
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Dict, List
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.BaseUtilities import as_tool
+
+# Copyright 2026 PyAgent Authors
+# TrustAgent: Multi-dimensional Socio-Emotional Analysis Agent - Phase 319 Enhanced
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
@@ -174,8 +174,7 @@ class TrustMetrics:
 
 
 class TrustAgent(BaseAgent):
-    """
-    Agent specializing in human-agent alignment, mood detection,
+    """Agent specializing in human-agent alignment, mood detection,
     emotional intelligence, and maintaining trust scores for interaction safety.
     """
 

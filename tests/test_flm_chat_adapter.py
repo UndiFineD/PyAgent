@@ -17,15 +17,16 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
-from src.core.providers.FlmProviderConfig import FlmProviderConfig
 from src.core.providers.FlmChatAdapter import FlmChatAdapter
+from src.core.providers.FlmProviderConfig import FlmProviderConfig
 
 
 @dataclass
 class _FakeFunction:
     """Mimics the structure of a tool call function in the FLM response."""
+
     name: str
     arguments: str
 
@@ -33,6 +34,7 @@ class _FakeFunction:
 @dataclass
 class _FakeToolCall:
     """Mimics the structure of a tool call in the FLM response."""
+
     id: str
     type: str
     function: _FakeFunction
@@ -41,6 +43,7 @@ class _FakeToolCall:
 @dataclass
 class _FakeMessage:
     """Mimics the structure of a message in the FLM response."""
+
     content: str | None
     tool_calls: list[_FakeToolCall] | None
 
@@ -48,23 +51,26 @@ class _FakeMessage:
 @dataclass
 class _FakeChoice:
     """Mimics the structure of a choice in the FLM response."""
+
     message: _FakeMessage
 
 
 @dataclass
 class _FakeResponse:
     """Mimics the structure of a response from the FLM completions API."""
+
     choices: list[_FakeChoice]
 
 
 class _FakeCompletions:
     """Mimics the completions interface of the FLM client, recording calls for verification."""
+
     def __init__(self, responses: list[_FakeResponse]) -> None:
         """Initialize with a list of responses to return on create calls."""
         self._responses = responses
-        self.calls: list[dict[str, Any]] = []
+        self.calls: list[dict[str, object]] = []
 
-    def create(self, **kwargs: Any) -> _FakeResponse:
+    def create(self, **kwargs: object) -> _FakeResponse:
         """Record the call arguments and return the next response."""
         self.calls.append(kwargs)
         return self._responses.pop(0)
@@ -72,6 +78,7 @@ class _FakeCompletions:
 
 class _FakeClient:
     """Mimics the FLM client, providing a chat interface with completions."""
+
     def __init__(self, responses: list[_FakeResponse]) -> None:
         """Initialize the fake client with a list of responses for the completions API."""
         self.chat = type("Chat", (), {})()
@@ -90,7 +97,11 @@ def test_create_completion_uses_default_model() -> None:
         }
     )
 
-    adapter = FlmChatAdapter(config=config, client_factory=lambda **_: fake_client)
+    def _client_factory(*, base_url: str, api_key: str) -> _FakeClient:
+        del base_url, api_key
+        return fake_client
+
+    adapter = FlmChatAdapter(config=config, client_factory=cast(Any, _client_factory))
     messages: list[dict[str, Any]] = [{"role": "system", "content": "you are helpful"}]
 
     result = adapter.create_completion(messages=messages, max_tokens=1024)
@@ -115,7 +126,11 @@ def test_run_until_terminal_returns_final_content() -> None:
         }
     )
 
-    adapter = FlmChatAdapter(config=config, client_factory=lambda **_: fake_client)
+    def _client_factory(*, base_url: str, api_key: str) -> _FakeClient:
+        del base_url, api_key
+        return fake_client
+
+    adapter = FlmChatAdapter(config=config, client_factory=cast(Any, _client_factory))
     messages: list[dict[str, Any]] = [{"role": "user", "content": "are you listening?"}]
 
     import asyncio

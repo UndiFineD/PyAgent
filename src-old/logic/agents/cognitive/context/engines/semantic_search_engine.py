@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/semantic_search_engine.description.md
 
@@ -41,20 +40,21 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # Phase 16: Rust acceleration for keyword matching and scoring
 
 """Auto-extracted class from agent_context.py"""
 
-from typing import Any
 import logging
+from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.utils.search_algorithm import SearchAlgorithm
 from src.logic.agents.cognitive.context.models.semantic_search_result import (
     SemanticSearchResult,
 )
+from src.logic.agents.cognitive.context.utils.search_algorithm import SearchAlgorithm
 
 __version__ = VERSION
 
@@ -83,6 +83,7 @@ class SemanticSearchEngine:
     Example:
         >>> engine=SemanticSearchEngine()
         >>> results=engine.search("function that handles authentication")
+
     """
 
     def __init__(self, persist_directory: str | None = None) -> None:
@@ -174,6 +175,7 @@ class SemanticSearchEngine:
         Args:
             file_path: Path to the file.
             content: File content to index.
+
         """
         # Update documents storage
         self.documents[file_path] = content
@@ -196,6 +198,7 @@ class SemanticSearchEngine:
 
         Returns:
             List of search results.
+
         """
         search_algo = algorithm or self.algorithm
         self.results = []

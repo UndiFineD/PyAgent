@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/stats/MetricsExporter.description.md
 
@@ -84,7 +83,7 @@ Sends telemetry to specialized backends like Prometheus, InfluxDB, or Grafana Cl
 
 import logging
 import time
-from typing import Dict, List, Any, Optional
+
 from src.classes.stats.PrometheusExporter import PrometheusExporter
 
 

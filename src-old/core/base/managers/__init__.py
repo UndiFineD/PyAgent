@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/managers/__init__.description.md
 
 # __init__
 
-**File**: `src\core\base\managers\__init__.py`  
+**File**: `src\\core\base\\managers\\__init__.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 27 imports  
 **Lines**: 64  
@@ -42,7 +41,7 @@ Internal managers for prompt, conversation, auth, and batch processing.
 
 # Improvements for __init__
 
-**File**: `src\core\base\managers\__init__.py`  
+**File**: `src\\core\base\\managers\\__init__.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 64 lines (small)  
 **Complexity**: 0 score (simple)
@@ -91,35 +90,35 @@ from __future__ import annotations
 from src.core.base.Version import VERSION as VERSION
 
 try:
+    from .AuthManagers import AuthenticationManager, AuthManager
+    from .BatchManagers import BatchRequest, RequestBatcher
+    from .ConversationManagers import ConversationHistory
+    from .OrchestrationManagers import (
+        ABTest,
+        AgentComposer,
+        ModelSelector,
+        QualityScorer,
+    )
+    from .PluginManager import PluginManager, PluginMetadata
+    from .ProcessorManagers import (
+        MultimodalProcessor,
+        ResponsePostProcessor,
+        SerializationManager,
+    )
     from .PromptManagers import (
         PromptTemplateManager,
         PromptVersion,
         PromptVersionManager,
     )
-    from .ConversationManagers import ConversationHistory
-    from .AuthManagers import AuthenticationManager, AuthManager
-    from .BatchManagers import BatchRequest, RequestBatcher
-    from .ProcessorManagers import (
-        ResponsePostProcessor,
-        MultimodalProcessor,
-        SerializationManager,
-    )
-    from .OrchestrationManagers import (
-        AgentComposer,
-        ModelSelector,
-        QualityScorer,
-        ABTest,
-    )
-    from .PluginManager import PluginManager, PluginMetadata
+    from .ResourceQuotaManager import QuotaConfig, ResourceQuotaManager
     from .SystemManagers import (
-        FilePriorityManager,
-        ResponseCache,
-        StatePersistence,
         EventManager,
+        FilePriorityManager,
         HealthChecker,
         ProfileManager,
+        ResponseCache,
+        StatePersistence,
     )
-    from .ResourceQuotaManager import ResourceQuotaManager, QuotaConfig
 except Exception:
     # Best-effort: allow package import even if some manager submodules are
     # missing or named differently (legacy/pluralization differences).

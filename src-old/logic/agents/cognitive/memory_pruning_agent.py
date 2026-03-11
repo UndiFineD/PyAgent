@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/memory_pruning_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -50,14 +50,14 @@ from __future__ import annotations
 
 import time
 from typing import Any
+
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 class MemoryPruningAgent:
-    """
-    Optimizes Long-Term Memory (LTM) by ranking importance and
+    """Optimizes Long-Term Memory (LTM) by ranking importance and
     pruning low-utility or stale data slices.
     """
 
@@ -65,8 +65,7 @@ class MemoryPruningAgent:
         self.workspace_path = workspace_path
 
     def rank_memory_importance(self, memory_entry: dict[str, Any]) -> float:
-        """
-        Ranks a memory entry based on recency, frequency of access, and logical density.
+        """Ranks a memory entry based on recency, frequency of access, and logical density.
         """
         score = 0.0
 
@@ -90,8 +89,7 @@ class MemoryPruningAgent:
     def select_pruning_targets(
         self, memory_list: list[dict[str, Any]], threshold: float = 0.2
     ) -> list[dict[str, Any]]:
-        """
-        Identifies entries that fall below the utility threshold.
+        """Identifies entries that fall below the utility threshold.
         """
         targets = []
         for i, entry in enumerate(memory_list):
@@ -103,8 +101,7 @@ class MemoryPruningAgent:
     def generate_archival_plan(
         self, memory_list: list[dict[str, Any]]
     ) -> dict[str, list[str]]:
-        """
-        Decides which memories to move to 'cold' storage vs 'delete'.
+        """Decides which memories to move to 'cold' storage vs 'delete'.
         """
         plan: dict[str, list[str]] = {"cold_storage": [], "delete": []}
         for entry in memory_list:

@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/skill_manager_core.description.md
 
 # skill_manager_core
 
-**File**: `src\core\base\logic\core\skill_manager_core.py`  
+**File**: `src\\core\base\\logic\\core\\skill_manager_core.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 10 imports  
 **Lines**: 100  
@@ -60,7 +59,7 @@ Harvested from awesome-mcp patterns.
 
 # Improvements for skill_manager_core
 
-**File**: `src\core\base\logic\core\skill_manager_core.py`  
+**File**: `src\\core\base\\logic\\core\\skill_manager_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 100 lines (medium)  
 **Complexity**: 2 score (simple)
@@ -93,16 +92,14 @@ Harvested from awesome-mcp patterns.
 LLM_CONTEXT_END
 """
 
+import asyncio
 import json
 import os
-import asyncio
-from typing import Dict, Any, List, Optional
-from src.core.base.agent_state_manager import StateTransaction
+from typing import Any, Dict, List, Optional
 
 
 class SkillManagerCore:
-    """
-    Manages the dynamic discovery and registration of agent skills (MCP tools).
+    """Manages the dynamic discovery and registration of agent skills (MCP tools).
     Harvested from awesome-mcp patterns.
     """
 
@@ -136,11 +133,9 @@ class SkillManagerCore:
     async def ensure_tool_installed(
         self, tool_name: str, install_cmd: List[str]
     ) -> bool:
-        """
-        JIT installation of missing tools/CLIs.
+        """JIT installation of missing tools/CLIs.
         Pattern harvested from AI-coding-platform.
         """
-        import subprocess
         import shutil
 
         # Check if already in PATH

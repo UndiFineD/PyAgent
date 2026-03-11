@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/acceleration.description.md
 
 # acceleration
 
-**File**: `src\core\base\acceleration.py`  
+**File**: `src\\core\base\acceleration.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 1 imports  
 **Lines**: 39  
@@ -37,7 +36,7 @@ Core engine for pruning neural connections in the swarm.
 
 # Improvements for acceleration
 
-**File**: `src\core\base\acceleration.py`  
+**File**: `src\\core\base\acceleration.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 39 lines (small)  
 **Complexity**: 2 score (simple)
@@ -100,8 +99,7 @@ class NeuralPruningEngine:
     def calculate_synaptic_weight(
         self, inputs: list[float], weights: list[float]
     ) -> float:
-        """
-        Accelerated implementation using Rust core.
+        """Accelerated implementation using Rust core.
         Falls back to Python if Rust module is not compiled.
         """
         try:

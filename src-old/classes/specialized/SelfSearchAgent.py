@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/SelfSearchAgent.description.md
 
@@ -93,9 +92,10 @@ from __future__ import annotations
 
 """Agent specializing in Self-Search Reinforcement Learning (SSRL) patterns."""
 
-from src.core.base.version import VERSION
-from src.core.base.BaseAgent import BaseAgent
 import logging
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

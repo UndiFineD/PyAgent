@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/maintenance/fix_headers/cli.description.md
 
 # cli
 
-**File**: `src\maintenance\fix_headers\cli.py`  
+**File**: `src\\maintenance\fix_headers\\cli.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 1 functions, 3 imports  
 **Lines**: 74  
@@ -48,7 +47,7 @@ CLI entry point for the Fix Headers Tool.
 
 # Improvements for cli
 
-**File**: `src\maintenance\fix_headers\cli.py`  
+**File**: `src\\maintenance\fix_headers\\cli.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 74 lines (small)  
 **Complexity**: 1 score (simple)
@@ -82,7 +81,6 @@ LLM_CONTEXT_END
 CLI interface for the Fix Headers Tool.
 """
 
-import sys
 import argparse
 
 from .fix_headers_agent import FixHeadersAgent

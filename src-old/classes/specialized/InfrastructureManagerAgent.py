@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/InfrastructureManagerAgent.description.md
 
@@ -100,11 +99,12 @@ from __future__ import annotations
 Provides tools for remote system administration and automated environment scaling.
 """
 
-from src.core.base.version import VERSION
 import logging
-from typing import Dict, Any
+from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -124,10 +124,12 @@ class InfrastructureManagerAgent(BaseAgent):
     @as_tool
     def list_proxmox_vms(self, host: str, token_id: str, secret: str) -> str:
         """Lists all VMs and containers on a Proxmox host.
+
         Args:
             host: Proxmox host IP or domain.
             token_id: API Token ID.
             secret: API Secret.
+
         """
         logging.info(f"INFRA: Listing ProxMox VMs on {host}")
         # Simulation of Proxmox API call
@@ -146,11 +148,13 @@ class InfrastructureManagerAgent(BaseAgent):
         self, entity_id: str, action: str, api_url: str, token: str
     ) -> str:
         """Controls a HomeAssistant device (light, switch, etc.).
+
         Args:
             entity_id: The HA entity ID (e.g., 'light.living_room').
             action: 'turn_on', 'turn_off', 'toggle'.
             api_url: HA Base URL.
             token: Long-lived access token.
+
         """
         logging.info(f"INFRA: HomeAssistant {action} for {entity_id}")
         # Simulation of HA REST API call

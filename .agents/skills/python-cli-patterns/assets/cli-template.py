@@ -1,5 +1,4 @@
-"""
-CLI Application Template
+"""CLI Application Template
 
 A production-ready CLI application structure.
 
@@ -9,15 +8,14 @@ Usage:
     python cli.py config init
 """
 
-import sys
 from pathlib import Path
 from typing import Annotated, Optional
 
 import typer
 from rich.console import Console
-from rich.table import Table
 from rich.panel import Panel
 from rich.progress import track
+from rich.table import Table
 
 # =============================================================================
 # App Setup
@@ -62,8 +60,7 @@ def main(
         None, "--config", "-c", help="Config file path"
     ),
 ):
-    """
-    [bold blue]MyApp[/bold blue] - A sample CLI application.
+    """[bold blue]MyApp[/bold blue] - A sample CLI application.
 
     Use [green]--help[/green] on any command for more info.
     """
@@ -103,12 +100,12 @@ def greet(
     count: Annotated[int, typer.Option("--count", "-n", help="Times to greet")] = 1,
     loud: Annotated[bool, typer.Option("--loud", "-l", help="Uppercase")] = False,
 ):
-    """
-    Say hello to someone.
+    """Say hello to someone.
 
     Example:
         myapp greet World
         myapp greet World --count 3 --loud
+
     """
     message = f"Hello, {name}!"
     if loud:
@@ -133,11 +130,11 @@ def process(
         typer.Option("--output", "-o", help="Output file"),
     ] = None,
 ):
-    """
-    Process one or more files.
+    """Process one or more files.
 
     Example:
         myapp process file1.txt file2.txt -o output.txt
+
     """
     log(f"Processing {len(files)} files")
 

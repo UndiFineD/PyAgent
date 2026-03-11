@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/managers/__init__.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -55,16 +56,19 @@ from src.core.base.lifecycle.version import VERSION
 from .auth_manager import AuthenticationManager, AuthManager  # noqa: F401
 from .batch_managers import BatchRequest, RequestBatcher  # noqa: F401
 from .conversation_managers import ConversationHistory  # noqa: F401
-from .orchestration_managers import (ABTest, AgentComposer, ModelSelector,  # noqa: F401
-                                     QualityScorer)
+from .orchestration_managers import ABTest, AgentComposer, ModelSelector, QualityScorer  # noqa: F401
 from .plugin_manager import PluginManager, PluginMetadata  # noqa: F401
-from .processor_managers import (MultimodalProcessor, ResponsePostProcessor,  # noqa: F401
-                                 SerializationManager)
-from .prompt_managers import (PromptTemplateManager, PromptVersion,  # noqa: F401
-                              PromptVersionManager)
+from .processor_managers import MultimodalProcessor, ResponsePostProcessor, SerializationManager  # noqa: F401
+from .prompt_managers import PromptTemplateManager, PromptVersion, PromptVersionManager  # noqa: F401
 from .resource_quota_manager import QuotaConfig, ResourceQuotaManager  # noqa: F401
-from .system_managers import (EventManager, FilePriorityManager, HealthChecker,  # noqa: F401
-                              ProfileManager, ResponseCache, StatePersistence)
+from .system_managers import (  # noqa: F401
+                                     EventManager,
+                                     FilePriorityManager,
+                                     HealthChecker,
+                                     ProfileManager,
+                                     ResponseCache,
+                                     StatePersistence,
+)
 
 __version__ = VERSION
 __all__ = [

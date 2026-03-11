@@ -34,7 +34,7 @@ def test_modules_importable(tmp_path: Path) -> None:
         spec.loader.exec_module(module)  # type: ignore
         if name.endswith("self_heal"):
             assert hasattr(module, "detect_misconfig"), "self_heal missing detect_misconfig"
-            assert callable(getattr(module, "detect_misconfig"))
+            assert callable(module.detect_misconfig)
         else:
             assert hasattr(module, "main"), f"{name} missing main()"
-            assert callable(getattr(module, "main"))
+            assert callable(module.main)

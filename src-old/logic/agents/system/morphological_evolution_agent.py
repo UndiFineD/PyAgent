@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/morphological_evolution_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -62,8 +62,7 @@ __version__ = VERSION
 
 
 class MorphologicalEvolutionAgent(BaseAgent):
-    """
-    Phase 37: Morphological Code Generation.
+    """Phase 37: Morphological Code Generation.
     Analyzes API usage patterns and evolves the fleet's class structures.
     Integrated with MorphologyCore for Agent DNA and Splitting/Merging logic.
     """
@@ -74,8 +73,7 @@ class MorphologicalEvolutionAgent(BaseAgent):
         self.core = MorphologyCore()
 
     def generate_agent_dna(self, agent_instance: BaseAgent) -> str:
-        """
-        Generates DNA for an agent instance for persistence and replication.
+        """Generates DNA for an agent instance for persistence and replication.
         """
         return self.core.encode_agent_dna(
             name=agent_instance.__class__.__name__,
@@ -87,8 +85,7 @@ class MorphologicalEvolutionAgent(BaseAgent):
     def check_for_merge_opportunity(
         self, agent_a_paths: list[str], agent_b_paths: list[str]
     ) -> bool:
-        """
-        Checks if two agents should merge based on path overlap.
+        """Checks if two agents should merge based on path overlap.
         """
         overlap = self.core.calculate_path_overlap(agent_a_paths, agent_b_paths)
         if overlap > 0.8:
@@ -109,8 +106,7 @@ class MorphologicalEvolutionAgent(BaseAgent):
     def analyze_api_morphology(
         self, agent_name: str, call_logs: list[dict[str, Any]]
     ) -> dict[str, Any]:
-        """
-        Analyzes how an agent is being used and proposes a morphological evolution.
+        """Analyzes how an agent is being used and proposes a morphological evolution.
         """
         logging.info(
             f"MorphologicalEvolution: Analyzing usage patterns for {agent_name}"

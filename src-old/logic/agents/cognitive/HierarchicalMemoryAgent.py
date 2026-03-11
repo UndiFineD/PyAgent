@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/HierarchicalMemoryAgent.description.md
 
 # HierarchicalMemoryAgent
 
-**File**: `src\logic\agents\cognitive\HierarchicalMemoryAgent.py`  
+**File**: `src\\logic\agents\\cognitive\\HierarchicalMemoryAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 62  
@@ -46,7 +45,7 @@ Phase 290: Integrated with 3-layer system (ShortTerm, Working, LongTerm).
 
 # Improvements for HierarchicalMemoryAgent
 
-**File**: `src\logic\agents\cognitive\HierarchicalMemoryAgent.py`  
+**File**: `src\\logic\agents\\cognitive\\HierarchicalMemoryAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 62 lines (small)  
 **Complexity**: 1 score (simple)
@@ -96,11 +95,13 @@ from __future__ import annotations
 Manages Short-term (Episodic), Mid-term (Working), Long-term (Semantic), and Archival storage tiers.
 """
 
-from src.core.base.Version import VERSION
 from pathlib import Path
-from .mixins.MemoryStorageMixin import MemoryStorageMixin
-from .mixins.MemoryQueryMixin import MemoryQueryMixin
+
 from src.core.base.BaseAgent import BaseAgent
+from src.core.base.Version import VERSION
+
+from .mixins.MemoryQueryMixin import MemoryQueryMixin
+from .mixins.MemoryStorageMixin import MemoryStorageMixin
 
 __version__ = VERSION
 

@@ -12,14 +12,13 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/cassette_mixin.description.md
 
 # cassette_mixin
 
-**File**: `src\core\base\mixins\cassette_mixin.py`  
+**File**: `src\\core\base\\mixins\\cassette_mixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 43  
@@ -55,7 +54,7 @@ Mixin regarding providing Cassette Orchestration capabilities to an Agent.
 
 # Improvements for cassette_mixin
 
-**File**: `src\core\base\mixins\cassette_mixin.py`  
+**File**: `src\\core\base\\mixins\\cassette_mixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 43 lines (small)  
 **Complexity**: 3 score (simple)
@@ -90,16 +89,16 @@ Mixin regarding Synaptic Modularization (Cassette-based logic).
 """
 
 from typing import Any, Optional
+
 from src.core.base.logic.cassette_orchestrator import (
-    CassetteOrchestrator,
     BaseLogicCassette,
+    CassetteOrchestrator,
 )
 from src.core.base.models.communication_models import CascadeContext
 
 
 class CassetteMixin:
-    """
-    Mixin regarding providing Cassette Orchestration capabilities to an Agent.
+    """Mixin regarding providing Cassette Orchestration capabilities to an Agent.
     """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:

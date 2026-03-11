@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/markdown_agent.description.md
 
@@ -34,6 +33,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -78,8 +78,7 @@ __version__ = VERSION
 
 
 class MarkdownAgent(BaseAgent):
-    """
-    MarkdownAgent specializing in technical documentation and markdown optimization.
+    """MarkdownAgent specializing in technical documentation and markdown optimization.
     """
 
     def __init__(self, file_path: str, **kwargs) -> None:

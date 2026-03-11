@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/errors/regression_detector.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -66,6 +67,7 @@ class RegressionDetector:
 
     Attributes:
         fixed_errors: Map of fixed error signatures to commit info.
+
     """
 
     def __init__(self) -> None:
@@ -79,6 +81,7 @@ class RegressionDetector:
         Args:
             error: The fixed error.
             commit_hash: The commit that fixed the error.
+
         """
         signature = self._get_error_signature(error)
         self.fixed_errors[signature] = commit_hash
@@ -92,6 +95,7 @@ class RegressionDetector:
 
         Returns:
             RegressionInfo if this is a regression, None otherwise.
+
         """
         signature = self._get_error_signature(error)
         if signature in self.fixed_errors:

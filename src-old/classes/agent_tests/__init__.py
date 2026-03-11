@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/agent_tests/__init__.description.md
 
 # __init__
 
-**File**: `src\classes\agent_tests\__init__.py`  
+**File**: `src\\classes\agent_tests\\__init__.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 61 imports  
 **Lines**: 117  
@@ -42,7 +41,7 @@ Test agent functionality - extracted classes.
 
 # Improvements for __init__
 
-**File**: `src\classes\agent_tests\__init__.py`  
+**File**: `src\\classes\agent_tests\\__init__.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 117 lines (medium)  
 **Complexity**: 0 score (simple)
@@ -73,6 +72,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -98,76 +98,69 @@ from src.core.base.Version import VERSION as VERSION
 
 # Attempt to import rich agent_tests implementations from infra; fall back silently
 try:
-    from .enums import (
-        TestPriority,
-        TestStatus,
-        CoverageType,
-        BrowserType,
-        TestSourceType,
-        MutationOperator,
-        ExecutionMode,
-    )
-
-    from .models import (
-        TestCase,
-        TestRun,
-        CoverageGap,
-        TestFactory,
-        VisualRegressionConfig,
-        ContractTest,
-        TestEnvironment,
-        ExecutionTrace,
-        TestDependency,
-        CrossBrowserConfig,
-        AggregatedResult,
-        Mutation,
-        GeneratedTest,
-        TestProfile,
-        ScheduleSlot,
-        Recording,
-        ReplayResult,
-        ProvisionedEnvironment,
-        ValidationResult,
-        _empty_str_list,
-        _empty_dict_any,
-        _empty_action_list,
-    )
-
-    from .testing_utils import (
-        VisualRegressionTester,
-        ContractTestRunner,
-        ResultAggregator,
-        TestMetricsCollector,
-    )
-
-    from .optimization import TestSuiteOptimizer, CoverageGapAnalyzer
-    from .mutation_testing import MutationTester, MutationRunner
-    from .test_generation import TestGenerator, TestCaseMinimizer, TestDocGenerator
-
+    from .agents import TestsAgent
     from .debugging import (
         ExecutionReplayer,
         TestProfiler,
         TestRecorder,
         TestReplayer,
     )
-
-    from .environment import EnvironmentProvisioner, DataFactory
     from .dependency_injection import DependencyInjector
-    from .scheduling import CrossBrowserRunner, TestScheduler
+    from .enums import (
+        BrowserType,
+        CoverageType,
+        ExecutionMode,
+        MutationOperator,
+        TestPriority,
+        TestSourceType,
+        TestStatus,
+    )
+    from .environment import DataFactory, EnvironmentProvisioner
+    from .models import (
+        AggregatedResult,
+        ContractTest,
+        CoverageGap,
+        CrossBrowserConfig,
+        ExecutionTrace,
+        GeneratedTest,
+        Mutation,
+        ProvisionedEnvironment,
+        Recording,
+        ReplayResult,
+        ScheduleSlot,
+        TestCase,
+        TestDependency,
+        TestEnvironment,
+        TestFactory,
+        TestProfile,
+        TestRun,
+        ValidationResult,
+        VisualRegressionConfig,
+        _empty_action_list,
+        _empty_dict_any,
+        _empty_str_list,
+    )
+    from .mutation_testing import MutationRunner, MutationTester
+    from .optimization import CoverageGapAnalyzer, TestSuiteOptimizer
     from .parallelization import ParallelizationStrategy
-
+    from .scheduling import CrossBrowserRunner, TestScheduler
+    from .test_generation import TestCaseMinimizer, TestDocGenerator, TestGenerator
     from .test_management import (
         BaselineComparisonResult,
         BaselineManager,
-        DIContainer,
-        TestPrioritizer,
-        FlakinessDetector,
-        QuarantineManager,
-        ImpactAnalyzer,
         ContractValidator,
+        DIContainer,
+        FlakinessDetector,
+        ImpactAnalyzer,
+        QuarantineManager,
+        TestPrioritizer,
     )
-
-    from .agents import TestsAgent
+    from .testing_utils import (
+        ContractTestRunner,
+        ResultAggregator,
+        TestMetricsCollector,
+        VisualRegressionTester,
+    )
 except Exception:
     # If infra-backed modules are missing, keep going with available placeholders
     pass

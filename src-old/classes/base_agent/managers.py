@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/base_agent/managers.description.md
 
 # managers
 
-**File**: `src\classes\base_agent\managers.py`  
+**File**: `src\\classes\base_agent\\managers.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 23 imports  
 **Lines**: 26  
@@ -42,7 +41,7 @@ Python module containing implementation for managers.
 
 # Improvements for managers
 
-**File**: `src\classes\base_agent\managers.py`  
+**File**: `src\\classes\base_agent\\managers.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 26 lines (small)  
 **Complexity**: 0 score (simple)
@@ -91,31 +90,3 @@ from __future__ import annotations
 
 """Manager and utility classes for BaseAgent (Facade)."""
 
-from .managers.PromptManagers import (
-    PromptTemplateManager,
-    PromptVersion,
-    PromptVersionManager,
-)
-from .managers.ConversationManagers import ConversationHistory
-from .managers.AuthManagers import AuthenticationManager, AuthManager
-from .managers.BatchManagers import BatchRequest, RequestBatcher
-from .managers.ProcessorManagers import (
-    ResponsePostProcessor,
-    MultimodalProcessor,
-    SerializationManager,
-)
-from .managers.OrchestrationManagers import (
-    AgentComposer,
-    ModelSelector,
-    QualityScorer,
-    ABTest,
-)
-from .managers.SystemManagers import (
-    FilePriorityManager,
-    ResponseCache,
-    StatePersistence,
-    EventManager,
-    PluginManager,
-    HealthChecker,
-    ProfileManager,
-)

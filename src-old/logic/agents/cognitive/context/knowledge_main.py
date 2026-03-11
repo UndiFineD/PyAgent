@@ -13,8 +13,7 @@
 # limitations under the License.
 
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/knowledge_main.description.md
 
@@ -42,15 +41,16 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
 CLI entry point for Knowledge Agent.
 """
 
-import sys
 import argparse
 import logging
+import sys
 from pathlib import Path
 
 from src.core.base.lifecycle.version import VERSION

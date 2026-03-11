@@ -1,14 +1,13 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/core_mixins/CoreSummaryMixin.description.md
 
 # CoreSummaryMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\core_mixins\CoreSummaryMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\core_mixins\\CoreSummaryMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 1 imports  
 **Lines**: 41  
@@ -39,7 +38,7 @@ Methods for summary generation and pruning.
 
 # Improvements for CoreSummaryMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\core_mixins\CoreSummaryMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\core_mixins\\CoreSummaryMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 41 lines (small)  
 **Complexity**: 2 score (simple)
@@ -73,6 +72,7 @@ LLM_CONTEXT_END
 """
 
 from typing import Any
+
 
 class CoreSummaryMixin:
     """Methods for summary generation and pruning."""

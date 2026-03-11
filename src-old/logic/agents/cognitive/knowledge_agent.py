@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/knowledge_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -47,19 +47,19 @@ from __future__ import annotations
 
 """Knowledge Agent module for MIRIX cognitive tier."""
 
+import importlib.util
 import json
 import logging
-import importlib.util
 from typing import Any
 
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool, create_main_function
+from src.core.base.lifecycle.base_agent import BaseAgent
 
-from .context.engines.graph_context_engine import GraphContextEngine
-from .context.engines.memory_engine import MemoryEngine
 from .context.engines.context_compressor import ContextCompressor
-from .context.engines.tiered_memory_engine import TieredMemoryEngine
+from .context.engines.graph_context_engine import GraphContextEngine
 from .context.engines.knowledge_core import KnowledgeCore
+from .context.engines.memory_engine import MemoryEngine
+from .context.engines.tiered_memory_engine import TieredMemoryEngine
 from .knowledge_graph_assistant import KnowledgeGraphAssistant
 from .knowledge_indexing_assistant import KnowledgeIndexingAssistant
 
@@ -68,8 +68,7 @@ HAS_CHROMADB = importlib.util.find_spec("chromadb") is not None
 
 # pylint: disable=too-many-ancestors
 class KnowledgeAgent(BaseAgent):
-    """
-    Tier 2 (Cognitive Logic) - Knowledge Agent: Scans workspace for semantic
+    """Tier 2 (Cognitive Logic) - Knowledge Agent: Scans workspace for semantic
     context, maintains the knowledge graph, and orchestrates RAG operations.
     """
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/lifecycle/base_agent_core.description.md
 
@@ -30,6 +29,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -148,7 +148,7 @@ class BaseAgentCore(ValidationCore, MetricsCore, FormattingCore, UtilsCore, Even
             if getattr(method, "_is_tool", False):
                 category: str = agent.__class__.__name__.replace("Agent", "").lower()
                 if hasattr(method, "_tool_category"):
-                    category = getattr(method, "_tool_category")
+                    category = method._tool_category
                 priority: int = getattr(method, "_tool_priority", 0)
                 collected.append((method, category, priority))
         return collected

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/stats/PrometheusExporter.description.md
 
@@ -79,8 +78,7 @@ LLM_CONTEXT_END
 Enables real-time dashboards in Grafana and ELK stack.
 """
 
-import logging
-from typing import Dict, List, Any, Optional
+from typing import Dict, Optional
 
 
 class PrometheusExporter:

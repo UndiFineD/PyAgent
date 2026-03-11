@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/SchedulerStats.description.md
 

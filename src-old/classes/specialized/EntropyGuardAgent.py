@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/EntropyGuardAgent.description.md
 
@@ -82,15 +81,15 @@ LLM_CONTEXT_END
 """
 
 import hashlib
-import os
 import logging
-from typing import Dict, List, Any, Optional
+import os
+from typing import Dict
+
 from src.classes.base_agent import BaseAgent
 
 
 class EntropyGuardAgent(BaseAgent):
-    """
-    Phase 60: Quantum-Resistant Cryptographic Layer.
+    """Phase 60: Quantum-Resistant Cryptographic Layer.
     Manages simulated post-quantum cryptographic (PQC) keys and entropy pools.
     """
 

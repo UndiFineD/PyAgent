@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/compliance_agent.description.md
 
@@ -29,9 +28,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -71,8 +72,7 @@ from pathlib import Path
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.compute.backend.local_context_recorder import \
-    LocalContextRecorder
+from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
 
 from .mixins.privacy_assessment_mixin import PrivacyAssessmentMixin
 from .mixins.privacy_scanner_mixin import PrivacyScannerMixin
@@ -81,8 +81,7 @@ __version__ = VERSION
 
 
 class ComplianceAgent(BaseAgent, PrivacyScannerMixin, PrivacyAssessmentMixin):  # pylint: disable=too-many-ancestors
-    """
-    Phase 57: Data Privacy & Compliance.
+    """Phase 57: Data Privacy & Compliance.
     Scans memory shards for PII and sensitive data patterns.
     """
 

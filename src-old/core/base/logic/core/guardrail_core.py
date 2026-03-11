@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/guardrail_core.description.md
 
 # guardrail_core
 
-**File**: `src\core\base\logic\core\guardrail_core.py`  
+**File**: `src\\core\base\\logic\\core\\guardrail_core.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 10 imports  
 **Lines**: 48  
@@ -61,7 +60,7 @@ Harvested from agentic-design-patterns.
 
 # Improvements for guardrail_core
 
-**File**: `src\core\base\logic\core\guardrail_core.py`  
+**File**: `src\\core\base\\logic\\core\\guardrail_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 48 lines (small)  
 **Complexity**: 3 score (simple)
@@ -95,15 +94,14 @@ LLM_CONTEXT_END
 """
 
 import json
-import logging
 import re
-from typing import Tuple, Any, Optional, Type, Callable
+from typing import Any, Callable, Optional, Tuple, Type
+
 from pydantic import BaseModel, ValidationError
 
 
 class GuardrailCore:
-    """
-    Implements output validation and logical checks for agent tasks.
+    """Implements output validation and logical checks for agent tasks.
     Harvested from agentic-design-patterns.
     """
 

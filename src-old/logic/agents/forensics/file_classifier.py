@@ -11,14 +11,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/forensics/file_classifier.description.md
 
 # file_classifier
 
-**File**: `src\logic\agents\forensics\file_classifier.py`  
+**File**: `src\\logic\agents\forensics\file_classifier.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 15 imports  
 **Lines**: 255  
@@ -69,7 +68,7 @@ Ported concepts from 0xSojalSec-Catalyzer and 0xSojalSec-CanaryTokenScanner.
 
 # Improvements for file_classifier
 
-**File**: `src\logic\agents\forensics\file_classifier.py`  
+**File**: `src\\logic\agents\forensics\file_classifier.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 255 lines (medium)  
 **Complexity**: 3 score (simple)
@@ -105,17 +104,17 @@ Ported concepts from 0xSojalSec-Catalyzer and 0xSojalSec-CanaryTokenScanner.
 LLM_CONTEXT_END
 """
 
+import asyncio
 import hashlib
 import json
-import asyncio
-import aiofiles
-import zipfile
 import re
-import shutil
 import tempfile
+import zipfile
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
-from dataclasses import dataclass, field
+
+import aiofiles
 
 
 @dataclass
@@ -134,8 +133,7 @@ class FileAnalysisResult:
 
 
 class FileClassifier:
-    """
-    Analyzes files to determine type, calculate hashes, and identify suspicious content.
+    """Analyzes files to determine type, calculate hashes, and identify suspicious content.
     Ported concepts from 0xSojalSec-Catalyzer and 0xSojalSec-CanaryTokenScanner.
     """
 
@@ -212,8 +210,7 @@ class FileClassifier:
         )
 
     async def carve_embedded_files(self, path: Path) -> List[Dict]:
-        """
-        Scans for embedded files using magic signatures at various offsets.
+        """Scans for embedded files using magic signatures at various offsets.
         Simplified binwalk implementation.
         """
         if not self.magic_signatures:
@@ -259,8 +256,7 @@ class FileClassifier:
         return embedded
 
     async def _scan_archive_urls(self, path: Path) -> List[str]:
-        """
-        Unzips (docx/pptx/xlsx/zip) and scans for unique URLs.
+        """Unzips (docx/pptx/xlsx/zip) and scans for unique URLs.
         """
         urls = set()
         if path.suffix.lower() in [".zip", ".docx", ".xlsx", ".pptx", ".jar", ".apk"]:
@@ -296,7 +292,7 @@ class FileClassifier:
                                             found_urls.append(url)
                             except Exception:
                                 pass
-            except Exception as e:
+            except Exception:
                 # Corrupt zip or other error
                 pass
         return found_urls

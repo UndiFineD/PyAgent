@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/MemoryConsolidationAgent.description.md
 
@@ -86,13 +85,11 @@ LLM_CONTEXT_END
 """Agent specializing in consolidating episodic memories into global project context."""
 
 import logging
-import json
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+
 from src.classes.base_agent import BaseAgent
-from src.classes.context.MemoryEngine import MemoryEngine
+from src.classes.base_agent.utilities import as_tool, create_main_function
 from src.classes.context.GlobalContextEngine import GlobalContextEngine
-from src.classes.base_agent.utilities import create_main_function, as_tool
+from src.classes.context.MemoryEngine import MemoryEngine
 
 
 class MemoryConsolidationAgent(BaseAgent):

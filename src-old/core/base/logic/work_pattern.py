@@ -12,14 +12,13 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/work_pattern.description.md
 
 # work_pattern
 
-**File**: `src\core\base\logic\work_pattern.py`  
+**File**: `src\\core\base\\logic\\work_pattern.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 5 imports  
 **Lines**: 59  
@@ -66,7 +65,7 @@ Standard work pattern regarding a peer-review loop: Plan -> Execute -> Review.
 
 # Improvements for work_pattern
 
-**File**: `src\core\base\logic\work_pattern.py`  
+**File**: `src\\core\base\\logic\\work_pattern.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 59 lines (small)  
 **Complexity**: 2 score (simple)
@@ -102,13 +101,13 @@ Inspired by agentUniverse.
 """
 
 import abc
-from typing import Any, Dict, Optional
+from typing import Any
+
 from src.core.base.models.communication_models import CascadeContext
 
 
 class BaseWorkPattern(abc.ABC):
-    """
-    Abstract base class regarding a 'Work Pattern'.
+    """Abstract base class regarding a 'Work Pattern'.
     Encapsulates orchestration logic regarding multiple agent roles or steps.
     """
 
@@ -125,8 +124,7 @@ class BaseWorkPattern(abc.ABC):
 
 
 class PeerReviewPattern(BaseWorkPattern):
-    """
-    Standard work pattern regarding a peer-review loop: Plan -> Execute -> Review.
+    """Standard work pattern regarding a peer-review loop: Plan -> Execute -> Review.
     """
 
     def __init__(self):
@@ -138,8 +136,7 @@ class PeerReviewPattern(BaseWorkPattern):
     async def execute(
         self, input_data: Any, context: CascadeContext, **kwargs: Any
     ) -> Any:
-        """
-        Executes the Peer-Review pattern.
+        """Executes the Peer-Review pattern.
         Expected kwargs: 'planner', 'executor', 'reviewer', 'eval_threshold', 'max_retries'.
         """
         # Orchestration logic goes here...

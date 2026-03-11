@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/agent_context.description.md
 
@@ -49,7 +48,6 @@ LLM_CONTEXT_END
 Context Agent: Maintains and improves context/description files.
 """
 
-from src.version import VERSION
 import sys
 from pathlib import Path
 

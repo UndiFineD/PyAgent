@@ -2,21 +2,21 @@
 """Pytest configuration for the repository."""
 from __future__ import annotations
 
-import sys
-import logging
-import importlib
-from importlib import util
-from contextlib import suppress
-import traceback
 import builtins
-import subprocess
+import importlib
+import logging
 import re
-from pathlib import Path
+import subprocess
+import sys
+import traceback
 from collections.abc import Callable
-from types import ModuleType
+from contextlib import suppress
+from importlib import util
 from importlib.machinery import ModuleSpec
 from os import PathLike
-from typing import Protocol, Any, IO, Optional, Union, cast
+from pathlib import Path
+from types import ModuleType
+from typing import IO, Any, Optional, Protocol, Union, cast
 
 import pytest
 
@@ -33,11 +33,13 @@ if str(src_dir) not in sys.path:
 
 class _SessionWithExitStatus(Protocol):
     """Minimal protocol for pytest session objects with exitstatus."""
+
     exitstatus: int
 
 
 class _PytestItemLike(Protocol):
     """Minimal protocol for pytest item objects used in inject_globals."""
+
     fspath: Any  # pytest can use py.path or pathlib.Path depending on version
     function: Any | None  # optional test function
     module: Any | None  # optional test module

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/errors/ErrorPattern.description.md
 
@@ -85,10 +84,12 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_errors.py"""
 
+from dataclasses import dataclass
+
 from src.core.base.version import VERSION
+
 from .ErrorCategory import ErrorCategory
 from .ErrorSeverity import ErrorSeverity
-from dataclasses import dataclass
 
 __version__ = VERSION
 

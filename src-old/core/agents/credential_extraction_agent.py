@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/agents/credential_extraction_agent.description.md
 
 # credential_extraction_agent
 
-**File**: `src\core\agents\credential_extraction_agent.py`  
+**File**: `src\\core\agents\\credential_extraction_agent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 12 imports  
 **Lines**: 152  
@@ -51,7 +50,7 @@ Agent for extracting credentials using Windows-specific techniques.
 
 # Improvements for credential_extraction_agent
 
-**File**: `src\core\agents\credential_extraction_agent.py`  
+**File**: `src\\core\agents\\credential_extraction_agent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 152 lines (medium)  
 **Complexity**: 1 score (simple)
@@ -104,13 +103,13 @@ Implements patterns from ADSyncDump-BOF for Azure AD Connect credential extracti
 
 
 import platform
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict
 from uuid import UUID
 
 from src.core.base.base_agent import BaseAgent
 from src.core.base.mixins.crypto_mixin import CryptoMixin
-from src.core.base.mixins.database_access_mixin import DatabaseAccessMixin
 from src.core.base.mixins.data_parsing_mixin import DataParsingMixin
+from src.core.base.mixins.database_access_mixin import DatabaseAccessMixin
 from src.core.base.mixins.privilege_escalation_mixin import PrivilegeEscalationMixin
 
 

@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/MemorySnapshot.description.md
 
@@ -164,6 +163,7 @@ Get current GC statistics.
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -178,19 +178,17 @@ Phase 17: vLLM Pattern Integration
 """
 import gc
 import os
-import sys
-import time
 import threading
+import time
+import tracemalloc
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from typing import Optional, Iterator, Any
-import tracemalloc
+from typing import Iterator, Optional
 
 
 @dataclass
 class MemorySnapshot:
-    """
-    Snapshot of memory usage at a point in time.
+    """Snapshot of memory usage at a point in time.
 
     Tracks Python, system, and optionally GPU memory.
     """
@@ -244,14 +242,14 @@ class MemorySnapshot:
 
 
 def capture_memory_snapshot(include_gpu: bool = True) -> MemorySnapshot:
-    """
-    Capture a complete memory snapshot.
+    """Capture a complete memory snapshot.
 
     Args:
         include_gpu: Whether to capture GPU memory (requires torch)
 
     Returns:
         MemorySnapshot with current memory state
+
     """
     snapshot = MemorySnapshot()
 
@@ -298,13 +296,13 @@ def capture_memory_snapshot(include_gpu: bool = True) -> MemorySnapshot:
 
 
 class MemoryProfiler:
-    """
-    Context manager for profiling memory usage.
+    """Context manager for profiling memory usage.
 
     Example:
         >>> with MemoryProfiler("model_load") as profiler:
         ...     model = load_model()
         >>> print(profiler.report())
+
     """
 
     def __init__(self, name: str = "profile", include_gpu: bool = True) -> None:
@@ -350,13 +348,13 @@ class MemoryProfiler:
 def memory_profile(
     name: str = "profile", include_gpu: bool = True
 ) -> Iterator[MemoryProfiler]:
-    """
-    Convenience context manager for memory profiling.
+    """Convenience context manager for memory profiling.
 
     Example:
         >>> with memory_profile("data_load") as prof:
         ...     data = load_data()
         >>> print(prof.delta())
+
     """
     profiler = MemoryProfiler(name, include_gpu)
     with profiler:
@@ -364,8 +362,7 @@ def memory_profile(
 
 
 class GCDebugger:
-    """
-    Garbage collection debugger for production monitoring.
+    """Garbage collection debugger for production monitoring.
 
     Inspired by vLLM's GCDebugger for tracking GC activity.
 
@@ -375,6 +372,7 @@ class GCDebugger:
         >>> # ... run code ...
         >>> debugger.stop()
         >>> print(debugger.report())
+
     """
 
     def __init__(self, log_collections: bool = False) -> None:
@@ -478,14 +476,14 @@ class GCDebugger:
 
 
 def freeze_gc_heap() -> int:
-    """
-    Freeze the GC heap after initialization.
+    """Freeze the GC heap after initialization.
 
     This marks all current objects as "immortal" to reduce GC overhead.
     Should be called after all static/long-lived objects are created.
 
     Returns:
         Number of objects frozen
+
     """
     gc.collect()  # Full collection first
     gc.freeze()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import logging
-import sys
 import os
+import sys
 from pathlib import Path
 
 # Add src to path
@@ -10,14 +10,15 @@ sys.path.append(str(Path(__file__).parent))
 from src.classes.fleet.FleetManager import FleetManager
 from src.classes.specialized.MCPAgent import MCPAgent
 
+
 def test_phase_16():
     logging.basicConfig(level=logging.INFO)
     workspace = os.getcwd()
     fleet = FleetManager(workspace)
-    
+
     print("\n--- Phase 16: MCP Integration (Server Init) ---")
     mcp_agent = MCPAgent(str(Path(workspace) / "src/classes/specialized/MCPAgent.py"))
-    
+
     # We use 'python' to run our mock server
     res = mcp_agent.initialize_mcp_server("test_server", ["python", str(Path(workspace) / "mock_mcp_server.py")])
     print(f"Init Status: {res}")

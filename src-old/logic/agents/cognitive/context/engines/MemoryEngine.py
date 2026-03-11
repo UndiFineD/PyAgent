@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/MemoryEngine.description.md
 
 # MemoryEngine
 
-**File**: `src\logic\agents\cognitive\context\engines\MemoryEngine.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\MemoryEngine.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 40  
@@ -45,7 +44,7 @@ Stores and retrieves historical agent contexts and lessons learned.
 
 # Improvements for MemoryEngine
 
-**File**: `src\logic\agents\cognitive\context\engines\MemoryEngine.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\MemoryEngine.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 40 lines (small)  
 **Complexity**: 1 score (simple)
@@ -93,13 +92,15 @@ from __future__ import annotations
 
 """Engine for persistent episodic memory of agent actions and outcomes."""
 
-from src.core.base.Version import VERSION
 from pathlib import Path
 from typing import Any
+
+from src.core.base.Version import VERSION
 from src.logic.agents.cognitive.context.engines.MemoryCore import MemoryCore
-from .memory_mixins.MemoryStorageMixin import MemoryStorageMixin
+
 from .memory_mixins.MemoryEpisodeMixin import MemoryEpisodeMixin
 from .memory_mixins.MemorySearchMixin import MemorySearchMixin
+from .memory_mixins.MemoryStorageMixin import MemoryStorageMixin
 
 __version__ = VERSION
 

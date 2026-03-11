@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/modules/TaskDecomposerModule.description.md
 
@@ -102,9 +101,9 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 from dataclasses import dataclass, field
-from typing import Any, Dict, List
+from typing import Any
+
 from src.core.base.modules import BaseModule
 
 
@@ -117,8 +116,7 @@ class PlanStep:
 
 
 class TaskDecomposerModule(BaseModule):
-    """
-    Consolidated core module for task decomposition.
+    """Consolidated core module for task decomposition.
     Migrated from TaskDecomposerCore.
     """
 
@@ -128,8 +126,7 @@ class TaskDecomposerModule(BaseModule):
         return super().initialize()
 
     def execute(self, request: str) -> list[dict[str, Any]]:
-        """
-        Executes the planning logic for a given request.
+        """Executes the planning logic for a given request.
         """
         if not self.initialized:
             self.initialize()

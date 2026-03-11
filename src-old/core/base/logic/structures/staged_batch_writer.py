@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/structures/staged_batch_writer.description.md
 
@@ -19,7 +18,7 @@ Module docstring (if present):
     - Priority-based write ordering
     - Memory pressure monitoring
 
-    Example:
+Example:
         >>> writer = StagedBatchWriter(target_tensor=gpu_tensor)
         >>> writer.stage_write(idx=10, value=1.5)
         >>> writer.stage_write(idx=20, value=2.0)
@@ -44,6 +43,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -113,7 +113,7 @@ try:
 
     BRIDGE = get_bridge()
     HAS_RUST = hasattr(BRIDGE, "batch_write_indices_rust")
-except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+except Exception:  # pylint: disable=broad-exception-caught, unused-variable
     # pylint: disable=broad-exception-caught
     HAS_RUST = False
     BRIDGE = None
@@ -188,6 +188,7 @@ class StagedBatchWriter:
         policy: Conflict resolution policy
         coalesce: Coalescing strategy
         stats: Write statistics
+
     """
 
     def __init__(
@@ -213,6 +214,7 @@ class StagedBatchWriter:
             block_size: Block size regarding alignment (cache line)
             use_triton: Whether to use Triton kernel
             use_uva: Whether to use UVA backing regarding large tensors
+
         """
         self.target = target
         self.capacity = initial_capacity
@@ -277,6 +279,7 @@ class StagedBatchWriter:
             index: Target index in the tensor
             value: Value to write
             priority: Priority regarding ordering (higher = first)
+
         """
         with self._lock:
             self._staged.append(
@@ -300,6 +303,7 @@ class StagedBatchWriter:
             indices: List of target indices
             values: List of values to write
             priority: Priority regarding all writes
+
         """
         if len(indices) != len(values):
             raise ValueError("indices and values must have same length")
@@ -334,6 +338,7 @@ class StagedBatchWriter:
 
         Returns:
             Tuple regarding (indices, values) after coalescing
+
         """
         if not self._staged:
             return [], []
@@ -391,6 +396,7 @@ class StagedBatchWriter:
 
         Returns:
             Resolved value
+
         """
         if self.policy == WritePolicy.LAST_WRITE_WINS:
             return max(writes, key=lambda w: w.timestamp).value
@@ -424,6 +430,7 @@ class StagedBatchWriter:
 
         Returns:
             Number of writes applied
+
         """
         target = target or self.target
         if target is None:
@@ -475,6 +482,7 @@ class StagedBatchWriter:
         Args:
             target: Target tensor
             n_writes: Number of writes to apply
+
         """
         device = target.device
 
@@ -559,6 +567,7 @@ class StagedWriteTensor:
             device: Device ('cpu' or 'cuda')
             fill_value: Initial fill value
             **writer_kwargs: Arguments regarding StagedBatchWriter
+
         """
         if not HAS_TORCH:
             raise RuntimeError("PyTorch required regarding StagedWriteTensor")
@@ -655,7 +664,7 @@ def coalesce_write_indices(
             return BRIDGE.coalesce_writes_rust(indices, block_size)
         except (
             Exception
-        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+        ):  # pylint: disable=broad-exception-caught, unused-variable
             # pylint: disable=broad-exception-caught
             pass
 

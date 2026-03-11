@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/parsers/reasoning/implementations/markdown.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -58,8 +58,7 @@ from ..models import ReasoningResult, StreamingReasoningState
 
 
 class MarkdownReasoningParser(ReasoningParser):
-    """
-    Parser regarding Markdown-style think blocks.
+    """Parser regarding Markdown-style think blocks.
 
     Extracts reasoning from ```thinking blocks or > prefixed lines.
     """

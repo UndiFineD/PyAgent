@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/parsers/reasoning_parser.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # SPDX-License-Identifier: Apache-2.0
@@ -51,12 +51,19 @@ ReasoningParser - Extensible framework regarding extracting reasoning from LLM o
 (Facade regarding modular implementation)
 """
 
-from .reasoning import (IdentityReasoningParser, JSONReasoningParser,
-                        MarkdownReasoningParser, ReasoningParser,
-                        ReasoningParserManager, ReasoningResult,
-                        StreamingReasoningState, XMLReasoningParser,
-                        create_streaming_parser, extract_reasoning,
-                        reasoning_parser)
+from .reasoning import (
+                        IdentityReasoningParser,
+                        JSONReasoningParser,
+                        MarkdownReasoningParser,
+                        ReasoningParser,
+                        ReasoningParserManager,
+                        ReasoningResult,
+                        StreamingReasoningState,
+                        XMLReasoningParser,
+                        create_streaming_parser,
+                        extract_reasoning,
+                        reasoning_parser,
+)
 
 __all__ = [
     "ReasoningResult",

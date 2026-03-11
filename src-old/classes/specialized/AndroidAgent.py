@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/AndroidAgent.description.md
 
@@ -88,6 +87,14 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import logging
+import time
+from pathlib import Path
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -100,15 +107,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import logging
-import time
-from pathlib import Path
-from typing import Dict, Any
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 from src.logic.agents.development.core.AndroidCore import AndroidCore
 
@@ -116,8 +115,7 @@ __version__ = VERSION
 
 
 class AndroidAgent(BaseAgent):
-    """
-    Automates Android devices using the 'Action-State' pattern (Accessibility Tree).
+    """Automates Android devices using the 'Action-State' pattern (Accessibility Tree).
     95% cheaper and 5x faster than vision-based mobile automation.
     """
 

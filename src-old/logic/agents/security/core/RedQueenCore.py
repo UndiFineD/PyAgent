@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/core/RedQueenCore.description.md
 
 # RedQueenCore
 
-**File**: `src\logic\agents\security\core\RedQueenCore.py`  
+**File**: `src\\logic\agents\\security\\core\\RedQueenCore.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 4 imports  
 **Lines**: 48  
@@ -45,7 +44,7 @@ Generates and mutates prompts to test security guardrails.
 
 # Improvements for RedQueenCore
 
-**File**: `src\logic\agents\security\core\RedQueenCore.py`  
+**File**: `src\\logic\agents\\security\\core\\RedQueenCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 48 lines (small)  
 **Complexity**: 3 score (simple)
@@ -84,7 +83,6 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 import re
-from typing import List
 from dataclasses import dataclass
 
 

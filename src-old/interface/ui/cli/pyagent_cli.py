@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/interface/ui/cli/pyagent_cli.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -73,7 +73,6 @@ from rich.progress import (
     TextColumn,
 )
 from rich.table import Table
-
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.connectivity_manager import ConnectivityManager
 from src.infrastructure.compute.backend.local_context_recorder import (
@@ -109,7 +108,7 @@ def check_server() -> bool:
         available = response.status_code == 200
         conn_manager.update_status("AgentAPIServer", available)
         return available
-    except (RuntimeError, ValueError) as e:
+    except (RuntimeError, ValueError):
         pass
     except BaseException as e:
         pass

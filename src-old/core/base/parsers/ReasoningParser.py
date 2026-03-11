@@ -1,13 +1,12 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/parsers/ReasoningParser.description.md
 
 # ReasoningParser
 
-**File**: `src\core\base\parsers\ReasoningParser.py`  
+**File**: `src\\core\base\\parsers\\ReasoningParser.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 11 imports  
 **Lines**: 34  
@@ -39,7 +38,7 @@ ReasoningParser - Extensible framework for extracting reasoning from LLM outputs
 
 # Improvements for ReasoningParser
 
-**File**: `src\core\base\parsers\ReasoningParser.py`  
+**File**: `src\\core\base\\parsers\\ReasoningParser.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 34 lines (small)  
 **Complexity**: 0 score (simple)
@@ -75,17 +74,17 @@ ReasoningParser - Extensible framework for extracting reasoning from LLM outputs
 """
 
 from .reasoning import (
-    ReasoningResult,
-    StreamingReasoningState,
-    ReasoningParser,
-    ReasoningParserManager,
-    reasoning_parser,
-    extract_reasoning,
-    create_streaming_parser,
-    XMLReasoningParser,
+    IdentityReasoningParser,
     JSONReasoningParser,
     MarkdownReasoningParser,
-    IdentityReasoningParser,
+    ReasoningParser,
+    ReasoningParserManager,
+    ReasoningResult,
+    StreamingReasoningState,
+    XMLReasoningParser,
+    create_streaming_parser,
+    extract_reasoning,
+    reasoning_parser,
 )
 
 __all__ = [

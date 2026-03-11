@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/SQLAgent.description.md
 
@@ -100,12 +99,12 @@ from __future__ import annotations
 
 """Agent specializing in SQL database interaction and query optimization."""
 
-from src.core.base.version import VERSION
-import sqlite3
 import logging
-from typing import List, Optional
+import sqlite3
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

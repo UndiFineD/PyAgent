@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/registry_core.description.md
 
@@ -41,13 +40,16 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Unified Registry core for all PyAgent components."""
 
 import logging
 from typing import Callable, Dict, Generic, List, TypeVar
+
 from .base_core import BaseCore
+
 T = TypeVar("T")
 
 try:
@@ -59,8 +61,7 @@ logger = logging.getLogger("pyagent.registry")
 
 
 class RegistryCore(BaseCore, Generic[T]):
-    """
-    Generic registry to handle Tools, Signals, Plugins, and Capabilities.
+    """Generic registry to handle Tools, Signals, Plugins, and Capabilities.
     Standardizes registration, lookup, and lifecycle management.
     """
 
@@ -168,11 +169,11 @@ class RegistryCore(BaseCore, Generic[T]):
             # Fallback for single-argument registration where key acts as the item
             item = cast(T, key)
             if hasattr(item, "__name__"):
-                key = getattr(item, "__name__")
-            elif hasattr(item, "agent_name") and isinstance(getattr(item, "agent_name"), str):
-                key = getattr(item, "agent_name")
-            elif hasattr(item, "name") and isinstance(getattr(item, "name"), str):
-                key = getattr(item, "name")
+                key = item.__name__
+            elif hasattr(item, "agent_name") and isinstance(item.agent_name, str):
+                key = item.agent_name
+            elif hasattr(item, "name") and isinstance(item.name, str):
+                key = item.name
             else:
                 key = str(item)
 

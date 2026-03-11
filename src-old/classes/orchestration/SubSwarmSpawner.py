@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/SubSwarmSpawner.description.md
 
@@ -93,8 +92,10 @@ from __future__ import annotations
 
 import logging
 import uuid
+from typing import Dict, List, Optional
+
 from src.classes.fleet.FleetManager import FleetManager
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
+
 
 class SubSwarm:
     """A lightweight sub-swarm with a subset of capabilities."""
@@ -126,8 +127,7 @@ class SubSwarm:
 
 
 class SubSwarmSpawner:
-    """
-    Implements Autonomous Sub-Swarm Spawning (Phase 33).
+    """Implements Autonomous Sub-Swarm Spawning (Phase 33).
     Allows the fleet to spawn specialized mini-swarms for micro-tasks.
     """
 
@@ -136,8 +136,7 @@ class SubSwarmSpawner:
         self.active_sub_swarms: Dict[str, SubSwarm] = {}
 
     def spawn_sub_swarm(self, capabilities: List[str]) -> str:
-        """
-        Creates a new sub-swarm based on requested capabilities or agent names.
+        """Creates a new sub-swarm based on requested capabilities or agent names.
         """
         swarm_id = f"swarm_{uuid.uuid4().hex[:8]}"
         logging.info(

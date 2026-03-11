@@ -11,8 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/math/batch_ops/softmax.description.md
 
@@ -40,6 +39,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -55,13 +55,13 @@ except ImportError:
     HAS_TORCH = False
 import numpy as np
 
+
 def softmax_batch_invariant(
     tensor: Any,
     dim: int = -1,
     dtype: Any = None,
 ) -> Any:
-    """
-    Numerically stable softmax that is deterministic across batch orderings.
+    """Numerically stable softmax that is deterministic across batch orderings.
     """
     if not HAS_TORCH:
         input_max = np.max(tensor, axis=dim, keepdims=True)

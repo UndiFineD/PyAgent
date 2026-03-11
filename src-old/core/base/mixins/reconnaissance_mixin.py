@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/reconnaissance_mixin.description.md
 
 # reconnaissance_mixin
 
-**File**: `src\core\base\mixins\reconnaissance_mixin.py`  
+**File**: `src\\core\base\\mixins\reconnaissance_mixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 10 imports  
 **Lines**: 248  
@@ -65,7 +64,7 @@ Inspired by aem_discoverer.py patterns for identifying vulnerable services.
 
 # Improvements for reconnaissance_mixin
 
-**File**: `src\core\base\mixins\reconnaissance_mixin.py`  
+**File**: `src\\core\base\\mixins\reconnaissance_mixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 248 lines (medium)  
 **Complexity**: 6 score (moderate)
@@ -98,17 +97,16 @@ Inspired by aem_discoverer.py patterns for identifying vulnerable services.
 LLM_CONTEXT_END
 """
 
-import asyncio
 import concurrent.futures
-from typing import List, Dict, Optional, Set
-import requests
-from urllib.parse import urljoin, urlparse
 import re
+from typing import Dict, List, Optional
+from urllib.parse import urljoin
+
+import requests
 
 
 class ReconnaissanceMixin:
-    """
-    Mixin providing reconnaissance capabilities for target discovery.
+    """Mixin providing reconnaissance capabilities for target discovery.
 
     Inspired by aem_discoverer.py patterns for identifying vulnerable services.
     """
@@ -179,8 +177,7 @@ class ReconnaissanceMixin:
         timeout: int = 5,
         proxy: Optional[Dict] = None,
     ) -> Dict[str, List[str]]:
-        """
-        Discover potential targets from a list of URLs.
+        """Discover potential targets from a list of URLs.
 
         Args:
             urls: List of base URLs to check
@@ -191,6 +188,7 @@ class ReconnaissanceMixin:
 
         Returns:
             Dict mapping URLs to list of discovered endpoints
+
         """
         if patterns is None:
             patterns = []
@@ -276,14 +274,14 @@ class ReconnaissanceMixin:
     async def fingerprint_service(
         self, url: str, proxy: Optional[Dict] = None
     ) -> Dict[str, str]:
-        """
-        Fingerprint a service to identify its type.
+        """Fingerprint a service to identify its type.
 
         Args:
             url: URL to fingerprint
 
         Returns:
             Dict with fingerprint information
+
         """
         fingerprint = {
             "url": url,
@@ -330,12 +328,12 @@ class ReconnaissanceMixin:
         return fingerprint
 
     def add_discovery_pattern(self, category: str, patterns: List[str]) -> None:
-        """
-        Add custom discovery patterns.
+        """Add custom discovery patterns.
 
         Args:
             category: Category name
             patterns: List of URL patterns
+
         """
         if category in self._discovery_patterns:
             self._discovery_patterns[category].extend(patterns)
@@ -345,14 +343,14 @@ class ReconnaissanceMixin:
     def get_discovery_patterns(
         self, category: Optional[str] = None
     ) -> Dict[str, List[str]]:
-        """
-        Get discovery patterns.
+        """Get discovery patterns.
 
         Args:
             category: Specific category or None for all
 
         Returns:
             Patterns dictionary
+
         """
         if category:
             return {category: self._discovery_patterns.get(category, [])}

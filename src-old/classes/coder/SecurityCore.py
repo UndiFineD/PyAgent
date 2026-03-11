@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/SecurityCore.description.md
 
@@ -92,14 +91,16 @@ Combines scanning for secrets, command auditing, shell script analysis, and inje
 This is designed for high-performance static analysis and future Rust migration.
 """
 
-import re
 import logging
+import re
 import time
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
+from typing import List, Optional, Tuple
+
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
+
 from .SecurityIssueType import SecurityIssueType
 from .SecurityVulnerability import SecurityVulnerability
-from src.classes.backend.LocalContextRecorder import LocalContextRecorder
 
 
 class SecurityCore:

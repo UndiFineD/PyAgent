@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/DocGenAgent.description.md
 
@@ -79,6 +78,11 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import ast
+import os
+
+from src.core.base.BaseAgent import BaseAgent
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -91,19 +95,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import os
-import ast
-from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
 
 
 class DocGenAgent(BaseAgent):
-    """
-    Autonomous Documentation Generator: Extracts docstrings from Python modules
+    """Autonomous Documentation Generator: Extracts docstrings from Python modules
     and generates Markdown files compatible with Sphinx/Jekyll.
     """
 

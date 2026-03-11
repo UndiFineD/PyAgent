@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/DocumentationIndexerAgent.description.md
 
@@ -81,10 +80,10 @@ LLM_CONTEXT_END
 
 """Agent specializing in workspace-wide documentation indexing and retrieval (Tabby pattern)."""
 
-from src.classes.base_agent import BaseAgent
-import logging
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Dict, List
+
+from src.classes.base_agent import BaseAgent
 
 
 class DocumentationIndexerAgent(BaseAgent):

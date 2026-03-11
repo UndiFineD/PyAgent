@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Simple benchmark comparing sync loop vs runtime-based async loop."""
-import time
 import asyncio
+import time
+
 from observability.stats import metrics_engine
 
 

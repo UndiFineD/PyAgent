@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/structures/__init__.description.md
 
@@ -43,6 +42,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -64,23 +64,32 @@ from src.core.base.logic.structures.lock_free_queue import (
     SPSCQueue,
     WorkStealingDeque,
 )
-from src.core.base.logic.structures.memory_arena import (ArenaStats,
-                                                         MemoryArena,
-                                                         SlabAllocator,
-                                                         StackArena,
-                                                         TypedArena,
-                                                         temp_arena,
-                                                         thread_temp_alloc)
-from src.core.base.logic.structures.object_pool import (BufferPool, ObjectPool,
-                                                        PoolStats,
-                                                        TieredBufferPool,
-                                                        TypedObjectPool,
-                                                        pooled_dict,
-                                                        pooled_list,
-                                                        pooled_set)
+from src.core.base.logic.structures.memory_arena import (
+    ArenaStats,
+    MemoryArena,
+    SlabAllocator,
+    StackArena,
+    TypedArena,
+    temp_arena,
+    thread_temp_alloc,
+)
+from src.core.base.logic.structures.object_pool import (
+    BufferPool,
+    ObjectPool,
+    PoolStats,
+    TieredBufferPool,
+    TypedObjectPool,
+    pooled_dict,
+    pooled_list,
+    pooled_set,
+)
 from src.core.base.logic.structures.ring_buffer import (
-    RingBuffer, SlidingWindowAggregator, ThreadSafeRingBuffer,
-    TimeSeriesBuffer, TimestampedValue)
+    RingBuffer,
+    SlidingWindowAggregator,
+    ThreadSafeRingBuffer,
+    TimeSeriesBuffer,
+    TimestampedValue,
+)
 
 __all__ = [
     # Bloom Filters (Phase 18)

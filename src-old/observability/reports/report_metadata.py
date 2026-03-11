@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/report_metadata.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -58,11 +59,13 @@ __version__: str = VERSION
 @dataclass
 class ReportMetadata:
     """Metadata for a generated report.
+
     Attributes:
         path: Path to source file.
         generated_at: Timestamp of generation.
         content_hash: SHA256 hash of content.
         version: Report version string.
+
     """
 
     path: str

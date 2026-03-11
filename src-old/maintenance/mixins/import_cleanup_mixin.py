@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/maintenance/mixins/import_cleanup_mixin.description.md
 
@@ -41,14 +40,15 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
 Mixin providing automated import cleanup and optimization for the Maintenance Agent.
 """
 
-import re
 import logging
+import re
 from pathlib import Path
 from typing import Dict, List, Tuple
 
@@ -61,8 +61,7 @@ class ImportCleanupMixin:
     def build_module_map(
         self, root_dir: Path, dirs: List[str]
     ) -> Dict[Tuple[str, str], str]:
-        """
-        Builds a map from (parent_path_lower, name_lower) to actual_case_name.
+        """Builds a map from (parent_path_lower, name_lower) to actual_case_name.
         Useful for fixing imports after snake_case renaming.
         """
         name_map = {}

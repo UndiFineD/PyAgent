@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/exporters/TokenCostEngine.description.md
 
@@ -80,16 +79,13 @@ LLM_CONTEXT_END
 Inspired by tokencost and other cost tracking tools.
 """
 
-import logging
-from typing import Dict, Any, Optional
 
 # Constants for common models (Jan 2026 estimates)
-from .TokenCostCore import TokenCostCore, MODEL_COSTS
+from .TokenCostCore import MODEL_COSTS, TokenCostCore
 
 
 class TokenCostEngine:
-    """
-    Calculates estimated costs for LLM tokens based on model variety.
+    """Calculates estimated costs for LLM tokens based on model variety.
     Shell for TokenCostCore.
     """
 

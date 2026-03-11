@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/immune_system_agent.description.md
 
@@ -30,6 +29,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -92,11 +92,12 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def trigger_self_healing(self, node_id: str, issue_type: str) -> str:
-        """
-        Triggers an automated self-healing protocol for a corrupted or failing node.
+        """Triggers an automated self-healing protocol for a corrupted or failing node.
+
         Args:
             node_id: The ID of the node to fix.
             issue_type: The nature of the failure (e.g., 'crash', 'logical_loop', 'unauthorized_access').
+
         """
         logging.info(
             f"ImmuneSystem: Self-healing protocol triggered for {node_id} (Issue: {issue_type})"
@@ -118,8 +119,10 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
     def scan_for_injections(self, input_text: str) -> dict[str, Any]:
         """Scans a prompt or message for known injection patterns.
+
         Args:
             input_text: The text to scan.
+
         """
         findings = []
 
@@ -194,8 +197,7 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     async def propose_autonomous_patch(
         self, vulnerability: str, insecure_code: str
     ) -> str:
-        """
-        Proposes a patch for a detected vulnerability using AI reasoning.
+        """Proposes a patch for a detected vulnerability using AI reasoning.
 
 
 

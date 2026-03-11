@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/base_modules.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -57,8 +57,7 @@ from typing import Any
 
 
 class BaseModule(ABC):
-    """
-    Base class for all core modules in the swarm.
+    """Base class for all core modules in the swarm.
     Standardizes the lifecycle of global specialized logic.
     """
 

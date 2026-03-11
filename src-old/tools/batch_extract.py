@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/batch_extract.description.md
 
@@ -98,11 +97,9 @@ run on untrusted machines unless you understand the risks.
 """
 import argparse
 import json
-from pathlib import Path
-import tempfile
-import subprocess
-import math
 import shutil
+import subprocess
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 REPORT_DEFAULT = ROOT / ".external" / "refactor_report.json"

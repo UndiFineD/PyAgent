@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/run_auto_tests.description.md
 
@@ -77,12 +76,12 @@ from __future__ import annotations
 This script collects matching test files and invokes pytest on them directly to avoid
 collecting unrelated tests.
 """
-from pathlib import Path
-import sys
 import argparse
 import concurrent.futures
-import subprocess
 import os
+import subprocess
+import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 TESTS_DIR = ROOT / "tests" / "unit"

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/external_ai_recorder_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -85,11 +85,13 @@ class ExternalAIRecorderAgent(BaseAgent):
         self, external_ai_name: str, prompt: str, context: str, response: str
     ) -> str:
         """Saves a session with an external AI to the local learning archive.
+
         Args:
             external_ai_name: Name of the external system (e.g., 'Claude-3.5', 'GPT-4o').
             prompt: The user query sent to the external AI.
             context: Any supplemental context provided in the session.
             response: The full text response from the external AI.
+
         """
         # Phase 105: Direct Shard Recording
         if self.recorder:
@@ -122,7 +124,6 @@ class ExternalAIRecorderAgent(BaseAgent):
     @as_tool
     def synthesize_local_knowledge(self) -> str:
         """Analyzes recorded interactions to identify recurring patterns or high-value insights."""
-
         return "Local knowledge synthesis: Identification of 5 high-value patterns from external records completed."
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:

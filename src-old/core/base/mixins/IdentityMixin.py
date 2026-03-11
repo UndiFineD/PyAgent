@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # Identity Mixin for BaseAgent
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/IdentityMixin.description.md
 
 # IdentityMixin
 
-**File**: `src\core\base\mixins\IdentityMixin.py`  
+**File**: `src\\core\base\\mixins\\IdentityMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 49  
@@ -42,7 +41,7 @@ Handles agent identity, configuration, and capabilities.
 
 # Improvements for IdentityMixin
 
-**File**: `src\core\base\mixins\IdentityMixin.py`  
+**File**: `src\\core\base\\mixins\\IdentityMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 49 lines (small)  
 **Complexity**: 3 score (simple)
@@ -76,6 +75,7 @@ LLM_CONTEXT_END
 """
 
 from typing import Any
+
 from src.core.base.models import AgentPriority
 
 
@@ -95,6 +95,7 @@ class IdentityMixin:
         """Emits a signal with agent capabilities for discovery."""
         try:
             import asyncio
+
             from src.infrastructure.orchestration.signals.SignalRegistry import (
                 SignalRegistry,
             )

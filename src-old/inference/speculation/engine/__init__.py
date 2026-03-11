@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/inference/speculation/engine/__init__.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # SPDX-License-Identifier: Apache-2.0
@@ -55,8 +55,7 @@ from .base import DrafterBase  # noqa: F401
 from .config import SpecMethod, SpeculativeConfig  # noqa: F401
 from .engine import SpeculativeEngine, create_speculative_decoder  # noqa: F401
 from .proposals import DraftProposal, SpecDecodingMetrics, VerificationResult  # noqa: F401
-from .proposers import (EagleProposer, HybridDrafter, NgramProposer,  # noqa: F401
-                        SuffixProposer)
+from .proposers import EagleProposer, HybridDrafter, NgramProposer, SuffixProposer  # noqa: F401
 from .verifier import TokenVerifier  # noqa: F401
 
 __all__ = [

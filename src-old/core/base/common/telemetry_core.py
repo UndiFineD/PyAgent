@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/telemetry_core.description.md
 
@@ -29,10 +28,12 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Centralized Telemetry and Metrics Core."""
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -45,13 +46,14 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import logging
 import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
+
 from .base_core import BaseCore
+
 try:
     import rust_core as rc
 except ImportError:
@@ -62,6 +64,7 @@ logger = logging.getLogger("pyagent.telemetry")
 
 class MetricType(Enum):
     """Enumeration of supported metric types."""
+
     COUNTER = "counter"
     GAUGE = "gauge"
     HISTOGRAM = "histogram"
@@ -71,6 +74,7 @@ class MetricType(Enum):
 @dataclass
 class Metric:
     """Representation of a single metric data point."""
+
     name: str
     value: float
     metric_type: MetricType = MetricType.GAUGE
@@ -86,15 +90,14 @@ class Metric:
         yield self.value
 
     def __getitem__(self, index: int) -> Any:
-        """Allows indexing as [0] for timestamp and [1] 
+        """Allows indexing as [0] for timestamp and [1]
         for value for legacy compatibility in tests.
         """
         return (self.timestamp, self.value)[index]
 
 
 class TelemetryCore(BaseCore):
-    """
-    Authoritative engine for system metrics and event tracking.
+    """Authoritative engine for system metrics and event tracking.
     Standardizes how agents and infrastructure report health and performance.
     """
 
@@ -116,8 +119,7 @@ class TelemetryCore(BaseCore):
             self._metrics_buffer = self._metrics_buffer[-5000:]
 
     def get_rollups(self, metric_name: str, window_seconds: int = 3600) -> Dict[str, float]:
-        """
-        Calculates basic stats for a metric.
+        """Calculates basic stats for a metric.
         Hot path for Rust acceleration in docs/RUST_MAPPING.md.
         """
         if rc and hasattr(rc, "calculate_rollups"):

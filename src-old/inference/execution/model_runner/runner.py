@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/inference/execution/model_runner/runner.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # SPDX-License-Identifier: Apache-2.0
@@ -62,8 +62,7 @@ logger = logging.getLogger(__name__)
 
 
 class AsyncModelRunner:
-    """
-    Async model execution runner.
+    """Async model execution runner.
 
     vLLM Pattern: GPUModelRunner from gpu_model_runner.py
 
@@ -116,8 +115,7 @@ class AsyncModelRunner:
     async def execute_model_async(
         self, scheduler_output: SchedulerOutput
     ) -> List[ModelOutput]:
-        """
-        Execute model on scheduled batch (async).
+        """Execute model on scheduled batch (async).
 
         vLLM Pattern: execute_model() with scheduler_output
         """
@@ -183,8 +181,7 @@ class AsyncModelRunner:
             self._pending_futures.pop(request_id, None)
 
     def _model_forward(self, model_input: ModelInput) -> ModelOutput:
-        """
-        Execute model forward pass.
+        """Execute model forward pass.
 
         vLLM Pattern: _model_forward() helper
         """

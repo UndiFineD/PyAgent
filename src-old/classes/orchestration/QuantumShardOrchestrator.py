@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/QuantumShardOrchestrator.description.md
 
@@ -90,11 +89,12 @@ Simulates non-local state synchronization (Quantum Entanglement pattern).
 Provides "instant" state consistency for critical variables across distributed shards.
 """
 
-import logging
 import json
+import logging
 import uuid
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/StructuredOrchestrator.description.md
 
@@ -86,9 +85,10 @@ LLM_CONTEXT_END
 Phases: Observe, Think, Plan, Build, Execute, Verify, Learn.
 """
 
-import logging
 import json
-from typing import Dict, List, Any, Optional
+import logging
+from typing import Any, Dict, List
+
 from src.classes.fleet.FleetManager import FleetManager
 
 

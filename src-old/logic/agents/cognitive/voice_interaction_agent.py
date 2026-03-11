@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/voice_interaction_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -52,9 +52,9 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -117,8 +117,7 @@ class VoiceInteractionAgent(BaseAgent):
 
     @as_tool
     async def run_omni_pipeline(self, audio_input_path: str) -> dict[str, str]:
-        """
-        Executes the full 'See-While-Hear' pipeline: hiding latency by pipelining.
+        """Executes the full 'See-While-Hear' pipeline: hiding latency by pipelining.
         Audio -> Transcribe -> LLM Think -> Synthesize -> Output Audio.
         """
         # 1. Speech to Text

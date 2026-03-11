@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/agent/ParallelProcessor.description.md
 
 # ParallelProcessor
 
-**File**: `src\classes\agent\ParallelProcessor.py`  
+**File**: `src\\classes\agent\\ParallelProcessor.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 11 imports  
 **Lines**: 55  
@@ -47,7 +46,7 @@ Handles concurrent and parallel execution of tasks across files.
 
 # Improvements for ParallelProcessor
 
-**File**: `src\classes\agent\ParallelProcessor.py`  
+**File**: `src\\classes\agent\\ParallelProcessor.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 55 lines (small)  
 **Complexity**: 2 score (simple)
@@ -83,11 +82,10 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 import asyncio
-import functools
 import logging
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from typing import List, Callable, Any, Optional
+from typing import Any, Callable, List
 
 try:
     from tqdm import tqdm

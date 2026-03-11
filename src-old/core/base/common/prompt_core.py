@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/prompt_core.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -63,8 +63,7 @@ from .models import PromptTemplate
 
 
 class PromptCore(BaseCore):
-    """
-    Authoritative engine for prompt templates and A/B testing.
+    """Authoritative engine for prompt templates and A/B testing.
     """
 
     def __init__(self) -> None:
@@ -74,20 +73,17 @@ class PromptCore(BaseCore):
         self.active_version: Optional[str] = None
 
     def register_template(self, template: PromptTemplate) -> None:
-        """
-        Registers a new prompt template.
+        """Registers a new prompt template.
         """
         self.templates[template.name] = template
 
     def register_version(self, version: PromptVersion) -> None:
-        """
-        Registers a new prompt version.
+        """Registers a new prompt version.
         """
         self.versions[version.version_id] = version
 
     def render_template(self, name: str, **kwargs: Any) -> str:
-        """
-        Renders a registered template with the provided arguments.
+        """Renders a registered template with the provided arguments.
         """
         if name not in self.templates:
             raise KeyError(f"Template '{name}' not found")
@@ -95,8 +91,7 @@ class PromptCore(BaseCore):
 
 
 class PromptVersion:
-    """
-    Represents a specific version of a prompt for A/B testing and tracking.
+    """Represents a specific version of a prompt for A/B testing and tracking.
     """
 
     def __init__(

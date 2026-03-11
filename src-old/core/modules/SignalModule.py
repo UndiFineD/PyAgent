@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/modules/SignalModule.description.md
 
@@ -94,15 +93,14 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
+
 from src.core.base.modules import BaseModule
 
 
 class SignalModule(BaseModule):
-    """
-    Consolidated core module for signal processing.
+    """Consolidated core module for signal processing.
     Migrated from SignalCore.
     """
 
@@ -111,8 +109,7 @@ class SignalModule(BaseModule):
         return super().initialize()
 
     def execute(self, action: str, **kwargs) -> Any:
-        """
-        Executes signal-related logic.
+        """Executes signal-related logic.
         Supported actions: create_event, prune_history
         """
         if not self.initialized:

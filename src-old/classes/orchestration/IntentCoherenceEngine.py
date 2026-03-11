@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/IntentCoherenceEngine.description.md
 
@@ -85,13 +84,14 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 import logging
-from src.classes.fleet.FleetManager import FleetManager
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
 from datetime import datetime
+from typing import Any, Dict, List, Optional
+
+from src.classes.fleet.FleetManager import FleetManager
+
 
 class IntentCoherenceEngine:
-    """
-    Implements Swarm Consciousness (Phase 30).
+    """Implements Swarm Consciousness (Phase 30).
     Maintains a unified 'Intent' layer that synchronizes all agent goals
     without necessitating explicit task decomposition.
     """
@@ -103,8 +103,7 @@ class IntentCoherenceEngine:
         self.sub_intents: List[Dict[str, Any]] = []
 
     def broadcast_intent(self, intent: str, priority: int = 10) -> Dict[str, Any]:
-        """
-        Sets the global coherent objective for the entire swarm.
+        """Sets the global coherent objective for the entire swarm.
         """
         logging.info(f"IntentCoherenceEngine: Broadcasting global intent: {intent}")
         self.global_intent = intent
@@ -129,8 +128,7 @@ class IntentCoherenceEngine:
         }
 
     def align_agent(self, agent_name: str, local_task: str) -> str:
-        """
-        Re-aligns an agent's local task with the global coherent intent.
+        """Re-aligns an agent's local task with the global coherent intent.
         """
         if not self.global_intent:
             return local_task

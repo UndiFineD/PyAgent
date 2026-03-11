@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/exporters/CloudExporter.description.md
 
@@ -87,6 +86,7 @@ Attributes:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -107,13 +107,14 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_stats.py"""
 
-from src.core.base.Version import VERSION
-from ..ObservabilityCore import ExportDestination
-from ..ObservabilityCore import Metric
-from datetime import datetime
-from typing import Any
 import json
 import logging
+from datetime import datetime
+from typing import Any
+
+from src.core.base.Version import VERSION
+
+from ..ObservabilityCore import ExportDestination, Metric
 
 __version__ = VERSION
 
@@ -128,6 +129,7 @@ class CloudExporter:
         destination: The export destination.
         config: Export configuration.
         export_queue: Queued metrics for export.
+
     """
 
     def __init__(
@@ -139,6 +141,7 @@ class CloudExporter:
             destination: The target cloud platform.
             api_key: API key for authentication.
             endpoint: Custom endpoint URL.
+
         """
         self.destination = destination
         self.api_key = api_key
@@ -152,6 +155,7 @@ class CloudExporter:
 
         Returns:
             Default endpoint URL.
+
         """
         defaults = {
             ExportDestination.DATADOG: "https://api.datadoghq.com / v1 / series",
@@ -167,6 +171,7 @@ class CloudExporter:
 
         Args:
             metric: The metric to queue.
+
         """
         self.export_queue.append(metric)
 
@@ -175,6 +180,7 @@ class CloudExporter:
 
         Returns:
             Number of metrics exported.
+
         """
         if not self.export_queue:
             return 0
@@ -247,6 +253,7 @@ class CloudExporter:
 
         Returns:
             Export statistics.
+
         """
         return {
             "destination": self.destination.value,

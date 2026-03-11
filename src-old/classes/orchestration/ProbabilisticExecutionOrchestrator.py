@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/ProbabilisticExecutionOrchestrator.description.md
 
@@ -87,15 +86,13 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 import logging
-import json
-import random
+from typing import Any, Dict, List
+
 from src.classes.fleet.FleetManager import FleetManager
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
-from src.classes.base_agent import BaseAgent
+
 
 class ProbabilisticExecutionOrchestrator:
-    """
-    Implements 'Wave-function collapse' execution for Phase 28.
+    """Implements 'Wave-function collapse' execution for Phase 28.
     Runs multiple parallel task variations and selects the most stable/optimal outcome.
     """
 
@@ -103,8 +100,7 @@ class ProbabilisticExecutionOrchestrator:
         self.fleet = fleet
 
     def execute_with_confidence(self, task: str, variations: int = 3) -> Dict[str, Any]:
-        """
-        Executes a task multiple times and collapses the results into a single high-confidence output.
+        """Executes a task multiple times and collapses the results into a single high-confidence output.
         """
         logging.info(
             f"ProbabilisticExecutionOrchestrator: Executing task '{task}' with {variations} variations."
@@ -140,8 +136,7 @@ class ProbabilisticExecutionOrchestrator:
         }
 
     def _collapse(self, task: str, results: List[Any]) -> Any:
-        """
-        Selects the most optimal result from the set of variations.
+        """Selects the most optimal result from the set of variations.
         If RealityAnchorAgent is available, it uses it for verification.
         """
         # Attempt to use RealityAnchorAgent for grounding if it exists in the fleet
@@ -176,8 +171,7 @@ class ProbabilisticExecutionOrchestrator:
         return results[0]
 
     def _calculate_confidence(self, results: List[Any], winner: Any) -> float:
-        """
-        Calculates confidence score based on similarity between variations.
+        """Calculates confidence score based on similarity between variations.
         """
         if not results:
             return 0.0

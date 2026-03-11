@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/ScalingAgent.description.md
 
 # ScalingAgent
 
-**File**: `src\logic\agents\specialists\ScalingAgent.py`  
+**File**: `src\\logic\agents\\specialists\\ScalingAgent.py`  
 **Type**: Python Module  
 **Summary**: 5 classes, 0 functions, 14 imports  
 **Lines**: 291  
@@ -76,7 +75,7 @@ load balancing, and high-concurrency async operations coordination.
 
 # Improvements for ScalingAgent
 
-**File**: `src\logic\agents\specialists\ScalingAgent.py`  
+**File**: `src\\logic\agents\\specialists\\ScalingAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 291 lines (medium)  
 **Complexity**: 6 score (moderate)
@@ -117,18 +116,19 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# ScalingAgent: Fleet Expansion and Resource Orchestration - Phase 319 Enhanced
-
-from src.core.base.Version import VERSION
-import logging
 import asyncio
+import logging
 import time
-from typing import Any, Dict, List, Optional
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Dict, List, Optional
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.BaseUtilities import as_tool
+
+# Copyright 2026 PyAgent Authors
+# ScalingAgent: Fleet Expansion and Resource Orchestration - Phase 319 Enhanced
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
@@ -175,8 +175,7 @@ class ScalingDecision:
 
 
 class ScalingAgent(BaseAgent):
-    """
-    Agent specializing in dynamic fleet scaling, multi-provider deployment,
+    """Agent specializing in dynamic fleet scaling, multi-provider deployment,
     load balancing, and high-concurrency async operations coordination.
     """
 

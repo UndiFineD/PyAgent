@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/agents/change_monitoring_agent.description.md
 
 # change_monitoring_agent
 
-**File**: `src\core\agents\change_monitoring_agent.py`  
+**File**: `src\\core\agents\\change_monitoring_agent.py`  
 **Type**: Python Module  
 **Summary**: 4 classes, 0 functions, 16 imports  
 **Lines**: 308  
@@ -87,7 +86,7 @@ Inspired by ADSpider's real-time change detection using USN and replication meta
 
 # Improvements for change_monitoring_agent
 
-**File**: `src\core\agents\change_monitoring_agent.py`  
+**File**: `src\\core\agents\\change_monitoring_agent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 308 lines (medium)  
 **Complexity**: 10 score (moderate)
@@ -269,8 +268,7 @@ class HistoryManager:
 
 
 class ChangeMonitoringAgent(BaseAgent, DataProcessingMixin):
-    """
-    Agent for monitoring changes in data sources using incremental patterns.
+    """Agent for monitoring changes in data sources using incremental patterns.
 
     Inspired by ADSpider's real-time change detection using USN and replication metadata.
     """

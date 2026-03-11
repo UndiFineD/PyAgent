@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/git_core.description.md
 
@@ -29,10 +28,12 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Unified Git Core for PyAgent. Standardizes branch management, commits, and status retrieval."""
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -45,7 +46,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 from pathlib import Path
 from typing import List, Optional
 
@@ -59,8 +59,7 @@ except ImportError:
 
 
 class GitCore(BaseCore):
-    """
-    Standard implementation for Git operations.
+    """Standard implementation for Git operations.
     If rc is available, delegates to native libgit2 hooks for speed.
     """
 

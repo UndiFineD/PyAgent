@@ -1,8 +1,7 @@
 # Copyright 2026 PyAgent Authors
 # SelfImprovementCoordinator: Automates the monitoring and implementation of improvements.
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/maintenance/SelfImprovementCoordinator.description.md
 
@@ -88,18 +87,17 @@ Automates the monitoring and implementation of improvements and healing.
 LLM_CONTEXT_END
 """
 
-import os
-import re
-import logging
 import asyncio
 import json
-from typing import List, Dict, Any, Optional
+import logging
+import os
+import re
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 
 class SelfImprovementCoordinator:
-    """
-    Monitors improvements.md, roadmap.txt, context.txt, and prompt.txt.
+    """Monitors improvements.md, roadmap.txt, context.txt, and prompt.txt.
     Automates the monitoring and implementation of improvements and healing.
     """
 
@@ -179,8 +177,7 @@ class SelfImprovementCoordinator:
         )
 
     async def discover_external_servers(self) -> List[Dict[str, Any]]:
-        """
-        Connects with other servers in the local network or internet.
+        """Connects with other servers in the local network or internet.
         Uses LANDiscovery, MCPServerRegistry, and ConnectivityManager for discovery.
         """
         all_nodes = []
@@ -271,8 +268,7 @@ class SelfImprovementCoordinator:
         return all_nodes
 
     async def run_healing_cycle(self):
-        """
-        Phase 317: Automated Self-Healing Trigger.
+        """Phase 317: Automated Self-Healing Trigger.
         Reads health stats and documentation context to trigger repairs.
         """
         from src.infrastructure.orchestration.healing.SelfHealingOrchestrator import (
@@ -321,8 +317,7 @@ class SelfImprovementCoordinator:
     async def execute_remote_task(
         self, task: Dict[str, Any], target_peer: str
     ) -> Dict[str, Any]:
-        """
-        Dispatches a healing or improvement task to a remote peer.
+        """Dispatches a healing or improvement task to a remote peer.
         This enables 'Distributed computing across local network'.
         """
         # 1. Check if peer is known and online
@@ -417,8 +412,7 @@ class SelfImprovementCoordinator:
             await self.trigger_agent_execution(idea)
 
     async def trigger_agent_execution(self, item: Dict[str, Any]):
-        """
-        Synaptic Automation: Hands off planned improvements to the Director/Research swarm.
+        """Synaptic Automation: Hands off planned improvements to the Director/Research swarm.
         This connects the monitoring phase to the execution phase.
         """
         title = item["title"]

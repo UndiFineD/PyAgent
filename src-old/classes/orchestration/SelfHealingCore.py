@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/SelfHealingCore.description.md
 
@@ -95,9 +94,8 @@ and recovery strategy selection.
 """
 
 import time
-import logging
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from typing import Dict, List
 
 
 @dataclass
@@ -171,8 +169,7 @@ class SelfHealingCore:
     def validate_plugin_version(
         self, plugin_version: str, required_version: str
     ) -> bool:
-        """
-        Semantic version comparison logic.
+        """Semantic version comparison logic.
         v1.2.3 vs v1.2.0
         """
         try:

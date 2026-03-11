@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/mixins/ContextEntityMixin.description.md
 
 # ContextEntityMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\mixins\ContextEntityMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\mixins\\ContextEntityMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 52  
@@ -39,7 +38,7 @@ Mixin for tracking entities and project lessons.
 
 # Improvements for ContextEntityMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\mixins\ContextEntityMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\mixins\\ContextEntityMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 52 lines (small)  
 **Complexity**: 2 score (simple)

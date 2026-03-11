@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/InterFleetIdentityAgent.description.md
 
@@ -86,6 +85,14 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import hashlib
+import time
+import uuid
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.core.IdentityCore import IdentityCore
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -98,22 +105,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.Version import VERSION
-from src.core.base.BaseAgent import BaseAgent
-import time
-import hashlib
-import uuid
-from typing import Any
-from src.core.base.core.IdentityCore import IdentityCore
 
 __version__ = VERSION
 
 
 class InterFleetIdentityAgent(BaseAgent):
-    """
-    Tier 3 (Orchestration) - Inter-Fleet Identity Agent: Manages federated
+    """Tier 3 (Orchestration) - Inter-Fleet Identity Agent: Manages federated
     identities for agents across multiple fleets using cryptographic signing and DID.
     """
 

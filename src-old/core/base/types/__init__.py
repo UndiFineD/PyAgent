@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/types/__init__.description.md
 
 # __init__
 
-**File**: `src\core\base\types\__init__.py`  
+**File**: `src\\core\base\types\\__init__.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 47 imports  
 **Lines**: 65  
@@ -41,7 +40,7 @@ Domain types for the PyAgent core architecture.
 
 # Improvements for __init__
 
-**File**: `src\core\base\types\__init__.py`  
+**File**: `src\\core\base\types\\__init__.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 65 lines (small)  
 **Complexity**: 0 score (simple)

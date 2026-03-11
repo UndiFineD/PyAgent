@@ -1,14 +1,13 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/knowledge_mixins/KnowledgeSymbolMixin.description.md
 
 # KnowledgeSymbolMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\knowledge_mixins\KnowledgeSymbolMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\knowledge_mixins\\KnowledgeSymbolMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 57  
@@ -44,7 +43,7 @@ Methods for symbol extraction from various formats.
 
 # Improvements for KnowledgeSymbolMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\knowledge_mixins\KnowledgeSymbolMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\knowledge_mixins\\KnowledgeSymbolMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 57 lines (small)  
 **Complexity**: 4 score (simple)
@@ -78,8 +77,8 @@ LLM_CONTEXT_END
 """
 
 import re
-from typing import Any
 from pathlib import Path
+from typing import Any
 
 try:
     import rust_core

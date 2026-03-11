@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/interface/ui/gui/dashboard_server.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -62,9 +62,8 @@ from typing import Any
 
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-
-from src.core.base.logic.managers import HealthChecker
 from src.core.base.lifecycle.version import VERSION
+from src.core.base.logic.managers import HealthChecker
 
 # Internal Imports
 __version__ = VERSION
@@ -114,7 +113,6 @@ class ConnectionManager:
 
     async def broadcast(self, message: dict[str, Any]) -> None:
         """Send a JSON broadcast to all connected clients."""
-
         payload = message  # message is already a dict, send_json will handle it
         for connection in self.active_connections:
             try:
@@ -136,7 +134,6 @@ async def get_version() -> dict[str, str]:
 @app.get("/api/health")
 async def get_health() -> dict[str, Any]:
     """Returns the system health status from the HealthChecker manager."""
-
     try:
         return health_checker.check()
     except (RuntimeError, ValueError, ConnectionError) as e:

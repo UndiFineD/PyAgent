@@ -14,9 +14,9 @@
 
 from __future__ import annotations
 
-from contextlib import contextmanager
-import subprocess
 import os
+import subprocess
+from contextlib import contextmanager
 from typing import Iterator
 
 # import heavy dependency only when transaction begins

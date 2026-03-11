@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/base_agent/ConnectivityManager.description.md
 
 # ConnectivityManager
 
-**File**: `src\classes\base_agent\ConnectivityManager.py`  
+**File**: `src\\classes\base_agent\\ConnectivityManager.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 9 imports  
 **Lines**: 107  
@@ -54,7 +53,7 @@ Manages connection status for external APIs with persistent 15-minute TTL cachin
 
 # Improvements for ConnectivityManager
 
-**File**: `src\classes\base_agent\ConnectivityManager.py`  
+**File**: `src\\classes\base_agent\\ConnectivityManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 107 lines (medium)  
 **Complexity**: 11 score (moderate)
@@ -90,10 +89,10 @@ from __future__ import annotations
 
 import json
 import logging
-import time
 import os
+import time
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 
 class ConnectivityManager:

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ResourceCurationAgent.description.md
 
@@ -106,11 +105,12 @@ Specializes in parsing, summarizing, and indexing external research links,
 blog posts, and technical papers into the agent's knowledge base.
 """
 
-from src.core.base.version import VERSION
 import json
-from typing import Dict, List, Any, Optional
+from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

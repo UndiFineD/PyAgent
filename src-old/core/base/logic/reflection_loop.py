@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/reflection_loop.description.md
 
 # reflection_loop
 
-**File**: `src\core\base\logic\reflection_loop.py`  
+**File**: `src\\core\base\\logic\reflection_loop.py`  
 **Type**: Python Module  
 **Summary**: 7 classes, 0 functions, 15 imports  
 **Lines**: 318  
@@ -114,7 +113,7 @@ Orchestrates the reflection loop process.
 
 # Improvements for reflection_loop
 
-**File**: `src\core\base\logic\reflection_loop.py`  
+**File**: `src\\core\base\\logic\reflection_loop.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 318 lines (medium)  
 **Complexity**: 6 score (moderate)
@@ -162,9 +161,9 @@ Based on patterns from agentic_design_patterns repository.
 import asyncio
 import logging
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional, Callable, Union
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Any, Callable, Dict, List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -173,6 +172,7 @@ logger = logging.getLogger(__name__)
 
 class ReflectionResult(BaseModel):
     """Result of a reflection iteration."""
+
     iteration: int
     content: Any
     critique: str
@@ -183,6 +183,7 @@ class ReflectionResult(BaseModel):
 
 class ReflectionLoopConfig(BaseModel):
     """Configuration for reflection loop execution."""
+
     max_iterations: int = Field(default=3, description="Maximum number of reflection iterations")
     critique_prompt: str = Field(
         default="You are a senior software engineer and expert code reviewer. Critically evaluate the provided content based on the original requirements. Look for bugs, style issues, missing edge cases, and areas for improvement. If the content is perfect and meets all requirements, respond with the single phrase 'CONTENT_IS_PERFECT'. Otherwise, provide specific, actionable critiques.",
@@ -199,6 +200,7 @@ class ReflectionLoopConfig(BaseModel):
 @dataclass
 class ReflectionContext:
     """Context maintained throughout the reflection loop."""
+
     task_description: str
     current_content: Any = None
     history: List[ReflectionResult] = field(default_factory=list)

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/TaskDecomposer.description.md
 
@@ -81,14 +80,13 @@ Breaks complex user requests into granular sub-tasks for the agent fleet.
 """
 
 import logging
-import json
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 from .TaskDecomposerCore import TaskDecomposerCore
 
+
 class TaskDecomposer:
-    """
-    Analyzes high-level requests and generates a multi-step plan.
+    """Analyzes high-level requests and generates a multi-step plan.
     Shell for TaskDecomposerCore.
     """
 

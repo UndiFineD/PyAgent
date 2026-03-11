@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/CoderMetricsMixin.description.md
 
 # CoderMetricsMixin
 
-**File**: `src\logic\agents\development\mixins\CoderMetricsMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\CoderMetricsMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 58  
@@ -40,7 +39,7 @@ Mixin for CoderCore to handle complex metrics calculations.
 
 # Improvements for CoderMetricsMixin
 
-**File**: `src\logic\agents\development\mixins\CoderMetricsMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\CoderMetricsMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 58 lines (small)  
 **Complexity**: 2 score (simple)
@@ -87,9 +86,9 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import ast
 import math
+
 from src.core.base.types.CodeMetrics import CodeMetrics
 
 

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/agent/DiffGenerator.description.md
 
 # DiffGenerator
 
-**File**: `src\classes\agent\DiffGenerator.py`  
+**File**: `src\\classes\agent\\DiffGenerator.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 178  
@@ -53,7 +52,7 @@ Attributes:
 
 # Improvements for DiffGenerator
 
-**File**: `src\classes\agent\DiffGenerator.py`  
+**File**: `src\\classes\agent\\DiffGenerator.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 178 lines (medium)  
 **Complexity**: 4 score (simple)
@@ -81,6 +80,7 @@ Attributes:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -101,11 +101,12 @@ from __future__ import annotations
 
 """Auto-extracted class from agent.py"""
 
-import sys
-from src.core.base.Version import VERSION
-from src.core.base.models import DiffOutputFormat, DiffResult
-from pathlib import Path
 import difflib
+import sys
+from pathlib import Path
+
+from src.core.base.models import DiffOutputFormat, DiffResult
+from src.core.base.Version import VERSION
 
 try:
     import rust_core as rc
@@ -126,6 +127,7 @@ class DiffGenerator:
     Attributes:
         output_format: Default output format for diffs.
         context_lines: Number of context lines in diff.
+
     """
 
     def __init__(
@@ -138,6 +140,7 @@ class DiffGenerator:
         Args:
             output_format: Default output format.
             context_lines: Number of context lines.
+
         """
         self.output_format = output_format
         self.context_lines = context_lines
@@ -154,6 +157,7 @@ class DiffGenerator:
 
         Returns:
             DiffResult with diff information.
+
         """
         # Rust-accelerated diff generation
         if HAS_RUST:
@@ -221,6 +225,7 @@ class DiffGenerator:
 
         Returns:
             Formatted diff string.
+
         """
         fmt = output_format or self.output_format
 
@@ -251,6 +256,7 @@ class DiffGenerator:
 
         Args:
             diff_result: DiffResult to print.
+
         """
         for line in diff_result.diff_lines:
             if line.startswith("+") and not line.startswith("+++"):

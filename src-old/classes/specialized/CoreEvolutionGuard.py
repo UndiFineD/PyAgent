@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/CoreEvolutionGuard.description.md
 
@@ -83,6 +82,11 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import hashlib
+import os
+import time
+from typing import Any
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -95,20 +99,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import os
-import hashlib
-import time
-from typing import Dict, List, Any, Optional
 
 __version__ = VERSION
 
 
 class CoreEvolutionGuard:
-    """
-    Monitors and validates changes to the agent's core source code.
+    """Monitors and validates changes to the agent's core source code.
     Prevents unintended mutations or malicious injections into the agent logic.
     """
 
@@ -129,8 +126,7 @@ class CoreEvolutionGuard:
             return None
 
     def snapshot_core_logic(self, core_paths: list[str]) -> dict[str, Any]:
-        """
-        Creates a baseline of hashes for critical agent files.
+        """Creates a baseline of hashes for critical agent files.
         """
         for path in core_paths:
             full_path = os.path.join(self.workspace_path, path)
@@ -144,8 +140,7 @@ class CoreEvolutionGuard:
         return {"monitored_files": len(self.code_fingerprints)}
 
     def validate_code_integrity(self, file_path: str) -> dict[str, Any]:
-        """
-        Validates if a change to a file is "safe" or needs human review.
+        """Validates if a change to a file is "safe" or needs human review.
         """
         # Determine relative path for lookup
         rel_path = file_path

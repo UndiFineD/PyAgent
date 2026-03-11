@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/MCPAgent.description.md
 
@@ -101,13 +100,14 @@ Acts as a bridge between the PyAgent fleet and external MCP servers.
 Inspired by mcp-server-spec-driven-development and awesome-mcp-servers.
 """
 
-from src.core.base.version import VERSION
-import json
 import asyncio
+import json
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 from src.infrastructure.fleet.MCPConnector import MCPConnector
 
 __version__ = VERSION

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/stability_core.description.md
 
@@ -28,10 +27,12 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Core logic for fleet stability, health monitoring, and anomaly detection."""
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -44,12 +45,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import contextlib
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
+
 from .base_core import BaseCore
+
 try:
     import rust_core as rc  # pylint: disable=no-member
 except ImportError:
@@ -59,6 +61,7 @@ except ImportError:
 @dataclass
 class HealthStatus:
     """Status tracking for individual agents or components."""
+
     component_id: str
     is_alive: bool = True
     last_seen: float = field(default_factory=time.time)
@@ -69,8 +72,7 @@ class HealthStatus:
 
 
 class StabilityCore(BaseCore):
-    """
-    Standardized logic for fleet stability, health monitoring, and anomaly detection.
+    """Standardized logic for fleet stability, health monitoring, and anomaly detection.
     Inherits from BaseCore for lifecycle and persistence.
     """
 

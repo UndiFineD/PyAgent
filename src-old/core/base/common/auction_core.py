@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/auction_core.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -72,12 +72,13 @@ class AuctionCore(BaseCore):
 
         Returns:
             List of winning bids with 'price_paid' attribute.
+
         """
         if rc and hasattr(rc, "calculate_vcg_auction"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
                 return rc.calculate_vcg_auction(bids, slots)  # type: ignore
-            except Exception as e:
+            except Exception:
                 pass
 
         if not bids:
@@ -100,11 +101,12 @@ class AuctionCore(BaseCore):
 
         Returns:
             True if within quota, False otherwise.
+
         """
         if rc and hasattr(rc, "enforce_vram_quota"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
                 return rc.enforce_vram_quota(agent_vram_request, total_available, quota_percent)  # type: ignore
-            except Exception as e:
+            except Exception:
                 pass
         return agent_vram_request <= (total_available * quota_percent)

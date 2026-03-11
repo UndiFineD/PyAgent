@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/structures/LockFreeQueue.description.md
 
 # LockFreeQueue
 
-**File**: `src\core\base\structures\LockFreeQueue.py`  
+**File**: `src\\core\base\\structures\\LockFreeQueue.py`  
 **Type**: Python Module  
 **Summary**: 7 classes, 0 functions, 17 imports  
 **Lines**: 649  
@@ -170,7 +169,7 @@ then delivers as a batch.
 
 # Improvements for LockFreeQueue
 
-**File**: `src\core\base\structures\LockFreeQueue.py`  
+**File**: `src\\core\base\\structures\\LockFreeQueue.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 649 lines (large)  
 **Complexity**: 42 score (complex)
@@ -204,6 +203,7 @@ then delivers as a batch.
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -215,22 +215,20 @@ Phase 19: Beyond vLLM - Performance Patterns
 Wait-free and lock-free data structures.
 """
 
+import heapq
 import threading
 import time
 from collections import deque
 from dataclasses import dataclass, field
+from queue import Empty, Full
 from typing import (
     Any,
-    Generic,
-    TypeVar,
-    Optional,
     Dict,
+    Generic,
     List,
-    Iterator,
-    Callable,
+    Optional,
+    TypeVar,
 )
-from queue import Empty, Full
-import heapq
 
 T = TypeVar("T")
 
@@ -263,8 +261,7 @@ class QueueStats:
 
 
 class MPMCQueue(Generic[T]):
-    """
-    Multi-Producer Multi-Consumer bounded queue.
+    """Multi-Producer Multi-Consumer bounded queue.
 
     High-performance queue optimized for concurrent access.
     Uses fine-grained locking with separate locks for head/tail.
@@ -283,14 +280,15 @@ class MPMCQueue(Generic[T]):
 
         # Consumer
         value = queue.get()
+
     """
 
     def __init__(self, capacity: int = 1000):
-        """
-        Initialize queue.
+        """Initialize queue.
 
         Args:
             capacity: Maximum queue size
+
         """
         self._capacity = capacity
         self._buffer: deque[T] = deque()
@@ -304,8 +302,7 @@ class MPMCQueue(Generic[T]):
         self._closed = False
 
     def put(self, item: T, timeout: Optional[float] = None) -> bool:
-        """
-        Put an item in the queue.
+        """Put an item in the queue.
 
         Args:
             item: Item to enqueue
@@ -316,6 +313,7 @@ class MPMCQueue(Generic[T]):
 
         Raises:
             Full: If timeout expires
+
         """
         with self._not_full:
             if self._closed:
@@ -345,14 +343,14 @@ class MPMCQueue(Generic[T]):
             return True
 
     def try_put(self, item: T) -> bool:
-        """
-        Try to put an item without blocking.
+        """Try to put an item without blocking.
 
         Args:
             item: Item to enqueue
 
         Returns:
             True if successful, False if full
+
         """
         with self._lock:
             if self._closed or len(self._buffer) >= self._capacity:
@@ -367,8 +365,7 @@ class MPMCQueue(Generic[T]):
             return True
 
     def get(self, timeout: Optional[float] = None) -> T:
-        """
-        Get an item from the queue.
+        """Get an item from the queue.
 
         Args:
             timeout: Max seconds to wait (None = forever)
@@ -378,6 +375,7 @@ class MPMCQueue(Generic[T]):
 
         Raises:
             Empty: If timeout expires or queue closed
+
         """
         with self._not_empty:
             deadline = time.monotonic() + timeout if timeout else None
@@ -402,11 +400,11 @@ class MPMCQueue(Generic[T]):
             return item
 
     def try_get(self) -> Optional[T]:
-        """
-        Try to get an item without blocking.
+        """Try to get an item without blocking.
 
         Returns:
             Item or None if empty
+
         """
         with self._lock:
             if not self._buffer:
@@ -432,11 +430,11 @@ class MPMCQueue(Generic[T]):
             self._not_full.notify_all()
 
     def clear(self) -> int:
-        """
-        Clear all items from queue.
+        """Clear all items from queue.
 
         Returns:
             Number of items cleared
+
         """
         with self._lock:
             count = len(self._buffer)
@@ -470,8 +468,7 @@ class MPMCQueue(Generic[T]):
 
 
 class SPSCQueue(Generic[T]):
-    """
-    Single-Producer Single-Consumer lock-free queue.
+    """Single-Producer Single-Consumer lock-free queue.
 
     Optimized for scenarios with exactly one producer and one consumer thread.
     Uses memory barriers instead of locks for maximum performance.
@@ -480,11 +477,11 @@ class SPSCQueue(Generic[T]):
     """
 
     def __init__(self, capacity: int = 1024):
-        """
-        Initialize SPSC queue.
+        """Initialize SPSC queue.
 
         Args:
             capacity: Must be power of 2 for efficiency
+
         """
         # Round up to power of 2
         self._capacity = 1 << (capacity - 1).bit_length()
@@ -497,14 +494,14 @@ class SPSCQueue(Generic[T]):
         self._stats = QueueStats()
 
     def try_put(self, item: T) -> bool:
-        """
-        Try to enqueue an item.
+        """Try to enqueue an item.
 
         Args:
             item: Item to enqueue
 
         Returns:
             True if successful, False if full
+
         """
         tail = self._tail
         next_tail = (tail + 1) & self._mask
@@ -520,11 +517,11 @@ class SPSCQueue(Generic[T]):
         return True
 
     def try_get(self) -> Optional[T]:
-        """
-        Try to dequeue an item.
+        """Try to dequeue an item.
 
         Returns:
             Item or None if empty
+
         """
         head = self._head
 
@@ -569,19 +566,18 @@ class PriorityItem(Generic[T]):
 
 
 class PriorityQueue(Generic[T]):
-    """
-    Thread-safe priority queue.
+    """Thread-safe priority queue.
 
     Lower priority values are dequeued first (min-heap).
     Maintains FIFO order for items with equal priority.
     """
 
     def __init__(self, capacity: int = 10000):
-        """
-        Initialize priority queue.
+        """Initialize priority queue.
 
         Args:
             capacity: Maximum queue size
+
         """
         self._capacity = capacity
         self._heap: List[PriorityItem[T]] = []
@@ -596,8 +592,7 @@ class PriorityQueue(Generic[T]):
         priority: float = 0.0,
         timeout: Optional[float] = None,
     ) -> bool:
-        """
-        Put an item with priority.
+        """Put an item with priority.
 
         Args:
             item: Item to enqueue
@@ -606,6 +601,7 @@ class PriorityQueue(Generic[T]):
 
         Returns:
             True if successful
+
         """
         with self._not_empty:
             if len(self._heap) >= self._capacity:
@@ -623,8 +619,7 @@ class PriorityQueue(Generic[T]):
             return True
 
     def get(self, timeout: Optional[float] = None) -> T:
-        """
-        Get highest priority item.
+        """Get highest priority item.
 
         Args:
             timeout: Max wait time
@@ -634,6 +629,7 @@ class PriorityQueue(Generic[T]):
 
         Raises:
             Empty: If timeout expires
+
         """
         with self._not_empty:
             deadline = time.monotonic() + timeout if timeout else None
@@ -686,8 +682,7 @@ class PriorityQueue(Generic[T]):
 
 
 class WorkStealingDeque(Generic[T]):
-    """
-    Work-stealing deque for task scheduling.
+    """Work-stealing deque for task scheduling.
 
     Owner pushes/pops from tail (LIFO for cache locality).
     Thieves steal from head (FIFO to get older tasks).
@@ -701,14 +696,14 @@ class WorkStealingDeque(Generic[T]):
         self._stats = QueueStats()
 
     def push(self, item: T) -> bool:
-        """
-        Push item to tail (owner operation).
+        """Push item to tail (owner operation).
 
         Args:
             item: Item to push
 
         Returns:
             True if successful
+
         """
         with self._lock:
             if len(self._buffer) >= self._capacity:
@@ -721,11 +716,11 @@ class WorkStealingDeque(Generic[T]):
             return True
 
     def pop(self) -> Optional[T]:
-        """
-        Pop item from tail (owner operation - LIFO).
+        """Pop item from tail (owner operation - LIFO).
 
         Returns:
             Item or None if empty
+
         """
         with self._lock:
             if not self._buffer:
@@ -737,11 +732,11 @@ class WorkStealingDeque(Generic[T]):
             return item
 
     def steal(self) -> Optional[T]:
-        """
-        Steal item from head (thief operation - FIFO).
+        """Steal item from head (thief operation - FIFO).
 
         Returns:
             Item or None if empty
+
         """
         with self._lock:
             if not self._buffer:
@@ -768,8 +763,7 @@ class WorkStealingDeque(Generic[T]):
 
 
 class BatchingQueue(Generic[T]):
-    """
-    Queue that batches items for efficient processing.
+    """Queue that batches items for efficient processing.
 
     Collects items until batch size or timeout is reached,
     then delivers as a batch.
@@ -781,13 +775,13 @@ class BatchingQueue(Generic[T]):
         batch_timeout: float = 0.01,
         max_pending: int = 10000,
     ):
-        """
-        Initialize batching queue.
+        """Initialize batching queue.
 
         Args:
             batch_size: Target batch size
             batch_timeout: Max time to wait for full batch
             max_pending: Max items pending
+
         """
         self._batch_size = batch_size
         self._batch_timeout = batch_timeout
@@ -817,8 +811,7 @@ class BatchingQueue(Generic[T]):
             return True
 
     def get_batch(self, timeout: Optional[float] = None) -> List[T]:
-        """
-        Get a batch of items.
+        """Get a batch of items.
 
         Waits until batch_size items or batch_timeout elapses.
 
@@ -827,6 +820,7 @@ class BatchingQueue(Generic[T]):
 
         Returns:
             List of items (may be smaller than batch_size)
+
         """
         with self._batch_ready:
             deadline = time.monotonic() + (timeout or self._batch_timeout)

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/state/agent_state_manager.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -51,16 +51,15 @@ Provides transactional file-system state management for PyAgent agents.
 """
 
 
+import ast
 import collections
 import json
 import logging
+import subprocess
+import sys
 import time
 import traceback
-import sys
-import ast
-import subprocess
 from pathlib import Path
-from subprocess import CalledProcessError, TimeoutExpired
 from typing import Any
 
 from src.core.base.common.file_system_core import FileSystemCore
@@ -90,7 +89,7 @@ class EmergencyEventLog:
 
             except (
                 Exception
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            ):  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
     def record_action(self, action: str, details: str) -> None:
@@ -113,8 +112,7 @@ EMERGENCY_LOG = EmergencyEventLog()
 
 
 class AgentCircuitBreaker:
-    """
-    Phase 336: Circuit breaker for autonomous agents to prevent cascading failures.
+    """Phase 336: Circuit breaker for autonomous agents to prevent cascading failures.
     Tracks failure rates and halts operations if threshold is exceeded.
     """
 
@@ -146,7 +144,7 @@ class AgentCircuitBreaker:
         except (
             OSError,
             TypeError,
-        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+        ):  # pylint: disable=broad-exception-caught, unused-variable
             pass
 
     def record_result(self, success: bool) -> None:
@@ -176,8 +174,7 @@ class AgentCircuitBreaker:
 
 
 class AgentCheckpointManager:
-    """
-    Phase 336: Manages agent state snapshots and restoration.
+    """Phase 336: Manages agent state snapshots and restoration.
     Provides logic to rollback agent memory layer and file system changes atomically.
     """
 
@@ -190,8 +187,7 @@ class AgentCheckpointManager:
     def create_checkpoint(
         self, state_data: dict[str, Any], associated_files: list[Path] | None = None
     ) -> str:
-        """
-        Creates a snapshot of agent state and optionally backups associated files.
+        """Creates a snapshot of agent state and optionally backups associated files.
         Returns: Checkpoint ID
         """
         checkpoint_id: str = f"cp_{int(time.time())}_{self.agent_id}"
@@ -215,8 +211,7 @@ class AgentCheckpointManager:
         return checkpoint_id
 
     def restore_checkpoint(self, checkpoint_id: str) -> dict[str, Any]:
-        """
-        Restores agent state and files from a checkpoint.
+        """Restores agent state and files from a checkpoint.
         """
         cp_path: Path = self.checkpoint_dir / checkpoint_id
         if not cp_path.exists():
@@ -244,8 +239,7 @@ class AgentCheckpointManager:
 
 
 class StateDriftDetector:
-    """
-    Phase 336: Validates pre/post execution state to detect corruption.
+    """Phase 336: Validates pre/post execution state to detect corruption.
     """
 
     def __init__(self, target_files: list[Path]) -> None:
@@ -271,8 +265,7 @@ class StateDriftDetector:
 
 
 class StructuredErrorValidator:
-    """
-    Phase 336: Validates and classifies errors to prevent 'Unknown failure' states.
+    """Phase 336: Validates and classifies errors to prevent 'Unknown failure' states.
     Captures diagnostic metadata for swarm intelligence.
     """
 
@@ -291,10 +284,8 @@ class StructuredErrorValidator:
     def capture_failure(
         self, context_id: str, error: BaseException, traceback_obj: Any
     ) -> dict[str, Any]:
+        """Classify error and return structured metadata.
         """
-        Classify error and return structured metadata.
-        """
-
         error_type: str = type(error).__name__
         stack_trace: str = (
             "".join(traceback.format_tb(traceback_obj)) if traceback_obj else str(error)
@@ -385,7 +376,6 @@ class StateTransaction:
 
     def validate(self) -> None:
         """Phase 280: Validate Python files before commit (AST Check, Immutable Test Check, Drift)."""
-
         # Drift/Corruption Check
         warnings: list[str] = self.drift_detector.detect_drift()
         for w in warnings:

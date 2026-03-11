@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/improvements/ProgressDashboard.description.md
 
@@ -83,6 +82,7 @@ Attributes:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -103,13 +103,14 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_improvements.py"""
 
+from datetime import datetime
+from pathlib import Path
+
 from src.core.base.version import VERSION
+
 from .Improvement import Improvement
 from .ImprovementStatus import ImprovementStatus
 from .ProgressReport import ProgressReport
-from datetime import datetime
-from pathlib import Path
-from typing import List, Tuple
 
 __version__ = VERSION
 
@@ -121,6 +122,7 @@ class ProgressDashboard:
 
     Attributes:
         reports: List of generated reports.
+
     """
 
     def __init__(self) -> None:
@@ -136,6 +138,7 @@ class ProgressDashboard:
 
         Returns:
             ProgressReport with current metrics.
+
         """
         completed = len(
             [i for i in improvements if i.status == ImprovementStatus.COMPLETED]

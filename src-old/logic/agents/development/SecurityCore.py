@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/SecurityCore.description.md
 
 # SecurityCore
 
-**File**: `src\logic\agents\development\SecurityCore.py`  
+**File**: `src\\logic\agents\\development\\SecurityCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 9 imports  
 **Lines**: 89  
@@ -48,7 +47,7 @@ Pure logic core for security and safety validation.
 
 # Improvements for SecurityCore
 
-**File**: `src\logic\agents\development\SecurityCore.py`  
+**File**: `src\\logic\agents\\development\\SecurityCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 89 lines (small)  
 **Complexity**: 1 score (simple)
@@ -103,17 +102,18 @@ This is designed for high-performance static analysis and future Rust migration.
 
 import importlib.util
 from pathlib import Path
-from src.core.base.Version import VERSION
+
 from src.core.base.types.SecurityIssueType import SecurityIssueType
+from src.core.base.Version import VERSION
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
-from src.logic.agents.development.mixins.SecurityScannerMixin import (
-    SecurityScannerMixin,
-)
 from src.logic.agents.development.mixins.SecurityAuditorMixin import (
     SecurityAuditorMixin,
 )
 from src.logic.agents.development.mixins.SecurityReporterMixin import (
     SecurityReporterMixin,
+)
+from src.logic.agents.development.mixins.SecurityScannerMixin import (
+    SecurityScannerMixin,
 )
 
 _RUST_AVAILABLE = importlib.util.find_spec("rust_core") is not None

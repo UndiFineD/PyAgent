@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/dynamic_importer.description.md
 
@@ -46,6 +45,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -86,10 +86,10 @@ Use Cases:
 
 
 import importlib
-from importlib.machinery import ModuleSpec
 import importlib.util
 import logging
 import sys
+from importlib.machinery import ModuleSpec
 from pathlib import Path
 from types import ModuleType
 from typing import Any, Generic, TypeVar
@@ -110,8 +110,7 @@ def import_from_path(
     *,
     add_to_sys_modules: bool = True,
 ) -> ModuleType:
-    """
-    Import a Python module from a filesystem path.
+    """Import a Python module from a filesystem path.
 
     This allows importing modules that are not on sys.path.
 
@@ -130,6 +129,7 @@ def import_from_path(
     Examples:
         >>> mod = import_from_path("my_plugin", "/path/to/plugin.py")
         >>> mod.some_function()
+
     """
     file_path = Path(file_path)
 
@@ -167,8 +167,7 @@ def import_from_path(
 
 
 def resolve_obj_by_qualname(qualname: str) -> Any:
-    """
-    Resolve a fully qualified name to an object.
+    """Resolve a fully qualified name to an object.
 
     The qualname should be in the format "module.submodule.ClassName"
     or "module.function_name".
@@ -190,6 +189,7 @@ def resolve_obj_by_qualname(qualname: str) -> Any:
         >>> json_loads = resolve_obj_by_qualname("json.loads")
         >>> json_loads('{"a": 1}')
         {"a": 1}
+
     """
     parts: list[str] = qualname.rsplit(".", 1)
 
@@ -215,8 +215,7 @@ def resolve_obj_by_qualname_parts(
     module_path: str,
     attr_path: str,
 ) -> Any:
-    """
-    Resolve an object from module path and attribute path separately.
+    """Resolve an object from module path and attribute path separately.
 
     Args:
         module_path: The module to import (e.g., "collections").
@@ -229,6 +228,7 @@ def resolve_obj_by_qualname_parts(
         >>> cls = resolve_obj_by_qualname_parts("json", "JSONEncoder")
         >>> isinstance(cls(), cls)
         True
+
     """
     module: ModuleType = importlib.import_module(module_path)
     obj: ModuleType = module
@@ -245,8 +245,7 @@ def resolve_obj_by_qualname_parts(
 
 
 class PlaceholderModule:
-    """
-    A placeholder for a module that hasn't been imported yet.
+    """A placeholder for a module that hasn't been imported yet.
 
     Provides a helpful error message when accessed, explaining
     that the module needs to be installed or is not available.
@@ -255,6 +254,7 @@ class PlaceholderModule:
         module_name: Name of the module this is a placeholder for.
         install_hint: Optional hint for installing the module.
         reason: Optional reason why the module wasn't loaded.
+
     """
 
     def __init__(
@@ -300,8 +300,7 @@ def lazy_import(
     *,
     install_hint: str | None = None,
 ) -> ModuleType | PlaceholderModule:
-    """
-    Lazily import a module, returning a placeholder if not available.
+    """Lazily import a module, returning a placeholder if not available.
 
     This is useful for optional dependencies that may not be installed.
 
@@ -316,6 +315,7 @@ def lazy_import(
         >>> numpy = lazy_import("numpy", install_hint="pip install numpy")
         >>> # If numpy is installed, use it normally
         >>> # If not, access will raise a helpful error
+
     """
     try:
         return importlib.import_module(module_name)
@@ -332,8 +332,7 @@ def safe_import(
     module_name: str,
     default: _T = None,  # type: ignore
 ) -> ModuleType | _T:
-    """
-    Safely import a module, returning a default value on failure.
+    """Safely import a module, returning a default value on failure.
 
     Args:
         module_name: Name of the module to import.
@@ -346,6 +345,7 @@ def safe_import(
         >>> numpy = safe_import("numpy")  # Returns None if not installed
         >>> if numpy is not None:
         ...     arr = numpy.array([1, 2, 3])
+
     """
     try:
         return importlib.import_module(module_name)
@@ -359,8 +359,7 @@ def safe_import(
 
 
 class LazyModuleRegistry:
-    """
-    Registry for lazy module loading with deferred import.
+    """Registry for lazy module loading with deferred import.
 
     Modules are registered with their import path but not loaded
     until first access. This reduces startup time for rarely-used
@@ -371,6 +370,7 @@ class LazyModuleRegistry:
         >>> registry.register("parser", "myapp.parsers.JSONParser")
         >>> # Module is not imported yet
         >>> parser_cls = registry.get("parser")  # Now it's imported
+
     """
 
     def __init__(self) -> None:
@@ -378,12 +378,12 @@ class LazyModuleRegistry:
         self._cache: dict[str, Any] = {}
 
     def register(self, name: str, qualname: str) -> None:
-        """
-        Register a module/class for lazy loading.
+        """Register a module/class for lazy loading.
 
         Args:
             name: Name to register under.
             qualname: Fully qualified name to import when accessed.
+
         """
         self._registry[name] = qualname
         # Invalidate cache if re-registering
@@ -391,18 +391,17 @@ class LazyModuleRegistry:
         logger.debug(f"Registered lazy module: {name} -> {qualname}")
 
     def register_many(self, mappings: dict[str, str]) -> None:
-        """
-        Register multiple modules at once.
+        """Register multiple modules at once.
 
         Args:
             mappings: Dict of name -> qualname mappings.
+
         """
         for name, qualname in mappings.items():
             self.register(name, qualname)
 
     def get(self, name: str) -> Any:
-        """
-        Get a registered module/class, importing if necessary.
+        """Get a registered module/class, importing if necessary.
 
         Args:
             name: Registered name to look up.
@@ -413,6 +412,7 @@ class LazyModuleRegistry:
         Raises:
             KeyError: If name not registered.
             ImportError: If import fails.
+
         """
         if name in self._cache:
             return self._cache[name]
@@ -444,11 +444,11 @@ class LazyModuleRegistry:
         return name in self._cache
 
     def preload(self, *names: str) -> None:
-        """
-        Preload specific modules.
+        """Preload specific modules.
 
         Args:
             names: Names of modules to preload.
+
         """
         for name in names:
             self.get(name)
@@ -464,25 +464,25 @@ _global_registry = LazyModuleRegistry()
 
 
 def register_lazy_module(name: str, qualname: str) -> None:
-    """
-    Register a module for global lazy loading.
+    """Register a module for global lazy loading.
 
     Args:
         name: Name to register under.
         qualname: Fully qualified name to import.
+
     """
     _global_registry.register(name, qualname)
 
 
 def get_lazy_module(name: str) -> Any:
-    """
-    Get a globally registered lazy module.
+    """Get a globally registered lazy module.
 
     Args:
         name: Registered name to look up.
 
     Returns:
         The imported object.
+
     """
     return _global_registry.get(name)
 
@@ -493,8 +493,7 @@ def get_lazy_module(name: str) -> Any:
 
 
 class LazyAttribute(Generic[_T]):
-    """
-    A descriptor that lazily imports a module attribute.
+    """A descriptor that lazily imports a module attribute.
 
     Use this in classes to defer import until attribute access.
 
@@ -505,6 +504,7 @@ class LazyAttribute(Generic[_T]):
         ...
         >>> obj = MyClass()
         >>> obj.numpy.array([1, 2, 3])  # Imports numpy here
+
     """
 
     def __init__(self, qualname: str, *, install_hint: str | None = None) -> None:
@@ -535,8 +535,7 @@ class LazyAttribute(Generic[_T]):
 
 
 def reload_module(module: ModuleType | str) -> ModuleType:
-    """
-    Reload a module, refreshing its code.
+    """Reload a module, refreshing its code.
 
     Args:
         module: Module object or name to reload.
@@ -546,6 +545,7 @@ def reload_module(module: ModuleType | str) -> ModuleType:
 
     Raises:
         ImportError: If module can't be reloaded.
+
     """
     if isinstance(module, str):
         if module not in sys.modules:
@@ -556,8 +556,7 @@ def reload_module(module: ModuleType | str) -> ModuleType:
 
 
 def unload_module(module_name: str) -> bool:
-    """
-    Unload a module from sys.modules.
+    """Unload a module from sys.modules.
 
     Note: This doesn't unload dependencies or clean up references.
 
@@ -566,6 +565,7 @@ def unload_module(module_name: str) -> bool:
 
     Returns:
         True if module was unloaded, False if not loaded.
+
     """
     if module_name in sys.modules:
         del sys.modules[module_name]
@@ -580,27 +580,27 @@ def unload_module(module_name: str) -> bool:
 
 
 def is_module_available(module_name: str) -> bool:
-    """
-    Check if a module is available without importing it.
+    """Check if a module is available without importing it.
 
     Args:
         module_name: Name of module to check.
 
     Returns:
         True if module can be imported.
+
     """
     return importlib.util.find_spec(module_name) is not None
 
 
 def get_module_version(module_name: str) -> str | None:
-    """
-    Get the version of an installed module.
+    """Get the version of an installed module.
 
     Args:
         module_name: Name of module.
 
     Returns:
         Version string if available, None otherwise.
+
     """
     try:
         module: ModuleType = importlib.import_module(module_name)
@@ -614,8 +614,7 @@ def require_module(
     min_version: str | None = None,
     install_hint: str | None = None,
 ) -> ModuleType:
-    """
-    Import a required module, raising a clear error if not available.
+    """Import a required module, raising a clear error if not available.
 
     Args:
         module_name: Name of required module.
@@ -627,8 +626,8 @@ def require_module(
 
     Raises:
         ImportError: If module not available or version too low.
-    """
 
+    """
     try:
         module: ModuleType = importlib.import_module(module_name)
     except ImportError as e:
@@ -651,11 +650,11 @@ def require_module(
 
 
 def _compare_versions(v1: str, v2: str) -> int:
-    """
-    Compare two version strings.
+    """Compare two version strings.
 
     Returns:
         -1 if v1 < v2, 0 if v1 == v2, 1 if v1 > v2.
+
     """
 
     def normalize(v: str) -> tuple[int, ...]:

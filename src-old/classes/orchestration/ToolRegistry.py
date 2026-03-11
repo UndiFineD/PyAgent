@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/ToolRegistry.description.md
 
@@ -83,15 +82,14 @@ LLM_CONTEXT_END
 
 """Central registry for all agent tools and capabilities."""
 
-import inspect
 import logging
-from typing import Dict, List, Any, Callable, Optional, Type
+from typing import Any, Callable, Dict, List, Optional
+
 from .ToolCore import ToolCore, ToolMetadata
 
 
 class ToolRegistry:
-    """
-    A registry that allows agents to discover and invoke tools across the fleet.
+    """A registry that allows agents to discover and invoke tools across the fleet.
     Shell for ToolCore.
     """
 

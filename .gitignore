@@ -69,6 +69,10 @@ scratch/foreach_shards/
 target/
 **/target/
 
+# Ensure rust target directories are git-ignored (already present but keep explicit)
+/target/
+
+
 
 #__pycache__
 __pycache__
@@ -86,3 +90,7 @@ chroma.sqlite3
 *.db
 data/
 fixes/
+
+# Generated key files from tests / runtime artifacts
+# Ignore key pairs created during testing in rust_core
+rust_core/*-keys.*

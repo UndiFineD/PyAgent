@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/trust_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -115,8 +115,7 @@ class TrustMetrics:
 
 # pylint: disable=too-many-ancestors
 class TrustAgent(BaseAgent):
-    """
-    Agent specializing in human-agent alignment, mood detection,
+    """Agent specializing in human-agent alignment, mood detection,
     emotional intelligence, and maintaining trust scores for interaction safety.
     """
 

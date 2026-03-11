@@ -1,14 +1,13 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/core_mixins/CorePartitionMixin.description.md
 
 # CorePartitionMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\core_mixins\CorePartitionMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\core_mixins\\CorePartitionMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 74  
@@ -42,7 +41,7 @@ Methods for partitioning and bloat detection.
 
 # Improvements for CorePartitionMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\core_mixins\CorePartitionMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\core_mixins\\CorePartitionMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 74 lines (small)  
 **Complexity**: 2 score (simple)
@@ -75,8 +74,8 @@ Methods for partitioning and bloat detection.
 LLM_CONTEXT_END
 """
 
-from typing import Any
 import json
+from typing import Any
 
 try:
     from rust_core import partition_to_shards_rust
@@ -92,8 +91,7 @@ class CorePartitionMixin:
     def partition_memory(
         self, memory: dict[str, Any], max_entries_per_shard: int = 1000
     ) -> dict[str, dict[str, Any]]:
-        """
-        Splits memory into shards if it exceeds thresholds.
+        """Splits memory into shards if it exceeds thresholds.
         Implements stable sub-sharding for trillion-parameter scalability.
         """
         import zlib

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/anomaly_detection_agent.description.md
 
 # anomaly_detection_agent
 
-**File**: `src\logic\agents\security\anomaly_detection_agent.py`  
+**File**: `src\\logic\agents\\security\anomaly_detection_agent.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 11 imports  
 **Lines**: 129  
@@ -65,7 +64,7 @@ Inspired by AD-Canaries event monitoring and correlation.
 
 # Improvements for anomaly_detection_agent
 
-**File**: `src\logic\agents\security\anomaly_detection_agent.py`  
+**File**: `src\\logic\agents\\security\anomaly_detection_agent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 129 lines (medium)  
 **Complexity**: 10 score (moderate)
@@ -180,8 +179,7 @@ class AnomalyDetector:
 
 
 class AnomalyDetectionAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Monitors agent behavior for anomalies, using statistical analysis and pattern recognition.
+    """Monitors agent behavior for anomalies, using statistical analysis and pattern recognition.
     Inspired by AD-Canaries event monitoring and correlation.
     """
 

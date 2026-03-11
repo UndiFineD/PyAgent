@@ -1,14 +1,13 @@
 # Copyright 2026 PyAgent Authors
 # MIRIX 6-tier memory engine utilizing ChromaDB.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/TieredMemoryEngine.description.md
 
 # TieredMemoryEngine
 
-**File**: `src\logic\agents\cognitive\context\engines\TieredMemoryEngine.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\TieredMemoryEngine.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 30  
@@ -46,7 +45,7 @@ Manages the 6 memory tiers: Core, Episodic, Semantic, Procedural, Resource, and 
 
 # Improvements for TieredMemoryEngine
 
-**File**: `src\logic\agents\cognitive\context\engines\TieredMemoryEngine.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\TieredMemoryEngine.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 30 lines (small)  
 **Complexity**: 5 score (moderate)
@@ -80,7 +79,7 @@ LLM_CONTEXT_END
 """
 
 import logging
-from typing import Any, List, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 
 class TieredMemoryEngine:

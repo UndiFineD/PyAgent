@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/autonomy_core.description.md
 
@@ -41,11 +40,13 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Unified Autonomy and Self-Model core."""
 
 from typing import List, Optional
+
 # Use absolute import to avoid issues when module is executed in isolation
 from src.core.base.common.base_core import BaseCore
 
@@ -56,8 +57,7 @@ except ImportError:
 
 
 class AutonomyCore(BaseCore):
-    """
-    Standard implementation for Agent Autonomy and Self-Model.
+    """Standard implementation for Agent Autonomy and Self-Model.
     Provides logic for identifying blind spots and calculating evolution sleep intervals.
     """
 
@@ -72,7 +72,7 @@ class AutonomyCore(BaseCore):
         if rc and hasattr(rc, "evaluate_autonomy_score"):  # pylint: disable=no-member
             try:
                 return rc.evaluate_autonomy_score(agent_id, stats)
-            except Exception as e: 
+            except Exception:
                 pass
         return 0.5  # Default fallback
 

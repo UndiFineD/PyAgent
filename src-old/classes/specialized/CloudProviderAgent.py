@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/CloudProviderAgent.description.md
 
@@ -80,15 +79,13 @@ Manages cloud credentials, region selection, and generates IaC templates.
 LLM_CONTEXT_END
 """
 
-import os
-import json
-from typing import Dict, List, Any, Optional
+from typing import Dict
+
 from src.classes.base_agent import BaseAgent
 
 
 class CloudProviderAgent(BaseAgent):
-    """
-    Phase 56: Multi-Cloud Infrastructure as Code.
+    """Phase 56: Multi-Cloud Infrastructure as Code.
     Manages cloud credentials, region selection, and generates IaC templates.
     """
 

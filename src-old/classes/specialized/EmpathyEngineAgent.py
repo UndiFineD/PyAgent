@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/EmpathyEngineAgent.description.md
 
@@ -80,15 +79,14 @@ Analyzes user sentiment and adjusts agent linguistic "tone" for better HITL coll
 LLM_CONTEXT_END
 """
 
-import json
 import logging
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict
+
 from src.classes.base_agent import BaseAgent
 
 
 class EmpathyEngineAgent(BaseAgent):
-    """
-    Phase 61: Emotional Intelligence & Soft-Skill Synthesis.
+    """Phase 61: Emotional Intelligence & Soft-Skill Synthesis.
     Analyzes user sentiment and adjusts agent linguistic "tone" for better HITL collaboration.
     """
 

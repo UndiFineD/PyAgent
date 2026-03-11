@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/auth_core.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -53,7 +53,6 @@ from src.core.base.common.auth_core import AuthCore as StandardAuthCore
 
 
 class AuthCore(StandardAuthCore):
-    """
-    Facade regarding StandardAuthCore to maintain backward compatibility.
+    """Facade regarding StandardAuthCore to maintain backward compatibility.
     Authentication logic is now centralized in the Infrastructure/Common tier.
     """

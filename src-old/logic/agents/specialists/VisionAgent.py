@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/VisionAgent.description.md
 
 # VisionAgent
 
-**File**: `src\logic\agents\specialists\VisionAgent.py`  
+**File**: `src\\logic\agents\\specialists\\VisionAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 14 imports  
 **Lines**: 221  
@@ -51,7 +50,7 @@ and visual pattern recognition using multi-modal model backends.
 
 # Improvements for VisionAgent
 
-**File**: `src\logic\agents\specialists\VisionAgent.py`  
+**File**: `src\\logic\agents\\specialists\\VisionAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 221 lines (medium)  
 **Complexity**: 1 score (simple)
@@ -86,24 +85,24 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# VisionAgent: Image Analysis and Computer Vision Specialist - Phase 319 Enhanced
-
-from src.core.base.Version import VERSION
-import logging
 import base64
+import logging
 import re
-from typing import Any, Dict, List, Optional, Tuple
 from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.BaseUtilities import as_tool
+
+# Copyright 2026 PyAgent Authors
+# VisionAgent: Image Analysis and Computer Vision Specialist - Phase 319 Enhanced
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
 
 class VisionAgent(BaseAgent):
-    """
-    Agent specializing in image description, OCR, diagram analysis,
+    """Agent specializing in image description, OCR, diagram analysis,
     and visual pattern recognition using multi-modal model backends.
     """
 
@@ -121,8 +120,7 @@ class VisionAgent(BaseAgent):
     async def analyze_image(
         self, image_source: str, query: str = "Describe this image in detail."
     ) -> Dict[str, Any]:
-        """
-        Analyzes an image and answers a query about it.
+        """Analyzes an image and answers a query about it.
         image_source: Either a base64 string, file path, or URL.
         """
         b64_data = await self._resolve_image_source(image_source)

@@ -1,5 +1,4 @@
-"""
-Production logging configuration for Python applications.
+"""Production logging configuration for Python applications.
 
 Usage:
 from logging_config import configure_logging
@@ -18,15 +17,14 @@ def configure_logging(
     format: Literal["json", "console"] = "json",
     service_name: str = "app",
 ):
-    """
-    Configure structured logging for production.
+    """Configure structured logging for production.
 
     Args:
         log_level: Logging level (DEBUG, INFO, WARNING, ERROR)
         format: Output format - 'json' for production, 'console' for development
         service_name: Service name to include in logs
-    """
 
+    """
     # Timestamper
     timestamper = structlog.processors.TimeStamper(fmt="iso")
 

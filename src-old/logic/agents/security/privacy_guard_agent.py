@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/privacy_guard_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -59,8 +59,7 @@ __version__ = VERSION
 
 
 class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Privacy Guard Agent: Monitors fleet communications for PII (Personally
+    """Privacy Guard Agent: Monitors fleet communications for PII (Personally
     Identifiable Information), performs redaction, and tracks compliance.
     """
 
@@ -129,8 +128,7 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         }
 
     def bulk_scan_workspace(self) -> list[dict[str, str]]:
-        """
-        Performs a high-speed recursive scan of the workspace for secrets.
+        """Performs a high-speed recursive scan of the workspace for secrets.
         Offloads the heavy filesystem traversal and regex matching to Rust.
         """
         try:

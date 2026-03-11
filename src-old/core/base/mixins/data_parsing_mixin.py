@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/data_parsing_mixin.description.md
 
 # data_parsing_mixin
 
-**File**: `src\core\base\mixins\data_parsing_mixin.py`  
+**File**: `src\\core\base\\mixins\\data_parsing_mixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 46  
@@ -46,7 +45,7 @@ Mixin providing data parsing features for structured data.
 
 # Improvements for data_parsing_mixin
 
-**File**: `src\core\base\mixins\data_parsing_mixin.py`  
+**File**: `src\\core\base\\mixins\\data_parsing_mixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 46 lines (small)  
 **Complexity**: 4 score (simple)
@@ -77,6 +76,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -97,8 +97,6 @@ Inspired by ADSyncDump-BOF XML parsing techniques.
 """
 
 
-import html
-import re
 from typing import Any, Optional
 
 from src.core.base.logic.processing.data_parsing_core import DataParsingCore

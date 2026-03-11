@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/core/CurationCore.description.md
 
 # CurationCore
 
-**File**: `src\logic\agents\system\core\CurationCore.py`  
+**File**: `src\\logic\agents\\system\\core\\CurationCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 48  
@@ -39,7 +38,7 @@ Class CurationCore implementation.
 
 # Improvements for CurationCore
 
-**File**: `src\logic\agents\system\core\CurationCore.py`  
+**File**: `src\\logic\agents\\system\\core\\CurationCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 48 lines (small)  
 **Complexity**: 2 score (simple)
@@ -85,8 +84,7 @@ import time
 class CurationCore:
     @staticmethod
     def prune_directory(directory: str, max_age_days: int = 7) -> int:
-        """
-        Removes files in a directory that are older than max_age_days.
+        """Removes files in a directory that are older than max_age_days.
         Returns the number of files removed.
         """
         if not os.path.exists(directory):
@@ -110,8 +108,7 @@ class CurationCore:
 
     @staticmethod
     def deep_clean_pycache(root_dir: str) -> int:
-        """
-        Forcefully removes all __pycache__ folders.
+        """Forcefully removes all __pycache__ folders.
         """
         count = 0
         for root, dirs, files in os.walk(root_dir):

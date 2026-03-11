@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/network_reconnaissance_core.description.md
 
 # network_reconnaissance_core
 
-**File**: `src\core\base\logic\core\network_reconnaissance_core.py`  
+**File**: `src\\core\base\\logic\\core\network_reconnaissance_core.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 25 imports  
 **Lines**: 430  
@@ -84,7 +83,7 @@ Inspired by OWASP Amass, this core provides:
 
 # Improvements for network_reconnaissance_core
 
-**File**: `src\core\base\logic\core\network_reconnaissance_core.py`  
+**File**: `src\\core\base\\logic\\core\network_reconnaissance_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 430 lines (medium)  
 **Complexity**: 4 score (simple)
@@ -121,28 +120,25 @@ LLM_CONTEXT_END
 # Provides comprehensive network asset discovery and attack surface mapping
 
 import asyncio
+import re
+import socket
+import ssl
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Set
+from urllib.parse import urljoin, urlparse
+
 import aiohttp
 import dns.resolver
 import dns.reversename
 import dns.zone
-import ipaddress
-import json
-import re
-import ssl
-import socket
-import time
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Set, Tuple, Any
-from urllib.parse import urlparse, urljoin
-import warnings
-
 from src.core.base.common.base_core import BaseCore
 
 
 @dataclass
 class AssetDiscoveryResult:
     """Result of network asset discovery operations."""
+
     domain: str
     subdomains: Set[str] = field(default_factory=set)
     ip_addresses: Set[str] = field(default_factory=set)
@@ -157,6 +153,7 @@ class AssetDiscoveryResult:
 @dataclass
 class ReconnaissanceConfig:
     """Configuration for reconnaissance operations."""
+
     max_dns_queries: int = 1000
     rate_limit_delay: float = 0.1
     timeout: int = 10
@@ -171,8 +168,7 @@ class ReconnaissanceConfig:
 
 
 class NetworkReconnaissanceCore(BaseCore):
-    """
-    Network Reconnaissance Core implementing comprehensive asset discovery patterns.
+    """Network Reconnaissance Core implementing comprehensive asset discovery patterns.
 
     Inspired by OWASP Amass, this core provides:
     - DNS enumeration and subdomain discovery
@@ -197,7 +193,7 @@ class NetworkReconnaissanceCore(BaseCore):
             'portal', 'login', 'auth', 'oauth', 'sso', 'vpn', 'remote', 'cloud',
             'aws', 'azure', 'gcp', 'cdn', 'static', 'assets', 'media', 'files',
             'download', 'upload', 'backup', 'db', 'database', 'sql', 'mysql',
-            'postgres', 'mongo', 'redis', 'cache', 'session', 'api', 'rest',
+            'postgres', 'mongo', 'redis', 'cache', 'session', 'rest',
             'graphql', 'soap', 'ws', 'websocket', 'socket', 'tcp', 'udp'
         }
 
@@ -229,14 +225,14 @@ class NetworkReconnaissanceCore(BaseCore):
             self.session = None
 
     async def discover_assets(self, domain: str) -> AssetDiscoveryResult:
-        """
-        Perform comprehensive asset discovery for a domain.
+        """Perform comprehensive asset discovery for a domain.
 
         Args:
             domain: Target domain to analyze
 
         Returns:
             AssetDiscoveryResult with all discovered assets
+
         """
         await self.initialize()
 
@@ -467,14 +463,14 @@ class NetworkReconnaissanceCore(BaseCore):
         return min(score, 1.0)
 
     async def passive_reconnaissance(self, domain: str) -> AssetDiscoveryResult:
-        """
-        Perform passive reconnaissance using certificate transparency and DNS.
+        """Perform passive reconnaissance using certificate transparency and DNS.
 
         Args:
             domain: Target domain
 
         Returns:
             AssetDiscoveryResult with passive findings
+
         """
         result = AssetDiscoveryResult(domain=domain)
 
@@ -489,14 +485,14 @@ class NetworkReconnaissanceCore(BaseCore):
         return result
 
     async def active_reconnaissance(self, domain: str) -> AssetDiscoveryResult:
-        """
-        Perform active reconnaissance including brute force and web crawling.
+        """Perform active reconnaissance including brute force and web crawling.
 
         Args:
             domain: Target domain
 
         Returns:
             AssetDiscoveryResult with active findings
+
         """
         result = AssetDiscoveryResult(domain=domain)
 
@@ -513,14 +509,14 @@ class NetworkReconnaissanceCore(BaseCore):
         return result
 
     def get_discovery_summary(self, result: AssetDiscoveryResult) -> Dict[str, Any]:
-        """
-        Generate a summary of discovery results.
+        """Generate a summary of discovery results.
 
         Args:
             result: AssetDiscoveryResult to summarize
 
         Returns:
             Dictionary with summary statistics
+
         """
         return {
             'domain': result.domain,

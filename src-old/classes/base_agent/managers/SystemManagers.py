@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/base_agent/managers/SystemManagers.description.md
 
 # SystemManagers
 
-**File**: `src\classes\base_agent\managers\SystemManagers.py`  
+**File**: `src\\classes\base_agent\\managers\\SystemManagers.py`  
 **Type**: Python Module  
 **Summary**: 7 classes, 0 functions, 22 imports  
 **Lines**: 155  
@@ -112,7 +111,7 @@ Manages configuration profiles.
 
 # Improvements for SystemManagers
 
-**File**: `src\classes\base_agent\managers\SystemManagers.py`  
+**File**: `src\\classes\base_agent\\managers\\SystemManagers.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 155 lines (medium)  
 **Complexity**: 26 score (complex)
@@ -151,23 +150,22 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 # Copyright (c) 2025 PyAgent contributors
-
 import hashlib
 import json
-import logging
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
+
 from ..models import (
-    FilePriority,
-    FilePriorityConfig,
     AgentEvent,
     ConfigProfile,
-    _empty_dict_str_str,
+    FilePriority,
+    FilePriorityConfig,
     _empty_agent_event_handlers,
-    _empty_dict_str_health_checks,
     _empty_dict_str_any,
     _empty_dict_str_configprofile,
+    _empty_dict_str_health_checks,
+    _empty_dict_str_str,
 )
 
 

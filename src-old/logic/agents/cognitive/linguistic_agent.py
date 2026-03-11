@@ -13,8 +13,7 @@
 # limitations under the License.
 
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/linguistic_agent.description.md
 
@@ -43,6 +42,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Agent specializing in linguistic articulation and epistemic subordination.
@@ -51,9 +51,9 @@ Ensures that the LLM only verbalizes grounded results and never hallucinates new
 
 import logging
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -89,11 +89,14 @@ class LinguisticAgent(BaseAgent):
     @as_tool
     def articulate_results(self, technical_report: str, user_query: str) -> str:
         """Converts raw expert outputs into a polite, natural response.
+
         Args:
             technical_report: The raw output from the PatternOrchestrator.
             user_query: The original user question.
+
         Return:
             A natural language summary.
+
         """
         logging.info("LinguisticAgent: Articulating technical report...")
 

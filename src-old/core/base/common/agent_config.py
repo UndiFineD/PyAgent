@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/agent_config.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -51,9 +51,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.models.agent_models import AgentPluginConfig
 from src.core.base.common.models.fleet_models import RateLimitConfig
+from src.core.base.lifecycle.version import VERSION
+
 # When this file is loaded directly via importlib.spec_from_file_location in tests,
 # the package context may be missing, causing relative imports to fail.  We attempt
 # the relative import first and fall back to the absolute path if necessary.
@@ -91,6 +92,7 @@ class AgentConfig:  # pylint: disable=too-many-instance-attributes
         plugins: List of plugin configurations.
         selective_agents: Agents to execute.
         timeout_per_agent: Timeout settings per agent.
+
     """
 
     repo_root: str = "."

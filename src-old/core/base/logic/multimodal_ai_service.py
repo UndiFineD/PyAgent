@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/multimodal_ai_service.description.md
 
 # multimodal_ai_service
 
-**File**: `src\core\base\logic\multimodal_ai_service.py`  
+**File**: `src\\core\base\\logic\\multimodal_ai_service.py`  
 **Type**: Python Module  
 **Summary**: 5 classes, 0 functions, 10 imports  
 **Lines**: 315  
@@ -102,7 +101,7 @@ Provides a single interface for various AI services across different providers.
 
 # Improvements for multimodal_ai_service
 
-**File**: `src\core\base\logic\multimodal_ai_service.py`  
+**File**: `src\\core\base\\logic\\multimodal_ai_service.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 315 lines (medium)  
 **Complexity**: 11 score (moderate)
@@ -144,11 +143,11 @@ Provides unified interface for various AI services (speech, text, vision).
 """
 
 import asyncio
-import time
 import logging
-from typing import Dict, Any, Optional, Union
+import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from typing import Any, Dict, Optional, Union
 
 
 @dataclass
@@ -317,8 +316,7 @@ class CloudflareProvider(AIServiceProvider):
 
 
 class MultimodalAIService:
-    """
-    Unified multimodal AI service gateway.
+    """Unified multimodal AI service gateway.
 
     Provides a single interface for various AI services across different providers.
     """
@@ -339,8 +337,7 @@ class MultimodalAIService:
         provider: str = "default",
         **kwargs,
     ) -> Dict[str, Any]:
-        """
-        Process a multimodal AI request.
+        """Process a multimodal AI request.
 
         Args:
             service_type: Type of AI service (speech_to_text, text_generation, etc.)
@@ -350,6 +347,7 @@ class MultimodalAIService:
 
         Returns:
             Processing result with metadata
+
         """
         if provider not in self.providers:
             available = list(self.providers.keys())

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/agent/AgentMetrics.description.md
 
 # AgentMetrics
 
-**File**: `src\classes\agent\AgentMetrics.py`  
+**File**: `src\\classes\agent\\AgentMetrics.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 10 imports  
 **Lines**: 130  
@@ -51,7 +50,7 @@ Manages execution metrics and statistics for an agent.
 
 # Improvements for AgentMetrics
 
-**File**: `src\classes\agent\AgentMetrics.py`  
+**File**: `src\\classes\agent\\AgentMetrics.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 130 lines (medium)  
 **Complexity**: 7 score (moderate)
@@ -86,6 +85,11 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import logging
+import time
+from dataclasses import dataclass, field
+from typing import Any
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -98,13 +102,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-from dataclasses import dataclass, field
-from typing import Dict, Any, List, Optional
-import time
-import logging
 
 __version__ = VERSION
 

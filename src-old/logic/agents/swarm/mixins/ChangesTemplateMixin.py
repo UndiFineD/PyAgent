@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/mixins/ChangesTemplateMixin.description.md
 
 # ChangesTemplateMixin
 
-**File**: `src\logic\agents\swarm\mixins\ChangesTemplateMixin.py`  
+**File**: `src\\logic\agents\\swarm\\mixins\\ChangesTemplateMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 81  
@@ -41,7 +40,7 @@ Mixin for managing changelog templates.
 
 # Improvements for ChangesTemplateMixin
 
-**File**: `src\logic\agents\swarm\mixins\ChangesTemplateMixin.py`  
+**File**: `src\\logic\agents\\swarm\\mixins\\ChangesTemplateMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 81 lines (small)  
 **Complexity**: 3 score (simple)
@@ -92,6 +91,7 @@ Template management logic for ChangesAgent.
 
 import logging
 from typing import List
+
 from ..ChangelogTemplate import ChangelogTemplate
 
 

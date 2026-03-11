@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/SemanticSearchEngine.description.md
 
@@ -91,6 +90,7 @@ Example:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -112,13 +112,14 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_context.py"""
 
+import logging
+from typing import Any
+
 from src.core.base.Version import VERSION
-from src.logic.agents.cognitive.context.utils.SearchAlgorithm import SearchAlgorithm
 from src.logic.agents.cognitive.context.models.SemanticSearchResult import (
     SemanticSearchResult,
 )
-from typing import Any
-import logging
+from src.logic.agents.cognitive.context.utils.SearchAlgorithm import SearchAlgorithm
 
 __version__ = VERSION
 
@@ -147,6 +148,7 @@ class SemanticSearchEngine:
     Example:
         >>> engine=SemanticSearchEngine()
         >>> results=engine.search("function that handles authentication")
+
     """
 
     def __init__(self, persist_directory: str | None = None) -> None:
@@ -233,6 +235,7 @@ class SemanticSearchEngine:
         Args:
             file_path: Path to the file.
             content: File content to index.
+
         """
         # Update documents storage
         self.documents[file_path] = content
@@ -255,6 +258,7 @@ class SemanticSearchEngine:
 
         Returns:
             List of search results.
+
         """
         search_algo = algorithm or self.algorithm
         self.results = []

@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/registry.description.md
 
 # registry
 
-**File**: `src\core\base\registry.py`  
+**File**: `src\\core\base\registry.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 62  
@@ -46,7 +45,7 @@ Singleton registry to track all active agents.
 
 # Improvements for registry
 
-**File**: `src\core\base\registry.py`  
+**File**: `src\\core\base\registry.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 62 lines (small)  
 **Complexity**: 6 score (moderate)
@@ -97,10 +96,10 @@ AgentRegistry: Central registry for all active agent instances.
 Provides discovery and cross-agent communication.
 """
 
-from src.core.base.version import VERSION
 import logging
+
 from src.core.base.BaseAgent import BaseAgent
-from typing import TYPE_CHECKING, Optional
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

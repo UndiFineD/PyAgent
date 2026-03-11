@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/routing_core.description.md
 
@@ -28,10 +27,12 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Core logic for performance-based routing and task distribution."""
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -44,10 +45,11 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import os
 from typing import Any, Dict, Optional
+
 from .base_core import BaseCore
+
 try:
     import rust_core as rc  # pylint: disable=import-error
 except ImportError:
@@ -55,8 +57,7 @@ except ImportError:
 
 
 class RoutingCore(BaseCore):
-    """
-    Authoritative engine for task routing and provider selection.
+    """Authoritative engine for task routing and provider selection.
     Balances latency, cost, and quality metrics across backend providers.
     """
 
@@ -77,8 +78,7 @@ class RoutingCore(BaseCore):
         priority: str = "balanced",
         performance_report: Optional[Dict[str, Any]] = None,
     ) -> str:
-        """
-        Optimal provider selection logic.
+        """Optimal provider selection logic.
         Hot path for Rust acceleration in docs/RUST_MAPPING.md.
         """
         if rc and hasattr(rc, "select_provider_rust"):  # pylint: disable=no-member

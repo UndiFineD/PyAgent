@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/auth_core.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -74,14 +74,14 @@ logger = logging.getLogger("pyagent.auth")
 @dataclass(frozen=True)
 class AuthProof:
     """Authentication proof container for agent validation."""
+
     timestamp: float
     challenge: str
     proof: str
 
 
 class AuthCore(BaseCore):
-    """
-    Unified Authentication Core.
+    """Unified Authentication Core.
     Combines internal challenge-response logic and external API credential management.
     """
 

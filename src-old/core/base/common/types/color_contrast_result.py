@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/types/color_contrast_result.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -67,6 +68,7 @@ class ColorContrastResult:
         passes_aaa: Whether it passes WCAG AAA.
         min_ratio_aa: Minimum required ratio for AA.
         min_ratio_aaa: Minimum required ratio for AAA.
+
     """
 
     foreground: str

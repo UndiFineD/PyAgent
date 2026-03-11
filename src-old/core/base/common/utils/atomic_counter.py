@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/atomic_counter.description.md
 
@@ -32,9 +31,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -69,8 +70,7 @@ except ImportError:
 
 
 class Counter:
-    """
-    Simple non-atomic counter for single-threaded use.
+    """Simple non-atomic counter for single-threaded use.
 
     Use AtomicCounter for multi-threaded scenarios.
     """
@@ -106,8 +106,7 @@ class Counter:
 
 
 class AtomicCounter:
-    """
-    Thread-safe atomic counter.
+    """Thread-safe atomic counter.
 
     Uses a lock internally for thread safety. For extremely high-frequency
     operations, consider using Rust-accelerated atomic operations.
@@ -120,17 +119,18 @@ class AtomicCounter:
         6
         >>> counter.value
         6
+
     """
 
     __slots__ = ("_value", "_lock", "_use_rust")
 
     def __init__(self, start: int = 0, use_rust: bool = True) -> None:
-        """
-        Initialize atomic counter.
+        """Initialize atomic counter.
 
         Args:
             start: Initial value
             use_rust: Whether to use Rust acceleration if available
+
         """
         self._value = start
         self._lock = threading.Lock()
@@ -143,14 +143,14 @@ class AtomicCounter:
             return self._value
 
     def inc(self, delta: int = 1) -> int:
-        """
-        Atomically increment the counter.
+        """Atomically increment the counter.
 
         Args:
             delta: Amount to increment by
 
         Returns:
             New counter value
+
         """
         if self._use_rust and hasattr(rc, "atomic_counter_add_rust"):
             # Rust atomic operation
@@ -164,14 +164,14 @@ class AtomicCounter:
             return self._value
 
     def dec(self, delta: int = 1) -> int:
-        """
-        Atomically decrement the counter.
+        """Atomically decrement the counter.
 
         Args:
             delta: Amount to decrement by
 
         Returns:
             New counter value
+
         """
         return self.inc(-delta)
 
@@ -184,14 +184,14 @@ class AtomicCounter:
         return self.dec(delta)
 
     def reset(self, value: int = 0) -> int:
-        """
-        Atomically reset the counter.
+        """Atomically reset the counter.
 
         Args:
             value: New value to set
 
         Returns:
             Old counter value
+
         """
         with self._lock:
             old = self._value
@@ -199,8 +199,7 @@ class AtomicCounter:
             return old
 
     def compare_and_swap(self, expected: int, new_value: int) -> bool:
-        """
-        Atomically compare and swap.
+        """Atomically compare and swap.
 
         Args:
             expected: Expected current value
@@ -208,6 +207,7 @@ class AtomicCounter:
 
         Returns:
             True if swap occurred, False otherwise
+
         """
         with self._lock:
             if self._value == expected:
@@ -216,13 +216,13 @@ class AtomicCounter:
             return False
 
     def get_and_reset(self) -> int:
-        """
-        Atomically get the current value and reset to 0.
+        """Atomically get the current value and reset to 0.
 
         Useful for collecting metrics.
 
         Returns:
             Value before reset
+
         """
         return self.reset(0)
 
@@ -239,8 +239,7 @@ class AtomicCounter:
 
 
 class AtomicFlag:
-    """
-    Thread-safe atomic boolean flag.
+    """Thread-safe atomic boolean flag.
 
     Useful for signaling between threads.
     """
@@ -293,8 +292,7 @@ class AtomicFlag:
 
 
 class AtomicGauge:
-    """
-    Thread-safe gauge that tracks min, max, and current value.
+    """Thread-safe gauge that tracks min, max, and current value.
 
     Useful for monitoring metrics that can go up and down.
     """

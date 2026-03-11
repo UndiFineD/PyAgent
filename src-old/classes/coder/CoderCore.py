@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/CoderCore.description.md
 
@@ -97,18 +96,20 @@ Computational core for code analysis, metrics, and quality assessment.
 Designed for high-performance rule checking with future Rust integration.
 """
 
+import ast
+import hashlib
+import math
+import re
+from typing import Any, Dict, List, Tuple
+
+from src.classes.base_agent.core import LogicCore
+
 from .CodeLanguage import CodeLanguage
 from .CodeMetrics import CodeMetrics
 from .CodeSmell import CodeSmell
 from .QualityScore import QualityScore
 from .StyleRule import StyleRule
 from .StyleRuleSeverity import StyleRuleSeverity
-from src.classes.base_agent.core import LogicCore
-from typing import Any, Dict, List, Optional, Tuple
-import ast
-import hashlib
-import math
-import re
 
 # Logic extracted for future Rust migration (PyO3)
 # Goal: Isolate all "Computationally Expensive" or "Rule-Based" logic here.

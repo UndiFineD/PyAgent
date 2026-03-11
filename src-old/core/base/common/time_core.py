@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/time_core.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -57,8 +57,7 @@ except ImportError:
 
 
 class TimeCore:
-    """
-    Ensures consistent time handling across the swarm (UTC focused).
+    """Ensures consistent time handling across the swarm (UTC focused).
     """
 
     @staticmethod
@@ -70,7 +69,7 @@ class TimeCore:
                 return datetime.fromtimestamp(ts, tz=timezone.utc)
             except (
                 RuntimeError
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            ):  # pylint: disable=broad-exception-caught, unused-variable
                 # Rust bridge reported an error; fall back to Python
                 pass
         return datetime.now(timezone.utc)
@@ -83,7 +82,7 @@ class TimeCore:
                 return float(rc.get_utc_timestamp_rust())  # pylint: disable=no-member
             except (
                 RuntimeError
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            ):  # pylint: disable=broad-exception-caught, unused-variable
                 # Rust bridge reported an error; fall back to Python
                 pass
         return time.time()

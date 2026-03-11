@@ -13,13 +13,13 @@
 # limitations under the License.
 
 import argparse
-import sys
 import difflib
+import sys
 from pathlib import Path
 
+from .logger import AutoFixLogger
 from .rule_engine import RuleEngine
 from .transaction import TransactionManager
-from .logger import AutoFixLogger
 
 
 def main() -> None:

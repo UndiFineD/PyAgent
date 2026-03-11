@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/DataScienceAgent.description.md
 
@@ -101,11 +100,12 @@ from __future__ import annotations
 Specializes in data cleaning, exploratory data analysis (EDA), statistical modeling, and insights.
 """
 
-from src.core.base.version import VERSION
 import logging
-from typing import Dict, List, Any
+from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function, as_tool
+from src.core.base.utilities import as_tool, create_main_function
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -128,6 +128,7 @@ class DataScienceAgent(BaseAgent):
 
         Args:
             data_path: Path to the CSV or JSON dataset.
+
         """
         logging.info(f"DataScience: Analyzing dataset at {data_path}")
         # In a real implementation, this would use pandas to load and describe the data
@@ -155,6 +156,7 @@ class DataScienceAgent(BaseAgent):
             group_a: First set of numeric values.
             group_b: Second set of numeric values.
             test_type: The type of test (t-test, anova, chi-square).
+
         """
         logging.info(f"DataScience: Running {test_type} between groups.")
         return {
@@ -172,6 +174,7 @@ class DataScienceAgent(BaseAgent):
 
         Args:
             time_series_data: Mapping of timestamps to values.
+
         """
         logging.info("DataScience: Building time-series forecast model.")
         return {

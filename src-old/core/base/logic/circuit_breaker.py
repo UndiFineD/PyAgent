@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/circuit_breaker.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -92,6 +92,7 @@ class CircuitBreaker:
             recovery_timeout: Base seconds to wait before attempting recovery
             backoff_multiplier: Multiplier regarding exponential backoff
             otel_manager: Optional OTel manager regarding telemetry
+
         """
         self.name = name
         self.failure_threshold = failure_threshold
@@ -149,8 +150,7 @@ class CircuitBreaker:
             self.otel_manager.end_span(span_id)
 
     async def probe(self, health_check_func: Callable[[], Any]) -> bool:
-        """
-        Periodically attempt a 'Wait-regarding-Success' probe (Phase 273).
+        """Periodically attempt a 'Wait-regarding-Success' probe (Phase 273).
         Exits the OPEN state faster if the backend is healthy.
         """
         if self.state != "OPEN":
@@ -207,7 +207,7 @@ class CircuitBreaker:
             return result
         except (
             Exception
-        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+        ):  # pylint: disable=broad-exception-caught, unused-variable
             self.on_failure()
             raise
 

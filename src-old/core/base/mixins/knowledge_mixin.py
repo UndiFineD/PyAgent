@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/knowledge_mixin.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -131,17 +131,17 @@ class KnowledgeMixin:
     def add_to_history(self, role: str, content: str) -> None:
         """Add a message to history if manager exists."""
         if hasattr(self, "_history_manager"):
-            getattr(self, "_history_manager").add_message(role, content)
+            self._history_manager.add_message(role, content)
 
     def clear_history(self) -> None:
         """Clear message history."""
         if hasattr(self, "_history_manager"):
-            getattr(self, "_history_manager").clear()
+            self._history_manager.clear()
 
     def get_history(self) -> list[Any]:
         """Get message history."""
         if hasattr(self, "_history_manager"):
-            return getattr(self, "_history_manager").get_messages()
+            return self._history_manager.get_messages()
         return []
 
     def _build_prompt_with_history(self, prompt: str) -> str:
@@ -160,10 +160,10 @@ class KnowledgeMixin:
         """Access global context engine."""
         if (
             hasattr(self, "fleet")
-            and getattr(self, "fleet")
-            and hasattr(getattr(self, "fleet"), "global_context")
+            and self.fleet
+            and hasattr(self.fleet, "global_context")
         ):
-            return getattr(getattr(self, "fleet"), "global_context")
+            return self.fleet.global_context
         if self._local_global_context is None:
             try:
                 # pylint: disable=import-outside-toplevel

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/cognitive/TheoryOfMind.description.md
 
@@ -95,8 +94,9 @@ from __future__ import annotations
 
 """Shell for TheoryOfMind, managing agent profiles and state."""
 
+from typing import Any
+
 from src.core.base.version import VERSION
-from typing import Dict, Any, List
 from src.logic.cognitive.TheoryOfMindCore import TheoryOfMindCore
 
 __version__ = VERSION

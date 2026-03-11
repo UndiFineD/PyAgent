@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/SelfHealingOrchestrator.description.md
 
@@ -81,15 +80,15 @@ Uses AgentRegistry tools for re-loading failed plugins.
 LLM_CONTEXT_END
 """
 
-import time
 import logging
-from typing import Dict, List, Any, Optional
+import time
+from typing import Any, Dict, List, Optional
+
 from .SelfHealingCore import SelfHealingCore
 
 
 class SelfHealingOrchestrator:
-    """
-    Advanced Self-Healing v3: Shell for fleet resilience logic.
+    """Advanced Self-Healing v3: Shell for fleet resilience logic.
     Delegates thresholds and strategy to SelfHealingCore.
     Uses AgentRegistry tools for re-loading failed plugins.
     """
@@ -169,8 +168,7 @@ class SelfHealingOrchestrator:
         }
 
     def review_recovery_lessons(self) -> None:
-        """
-        Reviews recent recovery logs to identify recurring patterns of failure.
+        """Reviews recent recovery logs to identify recurring patterns of failure.
         Feeds these back into the SelfImprovementOrchestrator for source-level fixes.
         """
         if not self.recovery_logs:

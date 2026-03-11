@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/global_context_core.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -60,6 +60,7 @@ Global context core logic for cognitive agents.
 """
 
 from src.core.base.lifecycle.version import VERSION
+
 from .core_mixins.core_partition_mixin import CorePartitionMixin
 from .core_mixins.core_resolution_mixin import CoreResolutionMixin
 from .core_mixins.core_summary_mixin import CoreSummaryMixin
@@ -68,8 +69,7 @@ __version__ = VERSION
 
 
 class GlobalContextCore(CorePartitionMixin, CoreResolutionMixin, CoreSummaryMixin):
-    """
-    Pure logic for GlobalContext.
+    """Pure logic for GlobalContext.
     Handles data merging, pruning, and summary formatting.
     No I/O or direct disk access.
     """

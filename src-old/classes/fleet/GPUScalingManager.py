@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/GPUScalingManager.description.md
 
 # GPUScalingManager
 
-**File**: `src\classes\fleet\GPUScalingManager.py`  
+**File**: `src\\classes\fleet\\GPUScalingManager.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 41  
@@ -43,7 +42,7 @@ Monitors GPU resources and triggers scaling events.
 
 # Improvements for GPUScalingManager
 
-**File**: `src\classes\fleet\GPUScalingManager.py`  
+**File**: `src\\classes\fleet\\GPUScalingManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 41 lines (small)  
 **Complexity**: 3 score (simple)
@@ -79,7 +78,7 @@ Scales agent pools based on GPU memory pressure and latency.
 
 import logging
 import random
-from typing import Dict, Any
+from typing import Any, Dict
 
 
 class GPUScalingManager:

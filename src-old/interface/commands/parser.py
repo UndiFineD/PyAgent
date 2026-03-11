@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/interface/commands/parser.description.md
 
@@ -42,15 +41,16 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
 
-import os
-import sys
 import importlib.util
 import logging
+import os
 import re
+import sys
 import time
 from typing import Any, ClassVar
 
@@ -116,14 +116,14 @@ COMMAND_PATTERN = re.compile(
 
 
 def parse_commands(prompt: str) -> list[ParsedCommand]:
-    """
-    Parse slash commands from a prompt.
+    """Parse slash commands from a prompt.
 
     Args:
         prompt: The input prompt text
 
     Returns:
         List of parsed commands with positions
+
     """
     commands = []
 
@@ -146,8 +146,7 @@ def parse_commands(prompt: str) -> list[ParsedCommand]:
 
 
 class CommandParser:
-    """
-    Slash command parser and executor for chat prompts.
+    """Slash command parser and executor for chat prompts.
     """
 
     # Global registry for built-in commands
@@ -165,13 +164,13 @@ class CommandParser:
         prefix: str = "/",
         include_builtins: bool = True,
     ) -> None:
-        """
-        Initialize CommandParser.
+        """Initialize CommandParser.
 
         Args:
             registry: Custom command registry (uses global if None)
             prefix: Command prefix (default: "/")
             include_builtins: Whether to include built-in commands
+
         """
         self.registry = registry or (
             self._global_registry if include_builtins else CommandRegistry()
@@ -191,8 +190,7 @@ class CommandParser:
     def execute(
         self, command: str, args: list[str] | None = None, **metadata: Any
     ) -> CommandResult:
-        """
-        Execute a single command.
+        """Execute a single command.
 
         Args:
             command: Command name (without prefix)
@@ -201,6 +199,7 @@ class CommandParser:
 
         Returns:
             CommandResult with output
+
         """
         defn = self.registry.get(command.lower())
         if not defn:
@@ -231,8 +230,7 @@ class CommandParser:
         inline_results: bool = True,
         **metadata: Any,
     ) -> ProcessedPrompt:
-        """
-        Process a prompt, executing all slash commands.
+        """Process a prompt, executing all slash commands.
         """
         parsed = self.parse(prompt)
         results: list[tuple[ParsedCommand, CommandResult]] = []

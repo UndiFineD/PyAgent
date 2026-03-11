@@ -26,6 +26,7 @@ from typing import Any, Mapping
 @dataclass(frozen=True)
 class FlmProviderConfig:
     """Validated configuration for the Fastflow Language Model provider."""
+
     base_url: str
     default_model: str
     timeout: int
@@ -39,6 +40,7 @@ class FlmProviderConfig:
 
         Raises:
             ValueError: If required keys are missing or values are invalid.
+
         """
         base_url = cls._required_text(values, "base_url")
         default_model = cls._required_text(values, "default_model")

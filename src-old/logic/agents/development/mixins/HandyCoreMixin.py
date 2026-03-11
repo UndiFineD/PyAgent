@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/HandyCoreMixin.description.md
 
 # HandyCoreMixin
 
-**File**: `src\logic\agents\development\mixins\HandyCoreMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\HandyCoreMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 27  
@@ -40,7 +39,7 @@ Mixin for core recording and evaluation logic in HandyAgent.
 
 # Improvements for HandyCoreMixin
 
-**File**: `src\logic\agents\development\mixins\HandyCoreMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\HandyCoreMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 27 lines (small)  
 **Complexity**: 2 score (simple)
@@ -77,10 +76,11 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
-
 import time
+from typing import Any
+
 from src.logic.agents.development.HandyAgent import HandyAgent
-from typing import TYPE_CHECKING, Any
+
 
 class HandyCoreMixin:
     """Mixin for core recording and evaluation logic in HandyAgent."""

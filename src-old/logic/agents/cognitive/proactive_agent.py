@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/proactive_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -54,16 +54,15 @@ import logging
 import time
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 # pylint: disable=too-many-ancestors
 class ProactiveAgent(BaseAgent):
-    """
-    Tier 2 (Cognitive Logic) - Proactive Agent: Manages autonomous triggers,
+    """Tier 2 (Cognitive Logic) - Proactive Agent: Manages autonomous triggers,
     scheduled maintenance, and predictive task execution for the fleet.
     """
 
@@ -77,8 +76,7 @@ class ProactiveAgent(BaseAgent):
         self.scheduled_tasks: list[dict[str, Any]] = []
 
     def observe_environment(self) -> dict[str, Any]:
-        """
-        Observes the local system environment for triggers.
+        """Observes the local system environment for triggers.
         Hooked into ResourceMonitor (Phase 125).
         """
         try:

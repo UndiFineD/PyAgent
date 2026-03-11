@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/eternal_audit_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -65,8 +65,7 @@ __version__ = VERSION
 
 
 class EternalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Agent that maintains an append-only verifiable audit trail of all swarm activities.
+    """Agent that maintains an append-only verifiable audit trail of all swarm activities.
     Uses hashing to ensure temporal integrity (simulated blockchain).
     """
 
@@ -109,8 +108,7 @@ class EternalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def log_event(self, agent_name: str, action: str, details: dict[str, Any]) -> str:
-        """
-        Records an event in the verifiable audit trail.
+        """Records an event in the verifiable audit trail.
         """
         # Selective pruning: check if action or details contain critical keywords
         is_critical = any(
@@ -156,8 +154,7 @@ class EternalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def verify_audit_trail(self) -> dict[str, Any]:
-        """
-        Verifies the integrity of the audit trail by re-calculating hashes.
+        """Verifies the integrity of the audit trail by re-calculating hashes.
         """
         if not os.path.exists(self.current_shard):
             return {"status": "error", "message": "No audit trail found."}

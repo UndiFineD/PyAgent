@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/swarm_orchestrator_core.description.md
 
 # swarm_orchestrator_core
 
-**File**: `src\core\base\logic\core\swarm_orchestrator_core.py`  
+**File**: `src\\core\base\\logic\\core\\swarm_orchestrator_core.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 9 imports  
 **Lines**: 98  
@@ -71,7 +70,7 @@ Patterns harvested from Agno (Team) and AgentUniverse (WorkPatterns).
 
 # Improvements for swarm_orchestrator_core
 
-**File**: `src\core\base\logic\core\swarm_orchestrator_core.py`  
+**File**: `src\\core\base\\logic\\core\\swarm_orchestrator_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 98 lines (small)  
 **Complexity**: 4 score (simple)
@@ -107,10 +106,9 @@ Patterns harvested from Agno (Team) and AgentUniverse (WorkPatterns).
 LLM_CONTEXT_END
 """
 
-import asyncio
-from typing import Any, Dict, List, Optional, Literal
-from enum import Enum
 from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List
 
 
 class DelegationMode(str, Enum):
@@ -129,8 +127,7 @@ class SwarmMember:
 
 
 class SwarmOrchestratorCore:
-    """
-    Handles higher-level multi-agent orchestration logic.
+    """Handles higher-level multi-agent orchestration logic.
     Patterns harvested from Agno (Team) and AgentUniverse (WorkPatterns).
     """
 
@@ -146,8 +143,7 @@ class SwarmOrchestratorCore:
     async def delegate_task(
         self, task: Dict[str, Any], mode: DelegationMode = DelegationMode.COORDINATE
     ) -> Dict[str, Any]:
-        """
-        Delegates a complex task using the specified mode.
+        """Delegates a complex task using the specified mode.
         """
         if mode == DelegationMode.ROUTE:
             return await self._route_task(task)

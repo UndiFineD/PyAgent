@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Test the transaction mechanism in rust_core."""
-import os
-import sys
 import glob
-import shutil
-import tempfile
+import os
 import pathlib
+import shutil
+import sys
+import tempfile
+
 import rust_core
 
 sys.path.insert(0, os.path.join(os.getcwd(), 'target', 'debug'))

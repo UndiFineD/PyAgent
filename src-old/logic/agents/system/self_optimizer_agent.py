@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/self_optimizer_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -52,8 +52,9 @@ from __future__ import annotations
 from src.core.base.common.base_utilities import create_main_function
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
-from src.observability.stats.metrics_engine import ObservabilityEngine
 from src.observability.stats.monitoring import ResourceMonitor
+
+from src.observability.stats.metrics_engine import ObservabilityEngine
 
 __version__ = VERSION
 

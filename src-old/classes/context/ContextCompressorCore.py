@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/ContextCompressorCore.description.md
 
@@ -98,10 +97,10 @@ Pure logic for reducing the size of source files while preserving structural con
 No I/O or side effects.
 """
 
-from src.core.base.version import VERSION
-import re
 import ast
-from typing import List
+import re
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

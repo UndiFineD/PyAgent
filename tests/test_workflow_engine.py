@@ -1,5 +1,7 @@
+#!/usr/bin/env python3
+"""Test the WorkflowEngine processes tasks from the TaskQueue and updates their state."""
 import pytest
-import asyncio
+
 from src.core.workflow.engine import WorkflowEngine
 from src.core.workflow.queue import TaskQueue
 from src.core.workflow.task import Task, TaskState

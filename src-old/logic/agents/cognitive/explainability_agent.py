@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/explainability_agent.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -52,8 +52,8 @@ import os
 import random
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.core.interpretable_core import InterpretableCore
 
 __version__ = VERSION
@@ -61,8 +61,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class ExplainabilityAgent(BaseAgent):
-    """
-    Explainability Agent: Provides autonomous tracing and justification of multi-agent
+    """Explainability Agent: Provides autonomous tracing and justification of multi-agent
     reasoning chains. Enhanced with SAE (Sparse Autoencoder) neural interpretability.
     """
 
@@ -79,8 +78,7 @@ class ExplainabilityAgent(BaseAgent):
     def generate_neural_trace(
         self, agent_name: str, decision_context: str
     ) -> dict[str, Any]:
-        """
-        Generates a synthetic neural trace for a decision using SAE logic.
+        """Generates a synthetic neural trace for a decision using SAE logic.
         """
         trace = self.interpret_core.simulate_neural_trace(agent_name, decision_context)
         # Mock activations for decomposition
@@ -104,7 +102,6 @@ class ExplainabilityAgent(BaseAgent):
         context: dict[str, Any],
     ) -> None:
         """Logs a single reasoning step in the chain."""
-
         # Pruning logic: Only record if verbose is ON or if it's a failure/error
         is_failure = any(
             word in (justification + action).lower()

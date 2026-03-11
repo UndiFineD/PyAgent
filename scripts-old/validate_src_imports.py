@@ -12,14 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import importlib.util
 import os
 import sys
-import importlib.util
 from pathlib import Path
 
+
 def validate_imports(src_dir: Path):
-    """
-    Attempts to import every .py file in the src directory to identify
+    """Attempts to import every .py file in the src directory to identify
     missing dependencies or syntax errors caused by imports.
     """
     print(f"Starting import validation in: {src_dir}")

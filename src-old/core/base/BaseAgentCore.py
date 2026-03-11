@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/BaseAgentCore.description.md
 
 # BaseAgentCore
 
-**File**: `src\core\base\BaseAgentCore.py`  
+**File**: `src\\core\base\\BaseAgentCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 21 imports  
 **Lines**: 166  
@@ -67,7 +66,7 @@ Inherits from logic mixins to satisfy the 500-line modularization rule.
 
 # Improvements for BaseAgentCore
 
-**File**: `src\core\base\BaseAgentCore.py`  
+**File**: `src\\core\base\\BaseAgentCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 166 lines (medium)  
 **Complexity**: 13 score (moderate)
@@ -109,22 +108,20 @@ Modularized via the 'core_logic' subpackage to maintain <500 line limit.
 
 import logging
 import os
-from typing import Any, Dict, List, Optional, Tuple, Callable
+from typing import Any, Callable, Dict, List, Tuple
+
 from src.core.base.models import (
     AgentConfig,
-    ResponseQuality,
-    AgentPriority,
     ConversationMessage,
-    EventType,
 )
 
 # Phase 317: Modularized Logic Mixins
 from .core_logic import (
-    ValidationCore,
-    MetricsCore,
-    FormattingCore,
-    UtilsCore,
     EventCore,
+    FormattingCore,
+    MetricsCore,
+    UtilsCore,
+    ValidationCore,
 )
 
 try:

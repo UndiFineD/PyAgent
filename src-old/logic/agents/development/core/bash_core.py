@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/core/bash_core.description.md
 
@@ -30,9 +29,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -92,8 +93,7 @@ class BashCore:
 
     @staticmethod
     def lint_script(script_path: str, recorder: ContextRecorderInterface | None = None) -> BashLintResult:
-        """
-        Runs shellcheck on a bash script.
+        """Runs shellcheck on a bash script.
         """
         if not os.path.exists(script_path):
             result: BashLintResult = {
@@ -157,8 +157,7 @@ class BashCore:
 
     @staticmethod
     def wrap_with_safety_flags(content: str) -> str:
-        """
-        Ensures script starts with common safety flags (`set -euo pipefail`) if not present.
+        """Ensures script starts with common safety flags (`set -euo pipefail`) if not present.
         """
         try:
             import rust_core

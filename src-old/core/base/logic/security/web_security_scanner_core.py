@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/security/web_security_scanner_core.description.md
 
 # web_security_scanner_core
 
-**File**: `src\core\base\logic\security\web_security_scanner_core.py`  
+**File**: `src\\core\base\\logic\\security\\web_security_scanner_core.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 11 imports  
 **Lines**: 150  
@@ -49,7 +48,7 @@ Core logic for web security scanning operations.
 
 # Improvements for web_security_scanner_core
 
-**File**: `src\core\base\logic\security\web_security_scanner_core.py`  
+**File**: `src\\core\base\\logic\\security\\web_security_scanner_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 150 lines (medium)  
 **Complexity**: 2 score (simple)
@@ -104,7 +103,7 @@ Implements asynchronous web application scanning with pattern matching for vulne
 import asyncio
 import re
 import time
-from typing import Any, Dict, List, Optional, Set
+from typing import Dict, List, Optional
 from urllib.parse import urlparse
 
 try:
@@ -133,8 +132,7 @@ class WebSecurityScannerCore:
     async def scan_hosts(
         self, hosts: List[str], patterns: Dict[str, str]
     ) -> Dict[str, List[str]]:
-        """
-        Scan a list of hosts for security patterns.
+        """Scan a list of hosts for security patterns.
 
         Args:
             hosts: List of URLs or host strings
@@ -142,6 +140,7 @@ class WebSecurityScannerCore:
 
         Returns:
             Dict of host -> list of matched pattern names
+
         """
         results = {}
         tasks = []
@@ -214,14 +213,14 @@ class WebSecurityScannerCore:
             return matches
 
     async def detect_cms_fingerprints(self, hosts: List[str]) -> Dict[str, List[str]]:
-        """
-        Detect CMS fingerprints using common patterns.
+        """Detect CMS fingerprints using common patterns.
 
         Args:
             hosts: List of hosts to scan
 
         Returns:
             Dict of host -> list of detected CMS types
+
         """
         # Common CMS detection patterns
         cms_patterns = {

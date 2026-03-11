@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/KnowledgeFusionAgent.description.md
 
@@ -104,13 +103,14 @@ from __future__ import annotations
 Consolidates individual agent memory shards into a unified global knowledge graph.
 """
 
-from src.core.base.version import VERSION
-import logging
 import json
+import logging
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -144,8 +144,10 @@ class KnowledgeFusionAgent(BaseAgent):
     @as_tool
     def fuse_memory_shards(self, shard_paths: list[str]) -> str:
         """Aggregates multiple memory shards into the global knowledge graph.
+
         Args:
             shard_paths: List of file paths to agent-specific memory shards (JSON).
+
         """
         graph = self._load_global_graph()
         added_nodes = 0

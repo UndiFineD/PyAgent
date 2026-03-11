@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/errors/error_budget_manager.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -65,6 +66,7 @@ class ErrorBudgetManager:
 
     Attributes:
         budgets: Map of budget names to ErrorBudget objects.
+
     """
 
     def __init__(self) -> None:
@@ -81,6 +83,7 @@ class ErrorBudgetManager:
 
         Returns:
             The created ErrorBudget.
+
         """
         now = datetime.now()
         end = now + timedelta(days=period_days)
@@ -102,6 +105,7 @@ class ErrorBudgetManager:
 
         Returns:
             True if budget was consumed, False if exceeded.
+
         """
         if name not in self.budgets:
             return False
@@ -119,6 +123,7 @@ class ErrorBudgetManager:
 
         Returns:
             Remaining budget amount.
+
         """
         if name not in self.budgets:
             return 0.0

@@ -16,9 +16,10 @@
 
 import logging
 from pathlib import Path
-from src.infrastructure.fleet.FleetManager import FleetManager
+
 from src.infrastructure.fleet.AgentRegistry import AgentRegistry, LazyAgentMap
 from src.infrastructure.fleet.ResilientStubs import ResilientStub
+
 
 def test_version_gate() -> None:
     logging.basicConfig(level=logging.INFO)

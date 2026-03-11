@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/base_agent/managers/AuthManager.description.md
 
 # AuthManager
 
-**File**: `src\classes\base_agent\managers\AuthManager.py`  
+**File**: `src\\classes\base_agent\\managers\\AuthManager.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 37  
@@ -44,7 +43,7 @@ Wraps AuthCore with stateful session management.
 
 # Improvements for AuthManager
 
-**File**: `src\classes\base_agent\managers\AuthManager.py`  
+**File**: `src\\classes\base_agent\\managers\\AuthManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 37 lines (small)  
 **Complexity**: 3 score (simple)
@@ -79,8 +78,9 @@ LLM_CONTEXT_END
 
 import logging
 import time
-from typing import Dict, Any, Optional
-from src.core.base.core.AuthCore import AuthCore, AuthProof
+from typing import Dict
+
+from src.core.base.core.AuthCore import AuthCore
 
 
 class AuthManager:

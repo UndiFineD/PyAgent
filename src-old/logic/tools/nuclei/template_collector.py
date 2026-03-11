@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/tools/nuclei/template_collector.description.md
 
 # template_collector
 
-**File**: `src\logic\tools\nuclei\template_collector.py`  
+**File**: `src\\logic\tools\nuclei\template_collector.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 131  
@@ -60,7 +59,7 @@ Adapted from AllForOne tool.
 
 # Improvements for template_collector
 
-**File**: `src\logic\tools\nuclei\template_collector.py`  
+**File**: `src\\logic\tools\nuclei\template_collector.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 131 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -93,19 +92,19 @@ Adapted from AllForOne tool.
 LLM_CONTEXT_END
 """
 
-import os
-import subprocess
-import shutil
 import logging
-import requests
+import os
+import shutil
+import subprocess
 from concurrent.futures import ThreadPoolExecutor, wait
+
+import requests
 
 logger = logging.getLogger(__name__)
 
 
 class NucleiTemplateCollector:
-    """
-    Collects Nuclei templates from various public repositories.
+    """Collects Nuclei templates from various public repositories.
     Adapted from AllForOne tool.
     """
 
@@ -150,8 +149,7 @@ class NucleiTemplateCollector:
         return None
 
     def collect_templates(self, source_url: str = None):
-        """
-        Main execution method to collect templates.
+        """Main execution method to collect templates.
         """
         source_url = source_url or self.DEFAULT_SOURCE_LIST
 

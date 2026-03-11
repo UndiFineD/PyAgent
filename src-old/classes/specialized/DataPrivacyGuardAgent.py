@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/DataPrivacyGuardAgent.description.md
 
@@ -81,6 +80,11 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import re
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -99,18 +103,13 @@ from __future__ import annotations
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
 from src.core.base.version import VERSION
-import re
-from typing import Dict, Any
-from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
 
 
 class PrivacyGuardAgent(BaseAgent):
-    """
-    Privacy Guard Agent: Monitors fleet communications for PII (Personally
+    """Privacy Guard Agent: Monitors fleet communications for PII (Personally
     Identifiable Information), performs redaction, and tracks compliance.
     """
 

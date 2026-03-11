@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/federation_services_core.description.md
 
 # federation_services_core
 
-**File**: `src\core\base\logic\core\federation_services_core.py`  
+**File**: `src\\core\base\\logic\\core\federation_services_core.py`  
 **Type**: Python Module  
 **Summary**: 10 classes, 0 functions, 29 imports  
 **Lines**: 662  
@@ -111,7 +110,7 @@ service management based on ADFSpoof methodologies.
 
 # Improvements for federation_services_core
 
-**File**: `src\core\base\logic\core\federation_services_core.py`  
+**File**: `src\\core\base\\logic\\core\federation_services_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 662 lines (large)  
 **Complexity**: 1 score (simple)
@@ -153,26 +152,21 @@ LLM_CONTEXT_END
 # Federation Services Core - AD FS Token Forgery and SAML Management
 # Based on patterns from ADFSpoof repository
 
-import asyncio
+import base64
 import json
 import logging
-from typing import Dict, List, Optional, Any, Tuple, Set, Union
+import secrets
+import uuid
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import uuid
-import base64
-import hashlib
-from pathlib import Path
-from cryptography.hazmat.primitives import serialization, hashes
-from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.backends import default_backend
+from typing import Any, Dict, List, Optional, Tuple
+
 from cryptography import x509
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.x509.oid import NameOID
-import signxml
-from lxml import etree
-import secrets
-import string
 
 
 class SAMLVersion(Enum):
@@ -280,8 +274,7 @@ class TokenGenerationRequest:
 
 
 class FederationServicesCore:
-    """
-    Federation Services Core for AD FS token forgery and SAML management.
+    """Federation Services Core for AD FS token forgery and SAML management.
 
     Provides comprehensive SAML token generation, signing, and federation
     service management based on ADFSpoof methodologies.
@@ -614,8 +607,7 @@ class FederationServicesCore:
     async def decrypt_encrypted_pfx(
         self, encrypted_blob: bytes, dkm_key: bytes, output_path: str
     ) -> bool:
-        """
-        Decrypt an EncryptedPFX blob using DKM key
+        """Decrypt an EncryptedPFX blob using DKM key
 
         Args:
             encrypted_blob: The encrypted PFX blob
@@ -624,6 +616,7 @@ class FederationServicesCore:
 
         Returns:
             True if successful, False otherwise
+
         """
         try:
             # Mock decryption - in real implementation would use custom cryptography
@@ -645,8 +638,7 @@ class FederationServicesCore:
     async def load_pfx_certificate(
         self, pfx_path: str, password: Optional[str] = None
     ) -> Tuple[Optional[bytes], Optional[bytes]]:
-        """
-        Load certificate and private key from PFX file
+        """Load certificate and private key from PFX file
 
         Args:
             pfx_path: Path to PFX file
@@ -654,6 +646,7 @@ class FederationServicesCore:
 
         Returns:
             Tuple of (certificate_bytes, private_key_bytes)
+
         """
         try:
             with open(pfx_path, "rb") as f:
@@ -678,8 +671,7 @@ class FederationServicesCore:
         organization: str = "Example Corp",
         validity_days: int = 365,
     ) -> Tuple[bytes, bytes]:
-        """
-        Generate a self-signed certificate for testing
+        """Generate a self-signed certificate for testing
 
         Args:
             common_name: Certificate common name
@@ -688,6 +680,7 @@ class FederationServicesCore:
 
         Returns:
             Tuple of (certificate_pem, private_key_pem)
+
         """
         try:
             # Generate private key
@@ -732,13 +725,13 @@ class FederationServicesCore:
     async def export_token_to_file(
         self, token: SAMLToken, filepath: str, format: str = "xml"
     ) -> None:
-        """
-        Export SAML token to file
+        """Export SAML token to file
 
         Args:
             token: Token to export
             filepath: Output file path
             format: Export format (xml, json)
+
         """
         if format == "xml":
             content = (

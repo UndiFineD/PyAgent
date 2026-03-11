@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/core/DeduplicationCore.description.md
 
 # DeduplicationCore
 
-**File**: `src\observability\reports\core\DeduplicationCore.py`  
+**File**: `src\\observability\reports\\core\\DeduplicationCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 53  
@@ -41,7 +40,7 @@ Class DeduplicationCore implementation.
 
 # Improvements for DeduplicationCore
 
-**File**: `src\observability\reports\core\DeduplicationCore.py`  
+**File**: `src\\observability\reports\\core\\DeduplicationCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 53 lines (small)  
 **Complexity**: 3 score (simple)
@@ -80,14 +79,13 @@ Handles similarity calculations and JSONL export.
 """
 
 import json
-from typing import List, Dict, Any
+from typing import Any
 
 
 class DeduplicationCore:
     @staticmethod
     def jaccard_similarity(s1: str, s2: str) -> float:
-        """
-        Calculates Jaccard similarity between two strings based on words.
+        """Calculates Jaccard similarity between two strings based on words.
         """
         set1 = set(s1.lower().split())
         set2 = set(s2.lower().split())
@@ -101,8 +99,7 @@ class DeduplicationCore:
     def deduplicate_items(
         items: list[dict[str, Any]], key: str = "message", threshold: float = 0.8
     ) -> list[dict[str, Any]]:
-        """
-        Removes items that are too similar to already seen items.
+        """Removes items that are too similar to already seen items.
         """
         unique_items = []
         seen_messages: list[str] = []
@@ -123,8 +120,7 @@ class DeduplicationCore:
 
     @staticmethod
     def export_to_jsonl(items: list[dict[str, Any]], output_path: str) -> None:
-        """
-        Exports a list of dicts to a JSONL file.
+        """Exports a list of dicts to a JSONL file.
         """
         with open(output_path, "w", encoding="utf-8") as f:
             for item in items:

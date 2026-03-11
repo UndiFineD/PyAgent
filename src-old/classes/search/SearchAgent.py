@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/search/SearchAgent.description.md
 
@@ -106,17 +105,18 @@ from __future__ import annotations
 
 """Agent for performing web searches and deep research."""
 
-from src.core.base.version import VERSION
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function
 import logging
 import os
-import requests
 import time
 from pathlib import Path
-from typing import Optional
+
+import requests
+from src.core.base.BaseAgent import BaseAgent
 from src.core.base.ConnectivityManager import ConnectivityManager
+from src.core.base.utilities import create_main_function
+from src.core.base.version import VERSION
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+
 from .SearchCore import SearchCore
 
 __version__ = VERSION

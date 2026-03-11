@@ -1,12 +1,11 @@
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/core/AndroidCore.description.md
 
 # AndroidCore
 
-**File**: `src\logic\agents\development\core\AndroidCore.py`  
+**File**: `src\\logic\agents\\development\\core\\AndroidCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 66  
@@ -42,7 +41,7 @@ Class AndroidCore implementation.
 
 # Improvements for AndroidCore
 
-**File**: `src\logic\agents\development\core\AndroidCore.py`  
+**File**: `src\\logic\agents\\development\\core\\AndroidCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 66 lines (small)  
 **Complexity**: 3 score (simple)
@@ -81,20 +80,19 @@ Encapsulates ADB commands for UI testing.
 """
 
 import subprocess
-from typing import List, Optional
 
 from src.core.base.interfaces import ContextRecorderInterface
+
 
 class AndroidCore:
     @staticmethod
     def run_adb_command(command: list[str], serial: str | None = None, recorder: ContextRecorderInterface | None = None) -> str:
-        """
-        Runs an adb command and returns the output.
+        """Runs an adb command and returns the output.
         """
         base = ["adb"]
         if serial:
             base.extend(["-s", serial])
-        
+
         full_command = base + command
         try:
             result = subprocess.run(full_command, capture_output=True, text=True, check=True)
@@ -117,8 +115,7 @@ class AndroidCore:
 
     @staticmethod
     def list_devices(recorder: ContextRecorderInterface | None = None) -> list[str]:
-        """
-        Returns a list of connected device serials.
+        """Returns a list of connected device serials.
         """
         output = AndroidCore.run_adb_command(["devices"], recorder=recorder)
         lines = output.splitlines()
@@ -130,8 +127,7 @@ class AndroidCore:
 
     @staticmethod
     def take_screenshot(output_path: str, serial: str | None = None, recorder: ContextRecorderInterface | None = None) -> bool:
-        """
-        Takes a screenshot of the device.
+        """Takes a screenshot of the device.
         """
         # Take screenshot on device
         res = AndroidCore.run_adb_command(["shell", "screencap", "-p", "/sdcard/screen.png"], serial, recorder)

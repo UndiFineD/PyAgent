@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ImmuneSystemAgent.description.md
 
@@ -107,12 +106,13 @@ Specializes in biological resilience, detecting malicious prompt injections,
 and monitoring swarm health for corrupted nodes.
 """
 
-from src.core.base.version import VERSION
 import logging
 import re
-from typing import Dict, List, Any
+from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -144,11 +144,12 @@ class ImmuneSystemAgent(BaseAgent):
 
     @as_tool
     def trigger_self_healing(self, node_id: str, issue_type: str) -> str:
-        """
-        Triggers an automated self-healing protocol for a corrupted or failing node.
+        """Triggers an automated self-healing protocol for a corrupted or failing node.
+
         Args:
             node_id: The ID of the node to fix.
             issue_type: The nature of the failure (e.g., 'crash', 'logical_loop', 'unauthorized_access').
+
         """
         logging.info(
             f"ImmuneSystem: Self-healing protocol triggered for {node_id} (Issue: {issue_type})"
@@ -170,8 +171,10 @@ class ImmuneSystemAgent(BaseAgent):
     @as_tool
     def scan_for_injections(self, input_text: str) -> dict[str, Any]:
         """Scans a prompt or message for known injection patterns.
+
         Args:
             input_text: The text to scan.
+
         """
         findings = []
         for pattern in self.injection_patterns:
@@ -234,8 +237,7 @@ class ImmuneSystemAgent(BaseAgent):
         return sanitized
 
     def propose_autonomous_patch(self, vulnerability: str, insecure_code: str) -> str:
-        """
-        Proposes a patch for a detected vulnerability using AI reasoning.
+        """Proposes a patch for a detected vulnerability using AI reasoning.
         """
         prompt = (
             f"Vulnerability: {vulnerability}\n"

@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/agent_knowledge.description.md
 
@@ -52,9 +51,9 @@ LLM_CONTEXT_END
 Knowledge Agent: Manages workspace knowledge and backlinks.
 """
 
-import sys
 import argparse
 import logging
+import sys
 from pathlib import Path
 
 from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent

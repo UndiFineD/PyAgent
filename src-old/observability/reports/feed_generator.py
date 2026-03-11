@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/feed_generator.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -70,6 +70,7 @@ class FeedGenerator:
     Example:
         >>> generator=FeedGenerator(FeedFormat.ATOM_10)
         >>> feed=generator.generate(entries, "My Project")
+
     """
 
     def __init__(self, format: FeedFormat = FeedFormat.ATOM_10) -> None:
@@ -77,6 +78,7 @@ class FeedGenerator:
 
         Args:
             format: Feed format to use.
+
         """
         self.format = format
 
@@ -89,6 +91,7 @@ class FeedGenerator:
 
         Returns:
             Feed content as string.
+
         """
         if self.format == FeedFormat.RSS_20:
             return self._generate_rss(entries, project_name)

@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/crew_orchestrator.description.md
 
 # crew_orchestrator
 
-**File**: `src\core\base\logic\core\crew_orchestrator.py`  
+**File**: `src\\core\base\\logic\\core\\crew_orchestrator.py`  
 **Type**: Python Module  
 **Summary**: 7 classes, 0 functions, 12 imports  
 **Lines**: 386  
@@ -103,7 +102,7 @@ Inspired by CrewAI task coordination patterns.
 
 # Improvements for crew_orchestrator
 
-**File**: `src\core\base\logic\core\crew_orchestrator.py`  
+**File**: `src\\core\base\\logic\\core\\crew_orchestrator.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 386 lines (medium)  
 **Complexity**: 7 score (moderate)
@@ -145,10 +144,10 @@ Implements role-based agent coordination with task dependencies and context shar
 
 import asyncio
 import logging
-from typing import Dict, List, Optional, Any, Callable, Set
 from dataclasses import dataclass, field
-from enum import Enum
 from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set
 
 
 class AgentRole(Enum):
@@ -211,8 +210,7 @@ class TaskResult:
 
 
 class CrewAgent:
-    """
-    A CrewAI-style agent with role-based capabilities.
+    """A CrewAI-style agent with role-based capabilities.
 
     Based on patterns from .external/action repository.
     """
@@ -226,8 +224,7 @@ class CrewAgent:
     async def execute_task(
         self, task: TaskConfig, context: Dict[str, Any]
     ) -> TaskResult:
-        """
-        Execute a task with given context.
+        """Execute a task with given context.
 
         Args:
             task: Task configuration
@@ -235,6 +232,7 @@ class CrewAgent:
 
         Returns:
             TaskResult with execution outcome
+
         """
         start_time = datetime.now()
         result = TaskResult(
@@ -306,8 +304,7 @@ class CrewAgent:
 
 
 class CrewOrchestrator:
-    """
-    Orchestrates multi-agent task execution with dependencies.
+    """Orchestrates multi-agent task execution with dependencies.
 
     Inspired by CrewAI task coordination patterns.
     """
@@ -331,14 +328,14 @@ class CrewOrchestrator:
     async def execute_crew(
         self, initial_context: Optional[Dict[str, Any]] = None
     ) -> Dict[str, TaskResult]:
-        """
-        Execute all tasks in the crew with proper dependency resolution.
+        """Execute all tasks in the crew with proper dependency resolution.
 
         Args:
             initial_context: Initial context for task execution
 
         Returns:
             Dictionary of task results
+
         """
         context = initial_context or {}
         completed_tasks: Set[str] = set()
@@ -452,11 +449,11 @@ class CrewOrchestrator:
 
 # Example usage function
 async def create_engineering_crew() -> CrewOrchestrator:
-    """
-    Create an engineering crew similar to the action repository example.
+    """Create an engineering crew similar to the action repository example.
 
     Returns:
         Configured CrewOrchestrator
+
     """
     crew = CrewOrchestrator()
 

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/interfaces.description.md
 
 # interfaces
 
-**File**: `src\core\base\interfaces.py`  
+**File**: `src\\core\base\\interfaces.py`  
 **Type**: Python Module  
 **Summary**: 4 classes, 0 functions, 9 imports  
 **Lines**: 70  
@@ -82,7 +81,7 @@ Interface for cognitive recording and context harvesting.
 
 # Improvements for interfaces
 
-**File**: `src\core\base\interfaces.py`  
+**File**: `src\\core\base\\interfaces.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 70 lines (small)  
 **Complexity**: 12 score (moderate)
@@ -120,6 +119,9 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+from pathlib import Path
+from typing import Any, Protocol, runtime_checkable
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -132,19 +134,14 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-from typing import Protocol, runtime_checkable, Dict, Any, List, Optional
-from pathlib import Path
 
 __version__ = VERSION
 
 
 @runtime_checkable
 class AgentInterface(Protocol):
-    """
-    Core interface for all AI-powered agents.
+    """Core interface for all AI-powered agents.
     Defining this as a Protocol facilitates future Rust implementation (PyO3).
     """
 

@@ -12,15 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Test script for LANDiscovery network functionality.
+"""Test script for LANDiscovery network functionality.
 """
 
-import sys
 import os
+import sys
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 from src.infrastructure.swarm.network.lan_discovery import LANDiscovery
+
 
 def test_network_detection():
     """Test network detection and configuration."""

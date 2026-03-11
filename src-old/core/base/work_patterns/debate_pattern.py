@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/work_patterns/debate_pattern.description.md
 
 # debate_pattern
 
-**File**: `src\core\base\work_patterns\debate_pattern.py`  
+**File**: `src\\core\base\\work_patterns\\debate_pattern.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 9 imports  
 **Lines**: 394  
@@ -74,7 +73,7 @@ adversarial reasoning.
 
 # Improvements for debate_pattern
 
-**File**: `src\core\base\work_patterns\debate_pattern.py`  
+**File**: `src\\core\base\\work_patterns\\debate_pattern.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 394 lines (medium)  
 **Complexity**: 4 score (simple)
@@ -106,9 +105,8 @@ LLM_CONTEXT_END
 
 """Debate work pattern implementation for multi-agent adversarial reasoning."""
 
-import asyncio
-from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
+from typing import Any, Dict, List, Optional
 
 from src.core.base.common.models.communication_models import CascadeContext, WorkState
 from src.core.base.work_patterns.base_pattern import WorkPattern
@@ -164,6 +162,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             True if agents are valid for debate
+
         """
         if len(agents) < 2:
             return False
@@ -187,6 +186,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             The agent instance or None
+
         """
         agents = []
         if self.advocate_agent:
@@ -208,6 +208,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             Dict containing debate results and final decision
+
         """
         # Get agents from pattern configuration
         debate_agents = []
@@ -275,6 +276,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             Results of the debate round
+
         """
         round_results = {
             "round": round_num + 1,
@@ -321,6 +323,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             Generated position
+
         """
         # Find the actual agent instance
         actual_agent = self._find_agent_by_id(agent.agent_id)
@@ -365,6 +368,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             Counter-argument
+
         """
         # Find the actual agent instance
         actual_agent = self._find_agent_by_id(agent.agent_id)
@@ -406,6 +410,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             True if consensus reached
+
         """
         # Simple consensus check - all agents agree on key points
         # In practice, this would be more sophisticated
@@ -430,6 +435,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             Final synthesized decision
+
         """
         if self.config.synthesis_method == "auto":
             return await self._auto_synthesis(debate_history, participants)
@@ -454,6 +460,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             Synthesized decision
+
         """
         # Simple synthesis - take the position with highest average confidence
         final_round = debate_history[-1]
@@ -479,6 +486,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             Synthesized decision
+
         """
         # Weight votes by agent incentives and historical performance
         votes = {}

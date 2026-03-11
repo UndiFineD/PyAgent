@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/code_translation_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -74,8 +74,7 @@ __version__ = VERSION
 
 
 class CodeTranslationAgent(BaseAgent):
-    """
-    Handles translation of codebases between different programming languages.
+    """Handles translation of codebases between different programming languages.
     Supports mapping logic, syntax transformations, and multi-file translation.
     """
 
@@ -87,8 +86,7 @@ class CodeTranslationAgent(BaseAgent):
     async def translate_file(
         self, source_code: str, from_lang: str, to_lang: str
     ) -> str:
-        """
-        Translates source code from one language to another using LLM reasoning.
+        """Translates source code from one language to another using LLM reasoning.
         """
         logging.info(
             f"CodeTranslationAgent: Translating code from {from_lang} to {to_lang}."

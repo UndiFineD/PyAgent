@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/SelfHealingEngineCore.description.md
 
@@ -73,13 +72,11 @@ Decides what kind of fix is needed based on the traceback.
 LLM_CONTEXT_END
 """
 
-import traceback
-from typing import Dict, List, Any
+from typing import Any, Dict, List
 
 
 class SelfHealingEngineCore:
-    """
-    Pure logic for self-healing analysis.
+    """Pure logic for self-healing analysis.
     Decides what kind of fix is needed based on the traceback.
     """
 

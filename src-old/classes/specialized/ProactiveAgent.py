@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ProactiveAgent.description.md
 
@@ -83,11 +82,12 @@ LLM_CONTEXT_END
 
 """Agent specializing in proactive task management and recurring workflows (Sentient pattern)."""
 
-from src.classes.base_agent import BaseAgent
-import logging
 import json
+import logging
 import time
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List
+
+from src.classes.base_agent import BaseAgent
 
 
 class ProactiveAgent(BaseAgent):

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
+import logging
 import os
 import sys
-import logging
 from pathlib import Path
+
 from src.classes.fleet.FleetManager import FleetManager
 
 # Add the workspace root to sys.path

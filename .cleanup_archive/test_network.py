@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-import sys
 import os
+import sys
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 from infrastructure.swarm.network.network_utils import get_local_network_ip
@@ -9,6 +10,7 @@ print('Testing get_local_network_ip()...')
 
 # Let's debug step by step
 import subprocess
+
 print('Running ipconfig...')
 result = subprocess.run(['ipconfig'], capture_output=True, text=True, timeout=10)
 print('ipconfig return code:', result.returncode)

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/FleetTelemetryVisualizer.description.md
 
@@ -81,12 +80,11 @@ LLM_CONTEXT_END
 
 import logging
 import time
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List
 
 
 class FleetTelemetryVisualizer:
-    """
-    Phase 37: Swarm Telemetry Visualization.
+    """Phase 37: Swarm Telemetry Visualization.
     Visualizes signal flow and task execution paths across the fleet.
     """
 

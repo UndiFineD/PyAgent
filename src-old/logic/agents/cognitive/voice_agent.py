@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/voice_agent.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,9 +51,9 @@ from __future__ import annotations
 
 import logging
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -77,8 +78,7 @@ class VoiceAgent(BaseAgent):
         reference_voice_path: str | None = None,
         language_code: str = "en",
     ) -> str:
-        """
-        Synthesizes speech with paralinguistic tags and multilingual support (Toucan Pattern).
+        """Synthesizes speech with paralinguistic tags and multilingual support (Toucan Pattern).
         Supports expressive markers: [laugh], [chuckle], [sigh], [breath].
         """
         _ = reference_voice_path
@@ -102,8 +102,7 @@ class VoiceAgent(BaseAgent):
 
     @as_tool
     def manage_cosyvoice_lifecycle(self, action: str) -> str:
-        """
-        Manages the lifecycle of the CosyVoice generative model.
+        """Manages the lifecycle of the CosyVoice generative model.
         Actions: 'load', 'unload', 'status'.
         """
         if action == 'load':
@@ -118,14 +117,12 @@ class VoiceAgent(BaseAgent):
     def transcribe_audio(
         self, audio_file_path: str, strategy: str = "whisper-gpu"
     ) -> str:
-        """
-        Transcribes an audio file into text.
+        """Transcribes an audio file into text.
         Supports multiple strategies (Handy/Whisper patterns):
         - whisper-gpu: High-accuracy Large/Turbo models (GPU)
         - parakeet-v3: CPU-optimized fast transcription
         - silero-vad: Voice Activity Detection preprocessing
         """
-
         logging.info(
             f"VoiceAgent: Transcribing {audio_file_path} using strategy: {strategy}"
         )

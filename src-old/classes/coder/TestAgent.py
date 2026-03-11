@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/TestAgent.description.md
 
@@ -89,9 +88,7 @@ Inspired by SGI-Bench and py.test.
 
 import logging
 import subprocess
-import json
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 

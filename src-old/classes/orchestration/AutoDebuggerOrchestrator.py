@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/AutoDebuggerOrchestrator.description.md
 
@@ -89,12 +88,13 @@ Implemented as part of Phase 40: Recursive Self-Debugging.
 
 import logging
 import os
-import sys
 import subprocess
-from typing import Dict, List, Any, Optional
-from src.classes.specialized.ImmuneSystemAgent import ImmuneSystemAgent
-from src.classes.coder.CoderAgent import CoderAgent
+import sys
+from typing import Any, Dict, List, Optional
+
 from src.classes.base_agent.utilities import as_tool
+from src.classes.coder.CoderAgent import CoderAgent
+from src.classes.specialized.ImmuneSystemAgent import ImmuneSystemAgent
 
 
 class AutoDebuggerOrchestrator:
@@ -121,6 +121,7 @@ class AutoDebuggerOrchestrator:
 
         Args:
             file_path: The absolute path to the file to check.
+
         """
         if not os.path.exists(file_path):
             return {"status": "error", "message": f"File not found: {file_path}"}

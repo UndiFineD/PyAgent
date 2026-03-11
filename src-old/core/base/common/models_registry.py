@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/models_registry.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -50,6 +50,7 @@ Ports the extensive provider list from .code_puppy's models.dev integration.
 """
 
 from typing import Dict, List, TypedDict
+
 
 class ModelSpec(TypedDict):
     id: str
@@ -60,10 +61,9 @@ class ModelSpec(TypedDict):
     literals: List[str] # Trigger keywords
 
 class ProviderRegistry:
+    """Central repository for 65+ LLM/multimodal providers and their pricing.
     """
-    Central repository for 65+ LLM/multimodal providers and their pricing.
-    """
-    
+
     # --------------------------------------------------------------------------
     # TIER 1: FOUNDATION MODELS
     # --------------------------------------------------------------------------
@@ -72,7 +72,7 @@ class ProviderRegistry:
     GOOGLE = "google"
     META = "meta"
     MISTRAL = "mistral"
-    
+
     # --------------------------------------------------------------------------
     # TIER 2: SPECIALIZED & OPEN SOURCE
     # --------------------------------------------------------------------------
@@ -83,7 +83,7 @@ class ProviderRegistry:
     DEEPSEEK = "deepseek"
     QWEN = "qwen"
     YI = "01-ai"
-    
+
     # --------------------------------------------------------------------------
     # TIER 3: EDGE & LOCAL
     # --------------------------------------------------------------------------

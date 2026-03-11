@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/processing/database_access_core.description.md
 
 # database_access_core
 
-**File**: `src\core\base\logic\processing\database_access_core.py`  
+**File**: `src\\core\base\\logic\\processing\\database_access_core.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 154  
@@ -49,7 +48,7 @@ Core class for ODBC database operations.
 
 # Improvements for database_access_core
 
-**File**: `src\core\base\logic\processing\database_access_core.py`  
+**File**: `src\\core\base\\logic\\processing\\database_access_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 154 lines (medium)  
 **Complexity**: 6 score (moderate)
@@ -102,7 +101,6 @@ Implements database connection and query patterns from ADSyncDump-BOF.
 
 
 import ctypes
-from ctypes import wintypes
 from typing import Any, Dict, List, Optional
 
 # ODBC constants

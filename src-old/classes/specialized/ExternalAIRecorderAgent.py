@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ExternalAIRecorderAgent.description.md
 
@@ -87,11 +86,10 @@ LLM_CONTEXT_END
 Captures prompts, contexts, and responses provided to/from external systems like ChatGPT, Claude, etc.
 """
 
-import logging
 import json
 import time
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
@@ -118,11 +116,13 @@ class ExternalAIRecorderAgent(BaseAgent):
         self, external_ai_name: str, prompt: str, context: str, response: str
     ) -> str:
         """Saves a session with an external AI to the local learning archive.
+
         Args:
             external_ai_name: Name of the external system (e.g., 'Claude-3.5', 'GPT-4o').
             prompt: The user query sent to the external AI.
             context: Any supplemental context provided in the session.
             response: The full text response from the external AI.
+
         """
         entry = {
             "timestamp": time.time(),

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/SandboxAgent.description.md
 
 # SandboxAgent
 
-**File**: `src\logic\agents\development\SandboxAgent.py`  
+**File**: `src\\logic\agents\\development\\SandboxAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 75  
@@ -47,7 +46,7 @@ Executes untrusted code in a controlled environment.
 
 # Improvements for SandboxAgent
 
-**File**: `src\logic\agents\development\SandboxAgent.py`  
+**File**: `src\\logic\agents\\development\\SandboxAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 75 lines (small)  
 **Complexity**: 4 score (simple)
@@ -97,10 +96,11 @@ from __future__ import annotations
 Prevents side effects on the host system by using containerized or WASM environments.
 """
 
-from src.core.base.version import VERSION
 import logging
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

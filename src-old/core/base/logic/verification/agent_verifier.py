@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/verification/agent_verifier.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -78,8 +78,7 @@ class AgentVerifier:
 
     @classmethod
     def calculate_anchoring_strength(cls, result: str, context_pool: dict[str, Any]) -> float:
-        """
-        Calculates the 'Anchoring Strength' metric using Semantic Cosine Similarity.
+        """Calculates the 'Anchoring Strength' metric using Semantic Cosine Similarity.
         """
         if not context_pool:
             return 0.5

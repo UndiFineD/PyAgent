@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+"""Tests for chat models."""
 from chat.models import ChatRoom
 
 

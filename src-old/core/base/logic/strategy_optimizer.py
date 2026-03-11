@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/strategy_optimizer.description.md
 
 # strategy_optimizer
 
-**File**: `src\core\base\logic\strategy_optimizer.py`  
+**File**: `src\\core\base\\logic\\strategy_optimizer.py`  
 **Type**: Python Module  
 **Summary**: 12 classes, 0 functions, 17 imports  
 **Lines**: 643  
@@ -167,7 +166,7 @@ Strategy wrapper for pipeline configurations
 
 # Improvements for strategy_optimizer
 
-**File**: `src\core\base\logic\strategy_optimizer.py`  
+**File**: `src\\core\base\\logic\\strategy_optimizer.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 643 lines (large)  
 **Complexity**: 26 score (complex)
@@ -209,14 +208,13 @@ Based on AutoRAG patterns: threshold filtering, performance measurement, best se
 """
 
 import asyncio
-import json
 import logging
+import statistics
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any, Callable, Tuple, Union
 from enum import Enum
-import statistics
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -298,8 +296,7 @@ class Strategy(ABC):
 
 
 class ThresholdFilter:
-    """
-    Threshold-based filtering for strategy selection
+    """Threshold-based filtering for strategy selection
     Based on AutoRAG's threshold filtering patterns
     """
 
@@ -357,8 +354,7 @@ class ThresholdFilter:
 
 
 class PerformanceMeasurer:
-    """
-    Measures and aggregates strategy performance
+    """Measures and aggregates strategy performance
     Based on AutoRAG's performance measurement patterns
     """
 
@@ -634,8 +630,7 @@ class ParetoFrontierSelector(BestSelectionAlgorithm):
 
 
 class StrategyOptimizer:
-    """
-    AutoML framework for strategy optimization
+    """AutoML framework for strategy optimization
     Based on AutoRAG's strategy optimization patterns
     """
 
@@ -677,8 +672,7 @@ class StrategyOptimizer:
         metric_weights: Optional[Dict[str, float]] = None,
         **kwargs,
     ) -> OptimizationTrial:
-        """
-        Run optimization trial across multiple strategies
+        """Run optimization trial across multiple strategies
         Based on AutoRAG's optimization workflow
         """
         trial_id = f"trial_{int(time.time())}_{len(self.optimization_history)}"
@@ -757,8 +751,7 @@ class StrategyOptimizer:
         evaluation_data: List[Tuple[Any, Any]],
         **kwargs,
     ) -> OptimizationTrial:
-        """
-        Optimize a complete pipeline configuration
+        """Optimize a complete pipeline configuration
         Based on AutoRAG's pipeline optimization
         """
         # Convert pipeline configs to strategies

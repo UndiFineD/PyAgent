@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/SwarmOptimizer.description.md
 
@@ -77,8 +76,7 @@ LLM_CONTEXT_END
 Monitors fleet performance and suggests structural or configuration changes.
 """
 
-import logging
-from typing import Dict, List, Any
+from typing import Any, Dict, List
 
 
 class SwarmOptimizer:

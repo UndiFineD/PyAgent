@@ -3,12 +3,11 @@
 
 > pip install openai
 """
-import os
 from openai import OpenAI
 from openai.types.chat import (
-    ChatCompletionMessageParam,
     ChatCompletionAssistantMessageParam,
     ChatCompletionMessageFunctionToolCallParam,
+    ChatCompletionMessageParam,
 )
 
 client = OpenAI(

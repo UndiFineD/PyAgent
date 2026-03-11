@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/validation/tensor_schema.description.md
 
@@ -34,6 +33,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -109,8 +109,7 @@ class DynamicDim:
 
 @dataclass
 class TensorShape:
-    """
-    Represents a tensor shape with symbolic dimensions.
+    """Represents a tensor shape with symbolic dimensions.
 
     Dimensions can be:
     - int: Fixed size
@@ -121,6 +120,7 @@ class TensorShape:
         >>> shape = TensorShape("batch", "seq_len", 768)
         >>> resolved = shape.resolve(batch=32, seq_len=512)
         >>> print(resolved)  # (32, 512, 768)
+
     """
 
     dims: tuple[int | str | DynamicDim, ...]
@@ -142,14 +142,14 @@ class TensorShape:
         list(map(detect_dynamic, dims))
 
     def resolve(self, **bindings: int) -> tuple[int | str, ...]:
-        """
-        Resolve symbolic dimensions to concrete values.
+        """Resolve symbolic dimensions to concrete values.
 
         Args:
             **bindings: Mapping of dimension names to values
 
         Returns:
             Tuple of resolved dimensions (unresolved symbols remain as strings)
+
         """
 
         def _resolve(dim):
@@ -164,8 +164,7 @@ class TensorShape:
         return tuple(map(_resolve, self.dims))
 
     def matches(self, shape: tuple[int, ...], **bindings: int) -> bool:
-        """
-        Check if a concrete shape matches this schema.
+        """Check if a concrete shape matches this schema.
 
         Args:
             shape: Concrete tensor shape
@@ -173,6 +172,7 @@ class TensorShape:
 
         Returns:
             True if shape matches
+
         """
         if len(shape) != len(self.dims):
             return False
@@ -211,8 +211,7 @@ class TensorShape:
 
 @dataclass
 class TensorSchema:
-    """
-    Schema regarding validating multiple tensors with related dimensions.
+    """Schema regarding validating multiple tensors with related dimensions.
 
     Example:
         >>> schema = TensorSchema(
@@ -221,6 +220,7 @@ class TensorSchema:
         ...     hidden_states=TensorShape("batch", "seq_len", 768),
         ... )
         >>> schema.validate(input_ids=input_tensor, attention_mask=mask_tensor)
+
     """
 
     fields: dict[str, TensorShape] = field(default_factory=dict)
@@ -249,8 +249,7 @@ class TensorSchema:
         list(map(_add_field, field_shapes.items()))
 
     def validate(self, **tensors: Any) -> dict[str, tuple[int, ...]]:
-        """
-        Validate tensors against the schema.
+        """Validate tensors against the schema.
 
         Args:
             **tensors: Tensor name to tensor mapping
@@ -260,6 +259,7 @@ class TensorSchema:
 
         Raises:
             ValueError: If validation fails
+
         """
         results = {}
         collected_bindings = dict(self.resolve_bindings)
@@ -372,8 +372,7 @@ def validate_tensor(
     dynamic_dims: set[str] | None = None,
     **bindings: int,
 ) -> bool:
-    """
-    Validate a single tensor's shape.
+    """Validate a single tensor's shape.
 
     Args:
         tensor: Tensor to validate
@@ -386,6 +385,7 @@ def validate_tensor(
 
     Raises:
         ValueError: If shape doesn't match
+
     """
     shape = TensorShape(*dims, dynamic_dims=dynamic_dims)
 
@@ -409,8 +409,7 @@ def validate_tensor_shape(
     dynamic_dims: set[str] | None = None,
     **bindings: int,
 ) -> bool:
-    """
-    Validate a shape tuple against expected pattern.
+    """Validate a shape tuple against expected pattern.
 
     Args:
         shape: Actual shape tuple
@@ -420,6 +419,7 @@ def validate_tensor_shape(
 
     Returns:
         True if valid
+
     """
     tensor_shape = TensorShape(*expected, dynamic_dims=dynamic_dims)
     return tensor_shape.matches(shape, **bindings)

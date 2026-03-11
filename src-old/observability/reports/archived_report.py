@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/archived_report.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -60,6 +61,7 @@ __version__ = VERSION
 @dataclass
 class ArchivedReport:
     """Archived report with retention info.
+
     Attributes:
         report_id: Unique report identifier.
         file_path: Original file path.
@@ -67,6 +69,7 @@ class ArchivedReport:
         archived_at: Archive timestamp.
         retention_days: Days to retain.
         metadata: Report metadata.
+
     """
 
     report_id: str

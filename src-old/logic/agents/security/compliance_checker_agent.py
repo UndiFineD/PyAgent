@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/compliance_checker_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -66,6 +66,7 @@ class ComplianceChecker:
     Example:
         >>> checker=ComplianceChecker()
         >>> results=checker.check_all(entries)
+
     """
 
     SECURITY_KEYWORDS = ["vulnerability", "cve", "security", "patch", "exploit"]
@@ -81,6 +82,7 @@ class ComplianceChecker:
 
         Returns:
             ComplianceResult for security category.
+
         """
         issues: list[str] = []
         recommendations: list[str] = []
@@ -109,6 +111,7 @@ class ComplianceChecker:
 
         Returns:
             ComplianceResult for legal category.
+
         """
         issues: list[str] = []
         recommendations: list[str] = []
@@ -134,6 +137,7 @@ class ComplianceChecker:
 
         Returns:
             List of ComplianceResult for all categories.
+
         """
         return [
             self.check_security_compliance(entries),

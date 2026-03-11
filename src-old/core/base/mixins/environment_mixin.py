@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/environment_mixin.description.md
 
 # environment_mixin
 
-**File**: `src\core\base\mixins\environment_mixin.py`  
+**File**: `src\\core\base\\mixins\\environment_mixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 12 imports  
 **Lines**: 164  
@@ -49,7 +48,7 @@ Allows agents to create and manage isolated execution environments.
 
 # Improvements for environment_mixin
 
-**File**: `src\core\base\mixins\environment_mixin.py`  
+**File**: `src\\core\base\\mixins\\environment_mixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 164 lines (medium)  
 **Complexity**: 1 score (simple)
@@ -119,8 +118,7 @@ logger = logging.getLogger(__name__)
 
 
 class EnvironmentMixin:
-    """
-    Mixin providing environment management capabilities to agents.
+    """Mixin providing environment management capabilities to agents.
     Allows agents to create and manage isolated execution environments.
     """
 

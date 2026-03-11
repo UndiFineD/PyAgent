@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/DimensionalityAgent.description.md
 
 # DimensionalityAgent
 
-**File**: `src\logic\agents\specialists\DimensionalityAgent.py`  
+**File**: `src\\logic\agents\\specialists\\DimensionalityAgent.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 18 imports  
 **Lines**: 360  
@@ -65,7 +64,7 @@ Focuses on PCA, t-SNE (simulated), UMAP, and semantic embedding compression.
 
 # Improvements for DimensionalityAgent
 
-**File**: `src\logic\agents\specialists\DimensionalityAgent.py`  
+**File**: `src\\logic\agents\\specialists\\DimensionalityAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 360 lines (medium)  
 **Complexity**: 3 score (simple)
@@ -103,20 +102,21 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import json
+import logging
+import math
+import re
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.BaseUtilities import as_tool
+
 # Copyright 2026 PyAgent Authors
 # DimensionalityAgent: Feature Compression and Latent Space Mapping - Phase 319 Enhanced
 # Phase 16: Rust acceleration for PCA reduction, embedding stats, k-means clustering
-
 from src.core.base.Version import VERSION
-import logging
-import json
-import re
-import math
-from typing import Any, Dict, List, Optional, Tuple
-from dataclasses import dataclass, field
-from enum import Enum
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
 
@@ -153,8 +153,7 @@ class EmbeddingStats:
 
 
 class DimensionalityAgent(BaseAgent):
-    """
-    Agent specializing in simplifying complex datasets and high-dimensional spaces.
+    """Agent specializing in simplifying complex datasets and high-dimensional spaces.
     Focuses on PCA, t-SNE (simulated), UMAP, and semantic embedding compression.
     """
 

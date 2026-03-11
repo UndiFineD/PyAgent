@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/EvolutionEngine.description.md
 
 # EvolutionEngine
 
-**File**: `src\classes\fleet\EvolutionEngine.py`  
+**File**: `src\\classes\fleet\\EvolutionEngine.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 51  
@@ -48,7 +47,7 @@ Shell for EvolutionCore.
 
 # Improvements for EvolutionEngine
 
-**File**: `src\classes\fleet\EvolutionEngine.py`  
+**File**: `src\\classes\fleet\\EvolutionEngine.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 51 lines (small)  
 **Complexity**: 4 score (simple)
@@ -82,16 +81,15 @@ LLM_CONTEXT_END
 Allows agents to generate new, specialized agent files to expand fleet capabilities.
 """
 
-import os
 import logging
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Any, Dict
+
 from .EvolutionCore import EvolutionCore
 
 
 class EvolutionEngine:
-    """
-    Manages the autonomous generation of new agent types.
+    """Manages the autonomous generation of new agent types.
     Shell for EvolutionCore.
     """
 
@@ -117,8 +115,7 @@ class EvolutionEngine:
         return str(target_path)
 
     def optimize_hyperparameters(self, fleet_stats: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Phase 52: Evolutionary Neuro-Optimization.
+        """Phase 52: Evolutionary Neuro-Optimization.
         Delegates strategy to EvolutionCore.
         """
         return self.core.compute_mutations(fleet_stats)

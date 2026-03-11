@@ -1,13 +1,13 @@
-"""
-Safe platform shim that delegates to the stdlib's platform.py when available.
+"""Safe platform shim that delegates to the stdlib's platform.py when available.
 Avoids recursion by loading the stdlib implementation directly from the stdlib path.
 If the stdlib platform module is not found, provides a minimal fallback for tests.
 """
 from __future__ import annotations
+
+import importlib.util
 import os
 import sys
 import sysconfig
-import importlib.util
 
 
 def _load_stdlib_platform():
@@ -57,9 +57,6 @@ This package exposes project-local `platform` submodules under
 `src/infrastructure/services/platform` while delegating attribute access
 to the stdlib `platform` module when appropriate.
 """
-import os
-import sysconfig
-import importlib.util
 from collections import namedtuple
 
 # Ensure Python will find package submodules under project src path

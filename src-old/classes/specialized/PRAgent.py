@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/PRAgent.description.md
 
@@ -105,13 +104,14 @@ from __future__ import annotations
 Inspired by PR-Agent and GitHub CLI.
 """
 
-from src.core.base.version import VERSION
 import subprocess
 import time
 from pathlib import Path
 from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 
 __version__ = VERSION

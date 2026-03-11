@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/agents/foreach_distributed.description.md
 
 # foreach_distributed
 
-**File**: `src\core\agents\foreach_distributed.py`  
+**File**: `src\\core\agents\foreach_distributed.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 12 imports  
 **Lines**: 299  
@@ -88,7 +87,7 @@ to run focused tests before staging edits.
 
 # Improvements for foreach_distributed
 
-**File**: `src\core\agents\foreach_distributed.py`  
+**File**: `src\\core\agents\foreach_distributed.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 299 lines (medium)  
 **Complexity**: 13 score (moderate)
@@ -132,10 +131,10 @@ synchronous to make dry-run and staged runs deterministic and easy to test.
 """
 
 
+import asyncio
 import json
 import logging
 import time
-import asyncio
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 

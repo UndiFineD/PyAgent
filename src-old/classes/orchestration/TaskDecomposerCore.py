@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/TaskDecomposerCore.description.md
 
@@ -72,12 +71,11 @@ Handles heuristic-based planning and plan summarization.
 LLM_CONTEXT_END
 """
 
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 
 class TaskDecomposerCore:
-    """
-    Pure logic for task decomposition.
+    """Pure logic for task decomposition.
     Handles heuristic-based planning and plan summarization.
     """
 

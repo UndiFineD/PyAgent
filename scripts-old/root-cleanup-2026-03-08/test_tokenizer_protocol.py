@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Example showing how TokenizerLike Protocol works with concrete implementations."""
 
-import sys
 import importlib.util
+
 
 # Load modules directly
 def load_module(name, path):
@@ -63,11 +63,11 @@ result = multimodal_tokenizer.encode_multimodal(
 )
 
 print("[Step 4] Test multimodal encoding")
-print(f"  Text: 'A robot learning to see and hear'")
-print(f"  Image patches: 2")
-print(f"  Audio frames: 1")
+print("  Text: 'A robot learning to see and hear'")
+print("  Image patches: 2")
+print("  Audio frames: 1")
 print(f"  Total tokens: {result.num_tokens}")
-print(f"  Breakdown:")
+print("  Breakdown:")
 print(f"    - Text tokens: {result.text_token_count} (IDs: {result.token_ids[:result.text_token_count]})")
 print(f"    - Image tokens: {result.image_token_count} (IDs: {result.token_ids[result.text_token_count:result.text_token_count+result.image_token_count]})")
 print(f"    - Audio tokens: {result.audio_token_count} (IDs: {result.token_ids[-result.audio_token_count:]})")

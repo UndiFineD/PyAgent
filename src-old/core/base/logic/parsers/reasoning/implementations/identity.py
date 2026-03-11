@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/parsers/reasoning/implementations/identity.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -57,8 +57,7 @@ from ..models import ReasoningResult, StreamingReasoningState
 
 
 class IdentityReasoningParser(ReasoningParser):
-    """
-    No-op parser that returns the full output as content.
+    """No-op parser that returns the full output as content.
     """
 
     name: ClassVar[str] = "identity"

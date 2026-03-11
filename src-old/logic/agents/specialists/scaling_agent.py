@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/scaling_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -118,8 +118,7 @@ class ScalingDecision:
 
 # pylint: disable=too-many-ancestors
 class ScalingAgent(BaseAgent):
-    """
-    Agent specializing in dynamic fleet scaling, multi-provider deployment,
+    """Agent specializing in dynamic fleet scaling, multi-provider deployment,
     load balancing, and high-concurrency async operations coordination.
     """
 
@@ -148,8 +147,7 @@ class ScalingAgent(BaseAgent):
         self._current_strategy = ScalingStrategy.LATENCY_WEIGHTED
 
     def _detect_ollama_capacity(self) -> int:
-        """
-        Dynamically estimates Ollama concurrency capacity based on system VRAM.
+        """Dynamically estimates Ollama concurrency capacity based on system VRAM.
         Heuristic: 1 slot per 8GB VRAM for 7B models, or default to 3.
         """
         try:

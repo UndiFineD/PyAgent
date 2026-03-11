@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/core/entropy_core.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -65,8 +65,7 @@ class EntropyCore:
 
     @staticmethod
     def calculate_cyclomatic_complexity(code: str) -> int:
-        """
-        Estimates cyclomatic complexity based on AST nodes.
+        """Estimates cyclomatic complexity based on AST nodes.
         CC = E - N + 2P (approximate using decision points)
         """
         try:
@@ -91,8 +90,7 @@ class EntropyCore:
 
     @staticmethod
     def get_file_metrics(file_path: str) -> dict:
-        """
-        Returns size and estimated complexity for a single file.
+        """Returns size and estimated complexity for a single file.
         """
         if not os.path.exists(file_path):
             return {}
@@ -108,8 +106,7 @@ class EntropyCore:
 
     @staticmethod
     def scan_directory_metrics(directory: str) -> dict:
-        """
-        Scans a directory and returns aggregate metrics.
+        """Scans a directory and returns aggregate metrics.
         """
         all_metrics = []
         for root, _, files in os.walk(directory):
@@ -138,7 +135,7 @@ class EntropyCore:
                 }
             except (
                 Exception
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            ):  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         count = len(all_metrics)

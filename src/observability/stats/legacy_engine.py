@@ -16,7 +16,7 @@
 
 from __future__ import annotations
 
-from runtime_py import spawn, sleep
+from runtime_py import sleep, spawn
 
 counter: int = 0
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/intelligence/core/search_mesh_core.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -60,8 +61,7 @@ except ImportError:
 
 
 class SearchMeshCore:
-    """
-    SearchMeshCore implements federated search result aggregation and ranking.
+    """SearchMeshCore implements federated search result aggregation and ranking.
     It synthesizes results from multiple providers (Google, Bing, Perplexity, Tavily).
     """
 
@@ -76,14 +76,13 @@ class SearchMeshCore:
         }
 
     def aggregate_results(self, raw_results: dict[str, list[dict[str, Any]]]) -> list[dict[str, Any]]:
-        """
-        Takes raw results from multiple providers and merges them into a ranked list.
+        """Takes raw results from multiple providers and merges them into a ranked list.
         Each result should have: 'title', 'url', 'snippet', 'score' (optional).
         """
         if HAS_RUST:
             try:
                 return rust_core.aggregate_search_results(raw_results, self.weights)  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         master_list: list[dict[str, Any]] = []
@@ -126,14 +125,12 @@ class SearchMeshCore:
         return master_list
 
     def filter_redundant(self, results: list[dict[str, Any]], remembered_urls: set[str]) -> list[dict[str, Any]]:
-        """
-        Filters out results that have already been seen in previous search research sessions (MemoRAG integration).
+        """Filters out results that have already been seen in previous search research sessions (MemoRAG integration).
         """
         return [res for res in results if res["url"] not in remembered_urls]
 
     async def parallel_search_placeholder(self, providers: list[str], query: str) -> dict[str, list[dict[str, Any]]]:
-        """
-        Generic structure for the Mesh agent to invoke search providers in parallel.
+        """Generic structure for the Mesh agent to invoke search providers in parallel.
         (The Shell agent will provide the actual API implementation callbacks).
         """
         # This logic stays in the shell, but the core defines the expected structure.

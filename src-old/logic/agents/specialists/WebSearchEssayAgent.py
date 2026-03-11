@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/WebSearchEssayAgent.description.md
 
 # WebSearchEssayAgent
 
-**File**: `src\logic\agents\specialists\WebSearchEssayAgent.py`  
+**File**: `src\\logic\agents\\specialists\\WebSearchEssayAgent.py`  
 **Type**: Python Module  
 **Summary**: 5 classes, 0 functions, 15 imports  
 **Lines**: 344  
@@ -73,7 +72,7 @@ composes structured essays based on findings.
 
 # Improvements for WebSearchEssayAgent
 
-**File**: `src\logic\agents\specialists\WebSearchEssayAgent.py`  
+**File**: `src\\logic\agents\\specialists\\WebSearchEssayAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 344 lines (medium)  
 **Complexity**: 2 score (simple)
@@ -114,19 +113,20 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# WebSearchEssayAgent: Research-driven Essay Writing Specialist - Phase 319 Enhanced
-
-from src.core.base.Version import VERSION
-import logging
 import json
+import logging
 import re
 import time
-from typing import Any, Dict, List, Optional
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-from src.logic.agents.intelligence.SearchAgent import SearchAgent
+from typing import Any, Dict, List, Optional
+
 from src.core.base.BaseUtilities import as_tool
+
+# Copyright 2026 PyAgent Authors
+# WebSearchEssayAgent: Research-driven Essay Writing Specialist - Phase 319 Enhanced
+from src.core.base.Version import VERSION
+from src.logic.agents.intelligence.SearchAgent import SearchAgent
 
 __version__ = VERSION
 
@@ -169,8 +169,7 @@ class EssayOutline:
 
 
 class WebSearchEssayAgent(SearchAgent):
-    """
-    Agent that researches complex subjects via web search and
+    """Agent that researches complex subjects via web search and
     composes structured essays based on findings.
     """
 

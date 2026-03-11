@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/inference/speculation/engine/engine.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # SPDX-License-Identifier: Apache-2.0
@@ -58,7 +58,7 @@ __version__ = VERSION
 from .base import DrafterBase
 from .config import SpecMethod, SpeculativeConfig
 from .proposals import DraftProposal, SpecDecodingMetrics, VerificationResult
-from .proposers import (EagleProposer, HybridDrafter, NgramProposer, SuffixProposer)
+from .proposers import EagleProposer, HybridDrafter, NgramProposer, SuffixProposer
 from .verifier import TokenVerifier
 
 logger = logging.getLogger(__name__)

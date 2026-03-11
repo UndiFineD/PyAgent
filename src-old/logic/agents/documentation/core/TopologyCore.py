@@ -1,12 +1,11 @@
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/documentation/core/TopologyCore.description.md
 
 # TopologyCore
 
-**File**: `src\logic\agents\documentation\core\TopologyCore.py`  
+**File**: `src\\logic\agents\\documentation\\core\\TopologyCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 52  
@@ -39,7 +38,7 @@ Class TopologyCore implementation.
 
 # Improvements for TopologyCore
 
-**File**: `src\logic\agents\documentation\core\TopologyCore.py`  
+**File**: `src\\logic\agents\\documentation\\core\\TopologyCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 52 lines (small)  
 **Complexity**: 2 score (simple)
@@ -77,20 +76,18 @@ Core logic for Swarm Topology Generation (Phase 169).
 This module is designed to be side-effect free and a candidate for Rust acceleration.
 """
 
-from typing import Dict, List
 
 class TopologyCore:
     @staticmethod
     def generate_mermaid_graph(nodes: list[str], edges: list[dict[str, str]], direction: str = "TD") -> str:
-        """
-        Generates a Mermaid.js flowchart string.
+        """Generates a Mermaid.js flowchart string.
         :param nodes: List of node names.
         :param edges: List of dicts with 'from', 'to', and optional 'label'.
         :param direction: Mermaid direction (TD, LR, etc.)
         :return: A mermaid formatted string.
         """
         lines = [f"graph {direction}"]
-        
+
         # Add nodes with basic styling based on type
         for node in nodes:
             safe_id = node.replace(".", "_").replace("/", "_").replace("\\", "_")
@@ -100,7 +97,7 @@ class TopologyCore:
                 lines.append(f"    {safe_id}{{{{{node}}}}}")
             else:
                 lines.append(f"    {safe_id}[{node}]")
-                
+
         # Add edges
         for edge in edges:
             u = edge['from'].replace(".", "_").replace("/", "_").replace("\\", "_")
@@ -110,13 +107,12 @@ class TopologyCore:
                 lines.append(f"    {u} -->|{label}| {v}")
             else:
                 lines.append(f"    {u} --> {v}")
-                
+
         return "\n".join(lines)
 
     @staticmethod
     def filter_active_relationships(all_deps: dict[str, list[str]], focus_list: list[str]) -> dict[str, list[str]]:
-        """
-        Filters a dependency map to only include nodes relevant to the focus list.
+        """Filters a dependency map to only include nodes relevant to the focus list.
         """
         filtered = {}
         for source, targets in all_deps.items():

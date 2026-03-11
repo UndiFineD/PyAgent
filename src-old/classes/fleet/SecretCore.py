@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/SecretCore.description.md
 
 # SecretCore
 
-**File**: `src\classes\fleet\SecretCore.py`  
+**File**: `src\\classes\fleet\\SecretCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 28  
@@ -42,7 +41,7 @@ Class SecretCore implementation.
 
 # Improvements for SecretCore
 
-**File**: `src\classes\fleet\SecretCore.py`  
+**File**: `src\\classes\fleet\\SecretCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 28 lines (small)  
 **Complexity**: 4 score (simple)
@@ -80,7 +79,6 @@ SecretCore logic for credential safety.
 Pure logic for secret masking, validation, and naming policy.
 """
 
-from typing import List, Optional
 
 class SecretCore:
     def __init__(self) -> None:

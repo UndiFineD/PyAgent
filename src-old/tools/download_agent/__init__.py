@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/download_agent/__init__.description.md
 
 # __init__
 
-**File**: `src\tools\download_agent\__init__.py`  
+**File**: `src\tools\\download_agent\\__init__.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 4 imports  
 **Lines**: 27  
@@ -46,7 +45,7 @@ them using appropriate mechanisms based on their type.
 
 # Improvements for __init__
 
-**File**: `src\tools\download_agent\__init__.py`  
+**File**: `src\tools\\download_agent\\__init__.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 27 lines (small)  
 **Complexity**: 0 score (simple)
@@ -83,9 +82,9 @@ A comprehensive download agent that handles different types of URLs and download
 them using appropriate mechanisms based on their type.
 """
 
+from .classifiers import URLClassifier
 from .core import DownloadAgent
 from .models import DownloadConfig, DownloadResult
-from .classifiers import URLClassifier
 
 __version__ = "1.0.0"
 __all__ = ["DownloadAgent", "DownloadConfig", "DownloadResult", "URLClassifier"]

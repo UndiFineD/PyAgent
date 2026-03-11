@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/AgentStore.description.md
 
 # AgentStore
 
-**File**: `src\classes\fleet\AgentStore.py`  
+**File**: `src\\classes\fleet\\AgentStore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 48  
@@ -46,7 +45,7 @@ Marketplace for agent templates and specialized configurations.
 
 # Improvements for AgentStore
 
-**File**: `src\classes\fleet\AgentStore.py`  
+**File**: `src\\classes\fleet\\AgentStore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 48 lines (small)  
 **Complexity**: 3 score (simple)
@@ -80,10 +79,9 @@ LLM_CONTEXT_END
 Allows agents to 'buy' or download new capabilities.
 """
 
-import json
 import logging
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, Optional
 
 
 class AgentStore:

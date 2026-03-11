@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/rl/ActionSpace.description.md
 
 # ActionSpace
 
-**File**: `src\core\rl\ActionSpace.py`  
+**File**: `src\\core\rl\\ActionSpace.py`  
 **Type**: Python Module  
 **Summary**: 6 classes, 0 functions, 12 imports  
 **Lines**: 120  
@@ -96,7 +95,7 @@ Hierarchical action space with named sub-spaces.
 
 # Improvements for ActionSpace
 
-**File**: `src\core\rl\ActionSpace.py`  
+**File**: `src\\core\rl\\ActionSpace.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 120 lines (medium)  
 **Complexity**: 21 score (complex)
@@ -136,10 +135,10 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Reinforcement Learning Action Space Definition - Phase 319 Enhanced
-
 import random
-from typing import Any, List, Union, Dict, Optional, Tuple
 from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 import numpy as np
 
 
@@ -267,7 +266,7 @@ class MultiDiscreteActionSpace:
     """Multiple discrete action spaces (e.g., for multi-headed agents)."""
 
     def __init__(self, nvec: List[int]):
-        """nvec specifies the number of discrete actions for each dimension."""
+        """Nvec specifies the number of discrete actions for each dimension."""
         self.nvec = np.array(nvec)
         self.shape = (len(nvec),)
 

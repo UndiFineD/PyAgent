@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/interface/core/interface_sync_core.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -53,8 +54,7 @@ from typing import Any
 
 
 class InterfaceSyncCore:
-    """
-    InterfaceSyncCore handles synchronization logic between CLI, GUI, and Web.
+    """InterfaceSyncCore handles synchronization logic between CLI, GUI, and Web.
     It manages the central state and 'Theme Engine' propagation.
     """
 
@@ -79,8 +79,7 @@ class InterfaceSyncCore:
         return self.themes.get(name, self.themes["dark"])
 
     def broadcast_action(self, action_type: str, payload: Any) -> dict[str, Any]:
-        """
-        Formats an action for broadcast to all interface targets.
+        """Formats an action for broadcast to all interface targets.
         """
         return {
             "event": "INTERFACE_SYNC",
@@ -90,8 +89,7 @@ class InterfaceSyncCore:
         }
 
     def resolve_topology_state(self, agents: list[dict[str, Any]], connections: list[tuple]) -> dict[str, Any]:
-        """
-        Prepares a unified topology state for the Web viewer and GUI.
+        """Prepares a unified topology state for the Web viewer and GUI.
         """
         return {
             "nodes": agents,

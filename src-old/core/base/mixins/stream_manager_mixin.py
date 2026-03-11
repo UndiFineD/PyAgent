@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/stream_manager_mixin.description.md
 
 # stream_manager_mixin
 
-**File**: `src\core\base\mixins\stream_manager_mixin.py`  
+**File**: `src\\core\base\\mixins\\stream_manager_mixin.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 17 imports  
 **Lines**: 320  
@@ -69,7 +68,7 @@ Adapted from Adorable's stream-manager.ts patterns for Python/asyncio.
 
 # Improvements for stream_manager_mixin
 
-**File**: `src\core\base\mixins\stream_manager_mixin.py`  
+**File**: `src\\core\base\\mixins\\stream_manager_mixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 320 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -100,6 +99,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -124,9 +124,9 @@ import json
 import logging
 import time
 import uuid
-from typing import Any, Dict, List, Optional, Callable, AsyncGenerator
-from dataclasses import dataclass, field
 from contextlib import asynccontextmanager
+from dataclasses import dataclass, field
+from typing import Any, Callable, Dict, Optional
 
 try:
     import redis.asyncio as redis
@@ -135,12 +135,12 @@ except ImportError:
     redis = None
     HAS_REDIS = False
 
-from src.core.base.common.models.communication_models import CascadeContext
 
 
 @dataclass
 class StreamState:
     """Represents the current state of a stream."""
+
     state: Optional[str] = None
     last_updated: float = field(default_factory=time.time)
 
@@ -161,6 +161,7 @@ class StreamState:
 @dataclass
 class StreamInfo:
     """Information about an active stream."""
+
     stream_id: str
     agent_id: str
     created_at: float
@@ -185,8 +186,7 @@ class StreamInfo:
 
 
 class StreamManagerMixin:
-    """
-    Mixin providing Redis-backed stream management capabilities.
+    """Mixin providing Redis-backed stream management capabilities.
     Adapted from Adorable's stream-manager.ts patterns for Python/asyncio.
     """
 
@@ -413,7 +413,7 @@ class StreamManagerMixin:
         await self.handle_stream_lifecycle(agent_id, "start")
         try:
             yield
-        except Exception as e:
+        except Exception:
             await self.handle_stream_lifecycle(agent_id, "error")
             raise
         else:

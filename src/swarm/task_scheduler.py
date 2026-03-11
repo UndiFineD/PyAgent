@@ -3,7 +3,7 @@
 import heapq
 import time
 import uuid
-from typing import Dict, Any
+from typing import Any, Dict
 
 
 class TaskScheduler:
@@ -16,7 +16,7 @@ class TaskScheduler:
         self._tasks: Dict[str, Dict[str, Any]] = {}
 
     def enqueue(self, payload: dict, priority: int = 3) -> str:
-        """Add a task to the scheduler with the given payload and priority, 
+        """Add a task to the scheduler with the given payload and priority,
         returning its unique ID.
         """
         tid = str(uuid.uuid4())

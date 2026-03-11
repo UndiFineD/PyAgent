@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/backend/SqlAgent.description.md
 
 # SqlAgent
 
-**File**: `src\classes\backend\SqlAgent.py`  
+**File**: `src\\classes\backend\\SqlAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 12 imports  
 **Lines**: 256  
@@ -56,7 +55,7 @@ Relational metadata overlay for compressed interaction shards.
 
 # Improvements for SqlAgent
 
-**File**: `src\classes\backend\SqlAgent.py`  
+**File**: `src\\classes\backend\\SqlAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 256 lines (medium)  
 **Complexity**: 10 score (moderate)
@@ -91,6 +90,14 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import gzip
+import json
+import logging
+import os
+import sqlite3
+import time
+from typing import Any
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -109,15 +116,7 @@ from __future__ import annotations
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
 from src.core.base.version import VERSION
-import sqlite3
-import json
-import os
-import gzip
-import logging
-import time
-from typing import List, Dict, Any, Optional
 
 __version__ = VERSION
 
@@ -273,8 +272,7 @@ class SqlMetadataHandler:
             conn.commit()
 
     def get_intelligence_summary(self) -> list[dict[str, Any]]:
-        """
-        Generates a summary of harvested intelligence lessons.
+        """Generates a summary of harvested intelligence lessons.
         Optimized for high-scale analysis of trillion-parameter related interaction logs.
         """
         results = []
@@ -374,8 +372,7 @@ class SqlMetadataHandler:
             conn.commit()
 
     def bulk_record_interactions(self, interaction_data: list[tuple]) -> int:
-        """
-        Efficiently inserts multiple interactions in a single transaction.
+        """Efficiently inserts multiple interactions in a single transaction.
         Essential for processing 'trillion-parameter' scale interaction datasets.
         """
         with sqlite3.connect(self.db_path) as conn:

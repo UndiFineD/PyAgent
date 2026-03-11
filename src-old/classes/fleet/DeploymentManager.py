@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/DeploymentManager.description.md
 
 # DeploymentManager
 
-**File**: `src\classes\fleet\DeploymentManager.py`  
+**File**: `src\\classes\fleet\\DeploymentManager.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 64  
@@ -46,7 +45,7 @@ Automates the generation of infrastructure-as-code and container manifests for t
 
 # Improvements for DeploymentManager
 
-**File**: `src\classes\fleet\DeploymentManager.py`  
+**File**: `src\\classes\fleet\\DeploymentManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 64 lines (small)  
 **Complexity**: 4 score (simple)
@@ -78,10 +77,7 @@ LLM_CONTEXT_END
 
 """Manager for automated deployment, containerization, and fleet-as-a-service scaling."""
 
-import logging
-import os
 from pathlib import Path
-from typing import Dict, List, Any, Optional
 
 
 class DeploymentManager:
@@ -109,7 +105,7 @@ CMD ["python", "src/agent_remote.py"]
 
     def generate_compose_orchestration(self, num_replicas: int = 3) -> str:
         """Generates a docker-compose.yaml for multi-node fleet scaling."""
-        compose_content = f"""version: '3.8'
+        compose_content = """version: '3.8'
 services:
   fleet_master:
     build:

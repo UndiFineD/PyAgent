@@ -2,8 +2,7 @@
 # some environments have incompatible FastAPI/pydantic versions, so
 # wrap imports in a try/except. we also prefer functools.lru_cache
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/dashboard_server.description.md
 
@@ -46,7 +45,6 @@ LLM_CONTEXT_START
 LLM_CONTEXT_END
 """
 
-from functools import lru_cache
 
 try:
     from fastapi import FastAPI, HTTPException
@@ -67,7 +65,6 @@ except Exception:
             pass
 
         def get(self, *args, **kwargs) -> None:
-
             """Decorator for GET endpoints (no-op)."""
             def decorator(func) -> None:
                 """No-op endpoint decorator."""
@@ -84,17 +81,16 @@ except Exception:
             """No-op middleware."""
             pass
 
-from typing import List, Dict, Any
 import json
-# import os
 
+# import os
 from pathlib import Path
+from typing import Any, Dict, List
 
 app = FastAPI(title="PyAgent Unified Desktop API")
 
 # Enable CORS for frontend interaction
 
-from src.version import VERSION
 __logic_category__ = "General"
 app.add_middleware(
     CORSMiddleware,
@@ -117,7 +113,7 @@ async def get_thoughts(limit: int = 50) -> List[Dict[str, Any]]:
     """Retrieve the latest episodic memories (agent thoughts/actions)."""
     if not LOG_FILE.exists():
         return []
-    
+
     thoughts = []
     try:
         with open(LOG_FILE, "r", encoding="utf-8") as f:
@@ -126,7 +122,7 @@ async def get_thoughts(limit: int = 50) -> List[Dict[str, Any]]:
                 thoughts.append(json.loads(line))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
     return thoughts[::-1] # Return newest first
 
 
@@ -135,7 +131,7 @@ async def list_artifacts() -> List[Dict[str, Any]]:
     """List files in the 'src/classes/generated' or 'logs/screenshots' folders."""
     artifacts = []
     paths = [Path("src/classes/generated"), Path("logs/screenshots")]
-    
+
     for p in paths:
         if p.exists():
             for item in p.iterdir():

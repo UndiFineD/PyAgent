@@ -3,7 +3,9 @@
 
 from tools.pm import risk
 
-def test_risk_matrix_reader_writer(tmp_path):
+
+def test_risk_matrix_reader_writer(tmp_path) -> None:
+    """Test that the risk matrix reader and writer functions work."""
     path = tmp_path / "risk.md"
     sample = "- Risk: test\n  Likelihood: low\n  Impact: low\n"
     path.write_text(sample)

@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/intelligence/core/SynthesisCore.description.md
 
 # SynthesisCore
 
-**File**: `src\logic\agents\intelligence\core\SynthesisCore.py`  
+**File**: `src\\logic\agents\\intelligence\\core\\SynthesisCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 106  
@@ -44,7 +43,7 @@ It also implements the Feature Store logic for vectorized insights.
 
 # Improvements for SynthesisCore
 
-**File**: `src\logic\agents\intelligence\core\SynthesisCore.py`  
+**File**: `src\\logic\agents\\intelligence\\core\\SynthesisCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 106 lines (medium)  
 **Complexity**: 4 score (simple)
@@ -81,8 +80,8 @@ SynthesisCore handles synthetic data generation for fine-tuning.
 It also implements the Feature Store logic for vectorized insights.
 """
 
-import random
 import logging
+import random
 
 try:
     import rust_core
@@ -93,8 +92,7 @@ except ImportError:
 
 
 class SynthesisCore:
-    """
-    SynthesisCore handles synthetic data generation for fine-tuning.
+    """SynthesisCore handles synthetic data generation for fine-tuning.
     It also implements the Feature Store logic for vectorized insights.
     """
 
@@ -146,8 +144,7 @@ class SynthesisCore:
         return results
 
     def vectorize_insight(self, insight: str) -> list[float]:
-        """
-        Simulated vectorization of a text insight.
+        """Simulated vectorization of a text insight.
         Returns a mock embedding vector.
         """
         if HAS_RUST:

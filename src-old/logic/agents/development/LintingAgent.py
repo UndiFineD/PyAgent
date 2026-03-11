@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/LintingAgent.description.md
 
 # LintingAgent
 
-**File**: `src\logic\agents\development\LintingAgent.py`  
+**File**: `src\\logic\agents\\development\\LintingAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 91  
@@ -46,7 +45,7 @@ Ensures code adheres to quality standards by running linters.
 
 # Improvements for LintingAgent
 
-**File**: `src\logic\agents\development\LintingAgent.py`  
+**File**: `src\\logic\agents\\development\\LintingAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 91 lines (small)  
 **Complexity**: 5 score (moderate)
@@ -94,10 +93,11 @@ from __future__ import annotations
 
 """Agent specializing in code quality, linting, and style enforcement."""
 
-from src.core.base.version import VERSION
 import subprocess
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import create_main_function
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

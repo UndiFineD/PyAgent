@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/AccessibilityReportMixin.description.md
 
 # AccessibilityReportMixin
 
-**File**: `src\logic\agents\development\AccessibilityReportMixin.py`  
+**File**: `src\\logic\agents\\development\\AccessibilityReportMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 57  
@@ -39,7 +38,7 @@ Mixin for generating accessibility reports.
 
 # Improvements for AccessibilityReportMixin
 
-**File**: `src\logic\agents\development\AccessibilityReportMixin.py`  
+**File**: `src\\logic\agents\\development\\AccessibilityReportMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 57 lines (small)  
 **Complexity**: 2 score (simple)
@@ -75,7 +74,6 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
-
 from src.core.base.types.AccessibilityReport import AccessibilityReport
 from src.core.base.types.AccessibilitySeverity import AccessibilitySeverity
 

@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/FleetEconomyAgent.description.md
 
 # FleetEconomyAgent
 
-**File**: `src\logic\agents\swarm\FleetEconomyAgent.py`  
+**File**: `src\\logic\agents\\swarm\\FleetEconomyAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 185  
@@ -52,7 +51,7 @@ credits, and resource bidding mechanisms using a persistent SQLite backend.
 
 # Improvements for FleetEconomyAgent
 
-**File**: `src\logic\agents\swarm\FleetEconomyAgent.py`  
+**File**: `src\\logic\agents\\swarm\\FleetEconomyAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 185 lines (medium)  
 **Complexity**: 9 score (moderate)
@@ -87,6 +86,13 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import logging
+import sqlite3
+from pathlib import Path
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -99,21 +105,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.Version import VERSION
-from src.core.base.BaseAgent import BaseAgent
-from pathlib import Path
-import sqlite3
-import logging
-from typing import Any
 
 __version__ = VERSION
 
 
 class FleetEconomyAgent(BaseAgent):
-    """
-    Tier 4 (Economy) - Fleet Economy Agent: Manages internal agent "wallets",
+    """Tier 4 (Economy) - Fleet Economy Agent: Manages internal agent "wallets",
     credits, and resource bidding mechanisms using a persistent SQLite backend.
     """
 

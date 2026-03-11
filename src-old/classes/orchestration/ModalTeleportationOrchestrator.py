@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/ModalTeleportationOrchestrator.description.md
 
@@ -82,12 +81,13 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 import logging
+from typing import Any
+
 from src.classes.fleet.FleetManager import FleetManager
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
+
 
 class ModalTeleportationOrchestrator:
-    """
-    Implements Cross-Modal Teleportation (Phase 33).
+    """Implements Cross-Modal Teleportation (Phase 33).
     Converts task state between different modalities (e.g., GUI -> Code, Voice -> SQL).
     """
 
@@ -97,8 +97,7 @@ class ModalTeleportationOrchestrator:
     def teleport_state(
         self, source_modality: str, target_modality: str, source_data: Any
     ) -> Any:
-        """
-        Converts data from one modality to another.
+        """Converts data from one modality to another.
         """
         logging.info(
             f"ModalTeleportationOrchestrator: Teleporting state from {source_modality} to {target_modality}"
@@ -128,8 +127,7 @@ class ModalTeleportationOrchestrator:
             return f"Error: Could not teleport from {source_modality} to {target_modality}."
 
     def identify_optimal_target(self, source_modality: str, raw_data: Any) -> str:
-        """
-        Suggests the best target modality for a given raw data input.
+        """Suggests the best target modality for a given raw data input.
         """
         if "sql" in str(raw_data).lower():
             return "SQL_SCHEMA"

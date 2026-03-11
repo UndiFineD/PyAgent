@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/PersonalityCoreAgent.description.md
 
@@ -82,6 +81,12 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import logging
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -94,20 +99,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import logging
-from typing import Dict, Any
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
 
 class PersonalityCoreAgent(BaseAgent):
-    """
-    Manages the 'emotional intelligence' and 'vibes' of the fleet.
+    """Manages the 'emotional intelligence' and 'vibes' of the fleet.
     Adjusts communication style and task priorities based on user context.
     """
 
@@ -122,8 +120,7 @@ class PersonalityCoreAgent(BaseAgent):
 
     @as_tool
     def set_vibe_track(self, user_input: str) -> dict[str, Any]:
-        """
-        Analyzes user input and sets the fleet-wide emotional/operational vibe.
+        """Analyzes user input and sets the fleet-wide emotional/operational vibe.
         """
         logging.info(f"PersonalityCoreAgent: Analyzing vibe for: {user_input[:50]}...")
 
@@ -159,8 +156,7 @@ class PersonalityCoreAgent(BaseAgent):
 
     @as_tool
     def get_track_guidance(self) -> str:
-        """
-        Returns instructions for other agents on how to behave under the current vibe.
+        """Returns instructions for other agents on how to behave under the current vibe.
         """
         guidance = {
             "professional": "Direct, technical, and concise.",

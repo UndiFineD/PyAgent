@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ComplianceAuditAgent.description.md
 
@@ -82,6 +81,10 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -94,18 +97,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-from typing import Dict, List, Any
-from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
 
 
 class ComplianceAuditAgent(BaseAgent):
-    """
-    Compliance Audit Agent: Verifies fleet operations against simulated
+    """Compliance Audit Agent: Verifies fleet operations against simulated
     industry standards (e.g., SOC2, GDPR, HIPAA patterns).
     """
 

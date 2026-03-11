@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/ConsensusOrchestrator.description.md
 
@@ -88,13 +87,13 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 import logging
-import json
+from typing import Any, Dict, List
+
 from src.classes.fleet.FleetManager import FleetManager
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
+
 
 class ConsensusOrchestrator:
-    """
-    Advanced orchestrator for resolving conflicts between agents using weighted voting
+    """Advanced orchestrator for resolving conflicts between agents using weighted voting
     and a multi-turn debate system.
     """
 
@@ -105,8 +104,7 @@ class ConsensusOrchestrator:
         )  # Agent name -> score (0.0 to 1.0)
 
     def resolve_conflict(self, task: str, agents: List[str]) -> str:
-        """
-        Orchestrates a debate and weighted vote to reach consensus on a task.
+        """Orchestrates a debate and weighted vote to reach consensus on a task.
         """
         logging.info(
             f"ConsensusOrchestrator: Resolving conflict for task: {task} using {agents}"
@@ -128,8 +126,7 @@ class ConsensusOrchestrator:
         return final_decision
 
     def verify_state_block(self, task: str, decision: str) -> None:
-        """
-        Phase 55: Distributed Byzantine Fault Tolerance (DBFT).
+        """Phase 55: Distributed Byzantine Fault Tolerance (DBFT).
         Simulates signing a state block after consensus to ensure data integrity
         across a distributed agent network.
         """
@@ -166,8 +163,7 @@ class ConsensusOrchestrator:
     def _conduct_debate(
         self, task: str, proposals: List[Dict[str, Any]], rounds: int = 2
     ) -> List[Dict[str, Any]]:
-        """
-        Agents review each other's proposals and refine their own.
+        """Agents review each other's proposals and refine their own.
         """
         current_proposals = proposals
         for r in range(rounds):
@@ -203,8 +199,7 @@ class ConsensusOrchestrator:
         return best_proposal["content"]
 
     def update_reputation(self, agent_name: str, feedback_score: float) -> None:
-        """
-        Updates agent reputation based on external feedback (0.0 to 1.0).
+        """Updates agent reputation based on external feedback (0.0 to 1.0).
         """
         current = self.reputation_scores.get(agent_name, 0.5)
         # Moving average update

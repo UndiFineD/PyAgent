@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/telemetry_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -80,8 +80,7 @@ __version__ = VERSION
 
 
 class TelemetryAgent(BaseAgent):
-    """
-    Tier 5 (Maintenance) - Telemetry Agent: Responsible for broadcasting fleet
+    """Tier 5 (Maintenance) - Telemetry Agent: Responsible for broadcasting fleet
     telemetry and archiving interactions for swarm intelligence harvesting.
     """
 
@@ -109,7 +108,7 @@ class TelemetryAgent(BaseAgent):
                 )
             except (
                 Exception
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            ):  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
     def log_event(self, event_type: str, source: str, data: dict[str, Any]) -> None:
@@ -131,7 +130,7 @@ class TelemetryAgent(BaseAgent):
                 pass
             except (
                 Exception
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            ):  # pylint: disable=broad-exception-caught, unused-variable
                 # self.connectivity.update_status("telemetry_server", False)
                 pass
 

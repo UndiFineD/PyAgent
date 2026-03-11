@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/errors/SuppressionRule.description.md
 
@@ -84,9 +83,9 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_errors.py"""
 
-from src.core.base.version import VERSION
 from dataclasses import dataclass
-from typing import Optional
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

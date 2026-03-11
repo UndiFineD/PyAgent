@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/analysis/dependency_graph_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -86,8 +86,7 @@ __version__ = VERSION
 
 
 class DependencyGraphAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Maps and analyzes dependencies between agent modules and classes.
+    """Maps and analyzes dependencies between agent modules and classes.
     Helps in understanding the impact of changes and optimizing imports.
     """
 
@@ -97,8 +96,7 @@ class DependencyGraphAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.dependency_map: dict[str, list[str]] = {}  # module -> list of imports
 
     def scan_dependencies(self, start_dir: str = "src") -> dict[str, Any]:
-        """
-        Scans a directory for Python files and extracts their imports.
+        """Scans a directory for Python files and extracts their imports.
         """
         search_path = self.workspace_path / start_dir
         if not search_path.exists():
@@ -136,8 +134,7 @@ class DependencyGraphAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return list(imports)
 
     def get_impact_scope(self, module_name: str) -> list[str]:
-        """
-        Identifies which modules depend on a given module.
+        """Identifies which modules depend on a given module.
         """
         if _RUST_ACCEL:
             # Convert to Rust format: Vec<(module, Vec<imports>)>

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/ReasoningAgent.description.md
 
@@ -81,8 +80,8 @@ LLM_CONTEXT_END
 
 """Agent specializing in logical reasoning, chain-of-thought analysis, and problem decomposition."""
 
-import logging
-from typing import Dict, List, Any, Optional
+from typing import Optional
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import create_main_function
 

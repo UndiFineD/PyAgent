@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialized/legal_audit_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -60,8 +60,7 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 
 
 class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Phase 286: Legal Audit Agent.
+    """Phase 286: Legal Audit Agent.
     Verifies that all source files and third-party code comply with the project's
     license requirements (Apache 2.0 or MIT).
     """

@@ -2,8 +2,7 @@
 # Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/SqlAgent.description.md
 
@@ -76,9 +75,10 @@ LLM_CONTEXT_END
 
 """Agent specializing in SQL and database scripts."""
 
-from .CoderAgent import CoderAgent
+
 from src.classes.base_agent.utilities import create_main_function
-import logging
+
+from .CoderAgent import CoderAgent
 
 
 class SqlAgent(CoderAgent):

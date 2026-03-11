@@ -14,10 +14,11 @@
 
 """Unit tests for PluginManager logic."""
 
-from typing import List
-import unittest
 import logging
+import unittest
 from pathlib import Path
+from typing import List
+
 import pytest
 
 try:

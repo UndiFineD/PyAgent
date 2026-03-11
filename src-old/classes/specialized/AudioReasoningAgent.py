@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/AudioReasoningAgent.description.md
 
@@ -79,14 +78,13 @@ Mocks transcription and reasoning over audio telemetry.
 LLM_CONTEXT_END
 """
 
-import json
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict
+
 from src.classes.base_agent import BaseAgent
 
 
 class AudioReasoningAgent(BaseAgent):
-    """
-    Phase 58: Advanced Multimedia Grounding.
+    """Phase 58: Advanced Multimedia Grounding.
     Mocks transcription and reasoning over audio telemetry.
     """
 

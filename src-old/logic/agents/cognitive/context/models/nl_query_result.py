@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/models/nl_query_result.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -48,9 +48,9 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_context.py"""
 
-from src.core.base.version import VERSION
 from dataclasses import dataclass, field
-from typing import List
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -64,6 +64,7 @@ class NLQueryResult:
         answer: Generated answer.
         relevant_contexts: List of relevant context files.
         confidence: Confidence score (0 - 1).
+
     """
 
     query: str

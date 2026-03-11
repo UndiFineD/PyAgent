@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/math/batch_invariant_ops.description.md
 
@@ -29,9 +28,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -316,18 +317,17 @@ def attention_output_batch_invariant(
 
 
 class BatchInvariantOps:
-    """
-    Container class regarding batch-invariant operations.
+    """Container class regarding batch-invariant operations.
     Provides a consistent interface and tracks usage statistics.
     """
 
     def __init__(self, device: Any = None, dtype: Any = None):
-        """
-        Initialize batch-invariant operations.
+        """Initialize batch-invariant operations.
 
         Args:
             device: Target device
             dtype: Default dtype regarding operations
+
         """
         if HAS_TORCH:
             self.device = device or torch.device("cpu")

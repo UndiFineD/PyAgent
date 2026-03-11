@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/run_static_checks.description.md
 
@@ -84,12 +83,12 @@ Tries to run `bandit` and `semgrep` if available. Writes JSON outputs under ./.e
 Usage:
   python src/tools/run_static_checks.py src/external_candidates/auto
 """
+import ast
+import json
+import shutil
+import subprocess
 import sys
 from pathlib import Path
-import subprocess
-import shutil
-import json
-import ast
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT_DIR = ROOT / ".external" / "static_checks"

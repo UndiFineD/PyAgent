@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/stats/ResourceMonitor.description.md
 
@@ -80,12 +79,11 @@ LLM_CONTEXT_END
 
 """Engine for monitoring system resources (CPU, Memory, Disk)."""
 
-import os
+import json
 import logging
 import platform
-import json
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Any, Dict
 
 try:
     import psutil

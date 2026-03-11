@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/maintenance/code_refactorer.description.md
 
@@ -34,9 +33,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Recovered and standardized for Phase 317
 
@@ -59,8 +60,7 @@ __version__ = VERSION
 
 
 class CodeRefactorer:
-    """
-    CodeRefactorer recovered after Copilot CLI deprecation event.
+    """CodeRefactorer recovered after Copilot CLI deprecation event.
     Standardized placeholder for future re-implementation.
     """
 

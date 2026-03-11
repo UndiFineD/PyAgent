@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/core/EntropyCore.description.md
 
 # EntropyCore
 
-**File**: `src\logic\agents\system\core\EntropyCore.py`  
+**File**: `src\\logic\agents\\system\\core\\EntropyCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 67  
@@ -39,7 +38,7 @@ Class EntropyCore implementation.
 
 # Improvements for EntropyCore
 
-**File**: `src\logic\agents\system\core\EntropyCore.py`  
+**File**: `src\\logic\agents\\system\\core\\EntropyCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 67 lines (small)  
 **Complexity**: 3 score (simple)
@@ -77,15 +76,14 @@ Core logic for Entropy Measurement (Phase 172).
 Calculates structural complexity metrics.
 """
 
-import os
 import ast
+import os
 
 
 class EntropyCore:
     @staticmethod
     def calculate_cyclomatic_complexity(code: str) -> int:
-        """
-        Estimates cyclomatic complexity based on AST nodes.
+        """Estimates cyclomatic complexity based on AST nodes.
         CC = E - N + 2P (approximate using decision points)
         """
         try:
@@ -103,8 +101,7 @@ class EntropyCore:
 
     @staticmethod
     def get_file_metrics(file_path: str) -> dict:
-        """
-        Returns size and estimated complexity for a single file.
+        """Returns size and estimated complexity for a single file.
         """
         if not os.path.exists(file_path):
             return {}
@@ -120,8 +117,7 @@ class EntropyCore:
 
     @staticmethod
     def scan_directory_metrics(directory: str) -> dict:
-        """
-        Scans a directory and returns aggregate metrics.
+        """Scans a directory and returns aggregate metrics.
         """
         all_metrics = []
         for root, _, files in os.walk(directory):

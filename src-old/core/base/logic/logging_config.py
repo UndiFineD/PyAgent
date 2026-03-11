@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/logging_config.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -77,6 +78,7 @@ def setup_logging(verbosity_arg: int = 0) -> None:
         - verbosity_arg takes precedence when provided and forces DEBUG level
         - Environment variable is used as fallback
         - Defaults to INFO level if neither is set
+
     """
     env_verbosity: str | None = os.environ.get("DV_AGENT_VERBOSITY")
     levels: dict[str, int] = {

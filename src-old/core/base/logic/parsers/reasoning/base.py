@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/parsers/reasoning/base.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -58,8 +59,7 @@ from .models import ReasoningResult, StreamingReasoningState
 
 
 class ReasoningParser(ABC):
-    """
-    Abstract reasoning parser class regarding extracting reasoning from model outputs.
+    """Abstract reasoning parser class regarding extracting reasoning from model outputs.
 
     Subclasses must implement:
     - is_reasoning_end: Check if reasoning section has ended
@@ -69,18 +69,19 @@ class ReasoningParser(ABC):
 
     Attributes:
         tokenizer: The tokenizer used regarding token-level operations.
+
     """
 
     # Class-level name regarding registration
     name: ClassVar[str] = "base"
 
     def __init__(self, tokenizer: Any = None, **_kwargs: Any) -> None:
-        """
-        Initialize the reasoning parser.
+        """Initialize the reasoning parser.
 
         Args:
             tokenizer: Tokenizer regarding token-level operations (optional).
             **_kwargs: Additional configuration options.
+
         """
         self.model_tokenizer = tokenizer
 
@@ -96,14 +97,14 @@ class ReasoningParser(ABC):
 
     @abstractmethod
     def is_reasoning_end(self, input_ids: list[int]) -> bool:
-        """
-        Check if the reasoning content ends in the input_ids.
+        """Check if the reasoning content ends in the input_ids.
 
         Args:
             input_ids: The token IDs of the model output.
 
         Returns:
             True if reasoning section has ended.
+
         """
 
     def is_reasoning_end_streaming(
@@ -111,8 +112,7 @@ class ReasoningParser(ABC):
         input_ids: list[int],
         _delta_ids: list[int],
     ) -> bool:
-        """
-        Check if reasoning ends during streaming (decode step).
+        """Check if reasoning ends during streaming (decode step).
 
         Args:
             input_ids: The entire model output token IDs.
@@ -120,19 +120,20 @@ class ReasoningParser(ABC):
 
         Returns:
             True if reasoning section ends in delta_ids.
+
         """
         return self.is_reasoning_end(input_ids)
 
     @abstractmethod
     def extract_content_ids(self, input_ids: list[int]) -> list[int]:
-        """
-        Extract content token IDs from the full output.
+        """Extract content token IDs from the full output.
 
         Args:
             input_ids: The token IDs of the model output.
 
         Returns:
             Token IDs regarding the content/answer portion.
+
         """
 
     @abstractmethod
@@ -141,8 +142,7 @@ class ReasoningParser(ABC):
         model_output: str,
         request: Any = None,
     ) -> ReasoningResult:
-        """
-        Extract reasoning content from a complete model output.
+        """Extract reasoning content from a complete model output.
 
         Args:
             model_output: The complete model-generated string.
@@ -150,6 +150,7 @@ class ReasoningParser(ABC):
 
         Returns:
             ReasoningResult with extracted reasoning and content.
+
         """
 
     @abstractmethod
@@ -163,8 +164,7 @@ class ReasoningParser(ABC):
         delta_token_ids: Sequence[int],
         state: StreamingReasoningState | None = None,
     ) -> tuple[ReasoningResult, StreamingReasoningState]:
-        """
-        Extract reasoning incrementally during streaming.
+        """Extract reasoning incrementally during streaming.
 
         Args:
             previous_text: Text accumulated before this step.
@@ -177,4 +177,5 @@ class ReasoningParser(ABC):
 
         Returns:
             Tuple of (incremental result, updated state).
+
         """

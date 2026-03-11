@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 import sys
-from pathlib import Path
 
 # delegate to the main function of the specialized script
 if __name__ == "__main__":

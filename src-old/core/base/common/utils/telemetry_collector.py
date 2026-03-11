@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/telemetry_collector.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -75,6 +75,7 @@ class TelemetryCollector:
             # ... process file ...
 
         spans=collector.get_spans()
+
     """
 
     def __init__(self, service_name: str = "agent") -> None:
@@ -82,6 +83,7 @@ class TelemetryCollector:
 
         Args:
             service_name: Service name for tracing.
+
         """
         self.service_name = service_name
         self._spans: list[TelemetrySpan] = []
@@ -99,6 +101,7 @@ class TelemetryCollector:
 
         Yields:
             SpanContext for adding attributes and events.
+
         """
         parent_id = self._current_span.span_id if self._current_span else None
         trace_id = (
@@ -138,6 +141,7 @@ class TelemetryCollector:
 
         Returns:
             JSON string of spans.
+
         """
         spans_data: list[dict[str, Any]] = []
         for span in self._spans:

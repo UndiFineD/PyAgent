@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/api/FleetLoadBalancer.description.md
 
 # FleetLoadBalancer
 
-**File**: `src\classes\api\FleetLoadBalancer.py`  
+**File**: `src\\classes\api\\FleetLoadBalancer.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 9 imports  
 **Lines**: 52  
@@ -48,7 +47,7 @@ Integrated with LoadBalancerCore for cognitive pressure distribution.
 
 # Improvements for FleetLoadBalancer
 
-**File**: `src\classes\api\FleetLoadBalancer.py`  
+**File**: `src\\classes\api\\FleetLoadBalancer.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 52 lines (small)  
 **Complexity**: 3 score (simple)
@@ -82,18 +81,17 @@ LLM_CONTEXT_END
 """
 
 import logging
-import random
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List
+
 from src.infrastructure.api.core.GatewayCore import GatewayCore
 from src.infrastructure.fleet.core.LoadBalancerCore import (
-    LoadBalancerCore,
     AgentMetrics,
+    LoadBalancerCore,
 )
 
 
 class FleetLoadBalancer:
-    """
-    GUI Improvements: Load Balancer for multi-interface traffic.
+    """GUI Improvements: Load Balancer for multi-interface traffic.
     Integrated with LoadBalancerCore for cognitive pressure distribution.
     """
 
@@ -105,8 +103,7 @@ class FleetLoadBalancer:
         self.agent_metrics: Dict[str, AgentMetrics] = {}
 
     def balance_request(self, interface: str, command: str) -> Dict[str, Any]:
-        """
-        Routes the request to the most available resource or queues it.
+        """Routes the request to the most available resource or queues it.
         Assigns model based on Interface Affinity.
         """
         logging.info(

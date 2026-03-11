@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/model_forge_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -105,9 +105,11 @@ class ModelForgeAgent(BaseAgent):
         self, task_name: str, examples: list[dict[str, str]]
     ) -> str:
         """Prepares a JSONL dataset for fine-tuning.
+
         Args:
             task_name: Unique name for the fine-tuning task.
             examples: List of dictionaries with 'instruction' and 'output'.
+
         """
         output_path = self.datasets_dir / f"{task_name}.jsonl"
 
@@ -128,11 +130,12 @@ class ModelForgeAgent(BaseAgent):
     async def trigger_autonomous_tuning(
         self, module_name: str, evolution_data: dict[str, Any]
     ) -> str:
-        """
-        Triggers an autonomous fine-tuning loop for a specific agent/module.
+        """Triggers an autonomous fine-tuning loop for a specific agent/module.
+
         Args:
             module_name: The target agent or module (e.g., 'SQLAgent').
             evolution_data: Dictionary containing 'version' and 'synthetic_examples'.
+
         """
         version = evolution_data.get("version", "v1")
         examples = evolution_data.get("synthetic_examples", [])
@@ -154,9 +157,11 @@ class ModelForgeAgent(BaseAgent):
         self, task_name: str, base_model: str = "unsloth/llama-3-8b-bnb-4bit"
     ) -> str:
         """Simulates starting a LoRA fine-tuning session.
+
         Args:
             task_name: Name of the task/dataset to use.
             base_model: The base model to fine-tune.
+
         """
         dataset_path = self.datasets_dir / f"{task_name}.jsonl"
 

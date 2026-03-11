@@ -3,7 +3,7 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 
-from auto_fix import RuleEngine, TransactionManager, AutoFixLogger
+from auto_fix import AutoFixLogger, RuleEngine, TransactionManager
 
 
 def test_imports_exist():

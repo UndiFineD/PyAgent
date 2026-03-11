@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/swarm_arbitrator_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -78,8 +78,7 @@ __version__ = VERSION
 
 
 class SwarmArbitratorAgent:
-    """
-    Phase 285: Swarm Arbitration with PBFT (Practical Byzantine Fault Tolerance).
+    """Phase 285: Swarm Arbitration with PBFT (Practical Byzantine Fault Tolerance).
     Manages consensus across multiple agents and tracks behavioral reputation.
     """
 
@@ -92,8 +91,7 @@ class SwarmArbitratorAgent:
         self.resource_ledger: dict[Any, Any] = {}
 
     async def arbitrate_consensus(self, votes: list[dict[str, Any]]) -> dict[str, Any]:
-        """
-        PBFT-inspired consensus logic.
+        """PBFT-inspired consensus logic.
         Requires at least 2/3 agreement to finalize a state change.
         """
         if not votes:

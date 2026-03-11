@@ -9,7 +9,8 @@ def test_dependency_audit_returns_list(tmp_path: Path) -> None:
     from scripts.setup_structure import create_core_structure
     create_core_structure(str(tmp_path))
 
-    import importlib.util, sys
+    import importlib.util
+    import sys
     sys.path.insert(0, str(tmp_path / "src"))
     spec = importlib.util.find_spec("tools.dependency_audit")
     assert spec is not None

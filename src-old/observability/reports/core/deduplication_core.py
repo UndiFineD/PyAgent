@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/core/deduplication_core.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -63,8 +63,7 @@ class DeduplicationCore:
 
     @staticmethod
     def jaccard_similarity(s1: str, s2: str) -> float:
-        """
-        Calculates Jaccard similarity between two strings based on words.
+        """Calculates Jaccard similarity between two strings based on words.
         """
         if rc:
             try:
@@ -84,8 +83,7 @@ class DeduplicationCore:
     def deduplicate_items(
         items: list[dict[str, Any]], key: str = "message", threshold: float = 0.8
     ) -> list[dict[str, Any]]:
-        """
-        Removes items that are too similar to already seen items.
+        """Removes items that are too similar to already seen items.
         """
         if rc:
             try:
@@ -114,8 +112,7 @@ class DeduplicationCore:
 
     @staticmethod
     def export_to_jsonl(items: list[dict[str, Any]], output_path: str) -> None:
-        """
-        Exports a list of dicts to a JSONL file.
+        """Exports a list of dicts to a JSONL file.
         """
         with open(output_path, "w", encoding="utf-8") as f:
             for item in items:

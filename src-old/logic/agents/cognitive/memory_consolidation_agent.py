@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/memory_consolidation_agent.description.md
 
@@ -41,19 +40,20 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Agent specializing in consolidating episodic memories into global project context."""
 
 import logging
 
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.base_utilities import as_tool, create_main_function
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.logic.agents.cognitive.long_term_memory import LongTermMemory
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.engines.global_context_engine import (
     GlobalContextEngine,
 )
-from src.core.base.common.base_utilities import create_main_function, as_tool
+from src.logic.agents.cognitive.long_term_memory import LongTermMemory
 
 __version__ = VERSION
 

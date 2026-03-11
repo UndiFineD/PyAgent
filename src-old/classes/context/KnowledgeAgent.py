@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/KnowledgeAgent.description.md
 
@@ -116,23 +115,24 @@ from __future__ import annotations
 
 """Agent specializing in Workspace Knowledge and Codebase Context (RAG-lite)."""
 
-from src.core.base.version import VERSION
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function, as_tool
-from src.logic.agents.cognitive.context.engines.GraphContextEngine import (
-    GraphContextEngine,
-)
-from src.logic.agents.cognitive.context.engines.MemoryEngine import MemoryEngine
-from src.logic.agents.cognitive.context.engines.ContextCompressor import (
-    ContextCompressor,
-)
-from src.logic.agents.cognitive.context.engines.KnowledgeCore import KnowledgeCore
-import logging
 import json
+import logging
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool, create_main_function
+from src.core.base.version import VERSION
+from src.logic.agents.cognitive.context.engines.ContextCompressor import (
+    ContextCompressor,
+)
+from src.logic.agents.cognitive.context.engines.GraphContextEngine import (
+    GraphContextEngine,
+)
+from src.logic.agents.cognitive.context.engines.KnowledgeCore import KnowledgeCore
+from src.logic.agents.cognitive.context.engines.MemoryEngine import MemoryEngine
 
 __version__ = VERSION
 

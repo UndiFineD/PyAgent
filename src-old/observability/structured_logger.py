@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/structured_logger.description.md
 
@@ -63,10 +62,10 @@ import logging
 import re
 import shutil
 import time
+import traceback
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Pattern
-import traceback
 
 from src.core.base.common.file_system_core import FileSystemCore
 from src.core.base.lifecycle.version import VERSION

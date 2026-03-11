@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/DynamicDecomposerAgent.description.md
 
@@ -106,12 +105,13 @@ from __future__ import annotations
 Handles dynamic task splitting, load balancing, and capability-based routing.
 """
 
-from src.core.base.version import VERSION
-import logging
 import json
-from typing import Dict, List, Any
+import logging
+from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -131,9 +131,11 @@ class DynamicDecomposerAgent(BaseAgent):
     @as_tool
     def decompose_task_v2(self, complex_task: str, available_agents: list[str]) -> str:
         """Splits a complex task into optimized sub-tasks for the swarm.
+
         Args:
             complex_task: The high-level user request.
             available_agents: List of agent names currently active.
+
         """
         logging.info(f"DynamicDecomposer: Decomposing task: {complex_task[:50]}...")
 

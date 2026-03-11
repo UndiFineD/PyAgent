@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/reward_model_agent.description.md
 
@@ -30,6 +29,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -84,6 +84,7 @@ class RewardModelAgent(BaseAgent):
         Args:
             task: The original task given to the agents.
             proposals: Mapping of agent names to their generated content.
+
         """
         if self.recorder:
             self.recorder.record_lesson(

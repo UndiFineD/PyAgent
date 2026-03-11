@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/personality_core_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -52,17 +52,16 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 # pylint: disable=too-many-ancestors
 class PersonalityCoreAgent(BaseAgent):
-    """
-    Manages the 'emotional intelligence' and 'vibes' of the fleet.
+    """Manages the 'emotional intelligence' and 'vibes' of the fleet.
     Adjusts communication style and task priorities based on user context.
     """
 
@@ -77,8 +76,7 @@ class PersonalityCoreAgent(BaseAgent):
 
     @as_tool
     def set_vibe_track(self, user_input: str) -> dict[str, Any]:
-        """
-        Analyzes user input and sets the fleet-wide emotional/operational vibe.
+        """Analyzes user input and sets the fleet-wide emotional/operational vibe.
         """
         logging.info(f"PersonalityCoreAgent: Analyzing vibe for: {user_input[:50]}...")
 
@@ -114,8 +112,7 @@ class PersonalityCoreAgent(BaseAgent):
 
     @as_tool
     def get_track_guidance(self) -> str:
-        """
-        Returns instructions for other agents on how to behave under the current vibe.
+        """Returns instructions for other agents on how to behave under the current vibe.
         """
         guidance = {
             "professional": "Direct, technical, and concise.",

@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/structures/ObjectPool.description.md
 
 # ObjectPool
 
-**File**: `src\core\base\structures\ObjectPool.py`  
+**File**: `src\\core\base\\structures\\ObjectPool.py`  
 **Type**: Python Module  
 **Summary**: 7 classes, 6 functions, 17 imports  
 **Lines**: 542  
@@ -180,7 +179,7 @@ Get a pooled set that's automatically returned.
 
 # Improvements for ObjectPool
 
-**File**: `src\core\base\structures\ObjectPool.py`  
+**File**: `src\\core\base\\structures\\ObjectPool.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 542 lines (large)  
 **Complexity**: 40 score (complex)
@@ -214,6 +213,7 @@ Get a pooled set that's automatically returned.
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -227,21 +227,20 @@ Reusable object pooling to minimize allocations.
 
 import threading
 import time
-import weakref
 from collections import deque
-from dataclasses import dataclass, field
+from contextlib import contextmanager
+from dataclasses import dataclass
 from typing import (
     Any,
     Callable,
-    Generic,
-    TypeVar,
-    Optional,
     Dict,
+    Generic,
     List,
+    Optional,
     Protocol,
+    TypeVar,
     runtime_checkable,
 )
-from contextlib import contextmanager
 
 T = TypeVar("T")
 
@@ -292,8 +291,7 @@ class PoolStats:
 
 
 class ObjectPool(Generic[T]):
-    """
-    Generic object pool for reducing allocation overhead.
+    """Generic object pool for reducing allocation overhead.
 
     Features:
     - Configurable min/max pool size
@@ -312,6 +310,7 @@ class ObjectPool(Generic[T]):
 
         with pool.acquire() as buffer:
             buffer.write(b"data")
+
     """
 
     def __init__(
@@ -323,8 +322,7 @@ class ObjectPool(Generic[T]):
         max_size: int = 100,
         max_idle_seconds: float = 300.0,
     ):
-        """
-        Initialize object pool.
+        """Initialize object pool.
 
         Args:
             factory: Function to create new objects
@@ -333,6 +331,7 @@ class ObjectPool(Generic[T]):
             min_size: Minimum pool size to maintain
             max_size: Maximum pool size
             max_idle_seconds: Discard objects idle longer than this
+
         """
         self._factory = factory
         self._reset = reset
@@ -358,11 +357,11 @@ class ObjectPool(Generic[T]):
             self._stats.peak_size = max(self._stats.peak_size, self._stats.current_size)
 
     def acquire(self) -> T:
-        """
-        Acquire an object from the pool.
+        """Acquire an object from the pool.
 
         Returns:
             Object from pool or newly created
+
         """
         with self._lock:
             now = time.monotonic()
@@ -399,11 +398,11 @@ class ObjectPool(Generic[T]):
             return obj
 
     def release(self, obj: T) -> None:
-        """
-        Return an object to the pool.
+        """Return an object to the pool.
 
         Args:
             obj: Object to return
+
         """
         with self._lock:
             if self._stats.current_size >= self._max_size:
@@ -417,11 +416,11 @@ class ObjectPool(Generic[T]):
 
     @contextmanager
     def borrow(self):
-        """
-        Context manager for borrowing an object.
+        """Context manager for borrowing an object.
 
         Yields:
             Borrowed object (automatically returned on exit)
+
         """
         obj = self.acquire()
         try:
@@ -430,11 +429,11 @@ class ObjectPool(Generic[T]):
             self.release(obj)
 
     def clear(self) -> int:
-        """
-        Clear all objects from the pool.
+        """Clear all objects from the pool.
 
         Returns:
             Number of objects cleared
+
         """
         with self._lock:
             count = len(self._pool)
@@ -443,14 +442,14 @@ class ObjectPool(Generic[T]):
             return count
 
     def prune(self, max_age_seconds: Optional[float] = None) -> int:
-        """
-        Remove stale objects from the pool.
+        """Remove stale objects from the pool.
 
         Args:
             max_age_seconds: Maximum age (uses max_idle_seconds if None)
 
         Returns:
             Number of objects pruned
+
         """
         max_age = max_age_seconds or self._max_idle_seconds
         now = time.monotonic()
@@ -487,8 +486,7 @@ class ObjectPool(Generic[T]):
 
 
 class TypedObjectPool(Generic[T]):
-    """
-    Object pool that works with Resettable objects.
+    """Object pool that works with Resettable objects.
 
     Automatically calls reset() on objects that implement the protocol.
     """
@@ -531,8 +529,7 @@ class TypedObjectPool(Generic[T]):
 
 
 class BufferPool:
-    """
-    Specialized pool for byte buffers.
+    """Specialized pool for byte buffers.
 
     Pre-allocates buffers of specific sizes for zero-copy operations.
     """
@@ -542,12 +539,12 @@ class BufferPool:
         buffer_size: int = 4096,
         max_buffers: int = 100,
     ):
-        """
-        Initialize buffer pool.
+        """Initialize buffer pool.
 
         Args:
             buffer_size: Size of each buffer
             max_buffers: Maximum number of buffers to pool
+
         """
         self._buffer_size = buffer_size
 
@@ -584,8 +581,7 @@ class BufferPool:
 
 
 class TieredBufferPool:
-    """
-    Multi-tier buffer pool with different size classes.
+    """Multi-tier buffer pool with different size classes.
 
     Automatically selects the smallest buffer that fits the request.
     """
@@ -598,12 +594,12 @@ class TieredBufferPool:
         sizes: Optional[List[int]] = None,
         max_buffers_per_tier: int = 50,
     ):
-        """
-        Initialize tiered buffer pool.
+        """Initialize tiered buffer pool.
 
         Args:
             sizes: List of buffer sizes (default: powers of 2)
             max_buffers_per_tier: Max buffers per size tier
+
         """
         self._sizes = sorted(sizes or self.DEFAULT_SIZES)
         self._pools: Dict[int, BufferPool] = {
@@ -620,14 +616,14 @@ class TieredBufferPool:
         return None
 
     def acquire(self, size: int) -> bytearray:
-        """
-        Acquire a buffer of at least the given size.
+        """Acquire a buffer of at least the given size.
 
         Args:
             size: Minimum buffer size needed
 
         Returns:
             Buffer of at least the requested size
+
         """
         tier = self._find_tier(size)
 
@@ -640,11 +636,11 @@ class TieredBufferPool:
         return bytearray(size)
 
     def release(self, buffer: bytearray) -> None:
-        """
-        Return buffer to appropriate tier.
+        """Return buffer to appropriate tier.
 
         Args:
             buffer: Buffer to return
+
         """
         size = len(buffer)
 
@@ -654,11 +650,11 @@ class TieredBufferPool:
 
     @contextmanager
     def borrow(self, size: int):
-        """
-        Borrow a buffer with automatic return.
+        """Borrow a buffer with automatic return.
 
         Args:
             size: Minimum buffer size needed
+
         """
         buf = self.acquire(size)
         try:
@@ -675,8 +671,7 @@ class TieredBufferPool:
 
 
 class PooledContextManager(Generic[T]):
-    """
-    Wrapper that makes any pooled object a context manager.
+    """Wrapper that makes any pooled object a context manager.
     """
 
     def __init__(self, pool: ObjectPool[T], obj: T):

@@ -11,8 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/math/batch_ops/matmul.description.md
 
@@ -40,6 +39,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -55,14 +55,14 @@ except ImportError:
     HAS_TORCH = False
 import numpy as np
 
+
 def mm_batch_invariant(
     a: Any,
     b: Any,
     *,
     out: Any | None = None,
 ) -> Any:
-    """
-    Deterministic matrix multiplication (2D x 2D).
+    """Deterministic matrix multiplication (2D x 2D).
     """
     if not HAS_TORCH:
         result = np.matmul(a, b)
@@ -80,8 +80,7 @@ def bmm_batch_invariant(
     *,
     out: Any | None = None,
 ) -> Any:
-    """
-    Deterministic batched matrix multiplication (3D x 3D).
+    """Deterministic batched matrix multiplication (3D x 3D).
     """
     if not HAS_TORCH:
         result = np.matmul(a, b)

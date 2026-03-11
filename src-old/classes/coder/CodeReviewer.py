@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/CodeReviewer.description.md
 
 # CodeReviewer
 
-**File**: `src\classes\coder\CodeReviewer.py`  
+**File**: `src\\classes\\coder\\CodeReviewer.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 121  
@@ -54,7 +53,7 @@ Example:
 
 # Improvements for CodeReviewer
 
-**File**: `src\classes\coder\CodeReviewer.py`  
+**File**: `src\\classes\\coder\\CodeReviewer.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 121 lines (medium)  
 **Complexity**: 3 score (simple)
@@ -82,6 +81,7 @@ Example:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -107,11 +107,11 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_coder.py"""
 
-from src.core.base.version import VERSION
+import re
+
 from src.core.base.types.ReviewCategory import ReviewCategory
 from src.core.base.types.ReviewFinding import ReviewFinding
-from typing import Dict, List
-import re
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -128,6 +128,7 @@ class CodeReviewer:
     Example:
         >>> reviewer=CodeReviewer()
         >>> findings=reviewer.review_code("def foo():\\n    pass")
+
     """
 
     def __init__(self) -> None:
@@ -142,6 +143,7 @@ class CodeReviewer:
 
         Returns:
             List of review findings.
+
         """
         self.findings = []
         lines = content.split("\n")
@@ -208,6 +210,7 @@ class CodeReviewer:
 
         Returns:
             Dictionary mapping category to count.
+
         """
         summary: dict[str, int] = {}
         for finding in self.findings:

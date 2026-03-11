@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/cognitive/MetacognitiveCore.description.md
 
@@ -81,14 +80,14 @@ Pure logic for evaluating reasoning certainty and consistency.
 No I/O or side effects.
 """
 
-from typing import Dict, Any, List
+from typing import Any, Dict, List
+
 
 class MetacognitiveCore:
     """Pure logic core for metacognitive evaluation and intention prediction."""
 
     def calibrate_confidence_weight(self, reported_conf: float, actual_correct: bool, current_weight: float) -> float:
-        """
-        Adjusts the consensus weight of an agent.
+        """Adjusts the consensus weight of an agent.
         If an agent is 'overconfident' (high conf, wrong result), penalize heavily.
         """
         if not actual_correct and reported_conf > 0.8:
@@ -98,8 +97,7 @@ class MetacognitiveCore:
         return current_weight
 
     def predict_next_intent(self, history: List[Dict[str, Any]]) -> str:
-        """
-        Heuristic-based intent prediction based on recent sequence.
+        """Heuristic-based intent prediction based on recent sequence.
         """
         if not history:
             return "GENERAL_INQUIRY"
@@ -123,10 +121,10 @@ class MetacognitiveCore:
         """Analyzes a reasoning chain for hedge words and length patterns."""
         hedge_words = ["maybe", "perhaps", "i think", "not sure", "unclear", "likely"]
         count = sum(1 for word in hedge_words if word in reasoning_chain.lower())
-        
+
         uncertainty_score = min(1.0, count / 5.0)
         confidence = 1.0 - uncertainty_score
-        
+
         return {
             "confidence": confidence,
             "uncertainty_score": uncertainty_score,
@@ -139,7 +137,7 @@ class MetacognitiveCore:
         """Calculates average confidence and totals."""
         if not uncertainty_log:
             return {"avg_confidence": 1.0, "total_evaluations": 0}
-            
+
         avg = sum(e.get("confidence", 0.0) for e in uncertainty_log) / len(uncertainty_log)
         return {
             "avg_confidence": round(avg, 2),

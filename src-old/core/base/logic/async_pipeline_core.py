@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/async_pipeline_core.description.md
 
 # async_pipeline_core
 
-**File**: `src\core\base\logic\async_pipeline_core.py`  
+**File**: `src\\core\base\\logic\async_pipeline_core.py`  
 **Type**: Python Module  
 **Summary**: 5 classes, 0 functions, 12 imports  
 **Lines**: 346  
@@ -92,7 +91,7 @@ Based on the Asynchronous Coding Agent Pipeline pattern from agentic-patterns
 
 # Improvements for async_pipeline_core
 
-**File**: `src\core\base\logic\async_pipeline_core.py`  
+**File**: `src\\core\base\\logic\async_pipeline_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 346 lines (medium)  
 **Complexity**: 9 score (moderate)
@@ -132,11 +131,11 @@ Based on patterns from agentic-patterns repository (Asynchronous Coding Agent Pi
 
 import asyncio
 import logging
-from typing import Dict, List, Any, Optional, Callable, Awaitable
+import time
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from enum import Enum
-from concurrent.futures import ThreadPoolExecutor
-import time
+from typing import Any, Awaitable, Callable, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -200,8 +199,7 @@ class PipelineConfig:
 
 
 class AsyncPipelineCore:
-    """
-    Orchestrates asynchronous coding agent pipelines
+    """Orchestrates asynchronous coding agent pipelines
     Based on the Asynchronous Coding Agent Pipeline pattern from agentic-patterns
     """
 

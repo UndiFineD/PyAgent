@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/maintenance/fix_headers/__init__.description.md
 
 # __init__
 
-**File**: `src\maintenance\fix_headers\__init__.py`  
+**File**: `src\\maintenance\fix_headers\\__init__.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 1 imports  
 **Lines**: 24  
@@ -42,7 +41,7 @@ A maintenance tool for ensuring all Python files have proper Apache 2.0 license 
 
 # Improvements for __init__
 
-**File**: `src\maintenance\fix_headers\__init__.py`  
+**File**: `src\\maintenance\fix_headers\\__init__.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 24 lines (small)  
 **Complexity**: 0 score (simple)

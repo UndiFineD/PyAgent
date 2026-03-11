@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/evolved/sampletask.description.md
 
 # sampletask
 
-**File**: `src\tools\evolved\sampletask.py`  
+**File**: `src\tools\\evolved\\sampletask.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 1 functions, 3 imports  
 **Lines**: 13  
@@ -34,7 +33,7 @@ Automated task from sample recording.
 
 # Improvements for sampletask
 
-**File**: `src\tools\evolved\sampletask.py`  
+**File**: `src\tools\\evolved\\sampletask.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 13 lines (small)  
 **Complexity**: 1 score (simple)
@@ -66,7 +65,6 @@ LLM_CONTEXT_END
 
 """A sample automated GUI task."""
 
-from src.version import VERSION
 import pyautogui
 from src.classes.base_agent.utilities import as_tool
 

@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/rag_core.description.md
 
 # rag_core
 
-**File**: `src\core\base\logic\core\rag_core.py`  
+**File**: `src\\core\base\\logic\\core\rag_core.py`  
 **Type**: Python Module  
 **Summary**: 12 classes, 0 functions, 15 imports  
 **Lines**: 720  
@@ -139,7 +138,7 @@ Mock vector store for testing and development.
 
 # Improvements for rag_core
 
-**File**: `src\core\base\logic\core\rag_core.py`  
+**File**: `src\\core\base\\logic\\core\rag_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 720 lines (large)  
 **Complexity**: 4 score (simple)
@@ -183,19 +182,18 @@ Supports multiple vector databases, retrieval strategies, and tool integration.
 Based on AgentCloud's RAG tool implementation with pre/post processors.
 """
 
-import asyncio
 import logging
-from typing import Dict, List, Optional, Any, Callable, Union, Protocol
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import uuid
+from typing import Any, Callable, Dict, List, Optional, Protocol
 
 from src.core.base.common.base_core import BaseCore
 
 
 class VectorStoreType(str, Enum):
     """Supported vector store types."""
+
     QDRANT = "qdrant"
     PINECONE = "pinecone"
     CHROMA = "chroma"
@@ -205,6 +203,7 @@ class VectorStoreType(str, Enum):
 
 class RetrievalStrategy(str, Enum):
     """Retrieval strategies for RAG."""
+
     SIMILARITY = "similarity"
     MMR = "mmr"  # Maximal Marginal Relevance
     SELF_QUERY = "self_query"
@@ -215,6 +214,7 @@ class RetrievalStrategy(str, Enum):
 
 class DocumentType(str, Enum):
     """Types of documents that can be stored."""
+
     TEXT = "text"
     PDF = "pdf"
     WEBPAGE = "webpage"
@@ -225,6 +225,7 @@ class DocumentType(str, Enum):
 @dataclass
 class Document:
     """Document for RAG storage."""
+
     doc_id: str
     content: str
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -237,6 +238,7 @@ class Document:
 @dataclass
 class RetrievalConfig:
     """Configuration for retrieval operations."""
+
     strategy: RetrievalStrategy = RetrievalStrategy.SIMILARITY
     top_k: int = 5
     score_threshold: float = 0.0
@@ -248,6 +250,7 @@ class RetrievalConfig:
 @dataclass
 class RAGToolConfig:
     """Configuration for RAG tool."""
+
     tool_id: str
     name: str
     description: str
@@ -265,6 +268,7 @@ class RAGToolConfig:
 @dataclass
 class RetrievalResult:
     """Result of a retrieval operation."""
+
     query: str
     documents: List[Document]
     scores: List[float]
@@ -275,6 +279,7 @@ class RetrievalResult:
 @dataclass
 class RAGQuery:
     """RAG query with context."""
+
     query: str
     filters: Dict[str, Any] = field(default_factory=dict)
     retrieval_config: Optional[RetrievalConfig] = None
@@ -338,8 +343,7 @@ class BaseVectorStore:
 
 
 class RAGCore(BaseCore):
-    """
-    RAG (Retrieval-Augmented Generation) Core
+    """RAG (Retrieval-Augmented Generation) Core
 
     Implements advanced RAG patterns from AgentCloud:
     - Multiple vector store support (Qdrant, Pinecone, etc.)
@@ -370,8 +374,7 @@ class RAGCore(BaseCore):
         store_type: VectorStoreType,
         config: Dict[str, Any]
     ) -> str:
-        """
-        Register a vector store instance.
+        """Register a vector store instance.
 
         Args:
             store_id: Unique identifier for the store
@@ -380,6 +383,7 @@ class RAGCore(BaseCore):
 
         Returns:
             Store ID
+
         """
         # In a real implementation, this would instantiate the actual vector store
         # For now, we'll create a mock implementation
@@ -397,8 +401,7 @@ class RAGCore(BaseCore):
         collection_name: str,
         **kwargs
     ) -> RAGToolConfig:
-        """
-        Create a RAG tool configuration.
+        """Create a RAG tool configuration.
 
         Args:
             tool_id: Unique tool identifier
@@ -410,6 +413,7 @@ class RAGCore(BaseCore):
 
         Returns:
             RAG tool configuration
+
         """
         if vector_store_id not in self.vector_stores:
             raise ValueError(f"Vector store {vector_store_id} not found")
@@ -436,8 +440,7 @@ class RAGCore(BaseCore):
         documents: List[Document],
         chunk_documents: bool = True
     ) -> List[str]:
-        """
-        Add documents to a RAG tool.
+        """Add documents to a RAG tool.
 
         Args:
             tool_id: RAG tool to add documents to
@@ -446,6 +449,7 @@ class RAGCore(BaseCore):
 
         Returns:
             List of document IDs added
+
         """
         if tool_id not in self.rag_tools:
             raise ValueError(f"RAG tool {tool_id} not found")
@@ -480,8 +484,7 @@ class RAGCore(BaseCore):
         retrieval_config: Optional[RetrievalConfig] = None,
         filters: Optional[Dict[str, Any]] = None
     ) -> RetrievalResult:
-        """
-        Retrieve relevant documents for a query.
+        """Retrieve relevant documents for a query.
 
         Args:
             tool_id: RAG tool to query
@@ -491,6 +494,7 @@ class RAGCore(BaseCore):
 
         Returns:
             Retrieval results
+
         """
         if tool_id not in self.rag_tools:
             raise ValueError(f"RAG tool {tool_id} not found")
@@ -538,8 +542,7 @@ class RAGCore(BaseCore):
         rag_query: RAGQuery,
         generate_response: bool = True
     ) -> Dict[str, Any]:
-        """
-        Perform a complete RAG query with optional response generation.
+        """Perform a complete RAG query with optional response generation.
 
         Args:
             tool_id: RAG tool to use
@@ -548,6 +551,7 @@ class RAGCore(BaseCore):
 
         Returns:
             RAG query results with optional generated response
+
         """
         # Retrieve relevant documents
         retrieval_result = await self.retrieve(
@@ -572,8 +576,7 @@ class RAGCore(BaseCore):
         return result
 
     async def update_document(self, doc_id: str, content: str, metadata: Optional[Dict[str, Any]] = None) -> bool:
-        """
-        Update an existing document.
+        """Update an existing document.
 
         Args:
             doc_id: Document ID to update
@@ -582,6 +585,7 @@ class RAGCore(BaseCore):
 
         Returns:
             Success status
+
         """
         if doc_id not in self.documents:
             return False
@@ -599,14 +603,14 @@ class RAGCore(BaseCore):
         return True
 
     async def delete_documents(self, doc_ids: List[str]) -> bool:
-        """
-        Delete documents from all tools and stores.
+        """Delete documents from all tools and stores.
 
         Args:
             doc_ids: Document IDs to delete
 
         Returns:
             Success status
+
         """
         success = True
         for doc_id in doc_ids:

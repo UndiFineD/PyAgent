@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/utils/refactoring_advisor.description.md
 
@@ -31,6 +30,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -81,6 +81,7 @@ class RefactoringAdvisor:
     Example:
         >>> advisor = RefactoringAdvisor()
         >>> suggestions = advisor.analyze(contexts)
+
     """
 
     def __init__(self) -> None:
@@ -94,6 +95,7 @@ class RefactoringAdvisor:
             name: Pattern identifier.
             pattern: Regex pattern to search for.
             description: Human-readable suggestion description.
+
         """
         self.patterns[name] = {"pattern": pattern, "description": description}
 
@@ -106,6 +108,7 @@ class RefactoringAdvisor:
 
         Returns:
             List of refactoring suggestions.
+
         """
         context_map: dict[str, str]
         if isinstance(contexts, str):
@@ -183,6 +186,7 @@ class RefactoringAdvisor:
 
         Returns:
             Suggestions sorted by estimated impact.
+
         """
         impact_rank = {"high": 0, "medium": 1, "low": 2}
 

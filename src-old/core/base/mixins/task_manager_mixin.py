@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/task_manager_mixin.description.md
 
 # task_manager_mixin
 
-**File**: `src\core\base\mixins\task_manager_mixin.py`  
+**File**: `src\\core\base\\mixins\task_manager_mixin.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 12 imports  
 **Lines**: 282  
@@ -61,7 +60,7 @@ Inspired by Adorable's todo tool for tracking agent tasks and workflows.
 
 # Improvements for task_manager_mixin
 
-**File**: `src\core\base\mixins\task_manager_mixin.py`  
+**File**: `src\\core\base\\mixins\task_manager_mixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 282 lines (medium)  
 **Complexity**: 7 score (moderate)
@@ -92,6 +91,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -115,8 +115,8 @@ import json
 import logging
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 from src.core.base.common.models.communication_models import CascadeContext
 
@@ -124,6 +124,7 @@ from src.core.base.common.models.communication_models import CascadeContext
 @dataclass
 class TaskItem:
     """Represents a single task item."""
+
     description: str
     completed: bool = False
     created_at: float = field(default_factory=time.time)
@@ -161,8 +162,7 @@ class TaskItem:
 
 
 class TaskManagerMixin:
-    """
-    Mixin providing structured task management capabilities.
+    """Mixin providing structured task management capabilities.
     Inspired by Adorable's todo tool for tracking agent tasks and workflows.
     """
 
@@ -178,8 +178,7 @@ class TaskManagerMixin:
             self._load_tasks()
 
     async def update_task_list(self, items: List[Dict[str, Any]], cascade_context: Optional[CascadeContext] = None) -> Dict[str, Any]:
-        """
-        Update the task list with new items.
+        """Update the task list with new items.
         Inspired by Adorable's todo tool interface.
         """
         try:

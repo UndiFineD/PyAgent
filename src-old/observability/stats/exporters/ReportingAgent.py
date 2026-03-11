@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/exporters/ReportingAgent.description.md
 
@@ -88,38 +87,37 @@ LLM_CONTEXT_END
 
 """Agent specializing in executive summaries and progress tracking dashboards."""
 
-import logging
 import json
+import logging
 import time
 from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import create_main_function
-from src.classes.fleet.FleetManager import FleetManager
-from src.classes.context.KnowledgeAgent import KnowledgeAgent
-from src.classes.coder.SecurityGuardAgent import SecurityGuardAgent
-from src.classes.coder.LintingAgent import LintingAgent
-from src.classes.coder.SelfOptimizerAgent import SelfOptimizerAgent
-from src.classes.fleet.TaskPlannerAgent import TaskPlannerAgent
-from src.classes.coder.TypeSafetyAgent import TypeSafetyAgent
 from src.classes.coder.DocumentationAgent import DocumentationAgent
+from src.classes.coder.LintingAgent import LintingAgent
 from src.classes.coder.QualityGateAgent import QualityGateAgent
 from src.classes.coder.ReasoningAgent import ReasoningAgent
+from src.classes.coder.SecurityGuardAgent import SecurityGuardAgent
 from src.classes.coder.SelfHealingAgent import SelfHealingAgent
-from src.classes.orchestration.MetaOrchestratorAgent import MetaOrchestratorAgent
-from src.classes.context.MemoryConsolidationAgent import MemoryConsolidationAgent
-from src.classes.context.GlobalContextEngine import GlobalContextEngine
-from src.classes.stats.TransparencyAgent import TransparencyAgent
-from src.classes.specialized.SpecToolAgent import SpecToolAgent
-from src.classes.specialized.KernelAgent import KernelAgent
-from src.classes.specialized.PRAgent import PRAgent
-from src.classes.specialized.ConfigAgent import ConfigAgent
+from src.classes.coder.SelfOptimizerAgent import SelfOptimizerAgent
 from src.classes.coder.TestAgent import TestAgent
+from src.classes.coder.TypeSafetyAgent import TypeSafetyAgent
+from src.classes.context.GlobalContextEngine import GlobalContextEngine
+from src.classes.context.KnowledgeAgent import KnowledgeAgent
+from src.classes.context.MemoryConsolidationAgent import MemoryConsolidationAgent
+from src.classes.fleet.FleetManager import FleetManager
+from src.classes.fleet.TaskPlannerAgent import TaskPlannerAgent
+from src.classes.orchestration.MetaOrchestratorAgent import MetaOrchestratorAgent
 from src.classes.specialized.BrowsingAgent import BrowsingAgent
+from src.classes.specialized.ConfigAgent import ConfigAgent
+from src.classes.specialized.KernelAgent import KernelAgent
 from src.classes.specialized.MCPAgent import MCPAgent
+from src.classes.specialized.PRAgent import PRAgent
+from src.classes.specialized.SpecToolAgent import SpecToolAgent
 from src.classes.specialized.ToolEvolutionAgent import ToolEvolutionAgent
 from src.classes.specialized.VisualizerAgent import VisualizerAgent
+from src.classes.stats.TransparencyAgent import TransparencyAgent
 
 
 class ReportingAgent(BaseAgent):

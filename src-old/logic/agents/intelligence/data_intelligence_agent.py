@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/intelligence/data_intelligence_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -65,8 +65,7 @@ __version__ = VERSION
 
 
 class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Unified agent for database interaction, spreadsheet parsing, and statistical analysis.
+    """Unified agent for database interaction, spreadsheet parsing, and statistical analysis.
     Consolidates legacy SqlQueryAgent, DataAgent, CsvAgent, ExcelAgent, and DataScienceAgent.
     """
 
@@ -100,6 +99,7 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         Args:
             sql: The SQL query to run.
             read_only: If True, blocks destructive commands (DROP, DELETE, etc.).
+
         """
         if not self.connection:
             return "Error: No database connection. Call 'connect_db' first."

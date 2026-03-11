@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/LatentSignalBus.description.md
 
@@ -86,16 +85,17 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-import logging
-import json
 import base64
-from src.classes.fleet.FleetManager import FleetManager
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
+import json
+import logging
 from datetime import datetime
+from typing import Any, Dict, List, Optional
+
+from src.classes.fleet.FleetManager import FleetManager
+
 
 class LatentSignalBus:
-    """
-    Implements Telepathic Signal Compression (Phase 30).
+    """Implements Telepathic Signal Compression (Phase 30).
     Facilitates high-bandwidth inter-agent communication using compressed 'latent vectors'
     (simulated as base64-encoded state payloads) instead of plain natural language.
     """
@@ -105,8 +105,7 @@ class LatentSignalBus:
         self.latent_space: Dict[str, Any] = {}  # channel -> latent_vector
 
     def transmit_latent(self, channel: str, state_payload: Dict[str, Any]) -> str:
-        """
-        Compresses a complex state payload into a 'latent signal' and transmits it.
+        """Compresses a complex state payload into a 'latent signal' and transmits it.
         """
         logging.info(f"LatentSignalBus: Encoding state for channel '{channel}'")
 
@@ -131,8 +130,7 @@ class LatentSignalBus:
         return latent_vector
 
     def receive_latent(self, channel: str) -> Optional[Dict[str, Any]]:
-        """
-        Retrieves and decompresses the latest latent signal from a channel.
+        """Retrieves and decompresses the latest latent signal from a channel.
         """
         if channel not in self.latent_space:
             return None

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/SovereigntyOrchestrator.description.md
 
@@ -69,16 +68,15 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import logging
-import json
 import uuid
+from typing import Any
+
 from src.classes.fleet.FleetManager import FleetManager
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
+
 
 class FederatedOrchestrator:
-    """
-    Phase 300: Federated Orchestration layer.
+    """Phase 300: Federated Orchestration layer.
     Manages coordination and consensus across distributed PyAgent swarms.
     Ensures local sovereignty remains intact while achieving global alignment.
     """
@@ -101,8 +99,7 @@ class FederatedOrchestrator:
     def propose_federated_task(
         self, task_description: str, target_swarm_ids: list[str]
     ) -> str:
-        """
-        Proposes a task to be shared across swarms.
+        """Proposes a task to be shared across swarms.
         """
         proposal_id = str(uuid.uuid4())
         logging.info(
@@ -122,8 +119,7 @@ class FederatedOrchestrator:
     def negotiate_privacy_boundaries(
         self, proposal_id: str, swarm_id: str, constraints: list[str]
     ) -> bool:
-        """
-        Negotiates what data can be shared for a specific proposal.
+        """Negotiates what data can be shared for a specific proposal.
         """
         logging.info(
             f"FederatedOrchestrator: Negotiating constraints for {proposal_id} with {swarm_id}"

@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/TechDebtCore.description.md
 
 # TechDebtCore
 
-**File**: `src\logic\agents\development\TechDebtCore.py`  
+**File**: `src\\logic\agents\\development\\TechDebtCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 65  
@@ -42,7 +41,7 @@ Ready for Rust conversion.
 
 # Improvements for TechDebtCore
 
-**File**: `src\logic\agents\development\TechDebtCore.py`  
+**File**: `src\\logic\agents\\development\\TechDebtCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 65 lines (small)  
 **Complexity**: 2 score (simple)
@@ -77,6 +76,9 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import ast
+from typing import Any
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -89,31 +91,26 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import ast
-from typing import Dict, List, Any
 
 __version__ = VERSION
 
 
 class TechDebtCore:
-    """
-    Pure logic for analyzing technical debt from AST.
+    """Pure logic for analyzing technical debt from AST.
     Ready for Rust conversion.
     """
 
     @staticmethod
     def analyze_ast_debt(tree: ast.AST) -> list[dict[str, Any]]:
-        """
-        Analyzes an AST tree for technical debt markers.
+        """Analyzes an AST tree for technical debt markers.
 
         Args:
             tree: The pre-parsed AST tree.
 
         Returns:
             A list of identified issues.
+
         """
         issues = []
 

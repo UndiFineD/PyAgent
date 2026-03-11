@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/prepare_refactor_patches.description.md
 
 # prepare_refactor_patches
 
-**File**: `src\tools\prepare_refactor_patches.py`  
+**File**: `src\tools\\prepare_refactor_patches.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 7 functions, 6 imports  
 **Lines**: 132  
@@ -54,7 +53,7 @@ This script does NOT apply patches; it only writes suggestions for reviewers.
 
 # Improvements for prepare_refactor_patches
 
-**File**: `src\tools\prepare_refactor_patches.py`  
+**File**: `src\tools\\prepare_refactor_patches.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 132 lines (medium)  
 **Complexity**: 7 score (moderate)
@@ -95,10 +94,8 @@ Produces:
 This script does NOT apply patches; it only writes suggestions for reviewers.
 """
 import json
-from pathlib import Path
-import ast
 import re
-import shutil
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 BANDIT_JSON = ROOT / ".external" / "static_checks" / "bandit.json"

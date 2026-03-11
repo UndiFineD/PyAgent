@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/agents/web_security_scanner_agent.description.md
 
 # web_security_scanner_agent
 
-**File**: `src\core\agents\web_security_scanner_agent.py`  
+**File**: `src\\core\agents\\web_security_scanner_agent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 12 imports  
 **Lines**: 141  
@@ -51,7 +50,7 @@ Agent for web security scanning using patterns from aem-eye.
 
 # Improvements for web_security_scanner_agent
 
-**File**: `src\core\agents\web_security_scanner_agent.py`  
+**File**: `src\\core\agents\\web_security_scanner_agent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 141 lines (medium)  
 **Complexity**: 1 score (simple)
@@ -103,9 +102,7 @@ Implements multi-agent coordination for distributed scanning tasks.
 """
 
 
-import asyncio
 from typing import Any, Dict, List, Optional
-from uuid import UUID
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.logic.security.web_security_scanner_core import (
@@ -135,8 +132,7 @@ class WebSecurityScannerAgent(
     async def scan_for_vulnerabilities(
         self, hosts: List[str], custom_patterns: Optional[Dict[str, str]] = None
     ) -> Dict[str, Any]:
-        """
-        Scan hosts for security vulnerabilities using pattern matching.
+        """Scan hosts for security vulnerabilities using pattern matching.
 
         Args:
             hosts: List of hosts/URLs to scan
@@ -144,6 +140,7 @@ class WebSecurityScannerAgent(
 
         Returns:
             Scan results with detected patterns
+
         """
         # Use default CMS patterns if none provided
         if custom_patterns is None:
@@ -213,14 +210,14 @@ class WebSecurityScannerAgent(
         }
 
     async def detect_cms_instances(self, hosts: List[str]) -> Dict[str, Any]:
-        """
-        Detect CMS instances across hosts.
+        """Detect CMS instances across hosts.
 
         Args:
             hosts: List of hosts to scan
 
         Returns:
             CMS detection results
+
         """
         results = await self.scanner_core.detect_cms_fingerprints(hosts)
         analysis = await self._analyze_scan_results(results)

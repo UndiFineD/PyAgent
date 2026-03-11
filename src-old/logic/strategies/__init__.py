@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/strategies/__init__.description.md
 
@@ -27,9 +26,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -52,9 +53,7 @@ from collections.abc import Callable
 from src.core.base.lifecycle.version import VERSION
 
 from .agent_strategy import AgentStrategy  # noqa: F401
-from .chain_of_thought_strategy import (  # noqa: F401
-    ChainOfThoughtStrategy
-)
+from .chain_of_thought_strategy import ChainOfThoughtStrategy  # noqa: F401
 from .direct_strategy import DirectStrategy  # noqa: F401
 from .reflexion_strategy import ReflexionStrategy  # noqa: F401
 

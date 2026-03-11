@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/core_utils.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -97,6 +98,7 @@ def load_codeignore(root: Path) -> set[str]:
         - Empty lines are skipped
         - File encoding is assumed to be UTF-8
         - Patterns are cached with mtime checking for efficiency
+
     """
     codeignore_path = root / ".codeignore"
     cache_key = str(codeignore_path)
@@ -140,11 +142,6 @@ def load_codeignore(root: Path) -> set[str]:
 
 def setup_logging(verbosity: str | None = None) -> None:
     """Configure logging based on verbosity level.
-
-
-
-
-
 
     Defaults to WARNING to capture only errors and failures as requested.
     """

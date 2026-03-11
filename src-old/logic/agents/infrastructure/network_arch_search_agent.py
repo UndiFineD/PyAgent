@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/infrastructure/network_arch_search_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -63,8 +63,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class NetworkArchSearchAgent(BaseAgent):
-    """
-    Agent specializing in Neural Architecture Search (NAS).
+    """Agent specializing in Neural Architecture Search (NAS).
     Designs and suggests optimized model topologies (adapters) for specific swarm tasks.
     """
 
@@ -81,8 +80,7 @@ class NetworkArchSearchAgent(BaseAgent):
     async def search_optimal_architecture(
         self, task_requirement: str, latency_target_ms: int = 50
     ) -> dict[str, Any]:
-        """
-        Searches for the optimal neural architecture components for a given task.
+        """Searches for the optimal neural architecture components for a given task.
         Returns a specification for a LoRA or small model adapter.
         """
         logging.info(

@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/rl/LearningObjectives.description.md
 
 # LearningObjectives
 
-**File**: `src\core\rl\LearningObjectives.py`  
+**File**: `src\\core\rl\\LearningObjectives.py`  
 **Type**: Python Module  
 **Summary**: 5 classes, 0 functions, 11 imports  
 **Lines**: 277  
@@ -83,7 +82,7 @@ Manages high-level goals for the self-improving fleet.
 
 # Improvements for LearningObjectives
 
-**File**: `src\core\rl\LearningObjectives.py`  
+**File**: `src\\core\rl\\LearningObjectives.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 277 lines (medium)  
 **Complexity**: 18 score (moderate)
@@ -124,14 +123,13 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import time
+
 # Copyright 2026 PyAgent Authors
 # Learning Objectives and Goals for Fleet Optimization - Phase 319 Enhanced
-
 from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional, Callable
 from enum import Enum
-import time
-import math
+from typing import Any, Dict, List, Optional
 
 
 class ObjectiveStatus(Enum):

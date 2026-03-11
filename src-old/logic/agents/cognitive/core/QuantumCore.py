@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/core/QuantumCore.description.md
 
 # QuantumCore
 
-**File**: `src\logic\agents\cognitive\core\QuantumCore.py`  
+**File**: `src\\logic\agents\\cognitive\\core\\QuantumCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 44  
@@ -39,7 +38,7 @@ Class QuantumCore implementation.
 
 # Improvements for QuantumCore
 
-**File**: `src\logic\agents\cognitive\core\QuantumCore.py`  
+**File**: `src\\logic\agents\\cognitive\\core\\QuantumCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 44 lines (small)  
 **Complexity**: 2 score (simple)
@@ -78,7 +77,6 @@ Mathematical models for "Superposition Prompting" (Theoretical).
 """
 
 import math
-from typing import List, Dict
 
 
 class QuantumCore:
@@ -86,8 +84,7 @@ class QuantumCore:
     def calculate_superposition_weights(
         prompts: list[str], constraints: dict[str, float]
     ) -> list[float]:
-        r"""
-        Calculates weights for multiple prompts being processed in "superposition".
+        r"""Calculates weights for multiple prompts being processed in "superposition".
         $W_i = \frac{e^{C_i}}{\sum e^{C_j}}$ where $C$ is the constraint score.
         """
         if not prompts:
@@ -110,8 +107,7 @@ class QuantumCore:
 
     @staticmethod
     def simulate_interference_pattern(weights: list[float]) -> float:
-        """
-        Simulates the "Interference" between conflicting prompt intents.
+        """Simulates the "Interference" between conflicting prompt intents.
         An entropy-based measure of reasoning decoherence.
         """
         if not weights:

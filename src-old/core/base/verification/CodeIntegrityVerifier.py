@@ -1,14 +1,13 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/verification/CodeIntegrityVerifier.description.md
 
 # CodeIntegrityVerifier
 
-**File**: `src\core\base\verification\CodeIntegrityVerifier.py`  
+**File**: `src\\core\base\verification\\CodeIntegrityVerifier.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 81  
@@ -40,7 +39,7 @@ Phase 316: Scans codebase for structural integrity issues, specifically import p
 
 # Improvements for CodeIntegrityVerifier
 
-**File**: `src\core\base\verification\CodeIntegrityVerifier.py`  
+**File**: `src\\core\base\verification\\CodeIntegrityVerifier.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 81 lines (small)  
 **Complexity**: 2 score (simple)
@@ -82,8 +81,7 @@ class CodeIntegrityVerifier:
 
     @staticmethod
     def verify_imports(root_dir: str = "src") -> dict[str, list[str]]:
-        """
-        Scans all Python files in the given directory for broken internal imports.
+        """Scans all Python files in the given directory for broken internal imports.
         Specifically looks for 'from src.xxx' or 'import src.xxx' and verifies existence.
         """
         root_path = Path(root_dir)
@@ -134,8 +132,7 @@ class CodeIntegrityVerifier:
         return report
 
     def get_symbol_map(self, root_dir: Path) -> dict[str, str]:
-        """
-        Maps all class names in the directory to their relative file paths (indexing).
+        """Maps all class names in the directory to their relative file paths (indexing).
         """
         mapping = {}
         for py_file in root_dir.rglob("*.py"):

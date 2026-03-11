@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/CoderValidationMixin.description.md
 
 # CoderValidationMixin
 
-**File**: `src\logic\agents\development\mixins\CoderValidationMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\CoderValidationMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 66  
@@ -44,7 +43,7 @@ Mixin for validating syntax and linting code.
 
 # Improvements for CoderValidationMixin
 
-**File**: `src\logic\agents\development\mixins\CoderValidationMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\CoderValidationMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 66 lines (small)  
 **Complexity**: 2 score (simple)
@@ -99,6 +98,7 @@ import os
 import shutil
 import subprocess
 import tempfile
+
 from src.core.base.types.CodeLanguage import CodeLanguage
 
 

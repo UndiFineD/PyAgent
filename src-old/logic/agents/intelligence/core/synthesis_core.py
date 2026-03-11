@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/intelligence/core/synthesis_core.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -65,8 +65,7 @@ except ImportError:
 
 
 class SynthesisCore:
-    """
-    SynthesisCore handles synthetic data generation for fine-tuning.
+    """SynthesisCore handles synthetic data generation for fine-tuning.
     It also implements the Feature Store logic for vectorized insights.
     """
 
@@ -151,8 +150,7 @@ class SynthesisCore:
         return results
 
     def vectorize_insight(self, insight: str) -> list[float]:
-        """
-        Simulated vectorization of a text insight.
+        """Simulated vectorization of a text insight.
         Returns a mock embedding vector.
         """
         transformer = self._get_transformer()
@@ -200,7 +198,7 @@ class SynthesisCore:
                 return rust_core.average_feature_vectors(vectors)  # type: ignore[attr-defined]
             except (
                 Exception
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            ):  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         if not vectors:

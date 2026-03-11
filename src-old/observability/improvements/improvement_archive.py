@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/improvements/improvement_archive.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -67,6 +68,7 @@ class ImprovementArchive:
 
     Attributes:
         archive: List of archived improvements.
+
     """
 
     def __init__(self) -> None:
@@ -83,6 +85,7 @@ class ImprovementArchive:
 
         Returns:
             The archived improvement record.
+
         """
         archived = ArchivedImprovement(
             improvement=improvement,
@@ -101,6 +104,7 @@ class ImprovementArchive:
 
         Returns:
             The restored improvement or None.
+
         """
         for i, archived in enumerate(self.archive):
             if archived.improvement.id == improvement_id:
@@ -120,6 +124,7 @@ class ImprovementArchive:
 
         Returns:
             Matching archived improvements.
+
         """
         results: list[ArchivedImprovement] = []
         for archived in self.archive:

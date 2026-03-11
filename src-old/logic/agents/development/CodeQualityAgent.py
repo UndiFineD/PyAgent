@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/CodeQualityAgent.description.md
 
 # CodeQualityAgent
 
-**File**: `src\logic\agents\development\CodeQualityAgent.py`  
+**File**: `src\\logic\agents\\development\\CodeQualityAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 9 imports  
 **Lines**: 111  
@@ -51,7 +50,7 @@ and complexity analysis for Python, Rust, and JavaScript.
 
 # Improvements for CodeQualityAgent
 
-**File**: `src\logic\agents\development\CodeQualityAgent.py`  
+**File**: `src\\logic\agents\\development\\CodeQualityAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 111 lines (medium)  
 **Complexity**: 6 score (moderate)
@@ -86,6 +85,13 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import os
+import re
+import subprocess
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -98,21 +104,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import os
-import subprocess
-import re
-from typing import Dict, List, Any
-from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
 
 
 class CodeQualityAgent(BaseAgent):
-    """
-    Automated Code Quality Guard: Performs linting, formatting checks,
+    """Automated Code Quality Guard: Performs linting, formatting checks,
     and complexity analysis for Python, Rust, and JavaScript.
     """
 

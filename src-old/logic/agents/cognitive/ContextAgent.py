@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/ContextAgent.description.md
 
 # ContextAgent
 
-**File**: `src\logic\agents\cognitive\ContextAgent.py`  
+**File**: `src\\logic\agents\\cognitive\\ContextAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 18 imports  
 **Lines**: 169  
@@ -59,7 +58,7 @@ Updates code file context descriptions using AI assistance.
 
 # Improvements for ContextAgent
 
-**File**: `src\logic\agents\cognitive\ContextAgent.py`  
+**File**: `src\\logic\agents\\cognitive\\ContextAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 169 lines (medium)  
 **Complexity**: 7 score (moderate)
@@ -107,29 +106,29 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_context.py"""
 
+import logging
+from pathlib import Path
+
+from src.core.base.BaseAgent import BaseAgent
 from src.core.base.Version import VERSION
 from src.logic.agents.cognitive.context.models.ContextPriority import ContextPriority
 from src.logic.agents.cognitive.context.models.FileCategory import FileCategory
-from src.core.base.BaseAgent import BaseAgent
-from src.logic.agents.cognitive.core.LocalRAGCore import LocalRAGCore, RAGShard
-from pathlib import Path
-import logging
-
-from src.logic.agents.cognitive.ContextTemplateMixin import (
-    ContextTemplateMixin,
-    DEFAULT_TEMPLATES,
-)
-from src.logic.agents.cognitive.ContextTaggingMixin import ContextTaggingMixin
-from src.logic.agents.cognitive.ContextVersioningMixin import ContextVersioningMixin
-from src.logic.agents.cognitive.ContextValidationMixin import (
-    ContextValidationMixin,
-    DEFAULT_VALIDATION_RULES,
-)
 from src.logic.agents.cognitive.ContextAnnotationMixin import ContextAnnotationMixin
 from src.logic.agents.cognitive.ContextCategorizationMixin import (
     ContextCategorizationMixin,
 )
 from src.logic.agents.cognitive.ContextRAGMixin import ContextRAGMixin
+from src.logic.agents.cognitive.ContextTaggingMixin import ContextTaggingMixin
+from src.logic.agents.cognitive.ContextTemplateMixin import (
+    DEFAULT_TEMPLATES,
+    ContextTemplateMixin,
+)
+from src.logic.agents.cognitive.ContextValidationMixin import (
+    DEFAULT_VALIDATION_RULES,
+    ContextValidationMixin,
+)
+from src.logic.agents.cognitive.ContextVersioningMixin import ContextVersioningMixin
+from src.logic.agents.cognitive.core.LocalRAGCore import LocalRAGCore, RAGShard
 
 __version__ = VERSION
 

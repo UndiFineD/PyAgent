@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/modules/doc_gen_module.description.md
 
@@ -27,9 +26,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -55,8 +56,7 @@ from src.core.base.common.base_modules import BaseModule
 
 
 class DocGenModule(BaseModule):
-    """
-    Consolidated core module for generating documentation.
+    """Consolidated core module for generating documentation.
     Migrated from DocGenCore.
     """
 
@@ -65,8 +65,7 @@ class DocGenModule(BaseModule):
         return super().initialize()
 
     def execute(self, source_code: str, file_name: str) -> str:
-        """
-        Extracts markdown documentation from Python source code.
+        """Extracts markdown documentation from Python source code.
         """
         if not self.initialized:
             self.initialize()

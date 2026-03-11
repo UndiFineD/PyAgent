@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/resilience_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -67,8 +67,7 @@ __version__ = VERSION
 
 
 class ResilienceAgent(BaseAgent):
-    """
-    Agent responsible for autonomous compute resource management.
+    """Agent responsible for autonomous compute resource management.
     Monitors swarm health, handles failovers, and optimizes resource allocation.
     """
 
@@ -101,8 +100,7 @@ class ResilienceAgent(BaseAgent):
 
     @as_tool
     def trigger_failover(self, source_node: str, target_node: str) -> bool:
-        """
-        Migrates high-priority agent tasks from a failing node to a healthy one.
+        """Migrates high-priority agent tasks from a failing node to a healthy one.
         """
         logging.warning(
             f"ResilienceManager: Triggering failover from {source_node} to {target_node}"
@@ -115,8 +113,7 @@ class ResilienceAgent(BaseAgent):
 
     @as_tool
     def optimize_resource_allocation(self) -> dict[str, Any]:
-        """
-        Analyzes current swarm distribution and rebalances agent loads.
+        """Analyzes current swarm distribution and rebalances agent loads.
         """
         logging.info("ResilienceManager: Optimizing swarm resource distribution.")
         stats = {

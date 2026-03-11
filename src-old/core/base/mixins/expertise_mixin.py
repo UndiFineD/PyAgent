@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/expertise_mixin.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -55,8 +55,7 @@ from src.core.base.common.models.communication_models import ExpertProfile
 
 
 class ExpertiseMixin:
-    """
-    Mixin for agents that participate in Cross-Model MoE.
+    """Mixin for agents that participate in Cross-Model MoE.
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -66,8 +65,7 @@ class ExpertiseMixin:
     def declare_expertise(
         self, domains: List[str], performance_score: float = 1.0, model_family: str = "unknown"
     ) -> None:
-        """
-        Registers the agent's expertise profile.
+        """Registers the agent's expertise profile.
         """
         # Note: agent_id should be available on the base agent
         agent_id: Any | str = getattr(self, "agent_id", "unknown_agent")

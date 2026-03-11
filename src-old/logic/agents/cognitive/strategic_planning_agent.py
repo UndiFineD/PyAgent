@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/strategic_planning_agent.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,16 +51,15 @@ from __future__ import annotations
 
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 # pylint: disable=too-many-ancestors
 class StrategicPlanningAgent(BaseAgent):
-    """
-    Tier 2 (Cognitive Logic) - Strategic Planning Agent: Handles long-term
+    """Tier 2 (Cognitive Logic) - Strategic Planning Agent: Handles long-term
     goal setting, roadmap prioritization, and autonomous project management for the fleet.
     """
 

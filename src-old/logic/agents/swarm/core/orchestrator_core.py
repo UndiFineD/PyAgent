@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/core/orchestrator_core.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -61,8 +62,7 @@ except ImportError:
 
 
 class OrchestratorCore(AgentCore):
-    """
-    Pure logic core for the OrchestratorAgent.
+    """Pure logic core for the OrchestratorAgent.
     Handles decision making, consensus logic, and scoring.
     """
 
@@ -101,15 +101,14 @@ class OrchestratorCore(AgentCore):
         return True
 
     def calculate_improvement_score(self, files_processed: int, files_modified: int) -> float:
-        """
-        Calculates a global improvement score.
+        """Calculates a global improvement score.
         Rust hook candidate for phase 132.
         """
         if rc and hasattr(rc, "calculate_efficiency_score"):
             # Mocking usage of a rust function if it existed or using a generic one
             try:
                 return rc.score_efficiency(float(files_modified), files_processed)  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         if files_processed == 0:
@@ -117,11 +116,9 @@ class OrchestratorCore(AgentCore):
         return (files_modified / files_processed) * 100.0
 
     async def validate_with_consensus(self, task: str, proposals: Dict[str, str], log_path: Path) -> Dict[str, Any]:
+        """Validates proposals using the ByzantineConsensusAgent via logical delegation.
         """
-        Validates proposals using the ByzantineConsensusAgent via logical delegation.
-        """
-        from src.logic.agents.security.byzantine_consensus_agent import \
-            ByzantineConsensusAgent
+        from src.logic.agents.security.byzantine_consensus_agent import ByzantineConsensusAgent
 
         consensus_agent = ByzantineConsensusAgent(str(log_path))
         return await consensus_agent.run_committee_vote(task, proposals)

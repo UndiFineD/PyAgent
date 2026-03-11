@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/InterleavingOrchestrator.description.md
 
@@ -85,13 +84,13 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 import logging
-import json
+from typing import Any, Dict, List
+
 from src.classes.fleet.FleetManager import FleetManager
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
+
 
 class InterleavingOrchestrator:
-    """
-    Advanced orchestrator that implements 'Neural Interleaving' -
+    """Advanced orchestrator that implements 'Neural Interleaving' -
     switching between different reasoning models or agent tiers based on task complexity.
     """
 
@@ -100,8 +99,7 @@ class InterleavingOrchestrator:
         self.step_history: List[Dict[str, Any]] = []
 
     def execute_interleaved_task(self, task: str) -> str:
-        """
-        Executes a task by interleaving different agent capabilities based on dynamic complexity analysis.
+        """Executes a task by interleaving different agent capabilities based on dynamic complexity analysis.
         """
         logging.info(
             f"InterleavingOrchestrator: Beginning interleaved execution for: {task}"
@@ -132,8 +130,7 @@ class InterleavingOrchestrator:
         return "\n".join(results)
 
     def _assess_complexity(self, task: str) -> int:
-        """
-        Fast heuristic assessment of task complexity.
+        """Fast heuristic assessment of task complexity.
         """
         score = 1
         if len(task) > 100:
@@ -147,8 +144,7 @@ class InterleavingOrchestrator:
         return min(score, 10)
 
     def _select_strategy(self, score: int) -> Dict[str, Any]:
-        """
-        Maps complexity score to an interleaving strategy.
+        """Maps complexity score to an interleaving strategy.
         """
         if score < 4:
             return {
@@ -181,8 +177,7 @@ class InterleavingOrchestrator:
     def record_tier_performance(
         self, task_id: str, tier: str, latency: float, success: bool
     ) -> None:
-        """
-        Saves performance data to refine future interleaving decisions (Reinforcement Learning signal).
+        """Saves performance data to refine future interleaving decisions (Reinforcement Learning signal).
         """
         self.step_history.append(
             {"task_id": task_id, "tier": tier, "latency": latency, "success": success}

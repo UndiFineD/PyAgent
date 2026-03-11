@@ -13,8 +13,7 @@
 # limitations under the License.
 
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/connectivity_core.description.md
 
@@ -43,6 +42,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -51,8 +51,8 @@ Core logic regarding connectivity.
 """
 
 from typing import Any
-from src.core.base.common.connectivity_core import \
-    ConnectivityCore as StandardConnectivityCore
+
+from src.core.base.common.connectivity_core import ConnectivityCore as StandardConnectivityCore
 
 
 class ConnectivityCore(StandardConnectivityCore):
@@ -60,8 +60,7 @@ class ConnectivityCore(StandardConnectivityCore):
 
 
 class BinaryTransport:
-    """
-    Utility regarding packing and unpacking binary payloads.
+    """Utility regarding packing and unpacking binary payloads.
     Uses msgpack and zlib regarding compression.
     """
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/formula_engine.description.md
 
@@ -29,9 +28,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 
 """
@@ -100,7 +101,7 @@ class FormulaEngineCore(FormulaCore):
 
             # Use base class evaluate if possible
             return self.evaluate(formula.replace("{", "").replace("}", ""), substituted_vars)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             return 0.0
 
     def validate_logic(self, formula: str) -> Dict[str, Any]:

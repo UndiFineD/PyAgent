@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/AsyncFleetManager.description.md
 
 # AsyncFleetManager
 
-**File**: `src\classes\fleet\AsyncFleetManager.py`  
+**File**: `src\\classes\fleet\\AsyncFleetManager.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 12 imports  
 **Lines**: 88  
@@ -52,7 +51,7 @@ Executes agent workflows in parallel using a thread pool.
 
 # Improvements for AsyncFleetManager
 
-**File**: `src\classes\fleet\AsyncFleetManager.py`  
+**File**: `src\\classes\fleet\\AsyncFleetManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 88 lines (small)  
 **Complexity**: 3 score (simple)
@@ -84,13 +83,12 @@ LLM_CONTEXT_END
 
 """An enhanced FleetManager that supports parallel execution of agent workflows."""
 
-import logging
 import concurrent.futures
+import logging
 import time
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Type
+from typing import Any, Dict, List
+
 from src.classes.fleet.FleetManager import FleetManager
-from src.classes.base_agent import BaseAgent
 
 
 class AsyncFleetManager(FleetManager):
@@ -172,8 +170,8 @@ class AsyncFleetManager(FleetManager):
 
 if __name__ == "__main__":
     # Test script
-    from src.classes.context.KnowledgeAgent import KnowledgeAgent
     from src.classes.coder.SecurityGuardAgent import SecurityGuardAgent
+    from src.classes.context.KnowledgeAgent import KnowledgeAgent
 
     root = "c:/DEV/PyAgent"
     afleet = AsyncFleetManager(root)

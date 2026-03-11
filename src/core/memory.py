@@ -14,6 +14,7 @@
 """Minimal MemoryStore core module."""
 
 from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import Any, Dict, Optional
 
@@ -21,6 +22,7 @@ from typing import Any, Dict, Optional
 @dataclass
 class MemoryStore:
     """Simple in-memory key-value store."""
+
     _store: Optional[Dict[str, Any]] = None
 
     def __post_init__(self) -> None:

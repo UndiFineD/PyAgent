@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ConfigAgent.description.md
 
@@ -87,10 +86,8 @@ Inspired by external-secrets and infrastructure-as-code patterns.
 """
 
 import os
+
 import yaml
-import logging
-from pathlib import Path
-from typing import Dict, List, Any, Optional
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 

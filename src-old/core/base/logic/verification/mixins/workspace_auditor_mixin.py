@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/verification/mixins/workspace_auditor_mixin.description.md
 
@@ -27,6 +26,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -54,8 +54,7 @@ class WorkspaceAuditorMixin:
     """Methods regarding auditing the workspace regarding tech debt with Rust acceleration."""
 
     def audit_workspace(self, root_dir: str = "src") -> Dict[str, List]:
-        """
-        Performs a comprehensive health audit of the workspace codebase.
+        """Performs a comprehensive health audit of the workspace codebase.
         Offloads regex-heavy scanning to Rust if available.
         """
         results = self._initialize_audit_results()

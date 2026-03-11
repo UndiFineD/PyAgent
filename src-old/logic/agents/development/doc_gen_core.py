@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/doc_gen_core.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -78,14 +78,12 @@ __version__ = VERSION
 
 
 class DocGenCore:
-    """
-    Pure logic for extracting documentation from Python source code.
+    """Pure logic for extracting documentation from Python source code.
     No file I/O or side effects. 100% Type-safe and ready for Rust conversion.
     """
 
     def extract_markdown_from_source(self, source_code: str, file_name: str) -> str:
-        """
-        Parses source code using AST and generates Markdown documentation.
+        """Parses source code using AST and generates Markdown documentation.
 
         Args:
             source_code: The raw Python source code as a string.
@@ -93,6 +91,7 @@ class DocGenCore:
 
         Returns:
             A string containing the formatted Markdown documentation.
+
         """
         try:
             tree = ast.parse(source_code)
@@ -140,8 +139,7 @@ class DocGenCore:
 
     @staticmethod
     def get_doc_filename(rel_path: str) -> str:
-        """
-        Generates a standardized documentation filename from a relative path.
+        """Generates a standardized documentation filename from a relative path.
         Example: src/utils/helper.py -> src_utils_helper.md
         """
         return rel_path.replace(os.sep, "_").replace(".py", ".md")

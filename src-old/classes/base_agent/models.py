@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/base_agent/models.description.md
 
 # models
 
-**File**: `src\classes\base_agent\models.py`  
+**File**: `src\\classes\base_agent\\models.py`  
 **Type**: Python Module  
 **Summary**: 53 classes, 16 functions, 15 imports  
 **Lines**: 1051  
@@ -560,7 +559,7 @@ Context for a telemetry span.
 
 # Improvements for models
 
-**File**: `src\classes\base_agent\models.py`  
+**File**: `src\\classes\base_agent\\models.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 1051 lines (very_large)  
 **Complexity**: 56 score (very_complex)
@@ -594,6 +593,7 @@ Context for a telemetry span.
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -623,7 +623,6 @@ from __future__ import annotations
 
 """Data models and structures for BaseAgent."""
 
-from src.core.base.version import VERSION
 import time
 import uuid
 from dataclasses import dataclass, field
@@ -631,6 +630,8 @@ from datetime import datetime
 from enum import Enum, auto
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -889,6 +890,7 @@ class PromptTemplate:
         description: Description of when to use this template.
         version: Version string for A/B testing.
         tags: Tags for categorization.
+
     """
 
     name: str
@@ -907,6 +909,7 @@ class PromptTemplate:
 
         Returns:
             Rendered template string.
+
         """
         return self.template.format(**kwargs)
 
@@ -919,6 +922,7 @@ class ConversationMessage:
         role: The role (user, assistant, system).
         content: Message content.
         timestamp: When the message was created.
+
     """
 
     role: MessageRole
@@ -934,6 +938,7 @@ class ConversationHistory:
 
         Args:
             max_messages: Maximum number of messages to keep.
+
         """
         self.messages: List[ConversationMessage] = []
         self.max_messages = max_messages
@@ -944,6 +949,7 @@ class ConversationHistory:
         Args:
             role: Message role (user, assistant, system).
             content: Message content.
+
         """
         msg = ConversationMessage(role=role, content=content)
         self.messages.append(msg)
@@ -957,6 +963,7 @@ class ConversationHistory:
 
         Returns:
             List of conversation messages.
+
         """
         return self.messages.copy()
 
@@ -977,6 +984,7 @@ class PromptTemplateManager:
 
         Args:
             template: PromptTemplate to register.
+
         """
         self.templates[template.name] = template
 
@@ -992,6 +1000,7 @@ class PromptTemplateManager:
 
         Raises:
             KeyError: If template not found.
+
         """
         template = self.templates[template_name]
         return template.render(**kwargs)
@@ -1010,6 +1019,7 @@ class ResponsePostProcessor:
         Args:
             hook: Function that takes text and returns processed text.
             priority: Priority level (higher = executed first).
+
         """
         self.hooks.append((hook, priority))
 
@@ -1021,6 +1031,7 @@ class ResponsePostProcessor:
 
         Returns:
             Processed text.
+
         """
         # Sort by priority (descending), then execute in order
         sorted_hooks = sorted(self.hooks, key=lambda x: x[1], reverse=True)
@@ -1047,6 +1058,7 @@ class PromptVersion:
         variant: Variant name (compatibility).
         prompt_text: Alias for content (compatibility).
         weight: Selection weight (compatibility).
+
     """
 
     def __init__(
@@ -1075,6 +1087,7 @@ class PromptVersion:
             variant: Variant name (old API).
             prompt_text: Prompt text (old API, used if content is None).
             weight: Selection weight (old API).
+
         """
         # Support both APIs
         self.version = version or version_id or ""
@@ -1104,6 +1117,7 @@ class BatchRequest:
         callback: Optional callback on completion.
         max_size: Maximum batch size (for generic batching).
         items: Items in the batch (for generic batching).
+
     """
 
     def __init__(
@@ -1124,6 +1138,7 @@ class BatchRequest:
             priority: Processing priority (old API).
             callback: Completion callback (old API).
             max_size: Max items before flush (new API).
+
         """
         # Old API fields
         self.file_path = file_path
@@ -1140,6 +1155,7 @@ class BatchRequest:
 
         Args:
             item: Item to add.
+
         """
         # If at max size, don't add
         if self.max_size is not None and len(self.items) >= self.max_size:
@@ -1159,6 +1175,7 @@ class BatchRequest:
 
         Returns:
             Processed results.
+
         """
         return processor(self.items)
 
@@ -1173,6 +1190,7 @@ class CacheEntry:
         timestamp: When the entry was cached.
         hit_count: Number of cache hits.
         quality_score: Quality score of response.
+
     """
 
     key: str
@@ -1195,6 +1213,7 @@ class AgentConfig:
         timeout: Request timeout in seconds.
         cache_enabled: Whether to enable response caching.
         token_budget: Total token budget for session.
+
     """
 
     backend: str = "auto"
@@ -1217,6 +1236,7 @@ class HealthCheckResult:
         memory_ok: Whether memory usage is acceptable.
         disk_ok: Whether disk space is sufficient.
         details: Additional health details.
+
     """
 
     healthy: bool
@@ -1239,6 +1259,7 @@ class AuthConfig:
         oauth_client_id: OAuth2 client ID.
         oauth_client_secret: OAuth2 client secret.
         custom_headers: Custom headers to include.
+
     """
 
     method: AuthMethod = AuthMethod.NONE
@@ -1261,6 +1282,7 @@ class BatchResult:
         content: Processed content if successful.
         error: Error message if failed.
         processing_time: Time taken to process.
+
     """
 
     file_path: Path | None
@@ -1279,6 +1301,7 @@ class MultimodalInput:
         content: Content data (text, base64, path).
         mime_type: MIME type for binary content.
         metadata: Additional input metadata.
+
     """
 
     input_type: InputType
@@ -1296,6 +1319,7 @@ class ComposedAgent:
         config: Agent-specific configuration.
         order: Execution order in composition.
         depends_on: Other agents this depends on.
+
     """
 
     agent_type: str
@@ -1313,6 +1337,7 @@ class SerializationConfig:
         options: Format-specific options.
         compression: Whether to compress output.
         encryption: Whether to encrypt output.
+
     """
 
     format: SerializationFormat = SerializationFormat.JSON
@@ -1329,6 +1354,7 @@ class FilePriorityConfig:
         path_patterns: Patterns mapped to priorities.
         extension_priorities: Extensions mapped to priorities.
         default_priority: Default priority level.
+
     """
 
     path_patterns: Dict[str, FilePriority] = field(
@@ -1506,6 +1532,7 @@ class ExecutionCondition:
         name: Condition name.
         check: Function to check condition.
         description: Human - readable description.
+
     """
 
     name: str
@@ -1522,6 +1549,7 @@ class IncrementalState:
         processed_files: Dict of file paths to their last processed timestamp.
         file_hashes: Dict of file paths to their content hashes.
         pending_files: List of files pending processing.
+
     """
 
     last_run_timestamp: float = 0.0
@@ -1540,6 +1568,7 @@ class RateLimitConfig:
         burst_size: Maximum burst size for token bucket.
         strategy: Rate limiting strategy to use.
         cooldown_seconds: Cooldown period after hitting limit.
+
     """
 
     requests_per_second: float = 10.0
@@ -1559,6 +1588,7 @@ class ShutdownState:
         completed_files: List of completed files.
         pending_files: List of pending files.
         start_time: Processing start time.
+
     """
 
     shutdown_requested: bool = False
@@ -1625,6 +1655,7 @@ class AgentHealthCheck:
         last_check: Timestamp of last health check.
         error_message: Error message if unhealthy.
         details: Additional health details.
+
     """
 
     agent_name: str
@@ -1646,6 +1677,7 @@ class AgentPluginConfig:
         priority: Execution priority.
         enabled: Whether the plugin is enabled.
         config: Plugin - specific configuration.
+
     """
 
     name: str
@@ -1667,6 +1699,7 @@ class CachedResult:
         result: The cached result.
         timestamp: When cached.
         ttl_seconds: Time to live.
+
     """
 
     file_path: str
@@ -1689,6 +1722,7 @@ class DiffResult:
         additions: Number of lines added.
         deletions: Number of lines deleted.
         changes: Number of lines changed.
+
     """
 
     file_path: Path
@@ -1711,6 +1745,7 @@ class ExecutionProfile:
         parallel: Enable parallel execution.
         workers: Number of workers.
         dry_run: Dry run mode.
+
     """
 
     name: str
@@ -1734,6 +1769,7 @@ class TelemetrySpan:
         end_time: End timestamp.
         attributes: Span attributes.
         events: Span events.
+
     """
 
     name: str
@@ -1754,6 +1790,7 @@ class SpanContext:
 
         Args:
             span: The span to manage.
+
         """
         self._span = span
 
@@ -1763,6 +1800,7 @@ class SpanContext:
         Args:
             key: Attribute key.
             value: Attribute value.
+
         """
         self._span.attributes[key] = value
 
@@ -1772,6 +1810,7 @@ class SpanContext:
         Args:
             name: Event name.
             attributes: Event attributes.
+
         """
         self._span.events.append(
             {

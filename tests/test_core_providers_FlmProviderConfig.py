@@ -5,5 +5,6 @@ from src.core.providers import FlmProviderConfig
 
 
 def test_module_imports_and_validate() -> None:
+    """Test that FlmProviderConfig can be imported and validate function runs."""
     FlmProviderConfig.validate()
     assert True

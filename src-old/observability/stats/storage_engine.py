@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/storage_engine.description.md
 
@@ -34,10 +33,10 @@ LLM_CONTEXT_END
 
 """Storage engine.py module."""
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Backup, snapshot, and compression engine.
 # Phase 16: Rust acceleration for JSON serialization and compression
-
 import contextlib
 import json
 import logging
@@ -260,7 +259,7 @@ class StatsCompressor:
             return json.loads(body.decode("utf-8"))
         try:
             return json.loads(payload.decode("utf-8"))
-        except json.JSONDecodeError as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except json.JSONDecodeError:  # pylint: disable=broad-exception-caught, unused-variable
             import traceback
             traceback.print_exc()
             return payload

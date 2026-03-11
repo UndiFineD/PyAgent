@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/profiling/__init__.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -49,7 +49,8 @@ Profiling utilities for PyAgent.
 Includes Rust acceleration profiling and performance tracking.
 """
 
-from src.observability.profiling.profile_decorators import (ProfileAccumulator,
+from src.observability.profiling.profile_decorators import (
+                                                            ProfileAccumulator,
                                                             ProfileResult,
                                                             cprofile,
                                                             cprofile_context,
@@ -57,10 +58,15 @@ from src.observability.profiling.profile_decorators import (ProfileAccumulator,
                                                             reset_profile_data,
                                                             timer,
                                                             timer_context,
-                                                            track)
+                                                            track,
+)
 from src.observability.profiling.rust_profiler import (
-    FunctionStats, RustProfiler, RustUsageScanner, create_profiled_rust_core,
-    profile_rust_call)
+                                                            FunctionStats,
+                                                            RustProfiler,
+                                                            RustUsageScanner,
+                                                            create_profiled_rust_core,
+                                                            profile_rust_call,
+)
 
 __all__ = [
     # RustProfiler

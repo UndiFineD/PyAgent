@@ -1,8 +1,12 @@
+#!/usr/bin/env python3
+"""Test the Task class."""
 import pytest
+
 from src.core.workflow.task import Task, TaskState
 
 
-def test_task_initial_state_and_metadata() -> None:
+@pytest.mark.asyncio
+async def test_task_initial_state_and_metadata() -> None:
     """A new Task should have the correct initial state and store metadata/context."""
     t = Task(id="123", metadata={"foo": "bar"}, context={"a": 1})
     assert t.id == "123"
@@ -11,10 +15,11 @@ def test_task_initial_state_and_metadata() -> None:
     assert t.state == TaskState.ACTIVE
 
 
-def test_task_state_transitions() -> None:
+@pytest.mark.asyncio
+async def test_task_state_transitions() -> None:
     """A Task should transition between states correctly."""
     t = Task(id="x")
     t.transition(TaskState.FAILED)
-    assert t.state is TaskState.FAILED
+    assert t.state.value == TaskState.FAILED.value
     t.transition(TaskState.RETRYING)
-    assert t.state is TaskState.RETRYING
+    assert t.state.value == TaskState.RETRYING.value

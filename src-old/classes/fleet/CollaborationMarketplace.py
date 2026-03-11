@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/CollaborationMarketplace.description.md
 
 # CollaborationMarketplace
 
-**File**: `src\classes\fleet\CollaborationMarketplace.py`  
+**File**: `src\\classes\fleet\\CollaborationMarketplace.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 47  
@@ -45,7 +44,7 @@ Facilitates task auctioning and collaboration between agents.
 
 # Improvements for CollaborationMarketplace
 
-**File**: `src\classes\fleet\CollaborationMarketplace.py`  
+**File**: `src\\classes\fleet\\CollaborationMarketplace.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 47 lines (small)  
 **Complexity**: 4 score (simple)
@@ -80,7 +79,7 @@ Agents 'bid' for tasks based on their specialized capabilities and RL scores.
 """
 
 import logging
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List
 
 
 class CollaborationMarketplace:

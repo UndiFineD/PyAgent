@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/maintenance/self_improvement_coordinator.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -66,8 +66,7 @@ from typing import Any, Dict, List, Optional
 
 
 class SelfImprovementCoordinator:
-    """
-    Monitors improvements.md, roadmap.txt, context.txt, and prompt.txt.
+    """Monitors improvements.md, roadmap.txt, context.txt, and prompt.txt.
     Automates the monitoring and implementation of improvements and healing.
     """
 
@@ -151,8 +150,7 @@ class SelfImprovementCoordinator:
         )
 
     async def discover_external_servers(self) -> List[Dict[str, Any]]:
-        """
-        Connects with other servers in the local network or internet.
+        """Connects with other servers in the local network or internet.
         Uses LANDiscovery, MCPServerRegistry, and ConnectivityManager for discovery.
         """
         all_nodes = []
@@ -268,8 +266,7 @@ class SelfImprovementCoordinator:
         return all_nodes
 
     async def research_synthesis_loop(self) -> None:
-        """
-        Phase 51: Automated Research Synthesis Loop.
+        """Phase 51: Automated Research Synthesis Loop.
         Workflow: Find -> Summarize -> Map to Logic -> Implement -> Test -> documentation sync.
         """
         self.logger.info("Initiating Phase 51 Research Synthesis Loop...")
@@ -312,8 +309,7 @@ class SelfImprovementCoordinator:
             await director.think(f"Improvement Task: {goal}")
 
     async def cloud_orchestration_loop(self) -> None:
-        """
-        Phase 51: Distributed Cloud Coordination.
+        """Phase 51: Distributed Cloud Coordination.
         Manages task offloading to discovered peers and cloud-hosted MCPServers.
         Integrates with BudgetManager for cost control.
         """
@@ -344,8 +340,7 @@ class SelfImprovementCoordinator:
         # In a real scenario, this would pop from a RequestQueue and call execute_remote_task
 
     async def run_healing_cycle(self) -> dict[str, Any]:
-        """
-        Phase 317: Automated Self-Healing Trigger.
+        """Phase 317: Automated Self-Healing Trigger.
         Reads health stats and documentation context to trigger repairs.
         """
         from src.infrastructure.swarm.orchestration.healing.self_healing_orchestrator import (
@@ -394,13 +389,15 @@ class SelfImprovementCoordinator:
     async def execute_remote_task(
         self, task: Dict[str, Any], target_peer: str
     ) -> Dict[str, Any]:
-        """
-        Executes a remote task on the specified peer. (Not yet implemented)
+        """Executes a remote task on the specified peer. (Not yet implemented)
+
         Args:
             task: The task to execute (currently unused).
             target_peer: The peer to execute the task on.
+
         Returns:
             A dictionary with the result of the remote execution.
+
         """
         # TODO: Implement remote task execution logic
         self.logger.info(
@@ -505,8 +502,7 @@ class SelfImprovementCoordinator:
             await self.trigger_agent_execution(idea)
 
     async def trigger_agent_execution(self, item: dict[str, Any]) -> None:
-        """
-        Synaptic Automation: Hands off planned improvements to the Director/Research swarm.
+        """Synaptic Automation: Hands off planned improvements to the Director/Research swarm.
         This connects the monitoring phase to the execution phase.
         """
         title = item["title"]

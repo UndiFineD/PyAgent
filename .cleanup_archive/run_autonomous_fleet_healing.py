@@ -19,10 +19,12 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-import os
+
 import logging
+import os
 from pathlib import Path
+
+from src.core.base.version import VERSION
 from src.infrastructure.fleet.FleetManager import FleetManager
 from src.infrastructure.orchestration.SelfImprovementOrchestrator import SelfImprovementOrchestrator
 
@@ -32,8 +34,7 @@ __version__ = VERSION
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 def run_autonomous_maintenance() -> None:
-    """
-    Master entry point for autonomous fleet maintenance.
+    """Master entry point for autonomous fleet maintenance.
     - Improves speed, security, robustness, self-healing.
     - Prepares code for Rust migration via strong typing.
     - Optimizes databases for trillion-parameter scale.
@@ -41,29 +42,29 @@ def run_autonomous_maintenance() -> None:
     """
     workspace_root = Path(os.getcwd())
     print("=== SWARM AUTONOMOUS MAINTENANCE INITIATED ===")
-    
+
     # 1. Initialize Fleet Manager (Core Hub)
     fleet = FleetManager(str(workspace_root))
-    
+
     # 2. Trigger Self-Improvement Cycle
     print("[1/3] Running codebase improvement cycle (Speed, Security, Types)...")
     orchestrator = SelfImprovementOrchestrator(fleet)
     results = orchestrator.run_improvement_cycle(target_dir="src")
-    
+
     print(f" - Files Scanned: {results['files_scanned']}")
     print(f" - Issues Identified: {results['issues_found']}")
     print(f" - Autonomous Fixes Applied: {results['fixes_applied']}")
-    
+
     # 3. Relational Scale Optimization
     print("[2/3] Optimizing Relational Metadata (Trillion-Parameter Scalability)...")
     fleet.sql_metadata.optimize_db()
-    
+
     # 4. Interaction Record Audit
     print("[3/3] Auditing AI Interaction Shards...")
     shard_count = len(list((workspace_root / "data/logs" / "external_ai_learning").glob("shard_*.jsonl.gz")))
     print(f" - Active Shards: {shard_count}")
     print(" - Recording Strategy: Compressed Monthly/Zlib (Active)")
-    
+
     # 5. Rust Readiness Report
     untyped_files = [d['file'] for d in results['details'] if any(i['type'] == "Rust Readiness Task" and not i['fixed'] for i in d['issues'])]
     if untyped_files:

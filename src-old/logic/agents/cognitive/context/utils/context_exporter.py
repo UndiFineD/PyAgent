@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/utils/context_exporter.description.md
 
@@ -31,6 +30,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -73,6 +73,7 @@ class ContextExporter:
     Example:
         >>> exporter = ContextExporter()
         >>> exported = exporter.export("content", ExportFormat.HTML)
+
     """
 
     def __init__(self, default_format: ExportFormat = ExportFormat.MARKDOWN) -> None:
@@ -83,6 +84,7 @@ class ContextExporter:
 
         Args:
             export_format: The format to set as default.
+
         """
         self.default_format = export_format
 
@@ -101,6 +103,7 @@ class ContextExporter:
 
         Returns:
             ExportedContext with exported content.
+
         """
         fmt = export_format if export_format is not None else self.default_format
 

@@ -21,13 +21,14 @@ from __future__ import annotations
 
 import pkgutil
 import runpy
+
 import src.tools
 
 
 def test_tools_main_blocks() -> None:
     """Iterate through every module under src.tools (excluding subpackages)
     and execute it as a script.  The modules are simple placeholders and
-their `main()` functions simply print a message, so running them is safe.
+    their `main()` functions simply print a message, so running them is safe.
     """
     pkgpath = src.tools.__path__[0]
     for _finder, modname, ispkg in pkgutil.iter_modules([pkgpath]):
@@ -40,7 +41,7 @@ their `main()` functions simply print a message, so running them is safe.
         except SystemExit:
             # some modules call sys.exit; ignore the exit
             pass
-        except Exception:  # noqa: E722
+        except (ImportError, AttributeError):
             # certain test modules or import hooks may raise when executed as
             # a script (e.g. AssertionRewritingHook errors); ignore them since
             # coverage is handled by the meta-test below.

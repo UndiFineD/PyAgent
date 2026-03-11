@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/core/byzantine_core.description.md
 
@@ -29,9 +28,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -57,14 +58,12 @@ except ImportError:  # type: ignore[assignment]
 
 
 class ByzantineCore:
-    """
-    Pure logic for Byzantine Fault Tolerance (BFT) consensus.
+    """Pure logic for Byzantine Fault Tolerance (BFT) consensus.
     Calculates weighted agreement scores and detect malicious deviations.
     """
 
     def calculate_agreement_score(self, votes: list[dict[str, Any]]) -> float:
-        """
-        Calculates the consensus score.
+        """Calculates the consensus score.
         votes: list of {'weight': float, 'hash': str}
         """
         if rc:
@@ -89,8 +88,7 @@ class ByzantineCore:
         return max_agreement / total_weight
 
     def select_committee(self, agents_reliability: dict[str, float], min_size: int = 3) -> list[str]:
-        """
-        Scales the committee based on historic reliability scores.
+        """Scales the committee based on historic reliability scores.
         Only recruits agents with reliability > 0.7.
         """
         if rc:
@@ -114,8 +112,7 @@ class ByzantineCore:
         return committee
 
     def get_required_quorum(self, change_type: str) -> float:
-        """
-        Returns the variable quorum requirement based on the risk level.
+        """Returns the variable quorum requirement based on the risk level.
         Critical infrastructure: 0.8 (4/5)
         Documentation/Scripts: 0.5 (1/2)
         Default: 0.67 (2/3)

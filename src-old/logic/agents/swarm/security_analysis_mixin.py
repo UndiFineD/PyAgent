@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/security_analysis_mixin.description.md
 
 # security_analysis_mixin
 
-**File**: `src\logic\agents\swarm\security_analysis_mixin.py`  
+**File**: `src\\logic\agents\\swarm\\security_analysis_mixin.py`  
 **Type**: Python Module  
 **Summary**: 5 classes, 0 functions, 12 imports  
 **Lines**: 546  
@@ -114,7 +113,7 @@ and generate security reports, inspired by Agent-Wiz's threat modeling.
 
 # Improvements for security_analysis_mixin
 
-**File**: `src\logic\agents\swarm\security_analysis_mixin.py`  
+**File**: `src\\logic\agents\\swarm\\security_analysis_mixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 546 lines (large)  
 **Complexity**: 26 score (complex)
@@ -153,13 +152,10 @@ LLM_CONTEXT_END
 """Security analysis and threat modeling for PyAgent workflows."""
 
 import ast
-import json
 import logging
-from typing import Dict, List, Any, Optional, Set
 from dataclasses import dataclass, field
 from datetime import datetime
-
-from src.logic.agents.swarm.orchestrator_work_pattern_mixin import OrchestratorWorkPatternMixin
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -195,8 +191,7 @@ class WorkflowAnalysis:
 
 
 class WorkflowSecurityAnalyzer:
-    """
-    Security analyzer for PyAgent workflows.
+    """Security analyzer for PyAgent workflows.
 
     Inspired by Agent-Wiz's threat modeling capabilities, this analyzer
     performs static analysis of agent workflows to identify security
@@ -286,8 +281,7 @@ class WorkflowSecurityAnalyzer:
         }
 
     def analyze_workflow_code(self, code: str, filename: str = "unknown") -> WorkflowAnalysis:
-        """
-        Analyze workflow code for security vulnerabilities.
+        """Analyze workflow code for security vulnerabilities.
 
         Args:
             code: Python code containing agent workflow definitions
@@ -295,6 +289,7 @@ class WorkflowSecurityAnalyzer:
 
         Returns:
             WorkflowAnalysis with findings and recommendations
+
         """
         analysis = WorkflowAnalysis(workflow_name=filename)
 
@@ -507,8 +502,7 @@ class WorkflowSecurityAnalyzer:
 
 
 class WorkflowASTAnalyzer(ast.NodeVisitor):
-    """
-    AST analyzer for extracting workflow components from Python code.
+    """AST analyzer for extracting workflow components from Python code.
 
     Based on Agent-Wiz's AST parsing approach for workflow extraction.
     """
@@ -620,8 +614,7 @@ class WorkflowASTAnalyzer(ast.NodeVisitor):
 
 
 class SecurityAnalysisMixin:
-    """
-    Mixin to add security analysis capabilities to PyAgent orchestrators.
+    """Mixin to add security analysis capabilities to PyAgent orchestrators.
 
     This mixin provides methods to analyze workflows for security vulnerabilities
     and generate security reports, inspired by Agent-Wiz's threat modeling.
@@ -632,8 +625,7 @@ class SecurityAnalysisMixin:
         self.security_analyzer = WorkflowSecurityAnalyzer()
 
     def analyze_workflow_security(self, workflow_code: str, workflow_name: str = "unknown") -> WorkflowAnalysis:
-        """
-        Analyze a workflow for security vulnerabilities.
+        """Analyze a workflow for security vulnerabilities.
 
         Args:
             workflow_code: Python code defining the workflow
@@ -641,37 +633,37 @@ class SecurityAnalysisMixin:
 
         Returns:
             Security analysis results
+
         """
         return self.security_analyzer.analyze_workflow_code(workflow_code, workflow_name)
 
     def generate_security_report(self, analysis: WorkflowAnalysis) -> str:
-        """
-        Generate a comprehensive security report.
+        """Generate a comprehensive security report.
 
         Args:
             analysis: Security analysis results
 
         Returns:
             Formatted security report
+
         """
         return self.security_analyzer.generate_security_report(analysis)
 
     def get_security_score(self, workflow_code: str) -> float:
-        """
-        Get a security score for workflow code.
+        """Get a security score for workflow code.
 
         Args:
             workflow_code: Python code to analyze
 
         Returns:
             Security score (0-100, higher is better)
+
         """
         analysis = self.analyze_workflow_security(workflow_code)
         return analysis.security_score
 
     def check_security_threshold(self, workflow_code: str, threshold: float = 70.0) -> bool:
-        """
-        Check if workflow meets security threshold.
+        """Check if workflow meets security threshold.
 
         Args:
             workflow_code: Python code to analyze
@@ -679,6 +671,7 @@ class SecurityAnalysisMixin:
 
         Returns:
             True if security score meets threshold
+
         """
         score = self.get_security_score(workflow_code)
         return score >= threshold

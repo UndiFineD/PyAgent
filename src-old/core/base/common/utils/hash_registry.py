@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/hash_registry.description.md
 
@@ -40,6 +39,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -131,8 +131,7 @@ def is_fips_mode() -> bool:
 
 
 def hash_sha256(data: Union[str, bytes]) -> str:
-    """
-    SHA-256 hash (64 hex characters).
+    """SHA-256 hash (64 hex characters).
 
     Cryptographically secure, FIPS-compliant.
     """
@@ -142,8 +141,7 @@ def hash_sha256(data: Union[str, bytes]) -> str:
 
 
 def hash_sha1(data: Union[str, bytes]) -> str:
-    """
-    SHA-1 hash (40 hex characters).
+    """SHA-1 hash (40 hex characters).
 
     Not recommended for security, but faster than SHA-256.
     """
@@ -153,8 +151,7 @@ def hash_sha1(data: Union[str, bytes]) -> str:
 
 
 def hash_md5(data: Union[str, bytes]) -> str:
-    """
-    MD5 hash (32 hex characters).
+    """MD5 hash (32 hex characters).
 
     Fast, not cryptographically secure.
     May not work in FIPS mode.
@@ -165,8 +162,7 @@ def hash_md5(data: Union[str, bytes]) -> str:
 
 
 def hash_xxhash64(data: Union[str, bytes]) -> str:
-    """
-    xxHash64 hash (16 hex characters).
+    """xxHash64 hash (16 hex characters).
 
     Very fast, non-cryptographic.
     Falls back to FNV-1a if xxhash not installed.
@@ -186,8 +182,7 @@ def hash_xxhash64(data: Union[str, bytes]) -> str:
 
 
 def hash_xxhash128(data: Union[str, bytes]) -> str:
-    """
-    xxHash128 hash (32 hex characters).
+    """xxHash128 hash (32 hex characters).
 
     Very fast, non-cryptographic, larger output.
     Falls back to SHA-1 if xxhash not installed.
@@ -212,8 +207,7 @@ def _fnv1a_hash(data: bytes) -> str:
 
 
 def hash_fnv1a(data: Union[str, bytes]) -> str:
-    """
-    FNV-1a 64-bit hash (16 hex characters).
+    """FNV-1a 64-bit hash (16 hex characters).
 
     Fast, non-cryptographic, pure Python/Rust.
     """
@@ -228,8 +222,7 @@ def hash_fnv1a(data: Union[str, bytes]) -> str:
 
 
 def safe_hash(data: Union[str, bytes]) -> str:
-    """
-    Safe hash that works in any environment.
+    """Safe hash that works in any environment.
 
     - Uses MD5 in normal mode (fast)
     - Falls back to SHA-256 in FIPS mode (compliant)
@@ -252,27 +245,27 @@ _HASH_FUNCTIONS: dict[HashAlgorithm, Callable[[Union[str, bytes]], str]] = {
 
 
 def get_hash_fn(algorithm: HashAlgorithm) -> Callable[[Union[str, bytes]], str]:
-    """
-    Get a hash function by algorithm.
+    """Get a hash function by algorithm.
 
     Args:
         algorithm: Hash algorithm to use
 
     Returns:
         Hash function
+
     """
     return _HASH_FUNCTIONS[algorithm]
 
 
 def get_hash_fn_by_name(name: str) -> Callable[[Union[str, bytes]], str]:
-    """
-    Get a hash function by name string.
+    """Get a hash function by name string.
 
     Args:
         name: Algorithm name (sha256, md5, xxhash64, fnv1a, safe)
 
     Returns:
         Hash function
+
     """
     name_map = {
         "sha256": HashAlgorithm.SHA256,
@@ -296,8 +289,7 @@ def get_hash_fn_by_name(name: str) -> Callable[[Union[str, bytes]], str]:
 
 
 def hash_with(data: Union[str, bytes], algorithm: str = "safe") -> str:
-    """
-    Hash data with a specified algorithm.
+    """Hash data with a specified algorithm.
 
     Args:
         data: Data to hash
@@ -305,18 +297,19 @@ def hash_with(data: Union[str, bytes], algorithm: str = "safe") -> str:
 
     Returns:
         Hex hash string
+
     """
     return get_hash_fn_by_name(algorithm)(data)
 
 
 class ContentHasher:
-    """
-    Configurable content hasher for cache keys.
+    """Configurable content hasher for cache keys.
 
     Example:
         >>> hasher = ContentHasher(algorithm='xxhash64', prefix='cache')
         >>> key = hasher.hash("some content")
         >>> print(key)  # cache:a1b2c3d4e5f6g7h8
+
     """
 
     def __init__(
@@ -325,13 +318,13 @@ class ContentHasher:
         prefix: str | None = None,
         truncate: int | None = None,
     ) -> None:
-        """
-        Initialize hasher.
+        """Initialize hasher.
 
         Args:
             algorithm: Hash algorithm name
             prefix: Optional prefix for hash output
             truncate: Optional truncation length for hash
+
         """
         self._hash_fn = get_hash_fn_by_name(algorithm)
         self._prefix = prefix

@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/clean_sys_path.description.md
 
 # clean_sys_path
 
-**File**: `src\tools\clean_sys_path.py`  
+**File**: `src\tools\\clean_sys_path.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 1 functions, 3 imports  
 **Lines**: 36  
@@ -32,7 +31,7 @@ Python module containing implementation for clean_sys_path.
 
 # Improvements for clean_sys_path
 
-**File**: `src\tools\clean_sys_path.py`  
+**File**: `src\tools\\clean_sys_path.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 36 lines (small)  
 **Complexity**: 1 score (simple)

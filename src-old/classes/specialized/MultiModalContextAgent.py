@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/MultiModalContextAgent.description.md
 
@@ -117,21 +116,22 @@ from __future__ import annotations
 Used for interpreting screenshots, diagrams, and vision-based UI testing.
 """
 
-from src.core.base.version import VERSION
-import logging
 import base64
 import json
+import logging
 import time
-import pyautogui
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any
+
+import pyautogui
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
 try:
-    from pynput import mouse, keyboard
+    from pynput import keyboard, mouse
 except ImportError:
     pass
 
@@ -177,9 +177,11 @@ class MultiModalContextAgent(BaseAgent):
         self, image_path: str, query: str = "Describe this UI"
     ) -> str:
         """Analyzes a local image file using a vision model.
+
         Args:
             image_path: Path to the image/screenshot.
             query: Specific question or task for the vision model.
+
         """
         path = Path(image_path)
         if not path.exists():
@@ -219,8 +221,8 @@ class MultiModalContextAgent(BaseAgent):
 
         # 1. Try pytesseract (Phase 127 UX Integration)
         try:
-            from PIL import Image
             import pytesseract
+            from PIL import Image
 
             img = Image.open(image_path)
             text = pytesseract.image_to_string(img)
@@ -265,9 +267,11 @@ class MultiModalContextAgent(BaseAgent):
     @as_tool
     def gui_action(self, action: str, params: dict[str, Any]) -> str:
         """SOC Pattern: Executes GUI actions based on visual coordinates.
+
         Args:
             action: 'click', 'type', 'scroll', 'drag', 'move'
             params: Coordinates {x, y} or text to type.
+
         """
         logging.info(f"MultiModalAgent: GUI Action '{action}' with params {params}")
 

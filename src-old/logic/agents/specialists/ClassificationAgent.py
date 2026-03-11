@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/ClassificationAgent.description.md
 
 # ClassificationAgent
 
-**File**: `src\logic\agents\specialists\ClassificationAgent.py`  
+**File**: `src\\logic\agents\\specialists\\ClassificationAgent.py`  
 **Type**: Python Module  
 **Summary**: 4 classes, 0 functions, 15 imports  
 **Lines**: 291  
@@ -70,7 +69,7 @@ Supports single-label, multi-label, and hierarchical classification.
 
 # Improvements for ClassificationAgent
 
-**File**: `src\logic\agents\specialists\ClassificationAgent.py`  
+**File**: `src\\logic\agents\\specialists\\ClassificationAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 291 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -111,18 +110,19 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# ClassificationAgent: Taxonomy and Categorization Specialist - Phase 319 Enhanced
-
-from src.core.base.Version import VERSION
-import logging
 import json
+import logging
 import re
-from typing import Any, Dict, List, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Dict, List, Optional
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.BaseUtilities import as_tool
+
+# Copyright 2026 PyAgent Authors
+# ClassificationAgent: Taxonomy and Categorization Specialist - Phase 319 Enhanced
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
@@ -155,8 +155,7 @@ class Taxonomy:
 
 
 class ClassificationAgent(BaseAgent):
-    """
-    Agent specializing in classifying text, code, or images into predefined categories.
+    """Agent specializing in classifying text, code, or images into predefined categories.
     Supports single-label, multi-label, and hierarchical classification.
     """
 

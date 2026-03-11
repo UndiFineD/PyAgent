@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/FractalKnowledgeOrchestrator.description.md
 
@@ -78,12 +77,11 @@ LLM_CONTEXT_END
 """
 
 import logging
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List
 
 
 class FractalKnowledgeOrchestrator:
-    """
-    Phase 39: Fractal Knowledge Synthesis.
+    """Phase 39: Fractal Knowledge Synthesis.
     Synthesizes cross-domain knowledge by recursively merging summaries from specialized agents.
     Resolves conflicting insights into a unified 'Wisdom Layer'.
     """
@@ -93,8 +91,7 @@ class FractalKnowledgeOrchestrator:
         self.wisdom_cache: Dict[str, Any] = {}
 
     def synthesize(self, topic: str, agent_names: List[str]) -> Dict[str, Any]:
-        """
-        Gathers insights from specific agents and merges them into a fractal summary.
+        """Gathers insights from specific agents and merges them into a fractal summary.
         """
         logging.info(
             f"FractalKnowledge: Synthesizing wisdom for '{topic}' across {len(agent_names)} agents..."

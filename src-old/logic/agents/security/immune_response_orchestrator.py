@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/immune_response_orchestrator.description.md
 
@@ -29,9 +28,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -76,8 +77,7 @@ __version__ = VERSION
 
 
 class ImmuneResponseOrchestrator:
-    """
-    Coordinates rapid patching and vulnerability shielding across the fleet.
+    """Coordinates rapid patching and vulnerability shielding across the fleet.
     """
 
     def __init__(self, workspace_path: str) -> None:
@@ -86,8 +86,7 @@ class ImmuneResponseOrchestrator:
         self.vulnerability_db: dict[str, Any] = {}
 
     def deploy_rapid_patch(self, vulnerability_id: str, patch_code: str) -> dict[str, Any]:
-        """
-        Simulates deploying a hot-patch to all running agent nodes.
+        """Simulates deploying a hot-patch to all running agent nodes.
         """
         _ = patch_code
         self.vulnerability_db[vulnerability_id] = {
@@ -97,8 +96,7 @@ class ImmuneResponseOrchestrator:
         }
         # Phase 108: Intelligence Recording
         try:
-            from src.infrastructure.compute.backend.local_context_recorder import \
-                LocalContextRecorder
+            from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
 
             recorder = LocalContextRecorder(user_context="ImmuneResponse")
             recorder.record_interaction(
@@ -117,8 +115,7 @@ class ImmuneResponseOrchestrator:
         }
 
     def monitor_threat_vectors(self) -> dict[str, Any]:
-        """
-        Scans for zero-day patterns in communication logs.
+        """Scans for zero-day patterns in communication logs.
         """
         # Simulated scan
         return {
@@ -129,8 +126,7 @@ class ImmuneResponseOrchestrator:
 
 
 class HoneypotAgent:
-    """
-    Detects and neutralizes prompt injection and adversarial attacks
+    """Detects and neutralizes prompt injection and adversarial attacks
     by acting as an attractive but isolated target.
     """
 
@@ -139,8 +135,7 @@ class HoneypotAgent:
         self.trapped_attempts: list[dict[str, Any]] = []
 
     def verify_input_safety(self, prompt_input: str) -> dict[str, Any]:
-        """
-        Inspects input for "ignore previous instruction" or similar patterns.
+        """Inspects input for "ignore previous instruction" or similar patterns.
         """
         adversarial_patterns = [
             "ignore all previous",

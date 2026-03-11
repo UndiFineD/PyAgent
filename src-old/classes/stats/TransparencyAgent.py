@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/stats/TransparencyAgent.description.md
 
@@ -83,13 +82,11 @@ LLM_CONTEXT_END
 
 """Agent specializing in interpretability and deep tracing of agent reasoning steps."""
 
-import json
-import logging
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Optional
+
 from src.classes.base_agent import BaseAgent
+from src.classes.base_agent.utilities import as_tool, create_main_function
 from src.classes.orchestration.SignalRegistry import SignalRegistry
-from src.classes.base_agent.utilities import create_main_function, as_tool
 
 
 class TransparencyAgent(BaseAgent):
@@ -119,7 +116,7 @@ class TransparencyAgent(BaseAgent):
                 or workflow_id in str(e)
             ]
 
-        report = [f"# fleet Transparency Audit Trail"]
+        report = ["# fleet Transparency Audit Trail"]
         if workflow_id:
             report.append(f"## Focus: Workflow {workflow_id}")
 

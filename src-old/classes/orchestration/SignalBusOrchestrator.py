@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/SignalBusOrchestrator.description.md
 
@@ -84,15 +83,13 @@ LLM_CONTEXT_END
 """
 
 import logging
-import json
 import queue
 import threading
-from typing import Dict, List, Any, Optional, Callable
+from typing import Any, Callable, Dict, List
 
 
 class SignalBusOrchestrator:
-    """
-    High-speed signal bus for low-latency agent-to-agent communication.
+    """High-speed signal bus for low-latency agent-to-agent communication.
     Uses an internal message queue and a pub-sub pattern to bypass slow JSON/HTTP overhead.
     """
 

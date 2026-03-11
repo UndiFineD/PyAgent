@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/metrics_collector.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -61,17 +62,19 @@ __version__ = VERSION
 class MetricsCollector:
     """Collector for custom report metrics and KPIs.
     Tracks and calculates metrics across reports.
+
     Attributes:
         metrics: Collected metrics by file.
+
     Example:
         collector=MetricsCollector()
         collector.record("file.py", "issues_count", 5)
         summary=collector.get_summary()
+
     """
 
     def __init__(self) -> None:
         """Initialize metrics collector."""
-
         self.metrics: dict[str, list[ReportMetric]] = {}
         logging.debug("MetricsCollector initialized")
 
@@ -84,16 +87,18 @@ class MetricsCollector:
         threshold: float | None = None,
     ) -> ReportMetric:
         """Record a metric.
+
         Args:
             file_path: File being measured.
             name: Metric name.
             value: Metric value.
             unit: Unit of measurement.
             threshold: Alert threshold.
+
         Returns:
             Created metric.
-        """
 
+        """
         metric = ReportMetric(name=name, value=value, unit=unit, threshold=threshold)
         if file_path not in self.metrics:
             self.metrics[file_path] = []
@@ -102,20 +107,23 @@ class MetricsCollector:
 
     def get_metrics(self, file_path: str) -> list[ReportMetric]:
         """Get metrics for a file.
+
         Args:
             file_path: File path.
+
         Returns:
             List of metrics.
-        """
 
+        """
         return self.metrics.get(file_path, [])
 
     def get_summary(self) -> dict[str, Any]:
         """Get summary of all metrics.
+
         Returns:
             Summary dictionary.
-        """
 
+        """
         total_files = len(self.metrics)
         total_metrics = sum(len(m) for m in self.metrics.values())
         # Calculate averages by metric name

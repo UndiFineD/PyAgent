@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/efficient_change_detector.description.md
 
 # efficient_change_detector
 
-**File**: `src\core\base\logic\efficient_change_detector.py`  
+**File**: `src\\core\base\\logic\\efficient_change_detector.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 15 imports  
 **Lines**: 249  
@@ -83,7 +82,7 @@ Uses metadata-based tracking instead of full content scanning
 
 # Improvements for efficient_change_detector
 
-**File**: `src\core\base\logic\efficient_change_detector.py`  
+**File**: `src\\core\base\\logic\\efficient_change_detector.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 249 lines (medium)  
 **Complexity**: 11 score (moderate)
@@ -119,13 +118,13 @@ Based on ADSpider's replication metadata approach for efficient monitoring
 """
 
 import asyncio
+import hashlib
+import logging
 import os
 import time
-import hashlib
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional, Set, Tuple, Callable
 from pathlib import Path
-import logging
+from typing import Any, Callable, Dict, List, Optional, Set
 
 logger = logging.getLogger(__name__)
 
@@ -154,8 +153,7 @@ class FileMetadata:
 
 
 class EfficientChangeDetector:
-    """
-    USN-inspired change detection for file systems
+    """USN-inspired change detection for file systems
     Uses metadata-based tracking instead of full content scanning
     """
 
@@ -238,8 +236,7 @@ class EfficientChangeDetector:
         return self.metadata_cache.copy()
 
     def detect_changes(self) -> List[ChangeRecord]:
-        """
-        Detect changes using USN-based approach
+        """Detect changes using USN-based approach
         Returns list of changes since last check
         """
         changes = []
@@ -318,8 +315,7 @@ class EfficientChangeDetector:
         interval: float = 30.0,
         max_iterations: Optional[int] = None,
     ):
-        """
-        Monitor for changes asynchronously
+        """Monitor for changes asynchronously
         Calls callback with list of changes when detected
         """
         iteration = 0

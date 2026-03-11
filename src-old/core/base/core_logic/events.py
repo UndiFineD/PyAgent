@@ -1,12 +1,11 @@
 # Copyright 2026 PyAgent Authors
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/core_logic/events.description.md
 
 # events
 
-**File**: `src\core\base\core_logic\events.py`  
+**File**: `src\\core\base\\core_logic\\events.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 32  
@@ -46,7 +45,7 @@ Class EventCore implementation.
 
 # Improvements for events
 
-**File**: `src\core\base\core_logic\events.py`  
+**File**: `src\\core\base\\core_logic\\events.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 32 lines (small)  
 **Complexity**: 4 score (simple)
@@ -83,8 +82,9 @@ LLM_CONTEXT_END
 """
 
 import logging
-from typing import Any, Dict, List, Optional, Callable
-from src.core.base.models import EventType, ConversationMessage
+from typing import Any, Callable, Dict, List, Optional
+
+from src.core.base.models import ConversationMessage, EventType
 
 logger = logging.getLogger(__name__)
 

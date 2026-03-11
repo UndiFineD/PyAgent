@@ -15,9 +15,11 @@
 """Comprehensive script for repairing improperly indented imports and VERSION placement."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+
 import os
 import re
+
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 

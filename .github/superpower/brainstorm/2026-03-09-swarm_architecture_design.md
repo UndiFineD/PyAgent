@@ -459,4 +459,7 @@ Phase 3 (6-12 months):
 - Implement full fault tolerance and recovery mechanisms
 - Optimize for high-performance throughput and low latency
 
-This swarm architecture design enables the PyAgent system to handle complex problem solving by distributing workload across specialized agents with dynamic coordination and communication protocols.
+This swarm architecture design enables the PyAgent system 
+to handle complex problem solving by distributing workload 
+across specialized agents with dynamic coordination 
+and communication protocols.

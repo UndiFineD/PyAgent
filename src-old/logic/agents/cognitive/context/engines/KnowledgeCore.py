@@ -13,14 +13,13 @@
 # limitations under the License.
 
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/KnowledgeCore.description.md
 
 # KnowledgeCore
 
-**File**: `src\logic\agents\cognitive\context\engines\KnowledgeCore.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\KnowledgeCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 38  
@@ -59,7 +58,7 @@ No I/O or database operations are allowed here to ensure Rust portability.
 
 # Improvements for KnowledgeCore
 
-**File**: `src\logic\agents\cognitive\context\engines\KnowledgeCore.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\KnowledgeCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 38 lines (small)  
 **Complexity**: 1 score (simple)
@@ -95,18 +94,19 @@ Contains pure regex and indexing logic for fast symbol discovery.
 This file is optimized for Rust migration (Phase 114).
 """
 
-from src.core.base.Version import VERSION
 from typing import Any
-from .knowledge_mixins.KnowledgeSymbolMixin import KnowledgeSymbolMixin
-from .knowledge_mixins.KnowledgeSearchMixin import KnowledgeSearchMixin
+
+from src.core.base.Version import VERSION
+
 from .knowledge_mixins.KnowledgeProcessMixin import KnowledgeProcessMixin
+from .knowledge_mixins.KnowledgeSearchMixin import KnowledgeSearchMixin
+from .knowledge_mixins.KnowledgeSymbolMixin import KnowledgeSymbolMixin
 
 __version__ = VERSION
 
 
 class KnowledgeCore(KnowledgeSymbolMixin, KnowledgeSearchMixin, KnowledgeProcessMixin):
-    """
-    KnowledgeCore performs pure computational analysis of workspace symbols.
+    """KnowledgeCore performs pure computational analysis of workspace symbols.
     No I/O or database operations are allowed here to ensure Rust portability.
     """
 

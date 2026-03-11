@@ -29,9 +29,6 @@ from __future__ import annotations
 import re
 from typing import List
 
-from auto_fix.rule_engine import Fix
-
-
 # --- helper functions copied/adapted from the older script ------------------
 
 def normalize_text(text: str) -> str:

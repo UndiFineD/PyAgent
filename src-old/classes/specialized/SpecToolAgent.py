@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/SpecToolAgent.description.md
 
@@ -101,13 +100,13 @@ from __future__ import annotations
 
 """Agent specializing in generating tools and code from specifications (OpenAPI, JSON Schema, MCP)."""
 
-from src.core.base.version import VERSION
 import json
 import logging
 from pathlib import Path
-from typing import Optional
+
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function, as_tool
+from src.core.base.utilities import as_tool, create_main_function
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

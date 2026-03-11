@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/base_agent/managers/OrchestrationManagers.description.md
 
 # OrchestrationManagers
 
-**File**: `src\classes\base_agent\managers\OrchestrationManagers.py`  
+**File**: `src\\classes\base_agent\\managers\\OrchestrationManagers.py`  
 **Type**: Python Module  
 **Summary**: 4 classes, 0 functions, 14 imports  
 **Lines**: 137  
@@ -78,7 +77,7 @@ A/B test for variants.
 
 # Improvements for OrchestrationManagers
 
-**File**: `src\classes\base_agent\managers\OrchestrationManagers.py`  
+**File**: `src\\classes\base_agent\\managers\\OrchestrationManagers.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 137 lines (medium)  
 **Complexity**: 12 score (moderate)
@@ -116,6 +115,13 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import logging
+import random
+from collections.abc import Callable
+from dataclasses import dataclass, field
+
+from src.core.base.models import ComposedAgent, ModelConfig, _empty_list_float
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -128,16 +134,9 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import logging
-import random
+
 from ..agent import BaseAgent
-from dataclasses import dataclass, field
-from typing import Dict, List, TYPE_CHECKING
-from collections.abc import Callable
-from src.core.base.models import ModelConfig, ComposedAgent, _empty_list_float
 
 __version__ = VERSION
 
@@ -228,8 +227,7 @@ class ModelSelector:
             self.models["default"] = ModelConfig(model_id="gpt-3.5-turbo")
 
     def select(self, agent_type: str, token_estimate: int = 0) -> ModelConfig:
-        """
-        Selects model based on agent type and token size.
+        """Selects model based on agent type and token size.
         Phase 129: High-token coding tasks route to GLM-4.7 for cost efficiency.
         """
         if agent_type == "coding" and token_estimate > 4000:

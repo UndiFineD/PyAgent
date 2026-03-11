@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/SecurityScanner.description.md
 
@@ -82,6 +81,7 @@ Example:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -107,11 +107,11 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_coder.py"""
 
-from src.core.base.version import VERSION
+import re
+
 from src.core.base.types.SecurityIssueType import SecurityIssueType
 from src.core.base.types.SecurityVulnerability import SecurityVulnerability
-from typing import List, Tuple
-import re
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -127,6 +127,7 @@ class SecurityScanner:
     Example:
         >>> scanner=SecurityScanner()
         >>> vulns=scanner.scan("password='secret123'")
+
     """
 
     SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [
@@ -186,6 +187,7 @@ class SecurityScanner:
 
         Returns:
             List of detected vulnerabilities.
+
         """
         self.vulnerabilities = []
         lines = content.split("\n")
@@ -226,5 +228,6 @@ class SecurityScanner:
 
         Returns:
             Number of critical severity vulnerabilities.
+
         """
         return sum(1 for v in self.vulnerabilities if v.severity == "critical")

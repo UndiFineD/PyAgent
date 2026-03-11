@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/git_branch_processor.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -69,6 +70,7 @@ class GitBranchProcessor:
         changed_files=processor.get_changed_files("feature-branch")
         for file in changed_files:
             process(file)
+
     """
 
     def __init__(self, repo_root: Path, recorder: Any = None) -> None:
@@ -77,6 +79,7 @@ class GitBranchProcessor:
         Args:
             repo_root: Repository root directory.
             recorder: Optional LocalContextRecorder.
+
         """
         self.repo_root = repo_root
         self.recorder = recorder
@@ -101,6 +104,7 @@ class GitBranchProcessor:
 
         Returns:
             List of changed file paths.
+
         """
         try:
             result = subprocess.run(
@@ -150,7 +154,7 @@ class GitBranchProcessor:
                 check=False,
             )
             return result.stdout.strip() if result.returncode == 0 else None
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
             return None
 
@@ -162,6 +166,7 @@ class GitBranchProcessor:
 
         Returns:
             List of branch names.
+
         """
         try:
             result = subprocess.run(
@@ -182,6 +187,6 @@ class GitBranchProcessor:
 
             return branches
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
             return []

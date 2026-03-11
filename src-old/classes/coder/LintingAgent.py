@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/LintingAgent.description.md
 
@@ -84,9 +83,7 @@ LLM_CONTEXT_END
 """Agent specializing in code quality, linting, and style enforcement."""
 
 import subprocess
-import logging
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import create_main_function
 

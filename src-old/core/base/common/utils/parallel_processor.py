@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/parallel_processor.description.md
 
@@ -29,9 +28,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -73,24 +74,22 @@ from src.core.base.common.execution_core import ExecutionCore
 
 
 class ParallelProcessor:
-    """
-    Facade for parallel execution utilities.
+    """Facade for parallel execution utilities.
     Uses ExecutionCore for underlying orchestration.
     """
 
     def __init__(self, max_workers: int = 4) -> None:
-        """
-        Initialize the ParallelProcessor.
+        """Initialize the ParallelProcessor.
 
         Args:
             max_workers: Maximum number of worker threads.
+
         """
         self.max_workers = max_workers
         self._execution_core = ExecutionCore(max_workers=max_workers)
 
     def process_files_threaded(self, files: list[Path], worker_func: Callable[[Path], Any]) -> list[Any]:
-        """
-        Process files using worker threads.
+        """Process files using worker threads.
 
         Args:
             files: List of file paths to process.
@@ -98,6 +97,7 @@ class ParallelProcessor:
 
         Returns:
             List of results from worker_func.
+
         """
         results = []
         with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
@@ -114,8 +114,7 @@ class ParallelProcessor:
         return [r for r in results if r is not None]
 
     async def async_process_files(self, files: list[Path], worker_func: Callable[[Path], Any]) -> list[Any]:
-        """
-        Process multiple files concurrently using async/await.
+        """Process multiple files concurrently using async/await.
 
         Args:
             files: List of file paths to process.
@@ -123,6 +122,7 @@ class ParallelProcessor:
 
         Returns:
             List of results from worker_func.
+
         """
 
         def _wrapped_task(file_path: Path) -> Any:

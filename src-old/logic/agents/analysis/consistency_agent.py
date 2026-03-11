@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/analysis/consistency_agent.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -67,6 +68,7 @@ class ConsistencyAgent:
     Example:
         >>> checker=ConsistencyAgent()
         >>> issues=checker.check(["file1.py", "file2.py"], {})
+
     """
 
     def __init__(self) -> None:
@@ -81,6 +83,7 @@ class ConsistencyAgent:
 
         Returns:
             List of consistency issues.
+
         """
         self.issues = []
         # Check naming conventions
@@ -94,6 +97,7 @@ class ConsistencyAgent:
 
         Args:
             file_contents: Dictionary mapping file paths to contents.
+
         """
         snake_case_files: list[str] = []
         camel_case_files: list[str] = []
@@ -119,6 +123,7 @@ class ConsistencyAgent:
 
         Args:
             file_contents: Dictionary mapping file paths to contents.
+
         """
         absolute_imports: list[str] = []
         relative_imports: list[str] = []

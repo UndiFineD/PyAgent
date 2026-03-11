@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/registry/ExtensionRegistry.description.md
 
 # ExtensionRegistry
 
-**File**: `src\core\base\registry\ExtensionRegistry.py`  
+**File**: `src\\core\base\registry\\ExtensionRegistry.py`  
 **Type**: Python Module  
 **Summary**: 6 classes, 5 functions, 18 imports  
 **Lines**: 575  
@@ -204,7 +203,7 @@ Create a new lazy extension manager.
 
 # Improvements for ExtensionRegistry
 
-**File**: `src\core\base\registry\ExtensionRegistry.py`  
+**File**: `src\\core\base\registry\\ExtensionRegistry.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 575 lines (large)  
 **Complexity**: 47 score (complex)
@@ -238,6 +237,7 @@ Create a new lazy extension manager.
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -263,19 +263,13 @@ Author: PyAgent Phase 20
 
 import logging
 import threading
-from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import (
-    TYPE_CHECKING,
     Any,
     Callable,
     Generic,
     TypeVar,
-    Protocol,
-    runtime_checkable,
-    overload,
 )
-from functools import wraps
 
 logger = logging.getLogger(__name__)
 
@@ -290,8 +284,7 @@ _Base = TypeVar("_Base")
 # Extension Manager (Basic)
 # ============================================================================
 class ExtensionManager:
-    """
-    A registry for managing pluggable extension classes.
+    """A registry for managing pluggable extension classes.
 
     Provides a simple mechanism to register and instantiate extension classes
     by name. Commonly used for plugin systems where different implementations
@@ -306,6 +299,7 @@ class ExtensionManager:
         >>> foo = FOO_REGISTRY.load("my_impl", value=123)
         >>> foo.value
         123
+
     """
 
     def __init__(self, name: str = "default") -> None:
@@ -315,14 +309,14 @@ class ExtensionManager:
         self._lock = threading.RLock()
 
     def register(self, name: str) -> Callable[[_T], _T]:
-        """
-        Decorator to register a class with the given name.
+        """Decorator to register a class with the given name.
 
         Args:
             name: The unique name to register the class under.
 
         Returns:
             Decorator function that registers and returns the class.
+
         """
 
         def wrap(cls_to_register: _T) -> _T:
@@ -337,12 +331,12 @@ class ExtensionManager:
         return wrap
 
     def register_class(self, name: str, cls: type) -> None:
-        """
-        Register a class programmatically (without decorator).
+        """Register a class programmatically (without decorator).
 
         Args:
             name: The unique name to register the class under.
             cls: The class to register.
+
         """
         with self._lock:
             if name in self._name2class:
@@ -352,14 +346,14 @@ class ExtensionManager:
             self._name2class[name] = cls
 
     def unregister(self, name: str) -> bool:
-        """
-        Unregister a class by name.
+        """Unregister a class by name.
 
         Args:
             name: The name to unregister.
 
         Returns:
             True if the class was unregistered, False if not found.
+
         """
         with self._lock:
             if name in self._name2class:
@@ -368,8 +362,7 @@ class ExtensionManager:
             return False
 
     def load(self, cls_name: str, *args: Any, **kwargs: Any) -> Any:
-        """
-        Instantiate and return a registered extension class by name.
+        """Instantiate and return a registered extension class by name.
 
         Args:
             cls_name: The registered name of the class to instantiate.
@@ -381,6 +374,7 @@ class ExtensionManager:
 
         Raises:
             KeyError: If the class name is not registered.
+
         """
         with self._lock:
             cls = self._name2class.get(cls_name)
@@ -393,14 +387,14 @@ class ExtensionManager:
         return cls(*args, **kwargs)
 
     def get_class(self, cls_name: str) -> type | None:
-        """
-        Get a registered class without instantiation.
+        """Get a registered class without instantiation.
 
         Args:
             cls_name: The registered name of the class.
 
         Returns:
             The class if found, None otherwise.
+
         """
         with self._lock:
             return self._name2class.get(cls_name)
@@ -432,8 +426,7 @@ class ExtensionManager:
 
 
 class TypedExtensionManager(Generic[_Base]):
-    """
-    A type-safe registry for managing extension classes of a specific base type.
+    """A type-safe registry for managing extension classes of a specific base type.
 
     Example:
         >>> class BasePlugin(ABC):
@@ -444,15 +437,16 @@ class TypedExtensionManager(Generic[_Base]):
         ... class UpperPlugin(BasePlugin):
         ...     def process(self, data: str) -> str:
         ...         return data.upper()
+
     """
 
     def __init__(self, name: str, base_class: type[_Base]) -> None:
-        """
-        Initialize a typed extension registry.
+        """Initialize a typed extension registry.
 
         Args:
             name: The name of this registry.
             base_class: The base class/interface all extensions must inherit from.
+
         """
         self.name = name
         self.base_class = base_class
@@ -460,8 +454,7 @@ class TypedExtensionManager(Generic[_Base]):
         self._lock = threading.RLock()
 
     def register(self, name: str) -> Callable[[type[_Base]], type[_Base]]:
-        """
-        Decorator to register a class with type checking.
+        """Decorator to register a class with type checking.
 
         Validates that the class inherits from the base class.
         """
@@ -534,8 +527,7 @@ class ExtensionInfo:
 
 
 class MultiExtensionManager:
-    """
-    Registry supporting multiple implementations per key with priority ordering.
+    """Registry supporting multiple implementations per key with priority ordering.
 
     Useful for plugin systems where multiple handlers can be registered
     for the same extension point.
@@ -547,6 +539,7 @@ class MultiExtensionManager:
         >>> @HANDLERS.register("format", priority=5)
         ... class XMLFormatter: ...
         >>> HANDLERS.get_all("format")  # Returns [JSONFormatter, XMLFormatter]
+
     """
 
     def __init__(self, name: str = "default") -> None:
@@ -557,13 +550,13 @@ class MultiExtensionManager:
     def register(
         self, name: str, priority: int = 0, **metadata: Any
     ) -> Callable[[_T], _T]:
-        """
-        Decorator to register a class with the given name and priority.
+        """Decorator to register a class with the given name and priority.
 
         Args:
             name: The extension point name.
             priority: Higher priority extensions are loaded first.
             **metadata: Additional metadata to store with the extension.
+
         """
 
         def wrap(cls_to_register: _T) -> _T:
@@ -623,12 +616,12 @@ class MultiExtensionManager:
             return len(self._extensions.get(name, []))
 
     def clear(self, name: str | None = None) -> None:
-        """
-        Clear registrations.
+        """Clear registrations.
 
         Args:
             name: If provided, clear only this extension point.
                   If None, clear all registrations.
+
         """
         with self._lock:
             if name is None:
@@ -641,8 +634,7 @@ class MultiExtensionManager:
 # Lazy Extension Manager
 # ============================================================================
 class LazyExtensionManager:
-    """
-    Extension manager with lazy module loading.
+    """Extension manager with lazy module loading.
 
     Extensions are specified as 'module:class' strings and only loaded
     when accessed.
@@ -651,6 +643,7 @@ class LazyExtensionManager:
         >>> LAZY = LazyExtensionManager("lazy")
         >>> LAZY.register_lazy("json", "json:JSONEncoder")
         >>> encoder = LAZY.load("json")  # Imports json module only now
+
     """
 
     def __init__(self, name: str = "default") -> None:
@@ -660,12 +653,12 @@ class LazyExtensionManager:
         self._lock = threading.RLock()
 
     def register_lazy(self, name: str, spec: str) -> None:
-        """
-        Register a lazy extension.
+        """Register a lazy extension.
 
         Args:
             name: The name to register under.
             spec: The import spec in 'module:class' or 'module.submodule:class' format.
+
         """
         if ":" not in spec:
             raise ValueError(
@@ -729,8 +722,7 @@ class LazyExtensionManager:
 
 
 class GlobalRegistry:
-    """
-    A singleton registry for managing multiple extension managers.
+    """A singleton registry for managing multiple extension managers.
 
     Provides a centralized way to access all extension registries.
     """

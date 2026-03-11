@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/registry/extension_registry.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -49,9 +49,9 @@ from __future__ import annotations
 Extension registry module for managing pluggable extension classes.
 """
 
-import threading
 import logging
-from typing import Callable, TypeVar, Generic, Optional
+import threading
+from typing import Callable, Generic, Optional, TypeVar
 
 logger: logging.Logger = logging.getLogger(__name__)
 _T = TypeVar("_T", bound=type)
@@ -59,8 +59,7 @@ T_co = TypeVar("T_co", covariant=True)
 
 
 class ExtensionManager:
-    """
-    A registry for managing pluggable extension classes.
+    """A registry for managing pluggable extension classes.
     """
 
     def __init__(self, name: str = "default") -> None:
@@ -69,8 +68,7 @@ class ExtensionManager:
         self._lock: threading.RLock = threading.RLock()
 
     def register(self, name: str) -> Callable[[_T], _T]:
-        """
-        Decorator to register a class with the given name.
+        """Decorator to register a class with the given name.
         """
 
         def wrap(cls_to_register: _T) -> _T:
@@ -85,8 +83,7 @@ class ExtensionManager:
         return wrap
 
     def register_class(self, name: str, cls: type) -> None:
-        """
-        Register a class programmatically (without decorator).
+        """Register a class programmatically (without decorator).
         """
         with self._lock:
             if name in self._name2class:
@@ -96,8 +93,7 @@ class ExtensionManager:
             self._name2class[name] = cls
 
     def load(self, name: str, *args, **kwargs) -> object:
-        """
-        Instantiate a registered class by name.
+        """Instantiate a registered class by name.
         """
         with self._lock:
             cls = self._name2class.get(name)
@@ -108,8 +104,7 @@ class ExtensionManager:
             return cls(*args, **kwargs)
 
     def get_class(self, name: str) -> type:
-        """
-        Retrieve a registered class by name.
+        """Retrieve a registered class by name.
         """
         with self._lock:
             cls = self._name2class.get(name)

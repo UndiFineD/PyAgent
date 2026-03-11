@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/core/ModelRegistryCore.description.md
 
 # ModelRegistryCore
 
-**File**: `src\logic\agents\system\core\ModelRegistryCore.py`  
+**File**: `src\\logic\agents\\system\\core\\ModelRegistryCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 68  
@@ -47,7 +46,7 @@ Phase 289: Model Registry Self-Healing.
 
 # Improvements for ModelRegistryCore
 
-**File**: `src\logic\agents\system\core\ModelRegistryCore.py`  
+**File**: `src\\logic\agents\\system\\core\\ModelRegistryCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 68 lines (small)  
 **Complexity**: 6 score (moderate)
@@ -82,14 +81,12 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-from typing import Dict, List, Optional
-from pathlib import Path
 import logging
+from pathlib import Path
 
 
 class ModelRegistryCore:
-    """
-    ModelRegistryCore manages the PEFT (LoRA/QLoRA) adapter registry.
+    """ModelRegistryCore manages the PEFT (LoRA/QLoRA) adapter registry.
     It maps request types to specific expert adapters.
     Phase 289: Model Registry Self-Healing.
     """
@@ -105,8 +102,7 @@ class ModelRegistryCore:
         self.unhealthy_entries: set[str] = set()
 
     def self_heal(self) -> int:
-        """
-        Phase 289: Detects missing adapter files and prunes or fixes the registry.
+        """Phase 289: Detects missing adapter files and prunes or fixes the registry.
         Returns the number of healed/removed entries.
         """
         healed_count = 0
@@ -139,8 +135,7 @@ class ModelRegistryCore:
     def should_trigger_finetuning(
         self, quality_history: list[float], threshold: float = 0.6
     ) -> bool:
-        """
-        Determines if fine-tuning is needed (e.g., last 5 scores below threshold).
+        """Determines if fine-tuning is needed (e.g., last 5 scores below threshold).
         """
         if len(quality_history) < 5:
             return False

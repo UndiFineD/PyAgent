@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 """Master dynamic test runner for all src/*_test.py files - auto-discovers and executes tests."""
 
+import importlib.util
 import os
 import sys
-import re
-import importlib.util
-import traceback
 import time
+from collections import defaultdict
 from pathlib import Path
-from collections import defaultdict, Counter
-from typing import List, Dict, Tuple, Any, Callable
+from typing import Any, Callable, Dict, List, Tuple
 
 # Fix Unicode on Windows
 if sys.platform == 'win32':
@@ -76,7 +74,7 @@ def discover_test_functions(test_module) -> Tuple[List[Tuple[str, Callable]], Li
                         method = getattr(obj, method_name)
                         if callable(method):
                             discovered_classes.append((name, method_name, obj, method))
-    except Exception as e:
+    except Exception:
         pass
     return discovered_functions, discovered_classes
 
@@ -93,7 +91,7 @@ def load_module_from_path(file_path: Path) -> Any:
             sys.modules[file_path.stem] = loaded_module
             spec.loader.exec_module(loaded_module)
             return loaded_module
-    except Exception as e:
+    except Exception:
         pass
     return None
 
@@ -306,7 +304,7 @@ print(f"  • Modules Loaded:             {len(loaded_modules):6d}")
 print(f"  • Load Failures:              {load_errors:6d}")
 print(f"  • Total Tests Discovered:     {total_tests:6d}")
 
-print(f"\nExecution Statistics:")
+print("\nExecution Statistics:")
 print(f"  • Tests Executed:             {TOTAL_EXECUTED:6d}")
 print(f"  • Tests Passed:               {test_results['pass']:6d} ({pass_rate:5.1f}%)")
 print(f"  • Tests Failed:               {test_results['fail']:6d} ({100-pass_rate:5.1f}%)")
@@ -314,7 +312,7 @@ print(f"  • Tests Skipped:              {test_results['skip']:6d}")
 
 if test_results['timings']:
     timings = test_results['timings']
-    print(f"\nPerformance Metrics:")
+    print("\nPerformance Metrics:")
     print(f"  • Fastest Test:               {min(timings)*1000:6.2f} ms")
     print(f"  • Slowest Test:               {max(timings)*1000:6.2f} ms")
     print(f"  • Average Test Time:          {sum(timings)/len(timings)*1000:6.2f} ms")
@@ -350,9 +348,9 @@ print(f"  • Tests Executed:             {EXECUTED}")
 print(f"  • Pass Rate:                  {pass_rate:.1f}%")
 print(f"  • Coverage:                   {100*EXECUTED/max(1, total_tests):.1f}%")
 
-print(f"\nTo Run All Tests:")
-print(f"  python run_all_tests.py                    # Execute all tests")
-print(f"  python run_all_tests.py --verbose         # With verbose output")
-print(f"  python run_all_tests.py --file <pattern>  # Run specific file")
+print("\nTo Run All Tests:")
+print("  python run_all_tests.py                    # Execute all tests")
+print("  python run_all_tests.py --verbose         # With verbose output")
+print("  python run_all_tests.py --file <pattern>  # Run specific file")
 
 print(f"\n{'=' * 110}\n")

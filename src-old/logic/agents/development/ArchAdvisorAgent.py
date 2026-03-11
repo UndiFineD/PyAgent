@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/ArchAdvisorAgent.description.md
 
 # ArchAdvisorAgent
 
-**File**: `src\logic\agents\development\ArchAdvisorAgent.py`  
+**File**: `src\\logic\agents\\development\\ArchAdvisorAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 75  
@@ -46,7 +45,7 @@ Analyzes codebase coupling and suggests architectural refactors.
 
 # Improvements for ArchAdvisorAgent
 
-**File**: `src\logic\agents\development\ArchAdvisorAgent.py`  
+**File**: `src\\logic\agents\\development\\ArchAdvisorAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 75 lines (small)  
 **Complexity**: 4 score (simple)
@@ -94,9 +93,9 @@ from __future__ import annotations
 
 """Agent specializing in architectural analysis and decoupled system design."""
 
-from src.core.base.version import VERSION
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import create_main_function
+from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.engines.GraphContextEngine import (
     GraphContextEngine,
 )

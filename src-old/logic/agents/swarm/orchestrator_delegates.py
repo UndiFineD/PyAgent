@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/orchestrator_delegates.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -56,30 +56,29 @@ from typing import Any
 
 
 class OrchestratorDelegates:
-    """
-    Mixin class that provides delegation methods for OrchestratorAgent.
+    """Mixin class that provides delegation methods for OrchestratorAgent.
     This helps keep the main OrchestratorAgent file small (<30KB).
     """
 
     def create_file_snapshot(self, file_path: Path) -> str | None:
         """Delegates to AgentFileManager."""
-        return getattr(self, "file_manager").create_file_snapshot(file_path)
+        return self.file_manager.create_file_snapshot(file_path)
 
     def restore_from_snapshot(self, file_path: Path, snapshot_id: str) -> bool:
         """Delegates to AgentFileManager."""
-        return getattr(self, "file_manager").restore_from_snapshot(
+        return self.file_manager.restore_from_snapshot(
             file_path, snapshot_id
         )
 
     def load_cascading_codeignore(self, directory: Path | None = None) -> set[str]:
         """Delegates to AgentFileManager."""
-        return getattr(self, "file_manager").load_cascading_codeignore(directory)
+        return self.file_manager.load_cascading_codeignore(directory)
 
     def find_code_files(self) -> list[Path]:
         """Delegates to AgentFileManager."""
         logging.info("Searching for code files (delegated to AgentFileManager)...")
-        code_files = getattr(self, "file_manager").find_code_files(
-            max_files=getattr(self, "max_files")
+        code_files = self.file_manager.find_code_files(
+            max_files=self.max_files
         )
         code_files = sorted(code_files)
         logging.info(f"Found {len(code_files)} code files.")
@@ -87,50 +86,50 @@ class OrchestratorDelegates:
 
     def _is_ignored(self, path: Path) -> bool:
         """Delegates to AgentFileManager."""
-        return getattr(self, "file_manager").is_ignored(path)
+        return self.file_manager.is_ignored(path)
 
     def update_errors_improvements(self, code_file: Path) -> bool:
         """Delegates to AgentUpdateManager."""
-        return getattr(self, "update_manager").update_errors_improvements(code_file)
+        return self.update_manager.update_errors_improvements(code_file)
 
     def update_code(self, code_file: Path) -> bool:
         """Delegates to AgentUpdateManager."""
-        return getattr(self, "update_manager").update_code(code_file)
+        return self.update_manager.update_code(code_file)
 
     def update_changelog_context_tests(self, code_file: Path) -> bool:
         """Delegates to AgentUpdateManager."""
-        return getattr(self, "update_manager").update_changelog_context_tests(code_file)
+        return self.update_manager.update_changelog_context_tests(code_file)
 
     def _check_files_ready(self, code_file: Path) -> bool:
         """Delegates to OrchestratorCore."""
-        return getattr(self, "core").check_files_ready(code_file)
+        return self.core.check_files_ready(code_file)
 
     def register_webhook(self, webhook_url: str) -> None:
         """Delegates to AgentNotificationManager."""
-        getattr(self, "notifications").register_webhook(webhook_url)
+        self.notifications.register_webhook(webhook_url)
 
     def register_callback(self, callback: Any) -> None:
         """Delegates to AgentNotificationManager."""
-        getattr(self, "notifications").register_callback(callback)
+        self.notifications.register_callback(callback)
 
     def send_webhook_notification(
         self, event_name: str, event_data: dict[str, Any]
     ) -> None:
         """Delegates to AgentNotificationManager."""
-        getattr(self, "notifications").notify(event_name, event_data)
+        self.notifications.notify(event_name, event_data)
 
     def execute_callbacks(self, event_name: str, event_data: dict[str, Any]) -> None:
         """Delegates to AgentNotificationManager."""
-        getattr(self, "notifications").notify(event_name, event_data)
+        self.notifications.notify(event_name, event_data)
 
     async def async_process_files(self, files: list[Path]) -> list[Path]:
         """Delegates to ParallelProcessor."""
-        return await getattr(self, "parallel_processor").async_process_files(
-            files, getattr(self, "process_file")
+        return await self.parallel_processor.async_process_files(
+            files, self.process_file
         )
 
     def process_files_threaded(self, files: list[Path]) -> list[Path]:
         """Delegates to ParallelProcessor."""
-        return getattr(self, "parallel_processor").process_files_threaded(
-            files, getattr(self, "process_file")
+        return self.parallel_processor.process_files_threaded(
+            files, self.process_file
         )

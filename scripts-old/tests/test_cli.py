@@ -2,12 +2,10 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
+import os
 import subprocess
 import sys
-import os
 from pathlib import Path
-
-import pytest
 
 
 def test_cli_dryrun(tmp_path, monkeypatch):

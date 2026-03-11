@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/mixins/MapBuilderMixin.description.md
 
 # MapBuilderMixin
 
-**File**: `src\logic\agents\system\mixins\MapBuilderMixin.py`  
+**File**: `src\\logic\agents\\system\\mixins\\MapBuilderMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 81  
@@ -44,7 +43,7 @@ Mixin for mapping and parsing code entities in TopologicalNavigator.
 
 # Improvements for MapBuilderMixin
 
-**File**: `src\logic\agents\system\mixins\MapBuilderMixin.py`  
+**File**: `src\\logic\agents\\system\\mixins\\MapBuilderMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 81 lines (small)  
 **Complexity**: 3 score (simple)
@@ -79,16 +78,17 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-
-import os
 import ast
 import logging
-from src.logic.agents.system.TopologicalNavigator import TopologicalNavigator
+
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+import os
 from pathlib import Path
-from typing import TYPE_CHECKING
+
 from src.core.base.BaseUtilities import as_tool
+from src.logic.agents.system.TopologicalNavigator import TopologicalNavigator
+
 
 class MapBuilderMixin:
     """Mixin for mapping and parsing code entities in TopologicalNavigator."""

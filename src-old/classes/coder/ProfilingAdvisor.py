@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/ProfilingAdvisor.description.md
 
@@ -102,14 +101,15 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_coder.py"""
 
-from src.core.base.version import VERSION
-from src.core.base.types.ProfilingCategory import ProfilingCategory
-from src.core.base.types.ProfilingSuggestion import ProfilingSuggestion
-from typing import Any, List
 import ast
 import logging
 import pstats
-from src.observability.stats.core.ProfilingCore import ProfilingCore, ProfileStats
+from typing import Any
+
+from src.core.base.types.ProfilingCategory import ProfilingCategory
+from src.core.base.types.ProfilingSuggestion import ProfilingSuggestion
+from src.core.base.version import VERSION
+from src.observability.stats.core.ProfilingCore import ProfileStats, ProfilingCore
 
 __version__ = VERSION
 
@@ -140,6 +140,7 @@ class ProfilingAgent:
 
         Args:
             node: AST node of the function.
+
         """
         has_loop = False
         has_io = False

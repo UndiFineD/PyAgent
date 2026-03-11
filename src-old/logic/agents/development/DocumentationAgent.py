@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/DocumentationAgent.description.md
 
 # DocumentationAgent
 
-**File**: `src\logic\agents\development\DocumentationAgent.py`  
+**File**: `src\\logic\agents\\development\\DocumentationAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 81  
@@ -46,7 +45,7 @@ Generates technical references and project OVERVIEW documents.
 
 # Improvements for DocumentationAgent
 
-**File**: `src\logic\agents\development\DocumentationAgent.py`  
+**File**: `src\\logic\agents\\development\\DocumentationAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 81 lines (small)  
 **Complexity**: 4 score (simple)
@@ -94,10 +93,11 @@ from __future__ import annotations
 
 """Agent specializing in automated documentation generation and maintenance."""
 
-from src.core.base.version import VERSION
 import logging
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import create_main_function
+from src.core.base.version import VERSION
 from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
 
 __version__ = VERSION

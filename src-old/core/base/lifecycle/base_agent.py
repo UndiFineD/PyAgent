@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/lifecycle/base_agent.description.md
 
@@ -42,17 +41,18 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
 
 import asyncio
-import uuid
 import collections.abc
 import logging
 import subprocess
 import time
 import traceback
+import uuid
 from pathlib import Path
 from typing import Any
 
@@ -63,17 +63,17 @@ except ImportError:
     requests = None
     HAS_REQUESTS = False
 
+from src.core.base.common.models import CacheEntry, EventType, FailureClassification, PromptTemplate
 from src.core.base.common.models.communication_models import CascadeContext
-from src.core.base.common.models import CacheEntry, EventType, PromptTemplate, FailureClassification
 from src.core.base.execution.shell_executor import ShellExecutor
 from src.core.base.lifecycle.agent_core import BaseCore
 from src.core.base.lifecycle.base_agent_core import BaseAgentCore
 from src.core.base.lifecycle.version import VERSION
-from src.core.base.mixins.governance_mixin import GovernanceMixin
+
 # Import Mixins for Synaptic Modularization (Phase 317)
 from src.core.base.mixins.config_mixin import ConfigMixin
 from src.core.base.mixins.environment_mixin import EnvironmentMixin
-from src.core.base.mixins.expertise_mixin import ExpertiseMixin
+from src.core.base.mixins.governance_mixin import GovernanceMixin
 from src.core.base.mixins.identity_mixin import IdentityMixin
 from src.core.base.mixins.knowledge_mixin import KnowledgeMixin
 from src.core.base.mixins.multimodal_mixin import MultimodalMixin
@@ -81,9 +81,9 @@ from src.core.base.mixins.orchestration_mixin import OrchestrationMixin
 from src.core.base.mixins.persistence_mixin import PersistenceMixin
 from src.core.base.mixins.reflection_mixin import ReflectionMixin
 from src.core.base.mixins.security_mixin import SecurityMixin
-from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
 from src.core.base.mixins.stream_manager_mixin import StreamManagerMixin
 from src.core.base.mixins.task_manager_mixin import TaskManagerMixin
+from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
 from src.core.base.mixins.tool_framework_mixin import ToolFrameworkMixin
 
 # Advanced components (Lazy loaded or optional)
@@ -117,10 +117,10 @@ class BaseAgent(
     EnvironmentMixin,
     ConfigMixin,
 ):
-    """
-    Core AI Agent Shell (Synaptic modularization Phase 317).
+    """Core AI Agent Shell (Synaptic modularization Phase 317).
     Inherits domain logic from specialized Mixins to maintain low complexity.
     """
+
     # Class-level attributes for shared state
     _prompt_templates: dict[str, PromptTemplate] = {}
     _response_cache: dict[str, CacheEntry] = {}
@@ -257,8 +257,7 @@ class BaseAgent(
 
 
     def run(self, prompt: str | None = None) -> str:
-        """
-        Synchronous execution entry point for legacy support.
+        """Synchronous execution entry point for legacy support.
         """
         if prompt is None:
             # Default behavior for no prompt (usually legacy loop)
@@ -327,8 +326,7 @@ class BaseAgent(
 
 
     def _classify_exception(self, e: Exception) -> str:
-        """
-        Classify exception into FailureClassification enum.
+        """Classify exception into FailureClassification enum.
         Phase 336: Standardized failure taxonomy implementation.
         """
         exc_str = str(e).lower()
@@ -370,8 +368,7 @@ class BaseAgent(
         original_content: str,
         parent_context: CascadeContext,
     ) -> str:
-        """
-        Internal method to run a sub-agent, propagating the CascadeContext.
+        """Internal method to run a sub-agent, propagating the CascadeContext.
         This wraps the actual backend call to allow context propagation.
         """
         # Derive a child context for the sub-agent
@@ -380,19 +377,18 @@ class BaseAgent(
             new_task_id=str(uuid.uuid4()) # Generate a new task ID for the sub-agent's task
         )
         # The actual ab.run_subagent would need to accept and use this child_context
-        from src.infrastructure.compute import backend as ab # pylint: disable=import-outside-toplevel
+        from src.infrastructure.compute import backend as ab  # pylint: disable=import-outside-toplevel
         return await asyncio.to_thread(ab.run_subagent, description, prompt, original_content, child_context)
 
 
     async def think(self, prompt: str) -> str:
-        """
-        The core synaptic processing method.
+        """The core synaptic processing method.
         Decomposes the prompt, consults knowledge, and produces a reasoning-based response.
         """
         logging.info("[%s] Reasoning on prompt: %s...", self.__class__.__name__, prompt[:50])
 
         # 1. Governance & Quota Checks
-        if hasattr(self, "check_preemption") and callable(getattr(self, "check_preemption")):
+        if hasattr(self, "check_preemption") and callable(self.check_preemption):
             await self.check_preemption()
 
         if hasattr(self, "quotas"):
@@ -448,7 +444,7 @@ class BaseAgent(
             # Telemetry Capture (Swarm Intelligence Fix)
             if getattr(self, "context", None):
                 try:
-                    getattr(self, "context").log_failure(
+                    self.context.log_failure(
                         stage=f"{self.__class__.__name__}.think",
                         error=str(e),
                         traceback=traceback.format_exc(),
@@ -459,7 +455,7 @@ class BaseAgent(
                     logging.error(f"[Robustness] Failed to log failure to CascadeContext: {telemetry_err}", exc_info=True)
 
             return f"Error encountered during agent reasoning: {str(e)} (Type: {f_type})"
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             logging.exception("[Robustness] Unexpected error in think execution, re-raising")
             raise
 
@@ -526,8 +522,7 @@ class BaseAgent(
 
 
     async def _process_task(self, task_data: dict[str, Any]) -> dict[str, Any]:
-        """
-        Process a task from the queue (abstract method from TaskQueueMixin).
+        """Process a task from the queue (abstract method from TaskQueueMixin).
         """
         task_id = task_data.get("id", "unknown")
         try:
@@ -550,8 +545,7 @@ class BaseAgent(
     async def get_task_status(
         self, cascade_context: CascadeContext | None = None
     ) -> dict[str, Any]:
-        """
-        Get the status of a task or all queued tasks.
+        """Get the status of a task or all queued tasks.
         """
         if cascade_context is None:
             # Return all task results if no specific cascade_context provided

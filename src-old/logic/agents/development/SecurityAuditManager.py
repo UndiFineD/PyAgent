@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/SecurityAuditManager.description.md
 
 # SecurityAuditManager
 
-**File**: `src\logic\agents\development\SecurityAuditManager.py`  
+**File**: `src\\logic\agents\\development\\SecurityAuditManager.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 60  
@@ -47,7 +46,7 @@ Manages fleet security including certificates and access control.
 
 # Improvements for SecurityAuditManager
 
-**File**: `src\logic\agents\development\SecurityAuditManager.py`  
+**File**: `src\\logic\agents\\development\\SecurityAuditManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 60 lines (small)  
 **Complexity**: 4 score (simple)
@@ -97,11 +96,12 @@ from __future__ import annotations
 Handles certificate rotation and security policy enforcement.
 """
 
-from src.core.base.version import VERSION
 import logging
 import time
 import uuid
-from typing import Dict, List, Any
+from typing import Any
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

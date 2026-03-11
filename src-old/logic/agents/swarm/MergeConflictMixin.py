@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/MergeConflictMixin.description.md
 
 # MergeConflictMixin
 
-**File**: `src\logic\agents\swarm\MergeConflictMixin.py`  
+**File**: `src\\logic\agents\\swarm\\MergeConflictMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 79  
@@ -38,7 +37,7 @@ Mixin for handling merge conflicts in file content.
 
 # Improvements for MergeConflictMixin
 
-**File**: `src\logic\agents\swarm\MergeConflictMixin.py`  
+**File**: `src\\logic\agents\\swarm\\MergeConflictMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 79 lines (small)  
 **Complexity**: 2 score (simple)
@@ -72,9 +71,10 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
-# Copyright 2026 PyAgent Authors
 
+# Copyright 2026 PyAgent Authors
 from typing import Any
+
 
 class MergeConflictMixin:
     """Mixin for handling merge conflicts in file content."""

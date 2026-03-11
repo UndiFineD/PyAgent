@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/strategies/reflexion_strategy.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -41,7 +41,6 @@ Reflexion strategy.py module.
 
 import logging
 from collections.abc import Callable
-from typing import TYPE_CHECKING, Dict, List, Optional
 
 from src.core.base.lifecycle.version import VERSION
 
@@ -52,6 +51,7 @@ __version__ = VERSION
 
 class ReflexionStrategy(AgentStrategy):
     """Reflexion strategy: Draft -> Critique -> Revise."""
+
     async def _safe_backend_call(
         self,
         step_name: str,
@@ -61,8 +61,7 @@ class ReflexionStrategy(AgentStrategy):
         history: list[dict[str, str]] | None,
         original_prompt_for_logging: str,
     ) -> str:
-        """
-        Helper method to encapsulate backend calls with error handling and logging.
+        """Helper method to encapsulate backend calls with error handling and logging.
         """
         try:
             response = await backend_call(call_prompt, system_prompt, history)

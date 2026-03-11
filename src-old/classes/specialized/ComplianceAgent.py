@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ComplianceAgent.description.md
 
@@ -87,19 +86,18 @@ Scans memory shards for PII and sensitive data patterns.
 LLM_CONTEXT_END
 """
 
-import re
-import json
 import logging
+import re
 import time
 from pathlib import Path
-from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
+from typing import Any, Dict, List
+
 from src.classes.backend.LocalContextRecorder import LocalContextRecorder
+from src.classes.base_agent import BaseAgent
 
 
 class ComplianceAgent(BaseAgent):
-    """
-    Phase 57: Data Privacy & Compliance.
+    """Phase 57: Data Privacy & Compliance.
     Scans memory shards for PII and sensitive data patterns.
     """
 

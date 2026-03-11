@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/CoderDocMixin.description.md
 
 # CoderDocMixin
 
-**File**: `src\logic\agents\development\mixins\CoderDocMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\CoderDocMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 84  
@@ -41,7 +40,7 @@ Mixin for generating documentation from code.
 
 # Improvements for CoderDocMixin
 
-**File**: `src\logic\agents\development\mixins\CoderDocMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\CoderDocMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 84 lines (small)  
 **Complexity**: 4 score (simple)
@@ -91,6 +90,7 @@ Documentation generation logic for CoderCore.
 """
 
 import ast
+
 from src.core.base.types.CodeLanguage import CodeLanguage
 
 

@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/HandyTerminalMixin.description.md
 
 # HandyTerminalMixin
 
-**File**: `src\logic\agents\development\mixins\HandyTerminalMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\HandyTerminalMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 83  
@@ -41,7 +40,7 @@ Mixin for terminal execution and slash command handling in HandyAgent.
 
 # Improvements for HandyTerminalMixin
 
-**File**: `src\logic\agents\development\mixins\HandyTerminalMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\HandyTerminalMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 83 lines (small)  
 **Complexity**: 2 score (simple)
@@ -78,11 +77,9 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
-
 import subprocess
-from typing import TYPE_CHECKING
-from src.core.base.BaseUtilities import as_tool
 
+from src.core.base.BaseUtilities import as_tool
 from src.logic.agents.development.HandyAgent import HandyAgent
 
 

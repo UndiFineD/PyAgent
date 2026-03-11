@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/agent_gui.description.md
 
@@ -50,7 +49,6 @@ LLM_CONTEXT_END
 GUI Agent: Provides a graphical user interface for PyAgent.
 """
 
-from src.version import VERSION
 import sys
 import tkinter as tk
 from pathlib import Path

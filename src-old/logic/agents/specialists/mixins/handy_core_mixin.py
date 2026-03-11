@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/mixins/handy_core_mixin.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -40,8 +40,10 @@ Handy core mixin.py module.
 
 
 import time
+from typing import Any
+
 from src.logic.agents.specialists.handy_agent import HandyAgent
-from typing import TYPE_CHECKING, Any
+
 
 class HandyCoreMixin:
     """Mixin for core recording and evaluation logic in HandyAgent."""

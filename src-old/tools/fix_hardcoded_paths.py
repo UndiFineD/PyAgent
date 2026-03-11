@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/fix_hardcoded_paths.description.md
 
@@ -98,7 +97,7 @@ def fix_hardcoded_paths():
                         def replacer(match):
                             # We want to replace "C:/DEV/PyAgent/..." with Path(...) / "..."
                             # But wait, we need to handle quotes.
-                            return f"{{ROOT_PLACEHOLDER}}"
+                            return "{ROOT_PLACEHOLDER}"
 
                         # Simpler: replace the string root with {ROOT} and then fix it up
                         content = content.replace("c:/DEV/PyAgent", "C:/DEV/PyAgent")

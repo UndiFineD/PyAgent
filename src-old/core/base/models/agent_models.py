@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/models/agent_models.description.md
 
 # agent_models
 
-**File**: `src\core\base\models\agent_models.py`  
+**File**: `src\\core\base\\models\agent_models.py`  
 **Type**: Python Module  
 **Summary**: 8 classes, 0 functions, 14 imports  
 **Lines**: 127  
@@ -87,7 +86,7 @@ Routes input based on conditions.
 
 # Improvements for agent_models
 
-**File**: `src\core\base\models\agent_models.py`  
+**File**: `src\\core\base\\models\agent_models.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 127 lines (medium)  
 **Complexity**: 7 score (moderate)
@@ -138,15 +137,16 @@ from __future__ import annotations
 """Models for agent configuration, state, and plugins."""
 
 import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
 from collections.abc import Callable
-from .enums import HealthStatus, AgentPriority
+from dataclasses import dataclass, field
+from typing import Any
+
 from .base_models import (
     _empty_dict_str_any,
-    _empty_list_str,
     _empty_dict_str_callable_any_any,
+    _empty_list_str,
 )
+from .enums import AgentPriority, HealthStatus
 
 
 @dataclass(slots=True)

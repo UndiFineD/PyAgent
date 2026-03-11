@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/neuro_symbolic_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -53,17 +53,16 @@ import logging
 import re
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 # pylint: disable=too-many-ancestors
 class NeuroSymbolicAgent(BaseAgent):
-    """
-    Phase 36: Neuro-Symbolic Reasoning.
+    """Phase 36: Neuro-Symbolic Reasoning.
     Verifies probabilistic neural output against strict symbolic rules.
     """
 
@@ -96,8 +95,7 @@ class NeuroSymbolicAgent(BaseAgent):
 
     @as_tool
     def perform_neurosymbolic_verification(self, content: str) -> dict[str, Any]:
-        """
-        Validates content against symbolic rules and attempts to flag violations.
+        """Validates content against symbolic rules and attempts to flag violations.
         """
         logging.info("NeuroSymbolic: Validating content against symbolic rules.")
         violations = []

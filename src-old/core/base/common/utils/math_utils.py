@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/math_utils.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -86,6 +86,7 @@ def cdiv(a: int, b: int) -> int:
         2
         >>> cdiv(1, 3)
         1
+
     """
     if RUST_AVAILABLE and hasattr(rc, "cdiv_rust"):
         return rc.cdiv_rust(a, b)
@@ -93,8 +94,7 @@ def cdiv(a: int, b: int) -> int:
 
 
 def next_power_of_2(n: int) -> int:
-    """
-    Return the smallest power of 2 >= n.
+    """Return the smallest power of 2 >= n.
 
     Uses bit_length() for O(1) performance.
 
@@ -111,6 +111,7 @@ def next_power_of_2(n: int) -> int:
         8
         >>> next_power_of_2(1)
         1
+
     """
     if RUST_AVAILABLE and hasattr(rc, "next_power_of_2_rust"):
         return rc.next_power_of_2_rust(n)
@@ -122,8 +123,7 @@ def next_power_of_2(n: int) -> int:
 
 
 def prev_power_of_2(n: int) -> int:
-    """
-    Return the largest power of 2 <= n (inclusive).
+    """Return the largest power of 2 <= n (inclusive).
 
     Args:
         n: Input integer (must be positive)
@@ -138,6 +138,7 @@ def prev_power_of_2(n: int) -> int:
         8
         >>> prev_power_of_2(1)
         1
+
     """
     if RUST_AVAILABLE and hasattr(rc, "prev_power_of_2_rust"):
         return rc.prev_power_of_2_rust(n)
@@ -147,8 +148,7 @@ def prev_power_of_2(n: int) -> int:
 
 
 def is_power_of_2(n: int) -> bool:
-    """
-    Check if n is a power of 2.
+    """Check if n is a power of 2.
 
     Uses bitwise AND for O(1) check.
 
@@ -157,13 +157,13 @@ def is_power_of_2(n: int) -> bool:
 
     Returns:
         True if n is a power of 2
+
     """
     return n > 0 and (n & (n - 1)) == 0
 
 
 def round_up(n: int, multiple: int) -> int:
-    """
-    Round n up to the nearest multiple.
+    """Round n up to the nearest multiple.
 
     Args:
         n: Input integer
@@ -177,6 +177,7 @@ def round_up(n: int, multiple: int) -> int:
         8
         >>> round_up(8, 4)
         8
+
     """
     if RUST_AVAILABLE and hasattr(rc, "round_up_rust"):
         return rc.round_up_rust(n, multiple)
@@ -184,8 +185,7 @@ def round_up(n: int, multiple: int) -> int:
 
 
 def round_down(n: int, multiple: int) -> int:
-    """
-    Round n down to the nearest multiple.
+    """Round n down to the nearest multiple.
 
     Args:
         n: Input integer
@@ -199,6 +199,7 @@ def round_down(n: int, multiple: int) -> int:
         4
         >>> round_down(8, 4)
         8
+
     """
     if RUST_AVAILABLE and hasattr(rc, "round_down_rust"):
         return rc.round_down_rust(n, multiple)
@@ -208,8 +209,7 @@ def round_down(n: int, multiple: int) -> int:
 def clamp(
     value: Union[int, float], min_val: Union[int, float], max_val: Union[int, float]
 ) -> Union[int, float]:
-    """
-    Clamp a value between min and max bounds.
+    """Clamp a value between min and max bounds.
 
     Args:
         value: Input value
@@ -218,13 +218,13 @@ def clamp(
 
     Returns:
         Clamped value
+
     """
     return max(min_val, min(value, max_val))
 
 
 def align_to(n: int, alignment: int) -> int:
-    """
-    Align n to the given alignment (round up to nearest multiple).
+    """Align n to the given alignment (round up to nearest multiple).
 
     This is useful for memory alignment operations.
 
@@ -234,14 +234,14 @@ def align_to(n: int, alignment: int) -> int:
 
     Returns:
         n aligned to the boundary
+
     """
     return round_up(n, alignment)
 
 
 @functools.lru_cache(maxsize=256)
 def bit_count(n: int) -> int:
-    """
-    Count the number of 1 bits in the binary representation of n.
+    """Count the number of 1 bits in the binary representation of n.
 
     Cached for repeated queries.
 
@@ -250,13 +250,13 @@ def bit_count(n: int) -> int:
 
     Returns:
         Number of 1 bits
+
     """
     return bin(n).count("1")
 
 
 def gcd(a: int, b: int) -> int:
-    """
-    Compute greatest common divisor using Euclidean algorithm.
+    """Compute greatest common divisor using Euclidean algorithm.
 
     Args:
         a: First integer
@@ -264,6 +264,7 @@ def gcd(a: int, b: int) -> int:
 
     Returns:
         GCD of a and b
+
     """
     while b:
         a, b = b, a % b
@@ -271,8 +272,7 @@ def gcd(a: int, b: int) -> int:
 
 
 def lcm(a: int, b: int) -> int:
-    """
-    Compute least common multiple.
+    """Compute least common multiple.
 
     Args:
         a: First integer
@@ -280,6 +280,7 @@ def lcm(a: int, b: int) -> int:
 
     Returns:
         LCM of a and b
+
     """
     if a == 0 or b == 0:
         return 0

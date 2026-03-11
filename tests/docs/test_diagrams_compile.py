@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """Tests for the compile_diagrams script."""
-from pathlib import Path
 import subprocess
-
+from pathlib import Path
 from typing import Any
 
 

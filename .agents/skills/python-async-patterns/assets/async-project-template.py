@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Async Python Project Template
+"""Async Python Project Template
 
 Production-ready async application structure with:
 - Proper session management

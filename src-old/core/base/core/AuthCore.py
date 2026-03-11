@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/core/AuthCore.description.md
 
 # AuthCore
 
-**File**: `src\core\base\core\AuthCore.py`  
+**File**: `src\\core\base\\core\\AuthCore.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 4 imports  
 **Lines**: 35  
@@ -46,7 +45,7 @@ Handles challenge-response generation without secret exposure.
 
 # Improvements for AuthCore
 
-**File**: `src\core\base\core\AuthCore.py`  
+**File**: `src\\core\base\\core\\AuthCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 35 lines (small)  
 **Complexity**: 4 score (simple)

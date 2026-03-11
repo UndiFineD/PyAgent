@@ -10,14 +10,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/base_agent/__init__.description.md
 
 # __init__
 
-**File**: `src\classes\base_agent\__init__.py`  
+**File**: `src\\classes\base_agent\\__init__.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 70 imports  
 **Lines**: 175  
@@ -53,7 +52,7 @@ BaseAgent module: Core classes and utilities for AI-powered agents.
 
 # Improvements for __init__
 
-**File**: `src\classes\base_agent\__init__.py`  
+**File**: `src\\classes\base_agent\\__init__.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 175 lines (medium)  
 **Complexity**: 0 score (simple)
@@ -86,24 +85,62 @@ LLM_CONTEXT_END
 """BaseAgent module: Core classes and utilities for AI-powered agents."""
 
 # ========== Models (Data Structures) ==========
+# ========== Agent Core ==========
+from .agent import DEFAULT_PROMPT_TEMPLATES, BaseAgent
+
+# ========== Managers (Business Logic) ==========
+from .managers import (
+    # A/B Testing
+    ABTest,
+    # Agent Composition
+    AgentComposer,
+    # Authentication
+    AuthenticationManager,
+    AuthManager,
+    # Batch Processing
+    BatchRequest,
+    ConversationHistory,
+    # Event Management
+    EventManager,
+    # File Priority
+    FilePriorityManager,
+    # Health Checking
+    HealthChecker,
+    # Model Selection
+    ModelSelector,
+    # Multimodal Processing
+    MultimodalProcessor,
+    # Plugin Management
+    PluginManager,
+    # Configuration Profiles
+    ProfileManager,
+    # Prompt Management
+    PromptTemplateManager,
+    PromptVersion,
+    PromptVersionManager,
+    # Quality Scoring
+    QualityScorer,
+    RequestBatcher,
+    # Response Caching
+    ResponseCache,
+    ResponsePostProcessor,
+    # Serialization
+    SerializationManager,
+    # State Persistence
+    StatePersistence,
+)
 from .models import (
-    # Enums
-    AgentEvent,
-    AgentState,
-    AgentType,
-    AuthMethod,
-    EventType,
-    FilePriority,
-    InputType,
-    MessageRole,
-    ResponseQuality,
-    SerializationFormat,
     # Dataclasses
     AgentConfig,
+    # Enums
+    AgentEvent,
     AgentParallel,
     AgentPipeline,
     AgentRouter,
+    AgentState,
+    AgentType,
     AuthConfig,
+    AuthMethod,
     BatchResult,
     CacheEntry,
     ComposedAgent,
@@ -111,75 +148,36 @@ from .models import (
     ContextWindow,
     ConversationMessage,
     EventHook,
+    EventType,
+    FilePriority,
     FilePriorityConfig,
     HealthCheckResult,
+    InputType,
+    MessageRole,
     ModelConfig,
     MultimodalBuilder,
     MultimodalInput,
     PromptTemplate,
+    ResponseQuality,
     SerializationConfig,
+    SerializationFormat,
     TokenBudget,
+    _empty_agent_event_handlers,
+    _empty_dict_str_any,
+    _empty_dict_str_callable_any_any,
+    _empty_dict_str_configprofile,
+    _empty_dict_str_filepriority,
+    _empty_dict_str_health_checks,
+    _empty_dict_str_int,
+    _empty_dict_str_modelconfig,
+    _empty_dict_str_quality_criteria,
+    _empty_dict_str_str,
+    _empty_list_float,
+    _empty_list_int,
     # Helper functions
     _empty_list_str,
-    _empty_list_int,
-    _empty_list_float,
-    _empty_dict_str_any,
-    _empty_dict_str_int,
-    _empty_dict_str_str,
-    _empty_dict_str_callable_any_any,
-    _empty_dict_str_quality_criteria,
-    _empty_dict_str_health_checks,
-    _empty_dict_str_configprofile,
     _empty_routes_list,
-    _empty_dict_str_filepriority,
-    _empty_dict_str_modelconfig,
-    _empty_agent_event_handlers,
 )
-
-# ========== Managers (Business Logic) ==========
-from .managers import (
-    # Prompt Management
-    PromptTemplateManager,
-    PromptVersion,
-    PromptVersionManager,
-    ConversationHistory,
-    ResponsePostProcessor,
-    # Batch Processing
-    BatchRequest,
-    RequestBatcher,
-    # Authentication
-    AuthenticationManager,
-    AuthManager,
-    # Multimodal Processing
-    MultimodalProcessor,
-    # Agent Composition
-    AgentComposer,
-    # Serialization
-    SerializationManager,
-    # File Priority
-    FilePriorityManager,
-    # Response Caching
-    ResponseCache,
-    # State Persistence
-    StatePersistence,
-    # Model Selection
-    ModelSelector,
-    # Quality Scoring
-    QualityScorer,
-    # A/B Testing
-    ABTest,
-    # Event Management
-    EventManager,
-    # Plugin Management
-    PluginManager,
-    # Health Checking
-    HealthChecker,
-    # Configuration Profiles
-    ProfileManager,
-)
-
-# ========== Agent Core ==========
-from .agent import BaseAgent, DEFAULT_PROMPT_TEMPLATES
 from .utilities import create_main_function, setup_logging
 
 __all__ = [

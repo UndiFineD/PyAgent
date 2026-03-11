@@ -1,12 +1,13 @@
 import os
 
+
 def replace_in_file(filepath):
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         new_content = content.replace("DebVisor", "PyAgent").replace("debvisor", "pyagent")
-        
+
         if content != new_content:
             print(f"Updating {filepath}")
             with open(filepath, 'w', encoding='utf-8') as f:

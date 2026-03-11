@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/batch_core.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -53,8 +53,8 @@ Core logic for batch request processing and queuing.
 from pathlib import Path
 from typing import Any, Callable, List, Optional
 
-from src.core.base.common.base_core import BaseCore
 from src.classes.base_agent.models import BatchResult, FilePriority
+from src.core.base.common.base_core import BaseCore
 
 
 class BatchRequest:
@@ -92,8 +92,7 @@ class BatchRequest:
 
 
 class BatchCore(BaseCore):
-    """
-    Authoritative engine for batch request management.
+    """Authoritative engine for batch request management.
     """
 
     def __init__(self, batch_size: int = 10, max_concurrent: int = 4) -> None:

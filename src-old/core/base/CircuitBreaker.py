@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/CircuitBreaker.description.md
 
 # CircuitBreaker
 
-**File**: `src\core\base\CircuitBreaker.py`  
+**File**: `src\\core\base\\CircuitBreaker.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 10 imports  
 **Lines**: 213  
@@ -61,7 +60,7 @@ States:
 
 # Improvements for CircuitBreaker
 
-**File**: `src\core\base\CircuitBreaker.py`  
+**File**: `src\\core\base\\CircuitBreaker.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 213 lines (medium)  
 **Complexity**: 7 score (moderate)
@@ -109,14 +108,14 @@ from __future__ import annotations
 
 """Auto-extracted class from agent.py"""
 
-from src.core.base.Version import VERSION
+import inspect
 import logging
 import time
-import asyncio
-import inspect
-from typing import Any
 from collections.abc import Callable
+from typing import Any
+
 from src.core.base.core.ResilienceCore import ResilienceCore
+from src.core.base.Version import VERSION
 from src.observability.stats.exporters import OTelManager
 
 __version__ = VERSION
@@ -152,6 +151,7 @@ class CircuitBreaker:
             recovery_timeout: Base seconds to wait before attempting recovery
             backoff_multiplier: Multiplier for exponential backoff
             otel_manager: Optional OTel manager for telemetry
+
         """
         self.name = name
         self.failure_threshold = failure_threshold
@@ -209,8 +209,7 @@ class CircuitBreaker:
             self.otel_manager.end_span(span_id)
 
     async def probe(self, health_check_func: Callable[[], Any]) -> bool:
-        """
-        Periodically attempt a 'Wait-for-Success' probe (Phase 273).
+        """Periodically attempt a 'Wait-for-Success' probe (Phase 273).
         Exits the OPEN state faster if the backend is healthy.
         """
         if self.state != "OPEN":

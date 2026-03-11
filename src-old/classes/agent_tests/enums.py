@@ -6,18 +6,21 @@ from enum import Enum
 
 class CoverageType(Enum):
     """Types of test coverage."""
+
     UNIT = "unit"
     INTEGRATION = "integration"
 
 
 class BrowserType(Enum):
     """Supported browsers for web testing."""
+
     CHROME = "chrome"
     FIREFOX = "firefox"
 
 
 class TestPriority(Enum):
     """Test priority levels."""
+
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -25,6 +28,7 @@ class TestPriority(Enum):
 
 class TestStatus(Enum):
     """Possible test outcomes."""
+
     PASS = "pass"
     FAIL = "fail"
     SKIP = "skip"
@@ -32,6 +36,7 @@ class TestStatus(Enum):
 
 class TestSourceType(Enum):
     """Origin of test cases."""
+
     UNIT = "unit"
     AUTO_GENERATED = "auto"
     MANUAL = "manual"
@@ -39,6 +44,7 @@ class TestSourceType(Enum):
 
 class MutationOperator(Enum):
     """Types of mutation operators for mutation testing."""
+
     AOR = "arithmetic"
     ROR = "relational"
     LCR = "logical"
@@ -46,6 +52,7 @@ class MutationOperator(Enum):
 
 class ExecutionMode(Enum):
     """Modes of test execution."""
+
     SEQUENTIAL = "sequential"
     PARALLEL = "parallel"
 
@@ -57,8 +64,13 @@ __all__ = [
 
 try:
     from src.infrastructure.services.dev.agent_tests.enums import (
-        CoverageType, BrowserType, TestPriority, TestStatus,
-        TestSourceType, MutationOperator, ExecutionMode
+        BrowserType,
+        CoverageType,
+        ExecutionMode,
+        MutationOperator,
+        TestPriority,
+        TestSourceType,
+        TestStatus,
     )
 except Exception:
     # Minimal placeholders if infra module not available

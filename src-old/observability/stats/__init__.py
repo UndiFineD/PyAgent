@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/__init__.description.md
 
@@ -28,19 +27,37 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-from .ab_engine import ABComparator, ABComparison, ABComparisonEngine, ABComparisonResult, ABSignificanceResult
+from typing import TYPE_CHECKING, Any
 
-from typing import Any, TYPE_CHECKING
 from src.core.base.lifecycle.version import VERSION
 from src.core.lazy_loader import ModuleLazyLoader
 
-
+# Copyright 2026 PyAgent Authors
+from .ab_engine import ABComparator, ABComparison, ABComparisonEngine, ABComparisonResult, ABSignificanceResult
+from .access import StatsAccessController
+from .alerting import RetentionEnforcer, ThresholdAlertManager
+from .analysis import CorrelationAnalyzer
 from .api import APIEndpoint, StatsAPIServer
+from .engine import StatsNamespaceManager
+from .exporters import (
+    CloudExporter,
+    MetricsExporter,
+    OTelManager,
+    PrometheusExporter,
+    Span,
+    StatsExporter,
+)
+from .federation import StatsFederation
+from .formula_engine import FormulaEngine, FormulaEngineCore, FormulaValidation
+from .metrics_core import DerivedMetricCalculator, ModelFallbackCore, TokenCostCore
+from .metrics_engine import ModelFallbackEngine, ObservabilityEngine, TokenCostEngine
+from .monitoring import ResourceMonitor
+from .namespaces import MetricNamespaceManager
 from .observability_core import (
     AggregationType,
     Alert,
@@ -63,36 +80,18 @@ from .observability_core import (
     StreamingProtocol,
     Threshold,
 )
+from .prediction_engine import StatsChangeDetector, StatsForecaster
+from .reporting_agent import ReportingAgent
+from .rollup_engine import StatsQueryEngine, StatsRollup, StatsRollupCalculator
+from .stats_agent import StatsAgent
+from .storage_engine import StatsBackupManager, StatsCompressor, StatsSnapshotManager
+from .streaming import StatsStreamer, StatsStreamManager
 from .subs_engine import (
     AnnotationManager,
     StatsAnnotationManager,
     StatsSubscriptionManager,
     SubscriptionManager,
 )
-from .exporters import (
-    CloudExporter,
-    MetricsExporter,
-    OTelManager,
-    PrometheusExporter,
-    Span,
-    StatsExporter,
-)
-from .analysis import CorrelationAnalyzer
-from .metrics_core import DerivedMetricCalculator, ModelFallbackCore, TokenCostCore
-from .namespaces import MetricNamespaceManager
-from .metrics_engine import ModelFallbackEngine, ObservabilityEngine, TokenCostEngine
-from .reporting_agent import ReportingAgent
-from .monitoring import ResourceMonitor
-from .alerting import RetentionEnforcer, ThresholdAlertManager
-from .access import StatsAccessController
-from .stats_agent import StatsAgent
-from .formula_engine import FormulaEngine, FormulaEngineCore, FormulaValidation
-from .storage_engine import StatsBackupManager, StatsCompressor, StatsSnapshotManager
-from .prediction_engine import StatsChangeDetector, StatsForecaster
-from .federation import StatsFederation
-from .engine import StatsNamespaceManager
-from .rollup_engine import StatsQueryEngine, StatsRollup, StatsRollupCalculator
-from .streaming import StatsStreamManager, StatsStreamer
 from .transparency_agent import TransparencyAgent
 
 _LAZY_REGISTRY = {

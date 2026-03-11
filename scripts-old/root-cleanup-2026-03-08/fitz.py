@@ -1,6 +1,5 @@
 import importlib.util
 import os
-import sys
 
 # Load the shim from scripts/fitz.py so tests importing `fitz` get the shim.
 _shim_path = os.path.join(os.path.dirname(__file__), "scripts", "fitz.py")

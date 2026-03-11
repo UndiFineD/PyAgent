@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/improvements/sla_manager.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -69,6 +70,7 @@ class SLAManager:
     Attributes:
         sla_configs: SLA configurations by level.
         tracked: Map of improvement IDs to SLA tracking data.
+
     """
 
     def __init__(self) -> None:
@@ -136,6 +138,7 @@ class SLAManager:
         Args:
             improvement: The improvement to track.
             level: SLA priority level.
+
         """
         config = self.sla_configs.get(level)
         if not config:

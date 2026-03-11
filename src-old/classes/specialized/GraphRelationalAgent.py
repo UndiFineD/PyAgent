@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/GraphRelationalAgent.description.md
 
@@ -92,10 +91,11 @@ Implements hybrid indexing using vector embeddings and structured knowledge grap
 Focuses on tracking entity relationships (e.g., Agent -> depends_on -> Tool).
 """
 
-import logging
 import json
+import logging
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Script to check for indentation errors and run pytest."""
-import subprocess
-import sys
 import glob
 import pathlib
+import subprocess
+import sys
 
 # repair imports
 subprocess.run([sys.executable, 'scripts/fix_leading_imports.py'], check=True)

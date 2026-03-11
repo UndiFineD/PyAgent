@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ReflectionAgent.description.md
 
@@ -75,7 +74,6 @@ LLM_CONTEXT_END
 
 """Agent specializing in self-critique and reflection."""
 
-import logging
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
@@ -94,7 +92,7 @@ class ReflectionAgent(BaseAgent):
     @as_tool
     def critique(self, work: str) -> str:
         """Analyzes work for flaws and suggests improvements."""
-        return f"### Critique\n1. Potential edge cases: Not handled.\n2. Inefficiency: The loop structure is O(n^2).\n3. Clarity: Variable names are ambiguous."
+        return "### Critique\n1. Potential edge cases: Not handled.\n2. Inefficiency: The loop structure is O(n^2).\n3. Clarity: Variable names are ambiguous."
 
     def improve_content(self, prompt: str) -> str:
         return self.critique(prompt)

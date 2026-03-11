@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/work_patterns/base_pattern.description.md
 
 # base_pattern
 
-**File**: `src\core\base\work_patterns\base_pattern.py`  
+**File**: `src\\core\base\\work_patterns\base_pattern.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 62  
@@ -61,7 +60,7 @@ inspired by agentUniverse PEER pattern and other collaborative frameworks.
 
 # Improvements for base_pattern
 
-**File**: `src\core\base\work_patterns\base_pattern.py`  
+**File**: `src\\core\base\\work_patterns\base_pattern.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 62 lines (small)  
 **Complexity**: 3 score (simple)
@@ -120,6 +119,7 @@ class WorkPattern(ABC):
 
         Returns:
             Dict containing the results of the pattern execution
+
         """
         pass
 
@@ -129,6 +129,7 @@ class WorkPattern(ABC):
 
         Returns:
             True if all required agents are present
+
         """
         pass
 
@@ -137,5 +138,6 @@ class WorkPattern(ABC):
 
         Returns:
             List of agent type names
+
         """
         return []

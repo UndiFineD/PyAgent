@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/core/MultiModalCore.description.md
 
 # MultiModalCore
 
-**File**: `src\logic\agents\system\core\MultiModalCore.py`  
+**File**: `src\\logic\agents\\system\\core\\MultiModalCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 54  
@@ -40,7 +39,7 @@ Class MultiModalCore implementation.
 
 # Improvements for MultiModalCore
 
-**File**: `src\logic\agents\system\core\MultiModalCore.py`  
+**File**: `src\\logic\agents\\system\\core\\MultiModalCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 54 lines (small)  
 **Complexity**: 3 score (simple)
@@ -79,14 +78,13 @@ Handles interactions with vision models for bug analysis.
 """
 
 import base64
-from typing import Dict, Any
+from typing import Any
 
 
 class MultiModalCore:
     @staticmethod
     def encode_image(image_path: str) -> str:
-        """
-        Encodes an image file to base64.
+        """Encodes an image file to base64.
         """
         with open(image_path, "rb") as image_file:
             return base64.b64encode(image_file.read()).decode("utf-8")
@@ -95,8 +93,7 @@ class MultiModalCore:
     def construct_vision_payload(
         model: str, prompt: str, base64_image: str
     ) -> dict[str, Any]:
-        """
-        Constructs a payload for a vision model (OpenAI-style).
+        """Constructs a payload for a vision model (OpenAI-style).
         """
         return {
             "model": model,
@@ -119,8 +116,7 @@ class MultiModalCore:
 
     @staticmethod
     def parse_bug_report(vision_response: str) -> dict[str, Any]:
-        """
-        Simplifies vision response into a structured bug report.
+        """Simplifies vision response into a structured bug report.
         """
         # Heuristic parsing - in reality, we'd use JSON mode if supported
         is_bug = "bug" in vision_response.lower() or "error" in vision_response.lower()

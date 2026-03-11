@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/doc_inference_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -92,6 +92,7 @@ class DocInferenceAgent(BaseAgent):
 
         Args:
             pdf_path: Path to the PDF file.
+
         """
         if not HAS_PYPDF:
             return "Error: pypdf library not installed. Please install it to use this tool."
@@ -120,6 +121,7 @@ class DocInferenceAgent(BaseAgent):
         Args:
             doc_path: Path to the document (PDF, Image, Text).
             tags: Optional metadata tags.
+
         """
         logging.info(f"DocInference: Ingesting {doc_path} into Knowledge.")
         content = (
@@ -181,8 +183,7 @@ class DocInferenceAgent(BaseAgent):
         return "Transcribed Note: 'Meeting at 5pm to discuss the new agent architecture. Don't forget the coffee.'"
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """
-        Specialized content improvement for Documentation Inference.
+        """Specialized content improvement for Documentation Inference.
         """
         _ = target_file
         # Perform inference

@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Sequence, Any
+from typing import Any, Sequence
 
 
 def compute_throughput(completed: Sequence[Any], period: Sequence[Any]) -> int:

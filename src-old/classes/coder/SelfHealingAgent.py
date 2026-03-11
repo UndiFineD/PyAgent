@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/SelfHealingAgent.description.md
 
@@ -84,12 +83,10 @@ LLM_CONTEXT_END
 
 """Agent specializing in self-healing through telemetry analysis and error correction."""
 
-import json
-import logging
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List
+
 from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import create_main_function, as_tool
+from src.classes.base_agent.utilities import as_tool, create_main_function
 from src.classes.stats.ObservabilityEngine import ObservabilityEngine
 
 

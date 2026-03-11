@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # Orchestration Mixin for BaseAgent
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/OrchestrationMixin.description.md
 
 # OrchestrationMixin
 
-**File**: `src\core\base\mixins\OrchestrationMixin.py`  
+**File**: `src\\core\base\\mixins\\OrchestrationMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 18 imports  
 **Lines**: 207  
@@ -57,7 +56,7 @@ Handles registry, tools, strategies, and distributed logging.
 
 # Improvements for OrchestrationMixin
 
-**File**: `src\core\base\mixins\OrchestrationMixin.py`  
+**File**: `src\\core\base\\mixins\\OrchestrationMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 207 lines (medium)  
 **Complexity**: 8 score (moderate)
@@ -183,9 +182,9 @@ class OrchestrationMixin:
             from pathlib import Path
 
             sys.path.append(str(Path(__file__).parent.parent.parent.parent))
-            from src.infrastructure.backend import ExecutionEngine as ab
-
             import asyncio
+
+            from src.infrastructure.backend import ExecutionEngine as ab
         result: str | None = await asyncio.to_thread(
             ab.run_subagent, description, prompt, original_content
         )
@@ -250,13 +249,12 @@ class OrchestrationMixin:
     async def delegate_to(
         self, agent_type: str, prompt: str, target_file: str | None = None
     ) -> str:
-        """
-        Synaptic Delegation: Hands off a sub-task to a specialized agent.
+        """Synaptic Delegation: Hands off a sub-task to a specialized agent.
         Supports both fleet-managed agents and dynamic on-demand instantiation.
         """
+        import asyncio
         import logging
         from pathlib import Path
-        import asyncio
 
         logging.info(
             f"[{self.__class__.__name__}] Delegating task to {agent_type} (Target: {target_file})"
@@ -288,8 +286,8 @@ class OrchestrationMixin:
 
         # 2. Dynamic Import Fallback (via AgentRegistry)
         try:
-            from src.infrastructure.fleet.AgentRegistry import AgentRegistry
             from src.core.base.AgentCore import BaseCore
+            from src.infrastructure.fleet.AgentRegistry import AgentRegistry
 
             ws_root = getattr(self, "_workspace_root", None) or Path(
                 BaseCore.detect_workspace_root(Path.cwd())

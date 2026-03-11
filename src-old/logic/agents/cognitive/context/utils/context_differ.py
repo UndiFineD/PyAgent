@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/utils/context_differ.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -63,6 +64,7 @@ class ContextDiffer:
     Example:
         >>> differ=ContextDiffer()
         >>> diff=differ.diff_versions(old_content, new_content)
+
     """
 
     def __init__(self) -> None:
@@ -108,6 +110,7 @@ class ContextDiffer:
 
         Returns:
             ContextDiff with changes.
+
         """
         # Extract sections
         sections_from: set[str] = set(re.findall(r"##\s+(\w+)", content_from))

@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/ArchitecturalDesignAgent.description.md
 
 # ArchitecturalDesignAgent
 
-**File**: `src\logic\agents\specialists\ArchitecturalDesignAgent.py`  
+**File**: `src\\logic\agents\\specialists\\ArchitecturalDesignAgent.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 13 imports  
 **Lines**: 245  
@@ -66,7 +65,7 @@ reduction and performance enhancement in AI-aided design.
 
 # Improvements for ArchitecturalDesignAgent
 
-**File**: `src\logic\agents\specialists\ArchitecturalDesignAgent.py`  
+**File**: `src\\logic\agents\\specialists\\ArchitecturalDesignAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 245 lines (medium)  
 **Complexity**: 3 score (simple)
@@ -104,18 +103,19 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import asyncio
+import json
+import logging
+from enum import Enum
+from typing import Any, Dict, Optional
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.BaseUtilities import as_tool
+
 # Copyright 2026 PyAgent Authors
 # ArchitecturalDesignAgent: Implementation of Multi-Stage Architectural GenAI Framework
 # Based on research: arXiv:2601.10696 and ScienceDirect S2090447925006203 (Jiang et al., 2026)
-
 from src.core.base.Version import VERSION
-import logging
-import json
-import asyncio
-from typing import Any, Dict, List, Optional
-from enum import Enum
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
 
@@ -136,8 +136,7 @@ class DesignExpertise(Enum):
 
 
 class ArchitecturalDesignAgent(BaseAgent):
-    """
-    Agent specializing in hierarchical architectural design workflows.
+    """Agent specializing in hierarchical architectural design workflows.
     Implements the 5-stage framework identified in 2026 empirical studies
     (arXiv:2601.10696, ScienceDirect S2090447925006203) regarding cognitive load
     reduction and performance enhancement in AI-aided design.
@@ -172,8 +171,7 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def process_requirements(self, brief: str) -> Dict[str, Any]:
-        """
-        Phase 1: Pre-design Analysis. Extracts site conditions and functional requirements.
+        """Phase 1: Pre-design Analysis. Extracts site conditions and functional requirements.
         Reduces initial cognitive load by automating constraints identification.
         """
         prompt = (
@@ -188,8 +186,7 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def simulate_environmental_impact(self) -> Dict[str, Any]:
-        """
-        Phase 1.5: Environmental Simulation. Analyze sun, wind, and terrain factors.
+        """Phase 1.5: Environmental Simulation. Analyze sun, wind, and terrain factors.
         Based on ScienceDirect S2090447925006203 recommendations for real-time analysis.
         """
         if not self.design_state["requirements"]:
@@ -205,8 +202,7 @@ class ArchitecturalDesignAgent(BaseAgent):
     async def generate_spatial_concept(
         self, refinement: Optional[str] = None
     ) -> Dict[str, Any]:
-        """
-        Phase 2: Concept Generation. Generates spatial logic and massing options.
+        """Phase 2: Concept Generation. Generates spatial logic and massing options.
         Leverages hierarchical reasoning to maintain global design coherence.
         Includes a GAAD (Generative-Adversarial Architecture Design) loop for internal refinement.
         """
@@ -250,8 +246,7 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def iterative_visual_refinement(self, visual_feedback: str) -> Dict[str, Any]:
-        """
-        Phase 2.5: Visual Refinement Loop.
+        """Phase 2.5: Visual Refinement Loop.
         Implements the iterative visual feedback loop from arXiv:2601.10696.
         Reducing cognitive load through multi-turn visual refinement.
         """
@@ -271,8 +266,7 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def critical_engagement_buffer(self, critique: str) -> Dict[str, Any]:
-        """
-        Mandatory Reflection State: Implements the 'Critical Engagement Buffer' from 2026 research.
+        """Mandatory Reflection State: Implements the 'Critical Engagement Buffer' from 2026 research.
         Ensures human or agent-based critique is integrated before development.
         """
         self.design_state["feedback_history"].append(critique)
@@ -290,8 +284,7 @@ class ArchitecturalDesignAgent(BaseAgent):
     async def coordinate_visual_verification(
         self, concept_index: int
     ) -> Dict[str, Any]:
-        """
-        Phase 3: Design Development. Simulates agent coordination for visual output.
+        """Phase 3: Design Development. Simulates agent coordination for visual output.
         Translates qualitative concepts into quantitative parameters.
         """
         if not self.design_state["critique_passed"]:
@@ -313,8 +306,7 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def finalize_production_specs(self) -> Dict[str, Any]:
-        """
-        Phase 4: Design Production. Generates technical specifications and urban context matching.
+        """Phase 4: Design Production. Generates technical specifications and urban context matching.
         Calculates the DPO Constructability Score.
         """
         if self.current_phase != DesignPhase.DESIGN_DEVELOPMENT:
@@ -348,8 +340,7 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def synthesize_presentation(self) -> Dict[str, Any]:
-        """
-        Phase 5: Post-production. Automated synthesis of presentation boards and urban viz.
+        """Phase 5: Post-production. Automated synthesis of presentation boards and urban viz.
         """
         prompt = f"Create automated presentation board layout for: {json.dumps(self.design_state)}"
         presentation = await self.run_subagent("synthesizing presentation", prompt)
@@ -364,8 +355,7 @@ class ArchitecturalDesignAgent(BaseAgent):
         return self.metrics
 
     def get_acceleration_metrics(self) -> Dict[str, Any]:
-        """
-        Returns simulated inference optimization metrics.
+        """Returns simulated inference optimization metrics.
         In 2026, agents monitor KV cache efficiency and JCT (Job Completion Time).
         """
         # Placeholders for requested technical concepts

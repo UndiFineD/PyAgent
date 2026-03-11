@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/error_mapping_core.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -49,12 +49,10 @@ Core logic regarding Error Mapping.
 (Facade regarding src.core.base.common.error_mapping_core)
 """
 
-from src.core.base.common.error_mapping_core import \
-    ErrorMappingCore as StandardErrorMappingCore
+from src.core.base.common.error_mapping_core import ErrorMappingCore as StandardErrorMappingCore
 
 
 class ErrorMappingCore(StandardErrorMappingCore):
-    """
-    Facade regarding StandardErrorMappingCore to maintain backward compatibility.
+    """Facade regarding StandardErrorMappingCore to maintain backward compatibility.
     Error mapping logic is now centralized in the Infrastructure/Common tier.
     """

@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/attention_buffer_agent.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -51,9 +51,9 @@ import logging
 import time
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -68,8 +68,7 @@ except ImportError:
 
 # pylint: disable=too-many-ancestors
 class AttentionBufferAgent(BaseAgent):
-    """
-    Tier 2 (Cognitive Logic) - Attention Buffer Agent: Maintains a shared
+    """Tier 2 (Cognitive Logic) - Attention Buffer Agent: Maintains a shared
     attention context between humans and agents to ensure cohesive collaboration.
 
     Phase 14 Rust Optimizations:
@@ -89,8 +88,7 @@ class AttentionBufferAgent(BaseAgent):
 
     @as_tool
     def push_attention_point(self, source: str, content: str, priority: int = 5) -> str:
-        """
-        Adds a new point of interest to the shared attention buffer.
+        """Adds a new point of interest to the shared attention buffer.
         Source can be 'Human' or any Agent name.
         """
         point = {
@@ -110,8 +108,7 @@ class AttentionBufferAgent(BaseAgent):
 
     @as_tool
     def get_attention_summary(self) -> dict[str, Any]:
-        """
-        Returns the current state of the attention buffer, sorted by priority and recency.
+        """Returns the current state of the attention buffer, sorted by priority and recency.
         Uses Rust-accelerated sorting when available.
         """
         # Rust-accelerated priority-timestamp sorting
@@ -143,8 +140,7 @@ class AttentionBufferAgent(BaseAgent):
 
     @as_tool
     def clear_stale_attention(self, age_seconds: int = 3600) -> str:
-        """
-        Removes attention points older than a certain duration.
+        """Removes attention points older than a certain duration.
         Uses Rust-accelerated filtering when available.
         """
         now = time.time()

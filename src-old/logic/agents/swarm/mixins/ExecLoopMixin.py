@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/mixins/ExecLoopMixin.description.md
 
 # ExecLoopMixin
 
-**File**: `src\logic\agents\swarm\mixins\ExecLoopMixin.py`  
+**File**: `src\\logic\agents\\swarm\\mixins\\ExecLoopMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 97  
@@ -40,7 +39,7 @@ Mixin for parallel execution strategies and main run loops.
 
 # Improvements for ExecLoopMixin
 
-**File**: `src\logic\agents\swarm\mixins\ExecLoopMixin.py`  
+**File**: `src\\logic\agents\\swarm\\mixins\\ExecLoopMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 97 lines (small)  
 **Complexity**: 2 score (simple)
@@ -87,8 +86,8 @@ from __future__ import annotations
 
 """Execution loop logic for OrchestratorAgent."""
 
-import logging
 import asyncio
+import logging
 
 
 class ExecLoopMixin:

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/CoderSmellMixin.description.md
 
 # CoderSmellMixin
 
-**File**: `src\logic\agents\development\mixins\CoderSmellMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\CoderSmellMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 154  
@@ -46,7 +45,7 @@ Mixin for detecting code smells.
 
 # Improvements for CoderSmellMixin
 
-**File**: `src\logic\agents\development\mixins\CoderSmellMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\CoderSmellMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 154 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -96,7 +95,8 @@ Code smell detection logic for CoderCore.
 """
 
 import ast
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
 from src.core.base.types.CodeLanguage import CodeLanguage
 from src.core.base.types.CodeSmell import CodeSmell
 

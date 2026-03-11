@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/collection_utils.description.md
 
@@ -32,6 +31,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -61,8 +61,7 @@ This module provides helper functions for manipulating and analyzing collections
 
 import itertools
 from collections import defaultdict
-from collections.abc import (Callable, Generator, Hashable, Iterable, Iterator,
-                             Mapping)
+from collections.abc import Callable, Generator, Hashable, Iterable, Iterator, Mapping
 from typing import Any, Generic, Literal, TypeVar
 
 from typing_extensions import TypeIs
@@ -78,8 +77,7 @@ V = TypeVar("V")
 
 
 class LazyDict(Mapping[str, V], Generic[V]):
-    """
-    Evaluates dictionary items only when they are accessed.
+    """Evaluates dictionary items only when they are accessed.
 
     Useful for expensive computations that should only run when needed.
 
@@ -94,16 +92,17 @@ class LazyDict(Mapping[str, V], Generic[V]):
         42
         >>> print(d["value"])  # Uses cached value
         42
+
     """
 
     __slots__ = ("_factory", "_cache")
 
     def __init__(self, factory: dict[str, Callable[[], V]]) -> None:
-        """
-        Initialize a lazy dictionary.
+        """Initialize a lazy dictionary.
 
         Args:
             factory: Dictionary mapping keys to factory functions.
+
         """
         self._factory = dict(factory)
         self._cache: dict[str, V] = {}
@@ -140,11 +139,11 @@ class LazyDict(Mapping[str, V], Generic[V]):
         return key in self._cache
 
     def clear_cache(self, key: str | None = None) -> None:
-        """
-        Clear cached computed values.
+        """Clear cached computed values.
 
         Args:
             key: If provided, clear only this key. Otherwise clear all.
+
         """
         if key is None:
             self._cache.clear()
@@ -165,8 +164,7 @@ class LazyDict(Mapping[str, V], Generic[V]):
 
 
 def as_list(maybe_list: Iterable[T]) -> list[T]:
-    """
-    Convert an iterable to a list, unless it's already a list.
+    """Convert an iterable to a list, unless it's already a list.
 
     Avoids unnecessary copying for lists.
     """
@@ -174,8 +172,7 @@ def as_list(maybe_list: Iterable[T]) -> list[T]:
 
 
 def as_iter(obj: T | Iterable[T]) -> Iterable[T]:
-    """
-    Convert a single object or iterable to an iterable.
+    """Convert a single object or iterable to an iterable.
 
     Strings are treated as single objects, not iterables.
     """
@@ -190,8 +187,7 @@ def is_list_of(
     *,
     check: Literal["first", "all"] = "first",
 ) -> TypeIs[list[T]]:
-    """
-    Type guard to check if value is a list of a specific type.
+    """Type guard to check if value is a list of a specific type.
 
     Args:
         value: The value to check.
@@ -207,6 +203,7 @@ def is_list_of(
         True
         >>> is_list_of(["a", "b"], int)
         False
+
     """
     def _is_empty(val: object) -> bool:
         return isinstance(val, list) and not val
@@ -229,12 +226,12 @@ def is_list_of(
 
 
 def chunk_list(lst: list[T], chunk_size: int) -> Generator[list[T], None, None]:
-    """
-    Yield successive chunks of a specified size from a list.
+    """Yield successive chunks of a specified size from a list.
 
     Example:
         >>> list(chunk_list([1, 2, 3, 4, 5], 2))
         [[1, 2], [3, 4], [5]]
+
     """
     if chunk_size <= 0:
         raise ValueError("chunk_size must be positive")
@@ -243,8 +240,7 @@ def chunk_list(lst: list[T], chunk_size: int) -> Generator[list[T], None, None]:
 
 
 def chunk_iter(iterable: Iterable[T], chunk_size: int) -> Generator[list[T], None, None]:
-    """
-    Yield successive chunks of a specified size from any iterable.
+    """Yield successive chunks of a specified size from any iterable.
 
     More memory efficient than chunk_list for large iterables.
     """
@@ -259,19 +255,18 @@ def chunk_iter(iterable: Iterable[T], chunk_size: int) -> Generator[list[T], Non
 
 
 def flatten_2d_lists(lists: Iterable[Iterable[T]]) -> list[T]:
-    """
-    Flatten a list of lists to a single list.
+    """Flatten a list of lists to a single list.
 
     Example:
         >>> flatten_2d_lists([[1, 2], [3, 4], [5]])
         [1, 2, 3, 4, 5]
+
     """
     return [item for sublist in lists for item in sublist]
 
 
 def flatten_deep(nested: Any, max_depth: int = -1) -> list[Any]:
-    """
-    Recursively flatten a deeply nested structure.
+    """Recursively flatten a deeply nested structure.
 
     Args:
         nested: The nested structure to flatten.
@@ -280,6 +275,7 @@ def flatten_deep(nested: Any, max_depth: int = -1) -> list[Any]:
     Example:
         >>> flatten_deep([[1, [2, 3]], [4, [5, [6]]]])
         [1, 2, 3, 4, 5, 6]
+
     """
     result: list[Any] = []
 
@@ -302,14 +298,14 @@ def flatten_deep(nested: Any, max_depth: int = -1) -> list[Any]:
 
 
 def full_groupby(values: Iterable[V], *, key: Callable[[V], K]) -> Iterable[tuple[K, list[V]]]:
-    """
-    Group items by key, without requiring sorted input.
+    """Group items by key, without requiring sorted input.
 
     Unlike itertools.groupby, groups are not broken by non-contiguous data.
 
     Example:
         >>> list(full_groupby([1, 2, 3, 1, 2], key=lambda x: x % 2))
         [(1, [1, 3, 1]), (0, [2, 2])]
+
     """
     groups: dict[K, list[V]] = defaultdict(list)
 
@@ -320,8 +316,7 @@ def full_groupby(values: Iterable[V], *, key: Callable[[V], K]) -> Iterable[tupl
 
 
 def partition(values: Iterable[T], predicate: Callable[[T], bool]) -> tuple[list[T], list[T]]:
-    """
-    Partition items into two lists based on a predicate.
+    """Partition items into two lists based on a predicate.
 
     Returns:
         Tuple of (matching, non_matching) lists.
@@ -329,6 +324,7 @@ def partition(values: Iterable[T], predicate: Callable[[T], bool]) -> tuple[list
     Example:
         >>> partition([1, 2, 3, 4, 5], lambda x: x % 2 == 0)
         ([2, 4], [1, 3, 5])
+
     """
     matching: list[T] = []
     non_matching: list[T] = []
@@ -343,22 +339,19 @@ def partition(values: Iterable[T], predicate: Callable[[T], bool]) -> tuple[list
 
 
 def first(iterable: Iterable[T], default: T | None = None) -> T | None:
-    """
-    Return the first item from an iterable, or default if empty.
+    """Return the first item from an iterable, or default if empty.
     """
     return next(iter(iterable), default)
 
 
 def first_or_raise(iterable: Iterable[T]) -> T:
-    """
-    Return the first item from an iterable, or raise StopIteration.
+    """Return the first item from an iterable, or raise StopIteration.
     """
     return next(iter(iterable))
 
 
 def last(iterable: Iterable[T], default: T | None = None) -> T | None:
-    """
-    Return the last item from an iterable, or default if empty.
+    """Return the last item from an iterable, or default if empty.
     """
     item = default
     for item in iterable:
@@ -372,8 +365,7 @@ def last(iterable: Iterable[T], default: T | None = None) -> T | None:
 
 
 def swap_dict_values(obj: dict[K, V], key1: K, key2: K) -> None:
-    """
-    Swap values between two dictionary keys in place.
+    """Swap values between two dictionary keys in place.
 
     Handles missing keys gracefully.
     """
@@ -392,8 +384,7 @@ def swap_dict_values(obj: dict[K, V], key1: K, key2: K) -> None:
 
 
 def deep_merge_dicts(base: dict[str, Any], override: dict[str, Any], *, inplace: bool = False) -> dict[str, Any]:
-    """
-    Recursively merge two dictionaries.
+    """Recursively merge two dictionaries.
 
     Args:
         base: The base dictionary.
@@ -402,6 +393,7 @@ def deep_merge_dicts(base: dict[str, Any], override: dict[str, Any], *, inplace:
 
     Returns:
         Merged dictionary.
+
     """
     result = base if inplace else dict(base)
 
@@ -415,8 +407,7 @@ def deep_merge_dicts(base: dict[str, Any], override: dict[str, Any], *, inplace:
 
 
 def invert_dict(d: dict[K, V]) -> dict[V, K]:
-    """
-    Invert a dictionary, swapping keys and values.
+    """Invert a dictionary, swapping keys and values.
 
     Note: Values must be hashable. Duplicate values will be overwritten.
     """
@@ -424,12 +415,12 @@ def invert_dict(d: dict[K, V]) -> dict[V, K]:
 
 
 def invert_dict_multi(d: dict[K, V]) -> dict[V, list[K]]:
-    """
-    Invert a dictionary, collecting all keys with the same value.
+    """Invert a dictionary, collecting all keys with the same value.
 
     Example:
         >>> invert_dict_multi({"a": 1, "b": 1, "c": 2})
         {1: ["a", "b"], 2: ["c"]}
+
     """
     result: dict[V, list[K]] = defaultdict(list)
     for key, value in d.items():
@@ -438,23 +429,20 @@ def invert_dict_multi(d: dict[K, V]) -> dict[V, list[K]]:
 
 
 def filter_none(d: dict[K, V | None]) -> dict[K, V]:
-    """
-    Return a new dictionary with None values filtered out.
+    """Return a new dictionary with None values filtered out.
     """
     return {k: v for k, v in d.items() if v is not None}
 
 
 def pick_keys(d: dict[K, V], keys: Iterable[K]) -> dict[K, V]:
-    """
-    Return a new dictionary with only the specified keys.
+    """Return a new dictionary with only the specified keys.
     """
     key_set = set(keys)
     return {k: v for k, v in d.items() if k in key_set}
 
 
 def omit_keys(d: dict[K, V], keys: Iterable[K]) -> dict[K, V]:
-    """
-    Return a new dictionary without the specified keys.
+    """Return a new dictionary without the specified keys.
     """
     key_set = set(keys)
     return {k: v for k, v in d.items() if k not in key_set}
@@ -466,8 +454,7 @@ def omit_keys(d: dict[K, V], keys: Iterable[K]) -> dict[K, V]:
 
 
 def unique(iterable: Iterable[T]) -> list[T]:
-    """
-    Return unique items preserving order.
+    """Return unique items preserving order.
 
     Items must be hashable.
     """
@@ -481,12 +468,12 @@ def unique(iterable: Iterable[T]) -> list[T]:
 
 
 def unique_by(iterable: Iterable[T], key: Callable[[T], Hashable]) -> list[T]:
-    """
-    Return unique items by key, preserving order.
+    """Return unique items by key, preserving order.
 
     Example:
         >>> unique_by([{"id": 1}, {"id": 2}, {"id": 1}], key=lambda x: x["id"])
         [{"id": 1}, {"id": 2}]
+
     """
     seen: set[Hashable] = set()
     result: list[T] = []
@@ -504,12 +491,12 @@ def unique_by(iterable: Iterable[T], key: Callable[[T], Hashable]) -> list[T]:
 
 
 def sliding_window(iterable: Iterable[T], size: int) -> Generator[tuple[T, ...], None, None]:
-    """
-    Yield sliding windows of a specified size.
+    """Yield sliding windows of a specified size.
 
     Example:
         >>> list(sliding_window([1, 2, 3, 4, 5], 3))
         [(1, 2, 3), (2, 3, 4), (3, 4, 5)]
+
     """
     if size <= 0:
         raise ValueError("size must be positive")
@@ -526,12 +513,12 @@ def sliding_window(iterable: Iterable[T], size: int) -> Generator[tuple[T, ...],
 
 
 def pairwise(iterable: Iterable[T]) -> Generator[tuple[T, T], None, None]:
-    """
-    Yield consecutive pairs from an iterable.
+    """Yield consecutive pairs from an iterable.
 
     Example:
         >>> list(pairwise([1, 2, 3, 4]))
         [(1, 2), (2, 3), (3, 4)]
+
     """
     iterator = iter(iterable)
     prev = next(iterator, None)

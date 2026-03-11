@@ -2,32 +2,34 @@
 
 import logging
 from pathlib import Path
+
 from src.classes.fleet.FleetManager import FleetManager
-from src.classes.specialized.VisualizerAgent import VisualizerAgent
 from src.classes.specialized.GraphMemoryAgent import GraphMemoryAgent
 from src.classes.specialized.MultiModalContextAgent import MultiModalContextAgent
+from src.classes.specialized.VisualizerAgent import VisualizerAgent
+
 
 def test_visualization_and_memory():
     print("\n--- Testing Phase 20: Visual & Multimodal ---")
     root = Path("c:/DEV/PyAgent")
     viz = VisualizerAgent(str(root / "src/classes/specialized/VisualizerAgent.py"))
     mem = GraphMemoryAgent(str(root / "src/classes/specialized/GraphMemoryAgent.py"))
-    
+
     # 1. Test Integration
     viz.set_memory_agent(mem)
     mem.add_relationship("User", "request", "CodeFix")
     mem.add_relationship("CodeFix", "triggers", "CoderAgent")
-    
+
     graph = viz.visualize_knowledge_graph()
     print(graph)
     assert "User -- request --> CodeFix" in graph
-    
+
     # 2. Test MultiModal (Simulated)
     mm = MultiModalContextAgent(str(root / "src/classes/specialized/MultiModalContextAgent.py"))
     # Create a dummy file for testing
     dummy_img = root / "dummy_ui.png"
     dummy_img.write_text("dummy binary data")
-    
+
     analysis = mm.analyze_screenshot(str(dummy_img))
     print(analysis)
     assert "Visual Analysis" in analysis
@@ -36,16 +38,16 @@ def test_visualization_and_memory():
 def test_observability():
     print("\n--- Testing Phase 21: Distributed Observability ---")
     fleet = FleetManager("c:/DEV/PyAgent")
-    
+
     # Trigger tracing
     fleet.telemetry.start_trace("test_op")
     fleet.telemetry.end_trace("test_op", "TestAgent", "test_action", status="success")
-    
+
     # Check MetricsExporter
     metrics = fleet.telemetry.get_metrics()
     print(f"Metrics (Promptheus format):\n{metrics[:200]}...")
     assert "pyagent_agent_call_duration_ms" in metrics
-    
+
     # Check OTel
     spans = fleet.telemetry.otel.export_spans()
     print(f"Exported {len(spans)} OTel spans.")
@@ -55,17 +57,17 @@ def test_gui_backend():
     print("\n--- Testing Phase 22: GUI Backend ---")
     fleet = FleetManager("c:/DEV/PyAgent")
     ui = fleet.web_ui
-    
+
     # File Explorer
     files = ui.list_workspace_files(".")
     print(f"File count: {len(files['items'])}")
     assert len(files['items']) > 0
-    
+
     # Workflow Designer
     designer = ui.get_workflow_designer_state()
     print(f"Available Agents: {len(designer['agents'])}")
     assert len(designer['agents']) >= 0
-    
+
     # Multi-Fleet
     fleet_mgmt = ui.get_multi_fleet_manager()
     print(f"Local Fleet Status: {fleet_mgmt['local_fleet']['status']}")

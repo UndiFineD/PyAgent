@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/compliance/core/ComplianceCore.description.md
 
 # ComplianceCore
 
-**File**: `src\logic\agents\compliance\core\ComplianceCore.py`  
+**File**: `src\\logic\agents\\compliance\\core\\ComplianceCore.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 4 imports  
 **Lines**: 74  
@@ -44,7 +43,7 @@ Identifies licensing conflicts, PII leaks, and dependency risks.
 
 # Improvements for ComplianceCore
 
-**File**: `src\logic\agents\compliance\core\ComplianceCore.py`  
+**File**: `src\\logic\agents\\compliance\\core\\ComplianceCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 74 lines (small)  
 **Complexity**: 2 score (simple)
@@ -83,7 +82,6 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 import re
-from typing import List
 from dataclasses import dataclass
 
 

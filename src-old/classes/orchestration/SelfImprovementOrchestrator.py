@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/SelfImprovementOrchestrator.description.md
 
@@ -98,22 +97,23 @@ LLM_CONTEXT_END
 """Orchestrator for the fleet's self-improvement cycle, 
 including tech debt scanning, security analysis, and autonomous fixes.
 """
-import os
 import json
 import logging
-import time
+import os
 import re
-from typing import Dict, List, Any
-from src.classes.base_agent import BaseAgent
+import time
+from typing import Any, Dict, List
+
 from src.classes.backend.LLMClient import LLMClient
+from src.classes.base_agent import BaseAgent
 from version import is_gate_open
 
 
 class SelfImprovementOrchestrator(BaseAgent):
-    """
-    Orchestrates the fleet's self-improvement cycle: scanning for tech debt, 
+    """Orchestrates the fleet's self-improvement cycle: scanning for tech debt,
     security leaks, and quality issues, and applying autonomous fixes.
     """
+
     def __init__(self, fleet_manager) -> None:
         # We pass workspace_root as the file_path for BaseAgent context
         super().__init__(str(fleet_manager.workspace_root))
@@ -181,7 +181,7 @@ class SelfImprovementOrchestrator(BaseAgent):
                                 logging.error(f"Failed to record debt to SQL: {e}")
 
                         results["details"].append({
-                            "file": os.path.relpath(file_path, self.workspace_root), 
+                            "file": os.path.relpath(file_path, self.workspace_root),
                             "issues": file_issues
                         })
 
@@ -591,8 +591,7 @@ class SelfImprovementOrchestrator(BaseAgent):
             f.write(json.dumps(entry) + "\n")
 
     def _review_ai_lessons(self) -> List[str]:
-        """
-        Scans sharded interaction history for patterns and failures.
+        """Scans sharded interaction history for patterns and failures.
         Extracts 'deep lessons' by reading the actual shard content (Phase 108).
         """
         import gzip

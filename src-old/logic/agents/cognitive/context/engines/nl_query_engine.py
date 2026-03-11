@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/nl_query_engine.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -48,9 +48,9 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_context.py"""
 
+
 from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.models.NLQueryResult import NLQueryResult
-from typing import Dict, List, Optional
 
 __version__ = VERSION
 
@@ -63,6 +63,7 @@ class NLQueryEngine:
     Example:
         >>> engine=NLQueryEngine()
         >>> result=engine.query("How does authentication work?", contexts)
+
     """
 
     def __init__(self) -> None:
@@ -89,6 +90,7 @@ class NLQueryEngine:
 
         Returns:
             NLQueryResult with answer.
+
         """
         # Simplified NL query - in production, use LLM
         relevant: list[str] = []

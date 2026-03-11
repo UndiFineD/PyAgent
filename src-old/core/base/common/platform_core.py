@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/platform_core.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # you may not use this file except in compliance with the License.
@@ -54,14 +54,13 @@ import logging
 import os
 import platform
 import sys
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 logger = logging.getLogger("pyagent.platform")
 
 
 class PlatformCore:
-    """
-    Standardized detector for environment, OS, and hardware capabilities.
+    """Standardized detector for environment, OS, and hardware capabilities.
     """
 
     _instance: Optional["PlatformCore"] = None

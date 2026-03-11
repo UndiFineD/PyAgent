@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/base_agent/managers/BatchManagers.description.md
 
 # BatchManagers
 
-**File**: `src\classes\base_agent\managers\BatchManagers.py`  
+**File**: `src\\classes\base_agent\\managers\\BatchManagers.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 15 imports  
 **Lines**: 140  
@@ -68,7 +67,7 @@ Batch processor for multiple file requests.
 
 # Improvements for BatchManagers
 
-**File**: `src\classes\base_agent\managers\BatchManagers.py`  
+**File**: `src\\classes\base_agent\\managers\\BatchManagers.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 140 lines (medium)  
 **Complexity**: 13 score (moderate)
@@ -103,6 +102,14 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import logging
+import time
+from collections.abc import Callable
+from pathlib import Path
+from typing import Any
+
+from src.core.base.models import BatchResult, FilePriority
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -115,17 +122,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import logging
-import time
-from ..agent import BaseAgent
 from src.infrastructure.compute.backend.LocalContextRecorder import LocalContextRecorder
-from pathlib import Path
-from typing import Any, Dict, List, Optional, TYPE_CHECKING
-from collections.abc import Callable
-from src.core.base.models import FilePriority, BatchResult
+
+from ..agent import BaseAgent
 
 __version__ = VERSION
 

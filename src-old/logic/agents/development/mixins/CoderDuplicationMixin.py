@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/CoderDuplicationMixin.description.md
 
 # CoderDuplicationMixin
 
-**File**: `src\logic\agents\development\mixins\CoderDuplicationMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\CoderDuplicationMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 87  
@@ -43,7 +42,7 @@ Mixin for identifying duplicate code.
 
 # Improvements for CoderDuplicationMixin
 
-**File**: `src\logic\agents\development\mixins\CoderDuplicationMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\CoderDuplicationMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 87 lines (small)  
 **Complexity**: 2 score (simple)
@@ -94,7 +93,7 @@ Duplicate code detection logic for CoderCore.
 
 import hashlib
 import re
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 
 class CoderDuplicationMixin:

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ResearchAgent.description.md
 
@@ -104,11 +103,11 @@ from __future__ import annotations
 Ingests SOTA research (simulated) and generates new agentic tools.
 """
 
-from src.core.base.version import VERSION
 import logging
-from typing import Dict
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

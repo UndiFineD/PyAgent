@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/mixins/GraphMIRIXMixin.description.md
 
 # GraphMIRIXMixin
 
-**File**: `src\logic\agents\cognitive\mixins\GraphMIRIXMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\mixins\\GraphMIRIXMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 111  
@@ -42,7 +41,7 @@ Mixin for MIRIX 6-component memory logic.
 
 # Improvements for GraphMIRIXMixin
 
-**File**: `src\logic\agents\cognitive\mixins\GraphMIRIXMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\mixins\\GraphMIRIXMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 111 lines (medium)  
 **Complexity**: 3 score (simple)
@@ -92,6 +91,7 @@ from __future__ import annotations
 import logging
 import time
 from typing import Any
+
 from src.core.base.BaseUtilities import as_tool
 
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/request_metrics.description.md
 
@@ -75,8 +74,7 @@ class RequestState(Enum):
 
 @dataclass
 class RequestMetrics:
-    """
-    Comprehensive timing metrics for request processing.
+    """Comprehensive timing metrics for request processing.
 
     Tracks detailed timing breakdown from arrival to completion:
     - Queue time: How long request waited in queue
@@ -92,6 +90,7 @@ class RequestMetrics:
         >>> metrics.mark_processing()
         >>> metrics.mark_completed()
         >>> print(metrics.summary())
+
     """
 
     # Request identification
@@ -294,14 +293,14 @@ class RequestMetrics:
 
 @dataclass
 class RequestMetricsAggregator:
-    """
-    Aggregates metrics from multiple requests for analysis.
+    """Aggregates metrics from multiple requests for analysis.
 
     Example:
         >>> aggregator = RequestMetricsAggregator()
         >>> aggregator.add(metrics1)
         >>> aggregator.add(metrics2)
         >>> print(aggregator.summary())
+
     """
 
     metrics: list[RequestMetrics] = field(default_factory=list)

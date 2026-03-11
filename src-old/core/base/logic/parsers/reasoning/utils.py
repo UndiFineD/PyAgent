@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/parsers/reasoning/utils.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # SPDX-License-Identifier: Apache-2.0
@@ -61,8 +61,7 @@ def extract_reasoning(
     tokenizer: Any = None,
     **kwargs: Any,
 ) -> ReasoningResult:
-    """
-    Convenience function to extract reasoning from model output.
+    """Convenience function to extract reasoning from model output.
     """
     parser = ReasoningParserManager.create_parser(parser_name, tokenizer, **kwargs)
     return parser.extract_reasoning(model_output)
@@ -73,8 +72,7 @@ def create_streaming_parser(
     tokenizer: Any = None,
     **kwargs: Any,
 ) -> tuple[Any, StreamingReasoningState]:
-    """
-    Create a parser and state regarding streaming extraction.
+    """Create a parser and state regarding streaming extraction.
     """
     parser = ReasoningParserManager.create_parser(parser_name, tokenizer, **kwargs)
     state = StreamingReasoningState()

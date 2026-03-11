@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/legal_audit_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -69,7 +69,7 @@ Legal audit agent.py module.
 
 import re
 import time
-from typing import Any, Optional, TypedDict
+from typing import Any, TypedDict
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
@@ -90,8 +90,7 @@ class LicenseReport(TypedDict, total=False):
 
 
 class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Phase 59: Autonomous Legal & Smart Contract Auditing.
+    """Phase 59: Autonomous Legal & Smart Contract Auditing.
     Scans codebases for licensing risks, liability concerns, and smart contract vulnerabilities.
     """
 
@@ -127,8 +126,7 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def check_license_compliance(
         self, content: str, project_license: str = "MIT"
     ) -> LicenseReport:
-        """
-        Phase 238: Check generated code against a license blacklist to prevent
+        """Phase 238: Check generated code against a license blacklist to prevent
         GPL/AGPL contamination in permissive projects.
         """
         _ = project_license

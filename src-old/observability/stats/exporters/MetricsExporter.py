@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/exporters/MetricsExporter.description.md
 
@@ -95,9 +94,11 @@ from __future__ import annotations
 Sends telemetry to specialized backends like Prometheus, InfluxDB, or Grafana Cloud.
 """
 
-from src.core.base.version import VERSION
 import logging
 import time
+
+from src.core.base.version import VERSION
+
 from .PrometheusExporter import PrometheusExporter
 
 __version__ = VERSION

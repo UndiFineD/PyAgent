@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/structures/StagedBatchWriter.description.md
 
 # StagedBatchWriter
 
-**File**: `src\core\base\structures\StagedBatchWriter.py`  
+**File**: `src\\core\base\\structures\\StagedBatchWriter.py`  
 **Type**: Python Module  
 **Summary**: 6 classes, 2 functions, 16 imports  
 **Lines**: 580  
@@ -143,7 +142,7 @@ Uses Rust acceleration if available.
 
 # Improvements for StagedBatchWriter
 
-**File**: `src\core\base\structures\StagedBatchWriter.py`  
+**File**: `src\\core\base\\structures\\StagedBatchWriter.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 580 lines (large)  
 **Complexity**: 25 score (complex)
@@ -177,6 +176,7 @@ Uses Rust acceleration if available.
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -204,8 +204,7 @@ import threading
 import time
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Callable, Optional, Union
-import math
+from typing import Any, Optional
 
 # Try to import torch for GPU operations
 try:
@@ -307,6 +306,7 @@ class StagedBatchWriter:
         policy: Conflict resolution policy
         coalesce: Coalescing strategy
         stats: Write statistics
+
     """
 
     def __init__(
@@ -331,6 +331,7 @@ class StagedBatchWriter:
             block_size: Block size for alignment (cache line)
             use_triton: Whether to use Triton kernel
             use_uva: Whether to use UVA backing for large tensors
+
         """
         self.target = target
         self.capacity = initial_capacity
@@ -395,6 +396,7 @@ class StagedBatchWriter:
             index: Target index in the tensor
             value: Value to write
             priority: Priority for ordering (higher = first)
+
         """
         with self._lock:
             self._staged.append(
@@ -418,6 +420,7 @@ class StagedBatchWriter:
             indices: List of target indices
             values: List of values to write
             priority: Priority for all writes
+
         """
         if len(indices) != len(values):
             raise ValueError("indices and values must have same length")
@@ -448,6 +451,7 @@ class StagedBatchWriter:
 
         Returns:
             Tuple of (indices, values) after coalescing
+
         """
         if not self._staged:
             return [], []
@@ -499,6 +503,7 @@ class StagedBatchWriter:
 
         Returns:
             Resolved value
+
         """
         if self.policy == WritePolicy.LAST_WRITE_WINS:
             return max(writes, key=lambda w: w.timestamp).value
@@ -532,6 +537,7 @@ class StagedBatchWriter:
 
         Returns:
             Number of writes applied
+
         """
         target = target or self.target
         if target is None:
@@ -583,6 +589,7 @@ class StagedBatchWriter:
         Args:
             target: Target tensor
             n_writes: Number of writes to apply
+
         """
         device = target.device
 
@@ -667,6 +674,7 @@ class StagedWriteTensor:
             device: Device ('cpu' or 'cuda')
             fill_value: Initial fill value
             **writer_kwargs: Arguments for StagedBatchWriter
+
         """
         if not HAS_TORCH:
             raise RuntimeError("PyTorch required for StagedWriteTensor")

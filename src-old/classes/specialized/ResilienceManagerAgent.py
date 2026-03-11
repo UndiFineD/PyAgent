@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ResilienceManagerAgent.description.md
 
@@ -89,16 +88,16 @@ LLM_CONTEXT_END
 import logging
 import time
 from pathlib import Path
-from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
+from typing import Any, Dict
+
 from src.classes.backend.LocalContextRecorder import LocalContextRecorder
+from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.ConnectivityManager import ConnectivityManager
+from src.classes.base_agent.utilities import as_tool
 
 
 class ResilienceManagerAgent(BaseAgent):
-    """
-    Agent responsible for autonomous compute resource management.
+    """Agent responsible for autonomous compute resource management.
     Monitors swarm health, handles failovers, and optimizes resource allocation.
     """
 
@@ -129,8 +128,7 @@ class ResilienceManagerAgent(BaseAgent):
 
     @as_tool
     def trigger_failover(self, source_node: str, target_node: str) -> bool:
-        """
-        Migrates high-priority agent tasks from a failing node to a healthy one.
+        """Migrates high-priority agent tasks from a failing node to a healthy one.
         """
         logging.warning(
             f"ResilienceManager: Triggering failover from {source_node} to {target_node}"
@@ -143,8 +141,7 @@ class ResilienceManagerAgent(BaseAgent):
 
     @as_tool
     def optimize_resource_allocation(self) -> Dict[str, Any]:
-        """
-        Analyzes current swarm distribution and rebalances agent loads.
+        """Analyzes current swarm distribution and rebalances agent loads.
         """
         logging.info("ResilienceManager: Optimizing swarm resource distribution.")
         stats = {

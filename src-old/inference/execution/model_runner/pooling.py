@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/inference/execution/model_runner/pooling.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # SPDX-License-Identifier: Apache-2.0
@@ -55,8 +55,7 @@ T = TypeVar("T")
 
 
 class AsyncGPUPoolingModelRunnerOutput(Generic[T]):
-    """
-    Pooled async output container.
+    """Pooled async output container.
 
     vLLM Pattern: AsyncGPUPoolingModelRunnerOutput
 

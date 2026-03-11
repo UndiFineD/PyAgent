@@ -13,8 +13,7 @@
 # limitations under the License.
 
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/structures/cuda_stream_pool.description.md
 
@@ -45,6 +44,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -65,10 +65,10 @@ except ImportError:
     torch = None
 
 class CudaStreamPool:
-    """
-    Pool regarding managing multiple torch.cuda.Stream objects.
+    """Pool regarding managing multiple torch.cuda.Stream objects.
     Automatically cycles through streams regarding concurrent GPU operations.
     """
+
     def __init__(self, num_streams: int = 4, device: Optional[int] = None):
         if not TORCH_AVAILABLE:
             raise ImportError("torch is required regarding CudaStreamPool")

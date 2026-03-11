@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/agent/FileLockManager.description.md
 
 # FileLockManager
 
-**File**: `src\classes\agent\FileLockManager.py`  
+**File**: `src\\classes\agent\\FileLockManager.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 11 imports  
 **Lines**: 133  
@@ -56,7 +55,7 @@ Attributes:
 
 # Improvements for FileLockManager
 
-**File**: `src\classes\agent\FileLockManager.py`  
+**File**: `src\\classes\agent\\FileLockManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 133 lines (medium)  
 **Complexity**: 4 score (simple)
@@ -84,6 +83,7 @@ Attributes:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -104,15 +104,15 @@ from __future__ import annotations
 
 """Auto-extracted class from agent.py"""
 
-from src.core.base.version import VERSION
-from src.core.base.utils.FileLock import FileLock
-from src.core.base.models import LockType
-from pathlib import Path
-from typing import Optional, Dict
 import logging
 import os
 import threading
 import time
+from pathlib import Path
+
+from src.core.base.models import LockType
+from src.core.base.utils.FileLock import FileLock
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -126,6 +126,7 @@ class FileLockManager:
     Attributes:
         locks: Dict of active file locks.
         lock_timeout: Default lock timeout in seconds.
+
     """
 
     def __init__(self, lock_timeout: float = 300.0) -> None:
@@ -133,6 +134,7 @@ class FileLockManager:
 
         Args:
             lock_timeout: Default lock timeout in seconds.
+
         """
         self.locks: dict[str, FileLock] = {}
         self.lock_timeout = lock_timeout
@@ -155,6 +157,7 @@ class FileLockManager:
 
         Returns:
             FileLock if acquired, None if timeout.
+
         """
         path_str = str(file_path.resolve())
         timeout = timeout or self.lock_timeout
@@ -203,6 +206,7 @@ class FileLockManager:
 
         Returns:
             bool: True if lock released, False if not owner.
+
         """
         path_str = str(file_path.resolve())
 

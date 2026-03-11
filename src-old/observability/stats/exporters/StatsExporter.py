@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/exporters/StatsExporter.description.md
 
@@ -91,9 +90,10 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_stats.py"""
 
-from src.core.base.version import VERSION
-from typing import Any, Dict, List, Optional
 import json
+from typing import Any
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

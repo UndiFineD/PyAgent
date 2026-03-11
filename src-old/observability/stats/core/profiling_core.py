@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/core/profiling_core.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -44,7 +44,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import pstats
 from dataclasses import dataclass
 from typing import Any
@@ -58,6 +57,7 @@ except ImportError:  # type: ignore[assignment]
 @dataclass(frozen=True)
 class ProfileStats:
     """Structured profiling data for a single function."""
+
     function_name: str
     call_count: int
     total_time: float

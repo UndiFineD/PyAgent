@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/SwarmDistillationAgent.description.md
 
@@ -84,6 +83,9 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+from pathlib import Path
+from typing import Any
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -102,18 +104,14 @@ from __future__ import annotations
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
 from src.core.base.version import VERSION
-from pathlib import Path
-from typing import Dict, List, Any
-from src.logic.agents.swarm.core.LessonCore import LessonCore, Lesson
+from src.logic.agents.swarm.core.LessonCore import Lesson, LessonCore
 
 __version__ = VERSION
 
 
 class SwarmDistillationAgent:
-    """
-    Compresses and distills knowledge from multiple specialized agents
+    """Compresses and distills knowledge from multiple specialized agents
     into a unified "Master" context for more efficient retrieval.
     Integrated with LessonCore for failure mode propagation.
     """
@@ -125,8 +123,7 @@ class SwarmDistillationAgent:
         self.lessons: list[Lesson] = []
 
     def distill_agent_knowledge(self, agent_id, knowledge_data) -> dict[str, Any]:
-        """
-        Extracts key insights from an agent's specialized knowledge.
+        """Extracts key insights from an agent's specialized knowledge.
         """
         # Simulated distillation: extract labels and high-level summaries
         distilled = {
@@ -154,8 +151,7 @@ class SwarmDistillationAgent:
         ]
 
     def get_unified_context(self) -> dict[str, Any]:
-        """
-        Returns the distilled knowledge from all registered agents.
+        """Returns the distilled knowledge from all registered agents.
         """
         return {
             "swarm_intelligence_level": len(self.master_context) * 0.1,
@@ -164,8 +160,7 @@ class SwarmDistillationAgent:
         }
 
     def prune_master_context(self, threshold=0.5) -> dict[str, Any]:
-        """
-        Removes outdated or low-importance knowledge from the master map.
+        """Removes outdated or low-importance knowledge from the master map.
         """
         initial_count = len(self.master_context)
         # Simulation: remove if 'capability_score' is low (if it existed)

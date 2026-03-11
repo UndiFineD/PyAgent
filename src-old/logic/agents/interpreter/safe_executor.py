@@ -11,14 +11,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/interpreter/safe_executor.description.md
 
 # safe_executor
 
-**File**: `src\logic\agents\interpreter\safe_executor.py`  
+**File**: `src\\logic\agents\\interpreter\\safe_executor.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 13 imports  
 **Lines**: 133  
@@ -68,7 +67,7 @@ Ported from 0xSojalSec-cai/cai/agents/meta/local_python_executor.py
 
 # Improvements for safe_executor
 
-**File**: `src\logic\agents\interpreter\safe_executor.py`  
+**File**: `src\\logic\agents\\interpreter\\safe_executor.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 133 lines (medium)  
 **Complexity**: 4 score (simple)
@@ -105,11 +104,11 @@ LLM_CONTEXT_END
 """
 
 import ast
+import asyncio
 import builtins
 import logging
-import asyncio
-from typing import Any, Dict, List, Optional, Union
 from dataclasses import dataclass
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -123,8 +122,7 @@ class ExecutionResult:
 
 
 class SafeLocalInterpreter:
-    """
-    Safely executes Python code within the agent's context.
+    """Safely executes Python code within the agent's context.
     Ported from 0xSojalSec-cai/cai/agents/meta/local_python_executor.py
     """
 
@@ -173,8 +171,7 @@ class SafeLocalInterpreter:
                 pass
 
     async def execute(self, code: str) -> ExecutionResult:
-        """
-        Executes code string in the safe context.
+        """Executes code string in the safe context.
         """
         loop = asyncio.get_event_loop()
         # Run blocking execution in thread
@@ -218,7 +215,7 @@ class SafeLocalInterpreter:
             else:
                 exec(code, self.safe_globals)
 
-        except Exception as e:
+        except Exception:
             success = False
             import traceback
 

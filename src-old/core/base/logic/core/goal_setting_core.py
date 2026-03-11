@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/goal_setting_core.description.md
 
 # goal_setting_core
 
-**File**: `src\core\base\logic\core\goal_setting_core.py`  
+**File**: `src\\core\base\\logic\\core\\goal_setting_core.py`  
 **Type**: Python Module  
 **Summary**: 5 classes, 0 functions, 13 imports  
 **Lines**: 326  
@@ -99,7 +98,7 @@ Implements patterns from agentic design patterns including:
 
 # Improvements for goal_setting_core
 
-**File**: `src\core\base\logic\core\goal_setting_core.py`  
+**File**: `src\\core\base\\logic\\core\\goal_setting_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 326 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -140,18 +139,18 @@ Based on agentic design patterns with goal evaluation, iterative refinement, and
 self-correction reasoning techniques.
 """
 
-import asyncio
 import logging
-from typing import List, Dict, Any, Optional, Callable, Union
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
 
 from src.core.base.common.base_core import BaseCore
 
 
 class GoalStatus(str, Enum):
     """Goal achievement status enumeration."""
+
     PENDING = "pending"
     IN_PROGRESS = "in_progress"
     ACHIEVED = "achieved"
@@ -161,6 +160,7 @@ class GoalStatus(str, Enum):
 
 class GoalPriority(str, Enum):
     """Goal priority levels."""
+
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -170,6 +170,7 @@ class GoalPriority(str, Enum):
 @dataclass
 class Goal:
     """Represents a goal with evaluation criteria."""
+
     id: str
     description: str
     criteria: List[str]  # List of criteria that must be met
@@ -196,6 +197,7 @@ class Goal:
 @dataclass
 class IterationResult:
     """Result of a single iteration."""
+
     iteration: int
     content: str
     evaluation: Dict[str, Any]
@@ -205,8 +207,7 @@ class IterationResult:
 
 
 class GoalSettingCore(BaseCore):
-    """
-    Core for goal-driven iterative refinement and self-correction.
+    """Core for goal-driven iterative refinement and self-correction.
 
     Implements patterns from agentic design patterns including:
     - Goal setting with evaluation criteria
@@ -231,8 +232,7 @@ class GoalSettingCore(BaseCore):
         priority: GoalPriority = GoalPriority.MEDIUM,
         max_iterations: int = 5
     ) -> Goal:
-        """
-        Create a new goal with evaluation criteria.
+        """Create a new goal with evaluation criteria.
 
         Args:
             goal_id: Unique identifier for the goal
@@ -243,6 +243,7 @@ class GoalSettingCore(BaseCore):
 
         Returns:
             Created Goal object
+
         """
         goal = Goal(
             id=goal_id,
@@ -257,22 +258,22 @@ class GoalSettingCore(BaseCore):
         return goal
 
     def register_evaluation_function(self, goal_type: str, func: Callable):
-        """
-        Register a custom evaluation function for a goal type.
+        """Register a custom evaluation function for a goal type.
 
         Args:
             goal_type: Type of goal this function evaluates
             func: Function that takes content and criteria, returns evaluation dict
+
         """
         self.evaluation_functions[goal_type] = func
 
     def register_refinement_function(self, goal_type: str, func: Callable):
-        """
-        Register a custom refinement function for a goal type.
+        """Register a custom refinement function for a goal type.
 
         Args:
             goal_type: Type of goal this function refines
             func: Function that takes content, feedback, and criteria, returns refined content
+
         """
         self.refinement_functions[goal_type] = func
 
@@ -282,8 +283,7 @@ class GoalSettingCore(BaseCore):
         criteria: List[str],
         goal_type: str = "default"
     ) -> Dict[str, Any]:
-        """
-        Evaluate content against goal criteria.
+        """Evaluate content against goal criteria.
 
         Args:
             content: Content to evaluate
@@ -292,6 +292,7 @@ class GoalSettingCore(BaseCore):
 
         Returns:
             Evaluation results with goals_met boolean and detailed feedback
+
         """
         if goal_type in self.evaluation_functions:
             return await self.evaluation_functions[goal_type](content, criteria)
@@ -327,8 +328,7 @@ class GoalSettingCore(BaseCore):
         criteria: List[str],
         goal_type: str = "default"
     ) -> str:
-        """
-        Refine content based on feedback and criteria.
+        """Refine content based on feedback and criteria.
 
         Args:
             content: Original content
@@ -338,6 +338,7 @@ class GoalSettingCore(BaseCore):
 
         Returns:
             Refined content
+
         """
         if goal_type in self.refinement_functions:
             return await self.refinement_functions[goal_type](content, feedback, criteria)
@@ -354,8 +355,7 @@ class GoalSettingCore(BaseCore):
         initial_content: str,
         goal_type: str = "default"
     ) -> Goal:
-        """
-        Execute iterative refinement for a goal.
+        """Execute iterative refinement for a goal.
 
         Args:
             goal_id: ID of the goal to iterate
@@ -364,6 +364,7 @@ class GoalSettingCore(BaseCore):
 
         Returns:
             Updated Goal object
+
         """
         if goal_id not in self.active_goals:
             raise ValueError(f"Goal {goal_id} not found")

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/MCPConnector.description.md
 
 # MCPConnector
 
-**File**: `src\classes\fleet\MCPConnector.py`  
+**File**: `src\\classes\fleet\\MCPConnector.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 10 imports  
 **Lines**: 117  
@@ -50,7 +49,7 @@ Manages the lifecycle and JSON-RPC communication with an MCP server.
 
 # Improvements for MCPConnector
 
-**File**: `src\classes\fleet\MCPConnector.py`  
+**File**: `src\\classes\fleet\\MCPConnector.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 117 lines (medium)  
 **Complexity**: 6 score (moderate)
@@ -98,12 +97,13 @@ from __future__ import annotations
 
 """Low-level connector for Model Context Protocol (MCP) servers using stdio transport."""
 
-from src.core.base.version import VERSION
 import json
 import logging
 import subprocess
 import threading
-from typing import Dict, List, Any, Optional
+from typing import Any
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

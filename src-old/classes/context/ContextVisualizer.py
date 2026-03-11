@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/ContextVisualizer.description.md
 
@@ -87,6 +86,7 @@ Example:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -107,6 +107,10 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_context.py"""
 
+import json
+from pathlib import Path
+from typing import Any
+
 from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.models.VisualizationData import (
     VisualizationData,
@@ -114,9 +118,6 @@ from src.logic.agents.cognitive.context.models.VisualizationData import (
 from src.logic.agents.cognitive.context.models.VisualizationType import (
     VisualizationType,
 )
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-import json
 
 __version__ = VERSION
 
@@ -129,6 +130,7 @@ class ContextVisualizer:
     Example:
         >>> visualizer=ContextVisualizer()
         >>> data=visualizer.create_dependency_graph(contexts)
+
     """
 
     def __init__(
@@ -176,6 +178,7 @@ class ContextVisualizer:
 
         Returns:
             VisualizationData for rendering.
+
         """
         nodes: list[dict[str, str]] = []
         edges: list[tuple[str, str]] = []
@@ -199,6 +202,7 @@ class ContextVisualizer:
 
         Returns:
             VisualizationData for rendering.
+
         """
         nodes: list[dict[str, str]] = []
         edges: list[tuple[str, str]] = []

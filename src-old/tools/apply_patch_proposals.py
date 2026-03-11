@@ -11,8 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/apply_patch_proposals.description.md
 
@@ -88,6 +87,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 """Apply conservative patch proposals generated from bandit findings.
 
 This script re-uses the heuristics in `prepare_refactor_patches.py` to

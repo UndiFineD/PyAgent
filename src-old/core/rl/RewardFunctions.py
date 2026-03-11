@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/rl/RewardFunctions.description.md
 
 # RewardFunctions
 
-**File**: `src\core\rl\RewardFunctions.py`  
+**File**: `src\\core\rl\\RewardFunctions.py`  
 **Type**: Python Module  
 **Summary**: 5 classes, 0 functions, 9 imports  
 **Lines**: 124  
@@ -77,7 +76,7 @@ Applies potential-based reward shaping to avoid changing optimal policy.
 
 # Improvements for RewardFunctions
 
-**File**: `src\core\rl\RewardFunctions.py`  
+**File**: `src\\core\rl\\RewardFunctions.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 124 lines (medium)  
 **Complexity**: 13 score (moderate)
@@ -120,11 +119,10 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Reward Functions for Agent Reinforcement - Phase 319 Enhanced
-
 import math
-from typing import Any, Callable, Dict, List, Optional
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Callable, List
 
 
 class RewardType(Enum):

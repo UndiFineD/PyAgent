@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/multimodal/stream_omni_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -54,7 +54,7 @@ Orchestrates speech-to-token -> LLM -> token-to-speech flow ("See-While-Hear").
 
 import asyncio
 import logging
-from typing import Any, AsyncGenerator, Dict, Optional
+from typing import Any, AsyncGenerator, Dict
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
@@ -66,8 +66,7 @@ logger = logging.getLogger(__name__)
 
 # pylint: disable=too-many-ancestors
 class StreamOmniAgent(BaseAgent):
-    """
-    Real-time multimodal pipeline agent.
+    """Real-time multimodal pipeline agent.
 
     Orchestrates the 'Stream-Omni' flow:
     Audio Input -> STT -> Token Streaming -> LLM -> Token Streaming -> TTS -> Audio Output.
@@ -79,8 +78,7 @@ class StreamOmniAgent(BaseAgent):
         self.latency_metrics: Dict[str, float] = {}
 
     async def execute_task(self, task: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Execute a multimodal pipeline task.
+        """Execute a multimodal pipeline task.
         """
         request_type = task.get("type", "unknown")
 
@@ -93,8 +91,7 @@ class StreamOmniAgent(BaseAgent):
     async def process_stream(
         self, audio_generator: AsyncGenerator[bytes, None]
     ) -> AsyncGenerator[bytes, None]:
-        """
-        Full duplex processing loop.
+        """Full duplex processing loop.
         """
         async for chunk in audio_generator:
             # 1. Speech to Text (STT)

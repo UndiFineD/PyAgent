@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/maintenance/mixins/syntax_fixer_mixin.description.md
 
@@ -101,8 +100,7 @@ class SyntaxFixerMixin:
     """Provides automated fixes for specific Python syntax patterns."""
 
     def fix_invalid_for_loop_type_hints(self, file_path: Path) -> bool:
-        """
-        Fixes 'for x: Type in' -> 'for x in' which is invalid Python syntax.
+        """Fixes 'for x: Type in' -> 'for x in' which is invalid Python syntax.
         Regex pattern: for\\s+(\\w+):\\s*[\\w\\[\\],\\s]*?\\s+in\\s+
         """
         try:
@@ -121,8 +119,7 @@ class SyntaxFixerMixin:
             return False
 
     def check_unmatched_triple_quotes(self, file_path: Path) -> list[int]:
-        """
-        Detects unmatched triple-quote occurrences.
+        """Detects unmatched triple-quote occurrences.
         Returns a list of line numbers of triple quotes if the total count is odd.
         """
         try:

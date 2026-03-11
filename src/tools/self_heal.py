@@ -1,7 +1,7 @@
 """Self‑healing helper utilities."""
 
-from typing import Dict, List
 import sys
+from typing import Dict, List
 
 
 def detect_misconfig() -> Dict[str, str]:

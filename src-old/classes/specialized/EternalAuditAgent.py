@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/EternalAuditAgent.description.md
 
@@ -87,6 +86,16 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import hashlib
+import json
+import logging
+import os
+import time
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -105,23 +114,13 @@ from __future__ import annotations
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
 from src.core.base.version import VERSION
-import logging
-import json
-import time
-import hashlib
-import os
-from typing import Dict, Any
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
 
 class EternalAuditAgent(BaseAgent):
-    """
-    Agent that maintains an append-only verifiable audit trail of all swarm activities.
+    """Agent that maintains an append-only verifiable audit trail of all swarm activities.
     Uses hashing to ensure temporal integrity (simulated blockchain).
     """
 
@@ -164,8 +163,7 @@ class EternalAuditAgent(BaseAgent):
 
     @as_tool
     def log_event(self, agent_name: str, action: str, details: dict[str, Any]) -> str:
-        """
-        Records an event in the verifiable audit trail.
+        """Records an event in the verifiable audit trail.
         """
         # Selective pruning: check if action or details contain critical keywords
         is_critical = any(
@@ -208,8 +206,7 @@ class EternalAuditAgent(BaseAgent):
 
     @as_tool
     def verify_audit_trail(self) -> dict[str, Any]:
-        """
-        Verifies the integrity of the audit trail by re-calculating hashes.
+        """Verifies the integrity of the audit trail by re-calculating hashes.
         """
         if not os.path.exists(self.current_shard):
             return {"status": "error", "message": "No audit trail found."}

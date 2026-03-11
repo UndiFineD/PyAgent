@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/test_quotas.description.md
 
@@ -72,9 +71,10 @@ LLM_CONTEXT_END
 
 import sys
 from pathlib import Path
+
 from src.core.base.managers.ResourceQuotaManager import (
-    ResourceQuotaManager,
     QuotaConfig,
+    ResourceQuotaManager,
 )
 
 # Add workspace to path

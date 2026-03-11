@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/ContextVersion.description.md
 
@@ -83,17 +82,8 @@ from __future__ import annotations
 """Auto-extracted class from agent_context.py"""
 
 
-from src.classes.base_agent import BaseAgent
 from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-import hashlib
-import json
-import logging
-import re
-import zlib
+from typing import List
 
 
 @dataclass

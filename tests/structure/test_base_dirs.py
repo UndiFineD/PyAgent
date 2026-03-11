@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Tests for base directory structure."""
-import os
 
 
 def test_root_project_dir_exists(tmp_path) -> None:

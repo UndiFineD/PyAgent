@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/core/local_rag_core.description.md
 
@@ -29,9 +28,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -71,7 +72,9 @@ class RAGShard:
         tags: Categorical tags for the shard内容.
         document_count: Number of documents in this shard.
         last_updated: Timestamp of the last shard update.
+
     """
+
     path: str
     tags: list[str]
     document_count: int
@@ -87,8 +90,7 @@ class LocalRAGCore:
     def route_query_to_shards(
         self, query: str, query_path: str, available_shards: list[RAGShard]
     ) -> list[str]:
-        """
-        Routes a query to the most relevant localized shards based on file path.
+        """Routes a query to the most relevant localized shards based on file path.
 
         Args:
             query: The text query.
@@ -97,6 +99,7 @@ class LocalRAGCore:
 
         Returns:
             List of relevant shard paths.
+
         """
         # Preference: direct path match > parent path match > tag match
         selected = []
@@ -111,8 +114,7 @@ class LocalRAGCore:
     def calculate_rerank_score(
         self, original_score: float, path_proximity: int
     ) -> float:
-        """
-        Boosts relevance score based on how close the source is to the active file.
+        """Boosts relevance score based on how close the source is to the active file.
 
         Args:
             original_score: Base relevance score.
@@ -120,20 +122,21 @@ class LocalRAGCore:
 
         Returns:
             The boosted relevance score.
+
         """
         # path_proximity = depth difference between query_path and shard_path
         boost = 1.0 / (1.0 + path_proximity)
         return original_score * (1.0 + boost)
 
     def extract_local_context_markers(self, content: str) -> list[str]:
-        """
-        Identifies key symbols/imports to use as local context anchors.
+        """Identifies key symbols/imports to use as local context anchors.
 
         Args:
             content: The file content to analyze.
 
         Returns:
             List of extracted markers.
+
         """
         markers = []
         if "import" in content:

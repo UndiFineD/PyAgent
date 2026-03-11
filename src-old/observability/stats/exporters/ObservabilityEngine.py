@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/exporters/ObservabilityEngine.description.md
 
@@ -93,15 +92,14 @@ LLM_CONTEXT_END
 """Engine for tracking agent performance, latency, and resource metrics."""
 
 import json
-import time
 import logging
-from dataclasses import dataclass, field, asdict
-from datetime import datetime
+import time
+from dataclasses import asdict
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
 
 from src.classes.fleet.ResilientStubs import resilient_import
-from src.classes.stats.ObservabilityCore import ObservabilityCore, AgentMetric
+from src.classes.stats.ObservabilityCore import AgentMetric, ObservabilityCore
 
 # Resiliently load dependencies
 TokenCostEngine = resilient_import(
@@ -141,6 +139,7 @@ class ObservabilityEngine:
             event_type: The category of event (e.g., 'task_complete', 'error').
             data: Payload of the event.
             level: Severity level (INFO, WARNING, ERROR, CRITICAL).
+
         """
         # Noise Reduction: Only store significant events in the persistent log buffer.
         # Metrics are still recorded for everything.

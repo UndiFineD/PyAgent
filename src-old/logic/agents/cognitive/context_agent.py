@@ -13,8 +13,7 @@
 # limitations under the License.
 
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context_agent.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -51,27 +51,26 @@ Auto-extracted class from agent_context.py
 import logging
 from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.logic.agents.cognitive.core.local_rag_core import LocalRAGCore, RAGShard
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.context_priority import ContextPriority
 from src.logic.agents.cognitive.context.models.file_category import FileCategory
-
-from src.logic.agents.cognitive.context_template_mixin import (
-    ContextTemplateMixin,
-    DEFAULT_TEMPLATES,
-)
-from src.logic.agents.cognitive.context_tagging_mixin import ContextTaggingMixin
-from src.logic.agents.cognitive.context_versioning_mixin import ContextVersioningMixin
-from src.logic.agents.cognitive.context_validation_mixin import (
-    ContextValidationMixin,
-    DEFAULT_VALIDATION_RULES,
-)
 from src.logic.agents.cognitive.context_annotation_mixin import ContextAnnotationMixin
 from src.logic.agents.cognitive.context_categorization_mixin import (
     ContextCategorizationMixin,
 )
 from src.logic.agents.cognitive.context_rag_mixin import ContextRAGMixin
+from src.logic.agents.cognitive.context_tagging_mixin import ContextTaggingMixin
+from src.logic.agents.cognitive.context_template_mixin import (
+    DEFAULT_TEMPLATES,
+    ContextTemplateMixin,
+)
+from src.logic.agents.cognitive.context_validation_mixin import (
+    DEFAULT_VALIDATION_RULES,
+    ContextValidationMixin,
+)
+from src.logic.agents.cognitive.context_versioning_mixin import ContextVersioningMixin
+from src.logic.agents.cognitive.core.local_rag_core import LocalRAGCore, RAGShard
 
 __version__ = VERSION
 

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/SelfOptimizerAgent.description.md
 
@@ -84,14 +83,11 @@ LLM_CONTEXT_END
 
 """Agent specializing in self-optimization and roadmap refinement."""
 
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import create_main_function
-from src.classes.stats.ResourceMonitor import ResourceMonitor
 from src.classes.stats.ObservabilityEngine import ObservabilityEngine
-import logging
-import os
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+from src.classes.stats.ResourceMonitor import ResourceMonitor
 
 
 class SelfOptimizerAgent(BaseAgent):
@@ -169,7 +165,7 @@ class SelfOptimizerAgent(BaseAgent):
         telemetry = self.telemetry.get_summary()
 
         system_report = [
-            f"\n## System Health",
+            "\n## System Health",
             f"- **Status**: {stats.get('status', 'Unknown')}",
             f"- **CPU Usage**: {stats.get('cpu_usage_pct')}%",
             f"- **Memory Usage**: {stats.get('memory_usage_pct')}%",

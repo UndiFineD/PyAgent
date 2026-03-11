@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/multimodal_encoders.description.md
 
@@ -41,11 +40,13 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Multimodal encoders logic."""
 
 from typing import List, Optional, Tuple, Union
+
 try:
     import rust_core as rc
 except ImportError:
@@ -53,8 +54,7 @@ except ImportError:
 
 
 class StreamingVisionEncoder:
-    """
-    Handles efficient vision streaming using adaptive delta compression.
+    """Handles efficient vision streaming using adaptive delta compression.
     Only sends changed pixels between frames to conserve bandwidth.
     Adjusts sensitivity based on scene dynamics (entropy).
     """
@@ -66,8 +66,7 @@ class StreamingVisionEncoder:
         self.base_threshold = base_threshold
 
     def adapt_threshold(self, entropy: float) -> None:
-        """
-        Adjust threshold based on motion complexity.
+        """Adjust threshold based on motion complexity.
         Higher entropy (lots of motion) -> higher threshold to save bandwidth.
         """
         # Logic: If entropy is high, we can afford to skip subtle changes
@@ -98,8 +97,7 @@ class StreamingVisionEncoder:
 
 
 class StreamingAudioProcessor:
-    """
-    Stateful processor for continuous audio streams.
+    """Stateful processor for continuous audio streams.
     Handles rolling buffers, VAD, and feature extraction.
     """
 
@@ -110,8 +108,7 @@ class StreamingAudioProcessor:
         self.buffer: List[float] = []
 
     def push(self, chunk: List[float]) -> List[List[float]]:
-        """
-        Push new audio samples and return extracted Mel features for completed frames.
+        """Push new audio samples and return extracted Mel features for completed frames.
         """
         self.buffer.extend(chunk)
         frames = []

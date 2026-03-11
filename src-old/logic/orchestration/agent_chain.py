@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/orchestration/agent_chain.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -68,6 +68,7 @@ class AgentChain:
         chain.add_step("coder", output_transform=extract_code)
         chain.add_step("tests", input_transform=prepare_for_tests)
         results=chain.execute(initial_input)
+
     """
 
     def __init__(self, name: str = "default_chain") -> None:
@@ -75,6 +76,7 @@ class AgentChain:
 
         Args:
             name: Chain name for identification.
+
         """
         self.name = name
         self._steps: list[AgentChainStep] = []
@@ -97,6 +99,7 @@ class AgentChain:
 
         Returns:
             Self for chaining.
+
         """
         step = AgentChainStep(
             agent_name=agent_name,
@@ -118,6 +121,7 @@ class AgentChain:
 
         Returns:
             List of results from each step.
+
         """
         self._results = []
         current_input = initial_input

@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/WorkflowState.description.md
 
 # WorkflowState
 
-**File**: `src\classes\fleet\WorkflowState.py`  
+**File**: `src\\classes\fleet\\WorkflowState.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 29  
@@ -44,7 +43,7 @@ Maintains context, variables, and history for a multi-agent session.
 
 # Improvements for WorkflowState
 
-**File**: `src\classes\fleet\WorkflowState.py`  
+**File**: `src\\classes\fleet\\WorkflowState.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 29 lines (small)  
 **Complexity**: 3 score (simple)
@@ -77,7 +76,7 @@ LLM_CONTEXT_END
 """Container for shared state and context between agents in a workflow."""
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List
 
 
 @dataclass

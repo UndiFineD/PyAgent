@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/ContextTemplateMixin.description.md
 
 # ContextTemplateMixin
 
-**File**: `src\logic\agents\cognitive\ContextTemplateMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\ContextTemplateMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 194  
@@ -43,7 +42,7 @@ Template management methods for ContextAgent.
 
 # Improvements for ContextTemplateMixin
 
-**File**: `src\logic\agents\cognitive\ContextTemplateMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\ContextTemplateMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 194 lines (medium)  
 **Complexity**: 6 score (moderate)
@@ -80,8 +79,8 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
-
 import logging
+
 from src.logic.agents.cognitive.context.models.ContextTemplate import ContextTemplate
 
 # Default templates for common file types

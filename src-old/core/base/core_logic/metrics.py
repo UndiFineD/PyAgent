@@ -1,12 +1,11 @@
 # Copyright 2026 PyAgent Authors
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/core_logic/metrics.description.md
 
 # metrics
 
-**File**: `src\core\base\core_logic\metrics.py`  
+**File**: `src\\core\base\\core_logic\\metrics.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 10 imports  
 **Lines**: 72  
@@ -50,7 +49,7 @@ Class MetricsCore implementation.
 
 # Improvements for metrics
 
-**File**: `src\core\base\core_logic\metrics.py`  
+**File**: `src\\core\base\\core_logic\\metrics.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 72 lines (small)  
 **Complexity**: 6 score (moderate)
@@ -87,9 +86,10 @@ LLM_CONTEXT_END
 """
 
 import logging
-from typing import Any, Dict, Optional, List, Tuple
-from src.core.base.models import ResponseQuality, AgentPriority
+from typing import Any, Dict, Optional, Tuple
+
 from src.core.base.AgentVerification import AgentVerifier
+from src.core.base.models import AgentPriority, ResponseQuality
 
 try:
     import rust_core as rc

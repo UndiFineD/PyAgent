@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/security/fuzzing.description.md
 
 # fuzzing
 
-**File**: `src\tools\security\fuzzing.py`  
+**File**: `src\tools\\security\fuzzing.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 0 imports  
 **Lines**: 603  
@@ -22,7 +21,7 @@ Python module containing implementation for fuzzing.
 
 # Improvements for fuzzing
 
-**File**: `src\tools\security\fuzzing.py`  
+**File**: `src\tools\\security\fuzzing.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 603 lines (large)  
 **Complexity**: 0 score (simple)
@@ -59,6 +58,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -71,33 +71,25 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 import asyncio
-import json
 import logging
 import os
 import random
-import re
-import subprocess
-import sys
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional
 from urllib.parse import urljoin, urlparse
 
 import requests
 from bs4 import BeautifulSoup
-
-from src.core.base.models.communication_models import CascadeContext
 
 logger = logging.getLogger("pyagent.security.fuzzing")
 
 
 class FuzzingTarget(Enum):
     """Types of targets for fuzzing."""
+
     WEB_URL = "web_url"
     API_ENDPOINT = "api_endpoint"
     FILE_PATH = "file_path"
@@ -107,6 +99,7 @@ class FuzzingTarget(Enum):
 
 class FuzzingTechnique(Enum):
     """Fuzzing techniques available."""
+
     PATH_TRAVERSAL = "path_traversal"
     SQL_INJECTION = "sql_injection"
     XSS = "xss"
@@ -119,6 +112,7 @@ class FuzzingTechnique(Enum):
 @dataclass
 class FuzzingResult:
     """Result of a fuzzing attempt."""
+
     target: str
     technique: FuzzingTechnique
     payload: str
@@ -134,6 +128,7 @@ class FuzzingResult:
 @dataclass
 class FuzzingSession:
     """A fuzzing session configuration."""
+
     session_id: str
     target: str
     target_type: FuzzingTarget
@@ -147,8 +142,7 @@ class FuzzingSession:
 
 
 class AIFuzzingEngine:
-    """
-    AI-powered fuzzing engine.
+    """AI-powered fuzzing engine.
 
     Implements learning-based discovery and intelligent path generation.
     Based on the brainstorm repository's AI fuzzing approach.
@@ -206,8 +200,7 @@ class AIFuzzingEngine:
     async def start_fuzzing_session(self, target: str, target_type: FuzzingTarget,
                                    techniques: Optional[List[FuzzingTechnique]] = None,
                                    max_iterations: int = 1000) -> str:
-        """
-        Start a new fuzzing session.
+        """Start a new fuzzing session.
 
         Args:
             target: Target to fuzz
@@ -217,6 +210,7 @@ class AIFuzzingEngine:
 
         Returns:
             Session ID
+
         """
         session_id = f"fuzz_{int(time.time())}_{random.randint(1000, 9999)}"
 
@@ -237,14 +231,14 @@ class AIFuzzingEngine:
         return session_id
 
     async def run_fuzzing_session(self, session_id: str) -> List[FuzzingResult]:
-        """
-        Run a fuzzing session.
+        """Run a fuzzing session.
 
         Args:
             session_id: Session ID to run
 
         Returns:
             List of fuzzing results
+
         """
         session = next((s for s in self.session_history if s.session_id == session_id), None)
         if not session:
@@ -576,8 +570,7 @@ Generate payloads that might bypass security filters. Return only the payloads, 
 
 
 class MultiCycleFuzzing:
-    """
-    Iterative fuzzing with multiple cycles of improvement.
+    """Iterative fuzzing with multiple cycles of improvement.
 
     Runs fuzzing sessions iteratively, learning from each cycle.
     """
@@ -588,8 +581,7 @@ class MultiCycleFuzzing:
 
     async def run_multi_cycle_fuzzing(self, target: str, target_type: FuzzingTarget,
                                      cycles: int = 3, techniques: Optional[List[FuzzingTechnique]] = None) -> Dict[str, Any]:
-        """
-        Run multi-cycle fuzzing with iterative improvement.
+        """Run multi-cycle fuzzing with iterative improvement.
 
         Args:
             target: Target to fuzz
@@ -599,6 +591,7 @@ class MultiCycleFuzzing:
 
         Returns:
             Multi-cycle results summary
+
         """
         self.logger.info(f"Starting multi-cycle fuzzing for {target} with {cycles} cycles")
 

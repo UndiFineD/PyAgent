@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/CoderStyleMixin.description.md
 
 # CoderStyleMixin
 
-**File**: `src\logic\agents\development\mixins\CoderStyleMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\CoderStyleMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 137  
@@ -47,7 +46,7 @@ Mixin for style checking and auto-fixing.
 
 # Improvements for CoderStyleMixin
 
-**File**: `src\logic\agents\development\mixins\CoderStyleMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\CoderStyleMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 137 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -96,9 +95,10 @@ from __future__ import annotations
 Style checking and auto-fixing logic for CoderCore.
 """
 
-import re
 import logging
-from typing import Any, List, Dict, Tuple
+import re
+from typing import Any, Dict, List, Tuple
+
 from src.core.base.types.StyleRule import StyleRule
 
 

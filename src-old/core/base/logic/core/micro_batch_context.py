@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/micro_batch_context.description.md
 
@@ -19,7 +18,7 @@ Module docstring (if present):
     - Dynamic stream selection based on workload
     - Context state preservation across micro-batches
 
-    Example:
+Example:
         >>> with MicroBatchContext(batch_size=32, micro_batch_size=8) as ctx:
         ...     for micro_batch in ctx.iterate():
         ...         result = model(micro_batch)
@@ -45,6 +44,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -104,7 +104,7 @@ try:
 
     _BRIDGE = get_bridge()
     HAS_RUST = hasattr(_BRIDGE, "stream_sync_rust")
-except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+except Exception:  # pylint: disable=broad-exception-caught, unused-variable
     # pylint: disable=broad-exception-caught
     HAS_RUST = False
     _BRIDGE = None
@@ -204,6 +204,7 @@ class StreamManager:
             num_compute_streams: Number of compute streams
             num_comm_streams: Number of communication streams
             use_high_priority: Whether to use high priority streams
+
         """
         self.num_compute_streams = num_compute_streams
         self.num_comm_streams = num_comm_streams
@@ -304,6 +305,7 @@ class MicroBatchContext(Generic[T]):
         batch_size: Total batch size
         micro_batch_size: Size of each micro-batch
         num_micro_batches: Number of micro-batches
+
     """
 
     # pylint: disable=too-many-positional-arguments
@@ -327,6 +329,7 @@ class MicroBatchContext(Generic[T]):
             adaptive: Whether to adapt micro-batch size dynamically
             min_micro_batch: Minimum micro-batch size (regarding adaptive)
             max_micro_batch: Maximum micro-batch size (regarding adaptive)
+
         """
         self.batch_size = batch_size
         self.micro_batch_size = micro_batch_size
@@ -428,6 +431,7 @@ class MicroBatchContext(Generic[T]):
         Args:
             output: Output to record
             mb_idx: Micro-batch index (uses current if None)
+
         """
         with self._lock:
             idx = mb_idx if mb_idx is not None else self._current_idx
@@ -518,6 +522,7 @@ class AdaptiveMicroBatchContext(MicroBatchContext[T]):
             target_time_ms: Target time per micro-batch
             memory_threshold: Memory threshold regarding shrinking
             **kwargs: Additional MicroBatchContext arguments
+
         """
         super().__init__(batch_size, initial_micro_batch, **kwargs)
         self.target_time_ms = target_time_ms
@@ -578,6 +583,7 @@ def create_micro_batch_context(
 
     Returns:
         MicroBatchContext instance
+
     """
     if adaptive:
         return AdaptiveMicroBatchContext(

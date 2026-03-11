@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/WebCore.description.md
 
@@ -101,9 +100,9 @@ Pure logic for cleaning and processing web content.
 No I/O or side effects.
 """
 
-from src.core.base.version import VERSION
+
 from bs4 import BeautifulSoup
-from typing import List, Optional
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

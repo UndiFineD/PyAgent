@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/lifecycle/version.description.md
 
@@ -27,6 +26,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -69,13 +69,13 @@ COMPATIBLE_CORE_VERSIONS: list[str] = [
 
 
 def is_gate_open(required_phase: int) -> bool:
-    """
-    Gatekeeping: Returns True if the system maturity allows for the required phase.
+    """Gatekeeping: Returns True if the system maturity allows for the required phase.
 
     Args:
         required_phase: The minimum phase required for the gate to be open.
 
     Returns:
         bool: True if the current EVOLUTION_PHASE is greater than or equal to required_phase.
+
     """
     return EVOLUTION_PHASE >= required_phase

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/CoderCore.description.md
 
 # CoderCore
 
-**File**: `src\logic\agents\development\CoderCore.py`  
+**File**: `src\\logic\agents\\development\\CoderCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 17 imports  
 **Lines**: 155  
@@ -56,7 +55,7 @@ Core logic for CoderAgent, target for Rust conversion.
 
 # Improvements for CoderCore
 
-**File**: `src\logic\agents\development\CoderCore.py`  
+**File**: `src\\logic\agents\\development\\CoderCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 155 lines (medium)  
 **Complexity**: 3 score (simple)
@@ -107,24 +106,25 @@ Computational core for code analysis, metrics, and quality assessment.
 Designed for high-performance rule checking with future Rust integration.
 """
 
-from src.core.base.Version import VERSION
+import ast
+
+from src.core.base.AgentCore import LogicCore
 from src.core.base.types.CodeLanguage import CodeLanguage
 from src.core.base.types.CodeMetrics import CodeMetrics
 from src.core.base.types.StyleRule import StyleRule
 from src.core.base.types.StyleRuleSeverity import StyleRuleSeverity
-from src.core.base.AgentCore import LogicCore
-from src.logic.agents.development.mixins.CoderMetricsMixin import CoderMetricsMixin
-from src.logic.agents.development.mixins.CoderStyleMixin import CoderStyleMixin
-from src.logic.agents.development.mixins.CoderSmellMixin import CoderSmellMixin
+from src.core.base.Version import VERSION
+from src.logic.agents.development.mixins.CoderDocMixin import CoderDocMixin
 from src.logic.agents.development.mixins.CoderDuplicationMixin import (
     CoderDuplicationMixin,
 )
+from src.logic.agents.development.mixins.CoderMetricsMixin import CoderMetricsMixin
 from src.logic.agents.development.mixins.CoderQualityMixin import CoderQualityMixin
-from src.logic.agents.development.mixins.CoderDocMixin import CoderDocMixin
+from src.logic.agents.development.mixins.CoderSmellMixin import CoderSmellMixin
+from src.logic.agents.development.mixins.CoderStyleMixin import CoderStyleMixin
 from src.logic.agents.development.mixins.CoderValidationMixin import (
     CoderValidationMixin,
 )
-import ast
 
 __version__ = VERSION
 

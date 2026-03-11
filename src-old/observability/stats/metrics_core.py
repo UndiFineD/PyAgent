@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/metrics_core.description.md
 
@@ -39,9 +38,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -118,6 +119,7 @@ class TokenCostCore:
 
         Returns:
             TokenCostResult with cost breakdown
+
         """
         # optimized using Rust if available
         if rc:
@@ -168,6 +170,7 @@ class TokenCostCore:
 
         Returns:
             Dict with input and output cost per token
+
         """
         pricing: dict[str, float] = self.MODEL_COSTS.get(model, self.MODEL_COSTS["gpt-3.5-turbo"])
         return {
@@ -197,6 +200,7 @@ class ModelFallbackCore:
 
         Returns:
             Selected model name
+
         """
         if rc:
             try:
@@ -230,6 +234,7 @@ class ModelFallbackCore:
 
         Returns:
             List of models in fallback order
+
         """
         if rc:
             try:
@@ -396,6 +401,7 @@ class CorrelationCore:
 
         Returns:
             Correlation coefficient (-1.0 to 1.0)
+
         """
         if rc:
             with contextlib.suppress(Exception):
@@ -432,6 +438,7 @@ class ABTestCore:
 
         Returns:
             Dict with p_value, t_statistic, effect_size
+
         """
         if rc:
             try:
@@ -478,6 +485,7 @@ class ABTestCore:
 
         Returns:
             Required sample size per group
+
         """
         if rc:
             try:

@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/tts_service.description.md
 
 # tts_service
 
-**File**: `src\core\base\logic\tts_service.py`  
+**File**: `src\\core\base\\logic\tts_service.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 1 functions, 12 imports  
 **Lines**: 313  
@@ -115,7 +114,7 @@ Returns:
 
 # Improvements for tts_service
 
-**File**: `src\core\base\logic\tts_service.py`  
+**File**: `src\\core\base\\logic\tts_service.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 313 lines (medium)  
 **Complexity**: 18 score (moderate)
@@ -143,6 +142,7 @@ Returns:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -153,12 +153,11 @@ Inspired by Coqui TTS API patterns.
 Provides unified interface for text-to-speech synthesis.
 """
 
-import io
 import logging
 import tempfile
-from pathlib import Path
-from typing import Optional, Dict, Any, Union
 from abc import ABC, abstractmethod
+from pathlib import Path
+from typing import Any, Dict, Optional
 
 import numpy as np
 
@@ -193,8 +192,7 @@ class TTSEngine(ABC):
 
 
 class CoquiTTSEngine(TTSEngine):
-    """
-    Coqui TTS engine implementation.
+    """Coqui TTS engine implementation.
 
     Inspired by Coqui TTS API patterns.
     """
@@ -323,8 +321,7 @@ class CoquiTTSEngine(TTSEngine):
 
 
 class TTSService:
-    """
-    Unified Text-to-Speech service.
+    """Unified Text-to-Speech service.
 
     Provides a single interface for various TTS engines.
     """
@@ -350,8 +347,7 @@ class TTSService:
         language: Optional[str] = None,
         **kwargs
     ) -> bytes:
-        """
-        Synthesize speech from text.
+        """Synthesize speech from text.
 
         Args:
             text: Text to synthesize
@@ -362,6 +358,7 @@ class TTSService:
 
         Returns:
             Audio data as bytes
+
         """
         engine_name = engine or self.default_engine
 
@@ -408,8 +405,7 @@ class TTSService:
         engine: Optional[str] = None,
         **kwargs
     ) -> bytes:
-        """
-        Streaming synthesis (placeholder for future implementation).
+        """Streaming synthesis (placeholder for future implementation).
 
         For now, just calls regular synthesize. In a real implementation,
         this would stream audio chunks as they're generated.
@@ -425,8 +421,7 @@ def text_to_speech(
     engine: str = "coqui",
     **kwargs
 ) -> bytes:
-    """
-    Convenience function for text-to-speech.
+    """Convenience function for text-to-speech.
 
     Args:
         text: Text to synthesize
@@ -436,6 +431,7 @@ def text_to_speech(
 
     Returns:
         Audio data as bytes
+
     """
     service = TTSService()
     audio_data = service.synthesize(text, engine, **kwargs)

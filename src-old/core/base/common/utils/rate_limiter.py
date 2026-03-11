@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/rate_limiter.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -69,6 +69,7 @@ class RateLimiter:
         config: Rate limiting configuration.
         tokens: Current number of available tokens.
         last_refill: Timestamp of last token refill.
+
     """
 
     def __init__(self, config: RateLimitConfig | None = None) -> None:
@@ -76,6 +77,7 @@ class RateLimiter:
 
         Args:
             config: Rate limiting configuration. Uses defaults if not provided.
+
         """
         self.config = config or RateLimitConfig()
         self.tokens = float(self.config.burst_size)
@@ -102,6 +104,7 @@ class RateLimiter:
 
         Returns:
             bool: True if token acquired, False if timeout.
+
         """
         start_time = time.time()
 
@@ -137,6 +140,7 @@ class RateLimiter:
 
         Returns:
             Dict with current tokens, request count, etc.
+
         """
         with self._lock:
             return {

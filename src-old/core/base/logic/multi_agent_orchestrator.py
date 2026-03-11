@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/multi_agent_orchestrator.description.md
 
 # multi_agent_orchestrator
 
-**File**: `src\core\base\logic\multi_agent_orchestrator.py`  
+**File**: `src\\core\base\\logic\\multi_agent_orchestrator.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 17 imports  
 **Lines**: 435  
@@ -102,7 +101,7 @@ Provides a centralized system for:
 
 # Improvements for multi_agent_orchestrator
 
-**File**: `src\core\base\logic\multi_agent_orchestrator.py`  
+**File**: `src\\core\base\\logic\\multi_agent_orchestrator.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 435 lines (medium)  
 **Complexity**: 13 score (moderate)
@@ -154,10 +153,10 @@ import json
 import threading
 import time
 import uuid
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, Any, Optional, List, Callable
-from dataclasses import dataclass, field
+from typing import Any, Callable, Dict, List, Optional
 
 from src.core.base.common.models.communication_models import CascadeContext
 from src.core.base.state.agent_state_manager import StateTransaction
@@ -193,8 +192,7 @@ class TaskResult:
 
 
 class MultiAgentOrchestratorCore:
-    """
-    Unified orchestrator for managing multiple agent types.
+    """Unified orchestrator for managing multiple agent types.
 
     Provides a centralized system for:
     - Agent registration and lifecycle management
@@ -263,12 +261,12 @@ class MultiAgentOrchestratorCore:
             self.registry_path.write_text(json.dumps(data, indent=2))
 
     def register_agent_type(self, agent_type: str, handler: Callable):
-        """
-        Register a handler for a specific agent type.
+        """Register a handler for a specific agent type.
 
         Args:
             agent_type: Type of agent (e.g., "voice", "coding", "browser")
             handler: Function that creates and manages agents of this type
+
         """
         self.agent_handlers[agent_type] = handler
 
@@ -279,8 +277,7 @@ class MultiAgentOrchestratorCore:
         capabilities: Optional[List[str]] = None,
         context: Optional[CascadeContext] = None,
     ) -> Dict[str, Any]:
-        """
-        Create and register a new agent.
+        """Create and register a new agent.
 
         Args:
             agent_type: Type of agent to create
@@ -290,6 +287,7 @@ class MultiAgentOrchestratorCore:
 
         Returns:
             Dictionary with agent creation result
+
         """
         if agent_type not in self.agent_handlers:
             return {
@@ -357,8 +355,7 @@ class MultiAgentOrchestratorCore:
         parameters: Optional[Dict[str, Any]] = None,
         context: Optional[CascadeContext] = None,
     ) -> Dict[str, Any]:
-        """
-        Dispatch a task to an agent for execution.
+        """Dispatch a task to an agent for execution.
 
         Args:
             agent_name: Name of the agent to dispatch to
@@ -368,6 +365,7 @@ class MultiAgentOrchestratorCore:
 
         Returns:
             Dictionary with task dispatch result
+
         """
         agent = self.agent_registry.get(agent_name)
         if not agent:

@@ -1,14 +1,20 @@
-def test_importer_flow(tmp_path):
+#!/usr/bin/env python
+"""Test the end-to-end importer flow using stubs."""
+import asyncio
+from pathlib import Path
+
+
+def test_importer_flow(tmp_path: Path) -> None:
+    """Test the end-to-end importer flow using stubs."""
     # end-to-end smoke using stubs
-    from importer.config import parse_manifest
-    from importer.downloader import download_repo
-    from importer.describe import describe_file
     from importer.compile import compile_architecture
+    from importer.config import parse_manifest
+    from importer.describe import describe_file
+    from importer.downloader import download_repo
 
     manifest = tmp_path / "github.md"
     manifest.write_text("a/b\n")
 
-    import asyncio
     repos = asyncio.run(parse_manifest(manifest))
     assert repos == [("a", "b")]
 
@@ -19,7 +25,6 @@ def test_importer_flow(tmp_path):
     assert info["size"] == 0
 
     out = tmp_path / "architecture.md"
-    import asyncio
     asyncio.run(compile_architecture([info], out))
     assert out.exists()
     assert "README.md" in out.read_text()

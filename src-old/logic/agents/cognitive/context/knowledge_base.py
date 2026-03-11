@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/knowledge_base.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -51,8 +51,8 @@ Context Agent: Maintains and improves context/description files.
 """
 
 
-from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.base_utilities import create_main_function
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context_agent import ContextAgent
 
 __version__ = VERSION

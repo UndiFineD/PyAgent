@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/managers/SystemManagers.description.md
 
 # SystemManagers
 
-**File**: `src\core\base\managers\SystemManagers.py`  
+**File**: `src\\core\base\\managers\\SystemManagers.py`  
 **Type**: Python Module  
 **Summary**: 6 classes, 0 functions, 28 imports  
 **Lines**: 348  
@@ -114,7 +113,7 @@ Manages configuration profiles and execution profiles.
 
 # Improvements for SystemManagers
 
-**File**: `src\core\base\managers\SystemManagers.py`  
+**File**: `src\\core\base\\managers\\SystemManagers.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 348 lines (medium)  
 **Complexity**: 33 score (complex)
@@ -152,6 +151,29 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import hashlib
+import json
+import logging
+import subprocess
+import sys
+import time
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any
+
+from src.core.base.models import (
+    AgentEvent,
+    AgentHealthCheck,
+    ConfigProfile,
+    ExecutionProfile,
+    FilePriority,
+    FilePriorityConfig,
+    HealthStatus,
+    _empty_agent_event_handlers,
+    _empty_dict_str_str,
+)
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -164,31 +186,8 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 # Optional import for PluginManager
-
 from src.core.base.version import VERSION
-import hashlib
-import json
-import logging
-import sys
-import time
-import subprocess
-from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Any, Dict, List, Optional
-from collections.abc import Callable
-from src.core.base.models import (
-    FilePriority,
-    FilePriorityConfig,
-    AgentEvent,
-    ConfigProfile,
-    HealthStatus,
-    AgentHealthCheck,
-    ExecutionProfile,
-    _empty_dict_str_str,
-    _empty_agent_event_handlers,
-)
 
 try:
     from src.infrastructure.fleet.VersionGate import VersionGate
@@ -246,8 +245,7 @@ class FilePriorityManager:
 
 @dataclass
 class ResponseCache:
-    """
-    Caches responses based on prompts.
+    """Caches responses based on prompts.
     Supports Prompt Caching (Phase 128) by identifying prefix reusable contexts.
     """
 

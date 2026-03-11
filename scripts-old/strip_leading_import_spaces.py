@@ -32,8 +32,8 @@ Usage::
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
 import re
+from pathlib import Path
 
 IMPORT_RE = re.compile(r"^( )(?:(from\s+\S)|(import\s+\S))")
 

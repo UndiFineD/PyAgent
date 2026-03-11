@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialized/FinancialAgent.description.md
 
 # FinancialAgent
 
-**File**: `src\logic\agents\specialized\FinancialAgent.py`  
+**File**: `src\\logic\agents\\specialized\\FinancialAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 52  
@@ -43,7 +42,7 @@ Estimates the real-world dollar cost of improvement cycles based on model usage.
 
 # Improvements for FinancialAgent
 
-**File**: `src\logic\agents\specialized\FinancialAgent.py`  
+**File**: `src\\logic\agents\\specialized\\FinancialAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 52 lines (small)  
 **Complexity**: 1 score (simple)
@@ -80,15 +79,14 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Apache 2.0 License
+from typing import Any
 
-from typing import List, Dict, Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
 
 class FinancialAgent(BaseAgent):
-    """
-    Phase 286: Financial Agent.
+    """Phase 286: Financial Agent.
     Estimates the real-world dollar cost of improvement cycles based on model usage.
     """
 
@@ -105,8 +103,7 @@ class FinancialAgent(BaseAgent):
 
     @as_tool
     async def calculate_run_cost(self, token_usage: dict[str, Any]) -> dict[str, Any]:
-        """
-        Calculates cost based on token usage.
+        """Calculates cost based on token usage.
         Example token_usage: {"GPT-4o": 500000, "Ollama": 1200000}
         """
         total_usd = 0.0

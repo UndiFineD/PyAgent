@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/mcp_validator_core.description.md
 
 # mcp_validator_core
 
-**File**: `src\core\base\logic\core\mcp_validator_core.py`  
+**File**: `src\\core\base\\logic\\core\\mcp_validator_core.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 97  
@@ -60,7 +59,7 @@ Harvested from .external/mcp-security:
 
 # Improvements for mcp_validator_core
 
-**File**: `src\core\base\logic\core\mcp_validator_core.py`  
+**File**: `src\\core\base\\logic\\core\\mcp_validator_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 97 lines (small)  
 **Complexity**: 3 score (simple)
@@ -94,12 +93,11 @@ LLM_CONTEXT_END
 """
 
 import re
-from typing import List, Dict, Any, Tuple
+from typing import Any, Dict, List
 
 
 class McpValidatorCore:
-    """
-    Validates MCP (Model Context Protocol) servers and tools for security.
+    """Validates MCP (Model Context Protocol) servers and tools for security.
 
     Harvested from .external/mcp-security:
     - Checks for prompt injection in descriptions.
@@ -132,8 +130,7 @@ class McpValidatorCore:
     ]
 
     def validate_tool_definition(self, tool_def: Dict[str, Any]) -> List[str]:
-        """
-        Runs multiple security checks on a tool definition.
+        """Runs multiple security checks on a tool definition.
         Returns a list of warning messages.
         """
         warnings = []
@@ -157,8 +154,7 @@ class McpValidatorCore:
         return warnings
 
     def check_metadata_isolation(self, mcp_server_config: Dict[str, Any]) -> bool:
-        """
-        Ensures metadata (like API keys) is not exposed in the server schema.
+        """Ensures metadata (like API keys) is not exposed in the server schema.
         """
 
         # Search recursively for 'key', 'secret', 'token' in the config structure

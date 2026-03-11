@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/policy_enforcement_agent.description.md
 
@@ -29,9 +28,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -76,8 +77,7 @@ __version__ = VERSION
 
 
 class PolicyEnforcementAgent:
-    """
-    Monitors agent activity against a set of governance-defined policies
+    """Monitors agent activity against a set of governance-defined policies
     and enforces restrictions (quarantining) if violations occur.
     """
 
@@ -92,8 +92,7 @@ class PolicyEnforcementAgent:
         self.quarantine_list: set[str] = set()
 
     def evaluate_action(self, agent_id: str, action_type: str, metadata: Any) -> dict[str, Any]:
-        """
-        Evaluates if an agent action complies with active policies.
+        """Evaluates if an agent action complies with active policies.
         """
         _ = (agent_id, action_type, metadata)
         violations = []
@@ -115,8 +114,7 @@ class PolicyEnforcementAgent:
         return {"status": "authorized"}
 
     def quarantine_agent(self, agent_id: str, reason: str) -> dict[str, Any]:
-        """
-        Isolates an agent from the fleet.
+        """Isolates an agent from the fleet.
         """
         self.quarantine_list.add(agent_id)
         return {"agent_id": agent_id, "status": "quarantined", "reason": reason}

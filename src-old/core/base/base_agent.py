@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/base_agent.description.md
 
 # base_agent
 
-**File**: `src\core\base\base_agent.py`  
+**File**: `src\\core\base\base_agent.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 2 imports  
 **Lines**: 25  
@@ -32,7 +31,7 @@ external code and tests.
 
 # Improvements for base_agent
 
-**File**: `src\core\base\base_agent.py`  
+**File**: `src\\core\base\base_agent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 25 lines (small)  
 **Complexity**: 0 score (simple)
@@ -63,6 +62,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

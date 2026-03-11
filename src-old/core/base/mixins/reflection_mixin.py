@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/reflection_mixin.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -56,8 +57,7 @@ from src.core.base.logic.core.lesson_core import Lesson, LessonCore
 
 
 class ReflectionMixin:
-    """
-    Adds a self-reflection loop to agents to ensure output correctness and
+    """Adds a self-reflection loop to agents to ensure output correctness and
     long-term learning from reasoning failures.
     """
 
@@ -69,8 +69,7 @@ class ReflectionMixin:
         self._lesson_core = LessonCore()
 
     async def reflect(self, prompt: str, result: str) -> str:
-        """
-        Evaluates the generated output against the original prompt.
+        """Evaluates the generated output against the original prompt.
         If flaws are detected, attempts a single corrective pass and records a lesson.
         """
         if not self._reflection_enabled or self._reflection_count >= self._max_reflections:
@@ -97,7 +96,7 @@ class ReflectionMixin:
             # We use the agent's think method to process the reflection
             # We temporarily disable reflection for this call to prevent recursion
             self._reflection_enabled = False
-            reflection_output = await getattr(self, "think")(reflection_instructions)
+            reflection_output = await self.think(reflection_instructions)
             self._reflection_enabled = True
 
             if reflection_output.strip().upper() == "VERIFIED":

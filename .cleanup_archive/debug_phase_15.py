@@ -3,17 +3,18 @@
 """Validation script for Phase 15: Ethics & Safety Governance."""
 
 import logging
-import json
 from pathlib import Path
-from src.classes.fleet.FleetManager import FleetManager
+
 from src.classes.context.KnowledgeAgent import KnowledgeAgent
+from src.classes.fleet.FleetManager import FleetManager
+
 
 def test_ethics_and_safety():
     logging.basicConfig(level=logging.INFO)
     root = Path("c:/DEV/PyAgent")
     fleet = FleetManager(str(root))
     fleet.register_agent("Knowledge", KnowledgeAgent)
-    
+
     print("--- Phase 15: Ethics Guardrail (Approved) ---")
     workflow = [{"agent": "Knowledge", "action": "scan_workspace", "args": ["/"]}]
     report = fleet.execute_workflow("Help me analyze the workspace", workflow)

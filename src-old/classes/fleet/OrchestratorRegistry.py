@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/OrchestratorRegistry.description.md
 
 # OrchestratorRegistry
 
-**File**: `src\classes\fleet\OrchestratorRegistry.py`  
+**File**: `src\\classes\fleet\\OrchestratorRegistry.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 14 imports  
 **Lines**: 143  
@@ -62,7 +61,7 @@ Class OrchestratorRegistry implementation.
 
 # Improvements for OrchestratorRegistry
 
-**File**: `src\classes\fleet\OrchestratorRegistry.py`  
+**File**: `src\\classes\fleet\\OrchestratorRegistry.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 143 lines (medium)  
 **Complexity**: 8 score (moderate)
@@ -98,18 +97,18 @@ Class OrchestratorRegistry implementation.
 LLM_CONTEXT_END
 """
 
-import importlib
-import logging
 import json
+import logging
 import os
-from typing import Dict, Any, Optional, List
 from pathlib import Path
-from .ResilientStubs import ResilientStub
-from .OrchestratorRegistryCore import OrchestratorRegistryCore
-from .BootstrapConfigs import BOOTSTRAP_ORCHESTRATORS
+from typing import Any, Dict, List
 
 # Import local version for gatekeeping
 from src.version import SDK_VERSION
+
+from .BootstrapConfigs import BOOTSTRAP_ORCHESTRATORS
+from .OrchestratorRegistryCore import OrchestratorRegistryCore
+from .ResilientStubs import ResilientStub
 
 
 class LazyOrchestratorMap:

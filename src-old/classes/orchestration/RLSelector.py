@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/RLSelector.description.md
 
@@ -82,7 +81,7 @@ Optimizes tool selection by weighting success rates and historical performance.
 
 import logging
 import random
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List
 
 
 class RLSelector:

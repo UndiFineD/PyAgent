@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/rust_bridge_profiler.description.md
 
@@ -27,6 +26,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -53,8 +53,7 @@ except ImportError:
 
 
 class RustBridgeProfiler:
-    """
-    Orchestrates the profiling of the rust_core.pyd binary.
+    """Orchestrates the profiling of the rust_core.pyd binary.
     Collects execution counts and timing metrics for all exported Rust functions.
     """
 

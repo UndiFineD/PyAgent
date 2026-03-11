@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/models/base_models.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -48,18 +48,12 @@ from __future__ import annotations
 """Base model classes and utility functions."""
 
 
+import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Optional
-import time
-from .core_enums import (
-    AuthMethod,
-    FilePriority,
-    SerializationFormat,
-    EnvironmentStatus,
-    EnvironmentIsolation,
-)
+
 from ._factories import (
     _empty_agent_event_handlers,
     _empty_dict_str_any,
@@ -77,6 +71,13 @@ from ._factories import (
     _empty_list_int,
     _empty_list_str,
     _empty_routes_list,
+)
+from .core_enums import (
+    AuthMethod,
+    EnvironmentIsolation,
+    EnvironmentStatus,
+    FilePriority,
+    SerializationFormat,
 )
 
 __all__ = [

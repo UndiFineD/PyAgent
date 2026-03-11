@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/strategies/ReflexionStrategy.description.md
 
@@ -78,14 +77,15 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# Apache 2.0 License
-
-from src.core.base.version import VERSION
-from .AgentStrategy import AgentStrategy
-from typing import Dict, List, Optional, TYPE_CHECKING
 import logging
 from collections.abc import Callable
+from typing import Dict, List, Optional
+
+# Copyright 2026 PyAgent Authors
+# Apache 2.0 License
+from src.core.base.version import VERSION
+
+from .AgentStrategy import AgentStrategy
 
 BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 

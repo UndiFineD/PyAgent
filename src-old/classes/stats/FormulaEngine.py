@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/stats/FormulaEngine.description.md
 
@@ -85,9 +84,10 @@ from __future__ import annotations
 """Shell for FormulaEngine using pure core logic."""
 
 import logging
-from typing import Any, Dict, List, Optional
-from .FormulaValidation import FormulaValidation
+from typing import Any, Dict, Optional
+
 from .FormulaEngineCore import FormulaEngineCore
+from .FormulaValidation import FormulaValidation
 
 
 class FormulaEngine:

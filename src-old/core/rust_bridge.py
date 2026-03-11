@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/rust_bridge.description.md
 
@@ -30,6 +29,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -54,7 +54,7 @@ Provides centralized hub for all Rust FFI calls with graceful fallbacks.
 
 
 import logging
-from typing import Dict, List, Any, Optional, Callable
+from typing import Any, Callable, Dict, List, Optional
 
 try:
     import rust_core as rc
@@ -73,8 +73,7 @@ def get_bridge() -> RustBridge:
 
 
 class RustBridge:
-    """
-    Centralized hub for all Rust FFI calls.
+    """Centralized hub for all Rust FFI calls.
     Provides memory-safe wrappers, boundary checks, and graceful fallbacks.
     """
 
@@ -209,7 +208,7 @@ class RustBridge:
                 results[path] = changed
             except (
                 Exception
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            ):  # pylint: disable=broad-exception-caught, unused-variable
                 results[path] = False
         return results
 

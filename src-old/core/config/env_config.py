@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/config/env_config.description.md
 
@@ -37,6 +36,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -87,8 +87,7 @@ T = TypeVar("T")
 
 
 class EnvVar(Generic[T]):
-    """
-    Descriptor for type-safe environment variable access.
+    """Descriptor for type-safe environment variable access.
 
     Provides automatic type conversion, default values, and validation.
 
@@ -99,6 +98,7 @@ class EnvVar(Generic[T]):
         ...     HOST = EnvVar("HOST", default="localhost")
         >>> config = Config()
         >>> config.DEBUG  # Returns False or bool from DEBUG env var
+
     """
 
     __slots__ = (
@@ -124,8 +124,7 @@ class EnvVar(Generic[T]):
         description: str = "",
         deprecated: str | None = None,
     ) -> None:
-        """
-        Initialize an environment variable descriptor.
+        """Initialize an environment variable descriptor.
 
         Args:
             name: The environment variable name.
@@ -135,6 +134,7 @@ class EnvVar(Generic[T]):
             transformer: Optional function to transform string to target type.
             description: Human-readable description.
             deprecated: Deprecation message if this var is deprecated.
+
         """
         self.name = name
         self.default = default
@@ -237,8 +237,7 @@ def get_env(
     *,
     type_: type[T] | None = None,
 ) -> T:
-    """
-    Get an environment variable with type conversion.
+    """Get an environment variable with type conversion.
 
     Args:
         name: Environment variable name.
@@ -247,6 +246,7 @@ def get_env(
 
     Returns:
         The environment variable value, converted to the appropriate type.
+
     """
     raw_value = os.environ.get(name)
 
@@ -320,13 +320,13 @@ def get_env_float(name: str, default: float = 0.0) -> float:
 def get_env_list(
     name: str, default: list[str] | None = None, sep: str = ","
 ) -> list[str]:
-    """
-    Get a list environment variable (comma-separated by default).
+    """Get a list environment variable (comma-separated by default).
 
     Args:
         name: Environment variable name.
         default: Default value if not set.
         sep: Separator for splitting the value.
+
     """
     if default is None:
         default = []
@@ -367,8 +367,7 @@ class EnvConfigMeta:
 
 
 class EnvConfig:
-    """
-    Base class for environment-based configuration.
+    """Base class for environment-based configuration.
 
     Subclass and add EnvVar descriptors for type-safe config.
 
@@ -382,6 +381,7 @@ class EnvConfig:
         >>> config = AppConfig()
         >>> config.DEBUG
         False
+
     """
 
     _cache: dict[str, Any] = {}
@@ -456,7 +456,7 @@ class EnvConfig:
             return "<not found>"
         except (
             Exception
-        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+        ):  # pylint: disable=broad-exception-caught, unused-variable
             return "<error>"
 
     @classmethod
@@ -492,22 +492,22 @@ class EnvConfig:
 
 
 class NamespacedConfig:
-    """
-    Configuration with automatic namespace prefixing.
+    """Configuration with automatic namespace prefixing.
 
     Example:
         >>> config = NamespacedConfig("MYAPP")
         >>> config.get("DEBUG", False)  # Reads MYAPP_DEBUG
         >>> config.get("PORT", 8080)    # Reads MYAPP_PORT
+
     """
 
     def __init__(self, namespace: str, sep: str = "_") -> None:
-        """
-        Initialize a namespaced configuration.
+        """Initialize a namespaced configuration.
 
         Args:
             namespace: Prefix for all environment variables.
             sep: Separator between namespace and variable name.
+
         """
         self.namespace = namespace
         self.sep = sep
@@ -567,8 +567,7 @@ class NamespacedConfig:
 
 
 class LazyEnvVar(Generic[T]):
-    """
-    Environment variable computed lazily on first access.
+    """Environment variable computed lazily on first access.
 
     Useful when the default requires computation.
     """
@@ -633,11 +632,11 @@ class TempEnv:
     """
 
     def __init__(self, **env_vars: str | None) -> None:
-        """
-        Initialize with environment variables to set.
+        """Initialize with environment variables to set.
 
         Args:
             **env_vars: Variables to set. None values delete the variable.
+
         """
         self.env_vars = env_vars
         self.original: dict[str, str | None] = {}

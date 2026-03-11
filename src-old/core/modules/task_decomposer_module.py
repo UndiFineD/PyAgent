@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/modules/task_decomposer_module.description.md
 
@@ -27,9 +26,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -65,8 +66,7 @@ class PlanStep:
 
 
 class TaskDecomposerModule(BaseModule):
-    """
-    Consolidated core module for task decomposition.
+    """Consolidated core module for task decomposition.
     Migrated from TaskDecomposerCore.
     """
 
@@ -76,8 +76,7 @@ class TaskDecomposerModule(BaseModule):
         return super().initialize()
 
     def execute(self, request: str) -> list[dict[str, Any]]:
-        """
-        Executes the planning logic for a given request.
+        """Executes the planning logic for a given request.
         """
         if not self.initialized:
             self.initialize()

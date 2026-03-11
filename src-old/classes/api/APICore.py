@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/api/APICore.description.md
 
 # APICore
 
-**File**: `src\classes\api\APICore.py`  
+**File**: `src\\classes\api\\APICore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 75  
@@ -45,7 +44,7 @@ Class APICore implementation.
 
 # Improvements for APICore
 
-**File**: `src\classes\api\APICore.py`  
+**File**: `src\\classes\api\\APICore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 75 lines (small)  
 **Complexity**: 3 score (simple)
@@ -104,10 +103,10 @@ APICore logic for fleet communication.
 Pure logic for OpenAPI spec generation and tool contract validation.
 """
 
-from src.core.base.version import VERSION
 import json
-from typing import Dict, List, Any
-from src.core.base.version import SDK_VERSION
+from typing import Any
+
+from src.core.base.version import SDK_VERSION, VERSION
 
 __version__ = VERSION
 

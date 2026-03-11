@@ -1,5 +1,4 @@
 import os
-import re
 
 src_path = r"c:\DEV\PyAgent\src"
 version_import = "from src.version import VERSION"
@@ -18,7 +17,7 @@ for root, _, files in os.walk(src_path):
             try:
                 with open(path, "r", encoding="utf-8", errors="ignore") as f:
                     content = f.read()
-                
+
                 if target_version in content:
                     # Replace the hardcoded version with an import
                     # We look for the line and replace it
@@ -31,7 +30,7 @@ for root, _, files in os.walk(src_path):
                             modified = True
                         else:
                             new_lines.append(line)
-                    
+
                     if modified:
                         new_content = "\n".join(new_lines) + ("\n" if content.endswith("\n") else "")
                         with open(path, "w", encoding="utf-8") as f:

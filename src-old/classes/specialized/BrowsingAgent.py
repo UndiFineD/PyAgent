@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/BrowsingAgent.description.md
 
@@ -96,10 +95,11 @@ from __future__ import annotations
 Inspired by Skyvern and BrowserOS.
 """
 
-from src.core.base.version import VERSION
 import logging
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

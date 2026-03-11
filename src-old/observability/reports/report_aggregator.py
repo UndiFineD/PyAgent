@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/report_aggregator.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -61,34 +62,37 @@ __version__ = VERSION
 class ReportAggregator:
     """Aggregator for combining reports from multiple sources.
     Combines and summarizes reports across files.
+
     Example:
         aggregator=ReportAggregator()
         aggregator.add_source("file1.py", issues1)
         aggregator.add_source("file2.py", issues2)
         combined=aggregator.aggregate()
+
     """
 
     def __init__(self) -> None:
         """Initialize aggregator."""
-
         self.sources: dict[str, list[CodeIssue]] = {}
         logging.debug("ReportAggregator initialized")
 
     def add_source(self, file_path: str, issues: list[CodeIssue]) -> None:
         """Add a source to aggregate.
+
         Args:
             file_path: Source file.
             issues: Issues from file.
-        """
 
+        """
         self.sources[file_path] = issues
 
     def aggregate(self) -> AggregatedReport:
         """Aggregate all sources.
+
         Returns:
             Aggregated report.
-        """
 
+        """
         all_issues: list[CodeIssue] = []
         for issues in self.sources.values():
             all_issues.extend(issues)
@@ -113,5 +117,4 @@ class ReportAggregator:
 
     def clear(self) -> None:
         """Clear all sources."""
-
         self.sources.clear()

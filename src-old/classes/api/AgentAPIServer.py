@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/api/AgentAPIServer.description.md
 
 # AgentAPIServer
 
-**File**: `src\classes\api\AgentAPIServer.py`  
+**File**: `src\\classes\api\\AgentAPIServer.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 15 imports  
 **Lines**: 131  
@@ -56,7 +55,7 @@ Class TelemetryManger implementation.
 
 # Improvements for AgentAPIServer
 
-**File**: `src\classes\api\AgentAPIServer.py`  
+**File**: `src\\classes\api\\AgentAPIServer.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 131 lines (medium)  
 **Complexity**: 2 score (simple)
@@ -114,14 +113,15 @@ from __future__ import annotations
 FastAPI-based API gateway for the PyAgent fleet.
 """
 
-from src.core.base.version import VERSION
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from pydantic import BaseModel
-from typing import List, Dict, Any, Optional
 import json
 import time
-from src.infrastructure.fleet.FleetManager import FleetManager
+from typing import Any
+
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from pydantic import BaseModel
+from src.core.base.version import VERSION
 from src.infrastructure.api.FleetLoadBalancer import FleetLoadBalancer
+from src.infrastructure.fleet.FleetManager import FleetManager
 
 __version__ = VERSION
 

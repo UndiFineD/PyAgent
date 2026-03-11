@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/CodeQualityCore.description.md
 
 # CodeQualityCore
 
-**File**: `src\logic\agents\development\CodeQualityCore.py`  
+**File**: `src\\logic\agents\\development\\CodeQualityCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 67  
@@ -44,7 +43,7 @@ Decoupled from file I/O and subprocesses.
 
 # Improvements for CodeQualityCore
 
-**File**: `src\logic\agents\development\CodeQualityCore.py`  
+**File**: `src\\logic\agents\\development\\CodeQualityCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 67 lines (small)  
 **Complexity**: 4 score (simple)
@@ -79,6 +78,8 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+from typing import Any
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -91,17 +92,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-from typing import Dict, List, Any
 
 __version__ = VERSION
 
 
 class CodeQualityCore:
-    """
-    Pure logic for code quality analysis.
+    """Pure logic for code quality analysis.
     Decoupled from file I/O and subprocesses.
     """
 

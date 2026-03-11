@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/jsontree/reduction.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -104,8 +104,7 @@ def json_reduce_leaves(
     initial: _U = ...,  # type: ignore[assignment]
     /,
 ) -> _T | _U:
-    """
-    Apply a function of two arguments cumulatively to each leaf.
+    """Apply a function of two arguments cumulatively to each leaf.
 
     Reduces all leaves to a single value, from left to right.
 
@@ -116,6 +115,7 @@ def json_reduce_leaves(
 
     Returns:
         The reduced value.
+
     """
     if initial is ...:
         return reduce(func, json_iter_leaves(value))  # type: ignore

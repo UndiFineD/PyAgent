@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/OrchestratorLifecycleMixin.description.md
 
 # OrchestratorLifecycleMixin
 
-**File**: `src\logic\agents\swarm\OrchestratorLifecycleMixin.py`  
+**File**: `src\\logic\agents\\swarm\\OrchestratorLifecycleMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 49  
@@ -46,7 +45,7 @@ Health check and graceful shutdown methods for OrchestratorAgent.
 
 # Improvements for OrchestratorLifecycleMixin
 
-**File**: `src\logic\agents\swarm\OrchestratorLifecycleMixin.py`  
+**File**: `src\\logic\agents\\swarm\\OrchestratorLifecycleMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 49 lines (small)  
 **Complexity**: 5 score (moderate)
@@ -83,12 +82,12 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
-
 import logging
 from pathlib import Path
-from src.core.base.models import AgentHealthCheck, HealthStatus
+
 from src.core.base.GracefulShutdown import GracefulShutdown
 from src.core.base.managers.SystemManagers import HealthChecker
+from src.core.base.models import AgentHealthCheck, HealthStatus
 
 
 class OrchestratorLifecycleMixin:

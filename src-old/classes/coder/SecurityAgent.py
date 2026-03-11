@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/SecurityAgent.description.md
 
@@ -74,9 +73,9 @@ LLM_CONTEXT_END
 
 """Agent specializing in Security Auditing and Vulnerability detection."""
 
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import create_main_function
-import logging
 
 
 class SecurityAgent(BaseAgent):

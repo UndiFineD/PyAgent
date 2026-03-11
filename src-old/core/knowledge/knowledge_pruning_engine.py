@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/knowledge/knowledge_pruning_engine.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -52,15 +53,15 @@ Knowledge pruning engine.py module.
 
 import logging
 import time
-from .knowledge_engine import KnowledgeEngine
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 
+from .knowledge_engine import KnowledgeEngine
+
 __version__ = VERSION
 class KnowledgePruningEngine:
-    """
-    Implements neural-inspired pruning for agent knowledge stores (Phase 127).
+    """Implements neural-inspired pruning for agent knowledge stores (Phase 127).
     Fosters 'Anchoring Strength' by preserving frequently accessed items
     and pruning redundant or stale data to optimize performance.
     """
@@ -78,8 +79,7 @@ class KnowledgePruningEngine:
         self.access_logs[element_id]["last_access"] = time.time()
 
     def get_anchoring_strength(self, element_id: str) -> float:
-        """
-        Calculates the anchoring strength of a knowledge element (Phase 130).
+        """Calculates the anchoring strength of a knowledge element (Phase 130).
         Strength = (Access Count) * exp(-decay_constant * (Current Time - Last Access))
         """
         import math
@@ -97,8 +97,7 @@ class KnowledgePruningEngine:
     def run_pruning_cycle(
         self, strength_threshold: float = 0.5, compression_threshold: float = 2.0
     ) -> dict[str, list[str]]:
-        """
-        Executes a pruning cycle across all engine stores using anchoring strength.
+        """Executes a pruning cycle across all engine stores using anchoring strength.
         Items with strength < strength_threshold are considered candidates for eviction.
         """
         logging.info(f"KnowledgePruningEngine: Initiating neural pruning for agent {self.engine.agent_id}")

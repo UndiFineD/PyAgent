@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/report_generator.description.md
 
@@ -51,15 +50,14 @@ from __future__ import annotations
 """Report generation logic for agent source files."""
 
 
-from argparse import Namespace
 import ast
 import hashlib
 import logging
 import os
 import re
-
 import sys
 import time
+from argparse import Namespace
 from collections.abc import Iterable
 from pathlib import Path
 from typing import Any, cast
@@ -88,6 +86,7 @@ class ReportGenerator:
             agent_dir: Directory containing agent scripts.
             output_dir: Directory where reports should be written.
             recorder: Optional LocalContextRecorder.
+
         """
         self.recorder = recorder
         if agent_dir:
@@ -583,7 +582,6 @@ if __name__ == "__main__":
         """Main entry point."""
         # Internal CLI for repairing/refreshing autodocs
         import argparse
-        from argparse import Namespace
 
         parser = argparse.ArgumentParser(
             description="Repair or refresh autodocs for the workspace."

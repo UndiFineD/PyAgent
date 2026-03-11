@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/AgentIdentityAgent.description.md
 
@@ -80,15 +79,14 @@ LLM_CONTEXT_END
 """
 
 import hashlib
-import time
 import json
+import time
 import uuid
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict
 
 
 class AgentIdentityAgent:
-    """
-    Manages Decentralized Identifiers (DIDs) and Verifiable Credentials (VCs)
+    """Manages Decentralized Identifiers (DIDs) and Verifiable Credentials (VCs)
     for agents within the Swarm and across fleet boundaries.
     """
 
@@ -97,8 +95,7 @@ class AgentIdentityAgent:
         self.identity_registry = {}  # agent_id -> DID document
 
     def create_agent_did(self, agent_name: str, fleet_id: str = "fleet-01") -> str:
-        """
-        Creates a new DID for an agent.
+        """Creates a new DID for an agent.
         Format: did:pyagent:<fleet_id>:<unique_hash>
         """
         unique_id = str(uuid.uuid4())
@@ -125,8 +122,7 @@ class AgentIdentityAgent:
     def issue_verifiable_credential(
         self, issuer_did: str, subject_did: str, claim_type: str, claim_value: Any
     ) -> Dict[str, Any]:
-        """
-        Issues a simulated VC for an agent.
+        """Issues a simulated VC for an agent.
         """
         vc = {
             "context": ["https://www.w3.org/2018/credentials/v1"],
@@ -146,8 +142,7 @@ class AgentIdentityAgent:
         return vc
 
     def verify_credential(self, vc: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Verifies the integrity of a credential.
+        """Verifies the integrity of a credential.
         """
         if "proof" in vc and "credentialSubject" in vc:
             # In a real system, we would verify the JWS signature.

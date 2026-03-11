@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/agent_stats.description.md
 
@@ -49,10 +48,10 @@ LLM_CONTEXT_END
 
 """Agent specializing in collecting and reporting project development statistics."""
 
-from src.version import VERSION
-import sys
 import argparse
+import sys
 from pathlib import Path
+
 from src.classes.stats.StatsAgent import StatsAgent
 
 # Ensure project root and src are in path for modular imports

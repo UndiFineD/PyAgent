@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/a2a_communication.description.md
 
 # a2a_communication
 
-**File**: `src\core\base\logic\a2a_communication.py`  
+**File**: `src\\core\base\\logic\a2a_communication.py`  
 **Type**: Python Module  
 **Summary**: 11 classes, 1 functions, 20 imports  
 **Lines**: 469  
@@ -149,7 +148,7 @@ Create an AgentCard from a dictionary.
 
 # Improvements for a2a_communication
 
-**File**: `src\core\base\logic\a2a_communication.py`  
+**File**: `src\\core\base\\logic\a2a_communication.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 469 lines (medium)  
 **Complexity**: 10 score (moderate)
@@ -192,14 +191,11 @@ Based on patterns from agentic_design_patterns repository.
 """
 
 import asyncio
-import json
 import logging
 import uuid
-from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Callable, Union, Protocol
-from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Callable, Dict, List, Optional, Protocol
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -208,6 +204,7 @@ logger = logging.getLogger(__name__)
 
 class MessageType(Enum):
     """Types of inter-agent messages."""
+
     REQUEST = "request"
     RESPONSE = "response"
     NOTIFICATION = "notification"
@@ -217,6 +214,7 @@ class MessageType(Enum):
 
 class AgentCapability(Enum):
     """Standard agent capabilities."""
+
     CODE_GENERATION = "code_generation"
     CODE_REVIEW = "code_review"
     DATA_ANALYSIS = "data_analysis"
@@ -229,6 +227,7 @@ class AgentCapability(Enum):
 
 class AgentSkill(BaseModel):
     """Represents a specific skill an agent can perform."""
+
     id: str = Field(..., description="Unique skill identifier")
     name: str = Field(..., description="Human-readable skill name")
     description: str = Field(..., description="Detailed skill description")
@@ -238,6 +237,7 @@ class AgentSkill(BaseModel):
 
 class AgentCard(BaseModel):
     """Agent identity and capability card for A2A communication."""
+
     name: str = Field(..., description="Agent name")
     description: str = Field(..., description="Agent description")
     url: str = Field(..., description="Agent endpoint URL")
@@ -259,6 +259,7 @@ class AgentCard(BaseModel):
 
 class AgentCapabilities(BaseModel):
     """Agent capability flags."""
+
     streaming: bool = Field(default=False, description="Supports streaming responses")
     async_execution: bool = Field(default=True, description="Supports async execution")
     batch_processing: bool = Field(default=False, description="Supports batch processing")
@@ -266,6 +267,7 @@ class AgentCapabilities(BaseModel):
 
 class A2AMessage(BaseModel):
     """Standard A2A message format."""
+
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Unique message ID")
     type: MessageType = Field(..., description="Message type")
     from_agent: str = Field(..., description="Sender agent ID")
@@ -279,6 +281,7 @@ class A2AMessage(BaseModel):
 
 class A2AResponse(BaseModel):
     """Standard A2A response format."""
+
     message_id: str = Field(..., description="Original message ID")
     status: str = Field(..., description="Response status (success/error)")
     result: Any = Field(default=None, description="Response result")

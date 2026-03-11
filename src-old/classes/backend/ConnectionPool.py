@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/backend/ConnectionPool.description.md
 
 # ConnectionPool
 
-**File**: `src\classes\backend\ConnectionPool.py`  
+**File**: `src\\classes\backend\\ConnectionPool.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 12 imports  
 **Lines**: 167  
@@ -58,7 +57,7 @@ caching 'working' status for 15 minutes.
 
 # Improvements for ConnectionPool
 
-**File**: `src\classes\backend\ConnectionPool.py`  
+**File**: `src\\classes\backend\\ConnectionPool.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 167 lines (medium)  
 **Complexity**: 10 score (moderate)
@@ -106,21 +105,21 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_backend.py"""
 
-from src.core.base.version import VERSION
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 import json
 import logging
 import threading
 import time
 import uuid
+from pathlib import Path
+from typing import Any
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
 
 class ConnectionPool:
-    """
-    Manages a pool of reusable connections with Phase 108 status caching.
+    """Manages a pool of reusable connections with Phase 108 status caching.
     Reduces connection overhead and prevents repeated failure pings by
     caching 'working' status for 15 minutes.
     """
@@ -212,6 +211,7 @@ class ConnectionPool:
         Args:
             backend: Backend identifier.
             connection: Connection to release.
+
         """
         with self._lock:
             if backend in self._pools:
@@ -226,6 +226,7 @@ class ConnectionPool:
 
         Returns:
             Dict: Connection object.
+
         """
         return {
             "backend": backend,
@@ -238,6 +239,7 @@ class ConnectionPool:
 
         Returns:
             Dict: Pool stats by backend.
+
         """
         with self._lock:
             return {
@@ -254,6 +256,7 @@ class ConnectionPool:
 
         Returns:
             int: Number of connections closed.
+
         """
         with self._lock:
             count = sum(len(pool) for pool in self._pools.values())

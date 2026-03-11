@@ -1,14 +1,13 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/memory_mixins/MemorySearchMixin.description.md
 
 # MemorySearchMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\memory_mixins\MemorySearchMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\memory_mixins\\MemorySearchMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 99  
@@ -40,7 +39,7 @@ Methods for searching memories.
 
 # Improvements for MemorySearchMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\memory_mixins\MemorySearchMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\memory_mixins\\MemorySearchMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 99 lines (small)  
 **Complexity**: 2 score (simple)

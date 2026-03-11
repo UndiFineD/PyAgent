@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/ChangelogAnalyticsMixin.description.md
 
 # ChangelogAnalyticsMixin
 
-**File**: `src\logic\agents\swarm\ChangelogAnalyticsMixin.py`  
+**File**: `src\\logic\agents\\swarm\\ChangelogAnalyticsMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 45  
@@ -38,7 +37,7 @@ Mixin for calculating statistics and analytics for changelogs.
 
 # Improvements for ChangelogAnalyticsMixin
 
-**File**: `src\logic\agents\swarm\ChangelogAnalyticsMixin.py`  
+**File**: `src\\logic\agents\\swarm\\ChangelogAnalyticsMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 45 lines (small)  
 **Complexity**: 1 score (simple)
@@ -74,7 +73,6 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
-
 import re
 from typing import Any
 
@@ -128,5 +126,5 @@ class ChangelogAnalyticsMixin:
             "line_count": len(content.split("\n")),
             "character_count": len(content),
         }
-        setattr(self, "_statistics", stats)
+        self._statistics = stats
         return stats

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/DocInferenceAgent.description.md
 
@@ -106,13 +105,14 @@ from __future__ import annotations
 Converts images and PDFs into structured Markdown/JSON/HTML while preserving forms and tables.
 """
 
-from src.core.base.version import VERSION
-import logging
 import json
+import logging
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool, create_main_function
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -143,6 +143,7 @@ class DocInferenceAgent(BaseAgent):
 
         Args:
             pdf_path: Path to the PDF file.
+
         """
         if not HAS_PYPDF:
             return "Error: pypdf library not installed. Please install it to use this tool."
@@ -169,6 +170,7 @@ class DocInferenceAgent(BaseAgent):
         Args:
             doc_path: Path to the document (PDF, Image, Text).
             tags: Optional metadata tags.
+
         """
         logging.info(f"DocInference: Ingesting {doc_path} into Knowledge.")
         content = (

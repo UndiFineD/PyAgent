@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/session_control_core.description.md
 
 # session_control_core
 
-**File**: `src\core\base\logic\core\session_control_core.py`  
+**File**: `src\\core\base\\logic\\core\\session_control_core.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 5 imports  
 **Lines**: 69  
@@ -66,7 +65,7 @@ Lesson harvested from .external/agentcloud pattern.
 
 # Improvements for session_control_core
 
-**File**: `src\core\base\logic\core\session_control_core.py`  
+**File**: `src\\core\base\\logic\\core\\session_control_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 69 lines (small)  
 **Complexity**: 6 score (moderate)
@@ -102,7 +101,6 @@ LLM_CONTEXT_END
 import enum
 import json
 from pathlib import Path
-from typing import Optional, Dict
 
 
 class SessionSignal(enum.Enum):
@@ -115,8 +113,7 @@ class SessionSignal(enum.Enum):
 
 
 class SessionControlCore:
-    """
-    Manages session interrupt signals and shared state flags for long-running agent tasks.
+    """Manages session interrupt signals and shared state flags for long-running agent tasks.
     Enables orchestration layers to pause or stop agents mid-loop via filesystem or shared memory flags.
     Lesson harvested from .external/agentcloud pattern.
     """

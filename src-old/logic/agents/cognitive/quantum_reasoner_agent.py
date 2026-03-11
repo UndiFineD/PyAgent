@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/quantum_reasoner_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -53,17 +53,16 @@ import json
 import logging
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 # pylint: disable=too-many-ancestors
 class QuantumReasonerAgent(BaseAgent):
-    """
-    Agent that uses 'Quantum-Inspired Reasoning' to handle ambiguity.
+    """Agent that uses 'Quantum-Inspired Reasoning' to handle ambiguity.
     It explores multiple 'superposition' states (plans) in parallel and
     collapses them into a single coherent execution path.
     """
@@ -81,8 +80,7 @@ class QuantumReasonerAgent(BaseAgent):
     async def reason_with_superposition(
         self, task: str, branch_count: int = 3
     ) -> dict[str, Any]:
-        """
-        Generates multiple reasoning branches for a task and selects the best one.
+        """Generates multiple reasoning branches for a task and selects the best one.
         """
         logging.info(
             f"QuantumReasoner: Exploring {branch_count} parallel states for task: {task}"
@@ -153,8 +151,7 @@ class QuantumReasonerAgent(BaseAgent):
 
     @as_tool
     def collapse_quantum_states(self, branches: list[dict[str, Any]]) -> str:
-        """
-        Manually collapses provided reasoning states into a single decision.
+        """Manually collapses provided reasoning states into a single decision.
         """
         if not branches:
             return "No states to collapse."

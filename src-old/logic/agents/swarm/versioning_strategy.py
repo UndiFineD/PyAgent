@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/versioning_strategy.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -52,5 +52,6 @@ from enum import Enum
 
 class VersioningStrategy(Enum):
     """Supported versioning schemes for the fleet."""
+
     SEMVER = "semver"
     CALVER = "calver"

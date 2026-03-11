@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/PerformanceAgent.description.md
 
 # PerformanceAgent
 
-**File**: `src\logic\agents\development\PerformanceAgent.py`  
+**File**: `src\\logic\agents\\development\\PerformanceAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 82  
@@ -53,7 +52,7 @@ Example:
 
 # Improvements for PerformanceAgent
 
-**File**: `src\logic\agents\development\PerformanceAgent.py`  
+**File**: `src\\logic\agents\\development\\PerformanceAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 82 lines (small)  
 **Complexity**: 2 score (simple)
@@ -81,6 +80,7 @@ Example:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -101,11 +101,11 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_coder.py"""
 
-from src.core.base.version import VERSION
+import re
+
 from src.core.base.types.OptimizationSuggestion import OptimizationSuggestion
 from src.core.base.types.OptimizationType import OptimizationType
-from typing import List, Tuple
-import re
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -122,6 +122,7 @@ class PerformanceAgent:
     Example:
         >>> optimizer=PerformanceAgent()
         >>> suggestions=optimizer.analyze("for i in range(len(items)):")
+
     """
 
     OPTIMIZATION_PATTERNS: list[tuple[str, OptimizationType, str, str]] = [
@@ -157,6 +158,7 @@ class PerformanceAgent:
 
         Returns:
             List of optimization suggestions.
+
         """
         self.suggestions = []
         lines = content.split("\n")

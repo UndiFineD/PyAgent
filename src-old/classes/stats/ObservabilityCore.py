@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/stats/ObservabilityCore.description.md
 
@@ -91,10 +90,9 @@ ObservabilityCore logic for metric aggregation and auditing.
 Pure logic for summarizing agent performance and costs.
 """
 
-import json
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List
 
 
 @dataclass

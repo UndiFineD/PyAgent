@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/reflection_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -49,17 +49,16 @@ from __future__ import annotations
 """Agent specializing in self-critique and reflection."""
 
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 # pylint: disable=too-many-ancestors
 class ReflectionAgent(BaseAgent):
-    """
-    Tier 2 (Cognitive Logic) - Reflection Agent: Critique and refinement engine
+    """Tier 2 (Cognitive Logic) - Reflection Agent: Critique and refinement engine
     specializing in self-improvement and logic verification.
     """
 

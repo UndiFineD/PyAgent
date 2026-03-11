@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/RefinementAgent.description.md
 
@@ -89,10 +88,9 @@ Optimizes system prompts, tool descriptions, and agent logic based on performanc
 """
 
 import logging
-import json
 import os
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
@@ -130,9 +128,11 @@ class RefinementAgent(BaseAgent):
         self, agent_class_name: str, performance_feedback: str
     ) -> str:
         """Generates a new optimized system prompt for an agent.
+
         Args:
             agent_class_name: The name of the agent class to refine.
             performance_feedback: Summary of what the agent is doing wrong.
+
         """
         logging.info(f"Refinement: Generating new prompt for {agent_class_name}...")
 
@@ -147,9 +147,11 @@ class RefinementAgent(BaseAgent):
     @as_tool
     def update_agent_source(self, file_path: str, new_logic_snippet: str) -> str:
         """Safely applies a refinement to an agent's source code.
+
         Args:
             file_path: Absolute path to the agent's Python file.
             new_logic_snippet: The refined code block to inject or update.
+
         """
         # In a real scenario, this would use the edit tools or AST manipulation.
         # This implementation logs the proposal for human-governed or orchestrated application.

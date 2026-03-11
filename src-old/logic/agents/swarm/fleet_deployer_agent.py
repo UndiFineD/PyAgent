@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/fleet_deployer_agent.description.md
 
@@ -30,6 +29,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -87,11 +87,6 @@ class FleetDeployerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     ) -> str:
         """Generates a specialized Dockerfile for an agent type.
 
-
-
-
-
-
         Args:
             agent_type: The type of agent (e.g., 'LinguisticAgent').
             python_version: Base image Python version.
@@ -141,6 +136,7 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
         Args:
             agent_name: Unique name for the new node.
             agent_type: The agent class to instantiate.
+
         """
         logging.info(
             f"FleetDeployer: Spawning new node '{agent_name}' of type '{agent_type}'"

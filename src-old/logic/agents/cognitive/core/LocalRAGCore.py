@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/core/LocalRAGCore.description.md
 
 # LocalRAGCore
 
-**File**: `src\logic\agents\cognitive\core\LocalRAGCore.py`  
+**File**: `src\\logic\agents\\cognitive\\core\\LocalRAGCore.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 3 imports  
 **Lines**: 45  
@@ -44,7 +43,7 @@ Handles shard selection, path-based routing, and context relevance.
 
 # Improvements for LocalRAGCore
 
-**File**: `src\logic\agents\cognitive\core\LocalRAGCore.py`  
+**File**: `src\\logic\agents\\cognitive\\core\\LocalRAGCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 45 lines (small)  
 **Complexity**: 3 score (simple)
@@ -79,7 +78,6 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-from typing import List
 from dataclasses import dataclass
 
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/DreamStateOrchestrator.description.md
 
@@ -83,13 +82,13 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 import logging
-import json
+from typing import Any, Dict
+
 from src.classes.fleet.FleetManager import FleetManager
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
+
 
 class DreamStateOrchestrator:
-    """
-    Implements Recursive Skill Synthesis (Phase 29).
+    """Implements Recursive Skill Synthesis (Phase 29).
     Orchestrates synthetic 'dreams' where agents practice tasks in simulated environments
     to discover new tools or optimize existing ones.
     """
@@ -98,8 +97,7 @@ class DreamStateOrchestrator:
         self.fleet = fleet
 
     def initiate_dream_cycle(self, focus_area: str) -> Dict[str, Any]:
-        """
-        Starts a simulation cycle to evolve skills in a specific area.
+        """Starts a simulation cycle to evolve skills in a specific area.
         """
         logging.info(
             f"DreamStateOrchestrator: Initiating dream cycle focal point: {focus_area}"

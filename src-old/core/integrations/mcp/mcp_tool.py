@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/integrations/mcp/mcp_tool.description.md
 
@@ -102,6 +101,7 @@ Returns:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -125,13 +125,13 @@ def register_tool(
     name: Optional[str] = None,
     description: Optional[str] = None,
 ):
-    """
-    Decorator to register a function as a tool using MCP format.
+    """Decorator to register a function as a tool using MCP format.
     Compatible with mcp.mcp_tool descriptor.
 
     Args:
         name: Optional custom tool name
         description: Optional custom description
+
     """
 
     def decorator(func: Callable) -> Callable:
@@ -200,8 +200,7 @@ def _generate_mcp_schema(func: Callable) -> Dict[str, Any]:
 
 
 def create_mcp_server(name: str = "aenv-server", version: str = "0.1.0"):
-    """
-    Create MCP server with registered tools.
+    """Create MCP server with registered tools.
 
     Args:
         name: Server name
@@ -209,8 +208,8 @@ def create_mcp_server(name: str = "aenv-server", version: str = "0.1.0"):
 
     Returns:
         MCP server instance
-    """
 
+    """
     registry = get_registry()
 
     # Create MCP server

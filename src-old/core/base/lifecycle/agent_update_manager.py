@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/lifecycle/agent_update_manager.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -61,8 +61,7 @@ __version__ = VERSION
 
 
 class AgentUpdateManager:
-    """
-    Handles the update logic for code files, including errors, improvements, and tests.
+    """Handles the update logic for code files, including errors, improvements, and tests.
     Implements Version Gatekeeping to prevent unstable mutations.
     """
 
@@ -95,8 +94,7 @@ class AgentUpdateManager:
         return True
 
     def update_errors_improvements(self, code_file: Path) -> bool:
-        """
-        Update errors and improvements for a specific code file.
+        """Update errors and improvements for a specific code file.
         Returns True if changes were written.
         """
         if not self._check_gate():
@@ -256,8 +254,7 @@ class AgentUpdateManager:
         return changes_made
 
     def update_code(self, code_file: Path) -> bool:
-        """
-        Update the code file based on improvements.
+        """Update the code file based on improvements.
         Returns True if changes were written.
         """
         if not self._check_gate():

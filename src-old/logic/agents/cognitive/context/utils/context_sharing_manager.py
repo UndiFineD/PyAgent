@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/utils/context_sharing_manager.description.md
 
@@ -31,9 +30,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -73,6 +74,7 @@ class ContextSharingManager:
     Example:
         >>> manager = ContextSharingManager()
         >>> shared = manager.create_shared("content", "my_context")
+
     """
 
     def __init__(self, owner: str = "current_user") -> None:
@@ -80,6 +82,7 @@ class ContextSharingManager:
 
         Args:
             owner: The user ID that owns the shared contexts.
+
         """
         self.owner: str = owner
         self.shared_contexts: dict[str, SharedContext] = {}
@@ -100,6 +103,7 @@ class ContextSharingManager:
 
         Returns:
             The created SharedContext object.
+
         """
         if context_id is None:
             context_id = f"context_{len(self.shared_contexts) + 1}"
@@ -123,6 +127,7 @@ class ContextSharingManager:
 
         Raises:
             KeyError: If the context_id is not found.
+
         """
         shared = self.shared_contexts.get(context_id)
         if not shared:
@@ -140,6 +145,7 @@ class ContextSharingManager:
 
         Raises:
             KeyError: If the context_id is not found.
+
         """
         shared = self.shared_contexts.get(context_id)
         if not shared:
@@ -156,6 +162,7 @@ class ContextSharingManager:
 
         Raises:
             KeyError: If the context_id is not found.
+
         """
         shared = self.shared_contexts.get(context_id)
         if not shared:
@@ -169,6 +176,7 @@ class ContextSharingManager:
 
         Returns:
             List of SharedContext objects.
+
         """
         return list(self.shared_contexts.values())
 
@@ -189,6 +197,7 @@ class ContextSharingManager:
 
         Returns:
             SharedContext configuration.
+
         """
         # Backwards compatible API: keep accepting explicit owner/users.
         self.owner = owner
@@ -205,6 +214,7 @@ class ContextSharingManager:
 
         Returns:
             List of usernames.
+
         """
         shared = self.shared_contexts.get(context_id)
         return shared.shared_with if shared else []

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/exporters/otel_manager.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -144,7 +144,6 @@ class OTelManager:
         attributes: dict[str, Any] | None = None,
     ) -> None:
         """Ends a span and calculates latency breakdown via Core."""
-
         raw_span = self.active_spans.pop(span_id, None)
         if not raw_span:
             logging.warning(f"OTel: Attempted to end non-existent span {span_id}")

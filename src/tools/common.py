@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Shared helper functions used by development utilities."""
-from typing import Any, Dict
 import json
 import logging
+from typing import Any, Dict
 
 
 def load_config(path: str) -> Dict[str, Any]:

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/model_optimizer_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -63,8 +63,7 @@ except ImportError:
 
 
 class ModelOptimizerAgent(BaseAgent):
-    """
-    Tier 2 (Cognitive Logic) - Model Optimizer Agent: Optimizes LLM deployment,
+    """Tier 2 (Cognitive Logic) - Model Optimizer Agent: Optimizes LLM deployment,
     quantization strategies, and inference performance for the fleet.
     """
 
@@ -143,8 +142,7 @@ class ModelOptimizerAgent(BaseAgent):
     def run_tinyml_benchmark(
         self, model_id: str, hardware_target: str
     ) -> dict[str, Any]:
-        """
-        Runs an energy and latency benchmark for a specific model on target hardware (MLSysBook Pattern).
+        """Runs an energy and latency benchmark for a specific model on target hardware (MLSysBook Pattern).
         Analyzes batch size, precision (INT8/FP16), and memory constraints.
         """
         if self.recorder:
@@ -166,8 +164,7 @@ class ModelOptimizerAgent(BaseAgent):
         return f"flm run {model_tag}"
 
     def simulate_hopper_load(self, model_params_billions: float) -> dict[str, Any]:
-        """
-        Simulates H100 (Hopper) performance using HopperSim logic (Phase 130).
+        """Simulates H100 (Hopper) performance using HopperSim logic (Phase 130).
         Calculates compute utilization and bandwidth requirements for FP8 kernels.
         """
         sim = HopperSim()

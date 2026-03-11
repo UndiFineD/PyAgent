@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/debug_fix.description.md
 
 # debug_fix
 
-**File**: `src\tools\debug_fix.py`  
+**File**: `src\tools\\debug_fix.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 1 functions, 4 imports  
 **Lines**: 80  
@@ -33,7 +32,7 @@ Python module containing implementation for debug_fix.
 
 # Improvements for debug_fix
 
-**File**: `src\tools\debug_fix.py`  
+**File**: `src\tools\\debug_fix.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 80 lines (small)  
 **Complexity**: 1 score (simple)
@@ -67,8 +66,6 @@ LLM_CONTEXT_END
 """
 
 import ast
-import os
-import re
 
 
 def debug_fix(path):
@@ -147,7 +144,6 @@ def debug_fix(path):
     except Exception as e:
         print(f"FAILED: {e}")
         # Find the line with the error
-        import traceback
 
         lines_res = res.splitlines()
         if hasattr(e, "lineno"):

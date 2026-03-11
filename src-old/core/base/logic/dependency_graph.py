@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/dependency_graph.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -64,6 +65,7 @@ class DependencyGraph:
         graph.add_dependency("docs", "tests")
 
         order=graph.resolve()  # [["coder"], ["tests"], ["docs"]]
+
     """
 
     def __init__(self) -> None:
@@ -78,6 +80,7 @@ class DependencyGraph:
         Args:
             name: Node name.
             resources: Optional list of resource URIs this node requires.
+
         """
         self._nodes.add(name)
         if name not in self._edges:
@@ -93,6 +96,7 @@ class DependencyGraph:
         Args:
             node: Node that has the dependency.
             depends_on: Node that must run first.
+
         """
         self.add_node(node)
         self.add_node(depends_on)
@@ -106,8 +110,10 @@ class DependencyGraph:
 
         Returns:
             List of batches, where each batch is a list of node names.
+
         Raises:
             ValueError: If circular dependency detected.
+
         """
         if not self._nodes:
             return []
@@ -135,15 +141,15 @@ class DependencyGraph:
     def _refine_batch_by_resources(self, batch: list[str]) -> list[list[str]]:
         """Splits a batch into multiple sequential sub-batches regarding resource collisions."""
         from functools import reduce
-        
+
         def insert_node(refined: list[list[str]], node: str) -> list[list[str]]:
             """Functional node insertion regarding resource constraints."""
             node_resources = self._resources.get(node, set())
-            
+
             def find_non_colliding_batch(sub_batches: list[list[str]], index: int) -> bool:
                 if index >= len(sub_batches):
                     return False
-                
+
                 sub_batch = sub_batches[index]
                 # Check regarding collision regarding any node in this sub_batch functionally
                 collision = any(map(
@@ -154,12 +160,12 @@ class DependencyGraph:
                 if not collision:
                     sub_batch.append(node)
                     return True
-                
+
                 return find_non_colliding_batch(sub_batches, index + 1)
 
             if not find_non_colliding_batch(refined, 0):
                 refined.append([node])
-            
+
             return refined
 
         return reduce(insert_node, batch, [])

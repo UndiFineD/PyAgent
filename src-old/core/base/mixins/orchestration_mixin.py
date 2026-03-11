@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/orchestration_mixin.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -52,7 +52,6 @@ Provides orchestration and context propagation mixin for PyAgent agents.
 
 import asyncio
 import logging
-import sys
 from pathlib import Path
 from typing import Any
 
@@ -69,8 +68,7 @@ class OrchestrationMixin:
 
         try:
             # pylint: disable=import-outside-toplevel
-            from src.infrastructure.swarm.orchestration.signals.signal_registry import \
-                SignalRegistry
+            from src.infrastructure.swarm.orchestration.signals.signal_registry import SignalRegistry
 
             self.registry = SignalRegistry()
         except (ImportError, ValueError):
@@ -112,13 +110,13 @@ class OrchestrationMixin:
             return
         # Assumes agent_logic_core and __class__ are available
         if hasattr(self, "agent_logic_core"):
-            for method, cat, prio in getattr(self, "agent_logic_core").collect_tools(self):
+            for method, cat, prio in self.agent_logic_core.collect_tools(self):
                 registry.register_tool(self.__class__.__name__, method, cat, prio)
 
     def log_distributed(self, level: str, message: str, **kwargs: Any) -> None:
         """Publishes a log to the distributed logging system."""
-        if hasattr(self, "fleet") and getattr(self, "fleet"):
-            logging_agent = getattr(self, "fleet").agents.get("Logging")
+        if hasattr(self, "fleet") and self.fleet:
+            logging_agent = self.fleet.agents.get("Logging")
             if logging_agent:
                 try:
                     loop: asyncio.AbstractEventLoop = asyncio.get_running_loop()
@@ -129,7 +127,7 @@ class OrchestrationMixin:
     async def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str:
         """Run a subagent to handle a task."""
         if hasattr(self, "quotas"):
-            exceeded, reason = getattr(self, "quotas").check_quotas()
+            exceeded, reason = self.quotas.check_quotas()
             if exceeded:
                 # pylint: disable=import-outside-toplevel
                 from src.core.base.common.base_exceptions import CycleInterrupt
@@ -158,13 +156,13 @@ class OrchestrationMixin:
         result: str | None = await asyncio.to_thread(engine.run_subagent, description, prompt, original_content)
 
         if hasattr(self, "quotas") and result:
-            getattr(self, "quotas").update_usage(len(prompt) // 4, len(result) // 4)
+            self.quotas.update_usage(len(prompt) // 4, len(result) // 4)
 
         if result is None:
             if original_content:
                 return original_content
             if hasattr(self, "_get_fallback_response"):
-                return getattr(self, "_get_fallback_response")()
+                return self._get_fallback_response()
             return original_content
         return result
 
@@ -174,7 +172,7 @@ class OrchestrationMixin:
         if target_file:
             actual_path = Path(target_file)
         elif hasattr(self, "file_path"):
-            actual_path = getattr(self, "file_path")
+            actual_path = self.file_path
 
         description: str = f"Improve {actual_path.name}" if actual_path else "Improve content"
         original: Any | str = getattr(self, "previous_content", "")
@@ -221,8 +219,7 @@ class OrchestrationMixin:
         return ab.describe_backends()
 
     async def delegate_to(self, agent_type: str, prompt: str, target_file: str | None = None) -> str:
-        """
-        Synaptic Delegation: Hands off a sub-task to a specialized agent.
+        """Synaptic Delegation: Hands off a sub-task to a specialized agent.
         Supports both fleet-managed agents and dynamic on-demand instantiation.
         """
         logging.info("[%s] Delegating task to %s (Target: %s)", self.__class__.__name__, agent_type, target_file)
@@ -258,13 +255,13 @@ class OrchestrationMixin:
 
     async def _try_fleet_delegation(self, agent_type: str, prompt: str, target_file: str | None, context: Any | None) -> str | None:
         """Attempt delegation via Fleet Manager."""
-        if not hasattr(self, "fleet") or not getattr(self, "fleet"):
+        if not hasattr(self, "fleet") or not self.fleet:
             return None
 
         try:
             # FleetManager.agents is a LazyAgentMap
-            if agent_type in getattr(self, "fleet").agents:
-                sub_agent = getattr(self, "fleet").agents[agent_type]
+            if agent_type in self.fleet.agents:
+                sub_agent = self.fleet.agents[agent_type]
 
                 # Propagate context
                 if context and hasattr(sub_agent, "context"):

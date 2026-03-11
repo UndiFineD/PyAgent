@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/utils/cross_repo_analyzer.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -48,9 +48,9 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_context.py"""
 
+
 from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.utils.CrossRepoContext import CrossRepoContext
-from typing import Dict, List
 
 __version__ = VERSION
 
@@ -65,6 +65,7 @@ class CrossRepoAnalyzer:
         >>> analyzer=CrossRepoAnalyzer()
         >>> analyzer.add_repository("owner / repo", "https://github.com / owner / repo")
         >>> results=analyzer.find_related_contexts("auth.py")
+
     """
 
     def __init__(self) -> None:
@@ -96,6 +97,7 @@ class CrossRepoAnalyzer:
 
         Returns:
             Created CrossRepoContext.
+
         """
         context = CrossRepoContext(repo_name=name, repo_url=url)
         self.repositories[name] = context
@@ -109,6 +111,7 @@ class CrossRepoAnalyzer:
 
         Returns:
             List of related cross - repo contexts.
+
         """
         results: list[CrossRepoContext] = []
         for repo in self.repositories.values():

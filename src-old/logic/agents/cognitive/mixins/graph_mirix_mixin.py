@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/mixins/graph_mirix_mixin.description.md
 
@@ -31,6 +30,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -57,8 +57,9 @@ including storage, retrieval, and temporal decay mechanisms.
 import logging
 import time
 from typing import Any
-from src.core.base.lifecycle.version import VERSION
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -77,6 +78,7 @@ class GraphMIRIXMixin:
 
         Returns:
             Success or error message.
+
         """
         if not hasattr(self, "memory_store"):
             return "Error: Memory store not initialized."
@@ -107,6 +109,7 @@ class GraphMIRIXMixin:
 
         Returns:
             Summary of the pruned memories.
+
         """
         if not hasattr(self, "memory_store"):
             return "Error: Memory store not initialized."

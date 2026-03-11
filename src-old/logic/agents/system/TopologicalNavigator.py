@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/TopologicalNavigator.description.md
 
 # TopologicalNavigator
 
-**File**: `src\logic\agents\system\TopologicalNavigator.py`  
+**File**: `src\\logic\agents\\system\\TopologicalNavigator.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 49  
@@ -47,7 +46,7 @@ and determines the impact of changes using graph-based dependency analysis.
 
 # Improvements for TopologicalNavigator
 
-**File**: `src\logic\agents\system\TopologicalNavigator.py`  
+**File**: `src\\logic\agents\\system\\TopologicalNavigator.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 49 lines (small)  
 **Complexity**: 1 score (simple)
@@ -97,13 +96,15 @@ from __future__ import annotations
 Builds a semantic map of the codebase for graph-based dependency exploration.
 """
 
-from src.core.base.Version import VERSION
 import os
 from pathlib import Path
-from .mixins.MapBuilderMixin import MapBuilderMixin
-from .mixins.GraphAnalysisMixin import GraphAnalysisMixin
-from .mixins.FederationMixin import FederationMixin
+
 from src.core.base.BaseAgent import BaseAgent
+from src.core.base.Version import VERSION
+
+from .mixins.FederationMixin import FederationMixin
+from .mixins.GraphAnalysisMixin import GraphAnalysisMixin
+from .mixins.MapBuilderMixin import MapBuilderMixin
 
 __version__ = VERSION
 
@@ -111,8 +112,7 @@ __version__ = VERSION
 class TopologicalNavigator(
     BaseAgent, MapBuilderMixin, GraphAnalysisMixin, FederationMixin
 ):
-    """
-    Tier 2 (Cognitive Logic) - Topological Navigator: Maps code relationships
+    """Tier 2 (Cognitive Logic) - Topological Navigator: Maps code relationships
     and determines the impact of changes using graph-based dependency analysis.
     """
 

@@ -1,14 +1,13 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/verification/mixins/WorkspaceAuditorMixin.description.md
 
 # WorkspaceAuditorMixin
 
-**File**: `src\core\base\verification\mixins\WorkspaceAuditorMixin.py`  
+**File**: `src\\core\base\verification\\mixins\\WorkspaceAuditorMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 9 imports  
 **Lines**: 134  
@@ -47,7 +46,7 @@ Methods for auditing the workspace for tech debt with Rust acceleration.
 
 # Improvements for WorkspaceAuditorMixin
 
-**File**: `src\core\base\verification\mixins\WorkspaceAuditorMixin.py`  
+**File**: `src\\core\base\verification\\mixins\\WorkspaceAuditorMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 134 lines (medium)  
 **Complexity**: 2 score (simple)
@@ -81,10 +80,10 @@ LLM_CONTEXT_END
 """
 
 import ast
-import re
 import logging
+import re
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Dict, List
 
 try:
     import rust_core
@@ -98,8 +97,7 @@ class WorkspaceAuditorMixin:
     """Methods for auditing the workspace for tech debt with Rust acceleration."""
 
     def audit_workspace(self, root_dir: str = "src") -> Dict[str, List]:
-        """
-        Performs a comprehensive health audit of the workspace codebase.
+        """Performs a comprehensive health audit of the workspace codebase.
         Offloads regex-heavy scanning to Rust if available.
         """
         results = {

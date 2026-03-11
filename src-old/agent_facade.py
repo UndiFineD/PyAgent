@@ -3,7 +3,6 @@
 
 """Central orchestrator for coordinating specialized AI agents in code improvement workflows."""
 
-from src.version import VERSION
 import sys
 from pathlib import Path
 

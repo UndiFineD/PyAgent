@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/ObsidianCodeDescriberAgent.description.md
 
 # ObsidianCodeDescriberAgent
 
-**File**: `src\logic\agents\specialists\ObsidianCodeDescriberAgent.py`  
+**File**: `src\\logic\agents\\specialists\\ObsidianCodeDescriberAgent.py`  
 **Type**: Python Module  
 **Summary**: 4 classes, 0 functions, 19 imports  
 **Lines**: 406  
@@ -71,7 +70,7 @@ formatted for an Obsidian knowledge vault (with [[wikilinks]]).
 
 # Improvements for ObsidianCodeDescriberAgent
 
-**File**: `src\logic\agents\specialists\ObsidianCodeDescriberAgent.py`  
+**File**: `src\\logic\agents\\specialists\\ObsidianCodeDescriberAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 406 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -112,21 +111,20 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# ObsidianCodeDescriberAgent: Obsidian Vault Documentation Specialist - Phase 319 Enhanced
-
-from src.core.base.Version import VERSION
 import logging
-import os
 import re
-import json
 import time
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
 from dataclasses import dataclass, field
 from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.BaseUtilities import as_tool
+
+# Copyright 2026 PyAgent Authors
+# ObsidianCodeDescriberAgent: Obsidian Vault Documentation Specialist - Phase 319 Enhanced
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
@@ -164,8 +162,7 @@ class VaultNote:
 
 
 class ObsidianCodeDescriberAgent(BaseAgent):
-    """
-    Agent specializing in describing code and generating markdown files
+    """Agent specializing in describing code and generating markdown files
     formatted for an Obsidian knowledge vault (with [[wikilinks]]).
     """
 

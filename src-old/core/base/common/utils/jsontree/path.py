@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/jsontree/path.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -80,8 +81,7 @@ def json_get_path(
     default: _U = None,  # type: ignore
     separator: str = ".",
 ) -> _T | _U:
-    """
-    Get a value from a nested structure using dot-notation path.
+    """Get a value from a nested structure using dot-notation path.
 
     Args:
         value: A nested JSON structure.
@@ -91,6 +91,7 @@ def json_get_path(
 
     Returns:
         The value at the path, or default if not found.
+
     """
     parts = _parse_path(path, separator)
     current: Any = value
@@ -115,8 +116,7 @@ def json_set_path(
     separator: str = ".",
     create_missing: bool = True,
 ) -> dict[str, Any]:
-    """
-    Set a value in a nested structure using dot-notation path.
+    """Set a value in a nested structure using dot-notation path.
 
     Args:
         value: A nested JSON structure (will be modified in place).
@@ -127,6 +127,7 @@ def json_set_path(
 
     Returns:
         The modified structure.
+
     """
     parts = _parse_path(path, separator)
     current: Any = value

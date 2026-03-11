@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/RealityGraftingAgent.description.md
 
@@ -78,13 +77,13 @@ LLM_CONTEXT_END
 """
 
 import logging
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
 
 class RealityGraftingAgent(BaseAgent):
-    """
-    Phase 34: Reality Grafting.
+    """Phase 34: Reality Grafting.
     Automatically 'grafts' successful logic paths from DreamState simulations into production.
     """
 
@@ -98,8 +97,7 @@ class RealityGraftingAgent(BaseAgent):
 
     @as_tool
     def graft_skill(self, focus_area: str, dream_output: str) -> str:
-        """
-        Takes synthesized intelligence from a dream cycle and implements it.
+        """Takes synthesized intelligence from a dream cycle and implements it.
         """
         logging.info(
             f"RealityGrafting: Attempting to graft skill for '{focus_area}' into reality."

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/OrchestratorExecutionMixin.description.md
 
 # OrchestratorExecutionMixin
 
-**File**: `src\logic\agents\swarm\OrchestratorExecutionMixin.py`  
+**File**: `src\\logic\agents\\swarm\\OrchestratorExecutionMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 12  
@@ -38,7 +37,7 @@ Command execution, git operations, and processing loop methods for OrchestratorA
 
 # Improvements for OrchestratorExecutionMixin
 
-**File**: `src\logic\agents\swarm\OrchestratorExecutionMixin.py`  
+**File**: `src\\logic\agents\\swarm\\OrchestratorExecutionMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 12 lines (small)  
 **Complexity**: 0 score (simple)
@@ -75,7 +74,6 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
-
 from .mixins.ExecCommandMixin import ExecCommandMixin
 from .mixins.ExecIterationMixin import ExecIterationMixin
 from .mixins.ExecLoopMixin import ExecLoopMixin

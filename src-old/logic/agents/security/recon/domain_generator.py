@@ -11,14 +11,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/recon/domain_generator.description.md
 
 # domain_generator
 
-**File**: `src\logic\agents\security\recon\domain_generator.py`  
+**File**: `src\\logic\agents\\security\recon\\domain_generator.py`  
 **Type**: Python Module  
 **Summary**: 4 classes, 0 functions, 7 imports  
 **Lines**: 86  
@@ -72,7 +71,7 @@ Class MockLLM implementation.
 
 # Improvements for domain_generator
 
-**File**: `src\logic\agents\security\recon\domain_generator.py`  
+**File**: `src\\logic\agents\\security\recon\\domain_generator.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 86 lines (small)  
 **Complexity**: 2 score (simple)
@@ -111,10 +110,10 @@ Class MockLLM implementation.
 LLM_CONTEXT_END
 """
 
-import re
 import asyncio
-from typing import List, Set, Protocol, Dict
+import re
 from dataclasses import dataclass
+from typing import Protocol, Set
 
 DOMAIN_REGEX = r"(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}"
 
@@ -131,8 +130,7 @@ class DomainGenerationResult:
 
 
 class DomainGenerator:
-    """
-    Generates domain variations using LLMs based on pattern recognition/fuzzing.
+    """Generates domain variations using LLMs based on pattern recognition/fuzzing.
     Ported concepts from 0xSojalSec-cewlai.
     """
 
@@ -143,8 +141,7 @@ class DomainGenerator:
     async def generate_permutations(
         self, seed_domain: str, count: int = 20
     ) -> DomainGenerationResult:
-        """
-        Asks the LLM to generate potential phishing/typosquatting variations for a seed domain.
+        """Asks the LLM to generate potential phishing/typosquatting variations for a seed domain.
         """
         prompt = (
             f"Generate {count} domain name variations for '{seed_domain}' that might be used for "

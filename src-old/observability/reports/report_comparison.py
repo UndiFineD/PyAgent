@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/report_comparison.description.md
 
@@ -23,6 +22,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,6 +50,7 @@ __version__ = VERSION
 @dataclass
 class ReportComparison:
     """Result of comparing two report versions.
+
     Attributes:
         old_path: Path to old version.
         new_path: Path to new version.
@@ -57,6 +58,7 @@ class ReportComparison:
         removed: Items removed from old version.
         changed: Items that changed (list of tuples of old, new).
         unchanged_count: Count of unchanged items.
+
     """
 
     old_path: str

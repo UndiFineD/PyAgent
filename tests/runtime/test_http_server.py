@@ -1,4 +1,5 @@
 import asyncio
+
 import httpx
 import pytest
 
@@ -6,9 +7,12 @@ from runtime_py import run_http_server
 
 
 @pytest.mark.asyncio
-async def test_http_server():
+async def test_http_server() -> None:
+    """Test that the HTTP server can handle a simple request."""
     # Python handler returns (status, body)
+
     async def handler(uri: str) -> tuple[int, str]:
+        """Example handler that ignores the URI and returns a fixed response."""
         return 200, "hello"
 
     # bind to a known port so the test can connect

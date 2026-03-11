@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/mixins/MemoryQueryMixin.description.md
 
 # MemoryQueryMixin
 
-**File**: `src\logic\agents\cognitive\mixins\MemoryQueryMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\mixins\\MemoryQueryMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 66  
@@ -40,7 +39,7 @@ Mixin for hierarchical memory querying in HierarchicalMemoryAgent.
 
 # Improvements for MemoryQueryMixin
 
-**File**: `src\logic\agents\cognitive\mixins\MemoryQueryMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\mixins\\MemoryQueryMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 66 lines (small)  
 **Complexity**: 1 score (simple)
@@ -77,11 +76,10 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
-
 import json
-from src.logic.agents.cognitive.HierarchicalMemoryAgent import HierarchicalMemoryAgent
-from typing import TYPE_CHECKING
+
 from src.core.base.BaseUtilities import as_tool
+from src.logic.agents.cognitive.HierarchicalMemoryAgent import HierarchicalMemoryAgent
 
 
 class MemoryQueryMixin:

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/annotation_manager.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -60,17 +61,19 @@ __version__ = VERSION
 class AnnotationManager:
     """Manager for report annotations and comments.
     Handles adding, retrieving, and managing annotations on reports.
+
     Attributes:
         annotations: Annotations by report ID.
+
     Example:
         manager=AnnotationManager()
         manager.add_annotation("report1", "user", "Important note")
         notes=manager.get_annotations("report1")
+
     """
 
     def __init__(self) -> None:
         """Initialize annotation manager."""
-
         self.annotations: dict[str, list[ReportAnnotation]] = {}
         self._annotation_counter = 0
         logging.debug("AnnotationManager initialized")
@@ -79,15 +82,17 @@ class AnnotationManager:
         self, report_id: str, author: str, content: str, line_number: int | None = None
     ) -> ReportAnnotation:
         """Add an annotation.
+
         Args:
             report_id: Report to annotate.
             author: Annotation author.
             content: Annotation content.
             line_number: Line number if applicable.
+
         Returns:
             Created annotation.
-        """
 
+        """
         self._annotation_counter += 1
         annotation_id = f"ann_{report_id}_{self._annotation_counter}"
         annotation = ReportAnnotation(
@@ -104,22 +109,26 @@ class AnnotationManager:
 
     def get_annotations(self, report_id: str) -> list[ReportAnnotation]:
         """Get annotations for a report.
+
         Args:
             report_id: Report ID.
+
         Returns:
             List of annotations.
-        """
 
+        """
         return self.annotations.get(report_id, [])
 
     def remove_annotation(self, annotation_id: str) -> bool:
         """Remove an annotation.
+
         Args:
             annotation_id: Annotation to remove.
+
         Returns:
             True if removed.
-        """
 
+        """
         for report_id, anns in list(self.annotations.items()):
             for i, ann in enumerate(anns):
                 if ann.annotation_id == annotation_id:

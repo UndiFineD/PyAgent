@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/resource_core.description.md
 
@@ -28,10 +27,12 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Core logic for Resource Quotas and budget enforcement."""
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -44,16 +45,17 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional, Tuple
+
 from .base_core import BaseCore
 
 
 @dataclass
 class QuotaConfig:
     """Configuration for agent resource quotas."""
+
     max_tokens: Optional[int] = None
     max_time_seconds: Optional[int] = None
     max_cycles: Optional[int] = None
@@ -62,6 +64,7 @@ class QuotaConfig:
 @dataclass
 class ResourceUsage:
     """Current resource usage for an agent session."""
+
     tokens_input: int = 0
     tokens_output: int = 0
     start_time: float = field(default_factory=time.time)
@@ -79,8 +82,7 @@ class ResourceUsage:
 
 
 class ResourceCore(BaseCore):
-    """
-    Authoritative engine for resource quota enforcement.
+    """Authoritative engine for resource quota enforcement.
     """
 
     def __init__(self, config: Optional[QuotaConfig] = None) -> None:

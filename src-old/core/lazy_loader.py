@@ -11,8 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/lazy_loader.description.md
 
@@ -65,6 +64,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -111,8 +111,7 @@ T = TypeVar("T")
 
 
 class LazyLoader:
-    """
-    A descriptor class for deferred imports.
+    """A descriptor class for deferred imports.
 
     LazyLoader delays the import of a module/attribute until first access,
     reducing startup time for modules with expensive imports.
@@ -132,6 +131,7 @@ class LazyLoader:
 
         # DataFrame is only imported when first accessed
         df = MyClass.DataFrame()
+
     """
 
     def __init__(
@@ -141,14 +141,14 @@ class LazyLoader:
         *,
         doc: Optional[str] = None,
     ) -> None:
-        """
-        Initialize the LazyLoader.
+        """Initialize the LazyLoader.
 
         Args:
             module_path: The dotted path to the module (e.g., "pandas.core").
             attr_name: The name of the attribute to import from the module.
                        If None, the entire module is returned.
             doc: Optional docstring for the descriptor.
+
         """
         self.module_path = module_path
         self.attr_name = attr_name
@@ -168,8 +168,7 @@ class LazyLoader:
         return self._cached
 
     def __get__(self, obj: Optional[object], objtype: Optional[type] = None) -> Any:
-        """
-        Descriptor protocol implementation for attribute access.
+        """Descriptor protocol implementation for attribute access.
 
         Args:
             obj: The instance accessing the descriptor, or None for class access.
@@ -177,6 +176,7 @@ class LazyLoader:
 
         Returns:
             The loaded module or attribute.
+
         """
         return self._load()
 
@@ -191,8 +191,7 @@ class LazyLoader:
 
 
 def lazy_import(func: Callable[[], T]) -> Callable[[], T]:
-    """
-    Decorator that wraps a function with lru_cache for lazy, cached imports.
+    """Decorator that wraps a function with lru_cache for lazy, cached imports.
 
     This decorator is useful for creating factory functions that lazily
     import and return expensive modules or classes. The result is cached
@@ -216,6 +215,7 @@ def lazy_import(func: Callable[[], T]) -> Callable[[], T]:
 
         # Subsequent calls return cached module
         np2 = get_numpy()  # Same object, no re-import
+
     """
     cached_func = lru_cache(maxsize=1)(func)
 
@@ -229,8 +229,7 @@ def lazy_import(func: Callable[[], T]) -> Callable[[], T]:
 
 
 class ModuleLazyLoader:
-    """
-    A utility class for implementing module-level __getattr__ lazy loading.
+    """A utility class for implementing module-level __getattr__ lazy loading.
 
     This class provides a clean way to implement the PEP 562 __getattr__ pattern
     for lazy loading of module-level attributes. It maintains a registry of
@@ -254,6 +253,7 @@ class ModuleLazyLoader:
 
         def __dir__():
             return list(globals().keys()) + _lazy.available_names()
+
     """
 
     def __init__(
@@ -262,13 +262,13 @@ class ModuleLazyLoader:
         *,
         parent_module: Optional[str] = None,
     ) -> None:
-        """
-        Initialize the ModuleLazyLoader.
+        """Initialize the ModuleLazyLoader.
 
         Args:
             registry: A dictionary mapping attribute names to tuples of
                       (module_path, attribute_name) for lazy loading.
             parent_module: Optional parent module name for relative imports.
+
         """
         self._registry = registry
         self._cache: Dict[str, Any] = {}
@@ -318,33 +318,33 @@ class ModuleLazyLoader:
             ) from e
 
     def available_names(self) -> list[str]:
-        """
-        Return a list of all attribute names available for lazy loading.
+        """Return a list of all attribute names available for lazy loading.
 
         Returns:
             List of attribute names in the registry.
+
         """
         return list(self._registry.keys())
 
     def is_loaded(self, name: str) -> bool:
-        """
-        Check if an attribute has been loaded.
+        """Check if an attribute has been loaded.
 
         Args:
             name: The name of the attribute to check.
 
         Returns:
             True if the attribute is in the cache, False otherwise.
+
         """
         return name in self._cache
 
     def preload(self, *names: str) -> None:
-        """
-        Preload specified attributes into the cache.
+        """Preload specified attributes into the cache.
 
         Args:
             *names: The names of attributes to preload.
                     If no names are provided, all attributes are preloaded.
+
         """
         target_names = names if names else self._registry.keys()
         for name in target_names:

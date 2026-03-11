@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ByzantineConsensusAgent.description.md
 
@@ -104,11 +103,12 @@ Ensures high-integrity changes by requiring 2/3 agreement from a committee of ag
 Used for critical infrastructure or security logic changes.
 """
 
-from src.core.base.version import VERSION
 import logging
-from typing import Dict, List, Any
+from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 from src.logic.agents.security.core.ByzantineCore import ByzantineCore
 
 __version__ = VERSION

@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/shell.description.md
 
 # shell
 
-**File**: `src\core\base\shell.py`  
+**File**: `src\\core\base\\shell.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 13 imports  
 **Lines**: 175  
@@ -54,7 +53,7 @@ Safely executes shell commands and records outcomes.
 
 # Improvements for shell
 
-**File**: `src\core\base\shell.py`  
+**File**: `src\\core\base\\shell.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 175 lines (medium)  
 **Complexity**: 2 score (simple)
@@ -105,13 +104,14 @@ Shell execution core for agents.
 Handles subprocess spawning, environment propagation, and interaction recording.
 """
 
-from src.core.base.version import VERSION
+import asyncio
+import logging
 import os
 import subprocess
-import logging
-import asyncio
-from typing import List, Any, Optional, Dict
+from typing import Any
+
 from src.core.base.sandbox import SandboxManager
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

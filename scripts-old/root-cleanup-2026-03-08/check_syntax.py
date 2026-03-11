@@ -1,4 +1,6 @@
-import os, py_compile, sys
+import os
+import py_compile
+
 errors=[]
 for root,dirs,files in os.walk('src'):
     for f in files:

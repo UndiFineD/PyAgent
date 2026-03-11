@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/event_correlation_agent.description.md
 
 # event_correlation_agent
 
-**File**: `src\logic\agents\security\event_correlation_agent.py`  
+**File**: `src\\logic\agents\\security\\event_correlation_agent.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 9 imports  
 **Lines**: 142  
@@ -65,7 +64,7 @@ Based on AD-Canaries event correlation patterns using log analysis.
 
 # Improvements for event_correlation_agent
 
-**File**: `src\logic\agents\security\event_correlation_agent.py`  
+**File**: `src\\logic\agents\\security\\event_correlation_agent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 142 lines (medium)  
 **Complexity**: 11 score (moderate)
@@ -118,7 +117,6 @@ Inspired by AD-Canaries event correlation using KQL queries.
 
 
 import logging
-from collections import defaultdict
 from typing import Any, Dict, List
 
 from src.core.base.common.base_utilities import as_tool
@@ -194,8 +192,7 @@ class EventCorrelator:
 
 
 class EventCorrelationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Correlates events across the system to identify security threats and patterns.
+    """Correlates events across the system to identify security threats and patterns.
     Based on AD-Canaries event correlation patterns using log analysis.
     """
 

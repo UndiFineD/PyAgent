@@ -2,23 +2,19 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-from pathlib import Path
-import subprocess
-import sys
-import os
 
-import pytest
 
-from auto_fix.rule_engine import RuleEngine, Fix
+from auto_fix.rule_engine import Fix, RuleEngine
 
 
 def test_evaluate_simple_rule():
-    """test that a simple rule can be evaluated correctly
+    """Test that a simple rule can be evaluated correctly
     """
     class DummyRule:
         """a simple rule that replaces 'foo' with 'bar'"""
+
         def check(self, content: str):
-            """returns a fix if 'foo' is in the content"""
+            """Returns a fix if 'foo' is in the content"""
             if "foo" in content:
                 return [Fix(path="x", original=content, replacement=content.replace("foo", "bar"), description="swap")]
             return []
@@ -30,7 +26,7 @@ def test_evaluate_simple_rule():
 
 
 def test_load_from_dir(tmp_path):
-    """test that rules can be loaded from a directory"""
+    """Test that rules can be loaded from a directory"""
     # create a valid rule file
     rules_dir = tmp_path / "rules"
     rules_dir.mkdir()

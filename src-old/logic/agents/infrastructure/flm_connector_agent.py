@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/infrastructure/flm_connector_agent.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,7 +51,6 @@ from __future__ import annotations
 import json
 
 import requests
-
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.security.network.firewall import ReverseProxyFirewall
@@ -76,7 +76,7 @@ class FlmConnectorAgent(BaseAgent):
             # Firewall handles caching, retries, and recording status
             response = self._firewall.get(health_url, timeout=2)
             return response.status_code == 200
-        except (requests.RequestException, ConnectionError, TimeoutError) as e:
+        except (requests.RequestException, ConnectionError, TimeoutError):
             return False
 
     def generate_local(self, prompt: str, model: str = "flm-npu-optimized") -> str:
@@ -97,7 +97,7 @@ class FlmConnectorAgent(BaseAgent):
                 if "choices" in response_json and len(response_json["choices"]) > 0:
                     return response_json["choices"][0].get("text", "")
                 return ""
-            
+
             return f"Error: FastFlowLM returned status {response.status_code}"
 
         except (requests.RequestException, json.JSONDecodeError, KeyError, ValueError) as e:

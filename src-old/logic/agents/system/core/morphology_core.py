@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/core/morphology_core.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -60,21 +61,19 @@ except ImportError:
 
 
 class MorphologyCore:
-    """
-    MorphologyCore handles agent splitting, merging, and DNA encoding.
+    """MorphologyCore handles agent splitting, merging, and DNA encoding.
     It identifies logical overlap and proposes architectural shifts.
     """
 
     def calculate_path_overlap(self, path_a: list[str], path_b: list[str]) -> float:
-        """
-        Calculates Jaccard similarity between two agent logic paths.
+        """Calculates Jaccard similarity between two agent logic paths.
         Overlap > 0.8 triggers a 'MERGE' proposal.
         """
         # Rust-accelerated Jaccard similarity
         if HAS_RUST:
             try:
                 return rc.calculate_jaccard_set_rust(path_a, path_b)  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
         set_a, set_b = set(path_a), set(path_b)
         if not set_a or not set_b:
@@ -84,8 +83,7 @@ class MorphologyCore:
         return intersection / union
 
     def encode_agent_dna(self, name: str, tools: list[str], prompt: str, model: str) -> str:
-        """
-        Encodes the agent's DNA into a JSON string.
+        """Encodes the agent's DNA into a JSON string.
         """
         dna = {
             "name": name,
@@ -99,8 +97,7 @@ class MorphologyCore:
         return json.dumps(dna)
 
     def propose_split(self, load_stats: dict[str, float]) -> list[str]:
-        """
-        If an agent's load is too high, it proposes splitting into sub-specialists.
+        """If an agent's load is too high, it proposes splitting into sub-specialists.
         """
         proposals = []
         for agent, load in load_stats.items():

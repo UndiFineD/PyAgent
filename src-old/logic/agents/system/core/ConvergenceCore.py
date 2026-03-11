@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/core/ConvergenceCore.description.md
 
 # ConvergenceCore
 
-**File**: `src\logic\agents\system\core\ConvergenceCore.py`  
+**File**: `src\\logic\agents\\system\\core\\ConvergenceCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 51  
@@ -39,7 +38,7 @@ Class ConvergenceCore implementation.
 
 # Improvements for ConvergenceCore
 
-**File**: `src\logic\agents\system\core\ConvergenceCore.py`  
+**File**: `src\\logic\agents\\system\\core\\ConvergenceCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 51 lines (small)  
 **Complexity**: 2 score (simple)
@@ -78,15 +77,14 @@ Handles file system cleanup and version management.
 """
 
 import os
-import shutil
 import re
+import shutil
 
 
 class ConvergenceCore:
     @staticmethod
     def clean_sweep(root_dir: str) -> dict:
-        """
-        Removes __pycache__ and temporary files.
+        """Removes __pycache__ and temporary files.
         """
         stats = {"pycache_removed": 0, "tmp_removed": 0}
 
@@ -107,8 +105,7 @@ class ConvergenceCore:
 
     @staticmethod
     def update_version_file(file_path: str, new_version: str) -> bool:
-        """
-        Updates the version string in version.py.
+        """Updates the version string in version.py.
         """
         if not os.path.exists(file_path):
             return False

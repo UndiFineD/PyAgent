@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/core/PruningCore.description.md
 
 # PruningCore
 
-**File**: `src\core\base\core\PruningCore.py`  
+**File**: `src\\core\base\\core\\PruningCore.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 4 imports  
 **Lines**: 39  
@@ -46,7 +45,7 @@ Handles weight calculations, refractory periods, and pruning decisions.
 
 # Improvements for PruningCore
 
-**File**: `src\core\base\core\PruningCore.py`  
+**File**: `src\\core\base\\core\\PruningCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 39 lines (small)  
 **Complexity**: 4 score (simple)

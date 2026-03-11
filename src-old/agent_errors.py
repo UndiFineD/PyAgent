@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/agent_errors.description.md
 
@@ -47,7 +46,6 @@ LLM_CONTEXT_END
 
 """Agent specializing in analyzing, documenting, and suggesting fixes for errors."""
 
-from src.version import VERSION
 import sys
 from pathlib import Path
 

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/mixins/GraphBeadsMixin.description.md
 
 # GraphBeadsMixin
 
-**File**: `src\logic\agents\cognitive\mixins\GraphBeadsMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\mixins\\GraphBeadsMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 92  
@@ -40,7 +39,7 @@ Mixin for Beads task graph logic.
 
 # Improvements for GraphBeadsMixin
 
-**File**: `src\logic\agents\cognitive\mixins\GraphBeadsMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\mixins\\GraphBeadsMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 92 lines (small)  
 **Complexity**: 3 score (simple)
@@ -88,6 +87,7 @@ from __future__ import annotations
 """Beads task logic for GraphMemoryAgent."""
 
 import logging
+
 from src.core.base.BaseUtilities import as_tool
 
 

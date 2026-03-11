@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/tool_evolution_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -92,8 +92,10 @@ class ToolEvolutionAgent(BaseAgent):
     @as_tool
     def analyze_gui_recording_for_automation(self, recording_path: str) -> str:
         """Analyzes a GUI recording file and generates a Python tool to reproduce the logic.
+
         Args:
             recording_path: Path to the .json recording from MultiModalContextAgent.
+
         """
         path = Path(recording_path)
         if not path.exists():
@@ -141,10 +143,12 @@ class ToolEvolutionAgent(BaseAgent):
         self, tool_name: str, code_content: str, description: str
     ) -> str:
         """Writes a new Python tool to the evolved tool directory.
+
         Args:
             tool_name: CamelCase name for the tool file (e.g. MyNewTool).
             code_content: Complete Python code for the tool function.
             description: What the tool does.
+
         """
         filename = f"{tool_name.lower()}.py"
         filepath = self.evolved_tools_dir / filename
@@ -163,12 +167,13 @@ class ToolEvolutionAgent(BaseAgent):
     @as_tool
     def generate_tool_contract(self, name: str, description: str, endpoint: str) -> str:
         """Generates an OpenAPI 3.0 contract for a drafted tool.
+
         Args:
             name: Technical identifier for the tool.
             description: Concise explanation of the tool's usage.
             endpoint: The API path where this tool is exposed.
-        """
 
+        """
         if not self.core.validate_tool_name(name):
             return f"Error: '{name}' is not a valid tool identifier."
 

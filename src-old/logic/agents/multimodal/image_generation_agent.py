@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/multimodal/image_generation_agent.description.md
 
 # image_generation_agent
 
-**File**: `src\logic\agents\multimodal\image_generation_agent.py`  
+**File**: `src\\logic\agents\\multimodal\\image_generation_agent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 12 imports  
 **Lines**: 140  
@@ -52,7 +51,7 @@ Supports async processing with memory management.
 
 # Improvements for image_generation_agent
 
-**File**: `src\logic\agents\multimodal\image_generation_agent.py`  
+**File**: `src\\logic\agents\\multimodal\\image_generation_agent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 140 lines (medium)  
 **Complexity**: 2 score (simple)
@@ -103,15 +102,13 @@ Provides image generation capabilities using diffusion models, inspired by 4o-gh
 """
 
 
-import os
-import time
-from typing import Any, Dict, Optional
 from pathlib import Path
+from typing import Any, Dict, Optional
 
 try:
-    from PIL import Image
     import torch
     from diffusers import FluxPipeline
+    from PIL import Image
 
     HAS_DIFFUSERS = True
 except ImportError:
@@ -125,8 +122,7 @@ from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
 
 
 class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
-    """
-    Agent for generating images using diffusion models.
+    """Agent for generating images using diffusion models.
     Supports async processing with memory management.
     """
 
@@ -170,8 +166,7 @@ class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
             self.pipe = None
 
     async def generate_image(self, prompt: str, **kwargs: Any) -> str:
-        """
-        Submit an image generation task.
+        """Submit an image generation task.
         Returns job_id for status tracking.
         """
         if not self.pipe:

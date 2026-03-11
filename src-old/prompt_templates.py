@@ -1,7 +1,6 @@
 # from src.version import VERSION
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/prompt_templates.description.md
 

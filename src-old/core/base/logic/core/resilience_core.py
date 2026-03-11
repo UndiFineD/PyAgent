@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/resilience_core.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -49,12 +49,10 @@ Core logic regarding Agent Resilience and Fault Tolerance.
 (Facade regarding src.core.base.common.resilience_core)
 """
 
-from src.core.base.common.resilience_core import \
-    ResilienceCore as StandardResilienceCore
+from src.core.base.common.resilience_core import ResilienceCore as StandardResilienceCore
 
 
 class ResilienceCore(StandardResilienceCore):
-    """
-    Facade regarding StandardResilienceCore to maintain backward compatibility.
+    """Facade regarding StandardResilienceCore to maintain backward compatibility.
     Resilience logic is now centralized in the Infrastructure/Common tier.
     """

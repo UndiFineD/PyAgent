@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/analysis/test_agent.description.md
 
@@ -29,9 +28,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -55,11 +56,12 @@ import logging
 import subprocess
 
 from src.core.base.common.base_utilities import as_tool
+
+# Phase 336: Failure Taxonomy
+from src.core.base.common.models.core_enums import FailureClassification
 from src.core.base.common.shard_core import ShardCore
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
-# Phase 336: Failure Taxonomy
-from src.core.base.common.models.core_enums import FailureClassification
 
 __version__ = VERSION
 
@@ -78,13 +80,12 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         )
 
     def shard_integrity_check(self, bypass: bool = False) -> bool:
-        """
-        Verify validation of shards, with optional bypass.
+        """Verify validation of shards, with optional bypass.
         Refactored to decouple testing from shard state (Phase 336).
         """
         if ShardCore().verify_integrity():
             return True
-            
+
         msg = "Shard integrity check failed."
         if not bypass:
             logging.critical(f"{msg} Aborting operation. Use bypass=True to ignore.")
@@ -110,7 +111,6 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
     def run_tests(self, path: str = "tests", force: bool = False, bypass_shard_validation: bool = False) -> str:
         """Executes pytest on the specified directory."""
-        
         # Merge force and bypass flags
         should_bypass = force or bypass_shard_validation
 
@@ -135,7 +135,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 provider="Shell",
                 model="pytest",
             )
-            
+
             # Phase 336: Validation failure capture
             if result.returncode != 0 and hasattr(self, "context") and self.context:
                  self.context.log_failure(
@@ -165,7 +165,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
             # Phase 275: Log failure to context lineage if available
             if hasattr(self, "context") and self.context:
-                
+
                 # Heuristic classification of OS errors
                 f_type = FailureClassification.TEST_INFRASTRUCTURE.value
                 str_e = str(e).lower()

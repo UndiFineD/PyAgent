@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/cognitive/MemoryConsolidator.description.md
 
@@ -104,11 +103,12 @@ from __future__ import annotations
 
 """Shell for MemoryConsolidator, handling storage and orchestration."""
 
-from src.core.base.version import VERSION
 import json
 import logging
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any
+
+from src.core.base.version import VERSION
 from src.logic.cognitive.MemoryConsolidatorCore import MemoryConsolidatorCore
 
 __version__ = VERSION

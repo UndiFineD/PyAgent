@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/swarm_migration_core.description.md
 
 # swarm_migration_core
 
-**File**: `src\core\base\logic\swarm_migration_core.py`  
+**File**: `src\\core\base\\logic\\swarm_migration_core.py`  
 **Type**: Python Module  
 **Summary**: 6 classes, 0 functions, 15 imports  
 **Lines**: 247  
@@ -95,7 +94,7 @@ Enables parallel execution of large-scale code migrations using multiple sub-age
 
 # Improvements for swarm_migration_core
 
-**File**: `src\core\base\logic\swarm_migration_core.py`  
+**File**: `src\\core\base\\logic\\swarm_migration_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 247 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -137,8 +136,8 @@ import asyncio
 import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional, Callable, Set
 from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
 
 from src.core.base.logic.strategy_optimizer import OptimizationTrial
 from src.core.base.models.communication_models import CascadeContext
@@ -205,8 +204,7 @@ class MigrationStrategy(ABC):
 
 
 class SwarmMigrationCore:
-    """
-    Core implementation of the Swarm Migration Pattern
+    """Core implementation of the Swarm Migration Pattern
     Enables parallel execution of large-scale code migrations using multiple sub-agents
     """
 
@@ -233,8 +231,7 @@ class SwarmMigrationCore:
         context: CascadeContext,
         progress_callback: Optional[Callable] = None,
     ) -> OptimizationTrial:
-        """
-        Execute a swarm migration across multiple targets
+        """Execute a swarm migration across multiple targets
         Based on the Swarm Migration Pattern from agentic-patterns
         """
         if task_type not in self.migration_strategies:

@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/android/core/kernel.description.md
 
 # kernel
 
-**File**: `src\logic\agents\android\core\kernel.py`  
+**File**: `src\\logic\agents\android\\core\\kernel.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 5 functions, 8 imports  
 **Lines**: 131  
@@ -53,7 +52,7 @@ Sends screen context to LLM and asks for the next move.
 
 # Improvements for kernel
 
-**File**: `src\logic\agents\android\core\kernel.py`  
+**File**: `src\\logic\agents\android\\core\\kernel.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 131 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -86,13 +85,14 @@ Sends screen context to LLM and asks for the next move.
 LLM_CONTEXT_END
 """
 
-import os
-import time
-import subprocess
 import json
-from typing import Dict, Any, List
-from openai import OpenAI
+import os
+import subprocess
+import time
+from typing import Any, Dict, List
+
 import sanitizer
+from openai import OpenAI
 
 # --- CONFIGURATION ---
 ADB_PATH = "adb"  # Ensure adb is in your PATH

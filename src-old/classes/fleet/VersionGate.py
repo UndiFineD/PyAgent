@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/VersionGate.description.md
 
 # VersionGate
 
-**File**: `src\classes\fleet\VersionGate.py`  
+**File**: `src\\classes\fleet\\VersionGate.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 55  
@@ -42,7 +41,7 @@ Designed for future Rust porting (Core/Shell pattern).
 
 # Improvements for VersionGate
 
-**File**: `src\classes\fleet\VersionGate.py`  
+**File**: `src\\classes\fleet\\VersionGate.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 55 lines (small)  
 **Complexity**: 2 score (simple)
@@ -78,19 +77,17 @@ Handles semantic versioning checks and capability validation.
 """
 
 import logging
-from typing import List, Tuple
+from typing import List
 
 
 class VersionGate:
-    """
-    Pure logic for version compatibility checks.
+    """Pure logic for version compatibility checks.
     Designed for future Rust porting (Core/Shell pattern).
     """
 
     @staticmethod
     def is_compatible(current: str, required: str) -> bool:
-        """
-        Checks if the current version meets the requirement using semantic logic.
+        """Checks if the current version meets the requirement using semantic logic.
         Major version must match or current must be higher (if backward compatible).
         """
         try:

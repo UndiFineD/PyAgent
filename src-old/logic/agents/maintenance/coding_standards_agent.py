@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/maintenance/coding_standards_agent.description.md
 
 # coding_standards_agent
 
-**File**: `src\logic\agents\maintenance\coding_standards_agent.py`  
+**File**: `src\\logic\agents\\maintenance\\coding_standards_agent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 66  
@@ -45,7 +44,7 @@ headers, and basic syntax integrity.
 
 # Improvements for coding_standards_agent
 
-**File**: `src\logic\agents\maintenance\coding_standards_agent.py`  
+**File**: `src\\logic\agents\\maintenance\\coding_standards_agent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 66 lines (small)  
 **Complexity**: 2 score (simple)
@@ -96,7 +95,6 @@ Agent for enforcing coding standards, fixing headers, and correcting syntax issu
 
 
 import logging
-from pathlib import Path
 from typing import Any
 
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -106,8 +104,7 @@ logger = logging.getLogger(__name__)
 
 
 class CodingStandardsAgent(BaseAgent):
-    """
-    Agent that autonomously maintains the codebase by enforcing style,
+    """Agent that autonomously maintains the codebase by enforcing style,
     headers, and basic syntax integrity.
     """
 
@@ -123,8 +120,7 @@ class CodingStandardsAgent(BaseAgent):
         logger.info("CodingStandardsAgent initialized.")
 
     async def execute_task(self, task: dict[str, Any]) -> dict[str, Any]:
-        """
-        Executes a maintenance task.
+        """Executes a maintenance task.
 
         Supported commands:
         - run_full_cycle: Executes all maintenance checks and fixes.

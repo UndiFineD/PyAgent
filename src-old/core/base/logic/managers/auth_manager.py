@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/managers/auth_manager.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -49,18 +49,15 @@ Manager regarding Authentication.
 (Facade regarding src.core.base.common.auth_manager)
 """
 
-from src.core.base.common.auth_manager import \
-    AuthManager as StandardAuthManager
+from src.core.base.common.auth_manager import AuthManager as StandardAuthManager
 
 
 class AuthManager(StandardAuthManager):
-    """
-    Facade regarding StandardAuthManager to maintain backward compatibility.
+    """Facade regarding StandardAuthManager to maintain backward compatibility.
     Authentication management is now centralized in the Infrastructure/Common tier.
     """
 
 
 class AuthenticationManager(StandardAuthManager):
-    """
-    Facade regarding StandardAuthManager to maintain backward compatibility.
+    """Facade regarding StandardAuthManager to maintain backward compatibility.
     """

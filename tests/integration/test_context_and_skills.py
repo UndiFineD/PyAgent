@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Integration tests for context management and skills registry."""
-from context_manager import ContextManager
-from skills_registry import SkillsRegistry
-from cort import ChainOfThought
 from pathlib import Path
 
 import pytest
+
+from context_manager import ContextManager
+from cort import ChainOfThought
+from skills_registry import SkillsRegistry
 
 
 @pytest.mark.asyncio

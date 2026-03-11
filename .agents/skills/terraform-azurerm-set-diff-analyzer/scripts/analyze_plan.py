@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Terraform Plan Analyzer for AzureRM Set-type Attributes
+"""Terraform Plan Analyzer for AzureRM Set-type Attributes
 
 Analyzes terraform plan JSON output to distinguish between:
 - Order-only changes (false positives) in Set-type attributes
@@ -78,8 +77,7 @@ AZURERM_SET_ATTRIBUTES: Dict[str, Any] = {}
 
 
 def get_attr_config(attr_def: Any) -> tuple:
-    """
-    Parse attribute definition and return (key_attr, nested_attrs).
+    """Parse attribute definition and return (key_attr, nested_attrs).
 
     Attribute definition can be:
     - str: simple key attribute (e.g., "name")
@@ -183,8 +181,7 @@ def values_equivalent(before_val: Any, after_val: Any) -> bool:
 def compare_elements(
     before: Dict[str, Any], after: Dict[str, Any], nested_attrs: Dict[str, Any] = None
 ) -> tuple:
-    """
-    Compare two elements and return (simple_diffs, nested_set_attrs).
+    """Compare two elements and return (simple_diffs, nested_set_attrs).
 
     simple_diffs: differences in non-Set attributes
     nested_set_attrs: list of (attr_name, before_val, after_val, attr_def) for nested Sets
@@ -479,8 +476,7 @@ def analyze_resource_change(
 
 
 def collect_all_changes(set_change: SetAttributeChange, prefix: str = "") -> tuple:
-    """
-    Recursively collect order-only and actual changes from nested structure.
+    """Recursively collect order-only and actual changes from nested structure.
     Returns (order_only_list, actual_change_list)
     """
     order_only = []

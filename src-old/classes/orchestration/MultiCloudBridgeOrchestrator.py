@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/MultiCloudBridgeOrchestrator.description.md
 
@@ -75,12 +74,11 @@ synchronization across AWS, Azure, and GCP simulated environments.
 LLM_CONTEXT_END
 """
 
-from typing import Dict, List, Any
+from typing import Any, Dict
 
 
 class MultiCloudBridgeOrchestrator:
-    """
-    Multi-Cloud Bridge Orchestrator: Manages agent communication and state
+    """Multi-Cloud Bridge Orchestrator: Manages agent communication and state
     synchronization across AWS, Azure, and GCP simulated environments.
     """
 

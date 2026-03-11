@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/code_formatting_standards_agent.description.md
 
@@ -33,6 +32,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -68,18 +68,17 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.mixins.identity_mixin import IdentityMixin
 from src.core.base.common.models.communication_models import (
     CascadeContext,
     ConversationMessage,
 )
 from src.core.base.common.models.core_enums import MessageRole
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.mixins.identity_mixin import IdentityMixin
 
 
 class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
-    """
-    Agent responsible for strict code formatting standards and quality enforcement.
+    """Agent responsible for strict code formatting standards and quality enforcement.
 
     This agent provides:
     - Strict indentation validation (4 spaces only, no tabs)
@@ -175,8 +174,7 @@ class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
     async def process_message(
         self, message: ConversationMessage, _context: CascadeContext
     ) -> ConversationMessage:
-        """
-        Process incoming messages and provide strict formatting assistance.
+        """Process incoming messages and provide strict formatting assistance.
 
         Args:
             message: The incoming message to process.
@@ -184,6 +182,7 @@ class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
 
         Returns:
             Response message with formatting assistance.
+
         """
         content = message.content.lower()
 
@@ -426,14 +425,14 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         return None
 
     async def perform_comprehensive_validation(self, file_path: str) -> Dict[str, Any]:
-        """
-        Perform comprehensive validation of all strict standards.
+        """Perform comprehensive validation of all strict standards.
 
         Args:
             file_path: Path to the file to validate.
 
         Returns:
             Dict containing validation results.
+
         """
         results = {"passed": True, "critical_issues": [], "warnings": [], "details": {}}
 
@@ -517,7 +516,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 results["passed"] = False
                 self.common_mistakes["time_sleep_usage"] += len(sleep_issues)
 
-        except (Exception,):  # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             results["critical_issues"].append("Error during validation process")
             results["passed"] = False
 
@@ -538,7 +537,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
             ast.parse(content)
         except SyntaxError as e:
             issues.append(f"Syntax Error: {e.msg} at line {e.lineno}")
-        except (Exception,):  # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             issues.append("Parse Error")
         return issues
 
@@ -624,7 +623,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                             f"Class '{node.name}' should be PascalCase"
                         )
 
-        except (Exception,):  # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             pass  # Skip if syntax errors prevent parsing
 
         return issues
@@ -888,20 +887,20 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 else:
                     issues["warnings"].append(f"Docstring: {issue['message']}")
 
-        except (Exception,):  # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             issues["critical"].append("Docstring validation error")
 
         return issues
 
     async def apply_strict_formatting(self, file_path: str) -> str:
-        """
-        Apply strict formatting with auto-fixes for warnings.
+        """Apply strict formatting with auto-fixes for warnings.
 
         Args:
             file_path: Path to the file to format.
 
         Returns:
             Formatting result message.
+
         """
         try:
             with open(file_path, "r", encoding="utf-8", newline="") as f:
@@ -959,12 +958,11 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 f"Formatting partially successful, but black reported: {result.stderr}"
             )
 
-        except (Exception,):  # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             return "Error during strict formatting"
 
     def _validate_strong_typing(self, content: str) -> List[str]:
-        """
-        Validate strong typing requirements for Rust port compatibility.
+        """Validate strong typing requirements for Rust port compatibility.
 
         Requires complete type hints for all function parameters and return types.
         """
@@ -1029,8 +1027,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         return issues
 
     def _validate_time_sleep_usage(self, content: str) -> List[str]:
-        """
-        Prevent usage of blocking sleep calls (marked as forbidden).
+        """Prevent usage of blocking sleep calls (marked as forbidden).
 
         Blocking sleeps should be replaced with async alternatives.
         """
@@ -1049,14 +1046,14 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         return issues
 
     async def perform_comprehensive_linting(self, file_path: str) -> str:
-        """
-        Perform comprehensive linting with all strict checks.
+        """Perform comprehensive linting with all strict checks.
 
         Args:
             file_path: Path to the file to lint.
 
         Returns:
             Comprehensive linting results.
+
         """
         validation = await self.perform_comprehensive_validation(file_path)
 

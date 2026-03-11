@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/BlackboardManager.description.md
 
@@ -78,16 +77,16 @@ LLM_CONTEXT_END
 """Shared central memory for opportunistic agent collaboration (Blackboard Pattern)."""
 
 import logging
-from typing import Dict, Any, List
+from typing import Any, List
 
 from .BlackboardCore import BlackboardCore
 
+
 class BlackboardManager:
-    """
-    Central repository for agents to post findings and look for data.
+    """Central repository for agents to post findings and look for data.
     Shell for BlackboardCore.
     """
-    
+
     def __init__(self) -> None:
         self.core = BlackboardCore()
 

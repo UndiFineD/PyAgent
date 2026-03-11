@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/core/EvolutionCore.description.md
 
 # EvolutionCore
 
-**File**: `src\logic\agents\cognitive\core\EvolutionCore.py`  
+**File**: `src\\logic\agents\\cognitive\\core\\EvolutionCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 41  
@@ -39,7 +38,7 @@ Class EvolutionCore implementation.
 
 # Improvements for EvolutionCore
 
-**File**: `src\logic\agents\cognitive\core\EvolutionCore.py`  
+**File**: `src\\logic\agents\\cognitive\\core\\EvolutionCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 41 lines (small)  
 **Complexity**: 3 score (simple)
@@ -84,8 +83,7 @@ import random
 class EvolutionCore:
     @staticmethod
     def prompt_crossover(prompt1: str, prompt2: str) -> str:
-        """
-        Combines two prompts by interweaving their logical blocks.
+        """Combines two prompts by interweaving their logical blocks.
         """
         lines1 = prompt1.splitlines()
         lines2 = prompt2.splitlines()
@@ -99,15 +97,13 @@ class EvolutionCore:
 
     @staticmethod
     def calculate_prompt_sha(prompt: str) -> str:
-        """
-        Returns a short SHA hash of the prompt for lineage tracking.
+        """Returns a short SHA hash of the prompt for lineage tracking.
         """
         return hashlib.sha256(prompt.encode()).hexdigest()[:12]
 
     @staticmethod
     def mutate_prompt(prompt: str, mutation_rate: float = 0.1) -> str:
-        """
-        Randomly injects keywords or modifies tone.
+        """Randomly injects keywords or modifies tone.
         """
         modifiers = [
             "be more precise",

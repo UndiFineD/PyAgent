@@ -19,10 +19,37 @@ from typing import Dict
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from prometheus_client import Counter
+
+try:
+    from prometheus_client import Counter
+except ModuleNotFoundError:  # pragma: no cover - fallback for minimal envs
+    class _CounterValue:
+        """Simple mutable value holder for fallback metrics."""
+
+        def __init__(self) -> None:
+            """Initialize value to zero."""
+            self._current = 0
+
+        def set(self, value: int) -> None:
+            """Set the stored metric value."""
+            self._current = value
+
+        def get(self) -> int:
+            """Get the stored metric value."""
+            return self._current
+
+    class Counter:
+        """No-op Prometheus counter fallback."""
+
+        def __init__(self, _name: str, _documentation: str) -> None:
+            """Initialize fallback counter."""
+            self._value = _CounterValue()
+
+        def inc(self) -> None:
+            """Increment counter by one."""
+            self._value.set(self._value.get() + 1)
 
 from chat.models import ChatRoom
-
 
 app = FastAPI()
 
@@ -37,12 +64,14 @@ messages_counter = Counter(
 
 class RoomCreateRequest(BaseModel):
     """Request body for creating a new chat room."""
+
     name: str
     members: list[str]
 
 
 class MessageRequest(BaseModel):
     """Request body for posting a message to a chat room."""
+
     sender: str
     text: str
 

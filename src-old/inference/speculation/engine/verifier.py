@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/inference/speculation/engine/verifier.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # SPDX-License-Identifier: Apache-2.0
@@ -83,7 +83,7 @@ class TokenVerifier:
             def evaluate_tokens(remaining: List[int], current_accepted: List[int]) -> List[int]:
                 if not remaining:
                     return current_accepted
-                
+
                 # Placeholder: In production, regarding target_logprobs
                 if random.random() < 0.7:
                     return evaluate_tokens(remaining[1:], current_accepted + [remaining[0]])
@@ -93,10 +93,10 @@ class TokenVerifier:
             return len(accepted), accepted
 
         results = list(map(verify_sequence, draft_tokens))
-        
+
         num_accepted = list(map(lambda x: x[0], results))
         accepted_token_ids = list(map(lambda x: x[1], results))
-        
+
         total_proposed = sum(map(len, draft_tokens))
         total_accepted = sum(num_accepted)
 

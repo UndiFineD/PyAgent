@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/errors/impact_analyzer.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -65,6 +66,7 @@ class ImpactAnalyzer:
 
     Attributes:
         file_dependencies: Map of file dependencies.
+
     """
 
     def __init__(self) -> None:
@@ -78,6 +80,7 @@ class ImpactAnalyzer:
         Args:
             file: The file path.
             depends_on: List of files this file depends on.
+
         """
         self.file_dependencies[file] = depends_on
 
@@ -87,6 +90,7 @@ class ImpactAnalyzer:
         Args:
             file: The file path.
             functions: List of function names in the file.
+
         """
         self.function_map[file] = functions
 
@@ -98,6 +102,7 @@ class ImpactAnalyzer:
 
         Returns:
             ErrorImpact with affected files and functions.
+
         """
         affected_files = self._find_affected_files(error.file_path)
         affected_functions = self.function_map.get(error.file_path, [])

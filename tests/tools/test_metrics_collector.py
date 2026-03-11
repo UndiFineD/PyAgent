@@ -9,7 +9,8 @@ def test_metrics_collector_api(tmp_path: Path) -> None:
     from scripts.setup_structure import create_core_structure
     create_core_structure(str(tmp_path))
 
-    import importlib.util, sys
+    import importlib.util
+    import sys
     sys.path.insert(0, str(tmp_path / "src"))
     spec = importlib.util.find_spec("tools.metrics")
     assert spec is not None

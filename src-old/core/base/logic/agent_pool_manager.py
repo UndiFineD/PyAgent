@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/agent_pool_manager.description.md
 
 # agent_pool_manager
 
-**File**: `src\core\base\logic\agent_pool_manager.py`  
+**File**: `src\\core\base\\logic\agent_pool_manager.py`  
 **Type**: Python Module  
 **Summary**: 4 classes, 0 functions, 22 imports  
 **Lines**: 387  
@@ -94,7 +93,7 @@ Implements the Autonomous Orchestration Ecosystem pattern
 
 # Improvements for agent_pool_manager
 
-**File**: `src\core\base\logic\agent_pool_manager.py`  
+**File**: `src\\core\base\\logic\agent_pool_manager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 387 lines (medium)  
 **Complexity**: 17 score (moderate)
@@ -132,18 +131,16 @@ Agent Pool Manager - Self-evolving agent pool with task-driven creation and evol
 Based on the Autonomous Orchestration Ecosystem from agent-orchestrator-self-evolving-subagent
 """
 
-import asyncio
 import json
 import logging
-import time
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional, Set, Tuple
-from enum import Enum
 import statistics
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set, Tuple
 
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.models.communication_models import CascadeContext
+from src.core.base.lifecycle.base_agent import BaseAgent
 
 logger = logging.getLogger(__name__)
 
@@ -215,8 +212,7 @@ class TaskRequirements:
 
 
 class AgentPoolManager:
-    """
-    Self-evolving agent pool manager
+    """Self-evolving agent pool manager
     Implements the Autonomous Orchestration Ecosystem pattern
     """
 
@@ -314,8 +310,7 @@ class AgentPoolManager:
     def find_optimal_agent(
         self, requirements: TaskRequirements
     ) -> Tuple[Optional[str], float]:
-        """
-        Find the optimal agent for a task based on coverage rate
+        """Find the optimal agent for a task based on coverage rate
         Returns (agent_name, coverage_rate)
         """
         best_agent = None
@@ -354,8 +349,7 @@ class AgentPoolManager:
     def decide_agent_action(
         self, coverage_rate: float, requirements: TaskRequirements
     ) -> str:
-        """
-        Decide what action to take based on coverage rate
+        """Decide what action to take based on coverage rate
         Based on the decision matrix from the autonomous orchestration ecosystem
         """
         if coverage_rate >= 0.9:
@@ -511,8 +505,8 @@ class AgentPoolManager:
 
     def load_manifests(self):
         """Load all agent manifests from disk"""
-        import os
         import glob
+        import os
 
         pattern = os.path.join(self.manifest_dir, "*.json")
         for filepath in glob.glob(pattern):

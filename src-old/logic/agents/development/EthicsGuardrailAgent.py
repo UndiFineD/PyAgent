@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/EthicsGuardrailAgent.description.md
 
 # EthicsGuardrailAgent
 
-**File**: `src\logic\agents\development\EthicsGuardrailAgent.py`  
+**File**: `src\\logic\agents\\development\\EthicsGuardrailAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 97  
@@ -49,7 +48,7 @@ Version 2: Real-time swarm monitoring and safety protocol enforcement.
 
 # Improvements for EthicsGuardrailAgent
 
-**File**: `src\logic\agents\development\EthicsGuardrailAgent.py`  
+**File**: `src\\logic\agents\\development\\EthicsGuardrailAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 97 lines (small)  
 **Complexity**: 5 score (moderate)
@@ -99,10 +98,11 @@ from __future__ import annotations
 Reviews task requests and agent actions against constitutional AI principles.
 """
 
-from src.core.base.version import VERSION
 import logging
-from typing import Dict, Any
+from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

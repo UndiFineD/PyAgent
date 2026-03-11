@@ -1,14 +1,13 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/parsers/reasoning/implementations/identity.description.md
 
 # identity
 
-**File**: `src\core\base\parsers\reasoning\implementations\identity.py`  
+**File**: `src\\core\base\\parsers\reasoning\\implementations\\identity.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 45  
@@ -48,7 +47,7 @@ No-op parser that returns the full output as content.
 
 # Improvements for identity
 
-**File**: `src\core\base\parsers\reasoning\implementations\identity.py`  
+**File**: `src\\core\base\\parsers\reasoning\\implementations\\identity.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 45 lines (small)  
 **Complexity**: 4 score (simple)
@@ -82,13 +81,13 @@ LLM_CONTEXT_END
 """
 
 from typing import Any, ClassVar, Sequence
+
 from ..base import ReasoningParser
 from ..models import ReasoningResult, StreamingReasoningState
 
 
 class IdentityReasoningParser(ReasoningParser):
-    """
-    No-op parser that returns the full output as content.
+    """No-op parser that returns the full output as content.
     """
 
     name: ClassVar[str] = "identity"

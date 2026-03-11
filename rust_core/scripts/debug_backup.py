@@ -2,6 +2,7 @@
 """Test the key management functions in rust_core."""
 import os
 import sys
+
 import rust_core
 
 _build_dir = os.path.abspath(os.path.join(os.getcwd(), 'target', 'debug'))

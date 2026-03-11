@@ -3,7 +3,6 @@
 import platform
 from typing import cast
 
-
 print("Testing platform module...", flush=True)
 try:
     s: str = cast(str, platform.system())

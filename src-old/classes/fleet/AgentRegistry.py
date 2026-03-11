@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/AgentRegistry.description.md
 
 # AgentRegistry
 
-**File**: `src\classes\fleet\AgentRegistry.py`  
+**File**: `src\\classes\fleet\\AgentRegistry.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 16 imports  
 **Lines**: 351  
@@ -70,7 +69,7 @@ Registry for mapping agent names to their implementations via lazy loading.
 
 # Improvements for AgentRegistry
 
-**File**: `src\classes\fleet\AgentRegistry.py`  
+**File**: `src\\classes\fleet\\AgentRegistry.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 351 lines (medium)  
 **Complexity**: 21 score (complex)
@@ -114,23 +113,24 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import importlib
+import json
 import logging
 import os
-import json
-from typing import Any, TYPE_CHECKING
 from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
 from src.core.base.Version import VERSION
 
 if TYPE_CHECKING:
     from .FleetManager import FleetManager
 from collections.abc import Iterable
-from .ResilientStubs import ResilientStub
+
 from src.logic.agents.system.MCPAgent import MCPAgent
+
 from .AgentRegistryCore import AgentRegistryCore
 from .BootstrapConfigs import BOOTSTRAP_AGENTS
+from .ResilientStubs import ResilientStub
 
 # Import local version for gatekeeping
 __version__ = VERSION
@@ -249,8 +249,7 @@ class LazyAgentMap(dict):
         return False
 
     def check_for_registry_cycles(self) -> None:
-        """
-        Uses Core logic to ensure no circular dependencies exist in the registry's
+        """Uses Core logic to ensure no circular dependencies exist in the registry's
         known configurations.
         """
         # Build dependency graph from all configs
@@ -460,8 +459,7 @@ class AgentRegistry:
     def get_agent_map(
         workspace_root: Path, fleet_instance: FleetManager | None = None
     ) -> LazyAgentMap:
-        """
-        Returns the initial map of agents.
+        """Returns the initial map of agents.
         Most agents are now dynamically discovered via AgentRegistryCore.scan_directory_for_agents().
         Only bootstrap-critical agents in BootstrapConfigs.py remain relatively static.
         """

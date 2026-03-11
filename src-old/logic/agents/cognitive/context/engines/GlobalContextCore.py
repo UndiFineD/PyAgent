@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/GlobalContextCore.description.md
 
 # GlobalContextCore
 
-**File**: `src\logic\agents\cognitive\context\engines\GlobalContextCore.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\GlobalContextCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 29  
@@ -40,7 +39,7 @@ No I/O or direct disk access.
 
 # Improvements for GlobalContextCore
 
-**File**: `src\logic\agents\cognitive\context\engines\GlobalContextCore.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\GlobalContextCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 29 lines (small)  
 **Complexity**: 0 score (simple)
@@ -87,9 +86,8 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.Version import VERSION
+
 from .core_mixins.CorePartitionMixin import CorePartitionMixin
 from .core_mixins.CoreResolutionMixin import CoreResolutionMixin
 from .core_mixins.CoreSummaryMixin import CoreSummaryMixin
@@ -98,8 +96,7 @@ __version__ = VERSION
 
 
 class GlobalContextCore(CorePartitionMixin, CoreResolutionMixin, CoreSummaryMixin):
-    """
-    Pure logic for GlobalContext.
+    """Pure logic for GlobalContext.
     Handles data merging, pruning, and summary formatting.
     No I/O or direct disk access.
     """

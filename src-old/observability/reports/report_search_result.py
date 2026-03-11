@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/report_search_result.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -60,12 +61,14 @@ __version__ = VERSION
 @dataclass
 class ReportSearchResult:
     """Result from report search.
+
     Attributes:
         file_path: Path to report file.
         report_type: Type of report.
         match_text: Matched text snippet.
         line_number: Line number of match.
         score: Relevance score.
+
     """
 
     file_path: str

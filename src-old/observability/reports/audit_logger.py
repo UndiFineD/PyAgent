@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/audit_logger.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -63,17 +64,19 @@ __version__ = VERSION
 class AuditLogger:
     """Logger for report audit trail.
     Records all actions performed on reports for compliance.
+
     Attributes:
         entries: Audit log entries.
+
     Example:
         logger=AuditLogger()
         logger.log(AuditAction.READ, "user1", "report.md")
         history=logger.get_history("report.md")
+
     """
 
     def __init__(self) -> None:
         """Initialize audit logger."""
-
         self.entries: list[AuditEntry] = []
         logging.debug("AuditLogger initialized")
 
@@ -85,15 +88,17 @@ class AuditLogger:
         details: dict[str, Any] | None = None,
     ) -> AuditEntry:
         """Log an action.
+
         Args:
             action: Action performed.
             user_id: User who performed it.
             report_id: Affected report.
             details: Additional details.
+
         Returns:
             Created entry.
-        """
 
+        """
         entry = AuditEntry(
             entry_id=f"audit_{int(time.time())}_{len(self.entries)}",
             timestamp=time.time(),
@@ -107,20 +112,24 @@ class AuditLogger:
 
     def get_history(self, report_id: str) -> list[AuditEntry]:
         """Get audit history for report.
+
         Args:
             report_id: Report ID.
+
         Returns:
             List of entries.
-        """
 
+        """
         return [e for e in self.entries if e.report_id == report_id]
 
     def get_user_activity(self, user_id: str) -> list[AuditEntry]:
         """Get activity for user.
+
         Args:
             user_id: User ID.
+
         Returns:
             List of entries.
-        """
 
+        """
         return [e for e in self.entries if e.user_id == user_id]

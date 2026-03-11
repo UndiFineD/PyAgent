@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/processing/crypto_core.description.md
 
 # crypto_core
 
-**File**: `src\core\base\logic\processing\crypto_core.py`  
+**File**: `src\\core\base\\logic\\processing\\crypto_core.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 5 imports  
 **Lines**: 192  
@@ -58,7 +57,7 @@ Core class for cryptographic operations.
 
 # Improvements for crypto_core
 
-**File**: `src\core\base\logic\processing\crypto_core.py`  
+**File**: `src\\core\base\\logic\\processing\\crypto_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 192 lines (medium)  
 **Complexity**: 5 score (moderate)

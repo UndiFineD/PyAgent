@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/EthicsGuardrailAgent.description.md
 
@@ -84,7 +83,8 @@ Reviews task requests and agent actions against constitutional AI principles.
 """
 
 import logging
-from typing import Dict, Any, List
+from typing import Any, Dict
+
 from src.classes.base_agent import BaseAgent
 
 
@@ -111,7 +111,7 @@ class EthicsGuardrailAgent(BaseAgent):
 
     def monitor_swarm_decision(self, decision: Dict[str, Any]) -> str:
         """Analyzes a swarm consensus decision for alignment risks."""
-        logging.info(f"Ethics: Monitoring swarm decision...")
+        logging.info("Ethics: Monitoring swarm decision...")
 
         # Risk scoring
         risk_score = 0

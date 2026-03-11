@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/improvements/ToolIntegration.description.md
 
@@ -84,6 +83,7 @@ Attributes:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -104,12 +104,14 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_improvements.py"""
 
+import re
+from typing import Any
+
 from src.core.base.version import VERSION
+
 from .AnalysisToolType import AnalysisToolType
 from .ImprovementCategory import ImprovementCategory
 from .ToolSuggestion import ToolSuggestion
-from typing import Any, Dict, List, Optional
-import re
 
 __version__ = VERSION
 
@@ -122,6 +124,7 @@ class ToolIntegration:
     Attributes:
         tool_configs: Configuration for each tool.
         suggestions: List of tool suggestions.
+
     """
 
     def __init__(self) -> None:
@@ -138,6 +141,7 @@ class ToolIntegration:
             tool_name: Name of the tool (e.g., "pylint").
             tool_type: Type of the tool.
             command: Command to run the tool.
+
         """
         self.tool_configs[tool_name] = {"type": tool_type, "command": command}
 

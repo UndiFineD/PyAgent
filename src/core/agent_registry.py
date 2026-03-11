@@ -14,14 +14,16 @@
 """Minimal Agent Registry core module."""
 
 from __future__ import annotations
+
 from dataclasses import dataclass
-from typing import Dict, Any
+from typing import Any, Dict, Optional
 
 
 @dataclass
 class AgentRegistry:
     """Simple registry for agent instances or definitions."""
-    _registry: Dict[str, Any] | None = None
+
+    _registry: Optional[Dict[str, Any]] = None
 
     def __post_init__(self) -> None:
         """Post-init to ensure the registry dict is created lazily."""
@@ -33,7 +35,7 @@ class AgentRegistry:
         assert self._registry is not None
         self._registry[name] = obj
 
-    def get(self, name: str) -> Any:
+    def get(self, name: str) -> Optional[Any]:
         """Retrieve a registered object by name, or None if not found."""
         assert self._registry is not None
         return self._registry.get(name)

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/stats/ModelFallbackCore.description.md
 
@@ -79,7 +78,8 @@ ModelFallbackCore logic for redundancy and cost optimization.
 Pure logic for selecting fallback models and price comparisons.
 """
 
-from typing import List, Dict, Optional, Any
+from typing import Dict, List, Optional
+
 
 class ModelFallbackCore:
     """Pure logic core for model fallback strategies."""
@@ -98,7 +98,7 @@ class ModelFallbackCore:
                 idx = chain.index(current_model)
                 if idx + 1 < len(chain):
                     return chain[idx + 1]
-        
+
         # Default fallback if not in a chain
         return self.fallback_chains["economy"][0]
 
@@ -106,7 +106,7 @@ class ModelFallbackCore:
         """Ranks models from cheapest to most expensive."""
         def get_cost(m: str) -> float:
             return model_price_map.get(m, {}).get("total", 999.0)
-            
+
         return sorted(models, key=get_cost)
 
     def validate_retry_limit(self, current_retry: int, max_retries: int) -> bool:

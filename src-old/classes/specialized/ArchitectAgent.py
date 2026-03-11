@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ArchitectAgent.description.md
 
@@ -82,6 +81,12 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import logging
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -94,20 +99,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import logging
-from typing import Dict, Any
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
 
 class ArchitectAgent(BaseAgent):
-    """
-    Agent responsible for autonomous core structural evolution (Swarm Singularity v1).
+    """Agent responsible for autonomous core structural evolution (Swarm Singularity v1).
     Analyzes performance telemetry and refactors core components to improve architecture.
     """
 
@@ -122,8 +120,7 @@ class ArchitectAgent(BaseAgent):
 
     @as_tool
     def suggest_architectural_pivot(self, performance_logs: str) -> dict[str, Any]:
-        """
-        Analyzes logs and suggests a structural change to the fleet or base agent.
+        """Analyzes logs and suggests a structural change to the fleet or base agent.
         """
         logging.info("ArchitectAgent: Analyzing logs for architectural pivot.")
 

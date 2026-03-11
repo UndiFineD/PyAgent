@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/MergeConflictResolver.description.md
 
@@ -80,6 +79,7 @@ Example:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -100,13 +100,13 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_context.py"""
 
+import re
+
 from src.core.base.version import VERSION
+from src.logic.agents.cognitive.context.models.MergeConflict import MergeConflict
 from src.logic.agents.cognitive.context.utils.ConflictResolution import (
     ConflictResolution,
 )
-from src.logic.agents.cognitive.context.models.MergeConflict import MergeConflict
-from typing import List, Optional
-import re
 
 __version__ = VERSION
 
@@ -119,6 +119,7 @@ class MergeConflictResolver:
     Example:
         >>> resolver=MergeConflictResolver()
         >>> resolved=resolver.resolve(conflict, ConflictResolution.OURS)
+
     """
 
     def __init__(self, strategy: ConflictResolution = ConflictResolution.AUTO) -> None:
@@ -170,6 +171,7 @@ class MergeConflictResolver:
 
         Returns:
             Resolved content.
+
         """
         effective = strategy or self.strategy
         if effective == ConflictResolution.OURS:

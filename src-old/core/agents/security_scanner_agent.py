@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/agents/security_scanner_agent.description.md
 
 # security_scanner_agent
 
-**File**: `src\core\agents\security_scanner_agent.py`  
+**File**: `src\\core\agents\\security_scanner_agent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 12 imports  
 **Lines**: 169  
@@ -58,7 +57,7 @@ Features:
 
 # Improvements for security_scanner_agent
 
-**File**: `src\core\agents\security_scanner_agent.py`  
+**File**: `src\\core\agents\\security_scanner_agent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 169 lines (medium)  
 **Complexity**: 2 score (simple)
@@ -110,9 +109,7 @@ Implements vulnerability scanning, payload generation, SSRF detection, and recon
 """
 
 
-import asyncio
-from typing import Any, Dict, List, Optional
-from uuid import UUID
+from typing import Any, Dict, List
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.mixins.payload_generator_mixin import PayloadGeneratorMixin
@@ -128,8 +125,7 @@ class SecurityScannerAgent(
     SSRFDetectorMixin,
     ReconnaissanceMixin,
 ):
-    """
-    Comprehensive security scanner agent inspired by aem-hacker patterns.
+    """Comprehensive security scanner agent inspired by aem-hacker patterns.
 
     Features:
     - Modular vulnerability scanning with extensible checks
@@ -152,8 +148,7 @@ class SecurityScannerAgent(
         detector_port: int = 8080,
         workers: int = 4,
     ) -> Dict[str, Any]:
-        """
-        Perform comprehensive security scan on targets.
+        """Perform comprehensive security scan on targets.
 
         Args:
             targets: List of target URLs
@@ -163,6 +158,7 @@ class SecurityScannerAgent(
 
         Returns:
             Scan results dictionary
+
         """
         results = {
             "reconnaissance": {},
@@ -239,8 +235,7 @@ class SecurityScannerAgent(
         return summary
 
     async def generate_exploit_payload(self, exploit_type: str, **kwargs) -> str:
-        """
-        Generate exploit payload for specific vulnerability type.
+        """Generate exploit payload for specific vulnerability type.
 
         Args:
             exploit_type: Type of exploit ('ssrf_rce', 'xss', 'deserialization', 'groovy_rce')
@@ -248,6 +243,7 @@ class SecurityScannerAgent(
 
         Returns:
             Generated payload
+
         """
         if exploit_type == "ssrf_rce":
             fake_aem = kwargs.get("fake_aem_host", "localhost")
@@ -266,11 +262,11 @@ class SecurityScannerAgent(
             raise ValueError(f"Unknown exploit type: {exploit_type}")
 
     async def add_custom_vulnerability_check(self, name: str, check_func) -> None:
-        """
-        Add custom vulnerability check.
+        """Add custom vulnerability check.
 
         Args:
             name: Check name
             check_func: Check function
+
         """
         self.register_vulnerability_check(name, check_func)

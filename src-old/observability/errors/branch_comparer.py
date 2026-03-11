@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/errors/branch_comparer.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -63,6 +64,7 @@ class BranchComparer:
 
     Attributes:
         branch_errors: Map of branch names to error sets.
+
     """
 
     def __init__(self) -> None:
@@ -75,6 +77,7 @@ class BranchComparer:
         Args:
             branch: Branch name.
             error_ids: List of error IDs in the branch.
+
         """
         self.branch_errors[branch] = set(error_ids)
 
@@ -87,6 +90,7 @@ class BranchComparer:
 
         Returns:
             BranchComparison with differences.
+
         """
         errors_a = self.branch_errors.get(branch_a, set())
         errors_b = self.branch_errors.get(branch_b, set())
@@ -108,6 +112,7 @@ class BranchComparer:
 
         Returns:
             List of error IDs only in feature branch.
+
         """
         comparison = self.compare(base_branch, feature_branch)
         return comparison.errors_only_in_b
@@ -121,6 +126,7 @@ class BranchComparer:
 
         Returns:
             List of error IDs fixed in feature branch.
+
         """
         comparison = self.compare(base_branch, feature_branch)
         return comparison.errors_only_in_a

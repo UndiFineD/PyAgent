@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/profiling/profile_decorators.description.md
 
@@ -36,6 +35,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -116,8 +116,7 @@ def cprofile_context(
     print_stats: bool = False,
     limit: int = 20,
 ) -> Iterator[ProfileResult]:
-    """
-    Context manager for cProfile profiling.
+    """Context manager for cProfile profiling.
 
     Args:
         enabled: Whether profiling is enabled
@@ -132,6 +131,7 @@ def cprofile_context(
         >>> with cprofile_context(print_stats=True) as result:
         ...     expensive_operation()
         >>> print(f"Took {result.elapsed_ms}ms")
+
     """
     result = ProfileResult(name="profile", elapsed_seconds=0.0)
 
@@ -183,8 +183,7 @@ def cprofile(
     print_stats: bool = False,
     limit: int = 20,
 ) -> Callable[[Callable[P, R]], Callable[P, R]]:
-    """
-    Decorator for cProfile profiling.
+    """Decorator for cProfile profiling.
 
     Args:
         enabled: Whether profiling is enabled
@@ -200,6 +199,7 @@ def cprofile(
         ... def slow_function():
         ...     time.sleep(0.1)  # nosec
         >>> slow_function()
+
     """
 
     def decorator(func: Callable[P, R]) -> Callable[P, R]:
@@ -221,8 +221,7 @@ def cprofile(
 
 @contextmanager
 def timer_context(name: str = "operation") -> Iterator[dict]:
-    """
-    Simple timing context manager.
+    """Simple timing context manager.
 
     Args:
         name: Name for the timed operation
@@ -234,6 +233,7 @@ def timer_context(name: str = "operation") -> Iterator[dict]:
         >>> with timer_context("data_load") as timing:
         ...     data = load_data()
         >>> print(f"Took {timing['elapsed_ms']:.2f}ms")
+
     """
     timing = {
         "name": name,
@@ -252,8 +252,7 @@ def timer_context(name: str = "operation") -> Iterator[dict]:
 
 
 def timer(name: str | None = None) -> Callable[[Callable[P, R]], Callable[P, R]]:
-    """
-    Simple timing decorator.
+    """Simple timing decorator.
 
     Args:
         name: Optional name (defaults to function name)
@@ -265,6 +264,7 @@ def timer(name: str | None = None) -> Callable[[Callable[P, R]], Callable[P, R]]
         >>> @timer()
         ... def slow_function():
         ...     time.sleep(0.1)  # nosec
+
     """
 
     def decorator(func: Callable[P, R]) -> Callable[P, R]:
@@ -283,8 +283,7 @@ def timer(name: str | None = None) -> Callable[[Callable[P, R]], Callable[P, R]]
 
 
 class ProfileAccumulator:
-    """
-    Accumulates profiling data across multiple calls.
+    """Accumulates profiling data across multiple calls.
 
     Useful for tracking function performance over time.
 
@@ -299,6 +298,7 @@ class ProfileAccumulator:
         ...     my_function()
         >>>
         >>> print(acc.report())
+
     """
 
     def __init__(self) -> None:

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/AccessibilityAgent.description.md
 
 # AccessibilityAgent
 
-**File**: `src\logic\agents\development\AccessibilityAgent.py`  
+**File**: `src\\logic\agents\\development\\AccessibilityAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 13 imports  
 **Lines**: 95  
@@ -64,7 +63,7 @@ Example:
 
 # Improvements for AccessibilityAgent
 
-**File**: `src\logic\agents\development\AccessibilityAgent.py`  
+**File**: `src\\logic\agents\\development\\AccessibilityAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 95 lines (small)  
 **Complexity**: 1 score (simple)
@@ -92,6 +91,7 @@ Example:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -112,19 +112,19 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_coder.py"""
 
-from src.core.base.Version import VERSION
+import logging
+
+from src.core.base.BaseAgent import BaseAgent
 from src.core.base.types.AccessibilityIssue import AccessibilityIssue
 from src.core.base.types.AccessibilityIssueType import AccessibilityIssueType
 from src.core.base.types.WCAGLevel import WCAGLevel
-from src.logic.agents.development.HtmlAccessibilityMixin import HtmlAccessibilityMixin
-from src.logic.agents.development.PythonAccessibilityMixin import (
-    PythonAccessibilityMixin,
-)
-from src.logic.agents.development.JavascriptAccessibilityMixin import (
-    JavascriptAccessibilityMixin,
-)
+from src.core.base.Version import VERSION
 from src.logic.agents.development.AccessibilityReportMixin import (
     AccessibilityReportMixin,
+)
+from src.logic.agents.development.HtmlAccessibilityMixin import HtmlAccessibilityMixin
+from src.logic.agents.development.JavascriptAccessibilityMixin import (
+    JavascriptAccessibilityMixin,
 )
 from src.logic.agents.development.mixins.AccessibilityCoreMixin import (
     AccessibilityCoreMixin,
@@ -132,8 +132,9 @@ from src.logic.agents.development.mixins.AccessibilityCoreMixin import (
 from src.logic.agents.development.mixins.AccessibilityLogicMixin import (
     AccessibilityLogicMixin,
 )
-from src.core.base.BaseAgent import BaseAgent
-import logging
+from src.logic.agents.development.PythonAccessibilityMixin import (
+    PythonAccessibilityMixin,
+)
 
 __version__ = VERSION
 
@@ -162,6 +163,7 @@ class AccessibilityAgent(
         report=analyzer.analyze_file("component.py")
         for issue in report.issues:
             print(f"{issue.severity.name}: {issue.description}")
+
     """
 
     # WCAG criterion to issue type mapping
@@ -186,6 +188,7 @@ class AccessibilityAgent(
         Args:
             target_level: Target WCAG conformance level.
             file_path: Path to the agent file.
+
         """
         super().__init__(file_path if file_path else "virtual_accessibility_agent")
 

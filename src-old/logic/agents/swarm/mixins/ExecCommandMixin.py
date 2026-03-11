@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/mixins/ExecCommandMixin.description.md
 
 # ExecCommandMixin
 
-**File**: `src\logic\agents\swarm\mixins\ExecCommandMixin.py`  
+**File**: `src\\logic\agents\\swarm\\mixins\\ExecCommandMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 89  
@@ -45,7 +44,7 @@ Mixin for fundamental command execution and git operations.
 
 # Improvements for ExecCommandMixin
 
-**File**: `src\logic\agents\swarm\mixins\ExecCommandMixin.py`  
+**File**: `src\\logic\agents\\swarm\\mixins\\ExecCommandMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 89 lines (small)  
 **Complexity**: 5 score (moderate)
@@ -95,8 +94,8 @@ from __future__ import annotations
 import logging
 import subprocess
 import sys
-from pathlib import Path
 from contextlib import contextmanager
+from pathlib import Path
 
 
 class ExecCommandMixin:
@@ -106,12 +105,12 @@ class ExecCommandMixin:
         self, cmd: list[str], timeout: int = 120, max_retries: int = 1
     ) -> subprocess.CompletedProcess[str]:
         """Run a command with timeout, error handling, retry logic, and logging."""
-        return getattr(self, "command_handler").run_command(cmd, timeout, max_retries)
+        return self.command_handler.run_command(cmd, timeout, max_retries)
 
     @contextmanager
     def _with_agent_env(self, agent_name: str):
         """Temporarily set environment variables for a specific agent."""
-        with getattr(self, "command_handler").with_agent_env(agent_name):
+        with self.command_handler.with_agent_env(agent_name):
             yield
 
     def run_stats_update(self, files: list[Path]) -> None:

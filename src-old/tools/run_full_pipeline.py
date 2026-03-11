@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/run_full_pipeline.description.md
 
@@ -121,19 +120,19 @@ Steps (non-interactive):
 
 This script returns a non-zero exit code if critical steps fail.
 """
+import ast
+import concurrent.futures
+import hashlib
+import json
+import os
+import shutil
+import sqlite3
 import subprocess
 import sys
-from pathlib import Path
-import json
-from datetime import datetime
-import os
-import sqlite3
-import hashlib
-import concurrent.futures
-import ast
-import time
 import tempfile
-import shutil
+import time
+from datetime import datetime
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS = ROOT / "src" / "tools"

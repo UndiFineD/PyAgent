@@ -1,4 +1,5 @@
 import os
+
 for root, dirs, files in os.walk('src'):
     for f in files:
         path = os.path.join(root, f)

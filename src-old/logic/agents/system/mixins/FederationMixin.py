@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/mixins/FederationMixin.description.md
 
 # FederationMixin
 
-**File**: `src\logic\agents\system\mixins\FederationMixin.py`  
+**File**: `src\\logic\agents\\system\\mixins\\FederationMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 32  
@@ -39,7 +38,7 @@ Mixin for multi-project federation in TopologicalNavigator.
 
 # Improvements for FederationMixin
 
-**File**: `src\logic\agents\system\mixins\FederationMixin.py`  
+**File**: `src\\logic\agents\\system\\mixins\\FederationMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 32 lines (small)  
 **Complexity**: 1 score (simple)
@@ -74,13 +73,14 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+from pathlib import Path
+
+from src.core.base.BaseUtilities import as_tool
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 from src.logic.agents.system.TopologicalNavigator import TopologicalNavigator
 
-from pathlib import Path
-from typing import TYPE_CHECKING
-from src.core.base.BaseUtilities import as_tool
 
 class FederationMixin:
     """Mixin for multi-project federation in TopologicalNavigator."""

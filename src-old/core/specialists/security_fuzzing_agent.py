@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/specialists/security_fuzzing_agent.description.md
 
@@ -122,11 +121,9 @@ Based on the brainstorm repository's AI fuzzing approach.
 
 
 import asyncio
-import json
 import logging
 from typing import Any, Dict, List, Optional
 
-from src.core.base.agent_state_manager import StateTransaction
 from src.core.base.base_agent import BaseAgent
 from src.core.base.models.communication_models import CascadeContext
 from src.tools.security.fuzzing import (
@@ -138,8 +135,7 @@ from src.tools.security.fuzzing import (
 
 
 class SecurityFuzzingMixin:
-    """
-    Mixin for security fuzzing capabilities.
+    """Mixin for security fuzzing capabilities.
 
     Provides AI-powered fuzzing methods for agents.
     """
@@ -157,8 +153,7 @@ class SecurityFuzzingMixin:
         techniques: Optional[List[FuzzingTechnique]] = None,
         context: Optional[CascadeContext] = None,
     ) -> Dict[str, Any]:
-        """
-        Fuzz a target for security vulnerabilities.
+        """Fuzz a target for security vulnerabilities.
 
         Args:
             target: Target to fuzz
@@ -168,6 +163,7 @@ class SecurityFuzzingMixin:
 
         Returns:
             Fuzzing results summary
+
         """
         if context:
             context.add_step("security_fuzzing", f"Fuzzing target: {target}")
@@ -227,8 +223,7 @@ class SecurityFuzzingMixin:
         techniques: Optional[List[FuzzingTechnique]] = None,
         context: Optional[CascadeContext] = None,
     ) -> Dict[str, Any]:
-        """
-        Perform multi-cycle security audit with iterative improvement.
+        """Perform multi-cycle security audit with iterative improvement.
 
         Args:
             target: Target to audit
@@ -239,6 +234,7 @@ class SecurityFuzzingMixin:
 
         Returns:
             Multi-cycle audit results
+
         """
         if context:
             context.add_step(
@@ -274,8 +270,7 @@ class SecurityFuzzingMixin:
     async def generate_security_report(
         self, session_ids: List[str], context: Optional[CascadeContext] = None
     ) -> Dict[str, Any]:
-        """
-        Generate comprehensive security report from fuzzing sessions.
+        """Generate comprehensive security report from fuzzing sessions.
 
         Args:
             session_ids: Session IDs to include in report
@@ -283,6 +278,7 @@ class SecurityFuzzingMixin:
 
         Returns:
             Security report
+
         """
         if context:
             context.add_step(
@@ -417,8 +413,7 @@ class SecurityFuzzingMixin:
 
 
 class SecurityFuzzingAgent(BaseAgent, SecurityFuzzingMixin):
-    """
-    Specialized agent for security fuzzing and vulnerability assessment.
+    """Specialized agent for security fuzzing and vulnerability assessment.
 
     Integrates AI-powered fuzzing into the PyAgent swarm architecture.
     """
@@ -437,8 +432,7 @@ class SecurityFuzzingAgent(BaseAgent, SecurityFuzzingMixin):
     async def process_task(
         self, task: Dict[str, Any], context: Optional[CascadeContext] = None
     ) -> Dict[str, Any]:
-        """
-        Process a security fuzzing task.
+        """Process a security fuzzing task.
 
         Args:
             task: Task definition
@@ -446,6 +440,7 @@ class SecurityFuzzingAgent(BaseAgent, SecurityFuzzingMixin):
 
         Returns:
             Task result
+
         """
         task_type = task.get("type", "")
 
@@ -502,8 +497,7 @@ class SecurityFuzzingAgent(BaseAgent, SecurityFuzzingMixin):
     async def web_security_audit(
         self, url: str, context: Optional[CascadeContext] = None
     ) -> Dict[str, Any]:
-        """
-        Perform comprehensive web security audit.
+        """Perform comprehensive web security audit.
 
         Args:
             url: URL to audit
@@ -511,6 +505,7 @@ class SecurityFuzzingAgent(BaseAgent, SecurityFuzzingMixin):
 
         Returns:
             Audit results
+
         """
         if context:
             context.add_step("web_audit", f"Auditing web application: {url}")
@@ -536,8 +531,7 @@ class SecurityFuzzingAgent(BaseAgent, SecurityFuzzingMixin):
     async def api_security_testing(
         self, endpoint: str, context: Optional[CascadeContext] = None
     ) -> Dict[str, Any]:
-        """
-        Perform API security testing.
+        """Perform API security testing.
 
         Args:
             endpoint: API endpoint to test
@@ -545,6 +539,7 @@ class SecurityFuzzingAgent(BaseAgent, SecurityFuzzingMixin):
 
         Returns:
             Testing results
+
         """
         if context:
             context.add_step("api_testing", f"Testing API endpoint: {endpoint}")
@@ -569,8 +564,7 @@ class SecurityFuzzingAgent(BaseAgent, SecurityFuzzingMixin):
     async def file_system_audit(
         self, path: str, context: Optional[CascadeContext] = None
     ) -> Dict[str, Any]:
-        """
-        Perform file system security audit.
+        """Perform file system security audit.
 
         Args:
             path: File system path to audit
@@ -578,6 +572,7 @@ class SecurityFuzzingAgent(BaseAgent, SecurityFuzzingMixin):
 
         Returns:
             Audit results
+
         """
         if context:
             context.add_step("filesystem_audit", f"Auditing file system: {path}")

@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/CacheInfo.description.md
 
@@ -137,6 +136,7 @@ Convenience class for caches that always need TTL.
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -152,7 +152,7 @@ import threading
 import time
 from collections import OrderedDict
 from dataclasses import dataclass, field
-from typing import TypeVar, Generic, Optional, Hashable, Iterator
+from typing import Generic, Hashable, Optional, TypeVar
 
 K = TypeVar("K", bound=Hashable)
 V = TypeVar("V")
@@ -226,8 +226,7 @@ class CacheEntry(Generic[V]):
 
 
 class LRUCache(Generic[K, V]):
-    """
-    Thread-safe LRU cache with hit statistics and pinned items.
+    """Thread-safe LRU cache with hit statistics and pinned items.
 
     Features:
     - Hit/miss tracking with statistics
@@ -242,6 +241,7 @@ class LRUCache(Generic[K, V]):
         >>> value = cache.get("key1")  # Returns 42, records hit
         >>> value = cache.get("key2")  # Returns None, records miss
         >>> print(cache.stats.hit_ratio)  # 0.5
+
     """
 
     def __init__(
@@ -250,13 +250,13 @@ class LRUCache(Generic[K, V]):
         ttl_seconds: Optional[float] = None,
         name: str = "cache",
     ) -> None:
-        """
-        Initialize LRU cache.
+        """Initialize LRU cache.
 
         Args:
             max_size: Maximum number of items (excluding pinned)
             ttl_seconds: Optional TTL for entries (None = no expiration)
             name: Name for logging/debugging
+
         """
         self._max_size = max_size
         self._ttl_seconds = ttl_seconds
@@ -292,8 +292,7 @@ class LRUCache(Generic[K, V]):
         return min(1.0, len(self._cache) / self._max_size)
 
     def get(self, key: K, default: Optional[V] = None) -> Optional[V]:
-        """
-        Get a value from the cache.
+        """Get a value from the cache.
 
         Updates LRU order and records hit/miss.
 
@@ -303,6 +302,7 @@ class LRUCache(Generic[K, V]):
 
         Returns:
             Cached value or default
+
         """
         with self._lock:
             # Check pinned first
@@ -333,13 +333,13 @@ class LRUCache(Generic[K, V]):
             return default
 
     def put(self, key: K, value: V, pinned: bool = False) -> None:
-        """
-        Put a value in the cache.
+        """Put a value in the cache.
 
         Args:
             key: Cache key
             value: Value to cache
             pinned: If True, item won't be evicted
+
         """
         with self._lock:
             entry = CacheEntry(value=value, pinned=pinned)
@@ -359,14 +359,14 @@ class LRUCache(Generic[K, V]):
                 self._evict_if_needed()
 
     def touch(self, key: K) -> bool:
-        """
-        Update access time without retrieving value.
+        """Update access time without retrieving value.
 
         Args:
             key: Cache key
 
         Returns:
             True if key exists and was touched
+
         """
         with self._lock:
             if key in self._pinned:
@@ -379,14 +379,14 @@ class LRUCache(Generic[K, V]):
             return False
 
     def pin(self, key: K) -> bool:
-        """
-        Pin an existing item so it won't be evicted.
+        """Pin an existing item so it won't be evicted.
 
         Args:
             key: Cache key
 
         Returns:
             True if item was found and pinned
+
         """
         with self._lock:
             if key in self._pinned:
@@ -402,14 +402,14 @@ class LRUCache(Generic[K, V]):
             return False
 
     def unpin(self, key: K) -> bool:
-        """
-        Unpin an item so it can be evicted.
+        """Unpin an item so it can be evicted.
 
         Args:
             key: Cache key
 
         Returns:
             True if item was found and unpinned
+
         """
         with self._lock:
             if key not in self._pinned:
@@ -423,14 +423,14 @@ class LRUCache(Generic[K, V]):
             return True
 
     def delete(self, key: K) -> bool:
-        """
-        Delete an item from the cache.
+        """Delete an item from the cache.
 
         Args:
             key: Cache key
 
         Returns:
             True if item was deleted
+
         """
         with self._lock:
             if key in self._pinned:
@@ -447,14 +447,14 @@ class LRUCache(Generic[K, V]):
             return key in self._cache or key in self._pinned
 
     def clear(self, include_pinned: bool = False) -> int:
-        """
-        Clear the cache.
+        """Clear the cache.
 
         Args:
             include_pinned: If True, also clear pinned items
 
         Returns:
             Number of items cleared
+
         """
         with self._lock:
             count = len(self._cache)
@@ -472,8 +472,7 @@ class LRUCache(Generic[K, V]):
             return list(self._cache.keys()) + list(self._pinned.keys())
 
     def get_delta_stats(self) -> CacheStats:
-        """
-        Get statistics since last delta check and reset delta.
+        """Get statistics since last delta check and reset delta.
 
         Useful for periodic monitoring.
         """
@@ -538,8 +537,7 @@ class LRUCache(Generic[K, V]):
 
 
 class TTLLRUCache(LRUCache[K, V]):
-    """
-    LRU Cache with mandatory TTL.
+    """LRU Cache with mandatory TTL.
 
     Convenience class for caches that always need TTL.
     """

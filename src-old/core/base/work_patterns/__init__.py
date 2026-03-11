@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/work_patterns/__init__.description.md
 
 # __init__
 
-**File**: `src\core\base\work_patterns\__init__.py`  
+**File**: `src\\core\base\\work_patterns\\__init__.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 3 imports  
 **Lines**: 25  
@@ -42,7 +41,7 @@ Work patterns for PyAgent swarm collaboration.
 
 # Improvements for __init__
 
-**File**: `src\core\base\work_patterns\__init__.py`  
+**File**: `src\\core\base\\work_patterns\\__init__.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 25 lines (small)  
 **Complexity**: 0 score (simple)
@@ -75,8 +74,8 @@ LLM_CONTEXT_END
 """Work patterns for PyAgent swarm collaboration."""
 
 from .base_pattern import WorkPattern
-from .peer_pattern import PeerWorkPattern
 from .debate_pattern import DebateWorkPattern
+from .peer_pattern import PeerWorkPattern
 
 __all__ = [
     "WorkPattern",

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/models/communication_models.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -234,8 +234,7 @@ class ConversationHistory:
 
 @dataclass(slots=True)
 class SpeculativeProposal:
-    """
-    Draft proposal from a lower-tier agent to a higher-tier agent (Phase 56).
+    """Draft proposal from a lower-tier agent to a higher-tier agent (Phase 56).
     Used in speculative swarm mode to accelerate decision making.
     """
 
@@ -249,8 +248,7 @@ class SpeculativeProposal:
 
 @dataclass(slots=True)
 class VerificationOutcome:
-    """
-    Outcome of a speculative proposal verification (Phase 56).
+    """Outcome of a speculative proposal verification (Phase 56).
     Determines if the draft was accepted, rejected, or partially modified.
     """
 
@@ -265,8 +263,7 @@ class VerificationOutcome:
 
 @dataclass(slots=True)
 class AsyncSpeculativeToken:
-    """
-    A single token yielded by the speculative async pipeline (Phase 60).
+    """A single token yielded by the speculative async pipeline (Phase 60).
     Includes a flag indicating if it's a 'draft' or 'verified' token.
     """
 
@@ -278,8 +275,7 @@ class AsyncSpeculativeToken:
 
 @dataclass(slots=True)
 class PipelineCorrection:
-    """
-    signal to roll back and correct the output stream (Phase 60).
+    """signal to roll back and correct the output stream (Phase 60).
     """
 
     rollback_to_index: int
@@ -289,8 +285,7 @@ class PipelineCorrection:
 
 @dataclass(slots=True)
 class ExpertProfile:
-    """
-    Metadata about an agent's expertise for MoE routing (Phase 61).
+    """Metadata about an agent's expertise for MoE routing (Phase 61).
     """
 
     agent_id: str
@@ -310,8 +305,7 @@ class ExpertProfile:
 
 @dataclass(slots=True)
 class MoERoutingDecision:
-    """
-    The result of routing a task through the MoE Gatekeeper (Phase 61).
+    """The result of routing a task through the MoE Gatekeeper (Phase 61).
     """
 
     task_id: str
@@ -323,8 +317,7 @@ class MoERoutingDecision:
 
 @dataclass(slots=True)
 class SwarmAuditTrail:
-    """
-    Detailed audit log for swarm decision making (Phase 69).
+    """Detailed audit log for swarm decision making (Phase 69).
     Tracks routing, fusion, and expert selection reasoning.
     """
 
@@ -338,8 +331,7 @@ class SwarmAuditTrail:
 
 @dataclass(slots=True)
 class ExpertEvaluation:
-    """
-    Feedback evaluation for an expert's performance on a specific task (Phase 68).
+    """Feedback evaluation for an expert's performance on a specific task (Phase 68).
     Used to drive Expert Specialization Evolution.
     """
 

@@ -14,6 +14,7 @@
 """Minimal TaskQueue core scaffold."""
 
 from __future__ import annotations
+
 import asyncio
 from dataclasses import dataclass
 from typing import Any, Optional
@@ -22,6 +23,7 @@ from typing import Any, Optional
 @dataclass
 class TaskQueue:
     """Simple FIFO async-friendly queue wrapper."""
+
     _queue: Optional[asyncio.Queue[Any]] = None
 
     def __post_init__(self) -> None:

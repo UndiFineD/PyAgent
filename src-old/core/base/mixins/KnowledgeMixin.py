@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # Knowledge Mixin for BaseAgent
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/KnowledgeMixin.description.md
 
 # KnowledgeMixin
 
-**File**: `src\core\base\mixins\KnowledgeMixin.py`  
+**File**: `src\\core\base\\mixins\\KnowledgeMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 87  
@@ -52,7 +51,7 @@ Handles knowledge engines, memory, sharded storage, and templates.
 
 # Improvements for KnowledgeMixin
 
-**File**: `src\core\base\mixins\KnowledgeMixin.py`  
+**File**: `src\\core\base\\mixins\\KnowledgeMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 87 lines (small)  
 **Complexity**: 12 score (moderate)
@@ -85,8 +84,9 @@ Handles knowledge engines, memory, sharded storage, and templates.
 LLM_CONTEXT_END
 """
 
-from typing import Any
 from pathlib import Path
+from typing import Any
+
 from src.core.base.ShardedKnowledgeCore import ShardedKnowledgeCore
 
 

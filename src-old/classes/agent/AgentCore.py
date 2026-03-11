@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/agent/AgentCore.description.md
 
 # AgentCore
 
-**File**: `src\classes\agent\AgentCore.py`  
+**File**: `src\\classes\agent\\AgentCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 125  
@@ -53,7 +52,7 @@ Logic-only core for managing improvement tasks and state.
 
 # Improvements for AgentCore
 
-**File**: `src\classes\agent\AgentCore.py`  
+**File**: `src\\classes\agent\\AgentCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 125 lines (medium)  
 **Complexity**: 6 score (moderate)
@@ -90,7 +89,8 @@ Ready for conversion to a Rust library with strong typing.
 """
 
 import re
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
+
 from ..base_agent.core import BaseCore
 
 
@@ -106,8 +106,7 @@ class AgentCore(BaseCore):
         self.settings = settings or {}
 
     def parse_improvements_content(self, content: str) -> List[str]:
-        """
-        Parses the content of an improvement markdown file and returns pending items.
+        """Parses the content of an improvement markdown file and returns pending items.
         Side-effect free: takes string, returns list.
         """
         if not content:
@@ -140,8 +139,7 @@ class AgentCore(BaseCore):
         return pending
 
     def update_fixed_items(self, content: str, fixed_items: List[str]) -> str:
-        """
-        Calculates the new content for an improvements file with fixed items marked.
+        """Calculates the new content for an improvements file with fixed items marked.
         """
         if not content or not fixed_items:
             return content
@@ -167,16 +165,14 @@ class AgentCore(BaseCore):
         return "\n".join(new_lines) + "\n"
 
     def generate_changelog_entries(self, fixed_items: List[str]) -> str:
-        """
-        Generates changelog snippet for fixed items.
+        """Generates changelog snippet for fixed items.
         """
         if not fixed_items:
             return ""
         return "\n".join([f"- Fixed: {item}" for item in fixed_items])
 
     def score_improvement_items(self, items: List[str]) -> List[str]:
-        """
-        Heuristic-based scoring to prioritize items.
+        """Heuristic-based scoring to prioritize items.
         Currently simple FIFO, but can be expanded with complex logic.
         """
         # Example criteria: prioritize 'security', 'bug', 'crash'
@@ -203,12 +199,8 @@ class AgentCore(BaseCore):
         prompt: str,
         strategy: str,
     ) -> List[str]:
+        """Pure logic for generating agent execution commands.
         """
-        Pure logic for generating agent execution commands.
-        """
-        import sys
-        from pathlib import Path
-
         # Calculate script path logic (pure path manipulation)
         # Note: script_name is like 'agent_errors.py'
 

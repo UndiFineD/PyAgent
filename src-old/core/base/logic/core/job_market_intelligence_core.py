@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/job_market_intelligence_core.description.md
 
 # job_market_intelligence_core
 
-**File**: `src\core\base\logic\core\job_market_intelligence_core.py`  
+**File**: `src\\core\base\\logic\\core\\job_market_intelligence_core.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 15 imports  
 **Lines**: 488  
@@ -81,7 +80,7 @@ including salary trends, company hiring patterns, and market insights.
 
 # Improvements for job_market_intelligence_core
 
-**File**: `src\core\base\logic\core\job_market_intelligence_core.py`  
+**File**: `src\\core\base\\logic\\core\\job_market_intelligence_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 488 lines (medium)  
 **Complexity**: 4 score (simple)
@@ -117,13 +116,10 @@ LLM_CONTEXT_END
 # Job Market Intelligence Core - Automated Job Data Collection and Analysis
 # Based on patterns from 2026-SWE-College-Jobs repository
 
-import asyncio
 import json
-import re
-from typing import Dict, List, Optional, Any, Tuple
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
-from urllib.parse import urlparse
+from typing import Any, Dict, List, Optional, Tuple
 
 from src.core.base.logic.core.base_core import BaseCore
 
@@ -131,6 +127,7 @@ from src.core.base.logic.core.base_core import BaseCore
 @dataclass
 class JobPosting:
     """Represents a job posting with all relevant data"""
+
     company_name: str
     company_url: Optional[str]
     job_title: str
@@ -159,18 +156,19 @@ class JobPosting:
         """Format salary for display"""
         if not self.salary:
             return ""
-        
+
         if self.salary >= 1000:
             salary_str = f"${(self.salary / 1000):.0f}k"
         else:
             salary_str = f"${self.salary:.0f}"
-        
+
         return f"{salary_str}/{self.salary_interval}"
 
 
 @dataclass
 class JobMarketStats:
     """Statistics about the job market"""
+
     total_jobs: int
     avg_salary: Optional[float]
     top_companies: List[Tuple[str, int]]
@@ -181,8 +179,7 @@ class JobMarketStats:
 
 
 class JobMarketIntelligenceCore(BaseCore):
-    """
-    Job Market Intelligence Core for automated job data collection and analysis.
+    """Job Market Intelligence Core for automated job data collection and analysis.
     
     Provides capabilities to collect, analyze, and present job market intelligence
     including salary trends, company hiring patterns, and market insights.
@@ -214,7 +211,7 @@ class JobMarketIntelligenceCore(BaseCore):
             "https://www.glassdoor.com",
             "https://www.indeed.com"
         ]
-        
+
         for source in default_sources:
             await self.add_data_source(source)
 
@@ -239,8 +236,7 @@ class JobMarketIntelligenceCore(BaseCore):
         company_type: Optional[str] = None,
         max_age_days: int = 120
     ) -> List[JobPosting]:
-        """
-        Collect job data from configured sources
+        """Collect job data from configured sources
         
         Args:
             job_type: Type of jobs to collect (intern, new_grad, etc.)
@@ -250,12 +246,13 @@ class JobMarketIntelligenceCore(BaseCore):
             
         Returns:
             List of collected job postings
+
         """
         collected_jobs = []
 
         # Simulate data collection from various sources
         # In a real implementation, this would scrape or API-call actual job sites
-        
+
         # For demonstration, create sample job data
         sample_jobs = await self._generate_sample_jobs(job_type, is_usa, company_type, max_age_days)
         collected_jobs.extend(sample_jobs)
@@ -285,17 +282,17 @@ class JobMarketIntelligenceCore(BaseCore):
 
         jobs = []
         cutoff_date = datetime.now() - timedelta(days=max_age_days)
-        
+
         for comp_type, comp_list in companies.items():
             if company_type and comp_type != company_type:
                 continue
-                
+
             for company in comp_list[:3]:  # Limit for demo
                 for i in range(2):  # 2 jobs per company
                     posting_date = datetime.now() - timedelta(days=i * 10)
                     if posting_date < cutoff_date:
                         continue
-                        
+
                     job = JobPosting(
                         company_name=company,
                         company_url=f"https://www.{company.lower().replace(' ', '')}.com",
@@ -311,7 +308,7 @@ class JobMarketIntelligenceCore(BaseCore):
                         tags=["software-engineering", job_type, comp_type]
                     )
                     jobs.append(job)
-        
+
         return jobs
 
     async def analyze_market_data(
@@ -320,8 +317,7 @@ class JobMarketIntelligenceCore(BaseCore):
         company_type: Optional[str] = None,
         is_usa: Optional[bool] = None
     ) -> JobMarketStats:
-        """
-        Analyze collected job market data
+        """Analyze collected job market data
         
         Args:
             job_type: Filter by job type
@@ -330,10 +326,11 @@ class JobMarketIntelligenceCore(BaseCore):
             
         Returns:
             Market statistics
+
         """
         # Filter jobs
         filtered_jobs = self.job_database
-        
+
         if job_type:
             filtered_jobs = [j for j in filtered_jobs if j.job_type == job_type]
         if company_type:
@@ -406,8 +403,7 @@ class JobMarketIntelligenceCore(BaseCore):
         is_usa: Optional[bool] = None,
         format: str = "markdown"
     ) -> str:
-        """
-        Generate a market intelligence report
+        """Generate a market intelligence report
         
         Args:
             job_type: Filter by job type
@@ -417,15 +413,16 @@ class JobMarketIntelligenceCore(BaseCore):
             
         Returns:
             Formatted report
+
         """
         stats = await self.analyze_market_data(job_type, company_type, is_usa)
-        
+
         if format == "json":
             return json.dumps(asdict(stats), indent=2, default=str)
-        
+
         elif format == "markdown":
             return await self._generate_markdown_report(stats, job_type, company_type, is_usa)
-        
+
         else:
             raise ValueError(f"Unsupported format: {format}")
 
@@ -503,18 +500,18 @@ class JobMarketIntelligenceCore(BaseCore):
         company_type: Optional[str] = None,
         format: str = "json"
     ) -> None:
-        """
-        Export job data to file
+        """Export job data to file
         
         Args:
             filepath: Output file path
             job_type: Filter by job type
             company_type: Filter by company type
             format: Export format (json, csv)
+
         """
         # Filter jobs
         filtered_jobs = self.job_database
-        
+
         if job_type:
             filtered_jobs = [j for j in filtered_jobs if j.job_type == job_type]
         if company_type:
@@ -524,7 +521,7 @@ class JobMarketIntelligenceCore(BaseCore):
             data = [asdict(job) for job in filtered_jobs]
             with open(filepath, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=2, default=str)
-        
+
         elif format == "csv":
             import csv
             with open(filepath, 'w', newline='', encoding='utf-8') as f:
@@ -534,24 +531,24 @@ class JobMarketIntelligenceCore(BaseCore):
                     writer.writeheader()
                     for job in filtered_jobs:
                         writer.writerow(asdict(job))
-        
+
         self.logger.info(f"Exported {len(filtered_jobs)} jobs to {filepath}")
 
     async def get_market_insights(
         self,
         focus_area: str = "salary"
     ) -> Dict[str, Any]:
-        """
-        Generate market insights and recommendations
+        """Generate market insights and recommendations
         
         Args:
             focus_area: Area to focus insights on (salary, companies, locations)
             
         Returns:
             Dictionary of insights and recommendations
+
         """
         stats = await self.analyze_market_data()
-        
+
         insights = {
             "market_health": "healthy" if stats.total_jobs > 100 else "limited",
             "recommendations": [],
@@ -566,7 +563,7 @@ class JobMarketIntelligenceCore(BaseCore):
                     insights["recommendations"].append("Market salaries are competitive")
                 else:
                     insights["recommendations"].append("Consider negotiating for higher compensation")
-            
+
             # Salary range insights
             if stats.salary_ranges:
                 max_range = max(stats.salary_ranges.items(), key=lambda x: x[1])
@@ -576,7 +573,7 @@ class JobMarketIntelligenceCore(BaseCore):
             if stats.top_companies:
                 top_company = stats.top_companies[0]
                 insights["opportunities"].append(f"High hiring activity at {top_company[0]} ({top_company[1]} positions)")
-            
+
             if stats.company_types:
                 dominant_type = max(stats.company_types.items(), key=lambda x: x[1])
                 insights["trends"].append(f"Dominant company type: {dominant_type[0]}")

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/agent/Agent.description.md
 
 # Agent
 
-**File**: `src\classes\agent\Agent.py`  
+**File**: `src\\classes\agent\\Agent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 46 imports  
 **Lines**: 1104  
@@ -72,7 +71,7 @@ This class has been refactored to delegate logic to specialized managers:
 
 # Improvements for Agent
 
-**File**: `src\classes\agent\Agent.py`  
+**File**: `src\\classes\agent\\Agent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 1104 lines (very_large)  
 **Complexity**: 62 score (very_complex)
@@ -134,10 +133,29 @@ resource allocation, and final response synthesis. It implements advanced
 self-healing and multi-agent synergy protocols.
 """
 
-from src.core.base.version import VERSION
+import asyncio
+import importlib.util
+import logging
+import subprocess
+import sys
+from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor, TimeoutError
+from contextlib import contextmanager
+from pathlib import Path
+from types import TracebackType
+from typing import Any
+
+from src.core.base.AgentCommandHandler import AgentCommandHandler
+from src.core.base.AgentCore import AgentCore, BaseCore
 from src.core.base.AgentPluginBase import AgentPluginBase
+from src.core.base.AgentUpdateManager import AgentUpdateManager
 from src.core.base.ConfigLoader import ConfigLoader
-from src.core.base.utils.DiffGenerator import DiffGenerator
+from src.core.base.ConnectivityManager import ConnectivityManager
+from src.core.base.GracefulShutdown import GracefulShutdown
+from src.core.base.IncrementalProcessor import IncrementalProcessor
+from src.core.base.interfaces import ContextRecorderInterface
+from src.core.base.managers import HealthChecker
+from src.core.base.managers.AgentMetrics import AgentMetrics
 from src.core.base.models import (
     AgentHealthCheck,
     AgentPluginConfig,
@@ -146,34 +164,14 @@ from src.core.base.models import (
     HealthStatus,
     RateLimitConfig,
 )
-from src.core.base.utils.FileLockManager import FileLockManager
-from src.core.base.GracefulShutdown import GracefulShutdown
-from src.core.base.managers import HealthChecker
-from src.core.base.IncrementalProcessor import IncrementalProcessor
-from src.core.base.utils.RateLimiter import RateLimiter
-from concurrent.futures import ThreadPoolExecutor
-from contextlib import contextmanager
-from pathlib import Path
-from types import TracebackType
-from typing import List, Set, Optional, Dict, Any
-from collections.abc import Callable
-import asyncio
-import importlib.util
-import logging
-import subprocess
-import sys
-from concurrent.futures import TimeoutError
-from src.core.base.managers.AgentMetrics import AgentMetrics
 from src.core.base.utils.AgentFileManager import AgentFileManager
 from src.core.base.utils.AgentGitHandler import AgentGitHandler
-from src.core.base.AgentCommandHandler import AgentCommandHandler
-from src.core.base.AgentCore import AgentCore
-from src.core.base.utils.ParallelProcessor import ParallelProcessor
+from src.core.base.utils.DiffGenerator import DiffGenerator
+from src.core.base.utils.FileLockManager import FileLockManager
 from src.core.base.utils.NotificationManager import NotificationManager
-from src.core.base.AgentUpdateManager import AgentUpdateManager
-from src.core.base.interfaces import ContextRecorderInterface
-from src.core.base.ConnectivityManager import ConnectivityManager
-from src.core.base.AgentCore import BaseCore
+from src.core.base.utils.ParallelProcessor import ParallelProcessor
+from src.core.base.utils.RateLimiter import RateLimiter
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -370,6 +368,7 @@ class OrchestratorAgent:
         Example:
             if agent.should_execute_agent('coder'):
                 coder_agent.run()
+
         """
         if not self.selective_agents:
             return True  # All agents run if no selective filter
@@ -389,6 +388,7 @@ class OrchestratorAgent:
 
         Example:
             timeout=agent.get_timeout_for_agent('coder', default=60)
+
         """
         return self.timeout_per_agent.get(agent_name.lower(), default)
 
@@ -670,6 +670,7 @@ class OrchestratorAgent:
             - Priority: multiprocessing > async > threaded > sequential
             - Webhooks and callbacks triggered on completion
             - Metrics summary printed at end
+
         """
         code_files = self.find_code_files()
         logging.info(f"Found {len(code_files)} code files to process")
@@ -791,8 +792,7 @@ class OrchestratorAgent:
     def validate_with_consensus(
         self, task: str, proposals: dict[str, str]
     ) -> dict[str, Any]:
-        """
-        Validates proposals using the ByzantineConsensusAgent.
+        """Validates proposals using the ByzantineConsensusAgent.
         This provides a Phase 129 quality gate for critical changes.
         """
         from src.logic.agents.security.ByzantineConsensusAgent import (
@@ -823,6 +823,7 @@ class OrchestratorAgent:
                     return True
 
             agent.register_plugin(MyPlugin("custom"))
+
         """
         if not hasattr(self, "plugins"):
             self.plugins: dict[str, AgentPluginBase] = {}
@@ -841,6 +842,7 @@ class OrchestratorAgent:
 
         Returns:
             bool: True if plugin was removed, False if not found.
+
         """
         if not hasattr(self, "plugins") or plugin_name not in self.plugins:
             return False
@@ -859,6 +861,7 @@ class OrchestratorAgent:
 
         Returns:
             Plugin instance or None if not found.
+
         """
         if not hasattr(self, "plugins"):
             return None
@@ -872,6 +875,7 @@ class OrchestratorAgent:
 
         Returns:
             Dict mapping plugin name to success status.
+
         """
         if not hasattr(self, "plugins") or not self.plugins:
             return {}
@@ -925,6 +929,7 @@ class OrchestratorAgent:
 
         Args:
             plugin_configs: List of plugin configurations.
+
         """
         for config in plugin_configs:
             if not config.enabled:
@@ -968,6 +973,7 @@ class OrchestratorAgent:
                 requests_per_second = 5.0,
                 burst_size = 10
             ))
+
         """
         self.rate_limiter = RateLimiter(config)
         logging.info(f"Rate limiting enabled: {config or 'default settings'}")
@@ -977,6 +983,7 @@ class OrchestratorAgent:
 
         Returns:
             Dict with rate limiter stats.
+
         """
         if hasattr(self, "rate_limiter"):
             return self.rate_limiter.get_stats()
@@ -994,6 +1001,7 @@ class OrchestratorAgent:
 
         Example:
             agent.enable_file_locking(lock_timeout=600.0)
+
         """
         self.lock_manager = FileLockManager(lock_timeout)
         logging.info(f"File locking enabled (timeout: {lock_timeout}s)")
@@ -1012,6 +1020,7 @@ class OrchestratorAgent:
 
         Example:
             agent.enable_diff_preview(DiffOutputFormat.HTML)
+
         """
         self.diff_generator = DiffGenerator(output_format)
         logging.info(f"Diff preview enabled (format: {output_format.name})")
@@ -1025,6 +1034,7 @@ class OrchestratorAgent:
 
         Returns:
             DiffResult with change information.
+
         """
         if not hasattr(self, "diff_generator"):
             self.diff_generator = DiffGenerator()
@@ -1063,6 +1073,7 @@ class OrchestratorAgent:
             agent.enable_incremental_processing()
             files=agent.find_code_files()  # All files
             changed=agent.get_changed_files(files)  # Only changed
+
         """
         self.incremental_processor = IncrementalProcessor(self.repo_root)
         logging.info("Incremental processing enabled")
@@ -1075,6 +1086,7 @@ class OrchestratorAgent:
 
         Returns:
             List of files that have changed.
+
         """
         if hasattr(self, "incremental_processor"):
             return self.incremental_processor.get_changed_files(files)
@@ -1098,6 +1110,7 @@ class OrchestratorAgent:
         Example:
             agent.enable_graceful_shutdown()
             agent.run()  # Can be interrupted with Ctrl + C
+
         """
         self.shutdown_handler = GracefulShutdown(self.repo_root)
         self.shutdown_handler.install_handlers()
@@ -1108,6 +1121,7 @@ class OrchestratorAgent:
 
         Returns:
             List of pending files to process, or None if no resume state.
+
         """
         if not hasattr(self, "shutdown_handler"):
             self.shutdown_handler = GracefulShutdown(self.repo_root)
@@ -1131,6 +1145,7 @@ class OrchestratorAgent:
             results=agent.run_health_checks()
             if all(r.status == HealthStatus.HEALTHY for r in results.values()):
                 agent.run()
+
         """
         checker = HealthChecker(self.repo_root)
         return checker.run_all_checks()
@@ -1140,6 +1155,7 @@ class OrchestratorAgent:
 
         Returns:
             bool: True if all healthy, False otherwise.
+
         """
         results = self.run_health_checks()
         return all(r.status == HealthStatus.HEALTHY for r in results.values())
@@ -1167,6 +1183,7 @@ class OrchestratorAgent:
         Example:
             agent=Agent.from_config_file(Path("agent.yaml"))
             agent.run()
+
         """
         loader = ConfigLoader(config_path)
         config = loader.load()
@@ -1225,6 +1242,7 @@ class OrchestratorAgent:
         Example:
             agent=Agent.auto_configure()  # Looks for agent.yaml etc.
             agent.run()
+
         """
         root = Path(repo_root).resolve()
         config_path = ConfigLoader.find_config_file(root)

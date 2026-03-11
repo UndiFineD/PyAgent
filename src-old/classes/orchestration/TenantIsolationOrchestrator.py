@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/TenantIsolationOrchestrator.description.md
 
@@ -78,14 +77,13 @@ Ensures compute resources, memory shards, and context windows are strictly segre
 LLM_CONTEXT_END
 """
 
-import os
 import hashlib
-from typing import Dict, List, Any, Optional
+import os
+from typing import Any, Dict, List
 
 
 class TenantIsolationOrchestrator:
-    """
-    Phase 51: Managed isolation for multi-tenant fleets.
+    """Phase 51: Managed isolation for multi-tenant fleets.
     Ensures compute resources, memory shards, and context windows are strictly segregated.
     """
 
@@ -113,8 +111,7 @@ class TenantIsolationOrchestrator:
         return vault_id
 
     def fuse_knowledge_zk(self, vault_ids: List[str]) -> str:
-        """
-        Simulates Zero-Knowledge Knowledge Fusion.
+        """Simulates Zero-Knowledge Knowledge Fusion.
         Aggregates insights without exposing the raw data of individual tenants.
         """
         # Mock aggregation of "high-level insights"

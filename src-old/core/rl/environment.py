@@ -1,6 +1,5 @@
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/rl/environment.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -60,8 +60,7 @@ class EpisodeStats:
 
 
 class RLEnvironment(abc.ABC):
-    """
-    Base class for any Reinforcement Learning environment in PyAgent.
+    """Base class for any Reinforcement Learning environment in PyAgent.
     Inspired by Gymnasium but tuned for multi-agent autonomous code improvement.
     Enhanced with episode management, wrappers, and vectorized support.
     """
@@ -81,16 +80,14 @@ class RLEnvironment(abc.ABC):
 
     @abc.abstractmethod
     def reset(self, seed: Optional[int] = None, options: Optional[Dict] = None) -> Tuple[Any, Dict]:
-        """
-        Resets the environment to an initial state.
+        """Resets the environment to an initial state.
         Returns: (observation, info)
         """
         pass  # pylint: disable=unnecessary-pass
 
     @abc.abstractmethod
     def step(self, action: Any) -> Tuple[Any, float, bool, bool, Dict[str, Any]]:
-        """
-        Executes an action in the environment.
+        """Executes an action in the environment.
         Returns: (observation, reward, terminated, truncated, info)
         """
         pass  # pylint: disable=unnecessary-pass
@@ -133,8 +130,7 @@ class RLEnvironment(abc.ABC):
 
 
 class CodeImprovementEnvironment(RLEnvironment):
-    """
-    Concrete RL environment for autonomous code improvement tasks.
+    """Concrete RL environment for autonomous code improvement tasks.
     State: Current code metrics (complexity, coverage, etc.)
     Actions: Improvement strategies (refactor, add_tests, optimize, etc.)
     Reward: Delta in code quality metrics.

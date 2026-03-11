@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/ContextCompressor.description.md
 
@@ -80,16 +79,17 @@ LLM_CONTEXT_END
 
 import logging
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any, Optional
 
 from src.classes.context.ContextCompressorCore import ContextCompressorCore
+
 
 class ContextCompressor:
     """Reduces the size of source files while preserving structural context.
     
     Acts as the I/O Shell for ContextCompressorCore.
     """
-    
+
     def __init__(self, workspace_root: Optional[str] = None) -> None:
         self.workspace_root: Optional[Path] = Path(workspace_root) if workspace_root else None
         self.core = ContextCompressorCore()
@@ -97,15 +97,15 @@ class ContextCompressor:
     def compress_file(self, file_path_raw: Any) -> str:
         """Determines compression strategy based on file extension and handles I/O."""
         file_path = Path(file_path_raw)
-        
+
         if not file_path.exists():
             return f"Error: File {file_path} not found."
-            
+
         try:
             content = file_path.read_text(encoding="utf-8", errors="replace")
             mode = self.core.decide_compression_mode(file_path.name)
             header = self.core.get_summary_header(file_path.name, mode.capitalize())
-            
+
             if mode == "python":
                 return header + self.core.compress_python(content)
             elif mode == "markdown":

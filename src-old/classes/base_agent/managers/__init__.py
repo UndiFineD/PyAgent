@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/base_agent/managers/__init__.description.md
 
 # __init__
 
-**File**: `src\classes\base_agent\managers\__init__.py`  
+**File**: `src\\classes\base_agent\\managers\\__init__.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 22 imports  
 **Lines**: 19  
@@ -44,7 +43,7 @@ Internal managers for prompt, conversation, auth, and batch processing.
 
 # Improvements for __init__
 
-**File**: `src\classes\base_agent\managers\__init__.py`  
+**File**: `src\\classes\base_agent\\managers\\__init__.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 19 lines (small)  
 **Complexity**: 0 score (simple)
@@ -78,22 +77,22 @@ LLM_CONTEXT_END
 Internal managers for prompt, conversation, auth, and batch processing.
 """
 
-from .PromptManagers import PromptTemplateManager, PromptVersion, PromptVersionManager
-from .ConversationManagers import ConversationHistory
 from .AuthManagers import AuthenticationManager, AuthManager
 from .BatchManagers import BatchRequest, RequestBatcher
+from .ConversationManagers import ConversationHistory
+from .OrchestrationManagers import ABTest, AgentComposer, ModelSelector, QualityScorer
 from .ProcessorManagers import (
-    ResponsePostProcessor,
     MultimodalProcessor,
+    ResponsePostProcessor,
     SerializationManager,
 )
-from .OrchestrationManagers import AgentComposer, ModelSelector, QualityScorer, ABTest
+from .PromptManagers import PromptTemplateManager, PromptVersion, PromptVersionManager
 from .SystemManagers import (
+    EventManager,
     FilePriorityManager,
+    HealthChecker,
+    PluginManager,
+    ProfileManager,
     ResponseCache,
     StatePersistence,
-    EventManager,
-    PluginManager,
-    HealthChecker,
-    ProfileManager,
 )

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/LongTermMemory.description.md
 
 # LongTermMemory
 
-**File**: `src\logic\agents\cognitive\LongTermMemory.py`  
+**File**: `src\\logic\agents\\cognitive\\LongTermMemory.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 29  
@@ -45,7 +44,7 @@ Standardized placeholder for future re-implementation.
 
 # Improvements for LongTermMemory
 
-**File**: `src\logic\agents\cognitive\LongTermMemory.py`  
+**File**: `src\\logic\agents\\cognitive\\LongTermMemory.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 29 lines (small)  
 **Complexity**: 1 score (simple)
@@ -90,15 +89,15 @@ For more information, visit:
 No commands will be executed.
 """
 
-from src.core.base.Version import VERSION
 import logging
+
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
 
 class LongTermMemory:
-    """
-    LongTermMemory recovered after Copilot CLI deprecation event.
+    """LongTermMemory recovered after Copilot CLI deprecation event.
     Standardized placeholder for future re-implementation.
     """
 

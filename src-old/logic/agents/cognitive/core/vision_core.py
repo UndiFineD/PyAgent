@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/core/vision_core.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -43,10 +44,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
-
-
 import hashlib
 
 from src.core.base.lifecycle.version import VERSION
@@ -55,8 +52,7 @@ __version__ = VERSION
 
 
 class VisionCore:
-    """
-    Pure logic for visual processing, signature extraction,
+    """Pure logic for visual processing, signature extraction,
     and glitch detection in GUI screenshots.
     """
 
@@ -68,12 +64,12 @@ class VisionCore:
 
         Returns:
             The MD5 hexadecimal hash.
+
         """
         return hashlib.md5(image_bytes).hexdigest()
 
     def detect_glitch_patterns(self, pixel_data: list[int]) -> bool:
-        """
-        Heuristic-based glitch detection.
+        """Heuristic-based glitch detection.
 
         Checks for uniformity and low entropy which may indicate rendering failures.
 
@@ -82,6 +78,7 @@ class VisionCore:
 
         Returns:
             True if a glitch or corrupted state is detected.
+
         """
         if not pixel_data:
             return True

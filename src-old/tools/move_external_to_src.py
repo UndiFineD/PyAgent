@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/move_external_to_src.description.md
 
 # move_external_to_src
 
-**File**: `src\tools\move_external_to_src.py`  
+**File**: `src\tools\\move_external_to_src.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 6 imports  
 **Lines**: 55  
@@ -34,7 +33,7 @@ Preserves directory structure and removes empty source dirs afterwards.
 
 # Improvements for move_external_to_src
 
-**File**: `src\tools\move_external_to_src.py`  
+**File**: `src\tools\\move_external_to_src.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 55 lines (small)  
 **Complexity**: 0 score (simple)
@@ -73,7 +72,6 @@ Preserves directory structure and removes empty source dirs afterwards.
 import os
 import shutil
 import subprocess
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]

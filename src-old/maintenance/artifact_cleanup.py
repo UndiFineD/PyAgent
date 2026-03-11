@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/maintenance/artifact_cleanup.description.md
 
 # artifact_cleanup
 
-**File**: `src\maintenance\artifact_cleanup.py`  
+**File**: `src\\maintenance\artifact_cleanup.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 1 functions, 8 imports  
 **Lines**: 223  
@@ -70,7 +69,7 @@ Get the global artifact cleanup core instance.
 
 # Improvements for artifact_cleanup
 
-**File**: `src\maintenance\artifact_cleanup.py`  
+**File**: `src\\maintenance\artifact_cleanup.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 223 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -109,18 +108,17 @@ LLM_CONTEXT_END
 # limitations under the License.
 
 import asyncio
+import logging
 import os
 import time
 from pathlib import Path
 from typing import Dict, List, Optional
-import logging
 
 logger = logging.getLogger(__name__)
 
 
 class ArtifactCleanupCore:
-    """
-    Core for managing artifact cleanup in PyAgent.
+    """Core for managing artifact cleanup in PyAgent.
 
     Implements secondary cleanup workers that periodically purge generated artifacts
     (images, logs, temporary files) from disk based on TTL (Time To Live).
@@ -136,8 +134,7 @@ class ArtifactCleanupCore:
         cleanup_dirs: Optional[List[str]] = None,
         dry_run: bool = False,
     ):
-        """
-        Initialize the artifact cleanup core.
+        """Initialize the artifact cleanup core.
 
         Args:
             cleanup_interval: How often to run cleanup (seconds)
@@ -145,6 +142,7 @@ class ArtifactCleanupCore:
             max_age_overrides: File extension -> TTL overrides
             cleanup_dirs: Directories to monitor for cleanup
             dry_run: If True, only log what would be deleted
+
         """
         self.cleanup_interval = cleanup_interval
         self.default_ttl = default_ttl

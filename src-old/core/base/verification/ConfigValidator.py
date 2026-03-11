@@ -1,14 +1,13 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/verification/ConfigValidator.description.md
 
 # ConfigValidator
 
-**File**: `src\core\base\verification\ConfigValidator.py`  
+**File**: `src\\core\base\verification\\ConfigValidator.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 38  
@@ -40,7 +39,7 @@ Phase 278: Validates configuration files and detects orphaned references.
 
 # Improvements for ConfigValidator
 
-**File**: `src\core\base\verification\ConfigValidator.py`  
+**File**: `src\\core\base\verification\\ConfigValidator.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 38 lines (small)  
 **Complexity**: 1 score (simple)

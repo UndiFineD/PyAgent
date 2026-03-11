@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/intelligence/__init__.description.md
 
@@ -27,6 +26,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -49,6 +49,7 @@ from __future__ import annotations
 
 
 from src.core.base.lifecycle.version import VERSION
+
 from .search_agent import SearchAgent
 
 __version__ = VERSION

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/ShardedKnowledgeCore.description.md
 
 # ShardedKnowledgeCore
 
-**File**: `src\core\base\ShardedKnowledgeCore.py`  
+**File**: `src\\core\base\\ShardedKnowledgeCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 17 imports  
 **Lines**: 228  
@@ -59,7 +58,7 @@ Logic for sharding and asynchronously retrieving knowledge at scale.
 
 # Improvements for ShardedKnowledgeCore
 
-**File**: `src\core\base\ShardedKnowledgeCore.py`  
+**File**: `src\\core\base\\ShardedKnowledgeCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 228 lines (medium)  
 **Complexity**: 6 score (moderate)
@@ -112,15 +111,15 @@ Optimized for high-concurrency and massive data volume.
 Requires orjson and aiofiles for high-speed non-blocking I/O.
 """
 
-from src.core.base.Version import VERSION
-import zlib
 import logging
+import time
 from pathlib import Path
 from typing import Any
-import orjson
+
 import aiofiles
 import msgpack
-import time
+import orjson
+from src.core.base.Version import VERSION
 
 try:
     import rust_core as rc
@@ -264,8 +263,7 @@ class ShardedKnowledgeCore:
         await self.create_index_snapshot()
 
     async def right_to_be_forgotten(self, entity_name: str) -> bool:
-        """
-        Removes an entity from the knowledge store across all shards
+        """Removes an entity from the knowledge store across all shards
         to comply with privacy regulations (GDPR/CCPA).
         """
         shard_id = self.get_shard_id(entity_name)

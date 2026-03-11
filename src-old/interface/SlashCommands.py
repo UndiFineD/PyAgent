@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/interface/SlashCommands.description.md
 
@@ -80,20 +79,20 @@ Moved to src/interface/commands/
 """
 
 from .commands import (
-    CommandParser,
-    SlashCommands,
     CommandContext,
-    CommandResult,
     CommandDefinition,
+    CommandParser,
     CommandRegistry,
+    CommandResult,
     ParsedCommand,
     ProcessedPrompt,
-    parse_commands,
-    get_slash_commands,
-    process_prompt,
-    execute_command,
-    register_command,
+    SlashCommands,
     command,
+    execute_command,
+    get_slash_commands,
+    parse_commands,
+    process_prompt,
+    register_command,
 )
 
 __all__ = [

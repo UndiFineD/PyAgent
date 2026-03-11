@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ExplainabilityAgent.description.md
 
@@ -85,6 +84,12 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import json
+import os
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -97,21 +102,14 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import json
-import os
-from typing import Dict, Any
-from src.core.base.BaseAgent import BaseAgent
 from src.logic.agents.cognitive.core.InterpretableCore import InterpretableCore
 
 __version__ = VERSION
 
 
 class ExplainabilityAgent(BaseAgent):
-    """
-    Explainability Agent: Provides autonomous tracing and justification of multi-agent
+    """Explainability Agent: Provides autonomous tracing and justification of multi-agent
     reasoning chains. Enhanced with SAE (Sparse Autoencoder) neural interpretability.
     """
 
@@ -128,8 +126,7 @@ class ExplainabilityAgent(BaseAgent):
     def generate_neural_trace(
         self, agent_name: str, decision_context: str
     ) -> dict[str, Any]:
-        """
-        Generates a synthetic neural trace for a decision using SAE logic.
+        """Generates a synthetic neural trace for a decision using SAE logic.
         """
         trace = self.interpret_core.simulate_neural_trace(agent_name, decision_context)
         # Mock activations for decomposition
@@ -153,7 +150,6 @@ class ExplainabilityAgent(BaseAgent):
         context: dict[str, Any],
     ) -> str:
         """Logs a single reasoning step in the chain."""
-
         # Pruning logic: Only record if verbose is ON or if it's a failure/error
         is_failure = any(
             word in (justification + action).lower()

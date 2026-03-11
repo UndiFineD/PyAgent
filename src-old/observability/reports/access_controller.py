@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/access_controller.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -63,17 +64,19 @@ __version__ = VERSION
 class AccessController:
     """Controller for report access permissions.
     Manages user permissions and access control for reports.
+
     Attributes:
         permissions: User permissions.
+
     Example:
         controller=AccessController()
         controller.grant("user1", "*.md", PermissionLevel.READ)
         can_read=controller.check("user1", "report.md", PermissionLevel.READ)
+
     """
 
     def __init__(self) -> None:
         """Initialize access controller."""
-
         self.permissions: list[ReportPermission] = []
         logging.debug("AccessController initialized")
 
@@ -85,15 +88,17 @@ class AccessController:
         granted_by: str = "system",
     ) -> ReportPermission:
         """Grant permission to a user.
+
         Args:
             user_id: User to grant permission to.
             report_pattern: Pattern for reports.
             level: Permission level.
             granted_by: Who is granting.
+
         Returns:
             Created permission.
-        """
 
+        """
         permission = ReportPermission(
             user_id=user_id,
             report_pattern=report_pattern,
@@ -105,13 +110,15 @@ class AccessController:
 
     def revoke(self, user_id: str, report_pattern: str) -> bool:
         """Revoke a permission.
+
         Args:
             user_id: User ID.
             report_pattern: Pattern to revoke.
+
         Returns:
             True if revoked.
-        """
 
+        """
         for perm in self.permissions:
             if perm.user_id == user_id and perm.report_pattern == report_pattern:
                 self.permissions.remove(perm)
@@ -120,14 +127,16 @@ class AccessController:
 
     def check(self, user_id: str, report_path: str, required_level: PermissionLevel) -> bool:
         """Check if user has permission.
+
         Args:
             user_id: User to check.
             report_path: Report being accessed.
             required_level: Required permission level.
+
         Returns:
             True if permitted.
-        """
 
+        """
         import fnmatch
 
         for perm in self.permissions:

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/models/base_models.description.md
 
 # base_models
 
-**File**: `src\core\base\models\base_models.py`  
+**File**: `src\\core\base\\models\base_models.py`  
 **Type**: Python Module  
 **Summary**: 9 classes, 16 functions, 16 imports  
 **Lines**: 174  
@@ -108,7 +107,7 @@ Result of a diff operation.
 
 # Improvements for base_models
 
-**File**: `src\core\base\models\base_models.py`  
+**File**: `src\\core\base\\models\base_models.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 174 lines (medium)  
 **Complexity**: 18 score (moderate)
@@ -158,18 +157,16 @@ from __future__ import annotations
 
 """Base model classes and utility functions."""
 
-import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
-from collections.abc import Callable
-from datetime import datetime
+from typing import Any
+
 from .enums import (
-    AuthMethod,
-    SerializationFormat,
-    FilePriority,
-    DiffOutputFormat,
     AgentEvent,
+    AuthMethod,
+    FilePriority,
+    SerializationFormat,
 )
 
 

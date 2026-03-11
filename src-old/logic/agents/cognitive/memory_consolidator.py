@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/memory_consolidator.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -53,9 +53,9 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 # Fixed import path assuming Core is in the same directory
 from .core.memory_consolidator_core import MemoryConsolidatorCore
@@ -134,7 +134,7 @@ class MemoryConsolidator(BaseAgent):
                     temp_path.unlink()
                 except (
                     Exception
-                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                ):  # pylint: disable=broad-exception-caught, unused-variable
                     # pylint: disable=broad-exception-caught
                     pass
             logging.error(f"Failed to save memory atomically: {e}")

@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/BlackboardCore.description.md
 
@@ -74,12 +73,11 @@ Handles data indexing and history tracking.
 LLM_CONTEXT_END
 """
 
-from typing import Dict, Any, List
+from typing import Any, Dict, List
 
 
 class BlackboardCore:
-    """
-    Pure logic for Blackboard operations.
+    """Pure logic for Blackboard operations.
     Handles data indexing and history tracking.
     """
 

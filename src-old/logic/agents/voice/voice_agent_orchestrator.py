@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/voice/voice_agent_orchestrator.description.md
 
 # voice_agent_orchestrator
 
-**File**: `src\logic\agents\voice\voice_agent_orchestrator.py`  
+**File**: `src\\logic\agents\voice\voice_agent_orchestrator.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 24 imports  
 **Lines**: 321  
@@ -91,7 +90,7 @@ Coordinates voice interactions with specialized agents for:
 
 # Improvements for voice_agent_orchestrator
 
-**File**: `src\logic\agents\voice\voice_agent_orchestrator.py`  
+**File**: `src\\logic\agents\voice\voice_agent_orchestrator.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 321 lines (medium)  
 **Complexity**: 9 score (moderate)
@@ -136,32 +135,20 @@ Key Features:
 - Real-time audio processing
 """
 
-import os
-import json
 import base64
 import logging
-import threading
-import asyncio
-import time
-from datetime import datetime, timezone
-from pathlib import Path
-from typing import Dict, Any, Optional, List
+import os
+from typing import Any, Dict, List
 
-import websocket
 import pyaudio
-import numpy as np
 from rich.console import Console
 from rich.panel import Panel
-from rich.table import Table
-
 from src.core.base.base_agent import BaseAgent
 from src.core.base.models.communication_models import CascadeContext
-from src.logic.agents.swarm.graph_orchestration import Orchestrator, OrchestrationState
 
 
 class VoiceAgentOrchestrator(BaseAgent):
-    """
-    Voice-controlled multi-agent orchestrator inspired by big-3-super-agent.
+    """Voice-controlled multi-agent orchestrator inspired by big-3-super-agent.
 
     Coordinates voice interactions with specialized agents for:
     - Code generation and editing
@@ -372,8 +359,7 @@ class VoiceAgentOrchestrator(BaseAgent):
         self.console.print(Panel(message, title=title, border_style=style))
 
     async def process_voice_command(self, audio_data: bytes) -> str:
-        """
-        Process voice command using OpenAI Realtime API.
+        """Process voice command using OpenAI Realtime API.
         This is a simplified version - full implementation would require WebSocket handling.
         """
         # For now, return a placeholder response
@@ -420,8 +406,7 @@ class VoiceAgentOrchestrator(BaseAgent):
             return f"Command processed: {command}"
 
     async def execute(self, context: CascadeContext, **kwargs) -> Any:
-        """
-        Main execution method for voice orchestration.
+        """Main execution method for voice orchestration.
         Supports both voice and text input modes.
         """
         input_mode = kwargs.get("input_mode", "text")

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/IdiomExtractorAgent.description.md
 
@@ -85,6 +84,15 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import json
+import logging
+import os
+import re
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -97,23 +105,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import os
-import json
-import logging
-import re
-from typing import Dict, Any
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
 
 class IdiomExtractorAgent(BaseAgent):
-    """
-    Agent responsible for extracting project-specific coding idioms and patterns.
+    """Agent responsible for extracting project-specific coding idioms and patterns.
     Maintains a .pyagent_idioms.json file to guide future code generation.
     """
 
@@ -123,8 +121,7 @@ class IdiomExtractorAgent(BaseAgent):
 
     @as_tool
     def extract_idioms(self, directory: str = "src") -> str:
-        """
-        Scans the specified directory for coding patterns and updates the idioms library.
+        """Scans the specified directory for coding patterns and updates the idioms library.
         """
         logging.info(f"IdiomExtractor: Scanning {directory} for idioms...")
 
@@ -183,8 +180,7 @@ class IdiomExtractorAgent(BaseAgent):
 
     @as_tool
     def get_current_idioms(self) -> dict[str, Any]:
-        """
-        Returns the currently stored project idioms.
+        """Returns the currently stored project idioms.
         """
         if os.path.exists(self.idioms_file):
             with open(self.idioms_file, encoding="utf-8") as f:

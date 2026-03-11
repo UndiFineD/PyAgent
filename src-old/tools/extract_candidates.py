@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/extract_candidates.description.md
 
 # extract_candidates
 
-**File**: `src\tools\extract_candidates.py`  
+**File**: `src\tools\\extract_candidates.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 6 functions, 8 imports  
 **Lines**: 195  
@@ -69,7 +68,7 @@ allow_banned_imports: when True, skip checking banned imports
 
 # Improvements for extract_candidates
 
-**File**: `src\tools\extract_candidates.py`  
+**File**: `src\tools\\extract_candidates.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 195 lines (medium)  
 **Complexity**: 6 score (moderate)
@@ -120,12 +119,11 @@ This script makes small, reversible changes: writes new files under src/external
 and tests under tests/unit/. It does not modify `.external`.
 """
 import argparse
-import json
 import ast
-from pathlib import Path
+import json
 import re
 import textwrap
-import importlib.util
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 REPORT_PATH = ROOT / ".external" / "refactor_report.json"

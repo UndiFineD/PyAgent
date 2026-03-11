@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/lock_core.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # you may not use this file except in compliance with the License.
@@ -53,16 +53,15 @@ Unified Locking Core for PyAgent.
 Handles local file locks and distributed swarm locks.
 """
 
-import time
 import threading
+import time
 from typing import Any, Dict
 
 from .base_core import BaseCore
 
 
 class LockCore(BaseCore):
-    """
-    Standard implementation for resource locking.
+    """Standard implementation for resource locking.
     Supports both file-based advisory locks and in-memory swarm locks.
     """
 

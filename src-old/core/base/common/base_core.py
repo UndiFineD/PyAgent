@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/base_core.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """BaseCore providing foundation regarding all PyAgent services."""
@@ -49,17 +49,16 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, Optional, Union
 
-from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.base_interfaces import Component, Loadable, Saveable
 from src.core.base.common.storage_core import StorageCore
 from src.core.base.common.workspace_core import WorkspaceCore
+from src.core.base.lifecycle.version import VERSION
 
 logger = logging.getLogger("pyagent.core")
 
 
 class BaseCore(Loadable, Saveable, Component):
-    """
-    Standardized base regarding all Core/Service classes.
+    """Standardized base regarding all Core/Service classes.
     Handles standard I/O, naming, and versioning.
     """
 

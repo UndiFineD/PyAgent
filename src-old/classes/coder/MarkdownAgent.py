@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/MarkdownAgent.description.md
 
@@ -108,13 +107,14 @@ from __future__ import annotations
 
 """Agent specializing in Markdown documentation."""
 
-from src.core.base.version import VERSION
-from src.logic.agents.development.CoderAgent import CoderAgent
-from src.core.base.utilities import create_main_function
-from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
 import re
-import yaml
 from pathlib import Path
+
+import yaml
+from src.core.base.utilities import create_main_function
+from src.core.base.version import VERSION
+from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
+from src.logic.agents.development.CoderAgent import CoderAgent
 
 __version__ = VERSION
 

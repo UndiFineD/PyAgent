@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/TemporalSyncOrchestrator.description.md
 
@@ -81,14 +80,12 @@ Synchronizes agent execution frequency with workspace activity patterns.
 LLM_CONTEXT_END
 """
 
-import time
 import logging
-from typing import Dict, List, Any, Optional
+import time
 
 
 class TemporalSyncOrchestrator:
-    """
-    Phase 34: Bio-Temporal Synchronization.
+    """Phase 34: Bio-Temporal Synchronization.
     Synchronizes agent execution frequency with workspace activity patterns.
     """
 

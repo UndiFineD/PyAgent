@@ -1,4 +1,6 @@
-from swarm.memory import SharedMemory, AgentMemory
+#!/usr/bin/env python
+"""Test the memory package."""
+from swarm.memory import AgentMemory, SharedMemory
 
 
 def test_shared_memory_put_get() -> None:

@@ -20,9 +20,11 @@
 """Script for repairing specific import corruption patterns in the fleet."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import os
 import re
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -35,9 +37,9 @@ def repair() -> None:
                 try:
                     with open(path, encoding="utf-8") as f:
                         content = f.read()
-                    
+
                     original_content = content
-                    
+
                     # 1. Fix "from X from Y import Z"
                     content = re.sub(r"from ([\w.]+) from ([\w.]+) import ([\w, ]+)", r"from \1 import \3\nfrom \2 import \3", content)
                     # Wait, that might not be right. Let's look at the error:
@@ -45,7 +47,7 @@ def repair() -> None:
                     # Probably meant:
                     # from __future__ import annotations
                     # from functools import lru_cache
-                    
+
                     content = content.replace("from __future__ from functools import lru_cache", "from __future__ import annotations\nfrom functools import lru_cache")
                     content = content.replace("from typing from functools import lru_cache", "from typing import Any, Dict, List\nfrom functools import lru_cache")
                     content = content.replace("from dataclasses from functools import lru_cache", "from dataclasses import dataclass\nfrom functools import lru_cache")
@@ -56,7 +58,7 @@ def repair() -> None:
                     # 2. Fix nested quotes in logging
                     # logging.debug(f'Fleet Debug: 'Section {i}')"')
                     content = re.sub(r"logging\.debug\(f'Fleet Debug: '(.*)'\b", r"logging.debug(f'Fleet Debug: \"\1\"", content)
-                    
+
                     if content != original_content:
                         print(f"Repaired {path}")
                         with open(path, "w", encoding="utf-8") as f:

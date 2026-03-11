@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/changelog_localizer.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -48,8 +49,7 @@ from __future__ import annotations
 """Auto-extracted class from agent_changes.py"""
 
 
-from src.core.base.common.types.localization_language import \
-    LocalizationLanguage
+from src.core.base.common.types.localization_language import LocalizationLanguage
 from src.core.base.common.types.localized_entry import LocalizedEntry
 from src.core.base.lifecycle.version import VERSION
 
@@ -70,6 +70,7 @@ class ChangelogLocalizer:
         >>> localizer=ChangelogLocalizer()
         >>> entry=localizer.create_entry("Added new feature")
         >>> localizer.add_translation(entry, LocalizationLanguage.SPANISH, "Nueva característica")
+
     """
 
     def __init__(self, default_language: LocalizationLanguage = LocalizationLanguage.ENGLISH) -> None:
@@ -77,6 +78,7 @@ class ChangelogLocalizer:
 
         Args:
             default_language: Default language for entries.
+
         """
         self.entries: list[LocalizedEntry] = []
         self.default_language = default_language
@@ -89,6 +91,7 @@ class ChangelogLocalizer:
 
         Returns:
             A new LocalizedEntry instance.
+
         """
         entry = LocalizedEntry(original_text=text, language=self.default_language)
         self.entries.append(entry)
@@ -101,6 +104,7 @@ class ChangelogLocalizer:
             entry: The entry to translate.
             language: Target language.
             translation: Translated text.
+
         """
         entry.translations[language.value] = translation
 
@@ -112,6 +116,7 @@ class ChangelogLocalizer:
 
         Returns:
             Changelog text in the specified language.
+
         """
         result: list[str] = []
         for entry in self.entries:

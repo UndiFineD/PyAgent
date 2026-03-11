@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/rl/TransitionDynamics.description.md
 
 # TransitionDynamics
 
-**File**: `src\core\rl\TransitionDynamics.py`  
+**File**: `src\\core\rl\\TransitionDynamics.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 12 imports  
 **Lines**: 297  
@@ -68,7 +67,7 @@ Supports empirical estimation, model learning, and uncertainty quantification.
 
 # Improvements for TransitionDynamics
 
-**File**: `src\core\rl\TransitionDynamics.py`  
+**File**: `src\\core\rl\\TransitionDynamics.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 297 lines (medium)  
 **Complexity**: 19 score (moderate)
@@ -103,14 +102,13 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import math
+import random
+from dataclasses import dataclass, field
+
 # Copyright 2026 PyAgent Authors
 # Transition Dynamics for Markov Decision Processes - Phase 319 Enhanced
-
-from typing import Any, Dict, List, Tuple, Optional, Set
-from dataclasses import dataclass, field
-import random
-import math
-import logging
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 
 @dataclass
@@ -139,8 +137,7 @@ class StateActionStats:
 
 
 class TransitionDynamics:
-    """
-    Models the probability of moving from state S to S' given action A.
+    """Models the probability of moving from state S to S' given action A.
     Supports empirical estimation, model learning, and uncertainty quantification.
     """
 

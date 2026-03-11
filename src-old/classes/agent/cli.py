@@ -10,14 +10,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/agent/cli.description.md
 
 # cli
 
-**File**: `src\classes\agent\cli.py`  
+**File**: `src\\classes\agent\\cli.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 3 functions, 13 imports  
 **Lines**: 251  
@@ -66,7 +65,7 @@ CLI entry point for the Agent Orchestrator.
 
 # Improvements for cli
 
-**File**: `src\classes\agent\cli.py`  
+**File**: `src\\classes\agent\\cli.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 251 lines (medium)  
 **Complexity**: 3 score (simple)
@@ -104,7 +103,6 @@ import logging
 import os
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional
 
 from .Agent import Agent
 from .HealthChecker import HealthChecker
@@ -113,7 +111,7 @@ from .utils import setup_logging
 
 
 def _parse_quick_flag(val: str) -> dict:
-    """format 'provider:model' or 'model'"""
+    """Format 'provider:model' or 'model'"""
     if not val:
         return {}
     if ":" in val:

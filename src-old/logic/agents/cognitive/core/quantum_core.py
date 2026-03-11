@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/core/quantum_core.description.md
 
@@ -31,9 +30,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -72,8 +73,7 @@ class QuantumCore:
     def calculate_superposition_weights(
         prompts: list[str], constraints: dict[str, float] | None = None
     ) -> list[float]:
-        r"""
-        Calculates weights for multiple prompts being processed in "superposition".
+        r"""Calculates weights for multiple prompts being processed in "superposition".
 
         $W_i = \frac{e^{C_i}}{\sum e^{C_j}}$ where $C$ is the constraint score.
 
@@ -83,6 +83,7 @@ class QuantumCore:
 
         Returns:
             List of normalized weights.
+
         """
         _ = constraints  # Fallback for now
 
@@ -113,8 +114,7 @@ class QuantumCore:
 
     @staticmethod
     def simulate_interference_pattern(weights: list[float]) -> float:
-        """
-        Simulates the "Interference" between conflicting prompt intents.
+        """Simulates the "Interference" between conflicting prompt intents.
 
         An entropy-based measure of reasoning decoherence.
 
@@ -123,6 +123,7 @@ class QuantumCore:
 
         Returns:
             Shannon entropy of the weight distribution.
+
         """
         try:
             from rust_core import simulate_interference_pattern as simulate_rust  # type: ignore[attr-defined]

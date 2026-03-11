@@ -15,13 +15,13 @@
 #!/usr/bin/env python3
 """Integration tests for the agent interaction pipeline."""
 
-import os
 from src.classes.fleet.FleetManager import FleetManager
+
 
 def test_pipeline() -> None:
     print("=== Testing Interaction Harvesting Pipeline ===")
     fleet = FleetManager(".")
-    
+
     # 1. Record some fake interactions
     print("Step 1: Recording interactions...")
     for i in range(10):
@@ -39,13 +39,13 @@ def test_pipeline() -> None:
                 "tags": ["test", "demo", f"num_{i}"]
             }
         )
-    
+
     # 2. Force sharding index update (the recorder does this)
     # 3. Use SqlAgent to index
     print("Step 2: Indexing metadata into SQL...")
     indexed = fleet.sql_metadata.index_shards()
     print(f"Indexed {indexed} items.")
-    
+
     # 4. Query back
     print("Step 3: Querying SQL...")
     results = fleet.sql_metadata.query_interactions("success = 1 AND task_type = 'unit_test'")

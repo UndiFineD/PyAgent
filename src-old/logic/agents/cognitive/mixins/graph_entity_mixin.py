@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/mixins/graph_entity_mixin.description.md
 
@@ -31,6 +30,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -56,8 +56,9 @@ associative querying and hybrid search capabilities.
 
 import logging
 from typing import Any
-from src.core.base.lifecycle.version import VERSION
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -78,6 +79,7 @@ class GraphEntityMixin:
 
         Returns:
             Success message.
+
         """
         if not hasattr(self, "entities"):
             return "Error: Entities not initialized."
@@ -101,6 +103,7 @@ class GraphEntityMixin:
 
         Returns:
             Success message.
+
         """
         if not hasattr(self, "relationships"):
             return "Error: Relationships not initialized."
@@ -121,6 +124,7 @@ class GraphEntityMixin:
 
         Returns:
             A newline-separated string of matching relationships.
+
         """
         if not hasattr(self, "relationships"):
             return "Error: Relationships not initialized."
@@ -143,6 +147,7 @@ class GraphEntityMixin:
 
         Returns:
             Dictionary containing vector results and graph context.
+
         """
         # In a real system, this would call ChromaDB for vectors and then cross-reference with self.entities
         if not hasattr(self, "entities"):

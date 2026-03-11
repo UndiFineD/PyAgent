@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/RewardModelAgent.description.md
 
@@ -88,7 +87,8 @@ Used in Phase 42 for model distillation and fine-tuning loops.
 """
 
 import logging
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
@@ -111,6 +111,7 @@ class RewardModelAgent(BaseAgent):
         Args:
             task: The original task given to the agents.
             proposals: Mapping of agent names to their generated content.
+
         """
         logging.info(
             f"RewardModel: Ranking {len(proposals)} items for task: {task[:30]}..."

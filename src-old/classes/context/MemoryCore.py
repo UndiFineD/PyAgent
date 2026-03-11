@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/MemoryCore.description.md
 
@@ -84,8 +83,8 @@ MemoryCore logic for PyAgent.
 Handles episode structuring, utility scoring, and rank-based filtering.
 """
 
-from typing import Dict, List, Any, Optional
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 
 class MemoryCore:

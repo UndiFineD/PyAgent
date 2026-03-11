@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/core/ConfigHygieneCore.description.md
 
 # ConfigHygieneCore
 
-**File**: `src\logic\agents\system\core\ConfigHygieneCore.py`  
+**File**: `src\\logic\agents\\system\\core\\ConfigHygieneCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 51  
@@ -40,7 +39,7 @@ Class ConfigHygieneCore implementation.
 
 # Improvements for ConfigHygieneCore
 
-**File**: `src\logic\agents\system\core\ConfigHygieneCore.py`  
+**File**: `src\\logic\agents\\system\\core\\ConfigHygieneCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 51 lines (small)  
 **Complexity**: 2 score (simple)
@@ -80,14 +79,13 @@ Handles JSON Schema validation for configuration files.
 
 import json
 import os
-from typing import Dict, Any
+from typing import Any
 
 
 class ConfigHygieneCore:
     @staticmethod
     def validate_json_with_schema(data_path: str, schema_path: str) -> tuple[bool, str]:
-        """
-        Validates a JSON file against a schema.
+        """Validates a JSON file against a schema.
         Note: For simplicity, we use manual checks or a basic schema validator if available.
         Since we want to avoid extra heavy dependencies like 'jsonschema' if not present,
         we'll do a structural check.
@@ -115,8 +113,7 @@ class ConfigHygieneCore:
     def extract_env_vars(
         config_data: dict[str, Any], prefix: str = "PYAGENT_"
     ) -> dict[str, str]:
-        """
-        Helper to flatten nested config into env-style key-value pairs.
+        """Helper to flatten nested config into env-style key-value pairs.
         """
         env_vars = {}
         for k, v in config_data.items():

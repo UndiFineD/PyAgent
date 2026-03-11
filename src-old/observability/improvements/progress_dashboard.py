@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/improvements/progress_dashboard.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -67,6 +68,7 @@ class ProgressDashboard:
 
     Attributes:
         reports: List of generated reports.
+
     """
 
     def __init__(self) -> None:
@@ -82,6 +84,7 @@ class ProgressDashboard:
 
         Returns:
             ProgressReport with current metrics.
+
         """
         completed = len([i for i in improvements if i.status == ImprovementStatus.COMPLETED])
         in_progress = len([i for i in improvements if i.status == ImprovementStatus.IN_PROGRESS])

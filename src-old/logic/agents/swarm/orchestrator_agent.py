@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/orchestrator_agent.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -65,6 +66,7 @@ from pathlib import Path
 from typing import Any
 
 from src.core.base.execution.agent_command_handler import AgentCommandHandler
+
 BaseAgent = None  # Will be imported locally to avoid circular import
 from src.core.base.lifecycle.version import VERSION
 
@@ -74,8 +76,7 @@ __version__ = VERSION
 
 
 class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ancestors
-    """
-    Primary orchestrator for swarm agentic workflows.
+    """Primary orchestrator for swarm agentic workflows.
     Combines core BaseAgent capabilities with specialized orchestrator features.
 
     This class satisfies both modern Mixin-based architecture and legacy
@@ -131,8 +132,7 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
         self._metrics = value
 
     def register_plugin(self, name_or_plugin: Any, plugin: Any | None = None) -> None:  # pylint: disable=arguments-renamed
-        """
-        Registers a plugin. Overrides BaseAgent classmethod
+        """Registers a plugin. Overrides BaseAgent classmethod
         to use OrchestratorPluginMixin instance method.
         """
         # Ensure plugins dict exists on instance
@@ -140,8 +140,7 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
             self.plugins = {}
 
         # Use the mixin implementation
-            from src.logic.agents.swarm.orchestrator_plugin_mixin import \
-            OrchestratorPluginMixin
+            from src.logic.agents.swarm.orchestrator_plugin_mixin import OrchestratorPluginMixin
 
         if plugin:
             OrchestratorPluginMixin.register_plugin(self, plugin)
@@ -160,8 +159,7 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
 
     @classmethod
     def from_config_file(cls, config_path: Path | str) -> OrchestratorAgent:
-        """
-        Creates an OrchestratorAgent from a configuration file.
+        """Creates an OrchestratorAgent from a configuration file.
         Legacy support for config-driven initialization.
         """
         import json
@@ -177,8 +175,7 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
         return cls(file_path=repo_root, **config)
 
     def generate_improvement_report(self) -> dict[str, Any]:
-        """
-        Generates a summary of changes and improvements made.
+        """Generates a summary of changes and improvements made.
         Legacy support for Phase 5 reporting tools.
         """
         processed = self._metrics.get("files_processed", 0)
@@ -194,8 +191,7 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
         }
 
     def benchmark_execution(self, files: list[Path]) -> dict[str, Any]:
-        """
-        Benchmarks the execution time per file.
+        """Benchmarks the execution time per file.
         Legacy support for Phase 5 benchmarking.
         """
         total_files = len(files)
@@ -204,8 +200,7 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
         return {"average_per_file": avg, "total_time": elapsed, "file_count": total_files}
 
     def cost_analysis(self, cost_per_request: float = 0.0) -> dict[str, Any]:
-        """
-        Analyzes the estimated cost of operations.
+        """Analyzes the estimated cost of operations.
         Legacy support for Phase 5 cost tracking.
         """
         agent_runs = sum(self._metrics.get("agents_applied", {}).values())
@@ -217,8 +212,7 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
         }
 
     def update_code(self, target: Path) -> str:
-        """
-        Stub for update_code which was used in older integration tests.
+        """Stub for update_code which was used in older integration tests.
         Redirects to modern sub-agent execution via command_handler.
         """
         logging.info(f"Orchestrator: Updating code for {target}")
@@ -236,8 +230,7 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
         return f"Error: {result.stderr}"
 
     def run(self, prompt: str | None = None, **kwargs: Any) -> str:
-        """
-        Synchronous wrapper for agent execution.
+        """Synchronous wrapper for agent execution.
         If no prompt is provided, runs the main processing loop.
         """
         _ = kwargs
@@ -245,7 +238,7 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
             # Legacy loop-based mode (Phase 5/6)
             logging.info("Orchestrator: Starting processing loop (legacy mode)")
             if hasattr(self, "run_with_parallel_execution"):
-                getattr(self, "run_with_parallel_execution")()
+                self.run_with_parallel_execution()
                 return "Success"
             return "Orchestrator: No loop implementation found."
 

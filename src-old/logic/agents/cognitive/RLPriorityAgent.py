@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/RLPriorityAgent.description.md
 
 # RLPriorityAgent
 
-**File**: `src\logic\agents\cognitive\RLPriorityAgent.py`  
+**File**: `src\\logic\agents\\cognitive\\RLPriorityAgent.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 1 imports  
 **Lines**: 9  
@@ -29,7 +28,7 @@ based on learned patterns of workload and system state.
 
 # Improvements for RLPriorityAgent
 
-**File**: `src\logic\agents\cognitive\RLPriorityAgent.py`  
+**File**: `src\\logic\agents\\cognitive\\RLPriorityAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 9 lines (small)  
 **Complexity**: 0 score (simple)

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/mixins/exec_command_mixin.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -62,12 +62,12 @@ class ExecCommandMixin:
         self, cmd: list[str], timeout: int = 120, max_retries: int = 1
     ) -> subprocess.CompletedProcess[str]:
         """Run a command with timeout, error handling, retry logic, and logging."""
-        return getattr(self, "command_handler").run_command(cmd, timeout, max_retries)
+        return self.command_handler.run_command(cmd, timeout, max_retries)
 
     @contextmanager
     def _with_agent_env(self, agent_name: str) -> dict:
         """Temporarily set environment variables for a specific agent."""
-        with getattr(self, "command_handler").with_agent_env(agent_name):
+        with self.command_handler.with_agent_env(agent_name):
             yield
 
     def run_stats_update(self, files: list[Path]) -> None:

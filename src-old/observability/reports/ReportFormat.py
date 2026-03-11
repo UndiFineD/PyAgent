@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/ReportFormat.description.md
 
 # ReportFormat
 
-**File**: `src\observability\reports\ReportFormat.py`  
+**File**: `src\\observability\reports\\ReportFormat.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 29  
@@ -37,7 +36,7 @@ Output format for reports.
 
 # Improvements for ReportFormat
 
-**File**: `src\observability\reports\ReportFormat.py`  
+**File**: `src\\observability\reports\\ReportFormat.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 29 lines (small)  
 **Complexity**: 0 score (simple)
@@ -85,8 +84,9 @@ from __future__ import annotations
 
 """Auto-extracted class from generate_agent_reports.py"""
 
-from src.core.base.version import VERSION
 from enum import Enum
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

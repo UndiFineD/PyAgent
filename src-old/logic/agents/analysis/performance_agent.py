@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/analysis/performance_agent.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 """PerformanceAgent identifies and suggests code optimizations."""
 
 # Copyright 2026 PyAgent Authors
@@ -52,15 +53,13 @@ import re
 
 # Try to import rust acceleration
 try:
-    from rust_core import \
-        scan_optimization_patterns_rust  # pylint: disable=no-name-in-module
+    from rust_core import scan_optimization_patterns_rust  # pylint: disable=no-name-in-module
 
     HAS_RUST_CORE = True
 except ImportError:
     HAS_RUST_CORE = False
 
-from src.core.base.common.types.optimization_suggestion import \
-    OptimizationSuggestion
+from src.core.base.common.types.optimization_suggestion import OptimizationSuggestion
 from src.core.base.common.types.optimization_type import OptimizationType
 from src.core.base.lifecycle.version import VERSION
 
@@ -81,6 +80,7 @@ class PerformanceAgent:
     Example:
         >>> optimizer=PerformanceAgent()
         >>> suggestions=optimizer.analyze("for i in range(len(items)):")
+
     """
 
     OPTIMIZATION_PATTERNS: list[tuple[str, OptimizationType, str, str]] = [
@@ -116,6 +116,7 @@ class PerformanceAgent:
 
         Returns:
             List of optimization suggestions.
+
         """
         self.suggestions = []
 

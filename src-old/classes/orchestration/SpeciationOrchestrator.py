@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/SpeciationOrchestrator.description.md
 
@@ -78,12 +77,11 @@ LLM_CONTEXT_END
 """
 
 import logging
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
 
 
 class SpeciationOrchestrator:
-    """
-    Phase 39: Autonomous Sub-Fleet Speciation.
+    """Phase 39: Autonomous Sub-Fleet Speciation.
     Uses the SpeciationAgent to spawn specialized 'breeds' of the fleet for specific domains.
     """
 
@@ -92,8 +90,7 @@ class SpeciationOrchestrator:
         self.sub_fleets: Dict[str, List[str]] = {}  # domain -> list of agent_names
 
     def speciate(self, domain: str) -> Dict[str, Any]:
-        """
-        Creates a specialized sub-fleet for a given domain (e.g., 'Kubernetes-SRE').
+        """Creates a specialized sub-fleet for a given domain (e.g., 'Kubernetes-SRE').
         """
         logging.info(
             f"SpeciationOrchestrator: Initiating speciation for domain: {domain}"

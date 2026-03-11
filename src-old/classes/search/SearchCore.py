@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/search/SearchCore.description.md
 
@@ -97,8 +96,9 @@ Pure logic for parsing search results from various providers.
 No I/O or side effects.
 """
 
+from typing import Any
+
 from src.core.base.version import VERSION
-from typing import List, Dict, Any
 
 __version__ = VERSION
 

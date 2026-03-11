@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/memory_core.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # you may not use this file except in compliance with the License.
@@ -67,8 +67,7 @@ logger = logging.getLogger("pyagent.memory")
 
 
 class MemoryCore:
-    """
-    Centralized handler for Episodic, Long-term, and Sharded Knowledge.
+    """Centralized handler for Episodic, Long-term, and Sharded Knowledge.
     Standardizes utility scoring, filtering, and cross-agent indexing.
     """
 
@@ -102,8 +101,7 @@ class MemoryCore:
         metadata: dict[str, Any] | None = None,
         base_utility: float = 0.5,
     ) -> dict[str, Any]:
-        """
-        Create a standardized episodic memory record.
+        """Create a standardized episodic memory record.
         Hot path for Rust acceleration (utility scoring).
         """
         if rc and hasattr(rc, "create_episode_struct"):
@@ -132,8 +130,7 @@ class MemoryCore:
     def rank_memories(
         self, memories: list[dict[str, Any]], limit: int = 5, min_utility: float = 0.0
     ) -> list[dict[str, Any]]:
-        """
-        Rank memories by utility score and recency.
+        """Rank memories by utility score and recency.
         Hot path for Rust acceleration.
         """
         if rc and hasattr(rc, "rank_memories_rust"):
@@ -180,8 +177,7 @@ class MemoryCore:
         mode: str = "structured",
         metadata: Optional[Dict[str, Any]] = None,
     ) -> bool:
-        """
-        Store knowledge in the agent's partitioned space.
+        """Store knowledge in the agent's partitioned space.
         Modes: 'structured' (JSON/B-Tree), 'semantic' (Vector), 'relational' (Graph)
         """
         if mode == "semantic":
@@ -227,8 +223,7 @@ class MemoryCore:
     def retrieve_knowledge(
         self, agent_id: str, query: str, mode: str = "structured", limit: int = 5
     ) -> List[Dict[str, Any]]:
-        """
-        Retrieve knowledge based on mode and query.
+        """Retrieve knowledge based on mode and query.
         """
         if mode == "semantic":
             return self._retrieve_semantic(agent_id, query, limit)
@@ -302,7 +297,7 @@ class MemoryCore:
                 return True
             except (
                 Exception
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            ):  # pylint: disable=broad-exception-caught, unused-variable
                 # pylint: disable=broad-exception-caught
                 return False
 
@@ -323,8 +318,7 @@ class MemoryCore:
         return path
 
     def update_index(self, agent_id: str, tags: List[str]) -> bool:
-        """
-        Update the global knowledge index with agent metadata.
+        """Update the global knowledge index with agent metadata.
         This file can be very large (>50MB), so we use atomic write.
         """
         index = self._storage.load_json(self.index_path, default={})

@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
-"""
-Simple script to analyze PyAgent improvement files and count completed items.
+"""Simple script to analyze PyAgent improvement files and count completed items.
 This script focuses on the actual improvement files in the repository.
 """
 
-import os
 import re
 from pathlib import Path
 
+
 def count_completed_items_in_file(file_path: str) -> tuple[int, int]:
-    """
-    Count completed items in an improvement file.
+    """Count completed items in an improvement file.
     Returns tuple of (total_items, completed_items)
     """
     try:
@@ -72,7 +70,7 @@ def analyze_repository(update: bool = False, init_only: bool = False) -> None:
             print(f"Error analyzing {file_path}: {e}")
 
     print("\n" + "=" * 40)
-    print(f"Summary:")
+    print("Summary:")
     print(f"  Files with checklists: {files_with_checklists}")
     print(f"  Total checklist items: {total_items}")
     print(f"  Completed items: {completed_items}")

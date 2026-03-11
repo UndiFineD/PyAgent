@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/multimodal/android_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -68,8 +68,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class AndroidAgent(BaseAgent):
-    """
-    Automates Android devices using the 'Action-State' pattern (Accessibility Tree).
+    """Automates Android devices using the 'Action-State' pattern (Accessibility Tree).
     95% cheaper and 5x faster than vision-based mobile automation.
     """
 

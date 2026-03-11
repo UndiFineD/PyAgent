@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/fix_f401_inits.description.md
 
@@ -66,10 +65,9 @@ Python module containing implementation for fix_f401_inits.
 LLM_CONTEXT_END
 """
 
-import os
-import subprocess
 import json
 import re
+import subprocess
 
 
 def main():

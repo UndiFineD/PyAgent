@@ -13,8 +13,7 @@
 # limitations under the License.
 
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/latent_reasoning_agent.description.md
 
@@ -45,6 +44,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -57,17 +57,16 @@ Ref: ArXiv 2601.02996 (Latent Reasoning in LLMs)
 import logging
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.base_utilities import as_tool, create_main_function
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import create_main_function, as_tool
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 # pylint: disable=too-many-ancestors
 class LatentReasoningAgent(BaseAgent):
-    """
-    Guardrail agent that validates cross-lingual reasoning integrity.
+    """Guardrail agent that validates cross-lingual reasoning integrity.
     Prevents 'representation collapse' in low-resource language outputs.
     """
 
@@ -84,8 +83,7 @@ class LatentReasoningAgent(BaseAgent):
     def audit_multilingual_output(
         self, task: str, response: str, language: str
     ) -> dict[str, Any]:
-        """
-        Audits a response for latent reasoning consistency.
+        """Audits a response for latent reasoning consistency.
         Flags outputs where reasoning strength likely drops due to language-specific training gaps.
         """
         _ = response
@@ -122,8 +120,7 @@ class LatentReasoningAgent(BaseAgent):
     def verify_silent_steps(
         self, chain_of_thought: list[str], target_language: str
     ) -> bool:
-        """
-        Verifies if each step of the reasoning chain holds up in the target language.
+        """Verifies if each step of the reasoning chain holds up in the target language.
         """
         # Logic to simulate cross-lingual logical entailment
         _ = chain_of_thought

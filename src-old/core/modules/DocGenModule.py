@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/modules/DocGenModule.description.md
 
@@ -91,15 +90,14 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import ast
 import os
+
 from src.core.base.modules import BaseModule
 
 
 class DocGenModule(BaseModule):
-    """
-    Consolidated core module for generating documentation.
+    """Consolidated core module for generating documentation.
     Migrated from DocGenCore.
     """
 
@@ -108,8 +106,7 @@ class DocGenModule(BaseModule):
         return super().initialize()
 
     def execute(self, source_code: str, file_name: str) -> str:
-        """
-        Extracts markdown documentation from Python source code.
+        """Extracts markdown documentation from Python source code.
         """
         if not self.initialized:
             self.initialize()

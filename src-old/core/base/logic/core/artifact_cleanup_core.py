@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/artifact_cleanup_core.description.md
 
 # artifact_cleanup_core
 
-**File**: `src\core\base\logic\core\artifact_cleanup_core.py`  
+**File**: `src\\core\base\\logic\\core\artifact_cleanup_core.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 106  
@@ -58,7 +57,7 @@ Pattern harvested from 4o-ghibli-at-home.
 
 # Improvements for artifact_cleanup_core
 
-**File**: `src\core\base\logic\core\artifact_cleanup_core.py`  
+**File**: `src\\core\base\\logic\\core\artifact_cleanup_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 106 lines (medium)  
 **Complexity**: 2 score (simple)
@@ -92,18 +91,16 @@ LLM_CONTEXT_END
 """
 
 import asyncio
-import os
-import time
 import logging
-from typing import Dict, List, Optional
+import time
 from pathlib import Path
+from typing import List, Optional
 
 logger = logging.getLogger(__name__)
 
 
 class ArtifactCleanupCore:
-    """
-    Background worker for disk maintenance of modality artifacts (images/test logs).
+    """Background worker for disk maintenance of modality artifacts (images/test logs).
     Pattern harvested from 4o-ghibli-at-home.
     """
 
@@ -151,8 +148,7 @@ class ArtifactCleanupCore:
             await asyncio.sleep(self.interval)
 
     async def perform_cleanup(self) -> int:
-        """
-        Scans binary artifact directories and removes old files.
+        """Scans binary artifact directories and removes old files.
         Returns the count of deleted files.
         """
         if not self.base_dir.exists():

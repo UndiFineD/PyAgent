@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ModelForgeAgent.description.md
 
@@ -108,16 +107,15 @@ from __future__ import annotations
 Specializes in local fine-tuning and model optimization (LoRA/QLoRA).
 """
 
-from src.core.base.version import VERSION
-import logging
-import os
-import json
 import asyncio
+import json
+import logging
 import time
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 from src.logic.agents.system.core.ModelRegistryCore import ModelRegistryCore
 
 __version__ = VERSION
@@ -161,9 +159,11 @@ class ModelForgeAgent(BaseAgent):
         self, task_name: str, examples: list[dict[str, str]]
     ) -> str:
         """Prepares a JSONL dataset for fine-tuning.
+
         Args:
             task_name: Unique name for the fine-tuning task.
             examples: List of dictionaries with 'instruction' and 'output'.
+
         """
         output_path = self.datasets_dir / f"{task_name}.jsonl"
 
@@ -183,9 +183,11 @@ class ModelForgeAgent(BaseAgent):
         self, task_name: str, base_model: str = "unsloth/llama-3-8b-bnb-4bit"
     ) -> str:
         """Simulates starting a LoRA fine-tuning session.
+
         Args:
             task_name: Name of the task/dataset to use.
             base_model: The base model to fine-tune.
+
         """
         dataset_path = self.datasets_dir / f"{task_name}.jsonl"
 

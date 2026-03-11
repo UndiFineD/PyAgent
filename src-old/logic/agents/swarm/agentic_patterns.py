@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/agentic_patterns.description.md
 
 # agentic_patterns
 
-**File**: `src\logic\agents\swarm\agentic_patterns.py`  
+**File**: `src\\logic\agents\\swarm\agentic_patterns.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 12 imports  
 **Lines**: 382  
@@ -80,7 +79,7 @@ Inspired by agentic design patterns from ADK.
 
 # Improvements for agentic_patterns
 
-**File**: `src\logic\agents\swarm\agentic_patterns.py`  
+**File**: `src\\logic\agents\\swarm\agentic_patterns.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 382 lines (medium)  
 **Complexity**: 4 score (simple)
@@ -114,8 +113,8 @@ LLM_CONTEXT_END
 
 import asyncio
 import logging
-from typing import List, Dict, Any, Optional, Union
 from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
 
 from src.core.base.common.models.communication_models import CascadeContext, WorkState
 from src.logic.agents.swarm.orchestrator_work_pattern_mixin import (
@@ -138,8 +137,7 @@ class SequentialAgentConfig:
 
 
 class SequentialAgentPattern:
-    """
-    Sequential agent execution pattern.
+    """Sequential agent execution pattern.
 
     This pattern executes agents in sequence, where each agent's output
     can be used as input for subsequent agents. Inspired by agentic design
@@ -157,8 +155,7 @@ class SequentialAgentPattern:
         initial_input: Dict[str, Any],
         **kwargs,
     ) -> Dict[str, Any]:
-        """
-        Execute agents in sequence.
+        """Execute agents in sequence.
 
         Args:
             context: Cascade context for execution
@@ -168,6 +165,7 @@ class SequentialAgentPattern:
 
         Returns:
             Dict containing execution results
+
         """
         logger.info(f"Starting sequential execution for {config.name}")
 
@@ -275,8 +273,7 @@ class SequentialAgentPattern:
         execution_state: WorkState,
         **kwargs,
     ) -> Dict[str, Any]:
-        """
-        Execute a single agent in the sequence.
+        """Execute a single agent in the sequence.
 
         Args:
             context: Agent execution context
@@ -287,6 +284,7 @@ class SequentialAgentPattern:
 
         Returns:
             Agent execution result
+
         """
         agent_type = agent_config.get("type", "pattern")
         agent_name = agent_config.get("name", "unnamed_agent")
@@ -328,8 +326,7 @@ class SequentialAgentPattern:
         agent_result: Dict[str, Any],
         agent_config: Dict[str, Any],
     ) -> Dict[str, Any]:
-        """
-        Prepare input for the next agent in sequence.
+        """Prepare input for the next agent in sequence.
 
         Args:
             current_input: Current input data
@@ -338,6 +335,7 @@ class SequentialAgentPattern:
 
         Returns:
             Input data for the next agent
+
         """
         # Default behavior: merge agent result with current input
         next_input = current_input.copy()
@@ -354,8 +352,7 @@ class SequentialAgentPattern:
 
 
 class ParallelAgentPattern:
-    """
-    Parallel agent execution pattern.
+    """Parallel agent execution pattern.
 
     This pattern executes multiple agents concurrently and combines their results.
     Inspired by agentic design patterns from ADK.
@@ -372,8 +369,7 @@ class ParallelAgentPattern:
         input_data: Dict[str, Any],
         **kwargs,
     ) -> Dict[str, Any]:
-        """
-        Execute multiple agents in parallel.
+        """Execute multiple agents in parallel.
 
         Args:
             context: Cascade context for execution
@@ -383,6 +379,7 @@ class ParallelAgentPattern:
 
         Returns:
             Dict containing combined execution results
+
         """
         logger.info(f"Starting parallel execution of {len(agent_configs)} agents")
 
@@ -466,14 +463,14 @@ class ParallelAgentPattern:
     def _combine_parallel_results(
         self, results: List[Dict[str, Any]]
     ) -> Dict[str, Any]:
-        """
-        Combine results from parallel agent execution.
+        """Combine results from parallel agent execution.
 
         Args:
             results: List of individual agent results
 
         Returns:
             Combined result dictionary
+
         """
         combined = {}
 

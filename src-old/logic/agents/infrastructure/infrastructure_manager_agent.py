@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/infrastructure/infrastructure_manager_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -78,10 +78,12 @@ class InfrastructureManagerAgent(BaseAgent):
     @as_tool
     def list_proxmox_vms(self, host: str, _token_id: str, _secret: str) -> str:
         """Lists all VMs and containers on a Proxmox host.
+
         Args:
             host: Proxmox host IP or domain.
             _token_id: API Token ID.
             _secret: API Secret.
+
         """
         logging.info(f"INFRA: Listing ProxMox VMs on {host}")
         # Simulation of Proxmox API call
@@ -100,11 +102,13 @@ class InfrastructureManagerAgent(BaseAgent):
         self, entity_id: str, action: str, api_url: str, _token: str
     ) -> str:
         """Controls a HomeAssistant device (light, switch, etc.).
+
         Args:
             entity_id: The HA entity ID (e.g., 'light.living_room').
             action: 'turn_on', 'turn_off', 'toggle'.
             api_url: HA Base URL.
             _token: Long-lived access token.
+
         """
         logging.info(f"INFRA: HomeAssistant {action} for {entity_id}")
         # Simulation of HA REST API call

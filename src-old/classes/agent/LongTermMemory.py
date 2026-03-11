@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/agent/LongTermMemory.description.md
 
 # LongTermMemory
 
-**File**: `src\classes\agent\LongTermMemory.py`  
+**File**: `src\\classes\agent\\LongTermMemory.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 10 imports  
 **Lines**: 112  
@@ -50,7 +49,7 @@ Manages persistent conversational and factual memory for agents.
 
 # Improvements for LongTermMemory
 
-**File**: `src\classes\agent\LongTermMemory.py`  
+**File**: `src\\classes\agent\\LongTermMemory.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 112 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -83,14 +82,11 @@ LLM_CONTEXT_END
 """Long-term memory for agents using vector storage."""
 
 import logging
-from typing import Dict, List, Any, Optional
 from datetime import datetime
-import json
-from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 try:
     import chromadb
-    from chromadb.config import Settings
 
     HAS_CHROMADB = True
 except Exception:

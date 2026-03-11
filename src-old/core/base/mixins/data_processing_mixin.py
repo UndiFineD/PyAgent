@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/data_processing_mixin.description.md
 
 # data_processing_mixin
 
-**File**: `src\core\base\mixins\data_processing_mixin.py`  
+**File**: `src\\core\base\\mixins\\data_processing_mixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 189  
@@ -65,7 +64,7 @@ raw data formats to human-readable representations.
 
 # Improvements for data_processing_mixin
 
-**File**: `src\core\base\mixins\data_processing_mixin.py`  
+**File**: `src\\core\base\\mixins\\data_processing_mixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 189 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -108,26 +107,25 @@ inspired by ADSpider's data transformation patterns.
 """
 
 import datetime
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Union
 
 
 class DataProcessingMixin:
-    """
-    Mixin providing data processing utilities for agents.
+    """Mixin providing data processing utilities for agents.
 
     Includes functions for converting binary flags, timestamps, and other
     raw data formats to human-readable representations.
     """
 
     def convert_user_account_control(self, uac_value: int) -> str:
-        """
-        Convert Windows User Account Control flags to human-readable format.
+        """Convert Windows User Account Control flags to human-readable format.
 
         Args:
             uac_value: Integer representing UAC flags
 
         Returns:
             String with human-readable UAC flags separated by " | "
+
         """
         uac_flags = [
             "SCRIPT",
@@ -164,14 +162,14 @@ class DataProcessingMixin:
     def convert_filetime_to_datetime(
         self, filetime_value: Union[int, str]
     ) -> datetime.datetime:
-        """
-        Convert Windows FILETIME to Python datetime.
+        """Convert Windows FILETIME to Python datetime.
 
         Args:
             filetime_value: FILETIME value as int or string
 
         Returns:
             datetime object
+
         """
         try:
             filetime = int(filetime_value)
@@ -183,14 +181,14 @@ class DataProcessingMixin:
             return datetime.datetime.min
 
     def convert_account_expires(self, expires_value: Union[int, str]) -> str:
-        """
-        Convert account expires timestamp to human-readable format.
+        """Convert account expires timestamp to human-readable format.
 
         Args:
             expires_value: Expires timestamp
 
         Returns:
             Human-readable expiration string
+
         """
         try:
             expires = int(expires_value)
@@ -203,14 +201,14 @@ class DataProcessingMixin:
             return "Invalid"
 
     def process_change_record(self, record: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Process a change record and add human-readable explanations.
+        """Process a change record and add human-readable explanations.
 
         Args:
             record: Dictionary containing change data
 
         Returns:
             Enhanced record with explanation field
+
         """
         record = record.copy()
         attr_name = record.get("attribute_name", "").lower()
@@ -248,8 +246,7 @@ class DataProcessingMixin:
     def format_change_output(
         self, changes: List[Dict[str, Any]], format_type: str = "table"
     ) -> str:
-        """
-        Format change records for output.
+        """Format change records for output.
 
         Args:
             changes: List of change records
@@ -257,6 +254,7 @@ class DataProcessingMixin:
 
         Returns:
             Formatted output string
+
         """
         if format_type == "json":
             import json

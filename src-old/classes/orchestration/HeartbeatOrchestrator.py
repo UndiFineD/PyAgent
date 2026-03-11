@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/HeartbeatOrchestrator.description.md
 
@@ -81,14 +80,13 @@ LLM_CONTEXT_END
 """
 
 import logging
-import time
 import threading
-from typing import Dict, List, Any, Optional
+import time
+from typing import Dict
 
 
 class HeartbeatOrchestrator:
-    """
-    Ensures the swarm processes remain alive via a distributed watchdog system.
+    """Ensures the swarm processes remain alive via a distributed watchdog system.
     Monitors agent health and attempts to respawn or alert on failure.
     """
 

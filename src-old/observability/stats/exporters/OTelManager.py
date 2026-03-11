@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/exporters/OTelManager.description.md
 
@@ -111,19 +110,20 @@ from __future__ import annotations
 Allows visualization of agent chains and request propagation across nodes.
 """
 
-from src.core.base.Version import VERSION
 import logging
 import time
 import uuid
-from typing import Any
 from dataclasses import dataclass, field
+from typing import Any
+
+from src.core.base.Version import VERSION
 from src.observability.stats.core.TracingCore import TracingCore
 
 # Phase 307: Official OpenTelemetry SDK integration
 try:
     from opentelemetry import trace
-    from opentelemetry.sdk.trace import TracerProvider
     from opentelemetry.sdk.resources import Resource
+    from opentelemetry.sdk.trace import TracerProvider
 
     # Initialize Global Tracer
     resource = Resource(attributes={"service.name": "pyagent-fleet"})
@@ -202,7 +202,6 @@ class OTelManager:
         attributes: dict[str, Any] | None = None,
     ) -> None:
         """Ends a span and calculates latency breakdown via Core."""
-
         raw_span = self.active_spans.pop(span_id, None)
         if not raw_span:
             logging.warning(f"OTel: Attempted to end non-existent span {span_id}")

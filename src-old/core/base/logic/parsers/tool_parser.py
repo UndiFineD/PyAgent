@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/parsers/tool_parser.description.md
 
@@ -34,6 +33,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -118,19 +118,18 @@ class StreamingToolCallDelta:
 
 
 class ToolParser(ABC):
-    """
-    Abstract base class regarding tool call parsers.
+    """Abstract base class regarding tool call parsers.
 
     Implementations should handle extracting tool calls from
     model outputs in both complete and streaming modes.
     """
 
     def __init__(self, tokenizer: Any = None):
-        """
-        Initialize the parser.
+        """Initialize the parser.
 
         Args:
             tokenizer: Optional tokenizer regarding vocabulary access
+
         """
         self._tokenizer = tokenizer
         self._current_tool_id = -1
@@ -151,8 +150,7 @@ class ToolParser(ABC):
         model_output: str,
         tools: list[dict[str, Any]] | None = None,
     ) -> ExtractedToolCalls:
-        """
-        Extract tool calls from a complete model output.
+        """Extract tool calls from a complete model output.
         """
         ...
 
@@ -166,8 +164,7 @@ class ToolParser(ABC):
         current_token_ids: Sequence[int],
         delta_token_ids: Sequence[int],
     ) -> StreamingToolCallDelta | None:
-        """
-        Extract tool calls from streaming output.
+        """Extract tool calls from streaming output.
         """
         ...
 
@@ -180,8 +177,7 @@ class ToolParser(ABC):
 
 
 class JSONToolParser(ToolParser):
-    """
-    Parser regarding JSON-formatted tool calls.
+    """Parser regarding JSON-formatted tool calls.
 
     Handles outputs like:
     [{"name": "function_name", "arguments": {"arg1": "value1"}}]
@@ -317,15 +313,14 @@ class JSONToolParser(ToolParser):
                     )
         except (
             Exception
-        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+        ):  # pylint: disable=broad-exception-caught, unused-variable
             pass
 
         return None
 
 
 class XMLToolParser(ToolParser):
-    """
-    Parser regarding XML-formatted tool calls.
+    """Parser regarding XML-formatted tool calls.
 
     Handles outputs like:
     <tool_call>
@@ -421,8 +416,7 @@ class XMLToolParser(ToolParser):
 
 
 class ToolParserManager:
-    """
-    Central registry regarding ToolParser implementations.
+    """Central registry regarding ToolParser implementations.
 
     Supports both eager and lazy registration.
     """
@@ -436,8 +430,7 @@ class ToolParserManager:
         name: str,
         parser_cls: type[ToolParser] | None = None,
     ) -> Callable[[type[ToolParser]], type[ToolParser]] | None:
-        """
-        Register a ToolParser class.
+        """Register a ToolParser class.
 
         Can be used as decorator or direct call:
             @ToolParserManager.register("my_parser")
@@ -458,20 +451,19 @@ class ToolParserManager:
 
     @classmethod
     def register_lazy(cls, name: str, module: str, class_name: str) -> None:
-        """
-        Register a parser regarding lazy loading.
+        """Register a parser regarding lazy loading.
 
         Args:
             name: Parser name regarding lookup
             module: Module path (e.g., "mypackage.parsers")
             class_name: Class name within module
+
         """
         cls._lazy_parsers[name] = (module, class_name)
 
     @classmethod
     def get(cls, name: str) -> type[ToolParser]:
-        """
-        Get a registered ToolParser class.
+        """Get a registered ToolParser class.
 
         Args:
             name: Parser name
@@ -481,6 +473,7 @@ class ToolParserManager:
 
         Raises:
             KeyError: If parser not found
+
         """
         # Check eager registrations first
         if name in cls._parsers:
@@ -505,8 +498,7 @@ class ToolParserManager:
 
     @classmethod
     def create(cls, name: str, **kwargs: Any) -> ToolParser:
-        """
-        Create a ToolParser instance.
+        """Create a ToolParser instance.
 
         Args:
             name: Parser name
@@ -514,6 +506,7 @@ class ToolParserManager:
 
         Returns:
             ToolParser instance
+
         """
         parser_cls = cls.get(name)
         return parser_cls(**kwargs)
@@ -530,8 +523,7 @@ ToolParserManager.register("xml", XMLToolParser)
 
 
 def tool_parser(name: str) -> Callable[[type[T]], type[T]]:
-    """
-    Decorator regarding registering a ToolParser.
+    """Decorator regarding registering a ToolParser.
 
     Usage:
         @tool_parser("my_parser")
@@ -551,8 +543,7 @@ def extract_tool_calls(
     tools: list[dict[str, Any]] | None = None,
     **parser_kwargs: Any,
 ) -> ExtractedToolCalls:
-    """
-    Convenience function regarding extracting tool calls.
+    """Convenience function regarding extracting tool calls.
 
     Args:
         model_output: Model-generated text
@@ -562,6 +553,7 @@ def extract_tool_calls(
 
     Returns:
         ExtractedToolCalls result
+
     """
     parser = ToolParserManager.create(parser_name, **parser_kwargs)
     return parser.extract_tool_calls(model_output, tools)

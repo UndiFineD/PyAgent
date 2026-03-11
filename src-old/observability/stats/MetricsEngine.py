@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/MetricsEngine.description.md
 
@@ -117,22 +116,21 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Unified logic for metric calculation, processing, and management.
-
 import json
 import logging
 import time
 from dataclasses import asdict
-from typing import Any
 from pathlib import Path
-from .ObservabilityCore import (
-    AgentMetric,
-    ObservabilityCore,
-)
+from typing import Any
 
 # Import pure calculation cores
 from .MetricsCore import (
-    TokenCostCore,
     ModelFallbackCore,
+    TokenCostCore,
+)
+from .ObservabilityCore import (
+    AgentMetric,
+    ObservabilityCore,
 )
 
 try:
@@ -140,7 +138,7 @@ try:
 except ImportError:
 
     psutil = None
-from .exporters import PrometheusExporter, OTelManager, MetricsExporter
+from .exporters import MetricsExporter, OTelManager, PrometheusExporter
 
 try:
     from src.observability.reports.GrafanaGenerator import (
@@ -188,6 +186,7 @@ class ObservabilityEngine:
             event_type: The category of event (e.g., 'task_complete', 'error').
             data: Payload of the event.
             level: Severity level (INFO, WARNING, ERROR, CRITICAL).
+
         """
         # Noise Reduction: Only store significant events in the persistent log buffer.
         # Metrics are still recorded for everything.
@@ -231,8 +230,7 @@ class ObservabilityEngine:
         return self.metrics_exporter.get_prometheus_payload()
 
     def generate_dashboard(self, shard_name: str | None = None) -> str:
-        """
-        Triggers Grafana JSON dashboard generation (Phase 126).
+        """Triggers Grafana JSON dashboard generation (Phase 126).
         """
         if GrafanaGenerator:
             generator = GrafanaGenerator(self.workspace_root / "deploy" / "grafana")

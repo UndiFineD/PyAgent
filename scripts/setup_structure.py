@@ -1,5 +1,4 @@
-"""
-Create the "project/..." skeleton used by the core-structure tests.
+"""Create the "project/..." skeleton used by the core-structure tests.
 
 This helper is deliberately dumb – it just makes a bunch of directories
 and creates empty placeholder files so that the TDD tests can exercise

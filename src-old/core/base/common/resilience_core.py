@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/resilience_core.description.md
 
@@ -29,9 +28,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -56,7 +57,7 @@ import functools
 import logging
 import random
 import threading
-from typing import Any, Callable, Coroutine, TypeVar, cast
+from typing import Any, Callable, Coroutine, TypeVar
 
 try:
     import rust_core as rc
@@ -71,8 +72,7 @@ T = TypeVar("T")
 
 
 class ResilienceCore(BaseCore):
-    """
-    Standard implementation of Agent Resilience and Fault Tolerance.
+    """Standard implementation of Agent Resilience and Fault Tolerance.
     Inherits from BaseCore for lifecycle management and environment awareness.
     """
 
@@ -130,7 +130,7 @@ class ResilienceCore(BaseCore):
                             except Exception:
                                 # If even that fails, there's nothing reasonable to do
                                 logger.debug("ResilienceCore: fallback wait also failed")
-                        
+
                         return run_attempt(attempt + 1, current_delay * backoff)
 
                 return run_attempt(0, delay)
@@ -186,8 +186,7 @@ class ResilienceCore(BaseCore):
         max_timeout: float,
         jitter_mode: str = "full",
     ) -> float:
-        """
-        Calculates exponential backoff with configurable jitter.
+        """Calculates exponential backoff with configurable jitter.
         """
         if rc:
             try:
@@ -235,8 +234,7 @@ class ResilienceCore(BaseCore):
         failure_count: int,
         failure_threshold: int,
     ) -> str:
-        """
-        Pure state machine logic for circuit breaker transitions.
+        """Pure state machine logic for circuit breaker transitions.
         """
         if rc:
             try:
@@ -271,8 +269,7 @@ class ResilienceCore(BaseCore):
         _last_failure_time: float,
         thresholds: dict[str, Any],
     ) -> tuple[str, int, int]:
-        """
-        Updates circuit breaker state based on the outcome of an operation.
+        """Updates circuit breaker state based on the outcome of an operation.
         """
         failure_threshold = thresholds.get("failure_threshold", 5)
         consecutive_successes_needed = thresholds.get("consecutive_successes_needed", 3)

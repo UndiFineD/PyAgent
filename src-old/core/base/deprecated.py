@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/deprecated.description.md
 
 # deprecated
 
-**File**: `src\core\base\deprecated.py`  
+**File**: `src\\core\base\\deprecated.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 4 imports  
 **Lines**: 35  
@@ -30,7 +29,7 @@ Central orchestrator for coordinating specialized AI agents in code improvement 
 
 # Improvements for deprecated
 
-**File**: `src\core\base\deprecated.py`  
+**File**: `src\\core\base\\deprecated.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 35 lines (small)  
 **Complexity**: 0 score (simple)
@@ -78,9 +77,10 @@ from __future__ import annotations
 
 """Central orchestrator for coordinating specialized AI agents in code improvement workflows."""
 
-from src.core.base.version import VERSION
 import sys
 from pathlib import Path
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

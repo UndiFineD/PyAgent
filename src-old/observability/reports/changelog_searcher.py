@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/changelog_searcher.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -73,6 +74,7 @@ class ChangelogSearcher:
     Example:
         >>> searcher=ChangelogSearcher()
         >>> results=searcher.search("bug fix", changelog_content)
+
     """
 
     def search(self, query: str, content: str) -> list[SearchResult]:
@@ -84,6 +86,7 @@ class ChangelogSearcher:
 
         Returns:
             List of search results.
+
         """
         # Rust-accelerated search
         if _RUST_AVAILABLE:
@@ -148,6 +151,7 @@ class ChangelogSearcher:
 
         Returns:
             Score between 0 and 1.
+
         """
         query_lower = query.lower()
         text_lower = text.lower()

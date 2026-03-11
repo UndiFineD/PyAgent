@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/structures/RingBuffer.description.md
 
 # RingBuffer
 
-**File**: `src\core\base\structures\RingBuffer.py`  
+**File**: `src\\core\base\\structures\\RingBuffer.py`  
 **Type**: Python Module  
 **Summary**: 5 classes, 0 functions, 10 imports  
 **Lines**: 546  
@@ -154,7 +153,7 @@ Example:
 
 # Improvements for RingBuffer
 
-**File**: `src\core\base\structures\RingBuffer.py`  
+**File**: `src\\core\base\\structures\\RingBuffer.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 546 lines (large)  
 **Complexity**: 45 score (complex)
@@ -188,6 +187,7 @@ Example:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -203,19 +203,18 @@ Goes beyond vLLM with lock-free ring buffer patterns:
 
 Phase 18: Beyond vLLM - Advanced Data Structures
 """
+import statistics
 import threading
 import time
 from collections.abc import Iterator
 from dataclasses import dataclass
-from typing import TypeVar, Generic, Any, Callable
-import statistics
+from typing import Generic, TypeVar
 
 T = TypeVar("T")
 
 
 class RingBuffer(Generic[T]):
-    """
-    Fixed-size circular buffer with O(1) operations.
+    """Fixed-size circular buffer with O(1) operations.
 
     When full, new items overwrite the oldest items.
 
@@ -225,14 +224,15 @@ class RingBuffer(Generic[T]):
         ...     rb.append(i)
         >>>
         >>> list(rb)  # [5, 6, 7, 8, 9] (oldest 0-4 overwritten)
+
     """
 
     def __init__(self, capacity: int) -> None:
-        """
-        Initialize ring buffer.
+        """Initialize ring buffer.
 
         Args:
             capacity: Maximum number of items
+
         """
         if capacity <= 0:
             raise ValueError("Capacity must be positive")
@@ -265,14 +265,14 @@ class RingBuffer(Generic[T]):
         return self._size == self._capacity
 
     def append(self, item: T) -> T | None:
-        """
-        Add item to buffer.
+        """Add item to buffer.
 
         Args:
             item: Item to add
 
         Returns:
             Overwritten item if buffer was full, None otherwise
+
         """
         overwritten = None
 
@@ -290,14 +290,14 @@ class RingBuffer(Generic[T]):
         return overwritten
 
     def pop(self) -> T:
-        """
-        Remove and return oldest item.
+        """Remove and return oldest item.
 
         Returns:
             Oldest item
 
         Raises:
             IndexError: If buffer is empty
+
         """
         if self._size == 0:
             raise IndexError("Pop from empty buffer")
@@ -310,14 +310,14 @@ class RingBuffer(Generic[T]):
         return item  # type: ignore
 
     def peek(self) -> T:
-        """
-        Return oldest item without removing.
+        """Return oldest item without removing.
 
         Returns:
             Oldest item
 
         Raises:
             IndexError: If buffer is empty
+
         """
         if self._size == 0:
             raise IndexError("Peek from empty buffer")
@@ -325,14 +325,14 @@ class RingBuffer(Generic[T]):
         return self._buffer[self._tail]  # type: ignore
 
     def peek_newest(self) -> T:
-        """
-        Return newest item without removing.
+        """Return newest item without removing.
 
         Returns:
             Newest item
 
         Raises:
             IndexError: If buffer is empty
+
         """
         if self._size == 0:
             raise IndexError("Peek from empty buffer")
@@ -388,8 +388,7 @@ class RingBuffer(Generic[T]):
 
 
 class ThreadSafeRingBuffer(Generic[T]):
-    """
-    Thread-safe version of RingBuffer.
+    """Thread-safe version of RingBuffer.
 
     Uses locking for safe concurrent access.
     """
@@ -460,8 +459,7 @@ class TimestampedValue(Generic[T]):
 
 
 class TimeSeriesBuffer(Generic[T]):
-    """
-    Ring buffer with time-based operations.
+    """Ring buffer with time-based operations.
 
     Useful for metrics collection with time windows.
 
@@ -472,6 +470,7 @@ class TimeSeriesBuffer(Generic[T]):
         >>> ts.append(98.2)
         >>>
         >>> print(ts.get_window_stats(window_seconds=10.0))
+
     """
 
     def __init__(
@@ -479,12 +478,12 @@ class TimeSeriesBuffer(Generic[T]):
         capacity: int = 1000,
         max_age_seconds: float | None = None,
     ) -> None:
-        """
-        Initialize time-series buffer.
+        """Initialize time-series buffer.
 
         Args:
             capacity: Maximum number of samples
             max_age_seconds: Optional max age for samples
+
         """
         self._buffer = ThreadSafeRingBuffer[TimestampedValue[T]](capacity)
         self._max_age = max_age_seconds
@@ -557,8 +556,7 @@ class TimeSeriesBuffer(Generic[T]):
 
 
 class SlidingWindowAggregator:
-    """
-    Efficient sliding window aggregation for streaming metrics.
+    """Efficient sliding window aggregation for streaming metrics.
 
     Supports multiple aggregation functions with O(1) updates.
 
@@ -570,6 +568,7 @@ class SlidingWindowAggregator:
         >>> agg.add(120.0)
         >>>
         >>> print(f"Avg: {agg.mean()}, P99: {agg.percentile(99)}")
+
     """
 
     def __init__(
@@ -577,12 +576,12 @@ class SlidingWindowAggregator:
         window_seconds: float = 60.0,
         bucket_seconds: float = 1.0,
     ) -> None:
-        """
-        Initialize sliding window aggregator.
+        """Initialize sliding window aggregator.
 
         Args:
             window_seconds: Total window duration
             bucket_seconds: Duration of each bucket
+
         """
         self._window_seconds = window_seconds
         self._bucket_seconds = bucket_seconds
@@ -683,14 +682,14 @@ class SlidingWindowAggregator:
             return max(maxs) if maxs else 0.0
 
     def percentile(self, p: float) -> float:
-        """
-        Get percentile value.
+        """Get percentile value.
 
         Args:
             p: Percentile (0-100)
 
         Returns:
             Percentile value
+
         """
         values = self._get_all_values()
 

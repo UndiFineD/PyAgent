@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/crypto_mixin.description.md
 
 # crypto_mixin
 
-**File**: `src\core\base\mixins\crypto_mixin.py`  
+**File**: `src\\core\base\\mixins\\crypto_mixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 53  
@@ -47,7 +46,7 @@ Mixin providing cryptographic operations for Windows environments.
 
 # Improvements for crypto_mixin
 
-**File**: `src\core\base\mixins\crypto_mixin.py`  
+**File**: `src\\core\base\\mixins\\crypto_mixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 53 lines (small)  
 **Complexity**: 5 score (moderate)
@@ -78,6 +77,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -98,7 +98,6 @@ Inspired by ADSyncDump-BOF decryption patterns.
 """
 
 
-import base64
 import platform
 from typing import Any, Optional
 
@@ -111,7 +110,7 @@ class CryptoMixin:
     def __init__(self, **kwargs: Any) -> None:
         if platform.system() != "Windows":
             raise RuntimeError("CryptoMixin is only supported on Windows")
-        
+
         self.crypto_core = CryptoCore()
 
     def decrypt_dpapi_blob(self, encrypted_data: bytes, entropy: Optional[bytes] = None) -> Optional[bytes]:

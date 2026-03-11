@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/CodeQualityAgent.description.md
 
@@ -83,15 +82,13 @@ LLM_CONTEXT_END
 """
 
 import os
-import subprocess
-import json
-from typing import Dict, List, Any
+from typing import Any, Dict, List
+
 from src.classes.base_agent import BaseAgent
 
 
 class CodeQualityAgent(BaseAgent):
-    """
-    Automated Code Quality Guard: Performs linting, formatting checks,
+    """Automated Code Quality Guard: Performs linting, formatting checks,
     and complexity analysis for Python, Rust, and JavaScript.
     """
 

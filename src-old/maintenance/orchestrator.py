@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/maintenance/orchestrator.description.md
 
@@ -31,6 +30,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -48,7 +48,6 @@ audits, configuration hygiene checks, and environment stabilization.
 
 import logging
 from typing import Any
-from pathlib import Path
 
 from src.core.base.lifecycle.version import VERSION
 from src.maintenance.workspace_maintenance import WorkspaceMaintenance
@@ -57,8 +56,7 @@ __version__ = VERSION
 
 
 class MaintenanceOrchestrator:
-    """
-    Central coordinator for system-wide maintenance cycles in the PyAgent fleet.
+    """Central coordinator for system-wide maintenance cycles in the PyAgent fleet.
 
     Acts as the primary lifecycle manager for Tier 5 (Maintenance) operations.
     It triggers dependency audits, workspace cleanup (TTL-based), and

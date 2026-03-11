@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/SynthesisAgent.description.md
 
@@ -84,6 +83,13 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import logging
+import os
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -96,21 +102,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import logging
-import os
-from typing import Dict, List, Any
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
 
 class SynthesisAgent(BaseAgent):
-    """
-    Tier 2 (Cognitive Logic) - Synthesis Agent: Responsible for Swarm Synthesis,
+    """Tier 2 (Cognitive Logic) - Synthesis Agent: Responsible for Swarm Synthesis,
     merging specialized agent capabilities into optimized super-agent architectures.
     """
 
@@ -132,12 +130,12 @@ class SynthesisAgent(BaseAgent):
     def fuse_agents(
         self, agent_names: list[str], new_agent_name: str
     ) -> dict[str, Any]:
-        """
-        Creates a new agent that combines functionalities of multiple source agents.
+        """Creates a new agent that combines functionalities of multiple source agents.
 
         Args:
             agent_names: List of existing agent class names to fuse.
             new_agent_name: The name of the new fused agent class.
+
         """
         logging.info(f"SynthesisAgent: Fusing {agent_names} into {new_agent_name}")
 
@@ -186,8 +184,7 @@ class SynthesisAgent(BaseAgent):
     def analyze_fusion_candidates(
         self, fleet_agents: list[str]
     ) -> list[dict[str, Any]]:
-        """
-        Analyzes the fleet to suggest which agents should be fused based on usage patterns.
+        """Analyzes the fleet to suggest which agents should be fused based on usage patterns.
         """
         logging.info("SynthesisAgent: Analyzing fleet for fusion candidates.")
         # This would typically use telemetry to find agents that frequently call each other.

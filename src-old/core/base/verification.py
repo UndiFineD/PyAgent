@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/verification.description.md
 
 # verification
 
-**File**: `src\core\base\verification.py`  
+**File**: `src\\core\base\verification.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 11 imports  
 **Lines**: 159  
@@ -73,7 +72,7 @@ Handles quality and anchoring verification of agent responses.
 
 # Improvements for verification
 
-**File**: `src\core\base\verification.py`  
+**File**: `src\\core\base\verification.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 159 lines (medium)  
 **Complexity**: 8 score (moderate)
@@ -113,15 +112,13 @@ class VerificationCore:
 
     @staticmethod
     def fact_check(code_snippet: str, agent_id: str) -> Dict[str, Any]:
-        """
-        Cross-references generated code snippets against the sharded knowledge base (Phase 257).
+        """Cross-references generated code snippets against the sharded knowledge base (Phase 257).
         """
         return {"valid": True, "hallucinations": []}
 
     @staticmethod
     def secondary_verify(result: str, primary_model: str) -> bool:
-        """
-        Performs a cross-model verification loop (Phase 258).
+        """Performs a cross-model verification loop (Phase 258).
         A faster model reviews the primary model's output.
         """
         # In a real implementation, this would call a different backend
@@ -129,8 +126,7 @@ class VerificationCore:
 
     @staticmethod
     def jury_verification(agent_responses: list[bool]) -> bool:
-        """
-        Implements a 'Jury of Agents' consensus (Phase 258).
+        """Implements a 'Jury of Agents' consensus (Phase 258).
         Requires majority or unanimity based on risk.
         """
         if not agent_responses:

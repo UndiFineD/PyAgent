@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/KnowledgeTransferCore.description.md
 
 # KnowledgeTransferCore
 
-**File**: `src\classes\fleet\KnowledgeTransferCore.py`  
+**File**: `src\\classes\fleet\\KnowledgeTransferCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 31  
@@ -39,7 +38,7 @@ Handles merging of lesson datasets.
 
 # Improvements for KnowledgeTransferCore
 
-**File**: `src\classes\fleet\KnowledgeTransferCore.py`  
+**File**: `src\\classes\fleet\\KnowledgeTransferCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 31 lines (small)  
 **Complexity**: 1 score (simple)
@@ -72,12 +71,11 @@ Handles merging of lesson datasets.
 LLM_CONTEXT_END
 """
 
-from typing import List, Dict, Any, Set
+from typing import Any, List, Set
 
 
 class KnowledgeTransferCore:
-    """
-    Pure logic for Knowledge Transfer.
+    """Pure logic for Knowledge Transfer.
     Handles merging of lesson datasets.
     """
 

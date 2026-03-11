@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/intelligence/CsvAgent.description.md
 
 # CsvAgent
 
-**File**: `src\logic\agents\intelligence\CsvAgent.py`  
+**File**: `src\\logic\agents\\intelligence\\CsvAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 42  
@@ -42,7 +41,7 @@ Agent for CSV data cleaning, analysis, and transformation.
 
 # Improvements for CsvAgent
 
-**File**: `src\logic\agents\intelligence\CsvAgent.py`  
+**File**: `src\\logic\agents\\intelligence\\CsvAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 42 lines (small)  
 **Complexity**: 2 score (simple)
@@ -90,9 +89,9 @@ from __future__ import annotations
 
 """Agent specializing in CSV and tabular data processing."""
 
-from src.core.base.version import VERSION
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import create_main_function
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

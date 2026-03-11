@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/SelfOptimizerAgent.description.md
 
 # SelfOptimizerAgent
 
-**File**: `src\logic\agents\development\SelfOptimizerAgent.py`  
+**File**: `src\\logic\agents\\development\\SelfOptimizerAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 122  
@@ -46,7 +45,7 @@ Analyses the workspace status and suggests strategic improvements.
 
 # Improvements for SelfOptimizerAgent
 
-**File**: `src\logic\agents\development\SelfOptimizerAgent.py`  
+**File**: `src\\logic\agents\\development\\SelfOptimizerAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 122 lines (medium)  
 **Complexity**: 4 score (simple)
@@ -94,11 +93,11 @@ from __future__ import annotations
 
 """Agent specializing in self-optimization and roadmap refinement."""
 
-from src.core.base.Version import VERSION
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.BaseUtilities import create_main_function
-from src.observability.stats.Monitoring import ResourceMonitor
+from src.core.base.Version import VERSION
 from src.observability.stats.MetricsEngine import ObservabilityEngine
+from src.observability.stats.Monitoring import ResourceMonitor
 
 __version__ = VERSION
 

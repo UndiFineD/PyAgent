@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/agent_coder.description.md
 
@@ -47,9 +46,9 @@ LLM_CONTEXT_END
 
 """Agent specializing in code generation, refactoring, and style enforcement."""
 
-from src.version import VERSION
 import sys
 from pathlib import Path
+
 from src.classes.base_agent import create_main_function
 from src.logic.agents.development.coder_agent import CoderAgent
 

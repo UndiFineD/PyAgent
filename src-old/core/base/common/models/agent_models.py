@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/models/agent_models.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -48,9 +48,10 @@ from __future__ import annotations
 import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any
 from functools import reduce
-from .base_models import (_empty_dict_str_any, _empty_dict_str_callable_any_any, _empty_list_str)
+from typing import Any
+
+from .base_models import _empty_dict_str_any, _empty_dict_str_callable_any_any, _empty_list_str
 from .core_enums import AgentPriority, HealthStatus
 
 

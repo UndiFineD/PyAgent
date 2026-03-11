@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/interface/slash_commands/core.description.md
 
@@ -31,6 +30,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -354,14 +354,14 @@ class ParsedCommand:
 
 
 def parse_commands(prompt: str) -> list[ParsedCommand]:
-    """
-    Parse slash commands from a prompt.
+    """Parse slash commands from a prompt.
 
     Args:
         prompt: The input prompt text
 
     Returns:
         List of parsed commands with positions
+
     """
     commands = []
 
@@ -426,14 +426,14 @@ class ProcessedPrompt:
 
 
 class SlashCommands:
-    """
-    Slash command parser and executor for chat prompts.
+    """Slash command parser and executor for chat prompts.
 
     Example:
         >>> slash = SlashCommands()
         >>> result = slash.process("What is /datetime the current time?")
         >>> print(result.processed_prompt)
         "What is [2026-01-17 10:30:00 UTC] the current time?"
+
     """
 
     def __init__(
@@ -443,13 +443,13 @@ class SlashCommands:
         prefix: str = "/",
         auto_load: bool = True,
     ) -> None:
-        """
-        Initialize SlashCommands.
+        """Initialize SlashCommands.
 
         Args:
             registry: Custom command registry (creates new if None)
             prefix: Command prefix (default: "/")
             auto_load: Whether to auto-load built-in commands
+
         """
         from .registry import get_global_registry
 
@@ -468,8 +468,7 @@ class SlashCommands:
     def execute(
         self, command: str, args: list[str] | None = None, **metadata: Any
     ) -> CommandResult:
-        """
-        Execute a single command.
+        """Execute a single command.
 
         Args:
             command: Command name (without prefix)
@@ -478,6 +477,7 @@ class SlashCommands:
 
         Returns:
             CommandResult with output
+
         """
         defn = self.registry.get(command.lower())
         if not defn:
@@ -510,8 +510,7 @@ class SlashCommands:
         inline_results: bool = True,
         **metadata: Any,
     ) -> ProcessedPrompt:
-        """
-        Process a prompt, executing all slash commands.
+        """Process a prompt, executing all slash commands.
 
         Args:
             prompt: The input prompt
@@ -521,6 +520,7 @@ class SlashCommands:
 
         Returns:
             ProcessedPrompt with results and modified text
+
         """
         parsed = self.parse(prompt)
         results: list[tuple[ParsedCommand, CommandResult]] = []

@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/core/ByzantineCore.description.md
 
 # ByzantineCore
 
-**File**: `src\logic\agents\security\core\ByzantineCore.py`  
+**File**: `src\\logic\agents\\security\\core\\ByzantineCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 75  
@@ -41,7 +40,7 @@ Calculates weighted agreement scores and detect malicious deviations.
 
 # Improvements for ByzantineCore
 
-**File**: `src\logic\agents\security\core\ByzantineCore.py`  
+**File**: `src\\logic\agents\\security\\core\\ByzantineCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 75 lines (small)  
 **Complexity**: 4 score (simple)
@@ -75,6 +74,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -88,54 +88,49 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Dict, List
 
 class ByzantineCore:
-    """
-    Pure logic for Byzantine Fault Tolerance (BFT) consensus.
+    """Pure logic for Byzantine Fault Tolerance (BFT) consensus.
     Calculates weighted agreement scores and detect malicious deviations.
     """
-    
+
     def calculate_agreement_score(self, votes: list[dict[str, any]]) -> float:
-        """
-        Calculates the consensus score.
+        """Calculates the consensus score.
         votes: list of {'weight': float, 'hash': str}
         """
         if not votes:
             return 0.0
-            
+
         total_weight = sum(v['weight'] for v in votes)
         hash_weights = {}
-        
+
         for v in votes:
             h = v['hash']
             hash_weights[h] = hash_weights.get(h, 0.0) + v['weight']
-            
+
         if not total_weight:
             return 0.0
-            
+
         max_agreement = max(hash_weights.values())
         return max_agreement / total_weight
 
     def select_committee(self, agents_reliability: dict[str, float], min_size: int = 3) -> list[str]:
-        """
-        Scales the committee based on historic reliability scores.
+        """Scales the committee based on historic reliability scores.
         Only recruits agents with reliability > 0.7.
         """
         eligible = [(name, score) for name, score in agents_reliability.items() if score > 0.7]
         # Sort by reliability descending
         eligible.sort(key=lambda x: x[1], reverse=True)
-        
+
         committee = [name for name, _ in eligible]
         if len(committee) < min_size:
             # Fallback to top N if not enough high-reliability agents
             return sorted(agents_reliability.keys(), key=lambda x: agents_reliability[x], reverse=True)[:min_size]
-        
+
         return committee
 
     def get_required_quorum(self, change_type: str) -> float:
-        """
-        Returns the variable quorum requirement based on the risk level.
+        """Returns the variable quorum requirement based on the risk level.
         Critical infrastructure: 0.8 (4/5)
         Documentation/Scripts: 0.5 (1/2)
         Default: 0.67 (2/3)

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/classification_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -102,8 +102,7 @@ class Taxonomy:
 
 # pylint: disable=too-many-ancestors
 class ClassificationAgent(BaseAgent):
-    """
-    Agent specializing in classifying text, code, or images into predefined categories.
+    """Agent specializing in classifying text, code, or images into predefined categories.
     Supports single-label, multi-label, and hierarchical classification.
     """
 

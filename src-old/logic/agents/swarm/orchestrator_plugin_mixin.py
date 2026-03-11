@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/orchestrator_plugin_mixin.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -114,7 +114,7 @@ class OrchestratorPluginMixin:
 
             try:
                 if hasattr(self, "rate_limiter"):
-                    getattr(self, "rate_limiter").acquire(timeout=30.0)
+                    self.rate_limiter.acquire(timeout=30.0)
 
                 with ThreadPoolExecutor(max_workers=1) as executor:
                     future = executor.submit(plugin.run, file_path, context)
@@ -126,7 +126,7 @@ class OrchestratorPluginMixin:
 
                 results[plugin.name] = result
                 if result and hasattr(self, "metrics"):
-                    metrics = getattr(self, "metrics")
+                    metrics = self.metrics
                     if "agents_applied" not in metrics:
                         metrics["agents_applied"] = {}
                     applied = metrics["agents_applied"]

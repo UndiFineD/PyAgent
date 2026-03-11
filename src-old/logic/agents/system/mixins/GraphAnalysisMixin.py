@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/mixins/GraphAnalysisMixin.description.md
 
 # GraphAnalysisMixin
 
-**File**: `src\logic\agents\system\mixins\GraphAnalysisMixin.py`  
+**File**: `src\\logic\agents\\system\\mixins\\GraphAnalysisMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 69  
@@ -41,7 +40,7 @@ Mixin for graph analysis and impact assessment in TopologicalNavigator.
 
 # Improvements for GraphAnalysisMixin
 
-**File**: `src\logic\agents\system\mixins\GraphAnalysisMixin.py`  
+**File**: `src\\logic\agents\\system\\mixins\\GraphAnalysisMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 69 lines (small)  
 **Complexity**: 3 score (simple)
@@ -76,12 +75,14 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+from typing import Any
+
+from src.core.base.BaseUtilities import as_tool
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 from src.logic.agents.system.TopologicalNavigator import TopologicalNavigator
 
-from typing import TYPE_CHECKING, Any
-from src.core.base.BaseUtilities import as_tool
 
 class GraphAnalysisMixin:
     """Mixin for graph analysis and impact assessment in TopologicalNavigator."""

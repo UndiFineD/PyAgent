@@ -1,6 +1,7 @@
 import os
 import re
 
+
 def restoration():
     for root, _, files in os.walk("src"):
         for file in files:
@@ -9,22 +10,22 @@ def restoration():
                 try:
                     with open(path, "r", encoding="utf-8") as f:
                         content = f.read()
-                    
+
                     original = content
-                    
+
                     # 1. Fix broken future imports
                     content = content.replace("from __future__ import lru_cache", "from functools import lru_cache")
-                    
+
                     # 2. Fix empty blocks caused by masking
                     content = re.sub(r"(if TYPE_CHECKING:)\n(\s*)#", r"\1\n\2pass\n\2#", content)
                     content = re.sub(r"(try:)\n(\s*)#", r"\1\n\2pass\n\2#", content)
                     content = re.sub(r"(except [\w.]+ as \w+:)\n(\s*)#", r"\1\n\2pass\n\2#", content)
                     content = re.sub(r"(except:\s*)\n(\s*)#", r"\1\n\2pass\n\2#", content)
-                    
+
                     # 3. Fix f-string break in CodeGenerator.py
                     if "CodeGenerator.py" in path:
                          content = content.replace('f"@lru_cache(maxsize=128)\ndef generated_function():\\n"', 'f"@lru_cache(maxsize=128)\\ndef generated_function():\\n"')
-                    
+
                     # 4. Fix specific logging quote mess
                     if "TestDataGenerator.py" in path:
                          content = re.sub(r"logging\.debug\(f'Fleet Debug: '(.*)'\b", r'logging.debug(f"Fleet Debug: \1"', content)

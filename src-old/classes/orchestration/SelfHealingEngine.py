@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/SelfHealingEngine.description.md
 
@@ -85,17 +84,18 @@ Detects runtime errors and orchestrates CoderAgents to apply fixes.
 
 import logging
 import traceback
-from typing import Dict, List, Any, Optional, Type
+from typing import Any, Dict, List
+
 from src.classes.base_agent import BaseAgent
 
 from .SelfHealingEngineCore import SelfHealingEngineCore
 
+
 class SelfHealingEngine:
-    """
-    Monitors tool execution and attempts automatic fixes for crashes.
+    """Monitors tool execution and attempts automatic fixes for crashes.
     Shell for SelfHealingEngineCore.
     """
-    
+
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = workspace_root
         self.failure_history: List[Dict[str, Any]] = []
@@ -106,11 +106,11 @@ class SelfHealingEngine:
         tb = traceback.format_exc()
         agent_name = agent.__class__.__name__
         logging.error(f"SELF-HEAL: Failure in {agent_name}.{tool_name}: {error}\n{tb}")
-        
+
         analysis = self.core.analyze_failure(agent_name, tool_name, str(error), tb)
         analysis["context"] = context
         self.failure_history.append(analysis)
-        
+
         # Fixed logic: communicate strategy
         return f"Self-Healing initiated: Strategy '{analysis['strategy']}' assigned to {tool_name}."
 

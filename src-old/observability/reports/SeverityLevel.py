@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/SeverityLevel.description.md
 
 # SeverityLevel
 
-**File**: `src\observability\reports\SeverityLevel.py`  
+**File**: `src\\observability\reports\\SeverityLevel.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 30  
@@ -37,7 +36,7 @@ Severity level for issues.
 
 # Improvements for SeverityLevel
 
-**File**: `src\observability\reports\SeverityLevel.py`  
+**File**: `src\\observability\reports\\SeverityLevel.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 30 lines (small)  
 **Complexity**: 0 score (simple)
@@ -85,8 +84,9 @@ from __future__ import annotations
 
 """Auto-extracted class from generate_agent_reports.py"""
 
-from src.core.base.version import VERSION
 from enum import Enum
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

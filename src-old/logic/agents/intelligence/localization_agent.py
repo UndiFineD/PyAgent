@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/intelligence/localization_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -62,8 +62,7 @@ __version__ = VERSION
 
 
 class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Handles localization and internationalization (i18n) tasks.
+    """Handles localization and internationalization (i18n) tasks.
     Integrated with LocalizationCore for cultural guardrails and multi-lang support.
     """
 
@@ -74,15 +73,13 @@ class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.supported_locales = self.core.get_supported_locales()
 
     def check_cultural_compliance(self, text: str) -> dict[str, Any]:
-        """
-        Runs cultural guardrails on agent communication.
+        """Runs cultural guardrails on agent communication.
         """
         issues = self.core.detect_cultural_issues(text)
         return {"compliant": not issues, "issues": issues, "count": len(issues)}
 
     async def translate_comment(self, text: str, target_lang: str) -> str:
-        """
-        Translates a single agent comment using the core's formatting.
+        """Translates a single agent comment using the core's formatting.
         """
         if target_lang not in self.supported_locales:
             logging.warning(

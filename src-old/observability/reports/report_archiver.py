@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/report_archiver.description.md
 
@@ -28,6 +27,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -63,35 +63,41 @@ AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
 class ReportArchiver:
     """Manager for report archiving with retention policies.
     Handles archiving, retrieval, and cleanup of historical reports.
+
     Attributes:
         archive_dir: Directory for archived reports.
         archives: In - memory archive index.
+
     Example:
         archiver=ReportArchiver(Path("./archives"))
         archiver.archive("file.py", report_content)
         old_reports=archiver.list_archives("file.py")
+
     """
 
     def __init__(self, archive_dir: Path | None = None) -> None:
         """Initialize archiver.
+
         Args:
             archive_dir: Directory for archives.
-        """
 
+        """
         self.archive_dir = archive_dir or AGENT_DIR / ".archives"
         self.archives: dict[str, list[ArchivedReport]] = {}
         logging.debug(f"ReportArchiver initialized at {self.archive_dir}")
 
     def archive(self, file_path: str, content: str, retention_days: int = 90) -> ArchivedReport:
         """Archive a report.
+
         Args:
             file_path: Source file path.
             content: Report content.
             retention_days: Days to retain.
+
         Returns:
             Created archive entry.
-        """
 
+        """
         report_id = f"{file_path}_{int(time.time())}"
         archived = ArchivedReport(
             report_id=report_id,
@@ -106,22 +112,26 @@ class ReportArchiver:
 
     def list_archives(self, file_path: str) -> list[ArchivedReport]:
         """List archives for a file.
+
         Args:
             file_path: File to list archives for.
+
         Returns:
             List of archived reports.
-        """
 
+        """
         return self.archives.get(file_path, [])
 
     def get_archive(self, report_id: str) -> ArchivedReport | None:
         """Get a specific archive.
+
         Args:
             report_id: Archive ID.
+
         Returns:
             Archived report if found.
-        """
 
+        """
         for archives in self.archives.values():
             for archive in archives:
                 if archive.report_id == report_id:
@@ -130,10 +140,11 @@ class ReportArchiver:
 
     def cleanup_expired(self) -> int:
         """Remove expired archives.
+
         Returns:
             Number of archives removed.
-        """
 
+        """
         removed = 0
         current_time = time.time()
         for file_path in list(self.archives.keys()):

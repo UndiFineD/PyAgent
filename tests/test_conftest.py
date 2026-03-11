@@ -81,7 +81,7 @@ def test_resolve_import_fixer_prefers_scripts_then_scripts_old(
 
     from conftest import SessionManager
     mgr = SessionManager(tmp_path)
-    resolver = getattr(mgr, "_resolve_import_fixer")
+    resolver = mgr._resolve_import_fixer
 
     scripts_old_fixer.touch()
     result = resolver()
@@ -114,7 +114,7 @@ def test_resolve_import_fixer_prefers_scripts_dir(tmp_path: Path) -> None:
     (scripts_old / "fix_leading_imports.py").write_text("print('old')\n", encoding="utf-8")
 
     manager = repo_conftest.SessionManager(tmp_path)
-    resolver = getattr(manager, "_resolve_import_fixer")
+    resolver = manager._resolve_import_fixer
     resolved = resolver()
 
     assert resolved == expected
@@ -129,7 +129,7 @@ def test_resolve_import_fixer_falls_back_to_scripts_old(tmp_path: Path) -> None:
     expected.write_text("print('fallback')\n", encoding="utf-8")
 
     manager = repo_conftest.SessionManager(tmp_path)
-    resolver = getattr(manager, "_resolve_import_fixer")
+    resolver = manager._resolve_import_fixer
     resolved = resolver()
 
     assert resolved == expected
@@ -138,6 +138,6 @@ def test_resolve_import_fixer_falls_back_to_scripts_old(tmp_path: Path) -> None:
 def test_resolve_import_fixer_returns_none_when_missing(tmp_path: Path) -> None:
     """Resolver should return None when fixer script is absent in both locations."""
     manager = repo_conftest.SessionManager(tmp_path)
-    resolver = getattr(manager, "_resolve_import_fixer")
+    resolver = manager._resolve_import_fixer
 
     assert resolver() is None

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/mixins/ContextShardMixin.description.md
 
 # ContextShardMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\mixins\ContextShardMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\mixins\\ContextShardMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 111  
@@ -41,7 +40,7 @@ Mixin for managing memory shards and persistence.
 
 # Improvements for ContextShardMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\mixins\ContextShardMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\mixins\\ContextShardMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 111 lines (medium)  
 **Complexity**: 4 score (simple)

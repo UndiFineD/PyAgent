@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/CognitiveSuperAgent.description.md
 
@@ -77,14 +76,12 @@ capabilities for high-performance cognitive workflows.
 LLM_CONTEXT_END
 """
 
-from typing import Dict, List, Any
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
 
 class CognitiveSuperAgent(BaseAgent):
-    """
-    Cognitive Super-Agent: A fused agent combining Reasoning and Reflection
+    """Cognitive Super-Agent: A fused agent combining Reasoning and Reflection
     capabilities for high-performance cognitive workflows.
     """
 

@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/core/LessonCore.description.md
 
 # LessonCore
 
-**File**: `src\logic\agents\swarm\core\LessonCore.py`  
+**File**: `src\\logic\agents\\swarm\\core\\LessonCore.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 5 imports  
 **Lines**: 42  
@@ -48,7 +47,7 @@ Uses bloom-filter-like hashing to track known failure modes.
 
 # Improvements for LessonCore
 
-**File**: `src\logic\agents\swarm\core\LessonCore.py`  
+**File**: `src\\logic\agents\\swarm\\core\\LessonCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 42 lines (small)  
 **Complexity**: 5 score (moderate)
@@ -87,7 +86,6 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 import hashlib
-from typing import List, Set
 from dataclasses import dataclass
 
 

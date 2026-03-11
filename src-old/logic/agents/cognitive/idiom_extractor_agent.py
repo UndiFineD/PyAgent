@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/idiom_extractor_agent.description.md
 
@@ -41,29 +40,29 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
 Idiom Extractor Agent for project-specific coding patterns.
 """
 
-import os
 import json
 import logging
+import os
 import re
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 # pylint: disable=too-many-ancestors
 class IdiomExtractorAgent(BaseAgent):
-    """
-    Agent responsible for extracting project-specific coding idioms and patterns.
+    """Agent responsible for extracting project-specific coding idioms and patterns.
     Maintains a .pyagent_idioms.json file to guide future code generation.
     """
 
@@ -73,8 +72,7 @@ class IdiomExtractorAgent(BaseAgent):
 
     @as_tool
     def extract_idioms(self, directory: str = "src") -> str:
-        """
-        Scans the specified directory for coding patterns and updates the idioms library.
+        """Scans the specified directory for coding patterns and updates the idioms library.
         """
         logging.info(f"IdiomExtractor: Scanning {directory} for idioms...")
 
@@ -140,8 +138,7 @@ class IdiomExtractorAgent(BaseAgent):
 
     @as_tool
     def get_current_idioms(self) -> dict[str, Any]:
-        """
-        Returns the currently stored project idioms.
+        """Returns the currently stored project idioms.
         """
         if os.path.exists(self.idioms_file):
             with open(self.idioms_file, encoding="utf-8") as f:

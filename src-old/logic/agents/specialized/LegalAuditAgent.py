@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialized/LegalAuditAgent.description.md
 
 # LegalAuditAgent
 
-**File**: `src\logic\agents\specialized\LegalAuditAgent.py`  
+**File**: `src\\logic\agents\\specialized\\LegalAuditAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 9 imports  
 **Lines**: 90  
@@ -47,7 +46,7 @@ license requirements (Apache 2.0 or MIT).
 
 # Improvements for LegalAuditAgent
 
-**File**: `src\logic\agents\specialized\LegalAuditAgent.py`  
+**File**: `src\\logic\agents\\specialized\\LegalAuditAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 90 lines (small)  
 **Complexity**: 1 score (simple)
@@ -82,6 +81,8 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import asyncio
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -94,18 +95,16 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import os
 import re
-import asyncio
-from typing import List, Dict, Any
+from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
 
 class LegalAuditAgent(BaseAgent):
-    """
-    Phase 286: Legal Audit Agent.
+    """Phase 286: Legal Audit Agent.
     Verifies that all source files and third-party code comply with the project's
     license requirements (Apache 2.0 or MIT).
     """

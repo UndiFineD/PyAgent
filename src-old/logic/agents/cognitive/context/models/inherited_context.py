@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/models/inherited_context.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -48,10 +48,10 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_context.py"""
 
+from dataclasses import dataclass, field
+
 from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.models.InheritanceMode import InheritanceMode
-from dataclasses import dataclass, field
-from typing import List
 
 __version__ = VERSION
 
@@ -65,6 +65,7 @@ class InheritedContext:
         inherited_sections: Sections inherited from parent.
         mode: Inheritance mode used.
         overrides: Sections that override parent.
+
     """
 
     parent_path: str

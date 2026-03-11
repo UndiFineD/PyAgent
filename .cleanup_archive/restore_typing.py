@@ -1,10 +1,11 @@
 import os
 import re
 
+
 def fix_file(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
-    
+
     changed = False
     new_lines = []
     for line in lines:
@@ -22,7 +23,7 @@ def fix_file(file_path):
                 new_lines.append(line)
         else:
             new_lines.append(line)
-            
+
     if changed:
         with open(file_path, 'w', encoding='utf-8') as f:
             f.writelines(new_lines)

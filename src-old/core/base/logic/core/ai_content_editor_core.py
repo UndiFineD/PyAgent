@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/ai_content_editor_core.description.md
 
 # ai_content_editor_core
 
-**File**: `src\core\base\logic\core\ai_content_editor_core.py`  
+**File**: `src\\core\base\\logic\\core\ai_content_editor_core.py`  
 **Type**: Python Module  
 **Summary**: 4 classes, 0 functions, 16 imports  
 **Lines**: 466  
@@ -81,7 +80,7 @@ using instruction-based approaches similar to advanced AI content editors.
 
 # Improvements for ai_content_editor_core
 
-**File**: `src\core\base\logic\core\ai_content_editor_core.py`  
+**File**: `src\\core\base\\logic\\core\ai_content_editor_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 466 lines (medium)  
 **Complexity**: 1 score (simple)
@@ -121,14 +120,9 @@ LLM_CONTEXT_END
 # Based on patterns from ACE_plus repository
 
 import asyncio
-import json
-import base64
-import io
-from typing import Dict, List, Optional, Any, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime
-from PIL import Image
-import numpy as np
+from typing import Any, Dict, List, Optional, Union
 
 from src.core.base.logic.core.base_core import BaseCore
 
@@ -136,6 +130,7 @@ from src.core.base.logic.core.base_core import BaseCore
 @dataclass
 class ContentEditRequest:
     """Request for content editing/generation"""
+
     instruction: str
     input_content: Optional[Union[str, bytes]] = None  # text or image data
     content_type: str = "text"  # text, image, audio, video
@@ -147,6 +142,7 @@ class ContentEditRequest:
 @dataclass
 class ContentEditResult:
     """Result of content editing operation"""
+
     output_content: Union[str, bytes]
     content_type: str
     confidence_score: float
@@ -158,6 +154,7 @@ class ContentEditResult:
 @dataclass
 class ContentTemplate:
     """Template for content generation/editing"""
+
     name: str
     description: str
     instruction_template: str
@@ -167,8 +164,7 @@ class ContentTemplate:
 
 
 class AIContentEditorCore(BaseCore):
-    """
-    AI Content Editor Core for instruction-based content generation and editing.
+    """AI Content Editor Core for instruction-based content generation and editing.
     
     Provides capabilities for multi-modal content creation, editing, and refinement
     using instruction-based approaches similar to advanced AI content editors.
@@ -272,14 +268,14 @@ class AIContentEditorCore(BaseCore):
         self,
         request: ContentEditRequest
     ) -> ContentEditResult:
-        """
-        Process a content editing request
+        """Process a content editing request
         
         Args:
             request: Content editing request
             
         Returns:
             Content editing result
+
         """
         start_time = asyncio.get_event_loop().time()
 
@@ -412,7 +408,7 @@ class AIContentEditorCore(BaseCore):
     ) -> str:
         """Process code content editing"""
         code = request.input_content or ""
-        
+
         if "optimize" in request.instruction.lower():
             # Simple code optimization patterns
             optimized = code.replace("    ", "  ")  # Reduce indentation
@@ -433,18 +429,18 @@ class AIContentEditorCore(BaseCore):
         """Calculate confidence score for the result"""
         # Mock confidence calculation
         base_confidence = 0.8
-        
+
         # Adjust based on content length/complexity
         if isinstance(result_content, str):
             if len(result_content) > 100:
                 base_confidence += 0.1
             if len(result_content) < 20:
                 base_confidence -= 0.2
-        
+
         # Adjust based on request complexity
         if len(request.instruction) > 50:
             base_confidence -= 0.1
-        
+
         return max(0.0, min(1.0, base_confidence))
 
     async def add_template(self, template: ContentTemplate) -> None:
@@ -469,8 +465,7 @@ class AIContentEditorCore(BaseCore):
         limit: int = 50,
         content_type: Optional[str] = None
     ) -> List[ContentEditResult]:
-        """
-        Get content editing history
+        """Get content editing history
         
         Args:
             limit: Maximum number of results
@@ -478,31 +473,32 @@ class AIContentEditorCore(BaseCore):
             
         Returns:
             List of edit results
+
         """
         history = self.edit_history
-        
+
         if content_type:
             history = [h for h in history if h.content_type == content_type]
-        
+
         return history[-limit:] if limit > 0 else history
 
     async def generate_content_report(
         self,
         time_range_hours: int = 24
     ) -> Dict[str, Any]:
-        """
-        Generate a report on content editing activities
+        """Generate a report on content editing activities
         
         Args:
             time_range_hours: Hours to look back
             
         Returns:
             Activity report
+
         """
         cutoff_time = datetime.now().replace(hour=datetime.now().hour - time_range_hours)
-        
+
         recent_edits = [e for e in self.edit_history if e.timestamp > cutoff_time]
-        
+
         report = {
             "total_edits": len(recent_edits),
             "content_types": {},
@@ -516,14 +512,14 @@ class AIContentEditorCore(BaseCore):
             # Calculate statistics
             total_confidence = sum(e.confidence_score for e in recent_edits)
             total_time = sum(e.processing_time for e in recent_edits)
-            
+
             report["average_confidence"] = total_confidence / len(recent_edits)
             report["average_processing_time"] = total_time / len(recent_edits)
-            
+
             # Count by content type
             for edit in recent_edits:
                 report["content_types"][edit.content_type] = report["content_types"].get(edit.content_type, 0) + 1
-                
+
                 template = edit.metadata.get("template_used")
                 if template:
                     report["templates_used"][template] = report["templates_used"].get(template, 0) + 1
@@ -549,7 +545,7 @@ class AIContentEditorCore(BaseCore):
     async def import_templates(self, templates_data: Dict[str, Any]) -> None:
         """Import templates from dictionary"""
         self.templates.clear()
-        
+
         for template_data in templates_data.get("templates", []):
             template = ContentTemplate(
                 name=template_data["name"],
@@ -560,7 +556,7 @@ class AIContentEditorCore(BaseCore):
                 examples=template_data.get("examples", [])
             )
             self.templates[template.name] = template
-        
+
         self.logger.info(f"Imported {len(self.templates)} templates")
 
     async def cleanup(self) -> None:

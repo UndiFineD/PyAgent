@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/neural_anchor_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -61,8 +61,7 @@ __version__ = VERSION
 
 
 class NeuralAnchorAgent(BaseAgent):
-    """
-    Agent responsible for anchoring reasoning to verified external sources of truth.
+    """Agent responsible for anchoring reasoning to verified external sources of truth.
     Validates agent statements against documentation, specifications, and issues.
     """
 
@@ -79,8 +78,7 @@ class NeuralAnchorAgent(BaseAgent):
     def load_anchor_source(
         self, source_name: str, content: str, source_type: str = "doc"
     ) -> str:
-        """
-        Registers a verified source of truth to be used for anchoring.
+        """Registers a verified source of truth to be used for anchoring.
         """
         self.anchors[source_name] = {
             "content": content,
@@ -91,8 +89,7 @@ class NeuralAnchorAgent(BaseAgent):
 
     @as_tool
     def validate_claim(self, claim: str, context_sources: list[str]) -> dict[str, Any]:
-        """
-        Validates a specific claim against the loaded anchor sources.
+        """Validates a specific claim against the loaded anchor sources.
         """
         results = []
         for src in context_sources:
@@ -118,7 +115,6 @@ class NeuralAnchorAgent(BaseAgent):
     def anchor_reasoning_step(
         self, reasoning_chain: list[str], sources: list[str]
     ) -> list[dict[str, Any]]:
-        """
-        Iteratively validates a chain of reasoning steps.
+        """Iteratively validates a chain of reasoning steps.
         """
         return [self.validate_claim(step, sources) for step in reasoning_chain]

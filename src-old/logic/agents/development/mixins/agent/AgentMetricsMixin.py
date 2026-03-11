@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/agent/AgentMetricsMixin.description.md
 
 # AgentMetricsMixin
 
-**File**: `src\logic\agents\development\mixins\agent\AgentMetricsMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\agent\\AgentMetricsMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 9 imports  
 **Lines**: 110  
@@ -47,7 +46,7 @@ Mixin for code metrics, quality scoring, and smell detection.
 
 # Improvements for AgentMetricsMixin
 
-**File**: `src\logic\agents\development\mixins\agent\AgentMetricsMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\agent\\AgentMetricsMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 110 lines (medium)  
 **Complexity**: 4 score (simple)
@@ -99,9 +98,10 @@ import re
 import shutil
 import subprocess
 import sys
+
 from src.core.base.types.CodeMetrics import CodeMetrics
-from src.core.base.types.QualityScore import QualityScore
 from src.core.base.types.CodeSmell import CodeSmell
+from src.core.base.types.QualityScore import QualityScore
 
 
 class AgentMetricsMixin:

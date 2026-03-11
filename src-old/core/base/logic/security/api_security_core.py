@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/security/api_security_core.description.md
 
 # api_security_core
 
-**File**: `src\core\base\logic\security\api_security_core.py`  
+**File**: `src\\core\base\\logic\\security\api_security_core.py`  
 **Type**: Python Module  
 **Summary**: 8 classes, 0 functions, 15 imports  
 **Lines**: 255  
@@ -99,7 +98,7 @@ Core class for API security patterns in agent communications.
 
 # Improvements for api_security_core
 
-**File**: `src\core\base\logic\security\api_security_core.py`  
+**File**: `src\\core\base\\logic\\security\api_security_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 255 lines (medium)  
 **Complexity**: 12 score (moderate)
@@ -133,6 +132,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -162,12 +162,11 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Set
 
-import asyncio
-
 
 @dataclass
 class AgentCredentials:
     """Credentials for agent authentication."""
+
     agent_id: str
     secret_key: str
     permissions: Set[str] = field(default_factory=set)
@@ -177,6 +176,7 @@ class AgentCredentials:
 @dataclass
 class RateLimitConfig:
     """Configuration for rate limiting."""
+
     requests_per_minute: int = 60
     burst_limit: int = 10
 
@@ -184,6 +184,7 @@ class RateLimitConfig:
 @dataclass
 class SecurityEvent:
     """Security event for logging."""
+
     timestamp: float
     event_type: str
     agent_id: str

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/FractalOrchestrator.description.md
 
@@ -77,12 +76,11 @@ LLM_CONTEXT_END
 """
 
 import logging
-from typing import Dict, List, Any, Optional
+from typing import List
 
 
 class FractalOrchestrator:
-    """
-    Implements recursive orchestration where an orchestrator can spawn
+    """Implements recursive orchestration where an orchestrator can spawn
     sub-orchestrators to handle nested complexity until the task is simplified.
     """
 

@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ToolSynthesisAgent.description.md
 
@@ -79,6 +78,9 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+from pathlib import Path
+from typing import Any
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -97,17 +99,13 @@ from __future__ import annotations
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
 from src.core.base.version import VERSION
-from pathlib import Path
-from typing import Dict, List, Any
 
 __version__ = VERSION
 
 
 class ToolSynthesisAgent:
-    """
-    Synthesizes new helper scripts and tools based on observed
+    """Synthesizes new helper scripts and tools based on observed
     recurring task patterns in the fleet.
     """
 
@@ -118,8 +116,7 @@ class ToolSynthesisAgent:
         self.synthesis_history = []
 
     def synthesize_tool(self, task_pattern, requirements) -> dict[str, Any]:
-        """
-        Generates a new tool script for a specific pattern.
+        """Generates a new tool script for a specific pattern.
         """
         tool_name = f"tool_{len(self.synthesis_history) + 1}.py"
         tool_content = f'"""\nGenerated tool for {task_pattern}\n"""\n\ndef run(data):\n    # Requirements: {requirements}\n    return f"Processed {{data}} using {tool_name}"\n'
@@ -139,8 +136,7 @@ class ToolSynthesisAgent:
         return self.synthesis_history
 
     def analyze_feedback(self, tool_name, feedback) -> dict[str, Any]:
-        """
-        Refines a tool based on agent or human feedback.
+        """Refines a tool based on agent or human feedback.
         """
         for tool in self.synthesis_history:
             if tool["name"] == tool_name:

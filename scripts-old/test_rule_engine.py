@@ -1,6 +1,8 @@
 import sys
+
 sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parent.parent / 'src'))
 from auto_fix.rule_engine import RuleEngine
+
 
 def main():
     engine = RuleEngine.load_from_dir('src/auto_fix/rules')

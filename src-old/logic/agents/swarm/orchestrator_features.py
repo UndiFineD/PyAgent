@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/orchestrator_features.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -66,7 +66,6 @@ class OrchestratorFeatures(
     OrchestratorExecutionMixin,
     OrchestratorWorkPatternMixin,
 ):  # pylint: disable=too-many-ancestors
-    """
-    Mixin class that provides additional features to OrchestratorAgent.
+    """Mixin class that provides additional features to OrchestratorAgent.
     This helps keep the main OrchestratorAgent file small (<30KB).
     """

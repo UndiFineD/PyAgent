@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/core/MicroBatchContext.description.md
 
 # MicroBatchContext
 
-**File**: `src\core\base\core\MicroBatchContext.py`  
+**File**: `src\\core\base\\core\\MicroBatchContext.py`  
 **Type**: Python Module  
 **Summary**: 7 classes, 2 functions, 17 imports  
 **Lines**: 529  
@@ -168,7 +167,7 @@ Usage:
 
 # Improvements for MicroBatchContext
 
-**File**: `src\core\base\core\MicroBatchContext.py`  
+**File**: `src\\core\base\\core\\MicroBatchContext.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 529 lines (large)  
 **Complexity**: 28 score (complex)
@@ -202,6 +201,7 @@ Usage:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -228,11 +228,10 @@ Example:
 
 import threading
 import time
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Callable, Iterator, Optional, Generic, TypeVar
-from contextlib import contextmanager
-import queue
+from typing import Any, Generic, Iterator, Optional, TypeVar
 
 # Try to import torch for GPU operations
 try:
@@ -348,6 +347,7 @@ class StreamManager:
             num_compute_streams: Number of compute streams
             num_comm_streams: Number of communication streams
             use_high_priority: Whether to use high priority streams
+
         """
         self.num_compute_streams = num_compute_streams
         self.num_comm_streams = num_comm_streams
@@ -449,6 +449,7 @@ class MicroBatchContext(Generic[T]):
         batch_size: Total batch size
         micro_batch_size: Size of each micro-batch
         num_micro_batches: Number of micro-batches
+
     """
 
     def __init__(
@@ -471,6 +472,7 @@ class MicroBatchContext(Generic[T]):
             adaptive: Whether to adapt micro-batch size dynamically
             min_micro_batch: Minimum micro-batch size (for adaptive)
             max_micro_batch: Maximum micro-batch size (for adaptive)
+
         """
         self.batch_size = batch_size
         self.micro_batch_size = micro_batch_size
@@ -545,6 +547,7 @@ class MicroBatchContext(Generic[T]):
 
         Yields:
             MicroBatchInfo for each micro-batch
+
         """
         for mb in self._micro_batches:
             mb.state = MicroBatchState.RUNNING
@@ -571,6 +574,7 @@ class MicroBatchContext(Generic[T]):
 
         Yields:
             Tuple of (MicroBatchInfo, data_slice)
+
         """
         for mb in self.iterate():
             data_slice = data[mb.start_idx : mb.end_idx]
@@ -582,6 +586,7 @@ class MicroBatchContext(Generic[T]):
         Args:
             output: Output to record
             mb_idx: Micro-batch index (uses current if None)
+
         """
         with self._lock:
             idx = mb_idx if mb_idx is not None else self._current_idx
@@ -594,6 +599,7 @@ class MicroBatchContext(Generic[T]):
 
         Returns:
             List of outputs in order
+
         """
         return [o for o in self._outputs if o is not None]
 
@@ -602,6 +608,7 @@ class MicroBatchContext(Generic[T]):
 
         Returns:
             Concatenated tensor or None
+
         """
         outputs = self.gather_outputs()
         if not outputs:
@@ -674,6 +681,7 @@ class AdaptiveMicroBatchContext(MicroBatchContext[T]):
             target_time_ms: Target time per micro-batch
             memory_threshold: Memory threshold for shrinking
             **kwargs: Additional MicroBatchContext arguments
+
         """
         super().__init__(batch_size, initial_micro_batch, **kwargs)
         self.target_time_ms = target_time_ms
@@ -726,6 +734,7 @@ def create_micro_batch_context(
 
     Returns:
         MicroBatchContext instance
+
     """
     if adaptive:
         return AdaptiveMicroBatchContext(

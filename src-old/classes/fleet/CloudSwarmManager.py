@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/CloudSwarmManager.description.md
 
 # CloudSwarmManager
 
-**File**: `src\classes\fleet\CloudSwarmManager.py`  
+**File**: `src\\classes\fleet\\CloudSwarmManager.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 97  
@@ -47,7 +46,7 @@ Orchestrates resources and deployments across multiple cloud providers.
 
 # Improvements for CloudSwarmManager
 
-**File**: `src\classes\fleet\CloudSwarmManager.py`  
+**File**: `src\\classes\fleet\\CloudSwarmManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 97 lines (small)  
 **Complexity**: 5 score (moderate)
@@ -97,10 +96,11 @@ from __future__ import annotations
 Handles resource provisioning and agent deployment across AWS, Azure, and GCP.
 """
 
-from src.core.base.version import VERSION
 import logging
-from typing import Dict, Any, Optional
 from pathlib import Path
+from typing import Any
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -123,6 +123,7 @@ class CloudSwarmManager:
             provider: One of 'aws', 'azure', 'gcp'.
             resource_type: Type of resource (e.g., 'vm', 'container', 'lambda').
             specs: Dictionary containing resource specifications.
+
         """
         provider = provider.lower()
         if provider not in self.providers:

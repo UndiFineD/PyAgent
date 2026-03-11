@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/core/TracingCore.description.md
 
@@ -76,13 +75,12 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-from typing import Dict, Any
 import time
+from typing import Any
 
 
 class TracingCore:
-    """
-    TracingCore handles the logic for distributed tracing and latency breakdown.
+    """TracingCore handles the logic for distributed tracing and latency breakdown.
     It prepares trace data for OpenTelemetry (OTel) exporters.
     """
 
@@ -93,8 +91,7 @@ class TracingCore:
     def calculate_latency_breakdown(
         self, total_time: float, network_time: float
     ) -> dict[str, float]:
-        """
-        Calculates agent thinking time vs network latency.
+        """Calculates agent thinking time vs network latency.
         """
         thinking_time = total_time - network_time
         return {

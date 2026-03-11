@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/fix_e701_v2.description.md
 
@@ -71,9 +70,9 @@ Check if parentheses, brackets, and braces are balanced in a string.
 LLM_CONTEXT_END
 """
 
+import ast
 import os
 import re
-import ast
 
 KEYWORDS = [
     "if",

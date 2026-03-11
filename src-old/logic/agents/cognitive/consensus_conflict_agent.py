@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/consensus_conflict_agent.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -50,16 +50,15 @@ Consensus Conflict Agent for multi-agent arbitration and voting.
 import time
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 # pylint: disable=too-many-ancestors
 class ConsensusConflictAgent(BaseAgent):
-    """
-    Tier 2 (Cognitive Logic) - Consensus Conflict Agent: Arbitrates disagreements
+    """Tier 2 (Cognitive Logic) - Consensus Conflict Agent: Arbitrates disagreements
     and resolves conflicts between agents in the swarm using voting systems.
     """
 

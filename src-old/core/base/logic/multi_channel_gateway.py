@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/multi_channel_gateway.description.md
 
 # multi_channel_gateway
 
-**File**: `src\core\base\logic\multi_channel_gateway.py`  
+**File**: `src\\core\base\\logic\\multi_channel_gateway.py`  
 **Type**: Python Module  
 **Summary**: 9 classes, 0 functions, 20 imports  
 **Lines**: 430  
@@ -130,7 +129,7 @@ presence tracking, and channel abstraction.
 
 # Improvements for multi_channel_gateway
 
-**File**: `src\core\base\logic\multi_channel_gateway.py`  
+**File**: `src\\core\base\\logic\\multi_channel_gateway.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 430 lines (medium)  
 **Complexity**: 6 score (moderate)
@@ -185,19 +184,18 @@ import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Protocol, Set, Union
+from typing import Any, Dict, List, Optional
 from uuid import uuid4
 
 import websockets
 from pydantic import BaseModel, Field
-
-from src.core.base.common.models.communication_models import CascadeContext
 
 logger = logging.getLogger(__name__)
 
 
 class ChannelType(Enum):
     """Supported messaging channel types."""
+
     WHATSAPP = "whatsapp"
     TELEGRAM = "telegram"
     DISCORD = "discord"
@@ -210,6 +208,7 @@ class ChannelType(Enum):
 
 class MessageType(Enum):
     """Types of messages in the gateway protocol."""
+
     TEXT = "text"
     IMAGE = "image"
     AUDIO = "audio"
@@ -223,6 +222,7 @@ class MessageType(Enum):
 
 class SessionActivationMode(Enum):
     """How sessions are activated in channels."""
+
     MENTION = "mention"  # Only respond when mentioned
     ALWAYS = "always"    # Always respond
     NEVER = "never"      # Never respond automatically
@@ -231,6 +231,7 @@ class SessionActivationMode(Enum):
 @dataclass
 class ChannelMessage:
     """Represents a message from any channel."""
+
     id: str
     channel_type: ChannelType
     channel_id: str  # Channel/group identifier
@@ -247,6 +248,7 @@ class ChannelMessage:
 @dataclass
 class GatewayPresence:
     """Presence information for gateway clients."""
+
     client_id: str
     status: str = "online"  # online, away, busy, offline
     last_seen: float = field(default_factory=lambda: asyncio.get_event_loop().time())
@@ -280,6 +282,7 @@ class ChannelProvider(ABC):
 
 class GatewaySession(BaseModel):
     """Represents an agent session in the gateway."""
+
     session_id: str = Field(default_factory=lambda: str(uuid4()))
     agent_id: str
     channel_type: ChannelType
@@ -495,8 +498,7 @@ class GatewayProtocol:
 
 
 class MultiChannelGatewayCore:
-    """
-    Core gateway for multi-channel agent communication.
+    """Core gateway for multi-channel agent communication.
 
     Provides WebSocket-based control plane with session management,
     presence tracking, and channel abstraction.

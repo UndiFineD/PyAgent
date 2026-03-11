@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/SecurityGuardAgent.description.md
 
 # SecurityGuardAgent
 
-**File**: `src\logic\agents\development\SecurityGuardAgent.py`  
+**File**: `src\\logic\agents\\development\\SecurityGuardAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 136  
@@ -52,7 +51,7 @@ Protects the workspace by validating diffs and commands.
 
 # Improvements for SecurityGuardAgent
 
-**File**: `src\logic\agents\development\SecurityGuardAgent.py`  
+**File**: `src\\logic\agents\\development\\SecurityGuardAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 136 lines (medium)  
 **Complexity**: 9 score (moderate)
@@ -100,11 +99,11 @@ from __future__ import annotations
 
 """Agent specializing in security validation and safety checks."""
 
-from src.core.base.version import VERSION
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import create_main_function
+from src.core.base.version import VERSION
 from src.logic.agents.development.SecurityCore import SecurityCore
-from typing import List, Tuple
 
 __version__ = VERSION
 

@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/PluginManager.description.md
 
 # PluginManager
 
-**File**: `src\classes\fleet\PluginManager.py`  
+**File**: `src\\classes\fleet\\PluginManager.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 11 imports  
 **Lines**: 108  
@@ -52,7 +51,7 @@ Handles discovery, version gatekeeping, and lazy loading for community extension
 
 # Improvements for PluginManager
 
-**File**: `src\classes\fleet\PluginManager.py`  
+**File**: `src\\classes\fleet\\PluginManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 108 lines (medium)  
 **Complexity**: 4 score (simple)
@@ -86,21 +85,20 @@ LLM_CONTEXT_END
 Scans the 'plugins' directory for agent implementations.
 """
 
-import os
+import importlib.util
 import json
 import logging
-import importlib.util
 from pathlib import Path
-from typing import Dict, List, Any, Optional
-from .VersionGate import VersionGate
+from typing import Any, Dict, List, Optional
 
 # Import local version for gatekeeping
 from src.version import SDK_VERSION
 
+from .VersionGate import VersionGate
+
 
 class PluginManager:
-    """
-    Modernized PluginManager.
+    """Modernized PluginManager.
     Handles discovery, version gatekeeping, and lazy loading for community extensions.
     """
 

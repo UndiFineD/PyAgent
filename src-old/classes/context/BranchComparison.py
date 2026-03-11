@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/BranchComparison.description.md
 
@@ -83,24 +82,18 @@ Attributes:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
-from src.classes.base_agent import BaseAgent
+
 from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-from pathlib import Path
-import hashlib
-import json
-import logging
-import re
-import zlib
 
 """Auto-extracted class from agent_context.py"""
 
 
-from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
+from typing import List
+
 
 @dataclass
 class BranchComparison:
@@ -112,6 +105,7 @@ class BranchComparison:
         files_only_in_a: Files only in branch A.
         files_only_in_b: Files only in branch B.
         modified_files: Files modified between branches.
+
     """
 
     branch_a: str

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/ReportingAgent.description.md
 
@@ -89,6 +88,8 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import logging
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -101,21 +102,17 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import os
 import time
-import logging
 from datetime import datetime
 from pathlib import Path
-from typing import TYPE_CHECKING
-from src.core.base.BaseAgent import BaseAgent
 
+from src.core.base.BaseAgent import BaseAgent
 from src.infrastructure.fleet.FleetManager import FleetManager
 
 
 class ReportingAgent(BaseAgent):
-    """
-    Observer agent that generates executive dashboards and reports
+    """Observer agent that generates executive dashboards and reports
     by orchestrating multiple specialist agents.
     """
 
@@ -132,16 +129,16 @@ class ReportingAgent(BaseAgent):
         from src.logic.agents.cognitive.MemoryConsolidationAgent import (
             MemoryConsolidationAgent,
         )
-        from src.observability.stats.TransparencyAgent import TransparencyAgent
-        from src.logic.agents.development.SpecToolAgent import SpecToolAgent
-        from src.logic.agents.system.KernelAgent import KernelAgent
-        from src.logic.agents.development.PullRequestAgent import PRAgent
-        from src.logic.agents.system.ConfigAgent import ConfigAgent
-        from src.logic.agents.development.TestAgent import TestAgent
-        from src.logic.agents.intelligence.BrowsingAgent import BrowsingAgent
-        from src.logic.agents.system.MCPAgent import MCPAgent
-        from src.logic.agents.development.ToolEvolutionAgent import ToolEvolutionAgent
         from src.logic.agents.cognitive.VisualizerAgent import VisualizerAgent
+        from src.logic.agents.development.PullRequestAgent import PRAgent
+        from src.logic.agents.development.SpecToolAgent import SpecToolAgent
+        from src.logic.agents.development.TestAgent import TestAgent
+        from src.logic.agents.development.ToolEvolutionAgent import ToolEvolutionAgent
+        from src.logic.agents.intelligence.BrowsingAgent import BrowsingAgent
+        from src.logic.agents.system.ConfigAgent import ConfigAgent
+        from src.logic.agents.system.KernelAgent import KernelAgent
+        from src.logic.agents.system.MCPAgent import MCPAgent
+        from src.observability.stats.TransparencyAgent import TransparencyAgent
 
         self.fleet.register_agent(
             "Consolidator",
@@ -266,6 +263,7 @@ class ReportingAgent(BaseAgent):
 if __name__ == "__main__":
     # Local test
     import asyncio
+
     from src.infrastructure.fleet.FleetManager import FleetManager
 
     f = FleetManager()

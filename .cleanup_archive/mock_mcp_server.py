@@ -2,6 +2,7 @@
 import json
 import sys
 
+
 def main():
     while True:
         line = sys.stdin.readline()
@@ -23,7 +24,7 @@ def main():
                 }
             else:
                 response = {"jsonrpc": "2.0", "id": request.get("id"), "error": "Unknown method"}
-            
+
             sys.stdout.write(json.dumps(response) + "\n")
             sys.stdout.flush()
         except:

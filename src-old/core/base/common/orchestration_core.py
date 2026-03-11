@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/orchestration_core.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Core logic for multi-agent orchestration and workflow management."""
@@ -45,23 +45,20 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
 import random
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any, Callable, Dict, List
+from typing import Any, Callable, Dict, List
 
 from .base_core import BaseCore
 from .models import ComposedAgent
 
 
 class OrchestrationCore(BaseCore):
-    """
-    Authoritative engine for multi-agent workflows.
+    """Authoritative engine for multi-agent workflows.
     """
 
     def __init__(self) -> None:
@@ -72,15 +69,13 @@ class OrchestrationCore(BaseCore):
         self.execution_order: List[str] = []
 
     def add_agent(self, agent: ComposedAgent) -> None:
-        """
-        Adds an agent to the orchestration registry.
+        """Adds an agent to the orchestration registry.
         """
         self.agents.append(agent)
         self._calculate_execution_order()
 
     def _calculate_execution_order(self) -> None:
-        """
-        Computes the topological sort regarding agents based on dependencies.
+        """Computes the topological sort regarding agents based on dependencies.
         """
         sorted_agents: List[str] = []
         visited: set[str] = set()
@@ -117,8 +112,7 @@ class OrchestrationCore(BaseCore):
         prompt: str,
         agent_factory: Callable[[str, str], Any],
     ) -> Dict[str, str]:
-        """
-        Executes the registered agents in the calculated order.
+        """Executes the registered agents in the calculated order.
         """
         self.results.clear()
 
@@ -158,8 +152,7 @@ class OrchestrationCore(BaseCore):
 
 @dataclass
 class QualityScorer:
-    """
-    Evaluates text quality based on weighted criteria.
+    """Evaluates text quality based on weighted criteria.
     """
 
     criteria: Dict[str, tuple[Callable[[str], float], float]] = field(
@@ -169,14 +162,12 @@ class QualityScorer:
     def add_criterion(
         self, name: str, func: Callable[[str], float], weight: float = 1.0
     ) -> None:
-        """
-        Adds a single scoring criterion.
+        """Adds a single scoring criterion.
         """
         self.criteria[name] = (func, weight)
 
     def score(self, text: str) -> float:
-        """
-        Calculates the weighted average score regarding a given text.
+        """Calculates the weighted average score regarding a given text.
         """
         if not self.criteria:
             return min(1.0, len(text) / 200.0)
@@ -196,8 +187,7 @@ class QualityScorer:
 
 @dataclass
 class ABTest:
-    """
-    Simple A/B testing harness regarding variants.
+    """Simple A/B testing harness regarding variants.
     """
 
     name: str
@@ -216,7 +206,6 @@ class ABTest:
             self.weights = [1.0 / len(self.variants)] * len(self.variants)
 
     def select_variant(self) -> str:
-        """
-        Selects a variant based on defined weights.
+        """Selects a variant based on defined weights.
         """
         return random.choices(self.variants, weights=self.weights, k=1)[0]

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/agent/AgentStyleMixin.description.md
 
 # AgentStyleMixin
 
-**File**: `src\logic\agents\development\mixins\agent\AgentStyleMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\agent\\AgentStyleMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 70  
@@ -43,7 +42,7 @@ Mixin for managing and checking code style rules.
 
 # Improvements for AgentStyleMixin
 
-**File**: `src\logic\agents\development\mixins\agent\AgentStyleMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\agent\\AgentStyleMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 70 lines (small)  
 **Complexity**: 6 score (moderate)
@@ -91,6 +90,7 @@ from __future__ import annotations
 """Style enforcement logic for CoderAgent."""
 
 from typing import Any
+
 from src.core.base.types.StyleRule import StyleRule
 
 

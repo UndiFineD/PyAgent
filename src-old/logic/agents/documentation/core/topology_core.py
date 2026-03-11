@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/documentation/core/topology_core.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -64,8 +64,7 @@ class TopologyCore:
     def generate_mermaid_graph(
         nodes: list[str], edges: list[dict[str, str]], direction: str = "TD"
     ) -> str:
-        """
-        Generates a Mermaid.js flowchart string.
+        """Generates a Mermaid.js flowchart string.
         """
         if HAS_RUST:
             try:
@@ -101,8 +100,7 @@ class TopologyCore:
     def filter_active_relationships(
         all_deps: dict[str, list[str]], focus_list: list[str]
     ) -> dict[str, list[str]]:
-        """
-        Filters a dependency map to only include nodes relevant to the focus list.
+        """Filters a dependency map to only include nodes relevant to the focus list.
         """
         if HAS_RUST:
             try:

@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/mixins/PrivacyScannerMixin.description.md
 
 # PrivacyScannerMixin
 
-**File**: `src\logic\agents\security\mixins\PrivacyScannerMixin.py`  
+**File**: `src\\logic\agents\\security\\mixins\\PrivacyScannerMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 45  
@@ -41,7 +40,7 @@ Mixin for PII scanning and masking in ComplianceAgent.
 
 # Improvements for PrivacyScannerMixin
 
-**File**: `src\logic\agents\security\mixins\PrivacyScannerMixin.py`  
+**File**: `src\\logic\agents\\security\\mixins\\PrivacyScannerMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 45 lines (small)  
 **Complexity**: 3 score (simple)
@@ -78,10 +77,11 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
-
 import re
+from typing import Any
+
 from src.logic.agents.security.ComplianceAgent import ComplianceAgent
-from typing import TYPE_CHECKING, Any
+
 
 class PrivacyScannerMixin:
     """Mixin for PII scanning and masking in ComplianceAgent."""

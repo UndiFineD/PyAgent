@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/utils/context_visualizer.description.md
 
@@ -31,6 +30,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -78,6 +78,7 @@ class ContextVisualizer:
     Example:
         >>> visualizer = ContextVisualizer()
         >>> data = visualizer.create_dependency_graph(contexts)
+
     """
 
     def __init__(
@@ -87,6 +88,7 @@ class ContextVisualizer:
 
         Args:
             viz_type: The default visualization type to use.
+
         """
         self.viz_type: VisualizationType = viz_type
         self.nodes: list[dict[str, Any]] = []
@@ -98,6 +100,7 @@ class ContextVisualizer:
 
         Args:
             viz_type: The visualization type to set.
+
         """
         self.viz_type = viz_type
 
@@ -107,6 +110,7 @@ class ContextVisualizer:
         Args:
             node_id: Unique identifier for the node.
             metadata: Optional metadata associated with the node.
+
         """
         if metadata is None:
             metadata = {}
@@ -118,6 +122,7 @@ class ContextVisualizer:
         Args:
             source: The ID of the source node.
             target: The ID of the target node.
+
         """
         self.edges.append((source, target))
 
@@ -126,6 +131,7 @@ class ContextVisualizer:
 
         Returns:
             VisualizationData object containing nodes and edges.
+
         """
         return VisualizationData(
             viz_type=self.viz_type,
@@ -139,6 +145,7 @@ class ContextVisualizer:
 
         Returns:
             JSON string representation of the visualization.
+
         """
         data = self.generate()
         payload: dict[str, Any] = {
@@ -157,6 +164,7 @@ class ContextVisualizer:
 
         Returns:
             VisualizationData for rendering.
+
         """
         nodes: list[dict[str, str]] = []
         edges: list[tuple[str, str]] = []
@@ -180,6 +188,7 @@ class ContextVisualizer:
 
         Returns:
             VisualizationData for rendering.
+
         """
         nodes: list[dict[str, str]] = []
         edges: list[tuple[str, str]] = []

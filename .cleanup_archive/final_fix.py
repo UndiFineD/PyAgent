@@ -1,6 +1,7 @@
 import os
 import re
 
+
 def fix():
     for root, dirs, files in os.walk(os.getcwd()):
         if "__pycache__" in root or ".git" in root:
@@ -12,7 +13,7 @@ def fix():
                     with open(path, "r", encoding="utf-8") as f:
                         lines = f.readlines()
                 except: continue
-                
+
                 changed = False
                 new_lines = []
                 for i, line in enumerate(lines):
@@ -28,7 +29,7 @@ def fix():
                         if not prev_line.endswith(":"):
                             line = line.lstrip()
                             changed = True
-                    
+
                     # Fix 2: Indent imports that are at col 0 but SHOULD be in a block
                     if re.match(r"^(from|import) ", line):
                         prev_line = ""
@@ -39,14 +40,14 @@ def fix():
                                 m = re.match(r"^(\s+)", lines[j])
                                 if m: prev_indent = m.group(1)
                                 break
-                        
+
                         if prev_line.endswith(":"):
                             # It definitely should be indented
                             indent = prev_indent + "    " if prev_indent else "    "
                             line = indent + line
                             changed = True
                         elif prev_indent and i > 0:
-                            # If previous line was indented but didn't end in :, 
+                            # If previous line was indented but didn't end in :,
                             # and this line is an import at col 0, it MIGHT be mid-block.
                             # But to be safe, only do it if the line below is also indented.
                             next_indent = ""
@@ -58,9 +59,9 @@ def fix():
                             if next_indent:
                                 line = next_indent + line
                                 changed = True
-                    
+
                     new_lines.append(line)
-                
+
                 if changed:
                     with open(path, "w", encoding="utf-8") as f:
                         f.writelines(new_lines)

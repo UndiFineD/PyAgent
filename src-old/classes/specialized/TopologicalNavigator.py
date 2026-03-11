@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/TopologicalNavigator.description.md
 
@@ -97,13 +96,15 @@ from __future__ import annotations
 Builds a semantic map of the codebase for graph-based dependency exploration.
 """
 
-from src.core.base.Version import VERSION
 import os
 from pathlib import Path
-from .mixins.MapBuilderMixin import MapBuilderMixin
-from .mixins.GraphAnalysisMixin import GraphAnalysisMixin
-from .mixins.FederationMixin import FederationMixin
+
 from src.core.base.BaseAgent import BaseAgent
+from src.core.base.Version import VERSION
+
+from .mixins.FederationMixin import FederationMixin
+from .mixins.GraphAnalysisMixin import GraphAnalysisMixin
+from .mixins.MapBuilderMixin import MapBuilderMixin
 
 __version__ = VERSION
 
@@ -111,8 +112,7 @@ __version__ = VERSION
 class TopologicalNavigator(
     BaseAgent, MapBuilderMixin, GraphAnalysisMixin, FederationMixin
 ):
-    """
-    Tier 2 (Cognitive Logic) - Topological Navigator: Maps code relationships
+    """Tier 2 (Cognitive Logic) - Topological Navigator: Maps code relationships
     and determines the impact of changes using graph-based dependency analysis.
     """
 

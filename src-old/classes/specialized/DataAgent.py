@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/DataAgent.description.md
 
@@ -100,10 +99,11 @@ from __future__ import annotations
 Provides execution capabilities and schema discovery.
 """
 
-from src.core.base.version import VERSION
 import sqlite3
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool, create_main_function
+from src.core.base.version import VERSION
 
 # Lazy loaded: pandas moved to localized usage
 __version__ = VERSION

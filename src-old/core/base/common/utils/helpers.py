@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/helpers.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -46,14 +46,12 @@ from __future__ import annotations
 # limitations under the License.
 from src.core.base.common.models.agent_models import AgentPluginConfig
 
-
 """Helper functions for dataclass default factories."""
 
 
 from collections.abc import Iterable
-from typing import TYPE_CHECKING, Any, Final, TypeVar
+from typing import Any, Final, TypeVar
 
-from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.models._factories import (
     _empty_dict_str_any,
     _empty_dict_str_float,
@@ -62,6 +60,7 @@ from src.core.base.common.models._factories import (
     _empty_list_dict_str_any,
     _empty_list_str,
 )
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

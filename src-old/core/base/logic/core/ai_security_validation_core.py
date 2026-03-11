@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/ai_security_validation_core.description.md
 
 # ai_security_validation_core
 
-**File**: `src\core\base\logic\core\ai_security_validation_core.py`  
+**File**: `src\\core\base\\logic\\core\ai_security_validation_core.py`  
 **Type**: Python Module  
 **Summary**: 4 classes, 0 functions, 12 imports  
 **Lines**: 486  
@@ -88,7 +87,7 @@ prompt injection detection, jailbreak prevention, and security assessment.
 
 # Improvements for ai_security_validation_core
 
-**File**: `src\core\base\logic\core\ai_security_validation_core.py`  
+**File**: `src\\core\base\\logic\\core\ai_security_validation_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 486 lines (medium)  
 **Complexity**: 14 score (moderate)
@@ -128,14 +127,11 @@ Inspired by ai-security-llm repository patterns for LLM security assessment.
 Implements prompt injection detection, jailbreak prevention, and security validation.
 """
 
-import asyncio
 import logging
 import re
-import json
-from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass
 from datetime import datetime
-import hashlib
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
@@ -174,8 +170,7 @@ class JailbreakAttempt:
 
 
 class AISecurityValidationCore:
-    """
-    Core for AI/LLM security validation and threat detection.
+    """Core for AI/LLM security validation and threat detection.
 
     Based on patterns from ai-security-llm repository, implementing
     prompt injection detection, jailbreak prevention, and security assessment.
@@ -298,8 +293,7 @@ class AISecurityValidationCore:
     async def scan_input_security(
         self, input_text: str, context: Optional[Dict[str, Any]] = None
     ) -> SecurityScanResult:
-        """
-        Perform comprehensive security scan on input text.
+        """Perform comprehensive security scan on input text.
 
         Args:
             input_text: Text to scan for security issues
@@ -307,6 +301,7 @@ class AISecurityValidationCore:
 
         Returns:
             SecurityScanResult with findings and recommendations
+
         """
         start_time = datetime.now()
 
@@ -592,8 +587,7 @@ class AISecurityValidationCore:
     async def validate_output_safety(
         self, output_text: str, input_context: Optional[Dict[str, Any]] = None
     ) -> SecurityScanResult:
-        """
-        Validate safety of AI-generated output.
+        """Validate safety of AI-generated output.
 
         Args:
             output_text: AI-generated text to validate
@@ -601,6 +595,7 @@ class AISecurityValidationCore:
 
         Returns:
             SecurityScanResult for the output
+
         """
         # For outputs, we're mainly concerned with harmful content and data leaks
         return await self.scan_input_security(output_text, input_context)

@@ -13,8 +13,7 @@
 # limitations under the License.
 
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/hierarchical_memory_agent.description.md
 
@@ -43,6 +42,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Agent specializing in Multi-Resolution Hierarchical Memory.
@@ -51,10 +51,11 @@ Manages Short-term (Episodic), Mid-term (Working), Long-term (Semantic), and Arc
 
 from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
-from .mixins.memory_storage_mixin import MemoryStorageMixin
+from src.core.base.lifecycle.version import VERSION
+
 from .mixins.memory_query_mixin import MemoryQueryMixin
+from .mixins.memory_storage_mixin import MemoryStorageMixin
 
 __version__ = VERSION
 

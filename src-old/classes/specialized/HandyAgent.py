@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/HandyAgent.description.md
 
@@ -96,13 +95,15 @@ from __future__ import annotations
 Inspired by the Handy pattern (Rust terminal agent) and GitHub Copilot CLI.
 """
 
-from src.core.base.Version import VERSION
 from pathlib import Path
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.Version import VERSION
+from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+
+from .mixins.HandyCoreMixin import HandyCoreMixin
 from .mixins.HandyFileSystemMixin import HandyFileSystemMixin
 from .mixins.HandyTerminalMixin import HandyTerminalMixin
-from .mixins.HandyCoreMixin import HandyCoreMixin
-from src.core.base.BaseAgent import BaseAgent
-from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 
 __version__ = VERSION
 

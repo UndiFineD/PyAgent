@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/math_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -110,8 +110,7 @@ SAFE_MATH_NAMESPACE = {
 
 # pylint: disable=too-many-ancestors
 class MathAgent(BaseAgent):
-    """
-    Agent specializing in symbolic math, numerical computation, and logical proofs.
+    """Agent specializing in symbolic math, numerical computation, and logical proofs.
     Utilizes Rust-accelerated evaluation where available.
     """
 

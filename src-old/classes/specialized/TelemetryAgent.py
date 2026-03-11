@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/TelemetryAgent.description.md
 
@@ -85,6 +84,14 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import json
+import time
+from pathlib import Path
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.ConnectivityManager import ConnectivityManager
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -97,15 +104,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.Version import VERSION
-import json
-import time
-from typing import Any
-from pathlib import Path
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.ConnectivityManager import ConnectivityManager
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 from src.observability.StructuredLogger import StructuredLogger
 
@@ -113,8 +112,7 @@ __version__ = VERSION
 
 
 class TelemetryAgent(BaseAgent):
-    """
-    Tier 5 (Maintenance) - Telemetry Agent: Responsible for broadcasting fleet
+    """Tier 5 (Maintenance) - Telemetry Agent: Responsible for broadcasting fleet
     telemetry and archiving interactions for swarm intelligence harvesting.
     """
 

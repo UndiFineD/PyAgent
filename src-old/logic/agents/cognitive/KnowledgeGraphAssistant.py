@@ -1,14 +1,13 @@
 # Copyright 2026 PyAgent Authors
 # Assistant for managing the knowledge graph and impact radius.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/KnowledgeGraphAssistant.description.md
 
 # KnowledgeGraphAssistant
 
-**File**: `src\logic\agents\cognitive\KnowledgeGraphAssistant.py`  
+**File**: `src\\logic\agents\\cognitive\\KnowledgeGraphAssistant.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 46  
@@ -43,7 +42,7 @@ Handles backlinks, dependency tracking, and graph visualization.
 
 # Improvements for KnowledgeGraphAssistant
 
-**File**: `src\logic\agents\cognitive\KnowledgeGraphAssistant.py`  
+**File**: `src\\logic\agents\\cognitive\\KnowledgeGraphAssistant.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 46 lines (small)  
 **Complexity**: 5 score (moderate)
@@ -77,6 +76,7 @@ LLM_CONTEXT_END
 """
 
 from typing import Set
+
 
 class KnowledgeGraphAssistant:
     """Handles backlinks, dependency tracking, and graph visualization."""

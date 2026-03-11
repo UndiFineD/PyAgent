@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/android/core/sanitizer.description.md
 
 # sanitizer
 
-**File**: `src\logic\agents\android\core\sanitizer.py`  
+**File**: `src\\logic\agents\android\\core\\sanitizer.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 1 functions, 4 imports  
 **Lines**: 54  
@@ -36,7 +35,7 @@ Calculates center coordinates (x, y) for every clickable element.
 
 # Improvements for sanitizer
 
-**File**: `src\logic\agents\android\core\sanitizer.py`  
+**File**: `src\\logic\agents\android\\core\\sanitizer.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 54 lines (small)  
 **Complexity**: 1 score (simple)
@@ -70,12 +69,11 @@ LLM_CONTEXT_END
 """
 
 import xml.etree.ElementTree as ET
-from typing import List, Dict, Optional
+from typing import Dict, List
 
 
 def get_interactive_elements(xml_content: str) -> List[Dict]:
-    """
-    Parses Android Accessibility XML and returns a lean list of interactive elements.
+    """Parses Android Accessibility XML and returns a lean list of interactive elements.
     Calculates center coordinates (x, y) for every clickable element.
     """
     try:

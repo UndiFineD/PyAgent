@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ResourcePredictorAgent.description.md
 
@@ -81,14 +80,13 @@ LLM_CONTEXT_END
 """
 
 import time
-import logging
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List
+
 from src.classes.base_agent import BaseAgent
 
 
 class ResourcePredictorAgent(BaseAgent):
-    """
-    Phase 53: Predictive Resource Forecasting.
+    """Phase 53: Predictive Resource Forecasting.
     Uses historical telemetry to forecast future token usage and compute needs.
     """
 
@@ -114,8 +112,7 @@ class ResourcePredictorAgent(BaseAgent):
             self.usage_history = self.usage_history[-1000:]
 
     def forecast_usage(self) -> Dict[str, Any]:
-        """
-        Forecasts usage for the next cycle.
+        """Forecasts usage for the next cycle.
         Uses simple linear extrapolation of the last N events.
         """
         if len(self.usage_history) < 5:

@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/mcp_server.description.md
 
@@ -49,15 +48,14 @@ LLM_CONTEXT_END
 
 from fastapi import FastAPI
 from fastapi_mcp import FastApiMCP
-from src.classes.specialized.SpecToolAgent import SpecToolAgent
 from src.classes.specialized.GraphMemoryAgent import GraphMemoryAgent
+from src.classes.specialized.SpecToolAgent import SpecToolAgent
 
 app = FastAPI(title="PyAgent MCP Server")
 mcp = FastApiMCP(app)
 
 # Initialize agents
 
-from src.version import VERSION
 
 __logic_category__ = "General"
 spec_agent = SpecToolAgent("spec_agent")

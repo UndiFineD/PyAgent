@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/KubernetesManager.description.md
 
 # KubernetesManager
 
-**File**: `src\classes\fleet\KubernetesManager.py`  
+**File**: `src\\classes\fleet\\KubernetesManager.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 60  
@@ -46,7 +45,7 @@ Orchestrates agent execution within a K8s cluster.
 
 # Improvements for KubernetesManager
 
-**File**: `src\classes\fleet\KubernetesManager.py`  
+**File**: `src\\classes\fleet\\KubernetesManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 60 lines (small)  
 **Complexity**: 4 score (simple)
@@ -80,9 +79,9 @@ LLM_CONTEXT_END
 Handles deployment and lifecycle of agent-specific containers.
 """
 
-import logging
 import json
-from typing import Dict, List, Any, Optional
+import logging
+from typing import List
 
 
 class KubernetesManager:

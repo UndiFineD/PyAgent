@@ -22,17 +22,19 @@ client is used; it does not contact any network resource.
 from __future__ import annotations
 
 import asyncio
+from typing import Any, cast
+
 import pytest
 
-from src.core.providers.FlmProviderConfig import FlmProviderConfig
 from src.core.providers.FlmChatAdapter import FlmChatAdapter, FlmRuntimeError
+from src.core.providers.FlmProviderConfig import FlmProviderConfig
 
 
 class _DummyCompletion:
     """A minimal fake completion object that can be used to test the adapter's handling of completions."""
 
-    def __init__(self, content: str, tool_calls=None) -> None:
-        """A minimal fake completion object that can be used to test the adapter's handling of completions."""
+    def __init__(self, content: str, tool_calls: list[object] | None = None) -> None:
+        """Create a minimal fake completion used to test adapter handling."""
         self.choices = [
             type(
                 "X",
@@ -51,8 +53,8 @@ class _DummyCompletion:
 class ToolCall:
     """A minimal fake tool call object."""
 
-    def __init__(self, id) -> None:
-        """A minimal fake tool call object."""
+    def __init__(self, id: int) -> None:
+        """Initialize a minimal fake tool call object."""
         self.id = id
         self.type = "function"
         self.function = type("F", (), {"name": "f", "arguments": ""})()
@@ -61,50 +63,51 @@ class ToolCall:
 class _DummyModels:
     """A minimal fake models interface that can be used to test the adapter's handling of model availability checks."""
 
-    def __init__(self, available=None, raise_exc=False) -> None:
-        """A minimal fake models interface that can be used to test the adapter's handling of model availability checks."""
+    def __init__(self, available: list[str] | None = None, raise_exc: bool = False) -> None:
+        """Create a minimal fake models interface for availability checks."""
         self._available = available or []
         self._raise = raise_exc
 
-    def list(self) -> Any:
-        """A minimal fake list method that can be used to test the adapter's handling of model availability checks."""
+    def list(self) -> object:
+        """Return a minimal fake list response for models.
+
+        Raises RuntimeError when configured to simulate a failure.
+        """
         if self._raise:
             raise RuntimeError("list failed")
         return type("Out", (), {"data": [type("I", (), {"id": id})() for id in self._available]})
 
 
 class _DummyChat:
-    """A minimal fake chat interface that can be used to test the adapter's handling of completions.
-    The create method can be configured to raise an exception to test error handling.
-    """
+    """Minimal fake chat interface used to test completion handling."""
 
-    class completions:
-        """A minimal fake completions creator that can be used to test the adapter's handling of completions.
-        The create method can be configured to raise an exception to test error handling.
-        """
+    class Completions:
+        """Fake completions creator used by the dummy chat interface."""
 
         @staticmethod
-        def create(*, messages, model, max_tokens) -> Any:
-            """A minimal fake create method that can be used to test the adapter's handling 
-            of completions.  The messages, model, and max_tokens parameters are accepted 
-            but ignored in this dummy implementation.
+        def create(*, messages: object, model: str, max_tokens: int) -> object:
+            """Return a dummy completion echoing the last message.
+
+            The parameters are accepted but ignored in this dummy implementation.
             """
-            # echo the last message
             return _DummyCompletion(content="done", tool_calls=[])
+
+    # keep the attribute name expected by adapters
+    completions = Completions
 
 
 class _DummyClient:
     """A minimal fake client with just the attributes needed for testing."""
 
-    def __init__(self, models_obj, chat_obj) -> None:
-        """A minimal fake client with just the attributes needed for testing."""
+    def __init__(self, models_obj: object, chat_obj: object) -> None:
+        """Initialize a minimal fake client with models and chat attributes."""
         self.models = models_obj
         self.chat = chat_obj
 
 
 @pytest.fixture
 def base_config() -> FlmProviderConfig:
-    """A base configuration object that can be used in multiple tests."""
+    """Return a base configuration object for tests."""
     return FlmProviderConfig(
         base_url="http://x",
         default_model="m1",
@@ -115,108 +118,125 @@ def base_config() -> FlmProviderConfig:
     )
 
 
-def test_check_endpoint_success(base_config) -> None:
-    """The adapter should successfully check endpoint availability when the client's list method works.
-    """
+def test_check_endpoint_success(base_config: FlmProviderConfig) -> None:
+    """The adapter should successfully check endpoint availability when the client's list works."""
     adapter = FlmChatAdapter(
         config=base_config,
-        client_factory=lambda **kwargs: _DummyClient(
+        client_factory=cast(Any, lambda **kwargs: _DummyClient(
             _DummyModels(available=["m1"]), _DummyChat()
-        ),
+        )),
     )
     # should not raise
     adapter.check_endpoint_available()
 
 
-def test_check_endpoint_failure(base_config) -> None:
-    """The adapter should raise FlmRuntimeError when the client's list method raises an exception."""
+def test_check_endpoint_failure(base_config: FlmProviderConfig) -> None:
+    """The adapter should raise FlmRuntimeError when the client's list raises an exception."""
     adapter = FlmChatAdapter(
         config=base_config,
-        client_factory=lambda **kwargs: _DummyClient(
+        client_factory=cast(Any, lambda **kwargs: _DummyClient(
             _DummyModels(raise_exc=True), _DummyChat()
-        ),
+        )),
     )
     with pytest.raises(FlmRuntimeError):
         adapter.check_endpoint_available()
 
 
-def test_ensure_model_missing(base_config) -> None:
-    """The adapter should raise FlmRuntimeError when the required model is not in the client's list output."""
+def test_ensure_model_missing(base_config: FlmProviderConfig) -> None:
+    """The adapter should raise FlmRuntimeError when the required model is missing."""
     adapter = FlmChatAdapter(
         config=base_config,
-        client_factory=lambda **kwargs: _DummyClient(
+        client_factory=cast(Any, lambda **kwargs: _DummyClient(
             _DummyModels(available=["other"]), _DummyChat()
-        ),
+        )),
     )
     with pytest.raises(FlmRuntimeError):
         adapter.ensure_model_available()
 
 
-def test_create_completion_raises(base_config):
-    """The adapter should raise FlmRuntimeError when the client's create method raises an exception."""
+def test_create_completion_raises(base_config: FlmProviderConfig) -> None:
+    """The adapter should raise FlmRuntimeError when the client's create method raises."""
     # client that throws inside create
+
     class BadChat:
-        class completions:
+        """Fake chat interface whose completions creator raises an exception."""
+
+        class Completions:
+            """Completions creator that always raises when create is called."""
+
             @staticmethod
-            def create(**kwargs):
+            def create(**kwargs: object) -> object:
+                """Raise to simulate a create-time failure."""
                 raise RuntimeError("boom")
+
+        completions = Completions
 
     adapter = FlmChatAdapter(
         config=base_config,
-        client_factory=lambda **kwargs: _DummyClient(
+        client_factory=cast(Any, lambda **kwargs: _DummyClient(
             _DummyModels(available=["m1"]), BadChat()
-        ),
+        )),
     )
     with pytest.raises(FlmRuntimeError):
         adapter.create_completion(messages=[{"role": "user", "content": "hi"}])
 
 
-def test_run_until_terminal_tool_executor_missing(base_config) -> None:
-    """The adapter should raise FlmRuntimeError when the client's create method returns a tool_call but no executor is provided."""
+def test_run_until_terminal_tool_executor_missing(base_config: FlmProviderConfig) -> None:
+    """The adapter should raise FlmRuntimeError when a tool_call is returned.
 
-    # return a response with a single tool_call
+    no executor is provided to run_until_terminal.
+    """
+    # return a response with a single tool_call, but no executor provided to run_until_terminal
+
     class ToolCall:
-        """A minimal fake tool call object."""
+        """A minimal fake tool call object used in chat responses."""
 
-        def __init__(self, id) -> None:
-            """A minimal fake tool call object."""
+        def __init__(self, id: int) -> None:
+            """Initialize the fake tool call with an integer id."""
             self.id = id
             self.type = "function"
             self.function = type("F", (), {"name": "f", "arguments": ""})()
 
     class ChatWithTool:
-        """A minimal fake chat interface that returns a tool call in the completion response."""
+        """Fake chat interface that returns a tool call in the completion response."""
 
-        class completions:
-            """A minimal fake completions creator that returns a tool call in the response."""
+        class Completions:
+            """Completions creator returning a tool call in the response."""
 
             @staticmethod
-            def create(**kwargs) -> Any:
-                """A minimal fake create method that returns a tool call in the response."""
-                # tool_calls attribute on message
+            def create(**kwargs: object) -> object:
+                """Return a response object containing a single tool call on the message."""
                 msg = type("M", (), {"content": "c", "tool_calls": [ToolCall(1)]})()
                 return type("R", (), {"choices": [type("C", (), {"message": msg})()]})()
 
+        completions = Completions
+
     adapter = FlmChatAdapter(
         config=base_config,
-        client_factory=lambda **kwargs: _DummyClient(
+        client_factory=cast(Any, lambda **kwargs: _DummyClient(
             _DummyModels(available=["m1"]), ChatWithTool()
-        ),
+        )),
     )
     with pytest.raises(FlmRuntimeError):
         asyncio.run(adapter.run_until_terminal(messages=[{"role": "user", "content": "hi"}]))
 
 
-def test_run_until_terminal_max_iterations(base_config) -> None:
-    """The adapter should raise FlmRuntimeError when the client's create method returns tool_calls for more iterations than the max_tool_iterations limit."""
+def test_run_until_terminal_max_iterations(base_config: FlmProviderConfig) -> None:
+    """The adapter should raise FlmRuntimeError when create returns tool_calls.
+
+    more iterations than the max_tool_iterations limit.
+    """
     # create a client that always returns a tool_call so the loop exceeds
+
     class ChatLoop:
-        """A minimal fake chat interface that always returns a tool call in the completion response, causing the run_until_terminal loop to exceed the max iterations."""
-        class completions:
-            """A minimal fake completions creator that always returns a tool call in the response, causing the run_until_terminal loop to exceed the max iterations."""
+        """Fake chat interface that always returns a tool call in completions."""
+
+        class Completions:
+            """Completions creator that always returns a tool call in the response."""
+
             @staticmethod
-            def create(**kwargs) -> Any:
-                """A minimal fake create method that always returns a tool call in the response, causing the run_until_terminal loop to exceed the max iterations."""
+            def create(**kwargs: object) -> object:
+                """Return a response object that contains a tool call on the message."""
                 msg = type(
                     "M",
                     (),
@@ -228,16 +248,18 @@ def test_run_until_terminal_max_iterations(base_config) -> None:
                     {"choices": [type("C", (), {"message": msg})()]},
                 )()
 
+        completions = Completions
+
     # a trivial executor
-    def noop(tool_call) -> str:
-        """A trivial tool executor that does nothing."""
+    def noop(tool_call: object) -> str:
+        """Execute the tool call trivially and return a string result."""
         return "ok"
 
     adapter = FlmChatAdapter(
         config=base_config,
-        client_factory=lambda **kwargs: _DummyClient(
+        client_factory=cast(Any, lambda **kwargs: _DummyClient(
             _DummyModels(available=["m1"]), ChatLoop()
-        ),
+        )),
     )
     with pytest.raises(FlmRuntimeError):
         asyncio.run(adapter.run_until_terminal(messages=[{"role": "user", "content": "hi"}], tool_executor=noop))

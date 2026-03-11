@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/RefactoringAdvisor.description.md
 
@@ -79,6 +78,7 @@ Example:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -104,12 +104,13 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_context.py"""
 
+import re
+from typing import Any
+
 from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.models.RefactoringSuggestion import (
     RefactoringSuggestion,
 )
-from typing import Any, Dict, List
-import re
 
 __version__ = VERSION
 
@@ -122,6 +123,7 @@ class RefactoringAdvisor:
     Example:
         >>> advisor=RefactoringAdvisor()
         >>> suggestions=advisor.analyze(contexts)
+
     """
 
     def __init__(self) -> None:
@@ -134,6 +136,7 @@ class RefactoringAdvisor:
             name: Pattern identifier.
             pattern: Regex pattern to search for.
             description: Human-readable suggestion description.
+
         """
         self.patterns[name] = {"pattern": pattern, "description": description}
 
@@ -146,6 +149,7 @@ class RefactoringAdvisor:
 
         Returns:
             List of refactoring suggestions.
+
         """
         context_map: dict[str, str]
         if isinstance(contexts, str):
@@ -205,6 +209,7 @@ class RefactoringAdvisor:
 
         Returns:
             Suggestions sorted by estimated impact.
+
         """
         impact_rank = {"high": 0, "medium": 1, "low": 2}
 

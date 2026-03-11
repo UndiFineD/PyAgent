@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/stats/TokenCostCore.description.md
 
@@ -73,7 +72,7 @@ No I/O or state management.
 LLM_CONTEXT_END
 """
 
-from typing import Dict, Any, List
+from typing import Dict, List
 
 # Constants for common models (Jan 2026 estimates)
 MODEL_COSTS = {
@@ -88,8 +87,7 @@ MODEL_COSTS = {
 
 
 class TokenCostCore:
-    """
-    Pure logic for cost calculations.
+    """Pure logic for cost calculations.
     No I/O or state management.
     """
 

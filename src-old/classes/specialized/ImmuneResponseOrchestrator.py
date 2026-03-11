@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ImmuneResponseOrchestrator.description.md
 
@@ -88,6 +87,9 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import time
+from typing import Any
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -106,17 +108,13 @@ from __future__ import annotations
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
 from src.core.base.version import VERSION
-import time
-from typing import Dict, List, Any
 
 __version__ = VERSION
 
 
 class ImmuneResponseOrchestrator:
-    """
-    Coordinates rapid patching and vulnerability shielding across the fleet.
+    """Coordinates rapid patching and vulnerability shielding across the fleet.
     """
 
     def __init__(self, workspace_path: str) -> None:
@@ -127,8 +125,7 @@ class ImmuneResponseOrchestrator:
     def deploy_rapid_patch(
         self, vulnerability_id: str, patch_code: str
     ) -> dict[str, Any]:
-        """
-        Simulates deploying a hot-patch to all running agent nodes.
+        """Simulates deploying a hot-patch to all running agent nodes.
         """
         self.vulnerability_db[vulnerability_id] = {
             "status": "patched",
@@ -158,8 +155,7 @@ class ImmuneResponseOrchestrator:
         }
 
     def monitor_threat_vectors(self) -> dict[str, Any]:
-        """
-        Scans for zero-day patterns in communication logs.
+        """Scans for zero-day patterns in communication logs.
         """
         # Simulated scan
         return {
@@ -170,8 +166,7 @@ class ImmuneResponseOrchestrator:
 
 
 class HoneypotAgent:
-    """
-    Detects and neutralizes prompt injection and adversarial attacks
+    """Detects and neutralizes prompt injection and adversarial attacks
     by acting as an attractive but isolated target.
     """
 
@@ -180,8 +175,7 @@ class HoneypotAgent:
         self.trapped_attempts: list[dict[str, Any]] = []
 
     def verify_input_safety(self, prompt_input: str) -> dict[str, Any]:
-        """
-        Inspects input for "ignore previous instruction" or similar patterns.
+        """Inspects input for "ignore previous instruction" or similar patterns.
         """
         adversarial_patterns = [
             "ignore all previous",

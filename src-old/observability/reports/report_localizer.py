@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/report_localizer.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -61,21 +62,25 @@ __version__: str = VERSION
 class ReportLocalizer:
     """Localizer for report internationalization.
     Handles translation of report strings.
+
     Attributes:
         strings: Localized strings.
         current_locale: Current locale.
+
     Example:
         localizer=ReportLocalizer()
         localizer.add_string("error.syntax", {"en-US": "Syntax Error"})
         text=localizer.get("error.syntax")
+
     """
 
     def __init__(self, locale: LocaleCode = LocaleCode.EN_US) -> None:
         """Initialize localizer.
+
         Args:
             locale: Default locale.
-        """
 
+        """
         self.strings: dict[str, LocalizedString] = {}
         self.current_locale: LocaleCode = locale
         self._init_defaults()
@@ -83,7 +88,6 @@ class ReportLocalizer:
 
     def _init_defaults(self) -> None:
         """Initialize default strings."""
-
         defaults: dict[str, dict[str, str]] = {
             "report.description": {"en-US": "Description", "de-DE": "Beschreibung"},
             "report.errors": {"en-US": "Errors", "de-DE": "Fehler"},
@@ -97,23 +101,26 @@ class ReportLocalizer:
 
     def add_string(self, key: str, translations: dict[str, str]) -> None:
         """Add a localized string.
+
         Args:
             key: String key.
             translations: Locale to text mapping.
-        """
 
+        """
         default: str = translations.get("en-US", list(translations.values())[0] if translations else "")
         self.strings[key] = LocalizedString(key=key, translations=translations, default=default)
 
     def get(self, key: str, locale: LocaleCode | None = None) -> str:
         """Get localized string.
+
         Args:
             key: String key.
             locale: Override locale.
+
         Returns:
             Localized text.
-        """
 
+        """
         loc: LocaleCode = locale or self.current_locale
         if key not in self.strings:
             return key
@@ -122,8 +129,9 @@ class ReportLocalizer:
 
     def set_locale(self, locale: LocaleCode) -> None:
         """Set current locale.
+
         Args:
             locale: New locale.
-        """
 
+        """
         self.current_locale: LocaleCode = locale

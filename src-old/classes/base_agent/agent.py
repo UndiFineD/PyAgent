@@ -10,14 +10,13 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/base_agent/agent.description.md
 
 # agent
 
-**File**: `src\classes\base_agent\agent.py`  
+**File**: `src\\classes\base_agent\agent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 1 functions, 60 imports  
 **Lines**: 1295  
@@ -113,7 +112,7 @@ Fix markdown formatting in content.
 
 # Improvements for agent
 
-**File**: `src\classes\base_agent\agent.py`  
+**File**: `src\\classes\base_agent\agent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 1295 lines (very_large)  
 **Complexity**: 65 score (very_complex)
@@ -144,46 +143,38 @@ Fix markdown formatting in content.
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 """BaseAgent main class and core agent logic."""
 
 from __future__ import annotations
 
-import os
 import asyncio
+import logging
+import os
 import subprocess
 import sys
 import time
-import logging
-
+from collections.abc import Callable
 from datetime import datetime
 from pathlib import Path
 from types import TracebackType
-from typing import Any, Dict, List, Optional, cast, TYPE_CHECKING
-from collections.abc import Callable
+from typing import Any, cast
 
-from src.core.base.version import VERSION
-from src.core.base.utilities import as_tool
-from src.core.base.exceptions import CycleInterrupt
-from src.core.base.ConnectivityManager import ConnectivityManager
-from src.core.base.models import AgentPriority
 from src.core.base.AgentCore import BaseCore
 from src.core.base.BaseAgentCore import BaseAgentCore
+from src.core.base.delegation import AgentDelegator
+from src.core.base.exceptions import CycleInterrupt
+from src.core.base.managers.ResourceQuotaManager import QuotaConfig, ResourceQuotaManager
+from src.core.base.models import AgentPriority
 from src.core.base.registry import AgentRegistry
 from src.core.base.ShardedKnowledgeCore import ShardedKnowledgeCore
-from src.core.base.state.agent_state_manager import AgentStateManager
-from src.core.base.verification import AgentVerifier
-from src.core.base.delegation import AgentDelegator
 from src.core.base.shell import ShellExecutor
-
-from src.core.base.managers.ResourceQuotaManager import (
-    ResourceQuotaManager,
-    QuotaConfig
-)
-from src.infrastructure.compute.backend.LocalContextRecorder import (
-    LocalContextRecorder
-)
+from src.core.base.state.agent_state_manager import AgentStateManager
+from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
+from src.infrastructure.compute.backend.LocalContextRecorder import LocalContextRecorder
 
 try:
     import requests
@@ -195,9 +186,9 @@ except ImportError:
 
 # Advanced components (Lazy loaded or optional)
 try:
-    from src.logic.agents.cognitive.LongTermMemory import LongTermMemory
     from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
     from src.infrastructure.orchestration.ToolRegistry import ToolRegistry
+    from src.logic.agents.cognitive.LongTermMemory import LongTermMemory
 except (ImportError, ValueError):
     LongTermMemory = None
     SignalRegistry = None
@@ -212,9 +203,9 @@ except Exception:
     DEFAULT_PROMPT_TEMPLATES = []
 
 # Advanced components (Lazy loaded or optional)
-from src.logic.agents.cognitive.LongTermMemory import LongTermMemory
-from src.infrastructure.orchestration.ToolRegistry import ToolRegistry
 from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
+from src.infrastructure.orchestration.ToolRegistry import ToolRegistry
+from src.logic.agents.cognitive.LongTermMemory import LongTermMemory
 
 
 def fix_markdown_content(content: str) -> str:
@@ -260,6 +251,7 @@ class BaseAgent:
         - Provides fallback responses when AI backend unavailable
         - Supports multiple AI backends via execution_engine (Phase 314)
         - Can be used as context manager for automatic cleanup
+
     """
 
     # Class-level attributes for shared state
@@ -311,6 +303,7 @@ class BaseAgent:
         Note:
             Automatically reads previous content on initialization.
             Supports context manager protocol via __enter__ and __exit__.
+
         """
         self.file_path = Path(file_path)
         self.previous_content: str = ""
@@ -475,8 +468,7 @@ class BaseAgent:
         self._local_global_context = value
 
     def register_tools(self, registry: ToolRegistry) -> None:
-        """
-        Registers all methods decorated with @as_tool with the provided registry.
+        """Registers all methods decorated with @as_tool with the provided registry.
         """
         if not registry:
             return
@@ -503,8 +495,7 @@ class BaseAgent:
                 )
 
     def calculate_anchoring_strength(self, result: str) -> float:
-        """
-        Calculates the 'Anchoring Strength' metric (Stanford Research 2025).
+        """Calculates the 'Anchoring Strength' metric (Stanford Research 2025).
         Delegates to pure logic core.
         """
         return self.agent_logic_core.calculate_anchoring_strength(
@@ -512,8 +503,7 @@ class BaseAgent:
         )
 
     def verify_self(self, result: str) -> tuple[bool, str]:
-        """
-        Self-verification layer (inspired by Keio University 2026 research).
+        """Self-verification layer (inspired by Keio University 2026 research).
         Delegates to pure logic core.
         """
         return self.agent_logic_core.verify_self(result)
@@ -536,6 +526,7 @@ class BaseAgent:
 
         Args:
             strategy: An instance of AgentStrategy (e.g., DirectStrategy, ChainOfThoughtStrategy).
+
         """
         self.strategy = strategy
         msg = self.agent_logic_core.set_strategy(strategy)
@@ -551,6 +542,7 @@ class BaseAgent:
 
         Args:
             model: Model identifier (e.g., "gpt-4", "claude-3").
+
         """
         self._model = model
         logging.debug(f"Model set to: {model}")
@@ -585,6 +577,7 @@ class BaseAgent:
             - Logs any exceptions that occurred
             - Does not suppress exceptions
             - Can be overridden in subclasses for custom cleanup
+
         """
         logging.debug(f"{self.__class__.__name__} exiting context manager")
         AgentRegistry().unregister(self.agent_name)
@@ -660,6 +653,7 @@ class BaseAgent:
             - Uses UTF-8 encoding
             - Handles missing files gracefully
             - Automatically handles encoding errors
+
         """
         self._state: AgentState = AgentState.READING
         self._trigger_event(EventType.PRE_READ, {"file_path": str(self.file_path)})
@@ -721,12 +715,12 @@ class BaseAgent:
 
         Note:
             Called automatically by read_previous_content() for missing files.
+
         """
         return self.core.get_default_content(filename=self.file_path.name)
 
     def think(self, prompt: str, system_prompt: str | None = None) -> str:
-        """
-        Generic reasoning method that doesn't involve file updates.
+        """Generic reasoning method that doesn't involve file updates.
         Useful for planning, data generation, or internal reasoning.
         """
         self._state: AgentState = AgentState.THINKING
@@ -944,6 +938,7 @@ class BaseAgent:
             - Backend selection is automatic or via DV_AGENT_BACKEND env var
             - Supports multiple backends: copilot, GitHub Models, local
             - Returns original_content as fallback if backend unavailable
+
         """
         # Phase 245: Check quotas before execution
         exceeded, reason = self.quotas.check_quotas()
@@ -988,6 +983,7 @@ def get_backend_status() -> dict[str, Any]:
         status=BaseAgent.get_backend_status()
         for backend, info in status.items():
             print(f"{backend}: {info}")
+
     """
     logging.debug("Fetching backend status")
     # Deferred import to avoid circular dependency
@@ -1010,6 +1006,7 @@ def describe_backends() -> str:
     Example:
         print(BaseAgent.describe_backends())
         # Output: Available backends, versions, configuration details
+
     """
     logging.debug("Describing backend configuration")
     # Deferred import to avoid circular dependency
@@ -1032,6 +1029,7 @@ def describe_backends() -> str:
         Note:
             Called automatically by run_subagent() when backend unavailable.
             Subclasses should override to provide domain-specific defaults.
+
         """
         return (
             "# AI Improvement Unavailable\n"
@@ -1046,6 +1044,7 @@ def describe_backends() -> str:
 
         Returns:
             str: Unified diff string.
+
         """
         return self.core.calculate_diff(
             self.previous_content, self.current_content, filename=str(self.file_path)
@@ -1072,6 +1071,7 @@ def describe_backends() -> str:
         Example:
             agent.current_content="# Improved Content"
             agent.update_file()  # Writes to agent.file_path
+
         """
         content_to_write: str = self.current_content
         # Only run the markdown fixer on markdown-like files. Applying markdown
@@ -1157,6 +1157,7 @@ def describe_backends() -> str:
             - Uses difflib.unified_diff for standard format
             - Preserves line endings in diff
             - Empty string indicates no changes between versions
+
         """
         logging.debug("Generating diff between previous and current content")
         diff_str: str = self.core.calculate_diff(
@@ -1176,6 +1177,7 @@ def describe_backends() -> str:
 
         Args:
             template: The prompt template to register.
+
         """
         cls._prompt_templates[template.id] = template
         logging.debug(f"Registered template: {template.id}")
@@ -1189,6 +1191,7 @@ def describe_backends() -> str:
 
         Returns:
             The template if found, None otherwise.
+
         """
         return cls._prompt_templates.get(template_id)
 
@@ -1204,6 +1207,7 @@ def describe_backends() -> str:
 
         Raises:
             ValueError: If template not found.
+
         """
         template: PromptTemplate | None = self.get_template(template_id)
         if not template:
@@ -1222,6 +1226,7 @@ def describe_backends() -> str:
         Args:
             role: Message role (user, assistant, system).
             content: Message content.
+
         """
         role_value: str = role.strip().lower()
         try:
@@ -1249,6 +1254,7 @@ def describe_backends() -> str:
 
         Returns:
             Prompt with history context prepended.
+
         """
         if not self._conversation_history:
             return prompt
@@ -1266,14 +1272,14 @@ def describe_backends() -> str:
 
         Args:
             processor: Function that transforms response content.
+
         """
         self._post_processors.append(processor)
         logging.debug(f"Added post-processor: {processor.__name__}")
 
     @as_tool(category="cognition", priority=5)
     def take_note(self, note: str) -> str:
-        """
-        Record a persistent note into the internal scratchpad.
+        """Record a persistent note into the internal scratchpad.
         Useful for modular thinking across multiple tool calls.
         """
         timestamp = datetime.now().strftime("%H:%M:%S")
@@ -1309,6 +1315,7 @@ def describe_backends() -> str:
 
         Returns:
             Quality score enum value.
+
         """
         score: int = self.core.score_response_quality(response)
         return ResponseQuality(score)
@@ -1324,6 +1331,7 @@ def describe_backends() -> str:
 
         Returns:
             SHA256 hash key.
+
         """
         return self.core.generate_cache_key(prompt, content, model=self._model or "")
 
@@ -1339,6 +1347,7 @@ def describe_backends() -> str:
 
         Returns:
             Dictionary with cache stats.
+
         """
         total_hits: int = sum(e.hit_count for e in cls._response_cache.values())
         avg_quality: float = sum(
@@ -1364,6 +1373,7 @@ def describe_backends() -> str:
 
         Returns:
             True if within budget, False otherwise.
+
         """
         return (self._token_usage + estimated_tokens) <= self._config.token_budget
 
@@ -1376,6 +1386,7 @@ def describe_backends() -> str:
         Args:
             event: Event type to hook.
             callback: Callback function to invoke.
+
         """
         if event not in cls._event_hooks:
             cls._event_hooks[event] = []
@@ -1389,6 +1400,7 @@ def describe_backends() -> str:
         Args:
             event: Event type.
             callback: Callback to remove.
+
         """
         if event in cls._event_hooks and callback in cls._event_hooks[event]:
             cls._event_hooks[event].remove(callback)
@@ -1420,6 +1432,7 @@ def describe_backends() -> str:
         Args:
             event: Event type.
             data: Event data to pass to hooks.
+
         """
         data["agent"] = self.__class__.__name__
         data["file_path"] = str(self.file_path)
@@ -1439,6 +1452,7 @@ def describe_backends() -> str:
         Args:
             name: Plugin name.
             plugin: Plugin instance.
+
         """
         cls._plugins[name] = plugin
         logging.debug(f"Registered plugin: {name}")
@@ -1452,6 +1466,7 @@ def describe_backends() -> str:
 
         Returns:
             Plugin instance if found.
+
         """
         return cls._plugins.get(name)
 
@@ -1463,6 +1478,7 @@ def describe_backends() -> str:
 
         Returns:
             HealthCheckResult with diagnostic information.
+
         """
         backend_status: dict[str, Any] = cls.get_backend_status()
         backend_available: bool = any(

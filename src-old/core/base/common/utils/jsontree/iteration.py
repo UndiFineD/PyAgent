@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/jsontree/iteration.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -55,8 +56,7 @@ from src.core.base.common.utils.jsontree.types import _T, JSONTree
 
 
 def json_iter_leaves(value: JSONTree[_T]) -> Iterable[_T]:
-    """
-    Iterate through each leaf in a nested JSON structure.
+    """Iterate through each leaf in a nested JSON structure.
 
     A leaf is any value that is not a dict, list, or tuple.
 
@@ -65,6 +65,7 @@ def json_iter_leaves(value: JSONTree[_T]) -> Iterable[_T]:
 
     Yields:
         Each leaf value in depth-first order.
+
     """
     if isinstance(value, dict):
         for v in value.values():
@@ -77,8 +78,7 @@ def json_iter_leaves(value: JSONTree[_T]) -> Iterable[_T]:
 
 
 def json_iter_leaves_with_path(value: JSONTree[_T], prefix: str = "") -> Iterable[tuple[str, _T]]:
-    """
-    Iterate through each leaf with its dot-notation path.
+    """Iterate through each leaf with its dot-notation path.
 
     Args:
         value: A nested JSON structure.
@@ -86,6 +86,7 @@ def json_iter_leaves_with_path(value: JSONTree[_T], prefix: str = "") -> Iterabl
 
     Yields:
         Tuples of (path, leaf_value).
+
     """
     if isinstance(value, dict):
         for k, v in value.items():

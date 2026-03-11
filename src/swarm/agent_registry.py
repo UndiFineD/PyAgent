@@ -1,9 +1,10 @@
 import time
-from typing import Dict, Any
+from typing import Any, Dict
 
 
 class AgentRegistry:
     """Registry to manage agent registrations and heartbeats."""
+
     def __init__(self, heartbeat_interval: float = 30.0) -> None:
         self.heartbeat_interval = heartbeat_interval
         self._agents: Dict[str, Dict[str, Any]] = {}

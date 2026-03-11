@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/maintenance/mixins/header_fixer_mixin.description.md
 
@@ -98,8 +97,7 @@ class HeaderFixerMixin:
     """Provides automated fixes for license headers and __future__ imports."""
 
     def clean_file_headers(self, file_path: Path) -> bool:
-        """
-        Remove duplicate license headers and docstrings, fix __future__ positioning.
+        """Remove duplicate license headers and docstrings, fix __future__ positioning.
         Salvaged from temp fix scripts.
         """
         try:

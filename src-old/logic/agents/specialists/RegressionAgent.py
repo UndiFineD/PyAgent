@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/RegressionAgent.description.md
 
 # RegressionAgent
 
-**File**: `src\logic\agents\specialists\RegressionAgent.py`  
+**File**: `src\\logic\agents\\specialists\\RegressionAgent.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 16 imports  
 **Lines**: 375  
@@ -68,7 +67,7 @@ between variables (e.g., predicting code complexity growth, performance trends).
 
 # Improvements for RegressionAgent
 
-**File**: `src\logic\agents\specialists\RegressionAgent.py`  
+**File**: `src\\logic\agents\\specialists\\RegressionAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 375 lines (medium)  
 **Complexity**: 6 score (moderate)
@@ -106,19 +105,17 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# RegressionAgent: Predictive Trend and Relationship Specialist - Phase 319 Enhanced
-
-from src.core.base.Version import VERSION
-import logging
-import json
-import re
 import math
-from typing import Any, Dict, List, Optional, Tuple
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Dict, List
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.BaseUtilities import as_tool
+
+# Copyright 2026 PyAgent Authors
+# RegressionAgent: Predictive Trend and Relationship Specialist - Phase 319 Enhanced
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
@@ -143,8 +140,7 @@ class RegressionResult:
 
 
 class RegressionAgent(BaseAgent):
-    """
-    Agent specializing in predicting continuous values and analyzing relationships
+    """Agent specializing in predicting continuous values and analyzing relationships
     between variables (e.g., predicting code complexity growth, performance trends).
     """
 

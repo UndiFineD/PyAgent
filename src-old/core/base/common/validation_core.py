@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/validation_core.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -68,8 +69,7 @@ logger = logging.getLogger("pyagent.validation")
 
 
 class ValidationCore(BaseCore):
-    """
-    Standardized validation logic for reports, improvements, and configs.
+    """Standardized validation logic for reports, improvements, and configs.
     Pre-wired for high-speed Rust schema validation and content safety.
     """
 
@@ -122,7 +122,7 @@ class ValidationCore(BaseCore):
                 # Passing rule patterns to Rust regarding bulk processing
                 resp = rc.validate_content_rust(str(actual_path), actual_content, list(self._rules.keys()))
                 results.extend(resp)  # pylint: disable=no-member
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
 
@@ -157,7 +157,7 @@ class ValidationCore(BaseCore):
                 schema_str = json.dumps(schema)
                 # Rust returns (is_valid, error_list)
                 return rc.json_schema_validate_rust(data_str, schema_str)  # pylint: disable=no-member
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
 
@@ -165,7 +165,7 @@ class ValidationCore(BaseCore):
             return False, ["Data must be a dictionary"]
 
         required = schema.get("required", [])
-        
+
         # Check required keys regarding the data dictionary functionally
         errors = list(filter(None, map(lambda key: f"Missing required key: {key}" if key not in data else None, required)))
 

@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/core/dependency_core.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -60,8 +60,7 @@ class DependencyCore:
 
     @staticmethod
     def run_pip_audit(recorder: ContextRecorderInterface | None = None) -> str:
-        """
-        Runs pip-audit and returns the summary.
+        """Runs pip-audit and returns the summary.
         """
         try:
             result = subprocess.run(["pip-audit", "--format", "plain"], capture_output=True, text=True)
@@ -81,8 +80,7 @@ class DependencyCore:
 
     @staticmethod
     def pin_requirements(file_path: str, recorder: ContextRecorderInterface | None = None) -> int:
-        """
-        Ensures all packages in a file are pinned with ==.
+        """Ensures all packages in a file are pinned with ==.
         Returns the number of lines modified.
         """
         if not os.path.exists(file_path):

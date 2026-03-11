@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/execution/agent_delegator.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -80,7 +80,6 @@ class AgentDelegator:
         priority: AgentPriority = AgentPriority.NORMAL,
     ) -> str:
         """Launches another agent to perform a sub-task."""
-
         # Initialize or update context
         if context is None:
             context = CascadeContext()

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialized/asyncio_threading_coder_agent.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -56,8 +57,7 @@ from src.core.base.lifecycle.version import VERSION
 
 
 class AsyncioThreadingCoderAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Specialized Agent for high-concurrency coding tasks using asyncio and threading.
+    """Specialized Agent for high-concurrency coding tasks using asyncio and threading.
     """
 
     def __init__(self, workspace_path: str) -> None:

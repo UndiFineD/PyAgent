@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/identity_core.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Unified Identity core for all PyAgent services."""
@@ -53,9 +53,10 @@ import uuid
 from dataclasses import dataclass
 from typing import Any, Dict, Optional
 
+from src.core.base.common.base_core import BaseCore
+
 # using absolute path because some tests load this module directly
 from src.core.base.lifecycle.version import SDK_VERSION
-from src.core.base.common.base_core import BaseCore
 
 try:
     import rust_core as rc
@@ -73,8 +74,7 @@ class AgentIdentity:
 
 
 class IdentityCore(BaseCore):
-    """
-    Pure logic for decentralized agent identity and payload signing.
+    """Pure logic for decentralized agent identity and payload signing.
     Handles cryptographic verification and agent-ID generation.
     """
 
@@ -149,8 +149,7 @@ class IdentityCore(BaseCore):
         return self.sign_payload(payload, public_key) == signature
 
     def validate_identity(self, identity: AgentIdentity) -> bool:
-        """
-        Validates an agent identity following Phase 119 rules.
+        """Validates an agent identity following Phase 119 rules.
         - agent_id must be 16 characters.
         - agent_id must NOT contain '@'.
         """

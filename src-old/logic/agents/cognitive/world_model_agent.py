@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/world_model_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -55,17 +55,16 @@ import logging
 import os
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 # pylint: disable=too-many-ancestors
 class WorldModelAgent(BaseAgent):
-    """
-    Agent responsible for maintaining a 'World Model' of the workspace and environment.
+    """Agent responsible for maintaining a 'World Model' of the workspace and environment.
     It can simulate actions and predict outcomes without executing them on the real system.
     """
 
@@ -102,8 +101,7 @@ class WorldModelAgent(BaseAgent):
     async def predict_action_outcome(
         self, action_description: str, current_context: str
     ) -> dict[str, Any]:
-        """
-        Predicts the outcome of a proposed action based on current context.
+        """Predicts the outcome of a proposed action based on current context.
         Returns a dictionary with predicted success, side effects, and risk level.
         """
         logging.info(
@@ -132,8 +130,7 @@ class WorldModelAgent(BaseAgent):
 
     @as_tool
     def simulate_workspace_state(self, hypothetical_changes: list[str]) -> str:
-        """
-        Simulates the state of the workspace after a set of hypothetical changes.
+        """Simulates the state of the workspace after a set of hypothetical changes.
         Useful for 'what-if' analysis.
         """
         logging.info(
@@ -150,8 +147,7 @@ class WorldModelAgent(BaseAgent):
     async def simulate_agent_interaction(
         self, agent_a: str, agent_b: str, shared_goal: str
     ) -> dict[str, Any]:
-        """
-        Recursive World Modeling: Simulates how two agents will interact to solve a goal.
+        """Recursive World Modeling: Simulates how two agents will interact to solve a goal.
         Predicts potential conflicts, cooperative strategies, and final throughput.
         """
         logging.info(

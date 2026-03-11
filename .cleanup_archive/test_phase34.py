@@ -11,15 +11,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-Test Phase34 module.
+"""Test Phase34 module.
 """
 
+import logging
 import os
 import sys
 import time
-import logging
 from pathlib import Path
+
 from src.classes.fleet.FleetManager import FleetManager
 
 # Add the workspace root to sys.path

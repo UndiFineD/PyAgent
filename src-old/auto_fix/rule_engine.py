@@ -15,7 +15,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Callable, Protocol
+from typing import Callable, List, Protocol
 
 
 class Rule(Protocol):
@@ -67,7 +67,7 @@ class RuleEngine:
                 except Exception:
                     continue
                 if hasattr(module, "check"):
-                    func = getattr(module, "check")
+                    func = module.check
 
                     class FuncRule:
                         def __init__(self, f: Callable[[str], list]):

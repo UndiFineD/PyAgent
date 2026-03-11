@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/mixins/privacy_assessment_mixin.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -53,8 +53,10 @@ Privacy assessment mixin.py module.
 
 
 import time
+from typing import Any
+
 from src.logic.agents.security.compliance_agent import ComplianceAgent
-from typing import TYPE_CHECKING, Any
+
 
 class PrivacyAssessmentMixin:
     """Mixin for conducting Privacy Impact Assessments in ComplianceAgent."""

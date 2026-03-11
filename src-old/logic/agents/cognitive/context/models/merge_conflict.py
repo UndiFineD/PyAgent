@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/models/merge_conflict.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -48,12 +48,12 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_context.py"""
 
+from dataclasses import dataclass
+
 from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.utils.ConflictResolution import (
     ConflictResolution,
 )
-from dataclasses import dataclass
-from typing import Optional
 
 __version__ = VERSION
 
@@ -67,6 +67,7 @@ class MergeConflict:
         ours: Our version of content.
         theirs: Their version of content.
         resolution: Applied resolution.
+
     """
 
     section: str

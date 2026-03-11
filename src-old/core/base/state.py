@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/state.description.md
 
 # state
 
-**File**: `src\core\base\state.py`  
+**File**: `src\\core\base\\state.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 13 imports  
 **Lines**: 129  
@@ -68,7 +67,7 @@ Manages saving and loading agent state to/from disk.
 
 # Improvements for state
 
-**File**: `src\core\base\state.py`  
+**File**: `src\\core\base\\state.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 129 lines (medium)  
 **Complexity**: 10 score (moderate)
@@ -119,14 +118,15 @@ State management for swarm agents.
 Handles persistence of agent memory, history, and metadata.
 """
 
-from src.core.base.version import VERSION
+import collections
 import json
 import logging
 import shutil
 import time
-import collections
 from pathlib import Path
-from typing import Dict, Any, Optional, List
+from typing import Any
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -174,7 +174,6 @@ class StateTransaction:
         self.id = f"tx_{int(time.time()*1000)}"
 
     def __enter__(self) -> StateTransaction:
-        import time
 
         for file in self.target_files:
             if file.exists():

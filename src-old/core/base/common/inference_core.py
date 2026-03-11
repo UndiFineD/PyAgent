@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/inference_core.description.md
 
@@ -28,10 +27,12 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Core logic for inference, tokenization, and model adaptation."""
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -44,18 +45,18 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import logging
 from typing import Any, Dict, List, Optional
+
+# import other components with absolute paths so the module can be executed via importlib
+from src.core.base.common.base_core import BaseCore
+from src.core.base.models.communication_models import PromptTemplate
 
 # Use absolute import so pytest can load the module regardless of package context
 from src.infrastructure.engine.tokenization.utils import (
     estimate_token_count,
     get_tokenizer,
 )
-# import other components with absolute paths so the module can be executed via importlib
-from src.core.base.common.base_core import BaseCore
-from src.core.base.models.communication_models import PromptTemplate
 
 try:
     import rust_core as rc
@@ -66,8 +67,7 @@ logger = logging.getLogger("pyagent.inference")
 
 
 class InferenceCore(BaseCore):
-    """
-    Unified Inference and Model Utilities Core.
+    """Unified Inference and Model Utilities Core.
     Handles tokenization, prompt rendering, and LoRA adapter management.
     """
 
@@ -108,8 +108,7 @@ class InferenceCore(BaseCore):
 
     # --- Adapter Management (Rust Acceleration Target) ---
     def apply_lora_adapters(self, base_model: Any, adapters: List[str]) -> Any:
-        """
-        Applies LoRA adapters to a base model.
+        """Applies LoRA adapters to a base model.
         Hot path for Rust migration (rc.apply_lora_rust).
         """
         if rc and hasattr(rc, "apply_lora_rust"):  # pylint: disable=no-member

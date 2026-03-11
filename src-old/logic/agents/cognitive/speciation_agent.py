@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/speciation_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -53,14 +53,13 @@ import os
 from pathlib import Path
 from typing import Any
 
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
 
 
 # pylint: disable=too-many-ancestors
 class SpeciationAgent(BaseAgent):
-    """
-    Agent responsible for 'speciation' - creating specialized derivatives of existing agents.
+    """Agent responsible for 'speciation' - creating specialized derivatives of existing agents.
     It analyzes task success and generates new agent classes with optimized system prompts.
     """
 
@@ -76,8 +75,7 @@ class SpeciationAgent(BaseAgent):
     async def evolve_specialized_agent(
         self, base_agent_name: str, niche_domain: str
     ) -> str:
-        """
-        Creates a new agent class file that specializes in a specific niche.
+        """Creates a new agent class file that specializes in a specific niche.
         e.g., 'CoderAgent' -> 'ReactSpecialistAgent'
         """
         logging.info(
@@ -137,8 +135,7 @@ class {new_agent_name}(BaseAgent):
     def detect_red_queen_stagnation(
         self, agent_a_name: str, agent_b_name: str
     ) -> dict[str, Any]:
-        """
-        Detects if two agents are converging in their specialized roles (Red Queen stagnation).
+        """Detects if two agents are converging in their specialized roles (Red Queen stagnation).
         If similarity is > 80%, it recommends a divergence event.
         """
         # In a real scenario, we'd load both classes and compare _system_prompts.
@@ -161,8 +158,7 @@ class {new_agent_name}(BaseAgent):
 
     @as_tool
     def trigger_divergence(self, agent_name: str) -> str:
-        """
-        Forces an agent to diverge its specialization to avoid redundant evolution.
+        """Forces an agent to diverge its specialization to avoid redundant evolution.
         Mutates the system prompt to explore a more distant niche.
         """
         logging.warning(f"Red Queen Event: Forcing divergence for {agent_name}")

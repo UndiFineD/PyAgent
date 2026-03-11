@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/asynchronous_agent_pipeline_core.description.md
 
 # asynchronous_agent_pipeline_core
 
-**File**: `src\core\base\logic\core\asynchronous_agent_pipeline_core.py`  
+**File**: `src\\core\base\\logic\\core\asynchronous_agent_pipeline_core.py`  
 **Type**: Python Module  
 **Summary**: 4 classes, 0 functions, 16 imports  
 **Lines**: 359  
@@ -85,7 +84,7 @@ communicating via queues to eliminate compute bubbles.
 
 # Improvements for asynchronous_agent_pipeline_core
 
-**File**: `src\core\base\logic\core\asynchronous_agent_pipeline_core.py`  
+**File**: `src\\core\base\\logic\\core\asynchronous_agent_pipeline_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 359 lines (medium)  
 **Complexity**: 4 score (simple)
@@ -127,15 +126,13 @@ Implements decoupled inference, tool execution, and learning for parallel proces
 
 import asyncio
 import logging
-import json
 import time
-from typing import Dict, List, Optional, Any, Callable, Awaitable
+import uuid
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import datetime
-from concurrent.futures import ThreadPoolExecutor
-import threading
 from queue import Queue
-import uuid
+from typing import Any, Awaitable, Callable, Dict, List, Optional
 
 
 @dataclass
@@ -175,8 +172,7 @@ class Trajectory:
 
 
 class AsynchronousAgentPipelineCore:
-    """
-    Core implementing asynchronous agent pipeline pattern.
+    """Core implementing asynchronous agent pipeline pattern.
 
     Decouples inference, tool execution, and learning into parallel components
     communicating via queues to eliminate compute bubbles.
@@ -255,12 +251,12 @@ class AsynchronousAgentPipelineCore:
         self.logger.info("Pipeline stopped")
 
     async def submit_inference_action(self, state: Dict[str, Any], action: ToolCall):
-        """
-        Submit an action from inference worker to tool execution queue.
+        """Submit an action from inference worker to tool execution queue.
 
         Args:
             state: Current agent state
             action: Tool call action
+
         """
         try:
             self.tool_call_queue.put_nowait((state, action))
@@ -390,8 +386,7 @@ class AsynchronousAgentPipelineCore:
         tool_result: ToolResult,
         execution_time: float,
     ) -> float:
-        """
-        Compute reward for a trajectory.
+        """Compute reward for a trajectory.
 
         This is a simple reward function - in practice, this would be
         a learned reward model or rule-based system.

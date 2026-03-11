@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/agent_plugin_base.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -53,8 +54,7 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any
 
-from src.core.base.common.models import (AgentHealthCheck, AgentPriority,
-                                         HealthStatus)
+from src.core.base.common.models import AgentHealthCheck, AgentPriority, HealthStatus
 from src.core.base.lifecycle.version import VERSION
 
 __version__: str = VERSION
@@ -70,6 +70,7 @@ class AgentPluginBase(ABC):
         name: Plugin name.
         priority: Execution priority.
         config: Plugin configuration.
+
     """
 
     def __init__(
@@ -84,6 +85,7 @@ class AgentPluginBase(ABC):
             name: Unique plugin name.
             priority: Execution priority.
             config: Plugin - specific configuration.
+
         """
         self.name: str = name
         self.priority: AgentPriority = priority
@@ -100,6 +102,7 @@ class AgentPluginBase(ABC):
 
         Returns:
             bool: True if changes were made, False otherwise.
+
         """
         raise NotImplementedError()
 
@@ -119,5 +122,6 @@ class AgentPluginBase(ABC):
 
         Returns:
             AgentHealthCheck: Health check result.
+
         """
         return AgentHealthCheck(agent_name=self.name, status=HealthStatus.HEALTHY)

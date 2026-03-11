@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/GraphContextEngine.description.md
 
@@ -98,11 +97,12 @@ from __future__ import annotations
 
 """Core engine for managing code relationships as a graph."""
 
-from src.core.base.version import VERSION
 import json
 import logging
 from pathlib import Path
-from typing import Dict, Set, Any, Optional
+from typing import Any
+
+from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.engines.GraphCore import GraphCore
 
 __version__ = VERSION

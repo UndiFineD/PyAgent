@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/OrchestratorFeatures.description.md
 
 # OrchestratorFeatures
 
-**File**: `src\logic\agents\swarm\OrchestratorFeatures.py`  
+**File**: `src\\logic\agents\\swarm\\OrchestratorFeatures.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 39  
@@ -41,7 +40,7 @@ This helps keep the main OrchestratorAgent file small (<30KB).
 
 # Improvements for OrchestratorFeatures
 
-**File**: `src\logic\agents\swarm\OrchestratorFeatures.py`  
+**File**: `src\\logic\agents\\swarm\\OrchestratorFeatures.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 39 lines (small)  
 **Complexity**: 0 score (simple)
@@ -91,11 +90,11 @@ OrchestratorFeatures: Mixin class for OrchestratorAgent features.
 """
 
 
+from .OrchestratorDiffMixin import OrchestratorDiffMixin
+from .OrchestratorExecutionMixin import OrchestratorExecutionMixin
+from .OrchestratorLifecycleMixin import OrchestratorLifecycleMixin
 from .OrchestratorPluginMixin import OrchestratorPluginMixin
 from .OrchestratorResourceMixin import OrchestratorResourceMixin
-from .OrchestratorDiffMixin import OrchestratorDiffMixin
-from .OrchestratorLifecycleMixin import OrchestratorLifecycleMixin
-from .OrchestratorExecutionMixin import OrchestratorExecutionMixin
 
 
 class OrchestratorFeatures(
@@ -105,8 +104,7 @@ class OrchestratorFeatures(
     OrchestratorLifecycleMixin,
     OrchestratorExecutionMixin,
 ):
-    """
-    Mixin class that provides additional features to OrchestratorAgent.
+    """Mixin class that provides additional features to OrchestratorAgent.
     This helps keep the main OrchestratorAgent file small (<30KB).
     """
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/core/model_registry_core.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -55,8 +55,7 @@ from pathlib import Path
 
 
 class ModelRegistryCore:
-    """
-    ModelRegistryCore manages the PEFT (LoRA/QLoRA) adapter registry.
+    """ModelRegistryCore manages the PEFT (LoRA/QLoRA) adapter registry.
     It maps request types to specific expert adapters.
     Phase 289: Model Registry Self-Healing.
     """
@@ -72,8 +71,7 @@ class ModelRegistryCore:
         self.unhealthy_entries: set[str] = set()
 
     def self_heal(self) -> int:
-        """
-        Phase 289: Detects missing adapter files and prunes or fixes the registry.
+        """Phase 289: Detects missing adapter files and prunes or fixes the registry.
         Returns the number of healed/removed entries.
         """
         healed_count = 0
@@ -106,8 +104,7 @@ class ModelRegistryCore:
     def should_trigger_finetuning(
         self, quality_history: list[float], threshold: float = 0.6
     ) -> bool:
-        """
-        Determines if fine-tuning is needed (e.g., last 5 scores below threshold).
+        """Determines if fine-tuning is needed (e.g., last 5 scores below threshold).
         """
         try:
             import rust_core

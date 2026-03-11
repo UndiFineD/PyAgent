@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/payload_generator_mixin.description.md
 
 # payload_generator_mixin
 
-**File**: `src\core\base\mixins\payload_generator_mixin.py`  
+**File**: `src\\core\base\\mixins\\payload_generator_mixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 168  
@@ -66,7 +65,7 @@ Inspired by aem-hacker's hardcoded payloads for SSRF, RCE, XSS, etc.
 
 # Improvements for payload_generator_mixin
 
-**File**: `src\core\base\mixins\payload_generator_mixin.py`  
+**File**: `src\\core\base\\mixins\\payload_generator_mixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 168 lines (medium)  
 **Complexity**: 9 score (moderate)
@@ -100,15 +99,13 @@ LLM_CONTEXT_END
 """
 
 import base64
-import json
 import uuid
-from typing import Dict, Any, List, Optional
+from typing import Any, Dict, List, Optional
 from urllib.parse import quote
 
 
 class PayloadGeneratorMixin:
-    """
-    Mixin providing payload generation capabilities for various exploits.
+    """Mixin providing payload generation capabilities for various exploits.
 
     Inspired by aem-hacker's hardcoded payloads for SSRF, RCE, XSS, etc.
     """
@@ -169,14 +166,14 @@ class PayloadGeneratorMixin:
         }
 
     def generate_ssrf_rce_payload(self, fake_aem_host: str) -> str:
-        """
-        Generate SSRF to RCE payload for AEM exploitation.
+        """Generate SSRF to RCE payload for AEM exploitation.
 
         Args:
             fake_aem_host: Hostname/IP of fake AEM server
 
         Returns:
             URL parameters string
+
         """
         template = self._payload_templates["ssrf_rce"]
         uuid_val = str(uuid.uuid4())
@@ -196,8 +193,7 @@ class PayloadGeneratorMixin:
     def generate_xss_payload(
         self, payload_type: str = "reflected", index: int = 0
     ) -> str:
-        """
-        Generate XSS payload.
+        """Generate XSS payload.
 
         Args:
             payload_type: 'swf', 'reflected'
@@ -205,6 +201,7 @@ class PayloadGeneratorMixin:
 
         Returns:
             XSS payload string
+
         """
         key = f"{payload_type}_xss" if payload_type == "swf" else payload_type
         payloads = self._payload_templates["xss"].get(key, [])
@@ -215,26 +212,26 @@ class PayloadGeneratorMixin:
     def generate_deserialization_payload(
         self, payload_type: str = "java_object_array"
     ) -> bytes:
-        """
-        Generate deserialization payload.
+        """Generate deserialization payload.
 
         Args:
             payload_type: Type of deserialization payload
 
         Returns:
             Payload bytes
+
         """
         return self._payload_templates["deserialization"].get(payload_type, b"")
 
     def generate_groovy_rce_payload(self, command: str = "whoami") -> str:
-        """
-        Generate Groovy RCE payload.
+        """Generate Groovy RCE payload.
 
         Args:
             command: Command to execute
 
         Returns:
             URL-encoded Groovy script
+
         """
         if command == "whoami":
             return self._payload_templates["groovy_rce"]["whoami"]
@@ -244,12 +241,12 @@ class PayloadGeneratorMixin:
             )
 
     def add_payload_template(self, name: str, template: Dict[str, Any]) -> None:
-        """
-        Add custom payload template.
+        """Add custom payload template.
 
         Args:
             name: Template name
             template: Template dictionary
+
         """
         self._payload_templates[name] = template
 

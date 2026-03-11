@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/maintenance/mixins/pylint_fixer_mixin.description.md
 
@@ -41,14 +40,15 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
 Mixin providing automated pylint issue remediation for the Maintenance Agent.
 """
 
-import re
 import logging
+import re
 from pathlib import Path
 
 logger = logging.getLogger(__name__)

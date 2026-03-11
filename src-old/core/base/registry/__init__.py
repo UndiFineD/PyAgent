@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/registry/__init__.description.md
 
@@ -44,6 +43,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -53,6 +53,7 @@ Extension Registry Package - Phase 20
 Plugin system for managing extensible component registries.
 """
 
+from .agent_registry import AgentRegistry  # noqa: F401
 from .extension_registry import (
     ExtensionInfo,
     ExtensionManager,  # noqa: F401
@@ -66,7 +67,6 @@ from .extension_registry import (
     create_typed_registry,
     get_global_registry,
 )
-from .agent_registry import AgentRegistry  # noqa: F401
 
 __all__ = [
     "ExtensionManager",

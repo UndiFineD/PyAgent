@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/interface/commands/__init__.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -49,14 +50,15 @@ Slash commands package.
 """
 
 
-from typing import Any, Callable
-
 # Certain test modules import this package under the name
 # `src.interface.commands` which breaks normal relative imports.  To avoid
 # the resulting ModuleNotFoundError we bypass Python's import machinery and
 # load the local files directly by path.  This loader works regardless of
 # how the package is named on sys.path.
-import importlib.util, os, sys
+import importlib.util
+import os
+import sys
+from typing import Any, Callable
 
 _pkg_dir = os.path.dirname(__file__)
 
@@ -138,15 +140,13 @@ def get_slash_commands() -> CommandParser:
 
 
 def process_prompt(prompt: str, **kwargs: Any) -> ProcessedPrompt:
-    """
-    Process a prompt with slash commands.
+    """Process a prompt with slash commands.
     """
     return get_slash_commands().process(prompt, **kwargs)
 
 
 def execute_command(command: str, args: list[str] | None = None) -> CommandResult:
-    """
-    Execute a single slash command.
+    """Execute a single slash command.
     """
     return get_slash_commands().execute(command, args)
 
@@ -156,15 +156,13 @@ def register_command(
     handler: CommandHandler,
     **kwargs: Any,
 ) -> None:
-    """
-    Register a custom command.
+    """Register a custom command.
     """
     get_slash_commands().registry.register(name, handler, **kwargs)
 
 
 def command(name: str, **kwargs: Any) -> Callable[[CommandHandler], CommandHandler]:
-    """
-    Decorator to register a custom command.
+    """Decorator to register a custom command.
     """
     return get_slash_commands().registry.command(name, **kwargs)
 

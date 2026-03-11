@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/tracing/open_telemetry_tracer.description.md
 
@@ -35,6 +34,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ import time
 from collections.abc import Callable, Generator, Mapping
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any, ParamSpec, TypeVar
+from typing import Any, ParamSpec, TypeVar
 
 logger = logging.getLogger(__name__)
 
@@ -92,19 +92,17 @@ try:
     from opentelemetry.context.context import Context
     from opentelemetry.sdk.environment_variables import OTEL_EXPORTER_OTLP_TRACES_PROTOCOL
     from opentelemetry.sdk.trace import TracerProvider
-    from opentelemetry.sdk.trace.export import (
-        BatchSpanProcessor,
-        SimpleSpanProcessor,
-        SpanExporter)
+    from opentelemetry.sdk.trace.export import BatchSpanProcessor, SimpleSpanProcessor, SpanExporter
     from opentelemetry.trace import (
-        Span, 
-        SpanKind, 
-        Status, 
+        Span,
+        SpanKind,
+        Status,
         StatusCode,
-        Tracer, 
+        Tracer,
         get_current_span,
-        get_tracer_provider, 
-        set_tracer_provider)
+        get_tracer_provider,
+        set_tracer_provider,
+    )
     from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
 
     _is_otel_imported = True
@@ -113,7 +111,7 @@ except ImportError:
     otel_import_error_traceback = traceback.format_exc()
 
 try:
-    import rust_core as rc # type: ignore
+    import rust_core as rc  # type: ignore
     HAS_RUST = True
 except ImportError:
     rc = None # type: ignore
@@ -127,8 +125,7 @@ T = TypeVar("T")
 # Span Attributes (Standard names for LLM operations)
 # ============================================================================
 class SpanAttributes:
-    """
-    Standard span attribute names for LLM and AI operations.
+    """Standard span attribute names for LLM and AI operations.
 
     Based on OpenTelemetry semantic conventions for GenAI.
     """
@@ -201,8 +198,7 @@ def init_tracer(
     *,
     use_batch_processor: bool = True,
 ) -> Tracer | None:
-    """
-    Initialize an OpenTelemetry tracer.
+    """Initialize an OpenTelemetry tracer.
 
     Args:
         instrumenting_module_name: Name of the module being instrumented.
@@ -214,6 +210,7 @@ def init_tracer(
 
     Raises:
         ValueError: If OpenTelemetry is not available.
+
     """
     if not is_otel_available():
         _raise_otel_missing_error()
@@ -250,8 +247,7 @@ def _configure_span_export(
 
 
 def get_span_exporter(endpoint: str) -> SpanExporter:
-    """
-    Get a span exporter based on the configured protocol.
+    """Get a span exporter based on the configured protocol.
 
     Supports both gRPC and HTTP protocols.
     """
@@ -265,11 +261,9 @@ def get_span_exporter(endpoint: str) -> SpanExporter:
 def _create_exporter_by_protocol(protocol: str, endpoint: str) -> SpanExporter:
     """Creates the appropriate span exporter for the given protocol."""
     if protocol == "grpc":
-        from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import \
-            OTLPSpanExporter
+        from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
     elif protocol == "http/protobuf":
-        from opentelemetry.exporter.otlp.proto.http.trace_exporter import \
-            OTLPSpanExporter
+        from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
     else:
         raise ValueError(f"Unsupported OTLP protocol '{protocol}' is configured")
 
@@ -277,8 +271,7 @@ def _create_exporter_by_protocol(protocol: str, endpoint: str) -> SpanExporter:
 
 
 def get_tracer(name: str = __name__) -> Tracer | None:
-    """
-    Get a tracer from the current provider.
+    """Get a tracer from the current provider.
 
     Returns None if OpenTelemetry is not available.
     """
@@ -291,14 +284,14 @@ def get_tracer(name: str = __name__) -> Tracer | None:
 # Trace Context Propagation
 # ============================================================================
 def extract_trace_context(headers: Mapping[str, str] | None) -> Context | None:
-    """
-    Extract trace context from HTTP headers.
+    """Extract trace context from HTTP headers.
 
     Args:
         headers: HTTP headers containing trace context.
 
     Returns:
         OpenTelemetry context or None.
+
     """
     propagator = get_propagator()
     if not propagator:
@@ -309,14 +302,14 @@ def extract_trace_context(headers: Mapping[str, str] | None) -> Context | None:
 
 
 def inject_trace_context(headers: dict[str, str]) -> dict[str, str]:
-    """
-    Inject current trace context into headers.
+    """Inject current trace context into headers.
 
     Args:
         headers: Dictionary to inject trace context into.
 
     Returns:
         Headers with trace context added.
+
     """
     propagator = get_propagator()
     if not propagator:
@@ -327,8 +320,7 @@ def inject_trace_context(headers: dict[str, str]) -> dict[str, str]:
 
 
 def extract_trace_headers(headers: Mapping[str, str]) -> dict[str, str]:
-    """
-    Extract only trace-related headers from a headers mapping.
+    """Extract only trace-related headers from a headers mapping.
     """
     return {h: headers[h] for h in TRACE_HEADERS if h in headers}
 
@@ -380,8 +372,7 @@ def create_span(
     should_record_exception: bool = True,
     set_status_on_exception: bool = True,
 ) -> Generator[Span | None, None, None]:
-    """
-    Context manager for creating a span.
+    """Context manager for creating a span.
 
     Args:
         name: Span name.
@@ -394,6 +385,7 @@ def create_span(
 
     Yields:
         Span instance or None if tracing is not available.
+
     """
     if not is_otel_available():
         yield None
@@ -425,8 +417,7 @@ def traced(
     attributes: dict[str, Any] | None = None,
     should_record_exception: bool = True,
 ) -> Callable[[Callable[P, T]], Callable[P, T]]:
-    """
-    Decorator to trace a function.
+    """Decorator to trace a function.
 
     Args:
         name: Span name (defaults to function name).
@@ -439,6 +430,7 @@ def traced(
         >>> @traced("process_data", attributes={"service": "processor"})
         ... def process_data(data: str) -> str:
         ...     return data.upper()
+
     """
 
     def decorator(func: Callable[P, T]) -> Callable[P, T]:
@@ -471,8 +463,7 @@ def get_current_span_safe() -> Span | None:
 
 
 def add_span_attributes(attributes: dict[str, Any]) -> None:
-    """
-    Add attributes to the current span regarding specific metadata.
+    """Add attributes to the current span regarding specific metadata.
 
     Safe to call even if tracing is not available.
     """
@@ -488,8 +479,7 @@ def add_span_event(
     name: str,
     attributes: dict[str, Any] | None = None,
 ) -> None:
-    """
-    Add an event to the current span.
+    """Add an event to the current span.
 
     Safe to call even if tracing is not available.
     """
@@ -502,8 +492,7 @@ def add_span_event(
 
 
 def record_exception(exception: Exception, escaped: bool = True) -> None:
-    """
-    Record an exception on the current span regarding the failure context.
+    """Record an exception on the current span regarding the failure context.
 
     Safe to call even if tracing is not available.
     """
@@ -575,11 +564,11 @@ class SpanTiming:
 def timed_span(
     name: str, tracer: Tracer | None = None, **kwargs: Any
 ) -> Generator[tuple[Span | None, SpanTiming], None, None]:
-    """
-    Context manager for a span with timing.
+    """Context manager for a span with timing.
 
     Yields:
         Tuple of (span, timing) where timing can be used to record checkpoints.
+
     """
     timing = SpanTiming()
     with create_span(name, tracer=tracer, **kwargs) as span:
@@ -651,6 +640,7 @@ from opentelemetry.context.context import Context
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import SpanExporter
 from opentelemetry.trace import Span, SpanKind, Status, StatusCode, Tracer
+
 __all__: list[str] = [
     # Constants
     "TRACE_HEADERS",

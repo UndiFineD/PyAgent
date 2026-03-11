@@ -10,8 +10,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/pyagent_cli.description.md
 
@@ -100,29 +99,25 @@ PyAgent CLI Interface.
 Connects to the Fleet Load Balancer via the Agent API Server.
 """
 
-from src.version import VERSION
 
 # from functools import lru_cache
 
-import sys
-import json
-import requests
 import argparse
+import sys
 
 # import time
-
 from pathlib import Path
 
+import requests
+
 # # # from typing import Dict, Any, List, Optional
-
-
 from rich.console import Console
-from rich.table import Table
 from rich.panel import Panel
+from rich.table import Table
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
 
 # Infrastructure
 from src.classes.base_agent.ConnectivityManager import ConnectivityManager
-from src.classes.backend.LocalContextRecorder import LocalContextRecorder
 
 console = Console()
 API_BASE_URL = "http://localhost:8000"

@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/model_manager_core.description.md
 
 # model_manager_core
 
-**File**: `src\core\base\logic\core\model_manager_core.py`  
+**File**: `src\\core\base\\logic\\core\\model_manager_core.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 46  
@@ -55,7 +54,7 @@ Harvested from awesome-ollama patterns.
 
 # Improvements for model_manager_core
 
-**File**: `src\core\base\logic\core\model_manager_core.py`  
+**File**: `src\\core\base\\logic\\core\\model_manager_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 46 lines (small)  
 **Complexity**: 1 score (simple)
@@ -88,13 +87,11 @@ Harvested from awesome-ollama patterns.
 LLM_CONTEXT_END
 """
 
-from typing import Dict, Any, List, Optional
-import asyncio
+from typing import Any, Dict
 
 
 class ModelManagerCore:
-    """
-    Manages the lifecycle of local/remote models (Ollama/VLLM).
+    """Manages the lifecycle of local/remote models (Ollama/VLLM).
     Handles dynamic context-length adjustments and health monitoring.
     Harvested from awesome-ollama patterns.
     """
@@ -109,8 +106,7 @@ class ModelManagerCore:
         return True
 
     async def optimize_context(self, model_name: str, task_complexity: float) -> int:
-        """
-        Dynamically adjusts context window based on task needs (e.g., 4k vs 128k).
+        """Dynamically adjusts context window based on task needs (e.g., 4k vs 128k).
         Returns the recommended context length.
         """
         if task_complexity > 0.8:

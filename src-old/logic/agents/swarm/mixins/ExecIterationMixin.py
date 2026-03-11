@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/mixins/ExecIterationMixin.description.md
 
 # ExecIterationMixin
 
-**File**: `src\logic\agents\swarm\mixins\ExecIterationMixin.py`  
+**File**: `src\\logic\agents\\swarm\\mixins\\ExecIterationMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 130  
@@ -39,7 +38,7 @@ Mixin for processing individual files and iterations.
 
 # Improvements for ExecIterationMixin
 
-**File**: `src\logic\agents\swarm\mixins\ExecIterationMixin.py`  
+**File**: `src\\logic\agents\\swarm\\mixins\\ExecIterationMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 130 lines (medium)  
 **Complexity**: 2 score (simple)
@@ -151,7 +150,7 @@ class ExecIterationMixin:
                     logging.error(f"Error in _perform_iteration for {code_file}: {e}")
                     try:
                         sql = getattr(
-                            getattr(self, "command_handler").models,
+                            self.command_handler.models,
                             "sql_metadata",
                             None,
                         )

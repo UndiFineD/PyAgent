@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/interface/commands/base.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -59,6 +59,7 @@ Base types and models for slash commands.
 @dataclass
 class CommandContext:
     """Context passed to command handlers."""
+
     command: str
     """The command name (without slash)."""
     args: list[str] = field(default_factory=list)
@@ -88,6 +89,7 @@ class CommandContext:
 @dataclass
 class CommandResult:
     """Result from a command execution."""
+
     success: bool = True
     """Whether the command executed successfully."""
     output: str = ""
@@ -115,6 +117,7 @@ class CommandResult:
 @dataclass
 class CommandDefinition:
     """Definition of a slash command."""
+
     name: str
     """Primary command name."""
     handler: CommandHandler
@@ -134,6 +137,7 @@ class CommandDefinition:
 @dataclass
 class ParsedCommand:
     """A parsed command from the prompt."""
+
     command: str
     """Command name."""
     args: list[str]
@@ -149,6 +153,7 @@ class ParsedCommand:
 @dataclass
 class ProcessedPrompt:
     """Result of processing a prompt."""
+
     original: str
     """Original prompt text."""
     processed: str

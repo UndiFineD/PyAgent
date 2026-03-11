@@ -1,12 +1,11 @@
 # Copyright 2026 PyAgent Authors
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/core_logic/__init__.description.md
 
 # __init__
 
-**File**: `src\core\base\core_logic\__init__.py`  
+**File**: `src\\core\base\\core_logic\\__init__.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 5 imports  
 **Lines**: 6  
@@ -31,7 +30,7 @@ Python module containing implementation for __init__.
 
 # Improvements for __init__
 
-**File**: `src\core\base\core_logic\__init__.py`  
+**File**: `src\\core\base\\core_logic\\__init__.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 6 lines (small)  
 **Complexity**: 0 score (simple)
@@ -64,8 +63,8 @@ Python module containing implementation for __init__.
 LLM_CONTEXT_END
 """
 
-from .validation import ValidationCore
-from .metrics import MetricsCore
-from .formatting import FormattingCore
-from .utils import UtilsCore
 from .events import EventCore
+from .formatting import FormattingCore
+from .metrics import MetricsCore
+from .utils import UtilsCore
+from .validation import ValidationCore

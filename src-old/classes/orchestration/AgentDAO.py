@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/AgentDAO.description.md
 
@@ -86,7 +85,8 @@ Manages resource allocation and task prioritization through agent deliberation.
 """
 
 import logging
-from typing import Dict, List, Any
+from typing import Any, Dict, List
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
@@ -109,6 +109,7 @@ class AgentDAO(BaseAgent):
 
         Args:
             allocation_plan: Mapping of agent/sub-swarm names to percentage of total resources.
+
         """
         logging.info(f"AgentDAO: Executing resource reallocation: {allocation_plan}")
         # In a real system, this would interface with ScalingManager or GPUScalingManager

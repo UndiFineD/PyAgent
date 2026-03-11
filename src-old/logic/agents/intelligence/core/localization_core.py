@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/intelligence/core/localization_core.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -62,8 +62,7 @@ except ImportError:
 
 
 class LocalizationCore:
-    """
-    LocalizationCore handles translation logic (placeholder) and Cultural Guardrails.
+    """LocalizationCore handles translation logic (placeholder) and Cultural Guardrails.
     It identifies problematic idioms or metaphors in multi-agent communication.
     """
 
@@ -82,8 +81,7 @@ class LocalizationCore:
         ]
 
     def detect_cultural_issues(self, text: str) -> list[dict[str, Any]]:
-        """
-        Detects cultural red flags in agent communication.
+        """Detects cultural red flags in agent communication.
         Returns a list of identified issues with suggestions.
         """
         if HAS_RUST:
@@ -92,7 +90,7 @@ class LocalizationCore:
                 return rust_core.detect_cultural_issues(text, self.cultural_red_flags)  # type: ignore[attr-defined]
             except (
                 Exception
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            ):  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         issues = []

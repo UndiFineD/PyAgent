@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/reporting_agent.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -52,13 +52,13 @@ from datetime import datetime
 from pathlib import Path
 
 from src.core.base.base_agent import BaseAgent
-from .transparency_agent import TransparencyAgent
 from src.infrastructure.fleet.FleetManager import FleetManager
+
+from .transparency_agent import TransparencyAgent
 
 
 class ReportingAgent(BaseAgent):
-    """
-    Observer agent that generates executive dashboards and reports
+    """Observer agent that generates executive dashboards and reports
     by orchestrating multiple specialist agents.
     """
 

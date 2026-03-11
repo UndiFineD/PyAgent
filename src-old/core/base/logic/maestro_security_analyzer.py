@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/maestro_security_analyzer.description.md
 
 # maestro_security_analyzer
 
-**File**: `src\core\base\logic\maestro_security_analyzer.py`  
+**File**: `src\\core\base\\logic\\maestro_security_analyzer.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 11 imports  
 **Lines**: 606  
@@ -87,7 +86,7 @@ Based on Agent-Wiz's implementation adapted for PyAgent's architecture.
 
 # Improvements for maestro_security_analyzer
 
-**File**: `src\core\base\logic\maestro_security_analyzer.py`  
+**File**: `src\\core\base\\logic\\maestro_security_analyzer.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 606 lines (large)  
 **Complexity**: 19 score (moderate)
@@ -126,17 +125,17 @@ Based on Agent-Wiz's MAESTRO (Multi-Agent Environment, Security, Threat Risk, an
 """
 
 import json
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from pathlib import Path
-import yaml
+from typing import Any, Dict, List, Optional
 
-from src.core.base.logic.dynamic_agent_evolution_orchestrator import AgentSkillSheet, AgentTier
+from src.core.base.logic.dynamic_agent_evolution_orchestrator import AgentTier
 
 
 @dataclass
 class AgentNode:
     """Represents an agent in the multi-agent graph."""
+
     name: str
     tier: AgentTier
     capabilities: List[str]
@@ -160,6 +159,7 @@ class AgentNode:
 @dataclass
 class ThreatAssessment:
     """MAESTRO threat assessment result."""
+
     layer: str
     category: str
     threat: str
@@ -174,8 +174,7 @@ class ThreatAssessment:
 
 
 class MAESTROSecurityAnalyzer:
-    """
-    MAESTRO (Multi-Agent Environment, Security, Threat Risk, and Outcome) analyzer
+    """MAESTRO (Multi-Agent Environment, Security, Threat Risk, and Outcome) analyzer
     for PyAgent multi-agent systems.
 
     Based on Agent-Wiz's implementation adapted for PyAgent's architecture.
@@ -316,14 +315,14 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
         }
 
     def analyze_multi_agent_system(self, agents: List[AgentNode]) -> Dict[str, Any]:
-        """
-        Perform MAESTRO analysis on a multi-agent system.
+        """Perform MAESTRO analysis on a multi-agent system.
 
         Args:
             agents: List of agent nodes in the system
 
         Returns:
             Comprehensive security analysis report
+
         """
         report = {
             "maestro_framework": self.MAESTRO_FRAMEWORK,
@@ -593,7 +592,7 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
         relationships = self._analyze_relationships(agents)
         if relationships["cascading_failure_risks"]:
             recommendations.append(
-                f"Reduce cascading failure risks by diversifying dependencies for high-dependency agents"
+                "Reduce cascading failure risks by diversifying dependencies for high-dependency agents"
             )
 
         # Layer-specific recommendations
@@ -711,4 +710,4 @@ if __name__ == "__main__":
 
     print("MAESTRO security analysis completed!")
     print(f"Overall risk level: {report['overall_risk_assessment']['overall_risk_level']}")
-    print(f"Generated reports: maestro_analysis.json, maestro_report.md")
+    print("Generated reports: maestro_analysis.json, maestro_report.md")

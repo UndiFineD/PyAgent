@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/tools/weather_api_tool.description.md
 
 # weather_api_tool
 
-**File**: `src\classes\tools\weather_api_tool.py`  
+**File**: `src\\classes\tools\\weather_api_tool.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 14  
@@ -37,7 +36,7 @@ Auto-generated tool class
 
 # Improvements for weather_api_tool
 
-**File**: `src\classes\tools\weather_api_tool.py`  
+**File**: `src\\classes\tools\\weather_api_tool.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 14 lines (small)  
 **Complexity**: 2 score (simple)
@@ -71,6 +70,7 @@ LLM_CONTEXT_END
 """
 
 import logging
+
 from src.classes.base_agent.utilities import as_tool
 
 

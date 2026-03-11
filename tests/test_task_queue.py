@@ -1,5 +1,8 @@
+#!/usr/bin/env python3
+"""Test the task queue."""
+
 import pytest
-import asyncio
+
 from src.core.workflow.queue import TaskQueue
 from src.core.workflow.task import Task
 

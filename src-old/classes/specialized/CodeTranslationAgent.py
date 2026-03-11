@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/CodeTranslationAgent.description.md
 
@@ -79,14 +78,13 @@ Supports mapping logic, syntax transformations, and multi-file translation.
 LLM_CONTEXT_END
 """
 
-import os
-from typing import Dict, List, Any
+from typing import Any, Dict
+
 from src.classes.base_agent import BaseAgent
 
 
 class CodeTranslationAgent(BaseAgent):
-    """
-    Handles translation of codebases between different programming languages.
+    """Handles translation of codebases between different programming languages.
     Supports mapping logic, syntax transformations, and multi-file translation.
     """
 
@@ -96,8 +94,7 @@ class CodeTranslationAgent(BaseAgent):
         self.translation_history = []
 
     def translate_file(self, source_code: str, from_lang: str, to_lang: str) -> str:
-        """
-        Simulates translation of source code from one language to another.
+        """Simulates translation of source code from one language to another.
         In a real scenario, this would interface with an LLM specialized in code.
         """
         print(f"Translating code from {from_lang} to {to_lang}...")

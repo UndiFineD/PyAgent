@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/fix_codebase.description.md
 
@@ -91,9 +90,10 @@ Utility to repair corrupted source files by uncommenting essential system import
 Part of the Fleet Healer autonomous recovery pattern.
 """
 
-from src.core.base.version import VERSION
 import os
 import re
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

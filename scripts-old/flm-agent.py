@@ -22,16 +22,16 @@ from __future__ import annotations
 import asyncio
 import json
 import os
-from typing import Any, Dict, Optional
 from contextlib import AsyncExitStack
+from typing import Any, Optional
 
 from mcp import ClientSession, StdioServerParameters
-from mcp.client.stdio import stdio_client
 from mcp.client.sse import sse_client
+from mcp.client.stdio import stdio_client
 from mcp.client.streamable_http import streamablehttp_client
-
 from openai import OpenAI
-from openai.types.chat import ChatCompletionToolParam, ResponseFormatText
+from openai.types.chat import ResponseFormatText
+
 
 class MCPClient:
     """Manages connections to multiple MCP servers and enables chatting with tools across those servers.
@@ -82,6 +82,7 @@ class MCPClient:
             server_id: Unique identifier for this server connection
             url: URL of the SSE server
             headers: Optional HTTP headers
+
         """
         sse_context = await self.exit_stack.enter_async_context(sse_client(url=url, headers=headers))
         read, write = sse_context
@@ -137,7 +138,7 @@ class MCPClient:
         available_tools = []
         for server_id, server_info in self._servers.items():
             for tool in server_info["tools"]:
-                available_tools.append({ 
+                available_tools.append({
                     "type": "function",
                     "function": {
                         "name": tool.name,
@@ -163,7 +164,7 @@ class MCPClient:
                     tool_arguments = tool.function.arguments if hasattr(tool, 'function') else tool.get('function', {}).get('arguments')
                     tool_args = json.loads(tool_arguments)
                     messages.append({
-                        "role": "assistant", 
+                        "role": "assistant",
                         "tool_calls": [{
                             "id": tool.id,
                             "type": "function",
@@ -220,15 +221,15 @@ async def main():
     ]
     try:
         await client.connect_http_server(
-            "TavilyMCP", 
+            "TavilyMCP",
             "https://mcp.tavily.com/mcp",
             {
                 "Authorization": "Bearer " + os.environ["YOUR_AUTH_TOKEN"],
             }
         )
         await client.connect_stdio_server(
-            "markitdown-mm4igrov", 
-            "uvx", 
+            "markitdown-mm4igrov",
+            "uvx",
             [
                 "markitdown-mcp",
             ],
@@ -236,8 +237,8 @@ async def main():
             }
         )
         await client.connect_stdio_server(
-            "memory-mm4ii8u0", 
-            "npx", 
+            "memory-mm4ii8u0",
+            "npx",
             [
                 "-y",
                 "@modelcontextprotocol/server-memory",
@@ -247,8 +248,8 @@ async def main():
             }
         )
         await client.connect_stdio_server(
-            "sequential-thinking-mm4illou", 
-            "npx", 
+            "sequential-thinking-mm4illou",
+            "npx",
             [
                 "-y",
                 "@modelcontextprotocol/server-sequential-thinking",
@@ -257,7 +258,7 @@ async def main():
             }
         )
         await client.connect_http_server(
-            "MicrosoftLearnMCPserver", 
+            "MicrosoftLearnMCPserver",
             "https://learn.microsoft.com/api/mcp",
             {
             }

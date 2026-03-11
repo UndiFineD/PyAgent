@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/evolution_core.description.md
 
 # evolution_core
 
-**File**: `src\core\base\logic\core\evolution_core.py`  
+**File**: `src\\core\base\\logic\\core\\evolution_core.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 7 imports  
 **Lines**: 89  
@@ -63,7 +62,7 @@ Harvested from self-evolving-subagent patterns.
 
 # Improvements for evolution_core
 
-**File**: `src\core\base\logic\core\evolution_core.py`  
+**File**: `src\\core\base\\logic\\core\\evolution_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 89 lines (small)  
 **Complexity**: 4 score (simple)
@@ -99,9 +98,9 @@ Harvested from self-evolving-subagent patterns.
 LLM_CONTEXT_END
 """
 
-from typing import Dict, Any, List, Optional
-from dataclasses import dataclass, field
 import time
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
@@ -116,8 +115,7 @@ class AgentMetadata:
 
 
 class EvolutionCore:
-    """
-    Manages the lifecycle and evolution of agents based on task performance.
+    """Manages the lifecycle and evolution of agents based on task performance.
     Harvested from self-evolving-subagent patterns.
     """
 
@@ -156,8 +154,7 @@ class EvolutionCore:
     def propose_integration(
         self, agent_a_name: str, agent_b_name: str
     ) -> Optional[str]:
-        """
-        Proposes a merger of two agents and their SOPs.
+        """Proposes a merger of two agents and their SOPs.
         Pattern harvested from self-evolving-subagent.
         """
         meta_a = self.agent_pool.get(agent_a_name)

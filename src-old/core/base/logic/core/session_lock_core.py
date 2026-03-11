@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/session_lock_core.description.md
 
 # session_lock_core
 
-**File**: `src\core\base\logic\core\session_lock_core.py`  
+**File**: `src\\core\base\\logic\\core\\session_lock_core.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 54  
@@ -55,7 +54,7 @@ Core for managing multi-tenant session locking and space isolation.
 
 # Improvements for session_lock_core
 
-**File**: `src\core\base\logic\core\session_lock_core.py`  
+**File**: `src\\core\base\\logic\\core\\session_lock_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 54 lines (small)  
 **Complexity**: 2 score (simple)
@@ -90,8 +89,8 @@ LLM_CONTEXT_END
 
 import os
 import secrets
-from typing import Dict, Any, Optional
 from datetime import datetime
+from typing import Any, Dict, Optional
 
 
 class SessionLockCore:

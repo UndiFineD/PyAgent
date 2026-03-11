@@ -12,14 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-import sys
 import argparse
 from pathlib import Path
 
+
 def mark_improvements(autodoc_dir: str) -> None:
-    """
-    Scans the autodoc directory for *_improvements.md files.
+    """Scans the autodoc directory for *_improvements.md files.
     If a file contains '[ ]' followed by an improvement description,
     it replaces it with '[X]'.
     """

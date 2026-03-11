@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/AuditAction.description.md
 
 # AuditAction
 
-**File**: `src\observability\reports\AuditAction.py`  
+**File**: `src\\observability\reports\\AuditAction.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 31  
@@ -37,7 +36,7 @@ Actions for audit logging.
 
 # Improvements for AuditAction
 
-**File**: `src\observability\reports\AuditAction.py`  
+**File**: `src\\observability\reports\\AuditAction.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 31 lines (small)  
 **Complexity**: 0 score (simple)
@@ -85,8 +84,9 @@ from __future__ import annotations
 
 """Auto-extracted class from generate_agent_reports.py"""
 
-from src.core.base.version import VERSION
 from enum import Enum
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

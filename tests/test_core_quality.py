@@ -10,21 +10,21 @@ import ast
 import pathlib
 from typing import Dict, List, Set
 
-
 ROOT = pathlib.Path(".")
 SRC = ROOT / "src"
 TESTS = ROOT / "tests"
 
 
 def _iter_py_files(root: pathlib.Path) -> List[pathlib.Path]:
+    """Recursively yield all .py files under the given root, excluding __pycache__."""
     return [p for p in root.rglob("*.py") if "__pycache__" not in p.parts]
 
 
 def test_core_components_exist() -> None:
     """Ensure minimal core components exist under `src/`.
 
-This list is intentionally conservative; adapt to project's real core layout.
-"""
+    This list is intentionally conservative; adapt to project's real core layout.
+    """
     required = [
         SRC / "core" / "__init__.py",
         SRC / "core" / "base" / "__init__.py",
@@ -37,7 +37,8 @@ This list is intentionally conservative; adapt to project's real core layout.
 
 def test_each_core_has_test_file() -> None:
     """For each module under `src/core`, ensure there is a corresponding test file.
-    We map `src/core/foo/bar.py` -> `tests/test_core_foo_bar.py` 
+
+    We map `src/core/foo/bar.py` -> `tests/test_core_foo_bar.py`
     or `tests/structure/test_core/foo/bar_test.py`.
     """
     core_files = [p for p in _iter_py_files(SRC / "core")]
@@ -57,8 +58,7 @@ def test_each_core_has_test_file() -> None:
 
 
 def test_test_files_have_assertions() -> None:
-    """Ensure test files contain at least 3 assertions (not trivial smoke tests).
-    """
+    """Ensure test files contain at least 3 assertions (not trivial smoke tests)."""
     pytests = [p for p in _iter_py_files(TESTS) if p.name.startswith("test_")]
     bad: List[str] = []
     for p in pytests:
@@ -79,7 +79,8 @@ def test_test_files_have_assertions() -> None:
 
 
 def test_validate_function_exists() -> None:
-    """Each core module should provide a `validate()` helper (static check) 
+    """Each core module should provide a `validate()` helper (static check).
+
     or a docstring that explains validation.
     This test parses module ASTs and looks for a top-level `validate` function.
     """
@@ -103,12 +104,13 @@ def test_validate_function_exists() -> None:
 def test_no_circular_imports_within_src() -> None:
     """Static detection of circular imports between modules under `src/`.
 
-This builds a simple directed graph of imports (only intra-src) and checks for cycles.
-"""
+    This builds a simple directed graph of imports (only intra-src) and checks for cycles.
+    """
     files = _iter_py_files(SRC)
     module_by_file: Dict[str, pathlib.Path] = {str(p.relative_to(SRC)): p for p in files}
 
     def _imports_of(p: pathlib.Path) -> Set[str]:
+        """Parse the file and return a set of imported module paths (relative to src)."""
         try:
             tree = ast.parse(p.read_text(encoding="utf-8"))
         except SyntaxError:
@@ -144,6 +146,7 @@ This builds a simple directed graph of imports (only intra-src) and checks for c
     visited: Set[str] = set()
 
     def visit(n: str) -> bool:
+        """Return True if a cycle is detected starting from n."""
         if n in visited:
             return False
         if n in visiting:

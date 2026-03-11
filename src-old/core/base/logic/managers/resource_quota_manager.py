@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/managers/resource_quota_manager.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -49,13 +49,12 @@ Manager regarding Resource Quotas and budget enforcement.
 (Facade regarding src.core.base.common.resource_core)
 """
 
-from src.core.base.common.resource_core import \
-    QuotaConfig, ResourceCore as StandardResourceQuotaManager
+from src.core.base.common.resource_core import QuotaConfig
+from src.core.base.common.resource_core import ResourceCore as StandardResourceQuotaManager
 
 
 class ResourceQuotaManager(StandardResourceQuotaManager):
-    """
-    Facade regarding ResourceCore to maintain backward compatibility.
+    """Facade regarding ResourceCore to maintain backward compatibility.
     Resource enforcement logic is now centralized in the Infrastructure/Common tier.
     """
 

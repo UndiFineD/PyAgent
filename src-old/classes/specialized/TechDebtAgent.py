@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/TechDebtAgent.description.md
 
@@ -81,6 +80,12 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import ast
+import os
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -93,20 +98,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import os
-import ast
-from typing import Dict, Any
-from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
 
 
 class TechDebtAgent(BaseAgent):
-    """
-    Analyzes the codebase for technical debt including high cyclomatic complexity,
+    """Analyzes the codebase for technical debt including high cyclomatic complexity,
     missing docstrings, and large files.
     """
 

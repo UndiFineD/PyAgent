@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/intention_prediction_agent.description.md
 
@@ -41,15 +40,16 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
 Intention Prediction Agent for predicting peer actions and goals.
 """
 
-import time
-import random
 import logging
+import random
+import time
 from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
@@ -59,8 +59,7 @@ __version__ = VERSION
 
 
 class IntentionPredictionAgent:
-    """
-    Predicts the future actions and goals of peer agents in the fleet.
+    """Predicts the future actions and goals of peer agents in the fleet.
     Integrated with MetacognitiveCore for intent prediction and pre-warming.
     """
 
@@ -72,8 +71,7 @@ class IntentionPredictionAgent:
         self.core = MetacognitiveCore()
 
     def predict_and_prewarm(self, agent_id: str) -> dict[str, Any]:
-        """
-        Predicts next intent and identifies agents to pre-warm.
+        """Predicts next intent and identifies agents to pre-warm.
         """
         history = self.agent_histories.get(agent_id, [])
         intent = self.core.predict_next_intent(history)
@@ -93,8 +91,7 @@ class IntentionPredictionAgent:
     def log_agent_action(
         self, agent_id: str, action_type: str, metadata: dict[str, Any]
     ) -> None:
-        """
-        Record an action for better future prediction.
+        """Record an action for better future prediction.
         """
         if agent_id not in self.agent_histories:
             self.agent_histories[agent_id] = []
@@ -106,8 +103,7 @@ class IntentionPredictionAgent:
             self.agent_histories[agent_id].pop(0)
 
     def predict_next_action(self, agent_id: str) -> dict[str, Any]:
-        """
-        Predicts the intent of an agent based on recent behavior.
+        """Predicts the intent of an agent based on recent behavior.
         """
         history = self.agent_histories.get(agent_id, [])
         if not history:
@@ -125,8 +121,7 @@ class IntentionPredictionAgent:
     def share_thought_signal(
         self, sender_id: str, receivers: list[str], thought_payload: Any
     ) -> dict[str, Any]:
-        """
-        Simulates sub-millisecond thought sharing protocols.
+        """Simulates sub-millisecond thought sharing protocols.
         """
         return {
             "origin": sender_id,

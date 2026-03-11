@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/core/AutonomyCore.description.md
 
 # AutonomyCore
 
-**File**: `src\core\base\core\AutonomyCore.py`  
+**File**: `src\\core\base\\core\\AutonomyCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 46  
@@ -40,7 +39,7 @@ It allows agents to autonomously review their own performance and 'sleep' when o
 
 # Improvements for AutonomyCore
 
-**File**: `src\core\base\core\AutonomyCore.py`  
+**File**: `src\\core\base\\core\\AutonomyCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 46 lines (small)  
 **Complexity**: 4 score (simple)
@@ -75,11 +74,9 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-from typing import List
 
 class AutonomyCore:
-    """
-    AutonomyCore implements 'Self-Model' logic and the Background Evolution Daemon.
+    """AutonomyCore implements 'Self-Model' logic and the Background Evolution Daemon.
     It allows agents to autonomously review their own performance and 'sleep' when optimized.
     """
 
@@ -88,8 +85,7 @@ class AutonomyCore:
         self.performance_history: list[float] = []
 
     def identify_blind_spots(self, success_rate: float, task_diversity: float) -> list[str]:
-        """
-        Analyzes performance stats to find 'Blind Spots'.
+        """Analyzes performance stats to find 'Blind Spots'.
         e.g., high success on coding, but low success on documentation.
         """
         blind_spots = []
@@ -100,8 +96,7 @@ class AutonomyCore:
         return blind_spots
 
     def calculate_daemon_sleep_interval(self, optimization_score: float) -> int:
-        """
-        Returns sleep seconds for the Background Evolution Daemon.
+        """Returns sleep seconds for the Background Evolution Daemon.
         If score is 1.0 (100% optimized), sleep longer (e.g., 3600s).
         """
         if optimization_score >= 1.0:
@@ -116,6 +111,6 @@ class AutonomyCore:
         plan = f"AGENT SELF-MODEL UPDATE for {self.agent_id}:\n"
         if not blind_spots:
             return f"{plan}Status: Optimal. No immediate changes required."
-        
+
         plan += "Action: Expand training data for identified blind spots: " + ", ".join(blind_spots)
         return plan

@@ -1,14 +1,13 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/parsers/reasoning/__init__.description.md
 
 # __init__
 
-**File**: `src\core\base\parsers\reasoning\__init__.py`  
+**File**: `src\\core\base\\parsers\reasoning\\__init__.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 11 imports  
 **Lines**: 35  
@@ -39,7 +38,7 @@ Python module containing implementation for __init__.
 
 # Improvements for __init__
 
-**File**: `src\core\base\parsers\reasoning\__init__.py`  
+**File**: `src\\core\base\\parsers\reasoning\\__init__.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 35 lines (small)  
 **Complexity**: 0 score (simple)
@@ -72,14 +71,14 @@ Python module containing implementation for __init__.
 LLM_CONTEXT_END
 """
 
-from .models import ReasoningResult, StreamingReasoningState
 from .base import ReasoningParser
-from .registry import ReasoningParserManager, reasoning_parser
-from .utils import extract_reasoning, create_streaming_parser
-from .implementations.xml import XMLReasoningParser
+from .implementations.identity import IdentityReasoningParser
 from .implementations.json import JSONReasoningParser
 from .implementations.markdown import MarkdownReasoningParser
-from .implementations.identity import IdentityReasoningParser
+from .implementations.xml import XMLReasoningParser
+from .models import ReasoningResult, StreamingReasoningState
+from .registry import ReasoningParserManager, reasoning_parser
+from .utils import create_streaming_parser, extract_reasoning
 
 # Register built-in parsers
 ReasoningParserManager.register_module("xml", XMLReasoningParser)

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/SecurityScannerMixin.description.md
 
 # SecurityScannerMixin
 
-**File**: `src\logic\agents\development\mixins\SecurityScannerMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\SecurityScannerMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 111  
@@ -42,7 +41,7 @@ Mixin for content and injection scanning.
 
 # Improvements for SecurityScannerMixin
 
-**File**: `src\logic\agents\development\mixins\SecurityScannerMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\SecurityScannerMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 111 lines (medium)  
 **Complexity**: 3 score (simple)
@@ -90,6 +89,7 @@ from __future__ import annotations
 """Content scanning logic for SecurityCore."""
 
 import re
+
 from src.core.base.types.SecurityIssueType import SecurityIssueType
 from src.core.base.types.SecurityVulnerability import SecurityVulnerability
 

@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/CooperativeCommunication.description.md
 
@@ -77,14 +76,13 @@ between sibling agent nodes in the fleet.
 LLM_CONTEXT_END
 """
 
-import time
 import random
-from typing import Dict, List, Any, Optional
+import time
+from typing import Any, Dict
 
 
 class CooperativeCommunication:
-    """
-    Manages high-speed thought sharing and signal synchronization
+    """Manages high-speed thought sharing and signal synchronization
     between sibling agent nodes in the fleet.
     """
 
@@ -93,8 +91,7 @@ class CooperativeCommunication:
         self.active_channels: Dict[str, Any] = {}  # node_id -> channel_metadata
 
     def establish_p2p_channel(self, node_a: str, node_b: str) -> Dict[str, Any]:
-        """
-        Creates a dedicated sub-millisecond link between two nodes.
+        """Creates a dedicated sub-millisecond link between two nodes.
         """
         channel_id = f"chan_{node_a}_{node_b}"
         self.active_channels[channel_id] = {
@@ -110,8 +107,7 @@ class CooperativeCommunication:
     def broadcast_thought_packet(
         self, origin_node: str, thought_payload: Any
     ) -> Dict[str, Any]:
-        """
-        Multicasts a thought packet to all connected nodes.
+        """Multicasts a thought packet to all connected nodes.
         """
         return {
             "origin": origin_node,
@@ -122,8 +118,7 @@ class CooperativeCommunication:
         }
 
     def synchronize_state(self, fleet_state: Any) -> Dict[str, Any]:
-        """
-        Ensures all nodes are aligned on the global fleet context.
+        """Ensures all nodes are aligned on the global fleet context.
         """
         # Simulated state hash check
         return {

@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/AccessibilityLogicMixin.description.md
 
 # AccessibilityLogicMixin
 
-**File**: `src\logic\agents\development\mixins\AccessibilityLogicMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\AccessibilityLogicMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 52  
@@ -42,7 +41,7 @@ Mixin for entry-point analysis logic and rule management in AccessibilityAgent.
 
 # Improvements for AccessibilityLogicMixin
 
-**File**: `src\logic\agents\development\mixins\AccessibilityLogicMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\AccessibilityLogicMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 52 lines (small)  
 **Complexity**: 4 score (simple)
@@ -77,13 +76,14 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+from pathlib import Path
+
+from src.core.base.types.AccessibilityReport import AccessibilityReport
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 from src.logic.agents.development.AccessibilityAgent import AccessibilityAgent
 
-from typing import TYPE_CHECKING
-from src.core.base.types.AccessibilityReport import AccessibilityReport
-from pathlib import Path
 
 class AccessibilityLogicMixin:
     """Mixin for entry-point analysis logic and rule management in AccessibilityAgent."""

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/maintenance/docstring_auditor.description.md
 
@@ -87,6 +86,7 @@ the list. Modules are chosen in the order they appear in the prompt.
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -117,6 +117,7 @@ def parse_prompt_file(prompt_path: str | Path) -> List[str]:
 
     Returns:
         List of relative file paths (POSIX-style) like "src/core/lazy_loader.py".
+
     """
     p = Path(prompt_path)
     if not p.exists():

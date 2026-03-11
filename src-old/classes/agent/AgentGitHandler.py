@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/agent/AgentGitHandler.description.md
 
 # AgentGitHandler
 
-**File**: `src\classes\agent\AgentGitHandler.py`  
+**File**: `src\\classes\agent\\AgentGitHandler.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 9 imports  
 **Lines**: 84  
@@ -47,7 +46,7 @@ Handles git operations for the Agent.
 
 # Improvements for AgentGitHandler
 
-**File**: `src\classes\agent\AgentGitHandler.py`  
+**File**: `src\\classes\agent\\AgentGitHandler.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 84 lines (small)  
 **Complexity**: 4 score (simple)
@@ -82,6 +81,11 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import logging
+import subprocess
+from pathlib import Path
+from typing import Any
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -94,13 +98,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import subprocess
-import logging
-from pathlib import Path
-from typing import List, Optional, Any, Dict
 
 __version__ = VERSION
 

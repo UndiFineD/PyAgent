@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/SecretManager.description.md
 
 # SecretManager
 
-**File**: `src\classes\fleet\SecretManager.py`  
+**File**: `src\\classes\fleet\\SecretManager.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 57  
@@ -47,7 +46,7 @@ Shell for SecretCore.
 
 # Improvements for SecretManager
 
-**File**: `src\classes\fleet\SecretManager.py`  
+**File**: `src\\classes\fleet\\SecretManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 57 lines (small)  
 **Complexity**: 6 score (moderate)
@@ -81,15 +80,15 @@ LLM_CONTEXT_END
 Mocks integration with Azure Key Vault or HashiCorp Vault.
 """
 
-import os
 import logging
+import os
 from typing import Optional
+
 from .SecretCore import SecretCore
 
 
 class SecretManager:
-    """
-    Provides secure access to credentials and API keys.
+    """Provides secure access to credentials and API keys.
     Shell for SecretCore.
     """
 

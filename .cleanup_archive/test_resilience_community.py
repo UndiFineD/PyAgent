@@ -11,8 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-Test Resilience Community module.
+"""Test Resilience Community module.
 """
 
 #!/usr/bin/env python3
@@ -20,11 +19,11 @@ import logging
 from pathlib import Path
 
 # Add project root to sys.path
-
 from src.classes.fleet.AgentRegistry import AgentRegistry
 
+
 def test_broken_community_plugin() -> None:
-    print(f"--- Running Broken Plugin Resilience Test ---")
+    print("--- Running Broken Plugin Resilience Test ---")
     workspace = Path('.').resolve()
     agents = AgentRegistry.get_agent_map(workspace)
 

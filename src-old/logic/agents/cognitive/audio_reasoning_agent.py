@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/audio_reasoning_agent.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -49,16 +49,15 @@ Audio Reasoning Agent for multimedia grounding.
 
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 # pylint: disable=too-many-ancestors
 class AudioReasoningAgent(BaseAgent):
-    """
-    Phase 58: Advanced Multimedia Grounding.
+    """Phase 58: Advanced Multimedia Grounding.
     Mocks transcription and reasoning over audio telemetry.
     """
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/interface/slash_commands/loader.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -52,9 +52,10 @@ Command loader - discovers and loads command modules.
 
 import importlib
 import importlib.util
-from src.interface.slash_commands.core import CommandRegistry
 from pathlib import Path
-from typing import TYPE_CHECKING
+
+from src.interface.slash_commands.core import CommandRegistry
+
     # Track loaded modules
 _loaded_modules: set[str] = set()
 _COMMANDS_LOADED = False
@@ -66,11 +67,11 @@ def get_commands_dir() -> Path:
 
 
 def discover_command_modules() -> list[str]:
-    """
-    Discover all command modules in the commands directory.
+    """Discover all command modules in the commands directory.
 
     Returns:
         List of module names (without .py extension)
+
     """
     commands_dir = get_commands_dir()
 
@@ -86,14 +87,14 @@ def discover_command_modules() -> list[str]:
 
 
 def load_module(module_name: str) -> bool:
-    """
-    Load a single command module.
+    """Load a single command module.
 
     Args:
         module_name: Name of the module (without .py)
 
     Returns:
         True if loaded successfully
+
     """
     full_module_name = f"src.interface.slash_commands.commands.{module_name}"
 
@@ -110,8 +111,7 @@ def load_module(module_name: str) -> bool:
 
 
 def unload_module(module_name: str) -> bool:
-    """
-    Unload a command module (removes from loaded set).
+    """Unload a command module (removes from loaded set).
 
     Note: This doesn't actually unload from sys.modules,
     but prevents it from being reloaded.
@@ -121,6 +121,7 @@ def unload_module(module_name: str) -> bool:
 
     Returns:
         True if was loaded
+
     """
     full_module_name = f"src.interface.slash_commands.commands.{module_name}"
 
@@ -131,14 +132,14 @@ def unload_module(module_name: str) -> bool:
 
 
 def load_commands(registry: "CommandRegistry | None" = None) -> int:
-    """
-    Load all command modules from the commands directory.
+    """Load all command modules from the commands directory.
 
     Args:
         registry: Optional registry (not used directly, modules register themselves)
 
     Returns:
         Number of modules loaded
+
     """
     global _COMMANDS_LOADED  # pylint: disable=global-statement
 
@@ -159,11 +160,11 @@ def load_commands(registry: "CommandRegistry | None" = None) -> int:
 
 
 def reload_commands() -> int:
-    """
-    Reload all command modules.
+    """Reload all command modules.
 
     Returns:
         Number of modules reloaded
+
     """
     global _COMMANDS_LOADED  # pylint: disable=global-statement
 

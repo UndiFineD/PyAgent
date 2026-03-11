@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/interface/slash_commands.description.md
 
@@ -44,6 +43,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -53,11 +53,22 @@ Provides backward compatibility for the moved SlashCommands implementation.
 Moved to src/interface/commands/
 """
 
-from .commands import (CommandContext, CommandDefinition, CommandParser,
-                       CommandRegistry, CommandResult, ParsedCommand,
-                       ProcessedPrompt, SlashCommands, command,
-                       execute_command, get_slash_commands, parse_commands,
-                       process_prompt, register_command)
+from .commands import (
+                       CommandContext,
+                       CommandDefinition,
+                       CommandParser,
+                       CommandRegistry,
+                       CommandResult,
+                       ParsedCommand,
+                       ProcessedPrompt,
+                       SlashCommands,
+                       command,
+                       execute_command,
+                       get_slash_commands,
+                       parse_commands,
+                       process_prompt,
+                       register_command,
+)
 
 __all__ = [
     # Classes

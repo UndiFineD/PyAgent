@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/cooperative_communication_agent.description.md
 
@@ -41,27 +40,27 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
 Cooperative Communication Agent for high-speed signal synchronization.
 """
 
-import time
 import logging
+import time
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 # pylint: disable=too-many-ancestors
 class CooperativeCommunicationAgent(BaseAgent):
-    """
-    Tier 2 (Cognitive Logic) - Cooperative Communication Agent: Orchestrates
+    """Tier 2 (Cognitive Logic) - Cooperative Communication Agent: Orchestrates
     high-speed signal synchronization and communication protocols between agent nodes.
     """
 
@@ -76,8 +75,7 @@ class CooperativeCommunicationAgent(BaseAgent):
 
     @as_tool
     def establish_p2p_channel(self, node_a: str, node_b: str) -> dict[str, Any]:
-        """
-        Creates a dedicated sub-millisecond link between two nodes.
+        """Creates a dedicated sub-millisecond link between two nodes.
         """
         import random
 
@@ -98,8 +96,7 @@ class CooperativeCommunicationAgent(BaseAgent):
     def broadcast_thought_packet(
         self, origin_node: str, thought_payload: Any
     ) -> dict[str, Any]:
-        """
-        Multicasts a thought packet to all connected nodes.
+        """Multicasts a thought packet to all connected nodes.
         """
         _ = thought_payload
         packet_id = f"thought_{int(time.time() * 1000)}"
@@ -114,8 +111,7 @@ class CooperativeCommunicationAgent(BaseAgent):
 
     @as_tool
     def synchronize_state(self, fleet_state: Any) -> dict[str, Any]:
-        """
-        Ensures all nodes are aligned on the global fleet context.
+        """Ensures all nodes are aligned on the global fleet context.
         Uses a real hash of the provided state.
         """
         import hashlib

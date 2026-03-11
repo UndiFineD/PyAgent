@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/FleetCore.description.md
 
 # FleetCore
 
-**File**: `src\classes\fleet\FleetCore.py`  
+**File**: `src\\classes\fleet\\FleetCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 74  
@@ -46,7 +45,7 @@ Pure logic core for the FleetManager.
 
 # Improvements for FleetCore
 
-**File**: `src\classes\fleet\FleetCore.py`  
+**File**: `src\\classes\fleet\\FleetCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 74 lines (small)  
 **Complexity**: 4 score (simple)
@@ -81,8 +80,8 @@ FleetCore logic for high-level fleet management.
 Contains pure logic for tool scoring, capability mapping, and state transition validation.
 """
 
-from typing import Dict, List, Any, Optional, Tuple
 from functools import lru_cache
+from typing import Any, Dict, List, Tuple
 
 
 class FleetCore:
@@ -117,8 +116,7 @@ class FleetCore:
         tools_metadata: List[Dict[str, Any]],
         provided_kwargs: Dict[str, Any],
     ) -> List[Tuple[float, str]]:
-        """
-        Calculates match scores for tools based on a goal/capability.
+        """Calculates match scores for tools based on a goal/capability.
         Returns a sorted list of (score, tool_name).
         """
         g_low: str = goal.lower()

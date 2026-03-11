@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/architect_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -63,8 +63,7 @@ __version__ = VERSION
 
 
 class ArchitectAgent(BaseAgent):
-    """
-    Agent responsible for autonomous core structural evolution (Swarm Singularity v1).
+    """Agent responsible for autonomous core structural evolution (Swarm Singularity v1).
     Analyzes performance telemetry and refactors core components to improve architecture.
     """
 
@@ -79,8 +78,7 @@ class ArchitectAgent(BaseAgent):
 
     @as_tool
     def suggest_architectural_pivot(self, performance_logs: str) -> dict[str, Any]:
-        """
-        Analyzes logs and suggests a structural change to the fleet or base agent.
+        """Analyzes logs and suggests a structural change to the fleet or base agent.
         """
         _ = performance_logs
         logging.info("ArchitectAgent: Analyzing logs for architectural pivot.")

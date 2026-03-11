@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/KernelAgent.description.md
 
@@ -101,17 +100,17 @@ from __future__ import annotations
 Inspired by Open Interpreter and Openator.
 """
 
-from src.core.base.version import VERSION
-import os
-import sys
-import json
-import shutil
-import platform
-import logging
-import subprocess
 import asyncio
+import json
+import logging
+import os
+import platform
+import shutil
+import sys
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 from src.logic.agents.development.SecurityGuardAgent import SecurityGuardAgent
 
 __version__ = VERSION

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/logging_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -86,13 +86,13 @@ class LoggingAgent(BaseAgent):
         syslog_host: str | None = None,
         syslog_port: int = 514,
     ) -> str:
-        """
-        Configures the destination for distributed logs.
+        """Configures the destination for distributed logs.
 
         Args:
             url: HTTP endpoint for centralized logs (e.g., http://aggregator:8080/log)
             syslog_host: Hostname/IP of a SysLog server.
             syslog_port: Port for SysLog (default 514).
+
         """
         self.log_aggregator_url = url
         if syslog_host:
@@ -119,14 +119,14 @@ class LoggingAgent(BaseAgent):
         message: str,
         metadata: dict[str, Any] | None = None,
     ) -> str:
-        """
-        Broadcasts a log entry to configured aggregators.
+        """Broadcasts a log entry to configured aggregators.
 
         Args:
             level: INFO, WARNING, ERROR, DEBUG
             source: Name of the agent or service originating the log.
             message: The log message content.
             metadata: Optional dictionary of context (phase, node_id, etc.).
+
         """
         log_entry = {
             "timestamp": time.time(),

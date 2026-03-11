@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/core/curation_core.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -59,8 +59,7 @@ class CurationCore:
 
     @staticmethod
     def prune_directory(directory: str, max_age_days: int = 7) -> int:
-        """
-        Removes files in a directory that are older than max_age_days.
+        """Removes files in a directory that are older than max_age_days.
         Returns the number of files removed.
         """
         if not os.path.exists(directory):
@@ -91,8 +90,7 @@ class CurationCore:
 
     @staticmethod
     def deep_clean_pycache(root_dir: str) -> int:
-        """
-        Forcefully removes all __pycache__ folders.
+        """Forcefully removes all __pycache__ folders.
         """
         if not os.path.exists(root_dir):
             return 0

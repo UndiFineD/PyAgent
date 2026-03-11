@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/managers/ResourceQuotaManager.description.md
 
 # ResourceQuotaManager
 
-**File**: `src\core\base\managers\ResourceQuotaManager.py`  
+**File**: `src\\core\base\\managers\\ResourceQuotaManager.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 6 imports  
 **Lines**: 88  
@@ -59,7 +58,7 @@ Phase 245: RESOURCE QUOTAS & BUDGETS
 
 # Improvements for ResourceQuotaManager
 
-**File**: `src\core\base\managers\ResourceQuotaManager.py`  
+**File**: `src\\core\base\\managers\\ResourceQuotaManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 88 lines (small)  
 **Complexity**: 8 score (moderate)
@@ -93,8 +92,8 @@ LLM_CONTEXT_END
 """
 
 import time
-from typing import Dict, Any, Optional
 from dataclasses import dataclass, field
+from typing import Any
 
 
 @dataclass
@@ -149,6 +148,7 @@ class ResourceQuotaManager:
 
         Returns:
             (is_exceeded, reason)
+
         """
         if self.config.max_tokens and self.usage.total_tokens >= self.config.max_tokens:
             self._is_interrupted = True

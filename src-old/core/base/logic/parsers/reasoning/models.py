@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/parsers/reasoning/models.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -55,8 +55,7 @@ from dataclasses import dataclass, field
 
 @dataclass
 class ReasoningResult:
-    """
-    Result of reasoning extraction.
+    """Result of reasoning extraction.
 
     Attributes:
         reasoning: The extracted reasoning/thinking content.
@@ -64,6 +63,7 @@ class ReasoningResult:
         reasoning_tokens: Token IDs regarding reasoning (if available).
         content_tokens: Token IDs regarding content (if available).
         is_complete: Whether reasoning extraction is complete.
+
     """
 
     reasoning: str | None = None
@@ -75,8 +75,7 @@ class ReasoningResult:
 
 @dataclass
 class StreamingReasoningState:
-    """
-    State regarding streaming reasoning extraction.
+    """State regarding streaming reasoning extraction.
 
     Tracks the current state of reasoning extraction during streaming.
     """

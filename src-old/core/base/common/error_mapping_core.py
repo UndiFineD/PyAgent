@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/error_mapping_core.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # you may not use this file except in compliance with the License.
@@ -50,12 +50,12 @@ LLM_CONTEXT_END
 """Unified Error Mapping core."""
 
 from typing import Dict, Optional
+
 from src.core.base.common.base_core import BaseCore
 
 
 class ErrorMappingCore(BaseCore):
-    """
-    Standard implementation for mapping system exceptions to PA-xxxx codes.
+    """Standard implementation for mapping system exceptions to PA-xxxx codes.
     Provides standardized error descriptions and troubleshooting links.
     """
 

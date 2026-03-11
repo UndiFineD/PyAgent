@@ -13,8 +13,9 @@
 # limitations under the License.
 
 from __future__ import annotations
+
 from dataclasses import dataclass, field
-from typing import List, Optional, Dict, Any
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
@@ -26,6 +27,7 @@ class AgentTemplate:
     the ``name`` attribute and expects the constructor to accept the
     keyword arguments demonstrated below.
     """
+
     name: str
     description: Optional[str] = None
     agents: List[str] = field(default_factory=list)

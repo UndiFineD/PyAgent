@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/shell_core.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Unified shell execution core for all PyAgent services."""
@@ -81,8 +81,7 @@ class ShellResult:
 
 
 class ShellCore:
-    """
-    Centralized handler for shell and subprocess operations.
+    """Centralized handler for shell and subprocess operations.
     Provides consistent logging, error handling, and environmental setup.
     """
 

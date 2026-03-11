@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/genetic_hardening_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -61,8 +61,7 @@ __version__ = VERSION
 
 
 class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Implements Genetic Code Hardening (Phase 32).
+    """Implements Genetic Code Hardening (Phase 32).
     Automatically evolves the codebase structure to be more resilient to errors.
     """
 
@@ -78,8 +77,7 @@ class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def analyze_fragility(self, code_snippet: str) -> list[dict[str, Any]]:
-        """
-        Analyzes a code snippet for structural fragility.
+        """Analyzes a code snippet for structural fragility.
         """
         logging.info("GeneticHardeningAgent: Analyzing code for fragility.")
 
@@ -108,8 +106,7 @@ class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     async def apply_genetic_refactor(
         self, code: str, hardening_rules: list[str]
     ) -> str:
-        """
-        Applies hardening rules to the code to 'evolve' it into a more resilient version.
+        """Applies hardening rules to the code to 'evolve' it into a more resilient version.
         """
         logging.info(
             f"GeneticHardeningAgent: Applying {len(hardening_rules)} hardening rules."

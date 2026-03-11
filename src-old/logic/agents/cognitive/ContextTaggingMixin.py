@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/ContextTaggingMixin.description.md
 
 # ContextTaggingMixin
 
-**File**: `src\logic\agents\cognitive\ContextTaggingMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\ContextTaggingMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 35  
@@ -41,7 +40,7 @@ Tagging methods for ContextAgent.
 
 # Improvements for ContextTaggingMixin
 
-**File**: `src\logic\agents\cognitive\ContextTaggingMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\ContextTaggingMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 35 lines (small)  
 **Complexity**: 5 score (moderate)
@@ -75,9 +74,9 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
-
 from src.logic.agents.cognitive.context.models.ContextTag import ContextTag
 
 

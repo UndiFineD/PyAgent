@@ -14,8 +14,8 @@
 
 # Package placeholder for auto_fix modules
 
+from .logger import AutoFixLogger
 from .rule_engine import RuleEngine
 from .transaction import TransactionManager
-from .logger import AutoFixLogger
 
 __all__ = ["RuleEngine", "TransactionManager", "AutoFixLogger"]

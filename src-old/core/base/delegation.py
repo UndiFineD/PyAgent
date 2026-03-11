@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/delegation.description.md
 
 # delegation
 
-**File**: `src\core\base\delegation.py`  
+**File**: `src\\core\base\\delegation.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 11 imports  
 **Lines**: 101  
@@ -46,7 +45,7 @@ Handles cascading sub-tasks to other agents.
 
 # Improvements for delegation
 
-**File**: `src\core\base\delegation.py`  
+**File**: `src\\core\base\\delegation.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 101 lines (medium)  
 **Complexity**: 1 score (simple)
@@ -97,14 +96,14 @@ Delegation management for agent cascading.
 Enables agents to launch sub-tasks by spawning other specialized agents.
 """
 
-from src.core.base.version import VERSION
-import os
-import logging
-from pathlib import Path
-from typing import Optional, Any
-from src.core.base.registry import AgentRegistry
-from src.core.base.models import CascadeContext, AgentPriority
 import importlib
+import logging
+import os
+from pathlib import Path
+
+from src.core.base.models import AgentPriority, CascadeContext
+from src.core.base.registry import AgentRegistry
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -124,7 +123,6 @@ class AgentDelegator:
         priority: AgentPriority = AgentPriority.NORMAL,
     ) -> str:
         """Launches another agent to perform a sub-task."""
-
         # Initialize or update context
         if context is None:
             context = CascadeContext()

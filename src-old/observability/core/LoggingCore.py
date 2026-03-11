@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/core/LoggingCore.description.md
 
@@ -90,15 +89,12 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import re
-from typing import List
 from re import Pattern
 
 
 class LoggingCore:
-    """
-    Pure logic for log formatting and sensitive data masking.
+    """Pure logic for log formatting and sensitive data masking.
     Targeted for Rust conversion to ensure performance in high-throughput streams.
     """
 

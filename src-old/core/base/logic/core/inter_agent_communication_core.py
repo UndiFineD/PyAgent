@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/inter_agent_communication_core.description.md
 
 # inter_agent_communication_core
 
-**File**: `src\core\base\logic\core\inter_agent_communication_core.py`  
+**File**: `src\\core\base\\logic\\core\\inter_agent_communication_core.py`  
 **Type**: Python Module  
 **Summary**: 19 classes, 0 functions, 23 imports  
 **Lines**: 589  
@@ -198,7 +197,7 @@ Provides secure, structured communication between agents with:
 
 # Improvements for inter_agent_communication_core
 
-**File**: `src\core\base\logic\core\inter_agent_communication_core.py`  
+**File**: `src\\core\base\\logic\\core\\inter_agent_communication_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 589 lines (large)  
 **Complexity**: 5 score (moderate)
@@ -249,30 +248,27 @@ Key Features:
 - Multi-tenant isolation
 """
 
-import asyncio
 import json
 import uuid
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union, AsyncGenerator, Callable
-from urllib.parse import urlparse
+from typing import Any, AsyncGenerator, Callable, Dict, List, Optional, Union
 
 import aiohttp
-from pydantic import BaseModel, Field, ConfigDict
-
+from pydantic import BaseModel, ConfigDict, Field
 from src.core.base.common.base_core import BaseCore
 
 
 class Role(str, Enum):
     """Message role enumeration."""
+
     USER = "user"
     AGENT = "agent"
 
 
 class TaskState(str, Enum):
     """Task execution states."""
+
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
@@ -282,6 +278,7 @@ class TaskState(str, Enum):
 
 class SecuritySchemeType(str, Enum):
     """Supported security scheme types."""
+
     OAUTH2 = "oauth2"
     HTTP = "http"
     API_KEY = "apiKey"
@@ -290,6 +287,7 @@ class SecuritySchemeType(str, Enum):
 
 class MessagePart(BaseModel):
     """Base class for message parts."""
+
     kind: str = Field(..., description="Type of content part")
 
     model_config = ConfigDict(validate_by_name=True)
@@ -297,6 +295,7 @@ class MessagePart(BaseModel):
 
 class TextPart(BaseModel):
     """Text content part."""
+
     kind: str = Field(default="text", description="Type of content part")
     text: str = Field(..., description="Text content")
 
@@ -305,6 +304,7 @@ class TextPart(BaseModel):
 
 class FilePart(BaseModel):
     """File content part."""
+
     kind: str = Field(default="file", description="Type of content part")
     filename: str = Field(..., description="File name")
     mime_type: str = Field(..., description="MIME type")
@@ -315,6 +315,7 @@ class FilePart(BaseModel):
 
 class DataPart(BaseModel):
     """Structured data part."""
+
     kind: str = Field(default="data", description="Type of content part")
     mime_type: str = Field(..., description="MIME type")
     data: Any = Field(..., description="Structured data")
@@ -324,6 +325,7 @@ class DataPart(BaseModel):
 
 class Message(BaseModel):
     """Agent message with multi-part content."""
+
     content: List[Union[TextPart, FilePart, DataPart]] = Field(default_factory=list, description="Message content parts")
     role: Role = Field(..., description="Message sender role")
     timestamp: Optional[datetime] = Field(default_factory=lambda: datetime.now(timezone.utc), description="Message timestamp")
@@ -341,6 +343,7 @@ class Message(BaseModel):
 
 class AgentCapabilities(BaseModel):
     """Agent capabilities declaration."""
+
     streaming: bool = Field(default=False, description="Supports streaming responses")
     push_notifications: Optional[bool] = Field(default=None, description="Supports push notifications")
     state_transition_history: Optional[bool] = Field(default=None, description="Tracks state transitions")
@@ -349,12 +352,14 @@ class AgentCapabilities(BaseModel):
 
 class AgentAuthentication(BaseModel):
     """Agent authentication configuration."""
+
     schemes: List[str] = Field(default_factory=list, description="Supported authentication schemes")
     credentials: Optional[str] = Field(default=None, description="Authentication credentials")
 
 
 class AgentCard(BaseModel):
     """Agent capability and configuration card."""
+
     name: str = Field(..., description="Agent name")
     description: str = Field(..., description="Agent description")
     version: str = Field(default="1.0.0", description="Agent version")
@@ -376,6 +381,7 @@ class AgentCard(BaseModel):
 
 class TaskStatus(BaseModel):
     """Task execution status."""
+
     state: TaskState = Field(..., description="Current task state")
     message: Optional[Message] = Field(default=None, description="Status message")
     timestamp: datetime = Field(default_factory=datetime.utcnow, description="Status timestamp")
@@ -385,6 +391,7 @@ class TaskStatus(BaseModel):
 
 class Task(BaseModel):
     """Agent task representation."""
+
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Unique task ID")
     agent_id: str = Field(..., description="Target agent ID")
     message: Message = Field(..., description="Task message")
@@ -397,6 +404,7 @@ class Task(BaseModel):
 
 class JsonRpcRequest(BaseModel):
     """JSON-RPC request structure."""
+
     jsonrpc: str = Field(default="2.0", description="JSON-RPC version")
     id: Union[str, int] = Field(..., description="Request ID")
     method: str = Field(..., description="Method name")
@@ -405,6 +413,7 @@ class JsonRpcRequest(BaseModel):
 
 class JsonRpcResponse(BaseModel):
     """JSON-RPC response structure."""
+
     jsonrpc: str = Field(default="2.0", description="JSON-RPC version")
     id: Union[str, int] = Field(..., description="Request ID")
     result: Any = Field(..., description="Response result")
@@ -412,6 +421,7 @@ class JsonRpcResponse(BaseModel):
 
 class JsonRpcError(BaseModel):
     """JSON-RPC error structure."""
+
     jsonrpc: str = Field(default="2.0", description="JSON-RPC version")
     id: Union[str, int] = Field(..., description="Request ID")
     error: Dict[str, Any] = Field(..., description="Error details")
@@ -419,6 +429,7 @@ class JsonRpcError(BaseModel):
 
 class A2AMessage(BaseModel):
     """A2A protocol message envelope."""
+
     request: Optional[JsonRpcRequest] = Field(default=None, description="RPC request")
     response: Optional[JsonRpcResponse] = Field(default=None, description="RPC response")
     error: Optional[JsonRpcError] = Field(default=None, description="RPC error")
@@ -426,14 +437,14 @@ class A2AMessage(BaseModel):
 
 class AgentEndpoint(BaseModel):
     """Agent endpoint configuration."""
+
     url: str = Field(..., description="Agent service URL")
     agent_card: Optional[AgentCard] = Field(default=None, description="Cached agent card")
     authentication: Optional[Dict[str, Any]] = Field(default=None, description="Authentication config")
 
 
 class InterAgentCommunicationCore(BaseCore):
-    """
-    Core for inter-agent communication using A2A protocol.
+    """Core for inter-agent communication using A2A protocol.
 
     Provides secure, structured communication between agents with:
     - Agent discovery and capability negotiation
@@ -470,12 +481,12 @@ class InterAgentCommunicationCore(BaseCore):
             await self.http_client.close()
 
     async def register_agent(self, agent_id: str, endpoint: AgentEndpoint) -> None:
-        """
-        Register an agent endpoint.
+        """Register an agent endpoint.
 
         Args:
             agent_id: Unique agent identifier
             endpoint: Agent endpoint configuration
+
         """
         # Fetch and cache agent card
         try:
@@ -488,19 +499,18 @@ class InterAgentCommunicationCore(BaseCore):
         self.logger.info(f"Registered agent {agent_id} at {endpoint.url}")
 
     async def unregister_agent(self, agent_id: str) -> None:
-        """
-        Unregister an agent.
+        """Unregister an agent.
 
         Args:
             agent_id: Agent identifier to remove
+
         """
         if agent_id in self.registered_agents:
             del self.registered_agents[agent_id]
             self.logger.info(f"Unregistered agent {agent_id}")
 
     async def send_message(self, target_agent_id: str, message: Message) -> Task:
-        """
-        Send a message to another agent.
+        """Send a message to another agent.
 
         Args:
             target_agent_id: Target agent identifier
@@ -508,6 +518,7 @@ class InterAgentCommunicationCore(BaseCore):
 
         Returns:
             Created task object
+
         """
         if target_agent_id not in self.registered_agents:
             raise ValueError(f"Unknown agent: {target_agent_id}")
@@ -541,26 +552,26 @@ class InterAgentCommunicationCore(BaseCore):
         return task
 
     async def get_task_status(self, task_id: str) -> Optional[Task]:
-        """
-        Get task status by ID.
+        """Get task status by ID.
 
         Args:
             task_id: Task identifier
 
         Returns:
             Task object if found
+
         """
         return self.active_tasks.get(task_id)
 
     async def cancel_task(self, task_id: str) -> bool:
-        """
-        Cancel a running task.
+        """Cancel a running task.
 
         Args:
             task_id: Task identifier
 
         Returns:
             True if cancelled successfully
+
         """
         task = self.active_tasks.get(task_id)
         if not task:
@@ -587,8 +598,7 @@ class InterAgentCommunicationCore(BaseCore):
             return False
 
     async def stream_messages(self, target_agent_id: str, message: Message) -> AsyncGenerator[Message, None]:
-        """
-        Send a streaming message to another agent.
+        """Send a streaming message to another agent.
 
         Args:
             target_agent_id: Target agent identifier
@@ -596,6 +606,7 @@ class InterAgentCommunicationCore(BaseCore):
 
         Yields:
             Response message chunks
+
         """
         if target_agent_id not in self.registered_agents:
             raise ValueError(f"Unknown agent: {target_agent_id}")
@@ -630,14 +641,14 @@ class InterAgentCommunicationCore(BaseCore):
             raise
 
     async def negotiate_capabilities(self, agent_id: str) -> AgentCapabilities:
-        """
-        Negotiate capabilities with another agent.
+        """Negotiate capabilities with another agent.
 
         Args:
             agent_id: Agent identifier
 
         Returns:
             Negotiated capabilities
+
         """
         endpoint = self.registered_agents.get(agent_id)
         if not endpoint or not endpoint.agent_card:
@@ -648,14 +659,14 @@ class InterAgentCommunicationCore(BaseCore):
         return endpoint.agent_card.capabilities
 
     async def _fetch_agent_card(self, url: str) -> AgentCard:
-        """
-        Fetch agent card from endpoint.
+        """Fetch agent card from endpoint.
 
         Args:
             url: Agent endpoint URL
 
         Returns:
             Agent card
+
         """
         card_url = f"{url.rstrip('/')}/.well-known/agent.json"
 
@@ -671,8 +682,7 @@ class InterAgentCommunicationCore(BaseCore):
         params: Dict[str, Any],
         request_id: str
     ) -> Dict[str, Any]:
-        """
-        Send JSON-RPC request to agent.
+        """Send JSON-RPC request to agent.
 
         Args:
             url: Agent endpoint URL
@@ -682,6 +692,7 @@ class InterAgentCommunicationCore(BaseCore):
 
         Returns:
             Response data
+
         """
         request = JsonRpcRequest(
             id=request_id,
@@ -704,8 +715,7 @@ class InterAgentCommunicationCore(BaseCore):
         params: Dict[str, Any],
         request_id: str
     ) -> AsyncGenerator[Message, None]:
-        """
-        Send streaming JSON-RPC request.
+        """Send streaming JSON-RPC request.
 
         Args:
             url: Agent endpoint URL
@@ -715,6 +725,7 @@ class InterAgentCommunicationCore(BaseCore):
 
         Yields:
             Message chunks
+
         """
         request = JsonRpcRequest(
             id=request_id,
@@ -743,24 +754,24 @@ class InterAgentCommunicationCore(BaseCore):
                         continue
 
     def register_message_handler(self, method: str, handler: Callable) -> None:
-        """
-        Register a message handler for incoming requests.
+        """Register a message handler for incoming requests.
 
         Args:
             method: RPC method name
             handler: Handler function
+
         """
         self.message_handlers[method] = handler
 
     async def handle_incoming_message(self, message: A2AMessage) -> Optional[A2AMessage]:
-        """
-        Handle incoming A2A message.
+        """Handle incoming A2A message.
 
         Args:
             message: Incoming message
 
         Returns:
             Response message if applicable
+
         """
         if message.request:
             method = message.request.method
@@ -789,23 +800,23 @@ class InterAgentCommunicationCore(BaseCore):
         return None
 
     def add_security_scheme(self, name: str, scheme: Dict[str, Any]) -> None:
-        """
-        Add a security scheme.
+        """Add a security scheme.
 
         Args:
             name: Scheme name
             scheme: Scheme configuration
+
         """
         self.security_schemes[name] = scheme
 
     def get_security_scheme(self, name: str):
-        """
-        Get a security scheme by name.
+        """Get a security scheme by name.
 
         Args:
             name: Scheme name
 
         Returns:
             Scheme configuration
+
         """
         return self.security_schemes.get(name)

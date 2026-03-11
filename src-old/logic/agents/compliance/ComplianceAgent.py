@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/compliance/ComplianceAgent.description.md
 
 # ComplianceAgent
 
-**File**: `src\logic\agents\compliance\ComplianceAgent.py`  
+**File**: `src\\logic\agents\\compliance\\ComplianceAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 57  
@@ -44,7 +43,7 @@ Coordinates fleet-wide scans and reports violations to the security layer.
 
 # Improvements for ComplianceAgent
 
-**File**: `src\logic\agents\compliance\ComplianceAgent.py`  
+**File**: `src\\logic\agents\\compliance\\ComplianceAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 57 lines (small)  
 **Complexity**: 2 score (simple)
@@ -77,11 +76,12 @@ Coordinates fleet-wide scans and reports violations to the security layer.
 LLM_CONTEXT_END
 """
 
-from src.core.base.Version import VERSION
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.BaseUtilities import as_tool
 import logging
 from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.BaseUtilities import as_tool
+from src.core.base.Version import VERSION
 
 # Ensure relative or absolute import matches structure
 try:

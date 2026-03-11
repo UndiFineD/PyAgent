@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/shard_core.description.md
 
@@ -28,10 +27,12 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Core logic for fleet sharding and partitioning."""
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -44,8 +45,8 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 from .base_core import BaseCore
+
 try:
     import rust_core as rc  # pylint: disable=import-error
 except ImportError:
@@ -53,14 +54,12 @@ except ImportError:
 
 
 class ShardCore(BaseCore):
-    """
-    Authoritative engine for agent and data partitioning.
+    """Authoritative engine for agent and data partitioning.
     Handles shard assignment, rebalancing, and cross-shard routing.
     """
 
     def calculate_shard_id(self, key: str, shard_count: int) -> int:
-        """
-        Determines the shard ID for a given key.
+        """Determines the shard ID for a given key.
         Hot path for Rust acceleration in docs/RUST_MAPPING.md.
         """
         if rc and hasattr(rc, "calculate_shard_id_rust"):  # pylint: disable=no-member
@@ -80,8 +79,7 @@ class ShardCore(BaseCore):
         return seed % shard_count
 
     def verify_integrity(self) -> bool:
-        """
-        Verifies that shard calculation is deterministic and functional.
+        """Verifies that shard calculation is deterministic and functional.
         Acts as a circuit breaker for shard-dependent operations.
         """
         try:

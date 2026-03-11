@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/HierarchicalMemoryAgent.description.md
 
@@ -96,11 +95,13 @@ from __future__ import annotations
 Manages Short-term (Episodic), Mid-term (Working), Long-term (Semantic), and Archival storage tiers.
 """
 
-from src.core.base.Version import VERSION
 from pathlib import Path
-from .mixins.MemoryStorageMixin import MemoryStorageMixin
-from .mixins.MemoryQueryMixin import MemoryQueryMixin
+
 from src.core.base.BaseAgent import BaseAgent
+from src.core.base.Version import VERSION
+
+from .mixins.MemoryQueryMixin import MemoryQueryMixin
+from .mixins.MemoryStorageMixin import MemoryStorageMixin
 
 __version__ = VERSION
 

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/QualityGateAgent.description.md
 
 # QualityGateAgent
 
-**File**: `src\logic\agents\development\QualityGateAgent.py`  
+**File**: `src\\logic\agents\\development\\QualityGateAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 10 imports  
 **Lines**: 129  
@@ -52,7 +51,7 @@ Enforces thresholds for code quality, test coverage, and security before deploym
 
 # Improvements for QualityGateAgent
 
-**File**: `src\logic\agents\development\QualityGateAgent.py`  
+**File**: `src\\logic\agents\\development\\QualityGateAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 129 lines (medium)  
 **Complexity**: 6 score (moderate)
@@ -100,13 +99,13 @@ from __future__ import annotations
 
 """Agent specializing in automated quality gates and release validation."""
 
-from src.core.base.version import VERSION
-import logging
 import json
+import logging
 import subprocess
-from typing import Optional
+
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function, as_tool
+from src.core.base.utilities import as_tool, create_main_function
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

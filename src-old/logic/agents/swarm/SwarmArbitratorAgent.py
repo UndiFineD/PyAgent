@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/SwarmArbitratorAgent.description.md
 
 # SwarmArbitratorAgent
 
-**File**: `src\logic\agents\swarm\SwarmArbitratorAgent.py`  
+**File**: `src\\logic\agents\\swarm\\SwarmArbitratorAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 94  
@@ -45,7 +44,7 @@ Manages consensus across multiple agents and tracks behavioral reputation.
 
 # Improvements for SwarmArbitratorAgent
 
-**File**: `src\logic\agents\swarm\SwarmArbitratorAgent.py`  
+**File**: `src\\logic\agents\\swarm\\SwarmArbitratorAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 94 lines (small)  
 **Complexity**: 3 score (simple)
@@ -80,6 +79,8 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+from typing import Any
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -92,20 +93,14 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import time
-import uuid
-from typing import Dict, List, Any
 from src.logic.agents.swarm.core.AuctionCore import AuctionCore
 
 __version__ = VERSION
 
 
 class SwarmArbitratorAgent:
-    """
-    Phase 285: Swarm Arbitration with PBFT (Practical Byzantine Fault Tolerance).
+    """Phase 285: Swarm Arbitration with PBFT (Practical Byzantine Fault Tolerance).
     Manages consensus across multiple agents and tracks behavioral reputation.
     """
 
@@ -117,8 +112,7 @@ class SwarmArbitratorAgent:
         self.core = AuctionCore()
 
     async def arbitrate_consensus(self, votes: list[dict[str, Any]]) -> dict[str, Any]:
-        """
-        PBFT-inspired consensus logic.
+        """PBFT-inspired consensus logic.
         Requires at least 2/3 agreement to finalize a state change.
         """
         if not votes:

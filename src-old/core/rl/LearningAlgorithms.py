@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/rl/LearningAlgorithms.description.md
 
 # LearningAlgorithms
 
-**File**: `src\core\rl\LearningAlgorithms.py`  
+**File**: `src\\core\rl\\LearningAlgorithms.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 13 imports  
 **Lines**: 203  
@@ -71,7 +70,7 @@ High-level policy optimization utilities.
 
 # Improvements for LearningAlgorithms
 
-**File**: `src\core\rl\LearningAlgorithms.py`  
+**File**: `src\\core\rl\\LearningAlgorithms.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 203 lines (medium)  
 **Complexity**: 13 score (moderate)
@@ -106,15 +105,14 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import logging
+import random
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Tuple
+
 # Copyright 2026 PyAgent Authors
 # Reinforcement Learning Algorithms Implementation - Phase 319 Enhanced
-
 import numpy as np
-from typing import Any, List, Dict, Tuple, Optional, Callable
-from dataclasses import dataclass, field
-from collections import defaultdict
-import random
-import logging
 
 logger = logging.getLogger(__name__)
 

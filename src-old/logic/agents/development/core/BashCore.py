@@ -1,12 +1,11 @@
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/core/BashCore.description.md
 
 # BashCore
 
-**File**: `src\logic\agents\development\core\BashCore.py`  
+**File**: `src\\logic\agents\\development\\core\\BashCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 65  
@@ -41,7 +40,7 @@ Class BashCore implementation.
 
 # Improvements for BashCore
 
-**File**: `src\logic\agents\development\core\BashCore.py`  
+**File**: `src\\logic\agents\\development\\core\\BashCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 65 lines (small)  
 **Complexity**: 2 score (simple)
@@ -79,23 +78,23 @@ Core logic for Bash script analysis (Phase 175).
 Integrates shellcheck for linting generated scripts.
 """
 
-import subprocess
 import os
+import subprocess
 
 from src.core.base.interfaces import ContextRecorderInterface
+
 
 class BashCore:
     @staticmethod
     def lint_script(script_path: str, recorder: ContextRecorderInterface | None = None) -> dict:
-        """
-        Runs shellcheck on a bash script.
+        """Runs shellcheck on a bash script.
         """
         if not os.path.exists(script_path):
             result = {"error": "File not found"}
             if recorder:
                 recorder.record_interaction("bash", "shellcheck", script_path, "file-not-found")
             return result
-            
+
         try:
             # -f json for machine readable output
             result = subprocess.run(["shellcheck", "-f", "json", script_path], capture_output=True, text=True)
@@ -130,8 +129,7 @@ class BashCore:
 
     @staticmethod
     def wrap_with_safety_flags(content: str) -> str:
-        """
-        Ensures script starts with common safety flags if not present.
+        """Ensures script starts with common safety flags if not present.
         """
         header = "#!/bin/bash\nset -euo pipefail\n\n"
         if content.startswith("#!"):

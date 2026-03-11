@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/core/BenchmarkCore.description.md
 
 # BenchmarkCore
 
-**File**: `src\logic\agents\development\core\BenchmarkCore.py`  
+**File**: `src\\logic\agents\\development\\core\\BenchmarkCore.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 5 imports  
 **Lines**: 40  
@@ -46,7 +45,7 @@ Calculates baselines and validates performance constraints.
 
 # Improvements for BenchmarkCore
 
-**File**: `src\logic\agents\development\core\BenchmarkCore.py`  
+**File**: `src\\logic\agents\\development\\core\\BenchmarkCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 40 lines (small)  
 **Complexity**: 3 score (simple)
@@ -84,8 +83,8 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-from typing import List, Dict, Any
 from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass(frozen=True)

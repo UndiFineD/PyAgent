@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/backend/SubagentRunner.description.md
 
 # SubagentRunner
 
-**File**: `src\classes\backend\SubagentRunner.py`  
+**File**: `src\\classes\backend\\SubagentRunner.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 18 imports  
 **Lines**: 366  
@@ -61,7 +60,7 @@ Handles running subagents with multiple backend support and fallback logic.
 
 # Improvements for SubagentRunner
 
-**File**: `src\classes\backend\SubagentRunner.py`  
+**File**: `src\\classes\backend\\SubagentRunner.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 366 lines (medium)  
 **Complexity**: 18 score (moderate)
@@ -97,18 +96,17 @@ from __future__ import annotations
 
 
 import hashlib
-import json
 import logging
 import os
 import subprocess
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 from .DiskCache import DiskCache
-from .RunnerBackends import BackendHandlers
 from .LLMClient import LLMClient
 from .LocalContextRecorder import LocalContextRecorder
+from .RunnerBackends import BackendHandlers
 
 try:
     import requests

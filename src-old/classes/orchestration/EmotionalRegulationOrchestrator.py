@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/EmotionalRegulationOrchestrator.description.md
 
@@ -81,12 +80,11 @@ LLM_CONTEXT_END
 
 import logging
 import time
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Optional
 
 
 class EmotionalRegulationOrchestrator:
-    """
-    Phase 36: Synthetic Emotional Regulation.
+    """Phase 36: Synthetic Emotional Regulation.
     Manages fleet 'patience' and 'urgency' to balance speed vs accuracy.
     """
 

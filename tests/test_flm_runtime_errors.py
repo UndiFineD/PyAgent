@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
 
 import pytest
 
@@ -28,12 +27,14 @@ from src.core.providers.FlmProviderConfig import FlmProviderConfig
 @dataclass
 class _FakeModel:
     """Mimics the structure of a model entry from the FLM models list API."""
+
     id: str
 
 
 @dataclass
 class _FakeModelsList:
     """Mimics the structure of a models list response from the FLM client."""
+
     data: list[_FakeModel]
 
 
@@ -54,7 +55,7 @@ class _FakeModels:
 class _FailingCompletions:
     """Mimics the completions interface of the FLM client, but always raises an error."""
 
-    def create(self, **_kwargs: Any) -> Any:
+    def create(self, **_kwargs: object) -> object:
         """Simulate a failure in the completions API by raising a runtime error."""
         raise RuntimeError("connection refused")
 
@@ -80,7 +81,7 @@ class _ModelErrorClient:
 
 
 def _make_config() -> FlmProviderConfig:
-    """Helper to create a standard FLM provider configuration for testing."""
+    """Create a standard FLM provider configuration for testing."""
     return FlmProviderConfig.from_mapping(
         {
             "base_url": "http://127.0.0.1:52625/v1/",

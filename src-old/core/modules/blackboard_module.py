@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/modules/blackboard_module.description.md
 
@@ -27,9 +26,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -54,8 +55,7 @@ from src.core.base.common.base_modules import BaseModule
 
 
 class BlackboardModule(BaseModule):
-    """
-    Consolidated core module for Blackboard operations.
+    """Consolidated core module for Blackboard operations.
     Migrated from BlackboardCore.
     """
 
@@ -69,8 +69,7 @@ class BlackboardModule(BaseModule):
         return super().initialize()
 
     def execute(self, action: str, **kwargs) -> Any:
-        """
-        Executes blackboard operations.
+        """Executes blackboard operations.
         Supported actions: post, get, keys
         """
         if not self.initialized:

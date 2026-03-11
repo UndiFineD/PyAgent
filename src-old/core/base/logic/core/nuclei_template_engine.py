@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/nuclei_template_engine.description.md
 
 # nuclei_template_engine
 
-**File**: `src\core\base\logic\core\nuclei_template_engine.py`  
+**File**: `src\\core\base\\logic\\core\nuclei_template_engine.py`  
 **Type**: Python Module  
 **Summary**: 7 classes, 0 functions, 13 imports  
 **Lines**: 425  
@@ -99,7 +98,7 @@ Based on patterns from .external/0day-templates repository.
 
 # Improvements for nuclei_template_engine
 
-**File**: `src\core\base\logic\core\nuclei_template_engine.py`  
+**File**: `src\\core\base\\logic\\core\nuclei_template_engine.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 425 lines (medium)  
 **Complexity**: 10 score (moderate)
@@ -139,15 +138,13 @@ Inspired by Nuclei templates from .external/0day-templates repository.
 Implements YAML-based vulnerability detection templates with DSL matchers.
 """
 
-import asyncio
 import logging
-import yaml
 import re
-from typing import Dict, List, Optional, Any, Union
 from dataclasses import dataclass
-from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 import requests
-from urllib.parse import urlparse
+import yaml
 
 
 @dataclass
@@ -217,8 +214,7 @@ class ScanResult:
 
 
 class NucleiTemplateEngine:
-    """
-    Nuclei-style vulnerability detection engine.
+    """Nuclei-style vulnerability detection engine.
 
     Based on patterns from .external/0day-templates repository.
     """
@@ -228,14 +224,14 @@ class NucleiTemplateEngine:
         self.logger = logging.getLogger(__name__)
 
     def load_template_from_yaml(self, yaml_content: str) -> Optional[NucleiTemplate]:
-        """
-        Load a template from YAML content.
+        """Load a template from YAML content.
 
         Args:
             yaml_content: YAML template content
 
         Returns:
             Parsed NucleiTemplate or None if parsing fails
+
         """
         try:
             data = yaml.safe_load(yaml_content)
@@ -294,14 +290,14 @@ class NucleiTemplateEngine:
             return None
 
     def load_template_from_file(self, file_path: str) -> Optional[NucleiTemplate]:
-        """
-        Load a template from a YAML file.
+        """Load a template from a YAML file.
 
         Args:
             file_path: Path to the YAML template file
 
         Returns:
             Parsed NucleiTemplate or None if loading fails
+
         """
         try:
             with open(file_path, "r", encoding="utf-8") as f:
@@ -314,8 +310,7 @@ class NucleiTemplateEngine:
     async def scan_url_with_template(
         self, template: NucleiTemplate, base_url: str
     ) -> Optional[ScanResult]:
-        """
-        Scan a URL with a specific template.
+        """Scan a URL with a specific template.
 
         Args:
             template: NucleiTemplate to execute
@@ -323,6 +318,7 @@ class NucleiTemplateEngine:
 
         Returns:
             ScanResult if template matches, None otherwise
+
         """
         if not template.http:
             return None
@@ -375,8 +371,7 @@ class NucleiTemplateEngine:
     async def scan_url_with_templates(
         self, base_url: str, template_ids: Optional[List[str]] = None
     ) -> List[ScanResult]:
-        """
-        Scan a URL with multiple templates.
+        """Scan a URL with multiple templates.
 
         Args:
             base_url: Base URL to scan
@@ -384,6 +379,7 @@ class NucleiTemplateEngine:
 
         Returns:
             List of matching ScanResults
+
         """
         results = []
         templates_to_scan = []
@@ -442,8 +438,7 @@ class NucleiTemplateEngine:
         response: requests.Response,
         condition: Optional[str] = None,
     ) -> bool:
-        """
-        Check if response matches the template matchers.
+        """Check if response matches the template matchers.
 
         Args:
             matchers: List of matcher conditions
@@ -452,6 +447,7 @@ class NucleiTemplateEngine:
 
         Returns:
             True if matchers are satisfied
+
         """
         if not matchers:
             return True

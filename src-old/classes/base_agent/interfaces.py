@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/base_agent/interfaces.description.md
 
 # interfaces
 
-**File**: `src\classes\base_agent\interfaces.py`  
+**File**: `src\\classes\base_agent\\interfaces.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 8 imports  
 **Lines**: 37  
@@ -72,7 +71,7 @@ Pure logic interface. High-performance, no-IO, candidate for Rust parity.
 
 # Improvements for interfaces
 
-**File**: `src\classes\base_agent\interfaces.py`  
+**File**: `src\\classes\base_agent\\interfaces.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 37 lines (small)  
 **Complexity**: 11 score (moderate)
@@ -107,14 +106,13 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-from typing import Protocol, runtime_checkable, Dict, Any, List, Optional
 from pathlib import Path
+from typing import Any, Dict, List, Optional, Protocol, runtime_checkable
 
 
 @runtime_checkable
 class AgentInterface(Protocol):
-    """
-    Core interface for all AI-powered agents.
+    """Core interface for all AI-powered agents.
     Defining this as a Protocol facilitates future Rust implementation (PyO3).
     """
 

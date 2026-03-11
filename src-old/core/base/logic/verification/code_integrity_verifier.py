@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/verification/code_integrity_verifier.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -48,10 +48,10 @@ Code integrity verifier.py module.
 """
 
 import ast
-from pathlib import Path
-from typing import Any, Optional, cast
-from itertools import chain
 from functools import reduce
+from itertools import chain
+from pathlib import Path
+from typing import Optional, cast
 
 
 class CodeIntegrityVerifier:
@@ -59,8 +59,7 @@ class CodeIntegrityVerifier:
 
     @staticmethod
     def verify_imports(root_dir: str = "src") -> dict[str, list[str]]:
-        """
-        Scans all Python files in the given directory regarding broken internal imports functionally.
+        """Scans all Python files in the given directory regarding broken internal imports functionally.
         Specifically looks regarding 'from src.xxx' or 'import src.xxx' and verifies existence.
         """
         root_path = Path(root_dir)
@@ -122,8 +121,7 @@ class CodeIntegrityVerifier:
         )
 
     def get_symbol_map(self, root_dir: Path) -> dict[str, str]:
-        """
-        Maps all class names in the directory to their relative file paths functionally.
+        """Maps all class names in the directory to their relative file paths functionally.
         """
         py_files = list(root_dir.rglob("*.py"))
 

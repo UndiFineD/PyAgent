@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/core/logging_core.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -62,8 +62,7 @@ except ImportError:
 
 
 class LoggingCore:
-    """
-    Pure logic for log formatting and sensitive data masking.
+    """Pure logic for log formatting and sensitive data masking.
     Targeted for Rust conversion to ensure performance in high-throughput streams.
     """
 
@@ -87,7 +86,7 @@ class LoggingCore:
                 return rust_core.mask_sensitive_logs(text)  # type: ignore[attr-defined]
             except (
                 Exception
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            ):  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         result = text

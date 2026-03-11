@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/diff_visualizer.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -66,6 +66,7 @@ class DiffVisualizer:
         >>> visualizer=DiffVisualizer()
         >>> result=visualizer.compare("old content", "new content")
         >>> html=visualizer.render_html(result, DiffViewMode.SIDE_BY_SIDE)
+
     """
 
     def compare(self, old_content: str, new_content: str) -> DiffResult:
@@ -77,6 +78,7 @@ class DiffVisualizer:
 
         Returns:
             DiffResult with comparison details.
+
         """
         old_lines = set(old_content.split("\n"))
         new_lines = set(new_content.split("\n"))
@@ -104,6 +106,7 @@ class DiffVisualizer:
 
         Returns:
             HTML string representation of the diff.
+
         """
         if mode == DiffViewMode.SIDE_BY_SIDE:
             return self._render_side_by_side(result)

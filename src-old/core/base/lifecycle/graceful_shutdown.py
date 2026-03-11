@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/lifecycle/graceful_shutdown.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -71,6 +71,7 @@ class GracefulShutdown:
     Attributes:
         state: Current shutdown state.
         state_file: Path to state persistence file.
+
     """
 
     def __init__(
@@ -81,6 +82,7 @@ class GracefulShutdown:
         Args:
             repo_root: Repository root directory.
             state_file: Name of state file.
+
         """
         self.repo_root = Path(repo_root)
         self.state_file = self.repo_root / state_file
@@ -115,6 +117,7 @@ class GracefulShutdown:
 
         Returns:
             bool: True if should continue, False if shutdown requested.
+
         """
         return not self.state.shutdown_requested
 
@@ -123,6 +126,7 @@ class GracefulShutdown:
 
         Args:
             file_path: Path to current file, or None if not processing.
+
         """
         self.state.current_file = str(file_path) if file_path else None
 
@@ -131,6 +135,7 @@ class GracefulShutdown:
 
         Args:
             file_path: Path to completed file.
+
         """
         self.state.completed_files.append(str(file_path))
         if str(file_path) in self.state.pending_files:
@@ -141,6 +146,7 @@ class GracefulShutdown:
 
         Args:
             files: List of pending file paths.
+
         """
         self.state.pending_files = [str(f) for f in files]
 
@@ -165,6 +171,7 @@ class GracefulShutdown:
 
         Returns:
             ShutdownState if resume state exists, None otherwise.
+
         """
         if not self.state_file.exists():
             return None

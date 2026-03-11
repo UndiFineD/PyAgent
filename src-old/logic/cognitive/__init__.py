@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/cognitive/__init__.description.md
 
@@ -44,6 +43,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Cognitive processing module for advanced reasoning and decision-making.
@@ -52,6 +52,4 @@ Provides cognitive frameworks for agent reasoning, planning, and knowledge
 representation across the PyAgent ecosystem.
 """
 
-from .prompt_templates import (  # noqa: F401
-    VIBE_CODING_2025_TRACKS as VIBE_CODING_2025_TRACKS
-)
+from .prompt_templates import VIBE_CODING_2025_TRACKS as VIBE_CODING_2025_TRACKS  # noqa: F401

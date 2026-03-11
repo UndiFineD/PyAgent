@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/agent_card_core.description.md
 
 # agent_card_core
 
-**File**: `src\core\base\logic\core\agent_card_core.py`  
+**File**: `src\\core\base\\logic\\core\agent_card_core.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 6 imports  
 **Lines**: 62  
@@ -71,7 +70,7 @@ Manages a registry of AgentCards for inter-agent communication (A2A).
 
 # Improvements for agent_card_core
 
-**File**: `src\core\base\logic\core\agent_card_core.py`  
+**File**: `src\\core\base\\logic\\core\agent_card_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 62 lines (small)  
 **Complexity**: 5 score (moderate)
@@ -107,7 +106,8 @@ Manages a registry of AgentCards for inter-agent communication (A2A).
 LLM_CONTEXT_END
 """
 
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -119,8 +119,7 @@ class AgentCapability(BaseModel):
 
 
 class AgentCard(BaseModel):
-    """
-    Standardized manifest for cross-agent discovery.
+    """Standardized manifest for cross-agent discovery.
     Pattern harvested from agentic_design_patterns.
     """
 
@@ -137,8 +136,7 @@ class AgentCard(BaseModel):
 
 
 class AgentCardCore:
-    """
-    Manages a registry of AgentCards for inter-agent communication (A2A).
+    """Manages a registry of AgentCards for inter-agent communication (A2A).
     """
 
     def __init__(self):

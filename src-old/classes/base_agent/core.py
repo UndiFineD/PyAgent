@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/base_agent/core.description.md
 
 # core
 
-**File**: `src\classes\base_agent\core.py`  
+**File**: `src\\classes\base_agent\\core.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 14 imports  
 **Lines**: 160  
@@ -74,7 +73,7 @@ Base class for performance-critical logic.
 
 # Improvements for core
 
-**File**: `src\classes\base_agent\core.py`  
+**File**: `src\\classes\base_agent\\core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 160 lines (medium)  
 **Complexity**: 14 score (moderate)
@@ -116,12 +115,11 @@ They should remain as 'pure' as possible - no complex dependencies on AI or IO.
 import difflib
 import fnmatch
 import hashlib
-import logging
 import os
 import re
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional, Set
 from pathlib import Path
+from typing import Any, Dict, List, Optional, Set
 
 
 @dataclass
@@ -235,8 +233,7 @@ class BaseCore:
         ignored_patterns: Set[str],
         supported_extensions: Set[str],
     ) -> List[Path]:
-        """
-        Pure logic for filtering code files.
+        """Pure logic for filtering code files.
         """
         return [
             f

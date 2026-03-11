@@ -6,12 +6,12 @@ uppercase module name `Version`.
 """
 
 from src.core.base.lifecycle.version import (
-    VERSION,
-    SDK_VERSION,
-    EVOLUTION_PHASE,
-    STABILITY_SCORE,
-    GOLDEN_MASTER_SEAL,
     COMPATIBLE_CORE_VERSIONS,
+    EVOLUTION_PHASE,
+    GOLDEN_MASTER_SEAL,
+    SDK_VERSION,
+    STABILITY_SCORE,
+    VERSION,
     is_gate_open,
 )
 
@@ -30,15 +30,6 @@ __all__ = [
 This file re-exports values from src.core.base.lifecycle.version so older
 imports (src.core.base.version) continue to work.
 """
-from src.core.base.lifecycle.version import (
-    VERSION,
-    SDK_VERSION,
-    EVOLUTION_PHASE,
-    STABILITY_SCORE,
-    GOLDEN_MASTER_SEAL,
-    COMPATIBLE_CORE_VERSIONS,
-    is_gate_open,
-)
 
 __all__ = [
     "VERSION",

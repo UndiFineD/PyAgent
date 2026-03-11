@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/registry/module_loader.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -43,9 +44,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
-
 import importlib
 import logging
 import os
@@ -65,8 +63,7 @@ class ModuleLoader:
 
     @classmethod
     def find_agent_module_path(cls, agent_type: str, start_dirs: list[str] | None = None) -> str | None:
-        """
-        Recursively searches for a python file matching the agent type.
+        """Recursively searches for a python file matching the agent type.
         Returns the dotted module path (e.g. 'src.logic.agents.development.coder_agent').
         """
         if agent_type in cls._module_cache:

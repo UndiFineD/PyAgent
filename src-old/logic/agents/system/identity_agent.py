@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/identity_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -63,8 +63,7 @@ __version__ = VERSION
 
 
 class IdentityAgent(BaseAgent):
-    """
-    Manages Decentralized Identifiers (DIDs) and Verifiable Credentials (VCs)
+    """Manages Decentralized Identifiers (DIDs) and Verifiable Credentials (VCs)
     for agents within the Swarm and across fleet boundaries.
     """
 
@@ -82,8 +81,7 @@ class IdentityAgent(BaseAgent):
         )
 
     def create_agent_did(self, agent_name: str, fleet_id: str = "fleet-01") -> str:
-        """
-        Creates a new DID for an agent.
+        """Creates a new DID for an agent.
         Format: did:pyagent:<fleet_id>:<unique_hash>
         """
         unique_id = str(uuid.uuid4())
@@ -110,8 +108,7 @@ class IdentityAgent(BaseAgent):
     def issue_verifiable_credential(
         self, issuer_name: str, subject_did: str, claim_type: str, claim_value: Any
     ) -> dict[str, Any]:
-        """
-        Issues a simulated VC for an agent.
+        """Issues a simulated VC for an agent.
         """
         # Resolve issuer_name to DID if possible
         issuer_did = self.identity_registry.get(issuer_name, {}).get(
@@ -132,8 +129,7 @@ class IdentityAgent(BaseAgent):
         return vc
 
     def verify_credential(self, vc: dict[str, Any]) -> dict[str, Any]:
-        """
-        Verifies the integrity of a credential.
+        """Verifies the integrity of a credential.
         """
         if "proof" not in vc or "jws" not in vc["proof"]:
             return {"status": "error", "reason": "Missing proof or signature"}

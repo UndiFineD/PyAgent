@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ShardedKnowledgeCore.description.md
 
@@ -87,10 +86,7 @@ Optimized for high-concurrency and massive data volume.
 """
 
 import zlib
-import json
-import os
-import logging
-from typing import Dict, Any, Optional, List
+from typing import Any, Dict
 
 
 class ShardedKnowledgeCore:
@@ -117,8 +113,7 @@ class ShardedKnowledgeCore:
     def filter_stable_knowledge(
         self, data: Dict[str, Any], threshold_confidence: float = 0.8
     ) -> Dict[str, Any]:
-        """
-        Filters knowledge that is considered stable enough for the 'trillion parameter'
+        """Filters knowledge that is considered stable enough for the 'trillion parameter'
         HuggingFace export format.
         """
         stable = {}

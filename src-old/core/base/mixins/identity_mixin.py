@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/identity_mixin.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -51,7 +51,6 @@ Provides identity and metadata mixin for PyAgent agents.
 
 """Identity Mixin for BaseAgent."""
 
-from asyncio import AbstractEventLoop
 from asyncio import AbstractEventLoop
 from typing import Any
 
@@ -82,6 +81,7 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
         try:
             # pylint: disable=import-outside-toplevel
             import asyncio
+
             from src.infrastructure.swarm.orchestration.signals.signal_registry import (
                 SignalRegistry,
             )
@@ -89,7 +89,7 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
             signals = SignalRegistry()
             # Note: We expect the class using this mixin to have agent_logic_core
             if hasattr(self, "agent_logic_core"):
-                payload = getattr(self, "agent_logic_core").prepare_capability_payload(
+                payload = self.agent_logic_core.prepare_capability_payload(
                     self.__class__.__name__, self.get_capabilities()
                 )
 
@@ -110,11 +110,11 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
                         )
                 except (
                     Exception
-                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                ):  # pylint: disable=broad-exception-caught, unused-variable
                     # pylint: disable=broad-exception-caught
                     pass
         except (
             Exception
-        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+        ):  # pylint: disable=broad-exception-caught, unused-variable
             # pylint: disable=broad-exception-caught
             pass

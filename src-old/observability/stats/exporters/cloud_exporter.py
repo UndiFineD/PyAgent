@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/exporters/cloud_exporter.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -70,6 +71,7 @@ class CloudExporter:
         destination: The export destination.
         config: Export configuration.
         export_queue: Queued metrics for export.
+
     """
 
     def __init__(self, destination: ExportDestination, api_key: str = "", endpoint: str = "") -> None:
@@ -79,6 +81,7 @@ class CloudExporter:
             destination: The target cloud platform.
             api_key: API key for authentication.
             endpoint: Custom endpoint URL.
+
         """
         self.destination = destination
         self.api_key = api_key
@@ -92,6 +95,7 @@ class CloudExporter:
 
         Returns:
             Default endpoint URL.
+
         """
         defaults = {
             ExportDestination.DATADOG: "https://api.datadoghq.com / v1 / series",
@@ -107,6 +111,7 @@ class CloudExporter:
 
         Args:
             metric: The metric to queue.
+
         """
         self.export_queue.append(metric)
 
@@ -115,6 +120,7 @@ class CloudExporter:
 
         Returns:
             Number of metrics exported.
+
         """
         if not self.export_queue:
             return 0
@@ -184,6 +190,7 @@ class CloudExporter:
 
         Returns:
             Export statistics.
+
         """
         return {
             "destination": self.destination.value,

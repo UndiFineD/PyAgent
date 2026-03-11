@@ -13,8 +13,7 @@
 # limitations under the License.
 
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/graph_core.description.md
 
@@ -43,6 +42,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -167,8 +167,7 @@ class GraphCore:
 
     @staticmethod
     def build_edges(analysis: dict[str, Any]) -> list[tuple[str, str, str]]:
-        """
-        Builds graph edges from analysis results.
+        """Builds graph edges from analysis results.
         Returns list of (source, target, relationship_type).
         """
         if _RUST_ACCEL:

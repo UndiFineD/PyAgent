@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Helper script to invoke pytest with reproducible quoting."""
 import sys
+
 import pytest
 
 if __name__ == "__main__":

@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/interface/core/InterfaceSyncCore.description.md
 
@@ -78,11 +77,11 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-from typing import Dict, List, Any, Optional
+from typing import Any
+
 
 class InterfaceSyncCore:
-    """
-    InterfaceSyncCore handles synchronization logic between CLI, GUI, and Web.
+    """InterfaceSyncCore handles synchronization logic between CLI, GUI, and Web.
     It manages the central state and 'Theme Engine' propagation.
     """
 
@@ -107,8 +106,7 @@ class InterfaceSyncCore:
         return self.themes.get(name, self.themes["dark"])
 
     def broadcast_action(self, action_type: str, payload: Any) -> dict[str, Any]:
-        """
-        Formats an action for broadcast to all interface targets.
+        """Formats an action for broadcast to all interface targets.
         """
         return {
             "event": "INTERFACE_SYNC",
@@ -118,8 +116,7 @@ class InterfaceSyncCore:
         }
 
     def resolve_topology_state(self, agents: list[dict[str, Any]], connections: list[tuple]) -> dict[str, Any]:
-        """
-        Prepares a unified topology state for the Web viewer and GUI.
+        """Prepares a unified topology state for the Web viewer and GUI.
         """
         return {
             "nodes": agents,

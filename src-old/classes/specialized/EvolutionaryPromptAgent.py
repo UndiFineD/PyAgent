@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/EvolutionaryPromptAgent.description.md
 
@@ -86,6 +85,12 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import random
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -98,12 +103,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 from src.core.base.version import VERSION
-import random
-from typing import Dict, List, Any
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
 from src.logic.agents.cognitive.core.EvolutionCore import EvolutionCore
 
 __version__ = VERSION
@@ -116,8 +116,7 @@ __version__ = VERSION
 
 
 class EvolutionaryPromptAgent(BaseAgent):
-    """
-    Agent that implements genetic algorithms to 'breed' and evolve system prompts.
+    """Agent that implements genetic algorithms to 'breed' and evolve system prompts.
     It tracks fitness scores based on task performance and performs crossover/mutation.
     """
 
@@ -135,8 +134,7 @@ class EvolutionaryPromptAgent(BaseAgent):
 
     @as_tool
     def initialize_population(self, seed_prompt: str) -> str:
-        """
-        Creates an initial population of variations of a seed prompt.
+        """Creates an initial population of variations of a seed prompt.
         """
         self.population = []
         for i in range(self.population_size):
@@ -153,8 +151,7 @@ class EvolutionaryPromptAgent(BaseAgent):
 
     @as_tool
     def record_fitness(self, prompt_index: int, score: float) -> str:
-        """
-        Records the performance score (fitness) of a specific prompt in the population.
+        """Records the performance score (fitness) of a specific prompt in the population.
         """
         if 0 <= prompt_index < len(self.population):
             self.population[prompt_index]["fitness"] = score
@@ -164,8 +161,7 @@ class EvolutionaryPromptAgent(BaseAgent):
 
     @as_tool
     def evolve_generation(self) -> dict[str, Any]:
-        """
-        Performs selection, crossover, and mutation to create next generation (Phase 182).
+        """Performs selection, crossover, and mutation to create next generation (Phase 182).
         """
         if not self.population:
             return {"error": "Population not initialized."}
@@ -208,8 +204,7 @@ class EvolutionaryPromptAgent(BaseAgent):
 
     @as_tool
     def get_best_prompt(self) -> str:
-        """
-        Returns the prompt with the highest fitness found so far.
+        """Returns the prompt with the highest fitness found so far.
         """
         if not self.population:
             return "No population initialized."

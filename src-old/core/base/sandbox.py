@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/sandbox.description.md
 
 # sandbox
 
-**File**: `src\core\base\sandbox.py`  
+**File**: `src\\core\base\\sandbox.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 66  
@@ -43,7 +42,7 @@ Manages restricted execution environments for plugins.
 
 # Improvements for sandbox
 
-**File**: `src\core\base\sandbox.py`  
+**File**: `src\\core\base\\sandbox.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 66 lines (small)  
 **Complexity**: 3 score (simple)
@@ -93,7 +92,6 @@ Phase 132: Plugin Sandbox Isolation.
 Enforces process-level lockdowns for potentially unsafe plugin code.
 """
 
-import os
 import sys
 from pathlib import Path
 
@@ -136,7 +134,6 @@ class SandboxManager:
     def apply_process_limits(creationflags: int = 0) -> int:
         """Returns flags to lower process priority / restrict UI (Windows specific)."""
         if sys.platform == "win32":
-            import subprocess
 
             # CREATE_NO_WINDOW and BELOW_NORMAL_PRIORITY_CLASS
             return creationflags | 0x08000000 | 0x00004000

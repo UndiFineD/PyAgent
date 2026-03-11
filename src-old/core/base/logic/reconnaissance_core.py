@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/reconnaissance_core.description.md
 
 # reconnaissance_core
 
-**File**: `src\core\base\logic\reconnaissance_core.py`  
+**File**: `src\\core\base\\logic\reconnaissance_core.py`  
 **Type**: Python Module  
 **Summary**: 7 classes, 0 functions, 15 imports  
 **Lines**: 347  
@@ -119,7 +118,7 @@ Combines patterns from alterx (DSL generation) and amass (multi-source intellige
 
 # Improvements for reconnaissance_core
 
-**File**: `src\core\base\logic\reconnaissance_core.py`  
+**File**: `src\\core\base\\logic\reconnaissance_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 347 lines (medium)  
 **Complexity**: 11 score (moderate)
@@ -158,15 +157,14 @@ Based on patterns from alterx (DSL-based generation) and amass (multi-source int
 """
 
 import asyncio
-import re
-from typing import List, Dict, Set, Optional, Any
-from dataclasses import dataclass
-from abc import ABC, abstractmethod
-import aiohttp
-import dns.resolver
-import dns.exception
-from urllib.parse import urlparse
 import logging
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import Dict, List, Optional
+
+import aiohttp
+import dns.exception
+import dns.resolver
 
 logger = logging.getLogger(__name__)
 
@@ -394,8 +392,7 @@ class ThreatCrowdSource(IntelligenceSource):
 
 
 class ReconnaissanceCore:
-    """
-    Intelligence gathering and asset discovery core
+    """Intelligence gathering and asset discovery core
     Combines patterns from alterx (DSL generation) and amass (multi-source intelligence)
     """
 
@@ -411,8 +408,7 @@ class ReconnaissanceCore:
         self.sources["threatcrowd"] = ThreatCrowdSource()
 
     async def enumerate_subdomains(self, config: ReconConfig) -> List[SubdomainResult]:
-        """
-        Enumerate subdomains using multiple intelligence sources
+        """Enumerate subdomains using multiple intelligence sources
         Based on amass multi-source enumeration patterns
         """
         all_results = []
@@ -482,8 +478,7 @@ class ReconnaissanceCore:
     def generate_wordlist(
         self, patterns: List[str], payloads: Dict[str, List[str]]
     ) -> List[str]:
-        """
-        Generate subdomain wordlist using DSL patterns
+        """Generate subdomain wordlist using DSL patterns
         Based on alterx pattern generation
         """
         wordlist = set()

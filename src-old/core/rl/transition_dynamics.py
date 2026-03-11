@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/rl/transition_dynamics.description.md
 
@@ -27,6 +26,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -70,8 +70,7 @@ class StateActionStats:
 
 
 class TransitionDynamics:
-    """
-    Models the probability of moving from state S to S' given action A.
+    """Models the probability of moving from state S to S' given action A.
     Supports empirical estimation, model learning, and uncertainty quantification.
     """
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/metacognitive_monitor.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -52,8 +52,8 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.core.metacognitive_core import MetacognitiveCore
 
 __version__ = VERSION
@@ -61,8 +61,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class MetacognitiveMonitor(BaseAgent):
-    """
-    Tier 2 (Cognitive Logic) - Metacognitive Monitor: Evaluates the internal
+    """Tier 2 (Cognitive Logic) - Metacognitive Monitor: Evaluates the internal
     consistency and certainty of agent reasoning.
     """
 

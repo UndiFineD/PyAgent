@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/self_archiving_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -63,8 +63,7 @@ __version__ = VERSION
 
 
 class SelfArchivingAgent(BaseAgent):
-    """
-    Phase 35: Recursive Self-Archiving.
+    """Phase 35: Recursive Self-Archiving.
     Identifies abandoned code paths or low-utility memories and compresses them into archives.
     """
 
@@ -78,8 +77,7 @@ class SelfArchivingAgent(BaseAgent):
 
     @as_tool
     def identify_archivable_targets(self, threshold_days: int = 30) -> list[str]:
-        """
-        Scans for files or memory entries that haven't been accessed in the given threshold.
+        """Scans for files or memory entries that haven't been accessed in the given threshold.
         """
         logging.info(
             f"SelfArchiving: Scanning for targets older than {threshold_days} days."
@@ -93,8 +91,7 @@ class SelfArchivingAgent(BaseAgent):
 
     @as_tool
     def archive_targets(self, targets: list[str]) -> str:
-        """
-        'Compresses' the provided targets into the archive directory.
+        """'Compresses' the provided targets into the archive directory.
         """
         if not targets:
             return "No targets provided for archiving."

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/utils/context_recommender.description.md
 
@@ -31,9 +30,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -72,6 +73,7 @@ class ContextRecommender:
     Example:
         >>> recommender = ContextRecommender()
         >>> recommendations = recommender.recommend("auth.py", similar_contexts)
+
     """
 
     def __init__(self) -> None:
@@ -84,6 +86,7 @@ class ContextRecommender:
         Args:
             file_name: Name of the reference file.
             content: Content of the reference file.
+
         """
         self.reference_files[file_name] = content
 
@@ -95,6 +98,7 @@ class ContextRecommender:
 
         Returns:
             List of reference file names that match the query.
+
         """
         query_words = set(query.lower().split())
         matches: list[str] = []
@@ -122,6 +126,7 @@ class ContextRecommender:
 
         Returns:
             List of ContextRecommendation objects.
+
         """
         corpus = (
             similar_contexts if similar_contexts is not None else self.reference_files

@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/structures/ImmutableCollections.description.md
 
 # ImmutableCollections
 
-**File**: `src\core\base\structures\ImmutableCollections.py`  
+**File**: `src\\core\base\\structures\\ImmutableCollections.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 1 functions, 9 imports  
 **Lines**: 348  
@@ -134,7 +133,7 @@ Returns:
 
 # Improvements for ImmutableCollections
 
-**File**: `src\core\base\structures\ImmutableCollections.py`  
+**File**: `src\\core\base\\structures\\ImmutableCollections.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 348 lines (medium)  
 **Complexity**: 71 score (very_complex)
@@ -162,6 +161,7 @@ Returns:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -177,8 +177,8 @@ Phase 23: Advanced Serialization & Validation
 """
 
 
-from collections.abc import Sequence, Mapping, Iterator, Hashable
-from typing import TypeVar, Generic, overload, Any
+from collections.abc import Hashable, Iterator, Mapping, Sequence
+from typing import Any, Generic, TypeVar, overload
 
 __all__ = [
     "ConstantList",
@@ -193,8 +193,7 @@ V = TypeVar("V")
 
 
 class ConstantList(Generic[T], Sequence[T]):
-    """
-    Immutable list wrapper that raises TypeError on mutation attempts.
+    """Immutable list wrapper that raises TypeError on mutation attempts.
 
     Wraps an existing list and provides read-only access while maintaining
     full Sequence protocol compatibility.
@@ -204,16 +203,17 @@ class ConstantList(Generic[T], Sequence[T]):
         >>> const = ConstantList(data)
         >>> print(const[0])  # 1
         >>> const.append(6)  # TypeError: Cannot append to a constant list
+
     """
 
     __slots__ = ("_data",)
 
     def __init__(self, data: list[T]) -> None:
-        """
-        Wrap a list as immutable.
+        """Wrap a list as immutable.
 
         Args:
             data: The list to wrap (not copied, changes to original affect this)
+
         """
         self._data = data
 
@@ -322,24 +322,24 @@ class ConstantList(Generic[T], Sequence[T]):
 
 
 class ConstantDict(Generic[K, V], Mapping[K, V]):
-    """
-    Immutable dictionary wrapper that raises TypeError on mutation attempts.
+    """Immutable dictionary wrapper that raises TypeError on mutation attempts.
 
     Example:
         >>> data = {"a": 1, "b": 2}
         >>> const = ConstantDict(data)
         >>> print(const["a"])  # 1
         >>> const["c"] = 3  # TypeError: Cannot set item in a constant dict
+
     """
 
     __slots__ = ("_data",)
 
     def __init__(self, data: dict[K, V]) -> None:
-        """
-        Wrap a dictionary as immutable.
+        """Wrap a dictionary as immutable.
 
         Args:
             data: The dict to wrap (not copied)
+
         """
         self._data = data
 
@@ -415,8 +415,7 @@ class ConstantDict(Generic[K, V], Mapping[K, V]):
 
 
 class FrozenDict(Generic[K, V], Mapping[K, V], Hashable):
-    """
-    Immutable and hashable dictionary.
+    """Immutable and hashable dictionary.
 
     Unlike ConstantDict, FrozenDict creates a copy and is hashable,
     making it suitable for use as dictionary keys or set members.
@@ -425,17 +424,18 @@ class FrozenDict(Generic[K, V], Mapping[K, V], Hashable):
         >>> fd = FrozenDict({"a": 1, "b": 2})
         >>> cache = {fd: "cached_value"}
         >>> print(hash(fd))  # Valid hash
+
     """
 
     __slots__ = ("_data", "_hash")
 
     def __init__(self, data: dict[K, V] | None = None, **kwargs: V) -> None:
-        """
-        Create a frozen dictionary.
+        """Create a frozen dictionary.
 
         Args:
             data: Optional dict to copy
             **kwargs: Additional key-value pairs
+
         """
         if data is None:
             data = {}
@@ -499,14 +499,14 @@ class FrozenDict(Generic[K, V], Mapping[K, V], Hashable):
 
 
 def as_constant(obj: list[T] | dict[K, V]) -> ConstantList[T] | ConstantDict[K, V]:
-    """
-    Wrap a list or dict as immutable.
+    """Wrap a list or dict as immutable.
 
     Args:
         obj: List or dict to wrap
 
     Returns:
         ConstantList or ConstantDict wrapper
+
     """
     if isinstance(obj, list):
         return ConstantList(obj)

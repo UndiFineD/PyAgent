@@ -11,14 +11,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/reasoning/recursive_thinker.description.md
 
 # recursive_thinker
 
-**File**: `src\logic\agents\reasoning\recursive_thinker.py`  
+**File**: `src\\logic\agents\reasoning\recursive_thinker.py`  
 **Type**: Python Module  
 **Summary**: 4 classes, 0 functions, 6 imports  
 **Lines**: 113  
@@ -69,7 +68,7 @@ Class MockThinkerLLM implementation.
 
 # Improvements for recursive_thinker
 
-**File**: `src\logic\agents\reasoning\recursive_thinker.py`  
+**File**: `src\\logic\agents\reasoning\recursive_thinker.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 113 lines (medium)  
 **Complexity**: 1 score (simple)
@@ -109,8 +108,8 @@ LLM_CONTEXT_END
 """
 
 import asyncio
-from typing import List, Optional, Protocol, Any
 from dataclasses import dataclass
+from typing import List, Protocol
 
 
 class LLMInterface(Protocol):
@@ -126,8 +125,7 @@ class RoundResult:
 
 
 class RecursiveThinker:
-    """
-    Implements a recursive thinking pattern (CoRT) to improve agent responses by
+    """Implements a recursive thinking pattern (CoRT) to improve agent responses by
     generating alternatives and self-evaluating.
     Ported logic from 0xSojalSec-Chain-of-Recursive-Thoughts.
     """
@@ -136,8 +134,7 @@ class RecursiveThinker:
         self.llm = llm
 
     async def think(self, prompt: str, initial_response: str, rounds: int = 2) -> str:
-        """
-        Iteratively improves the response through self-critique and alternative generation.
+        """Iteratively improves the response through self-critique and alternative generation.
         """
         current_best = initial_response
 

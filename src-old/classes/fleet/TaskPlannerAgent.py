@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/TaskPlannerAgent.description.md
 
 # TaskPlannerAgent
 
-**File**: `src\classes\fleet\TaskPlannerAgent.py`  
+**File**: `src\\classes\fleet\\TaskPlannerAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 10 imports  
 **Lines**: 118  
@@ -51,7 +50,7 @@ Orchestrator that plans multi-agent workflows.
 
 # Improvements for TaskPlannerAgent
 
-**File**: `src\classes\fleet\TaskPlannerAgent.py`  
+**File**: `src\\classes\fleet\\TaskPlannerAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 118 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -99,12 +98,13 @@ from __future__ import annotations
 
 """Agent specializing in breaking down complex tasks into executable workflows."""
 
-from src.core.base.version import VERSION
 import json
 import logging
-from typing import Dict, List, Any
+from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function, as_tool
+from src.core.base.utilities import as_tool, create_main_function
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

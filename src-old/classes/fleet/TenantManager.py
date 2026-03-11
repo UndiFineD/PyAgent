@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/TenantManager.description.md
 
 # TenantManager
 
-**File**: `src\classes\fleet\TenantManager.py`  
+**File**: `src\\classes\fleet\\TenantManager.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 50  
@@ -49,7 +48,7 @@ Shell for TenantCore.
 
 # Improvements for TenantManager
 
-**File**: `src\classes\fleet\TenantManager.py`  
+**File**: `src\\classes\fleet\\TenantManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 50 lines (small)  
 **Complexity**: 4 score (simple)
@@ -83,16 +82,15 @@ LLM_CONTEXT_END
 Simulates Docker-based environment isolation by managing restricted root paths.
 """
 
-import os
-import shutil
 import logging
-from typing import Dict, List, Any, Optional
+import os
+from typing import Dict
+
 from .TenantCore import TenantCore
 
 
 class TenantManager:
-    """
-    Manages isolated environments for different users or projects.
+    """Manages isolated environments for different users or projects.
     Shell for TenantCore.
     """
 

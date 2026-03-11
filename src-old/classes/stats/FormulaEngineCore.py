@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/stats/FormulaEngineCore.description.md
 
@@ -90,7 +89,7 @@ No I/O or side effects.
 import ast
 import operator
 import re
-from typing import Any, Dict, List, Optional, Type
+from typing import Any, Dict, List, Type
 
 
 class FormulaEngineCore:

@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/StructuredCounter.description.md
 
@@ -167,7 +166,7 @@ Phase 24: Advanced Observability & Parsing
 
 import copy
 from contextlib import contextmanager
-from dataclasses import dataclass, field, fields
+from dataclasses import dataclass, fields
 from typing import Any, Generator, TypeVar
 
 T = TypeVar("T", bound="StructuredCounter")
@@ -175,8 +174,7 @@ T = TypeVar("T", bound="StructuredCounter")
 
 @dataclass
 class StructuredCounter:
-    """
-    Base class for structured metric counters.
+    """Base class for structured metric counters.
 
     Provides snapshot, diff, and testing utilities for tracking
     detailed metrics across operations.
@@ -212,14 +210,14 @@ class StructuredCounter:
                 setattr(self, f.name, 0)
 
     def diff(self: T, other: T) -> dict[str, int]:
-        """
-        Compute the difference between this counter and another.
+        """Compute the difference between this counter and another.
 
         Args:
             other: The baseline counter to compare against
 
         Returns:
             Dictionary of field names to their differences (self - other)
+
         """
         result = {}
         for f in fields(self):
@@ -237,8 +235,7 @@ class StructuredCounter:
 
     @contextmanager
     def expect(self, **kwargs: int) -> Generator[None, None, None]:
-        """
-        Context manager for testing expected counter changes.
+        """Context manager for testing expected counter changes.
 
         Args:
             **kwargs: Expected changes for each counter field
@@ -249,6 +246,7 @@ class StructuredCounter:
         Example:
             with counter.expect(cache_hits=2, cache_misses=1):
                 # ... code that should increment cache_hits by 2, cache_misses by 1
+
         """
         old = self.clone()
         yield
@@ -273,8 +271,7 @@ class StructuredCounter:
 
 @dataclass
 class CompilationCounter(StructuredCounter):
-    """
-    Counter for tracking compilation-related metrics.
+    """Counter for tracking compilation-related metrics.
 
     Based on vLLM's compilation counter pattern.
     """

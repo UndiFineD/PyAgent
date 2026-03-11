@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/CoderAgent.description.md
 
 # CoderAgent
 
-**File**: `src\logic\agents\development\CoderAgent.py`  
+**File**: `src\\logic\agents\\development\\CoderAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 17 imports  
 **Lines**: 145  
@@ -64,7 +63,7 @@ Invariants:
 
 # Improvements for CoderAgent
 
-**File**: `src\logic\agents\development\CoderAgent.py`  
+**File**: `src\\logic\agents\\development\\CoderAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 145 lines (medium)  
 **Complexity**: 6 score (moderate)
@@ -112,27 +111,28 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_coder.py"""
 
-from src.core.base.Version import VERSION
+import logging
+from pathlib import Path
+
+from src.core.base.BaseAgent import BaseAgent
 from src.core.base.types.CodeLanguage import CodeLanguage
 from src.core.base.types.CodeMetrics import CodeMetrics
 from src.core.base.types.CodeSmell import CodeSmell
 from src.core.base.types.QualityScore import QualityScore
 from src.core.base.types.RefactoringPattern import RefactoringPattern
 from src.core.base.types.StyleRule import StyleRule
-from src.logic.agents.development.CoderCore import CoderCore, DEFAULT_PYTHON_STYLE_RULES
-from src.core.base.BaseAgent import BaseAgent
+from src.core.base.Version import VERSION
+from src.logic.agents.development.CoderCore import DEFAULT_PYTHON_STYLE_RULES, CoderCore
 from src.logic.agents.development.mixins.agent.AgentLanguageMixin import (
     AgentLanguageMixin,
 )
-from src.logic.agents.development.mixins.agent.AgentStyleMixin import AgentStyleMixin
 from src.logic.agents.development.mixins.agent.AgentMetricsMixin import (
     AgentMetricsMixin,
 )
 from src.logic.agents.development.mixins.agent.AgentRefactorMixin import (
     AgentRefactorMixin,
 )
-from pathlib import Path
-import logging
+from src.logic.agents.development.mixins.agent.AgentStyleMixin import AgentStyleMixin
 
 __version__ = VERSION
 
@@ -205,6 +205,7 @@ class CoderAgent(
 
         Returns:
             The detected CodeLanguage based on file extension.
+
         """
         self._language = self._detect_language()
         self.core.language = self._language  # Sync core

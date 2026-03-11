@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/OrchestratorRegistryCore.description.md
 
 # OrchestratorRegistryCore
 
-**File**: `src\classes\fleet\OrchestratorRegistryCore.py`  
+**File**: `src\\classes\fleet\\OrchestratorRegistryCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 9 imports  
 **Lines**: 112  
@@ -48,7 +47,7 @@ Handles dynamic discovery of orchestrator classes.
 
 # Improvements for OrchestratorRegistryCore
 
-**File**: `src\classes\fleet\OrchestratorRegistryCore.py`  
+**File**: `src\\classes\fleet\\OrchestratorRegistryCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 112 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -83,6 +82,9 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import os
+from typing import Any
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -101,17 +103,13 @@ from __future__ import annotations
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
 from src.core.base.version import VERSION
-import os
-from typing import Dict, List, Any, Tuple, Optional
 
 __version__ = VERSION
 
 
 class OrchestratorRegistryCore:
-    """
-    Pure logic core for Orchestrator Registry.
+    """Pure logic core for Orchestrator Registry.
     Handles dynamic discovery of orchestrator classes.
     """
 
@@ -121,8 +119,7 @@ class OrchestratorRegistryCore:
     def process_discovered_files(
         self, file_paths: list[str]
     ) -> dict[str, tuple[str, str, bool, str | None]]:
-        """
-        Processes a list of file paths and extracts orchestrator configurations.
+        """Processes a list of file paths and extracts orchestrator configurations.
         Expects relative paths from workspace root.
         """
         discovered: dict[str, tuple[str, str, bool, str | None]] = {}
@@ -186,8 +183,7 @@ class OrchestratorRegistryCore:
     def parse_manifest(
         self, raw_manifest: dict[str, Any]
     ) -> dict[str, tuple[str, str, bool, str | None]]:
-        """
-        Parses the raw manifest dictionary and filters incompatible plugins.
+        """Parses the raw manifest dictionary and filters incompatible plugins.
         Returns a dict of {Name: (module, class, needs_fleet, arg_path)}.
         """
         valid_configs: dict[str, tuple[str, str, bool, str | None]] = {}
@@ -205,8 +201,7 @@ class OrchestratorRegistryCore:
         return valid_configs
 
     def is_compatible(self, required_version: str) -> bool:
-        """
-        Checks if the current SDK version meets the required version.
+        """Checks if the current SDK version meets the required version.
         """
         try:
             p_parts = [int(x) for x in self.sdk_version.split(".")]

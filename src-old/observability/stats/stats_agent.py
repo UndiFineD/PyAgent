@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/stats_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -50,6 +50,7 @@ from __future__ import annotations
 
 
 import csv
+import functools
 import hashlib
 import json
 import logging
@@ -59,7 +60,6 @@ from collections.abc import Callable
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-import functools
 
 try:
     import rust_core

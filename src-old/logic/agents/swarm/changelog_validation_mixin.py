@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/changelog_validation_mixin.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -56,8 +56,10 @@ Changelog validation mixin.py module.
 
 
 import re
+from typing import Any
+
 from .changelog_entry import ChangelogEntry
-from typing import TYPE_CHECKING, Any
+
 
 class ChangelogValidationMixin:
     """Mixin for validating changelog entries and content."""

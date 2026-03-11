@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/multimodal/core/android_core.description.md
 
@@ -30,9 +29,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -78,8 +79,7 @@ class AndroidCore:
         serial: str | None = None,
         recorder: ContextRecorderInterface | None = None,
     ) -> ADBResult:
-        """
-        Runs an adb command and returns a structured result.
+        """Runs an adb command and returns a structured result.
         """
         base = ["adb"]
         if serial:
@@ -140,8 +140,7 @@ class AndroidCore:
 
     @staticmethod
     def list_devices(recorder: ContextRecorderInterface | None = None) -> list[str]:
-        """
-        Returns a list of connected device serials.
+        """Returns a list of connected device serials.
         """
         res = AndroidCore.run_adb_command(["devices"], recorder=recorder)
         if not res["success"]:
@@ -177,8 +176,7 @@ class AndroidCore:
         serial: str | None = None,
         recorder: ContextRecorderInterface | None = None,
     ) -> ADBResult:
-        """
-        Takes a screenshot of the device. Returns the result of the pull command (final step).
+        """Takes a screenshot of the device. Returns the result of the pull command (final step).
         """
         # 1. Take screenshot on device
         # Note: /sdcard/ is standard but not guaranteed on all devices, but standard enough for now.

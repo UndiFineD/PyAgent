@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/refactor_external_batch.description.md
 
@@ -91,12 +90,12 @@ Features:
 - Produces a JSON mapping and log file, supports `--limit` and `--dry-run`
 """
 
-from pathlib import Path
 import argparse
 import ast
+import hashlib
 import json
 import re
-import hashlib
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 EXTERNAL = ROOT / ".external"

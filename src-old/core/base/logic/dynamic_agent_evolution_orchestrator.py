@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/dynamic_agent_evolution_orchestrator.description.md
 
 # dynamic_agent_evolution_orchestrator
 
-**File**: `src\core\base\logic\dynamic_agent_evolution_orchestrator.py`  
+**File**: `src\\core\base\\logic\\dynamic_agent_evolution_orchestrator.py`  
 **Type**: Python Module  
 **Summary**: 4 classes, 0 functions, 20 imports  
 **Lines**: 562  
@@ -111,7 +110,7 @@ Task Requirements → Agent Creation/Integration → Performance Tracking → Ev
 
 # Improvements for dynamic_agent_evolution_orchestrator
 
-**File**: `src\core\base\logic\dynamic_agent_evolution_orchestrator.py`  
+**File**: `src\\core\base\\logic\\dynamic_agent_evolution_orchestrator.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 562 lines (large)  
 **Complexity**: 17 score (moderate)
@@ -171,17 +170,15 @@ Evolution Workflow:
 6. Evolution → Promote high-performers to elite status
 """
 
-import json
-import yaml
-import uuid
 import tempfile
-from pathlib import Path
-from datetime import datetime, timezone
-from pathlib import Path
-from typing import Dict, Any, Optional, List, Set, Tuple
+import uuid
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set, Tuple
 
+import yaml
 from src.core.base.common.models.communication_models import CascadeContext
 from src.core.base.state.agent_state_manager import StateTransaction
 
@@ -229,8 +226,7 @@ class TaskAnalysis:
 
 
 class DynamicAgentEvolutionOrchestrator:
-    """
-    Self-evolving agent orchestrator that creates agents based on task requirements.
+    """Self-evolving agent orchestrator that creates agents based on task requirements.
 
     This system implements the infinite evolution cycle:
     Task Requirements → Agent Creation/Integration → Performance Tracking → Evolution
@@ -302,8 +298,7 @@ class DynamicAgentEvolutionOrchestrator:
                 yaml.dump(data, f, default_flow_style=False, sort_keys=False)
 
     def analyze_task(self, task_description: str) -> TaskAnalysis:
-        """
-        Analyze task requirements to extract capabilities and domain.
+        """Analyze task requirements to extract capabilities and domain.
 
         This is a simplified analysis - in production, this would use LLM analysis.
         """
@@ -360,8 +355,7 @@ class DynamicAgentEvolutionOrchestrator:
     def calculate_coverage(
         self, task_analysis: TaskAnalysis, agent_sheet: AgentSkillSheet
     ) -> float:
-        """
-        Calculate how well an agent covers the task requirements.
+        """Calculate how well an agent covers the task requirements.
 
         Returns coverage percentage (0.0 to 1.0).
         """
@@ -390,8 +384,7 @@ class DynamicAgentEvolutionOrchestrator:
     def scan_agent_pool(
         self, task_analysis: TaskAnalysis
     ) -> List[Tuple[AgentSkillSheet, float]]:
-        """
-        Scan all agents and calculate their coverage for the task.
+        """Scan all agents and calculate their coverage for the task.
 
         Returns list of (agent_sheet, coverage) tuples, sorted by coverage descending.
         """
@@ -409,8 +402,7 @@ class DynamicAgentEvolutionOrchestrator:
     def select_or_create_agent(
         self, task_analysis: TaskAnalysis, context: Optional[CascadeContext] = None
     ) -> AgentSkillSheet:
-        """
-        Select existing agent or create new one based on coverage analysis.
+        """Select existing agent or create new one based on coverage analysis.
 
         Decision Matrix:
         - Coverage 90%+: Use existing agent

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/tool_framework_mixin.description.md
 
 # tool_framework_mixin
 
-**File**: `src\core\base\mixins\tool_framework_mixin.py`  
+**File**: `src\\core\base\\mixins\tool_framework_mixin.py`  
 **Type**: Python Module  
 **Summary**: 5 classes, 0 functions, 19 imports  
 **Lines**: 341  
@@ -88,7 +87,7 @@ Inspired by Adorable's tool system with createTool() pattern.
 
 # Improvements for tool_framework_mixin
 
-**File**: `src\core\base\mixins\tool_framework_mixin.py`  
+**File**: `src\\core\base\\mixins\tool_framework_mixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 341 lines (medium)  
 **Complexity**: 12 score (moderate)
@@ -122,6 +121,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -142,11 +142,8 @@ Provides schema-based tool creation and management, inspired by Adorable's tool 
 
 
 import inspect
-import json
-import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Callable, Union, get_type_hints
-from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional, get_type_hints
 
 try:
     import pydantic
@@ -164,6 +161,7 @@ from src.core.base.common.models.communication_models import CascadeContext
 @dataclass
 class ToolParameter:
     """Represents a tool parameter with validation."""
+
     name: str
     type: str
     description: str
@@ -183,6 +181,7 @@ class ToolParameter:
 @dataclass
 class ToolDefinition:
     """Complete definition of a tool."""
+
     id: str
     description: str
     parameters: List[ToolParameter]
@@ -202,17 +201,18 @@ class ToolDefinition:
 
 class ToolExecutionError(Exception):
     """Exception raised when tool execution fails."""
+
     pass
 
 
 class ToolValidationError(Exception):
     """Exception raised when tool parameters are invalid."""
+
     pass
 
 
 class ToolFrameworkMixin:
-    """
-    Mixin providing schema-based tool creation and management.
+    """Mixin providing schema-based tool creation and management.
     Inspired by Adorable's tool system with createTool() pattern.
     """
 
@@ -233,8 +233,7 @@ class ToolFrameworkMixin:
         category: str = "general",
         version: str = "1.0"
     ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
-        """
-        Decorator to create a tool from a function.
+        """Decorator to create a tool from a function.
         Inspired by Adorable's createTool pattern.
         """
         def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
@@ -296,8 +295,7 @@ class ToolFrameworkMixin:
         return decorator
 
     async def execute_tool(self, tool_id: str, parameters: Dict[str, Any], cascade_context: Optional[CascadeContext] = None) -> Dict[str, Any]:
-        """
-        Execute a registered tool with given parameters.
+        """Execute a registered tool with given parameters.
         """
         if tool_id not in self.registered_tools:
             raise ToolExecutionError(f"Tool '{tool_id}' not found")

@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-"""
-Execution script
+"""Execution script
 Version: 1.0.0
 Last modified: 02-03-2026
 """
-import os, sys
-import time
-import pandas as pd
-from typing import Dict, List, Optional, Any, Callable
-import numpy as np
 import multiprocessing
+import os
+import sys
+import time
+
+import pandas as pd
 
 # =============================================================================
 # System Configuration
@@ -36,15 +35,19 @@ def _ensure_references_on_path():
 
 _ensure_references_on_path()
 
+from references.analysis import (
+    drop_abnormal_ym,
+    drop_highcorr_features,
+    drop_highmiss_features,
+    drop_highnoise_features,
+    drop_highpsi_features,
+    drop_lowiv_features,
+    export_cleaning_report,
+    iv_distribution_by_org,
+    psi_distribution_by_org,
+    value_ratio_distribution_by_org,
+)
 from references.func import get_dataset, missing_check, org_analysis
-from references.analysis import (drop_abnormal_ym, drop_highmiss_features,
-                               drop_lowiv_features, drop_highcorr_features,
-                               drop_highpsi_features,
-                               drop_highnoise_features,
-                               export_cleaning_report,
-                               iv_distribution_by_org,
-                               psi_distribution_by_org,
-                               value_ratio_distribution_by_org)
 
 # ==================== Path Configuration (Interactive Input) ====================
 # Use 50-column test data as default, support interactive modification in command line
@@ -155,7 +158,7 @@ data = get_dataset(
     miss_vals=[-1, -999, -1111]
 )
 print(f"   Original data: {data.shape}")
-print(f"   Abnormal values replaced with NaN: [-1, -999, -1111]")
+print("   Abnormal values replaced with NaN: [-1, -999, -1111]")
 print(f"   Step 1 elapsed: {time.time() - step_start:.2f} seconds")
 
 # ==================== Step 2: Organization Sample Analysis ====================
@@ -386,6 +389,6 @@ print("Data Cleaning Completed!")
 print("=" * 60)
 print(f"   Original data: {data.shape[0]} rows")
 print(f"   Original features: {len([c for c in data.columns if c.startswith('i_')])}")
-print(f"   Cleaning steps (each step executed independently, data not deleted):")
+print("   Cleaning steps (each step executed independently, data not deleted):")
 for name, df in steps:
     print(f"     - {name}: Dropped {df.shape[0] if hasattr(df, 'shape') else len(df)}")

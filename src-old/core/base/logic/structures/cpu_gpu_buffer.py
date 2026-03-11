@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/structures/cpu_gpu_buffer.description.md
 
@@ -34,9 +33,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -62,7 +63,6 @@ Phase 23: Advanced Serialization & Validation
 """
 
 
-from typing import TYPE_CHECKING
 
 try:
     import torch
@@ -94,14 +94,14 @@ def is_pin_memory_available() -> bool:
 
 
 def get_device(device: str | int | None = None) -> "torch.device":
-    """
-    Get a torch device.
+    """Get a torch device.
 
     Args:
         device: Device specification (None = auto-detect)
 
     Returns:
         torch.device instance
+
     """
     if not TORCH_AVAILABLE:
         raise ImportError("torch is required")
@@ -115,8 +115,7 @@ def get_device(device: str | int | None = None) -> "torch.device":
 
 
 class CpuGpuBuffer:
-    """
-    Buffer for efficient tensor transfers between CPU and GPU.
+    """Buffer for efficient tensor transfers between CPU and GPU.
 
     Maintains paired CPU and GPU tensors of the same shape, enabling
     fast non-blocking transfers. Optionally provides a numpy view of
@@ -132,6 +131,7 @@ class CpuGpuBuffer:
         >>> # Transfer results back
         >>> buffer.copy_to_cpu()
         >>> torch.cuda.synchronize()  # Required for CPU data to be valid
+
     """
 
     def __init__(
@@ -142,8 +142,7 @@ class CpuGpuBuffer:
         pin_memory: bool = True,
         with_numpy: bool = True,
     ) -> None:
-        """
-        Create paired CPU/GPU buffers.
+        """Create paired CPU/GPU buffers.
 
         Args:
             *size: Tensor dimensions
@@ -151,6 +150,7 @@ class CpuGpuBuffer:
             device: GPU device for the GPU buffer
             pin_memory: Use pinned memory for CPU tensor (faster transfers)
             with_numpy: Create numpy view of CPU tensor
+
         """
         if not TORCH_AVAILABLE:
             raise ImportError("torch is required for CpuGpuBuffer")
@@ -186,8 +186,7 @@ class CpuGpuBuffer:
         self._dtype = dtype
 
     def copy_to_gpu(self, n: int | None = None, non_blocking: bool = True) -> "torch.Tensor":
-        """
-        Copy data from CPU to GPU.
+        """Copy data from CPU to GPU.
 
         Args:
             n: Number of elements to copy (first dim). None = all.
@@ -195,14 +194,14 @@ class CpuGpuBuffer:
 
         Returns:
             The GPU tensor (or slice if n specified)
+
         """
         if n is None:
             return self.gpu.copy_(self.cpu, non_blocking=non_blocking)
         return self.gpu[:n].copy_(self.cpu[:n], non_blocking=non_blocking)
 
     def copy_to_cpu(self, n: int | None = None, non_blocking: bool = True) -> "torch.Tensor":
-        """
-        Copy data from GPU to CPU.
+        """Copy data from GPU to CPU.
 
         NOTE: Because this is non-blocking, you must call torch.cuda.synchronize()
         before accessing the CPU data to ensure the transfer is complete.
@@ -213,6 +212,7 @@ class CpuGpuBuffer:
 
         Returns:
             The CPU tensor (or slice if n specified)
+
         """
         if n is None:
             return self.cpu.copy_(self.gpu, non_blocking=non_blocking)
@@ -229,11 +229,11 @@ class CpuGpuBuffer:
         self.gpu.zero_()
 
     def resize(self, *new_size: int) -> None:
-        """
-        Resize the buffers (creates new tensors).
+        """Resize the buffers (creates new tensors).
 
         Args:
             *new_size: New dimensions
+
         """
         use_pin = self.cpu.is_pinned() if hasattr(self.cpu, "is_pinned") else False
 
@@ -279,8 +279,7 @@ class CpuGpuBuffer:
 
 
 class CpuGpuBufferPool:
-    """
-    Pool of CpuGpuBuffers for efficient reuse.
+    """Pool of CpuGpuBuffers for efficient reuse.
 
     Maintains a pool of pre-allocated buffers to avoid repeated allocation.
     """
@@ -292,14 +291,14 @@ class CpuGpuBufferPool:
         device: str | int | None = None,
         pool_size: int = 4,
     ):
-        """
-        Create a buffer pool.
+        """Create a buffer pool.
 
         Args:
             size: Buffer dimensions
             dtype: Tensor dtype
             device: GPU device
             pool_size: Number of buffers in pool
+
         """
         self._size = size
         self._dtype = dtype or torch.float32
@@ -311,11 +310,11 @@ class CpuGpuBufferPool:
         list(map(lambda _: self._pool.append(CpuGpuBuffer(*size, dtype=self._dtype, device=device)), range(pool_size)))
 
     def acquire(self) -> tuple[CpuGpuBuffer, int]:
-        """
-        Acquire a buffer from the pool.
+        """Acquire a buffer from the pool.
 
         Returns:
             Tuple of (buffer, handle) for release
+
         """
         def find_free(idx):
             if idx >= len(self._pool):
@@ -337,11 +336,11 @@ class CpuGpuBufferPool:
         return buf, idx
 
     def release(self, handle: int) -> None:
-        """
-        Release a buffer back to the pool.
+        """Release a buffer back to the pool.
 
         Args:
             handle: Handle from acquire()
+
         """
         self._in_use.discard(handle)
 

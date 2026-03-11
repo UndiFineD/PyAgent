@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/VotingAgent.description.md
 
 # VotingAgent
 
-**File**: `src\logic\agents\specialists\VotingAgent.py`  
+**File**: `src\\logic\agents\\specialists\\VotingAgent.py`  
 **Type**: Python Module  
 **Summary**: 5 classes, 0 functions, 17 imports  
 **Lines**: 382  
@@ -80,7 +79,7 @@ Supports multiple voting methods including ranked choice and quadratic voting.
 
 # Improvements for VotingAgent
 
-**File**: `src\logic\agents\specialists\VotingAgent.py`  
+**File**: `src\\logic\agents\\specialists\\VotingAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 382 lines (medium)  
 **Complexity**: 7 score (moderate)
@@ -121,19 +120,20 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# VotingAgent: Consensus and Multi-Agent Voting Specialist - Phase 319 Enhanced
-
-from src.core.base.Version import VERSION
-import logging
 import json
+import logging
 import re
 import time
-from typing import Any, Dict, List, Optional, Callable
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Dict, List, Optional
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.BaseUtilities import as_tool
+
+# Copyright 2026 PyAgent Authors
+# VotingAgent: Consensus and Multi-Agent Voting Specialist - Phase 319 Enhanced
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
@@ -184,8 +184,7 @@ class VotingSession:
 
 
 class VotingAgent(BaseAgent):
-    """
-    Agent specializing in evaluation and consensus.
+    """Agent specializing in evaluation and consensus.
     Gathers votes from multiple agents to decide on a 'truth' or 'best path'.
     Supports multiple voting methods including ranked choice and quadratic voting.
     """

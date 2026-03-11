@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/holographic_context_agent.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -48,21 +48,20 @@ Holographic Context Agent for multi-perspective context snapshots.
 """
 
 import logging
-import time
 import random
+import time
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 # pylint: disable=too-many-ancestors
 class HolographicContextAgent(BaseAgent):
-    """
-    Agent that manages multi-perspective context snapshots (Holograms).
+    """Agent that manages multi-perspective context snapshots (Holograms).
     Allows agents to view the same project state from different architectural angles
     (e.g., Security, Performance, Maintainability, UX).
     """
@@ -83,8 +82,7 @@ class HolographicContextAgent(BaseAgent):
         state_data: dict[str, Any],
         angles: list[str] | None = None,
     ) -> str:
-        """
-        Creates a multi-angle 'hologram' of the provided state data.
+        """Creates a multi-angle 'hologram' of the provided state data.
         """
         if angles is None:
             angles = ["security", "performance"]
@@ -111,8 +109,7 @@ class HolographicContextAgent(BaseAgent):
 
     @as_tool
     def view_perspective(self, name: str, angle: str) -> dict[str, Any]:
-        """
-        Returns a specific perspective from a named hologram.
+        """Returns a specific perspective from a named hologram.
         """
         if name in self.holograms:
             h = self.holograms[name]
@@ -123,7 +120,6 @@ class HolographicContextAgent(BaseAgent):
 
     @as_tool
     def list_holograms(self) -> list[str]:
-        """
-        List all active context holograms.
+        """List all active context holograms.
         """
         return list(self.holograms.keys())

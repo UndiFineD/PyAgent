@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/ConsensusEngine.description.md
 
@@ -81,13 +80,13 @@ Agents vote on proposed solutions to ensure higher quality and redundancy.
 """
 
 import logging
-from typing import Dict, List, Any, Optional
+from typing import Dict, List
+
 from .ConsensusCore import ConsensusCore
 
 
 class ConsensusEngine:
-    """
-    Manages voting and agreement between multiple agents.
+    """Manages voting and agreement between multiple agents.
     Shell for ConsensusCore.
     """
 

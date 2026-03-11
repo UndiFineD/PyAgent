@@ -8,9 +8,9 @@ This is conservative: it only indents import/from lines that immediately follow
 an indented control-flow line (try/except/else/finally) and whose current
 indentation is less than the control-flow indent.
 """
-from pathlib import Path
-import re
 import argparse
+import re
+from pathlib import Path
 
 EXCLUDE_DIRS = {".venv", "venv", "dist", "build", "target", "__pycache__", ".git"}
 

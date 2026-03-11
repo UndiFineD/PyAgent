@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/base_agent.description.md
 
@@ -47,7 +46,6 @@ LLM_CONTEXT_END
 
 import sys
 from pathlib import Path
-from src.version import VERSION
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).parent.parent

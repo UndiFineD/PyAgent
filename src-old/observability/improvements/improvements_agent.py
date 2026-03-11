@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/improvements/improvements_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -54,8 +54,10 @@ import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-from src.core.base.lifecycle.version import VERSION
+
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
 from .effort_estimate import EffortEstimate
 from .improvement import Improvement
 from .improvement_category import ImprovementCategory

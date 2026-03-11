@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/testing/framework.description.md
 
 # framework
 
-**File**: `src\core\testing\framework.py`  
+**File**: `src\\core\testing\framework.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 0 imports  
 **Lines**: 635  
@@ -35,7 +34,7 @@ Python module containing implementation for framework.
 
 # Improvements for framework
 
-**File**: `src\core\testing\framework.py`  
+**File**: `src\\core\testing\framework.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 635 lines (large)  
 **Complexity**: 0 score (simple)
@@ -84,13 +83,12 @@ from typing import Any, Dict, List, Optional
 import pytest
 import yaml
 
-from src.core.base.models.communication_models import CascadeContext
-
 logger = logging.getLogger("pyagent.testing.framework")
 
 
 class TestType(Enum):
     """Types of tests in the testing pyramid."""
+
     UNIT = "unit"
     INTEGRATION = "integration"
     E2E = "e2e"
@@ -100,6 +98,7 @@ class TestType(Enum):
 
 class TestStatus(Enum):
     """Test execution status."""
+
     PASSED = "passed"
     FAILED = "failed"
     SKIPPED = "skipped"
@@ -110,6 +109,7 @@ class TestStatus(Enum):
 @dataclass
 class TestResult:
     """Result of a test execution."""
+
     test_id: str
     test_type: TestType
     status: TestStatus
@@ -124,6 +124,7 @@ class TestResult:
 @dataclass
 class TestScenario:
     """Test scenario configuration."""
+
     name: str
     description: str
     test_type: TestType
@@ -139,6 +140,7 @@ class TestScenario:
 @dataclass
 class TestSuite:
     """Collection of test scenarios."""
+
     name: str
     description: str
     scenarios: List[TestScenario]
@@ -148,8 +150,7 @@ class TestSuite:
 
 
 class AgentTestingPyramidCore:
-    """
-    Testing Pyramid Core.
+    """Testing Pyramid Core.
 
     Implements unit, integration, and E2E testing infrastructure.
     """
@@ -170,12 +171,13 @@ class AgentTestingPyramidCore:
             dir_path.mkdir(parents=True, exist_ok=True)
 
     async def run_test_pyramid(self, test_filter: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-        """
-        Run the complete testing pyramid.
+        """Run the complete testing pyramid.
+
         Args:
             test_filter: Optional filter for test selection
         Returns:
             Test execution summary
+
         """
         self.logger.info("Starting Agent Testing Pyramid execution")
         start_time = time.time()
@@ -436,8 +438,7 @@ class AgentTestingPyramidCore:
 
 
 class ScenarioTestingEngine:
-    """
-    YAML-driven scenario testing engine.
+    """YAML-driven scenario testing engine.
 
     Enables complex agent behavior testing through declarative scenarios.
     """
@@ -497,8 +498,7 @@ tags:
 
 
 class PromptVersioningSystem:
-    """
-    Version control and A/B testing for prompt optimization.
+    """Version control and A/B testing for prompt optimization.
 
     Tracks prompt versions and enables comparative testing.
     """
@@ -553,8 +553,7 @@ class PromptVersioningSystem:
 
     async def run_ab_test(self, prompt_name: str, version_a: str, version_b: str,
                          num_runs: int = 10) -> Dict[str, Any]:
-        """
-        Run A/B test between two prompt versions.
+        """Run A/B test between two prompt versions.
 
         Returns comparative results.
         """
@@ -588,8 +587,7 @@ class PromptVersioningSystem:
 
 
 class EvaluationNotebookSystem:
-    """
-    Jupyter-based evaluation and performance analysis.
+    """Jupyter-based evaluation and performance analysis.
 
     Enables interactive analysis of test results and agent performance.
     """

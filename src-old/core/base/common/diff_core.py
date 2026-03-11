@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/diff_core.description.md
 
@@ -29,10 +28,12 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Core logic for conversation history and message management."""
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -45,7 +46,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import difflib
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -60,8 +60,7 @@ except ImportError:
 
 
 class DiffCore(BaseCore):
-    """
-    Standard implementation for text comparison.
+    """Standard implementation for text comparison.
     Supports unified diff format and structured JSON diffs.
     """
 
@@ -81,8 +80,7 @@ class DiffCore(BaseCore):
         new_text: str,
         file_path: Optional[str | Path] = None,
     ) -> DiffResult:
-        """
-        Generates a diff between two strings.
+        """Generates a diff between two strings.
         If rc is available, uses the Rust-accelerated diffing engine (LCS or Myers).
         """
         # Handle legacy calls where file_path was passed as first argument

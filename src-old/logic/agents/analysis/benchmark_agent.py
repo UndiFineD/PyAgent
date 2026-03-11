@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/analysis/benchmark_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -113,9 +113,11 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
     def validate_scientific_hypothesis(self, hypothesis: str, dataset_path: str) -> str:
         """Scientific Benchmarking: Validates a hypothesis against a dataset using statistical analysis.
+
         Args:
             hypothesis: The scientific claim to test.
             dataset_path: Path to the CSV or JSON data.
+
         """
         logging.info(f"BENCHMARK: Validating hypothesis: {hypothesis}")
         # Simulation of data analysis (e.g. using pandas/scipy)

@@ -1,11 +1,15 @@
-import importlib
+#!/usr/bin/env python3
+"""Existence test for runtime module."""
 
 
-def test_runtime_module_exists() -> None:
+def test_runtime_import_and_validate() -> None:
+    """TDD: importing the runtime module should expose Runtime and validate()."""
+    import importlib
+
     runtime = importlib.import_module("src.core.runtime")
+
     assert hasattr(runtime, "Runtime"), "Runtime class not found"
+    assert callable(getattr(runtime, "validate", None)), "validate() is not callable"
 
-
-def test_runtime_has_validate() -> None:
-    runtime = importlib.import_module("src.core.runtime")
-    assert callable(getattr(runtime, "validate", None)), "validate() missing"
+    # Running validate() should be import-safe and cheap
+    runtime.validate()

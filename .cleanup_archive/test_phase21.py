@@ -2,6 +2,7 @@
 
 import sys
 from pathlib import Path
+
 from src.classes.fleet.FleetManager import FleetManager
 
 sys.path.append(str(Path(__file__).parent / "src"))

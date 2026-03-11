@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/InfrastructureRepairAgent.description.md
 
@@ -82,9 +81,10 @@ LLM_CONTEXT_END
 Detects and fixes environment issues like missing dependencies or broken paths.
 """
 
-import subprocess
 import logging
+import subprocess
 import sys
+
 from src.classes.base_agent import BaseAgent
 
 

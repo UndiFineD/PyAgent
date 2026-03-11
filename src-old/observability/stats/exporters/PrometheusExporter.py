@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/exporters/PrometheusExporter.description.md
 
@@ -94,8 +93,9 @@ from __future__ import annotations
 Enables real-time dashboards in Grafana and ELK stack.
 """
 
+from typing import Any
+
 from src.core.base.version import VERSION
-from typing import Dict, Any, Optional
 
 __version__ = VERSION
 

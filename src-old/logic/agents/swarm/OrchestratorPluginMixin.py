@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/OrchestratorPluginMixin.description.md
 
 # OrchestratorPluginMixin
 
-**File**: `src\logic\agents\swarm\OrchestratorPluginMixin.py`  
+**File**: `src\\logic\agents\\swarm\\OrchestratorPluginMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 9 imports  
 **Lines**: 112  
@@ -48,7 +47,7 @@ Plugin system methods for OrchestratorAgent.
 
 # Improvements for OrchestratorPluginMixin
 
-**File**: `src\logic\agents\swarm\OrchestratorPluginMixin.py`  
+**File**: `src\\logic\agents\\swarm\\OrchestratorPluginMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 112 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -83,14 +82,15 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import importlib.util
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
-
 import logging
-import importlib.util
+from concurrent.futures import ThreadPoolExecutor, TimeoutError
 from pathlib import Path
 from typing import Any
-from concurrent.futures import ThreadPoolExecutor, TimeoutError
+
 from src.core.base.AgentPluginBase import AgentPluginBase
 from src.core.base.models import AgentPluginConfig
 

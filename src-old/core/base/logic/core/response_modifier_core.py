@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/response_modifier_core.description.md
 
 # response_modifier_core
 
-**File**: `src\core\base\logic\core\response_modifier_core.py`  
+**File**: `src\\core\base\\logic\\core\response_modifier_core.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 10 imports  
 **Lines**: 291  
@@ -72,7 +71,7 @@ Useful for bypassing client-side validations and testing error handling.
 
 # Improvements for response_modifier_core
 
-**File**: `src\core\base\logic\core\response_modifier_core.py`  
+**File**: `src\\core\base\\logic\\core\response_modifier_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 291 lines (medium)  
 **Complexity**: 1 score (simple)
@@ -110,9 +109,8 @@ LLM_CONTEXT_END
 
 import asyncio
 import re
-from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass
-from urllib.parse import urlparse
+from typing import Any, Dict, List, Optional, Tuple
 
 from src.core.base.logic.core.base_core import BaseCore
 
@@ -120,6 +118,7 @@ from src.core.base.logic.core.base_core import BaseCore
 @dataclass
 class ResponseModificationRule:
     """Rule for modifying HTTP responses"""
+
     name: str
     condition: str  # Regex pattern for URL or response content
     target_status: int  # Target status code to set
@@ -130,6 +129,7 @@ class ResponseModificationRule:
 @dataclass
 class ModifiedResponse:
     """Container for modified response data"""
+
     original_status: int
     modified_status: int
     headers: List[str]
@@ -139,8 +139,7 @@ class ModifiedResponse:
 
 
 class ResponseModifierCore(BaseCore):
-    """
-    HTTP Response Modifier Core for security testing and analysis.
+    """HTTP Response Modifier Core for security testing and analysis.
     
     Provides capabilities to modify HTTP response codes and content
     for testing purposes, similar to Burp Suite extensions.
@@ -227,8 +226,7 @@ class ResponseModifierCore(BaseCore):
         headers: List[str],
         body: bytes
     ) -> Tuple[int, List[str], bytes]:
-        """
-        Modify an HTTP response based on active rules
+        """Modify an HTTP response based on active rules
         
         Args:
             url: Request URL
@@ -238,6 +236,7 @@ class ResponseModifierCore(BaseCore):
             
         Returns:
             Tuple of (modified_status, modified_headers, modified_body)
+
         """
         if not self.enabled:
             return status_code, headers, body
@@ -284,8 +283,7 @@ class ResponseModifierCore(BaseCore):
         limit: int = 100,
         rule_filter: Optional[str] = None
     ) -> List[ModifiedResponse]:
-        """
-        Get modification history
+        """Get modification history
         
         Args:
             limit: Maximum number of entries to return
@@ -293,6 +291,7 @@ class ResponseModifierCore(BaseCore):
             
         Returns:
             List of modified responses
+
         """
         history = self.modification_history
 
@@ -329,7 +328,7 @@ class ResponseModifierCore(BaseCore):
     async def import_rules(self, rules_data: Dict[str, Any]) -> None:
         """Import modification rules from dictionary"""
         self.modification_rules.clear()
-        
+
         for rule_data in rules_data.get("rules", []):
             rule = ResponseModificationRule(
                 name=rule_data["name"],
@@ -339,7 +338,7 @@ class ResponseModifierCore(BaseCore):
                 enabled=rule_data.get("enabled", True)
             )
             self.modification_rules.append(rule)
-        
+
         self.enabled = rules_data.get("enabled", False)
         self.logger.info(f"Imported {len(self.modification_rules)} modification rules")
 
@@ -347,14 +346,14 @@ class ResponseModifierCore(BaseCore):
         self,
         responses: List[Dict[str, Any]]
     ) -> Dict[str, Any]:
-        """
-        Analyze response patterns for testing insights
+        """Analyze response patterns for testing insights
         
         Args:
             responses: List of response data dictionaries
             
         Returns:
             Analysis results
+
         """
         analysis = {
             "total_responses": len(responses),

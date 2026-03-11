@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/reality_anchor_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -53,17 +53,16 @@ import json
 import logging
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 # pylint: disable=too-many-ancestors
 class RealityAnchorAgent(BaseAgent):
-    """
-    Tier 2 (Cognitive Logic) - Reality Anchor Agent: Specializes in
+    """Tier 2 (Cognitive Logic) - Reality Anchor Agent: Specializes in
     zero-hallucination execution by cross-referencing factual claims against
     verified 'Reality Graphs' (compiler outputs, documentation, tests).
     """
@@ -79,8 +78,7 @@ class RealityAnchorAgent(BaseAgent):
 
     @as_tool
     async def ground_against_docs(self, claim: str, doc_url: str) -> dict[str, Any]:
-        """
-        Cross-references a claim against official online documentation.
+        """Cross-references a claim against official online documentation.
         Integrates with documentation fetching mechanisms.
         """
         logging.info(f"RealityAnchorAgent: Grounding claim against {doc_url}")
@@ -106,11 +104,12 @@ class RealityAnchorAgent(BaseAgent):
     async def check_physics_constraints(
         self, action: str, environment_state: dict[str, Any]
     ) -> dict[str, Any]:
-        """
-        Validates an action against physics-based constraints (Simulated).
+        """Validates an action against physics-based constraints (Simulated).
+
         Args:
             action: Description of the action (e.g., 'Agent moves 100km in 1 second').
             environment_state: Current state (gravity, boundaries, object masses).
+
         """
         logging.info(
             f"RealityAnchorAgent: Checking physics constraints for action: {action}"
@@ -136,8 +135,7 @@ class RealityAnchorAgent(BaseAgent):
     async def verify_claim(
         self, claim: str, evidence_sources: list[str]
     ) -> dict[str, Any]:
-        """
-        Verifies a claim against a list of evidence sources (files, logs, etc.).
+        """Verifies a claim against a list of evidence sources (files, logs, etc.).
         Returns a verdict and supporting/contradicting evidence.
         """
         logging.info(f"RealityAnchorAgent: Verifying claim: {claim}")
@@ -166,8 +164,7 @@ class RealityAnchorAgent(BaseAgent):
 
     @as_tool
     async def anchor_context(self, context_snippet: str) -> str:
-        """
-        Strips unverified assumptions from a context snippet, leaving only grounded facts.
+        """Strips unverified assumptions from a context snippet, leaving only grounded facts.
         """
         logging.info("RealityAnchorAgent: Anchoring context snippet to reality.")
 

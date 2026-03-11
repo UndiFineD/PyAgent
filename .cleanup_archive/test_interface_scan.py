@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-import subprocess
 import socket
+import subprocess
 
 # Test interface scanning using the same approach as network_utils.py
 print("Testing interface scanning with ipconfig...")
@@ -32,12 +32,12 @@ try:
                         interfaces.append(current_iface)
                     else:
                         print(f"DEBUG: Discarding interface {current_iface['name']} (No IPv4)")
-                
+
                 # Start new interface
                 name = line.split(':', 1)[0].replace(' adapter', '').strip()
                 current_iface = {'name': name}
                 print(f"DEBUG: Found new interface header: {name}")
-                
+
             elif current_iface is not None:
                 if line.startswith('IPv4 Address'):
                     # Extract IP address - handle the dotted format
@@ -68,36 +68,36 @@ try:
             name = iface.get('name', '').lower()
 
             print(f"Interface: {iface['name']}")
-            print(f"  IP: {ip}") 
+            print(f"  IP: {ip}")
             print(f"  Subnet: {subnet}")
 
             # Skip VPN/tunnel interfaces
             is_vpn = any(keyword in name for keyword in ['vpn', 'tunnel', 'wireguard', 'proton', 'openvpn', 'pptp', 'l2tp'])
             if is_vpn:
                 score = 0
-                print(f"  -> VPN Detected (score=0)")
+                print("  -> VPN Detected (score=0)")
             else:
                 # Prefer /24 networks (255.255.255.0 subnet mask)
                 if subnet == '255.255.255.0':
                     score = 100
-                    print(f"  -> /24 Subnet Detected (score=100)")
+                    print("  -> /24 Subnet Detected (score=100)")
                 # Then /16 networks (255.255.0.0)
                 elif subnet == '255.255.0.0':
                     score = 80
-                    print(f"  -> /16 Subnet Detected (score=80)")
+                    print("  -> /16 Subnet Detected (score=80)")
                 # Then other private networks
                 elif ip.startswith(('192.168.', '10.', '172.')):
                     score = 60
-                    print(f"  -> Other Private IP Detected (score=60)")
+                    print("  -> Other Private IP Detected (score=60)")
                 else:
                     score = 40
-                    print(f"  -> Public/Other IP Detected (score=40)")
+                    print("  -> Public/Other IP Detected (score=40)")
 
             scored_interfaces.append((score, ip, iface['name']))
 
         # Sort by score and show results
         scored_interfaces.sort(reverse=True)
-        print(f"\nScored interfaces (highest first):")
+        print("\nScored interfaces (highest first):")
         for score, ip, name in scored_interfaces:
             status = "SELECTED" if score > 0 else "SKIPPED"
             print(f"  {status}: {name} - {ip} (score: {score})")

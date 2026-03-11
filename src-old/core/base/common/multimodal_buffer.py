@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/multimodal_buffer.description.md
 
@@ -41,11 +40,13 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Multimodal buffer management."""
 
 from typing import List
+
 try:
     import rust_core as rc
 except ImportError:
@@ -53,8 +54,7 @@ except ImportError:
 
 
 class TemporalModalityBuffer:
-    """
-    Rolling buffer for multimodal sequences (Short-term memory).
+    """Rolling buffer for multimodal sequences (Short-term memory).
     Stores recent frames/audio to allow temporal reasoning.
     """
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/quantum_memory_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -91,9 +91,11 @@ class QuantumMemoryAgent(BaseAgent):
     @as_tool
     def compress_context(self, context_text: str, target_ratio: float = 0.1) -> str:
         """Compresses a large block of text into a high-density semantic summary.
+
         Args:
             context_text: The raw text to compress.
             target_ratio: The desired compression ratio (default 10%).
+
         """
         logging.info(f"QuantumMemory: Compressing {len(context_text)} chars...")
 
@@ -111,8 +113,10 @@ class QuantumMemoryAgent(BaseAgent):
     @as_tool
     def hyper_context_query(self, query: str) -> str:
         """Searches across all compressed context blocks for relevant history.
+
         Args:
             query: The question or reference to search for.
+
         """
         # Logic: Scan all summaries and 're-hydrate' only the most relevant blocks.
         if _RUST_ACCEL and self.active_context_blocks:
@@ -140,7 +144,6 @@ class QuantumMemoryAgent(BaseAgent):
     @as_tool
     def export_context_knowledge_graph(self) -> str:
         """Exports the current compressed context as a JSON Knowledge Graph."""
-
         filepath = self.context_cache_dir / "knowledge_graph.json"
         with open(filepath, "w", encoding="utf-8") as f:
             json.dump(self.active_context_blocks, f, indent=2)

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/backend/LLMClient.description.md
 
 # LLMClient
 
-**File**: `src\classes\backend\LLMClient.py`  
+**File**: `src\\classes\backend\\LLMClient.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 17 imports  
 **Lines**: 348  
@@ -61,7 +60,7 @@ Handles direct HTTP calls to LLM providers.
 
 # Improvements for LLMClient
 
-**File**: `src\classes\backend\LLMClient.py`  
+**File**: `src\\classes\backend\\LLMClient.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 348 lines (medium)  
 **Complexity**: 12 score (moderate)
@@ -95,15 +94,17 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import logging
 import os
 import time
-import logging
+
 # import json
 from pathlib import Path
 from typing import Any, Dict, Optional  # List
-from functools import lru_cache
+
 from src.classes.backend.LocalContextRecorder import LocalContextRecorder
 from src.classes.base_agent.ConnectivityManager import ConnectivityManager
+
 from .VllmNativeEngine import VllmNativeEngine
 
 
@@ -158,8 +159,7 @@ class LLMClient:
         result: str,
         system_prompt: str = ""
     ) -> str:
-        """
-        Helper to record interactions if recorder is active.
+        """Helper to record interactions if recorder is active.
         Optimized for future trillion-parameter community data ingestion.
         """
         if self.recorder:
@@ -221,8 +221,8 @@ class LLMClient:
             return ""
 
         resolved_base_url = (
-            base_url 
-            or os.environ.get("GITHUB_MODELS_BASE_URL") 
+            base_url
+            or os.environ.get("GITHUB_MODELS_BASE_URL")
             or "https://models.inference.ai.azure.com"
         ).strip()
         if not resolved_base_url:
@@ -339,9 +339,9 @@ class LLMClient:
 
         try:
             response = self.session.post(
-                url, 
-                headers={"Content-Type": "application/json"}, 
-                json=payload, 
+                url,
+                headers={"Content-Type": "application/json"},
+                json=payload,
                 timeout=timeout_s
             )
             response.raise_for_status()
@@ -362,8 +362,7 @@ class LLMClient:
         system_prompt: str = "You are a helpful assistant.",
         model: Optional[str] = None
     ) -> str:
-        """
-        Uses the locally installed vLLM library (Native Engine) for maximum performance.
+        """Uses the locally installed vLLM library (Native Engine) for maximum performance.
         Records context, prompt, and result to the local training shards (Phase 108).
         """
         try:
@@ -388,8 +387,7 @@ class LLMClient:
         local_model: str = "llama3",
         external_model: str = "gpt-4o"
     ) -> str:
-        """
-        Smartly chooses between local and external AI models.
+        """Smartly chooses between local and external AI models.
         'local' preference attempts Native vLLM, then remote vLLM/Ollama.
         Implements Phase 108 Result Caching for extreme speed.
         """
@@ -403,7 +401,7 @@ class LLMClient:
         preferred = self.connectivity.get_preferred_endpoint("llm_backends")
         if preferred:
             result = getattr(
-                self, 
+                self,
                 f"llm_chat_via_{preferred}")(
                     prompt, model=local_model if "local" in preferred else external_model,
                     system_prompt=system_prompt

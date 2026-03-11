@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/core/PrivacyCore.description.md
 
 # PrivacyCore
 
-**File**: `src\logic\agents\security\core\PrivacyCore.py`  
+**File**: `src\\logic\agents\\security\\core\\PrivacyCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 59  
@@ -49,7 +48,7 @@ Provides high-speed text redaction and log scanning for PII.
 
 # Improvements for PrivacyCore
 
-**File**: `src\logic\agents\security\core\PrivacyCore.py`  
+**File**: `src\\logic\agents\\security\\core\\PrivacyCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 59 lines (small)  
 **Complexity**: 3 score (simple)
@@ -94,17 +93,17 @@ For more information, visit:
 No commands will be executed.
 """
 
-from src.core.base.Version import VERSION
 import logging
 import re
 from typing import Any
+
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
 
 class PrivacyCore:
-    """
-    PrivacyCore recovered after Copilot CLI deprecation event.
+    """PrivacyCore recovered after Copilot CLI deprecation event.
     Provides high-speed text redaction and log scanning for PII.
     """
 

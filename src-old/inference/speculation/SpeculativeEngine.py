@@ -1,6 +1,5 @@
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/inference/speculation/SpeculativeEngine.description.md
 
@@ -74,18 +73,18 @@ LLM_CONTEXT_END
 """Speculative Decoding Engine - Facade pattern for backward compatibility."""
 
 from .engine import (
-    SpecMethod,
-    SpeculativeConfig,
-    DraftProposal,
-    VerificationResult,
-    SpecDecodingMetrics,
     DrafterBase,
-    NgramProposer,
-    SuffixProposer,
+    DraftProposal,
     EagleProposer,
     HybridDrafter,
-    TokenVerifier,
+    NgramProposer,
+    SpecDecodingMetrics,
+    SpecMethod,
+    SpeculativeConfig,
     SpeculativeEngine,
+    SuffixProposer,
+    TokenVerifier,
+    VerificationResult,
     create_speculative_decoder,
 )
 

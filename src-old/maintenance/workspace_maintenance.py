@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/maintenance/workspace_maintenance.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -56,9 +56,9 @@ import re
 from pathlib import Path
 from typing import List, Tuple
 
-from src.maintenance.mixins.pylint_fixer_mixin import PylintFixerMixin
-from src.maintenance.mixins.import_cleanup_mixin import ImportCleanupMixin
 from src.maintenance.mixins.header_fixer_mixin import HeaderFixerMixin
+from src.maintenance.mixins.import_cleanup_mixin import ImportCleanupMixin
+from src.maintenance.mixins.pylint_fixer_mixin import PylintFixerMixin
 from src.maintenance.mixins.syntax_fixer_mixin import SyntaxFixerMixin
 
 logger: logging.Logger = logging.getLogger(__name__)

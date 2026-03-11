@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/SwarmPruningOrchestrator.description.md
 
@@ -93,7 +92,8 @@ Implemented as part of Phase 40: Swarm-Wide Neural Pruning.
 """
 
 import logging
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List
+
 from src.classes.specialized.NeuralPruningEngine import NeuralPruningEngine
 
 
@@ -115,6 +115,7 @@ class SwarmPruningOrchestrator:
 
         Args:
             threshold: The synaptic weight threshold below which a node is pruned.
+
         """
         logging.info(
             "SwarmPruningOrchestrator: Initiating swarm-wide neural pruning cycle."

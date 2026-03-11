@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/maintenance/shard_deduplication_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -66,8 +66,7 @@ __version__ = VERSION
 
 
 class ShardDeduplicationAgent(BaseAgent):
-    """
-    Analyzes and deduplicates shard data to reduce storage and noise.
+    """Analyzes and deduplicates shard data to reduce storage and noise.
     Identifies redundant records based on prompt hash and result content.
     """
 
@@ -82,8 +81,7 @@ class ShardDeduplicationAgent(BaseAgent):
         }
 
     def deduplicate_shards(self, data_dir: str) -> dict[str, Any]:
-        """
-        Scans directory for .jsonl.gz files and removes duplicate entries.
+        """Scans directory for .jsonl.gz files and removes duplicate entries.
 
         Definition of Duplicate:
         - Same `prompt_hash` AND same `result` content.

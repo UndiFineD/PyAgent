@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/sop_core.description.md
 
 # sop_core
 
-**File**: `src\core\base\logic\core\sop_core.py`  
+**File**: `src\\core\base\\logic\\core\\sop_core.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 7 imports  
 **Lines**: 91  
@@ -73,7 +72,7 @@ Pattern harvested from 'Acontext' and 'self_evolving_subagent'.
 
 # Improvements for sop_core
 
-**File**: `src\core\base\logic\core\sop_core.py`  
+**File**: `src\\core\base\\logic\\core\\sop_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 91 lines (small)  
 **Complexity**: 6 score (moderate)
@@ -109,9 +108,10 @@ Pattern harvested from 'Acontext' and 'self_evolving_subagent'.
 LLM_CONTEXT_END
 """
 
-from typing import List, Dict, Any, Optional
-from pydantic import BaseModel, Field
 import uuid
+from typing import Any, Dict, List, Optional
+
+from pydantic import BaseModel, Field
 
 
 class SopStep(BaseModel):
@@ -132,8 +132,7 @@ class SopManifest(BaseModel):
 
 
 class SopCore:
-    """
-    Manages 'Standard Operating Procedures' for autonomous workflows.
+    """Manages 'Standard Operating Procedures' for autonomous workflows.
     Pattern harvested from 'Acontext' and 'self_evolving_subagent'.
     """
 

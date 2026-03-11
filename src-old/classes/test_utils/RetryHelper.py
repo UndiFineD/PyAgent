@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/test_utils/RetryHelper.description.md
 
 # RetryHelper
 
-**File**: `src\classes\test_utils\RetryHelper.py`  
+**File**: `src\\classes\test_utils\\RetryHelper.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 31  
@@ -41,7 +40,7 @@ Simple retry helper for flaky operations.
 
 # Improvements for RetryHelper
 
-**File**: `src\classes\test_utils\RetryHelper.py`  
+**File**: `src\\classes\test_utils\\RetryHelper.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 31 lines (small)  
 **Complexity**: 2 score (simple)
@@ -76,9 +75,8 @@ from __future__ import annotations
 """Auto-extracted class from agent_test_utils.py"""
 
 
-from typing import Callable, Optional
-import time
 import threading
+from typing import Callable, Optional
 
 
 class RetryHelper:

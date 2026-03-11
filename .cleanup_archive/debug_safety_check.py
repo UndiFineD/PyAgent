@@ -19,9 +19,11 @@
 # Ensure the project root is in PYTHONPATH
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import os
 import sys
+
+from src.core.base.version import VERSION
 from src.infrastructure.fleet.FleetManager import FleetManager
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '.')))
@@ -32,9 +34,9 @@ def main() -> None:
     """Perform a comprehensive safety and compliance audit."""
     root = os.getcwd()
     fleet = FleetManager(root)
-    
+
     print("--- Starting Safety and Compliance Audit ---")
-    
+
     # 1. Privacy Check (Latest Phase 95)
     print("\n[Step 1] Privacy Check (PII Detection)")
     # Scan a few key files for PII

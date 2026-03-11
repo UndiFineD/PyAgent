@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/RealityAnchorAgent.description.md
 
@@ -83,16 +82,16 @@ factual claims against verified 'Reality Graphs' (compiler outputs, documentatio
 LLM_CONTEXT_END
 """
 
-import logging
 import json
-from typing import Dict, List, Any, Optional
+import logging
+from typing import Any, Dict, List
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
 
 class RealityAnchorAgent(BaseAgent):
-    """
-    Agent specializing in zero-hallucination execution by cross-referencing
+    """Agent specializing in zero-hallucination execution by cross-referencing
     factual claims against verified 'Reality Graphs' (compiler outputs, documentation, tests).
     """
 
@@ -109,11 +108,12 @@ class RealityAnchorAgent(BaseAgent):
     def check_physics_constraints(
         self, action: str, environment_state: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """
-        Validates an action against physics-based constraints (Simulated).
+        """Validates an action against physics-based constraints (Simulated).
+
         Args:
             action: Description of the action (e.g., 'Agent moves 100km in 1 second').
             environment_state: Current state (gravity, boundaries, object masses).
+
         """
         logging.info(
             f"RealityAnchorAgent: Checking physics constraints for action: {action}"
@@ -137,8 +137,7 @@ class RealityAnchorAgent(BaseAgent):
 
     @as_tool
     def verify_claim(self, claim: str, evidence_sources: List[str]) -> Dict[str, Any]:
-        """
-        Verifies a claim against a list of evidence sources (files, logs, etc.).
+        """Verifies a claim against a list of evidence sources (files, logs, etc.).
         Returns a verdict and supporting/contradicting evidence.
         """
         logging.info(f"RealityAnchorAgent: Verifying claim: {claim}")
@@ -167,8 +166,7 @@ class RealityAnchorAgent(BaseAgent):
 
     @as_tool
     def anchor_context(self, context_snippet: str) -> str:
-        """
-        Strips unverified assumptions from a context snippet, leaving only grounded facts.
+        """Strips unverified assumptions from a context snippet, leaving only grounded facts.
         """
         logging.info("RealityAnchorAgent: Anchoring context snippet to reality.")
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/report_exporter.description.md
 
@@ -32,6 +31,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -65,26 +65,29 @@ __version__ = VERSION
 class ReportExporter:
     """Exporter for various report formats.
     Exports reports to different formats including PDF, PPT, CSV.
+
     Example:
         exporter=ReportExporter()
         html=exporter.to_html(markdown_content)
         csv_data=exporter.to_csv(issues)
+
     """
 
     def __init__(self) -> None:
         """Initialize exporter."""
-
         logging.debug("ReportExporter initialized")
 
     def to_html(self, content: str, title: str = "Report") -> str:
         """Convert markdown to HTML.
+
         Args:
             content: Markdown content.
             title: Document title.
+
         Returns:
             HTML content.
-        """
 
+        """
         # Simple markdown to HTML conversion
         html_content = content
         html_content = re.sub(r"# (.+)$", r"<h1>\1</h1>", html_content, flags=re.MULTILINE)
@@ -99,12 +102,14 @@ class ReportExporter:
 
     def to_csv(self, issues: list[CodeIssue]) -> str:
         """Export issues to CSV.
+
         Args:
             issues: List of issues.
+
         Returns:
             CSV content.
-        """
 
+        """
         lines = ["message,category,severity,line_number,function_name"]
         for issue in issues:
             lines.append(
@@ -115,14 +120,16 @@ class ReportExporter:
 
     def export(self, content: str, format: ExportFormat, output_path: Path | None = None) -> str:
         """Export report to format.
+
         Args:
             content: Report content.
             format: Target format.
             output_path: Optional output file.
+
         Returns:
             Exported content.
-        """
 
+        """
         if format == ExportFormat.HTML:
             result = self.to_html(content)
         elif format == ExportFormat.JSON:

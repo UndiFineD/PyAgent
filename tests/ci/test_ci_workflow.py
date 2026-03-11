@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Tests for CI workflow."""
 import os
+
 import yaml
 
 

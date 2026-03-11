@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/inference/execution/async_model_runner.description.md
 
@@ -41,15 +40,23 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Facade for Async Model Runner modular implementation."""
 
-from .model_runner import (AsyncGPUPoolingModelRunnerOutput, AsyncModelRunner,
-                           BatchedAsyncRunner, ExecutionPipeline, ModelInput,
-                           ModelOutput, RunnerState, SchedulerOutput)
+from .model_runner import (
+                           AsyncGPUPoolingModelRunnerOutput,
+                           AsyncModelRunner,
+                           BatchedAsyncRunner,
+                           ExecutionPipeline,
+                           ModelInput,
+                           ModelOutput,
+                           RunnerState,
+                           SchedulerOutput,
+)
 
 __all__ = [
     "RunnerState",

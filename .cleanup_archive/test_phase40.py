@@ -14,11 +14,11 @@
 
 """Test script for Phase 40 improvements: Recursive Self-Debugging & Neural Pruning."""
 
+import logging
 import os
 import unittest
-import logging
-from unittest.mock import MagicMock, patch, AsyncMock
 from unittest import IsolatedAsyncioTestCase
+from unittest.mock import AsyncMock, MagicMock, patch
 
 # NOTE: The following imports are commented out as they reference archived/refactored modules.
 # This test file is in .cleanup_archive and may require updates to reference current locations.

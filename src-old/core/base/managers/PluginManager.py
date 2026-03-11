@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/managers/PluginManager.description.md
 
 # PluginManager
 
-**File**: `src\core\base\managers\PluginManager.py`  
+**File**: `src\\core\base\\managers\\PluginManager.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 12 imports  
 **Lines**: 271  
@@ -63,7 +62,7 @@ Handles discovery, manifest enforcement, health tracking, and graceful shutdown.
 
 # Improvements for PluginManager
 
-**File**: `src\core\base\managers\PluginManager.py`  
+**File**: `src\\core\base\\managers\\PluginManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 271 lines (medium)  
 **Complexity**: 10 score (moderate)
@@ -98,6 +97,12 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import importlib
+import json
+import logging
+from dataclasses import dataclass
+from pathlib import Path
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -110,17 +115,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 from typing import Any
-import importlib
-import json
-import logging
-from src.core.base.AgentPluginBase import AgentPluginBase
-from dataclasses import dataclass
-from pathlib import Path
-from typing import TYPE_CHECKING
-from src.core.base.Version import SDK_VERSION
 
+from src.core.base.AgentPluginBase import AgentPluginBase
+from src.core.base.Version import SDK_VERSION
 
     # Optional import for VersionGate
 try:
@@ -150,8 +148,7 @@ class PluginMetadata:
 
 
 class PluginManager:
-    """
-    Modernized PluginManager (Phase 226).
+    """Modernized PluginManager (Phase 226).
     Handles discovery, manifest enforcement, health tracking, and graceful shutdown.
     """
 

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/stats/ModelFallbackEngine.description.md
 
@@ -80,14 +79,15 @@ LLM_CONTEXT_END
 """
 
 import logging
-from typing import List, Optional, Dict, Any
+from typing import Any, List, Optional
+
 from src.classes.stats.TokenCostEngine import TokenCostEngine
+
 from .ModelFallbackCore import ModelFallbackCore
 
 
 class ModelFallbackEngine:
-    """
-    Manages model redundancy and fallback strategies.
+    """Manages model redundancy and fallback strategies.
     Shell for ModelFallbackCore.
     """
 

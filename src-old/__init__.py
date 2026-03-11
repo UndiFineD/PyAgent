@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/__init__.description.md
 
@@ -11,7 +10,7 @@ LLM_CONTEXT_START
 (No module docstring found)
 
 ## Location
-- Path: `src\tools\evolved\__init__.py`
+- Path: `src\tools\\evolved\\__init__.py`
 
 ## Public surface
 - Classes: (none)
@@ -27,7 +26,7 @@ LLM_CONTEXT_START
 
 - SHA256(source): `e3b0c44298fc1c14`
 - Last updated: `2026-01-08 22:55:16`
-- File: `src\tools\evolved\__init__.py`
+- File: `src\tools\\evolved\\__init__.py`
 ## Source: src-old/__init__.improvements.md
 
 # Improvements: `__init__.py`
@@ -38,7 +37,7 @@ LLM_CONTEXT_START
 
 ## Notes
 - These are suggestions based on static inspection; validate behavior with tests / runs.
-- File: `src\tools\evolved\__init__.py`
+- File: `src\tools\\evolved\\__init__.py`
 
 LLM_CONTEXT_END
 """

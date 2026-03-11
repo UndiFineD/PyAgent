@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/reasoning/cort_core.description.md
 
 # cort_core
 
-**File**: `src\core\reasoning\cort_core.py`  
+**File**: `src\\core\reasoning\\cort_core.py`  
 **Type**: Python Module  
 **Summary**: 4 classes, 0 functions, 16 imports  
 **Lines**: 386  
@@ -75,7 +74,7 @@ Integrates CoRT reasoning into the agent workflow.
 
 # Improvements for cort_core
 
-**File**: `src\core\reasoning\cort_core.py`  
+**File**: `src\\core\reasoning\\cort_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 386 lines (medium)  
 **Complexity**: 3 score (simple)
@@ -122,7 +121,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import logging
 import time
 from dataclasses import dataclass, field
@@ -166,8 +164,7 @@ class CoRTResult:
 
 
 class CoRTReasoningCore:
-    """
-    Chain-of-Recursive-Thoughts reasoning system.
+    """Chain-of-Recursive-Thoughts reasoning system.
 
     Implements dynamic evaluation, adaptive thinking rounds, and
     multi-path reasoning for breakthrough problem-solving.
@@ -183,8 +180,7 @@ class CoRTReasoningCore:
         _context: Optional[CascadeContext] = None,
         verbose: bool = True,
     ) -> CoRTResult:
-        """
-        Process user input with recursive thinking.
+        """Process user input with recursive thinking.
 
         Args:
             user_input: The user's input to process
@@ -193,6 +189,7 @@ class CoRTReasoningCore:
 
         Returns:
             CoRTResult with final response and thinking history
+
         """
         start_time = time.time()
 
@@ -283,8 +280,7 @@ class CoRTReasoningCore:
         return result
 
     async def _determine_thinking_rounds(self, prompt: str) -> int:
-        """
-        Determine optimal number of thinking rounds (1-5).
+        """Determine optimal number of thinking rounds (1-5).
 
         Uses AI to analyze prompt complexity and determine reasoning depth.
         """
@@ -332,8 +328,7 @@ Respond with just a number between 1 and 5."""
     async def _generate_alternatives(
         self, base_response: str, prompt: str, num_alternatives: int = 3
     ) -> List[str]:
-        """
-        Generate alternative responses using different approaches.
+        """Generate alternative responses using different approaches.
 
         Uses temperature variance (0.7, 0.8, 0.9) for creative diversity.
         """
@@ -363,8 +358,7 @@ Alternative response:"""
     async def _evaluate_responses(
         self, prompt: str, current_best: str, alternatives: List[str]
     ) -> Tuple[str, str]:
-        """
-        Evaluate responses and select the best one.
+        """Evaluate responses and select the best one.
 
         Returns (selected_response, explanation)
         """
@@ -467,8 +461,7 @@ Then on a new line, explain your choice in one sentence."""
 
 
 class CoRTAgentMixin:
-    """
-    Mixin to add CoRT reasoning capabilities to agents.
+    """Mixin to add CoRT reasoning capabilities to agents.
 
     Integrates CoRT reasoning into the agent workflow.
     Requires the subclass to implement process_input(user_input, context) method.
@@ -482,8 +475,7 @@ class CoRTAgentMixin:
     async def process_input(
         self, user_input: str, context: Optional[CascadeContext] = None
     ) -> Dict[str, Any]:
-        """
-        Base process_input method. Must be overridden by subclass.
+        """Base process_input method. Must be overridden by subclass.
 
         Args:
             user_input: User input to process
@@ -494,14 +486,14 @@ class CoRTAgentMixin:
 
         Raises:
             NotImplementedError: If not overridden by subclass
+
         """
         raise NotImplementedError("Subclass must implement process_input method")
 
     async def process_with_cort(
         self, user_input: str, context: Optional[CascadeContext] = None
     ) -> Dict[str, Any]:
-        """
-        Process user input using CoRT reasoning.
+        """Process user input using CoRT reasoning.
 
         Args:
             user_input: User input to process
@@ -509,6 +501,7 @@ class CoRTAgentMixin:
 
         Returns:
             Processing result with CoRT metadata
+
         """
         if not self.cort_core or not self.enable_cort_reasoning:
             # Fallback to normal processing

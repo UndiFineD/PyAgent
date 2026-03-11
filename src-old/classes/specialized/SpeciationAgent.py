@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/SpeciationAgent.description.md
 
@@ -83,16 +82,13 @@ LLM_CONTEXT_END
 """
 
 import logging
-import os
-from typing import Dict, List, Any, Optional
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
-from pathlib import Path
 
 
 class SpeciationAgent(BaseAgent):
-    """
-    Agent responsible for 'speciation' - creating specialized derivatives of existing agents.
+    """Agent responsible for 'speciation' - creating specialized derivatives of existing agents.
     It analyzes task success and generates new agent classes with optimized system prompts.
     """
 
@@ -106,8 +102,7 @@ class SpeciationAgent(BaseAgent):
 
     @as_tool
     def evolve_specialized_agent(self, base_agent_name: str, niche_domain: str) -> str:
-        """
-        Creates a new agent class file that specializes in a specific niche.
+        """Creates a new agent class file that specializes in a specific niche.
         e.g., 'CoderAgent' -> 'ReactSpecialistAgent'
         """
         logging.info(

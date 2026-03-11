@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/memory_engine.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -53,9 +53,10 @@ from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.engines.memory_core import MemoryCore
-from .memory_mixins.memory_storage_mixin import MemoryStorageMixin
+
 from .memory_mixins.memory_episode_mixin import MemoryEpisodeMixin
 from .memory_mixins.memory_search_mixin import MemorySearchMixin
+from .memory_mixins.memory_storage_mixin import MemoryStorageMixin
 
 __version__ = VERSION
 

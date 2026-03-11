@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/ScalingCore.description.md
 
 # ScalingCore
 
-**File**: `src\classes\fleet\ScalingCore.py`  
+**File**: `src\\classes\fleet\\ScalingCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 32  
@@ -43,7 +42,7 @@ Class ScalingCore implementation.
 
 # Improvements for ScalingCore
 
-**File**: `src\classes\fleet\ScalingCore.py`  
+**File**: `src\\classes\fleet\\ScalingCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 32 lines (small)  
 **Complexity**: 4 score (simple)
@@ -81,7 +80,8 @@ ScalingCore logic for fleet expansion.
 Pure logic for computing moving averages and scaling decisions.
 """
 
-from typing import Dict, List, Optional
+from typing import Dict, List
+
 
 class ScalingCore:
     def __init__(self, scale_threshold: float = 5.0, window_size: int = 10) -> None:

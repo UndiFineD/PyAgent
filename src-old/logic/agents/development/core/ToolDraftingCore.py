@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/core/ToolDraftingCore.description.md
 
 # ToolDraftingCore
 
-**File**: `src\logic\agents\development\core\ToolDraftingCore.py`  
+**File**: `src\\logic\agents\\development\\core\\ToolDraftingCore.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 6 imports  
 **Lines**: 61  
@@ -47,7 +46,7 @@ Handles schema drafting, parameter validation, and endpoint mapping.
 
 # Improvements for ToolDraftingCore
 
-**File**: `src\logic\agents\development\core\ToolDraftingCore.py`  
+**File**: `src\\logic\agents\\development\\core\\ToolDraftingCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 61 lines (small)  
 **Complexity**: 3 score (simple)
@@ -86,8 +85,8 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 import json
-from typing import Dict, Any, List
 from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass(frozen=True)

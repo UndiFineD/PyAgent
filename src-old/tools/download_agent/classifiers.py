@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/download_agent/classifiers.description.md
 
 # classifiers
 
-**File**: `src\tools\download_agent\classifiers.py`  
+**File**: `src\tools\\download_agent\\classifiers.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 88  
@@ -51,7 +50,7 @@ Classifies URLs by type and determines appropriate download strategy.
 
 # Improvements for classifiers
 
-**File**: `src\tools\download_agent\classifiers.py`  
+**File**: `src\tools\\download_agent\\classifiers.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 88 lines (small)  
 **Complexity**: 1 score (simple)

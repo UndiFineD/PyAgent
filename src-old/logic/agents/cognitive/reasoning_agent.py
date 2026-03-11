@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/reasoning_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -52,17 +52,16 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.base_utilities import as_tool, create_main_function
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import create_main_function, as_tool
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 # pylint: disable=too-many-ancestors
 class ReasoningAgent(BaseAgent):
-    """
-    Tier 2 (Cognitive Logic) - Reasoning Agent: Analyzes complex problems
+    """Tier 2 (Cognitive Logic) - Reasoning Agent: Analyzes complex problems
     and provides a logical blueprint before action using Chain-of-Thought reasoning.
     """
 
@@ -125,17 +124,7 @@ class ReasoningAgent(BaseAgent):
     def check_latent_consistency(
         self, problem: str, language: str = "english"
     ) -> dict[str, Any]:
-        """
-        Validates reasoning across language boundaries (Latent Reasoning Guardrail).
-
-
-
-
-
-
-
-
-
+        """Validates reasoning across language boundaries (Latent Reasoning Guardrail).
 
         Checks if the internal reasoning steps align when translated to low-resource languages.
         """

@@ -33,17 +33,20 @@ class FlmRuntimeError(RuntimeError):
 
 class _CompletionCreator(Protocol):
     """Protocol for the completions creation interface of the FLM client."""
+
     def create(self, **kwargs: Any) -> Any:
         """Create a completion from model messages."""
 
 
 class _ChatClient(Protocol):
     """Protocol for the chat interface of the FLM client."""
+
     completions: _CompletionCreator
 
 
 class _ClientProtocol(Protocol):
     """Protocol for the FLM client, which must provide a chat interface with completions."""
+
     chat: _ChatClient
     models: Any
 
@@ -76,6 +79,7 @@ ToolExecutor = Callable[[_ToolCallProtocol], str]
 @dataclass
 class FlmChatAdapter:
     """Adapter for Fastflow chat completion interactions."""
+
     config: FlmProviderConfig
     api_key: str = "dummy"
     client_factory: _ClientFactory = cast(_ClientFactory, OpenAI)

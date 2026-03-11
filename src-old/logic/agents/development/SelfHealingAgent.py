@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/SelfHealingAgent.description.md
 
 # SelfHealingAgent
 
-**File**: `src\logic\agents\development\SelfHealingAgent.py`  
+**File**: `src\\logic\agents\\development\\SelfHealingAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 11 imports  
 **Lines**: 199  
@@ -51,7 +50,7 @@ Monitors telemetry for agent failures and proposes fixes.
 
 # Improvements for SelfHealingAgent
 
-**File**: `src\logic\agents\development\SelfHealingAgent.py`  
+**File**: `src\\logic\agents\\development\\SelfHealingAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 199 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -99,11 +98,11 @@ from __future__ import annotations
 
 """Agent specializing in self-healing through telemetry analysis and error correction."""
 
-from src.core.base.Version import VERSION
-import os
 from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.BaseUtilities import create_main_function, as_tool
+from src.core.base.BaseUtilities import as_tool, create_main_function
+from src.core.base.Version import VERSION
 from src.observability.stats.MetricsEngine import ObservabilityEngine
 
 __version__ = VERSION

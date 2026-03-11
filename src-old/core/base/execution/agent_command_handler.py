@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/execution/agent_command_handler.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -98,7 +98,6 @@ class AgentCommandHandler:
         self, cmd: list[str], timeout: int = 120, max_retries: int = 1
     ) -> subprocess.CompletedProcess[str]:
         """Run a command with timeout, error handling, retry logic, and logging."""
-
         local_cmd, env = self._prepare_command_environment(list(cmd))
 
         # Retry logic handled internally or via loop
@@ -158,7 +157,7 @@ class AgentCommandHandler:
             )
         except (
             Exception
-        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+        ):  # pylint: disable=broad-exception-caught, unused-variable
             # pylint: disable=broad-exception-caught
             pass
 
@@ -178,7 +177,7 @@ class AgentCommandHandler:
                     env.update(self._get_agent_env_vars(agent_name))
             except (
                 Exception
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            ):  # pylint: disable=broad-exception-caught, unused-variable
                 # pylint: disable=broad-exception-caught
                 pass
 

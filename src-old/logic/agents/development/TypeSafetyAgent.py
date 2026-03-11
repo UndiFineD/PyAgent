@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/TypeSafetyAgent.description.md
 
 # TypeSafetyAgent
 
-**File**: `src\logic\agents\development\TypeSafetyAgent.py`  
+**File**: `src\\logic\agents\\development\\TypeSafetyAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 10 imports  
 **Lines**: 118  
@@ -51,7 +50,7 @@ Identifies missing type annotations and 'Any' usage to improve codebase robustne
 
 # Improvements for TypeSafetyAgent
 
-**File**: `src\logic\agents\development\TypeSafetyAgent.py`  
+**File**: `src\\logic\agents\\development\\TypeSafetyAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 118 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -99,13 +98,14 @@ from __future__ import annotations
 
 """Agent specializing in Python type hint enforcement and 'Any' type elimination."""
 
-from src.core.base.version import VERSION
 import ast
 import logging
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import create_main_function
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/OrchestratorResourceMixin.description.md
 
 # OrchestratorResourceMixin
 
-**File**: `src\logic\agents\swarm\OrchestratorResourceMixin.py`  
+**File**: `src\\logic\agents\\swarm\\OrchestratorResourceMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 52  
@@ -48,7 +47,7 @@ Resource management methods (rate limiting, locking, incremental processing) for
 
 # Improvements for OrchestratorResourceMixin
 
-**File**: `src\logic\agents\swarm\OrchestratorResourceMixin.py`  
+**File**: `src\\logic\agents\\swarm\\OrchestratorResourceMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 52 lines (small)  
 **Complexity**: 6 score (moderate)
@@ -85,13 +84,13 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
-
 import logging
 from pathlib import Path
 from typing import Any
+
+from src.core.base.IncrementalProcessor import IncrementalProcessor
 from src.core.base.models import RateLimitConfig
 from src.core.base.utils.FileLockManager import FileLockManager
-from src.core.base.IncrementalProcessor import IncrementalProcessor
 from src.core.base.utils.RateLimiter import RateLimiter
 
 

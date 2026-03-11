@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/BaseAgent.description.md
 
 # BaseAgent
 
-**File**: `src\core\base\BaseAgent.py`  
+**File**: `src\\core\base\\BaseAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 26 imports  
 **Lines**: 292  
@@ -64,7 +63,7 @@ Inherits domain logic from specialized Mixins to maintain low complexity.
 
 # Improvements for BaseAgent
 
-**File**: `src\core\base\BaseAgent.py`  
+**File**: `src\\core\base\\BaseAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 292 lines (medium)  
 **Complexity**: 13 score (moderate)
@@ -111,28 +110,29 @@ from __future__ import annotations
 
 """BaseAgent main class and core agent logic."""
 
-from src.core.base.Version import VERSION
+import asyncio
 import subprocess
+from collections.abc import Callable
 from pathlib import Path
 from types import TracebackType
 from typing import Any
-from collections.abc import Callable
+
+from src.core.base.AgentCore import BaseCore
+from src.core.base.BaseAgentCore import BaseAgentCore
+from src.core.base.mixins.GovernanceMixin import GovernanceMixin
+
+# Import Mixins for Synaptic Modularization (Phase 317)
+from src.core.base.mixins.IdentityMixin import IdentityMixin
+from src.core.base.mixins.KnowledgeMixin import KnowledgeMixin
+from src.core.base.mixins.OrchestrationMixin import OrchestrationMixin
+from src.core.base.mixins.PersistenceMixin import PersistenceMixin
 from src.core.base.models import (
     CacheEntry,
     EventType,
     PromptTemplate,
 )
-from src.core.base.AgentCore import BaseCore
-from src.core.base.BaseAgentCore import BaseAgentCore
 from src.core.base.ShellExecutor import ShellExecutor
-import asyncio
-
-# Import Mixins for Synaptic Modularization (Phase 317)
-from src.core.base.mixins.IdentityMixin import IdentityMixin
-from src.core.base.mixins.PersistenceMixin import PersistenceMixin
-from src.core.base.mixins.KnowledgeMixin import KnowledgeMixin
-from src.core.base.mixins.OrchestrationMixin import OrchestrationMixin
-from src.core.base.mixins.GovernanceMixin import GovernanceMixin
+from src.core.base.Version import VERSION
 
 # from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder # Moved to __init__
 
@@ -146,9 +146,9 @@ except ImportError:
 
 # Advanced components (Lazy loaded or optional)
 try:
-    from src.logic.agents.cognitive.LongTermMemory import LongTermMemory
     from src.infrastructure.orchestration.signals.SignalRegistry import SignalRegistry
     from src.infrastructure.orchestration.system.ToolRegistry import ToolRegistry
+    from src.logic.agents.cognitive.LongTermMemory import LongTermMemory
 except (ImportError, ValueError):
     LongTermMemory = None
     SignalRegistry = None
@@ -166,8 +166,7 @@ class BaseAgent(
     OrchestrationMixin,
     GovernanceMixin,
 ):
-    """
-    Core AI Agent Shell (Synaptic modularization Phase 317).
+    """Core AI Agent Shell (Synaptic modularization Phase 317).
     Inherits domain logic from specialized Mixins to maintain low complexity.
     """
 
@@ -255,8 +254,7 @@ class BaseAgent(
         return f"Thinking about: {prompt}"
 
     def run(self, prompt: str | None = None) -> str:
-        """
-        Synchronous execution entry point for legacy support.
+        """Synchronous execution entry point for legacy support.
         """
         if prompt is None:
             # Default behavior for no prompt (usually legacy loop)
@@ -308,8 +306,7 @@ class BaseAgent(
         return result
 
     async def think(self, prompt: str) -> str:
-        """
-        The core synaptic processing method.
+        """The core synaptic processing method.
         Decomposes the prompt, consults knowledge, and produces a reasoning-based response.
         """
         import logging
@@ -362,8 +359,7 @@ class BaseAgent(
             return f"Error encountered during agent reasoning: {str(e)}"
 
     async def improve_content(self, prompt: str) -> str:
-        """
-        Generic improvement method.
+        """Generic improvement method.
         Subclasses likely override this for specialized transformations (e.g., CoderAgent).
         """
         return await self.think(prompt)

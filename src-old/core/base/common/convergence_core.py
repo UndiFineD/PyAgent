@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/convergence_core.description.md
 
@@ -41,12 +40,15 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Unified Fleet Convergence and Health core."""
 
 from typing import Any, Dict, List, Optional
+
 from src.core.base.common.base_core import BaseCore
+
 try:
     import rust_core as rc
 except ImportError:
@@ -54,8 +56,7 @@ except ImportError:
 
 
 class ConvergenceCore(BaseCore):
-    """
-    Standard implementation for Fleet Convergence and Health Management.
+    """Standard implementation for Fleet Convergence and Health Management.
     Handles 'Full Fleet Sync' summaries and health verification.
     """
 

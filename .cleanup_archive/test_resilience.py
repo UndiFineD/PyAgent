@@ -14,14 +14,13 @@
 
 """Unit tests for AgentRegistry resilience and lazy mapping."""
 
-import os
-import sys
 import logging
+import os
 from pathlib import Path
 
 # Add the workspace root to sys.path
-
 from src.classes.fleet.AgentRegistry import AgentRegistry
+
 
 def test_resilience():
     logging.basicConfig(level=logging.INFO)

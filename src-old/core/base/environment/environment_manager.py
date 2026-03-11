@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/environment/environment_manager.description.md
 
 # environment_manager
 
-**File**: `src\core\base\environment\environment_manager.py`  
+**File**: `src\\core\base\\environment\\environment_manager.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 22 imports  
 **Lines**: 324  
@@ -55,7 +54,7 @@ Inspired by AEnvironment's containerized environment approach.
 
 # Improvements for environment_manager
 
-**File**: `src\core\base\environment\environment_manager.py`  
+**File**: `src\\core\base\\environment\\environment_manager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 324 lines (medium)  
 **Complexity**: 2 score (simple)
@@ -123,8 +122,8 @@ from src.core.base.common.models.base_models import (
     EnvironmentInstance,
 )
 from src.core.base.common.models.core_enums import (
-    EnvironmentStatus,
     EnvironmentIsolation,
+    EnvironmentStatus,
 )
 from src.core.base.lifecycle.version import VERSION
 
@@ -134,8 +133,7 @@ logger = logging.getLogger(__name__)
 
 
 class EnvironmentManager:
-    """
-    Manages agent environments with isolation, resource limits, and lifecycle management.
+    """Manages agent environments with isolation, resource limits, and lifecycle management.
     Inspired by AEnvironment's containerized environment approach.
     """
 

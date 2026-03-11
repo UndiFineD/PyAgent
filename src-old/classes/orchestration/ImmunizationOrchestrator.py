@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/ImmunizationOrchestrator.description.md
 
@@ -85,12 +84,13 @@ from __future__ import annotations
 
 import logging
 import re
+from typing import Any, Dict, List
+
 from src.classes.fleet.FleetManager import FleetManager
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
+
 
 class ImmunizationOrchestrator:
-    """
-    Implements Swarm Immunization (Phase 32).
+    """Implements Swarm Immunization (Phase 32).
     Collectively identifies and "immunizes" the fleet against adversarial prompt patterns.
     """
 
@@ -100,8 +100,7 @@ class ImmunizationOrchestrator:
         self.immunization_log: List[Dict[str, Any]] = []
 
     def scan_for_threats(self, prompt: str) -> bool:
-        """
-        Scans a prompt against known adversarial signatures.
+        """Scans a prompt against known adversarial signatures.
         """
         for signature in self.threat_signatures:
             if re.search(signature, prompt, re.IGNORECASE):
@@ -112,8 +111,7 @@ class ImmunizationOrchestrator:
         return False
 
     def immunize(self, adversarial_example: str, label: str) -> str:
-        """
-        Develops a new signature from an adversarial example.
+        """Develops a new signature from an adversarial example.
         """
         logging.info(
             f"ImmunizationOrchestrator: Immunizing fleet against new threat: {label}"

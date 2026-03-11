@@ -4,8 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/base_utilities.description.md
 
@@ -33,6 +32,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Utilities used across base modules.
@@ -42,19 +42,19 @@ Focus on low-risk, testable behaviors: replacement helpers, logging setup,
 and tool wrappers that record interactions to the fleet recorder when present.
 """
 
-import os
-
-from pathlib import Path
-import re
-import logging
-import inspect
 import argparse
-import sys
+import inspect
 import json
+import logging
+import os
+import re
+import sys
 import time
-from typing import Union, Callable, Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+from pathlib import Path
+from typing import Any, Callable, Union
+
 from src.core.base.common.file_system_core import FileSystemCore
+from src.core.base.lifecycle.base_agent import BaseAgent
 
 # Regex for matching ANSI escape sequences (CSI codes)
 _ansi_re = re.compile(r"\x1B\[[0-?]*[ -/]*[@-~]")
@@ -100,8 +100,7 @@ def bulk_replace_files(
     new_string: str,
     use_regex: bool = False,
 ) -> dict[str, bool]:
-    """
-    Performs a bulk string or regex replacement across multiple files.
+    """Performs a bulk string or regex replacement across multiple files.
     Returns a mapping of file path to boolean (True if file was modified).
     Phase 318: Rust-Native Parallel Engine.
     """
@@ -126,8 +125,7 @@ def bulk_replace(
     new_string: str,
     use_regex: bool = False,
 ) -> dict[str, bool]:
-    """
-    Performs a bulk string or regex replacement across multiple files.
+    """Performs a bulk string or regex replacement across multiple files.
     Returns a mapping of file path to boolean (True if file was modified).
     Phase 318: Rust-Native Parallel Engine.
     """

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/GoAgent.description.md
 
@@ -74,9 +73,10 @@ LLM_CONTEXT_END
 
 """Agent specializing in Go (Golang) programming."""
 
-from .CoderAgent import CoderAgent
+
 from src.classes.base_agent.utilities import create_main_function
-import logging
+
+from .CoderAgent import CoderAgent
 
 
 class GoAgent(CoderAgent):

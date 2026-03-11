@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/SecurityGuardAgent.description.md
 
@@ -89,13 +88,12 @@ LLM_CONTEXT_END
 
 """Agent specializing in security validation and safety checks."""
 
+from typing import List, Tuple
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import create_main_function
+
 from .SecurityCore import SecurityCore
-import logging
-import re
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
 
 
 class SecurityGuardAgent(BaseAgent):
@@ -201,7 +199,7 @@ class SecurityGuardAgent(BaseAgent):
         is_jailbreak = self.detect_jailbreak(prompt)
 
         report = [
-            f"## Security Audit Report",
+            "## Security Audit Report",
             f"**Target Analysis**: {prompt[:100]}...",
             f"**Overall Risk**: {'HIGH' if risk_level == 'HIGH' or injections or is_jailbreak else risk_level}",
             "",

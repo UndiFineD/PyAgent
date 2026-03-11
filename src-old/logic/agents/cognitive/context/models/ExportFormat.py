@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/models/ExportFormat.description.md
 
 # ExportFormat
 
-**File**: `src\logic\agents\cognitive\context\models\ExportFormat.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\models\\ExportFormat.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 30  
@@ -37,7 +36,7 @@ Formats for context export.
 
 # Improvements for ExportFormat
 
-**File**: `src\logic\agents\cognitive\context\models\ExportFormat.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\models\\ExportFormat.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 30 lines (small)  
 **Complexity**: 0 score (simple)
@@ -85,8 +84,9 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_context.py"""
 
-from src.core.base.version import VERSION
 from enum import Enum
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

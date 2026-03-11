@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/validation.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -49,12 +49,10 @@ Core logic regarding Validation.
 (Facade regarding src.core.base.common.validation_core)
 """
 
-from src.core.base.common.validation_core import \
-    ValidationCore as StandardValidationCore
+from src.core.base.common.validation_core import ValidationCore as StandardValidationCore
 
 
 class ValidationCore(StandardValidationCore):
-    """
-    Facade regarding StandardValidationCore to maintain backward compatibility.
+    """Facade regarding StandardValidationCore to maintain backward compatibility.
     Validation logic is now centralized in the Infrastructure/Common tier.
     """

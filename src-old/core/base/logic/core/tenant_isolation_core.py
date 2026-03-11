@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/tenant_isolation_core.description.md
 
 # tenant_isolation_core
 
-**File**: `src\core\base\logic\core\tenant_isolation_core.py`  
+**File**: `src\\core\base\\logic\\core\tenant_isolation_core.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 7 imports  
 **Lines**: 80  
@@ -66,7 +65,7 @@ Patterns harvested from AgentCloud.
 
 # Improvements for tenant_isolation_core
 
-**File**: `src\core\base\logic\core\tenant_isolation_core.py`  
+**File**: `src\\core\base\\logic\\core\tenant_isolation_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 80 lines (small)  
 **Complexity**: 5 score (moderate)
@@ -103,7 +102,8 @@ LLM_CONTEXT_END
 """
 
 import time
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -116,8 +116,7 @@ class TenantContext(BaseModel):
 
 
 class TenantIsolationCore:
-    """
-    Handles isolation of agent sessions between different tenants/users.
+    """Handles isolation of agent sessions between different tenants/users.
     Patterns harvested from AgentCloud.
     """
 
@@ -126,8 +125,7 @@ class TenantIsolationCore:
         self.active_sessions: Dict[str, TenantContext] = {}
 
     def authorize_session(self, token_payload: Dict[str, Any]) -> TenantContext:
-        """
-        Validates a JWT-like payload and creates a tenant context.
+        """Validates a JWT-like payload and creates a tenant context.
         """
         tenant_id = token_payload.get("tenant_id")
         if not tenant_id:

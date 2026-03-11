@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/analysis/code_quality_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -79,8 +79,7 @@ __version__ = VERSION
 
 
 class CodeQualityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Automated Code Quality Guard: Performs linting, formatting checks,
+    """Automated Code Quality Guard: Performs linting, formatting checks,
     and complexity analysis for Python, Rust, and JavaScript.
     """
 

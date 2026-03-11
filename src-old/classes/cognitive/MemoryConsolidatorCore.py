@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/cognitive/MemoryConsolidatorCore.description.md
 
@@ -103,9 +102,10 @@ Pure logic for distilling interactions into insights.
 No I/O or side effects.
 """
 
-from src.core.base.version import VERSION
 import time
-from typing import List, Dict, Any
+from typing import Any
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

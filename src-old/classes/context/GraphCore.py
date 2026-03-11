@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/GraphCore.description.md
 
@@ -109,9 +108,10 @@ GraphCore logic for PyAgent.
 Pure logic for AST-based code relationship analysis and graph management.
 """
 
-from src.core.base.version import VERSION
 import ast
-from typing import Dict, List, Set, Any, Tuple
+from typing import Any
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -183,8 +183,7 @@ class GraphCore:
 
     @staticmethod
     def build_edges(analysis: dict[str, Any]) -> list[tuple[str, str, str]]:
-        """
-        Builds graph edges from analysis results.
+        """Builds graph edges from analysis results.
         Returns list of (source, target, relationship_type).
         """
         edges = []

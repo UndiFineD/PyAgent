@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/DependencyGraph.description.md
 
 # DependencyGraph
 
-**File**: `src\core\base\DependencyGraph.py`  
+**File**: `src\\core\base\\DependencyGraph.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 126  
@@ -53,7 +52,7 @@ Example:
 
 # Improvements for DependencyGraph
 
-**File**: `src\core\base\DependencyGraph.py`  
+**File**: `src\\core\base\\DependencyGraph.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 126 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -81,6 +80,7 @@ Example:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -101,9 +101,9 @@ from __future__ import annotations
 
 """Auto-extracted class from agent.py"""
 
-from src.core.base.version import VERSION
-from typing import List, Set, Optional, Dict
 import graphlib
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -117,6 +117,7 @@ class DependencyGraph:
         graph.add_dependency("docs", "tests")
 
         order=graph.resolve()  # [["coder"], ["tests"], ["docs"]]
+
     """
 
     def __init__(self) -> None:
@@ -131,6 +132,7 @@ class DependencyGraph:
         Args:
             name: Node name.
             resources: Optional list of resource URIs this node requires.
+
         """
         self._nodes.add(name)
         if name not in self._edges:
@@ -146,6 +148,7 @@ class DependencyGraph:
         Args:
             node: Node that has the dependency.
             depends_on: Node that must run first.
+
         """
         self.add_node(node)
         self.add_node(depends_on)
@@ -159,8 +162,10 @@ class DependencyGraph:
 
         Returns:
             List of batches, where each batch is a list of node names.
+
         Raises:
             ValueError: If circular dependency detected.
+
         """
         if not self._nodes:
             return []

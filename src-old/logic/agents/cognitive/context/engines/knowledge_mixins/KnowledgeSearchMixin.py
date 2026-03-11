@@ -1,14 +1,13 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/knowledge_mixins/KnowledgeSearchMixin.description.md
 
 # KnowledgeSearchMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\knowledge_mixins\KnowledgeSearchMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\knowledge_mixins\\KnowledgeSearchMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 1 imports  
 **Lines**: 60  
@@ -39,7 +38,7 @@ Methods for workspace search and snippet extraction.
 
 # Improvements for KnowledgeSearchMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\knowledge_mixins\KnowledgeSearchMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\knowledge_mixins\\KnowledgeSearchMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 60 lines (small)  
 **Complexity**: 2 score (simple)
@@ -73,6 +72,7 @@ LLM_CONTEXT_END
 """
 
 from pathlib import Path
+
 
 class KnowledgeSearchMixin:
     """Methods for workspace search and snippet extraction."""

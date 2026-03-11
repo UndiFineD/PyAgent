@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/MultiModalReasoningAgent.description.md
 
 # MultiModalReasoningAgent
 
-**File**: `src\logic\agents\cognitive\MultiModalReasoningAgent.py`  
+**File**: `src\\logic\agents\\cognitive\\MultiModalReasoningAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 33  
@@ -41,7 +40,7 @@ to complement textual code analysis.
 
 # Improvements for MultiModalReasoningAgent
 
-**File**: `src\logic\agents\cognitive\MultiModalReasoningAgent.py`  
+**File**: `src\\logic\agents\\cognitive\\MultiModalReasoningAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 33 lines (small)  
 **Complexity**: 1 score (simple)
@@ -76,6 +75,8 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+from src.core.base.BaseAgent import BaseAgent
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -88,17 +89,15 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 from src.core.base.version import VERSION
-from src.core.base.BaseAgent import BaseAgent
+
 from .core.VisionCore import VisionCore
 
 __version__ = VERSION
 
 
 class MultiModalReasoningAgent(BaseAgent):
-    """
-    Agent capable of analyzing visual inputs (screenshots, diagrams)
+    """Agent capable of analyzing visual inputs (screenshots, diagrams)
     to complement textual code analysis.
     """
 

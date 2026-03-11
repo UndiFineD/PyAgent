@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/core/ProfilingCore.description.md
 
@@ -84,7 +83,6 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 import pstats
-from typing import List
 from dataclasses import dataclass
 
 

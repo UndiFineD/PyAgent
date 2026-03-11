@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/models/fleet_models.description.md
 
 # fleet_models
 
-**File**: `src\core\base\models\fleet_models.py`  
+**File**: `src\\core\base\\models\fleet_models.py`  
 **Type**: Python Module  
 **Summary**: 5 classes, 0 functions, 14 imports  
 **Lines**: 84  
@@ -68,7 +67,7 @@ State for graceful shutdown.
 
 # Improvements for fleet_models
 
-**File**: `src\core\base\models\fleet_models.py`  
+**File**: `src\\core\base\\models\fleet_models.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 84 lines (small)  
 **Complexity**: 4 score (simple)
@@ -120,15 +119,16 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
-from .enums import RateLimitStrategy
+from typing import Any
+
 from .base_models import (
     _empty_dict_str_any,
     _empty_dict_str_float,
+    _empty_dict_str_int,
     _empty_dict_str_str,
     _empty_list_str,
-    _empty_dict_str_int,
 )
+from .enums import RateLimitStrategy
 
 
 @dataclass(slots=True)

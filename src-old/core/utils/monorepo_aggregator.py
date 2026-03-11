@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/utils/monorepo_aggregator.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -69,6 +69,7 @@ class MonorepoAggregator:
         >>> aggregator=MonorepoAggregator()
         >>> aggregator.add_package("pkg-a", "1.0.0", entries)
         >>> unified=aggregator.generate_unified_changelog()
+
     """
 
     def __init__(self) -> None:
@@ -92,6 +93,7 @@ class MonorepoAggregator:
 
         Returns:
             The created MonorepoEntry.
+
         """
         entry = MonorepoEntry(
             package_name=package_name, version=version, entries=entries, path=path
@@ -104,6 +106,7 @@ class MonorepoAggregator:
 
         Returns:
             Unified changelog as markdown.
+
         """
         result = ["# Monorepo Changelog\n"]
 

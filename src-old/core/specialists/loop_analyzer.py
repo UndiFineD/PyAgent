@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/specialists/loop_analyzer.description.md
 
@@ -129,11 +128,11 @@ Used for performance profiling and code quality assessment.
 """
 
 import os
-import subprocess
 import re
-from typing import List, Tuple, Dict, Optional, Set
+import subprocess
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Dict, List, Optional, Set, Tuple
 
 
 @dataclass

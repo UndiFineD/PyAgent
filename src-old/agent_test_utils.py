@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/agent_test_utils.description.md
 
@@ -49,10 +48,9 @@ LLM_CONTEXT_END
 Test Utils: Common utilities for agent and backend unit tests.
 """
 
-from src.version import VERSION
 import sys
-from pathlib import Path
 from contextlib import contextmanager
+from pathlib import Path
 from typing import Iterator
 
 # Ensure project root and src are in path for modular imports

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialized/operational_cost_agent.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -56,8 +57,7 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 
 
 class OperationalCostAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Phase 286: Operational Cost Agent.
+    """Phase 286: Operational Cost Agent.
     Estimates the real-world dollar cost of improvement cycles based on model usage.
     """
 
@@ -74,8 +74,7 @@ class OperationalCostAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     async def calculate_run_cost(self, token_usage: dict[str, Any]) -> dict[str, Any]:
-        """
-        Calculates cost based on token usage.
+        """Calculates cost based on token usage.
         Example token_usage: {"GPT-4o": 500000, "Ollama": 1200000}
         """
         total_usd = 0.0

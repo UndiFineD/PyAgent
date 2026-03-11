@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/modules.description.md
 
 # modules
 
-**File**: `src\core\base\modules.py`  
+**File**: `src\\core\base\\modules.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 41  
@@ -46,7 +45,7 @@ Standardizes the lifecycle of global specialized logic.
 
 # Improvements for modules
 
-**File**: `src\core\base\modules.py`  
+**File**: `src\\core\base\\modules.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 41 lines (small)  
 **Complexity**: 4 score (simple)
@@ -93,14 +92,12 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional
+from typing import Any
 
 
 class BaseModule(ABC):
-    """
-    Base class for all core modules in the swarm.
+    """Base class for all core modules in the swarm.
     Standardizes the lifecycle of global specialized logic.
     """
 

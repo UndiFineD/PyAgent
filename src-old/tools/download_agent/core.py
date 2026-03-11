@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/download_agent/core.description.md
 
 # core
 
-**File**: `src\tools\download_agent\core.py`  
+**File**: `src\tools\\download_agent\\core.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 14 imports  
 **Lines**: 350  
@@ -71,7 +70,7 @@ Main download agent that handles different URL types.
 
 # Improvements for core
 
-**File**: `src\tools\download_agent\core.py`  
+**File**: `src\tools\\download_agent\\core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 350 lines (medium)  
 **Complexity**: 10 score (moderate)
@@ -105,19 +104,19 @@ LLM_CONTEXT_END
 Core download agent functionality.
 """
 
+import json
 import os
 import subprocess
 import time
-import json
+import urllib.parse
+from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
-from datetime import datetime
 
 import requests
-import urllib.parse
 
-from .models import DownloadConfig, DownloadResult
 from .classifiers import URLClassifier
+from .models import DownloadConfig, DownloadResult
 
 
 class DownloadAgent:

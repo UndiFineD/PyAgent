@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ExcelAgent.description.md
 
@@ -97,11 +96,12 @@ from __future__ import annotations
 
 """Agent specializing in structured extraction from Excel files (ExStruct pattern)."""
 
-from src.core.base.version import VERSION
-from src.core.base.BaseAgent import BaseAgent
 import logging
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

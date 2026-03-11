@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import logging
-import sys
 import os
+import sys
 from pathlib import Path
 
 # Add src to path
@@ -10,16 +10,17 @@ sys.path.append(str(Path(__file__).parent))
 from src.classes.fleet.FleetManager import FleetManager
 from src.classes.specialized.WebAgent import WebAgent
 
+
 def test_phase_17():
     logging.basicConfig(level=logging.INFO)
     workspace = os.getcwd()
     fleet = FleetManager(workspace)
-    
+
     print("\n--- Phase 17: WebAgent (Simulation) ---")
     web_agent = WebAgent(str(Path(workspace) / "src/classes/specialized/WebAgent.py"))
     search_results = web_agent.search_web("PyAgent GitHub")
     print(f"Search Results: {search_results}")
-    
+
     # Simulate fetching a page (mocked)
     content = web_agent.fetch_page_content("https://github.com/UndiFineD/PyAgent")
     print(f"Fetched Content Length: {len(content)}")

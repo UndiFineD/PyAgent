@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/satellite_reconnaissance_core.description.md
 
 # satellite_reconnaissance_core
 
-**File**: `src\core\base\logic\core\satellite_reconnaissance_core.py`  
+**File**: `src\\core\base\\logic\\core\\satellite_reconnaissance_core.py`  
 **Type**: Python Module  
 **Summary**: 4 classes, 0 functions, 19 imports  
 **Lines**: 427  
@@ -89,7 +88,7 @@ Inspired by aerospace cybersecurity tools, this core provides:
 
 # Improvements for satellite_reconnaissance_core
 
-**File**: `src\core\base\logic\core\satellite_reconnaissance_core.py`  
+**File**: `src\\core\base\\logic\\core\\satellite_reconnaissance_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 427 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -129,15 +128,9 @@ LLM_CONTEXT_END
 # Specialized reconnaissance for satellite, space, and aerospace assets
 
 import asyncio
-import aiohttp
-import json
-import re
-import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Set, Tuple, Any
-from urllib.parse import urlparse, urljoin
-import warnings
+from typing import Any, Dict, List, Optional, Tuple
 
 from src.core.base.common.base_core import BaseCore
 
@@ -145,6 +138,7 @@ from src.core.base.common.base_core import BaseCore
 @dataclass
 class SatelliteAsset:
     """Represents a satellite or space asset."""
+
     name: str
     norad_id: Optional[str] = None
     cospar_id: Optional[str] = None
@@ -162,6 +156,7 @@ class SatelliteAsset:
 @dataclass
 class SatelliteReconResult:
     """Result of satellite reconnaissance operations."""
+
     target: str
     satellites_found: List[SatelliteAsset] = field(default_factory=list)
     telemetry_data: Dict[str, Any] = field(default_factory=dict)
@@ -175,6 +170,7 @@ class SatelliteReconResult:
 @dataclass
 class SatelliteReconConfig:
     """Configuration for satellite reconnaissance."""
+
     max_concurrent_requests: int = 10
     timeout: int = 30
     enable_telemetry_analysis: bool = True
@@ -194,8 +190,7 @@ class SatelliteReconConfig:
 
 
 class SatelliteReconnaissanceCore(BaseCore):
-    """
-    Satellite Reconnaissance Core implementing specialized space/aerospace asset discovery.
+    """Satellite Reconnaissance Core implementing specialized space/aerospace asset discovery.
 
     Inspired by aerospace cybersecurity tools, this core provides:
     - Satellite catalog analysis and TLE processing
@@ -250,14 +245,14 @@ class SatelliteReconnaissanceCore(BaseCore):
         pass
 
     async def discover_satellite_assets(self, target: str) -> SatelliteReconResult:
-        """
-        Perform comprehensive satellite asset discovery.
+        """Perform comprehensive satellite asset discovery.
 
         Args:
             target: Target organization, country, or satellite name
 
         Returns:
             SatelliteReconResult with discovered assets
+
         """
         result = SatelliteReconResult(target=target)
 
@@ -464,14 +459,14 @@ class SatelliteReconnaissanceCore(BaseCore):
         return min(score, 1.0)
 
     async def monitor_satellite_telemetry(self, satellite_id: str) -> Dict[str, Any]:
-        """
-        Monitor real-time telemetry for a specific satellite.
+        """Monitor real-time telemetry for a specific satellite.
 
         Args:
             satellite_id: NORAD ID or satellite name
 
         Returns:
             Telemetry data dictionary
+
         """
         # Mock telemetry monitoring
         return {
@@ -493,8 +488,7 @@ class SatelliteReconnaissanceCore(BaseCore):
 
     def predict_satellite_passes(self, satellite_id: str, location: Tuple[float, float],
                                days_ahead: int = 7) -> List[Dict[str, Any]]:
-        """
-        Predict satellite passes over a location.
+        """Predict satellite passes over a location.
 
         Args:
             satellite_id: NORAD ID
@@ -503,6 +497,7 @@ class SatelliteReconnaissanceCore(BaseCore):
 
         Returns:
             List of pass predictions
+
         """
         predictions = []
         base_time = datetime.now()

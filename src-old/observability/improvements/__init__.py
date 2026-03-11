@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/improvements/__init__.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -60,7 +60,7 @@ from .improvement_dashboard import ImprovementDashboard
 from .improvement_diff import ImprovementDiff
 from .improvement_diff_type import ImprovementDiffType
 from .improvement_exporter import ImprovementExporter
-from .improvement_manager import ImprovementManager, DEFAULT_TEMPLATES
+from .improvement_manager import DEFAULT_TEMPLATES, ImprovementManager
 from .improvement_priority import ImprovementPriority
 from .improvement_scheduler import ImprovementScheduler
 from .improvement_status import ImprovementStatus
@@ -77,13 +77,14 @@ from .rollback_manager import RollbackManager
 from .rollback_point import RollbackPoint
 from .rollback_record import RollbackRecord
 from .rollback_tracker import RollbackTracker
+from .schedule_status import ScheduleStatus
+from .schedule_store import _ScheduleStore
+from .scheduled_entry import ScheduledEntry
+from .scheduled_improvement import ScheduledImprovement
 from .sla_configuration import SLAConfiguration
 from .sla_level import SLALevel
 from .sla_manager import SLAManager
 from .sla_policy import SLAPolicy
-from .schedule_status import ScheduleStatus
-from .scheduled_entry import ScheduledEntry
-from .scheduled_improvement import ScheduledImprovement
 from .tool_integration import ToolIntegration
 from .tool_suggestion import ToolSuggestion
 from .transition_result import TransitionResult
@@ -91,13 +92,14 @@ from .validation_result import ValidationResult
 from .validation_severity import ValidationSeverity
 from .voting_system import VotingSystem
 from .workflow_engine import WorkflowEngine
-from .schedule_store import _ScheduleStore
 
 """Lazy-loading entry point for observability.improvements."""
 
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
 from src.core.base.lifecycle.version import VERSION
 from src.core.lazy_loader import ModuleLazyLoader
+
 _LAZY_REGISTRY = {
     "AccessController": (
         "src.observability.improvements.access_controller",

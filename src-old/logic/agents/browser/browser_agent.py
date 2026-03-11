@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/browser/browser_agent.description.md
 
 # browser_agent
 
-**File**: `src\logic\agents\browser\browser_agent.py`  
+**File**: `src\\logic\agents\browser\browser_agent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 16 imports  
 **Lines**: 308  
@@ -86,7 +85,7 @@ Features:
 
 # Improvements for browser_agent
 
-**File**: `src\logic\agents\browser\browser_agent.py`  
+**File**: `src\\logic\agents\browser\browser_agent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 308 lines (medium)  
 **Complexity**: 12 score (moderate)
@@ -124,26 +123,21 @@ Inspired by big-3-super-agent's GeminiBrowserAgent.
 Provides web browsing capabilities with screenshot capture and interaction.
 """
 
-import os
+import logging
 import time
 import uuid
-import asyncio
-import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Any, Dict
 
-from playwright.sync_api import sync_playwright, Page
+from playwright.sync_api import sync_playwright
 from rich.console import Console
-from rich.panel import Panel
-
 from src.core.base.base_agent import BaseAgent
 from src.core.base.models.communication_models import CascadeContext
 
 
 class BrowserAgent(BaseAgent):
-    """
-    Web browser automation agent inspired by big-3-super-agent.
+    """Web browser automation agent inspired by big-3-super-agent.
 
     Features:
     - Playwright-based browser control
@@ -258,33 +252,33 @@ class BrowserAgent(BaseAgent):
         try:
             # Highlight search results
             result = self.page.evaluate(
-                f"""
-                (query) => {{
+                """
+                (query) => {
                     const elements = document.querySelectorAll('*');
                     let matches = [];
                     const regex = new RegExp(query, 'gi');
 
-                    for (let el of elements) {{
-                        if (el.offsetParent !== null && el.textContent) {{
+                    for (let el of elements) {
+                        if (el.offsetParent !== null && el.textContent) {
                             const text = el.textContent;
-                            if (regex.test(text)) {{
-                                matches.push({{
+                            if (regex.test(text)) {
+                                matches.push({
                                     text: text.trim(),
                                     tagName: el.tagName,
                                     className: el.className
-                                }});
+                                });
                                 // Highlight the element
                                 el.style.backgroundColor = 'yellow';
-                            }}
-                        }}
-                    }}
+                            }
+                        }
+                    }
 
-                    return {{
+                    return {
                         found: matches.length > 0,
                         count: matches.length,
                         matches: matches.slice(0, 10) // Limit results
-                    }};
-                }}
+                    };
+                }
             """,
                 query,
             )
@@ -337,14 +331,14 @@ class BrowserAgent(BaseAgent):
             return False
 
     async def execute(self, context: CascadeContext, **kwargs) -> Any:
-        """
-        Execute browser automation tasks.
+        """Execute browser automation tasks.
 
         Args:
             url: Website URL to visit
             task: Description of what to do
             search_query: Text to search for on the page
             extract_text: Whether to extract text content
+
         """
         url = kwargs.get("url")
         task = kwargs.get("task", "")

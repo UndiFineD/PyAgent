@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/long_term_memory.description.md
 
@@ -47,6 +46,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # you may not use this file except in compliance with the License.
@@ -74,8 +74,7 @@ __version__ = VERSION
 
 
 class LongTermMemory:
-    """
-    LongTermMemory recovered after Copilot CLI deprecation event.
+    """LongTermMemory recovered after Copilot CLI deprecation event.
     Standardized placeholder for future re-implementation.
     """
 

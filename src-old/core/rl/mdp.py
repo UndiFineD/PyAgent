@@ -1,6 +1,5 @@
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/rl/mdp.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -90,8 +90,7 @@ class ExperienceReplayBuffer:
 
 
 class MDP:
-    """
-    Models the decision-making process for agents.
+    """Models the decision-making process for agents.
     Implements: S (States), A (Actions), P(s'|s,a) (Transition Dynamics), R(s,a) (Rewards)
     Enhanced with value iteration, policy extraction, and model-based planning.
     """

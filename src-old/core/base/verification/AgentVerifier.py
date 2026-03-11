@@ -1,14 +1,13 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/verification/AgentVerifier.description.md
 
 # AgentVerifier
 
-**File**: `src\core\base\verification\AgentVerifier.py`  
+**File**: `src\\core\base\verification\\AgentVerifier.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 115  
@@ -47,7 +46,7 @@ Handles quality and anchoring verification of agent responses.
 
 # Improvements for AgentVerifier
 
-**File**: `src\core\base\verification\AgentVerifier.py`  
+**File**: `src\\core\base\verification\\AgentVerifier.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 115 lines (medium)  
 **Complexity**: 7 score (moderate)
@@ -81,6 +80,7 @@ LLM_CONTEXT_END
 """
 
 from typing import Any
+
 import numpy as np
 
 try:
@@ -110,8 +110,7 @@ class AgentVerifier:
     def calculate_anchoring_strength(
         cls, result: str, context_pool: dict[str, Any]
     ) -> float:
-        """
-        Calculates the 'Anchoring Strength' metric using Semantic Cosine Similarity.
+        """Calculates the 'Anchoring Strength' metric using Semantic Cosine Similarity.
         """
         if not context_pool:
             return 0.5

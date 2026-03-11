@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/security_scanner_agent.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -51,8 +52,7 @@ from __future__ import annotations
 import re
 
 from src.core.base.common.types.security_issue_type import SecurityIssueType
-from src.core.base.common.types.security_vulnerability import \
-    SecurityVulnerability
+from src.core.base.common.types.security_vulnerability import SecurityVulnerability
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
@@ -124,12 +124,12 @@ class SecurityScannerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         Returns:
             List of detected vulnerabilities.
+
         """
         self.vulnerabilities = []
 
         try:
-            from rust_core import \
-                scan_code_vulnerabilities_rust  # type: ignore[attr-defined]
+            from rust_core import scan_code_vulnerabilities_rust  # type: ignore[attr-defined]
 
             # Rust returns (line_number, pattern_index, matched_text)
             rust_results = scan_code_vulnerabilities_rust(content)
@@ -163,8 +163,7 @@ class SecurityScannerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         # Phase 108: Intelligence Recording
         try:
-            from src.infrastructure.compute.backend.local_context_recorder import \
-                LocalContextRecorder
+            from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
 
             recorder = LocalContextRecorder(user_context="SecurityScanner")
             recorder.record_interaction(
@@ -183,5 +182,6 @@ class SecurityScannerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         Returns:
             Number of critical severity vulnerabilities.
+
         """
         return sum(1 for v in self.vulnerabilities if v.severity == "critical")

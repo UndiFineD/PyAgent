@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/move_completed.description.md
 
 # move_completed
 
-**File**: `src\tools\move_completed.py`  
+**File**: `src\tools\\move_completed.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 3 functions, 3 imports  
 **Lines**: 94  
@@ -41,7 +40,7 @@ case-insensitive 'completed'|'done'|'finished' as completed.
 
 # Improvements for move_completed
 
-**File**: `src\tools\move_completed.py`  
+**File**: `src\tools\\move_completed.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 94 lines (small)  
 **Complexity**: 3 score (simple)
@@ -79,8 +78,8 @@ Idempotent: will not duplicate entries already present in completed.md.
 It treats table rows where the second column (status) contains
 case-insensitive 'completed'|'done'|'finished' as completed.
 """
-from pathlib import Path
 import datetime
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 TRACK = ROOT / ".external" / "tracking.md"

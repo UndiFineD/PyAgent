@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/infrastructure/OllamaConnectorAgent.description.md
 
 # OllamaConnectorAgent
 
-**File**: `src\logic\agents\infrastructure\OllamaConnectorAgent.py`  
+**File**: `src\\logic\agents\\infrastructure\\OllamaConnectorAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 84  
@@ -44,7 +43,7 @@ Handles local inference requests via the Ollama API.
 
 # Improvements for OllamaConnectorAgent
 
-**File**: `src\logic\agents\infrastructure\OllamaConnectorAgent.py`  
+**File**: `src\\logic\agents\\infrastructure\\OllamaConnectorAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 84 lines (small)  
 **Complexity**: 3 score (simple)
@@ -92,9 +91,9 @@ from __future__ import annotations
 
 """Agent for connecting to local Ollama instances on edge nodes (Phase 125)."""
 
-from src.core.base.version import VERSION
-from src.core.base.BaseAgent import BaseAgent
 import requests
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/dns_security_core.description.md
 
 # dns_security_core
 
-**File**: `src\core\base\logic\core\dns_security_core.py`  
+**File**: `src\\core\base\\logic\\core\\dns_security_core.py`  
 **Type**: Python Module  
 **Summary**: 7 classes, 0 functions, 22 imports  
 **Lines**: 522  
@@ -99,7 +98,7 @@ based on AdGuard Home methodologies.
 
 # Improvements for dns_security_core
 
-**File**: `src\core\base\logic\core\dns_security_core.py`  
+**File**: `src\\core\base\\logic\\core\\dns_security_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 522 lines (large)  
 **Complexity**: 3 score (simple)
@@ -141,19 +140,15 @@ LLM_CONTEXT_END
 # DNS Security Core - Network-level filtering and analysis
 # Based on patterns from AdGuard Home repository
 
-import asyncio
 import json
 import logging
-from typing import Dict, List, Optional, Any, Tuple, Set, Union
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-import ipaddress
 import re
-import hashlib
-from pathlib import Path
-from collections import defaultdict, deque
 import time
+from collections import deque
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 
 class DnsRecordType(Enum):
@@ -231,8 +226,7 @@ class DnsStatistics:
 
 
 class DnsSecurityCore:
-    """
-    DNS Security Core for network-level filtering and analysis.
+    """DNS Security Core for network-level filtering and analysis.
 
     Provides comprehensive DNS filtering, logging, and security analysis
     based on AdGuard Home methodologies.

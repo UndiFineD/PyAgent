@@ -18,6 +18,7 @@ hook used by meta-tests and CI to ensure core module health.
 """
 
 from __future__ import annotations
+
 import asyncio
 from dataclasses import dataclass
 
@@ -25,6 +26,7 @@ from dataclasses import dataclass
 @dataclass
 class Runtime:
     """Minimal runtime that manages task lifecycle (synchronous-safe)."""
+
     name: str = "runtime"
 
     async def start(self) -> None:
@@ -36,5 +38,5 @@ class Runtime:
 def validate() -> None:
     """Lightweight import-safe validation hook."""
     r = Runtime()
-    # ensure start is present and awaitable when called
-    assert callable(getattr(r, "start", None))
+    # ensure start is present and callable
+    assert callable(getattr(r, "start", None)), "Runtime.start not callable"

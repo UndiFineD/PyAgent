@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/dimensionality_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -108,8 +108,7 @@ class EmbeddingStats:
 
 # pylint: disable=too-many-ancestors
 class DimensionalityAgent(BaseAgent):
-    """
-    Agent specializing in simplifying complex datasets and high-dimensional spaces.
+    """Agent specializing in simplifying complex datasets and high-dimensional spaces.
     Focuses on PCA, t-SNE (simulated), UMAP, and semantic embedding compression.
     """
 

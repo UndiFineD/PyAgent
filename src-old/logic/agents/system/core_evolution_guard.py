@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/core_evolution_guard.description.md
 
@@ -29,9 +28,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -78,8 +79,7 @@ __version__ = VERSION
 
 
 class CoreEvolutionGuard:
-    """
-    Monitors and validates changes to the agent's core source code.
+    """Monitors and validates changes to the agent's core source code.
     Prevents unintended mutations or malicious injections into the agent logic.
     """
 
@@ -100,8 +100,7 @@ class CoreEvolutionGuard:
             return None
 
     def snapshot_core_logic(self, core_paths: list[str]) -> dict[str, Any]:
-        """
-        Creates a baseline of hashes for critical agent files.
+        """Creates a baseline of hashes for critical agent files.
         """
         for path in core_paths:
             full_path = os.path.join(self.workspace_path, path)
@@ -115,8 +114,7 @@ class CoreEvolutionGuard:
         return {"monitored_files": len(self.code_fingerprints)}
 
     def validate_code_integrity(self, file_path: str) -> dict[str, Any]:
-        """
-        Validates if a change to a file is "safe" or needs human review.
+        """Validates if a change to a file is "safe" or needs human review.
         """
         # Determine relative path for lookup
         rel_path = file_path

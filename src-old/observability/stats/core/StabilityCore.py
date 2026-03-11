@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/core/StabilityCore.description.md
 
@@ -82,7 +81,6 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-from typing import List
 from dataclasses import dataclass
 
 

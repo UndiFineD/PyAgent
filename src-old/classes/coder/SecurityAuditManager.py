@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/SecurityAuditManager.description.md
 
@@ -83,7 +82,7 @@ Handles certificate rotation and security policy enforcement.
 import logging
 import time
 import uuid
-from typing import Dict, List, Any
+from typing import Any, Dict, List
 
 
 class SecurityAuditManager:

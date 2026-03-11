@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/CoderQualityMixin.description.md
 
 # CoderQualityMixin
 
-**File**: `src\logic\agents\development\mixins\CoderQualityMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\CoderQualityMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 122  
@@ -43,7 +42,7 @@ Mixin for computing quality scores and refactoring suggestions.
 
 # Improvements for CoderQualityMixin
 
-**File**: `src\logic\agents\development\mixins\CoderQualityMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\CoderQualityMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 122 lines (medium)  
 **Complexity**: 2 score (simple)
@@ -92,7 +91,8 @@ from __future__ import annotations
 Quality scoring and refactoring suggestion logic for CoderCore.
 """
 
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
 from src.core.base.types.CodeMetrics import CodeMetrics
 from src.core.base.types.CodeSmell import CodeSmell
 from src.core.base.types.QualityScore import QualityScore

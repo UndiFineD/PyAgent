@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/ComplianceAgent.description.md
 
 # ComplianceAgent
 
-**File**: `src\logic\agents\security\ComplianceAgent.py`  
+**File**: `src\\logic\agents\\security\\ComplianceAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 46  
@@ -44,7 +43,7 @@ Scans memory shards for PII and sensitive data patterns.
 
 # Improvements for ComplianceAgent
 
-**File**: `src\logic\agents\security\ComplianceAgent.py`  
+**File**: `src\\logic\agents\\security\\ComplianceAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 46 lines (small)  
 **Complexity**: 1 score (simple)
@@ -79,6 +78,10 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+from pathlib import Path
+
+from src.core.base.BaseAgent import BaseAgent
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -91,21 +94,17 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.Version import VERSION
-from pathlib import Path
-from .mixins.PrivacyScannerMixin import PrivacyScannerMixin
-from .mixins.PrivacyAssessmentMixin import PrivacyAssessmentMixin
-from src.core.base.BaseAgent import BaseAgent
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+
+from .mixins.PrivacyAssessmentMixin import PrivacyAssessmentMixin
+from .mixins.PrivacyScannerMixin import PrivacyScannerMixin
 
 __version__ = VERSION
 
 
 class ComplianceAgent(BaseAgent, PrivacyScannerMixin, PrivacyAssessmentMixin):
-    """
-    Phase 57: Data Privacy & Compliance.
+    """Phase 57: Data Privacy & Compliance.
     Scans memory shards for PII and sensitive data patterns.
     """
 

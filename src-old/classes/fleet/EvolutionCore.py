@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/EvolutionCore.description.md
 
 # EvolutionCore
 
-**File**: `src\classes\fleet\EvolutionCore.py`  
+**File**: `src\\classes\fleet\\EvolutionCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 62  
@@ -45,7 +44,7 @@ No I/O or global state.
 
 # Improvements for EvolutionCore
 
-**File**: `src\classes\fleet\EvolutionCore.py`  
+**File**: `src\\classes\fleet\\EvolutionCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 62 lines (small)  
 **Complexity**: 3 score (simple)
@@ -80,11 +79,11 @@ EvolutionCore logic for agent fleet adaptation.
 Contains pure logic for template generation and hyperparameter optimization.
 """
 
-from typing import Dict, Any, List, Optional
+from typing import Dict
+
 
 class EvolutionCore:
-    """
-    Pure logic core for evolutionary agent development.
+    """Pure logic core for evolutionary agent development.
     Designed for future Rust implementation (Core/Shell pattern).
     No I/O or global state.
     """
@@ -116,13 +115,12 @@ class {name}Agent(BaseAgent):
 '''
 
     def compute_mutations(self, fleet_stats: Dict[str, Dict[str, float]]) -> Dict[str, Dict[str, float]]:
-        """
-        Pure logic for evolutionary mutations of hyperparameters.
+        """Pure logic for evolutionary mutations of hyperparameters.
         """
         refined_params: Dict[str, Dict[str, float]] = {}
         for agent_id, metrics in fleet_stats.items():
             success_rate = metrics.get("success_rate", 1.0)
-            
+
             # Genetic mutation logic:
             # If success is low, reduce randomness (temperature).
             # If success is high, increase randomness for exploration.
@@ -130,8 +128,8 @@ class {name}Agent(BaseAgent):
                 mutation = -0.1
             else:
                 mutation = 0.05
-                
+
             new_temp = max(0.1, min(1.0, self.default_temp + mutation))
             refined_params[agent_id] = {"temperature": new_temp}
-            
+
         return refined_params

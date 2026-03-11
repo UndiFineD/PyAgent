@@ -7,8 +7,10 @@ without requiring the real PyTorch wheel.
 """
 __all__ = ["_tensor", "_C"]
 
-from . import _tensor  # re-export submodule
-from . import _C  # placeholder C-extension module
+from . import (
+    _C,  # placeholder C-extension module
+    _tensor,  # re-export submodule
+)
 
 # Provide a convenience alias for common attribute access
 Tensor = _tensor.Tensor

@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/fix_e402_docstrings.description.md
 
@@ -69,7 +68,6 @@ LLM_CONTEXT_END
 
 import ast
 import os
-import sys
 
 
 def fix_file(path):

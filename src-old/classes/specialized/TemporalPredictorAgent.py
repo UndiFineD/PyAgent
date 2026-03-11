@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/TemporalPredictorAgent.description.md
 
@@ -108,14 +107,15 @@ Specializes in predictive execution and anticipatory self-healing.
 Analyzes historical patterns to forecast potential failures.
 """
 
-from src.core.base.version import VERSION
-import logging
 import json
-from pathlib import Path
-from typing import Dict, List, Any
+import logging
 from datetime import datetime
+from pathlib import Path
+from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

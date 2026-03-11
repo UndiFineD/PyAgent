@@ -13,8 +13,7 @@
 # limitations under the License.
 
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/graph_memory_agent.description.md
 
@@ -43,6 +42,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Agent specializing in Graph-based memory and entity relationship tracking.
@@ -52,12 +52,13 @@ Supports FalkorDB-style triple storage (Subject-Predicate-Object).
 from pathlib import Path
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
-from .mixins.graph_storage_mixin import GraphStorageMixin
-from .mixins.graph_mirix_mixin import GraphMIRIXMixin
+from src.core.base.lifecycle.version import VERSION
+
 from .mixins.graph_beads_mixin import GraphBeadsMixin
 from .mixins.graph_entity_mixin import GraphEntityMixin
+from .mixins.graph_mirix_mixin import GraphMIRIXMixin
+from .mixins.graph_storage_mixin import GraphStorageMixin
 
 __version__ = VERSION
 

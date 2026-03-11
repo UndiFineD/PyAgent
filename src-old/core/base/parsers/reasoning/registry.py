@@ -1,14 +1,13 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/parsers/reasoning/registry.description.md
 
 # registry
 
-**File**: `src\core\base\parsers\reasoning\registry.py`  
+**File**: `src\\core\base\\parsers\reasoning\registry.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 1 functions, 7 imports  
 **Lines**: 100  
@@ -55,7 +54,7 @@ Decorator to register a reasoning parser.
 
 # Improvements for registry
 
-**File**: `src\core\base\parsers\reasoning\registry.py`  
+**File**: `src\\core\base\\parsers\reasoning\registry.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 100 lines (medium)  
 **Complexity**: 7 score (moderate)
@@ -90,15 +89,15 @@ LLM_CONTEXT_END
 
 import importlib
 import logging
-from typing import Any, ClassVar, Callable, Type
+from typing import Any, Callable, ClassVar, Type
+
 from .base import ReasoningParser
 
 logger = logging.getLogger(__name__)
 
 
 class ReasoningParserManager:
-    """
-    Central registry for ReasoningParser implementations.
+    """Central registry for ReasoningParser implementations.
     """
 
     reasoning_parsers: ClassVar[dict[str, Type[ReasoningParser]]] = {}
@@ -106,8 +105,7 @@ class ReasoningParserManager:
 
     @classmethod
     def register_module(cls, name: str, parser_class: Type[ReasoningParser]) -> None:
-        """
-        Register a parser class.
+        """Register a parser class.
         """
         cls.reasoning_parsers[name] = parser_class
         logger.debug(f"Registered reasoning parser: {name}")
@@ -119,8 +117,7 @@ class ReasoningParserManager:
         module_path: str,
         class_name: str,
     ) -> None:
-        """
-        Register a parser for lazy loading.
+        """Register a parser for lazy loading.
         """
         cls.lazy_parsers[name] = (module_path, class_name)
         logger.debug(
@@ -129,8 +126,7 @@ class ReasoningParserManager:
 
     @classmethod
     def get_reasoning_parser(cls, name: str) -> Type[ReasoningParser]:
-        """
-        Retrieve a registered parser class.
+        """Retrieve a registered parser class.
         """
         if name in cls.reasoning_parsers:
             return cls.reasoning_parsers[name]
@@ -170,8 +166,7 @@ class ReasoningParserManager:
         tokenizer: Any = None,
         **kwargs: Any,
     ) -> ReasoningParser:
-        """
-        Create a parser instance.
+        """Create a parser instance.
         """
         parser_cls = cls.get_reasoning_parser(name)
         return parser_cls(tokenizer, **kwargs)
@@ -180,8 +175,7 @@ class ReasoningParserManager:
 def reasoning_parser(
     name: str,
 ) -> Callable[[Type[ReasoningParser]], Type[ReasoningParser]]:
-    """
-    Decorator to register a reasoning parser.
+    """Decorator to register a reasoning parser.
     """
 
     def decorator(cls: Type[ReasoningParser]) -> Type[ReasoningParser]:

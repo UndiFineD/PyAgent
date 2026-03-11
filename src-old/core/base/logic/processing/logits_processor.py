@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/processing/logits_processor.description.md
 
@@ -35,6 +34,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -65,7 +65,7 @@ Phase 23: Advanced Serialization & Validation
 
 
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, Protocol
+from typing import Protocol
 
 try:
     import torch
@@ -96,8 +96,7 @@ except ImportError:
 
 
 class LogitsProcessor(Protocol):
-    """
-    Protocol regarding logits processors.
+    """Protocol regarding logits processors.
 
     A logits processor modifies the logits tensor before sampling.
     It receives the past token IDs and current logits, returning
@@ -109,8 +108,7 @@ class LogitsProcessor(Protocol):
         input_ids: Sequence[int],
         logits: "torch.Tensor",
     ) -> "torch.Tensor":
-        """
-        Process logits.
+        """Process logits.
 
         Args:
             input_ids: Previously generated token IDs
@@ -118,12 +116,12 @@ class LogitsProcessor(Protocol):
 
         Returns:
             Modified logits tensor
+
         """
 
 
 class LogitsProcessorList:
-    """
-    Composable list of logits processors.
+    """Composable list of logits processors.
 
     Applies processors in order, passing the output of each to the next.
 
@@ -134,6 +132,7 @@ class LogitsProcessorList:
         ...     TopPProcessor(0.9),
         ... ])
         >>> modified_logits = processors(input_ids, logits)
+
     """
 
     def __init__(self, processors: list[LogitsProcessor] | None = None):
@@ -169,8 +168,7 @@ class LogitsProcessorList:
 
 
 class TemperatureProcessor:
-    """
-    Apply temperature scaling to logits.
+    """Apply temperature scaling to logits.
 
     Temperature < 1.0 makes distribution sharper (more deterministic)
     Temperature > 1.0 makes distribution flatter (more random)
@@ -204,8 +202,7 @@ class TemperatureProcessor:
 
 
 class TopKProcessor:
-    """
-    Keep only top-k logits, set others to -inf.
+    """Keep only top-k logits, set others to -inf.
 
     This limits sampling to the k most likely tokens.
     """
@@ -254,8 +251,7 @@ class TopKProcessor:
 
 
 class TopPProcessor:
-    """
-    Nucleus sampling - keep tokens with cumulative probability <= top_p.
+    """Nucleus sampling - keep tokens with cumulative probability <= top_p.
 
     This dynamically adjusts the number of considered tokens based on
     their cumulative probability.
@@ -292,8 +288,7 @@ class TopPProcessor:
 
 
 class RepetitionPenaltyProcessor:
-    """
-    Penalize tokens that have already appeared.
+    """Penalize tokens that have already appeared.
 
     penalty > 1.0 discourages repetition
     penalty < 1.0 encourages repetition
@@ -341,8 +336,7 @@ class RepetitionPenaltyProcessor:
 
 
 class NoBadWordsProcessor:
-    """
-    Block specific token sequences from being generated.
+    """Block specific token sequences from being generated.
 
     Given a list of "bad word" token sequences, this processor sets
     their logits to -inf when they would complete a bad sequence.
@@ -352,9 +346,9 @@ class NoBadWordsProcessor:
     _NEUTRAL_LOGIT = 0.0
 
     def __init__(self, bad_words_ids: list[list[int]]):
-        """
-        Args:
-            bad_words_ids: List of token ID sequences to block
+        """Args:
+        bad_words_ids: List of token ID sequences to block
+
         """
         self.bad_words_ids = bad_words_ids
         self._word_bias: "torch.Tensor | None" = None
@@ -410,8 +404,7 @@ class NoBadWordsProcessor:
 
 
 class MinLengthProcessor:
-    """
-    Prevent EOS token before minimum length is reached.
+    """Prevent EOS token before minimum length is reached.
     """
 
     def __init__(self, min_length: int, eos_token_id: int):
@@ -431,8 +424,7 @@ class MinLengthProcessor:
 
 
 class MaxLengthProcessor:
-    """
-    Force EOS token after maximum length is reached.
+    """Force EOS token after maximum length is reached.
     """
 
     def __init__(self, max_length: int, eos_token_id: int):
@@ -453,8 +445,7 @@ class MaxLengthProcessor:
 
 
 class PresencePenaltyProcessor:
-    """
-    Additive penalty regarding tokens that have appeared.
+    """Additive penalty regarding tokens that have appeared.
 
     Unlike RepetitionPenalty (multiplicative), this adds a flat penalty
     to any token that has appeared at least once.
@@ -484,8 +475,7 @@ class PresencePenaltyProcessor:
 
 
 class FrequencyPenaltyProcessor:
-    """
-    Penalty proportional to token frequency.
+    """Penalty proportional to token frequency.
 
     Tokens that appear more often receive a larger penalty.
     """
@@ -523,8 +513,7 @@ def apply_processors(
     logits: "torch.Tensor",
     *processors: LogitsProcessor,
 ) -> "torch.Tensor":
-    """
-    Apply multiple processors to logits.
+    """Apply multiple processors to logits.
     """
     from functools import reduce
 
@@ -545,11 +534,11 @@ def create_processor_chain(
     max_length: int | None = None,
     eos_token_id: int | None = None,
 ) -> LogitsProcessorList:
-    """
-    Create a standard processor chain from common parameters.
+    """Create a standard processor chain from common parameters.
 
     Returns:
         LogitsProcessorList with configured processors
+
     """
     processors = LogitsProcessorList()
 

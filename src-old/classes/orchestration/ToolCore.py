@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/ToolCore.description.md
 
@@ -83,7 +82,8 @@ LLM_CONTEXT_END
 """
 
 import inspect
-from typing import Dict, List, Any, Callable, Optional
+from typing import Any, Callable, Dict
+
 from pydantic import BaseModel
 
 
@@ -99,8 +99,7 @@ class ToolMetadata(BaseModel):
 
 
 class ToolCore:
-    """
-    Pure logic for tool registration and invocation.
+    """Pure logic for tool registration and invocation.
     Handles parameter introspection and argument filtering.
     """
 

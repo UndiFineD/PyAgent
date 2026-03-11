@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/models/agent_card.description.md
 
 # agent_card
 
-**File**: `src\core\base\models\agent_card.py`  
+**File**: `src\\core\base\\models\agent_card.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 7 imports  
 **Lines**: 38  
@@ -60,7 +59,7 @@ Class Config implementation.
 
 # Improvements for agent_card
 
-**File**: `src\core\base\models\agent_card.py`  
+**File**: `src\\core\base\\models\agent_card.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 38 lines (small)  
 **Complexity**: 0 score (simple)
@@ -96,14 +95,14 @@ Class Config implementation.
 LLM_CONTEXT_END
 """
 
-from typing import List, Optional, Dict, Any
-from dataclasses import dataclass, field
+from dataclasses import field
+from typing import Any, Dict, List, Optional
+
 from pydantic import BaseModel
 
 
 class AgentCard(BaseModel):
-    """
-    Standardized metadata for an agent in the fleet.
+    """Standardized metadata for an agent in the fleet.
     Enables cross-agent discovery and orchestration.
     Harvested from .external/agentic_design_patterns pattern.
     """

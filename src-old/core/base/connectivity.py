@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/connectivity.description.md
 
 # connectivity
 
-**File**: `src\core\base\connectivity.py`  
+**File**: `src\\core\base\\connectivity.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 8 imports  
 **Lines**: 102  
@@ -56,7 +55,7 @@ Optimized for BinaryTransport.
 
 # Improvements for connectivity
 
-**File**: `src\core\base\connectivity.py`  
+**File**: `src\\core\base\\connectivity.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 102 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -106,10 +105,11 @@ Modern connectivity module providing high-performance binary transport.
 Supports MessagePack for serialization and Zstd for compression (Phase 255).
 """
 
+import logging
+from typing import Any
+
 import msgpack
 import zstd
-import logging
-from typing import Any, Optional, Union
 from src.core.base.version import VERSION
 
 __version__ = VERSION
@@ -117,15 +117,13 @@ logger = logging.getLogger(__name__)
 
 
 class BinaryTransport:
-    """
-    Handles binary serialization and compression for agent communication.
+    """Handles binary serialization and compression for agent communication.
     Utilizes MessagePack and Zstd for optimal performance.
     """
 
     @staticmethod
     def pack(data: Any, compress: bool = False, level: int = 3) -> bytes:
-        """
-        Serializes data using MessagePack and optionally compresses with Zstd.
+        """Serializes data using MessagePack and optionally compresses with Zstd.
 
         Args:
             data: The data to serialize.
@@ -134,6 +132,7 @@ class BinaryTransport:
 
         Returns:
             bytes: The packed (and possibly compressed) data.
+
         """
         try:
             packed = msgpack.packb(data, use_bin_type=True)
@@ -146,8 +145,7 @@ class BinaryTransport:
 
     @staticmethod
     def unpack(payload: bytes, compressed: bool = False) -> Any:
-        """
-        Decompresses (optionally) and deserializes data using MessagePack.
+        """Decompresses (optionally) and deserializes data using MessagePack.
 
         Args:
             payload: The bytes to unpack.
@@ -155,6 +153,7 @@ class BinaryTransport:
 
         Returns:
             Any: The unpacked data.
+
         """
         try:
             data = payload
@@ -167,8 +166,7 @@ class BinaryTransport:
 
 
 class HeartbeatSignal:
-    """
-    Specialized structure for high-frequency heartbeat signals.
+    """Specialized structure for high-frequency heartbeat signals.
     Optimized for BinaryTransport.
     """
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/metrics_core.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -141,8 +142,7 @@ Agents applied:
 
 
 class MetricsCore(BaseCore):
-    """
-    Authoritative engine for agent metrics collection and performance analysis.
+    """Authoritative engine for agent metrics collection and performance analysis.
     """
 
     def __init__(self, **kwargs) -> None:
@@ -217,12 +217,12 @@ class MetricsCore(BaseCore):
         if rc:
             try:
                 grouped: Dict[str, List[float]] = {}
-                
+
                 def group_record(r):
                     if r.name not in grouped:
                         grouped[r.name] = []
                     grouped[r.name].append(r.value)
-                
+
                 list(map(group_record, self.records))
 
                 # pylint: disable=no-member
@@ -233,12 +233,12 @@ class MetricsCore(BaseCore):
 
     def _python_aggregate(self) -> Dict[str, float]:
         grouped_py: Dict[str, List[float]] = {}
-        
+
         def group_record(rec):
             if rec.name not in grouped_py:
                 grouped_py[rec.name] = []
             grouped_py[rec.name].append(rec.value)
-        
+
         list(map(group_record, self.records))
 
         def calc_avg(item):
@@ -267,10 +267,10 @@ class MetricsCore(BaseCore):
     def _python_rolling_avg(self, values: List[float], window: int) -> List[float]:
         if not values:
             return []
-        
+
         def calc_step_avg(i):
             start = max(0, i - window + 1)
             slice_vals = values[start : i + 1]
             return sum(slice_vals) / len(slice_vals)
-        
+
         return list(map(calc_step_avg, range(len(values))))

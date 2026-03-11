@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/interface/cli/ThoughtDebugger.description.md
 
@@ -86,21 +85,20 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import logging
+
 # Copyright 2026 PyAgent Authors
 # Phase 269: Interactive Thought Debugger
-
 import sys
 import time
-import json
-import logging
-from typing import Dict, Any, Optional
-from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
+from typing import Any
+
 from src.core.base.version import VERSION
+from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
 
 
 class ThoughtDebugger:
-    """
-    Interactive CLI tool for real-time inspection of agent reasoning (thoughts).
+    """Interactive CLI tool for real-time inspection of agent reasoning (thoughts).
     Subscribes to the 'thought_stream' signal and provides formatting and control.
     """
 

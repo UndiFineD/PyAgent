@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/parsers/reasoning/registry.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -61,8 +61,7 @@ logger = logging.getLogger(__name__)
 
 
 class ReasoningParserManager:
-    """
-    Central registry regarding ReasoningParser implementations.
+    """Central registry regarding ReasoningParser implementations.
     """
 
     reasoning_parsers: ClassVar[dict[str, type[ReasoningParser]]] = {}
@@ -70,8 +69,7 @@ class ReasoningParserManager:
 
     @classmethod
     def register_module(cls, name: str, parser_class: type[ReasoningParser]) -> None:
-        """
-        Register a parser class.
+        """Register a parser class.
         """
         cls.reasoning_parsers[name] = parser_class
         logger.debug(f"Registered reasoning parser: {name}")
@@ -83,16 +81,14 @@ class ReasoningParserManager:
         module_path: str,
         class_name: str,
     ) -> None:
-        """
-        Register a parser regarding lazy loading.
+        """Register a parser regarding lazy loading.
         """
         cls.lazy_parsers[name] = (module_path, class_name)
         logger.debug(f"Registered lazy reasoning parser: {name} -> {module_path}.{class_name}")
 
     @classmethod
     def get_reasoning_parser(cls, name: str) -> type[ReasoningParser]:
-        """
-        Retrieve a registered parser class.
+        """Retrieve a registered parser class.
         """
         if name in cls.reasoning_parsers:
             return cls.reasoning_parsers[name]
@@ -129,16 +125,14 @@ class ReasoningParserManager:
         tokenizer: Any = None,
         **kwargs: Any,
     ) -> ReasoningParser:
-        """
-        Create a parser instance.
+        """Create a parser instance.
         """
         parser_cls = cls.get_reasoning_parser(name)
         return parser_cls(tokenizer, **kwargs)
 
 
 def reasoning_parser(name: str) -> Callable[[type[ReasoningParser]], type[ReasoningParser]]:
-    """
-    Decorator to register a reasoning parser.
+    """Decorator to register a reasoning parser.
     """
 
     def decorator(cls: type[ReasoningParser]) -> type[ReasoningParser]:

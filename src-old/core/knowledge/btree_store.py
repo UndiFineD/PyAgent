@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/knowledge/btree_store.description.md
 
@@ -27,9 +26,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -63,8 +64,7 @@ __version__ = VERSION
 
 
 class BTreeKnowledgeStore(KnowledgeStore):
-    """
-    Sharded B-Tree style storage for structured key-value data.
+    """Sharded B-Tree style storage for structured key-value data.
     Designed to scale to trillions of parameters by sharding across filesystem.
     Phase 141: Hierarchical Persistence via SQLite per-bucket aggregation.
     Phase 144: Telemetry-Ready Access Patterns.
@@ -75,8 +75,7 @@ class BTreeKnowledgeStore(KnowledgeStore):
         self.logger = StructuredLogger(agent_id="BTreeStore")
 
     def _hash_key(self, key: str) -> str:
-        """
-        Fast hashing for shard lookup.
+        """Fast hashing for shard lookup.
         PHASE 131: Uses PyO3 Rust extension for sub-millisecond page access.
         """
         try:

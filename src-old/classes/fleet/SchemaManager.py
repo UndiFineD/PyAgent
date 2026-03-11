@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/SchemaManager.description.md
 
 # SchemaManager
 
-**File**: `src\classes\fleet\SchemaManager.py`  
+**File**: `src\\classes\fleet\\SchemaManager.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 31  
@@ -43,7 +42,7 @@ Discovers and caches database schemas across the fleet.
 
 # Improvements for SchemaManager
 
-**File**: `src\classes\fleet\SchemaManager.py`  
+**File**: `src\\classes\fleet\\SchemaManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 31 lines (small)  
 **Complexity**: 4 score (simple)
@@ -76,7 +75,7 @@ LLM_CONTEXT_END
 """Fleet-wide manager for database schema discovery and metadata storage."""
 
 import logging
-from typing import Dict, List, Any
+from typing import Any, Dict, List
 
 
 class SchemaManager:

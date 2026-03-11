@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/OrchestratorDiffMixin.description.md
 
 # OrchestratorDiffMixin
 
-**File**: `src\logic\agents\swarm\OrchestratorDiffMixin.py`  
+**File**: `src\\logic\agents\\swarm\\OrchestratorDiffMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 40  
@@ -43,7 +42,7 @@ Diff preview methods for OrchestratorAgent.
 
 # Improvements for OrchestratorDiffMixin
 
-**File**: `src\logic\agents\swarm\OrchestratorDiffMixin.py`  
+**File**: `src\\logic\agents\\swarm\\OrchestratorDiffMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 40 lines (small)  
 **Complexity**: 3 score (simple)
@@ -80,11 +79,11 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
-
 import logging
 from pathlib import Path
-from src.core.base.utils.DiffGenerator import DiffGenerator
+
 from src.core.base.models import DiffOutputFormat, DiffResult
+from src.core.base.utils.DiffGenerator import DiffGenerator
 
 
 class OrchestratorDiffMixin:

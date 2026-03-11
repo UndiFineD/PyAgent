@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/core/CudaStreamPool.description.md
 
 # CudaStreamPool
 
-**File**: `src\core\base\core\CudaStreamPool.py`  
+**File**: `src\\core\base\\core\\CudaStreamPool.py`  
 **Type**: Python Module  
 **Summary**: 7 classes, 5 functions, 16 imports  
 **Lines**: 641  
@@ -177,7 +176,7 @@ Get a high-priority stream from the global pool.
 
 # Improvements for CudaStreamPool
 
-**File**: `src\core\base\core\CudaStreamPool.py`  
+**File**: `src\\core\base\\core\\CudaStreamPool.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 641 lines (large)  
 **Complexity**: 42 score (complex)
@@ -211,6 +210,7 @@ Get a high-priority stream from the global pool.
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -236,12 +236,11 @@ Example:
 
 import threading
 import time
-import weakref
+from collections import deque
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Callable, Optional, Iterator
-from contextlib import contextmanager
-from collections import deque
+from typing import Any, Optional
 
 # Try to import torch for GPU operations
 try:
@@ -314,6 +313,7 @@ class PooledStream:
         priority: Stream priority
         state: Current state
         stream: Underlying CUDA stream
+
     """
 
     stream_id: int
@@ -350,6 +350,7 @@ class PooledStream:
 
         Returns:
             True if stream is idle, False if busy
+
         """
         if self.stream is None:
             return True
@@ -377,6 +378,7 @@ class PooledEvent:
     Attributes:
         event_id: Unique identifier
         event: Underlying CUDA event
+
     """
 
     event_id: int
@@ -424,6 +426,7 @@ class EventPool:
         Args:
             initial_size: Initial number of events
             max_size: Maximum pool size
+
         """
         self.max_size = max_size
         self._events: list[PooledEvent] = []
@@ -448,6 +451,7 @@ class EventPool:
 
         Returns:
             PooledEvent or None if pool exhausted
+
         """
         with self._lock:
             if self._free:
@@ -498,6 +502,7 @@ class CudaStreamPool:
     Attributes:
         compute_streams: Number of compute streams
         comm_streams: Number of communication streams
+
     """
 
     def __init__(
@@ -516,6 +521,7 @@ class CudaStreamPool:
             high_priority_streams: Number of high-priority streams
             event_pool_size: Size of event pool
             enable_affinity: Enable stream affinity tracking
+
         """
         self.compute_streams_count = compute_streams
         self.comm_streams_count = comm_streams
@@ -587,6 +593,7 @@ class CudaStreamPool:
 
         Returns:
             PooledStream or None
+
         """
         return self._acquire_from_pool(
             self._free_compute,
@@ -683,6 +690,7 @@ class CudaStreamPool:
 
         Args:
             stream: Stream to release
+
         """
         with self._lock:
             # Record timing
@@ -824,6 +832,7 @@ def get_global_stream_pool(
 
     Returns:
         Global CudaStreamPool instance
+
     """
     global _global_pool
 

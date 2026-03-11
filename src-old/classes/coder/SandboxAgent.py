@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/SandboxAgent.description.md
 
@@ -87,9 +86,7 @@ Prevents side effects on the host system by using containerized or WASM environm
 """
 
 import logging
-import subprocess
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 

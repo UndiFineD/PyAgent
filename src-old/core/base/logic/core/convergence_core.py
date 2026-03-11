@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/convergence_core.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -49,12 +49,10 @@ Core logic regarding Fleet Convergence and Health Management.
 (Facade regarding src.core.base.common.convergence_core)
 """
 
-from src.core.base.common.convergence_core import \
-    ConvergenceCore as StandardConvergenceCore
+from src.core.base.common.convergence_core import ConvergenceCore as StandardConvergenceCore
 
 
 class ConvergenceCore(StandardConvergenceCore):
-    """
-    Facade regarding StandardConvergenceCore to maintain backward compatibility.
+    """Facade regarding StandardConvergenceCore to maintain backward compatibility.
     Convergence logic is now centralized in the Infrastructure/Common tier.
     """

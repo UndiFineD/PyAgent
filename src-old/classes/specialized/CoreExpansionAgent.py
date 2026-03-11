@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/CoreExpansionAgent.description.md
 
@@ -84,6 +83,13 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import logging
+import subprocess
+import sys
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -96,22 +102,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import logging
-import subprocess
-import sys
-from typing import List
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
 
 class CoreExpansionAgent(BaseAgent):
-    """
-    Agent responsible for autonomous environment expansion.
+    """Agent responsible for autonomous environment expansion.
     Detects missing libraries and installs them into the active Python environment.
     """
 
@@ -126,8 +123,7 @@ class CoreExpansionAgent(BaseAgent):
 
     @as_tool
     def install_missing_dependency(self, package_name: str) -> str:
-        """
-        Attempts to install a missing Python package using pip.
+        """Attempts to install a missing Python package using pip.
         """
         logging.info(
             f"CoreExpansionAgent: Attempting to install package: {package_name}"
@@ -168,8 +164,7 @@ class CoreExpansionAgent(BaseAgent):
 
     @as_tool
     def audit_environment(self) -> list[str]:
-        """
-        Lists currently installed packages in the environment.
+        """Lists currently installed packages in the environment.
         """
         import pkg_resources
 

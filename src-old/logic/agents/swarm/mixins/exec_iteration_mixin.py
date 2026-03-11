@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/mixins/exec_iteration_mixin.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -115,7 +115,7 @@ class ExecIterationMixin:
                     logging.error(f"Error in _perform_iteration for {code_file}: {e}")
                     try:
                         sql = getattr(
-                            getattr(self, "command_handler").models,
+                            self.command_handler.models,
                             "sql_metadata",
                             None,
                         )
@@ -158,7 +158,7 @@ class ExecIterationMixin:
 
         except (
             Exception
-        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+        ):  # pylint: disable=broad-exception-caught, unused-variable
             logging.critical(
                 f"Global failure processing {code_file}: {global_e}", exc_info=True
             )

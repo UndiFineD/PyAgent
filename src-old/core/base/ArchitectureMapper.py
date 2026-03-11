@@ -1,14 +1,13 @@
 # c:\DEV\PyAgent\src\core\base\ArchitectureMapper.py
 # Evolution Phase 236: Documentation Architecture - Mermaid C4 System Context Diagram
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/ArchitectureMapper.description.md
 
 # ArchitectureMapper
 
-**File**: `src\core\base\ArchitectureMapper.py`  
+**File**: `src\\core\base\\ArchitectureMapper.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 90  
@@ -42,7 +41,7 @@ Maps relations between Core, Infrastructure, Logic, and Observability.
 
 # Improvements for ArchitectureMapper
 
-**File**: `src\core\base\ArchitectureMapper.py`  
+**File**: `src\\core\base\\ArchitectureMapper.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 90 lines (small)  
 **Complexity**: 3 score (simple)
@@ -80,8 +79,7 @@ from pathlib import Path
 
 
 class ArchitectureMapper:
-    """
-    Auto-generates a Mermaid C4 System Context Diagram based on the PyAgent project structure.
+    """Auto-generates a Mermaid C4 System Context Diagram based on the PyAgent project structure.
     Maps relations between Core, Infrastructure, Logic, and Observability.
     """
 

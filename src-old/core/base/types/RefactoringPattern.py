@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/types/RefactoringPattern.description.md
 
 # RefactoringPattern
 
-**File**: `src\core\base\types\RefactoringPattern.py`  
+**File**: `src\\core\base\types\\RefactoringPattern.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 32  
@@ -36,7 +35,7 @@ A code refactoring pattern.
 
 # Improvements for RefactoringPattern
 
-**File**: `src\core\base\types\RefactoringPattern.py`  
+**File**: `src\\core\base\types\\RefactoringPattern.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 32 lines (small)  
 **Complexity**: 0 score (simple)
@@ -84,9 +83,10 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_coder.py"""
 
-from src.core.base.version import VERSION
-from src.core.base.types.CodeLanguage import CodeLanguage
 from dataclasses import dataclass
+
+from src.core.base.types.CodeLanguage import CodeLanguage
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

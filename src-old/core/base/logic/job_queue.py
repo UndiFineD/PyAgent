@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/job_queue.description.md
 
 # job_queue
 
-**File**: `src\core\base\logic\job_queue.py`  
+**File**: `src\\core\base\\logic\\job_queue.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 10 imports  
 **Lines**: 251  
@@ -78,7 +77,7 @@ Features:
 
 # Improvements for job_queue
 
-**File**: `src\core\base\logic\job_queue.py`  
+**File**: `src\\core\base\\logic\\job_queue.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 251 lines (medium)  
 **Complexity**: 10 score (moderate)
@@ -120,13 +119,12 @@ import threading
 import time
 import uuid
 from collections import deque
-from typing import Any, Dict, Callable, Optional
-from datetime import datetime, timedelta
+from datetime import datetime
+from typing import Any, Callable, Dict, Optional
 
 
 class JobQueue:
-    """
-    Thread-safe in-memory job queue with background processing.
+    """Thread-safe in-memory job queue with background processing.
 
     Features:
     - Thread-safe job queuing and processing
@@ -201,8 +199,7 @@ class JobQueue:
         self.cleanup_worker = None
 
     def submit_job(self, job_data: Dict[str, Any]) -> str:
-        """
-        Submit a job to the queue.
+        """Submit a job to the queue.
 
         Args:
             job_data: Dictionary containing job parameters
@@ -212,6 +209,7 @@ class JobQueue:
 
         Raises:
             RuntimeError: If queue is full
+
         """
         with self.queue_lock:
             if len(self.job_queue) >= self.max_queue_size:

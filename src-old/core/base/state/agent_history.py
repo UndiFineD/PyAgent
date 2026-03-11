@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/state/agent_history.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -51,12 +52,10 @@ Extracted from BaseAgent for decomposition.
 
 
 import logging
-from src.core.base.lifecycle.agent_core import BaseCore
-from src.core.base.lifecycle.base_agent_core import BaseAgentCore
-from typing import TYPE_CHECKING
 
 from src.core.base.common.models import ConversationMessage, MessageRole
-
+from src.core.base.lifecycle.agent_core import BaseCore
+from src.core.base.lifecycle.base_agent_core import BaseAgentCore
 
 
 class AgentConversationHistory:

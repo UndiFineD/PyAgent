@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/structures/registry.description.md
 
@@ -43,6 +42,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -58,8 +58,7 @@ T = TypeVar("T")
 
 
 class Registry:
-    """
-    Thread-safe registry for mapping string keys to callables or classes.
+    """Thread-safe registry for mapping string keys to callables or classes.
     Useful for plugin systems, factories, and dynamic dispatch.
     """
 

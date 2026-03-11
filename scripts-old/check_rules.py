@@ -1,4 +1,6 @@
-import sys, pathlib
+import pathlib
+import sys
+
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent / 'src'))
 from auto_fix.rule_engine import RuleEngine
 

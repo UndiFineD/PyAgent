@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/agent/AgentPluginBase.description.md
 
 # AgentPluginBase
 
-**File**: `src\classes\agent\AgentPluginBase.py`  
+**File**: `src\\classes\agent\\AgentPluginBase.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 12 imports  
 **Lines**: 89  
@@ -62,7 +61,7 @@ Attributes:
 
 # Improvements for AgentPluginBase
 
-**File**: `src\classes\agent\AgentPluginBase.py`  
+**File**: `src\\classes\agent\\AgentPluginBase.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 89 lines (small)  
 **Complexity**: 6 score (moderate)
@@ -90,6 +89,7 @@ Attributes:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -110,12 +110,13 @@ from __future__ import annotations
 
 """Auto-extracted class from agent.py"""
 
-from src.core.base.version import VERSION
-from src.core.base.models import AgentHealthCheck, AgentPriority, HealthStatus
+import logging
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Optional, Dict, Any
-import logging
+from typing import Any
+
+from src.core.base.models import AgentHealthCheck, AgentPriority, HealthStatus
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -130,6 +131,7 @@ class AgentPluginBase(ABC):
         name: Plugin name.
         priority: Execution priority.
         config: Plugin configuration.
+
     """
 
     def __init__(
@@ -144,6 +146,7 @@ class AgentPluginBase(ABC):
             name: Unique plugin name.
             priority: Execution priority.
             config: Plugin - specific configuration.
+
         """
         self.name = name
         self.priority = priority
@@ -160,6 +163,7 @@ class AgentPluginBase(ABC):
 
         Returns:
             bool: True if changes were made, False otherwise.
+
         """
         raise NotImplementedError()
 
@@ -181,5 +185,6 @@ class AgentPluginBase(ABC):
 
         Returns:
             AgentHealthCheck: Health check result.
+
         """
         return AgentHealthCheck(agent_name=self.name, status=HealthStatus.HEALTHY)

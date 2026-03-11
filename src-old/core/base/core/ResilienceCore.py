@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/core/ResilienceCore.description.md
 
 # ResilienceCore
 
-**File**: `src\core\base\core\ResilienceCore.py`  
+**File**: `src\\core\base\\core\\ResilienceCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 86  
@@ -40,7 +39,7 @@ Audited for Rust conversion.
 
 # Improvements for ResilienceCore
 
-**File**: `src\core\base\core\ResilienceCore.py`  
+**File**: `src\\core\base\\core\\ResilienceCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 86 lines (small)  
 **Complexity**: 3 score (simple)
@@ -74,6 +73,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -86,12 +86,11 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import random
 
+
 class ResilienceCore:
-    """
-    Pure logic for Circuit Breaker and Retry mechanisms.
+    """Pure logic for Circuit Breaker and Retry mechanisms.
     Audited for Rust conversion.
     """
 
@@ -104,16 +103,15 @@ class ResilienceCore:
         max_timeout: float,
         jitter_mode: str = "full"
     ) -> float:
-        """
-        Phase 145: Enhanced backoff with Full Jitter.
+        """Phase 145: Enhanced backoff with Full Jitter.
         Prevents thundering herd better than standard 10% jitter.
         """
         if failure_count < threshold:
             return 0.0
-        
+
         exponent = max(0, failure_count - threshold)
         backoff = min(max_timeout, base_timeout * (multiplier ** exponent))
-        
+
         if jitter_mode == "full":
             # AWS style Full Jitter: random between 0 and exponential backoff
             return random.uniform(base_timeout / 2, backoff)
@@ -142,8 +140,7 @@ class ResilienceCore:
         failure_count: int,
         failure_threshold: int
     ) -> str:
-        """
-        Pure state machine logic for transition.
+        """Pure state machine logic for transition.
         Transitions:
             CLOSED -> OPEN (if failure_count >= threshold)
             OPEN -> HALF_OPEN (externally timed)
@@ -156,5 +153,5 @@ class ResilienceCore:
         elif current_state == "HALF_OPEN":
             if success_count >= consecutive_successes_needed:
                 return "CLOSED"
-        
+
         return current_state

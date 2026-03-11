@@ -18,10 +18,10 @@ from typing import Any
 
 import httpx
 
-
 # The real implementation will register this function as an MCP tool.
 # Here we make a simple network call to the chat service so that the
 # integration test can monkeypatch httpx.post and observe behaviour.
+
 
 def send_chat_message(room: str, sender: str, text: str) -> Any:
     """MCP tool that sends a message to a chat room.

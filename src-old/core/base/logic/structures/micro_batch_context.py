@@ -13,8 +13,7 @@
 # limitations under the License.
 
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/structures/micro_batch_context.description.md
 
@@ -45,6 +44,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -55,13 +55,11 @@ batch state, and nested batch scopes. Useful for distributed and pipelined GPU w
 """
 
 import threading
-from contextlib import contextmanager
 from typing import Any, Dict, Optional
 
 
 class MicroBatchContext:
-    """
-    Context manager for micro-batch execution state.
+    """Context manager for micro-batch execution state.
     Supports context variables, batch id, and nested batch scopes.
     """
 

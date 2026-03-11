@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/SignalRegistry.description.md
 
@@ -81,19 +80,18 @@ LLM_CONTEXT_END
 """A simple event-driven signal registry for inter-agent communication."""
 
 import logging
-from typing import Dict, List, Callable, Any, Optional
-from datetime import datetime
+from typing import Any, Callable, Dict, List
 
 from .SignalCore import SignalCore
 
+
 class SignalRegistry:
-    """
-    Central hub for publishing and subscribing to agent signals.
+    """Central hub for publishing and subscribing to agent signals.
     Shell for SignalCore.
     """
-    
+
     _instance = None
-    
+
     def __new__(cls, *args, **kwargs) -> "SignalRegistry":
         if cls._instance is None:
             cls._instance = super(SignalRegistry, cls).__new__(cls)
@@ -113,9 +111,9 @@ class SignalRegistry:
         """Emit a signal to all subscribers."""
         event = self.core.create_event(signal_name, data, sender)
         self.history.append(event)
-        
+
         logging.info(f"Signal emitted: {signal_name} from {sender}")
-        
+
         if signal_name in self.subscribers:
             for callback in self.subscribers[signal_name]:
                 try:

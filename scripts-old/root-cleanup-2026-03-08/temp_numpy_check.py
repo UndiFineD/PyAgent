@@ -1,4 +1,7 @@
-import numpy, pkgutil, importlib
+import importlib
+import pkgutil
+
+import numpy
 
 print("version", numpy.__version__)
 print("path", numpy.random.__path__)

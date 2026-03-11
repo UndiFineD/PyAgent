@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/SecurityReporterMixin.description.md
 
 # SecurityReporterMixin
 
-**File**: `src\logic\agents\development\mixins\SecurityReporterMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\SecurityReporterMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 50  
@@ -40,7 +39,7 @@ Mixin for security reporting and recording findings.
 
 # Improvements for SecurityReporterMixin
 
-**File**: `src\logic\agents\development\mixins\SecurityReporterMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\SecurityReporterMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 50 lines (small)  
 **Complexity**: 2 score (simple)
@@ -89,6 +88,7 @@ from __future__ import annotations
 
 import logging
 import time
+
 from src.core.base.types.SecurityVulnerability import SecurityVulnerability
 
 

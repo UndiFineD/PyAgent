@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 class Message(BaseModel):
     """Data model for a message in the swarm system."""
+
     id: str
     timestamp: str
     type: str

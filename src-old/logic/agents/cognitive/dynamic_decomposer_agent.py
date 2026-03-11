@@ -13,8 +13,7 @@
 # limitations under the License.
 
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/dynamic_decomposer_agent.description.md
 
@@ -43,19 +42,20 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Agent specializing in Autonomous Task Decomposition v2.
 Handles dynamic task splitting, load balancing, and capability-based routing.
 """
 
-import logging
 import json
+import logging
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -76,9 +76,11 @@ class DynamicDecomposerAgent(BaseAgent):
     @as_tool
     def decompose_task_v2(self, complex_task: str, available_agents: list[str]) -> str:
         """Splits a complex task into optimized sub-tasks for the swarm.
+
         Args:
             complex_task: The high-level user request.
             available_agents: List of agent names currently active.
+
         """
         _ = available_agents
         logging.info(f"DynamicDecomposer: Decomposing task: {complex_task[:50]}...")

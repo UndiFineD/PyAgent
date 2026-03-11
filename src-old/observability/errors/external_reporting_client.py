@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/errors/external_reporting_client.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -68,6 +69,7 @@ class ExternalReportingClient:
     Attributes:
         system: The external system to report to.
         dsn: Data source name or API key.
+
     """
 
     def __init__(self, system: ExternalReporter, dsn: str = "") -> None:
@@ -76,6 +78,7 @@ class ExternalReportingClient:
         Args:
             system: The external system type.
             dsn: Data source name or API key.
+
         """
         self.system = system
         self.dsn = dsn
@@ -89,6 +92,7 @@ class ExternalReportingClient:
 
         Returns:
             True if reported successfully.
+
         """
         if not self.enabled:
             return False
@@ -105,6 +109,7 @@ class ExternalReportingClient:
 
         Returns:
             Number of errors successfully reported.
+
         """
         count = 0
         for error in errors:

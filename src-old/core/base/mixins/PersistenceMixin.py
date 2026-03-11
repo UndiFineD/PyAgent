@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # Persistence Mixin for BaseAgent
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/PersistenceMixin.description.md
 
 # PersistenceMixin
 
-**File**: `src\core\base\mixins\PersistenceMixin.py`  
+**File**: `src\\core\base\\mixins\\PersistenceMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 9 imports  
 **Lines**: 112  
@@ -54,7 +53,7 @@ Handles agent state, history, scratchpad, metrics, and file persistence.
 
 # Improvements for PersistenceMixin
 
-**File**: `src\core\base\mixins\PersistenceMixin.py`  
+**File**: `src\\core\base\\mixins\\PersistenceMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 112 lines (medium)  
 **Complexity**: 11 score (moderate)
@@ -88,9 +87,10 @@ LLM_CONTEXT_END
 """
 
 from typing import Any, List
-from src.core.base.models import AgentState, EventType
+
 from src.core.base.AgentHistory import AgentConversationHistory
 from src.core.base.AgentScratchpad import AgentScratchpad
+from src.core.base.models import AgentState, EventType
 
 
 class PersistenceMixin:

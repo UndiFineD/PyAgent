@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/core/IdentityCore.description.md
 
 # IdentityCore
 
-**File**: `src\core\base\core\IdentityCore.py`  
+**File**: `src\\core\base\\core\\IdentityCore.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 6 imports  
 **Lines**: 38  
@@ -48,7 +47,7 @@ Handles cryptographic verification and agent-ID generation.
 
 # Improvements for IdentityCore
 
-**File**: `src\core\base\core\IdentityCore.py`  
+**File**: `src\\core\base\\core\\IdentityCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 38 lines (small)  
 **Complexity**: 4 score (simple)
@@ -88,8 +87,8 @@ from __future__ import annotations
 
 import hashlib
 import hmac
-from typing import Dict, Any
 from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass(frozen=True)

@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/ai_agent_orchestration_core.description.md
 
 # ai_agent_orchestration_core
 
-**File**: `src\core\base\logic\core\ai_agent_orchestration_core.py`  
+**File**: `src\\core\base\\logic\\core\ai_agent_orchestration_core.py`  
 **Type**: Python Module  
 **Summary**: 11 classes, 0 functions, 20 imports  
 **Lines**: 721  
@@ -145,7 +144,7 @@ Provides comprehensive AI agent orchestration capabilities including:
 
 # Improvements for ai_agent_orchestration_core
 
-**File**: `src\core\base\logic\core\ai_agent_orchestration_core.py`  
+**File**: `src\\core\base\\logic\\core\ai_agent_orchestration_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 721 lines (large)  
 **Complexity**: 13 score (moderate)
@@ -200,19 +199,16 @@ Key Features:
 """
 
 import asyncio
-import json
 import logging
+import threading
 import uuid
-from abc import ABC, abstractmethod
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Protocol, Union
-from concurrent.futures import ThreadPoolExecutor
-import threading
 
 from src.core.base.common.base_core import BaseCore
 from src.core.base.common.models.communication_models import CascadeContext
-from src.core.base.state.agent_state_manager import StateTransaction
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -376,8 +372,7 @@ class CodeExecutionProvider(Protocol):
 
 
 class AIAgentOrchestrationCore(BaseCore):
-    """
-    AI Agent Orchestration Core
+    """AI Agent Orchestration Core
 
     Provides comprehensive AI agent orchestration capabilities including:
     - Memory management with vector storage

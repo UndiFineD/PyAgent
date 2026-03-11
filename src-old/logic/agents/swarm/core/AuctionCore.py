@@ -1,12 +1,11 @@
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/core/AuctionCore.description.md
 
 # AuctionCore
 
-**File**: `src\logic\agents\swarm\core\AuctionCore.py`  
+**File**: `src\\logic\agents\\swarm\\core\\AuctionCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 40  
@@ -40,7 +39,7 @@ Class AuctionCore implementation.
 
 # Improvements for AuctionCore
 
-**File**: `src\logic\agents\swarm\core\AuctionCore.py`  
+**File**: `src\\logic\agents\\swarm\\core\\AuctionCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 40 lines (small)  
 **Complexity**: 2 score (simple)
@@ -78,37 +77,36 @@ Core logic for Swarm Resource Auctioning (Phase 184).
 Implements the VCG auction model for truthful bidding.
 """
 
-from typing import List, Dict, Any
+from typing import Any
+
 
 class AuctionCore:
     @staticmethod
     def calculate_vcg_auction(bids: list[dict[str, Any]], slots: int) -> list[dict[str, Any]]:
-        """
-        Simple VCG-inspired auction. 
+        """Simple VCG-inspired auction.
         Winners are the top 'slots' bidders.
         Price paid by winner i = The negative externality they impose on others.
         (Simplified: Winner i pays the bid of the first loser).
         """
         if not bids:
             return []
-            
+
         sorted_bids = sorted(bids, key=lambda x: x['amount'], reverse=True)
         winners = sorted_bids[:slots]
-        
+
         if len(sorted_bids) > slots:
             clearing_price = sorted_bids[slots]['amount']
         else:
             clearing_price = 0.0
-            
+
         for w in winners:
             w['price_paid'] = clearing_price
-            
+
         return winners
 
     @staticmethod
     def enforce_vram_quota(agent_vram_request: float, total_available: float, quota_percent: float = 0.2) -> bool:
-        """
-        Checks if a request exceeds the per-agent quota (default 20%).
+        """Checks if a request exceeds the per-agent quota (default 20%).
         """
         quota = total_available * quota_percent
         return agent_vram_request <= quota

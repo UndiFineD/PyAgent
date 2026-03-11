@@ -1,12 +1,11 @@
 # Copyright 2026 PyAgent Authors
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/core_logic/formatting.description.md
 
 # formatting
 
-**File**: `src\core\base\core_logic\formatting.py`  
+**File**: `src\\core\base\\core_logic\formatting.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 39  
@@ -41,7 +40,7 @@ Class FormattingCore implementation.
 
 # Improvements for formatting
 
-**File**: `src\core\base\core_logic\formatting.py`  
+**File**: `src\\core\base\\core_logic\formatting.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 39 lines (small)  
 **Complexity**: 3 score (simple)
@@ -77,9 +76,8 @@ Class FormattingCore implementation.
 LLM_CONTEXT_END
 """
 
-import re
 import difflib
-from typing import List
+import re
 
 try:
     import rust_core as rc

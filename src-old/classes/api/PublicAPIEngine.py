@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/api/PublicAPIEngine.description.md
 
 # PublicAPIEngine
 
-**File**: `src\classes\api\PublicAPIEngine.py`  
+**File**: `src\\classes\api\\PublicAPIEngine.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 41  
@@ -46,7 +45,7 @@ Shell for APICore.
 
 # Improvements for PublicAPIEngine
 
-**File**: `src\classes\api\PublicAPIEngine.py`  
+**File**: `src\\classes\api\\PublicAPIEngine.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 41 lines (small)  
 **Complexity**: 3 score (simple)
@@ -80,15 +79,14 @@ LLM_CONTEXT_END
 Generates OpenAPI/Swagger specs and handles external tool integration.
 """
 
-import json
 import logging
-from typing import Dict, List, Any
+from typing import Any, Dict
+
 from .APICore import APICore
 
 
 class PublicAPIEngine:
-    """
-    Manages the external interface for third-party integrations.
+    """Manages the external interface for third-party integrations.
     Shell for APICore.
     """
 

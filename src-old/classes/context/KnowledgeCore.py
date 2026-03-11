@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/KnowledgeCore.description.md
 
@@ -111,18 +110,18 @@ Contains pure regex and indexing logic for fast symbol discovery.
 This file is optimized for Rust migration (Phase 114).
 """
 
-from src.core.base.version import VERSION
-import re
 import logging
+import re
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Any
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
 
 class KnowledgeCore:
-    """
-    KnowledgeCore performs pure computational analysis of workspace symbols.
+    """KnowledgeCore performs pure computational analysis of workspace symbols.
     No I/O or database operations are allowed here to ensure Rust portability.
     """
 
@@ -148,8 +147,7 @@ class KnowledgeCore:
     def build_symbol_map(
         self, root: Path, patterns: dict[str, str]
     ) -> dict[str, list[dict[str, Any]]]:
-        """
-        Builds a map of symbols and backlinks.
+        """Builds a map of symbols and backlinks.
         Note: This currently violates the 'No I/O' rule due to the existing KnowledgeAgent caller.
         Will be moved to an 'I/O' layer in Phase 126.
         """
@@ -178,8 +176,7 @@ class KnowledgeCore:
     def process_file_content(
         self, rel_path: str, content: str, extension: str
     ) -> list[tuple[str, str, str, str]]:
-        """
-        Parses content and returns a list of (symbol, path, category, snippet) tuples.
+        """Parses content and returns a list of (symbol, path, category, snippet) tuples.
         This is a pure function ready for Rust conversion.
         """
         results: list[tuple[str, str, str, str]] = []

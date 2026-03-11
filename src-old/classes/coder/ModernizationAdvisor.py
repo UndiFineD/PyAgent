@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/ModernizationAdvisor.description.md
 
@@ -80,6 +79,7 @@ Example:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -105,10 +105,10 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_coder.py"""
 
-from src.core.base.version import VERSION
-from src.core.base.types.ModernizationSuggestion import ModernizationSuggestion
-from typing import List, Optional, Tuple
 import re
+
+from src.core.base.types.ModernizationSuggestion import ModernizationSuggestion
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -124,6 +124,7 @@ class ModernizationAgent:
     Example:
         >>> advisor=ModernizationAgent()
         >>> suggestions=advisor.analyze("import urllib2")
+
     """
 
     DEPRECATIONS: list[tuple[str, str, str, str | None, str]] = [
@@ -169,6 +170,7 @@ class ModernizationAgent:
 
         Returns:
             List of modernization suggestions.
+
         """
         self.suggestions = []
 

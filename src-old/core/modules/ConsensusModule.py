@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/modules/ConsensusModule.description.md
 
@@ -94,14 +93,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from typing import Any
 
-from typing import Any, Dict, List, Optional
 from src.core.base.modules import BaseModule
 
 
 class ConsensusModule(BaseModule):
-    """
-    Consolidated core module for consensus protocols.
+    """Consolidated core module for consensus protocols.
     Migrated from ConsensusCore.
     """
 
@@ -113,8 +111,7 @@ class ConsensusModule(BaseModule):
     def execute(
         self, proposals: list[str], weights: list[float] | None = None
     ) -> dict[str, Any]:
-        """
-        Executes the consensus protocol to find a winner.
+        """Executes the consensus protocol to find a winner.
         """
         if not self.initialized:
             self.initialize()

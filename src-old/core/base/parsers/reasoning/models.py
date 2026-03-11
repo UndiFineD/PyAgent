@@ -1,14 +1,13 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/parsers/reasoning/models.description.md
 
 # models
 
-**File**: `src\core\base\parsers\reasoning\models.py`  
+**File**: `src\\core\base\\parsers\reasoning\\models.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 2 imports  
 **Lines**: 37  
@@ -49,7 +48,7 @@ Tracks the current state of reasoning extraction during streaming.
 
 # Improvements for models
 
-**File**: `src\core\base\parsers\reasoning\models.py`  
+**File**: `src\\core\base\\parsers\reasoning\\models.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 37 lines (small)  
 **Complexity**: 0 score (simple)
@@ -80,14 +79,15 @@ Tracks the current state of reasoning extraction during streaming.
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from dataclasses import dataclass, field
 
+
 @dataclass
 class ReasoningResult:
-    """
-    Result of reasoning extraction.
+    """Result of reasoning extraction.
     
     Attributes:
         reasoning: The extracted reasoning/thinking content.
@@ -95,7 +95,9 @@ class ReasoningResult:
         reasoning_tokens: Token IDs for reasoning (if available).
         content_tokens: Token IDs for content (if available).
         is_complete: Whether reasoning extraction is complete.
+
     """
+
     reasoning: str | None = None
     content: str | None = None
     reasoning_tokens: list[int] | None = None
@@ -105,11 +107,11 @@ class ReasoningResult:
 
 @dataclass
 class StreamingReasoningState:
-    """
-    State for streaming reasoning extraction.
+    """State for streaming reasoning extraction.
     
     Tracks the current state of reasoning extraction during streaming.
     """
+
     accumulated_text: str = ""
     accumulated_tokens: list[int] = field(default_factory=list)
     in_reasoning: bool = False

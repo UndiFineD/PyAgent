@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/multimodal_session.description.md
 
@@ -41,21 +40,21 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Multimodal session management."""
 
 import time
-from .multimodal_logic import MultimodalCore
 from typing import Any, Callable, Dict, List, Optional
 
 from .multimodal_buffer import TemporalModalityBuffer
 from .multimodal_encoders import StreamingAudioProcessor, StreamingVisionEncoder
+from .multimodal_logic import MultimodalCore
 
 
 class MultimodalStreamSession:
-    """
-    High-level manager for a single multimodal interaction session.
+    """High-level manager for a single multimodal interaction session.
     Orchestrates live input processing and compressed output generation.
     """
 
@@ -81,8 +80,7 @@ class MultimodalStreamSession:
         self.modificators.append(mod)
 
     def process_120fps_pulse(self, audio: bytes, video: bytes, text: str) -> bytes:
-        """
-        Specialized 120fps pulse handler for Phase 51 Multimedia & Attention.
+        """Specialized 120fps pulse handler for Phase 51 Multimedia & Attention.
         Muxes separate modalities and prepares for hardware-accelerated delivery.
         """
         packet = self.core.mux_dvd_channels(audio, video, text)
@@ -95,8 +93,7 @@ class MultimodalStreamSession:
         width: int = 640,
         height: int = 480,
     ) -> Dict[str, Any]:
-        """
-        Process a single clock-tick of multimodal data (e.g. 32ms audio + optional frame).
+        """Process a single clock-tick of multimodal data (e.g. 32ms audio + optional frame).
         Includes smart dynamic focus and adaptive bandwidth.
         """
         # Update temporal memory
@@ -149,8 +146,7 @@ class MultimodalStreamSession:
         self.channels[modality] = channel_id
 
     def filter_response(self, raw_stream: str) -> List[Dict[str, Any]]:
-        """
-        Parses an LLM response chunk and filters it according to current DVD-style channels.
+        """Parses an LLM response chunk and filters it according to current DVD-style channels.
         Example: Hides <Thought> tags if directed.
         """
         fragments = self.core.parse_stream(raw_stream)

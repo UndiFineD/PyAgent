@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/errors/blame_tracker.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -68,6 +69,7 @@ class BlameTracker:
 
     Attributes:
         blame_cache: Cache of blame information.
+
     """
 
     def __init__(self, recorder: Any = None) -> None:
@@ -88,6 +90,7 @@ class BlameTracker:
 
         Returns:
             BlameInfo with commit and author details.
+
         """
         cache_key = f"{error.file_path}:{error.line_number}"
         if cache_key in self.blame_cache:
@@ -147,6 +150,7 @@ class BlameTracker:
 
         Returns:
             List of (author, count) tuples.
+
         """
         author_counts: dict[str, int] = {}
         for error in errors:

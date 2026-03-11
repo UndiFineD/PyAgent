@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/StructuredOrchestrator.description.md
 
@@ -112,12 +111,11 @@ Supports Supervisor, Debate, Voting, Pipeline, and MapReduce patterns.
 Inspired by multi-agent-generator and LangGraph.
 """
 
-from src.core.base.version import VERSION
 import logging
-from typing import List
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
-from src.core.base.version import EVOLUTION_PHASE
+from src.core.base.version import EVOLUTION_PHASE, VERSION
 from src.logic.cognitive.prompt_templates import VIBE_CODING_2025_TRACKS
 
 __version__ = VERSION
@@ -272,8 +270,9 @@ class PatternOrchestrator(BaseAgent):
     @as_tool
     def orchestrate_mapreduce(self, file_path: str, chunk_size: int = 1000) -> str:
         """Runs MapReduce (Phase 283): splits file, processes in parallel, merges results."""
-        from src.core.base.delegation import AgentDelegator
         import math
+
+        from src.core.base.delegation import AgentDelegator
 
         path = Path(file_path)
         if not path.exists():

@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/task_prioritization.description.md
 
 # task_prioritization
 
-**File**: `src\core\base\logic\task_prioritization.py`  
+**File**: `src\\core\base\\logic\task_prioritization.py`  
 **Type**: Python Module  
 **Summary**: 8 classes, 2 functions, 23 imports  
 **Lines**: 538  
@@ -148,7 +147,7 @@ Create an agent capability profile.
 
 # Improvements for task_prioritization
 
-**File**: `src\core\base\logic\task_prioritization.py`  
+**File**: `src\\core\base\\logic\task_prioritization.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 538 lines (large)  
 **Complexity**: 25 score (complex)
@@ -201,12 +200,10 @@ import asyncio
 import heapq
 import logging
 import threading
-import time
-from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Callable, Tuple, Union
-from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Tuple
 from uuid import uuid4
 
 from pydantic import BaseModel, Field, field_validator
@@ -216,6 +213,7 @@ logger = logging.getLogger(__name__)
 
 class PriorityLevel(Enum):
     """Task priority levels."""
+
     P0 = 0  # Critical - immediate attention required
     P1 = 1  # High - important but not urgent
     P2 = 2  # Medium - standard priority
@@ -225,6 +223,7 @@ class PriorityLevel(Enum):
 
 class TaskStatus(Enum):
     """Task execution status."""
+
     PENDING = "pending"
     ASSIGNED = "assigned"
     IN_PROGRESS = "in_progress"
@@ -236,6 +235,7 @@ class TaskStatus(Enum):
 
 class TaskType(Enum):
     """Types of tasks that can be managed."""
+
     CODE_GENERATION = "code_generation"
     CODE_REVIEW = "code_review"
     RESEARCH = "research"
@@ -249,6 +249,7 @@ class TaskType(Enum):
 
 class Task(BaseModel):
     """Represents a task in the system."""
+
     id: str = Field(default_factory=lambda: str(uuid4()), description="Unique task identifier")
     title: str = Field(..., description="Task title")
     description: str = Field(..., description="Detailed task description")
@@ -314,6 +315,7 @@ class Task(BaseModel):
 @dataclass(order=True)
 class PrioritizedTask:
     """Wrapper for tasks in priority queues."""
+
     priority_score: float
     task: Task = field(compare=False)
 
@@ -325,6 +327,7 @@ class PrioritizedTask:
 
 class AgentCapability(BaseModel):
     """Represents an agent's capabilities."""
+
     agent_id: str
     name: str
     skills: List[TaskType] = Field(default_factory=list)

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/SwarmDistillationAgent.description.md
 
 # SwarmDistillationAgent
 
-**File**: `src\logic\agents\swarm\SwarmDistillationAgent.py`  
+**File**: `src\\logic\agents\\swarm\\SwarmDistillationAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 29  
@@ -45,7 +44,7 @@ Standardized placeholder for future re-implementation.
 
 # Improvements for SwarmDistillationAgent
 
-**File**: `src\logic\agents\swarm\SwarmDistillationAgent.py`  
+**File**: `src\\logic\agents\\swarm\\SwarmDistillationAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 29 lines (small)  
 **Complexity**: 1 score (simple)
@@ -90,15 +89,15 @@ For more information, visit:
 No commands will be executed.
 """
 
-from src.core.base.Version import VERSION
 import logging
+
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
 
 class SwarmDistillationAgent:
-    """
-    SwarmDistillationAgent recovered after Copilot CLI deprecation event.
+    """SwarmDistillationAgent recovered after Copilot CLI deprecation event.
     Standardized placeholder for future re-implementation.
     """
 

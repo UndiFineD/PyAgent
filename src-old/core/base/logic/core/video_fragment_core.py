@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/video_fragment_core.description.md
 
 # video_fragment_core
 
-**File**: `src\core\base\logic\core\video_fragment_core.py`  
+**File**: `src\\core\base\\logic\\core\video_fragment_core.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 62  
@@ -55,7 +54,7 @@ Harvested from .external/AskVideos-VideoCLIP
 
 # Improvements for video_fragment_core
 
-**File**: `src\core\base\logic\core\video_fragment_core.py`  
+**File**: `src\\core\base\\logic\\core\video_fragment_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 62 lines (small)  
 **Complexity**: 3 score (simple)
@@ -89,12 +88,11 @@ LLM_CONTEXT_END
 """
 
 import os
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
 
 
 class VideoFragmentCore:
-    """
-    Handles fragmentation of long-form video files into overlapping clips for multimodal reasoning.
+    """Handles fragmentation of long-form video files into overlapping clips for multimodal reasoning.
     Harvested from .external/AskVideos-VideoCLIP
     """
 
@@ -105,8 +103,7 @@ class VideoFragmentCore:
     def fragment_video(
         self, video_path: str, output_dir: Optional[str] = None
     ) -> List[Dict]:
-        """
-        Splits a video into fragments and returns metadata for each clip.
+        """Splits a video into fragments and returns metadata for each clip.
         Uses ffmpeg or opencv for precise segmenting.
         """
         if not os.path.exists(video_path):
@@ -136,8 +133,7 @@ class VideoFragmentCore:
         return fragments
 
     def aggregate_fragments(self, fragment_results: List[str]) -> str:
-        """
-        Aggregates reasoned outputs from multiple video fragments into a coherent summary.
+        """Aggregates reasoned outputs from multiple video fragments into a coherent summary.
         """
         # Logic to merge overlapping contexts and remove redundant observations
         return "\n".join(fragment_results)

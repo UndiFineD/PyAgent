@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/temporal_shard_agent.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -60,8 +61,7 @@ __version__ = VERSION
 
 
 class TemporalShardAgent(BaseAgent):
-    """
-    Agent responsible for temporal sharding of memory.
+    """Agent responsible for temporal sharding of memory.
     Allows for 'flashbacks' and retrieval of context based on temporal relevance.
     """
 
@@ -76,8 +76,7 @@ class TemporalShardAgent(BaseAgent):
 
     @as_tool
     def retrieve_temporal_context(self, current_task: str, time_window: str = "last_24h") -> str:
-        """
-        Retrieves relevant context from a specific temporal shard.
+        """Retrieves relevant context from a specific temporal shard.
         """
         logging.info(f"TemporalShardAgent: Retrieving context for {current_task} from {time_window}")
 
@@ -86,8 +85,7 @@ class TemporalShardAgent(BaseAgent):
 
     @as_tool
     def create_temporal_anchor(self, event_description: str) -> bool:
-        """
-        Creates a high-resolution temporal anchor for future retrieval.
+        """Creates a high-resolution temporal anchor for future retrieval.
         """
         logging.info(f"TemporalShardAgent: Creating anchor for {event_description[:30]}...")
         # Persistence logic would go here

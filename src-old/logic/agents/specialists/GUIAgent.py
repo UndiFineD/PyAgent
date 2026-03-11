@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/GUIAgent.description.md
 
 # GUIAgent
 
-**File**: `src\logic\agents\specialists\GUIAgent.py`  
+**File**: `src\\logic\agents\\specialists\\GUIAgent.py`  
 **Type**: Python Module  
 **Summary**: 5 classes, 0 functions, 15 imports  
 **Lines**: 288  
@@ -74,7 +73,7 @@ Can generate layout code (Qt, React, Tkinter) and interpret UI snapshots.
 
 # Improvements for GUIAgent
 
-**File**: `src\logic\agents\specialists\GUIAgent.py`  
+**File**: `src\\logic\agents\\specialists\\GUIAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 288 lines (medium)  
 **Complexity**: 3 score (simple)
@@ -115,18 +114,19 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# GUIAgent: Graphical User Interface Automation Specialist - Phase 319 Enhanced
-
-from src.core.base.Version import VERSION
-import logging
 import json
+import logging
 import re
-from typing import Any, Dict, List, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.BaseUtilities import as_tool
+
+# Copyright 2026 PyAgent Authors
+# GUIAgent: Graphical User Interface Automation Specialist - Phase 319 Enhanced
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
@@ -178,8 +178,7 @@ class UIAction:
 
 
 class GUIAgent(BaseAgent):
-    """
-    Agent specializing in interacting with and designing GUIs.
+    """Agent specializing in interacting with and designing GUIs.
     Can generate layout code (Qt, React, Tkinter) and interpret UI snapshots.
     """
 

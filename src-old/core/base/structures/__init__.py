@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/structures/__init__.description.md
 
 # __init__
 
-**File**: `src\core\base\structures\__init__.py`  
+**File**: `src\\core\base\\structures\\__init__.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 29 imports  
 **Lines**: 85  
@@ -43,7 +42,7 @@ Phase 18-19: Beyond vLLM - Advanced data structures and performance patterns.
 
 # Improvements for __init__
 
-**File**: `src\core\base\structures\__init__.py`  
+**File**: `src\\core\base\\structures\\__init__.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 85 lines (small)  
 **Complexity**: 0 score (simple)
@@ -84,39 +83,39 @@ from src.core.base.structures.BloomFilter import (
     CountingBloomFilter,
     ScalableBloomFilter,
 )
+from src.core.base.structures.LockFreeQueue import (
+    BatchingQueue,
+    MPMCQueue,
+    PriorityQueue,
+    QueueStats,
+    SPSCQueue,
+    WorkStealingDeque,
+)
+from src.core.base.structures.MemoryArena import (
+    ArenaStats,
+    MemoryArena,
+    SlabAllocator,
+    StackArena,
+    TypedArena,
+    temp_arena,
+    thread_temp_alloc,
+)
+from src.core.base.structures.ObjectPool import (
+    BufferPool,
+    ObjectPool,
+    PoolStats,
+    TieredBufferPool,
+    TypedObjectPool,
+    pooled_dict,
+    pooled_list,
+    pooled_set,
+)
 from src.core.base.structures.RingBuffer import (
     RingBuffer,
+    SlidingWindowAggregator,
     ThreadSafeRingBuffer,
     TimeSeriesBuffer,
     TimestampedValue,
-    SlidingWindowAggregator,
-)
-from src.core.base.structures.ObjectPool import (
-    ObjectPool,
-    TypedObjectPool,
-    BufferPool,
-    TieredBufferPool,
-    PoolStats,
-    pooled_list,
-    pooled_dict,
-    pooled_set,
-)
-from src.core.base.structures.LockFreeQueue import (
-    MPMCQueue,
-    SPSCQueue,
-    PriorityQueue,
-    WorkStealingDeque,
-    BatchingQueue,
-    QueueStats,
-)
-from src.core.base.structures.MemoryArena import (
-    MemoryArena,
-    TypedArena,
-    StackArena,
-    SlabAllocator,
-    ArenaStats,
-    temp_arena,
-    thread_temp_alloc,
 )
 
 __all__ = [

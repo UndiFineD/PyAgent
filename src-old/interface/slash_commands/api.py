@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/interface/slash_commands/api.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -80,8 +81,7 @@ def reset_slash_commands() -> None:
 
 
 def process_prompt(prompt: str, **kwargs: Any) -> ProcessedPrompt:
-    """
-    Process a prompt with slash commands.
+    """Process a prompt with slash commands.
 
     Args:
         prompt: The input prompt
@@ -89,13 +89,13 @@ def process_prompt(prompt: str, **kwargs: Any) -> ProcessedPrompt:
 
     Returns:
         ProcessedPrompt with results
+
     """
     return get_slash_commands().process(prompt, **kwargs)
 
 
 def execute_command(command: str, args: list[str] | None = None, **metadata: Any) -> CommandResult:
-    """
-    Execute a single slash command.
+    """Execute a single slash command.
 
     Args:
         command: Command name (without /)
@@ -104,18 +104,19 @@ def execute_command(command: str, args: list[str] | None = None, **metadata: Any
 
     Returns:
         CommandResult
+
     """
     return get_slash_commands().execute(command, args, **metadata)
 
 
 def get_help(command: str | None = None) -> str:
-    """
-    Get help text for commands.
+    """Get help text for commands.
 
     Args:
         command: Specific command name, or None for all
 
     Returns:
         Help text
+
     """
     return get_slash_commands().get_help(command)

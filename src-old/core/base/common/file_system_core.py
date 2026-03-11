@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/file_system_core.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # you may not use this file except in compliance with the License.
@@ -58,9 +58,9 @@ import tempfile
 from pathlib import Path
 from typing import List, Optional, Set, Union
 
-from src.core.base.models import LockType
 from src.core.base.common.storage_core import StorageCore
 from src.core.base.common.utils.file_lock_manager import FileLockManager
+from src.core.base.models import LockType
 
 try:
     import rust_core as rc
@@ -69,8 +69,7 @@ except ImportError:
 
 
 class FileSystemCore:
-    """
-    Centralized handler for file system operations.
+    """Centralized handler for file system operations.
     Provides atomic writes, locking, and standardized backup logic.
     """
 
@@ -158,8 +157,7 @@ class FileSystemCore:
         encoding: str = "utf-8",
         use_lock: bool = True,
     ) -> bool:
-        """
-        Write content to a file atomically by using a temporary file.
+        """Write content to a file atomically by using a temporary file.
         Optional advisory locking.
         """
         p = Path(path)

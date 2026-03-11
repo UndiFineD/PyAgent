@@ -18,6 +18,7 @@ import logging
 import sys
 import traceback
 from pathlib import Path
+
 from src.classes.fleet.FleetManager import FleetManager
 
 logging.basicConfig(level=logging.INFO)

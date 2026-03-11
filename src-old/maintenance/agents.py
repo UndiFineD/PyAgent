@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/maintenance/agents.description.md
 
@@ -31,9 +30,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Recovered and standardized for Phase 317
 
@@ -55,8 +56,7 @@ __version__ = VERSION
 
 
 class AgentsMaintenance:
-    """
-    Handles autonomous maintenance tasks for specialized agents across the fleet.
+    """Handles autonomous maintenance tasks for specialized agents across the fleet.
 
     This component resides in the Tier 5 (Maintenance & Observability) layer
     of the Synaptic architecture. It ensures that agents remain operational
@@ -70,14 +70,14 @@ class AgentsMaintenance:
         logging.info(f"AgentsMaintenance initialized (v{VERSION}).")
 
     def generate_reminders(self, agent_name: str) -> str:
-        """
-        Generates a maintenance reminder for a specific agent.
+        """Generates a maintenance reminder for a specific agent.
 
         Args:
             agent_name: The name of the agent to generate reminders for.
 
         Returns:
             A string containing the formatted maintenance reminder.
+
         """
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         reminder = (

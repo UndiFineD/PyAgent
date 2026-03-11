@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/registry/agent_registry.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -62,8 +62,7 @@ __version__: str = VERSION
 
 
 class AgentRegistry(RegistryCore["BaseAgent"]):
-    """
-    Singleton registry to track all active agents.
+    """Singleton registry to track all active agents.
     Uses RegistryCore for thread-safe storage and hooks.
     """
 
@@ -80,12 +79,14 @@ class AgentRegistry(RegistryCore["BaseAgent"]):
             self._initialized = True
 
     def register_instance(self, agent) -> bool:
-        """
-        Register an agent instance using its internal agent_name.
+        """Register an agent instance using its internal agent_name.
+
         Args:
             agent: The agent instance to register.
+
         Returns:
             bool: True if registration succeeded, False otherwise.
+
         """
         name: str = getattr(agent, "agent_name", str(id(agent)))
         success: bool = super().register(name, agent)
@@ -94,12 +95,14 @@ class AgentRegistry(RegistryCore["BaseAgent"]):
         return success
 
     def unregister_instance(self, name: str) -> bool:
-        """
-        Unregister an agent instance by name.
+        """Unregister an agent instance by name.
+
         Args:
             name (str): The name of the agent to unregister.
+
         Returns:
             bool: True if the agent was unregistered, False otherwise.
+
         """
         success = super().unregister(name)
         if success:
@@ -107,28 +110,32 @@ class AgentRegistry(RegistryCore["BaseAgent"]):
         return bool(success)
 
     def get_agent(self, name: str) -> Any | None:
-        """
-        Retrieve an agent by name.
+        """Retrieve an agent by name.
+
         Args:
             name (str): The name of the agent to retrieve.
+
         Returns:
             BaseAgent | None: The agent instance if found, else None.
+
         """
         return self.get(name)
 
     def list_agents(self) -> list[str]:
-        """
-        List names of all registered agents.
+        """List names of all registered agents.
+
         Returns:
             list[str]: List of registered agent names.
+
         """
         return self.list_keys()
 
     @property
     def active_count(self) -> int:
-        """
-        Return the number of active agents.
+        """Return the number of active agents.
+
         Returns:
             int: Number of active agents.
+
         """
         return len(self._items)

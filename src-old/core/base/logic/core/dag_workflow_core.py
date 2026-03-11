@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/dag_workflow_core.description.md
 
 # dag_workflow_core
 
-**File**: `src\core\base\logic\core\dag_workflow_core.py`  
+**File**: `src\\core\base\\logic\\core\\dag_workflow_core.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 8 imports  
 **Lines**: 88  
@@ -66,7 +65,7 @@ Harvested from .external/agentkit_prompting DAG pattern.
 
 # Improvements for dag_workflow_core
 
-**File**: `src\core\base\logic\core\dag_workflow_core.py`  
+**File**: `src\\core\base\\logic\\core\\dag_workflow_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 88 lines (small)  
 **Complexity**: 6 score (moderate)
@@ -99,9 +98,9 @@ Harvested from .external/agentkit_prompting DAG pattern.
 LLM_CONTEXT_END
 """
 
-from typing import List, Dict, Set, Optional, Any
-from dataclasses import dataclass, field
 import collections
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
@@ -116,8 +115,7 @@ class WorkflowNode:
 
 
 class DAGWorkflowCore:
-    """
-    Manages complex task decomposition into Directed Acyclic Graphs (DAGs).
+    """Manages complex task decomposition into Directed Acyclic Graphs (DAGs).
     Harvested from .external/agentkit_prompting DAG pattern.
     """
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/FleetDeployerAgent.description.md
 
@@ -103,16 +102,16 @@ Specializes in autonomous containerization, Dockerfile generation,
 and managing node spawning across environments.
 """
 
-from src.core.base.version import VERSION
+import asyncio
+import json
 import logging
 import os
-import json
 import time
-import asyncio
 from pathlib import Path
-from typing import Dict, List, Any
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -139,6 +138,7 @@ class FleetDeployerAgent(BaseAgent):
         Args:
             agent_type: The type of agent (e.g., 'LinguisticAgent').
             python_version: Base image Python version.
+
         """
         dockerfile_content = f"""FROM python:{python_version}
 
@@ -171,6 +171,7 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
         Args:
             agent_name: Unique name for the new node.
             agent_type: The agent class to instantiate.
+
         """
         logging.info(
             f"FleetDeployer: Spawning new node '{agent_name}' of type '{agent_type}'"

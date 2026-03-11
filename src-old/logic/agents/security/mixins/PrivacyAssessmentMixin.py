@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/mixins/PrivacyAssessmentMixin.description.md
 
 # PrivacyAssessmentMixin
 
-**File**: `src\logic\agents\security\mixins\PrivacyAssessmentMixin.py`  
+**File**: `src\\logic\agents\\security\\mixins\\PrivacyAssessmentMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 78  
@@ -40,7 +39,7 @@ Mixin for conducting Privacy Impact Assessments in ComplianceAgent.
 
 # Improvements for PrivacyAssessmentMixin
 
-**File**: `src\logic\agents\security\mixins\PrivacyAssessmentMixin.py`  
+**File**: `src\\logic\agents\\security\\mixins\\PrivacyAssessmentMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 78 lines (small)  
 **Complexity**: 2 score (simple)
@@ -77,10 +76,11 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
-
 import time
+from typing import Any
+
 from src.logic.agents.security.ComplianceAgent import ComplianceAgent
-from typing import TYPE_CHECKING, Any
+
 
 class PrivacyAssessmentMixin:
     """Mixin for conducting Privacy Impact Assessments in ComplianceAgent."""

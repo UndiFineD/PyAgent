@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/JavascriptAccessibilityMixin.description.md
 
 # JavascriptAccessibilityMixin
 
-**File**: `src\logic\agents\development\JavascriptAccessibilityMixin.py`  
+**File**: `src\\logic\agents\\development\\JavascriptAccessibilityMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 56  
@@ -41,7 +40,7 @@ Mixin for Javascript UI accessibility analysis.
 
 # Improvements for JavascriptAccessibilityMixin
 
-**File**: `src\logic\agents\development\JavascriptAccessibilityMixin.py`  
+**File**: `src\\logic\agents\\development\\JavascriptAccessibilityMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 56 lines (small)  
 **Complexity**: 1 score (simple)
@@ -77,8 +76,8 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
-
 import re
+
 from src.core.base.types.AccessibilityIssue import AccessibilityIssue
 from src.core.base.types.AccessibilityIssueType import AccessibilityIssueType
 from src.core.base.types.AccessibilitySeverity import AccessibilitySeverity

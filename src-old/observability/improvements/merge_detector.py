@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/improvements/merge_detector.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -71,6 +72,7 @@ class MergeDetector:
 
     Attributes:
         similarity_threshold: Threshold for considering items similar.
+
     """
 
     def __init__(self, similarity_threshold: float = 0.7) -> None:
@@ -85,6 +87,7 @@ class MergeDetector:
 
         Returns:
             List of merge candidates.
+
         """
         # Rust-accelerated O(N²) similarity detection
         if _RUST_AVAILABLE and len(improvements) > 2:
@@ -111,7 +114,7 @@ class MergeDetector:
                     )
                     for src_id, tgt_id, score, reason in rust_results
                 ]
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 pass  # Fall back to Python
 
         # Python fallback
@@ -170,6 +173,7 @@ class MergeDetector:
 
         Returns:
             The merged improvement.
+
         """
         # Combine descriptions
         target.description = f"{target.description}\n\nMerged from: {source.title}"

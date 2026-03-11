@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/gui_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -123,8 +123,7 @@ class UIAction:
 
 # pylint: disable=too-many-ancestors
 class GUIAgent(BaseAgent):
-    """
-    Agent specializing in interacting with and designing GUIs.
+    """Agent specializing in interacting with and designing GUIs.
     Can generate layout code (Qt, React, Tkinter) and interpret UI snapshots.
     """
 

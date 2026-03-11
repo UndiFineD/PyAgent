@@ -1,14 +1,13 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/core_mixins/CoreResolutionMixin.description.md
 
 # CoreResolutionMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\core_mixins\CoreResolutionMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\core_mixins\\CoreResolutionMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 58  
@@ -42,7 +41,7 @@ Methods for conflict resolution and fact preparation.
 
 # Improvements for CoreResolutionMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\core_mixins\CoreResolutionMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\core_mixins\\CoreResolutionMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 58 lines (small)  
 **Complexity**: 4 score (simple)
@@ -75,8 +74,8 @@ Methods for conflict resolution and fact preparation.
 LLM_CONTEXT_END
 """
 
-from typing import Any
 from datetime import datetime
+from typing import Any
 
 
 class CoreResolutionMixin:

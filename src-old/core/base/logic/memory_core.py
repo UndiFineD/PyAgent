@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/memory_core.description.md
 
 # memory_core
 
-**File**: `src\core\base\logic\memory_core.py`  
+**File**: `src\\core\base\\logic\\memory_core.py`  
 **Type**: Python Module  
 **Summary**: 6 classes, 0 functions, 19 imports  
 **Lines**: 555  
@@ -108,7 +107,7 @@ Based on AutoMem's dual storage architecture
 
 # Improvements for memory_core
 
-**File**: `src\core\base\logic\memory_core.py`  
+**File**: `src\\core\base\\logic\\memory_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 555 lines (large)  
 **Complexity**: 7 score (moderate)
@@ -149,15 +148,12 @@ Memory Core - Hybrid graph-vector memory system
 Based on AutoMem patterns: FalkorDB + Qdrant hybrid architecture
 """
 
-import asyncio
-import json
 import logging
 import time
 import uuid
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from typing import Dict, List, Optional, Any, Set, Tuple
 from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -237,8 +233,7 @@ class MemoryStore(ABC):
 
 
 class GraphMemoryStore(MemoryStore):
-    """
-    Graph-based memory store using relationship patterns
+    """Graph-based memory store using relationship patterns
     Based on AutoMem's FalkorDB patterns
     """
 
@@ -395,8 +390,7 @@ class GraphMemoryStore(MemoryStore):
 
 
 class VectorMemoryStore(MemoryStore):
-    """
-    Vector-based memory store for semantic similarity
+    """Vector-based memory store for semantic similarity
     Based on AutoMem's Qdrant patterns
     """
 
@@ -502,8 +496,7 @@ class VectorMemoryStore(MemoryStore):
 
 
 class HybridMemoryCore:
-    """
-    Hybrid graph-vector memory system
+    """Hybrid graph-vector memory system
     Based on AutoMem's dual storage architecture
     """
 
@@ -577,8 +570,7 @@ class HybridMemoryCore:
         limit: int = 10,
         expand_paths: bool = True,
     ) -> List[Tuple[MemoryNode, float]]:
-        """
-        Hybrid search combining vector similarity, graph relations, and metadata
+        """Hybrid search combining vector similarity, graph relations, and metadata
         Based on AutoMem's 9-component hybrid scoring
         """
         candidates = set()

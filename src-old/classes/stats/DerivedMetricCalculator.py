@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/stats/DerivedMetricCalculator.description.md
 
@@ -83,13 +82,14 @@ from __future__ import annotations
 """Auto-extracted class from agent_stats.py"""
 
 
-from .DerivedMetric import DerivedMetric
-
-from typing import Dict, List, Optional
 import ast
-import operator
 import logging
 import math
+import operator
+from typing import Dict, List, Optional
+
+from .DerivedMetric import DerivedMetric
+
 
 class DerivedMetricCalculator:
     """Calculate derived metrics from dependencies using safe AST evaluation."""
@@ -150,6 +150,7 @@ class DerivedMetricCalculator:
 
         Returns:
             The registered derived metric.
+
         """
         derived = DerivedMetric(
             name=name,
@@ -173,6 +174,7 @@ class DerivedMetricCalculator:
 
         Returns:
             Calculated value or None if missing dependencies.
+
         """
         derived = self.derived_metrics.get(name)
         if not derived:
@@ -198,7 +200,7 @@ class DerivedMetricCalculator:
             # Safe AST evaluation
             tree = ast.parse(formula, mode='eval')
             result = self._eval_node(tree.body)
-            
+
             self._cache[name] = result
             return result
         except Exception as e:
@@ -216,6 +218,7 @@ class DerivedMetricCalculator:
 
         Returns:
             Dictionary of all calculated derived metrics.
+
         """
         results: Dict[str, float] = {}
         for name in self.derived_metrics:

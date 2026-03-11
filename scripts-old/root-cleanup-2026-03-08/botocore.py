@@ -5,6 +5,6 @@ from importlib import import_module
 
 _mod = import_module("scripts.botocore")
 
-ClientError = getattr(_mod, "ClientError")
+ClientError = _mod.ClientError
 
 __all__ = ["ClientError"]

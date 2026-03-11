@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/HandyAgent.description.md
 
 # HandyAgent
 
-**File**: `src\logic\agents\development\HandyAgent.py`  
+**File**: `src\\logic\agents\\development\\HandyAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 48  
@@ -46,7 +45,7 @@ Provides a terminal-native interface for the agent to interact with the OS.
 
 # Improvements for HandyAgent
 
-**File**: `src\logic\agents\development\HandyAgent.py`  
+**File**: `src\\logic\agents\\development\\HandyAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 48 lines (small)  
 **Complexity**: 1 score (simple)
@@ -96,15 +95,16 @@ from __future__ import annotations
 Inspired by the Handy pattern (Rust terminal agent) and GitHub Copilot CLI.
 """
 
-from src.core.base.Version import VERSION
 from pathlib import Path
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.Version import VERSION
+from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+from src.logic.agents.development.mixins.HandyCoreMixin import HandyCoreMixin
 from src.logic.agents.development.mixins.HandyFileSystemMixin import (
     HandyFileSystemMixin,
 )
 from src.logic.agents.development.mixins.HandyTerminalMixin import HandyTerminalMixin
-from src.logic.agents.development.mixins.HandyCoreMixin import HandyCoreMixin
-from src.core.base.BaseAgent import BaseAgent
-from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 
 __version__ = VERSION
 

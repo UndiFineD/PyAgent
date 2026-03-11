@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/BenchmarkAgent.description.md
 
@@ -108,12 +107,13 @@ from __future__ import annotations
 Measures latency, accuracy, and cost.
 """
 
-from src.core.base.version import VERSION
-import time
 import logging
-from typing import Dict, List, Any, Optional
+import time
+from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 from src.logic.agents.development.core.BenchmarkCore import (
     BenchmarkCore,
     BenchmarkResult,
@@ -169,9 +169,11 @@ class BenchmarkAgent(BaseAgent):
     @as_tool
     def validate_scientific_hypothesis(self, hypothesis: str, dataset_path: str) -> str:
         """Scientific Benchmarking: Validates a hypothesis against a dataset using statistical analysis.
+
         Args:
             hypothesis: The scientific claim to test.
             dataset_path: Path to the CSV or JSON data.
+
         """
         logging.info(f"BENCHMARK: Validating hypothesis: {hypothesis}")
         # Simulation of data analysis (e.g. using pandas/scipy)

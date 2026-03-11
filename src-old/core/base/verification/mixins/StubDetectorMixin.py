@@ -1,14 +1,13 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/verification/mixins/StubDetectorMixin.description.md
 
 # StubDetectorMixin
 
-**File**: `src\core\base\verification\mixins\StubDetectorMixin.py`  
+**File**: `src\\core\base\verification\\mixins\\StubDetectorMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 73  
@@ -39,7 +38,7 @@ Methods for detecting stub nodes in the AST.
 
 # Improvements for StubDetectorMixin
 
-**File**: `src\core\base\verification\mixins\StubDetectorMixin.py`  
+**File**: `src\\core\base\verification\\mixins\\StubDetectorMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 73 lines (small)  
 **Complexity**: 1 score (simple)
@@ -73,6 +72,7 @@ LLM_CONTEXT_END
 """
 
 import ast
+
 
 class StubDetectorMixin:
     """Methods for detecting stub nodes in the AST."""

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/validation_rule_manager.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -40,10 +40,11 @@ Manager for validation rules.
 (Facade for src.core.base.common.validation_core)
 """
 
-from typing import Any
 from pathlib import Path
-from src.core.base.common.validation_core import ValidationCore
+from typing import Any
+
 from src.core.base.common.models import ValidationRule
+from src.core.base.common.validation_core import ValidationCore
 
 
 class ValidationRuleManager:

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/LoggingAgent.description.md
 
 # LoggingAgent
 
-**File**: `src\logic\agents\system\LoggingAgent.py`  
+**File**: `src\\logic\agents\\system\\LoggingAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 12 imports  
 **Lines**: 115  
@@ -50,7 +49,7 @@ Manages distributed fleet logs and integrates with external aggregators.
 
 # Improvements for LoggingAgent
 
-**File**: `src\logic\agents\system\LoggingAgent.py`  
+**File**: `src\\logic\agents\\system\\LoggingAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 115 lines (medium)  
 **Complexity**: 1 score (simple)
@@ -100,14 +99,15 @@ from __future__ import annotations
 Supports forwarding logs to central aggregators via syslog or HTTP.
 """
 
-from src.core.base.version import VERSION
+import asyncio
 import logging
 import logging.handlers
 import time
-import asyncio
-from typing import Dict, List, Any, Optional
+from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -133,13 +133,13 @@ class LoggingAgent(BaseAgent):
         syslog_host: str | None = None,
         syslog_port: int = 514,
     ) -> str:
-        """
-        Configures the destination for distributed logs.
+        """Configures the destination for distributed logs.
 
         Args:
             url: HTTP endpoint for centralized logs (e.g., http://aggregator:8080/log)
             syslog_host: Hostname/IP of a SysLog server.
             syslog_port: Port for SysLog (default 514).
+
         """
         self.log_aggregator_url = url
         if syslog_host:
@@ -164,14 +164,14 @@ class LoggingAgent(BaseAgent):
         message: str,
         metadata: dict[str, Any] | None = None,
     ) -> str:
-        """
-        Broadcasts a log entry to configured aggregators.
+        """Broadcasts a log entry to configured aggregators.
 
         Args:
             level: INFO, WARNING, ERROR, DEBUG
             source: Name of the agent or service originating the log.
             message: The log message content.
             metadata: Optional dictionary of context (phase, node_id, etc.).
+
         """
         log_entry = {
             "timestamp": time.time(),

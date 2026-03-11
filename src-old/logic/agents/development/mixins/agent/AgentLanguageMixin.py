@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/agent/AgentLanguageMixin.description.md
 
 # AgentLanguageMixin
 
-**File**: `src\logic\agents\development\mixins\agent\AgentLanguageMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\agent\\AgentLanguageMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 61  
@@ -42,7 +41,7 @@ Mixin for code language detection and syntax validation.
 
 # Improvements for AgentLanguageMixin
 
-**File**: `src\logic\agents\development\mixins\agent\AgentLanguageMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\agent\\AgentLanguageMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 61 lines (small)  
 **Complexity**: 6 score (moderate)
@@ -73,6 +72,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -90,6 +90,7 @@ from __future__ import annotations
 
 from src.core.base.types.CodeLanguage import CodeLanguage
 
+
 class AgentLanguageMixin:
     """Mixin for code language detection and syntax validation."""
 
@@ -105,6 +106,7 @@ class AgentLanguageMixin:
 
         Returns:
             The detected CodeLanguage based on file extension.
+
         """
         self._language = self._detect_language()
         if hasattr(self, "core"):

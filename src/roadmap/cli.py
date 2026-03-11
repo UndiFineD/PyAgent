@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import asyncio
 from pathlib import Path
 
-from . import vision, milestones
-import asyncio
+from . import milestones, vision
 
 
 def generate(outdir: Path | str) -> Path:

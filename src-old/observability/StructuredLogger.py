@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/StructuredLogger.description.md
 
@@ -110,16 +109,17 @@ StructuredLogger: JSON-based logging for Phase 144 observability.
 Ensures machine-readable logs with mandatory AgentID and TraceID fields.
 """
 
-from typing import Any
-from src.core.base.Version import VERSION
+import gzip
 import json
 import logging
 import re
-import time
-import gzip
 import shutil
+import time
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
+
+from src.core.base.Version import VERSION
 
 # Rust acceleration for hot-path logging
 try:

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/fleet_economy_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -62,8 +62,7 @@ __version__ = VERSION
 
 
 class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Tier 4 (Economy) - Fleet Economy Agent: Manages internal agent "wallets",
+    """Tier 4 (Economy) - Fleet Economy Agent: Manages internal agent "wallets",
     credits, and resource bidding mechanisms using a persistent SQLite backend.
     """
 

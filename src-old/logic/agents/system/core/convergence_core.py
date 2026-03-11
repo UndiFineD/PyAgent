@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/core/convergence_core.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -59,8 +59,7 @@ class ConvergenceCore:
 
     @staticmethod
     def clean_sweep(root_dir: str) -> dict:
-        """
-        Removes __pycache__ and temporary files.
+        """Removes __pycache__ and temporary files.
         """
         stats = {"pycache_removed": 0, "tmp_removed": 0}
 
@@ -81,8 +80,7 @@ class ConvergenceCore:
 
     @staticmethod
     def update_version_file(file_path: str, new_version: str) -> bool:
-        """
-        Updates the version string in version.py.
+        """Updates the version string in version.py.
         """
         if not os.path.exists(file_path):
             return False

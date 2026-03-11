@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/graph_analysis_core.description.md
 
 # graph_analysis_core
 
-**File**: `src\core\base\logic\core\graph_analysis_core.py`  
+**File**: `src\\core\base\\logic\\core\\graph_analysis_core.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 150  
@@ -62,7 +61,7 @@ Core for graph-based security and relationship analysis.
 
 # Improvements for graph_analysis_core
 
-**File**: `src\core\base\logic\core\graph_analysis_core.py`  
+**File**: `src\\core\base\\logic\\core\\graph_analysis_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 150 lines (medium)  
 **Complexity**: 7 score (moderate)
@@ -95,10 +94,10 @@ Core for graph-based security and relationship analysis.
 LLM_CONTEXT_END
 """
 
-from typing import Dict, List, Set, Tuple, Optional
-from collections import defaultdict
 import json
 import os
+from collections import defaultdict
+from typing import Dict, List, Optional
 
 
 class GraphAnalysisCore:

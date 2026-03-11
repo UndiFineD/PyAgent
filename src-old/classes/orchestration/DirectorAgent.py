@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/DirectorAgent.description.md
 
@@ -99,14 +98,15 @@ from __future__ import annotations
 
 """Agent specializing in Project Management and Multi-Agent Orchestration."""
 
-from src.core.base.Version import VERSION
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.BaseUtilities import create_main_function
-from src.infrastructure.orchestration.state.StatusManager import StatusManager
-import logging
 import json
+import logging
 import re
 from pathlib import Path
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.BaseUtilities import create_main_function
+from src.core.base.Version import VERSION
+from src.infrastructure.orchestration.state.StatusManager import StatusManager
 
 __version__ = VERSION
 

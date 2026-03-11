@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/models/ContextAnnotation.description.md
 
 # ContextAnnotation
 
-**File**: `src\logic\agents\cognitive\context\models\ContextAnnotation.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\models\\ContextAnnotation.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 32  
@@ -35,7 +34,7 @@ An annotation / comment on context.
 
 # Improvements for ContextAnnotation
 
-**File**: `src\logic\agents\cognitive\context\models\ContextAnnotation.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\models\\ContextAnnotation.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 32 lines (small)  
 **Complexity**: 0 score (simple)
@@ -83,8 +82,9 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_context.py"""
 
-from src.core.base.version import VERSION
 from dataclasses import dataclass
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/SafetyAuditTrail.description.md
 
 # SafetyAuditTrail
 
-**File**: `src\classes\fleet\SafetyAuditTrail.py`  
+**File**: `src\\classes\fleet\\SafetyAuditTrail.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 50  
@@ -44,7 +43,7 @@ Logs security violations for later forensic analysis and training.
 
 # Improvements for SafetyAuditTrail
 
-**File**: `src\classes\fleet\SafetyAuditTrail.py`  
+**File**: `src\\classes\fleet\\SafetyAuditTrail.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 50 lines (small)  
 **Complexity**: 5 score (moderate)
@@ -78,8 +77,8 @@ LLM_CONTEXT_END
 
 import json
 import logging
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 
 class SafetyAuditTrail:

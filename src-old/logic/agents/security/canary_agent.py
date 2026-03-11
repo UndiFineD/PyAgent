@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/canary_agent.description.md
 
 # canary_agent
 
-**File**: `src\logic\agents\security\canary_agent.py`  
+**File**: `src\\logic\agents\\security\\canary_agent.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 9 imports  
 **Lines**: 135  
@@ -63,7 +62,7 @@ Based on AD-Canaries pattern: deploy honeypots that alert on unauthorized access
 
 # Improvements for canary_agent
 
-**File**: `src\logic\agents\security\canary_agent.py`  
+**File**: `src\\logic\agents\\security\\canary_agent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 135 lines (medium)  
 **Complexity**: 10 score (moderate)
@@ -150,8 +149,7 @@ class CanaryObject:
 
 
 class CanaryAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Creates and monitors decoy objects/tasks to detect anomalous agent behavior.
+    """Creates and monitors decoy objects/tasks to detect anomalous agent behavior.
     Based on AD-Canaries pattern: deploy honeypots that alert on unauthorized access.
     """
 

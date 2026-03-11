@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/generate_ast_refactor_patches.description.md
 
 # generate_ast_refactor_patches
 
-**File**: `src\tools\generate_ast_refactor_patches.py`  
+**File**: `src\tools\\generate_ast_refactor_patches.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 4 functions, 7 imports  
 **Lines**: 128  
@@ -65,7 +64,7 @@ Class SubprocessTransformer implementation.
 
 # Improvements for generate_ast_refactor_patches
 
-**File**: `src\tools\generate_ast_refactor_patches.py`  
+**File**: `src\tools\\generate_ast_refactor_patches.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 128 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -96,6 +95,7 @@ Class SubprocessTransformer implementation.
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -113,12 +113,11 @@ This script:
 Notes:
 - This only writes patch proposals and does not modify source files.
 """
-import json
-from pathlib import Path
 import ast
 import difflib
+import json
 import re
-import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 BANDIT_JSON = ROOT / ".external" / "static_checks" / "bandit.json"

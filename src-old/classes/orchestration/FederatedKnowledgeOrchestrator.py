@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/FederatedKnowledgeOrchestrator.description.md
 
@@ -84,11 +83,12 @@ Uses InterFleetBridgeOrchestrator to transmit knowledge without raw data leakage
 """
 
 import logging
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List
+
+from src.classes.context.KnowledgeAgent import KnowledgeAgent
 from src.classes.orchestration.InterFleetBridgeOrchestrator import (
     InterFleetBridgeOrchestrator,
 )
-from src.classes.context.KnowledgeAgent import KnowledgeAgent
 
 
 class FederatedKnowledgeOrchestrator:
@@ -110,6 +110,7 @@ class FederatedKnowledgeOrchestrator:
         Args:
             lesson_id: Unique identifier for the lesson.
             lesson_data: The outcome details (agent, task, success, fix).
+
         """
         logging.info(
             f"FederatedKnowledge: Broadcasting lesson '{lesson_id}' to the network."
@@ -148,6 +149,7 @@ class FederatedKnowledgeOrchestrator:
 
         Args:
             incoming_knowledge: List of lesson dictionaries.
+
         """
         logging.info(
             f"FederatedKnowledge: Received {len(incoming_knowledge)} insights. Starting fusion."

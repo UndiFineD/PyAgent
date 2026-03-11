@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/analysis/code_reviewer_agent.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -79,6 +80,7 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Example:
         >>> reviewer=CodeReviewerAgent("path\to\agent.py")
         >>> findings=reviewer.review_code("def foo():\\n    pass")
+
     """
 
     # Pattern definitions for Rust acceleration
@@ -115,6 +117,7 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         Returns:
             List of review findings.
+
         """
         self.findings = []
         lines = content.split("\n")
@@ -206,6 +209,7 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         Returns:
             Dictionary mapping category to count.
+
         """
         summary: dict[str, int] = {}
         for finding in self.findings:

@@ -4,7 +4,7 @@ class Tensor:
     """Very small stand-in for torch._tensor.Tensor used during import-time.
 
     This is intentionally minimal — tests that need actual tensor behavior should
-import the real `torch` package in an environment with PyTorch installed.
+    import the real `torch` package in an environment with PyTorch installed.
     """
 
     def __init__(self, *args, **kwargs):

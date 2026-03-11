@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/multi_tenant_agent_core.description.md
 
 # multi_tenant_agent_core
 
-**File**: `src\core\base\logic\core\multi_tenant_agent_core.py`  
+**File**: `src\\core\base\\logic\\core\\multi_tenant_agent_core.py`  
 **Type**: Python Module  
 **Summary**: 11 classes, 0 functions, 14 imports  
 **Lines**: 560  
@@ -124,7 +123,7 @@ Features:
 
 # Improvements for multi_tenant_agent_core
 
-**File**: `src\core\base\logic\core\multi_tenant_agent_core.py`  
+**File**: `src\\core\base\\logic\\core\\multi_tenant_agent_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 560 lines (large)  
 **Complexity**: 1 score (simple)
@@ -170,17 +169,18 @@ Based on AgentCloud's CrewAI platform architecture.
 
 import asyncio
 import logging
-from typing import Dict, List, Optional, Any, Union, Callable
+import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import uuid
+from typing import Any, Dict, List, Optional
 
 from src.core.base.common.base_core import BaseCore
 
 
 class ProcessType(str, Enum):
     """Crew process types."""
+
     SEQUENTIAL = "sequential"
     HIERARCHICAL = "hierarchical"
     CONSENSUAL = "consensual"
@@ -188,6 +188,7 @@ class ProcessType(str, Enum):
 
 class ToolType(str, Enum):
     """Tool types supported."""
+
     BUILTIN = "builtin"
     FUNCTION = "function"
     RAG = "rag"
@@ -195,6 +196,7 @@ class ToolType(str, Enum):
 
 class AgentStatus(str, Enum):
     """Agent status states."""
+
     ACTIVE = "active"
     INACTIVE = "inactive"
     ERROR = "error"
@@ -202,6 +204,7 @@ class AgentStatus(str, Enum):
 
 class TaskStatus(str, Enum):
     """Task execution status."""
+
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
@@ -212,6 +215,7 @@ class TaskStatus(str, Enum):
 @dataclass
 class TenantConfig:
     """Configuration for a tenant."""
+
     tenant_id: str
     name: str
     max_agents: int = 10
@@ -224,6 +228,7 @@ class TenantConfig:
 @dataclass
 class AgentDefinition:
     """Agent definition with role and capabilities."""
+
     agent_id: str
     tenant_id: str
     name: str
@@ -243,6 +248,7 @@ class AgentDefinition:
 @dataclass
 class TaskDefinition:
     """Task definition with requirements and outputs."""
+
     task_id: str
     tenant_id: str
     name: str
@@ -260,6 +266,7 @@ class TaskDefinition:
 @dataclass
 class CrewDefinition:
     """Crew definition for multi-agent orchestration."""
+
     crew_id: str
     tenant_id: str
     name: str
@@ -277,6 +284,7 @@ class CrewDefinition:
 @dataclass
 class ToolDefinition:
     """Tool definition with capabilities."""
+
     tool_id: str
     tenant_id: str
     name: str
@@ -289,6 +297,7 @@ class ToolDefinition:
 @dataclass
 class ExecutionResult:
     """Result of task/crew execution."""
+
     execution_id: str
     status: TaskStatus
     output: Any
@@ -299,8 +308,7 @@ class ExecutionResult:
 
 
 class MultiTenantAgentCore(BaseCore):
-    """
-    Multi-tenant agent orchestration core based on AgentCloud patterns.
+    """Multi-tenant agent orchestration core based on AgentCloud patterns.
 
     Features:
     - Tenant isolation with resource limits
@@ -335,8 +343,7 @@ class MultiTenantAgentCore(BaseCore):
         max_rpm: int = 100,
         allowed_models: Optional[List[str]] = None
     ) -> TenantConfig:
-        """
-        Create a new tenant with resource limits.
+        """Create a new tenant with resource limits.
 
         Args:
             tenant_id: Unique tenant identifier
@@ -348,6 +355,7 @@ class MultiTenantAgentCore(BaseCore):
 
         Returns:
             Created tenant configuration
+
         """
         if tenant_id in self.tenants:
             raise ValueError(f"Tenant {tenant_id} already exists")
@@ -377,8 +385,7 @@ class MultiTenantAgentCore(BaseCore):
         model_name: str,
         **kwargs
     ) -> AgentDefinition:
-        """
-        Create an agent for a tenant.
+        """Create an agent for a tenant.
 
         Args:
             tenant_id: Tenant that owns the agent
@@ -392,6 +399,7 @@ class MultiTenantAgentCore(BaseCore):
 
         Returns:
             Created agent definition
+
         """
         if tenant_id not in self.tenants:
             raise ValueError(f"Tenant {tenant_id} not found")
@@ -435,8 +443,7 @@ class MultiTenantAgentCore(BaseCore):
         agent_id: str,
         **kwargs
     ) -> TaskDefinition:
-        """
-        Create a task for a tenant.
+        """Create a task for a tenant.
 
         Args:
             tenant_id: Tenant that owns the task
@@ -449,6 +456,7 @@ class MultiTenantAgentCore(BaseCore):
 
         Returns:
             Created task definition
+
         """
         if tenant_id not in self.tenants:
             raise ValueError(f"Tenant {tenant_id} not found")
@@ -483,8 +491,7 @@ class MultiTenantAgentCore(BaseCore):
         process_type: ProcessType = ProcessType.SEQUENTIAL,
         **kwargs
     ) -> CrewDefinition:
-        """
-        Create a crew for multi-agent orchestration.
+        """Create a crew for multi-agent orchestration.
 
         Args:
             tenant_id: Tenant that owns the crew
@@ -497,6 +504,7 @@ class MultiTenantAgentCore(BaseCore):
 
         Returns:
             Created crew definition
+
         """
         if tenant_id not in self.tenants:
             raise ValueError(f"Tenant {tenant_id} not found")
@@ -529,8 +537,7 @@ class MultiTenantAgentCore(BaseCore):
         return crew
 
     async def check_rate_limits(self, tenant_id: str, agent_id: Optional[str] = None) -> bool:
-        """
-        Check if rate limits are exceeded.
+        """Check if rate limits are exceeded.
 
         Args:
             tenant_id: Tenant to check
@@ -538,6 +545,7 @@ class MultiTenantAgentCore(BaseCore):
 
         Returns:
             True if within limits, False if exceeded
+
         """
         current_time = datetime.now().replace(second=0, microsecond=0)
 
@@ -561,14 +569,14 @@ class MultiTenantAgentCore(BaseCore):
         return True
 
     async def execute_task(self, task_id: str) -> ExecutionResult:
-        """
-        Execute a single task.
+        """Execute a single task.
 
         Args:
             task_id: Task to execute
 
         Returns:
             Execution result
+
         """
         if task_id not in self.tasks:
             raise ValueError(f"Task {task_id} not found")
@@ -619,14 +627,14 @@ class MultiTenantAgentCore(BaseCore):
         return result
 
     async def execute_crew(self, crew_id: str) -> List[ExecutionResult]:
-        """
-        Execute a crew with multiple tasks.
+        """Execute a crew with multiple tasks.
 
         Args:
             crew_id: Crew to execute
 
         Returns:
             List of execution results
+
         """
         if crew_id not in self.crews:
             raise ValueError(f"Crew {crew_id} not found")

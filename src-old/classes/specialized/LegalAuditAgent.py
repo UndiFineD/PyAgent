@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/LegalAuditAgent.description.md
 
@@ -82,6 +81,11 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import re
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -94,19 +98,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import re
-from typing import Dict, Any
-from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
 
 
 class LegalAuditAgent(BaseAgent):
-    """
-    Phase 59: Autonomous Legal & Smart Contract Auditing.
+    """Phase 59: Autonomous Legal & Smart Contract Auditing.
     Scans codebases for licensing risks, liability concerns, and smart contract vulnerabilities.
     """
 
@@ -126,8 +124,7 @@ class LegalAuditAgent(BaseAgent):
     def check_license_compliance(
         self, content: str, project_license: str = "MIT"
     ) -> dict[str, Any]:
-        """
-        Phase 238: Check generated code against a license blacklist to prevent
+        """Phase 238: Check generated code against a license blacklist to prevent
         GPL/AGPL contamination in permissive projects.
         """
         scan = self.scan_licensing(content)

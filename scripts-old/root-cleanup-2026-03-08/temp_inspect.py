@@ -1,4 +1,3 @@
-import sys
 path='src/core/base/lifecycle/base_agent.py'
 with open(path,'rb') as f:
     lines=f.readlines()

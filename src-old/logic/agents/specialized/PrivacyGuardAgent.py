@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialized/PrivacyGuardAgent.description.md
 
 # PrivacyGuardAgent
 
-**File**: `src\logic\agents\specialized\PrivacyGuardAgent.py`  
+**File**: `src\\logic\agents\\specialized\\PrivacyGuardAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 105  
@@ -44,7 +43,7 @@ Scans for AWS keys, private tokens, and other secrets.
 
 # Improvements for PrivacyGuardAgent
 
-**File**: `src\logic\agents\specialized\PrivacyGuardAgent.py`  
+**File**: `src\\logic\agents\\specialized\\PrivacyGuardAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 105 lines (medium)  
 **Complexity**: 1 score (simple)
@@ -93,8 +92,7 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 
 
 class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Phase 286: Privacy Guard Agent.
+    """Phase 286: Privacy Guard Agent.
     Scans for AWS keys, private tokens, and other secrets.
     """
 

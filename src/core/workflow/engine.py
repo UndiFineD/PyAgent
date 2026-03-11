@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Workflow engine for processing tasks."""
-import asyncio
 from .queue import TaskQueue
 from .task import Task, TaskState
 

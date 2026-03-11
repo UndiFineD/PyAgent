@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context_template_mixin.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -39,6 +39,7 @@ from __future__ import annotations
 """Mixin for context templating capabilities."""
 
 import logging
+
 from src.logic.agents.cognitive.context.models.context_template import ContextTemplate
 
 # Default templates for common file types

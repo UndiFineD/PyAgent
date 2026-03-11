@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/autonomy_core.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -49,12 +49,10 @@ Core logic regarding Agent Autonomy and Self-Model.
 (Facade regarding src.core.base.common.autonomy_core)
 """
 
-from src.core.base.common.autonomy_core import \
-    AutonomyCore as StandardAutonomyCore
+from src.core.base.common.autonomy_core import AutonomyCore as StandardAutonomyCore
 
 
 class AutonomyCore(StandardAutonomyCore):
-    """
-    Facade regarding StandardAutonomyCore to maintain backward compatibility.
+    """Facade regarding StandardAutonomyCore to maintain backward compatibility.
     Autonomy logic is now centralized in the Infrastructure/Common tier.
     """

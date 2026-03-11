@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/TenantCore.description.md
 
 # TenantCore
 
-**File**: `src\classes\fleet\TenantCore.py`  
+**File**: `src\\classes\fleet\\TenantCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 31  
@@ -42,7 +41,7 @@ Class TenantCore implementation.
 
 # Improvements for TenantCore
 
-**File**: `src\classes\fleet\TenantCore.py`  
+**File**: `src\\classes\fleet\\TenantCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 31 lines (small)  
 **Complexity**: 3 score (simple)
@@ -81,7 +80,7 @@ Pure logic for path translation and security boundary enforcement.
 """
 
 import os
-from typing import List, Optional
+from typing import List
 
 
 class TenantCore:
@@ -89,8 +88,7 @@ class TenantCore:
         pass
 
     def validate_and_translate_path(self, tenant_root: str, relative_path: str) -> str:
-        """
-        Pure logic to ensure a path stays within the tenant's boundaries.
+        """Pure logic to ensure a path stays within the tenant's boundaries.
         Returns the absolute path if valid, raises PermissionError otherwise.
         """
         tenant_root_abs = os.path.abspath(tenant_root)

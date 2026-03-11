@@ -4,6 +4,6 @@ from importlib import import_module
 
 _mod = import_module("scripts.boto3")
 
-client = getattr(_mod, "client")
+client = _mod.client
 
 __all__ = ["client"]

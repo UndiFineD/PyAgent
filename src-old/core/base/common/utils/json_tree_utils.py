@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/json_tree_utils.description.md
 
@@ -44,6 +43,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -53,12 +53,8 @@ Refactored to modular package structure for Phase 317.
 Original monolithic implementation delegated to src.core.base.common.utils.jsontree modules.
 """
 
-from src.core.base.common.utils.jsontree.iteration import (
-    json_iter_leaves, json_iter_leaves_with_path
-)
-from src.core.base.common.utils.jsontree.mapping import (
-    json_map_leaves, json_map_leaves_async
-)
+from src.core.base.common.utils.jsontree.iteration import json_iter_leaves, json_iter_leaves_with_path
+from src.core.base.common.utils.jsontree.mapping import json_map_leaves, json_map_leaves_async
 from src.core.base.common.utils.jsontree.meta import (
     json_count_leaves,
     json_depth,

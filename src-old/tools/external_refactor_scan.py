@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/external_refactor_scan.description.md
 
 # external_refactor_scan
 
-**File**: `src\tools\external_refactor_scan.py`  
+**File**: `src\tools\\external_refactor_scan.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 6 functions, 7 imports  
 **Lines**: 175  
@@ -56,7 +55,7 @@ Run only after reviewing and ensuring safety.
 
 # Improvements for external_refactor_scan
 
-**File**: `src\tools\external_refactor_scan.py`  
+**File**: `src\tools\\external_refactor_scan.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 175 lines (medium)  
 **Complexity**: 6 score (moderate)
@@ -105,11 +104,11 @@ python -m src.tools.external_refactor_scan
 Run only after reviewing and ensuring safety.
 """
 
+import json
 import os
 import re
-import json
 from pathlib import Path
-from typing import List, Dict
+from typing import Dict, List
 
 ROOT = Path(__file__).resolve().parents[2]
 EXTERNAL = ROOT / ".external"

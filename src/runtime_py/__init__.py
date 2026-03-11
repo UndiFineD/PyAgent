@@ -15,11 +15,35 @@ into the compiled module when necessary.
 
 from __future__ import annotations
 
-from typing import Any
-from collections.abc import Awaitable, Callable
-
 import asyncio
 import importlib
+import logging
+from collections.abc import Awaitable, Callable
+from typing import Any
+
+_EXTENSION: object | None = None
+
+
+class _PythonRuntimeExtension:
+    """Pure-Python fallback for runtime primitives used in tests."""
+
+    def __init__(self) -> None:
+        """Initialize fallback logger."""
+        self.logger = logging.getLogger("runtime_py")
+
+    def spawn_task(self, py_coro: Awaitable[object]) -> None:
+        """Schedule a coroutine on the active asyncio loop."""
+        asyncio.create_task(py_coro)
+
+    def set_timeout(self, ms: float, callback: Callable[[], None]) -> None:
+        """Run callback after a timeout in milliseconds."""
+        loop = asyncio.get_event_loop()
+        loop.call_later(ms / 1000.0, callback)
+
+    def create_queue(self) -> tuple[asyncio.Queue[object], Callable[[object], Awaitable[None]]]:
+        """Create an asyncio queue and return it with its put coroutine."""
+        queue: asyncio.Queue[object] = asyncio.Queue()
+        return queue, queue.put
 
 
 def _get_extension() -> object:
@@ -28,8 +52,30 @@ def _get_extension() -> object:
     We import the extension dynamically to avoid circular imports and to make
     the wrapper package name different from the native module name.
     """
-    # this will load `runtime/runtime.cp*.pyd` from the installed package
-    return importlib.import_module("runtime.runtime")
+    global _EXTENSION
+    if _EXTENSION is not None:
+        return _EXTENSION
+
+    # Preferred path: compiled extension under ``runtime.runtime``.
+    try:
+        _EXTENSION = importlib.import_module("runtime.runtime")
+        return _EXTENSION
+    except ModuleNotFoundError:
+        pass
+
+    # Compatibility path: some environments expose the module directly as
+    # ``runtime``.
+    try:
+        candidate = importlib.import_module("runtime")
+        if all(hasattr(candidate, name) for name in ("spawn_task", "set_timeout", "create_queue")):
+            _EXTENSION = candidate
+            return _EXTENSION
+    except ModuleNotFoundError:
+        pass
+
+    # Last-resort test fallback.
+    _EXTENSION = _PythonRuntimeExtension()
+    return _EXTENSION
 
 
 def sleep(ms: float) -> asyncio.Future[None]:
@@ -113,26 +159,28 @@ def watch_file(path: str, callback: Callable[[str], Awaitable[None]]) -> None:
     and avoids the complexity entirely.  The watcher runs in a background
     task scheduled via :func:`spawn` so users need not await anything.
     """
-
     import os
-    # record the initial modification time (or 0 if missing)
+    # Record the initial modification timestamp in nanoseconds (or 0 if
+    # missing). ``st_mtime_ns`` is more reliable on Windows where second-level
+    # ``getmtime`` granularity can miss rapid writes in tests.
     try:
-        last_mtime = os.path.getmtime(path)
+        last_mtime_ns = os.stat(path).st_mtime_ns
     except OSError:
-        last_mtime = 0.0
+        last_mtime_ns = 0
 
     async def _poll() -> None:
-        nonlocal last_mtime
+        nonlocal last_mtime_ns
         while True:
             await asyncio.sleep(0.1)
             try:
-                m = os.path.getmtime(path)
+                mtime_ns = os.stat(path).st_mtime_ns
             except OSError:
                 continue
-            if m != last_mtime:
-                last_mtime = m
-                # schedule the callback but don't await it here
-                spawn(callback(path))
+            if mtime_ns != last_mtime_ns:
+                last_mtime_ns = mtime_ns
+                # Await the callback directly so coroutine callbacks are always
+                # consumed and errors surface through the watcher task.
+                await callback(path)
 
     spawn(_poll())
 
@@ -148,7 +196,6 @@ def run_http_server(addr: str, handler: Callable[[str], Awaitable[tuple[int, str
     maintain.  The server is spawned on the runtime event loop so it behaves
     like ``spawn``-ed tasks.
     """
-
     host, port_str = addr.split(":")
     port = int(port_str)
 

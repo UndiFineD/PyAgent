@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/report_api.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -65,39 +66,47 @@ AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
 class ReportAPI:
     """API for programmatic report access.
     Provides a RESTful - style interface for report operations.
+
     Example:
         api=ReportAPI()
         reports=api.list_reports()
         report=api.get_report("file.py", ReportType.ERRORS)
+
     """
 
     def __init__(self, reports_dir: Path = AGENT_DIR) -> None:
         """Initialize API.
+
         Args:
             reports_dir: Directory containing reports.
+
         """
         self.reports_dir = reports_dir
         logging.debug(f"ReportAPI initialized for {reports_dir}")
 
     def list_reports(self, file_pattern: str = "*.md") -> list[str]:
         """List available reports.
+
         Args:
             file_pattern: Glob pattern.
+
         Returns:
             List of report paths.
-        """
 
+        """
         return [str(p) for p in self.reports_dir.glob(file_pattern)]
 
     def get_report(self, file_stem: str, report_type: ReportType) -> str | None:
         """Get a specific report.
+
         Args:
             file_stem: File stem.
             report_type: Report type.
+
         Returns:
             Report content if found.
-        """
 
+        """
         suffix_map = {
             ReportType.DESCRIPTION: ".description.md",
             ReportType.ERRORS: ".errors.md",
@@ -111,14 +120,16 @@ class ReportAPI:
 
     def create_report(self, file_stem: str, report_type: ReportType, content: str) -> bool:
         """Create or update a report.
+
         Args:
             file_stem: File stem.
             report_type: Report type.
             content: Report content.
+
         Returns:
             True if successful.
-        """
 
+        """
         suffix_map = {
             ReportType.DESCRIPTION: ".description.md",
             ReportType.ERRORS: ".errors.md",

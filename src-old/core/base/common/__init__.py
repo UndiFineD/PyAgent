@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/__init__.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -153,6 +153,7 @@ try:
 except ImportError:
     ShardCore = None  # type: ignore
 from .shell_core import ShellCore  # noqa: F401
+
 try:
     from .signal_core import SignalCore  # noqa: F401
 except ImportError:
@@ -170,6 +171,7 @@ try:
 except ImportError:
     TemplateCore = None  # type: ignore
 from .time_core import TimeCore  # noqa: F401
+
 try:
     from .validation_core import ValidationCore  # noqa: F401
 except ImportError:

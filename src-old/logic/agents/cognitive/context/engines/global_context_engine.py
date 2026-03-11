@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/global_context_engine.description.md
 
@@ -30,6 +29,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -60,10 +60,11 @@ from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.engines.global_context_core import (
     GlobalContextCore,
 )
-from .mixins.context_shard_mixin import ContextShardMixin
+
+from .mixins.context_consolidation_mixin import ContextConsolidationMixin
 from .mixins.context_data_mixin import ContextDataMixin
 from .mixins.context_entity_mixin import ContextEntityMixin
-from .mixins.context_consolidation_mixin import ContextConsolidationMixin
+from .mixins.context_shard_mixin import ContextShardMixin
 
 __version__ = VERSION
 
@@ -71,8 +72,7 @@ __version__ = VERSION
 class GlobalContextEngine(
     ContextShardMixin, ContextDataMixin, ContextEntityMixin, ContextConsolidationMixin
 ):
-    """
-    Manages persistent project-wide knowledge and agent preferences.
+    """Manages persistent project-wide knowledge and agent preferences.
     Shell for GlobalContextCore.
     """
 

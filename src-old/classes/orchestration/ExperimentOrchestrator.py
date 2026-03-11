@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/ExperimentOrchestrator.description.md
 
@@ -88,7 +87,8 @@ Automates multi-agent benchmarks, training simulations, and MLOps experimentatio
 import logging
 import time
 import uuid
-from typing import Dict, List, Any
+from typing import Any, Dict, List
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
@@ -113,6 +113,7 @@ class ExperimentOrchestrator(BaseAgent):
         Args:
             suite_name: Name of the benchmark suite (e.g., 'SGI-Bench-Alpha').
             agents_to_test: List of agent names/types to evaluate.
+
         """
         experiment_id = str(uuid.uuid4())[:8]
         start_time = time.time()

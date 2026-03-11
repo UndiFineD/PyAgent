@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/compilation_counter.description.md
 
@@ -40,6 +39,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -73,10 +73,10 @@ Beyond vLLM:
 """
 
 
-from _thread import LockType
 import logging
 import threading
 import time
+from _thread import LockType
 from collections import Counter
 from dataclasses import dataclass, field
 from enum import Enum, auto
@@ -156,8 +156,7 @@ class FunctionStats:
 
 
 class CompilationCounter:
-    """
-    Counter for tracking compilation statistics.
+    """Counter for tracking compilation statistics.
 
     Based on vLLM's compilation counter pattern.
     """
@@ -168,13 +167,13 @@ class CompilationCounter:
         max_events: int = 10000,
         emit_interval: float = 60.0,
     ) -> None:
-        """
-        Initialize counter.
+        """Initialize counter.
 
         Args:
             name: Counter name for identification
             max_events: Maximum events to keep
             emit_interval: Interval for metric emission (seconds)
+
         """
         self.name: str = name
         self.max_events: int = max_events
@@ -201,14 +200,14 @@ class CompilationCounter:
         duration: float,
         backend: str = "inductor",
     ) -> None:
-        """
-        Record a compilation event.
+        """Record a compilation event.
 
         Args:
             function_id: ID of compiled function
             shape: Input shape
             duration: Compilation time
             backend: Compilation backend
+
         """
         event = self._create_compile_event(function_id, shape, duration, backend)
         with self._lock:
@@ -401,8 +400,7 @@ class CompilationCounter:
 
 
 class RecompileTracker(CompilationCounter):
-    """
-    Specialized tracker for recompilation.
+    """Specialized tracker for recompilation.
 
     Beyond vLLM:
     - Detects excessive recompilation
@@ -483,8 +481,7 @@ class RecompileTracker(CompilationCounter):
 
 
 class TrendAnalyzer:
-    """
-    Analyze compilation trends over time.
+    """Analyze compilation trends over time.
 
     Beyond vLLM:
     - Detects degradation patterns

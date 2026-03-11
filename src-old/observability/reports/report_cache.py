@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/report_cache.description.md
 
@@ -27,6 +26,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -54,12 +54,14 @@ __version__ = VERSION
 @dataclass
 class ReportCache:
     """Cache for report data.
+
     Attributes:
         path: File path for the cached report.
         content_hash: Hash of the cached content.
         content: The cached report content.
         created_at: Timestamp when cache was created.
         ttl_seconds: Time - to - live for cache entries.
+
     """
 
     path: str = ""

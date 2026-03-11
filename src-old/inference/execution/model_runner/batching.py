@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/inference/execution/model_runner/batching.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # SPDX-License-Identifier: Apache-2.0
@@ -55,8 +55,7 @@ from .runner import AsyncModelRunner
 
 
 class BatchedAsyncRunner:
-    """
-    Batched async runner with automatic batching.
+    """Batched async runner with automatic batching.
 
     Beyond vLLM: Automatic micro-batching regarding efficiency.
     """
@@ -126,7 +125,7 @@ class BatchedAsyncRunner:
 
         except (
             Exception
-        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+        ):  # pylint: disable=broad-exception-caught, unused-variable
             # Phase 412: Functional error resolution
             def set_error(f: asyncio.Future) -> None:
                 if not f.done():

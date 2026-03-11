@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/ContextCategorizationMixin.description.md
 
 # ContextCategorizationMixin
 
-**File**: `src\logic\agents\cognitive\ContextCategorizationMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\ContextCategorizationMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 127  
@@ -50,7 +49,7 @@ Categorization, priority, and metadata methods for ContextAgent.
 
 # Improvements for ContextCategorizationMixin
 
-**File**: `src\logic\agents\cognitive\ContextCategorizationMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\ContextCategorizationMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 127 lines (medium)  
 **Complexity**: 10 score (moderate)
@@ -85,12 +84,13 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import json
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
-
 import re
-import json
 from typing import Any
+
 from src.logic.agents.cognitive.context.models.ContextPriority import ContextPriority
 from src.logic.agents.cognitive.context.models.FileCategory import FileCategory
 

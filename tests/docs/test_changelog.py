@@ -12,16 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from scripts.changelog import generate_entry
 import pytest
+
+from scripts.changelog import generate_entry
 
 
 def test_generate_entry_empty(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test that generate_entry returns an empty string when there are no commits since the last tag."""
     monkeypatch.setattr("subprocess.check_output", lambda *args, **kwargs: "".encode())
     assert generate_entry() == ""
 
 
 def test_generate_entry_various(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test that generate_entry correctly categorizes commits based on their prefixes."""
     # simulate git output with feat, fix and other
     output = "feat: add foo\nfix: correct bar\nchore: cleanup\n"
     monkeypatch.setattr("subprocess.check_output", lambda *args, **kwargs: output)

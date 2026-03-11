@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/agent_tests.description.md
 
@@ -49,7 +48,6 @@ LLM_CONTEXT_END
 Tests Agent: Maintains and updates test suites for the workspace.
 """
 
-from src.version import VERSION
 import sys
 from pathlib import Path
 

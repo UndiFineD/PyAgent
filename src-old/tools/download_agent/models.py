@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/download_agent/models.description.md
 
 # models
 
-**File**: `src\tools\download_agent\models.py`  
+**File**: `src\tools\\download_agent\\models.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 2 imports  
 **Lines**: 45  
@@ -51,7 +50,7 @@ Configuration for download operations.
 
 # Improvements for models
 
-**File**: `src\tools\download_agent\models.py`  
+**File**: `src\tools\\download_agent\\models.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 45 lines (small)  
 **Complexity**: 0 score (simple)

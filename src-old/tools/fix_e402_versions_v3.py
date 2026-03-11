@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/fix_e402_versions_v3.description.md
 
@@ -69,9 +68,8 @@ Python module containing implementation for fix_e402_versions_v3.
 LLM_CONTEXT_END
 """
 
-import os
-import re
 import ast
+import os
 
 
 def is_syntax_valid(content):

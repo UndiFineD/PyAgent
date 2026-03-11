@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/models/ContextTag.description.md
 
 # ContextTag
 
-**File**: `src\logic\agents\cognitive\context\models\ContextTag.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\models\\ContextTag.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 31  
@@ -36,7 +35,7 @@ A tag for categorizing context.
 
 # Improvements for ContextTag
 
-**File**: `src\logic\agents\cognitive\context\models\ContextTag.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\models\\ContextTag.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 31 lines (small)  
 **Complexity**: 0 score (simple)
@@ -84,9 +83,9 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_context.py"""
 
-from src.core.base.version import VERSION
 from dataclasses import dataclass
-from typing import Optional
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

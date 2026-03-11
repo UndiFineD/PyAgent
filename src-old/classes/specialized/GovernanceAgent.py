@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/GovernanceAgent.description.md
 
@@ -107,15 +106,16 @@ Specializes in multi-agent proposal deliberation, voting, and fleet-wide policy 
 Follows Decentralized Autonomous Organization (DAO) principles for agent swarms.
 """
 
-from src.core.base.version import VERSION
-import logging
 import json
-import uuid
+import logging
 import time
+import uuid
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -145,6 +145,7 @@ class GovernanceAgent(BaseAgent):
             description: Detailed description of the requested change/action.
             creator: Name of the agent or user submitting the proposal.
             options: List of choices for the vote (default is ['Approve', 'Reject']).
+
         """
         proposal_id = str(uuid.uuid4())[:8]
         proposal = {
@@ -185,6 +186,7 @@ class GovernanceAgent(BaseAgent):
             voter: Name of the agent casting the vote.
             choice: The selected option.
             rationale: Brief explanation for the vote.
+
         """
         path = self.proposals_dir / f"{proposal_id}.json"
         if not path.exists():

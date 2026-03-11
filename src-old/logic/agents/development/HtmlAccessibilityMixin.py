@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/HtmlAccessibilityMixin.description.md
 
 # HtmlAccessibilityMixin
 
-**File**: `src\logic\agents\development\HtmlAccessibilityMixin.py`  
+**File**: `src\\logic\agents\\development\\HtmlAccessibilityMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 128  
@@ -42,7 +41,7 @@ Mixin for HTML accessibility analysis.
 
 # Improvements for HtmlAccessibilityMixin
 
-**File**: `src\logic\agents\development\HtmlAccessibilityMixin.py`  
+**File**: `src\\logic\agents\\development\\HtmlAccessibilityMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 128 lines (medium)  
 **Complexity**: 2 score (simple)
@@ -78,8 +77,8 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
-
 import re
+
 from src.core.base.types.AccessibilityIssue import AccessibilityIssue
 from src.core.base.types.AccessibilityIssueType import AccessibilityIssueType
 from src.core.base.types.AccessibilitySeverity import AccessibilitySeverity

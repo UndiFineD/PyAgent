@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/MemoRAGAgent.description.md
 
@@ -102,11 +101,12 @@ Generates 'clues' from global memory to improve retrieval accuracy.
 Ref: https://github.com/qhjqhj00/MemoRAG
 """
 
-from src.core.base.Version import VERSION
 import logging
 from pathlib import Path
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.BaseUtilities import as_tool
+from src.core.base.Version import VERSION
 
 try:
     import rust_core

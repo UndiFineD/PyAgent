@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/agent/HealthChecker.description.md
 
 # HealthChecker
 
-**File**: `src\classes\agent\HealthChecker.py`  
+**File**: `src\\classes\agent\\HealthChecker.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 40 imports  
 **Lines**: 210  
@@ -65,7 +64,7 @@ Attributes:
 
 # Improvements for HealthChecker
 
-**File**: `src\classes\agent\HealthChecker.py`  
+**File**: `src\\classes\agent\\HealthChecker.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 210 lines (medium)  
 **Complexity**: 8 score (moderate)
@@ -93,6 +92,7 @@ Attributes:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -100,44 +100,17 @@ from __future__ import annotations
 """Auto-extracted class from agent.py"""
 
 
-from .AgentHealthCheck import AgentHealthCheck
-from .HealthStatus import HealthStatus
-
-from abc import ABC, abstractmethod
-from concurrent.futures import ThreadPoolExecutor
-from contextlib import contextmanager
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from pathlib import Path
-from types import TracebackType
-from typing import (
-    List,
-    Set,
-    Optional,
-    Dict,
-    Any,
-    Callable,
-    Iterable,
-    TypeVar,
-    cast,
-    Final,
-)
-import argparse
-import asyncio
-import difflib
-import fnmatch
-import functools
-import hashlib
-import importlib.util
-import json
-import logging
-import os
-import signal
 import subprocess
 import sys
-import threading
 import time
-import uuid
+from pathlib import Path
+from typing import (
+    Any,
+    Dict,
+)
+
+from .AgentHealthCheck import AgentHealthCheck
+from .HealthStatus import HealthStatus
 
 
 class HealthChecker:
@@ -149,6 +122,7 @@ class HealthChecker:
     Attributes:
         repo_root: Repository root directory.
         results: Dict of health check results.
+
     """
 
     def __init__(self, repo_root: Path, recorder: Any = None) -> None:
@@ -157,6 +131,7 @@ class HealthChecker:
         Args:
             repo_root: Repository root directory.
             recorder: Optional LocalContextRecorder.
+
         """
         self.repo_root = repo_root
         self.recorder = recorder
@@ -175,6 +150,7 @@ class HealthChecker:
 
         Returns:
             AgentHealthCheck result.
+
         """
         start_time = time.time()
         # Look for script in src/ directory (scripts are stored there)
@@ -212,6 +188,7 @@ class HealthChecker:
 
         Returns:
             AgentHealthCheck result.
+
         """
         start_time = time.time()
 
@@ -244,6 +221,7 @@ class HealthChecker:
 
         Returns:
             AgentHealthCheck result.
+
         """
         start_time = time.time()
         response_time = (time.time() - start_time) * 1000
@@ -260,6 +238,7 @@ class HealthChecker:
 
         Returns:
             Dict of check name to AgentHealthCheck result.
+
         """
         agent_names = [
             "coder",
@@ -286,6 +265,7 @@ class HealthChecker:
 
         Returns:
             bool: True if all healthy, False otherwise.
+
         """
         if not self.results:
             self.run_all_checks()

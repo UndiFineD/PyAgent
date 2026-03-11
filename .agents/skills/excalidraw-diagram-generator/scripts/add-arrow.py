@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Add arrows (connections) between elements in Excalidraw diagrams.
+"""Add arrows (connections) between elements in Excalidraw diagrams.
 
 Usage:
     python add-arrow.py <diagram_path> <from_x> <from_y> <to_x> <to_y> [OPTIONS]
@@ -16,13 +15,13 @@ Examples:
     python add-arrow.py diagram.excalidraw 300 200 500 300 --label "HTTP"
     python add-arrow.py diagram.excalidraw 300 200 500 300 --style dashed --color "#7950f2"
     python add-arrow.py diagram.excalidraw 300 200 500 300 --use-edit-suffix
+
 """
 
 import json
 import sys
 import uuid
 from pathlib import Path
-from typing import Dict, Any
 
 
 def generate_unique_id() -> str:
@@ -31,13 +30,13 @@ def generate_unique_id() -> str:
 
 
 def prepare_edit_path(diagram_path: Path, use_edit_suffix: bool) -> tuple[Path, Path | None]:
-    """
-    Prepare a safe edit path to avoid editor overwrite issues.
+    """Prepare a safe edit path to avoid editor overwrite issues.
 
     Returns:
         (work_path, final_path)
         - work_path: file path to read/write during edit
         - final_path: file path to rename back to (or None if not used)
+
     """
     if not use_edit_suffix:
         return diagram_path, None
@@ -75,8 +74,7 @@ def create_arrow(
     color: str = "#1e1e1e",
     label: str = None
 ) -> list:
-    """
-    Create an arrow element.
+    """Create an arrow element.
     
     Args:
         from_x: Starting X coordinate
@@ -89,9 +87,10 @@ def create_arrow(
     
     Returns:
         List of elements (arrow and optional label)
+
     """
     elements = []
-    
+
     # Arrow element
     arrow = {
         "id": generate_unique_id(),
@@ -133,12 +132,12 @@ def create_arrow(
         "lastCommittedPoint": None
     }
     elements.append(arrow)
-    
+
     # Optional label
     if label:
         mid_x = (from_x + to_x) / 2 - (len(label) * 5)
         mid_y = (from_y + to_y) / 2 - 10
-        
+
         label_element = {
             "id": generate_unique_id(),
             "type": "text",
@@ -177,7 +176,7 @@ def create_arrow(
             "lineHeight": 1.25
         }
         elements.append(label_element)
-    
+
     return elements
 
 
@@ -191,8 +190,7 @@ def add_arrow_to_diagram(
     color: str = "#1e1e1e",
     label: str = None
 ) -> None:
-    """
-    Add an arrow to an Excalidraw diagram.
+    """Add an arrow to an Excalidraw diagram.
     
     Args:
         diagram_path: Path to the Excalidraw diagram file
@@ -203,32 +201,33 @@ def add_arrow_to_diagram(
         style: Line style (solid, dashed, dotted)
         color: Arrow color
         label: Optional text label
+
     """
     print(f"Creating arrow from ({from_x}, {from_y}) to ({to_x}, {to_y})")
     arrow_elements = create_arrow(from_x, from_y, to_x, to_y, style, color, label)
-    
+
     if label:
         print(f"  With label: '{label}'")
-    
+
     # Load diagram
     print(f"Loading diagram: {diagram_path}")
     with open(diagram_path, 'r', encoding='utf-8') as f:
         diagram = json.load(f)
-    
+
     # Add arrow elements
     if 'elements' not in diagram:
         diagram['elements'] = []
-    
+
     original_count = len(diagram['elements'])
     diagram['elements'].extend(arrow_elements)
     print(f"  Added {len(arrow_elements)} elements (total: {original_count} -> {len(diagram['elements'])})")
-    
+
     # Save diagram
-    print(f"Saving diagram")
+    print("Saving diagram")
     with open(diagram_path, 'w', encoding='utf-8') as f:
         json.dump(diagram, f, indent=2, ensure_ascii=False)
-    
-    print(f"✓ Successfully added arrow to diagram")
+
+    print("✓ Successfully added arrow to diagram")
 
 
 def main():
@@ -244,20 +243,20 @@ def main():
         print("  python add-arrow.py diagram.excalidraw 300 200 500 300")
         print("  python add-arrow.py diagram.excalidraw 300 200 500 300 --label 'HTTP'")
         sys.exit(1)
-    
+
     diagram_path = Path(sys.argv[1])
     from_x = float(sys.argv[2])
     from_y = float(sys.argv[3])
     to_x = float(sys.argv[4])
     to_y = float(sys.argv[5])
-    
+
     # Parse optional arguments
     style = "solid"
     color = "#1e1e1e"
     label = None
     # Default: use edit suffix to avoid editor overwrite issues
     use_edit_suffix = True
-    
+
     i = 6
     while i < len(sys.argv):
         if sys.argv[i] == '--style':
@@ -293,12 +292,12 @@ def main():
         else:
             print(f"Error: Unknown option: {sys.argv[i]}")
             sys.exit(1)
-    
+
     # Validate inputs
     if not diagram_path.exists():
         print(f"Error: Diagram file not found: {diagram_path}")
         sys.exit(1)
-    
+
     try:
         work_path, final_path = prepare_edit_path(diagram_path, use_edit_suffix)
         add_arrow_to_diagram(work_path, from_x, from_y, to_x, to_y, style, color, label)

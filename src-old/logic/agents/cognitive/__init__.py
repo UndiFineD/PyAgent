@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/__init__.description.md
 
@@ -41,13 +40,14 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Cognitive Agents for PyAgent Swarm."""
 
+from .context_agent import ContextAgent
 from .knowledge_agent import KnowledgeAgent
 from .reasoning_agent import ReasoningAgent
-from .context_agent import ContextAgent
 from .speciation_agent import SpeciationAgent
 
 __all__ = [

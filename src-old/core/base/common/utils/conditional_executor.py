@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/conditional_executor.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -53,8 +53,8 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from ..models.base_models import ExecutionCondition
 from ...lifecycle.version import VERSION
+from ..models.base_models import ExecutionCondition
 
 __version__ = VERSION
 
@@ -69,6 +69,7 @@ class ConditionalExecutor:
 
         if executor.should_execute("coder", file_path, content):
             run_coder(file_path)
+
     """
 
     def __init__(self) -> None:
@@ -88,6 +89,7 @@ class ConditionalExecutor:
             name: Condition name.
             check: Function taking (path, content) returning bool.
             description: Human - readable description.
+
         """
         self._conditions[name] = ExecutionCondition(
             name=name,
@@ -107,6 +109,7 @@ class ConditionalExecutor:
             agent_name: Name of the agent.
             conditions: List of condition names.
             require_all: If True, all conditions must pass.
+
         """
         self._agent_conditions[agent_name] = {
             "conditions": conditions,
@@ -128,6 +131,7 @@ class ConditionalExecutor:
 
         Returns:
             True if agent should execute.
+
         """
         if agent_name not in self._agent_conditions:
             return True  # No conditions, always execute
@@ -145,7 +149,7 @@ class ConditionalExecutor:
                 results.append(condition.check(file_path, content))
             except (
                 Exception
-            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            ):  # pylint: disable=broad-exception-caught, unused-variable
                 # pylint: disable=broad-exception-caught
                 results.append(False)
 

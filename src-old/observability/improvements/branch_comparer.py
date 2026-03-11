@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/improvements/branch_comparer.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -81,6 +82,7 @@ class BranchComparer:
         result=comparer.compare("main", "feature / improvements")
         for diff in result.diffs:
             print(f"{diff.diff_type.value}: {diff.improvement_id}")
+
     """
 
     def __init__(self, repo_path: str | None = None, recorder: Any = None) -> None:
@@ -89,6 +91,7 @@ class BranchComparer:
         Args:
             repo_path: Path to git repository. Defaults to current directory.
             recorder: Optional LocalContextRecorder.
+
         """
         self.repo_path = Path(repo_path) if repo_path else Path.cwd()
         self.recorder = recorder
@@ -110,6 +113,7 @@ class BranchComparer:
 
         Returns:
             Comparison result with diffs.
+
         """
         comparison = BranchComparison(
             source_branch=source_branch,
@@ -153,6 +157,7 @@ class BranchComparer:
 
         Returns:
             File content string.
+
         """
         try:
             result = subprocess.run(
@@ -174,6 +179,7 @@ class BranchComparer:
 
         Returns:
             Dictionary mapping improvement IDs to Improvement objects.
+
         """
         improvements: dict[str, Improvement] = {}
 
@@ -202,6 +208,7 @@ class BranchComparer:
 
         Returns:
             List of improvement differences.
+
         """
         diffs: list[ImprovementDiff] = []
         all_ids = set(source.keys()) | set(target.keys())
@@ -259,6 +266,7 @@ class BranchComparer:
 
         Returns:
             List of added improvements.
+
         """
         return [
             d.target_version for d in comparison.diffs if d.diff_type == ImprovementDiffType.ADDED and d.target_version
@@ -272,6 +280,7 @@ class BranchComparer:
 
         Returns:
             List of removed improvements.
+
         """
         return [
             d.source_version
@@ -287,6 +296,7 @@ class BranchComparer:
 
         Returns:
             List of (source, target) improvement tuples.
+
         """
         return [
             (d.source_version, d.target_version)
@@ -305,6 +315,7 @@ class BranchComparer:
 
         Returns:
             List of conflicting improvement diffs.
+
         """
         comp1 = self.compare(base_branch, branch1, file_path)
         comp2 = self.compare(base_branch, branch2, file_path)
@@ -324,6 +335,7 @@ class BranchComparer:
 
         Returns:
             Markdown formatted report.
+
         """
         lines = [
             "# Branch Comparison Report",
@@ -366,6 +378,7 @@ class BranchComparer:
 
         Returns:
             List of past comparisons.
+
         """
         return list(self.comparisons)
 

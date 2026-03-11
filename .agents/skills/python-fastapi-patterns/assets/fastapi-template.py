@@ -1,5 +1,4 @@
-"""
-Production-ready FastAPI application template.
+"""Production-ready FastAPI application template.
 
 Usage:
     uvicorn main:app --reload  # Development
@@ -14,7 +13,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings
-
 
 # =============================================================================
 # Configuration
@@ -34,6 +32,7 @@ class Settings(BaseSettings):
 
 # Cache settings
 from functools import lru_cache
+
 
 @lru_cache
 def get_settings() -> Settings:

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/core/MetacognitiveCore.description.md
 
 # MetacognitiveCore
 
-**File**: `src\logic\agents\cognitive\core\MetacognitiveCore.py`  
+**File**: `src\\logic\agents\\cognitive\\core\\MetacognitiveCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 121  
@@ -50,7 +49,7 @@ Phase 14 Rust Optimizations:
 
 # Improvements for MetacognitiveCore
 
-**File**: `src\logic\agents\cognitive\core\MetacognitiveCore.py`  
+**File**: `src\\logic\agents\\cognitive\\core\\MetacognitiveCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 121 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -102,9 +101,10 @@ Pure logic for evaluating reasoning certainty and consistency.
 No I/O or side effects.
 """
 
-from src.core.base.Version import VERSION
-from typing import Any
 import logging
+from typing import Any
+
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
@@ -130,8 +130,7 @@ class MetacognitiveCore:
     def calibrate_confidence_weight(
         self, reported_conf: float, actual_correct: bool, current_weight: float
     ) -> float:
-        """
-        Adjusts the consensus weight of an agent.
+        """Adjusts the consensus weight of an agent.
         If an agent is 'overconfident' (high conf, wrong result), penalize heavily.
         """
         if not actual_correct and reported_conf > 0.8:
@@ -141,8 +140,7 @@ class MetacognitiveCore:
         return current_weight
 
     def predict_next_intent(self, history: list[dict[str, Any]]) -> str:
-        """
-        Heuristic-based intent prediction based on recent sequence.
+        """Heuristic-based intent prediction based on recent sequence.
         """
         if not history:
             return "GENERAL_INQUIRY"

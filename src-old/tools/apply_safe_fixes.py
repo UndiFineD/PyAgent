@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/apply_safe_fixes.description.md
 
@@ -98,12 +97,11 @@ Writes unified diff patches to `.external/patches/` and optionally applies chang
 `--apply` is passed. Re-runs static checks and generated tests after applying fixes.
 """
 import argparse
-from pathlib import Path
+import ast
 import difflib
 import re
 import sys
-import ast
-import shutil
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 TARGET_DIR = ROOT / "src" / "external_candidates" / "auto"

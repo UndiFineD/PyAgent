@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/voice_agent_orchestrator.description.md
 
 # voice_agent_orchestrator
 
-**File**: `src\core\base\logic\voice_agent_orchestrator.py`  
+**File**: `src\\core\base\\logic\voice_agent_orchestrator.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 14 imports  
 **Lines**: 459  
@@ -100,7 +99,7 @@ Provides voice interaction capabilities with:
 
 # Improvements for voice_agent_orchestrator
 
-**File**: `src\core\base\logic\voice_agent_orchestrator.py`  
+**File**: `src\\core\base\\logic\voice_agent_orchestrator.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 459 lines (medium)  
 **Complexity**: 17 score (moderate)
@@ -148,17 +147,15 @@ Key Patterns Extracted from big-3-super-agent:
 - Real-time audio processing and conversation handling
 """
 
-import asyncio
-import json
 import threading
 import time
 import uuid
-from datetime import datetime, timezone
-from typing import Dict, Any, Optional, List
 from dataclasses import dataclass
+from datetime import datetime, timezone
+from typing import Any, Dict, List, Optional
 
-from src.core.base.logic.multi_agent_orchestrator import MultiAgentOrchestratorCore
 from src.core.base.common.models.communication_models import CascadeContext
+from src.core.base.logic.multi_agent_orchestrator import MultiAgentOrchestratorCore
 
 
 @dataclass
@@ -187,8 +184,7 @@ class VoiceSession:
 
 
 class VoiceAgentOrchestrator:
-    """
-    Voice-controlled orchestrator for multi-agent systems.
+    """Voice-controlled orchestrator for multi-agent systems.
 
     Provides voice interaction capabilities with:
     - OpenAI Realtime API integration
@@ -230,14 +226,14 @@ class VoiceAgentOrchestrator:
     def start_voice_session(
         self, context: Optional[CascadeContext] = None
     ) -> Dict[str, Any]:
-        """
-        Start a new voice interaction session.
+        """Start a new voice interaction session.
 
         Args:
             context: Cascade context for lineage tracking
 
         Returns:
             Dictionary with session start result
+
         """
         with self.session_lock:
             if self.current_session:
@@ -288,8 +284,7 @@ class VoiceAgentOrchestrator:
     def process_voice_input(
         self, audio_data: bytes, context: Optional[CascadeContext] = None
     ) -> Dict[str, Any]:
-        """
-        Process voice input and generate response.
+        """Process voice input and generate response.
 
         Args:
             audio_data: Raw audio data
@@ -297,6 +292,7 @@ class VoiceAgentOrchestrator:
 
         Returns:
             Dictionary with processing result
+
         """
         if not self.current_session:
             return {"ok": False, "error": "No active voice session"}
@@ -355,8 +351,7 @@ class VoiceAgentOrchestrator:
     def _process_transcription(
         self, transcription: str, context: Optional[CascadeContext] = None
     ) -> Dict[str, Any]:
-        """
-        Process transcribed text and generate response.
+        """Process transcribed text and generate response.
 
         This simulates the OpenAI Realtime API's tool calling and response generation.
         """

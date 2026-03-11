@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/QuantumMemoryAgent.description.md
 
@@ -100,12 +99,13 @@ from __future__ import annotations
 Uses hierarchical summarization and selective hydration to handle massive local context.
 """
 
-from src.core.base.version import VERSION
-import logging
 import json
+import logging
 from pathlib import Path
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -130,9 +130,11 @@ class QuantumMemoryAgent(BaseAgent):
     @as_tool
     def compress_context(self, context_text: str, target_ratio: float = 0.1) -> str:
         """Compresses a large block of text into a high-density semantic summary.
+
         Args:
             context_text: The raw text to compress.
             target_ratio: The desired compression ratio (default 10%).
+
         """
         logging.info(f"QuantumMemory: Compressing {len(context_text)} chars...")
 
@@ -150,8 +152,10 @@ class QuantumMemoryAgent(BaseAgent):
     @as_tool
     def hyper_context_query(self, query: str) -> str:
         """Searches across all compressed context blocks for relevant history.
+
         Args:
             query: The question or reference to search for.
+
         """
         # Logic: Scan all summaries and 're-hydrate' only the most relevant blocks.
         relevant_blocks = [

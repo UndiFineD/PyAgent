@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/report_search_engine.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -70,29 +71,32 @@ __version__ = VERSION
 class ReportSearchEngine:
     """Search engine for reports.
     Enables full - text search across historical report data.
+
     Attributes:
         index: Search index mapping terms to locations.
+
     Example:
         engine=ReportSearchEngine()
         engine.index_report("file.py", ReportType.ERRORS, content)
         results=engine.search("syntax error")
+
     """
 
     def __init__(self) -> None:
         """Initialize search engine."""
-
         self.index: dict[str, list[tuple[str, ReportType, int]]] = {}
         self._reports: dict[str, str] = {}
         logging.debug("ReportSearchEngine initialized")
 
     def index_report(self, file_path: str, report_type: ReportType, content: str) -> None:
         """Index a report for searching.
+
         Args:
             file_path: Report file path.
             report_type: Type of report.
             content: Report content.
-        """
 
+        """
         key = f"{file_path}:{report_type.name}"
         self._reports[key] = content
 
@@ -119,13 +123,15 @@ class ReportSearchEngine:
 
     def search(self, query: str, max_results: int = 20) -> list[ReportSearchResult]:
         """Search reports.
+
         Args:
             query: Search query.
             max_results: Maximum results to return.
+
         Returns:
             List of search results.
-        """
 
+        """
         # Rust-accelerated query tokenization
         if _RUST_AVAILABLE:
             try:

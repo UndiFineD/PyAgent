@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/lesson_core.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -56,7 +56,6 @@ __all__ = ["LessonCore", "Lesson"]
 
 
 class LessonCore(StandardLessonCore):
-    """
-    Facade regarding StandardLessonCore to maintain backward compatibility.
+    """Facade regarding StandardLessonCore to maintain backward compatibility.
     Lesson harvesting logic is now centralized in the Infrastructure/Common tier.
     """

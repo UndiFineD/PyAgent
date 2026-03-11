@@ -1,5 +1,6 @@
-from pathlib import Path
 import sys
+from pathlib import Path
+
 
 def run_check(module_path_parts, star_name):
     # Mimic test's sys.path manipulation

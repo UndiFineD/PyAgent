@@ -17,8 +17,8 @@
 
 import logging
 from pathlib import Path
+
 from src.classes.fleet.FleetManager import FleetManager
-from src.classes.fleet.ResilientStubs import ResilientStub
 
 logging.basicConfig(level=logging.INFO)
 
@@ -26,7 +26,7 @@ def test_v2_2_plugin_loading():
     print("--- Running SDK v2.2.0 Verification ---")
     workspace = Path(Path(__file__).resolve().parents[3])
     fleet = FleetManager(str(workspace))
-    
+
     # 1. Test Mock Agent loading (Dynamic via Manifest)
     print("\n[1] Testing Mock Agent...")
     try:
@@ -64,7 +64,6 @@ def test_v2_2_plugin_loading():
     fleet.blackboard.post("test_key", "verified", "test_runner")
     val = fleet.blackboard.get("test_key")
     print(f"Blackboard retrieval: {val}")
-    from src.classes.orchestration.BlackboardManager import BlackboardManager
     assert hasattr(fleet.blackboard, 'core')
     print("Success: Blackboard is using Core delegation.")
 

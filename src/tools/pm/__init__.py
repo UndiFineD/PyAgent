@@ -5,4 +5,4 @@ calculations, risk matrix helpers, and simple email template rendering.
 """
 
 # expose submodules for convenient imports
-from . import kpi, risk, email
+from . import email, kpi, risk

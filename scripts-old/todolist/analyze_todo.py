@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
-"""
-Script to analyze PyAgent improvement todo list and count remaining items.
+"""Script to analyze PyAgent improvement todo list and count remaining items.
 """
 
-import os
 import re
+
 
 def count_todo_items(file_path):
     """Count total and completed items in a todo file."""
     total = 0
     completed = 0
-    
+
     try:
         with open(file_path, 'r') as f:
             content = f.read()
-            
+
         # Look for checklist items (lines with [ ] or [x])
         lines = content.split('\n')
         for line in lines:
@@ -22,27 +21,27 @@ def count_todo_items(file_path):
                 total += 1
                 if '[x]' in line:
                     completed += 1
-                    
+
     except Exception as e:
         print(f"Error reading {file_path}: {e}")
-        
+
     return total, completed
 
 def analyze_todo_list():
     """Analyze the entire todo list structure."""
     todo_file = r"c:\dev\PyAgent\docs\todo-tree-20260303-1743.txt"
-    
+
     print("Analyzing PyAgent Improvement Todo List")
     print("=" * 50)
-    
+
     # Count total items from the todo file
     total_items = 0
     completed_items = 0
-    
+
     # Parse the todo file to count items
     with open(todo_file, 'r') as f:
         content = f.read()
-        
+
     # Split into lines and count checklist items
     lines = content.split('\n')
     for line in lines:
@@ -50,12 +49,12 @@ def analyze_todo_list():
             total_items += 1
             if '[x]' in line:
                 completed_items += 1
-                
+
     print(f"Total checklist items: {total_items}")
     print(f"Completed items: {completed_items}")
     print(f"Remaining items: {total_items - completed_items}")
     print(f"Completion percentage: {(completed_items/total_items)*100:.1f}%")
-    
+
     # Count total files
     files = []
     for line in lines:
@@ -64,9 +63,9 @@ def analyze_todo_list():
             file_match = re.search(r'([^\s]+\.improvements\.md)', line)
             if file_match:
                 files.append(file_match.group(1))
-    
+
     print(f"\nTotal improvement files: {len(set(files))}")
-    
+
     # Show some sample files
     print("\nSample files:")
     sample_files = list(set(files))[:10]

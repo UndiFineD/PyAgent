@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/utils/branch_comparer.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -64,6 +64,7 @@ class BranchComparer:
     Example:
         >>> comparer=BranchComparer()
         >>> comparison=comparer.compare("main", "feature")
+
     """
 
     def __init__(self) -> None:
@@ -108,6 +109,7 @@ class BranchComparer:
 
         Returns:
             BranchComparison with differences.
+
         """
         resolved_a = branch_a if branch_a is not None else self.branch_a
         resolved_b = branch_b if branch_b is not None else self.branch_b

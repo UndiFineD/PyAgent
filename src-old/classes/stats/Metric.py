@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/stats/Metric.description.md
 
@@ -76,14 +75,16 @@ from __future__ import annotations
 """Auto-extracted class from agent_stats.py"""
 
 
-from .MetricType import MetricType
-
 from dataclasses import dataclass, field
 from typing import Dict
+
+from .MetricType import MetricType
+
 
 @dataclass
 class Metric:
     """A single metric."""
+
     name: str
     value: float
     metric_type: MetricType

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/ReportValidator.description.md
 
 # ReportValidator
 
-**File**: `src\observability\reports\ReportValidator.py`  
+**File**: `src\\observability\reports\\ReportValidator.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 81  
@@ -22,6 +21,7 @@ Auto-extracted class from generate_agent_reports.py
 
 Validator for report data integrity.
 Validates report structure, content, and checksums.
+
 Example:
     validator=ReportValidator()
     result=validator.validate(content)
@@ -50,7 +50,7 @@ Example:
 
 # Improvements for ReportValidator
 
-**File**: `src\observability\reports\ReportValidator.py`  
+**File**: `src\\observability\reports\\ReportValidator.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 81 lines (small)  
 **Complexity**: 3 score (simple)
@@ -78,6 +78,7 @@ Example:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -98,12 +99,13 @@ from __future__ import annotations
 
 """Auto-extracted class from generate_agent_reports.py"""
 
-from src.core.base.version import VERSION
-from .ValidationResult import ValidationResult
-from typing import List
 import hashlib
 import logging
 import re
+
+from src.core.base.version import VERSION
+
+from .ValidationResult import ValidationResult
 
 __version__ = VERSION
 
@@ -111,26 +113,29 @@ __version__ = VERSION
 class ReportValidator:
     """Validator for report data integrity.
     Validates report structure, content, and checksums.
+
     Example:
         validator=ReportValidator()
         result=validator.validate(content)
         if not result.valid:
             print(result.errors)
+
     """
 
     def __init__(self) -> None:
         """Initialize validator."""
-
         logging.debug("ReportValidator initialized")
 
     def validate(self, content: str) -> ValidationResult:
         """Validate report content.
+
         Args:
             content: Report content.
+
         Returns:
             Validation result.
-        """
 
+        """
         errors: list[str] = []
         warnings: list[str] = []
         # Check for required sections
@@ -150,12 +155,14 @@ class ReportValidator:
 
     def verify_checksum(self, content: str, expected: str) -> bool:
         """Verify content checksum.
+
         Args:
             content: Report content.
             expected: Expected checksum.
+
         Returns:
             True if matches.
-        """
 
+        """
         actual = hashlib.sha256(content.encode()).hexdigest()[:16]
         return actual == expected

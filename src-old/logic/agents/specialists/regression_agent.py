@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/regression_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -91,8 +91,7 @@ class RegressionResult:
 
 # pylint: disable=too-many-ancestors
 class RegressionAgent(BaseAgent):
-    """
-    Agent specializing in predicting continuous values and analyzing relationships
+    """Agent specializing in predicting continuous values and analyzing relationships
     between variables (e.g., predicting code complexity growth, performance trends).
     """
 

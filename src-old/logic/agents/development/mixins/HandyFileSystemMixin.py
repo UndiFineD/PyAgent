@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/HandyFileSystemMixin.description.md
 
 # HandyFileSystemMixin
 
-**File**: `src\logic\agents\development\mixins\HandyFileSystemMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\HandyFileSystemMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 40  
@@ -40,7 +39,7 @@ Mixin for file system operations in HandyAgent.
 
 # Improvements for HandyFileSystemMixin
 
-**File**: `src\logic\agents\development\mixins\HandyFileSystemMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\HandyFileSystemMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 40 lines (small)  
 **Complexity**: 1 score (simple)
@@ -75,14 +74,13 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import shutil
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
-
 import subprocess
-import shutil
-from typing import TYPE_CHECKING
-from src.core.base.BaseUtilities import as_tool
 
+from src.core.base.BaseUtilities import as_tool
 from src.logic.agents.development.HandyAgent import HandyAgent
 
 

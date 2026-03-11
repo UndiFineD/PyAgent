@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/mixins/ContextDataMixin.description.md
 
 # ContextDataMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\mixins\ContextDataMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\mixins\\ContextDataMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 98  
@@ -41,7 +40,7 @@ Mixin for fundamental context data operations.
 
 # Improvements for ContextDataMixin
 
-**File**: `src\logic\agents\cognitive\context\engines\mixins\ContextDataMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\context\\engines\\mixins\\ContextDataMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 98 lines (small)  
 **Complexity**: 5 score (moderate)
@@ -72,6 +71,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -88,6 +88,7 @@ from __future__ import annotations
 """Data manipulation logic for GlobalContextEngine."""
 
 from typing import Any
+
 
 class ContextDataMixin:
     """Mixin for fundamental context data operations."""

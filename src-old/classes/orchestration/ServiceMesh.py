@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/ServiceMesh.description.md
 
@@ -80,9 +79,7 @@ LLM_CONTEXT_END
 """Service Mesh for synchronizing tools and capabilities across distributed fleet nodes."""
 
 import logging
-import json
-from typing import Dict, List, Any, Optional
-from src.classes.orchestration.SignalRegistry import SignalRegistry
+from typing import Any, Dict, List
 
 
 class ServiceMesh:

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/privilege_escalation_mixin.description.md
 
 # privilege_escalation_mixin
 
-**File**: `src\core\base\mixins\privilege_escalation_mixin.py`  
+**File**: `src\\core\base\\mixins\\privilege_escalation_mixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 66  
@@ -48,7 +47,7 @@ Mixin providing privilege escalation features for Windows environments.
 
 # Improvements for privilege_escalation_mixin
 
-**File**: `src\core\base\mixins\privilege_escalation_mixin.py`  
+**File**: `src\\core\base\\mixins\\privilege_escalation_mixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 66 lines (small)  
 **Complexity**: 6 score (moderate)
@@ -79,6 +78,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -112,7 +112,7 @@ class PrivilegeEscalationMixin:
     def __init__(self, **kwargs: Any) -> None:
         if platform.system() != "Windows":
             raise RuntimeError("PrivilegeEscalationMixin is only supported on Windows")
-        
+
         self.privilege_core = PrivilegeEscalationCore()
         self.impersonated_tokens: list = []
 

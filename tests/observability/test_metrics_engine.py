@@ -1,4 +1,5 @@
 import asyncio
+
 import pytest
 
 from observability.stats import metrics_engine  # type: ignore[import-not-found]
@@ -6,6 +7,7 @@ from observability.stats import metrics_engine  # type: ignore[import-not-found]
 
 @pytest.mark.asyncio
 async def test_async_tick_loop() -> None:
+    """Test that the metrics engine's asynchronous tick loop can run and update the counter."""
     # reset state
     metrics_engine.counter = 0
 

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/GraphMemoryAgent.description.md
 
 # GraphMemoryAgent
 
-**File**: `src\logic\agents\cognitive\GraphMemoryAgent.py`  
+**File**: `src\\logic\agents\\cognitive\\GraphMemoryAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 10 imports  
 **Lines**: 77  
@@ -49,7 +48,7 @@ Manages long-term memories with MIRIX 6-component architecture and Beads task tr
 
 # Improvements for GraphMemoryAgent
 
-**File**: `src\logic\agents\cognitive\GraphMemoryAgent.py`  
+**File**: `src\\logic\agents\\cognitive\\GraphMemoryAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 77 lines (small)  
 **Complexity**: 2 score (simple)
@@ -99,14 +98,16 @@ from __future__ import annotations
 Supports FalkorDB-style triple storage (Subject-Predicate-Object).
 """
 
-from src.core.base.Version import VERSION
 from pathlib import Path
 from typing import Any
+
 from src.core.base.BaseAgent import BaseAgent
-from .mixins.GraphStorageMixin import GraphStorageMixin
-from .mixins.GraphMIRIXMixin import GraphMIRIXMixin
+from src.core.base.Version import VERSION
+
 from .mixins.GraphBeadsMixin import GraphBeadsMixin
 from .mixins.GraphEntityMixin import GraphEntityMixin
+from .mixins.GraphMIRIXMixin import GraphMIRIXMixin
+from .mixins.GraphStorageMixin import GraphStorageMixin
 
 __version__ = VERSION
 

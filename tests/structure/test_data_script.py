@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Tests for the data generation script."""
-import os
 from scripts.generate_test_data import generate_sample_fixture
 
 

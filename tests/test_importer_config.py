@@ -17,12 +17,11 @@
 from __future__ import annotations
 
 import asyncio
-
-
 from pathlib import Path
 
 
 def test_parse_manifest(tmp_path: Path) -> None:
+    """Test that parse_manifest can read a simple manifest file."""
     from src.importer.config import parse_manifest
 
     # create a temporary manifest file with comments, blanks, and valid entries

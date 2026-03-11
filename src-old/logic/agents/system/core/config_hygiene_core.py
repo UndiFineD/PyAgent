@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/core/config_hygiene_core.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -59,8 +59,7 @@ class ConfigHygieneCore:
 
     @staticmethod
     def validate_json_with_schema(data_path: str, schema_path: str) -> tuple[bool, str]:
-        """
-        Validates a JSON file against a schema.
+        """Validates a JSON file against a schema.
         Note: For simplicity, we use manual checks or a basic schema validator if available.
         Since we want to avoid extra heavy dependencies like 'jsonschema' if not present,
         we'll do a structural check.
@@ -90,8 +89,7 @@ class ConfigHygieneCore:
     def extract_env_vars(
         config_data: dict[str, Any], prefix: str = "PYAGENT_"
     ) -> dict[str, str]:
-        """
-        Helper to flatten nested config into env-style key-value pairs.
+        """Helper to flatten nested config into env-style key-value pairs.
         """
         try:
             import rust_core

@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/ReasoningAgent.description.md
 
 # ReasoningAgent
 
-**File**: `src\logic\agents\specialists\ReasoningAgent.py`  
+**File**: `src\\logic\agents\\specialists\\ReasoningAgent.py`  
 **Type**: Python Module  
 **Summary**: 3 classes, 0 functions, 15 imports  
 **Lines**: 236  
@@ -61,7 +60,7 @@ and multi-step logical deduction with self-verification.
 
 # Improvements for ReasoningAgent
 
-**File**: `src\logic\agents\specialists\ReasoningAgent.py`  
+**File**: `src\\logic\agents\\specialists\\ReasoningAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 236 lines (medium)  
 **Complexity**: 1 score (simple)
@@ -99,17 +98,18 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# ReasoningAgent: Recursive and Deep Thinking Agent - Phase 319 Enhanced
-
-from src.core.base.Version import VERSION
 import logging
 import time
-from typing import Any, Dict, List, Optional
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Dict, List, Optional
+
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.BaseUtilities import as_tool
+
+# Copyright 2026 PyAgent Authors
+# ReasoningAgent: Recursive and Deep Thinking Agent - Phase 319 Enhanced
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
@@ -135,8 +135,7 @@ class ThoughtNode:
 
 
 class ReasoningAgent(BaseAgent):
-    """
-    Agent specializing in long-context reasoning, recursive chain-of-thought,
+    """Agent specializing in long-context reasoning, recursive chain-of-thought,
     and multi-step logical deduction with self-verification.
     """
 

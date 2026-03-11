@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/analysis/profiling_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -87,6 +87,7 @@ class ProfilingAgent(BaseAgent):
 
         Returns:
             List of ProfileStats for the file.
+
         """
         profiler = cProfile.Profile()
         try:
@@ -177,6 +178,7 @@ class ProfilingAgent(BaseAgent):
         Args:
             file_path: Original source file.
             slow_functions: List of detected slow functions.
+
         """
         import time
 
@@ -214,7 +216,7 @@ class ProfilingAgent(BaseAgent):
                         orchestrator.active_tasks = []
                     orchestrator.active_tasks.append(task)
                     logging.info(
-                        f"ProfilingAgent: Successly handed over task to SelfImprovementOrchestrator."
+                        "ProfilingAgent: Successly handed over task to SelfImprovementOrchestrator."
                     )
                 except (AttributeError, KeyError) as e:
                     logging.debug(
@@ -241,6 +243,7 @@ class ProfilingAgent(BaseAgent):
 
         Args:
             node: AST node of the function.
+
         """
         has_loop = False
         has_io = False

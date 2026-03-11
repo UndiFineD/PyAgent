@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/CognitiveBorrowingOrchestrator.description.md
 
@@ -80,12 +79,11 @@ LLM_CONTEXT_END
 """
 
 import logging
-from typing import Dict, List, Any, Optional
+from typing import Dict, Optional
 
 
 class CognitiveBorrowingOrchestrator:
-    """
-    Enables agents to 'borrow' high-level cognitive patterns or skills from peers in real-time.
+    """Enables agents to 'borrow' high-level cognitive patterns or skills from peers in real-time.
     When an agent encounters a task outside its direct specialization, it can request
     a 'Cognitive Bridge' to a more specialized peer.
     """

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/AttributionEngine.description.md
 
 # AttributionEngine
 
-**File**: `src\classes\fleet\AttributionEngine.py`  
+**File**: `src\\classes\fleet\\AttributionEngine.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 12 imports  
 **Lines**: 95  
@@ -54,7 +53,7 @@ Records the 'who, when, and how' for all system outputs (Phase 185).
 
 # Improvements for AttributionEngine
 
-**File**: `src\classes\fleet\AttributionEngine.py`  
+**File**: `src\\classes\fleet\\AttributionEngine.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 95 lines (small)  
 **Complexity**: 7 score (moderate)
@@ -104,14 +103,15 @@ from __future__ import annotations
 Tracks the lineage and provenance of every generated piece of content or code.
 """
 
-from src.core.base.version import VERSION
 import hashlib
-import time
 import json
-import os
 import logging
+import os
+import time
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any
+
+from src.core.base.version import VERSION
 from src.infrastructure.fleet.core.AttributionCore import AttributionCore
 
 __version__ = VERSION

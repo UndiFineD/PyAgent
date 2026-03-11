@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/graph_orchestration.description.md
 
 # graph_orchestration
 
-**File**: `src\logic\agents\swarm\graph_orchestration.py`  
+**File**: `src\\logic\agents\\swarm\\graph_orchestration.py`  
 **Type**: Python Module  
 **Summary**: 14 classes, 0 functions, 19 imports  
 **Lines**: 582  
@@ -198,7 +197,7 @@ This provides the LLM Tornado-inspired orchestration framework.
 
 # Improvements for graph_orchestration
 
-**File**: `src\logic\agents\swarm\graph_orchestration.py`  
+**File**: `src\\logic\agents\\swarm\\graph_orchestration.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 582 lines (large)  
 **Complexity**: 32 score (complex)
@@ -249,10 +248,9 @@ import asyncio
 import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional, Callable, TypeVar, Generic, Union
 from datetime import datetime
 from enum import Enum
-from dataclasses import dataclass, field
+from typing import Any, Callable, Dict, Generic, List, Optional, TypeVar
 
 
 # Simple execution context for orchestration
@@ -355,8 +353,7 @@ class OrchestrationRunnable(ABC):
 
 
 class OrchestrationAdvancer:
-    """
-    Handles transitions between runners based on execution results.
+    """Handles transitions between runners based on execution results.
 
     Inspired by LLM Tornado's advancer concept.
     """
@@ -380,8 +377,7 @@ class OrchestrationAdvancer:
 
 
 class OrchestrationGraph(Generic[TState]):
-    """
-    Immutable orchestration graph definition.
+    """Immutable orchestration graph definition.
 
     Based on LLM Tornado's OrchestrationGraph pattern.
     """
@@ -424,8 +420,7 @@ class OrchestrationGraph(Generic[TState]):
 
 
 class OrchestrationGraphBuilder(Generic[TState]):
-    """
-    Fluent builder for creating orchestration graphs.
+    """Fluent builder for creating orchestration graphs.
 
     Inspired by LLM Tornado's OrchestrationGraphBuilder pattern.
     """
@@ -519,8 +514,7 @@ class OrchestrationGraphBuilder(Generic[TState]):
 
 
 class Orchestrator(Generic[TState]):
-    """
-    Main orchestrator that executes orchestration graphs.
+    """Main orchestrator that executes orchestration graphs.
 
     Based on LLM Tornado's orchestrator concept.
     """
@@ -533,8 +527,7 @@ class Orchestrator(Generic[TState]):
     async def execute(
         self, initial_context: ExecutionContext, max_iterations: int = 100
     ) -> TState:
-        """
-        Execute the orchestration graph.
+        """Execute the orchestration graph.
 
         Args:
             initial_context: Initial cascade context
@@ -542,6 +535,7 @@ class Orchestrator(Generic[TState]):
 
         Returns:
             Final orchestration state
+
         """
         if self._running:
             raise RuntimeError("Orchestrator is already running.")
@@ -809,8 +803,7 @@ class ConditionalRunner(OrchestrationRunnable):
 
 
 class GraphOrchestrationMixin:
-    """
-    Mixin to add graph-based orchestration capabilities to PyAgent orchestrators.
+    """Mixin to add graph-based orchestration capabilities to PyAgent orchestrators.
 
     This provides the LLM Tornado-inspired orchestration framework.
     """

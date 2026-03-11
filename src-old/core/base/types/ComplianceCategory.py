@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/types/ComplianceCategory.description.md
 
 # ComplianceCategory
 
-**File**: `src\core\base\types\ComplianceCategory.py`  
+**File**: `src\\core\base\types\\ComplianceCategory.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 29  
@@ -37,7 +36,7 @@ Categories for compliance checking.
 
 # Improvements for ComplianceCategory
 
-**File**: `src\core\base\types\ComplianceCategory.py`  
+**File**: `src\\core\base\types\\ComplianceCategory.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 29 lines (small)  
 **Complexity**: 0 score (simple)
@@ -85,8 +84,9 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_changes.py"""
 
-from src.core.base.version import VERSION
 from enum import Enum
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

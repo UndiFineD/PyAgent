@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/multimodal_core.description.md
 
 # multimodal_core
 
-**File**: `src\core\base\logic\core\multimodal_core.py`  
+**File**: `src\\core\base\\logic\\core\\multimodal_core.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 8 imports  
 **Lines**: 93  
@@ -70,7 +69,7 @@ Inspired by 'Stream-Omni' and 'FastFlowLM':
 
 # Improvements for multimodal_core
 
-**File**: `src\core\base\logic\core\multimodal_core.py`  
+**File**: `src\\core\base\\logic\\core\\multimodal_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 93 lines (small)  
 **Complexity**: 7 score (moderate)
@@ -103,9 +102,9 @@ Inspired by 'Stream-Omni' and 'FastFlowLM':
 LLM_CONTEXT_END
 """
 
-from typing import List, Dict, Any, Optional, Union
-from dataclasses import dataclass, field
 import base64
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Union
 
 
 @dataclass
@@ -118,8 +117,7 @@ class MultimodalChunk:
 
 
 class MultimodalCore:
-    """
-    Implements interleaved multimodal token management for 'Omni' models.
+    """Implements interleaved multimodal token management for 'Omni' models.
 
     Inspired by 'Stream-Omni' and 'FastFlowLM':
     - Handles transition between raw media and model-specific tokens.
@@ -151,8 +149,7 @@ class MultimodalCore:
         )
 
     def generate_interleaved_prompt(self, model_family: str = "omni") -> str:
-        """
-        Formats the sequence into a specialized prompt structure.
+        """Formats the sequence into a specialized prompt structure.
         Example: <|text|>...<|audio|>...<|image|>...
         """
         prompt_parts = []
@@ -170,8 +167,7 @@ class MultimodalCore:
         self.context_sequence = []
 
     async def sync_streams(self, audio_receiver: Any, video_receiver: Any):
-        """
-        Orchestrates real-time synchronization between incoming RTP audio and
+        """Orchestrates real-time synchronization between incoming RTP audio and
         video fragments. (Skeleton for future implementation)
         """
         # Logic to match timestamps between audio chunks and video frames

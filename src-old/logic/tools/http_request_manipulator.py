@@ -11,14 +11,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/tools/http_request_manipulator.description.md
 
 # http_request_manipulator
 
-**File**: `src\logic\tools\http_request_manipulator.py`  
+**File**: `src\\logic\tools\\http_request_manipulator.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 0 imports  
 **Lines**: 39  
@@ -35,7 +34,7 @@ Derived from Chatio (0xSojalSec).
 
 # Improvements for http_request_manipulator
 
-**File**: `src\logic\tools\http_request_manipulator.py`  
+**File**: `src\\logic\tools\\http_request_manipulator.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 39 lines (small)  
 **Complexity**: 0 score (simple)

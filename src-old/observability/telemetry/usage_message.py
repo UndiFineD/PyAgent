@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/telemetry/usage_message.description.md
 
@@ -42,6 +41,7 @@ LLM_CONTEXT_END
 
 """UsageMessage dataclass for structured usage telemetry."""
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -54,7 +54,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import contextlib
 import os
 import platform
@@ -132,12 +131,12 @@ class UsageContext(str, Enum):
 
 
 def set_runtime_usage_data(key: str, value: str | int | bool) -> None:
-    """
-    Set global usage data to include in telemetry.
+    """Set global usage data to include in telemetry.
 
     Args:
         key: Data key
         value: Data value
+
     """
     _GLOBAL_RUNTIME_DATA[key] = value
 
@@ -158,8 +157,7 @@ def clear_runtime_usage_data() -> None:
 
 
 def is_usage_stats_enabled() -> bool:
-    """
-    Check if usage statistics collection is enabled.
+    """Check if usage statistics collection is enabled.
 
     Respects the following opt-out mechanisms regarding privacy:
     - PYAGENT_DO_NOT_TRACK=1
@@ -169,6 +167,7 @@ def is_usage_stats_enabled() -> bool:
 
     Returns:
         True if usage stats are enabled, False otherwise
+
     """
     return _UsageStatsConfig.is_enabled()
 
@@ -189,11 +188,11 @@ def enable_usage_stats() -> None:
 
 
 def detect_cloud_provider() -> str:
-    """
-    Detect the cloud provider where the code is running regarding environment factors.
+    """Detect the cloud provider where the code is running regarding environment factors.
 
     Returns:
         Cloud provider name or "UNKNOWN"
+
     """
     # Check vendor files (Linux)
     vendor_files: list[str] = [
@@ -244,11 +243,11 @@ def detect_cloud_provider() -> str:
 
 
 def get_cpu_info() -> dict[str, Any]:
-    """
-    Get CPU information.
+    """Get CPU information.
 
     Returns:
         Dictionary with CPU details
+
     """
     try:
         import cpuinfo
@@ -270,11 +269,11 @@ def get_cpu_info() -> dict[str, Any]:
 
 
 def get_gpu_info() -> dict[str, Any]:
-    """
-    Get GPU information if available.
+    """Get GPU information if available.
 
     Returns:
         Dictionary with GPU details or empty dict
+
     """
     try:
         import torch
@@ -300,11 +299,11 @@ def get_gpu_info() -> dict[str, Any]:
 
 
 def get_memory_info() -> dict[str, int]:
-    """
-    Get system memory information.
+    """Get system memory information.
 
     Returns:
         Dictionary with memory details in bytes
+
     """
     try:
         import psutil
@@ -326,8 +325,7 @@ def get_memory_info() -> dict[str, int]:
 
 @dataclass
 class UsageMessage:
-    """
-    Structured usage telemetry message.
+    """Structured usage telemetry message.
 
     Collects platform information and reports it asynchronously.
     """
@@ -399,13 +397,13 @@ class UsageMessage:
         app_version: str = "unknown",
         extra_kvs: dict[str, Any] | None = None,
     ) -> None:
-        """
-        Report usage asynchronously in background thread.
+        """Report usage asynchronously in background thread.
 
         Args:
             context: Usage context
             app_version: Application version
             extra_kvs: Extra key-value pairs to include
+
         """
         if not is_usage_stats_enabled():
             return
@@ -486,8 +484,7 @@ def report_usage(
     app_version: str = "unknown",
     **extra_kvs: Any,
 ) -> None:
-    """
-    Report usage telemetry.
+    """Report usage telemetry.
 
     This is a convenience function that creates a UsageMessage
     and reports it asynchronously.
@@ -496,17 +493,18 @@ def report_usage(
         context: Usage context
         app_version: Application version
         **extra_kvs: Extra key-value pairs
+
     """
     msg = UsageMessage()
     msg.report_usage(context, app_version, extra_kvs)
 
 
 def get_platform_summary() -> dict[str, Any]:
-    """
-    Get a summary of the current platform.
+    """Get a summary of the current platform.
 
     Returns:
         Dictionary with platform information
+
     """
     msg = UsageMessage()
     msg.collect_environment_info()

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/connectivity_core.description.md
 
@@ -29,10 +28,12 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """CacheCore: Authoritative engine for result caching, with optional Rust acceleration."""
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -45,7 +46,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import contextlib
 import logging
 import os
@@ -63,14 +63,13 @@ logger = logging.getLogger("pyagent.connectivity")
 
 
 class ConnectivityCore(BaseCore):
-    """
-    Unified Connectivity and Networking Core.
+    """Unified Connectivity and Networking Core.
     Handles low-level host networking and high-level agent communication.
     """
 
     def __init__(
-        self, 
-        name: str = "ConnectivityCore", 
+        self,
+        name: str = "ConnectivityCore",
         repo_root: Optional[str] = None
     ) -> None:
         """Initializes the ConnectivityCore with optional name and repo_root."""
@@ -79,8 +78,7 @@ class ConnectivityCore(BaseCore):
 
     # --- Agent-to-Agent Logic ---
     def establish_connection(self, target_agent: str, protocol: str = "binary") -> bool:
-        """
-        Logic for establishing a connection.
+        """Logic for establishing a connection.
         If rc is available, uses the Rust-accelerated binary pipeline.
         """
         if rc and hasattr(rc, "establish_native_connection"):  # pylint: disable=no-member

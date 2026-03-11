@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/models/communication_models.description.md
 
 # communication_models
 
-**File**: `src\core\base\models\communication_models.py`  
+**File**: `src\\core\base\\models\\communication_models.py`  
 **Type**: Python Module  
 **Summary**: 15 classes, 0 functions, 19 imports  
 **Lines**: 300  
@@ -154,7 +153,7 @@ Context for a telemetry span.
 
 # Improvements for communication_models
 
-**File**: `src\core\base\models\communication_models.py`  
+**File**: `src\\core\base\\models\\communication_models.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 300 lines (medium)  
 **Complexity**: 29 score (complex)
@@ -206,19 +205,19 @@ from __future__ import annotations
 
 import time
 import uuid
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
-from collections.abc import Callable
-from .enums import MessageRole, AgentEvent, FilePriority, InputType
-from .base_models import _empty_list_str, _empty_list_dict_str_any, _empty_dict_str_any
+from typing import Any
+
+from .base_models import _empty_dict_str_any, _empty_list_dict_str_any, _empty_list_str
+from .enums import FilePriority, InputType, MessageRole
 
 
 @dataclass(slots=True)
 class CascadeContext:
-    """
-    Context for recursive agent delegation (Phase 259/275).
+    """Context for recursive agent delegation (Phase 259/275).
     Tracks depth and lineage to prevent infinite loops and provide tracing.
     """
 

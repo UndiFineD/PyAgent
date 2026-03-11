@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/base_agent/managers/AuthManagers.description.md
 
 # AuthManagers
 
-**File**: `src\classes\base_agent\managers\AuthManagers.py`  
+**File**: `src\\classes\base_agent\\managers\\AuthManagers.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 11 imports  
 **Lines**: 103  
@@ -60,7 +59,7 @@ Manages authentication.
 
 # Improvements for AuthManagers
 
-**File**: `src\classes\base_agent\managers\AuthManagers.py`  
+**File**: `src\\classes\base_agent\\managers\\AuthManagers.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 103 lines (medium)  
 **Complexity**: 9 score (moderate)
@@ -95,6 +94,11 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import logging
+from dataclasses import dataclass, field
+
+from src.core.base.models import AuthConfig, AuthMethod, _empty_dict_str_str
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -107,13 +111,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import logging
-from dataclasses import dataclass, field
-from typing import Dict, Optional
-from src.core.base.models import AuthConfig, AuthMethod, _empty_dict_str_str
 
 __version__ = VERSION
 

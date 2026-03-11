@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/strategies/chain_of_thought_strategy.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -41,7 +41,6 @@ Chain of thought strategy.py module.
 
 import logging
 from collections.abc import Callable
-from typing import TYPE_CHECKING
 
 from src.core.base.lifecycle.version import VERSION
 
@@ -64,8 +63,7 @@ class ChainOfThoughtStrategy(AgentStrategy):
         agent_name: str,
         task_id: str,
     ) -> str:
-        """
-        Helper method to encapsulate backend calls with error handling and logging.
+        """Helper method to encapsulate backend calls with error handling and logging.
         """
         try:
             response = await backend_call(call_prompt, system_prompt, history)
@@ -88,8 +86,7 @@ class ChainOfThoughtStrategy(AgentStrategy):
         agent_name: str = "UnknownAgent",
         task_id: str = "UnknownTask",
     ) -> str:
-        """
-        Executes the Chain-of-Thought strategy.
+        """Executes the Chain-of-Thought strategy.
 
         This method first generates a reasoning prompt, sends it to the backend,
         and then uses the generated reasoning to formulate an execution prompt.
@@ -111,6 +108,7 @@ class ChainOfThoughtStrategy(AgentStrategy):
         Raises:
             Exception: If an error occurs during either the reasoning or
                        execution steps of the backend call.
+
         """
         # Step 1: Reasoning
         reasoning_prompt = (

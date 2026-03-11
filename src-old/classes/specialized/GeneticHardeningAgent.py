@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/GeneticHardeningAgent.description.md
 
@@ -83,6 +82,12 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import logging
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -101,19 +106,13 @@ from __future__ import annotations
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
 from src.core.base.version import VERSION
-import logging
-from typing import Dict, List, Any
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
 
 class GeneticHardeningAgent(BaseAgent):
-    """
-    Implements Genetic Code Hardening (Phase 32).
+    """Implements Genetic Code Hardening (Phase 32).
     Automatically evolves the codebase structure to be more resilient to errors.
     """
 
@@ -129,8 +128,7 @@ class GeneticHardeningAgent(BaseAgent):
 
     @as_tool
     def analyze_fragility(self, code_snippet: str) -> list[dict[str, Any]]:
-        """
-        Analyzes a code snippet for structural fragility.
+        """Analyzes a code snippet for structural fragility.
         """
         logging.info("GeneticHardeningAgent: Analyzing code for fragility.")
 
@@ -157,8 +155,7 @@ class GeneticHardeningAgent(BaseAgent):
 
     @as_tool
     def apply_genetic_refactor(self, code: str, hardening_rules: list[str]) -> str:
-        """
-        Applies hardening rules to the code to 'evolve' it into a more resilient version.
+        """Applies hardening rules to the code to 'evolve' it into a more resilient version.
         """
         logging.info(
             f"GeneticHardeningAgent: Applying {len(hardening_rules)} hardening rules."

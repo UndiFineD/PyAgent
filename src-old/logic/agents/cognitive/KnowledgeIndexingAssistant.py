@@ -1,14 +1,13 @@
 # Copyright 2026 PyAgent Authors
 # Assistant for indexing the workspace for vector search.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/KnowledgeIndexingAssistant.description.md
 
 # KnowledgeIndexingAssistant
 
-**File**: `src\logic\agents\cognitive\KnowledgeIndexingAssistant.py`  
+**File**: `src\\logic\agents\\cognitive\\KnowledgeIndexingAssistant.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 14  
@@ -42,7 +41,7 @@ Handles workspace traversal and data preparation for the TieredMemoryEngine.
 
 # Improvements for KnowledgeIndexingAssistant
 
-**File**: `src\logic\agents\cognitive\KnowledgeIndexingAssistant.py`  
+**File**: `src\\logic\agents\\cognitive\\KnowledgeIndexingAssistant.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 14 lines (small)  
 **Complexity**: 2 score (simple)
@@ -75,7 +74,8 @@ Handles workspace traversal and data preparation for the TieredMemoryEngine.
 LLM_CONTEXT_END
 """
 
-from typing import List, Dict, Any, Tuple
+from typing import Any, Dict, List, Tuple
+
 
 class KnowledgeIndexingAssistant:
     """Handles workspace traversal and data preparation for the TieredMemoryEngine."""

@@ -1,5 +1,6 @@
 class ClientError(Exception):
     """Minimal ClientError shim for tests that import botocore.exceptions.ClientError."""
+
     def __init__(self, error_response=None, operation_name=None):
         self.response = error_response
         self.operation_name = operation_name

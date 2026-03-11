@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/utils/merge_conflict_resolver.description.md
 
@@ -31,9 +30,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -57,10 +58,10 @@ using automated or specified resolution strategies.
 import re
 
 from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.cognitive.context.models.merge_conflict import MergeConflict
 from src.logic.agents.cognitive.context.utils.conflict_resolution import (
     ConflictResolution,
 )
-from src.logic.agents.cognitive.context.models.merge_conflict import MergeConflict
 
 __version__ = VERSION
 
@@ -73,6 +74,7 @@ class MergeConflictResolver:
     Example:
         >>> resolver = MergeConflictResolver()
         >>> resolved = resolver.resolve(conflict, ConflictResolution.OURS)
+
     """
 
     def __init__(self, strategy: ConflictResolution = ConflictResolution.AUTO) -> None:
@@ -80,6 +82,7 @@ class MergeConflictResolver:
 
         Args:
             strategy: The default resolution strategy to use.
+
         """
         self.strategy: ConflictResolution = strategy
 
@@ -88,6 +91,7 @@ class MergeConflictResolver:
 
         Args:
             strategy: The conflict resolution strategy.
+
         """
         self.strategy = strategy
 
@@ -106,6 +110,7 @@ class MergeConflictResolver:
 
         Returns:
             List of detected MergeConflict objects.
+
         """
         if theirs is None:
             content = ours
@@ -141,6 +146,7 @@ class MergeConflictResolver:
 
         Returns:
             Resolved content.
+
         """
         effective = strategy or self.strategy
         if effective == ConflictResolution.OURS:

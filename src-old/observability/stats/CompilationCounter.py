@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/CompilationCounter.description.md
 
@@ -190,10 +189,10 @@ Beyond vLLM:
 import logging
 import threading
 import time
-from collections import Counter, defaultdict
+from collections import Counter
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -269,8 +268,7 @@ class FunctionStats:
 
 
 class CompilationCounter:
-    """
-    Counter for tracking compilation statistics.
+    """Counter for tracking compilation statistics.
 
     Based on vLLM's compilation counter pattern.
     """
@@ -281,13 +279,13 @@ class CompilationCounter:
         max_events: int = 10000,
         emit_interval: float = 60.0,
     ):
-        """
-        Initialize counter.
+        """Initialize counter.
 
         Args:
             name: Counter name for identification
             max_events: Maximum events to keep
             emit_interval: Interval for metric emission (seconds)
+
         """
         self.name = name
         self.max_events = max_events
@@ -314,14 +312,14 @@ class CompilationCounter:
         duration: float,
         backend: str = "inductor",
     ) -> None:
-        """
-        Record a compilation event.
+        """Record a compilation event.
 
         Args:
             function_id: ID of compiled function
             shape: Input shape
             duration: Compilation time
             backend: Compilation backend
+
         """
         event = CompileEvent(
             event_type=CompileEventType.COMPILE,
@@ -498,8 +496,7 @@ class CompilationCounter:
 
 
 class RecompileTracker(CompilationCounter):
-    """
-    Specialized tracker for recompilation.
+    """Specialized tracker for recompilation.
 
     Beyond vLLM:
     - Detects excessive recompilation
@@ -580,8 +577,7 @@ class RecompileTracker(CompilationCounter):
 
 
 class TrendAnalyzer:
-    """
-    Analyze compilation trends over time.
+    """Analyze compilation trends over time.
 
     Beyond vLLM:
     - Detects degradation patterns

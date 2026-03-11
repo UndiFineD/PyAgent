@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/specialists/vision_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -71,8 +71,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class VisionAgent(BaseAgent):
-    """
-    Agent specializing in image description, OCR, diagram analysis,
+    """Agent specializing in image description, OCR, diagram analysis,
     and visual pattern recognition using multi-modal model backends.
     """
 
@@ -90,8 +89,7 @@ class VisionAgent(BaseAgent):
     async def analyze_image(
         self, image_source: str, query: str = "Describe this image in detail."
     ) -> Dict[str, Any]:
-        """
-        Analyzes an image and answers a query about it.
+        """Analyzes an image and answers a query about it.
         image_source: Either a base64 string, file path, or URL.
         """
         b64_data = await self._resolve_image_source(image_source)

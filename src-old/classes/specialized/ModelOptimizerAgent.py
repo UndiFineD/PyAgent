@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ModelOptimizerAgent.description.md
 
@@ -84,11 +83,11 @@ LLM_CONTEXT_END
 
 """Agent specializing in model inference optimization and low-VRAM strategies."""
 
-from src.classes.base_agent import BaseAgent
-import logging
 import json
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+import logging
+from typing import Any, Dict, List
+
+from src.classes.base_agent import BaseAgent
 
 
 class ModelOptimizerAgent(BaseAgent):
@@ -142,8 +141,7 @@ class ModelOptimizerAgent(BaseAgent):
     def run_tinyml_benchmark(
         self, model_id: str, hardware_target: str
     ) -> Dict[str, Any]:
-        """
-        Runs an energy and latency benchmark for a specific model on target hardware (MLSysBook Pattern).
+        """Runs an energy and latency benchmark for a specific model on target hardware (MLSysBook Pattern).
         Analyzes batch size, precision (INT8/FP16), and memory constraints.
         """
         logging.info(f"Running TinyML benchmark for {model_id} on {hardware_target}...")

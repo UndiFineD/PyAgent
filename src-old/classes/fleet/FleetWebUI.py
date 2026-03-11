@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/FleetWebUI.description.md
 
 # FleetWebUI
 
-**File**: `src\classes\fleet\FleetWebUI.py`  
+**File**: `src\\classes\fleet\\FleetWebUI.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 9 imports  
 **Lines**: 145  
@@ -53,7 +52,7 @@ Provides backend support for the Fleet visualization dashboard.
 
 # Improvements for FleetWebUI
 
-**File**: `src\classes\fleet\FleetWebUI.py`  
+**File**: `src\\classes\fleet\\FleetWebUI.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 145 lines (medium)  
 **Complexity**: 10 score (moderate)
@@ -108,11 +107,12 @@ from __future__ import annotations
 Generates data structures for internal/external dashboard consumers.
 """
 
-from src.core.base.version import VERSION
 import json
 import logging
-from typing import Dict, List, Any
 from pathlib import Path
+from typing import Any
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

@@ -13,8 +13,7 @@
 # limitations under the License.
 
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/knowledge_core.description.md
 
@@ -44,6 +43,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -55,16 +55,16 @@ This file is optimized for Rust migration (Phase 114).
 from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
-from .knowledge_mixins.knowledge_symbol_mixin import KnowledgeSymbolMixin
-from .knowledge_mixins.knowledge_search_mixin import KnowledgeSearchMixin
+
 from .knowledge_mixins.knowledge_process_mixin import KnowledgeProcessMixin
+from .knowledge_mixins.knowledge_search_mixin import KnowledgeSearchMixin
+from .knowledge_mixins.knowledge_symbol_mixin import KnowledgeSymbolMixin
 
 __version__ = VERSION
 
 
 class KnowledgeCore(KnowledgeSymbolMixin, KnowledgeSearchMixin, KnowledgeProcessMixin):
-    """
-    KnowledgeCore performs pure computational analysis of workspace symbols.
+    """KnowledgeCore performs pure computational analysis of workspace symbols.
     No I/O or database operations are allowed here to ensure Rust portability.
     """
 

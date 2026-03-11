@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/GlobalContextCore.description.md
 
@@ -80,13 +79,12 @@ No I/O or direct disk access.
 LLM_CONTEXT_END
 """
 
-from typing import Dict, List, Any, Optional
 from datetime import datetime
+from typing import Any, Dict, List
 
 
 class GlobalContextCore:
-    """
-    Pure logic for GlobalContext.
+    """Pure logic for GlobalContext.
     Handles data merging, pruning, and summary formatting.
     No I/O or direct disk access.
     """
@@ -94,8 +92,7 @@ class GlobalContextCore:
     def partition_memory(
         self, memory: Dict[str, Any], max_entries_per_shard: int = 1000
     ) -> Dict[str, Dict[str, Any]]:
-        """
-        Splits memory into shards if it exceeds thresholds.
+        """Splits memory into shards if it exceeds thresholds.
         Implements stable sub-sharding for trillion-parameter scalability (Phase 104).
         """
         import zlib

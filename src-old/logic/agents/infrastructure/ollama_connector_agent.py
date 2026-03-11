@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/infrastructure/ollama_connector_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -51,11 +51,10 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
 
 import httpx
 from openai import AsyncOpenAI, OpenAIError
-
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
@@ -67,8 +66,7 @@ logger = logging.getLogger(__name__)
 
 
 class OllamaConnectorAgent(BaseAgent):
-    """
-    Handles local and network inference requests via the Ollama API (OpenAI-compatible).
+    """Handles local and network inference requests via the Ollama API (OpenAI-compatible).
     Supports Chat, Reasoning (<think>), and FIM (Fill-In-The-Middle).
     Automatically detects and selects the fastest available Ollama instance on the network.
     """
@@ -139,8 +137,7 @@ class OllamaConnectorAgent(BaseAgent):
         reasoning: bool = False,
         json_schema: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
-        """
-        Runs a local inference request using OpenAI-compatible endpoints.
+        """Runs a local inference request using OpenAI-compatible endpoints.
 
         Args:
             prompt: User query or code prefix (if suffix is present).
@@ -152,6 +149,7 @@ class OllamaConnectorAgent(BaseAgent):
 
         Returns:
             Dict containing 'content', 'reasoning_trace', and 'cost'.
+
         """
         if not await self.check_availability():
             return {"error": f"Ollama service not reachable at {self.endpoint}"}

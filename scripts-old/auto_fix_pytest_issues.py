@@ -36,7 +36,6 @@ import re
 from pathlib import Path
 from typing import Iterable
 
-
 EXCLUDE_DIRS = {".venv", "venv", "dist", "build", "target", "__pycache__", ".git"}
 
 

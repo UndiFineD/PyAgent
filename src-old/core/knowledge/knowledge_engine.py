@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/knowledge/knowledge_engine.description.md
 
@@ -27,6 +26,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -64,8 +64,7 @@ __version__ = VERSION
 
 
 class KnowledgeEngine:
-    """
-    Central engine for managing multi-modal knowledge storage.
+    """Central engine for managing multi-modal knowledge storage.
     Delegates to MemoryCore for infrastructure and utility scoring.
     Automatically routes data to B-Tree, Vector, or Graph stores.
     Supports recursive compression of 'cold' memory blocks (Phase 128).
@@ -99,8 +98,7 @@ class KnowledgeEngine:
         return self._compressor
 
     def compress_memory(self, key: str) -> bool:
-        """
-        Retrieves content for a key, compresses it via CompressionAgent,
+        """Retrieves content for a key, compresses it via CompressionAgent,
         and replaces the original content with the dense summary.
         """
         compressor = self._get_compressor()
@@ -124,8 +122,7 @@ class KnowledgeEngine:
         return True
 
     def store(self, content: Any, mode: str = "vector", **kwargs) -> bool:
-        """
-        Store knowledge in the specified mode.
+        """Store knowledge in the specified mode.
         modes: 'vector', 'btree', 'graph'
         """
         key = kwargs.get("key", str(hash(content)))

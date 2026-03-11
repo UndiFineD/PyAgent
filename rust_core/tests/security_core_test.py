@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Tests for the Rust-based encryption and decryption functions in rust_core."""
+import importlib.util
 import os
 import sys
 from pathlib import Path
-import importlib.util
+
 import pytest
+
 # rust_core extension will be loaded manually after adjusting sys.path
 
 # Ensure the build directory is first on path so the compiled extension
@@ -75,7 +77,7 @@ def test_encrypt_decrypt_roundtrip(tmp_path: Path) -> None:
     assert hasattr(rust_core, "encrypt_data"), "encrypt_data missing"
     assert hasattr(rust_core, "decrypt_data"), "decrypt_data missing"
 
-    encrypted = getattr(rust_core, "encrypt_data")(plaintext)  # noqa: F821
+    encrypted = rust_core.encrypt_data(plaintext)  # noqa: F821
     assert isinstance(encrypted, (bytes, bytearray))
     # nonce prefix should be present
     assert len(encrypted) >= len(plaintext) + 24
@@ -85,7 +87,7 @@ def test_encrypt_decrypt_roundtrip(tmp_path: Path) -> None:
     encrypted2 = rust_core.encrypt_data(plaintext)
     assert encrypted2 != encrypted, "nonce should make each output unique"
 
-    decrypted = getattr(rust_core, "decrypt_data")(encrypted)  # noqa: F821
+    decrypted = rust_core.decrypt_data(encrypted)  # noqa: F821
     assert decrypted == plaintext
     with pytest.raises(RuntimeError):
         rust_core.decrypt_data(encrypted + b"x")

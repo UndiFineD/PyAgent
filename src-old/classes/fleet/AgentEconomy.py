@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/AgentEconomy.description.md
 
 # AgentEconomy
 
-**File**: `src\classes\fleet\AgentEconomy.py`  
+**File**: `src\\classes\fleet\\AgentEconomy.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 80  
@@ -51,7 +50,7 @@ Manages internal marketplace credits and task bidding.
 
 # Improvements for AgentEconomy
 
-**File**: `src\classes\fleet\AgentEconomy.py`  
+**File**: `src\\classes\fleet\\AgentEconomy.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 80 lines (small)  
 **Complexity**: 7 score (moderate)
@@ -85,10 +84,10 @@ LLM_CONTEXT_END
 Manages credits, bidding, and automated payments between agents.
 """
 
+import hashlib
 import logging
 import time
-import hashlib
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List
 
 
 class AgentEconomy:
@@ -169,4 +168,3 @@ class AgentEconomy:
             "timestamp": time.time(),
         }
 
-        import json

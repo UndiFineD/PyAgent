@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/PerformanceProfilingAgent.description.md
 
@@ -83,6 +82,12 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import random
+import time
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -101,19 +106,13 @@ from __future__ import annotations
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
 from src.core.base.version import VERSION
-import time
-import random
-from typing import Dict, List, Any
-from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
 
 
 class PerformanceProfilingAgent(BaseAgent):
-    """
-    Monitors resource usage (simulated) across the fleet and
+    """Monitors resource usage (simulated) across the fleet and
     proposes optimizations for throughput and latency.
     """
 

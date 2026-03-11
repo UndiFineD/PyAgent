@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/ContextValidationMixin.description.md
 
 # ContextValidationMixin
 
-**File**: `src\logic\agents\cognitive\ContextValidationMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\ContextValidationMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 81  
@@ -41,7 +40,7 @@ Validation methods for ContextAgent.
 
 # Improvements for ContextValidationMixin
 
-**File**: `src\logic\agents\cognitive\ContextValidationMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\ContextValidationMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 81 lines (small)  
 **Complexity**: 3 score (simple)
@@ -78,9 +77,9 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
-
 import re
 from typing import Any
+
 from src.core.base.models import ValidationRule
 
 # Default validation rules

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/models/__init__.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Safe export surface for frequently-used model names.
@@ -39,9 +39,9 @@ but falls back to None placeholders to avoid circular import problems
 during pytest collection. Replace with full lazy-loading if needed.
 """
 
-from typing import Any
 import importlib
 from types import ModuleType
+from typing import Any
 
 # Start with minimal placeholders to avoid AttributeError during early imports
 _export_names: dict[str, Any] = {}

@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/modules/BlackboardModule.description.md
 
@@ -96,14 +95,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from typing import Any
 
-from typing import Any, Dict, List, Optional
 from src.core.base.modules import BaseModule
 
 
 class BlackboardModule(BaseModule):
-    """
-    Consolidated core module for Blackboard operations.
+    """Consolidated core module for Blackboard operations.
     Migrated from BlackboardCore.
     """
 
@@ -117,8 +115,7 @@ class BlackboardModule(BaseModule):
         return super().initialize()
 
     def execute(self, action: str, **kwargs) -> Any:
-        """
-        Executes blackboard operations.
+        """Executes blackboard operations.
         Supported actions: post, get, keys
         """
         if not self.initialized:

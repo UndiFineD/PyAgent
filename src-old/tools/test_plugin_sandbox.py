@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/test_plugin_sandbox.description.md
 
@@ -60,8 +59,9 @@ Python module containing implementation for test_plugin_sandbox.
 LLM_CONTEXT_END
 """
 
-from src.core.base.managers.PluginManager import PluginManager
 from pathlib import Path
+
+from src.core.base.managers.PluginManager import PluginManager
 
 pm = PluginManager()
 discovered = pm.discover()

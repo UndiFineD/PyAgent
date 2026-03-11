@@ -11,13 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-Test Phase19 module.
+"""Test Phase19 module.
 """
 
-import time
 import sys
+import time
 from pathlib import Path
+
 from src.classes.fleet.FleetManager import FleetManager
 
 sys.path.append(str(Path(__file__).parent / "src"))

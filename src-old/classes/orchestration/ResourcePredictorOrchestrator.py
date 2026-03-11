@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/ResourcePredictorOrchestrator.description.md
 
@@ -78,12 +77,11 @@ LLM_CONTEXT_END
 """
 
 import logging
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict
 
 
 class ResourcePredictorOrchestrator:
-    """
-    Phase 38: Predictive Resource Pre-allocation.
+    """Phase 38: Predictive Resource Pre-allocation.
     Forecasts task complexity and pre-allocates resources.
     """
 
@@ -94,8 +92,7 @@ class ResourcePredictorOrchestrator:
         )  # task_type -> resource_profile
 
     def forecast_and_allocate(self, task: str) -> Dict[str, Any]:
-        """
-        Uses the fleet's temporal/logic predictors to forecast resource requirements.
+        """Uses the fleet's temporal/logic predictors to forecast resource requirements.
         """
         logging.info(
             f"ResourcePredictor: Forecasting requirements for task: {task[:50]}..."

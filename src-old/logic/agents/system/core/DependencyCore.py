@@ -1,12 +1,11 @@
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/core/DependencyCore.description.md
 
 # DependencyCore
 
-**File**: `src\logic\agents\system\core\DependencyCore.py`  
+**File**: `src\\logic\agents\\system\\core\\DependencyCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 3 imports  
 **Lines**: 81  
@@ -40,7 +39,7 @@ Class DependencyCore implementation.
 
 # Improvements for DependencyCore
 
-**File**: `src\logic\agents\system\core\DependencyCore.py`  
+**File**: `src\\logic\agents\\system\\core\\DependencyCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 81 lines (small)  
 **Complexity**: 2 score (simple)
@@ -78,16 +77,16 @@ Core logic for Dependency Management (Phase 176).
 Handles pip-audit execution and version pinning.
 """
 
-import subprocess
 import os
+import subprocess
 
 from src.core.base.interfaces import ContextRecorderInterface
+
 
 class DependencyCore:
     @staticmethod
     def run_pip_audit(recorder: ContextRecorderInterface | None = None) -> str:
-        """
-        Runs pip-audit and returns the summary.
+        """Runs pip-audit and returns the summary.
         """
         try:
             result = subprocess.run(["pip-audit", "--format", "plain"], capture_output=True, text=True)
@@ -107,8 +106,7 @@ class DependencyCore:
 
     @staticmethod
     def pin_requirements(file_path: str, recorder: ContextRecorderInterface | None = None) -> int:
-        """
-        Ensures all packages in a file are pinned with ==.
+        """Ensures all packages in a file are pinned with ==.
         Returns the number of lines modified.
         """
         if not os.path.exists(file_path):
@@ -120,10 +118,10 @@ class DependencyCore:
                     result="file-not-found"
                 )
             return 0
-            
+
         with open(file_path) as f:
             lines = f.readlines()
-            
+
         new_lines = []
         modified = 0
         for line in lines:
@@ -131,7 +129,7 @@ class DependencyCore:
             # If line is a package and not pinned
             if stripped and not stripped.startswith("#") and not stripped.startswith("-r"):
                 if "==" not in stripped and ">=" not in stripped:
-                    # In a real scenario, we'd fetch current version. 
+                    # In a real scenario, we'd fetch current version.
                     # For this phase, we'll mark it for review if not pinned.
                     new_lines.append(line.replace(stripped, stripped + "==LATEST-CHECK-REQUIRED"))
                     modified += 1
@@ -139,7 +137,7 @@ class DependencyCore:
                     new_lines.append(line)
             else:
                 new_lines.append(line)
-                
+
         with open(file_path, "w") as f:
             f.writelines(new_lines)
 
@@ -151,5 +149,5 @@ class DependencyCore:
                 result=f"modified={modified}",
                 meta={"changes": modified}
             )
-        
+
         return modified

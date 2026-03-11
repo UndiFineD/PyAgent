@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/manager_core.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # you may not use this file except in compliance with the License.
@@ -60,8 +60,7 @@ from .base_core import BaseCore
 
 
 class BaseManager(BaseCore):
-    """
-    Standard implementation for stateful Managers.
+    """Standard implementation for stateful Managers.
     Provides a dictionary-based state cache and standard operations.
     """
 

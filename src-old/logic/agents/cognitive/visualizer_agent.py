@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/visualizer_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -55,9 +55,9 @@ import time
 from pathlib import Path
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.engines.graph_context_engine import (
     GraphContextEngine,
 )
@@ -84,11 +84,12 @@ class VisualizerAgent(BaseAgent):
 
     @as_tool
     async def spatial_reasoning(self, objects: list[dict[str, Any]], query: str) -> str:
-        """
-        Performs spatial reasoning on a list of objects in a 2D/3D space.
+        """Performs spatial reasoning on a list of objects in a 2D/3D space.
+
         Args:
             objects: List of objects with 'id', 'type', 'position' (x, y, z), and 'size'.
             query: Spatial query (e.g., 'Is agent A closer to tool B than tool C?').
+
         """
         logging.info(f"VISUALIZER: Performing spatial reasoning for query: {query}")
 
@@ -106,12 +107,13 @@ class VisualizerAgent(BaseAgent):
     def video_grounding(
         self, frames: list[dict[str, Any]], event_query: str
     ) -> dict[str, Any]:
-        """
-        Phase 58: Video Grounding.
+        """Phase 58: Video Grounding.
         Analyzes a sequence of video frames to identify events or temporal relationships.
+
         Args:
             frames: List of frame metadata (timestamp, detected_objects).
             event_query: Query about an event (e.g., 'When did the human pick up the tool?').
+
         """
         logging.info(f"VISUALIZER: Performing video grounding for query: {event_query}")
 
@@ -174,7 +176,7 @@ class VisualizerAgent(BaseAgent):
             temp_path.replace(output_path)
         except (
             Exception
-        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+        ):  # pylint: disable=broad-exception-caught, unused-variable
             if temp_path.exists():
                 temp_path.unlink()
             raise
@@ -278,8 +280,7 @@ class VisualizerAgent(BaseAgent):
         return "## 🔗 Code Call Graph\n\n```mermaid\n" + "\n".join(lines) + "\n```"
 
     def generate_3d_swarm_data(self) -> dict[str, Any]:
-        """
-        Generates a 3D-compatible dataset for force-directed swarm visualization.
+        """Generates a 3D-compatible dataset for force-directed swarm visualization.
         Schema compatible with Force-Directed Graph libraries.
         """
         nodes = [

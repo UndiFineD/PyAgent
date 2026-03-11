@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/refinement_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -99,9 +99,11 @@ class RefinementAgent(BaseAgent):
         self, agent_class_name: str, performance_feedback: str
     ) -> str:
         """Generates a new optimized system prompt for an agent.
+
         Args:
             agent_class_name: The name of the agent class to refine.
             performance_feedback: Summary of what the agent is doing wrong.
+
         """
         logging.info(f"Refinement: Generating new prompt for {agent_class_name}...")
 
@@ -117,12 +119,10 @@ class RefinementAgent(BaseAgent):
     def update_agent_source(self, file_path: str, new_logic_snippet: str) -> str:
         """Safely applies a refinement to an agent's source code.
 
-
-
-
         Args:
             file_path: Absolute path to the agent's Python file.
             new_logic_snippet: The refined code block to inject or update.
+
         """
         # In a real scenario, this would use the edit tools or AST manipulation.
 
@@ -134,8 +134,7 @@ class RefinementAgent(BaseAgent):
         return f"Refinement logic written to {ref_file}. Verification required before merge."
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """
-        Specialized content improvement for Refinement.
+        """Specialized content improvement for Refinement.
         """
         _ = target_file
         return f"Refinement result mapping for: {prompt[:50]}..."

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/self_healing_agent.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -53,6 +54,7 @@ from typing import Any
 from src.core.base.common.base_utilities import as_tool, create_main_function
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
+
 from src.observability.stats.metrics_engine import ObservabilityEngine
 
 __version__ = VERSION
@@ -67,8 +69,7 @@ class SelfHealingAgent(BaseAgent):
         self.telemetry = ObservabilityEngine(str(self.workspace_root))
 
         # Phase 317: Dynamic prompt loading and coordinator integration
-        from src.maintenance.self_improvement_coordinator import \
-            SelfImprovementCoordinator
+        from src.maintenance.self_improvement_coordinator import SelfImprovementCoordinator
 
         self.coordinator = SelfImprovementCoordinator(str(self.workspace_root))
         self._load_dynamic_prompt()

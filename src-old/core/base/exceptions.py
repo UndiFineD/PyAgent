@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/exceptions.description.md
 
 # exceptions
 
-**File**: `src\core\base\exceptions.py`  
+**File**: `src\\core\base\\exceptions.py`  
 **Type**: Python Module  
 **Summary**: 7 classes, 0 functions, 2 imports  
 **Lines**: 40  
@@ -75,7 +74,7 @@ Interruption of an agent cycle (e.g., quota exceeded).
 
 # Improvements for exceptions
 
-**File**: `src\core\base\exceptions.py`  
+**File**: `src\\core\base\\exceptions.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 40 lines (small)  
 **Complexity**: 1 score (simple)
@@ -112,6 +111,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -125,10 +125,10 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Optional
 
 class PyAgentException(Exception):
     """Base exception for all PyAgent errors."""
+
     def __init__(self, message: str, error_code: str | None = None) -> None:
         super().__init__(message)
         self.error_code = error_code

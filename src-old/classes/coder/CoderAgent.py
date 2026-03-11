@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/CoderAgent.description.md
 
@@ -112,21 +111,23 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_coder.py"""
 
-from src.core.base.Version import VERSION
+import logging
+from pathlib import Path
+
+from src.core.base.BaseAgent import BaseAgent
 from src.core.base.types.CodeLanguage import CodeLanguage
 from src.core.base.types.CodeMetrics import CodeMetrics
 from src.core.base.types.CodeSmell import CodeSmell
 from src.core.base.types.QualityScore import QualityScore
 from src.core.base.types.RefactoringPattern import RefactoringPattern
 from src.core.base.types.StyleRule import StyleRule
-from src.logic.agents.development.CoderCore import CoderCore, DEFAULT_PYTHON_STYLE_RULES
-from src.core.base.BaseAgent import BaseAgent
+from src.core.base.Version import VERSION
+from src.logic.agents.development.CoderCore import DEFAULT_PYTHON_STYLE_RULES, CoderCore
+
 from .mixins.agent.AgentLanguageMixin import AgentLanguageMixin
-from .mixins.agent.AgentStyleMixin import AgentStyleMixin
 from .mixins.agent.AgentMetricsMixin import AgentMetricsMixin
 from .mixins.agent.AgentRefactorMixin import AgentRefactorMixin
-from pathlib import Path
-import logging
+from .mixins.agent.AgentStyleMixin import AgentStyleMixin
 
 __version__ = VERSION
 
@@ -199,6 +200,7 @@ class CoderAgent(
 
         Returns:
             The detected CodeLanguage based on file extension.
+
         """
         self._language = self._detect_language()
         self.core.language = self._language  # Sync core

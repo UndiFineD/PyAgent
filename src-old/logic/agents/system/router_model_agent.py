@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/router_model_agent.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -61,8 +62,7 @@ __version__ = VERSION
 
 
 class RouterModelAgent(BaseAgent):
-    """
-    Intelligently routes tasks to different LLMs based on cost, latency,
+    """Intelligently routes tasks to different LLMs based on cost, latency,
     and task complexity.
     """
 
@@ -104,8 +104,7 @@ class RouterModelAgent(BaseAgent):
     def determine_optimal_provider(
         self, task_type: str, max_cost: float = 0.01, required_capability: float = 0.0
     ) -> str:
-        """
-        Selects the best provider for a given task.
+        """Selects the best provider for a given task.
         Prioritizes 'internal_ai' unless capability requirements exceed it.
         """
         if self.recorder:
@@ -139,8 +138,7 @@ class RouterModelAgent(BaseAgent):
         return selected
 
     def compress_context(self, long_prompt: str, target_tokens: int = 500) -> str:
-        """
-        Simulates prompt compression to save costs.
+        """Simulates prompt compression to save costs.
         """
         if len(long_prompt) < 1000:
             return long_prompt

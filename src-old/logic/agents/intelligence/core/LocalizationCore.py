@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/intelligence/core/LocalizationCore.description.md
 
 # LocalizationCore
 
-**File**: `src\logic\agents\intelligence\core\LocalizationCore.py`  
+**File**: `src\\logic\agents\\intelligence\\core\\LocalizationCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 53  
@@ -43,7 +42,7 @@ It identifies problematic idioms or metaphors in multi-agent communication.
 
 # Improvements for LocalizationCore
 
-**File**: `src\logic\agents\intelligence\core\LocalizationCore.py`  
+**File**: `src\\logic\agents\\intelligence\\core\\LocalizationCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 53 lines (small)  
 **Complexity**: 4 score (simple)
@@ -78,13 +77,12 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
-from typing import Dict, List, Any
 import re
+from typing import Any
 
 
 class LocalizationCore:
-    """
-    LocalizationCore handles translation logic (placeholder) and Cultural Guardrails.
+    """LocalizationCore handles translation logic (placeholder) and Cultural Guardrails.
     It identifies problematic idioms or metaphors in multi-agent communication.
     """
 
@@ -103,8 +101,7 @@ class LocalizationCore:
         ]
 
     def detect_cultural_issues(self, text: str) -> list[dict[str, Any]]:
-        """
-        Detects cultural red flags in agent communication.
+        """Detects cultural red flags in agent communication.
         Returns a list of identified issues with suggestions.
         """
         issues = []

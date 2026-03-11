@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/cuda_stream_pool.description.md
 
@@ -19,7 +18,7 @@ Module docstring (if present):
     - Stream affinity for related operations
     - Event recycling to reduce allocation overhead
 
-    Example:
+Example:
         >>> pool = CudaStreamPool(compute_streams=4, comm_streams=2)
         >>> with pool.acquire_compute() as stream:
         ...     result = model(input, stream=stream)
@@ -44,6 +43,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -112,7 +112,7 @@ try:
 
     _BRIDGE = get_bridge()
     HAS_RUST = hasattr(_BRIDGE, "event_query_rust")
-except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+except Exception:  # pylint: disable=broad-exception-caught, unused-variable
     # pylint: disable=broad-exception-caught
     HAS_RUST = False
     _BRIDGE = None
@@ -161,6 +161,7 @@ class PooledStream:
         priority: Stream priority
         state: Current state
         stream: Underlying CUDA stream
+
     """
 
     stream_id: int
@@ -197,6 +198,7 @@ class PooledStream:
 
         Returns:
             True if stream is idle, False if busy
+
         """
         if self.stream is None:
             return True
@@ -224,6 +226,7 @@ class PooledEvent:
     Attributes:
         event_id: Unique identifier
         event: Underlying CUDA event
+
     """
 
     event_id: int
@@ -271,6 +274,7 @@ class EventPool:
         Args:
             initial_size: Initial number of events
             max_size: Maximum pool size
+
         """
         self.max_size = max_size
         self._events: list[PooledEvent] = []
@@ -294,6 +298,7 @@ class EventPool:
 
         Returns:
             PooledEvent or None if pool exhausted
+
         """
         with self._lock:
             if self._free:
@@ -348,6 +353,7 @@ class CudaStreamPool:
     Attributes:
         compute_streams: Number of compute streams
         comm_streams: Number of communication streams
+
     """
 
     # pylint: disable=too-many-positional-arguments
@@ -367,6 +373,7 @@ class CudaStreamPool:
             high_priority_streams: Number of high-priority streams
             event_pool_size: Size of event pool
             enable_affinity: Enable stream affinity tracking
+
         """
         self.compute_streams_count = compute_streams
         self.comm_streams_count = comm_streams
@@ -447,6 +454,7 @@ class CudaStreamPool:
 
         Returns:
             PooledStream or None
+
         """
         return self._acquire_from_pool(
             self._free_compute,
@@ -547,6 +555,7 @@ class CudaStreamPool:
 
         Args:
             stream: Stream to release
+
         """
         with self._lock:
             # Record timing
@@ -695,6 +704,7 @@ def get_global_stream_pool(
 
     Returns:
         Global CudaStreamPool instance
+
     """
     global _GLOBAL_POOL  # pylint: disable=global-statement
 

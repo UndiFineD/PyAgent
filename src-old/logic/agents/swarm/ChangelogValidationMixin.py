@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/ChangelogValidationMixin.description.md
 
 # ChangelogValidationMixin
 
-**File**: `src\logic\agents\swarm\ChangelogValidationMixin.py`  
+**File**: `src\\logic\agents\\swarm\\ChangelogValidationMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 61  
@@ -41,7 +40,7 @@ Mixin for validating changelog entries and content.
 
 # Improvements for ChangelogValidationMixin
 
-**File**: `src\logic\agents\swarm\ChangelogValidationMixin.py`  
+**File**: `src\\logic\agents\\swarm\\ChangelogValidationMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 61 lines (small)  
 **Complexity**: 2 score (simple)
@@ -77,10 +76,11 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
-
 import re
+from typing import Any
+
 from .ChangelogEntry import ChangelogEntry
-from typing import Any, TYPE_CHECKING
+
 
 class ChangelogValidationMixin:
     """Mixin for validating changelog entries and content."""

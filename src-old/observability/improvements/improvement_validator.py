@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/improvements/improvement_validator.description.md
 
@@ -29,9 +28,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -61,11 +62,11 @@ from .validation_severity import ValidationSeverity
 
 
 class ImprovementValidator(ValidationCore):
-    """
-    Runs validation rules and automated tests on improvements.
+    """Runs validation rules and automated tests on improvements.
 
     Attributes:
         rules: List of validation rules.
+
     """
 
     def __init__(self) -> None:
@@ -123,6 +124,7 @@ class ImprovementValidator(ValidationCore):
 
         Returns:
             ValidationResult with issues found.
+
         """
         result = ValidationResult(improvement_id=improvement.id)
 

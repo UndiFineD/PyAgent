@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/modules/CodeQualityModule.description.md
 
@@ -96,15 +95,14 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import re
-from typing import Any, Dict, List
+from typing import Any
+
 from src.core.base.modules import BaseModule
 
 
 class CodeQualityModule(BaseModule):
-    """
-    Consolidated core module for code quality analysis.
+    """Consolidated core module for code quality analysis.
     Migrated from CodeQualityCore.
     """
 
@@ -113,8 +111,7 @@ class CodeQualityModule(BaseModule):
         return super().initialize()
 
     def execute(self, source: str, language: str = "python") -> list[dict[str, Any]]:
-        """
-        Analyzes source code quality for a specific language.
+        """Analyzes source code quality for a specific language.
         """
         if not self.initialized:
             self.initialize()

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/core_mixins/core_partition_mixin.description.md
 
@@ -28,9 +27,13 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
+import json
+import zlib
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,11 +47,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from typing import Any
-import json
-import zlib
 
 try:
     from rust_core import partition_to_shards_rust
@@ -65,8 +64,7 @@ class CorePartitionMixin:
     def partition_memory(
         self, memory: dict[str, Any], max_entries_per_shard: int = 1000
     ) -> dict[str, dict[str, Any]]:
-        """
-        Splits memory into shards if it exceeds thresholds.
+        """Splits memory into shards if it exceeds thresholds.
         Implements stable sub-sharding for trillion-parameter scalability.
         """
         shards: dict[str, dict[str, Any]] = {"default": {}}

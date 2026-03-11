@@ -12,14 +12,13 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/cassette_orchestrator.description.md
 
 # cassette_orchestrator
 
-**File**: `src\core\base\logic\cassette_orchestrator.py`  
+**File**: `src\\core\base\\logic\\cassette_orchestrator.py`  
 **Type**: Python Module  
 **Summary**: 2 classes, 0 functions, 7 imports  
 **Lines**: 74  
@@ -70,7 +69,7 @@ Enables zero-shot structural transfer of logic between agents.
 
 # Improvements for cassette_orchestrator
 
-**File**: `src\core\base\logic\cassette_orchestrator.py`  
+**File**: `src\\core\base\\logic\\cassette_orchestrator.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 74 lines (small)  
 **Complexity**: 5 score (moderate)
@@ -106,14 +105,13 @@ Inspired by the Unified Algorithmic Cassette Model (Grokkit).
 """
 
 import abc
-import asyncio
-from typing import Any, Dict, Optional, Type
+from typing import Any, Dict, Optional
+
 from src.core.base.models.communication_models import CascadeContext
 
 
 class BaseLogicCassette(abc.ABC):
-    """
-    Abstract base class regarding a logic 'cassette'.
+    """Abstract base class regarding a logic 'cassette'.
     A cassette is a self-contained, structurally transferable algorithmic primitive.
     """
 
@@ -132,8 +130,7 @@ class BaseLogicCassette(abc.ABC):
 
 
 class CassetteOrchestrator:
-    """
-    Orchestrates specialized neural/logic cassettes regarding an Agent.
+    """Orchestrates specialized neural/logic cassettes regarding an Agent.
     Enables zero-shot structural transfer of logic between agents.
     """
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/improvements/ScheduledEntry.description.md
 
@@ -86,10 +85,10 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_improvements.py"""
 
-from src.core.base.version import VERSION
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import List
+
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

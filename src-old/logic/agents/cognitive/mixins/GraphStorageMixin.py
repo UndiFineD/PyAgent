@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/mixins/GraphStorageMixin.description.md
 
 # GraphStorageMixin
 
-**File**: `src\logic\agents\cognitive\mixins\GraphStorageMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\mixins\\GraphStorageMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 94  
@@ -42,7 +41,7 @@ Mixin for graph storage and bead persistence.
 
 # Improvements for GraphStorageMixin
 
-**File**: `src\logic\agents\cognitive\mixins\GraphStorageMixin.py`  
+**File**: `src\\logic\agents\\cognitive\\mixins\\GraphStorageMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 94 lines (small)  
 **Complexity**: 4 score (simple)

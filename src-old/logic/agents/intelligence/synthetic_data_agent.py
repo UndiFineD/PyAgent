@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/intelligence/synthetic_data_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -63,8 +63,7 @@ __version__ = VERSION
 
 
 class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Agent specializing in generating high-fidelity synthetic training data.
+    """Agent specializing in generating high-fidelity synthetic training data.
     Used to create datasets for fine-tuning local models (ModelForge).
     Integrated with SynthesisCore for edge-case generation.
     """
@@ -77,8 +76,7 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def generate_edge_case_dataset(self, count: int = 100) -> str:
-        """
-        Generates a massive dataset of synthetic Python edge cases for model hardening.
+        """Generates a massive dataset of synthetic Python edge cases for model hardening.
         """
         logging.info(f"SyntheticDataAgent: Generating {count} edge cases...")
         snippets = self.core.generate_python_edge_cases(count)
@@ -97,8 +95,7 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def generate_training_data(self, topic: str, count: int = 5) -> str:
-        """
-        Generates synthetic training pairs (instruction, input, output) for a given topic.
+        """Generates synthetic training pairs (instruction, input, output) for a given topic.
         Saves them to a .jsonl file in the logs directory.
         """
         logging.info(
@@ -128,8 +125,7 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def augment_existing_data(self, input_file: str) -> str:
-        """
-        Takes an existing dataset and performs data augmentation (paraphrasing instructions, etc).
+        """Takes an existing dataset and performs data augmentation (paraphrasing instructions, etc).
         """
         if not os.path.exists(input_file):
             return f"Error: Input file {input_file} not found."

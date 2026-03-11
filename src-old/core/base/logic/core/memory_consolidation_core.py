@@ -12,14 +12,13 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/memory_consolidation_core.description.md
 
 # memory_consolidation_core
 
-**File**: `src\core\base\logic\core\memory_consolidation_core.py`  
+**File**: `src\\core\base\\logic\\core\\memory_consolidation_core.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 11 imports  
 **Lines**: 178  
@@ -69,7 +68,7 @@ Inspired by biological memory patterns.
 
 # Improvements for memory_consolidation_core
 
-**File**: `src\core\base\logic\core\memory_consolidation_core.py`  
+**File**: `src\\core\base\\logic\\core\\memory_consolidation_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 178 lines (medium)  
 **Complexity**: 6 score (moderate)
@@ -107,18 +106,16 @@ Implements dream-inspired memory processing:
 - Semantic clustering for memory compression.
 """
 
-import math
 import logging
-import asyncio
-from typing import Any, Dict, List, Optional, Set
-from datetime import datetime, timezone, timedelta
+import math
+from datetime import datetime, timezone
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
 
 class MemoryConsolidationCore:
-    """
-    Core engine for consolidating agent memories.
+    """Core engine for consolidating agent memories.
     Inspired by biological memory patterns.
     """
 
@@ -146,8 +143,7 @@ class MemoryConsolidationCore:
         confidence: float = 0.5,
         current_time: Optional[datetime] = None,
     ) -> float:
-        """
-        Calculate mathematical relevance of a memory based on decay and reinforcement.
+        """Calculate mathematical relevance of a memory based on decay and reinforcement.
         """
         if current_time is None:
             current_time = datetime.now(timezone.utc)
@@ -181,8 +177,7 @@ class MemoryConsolidationCore:
     def discover_creative_associations(
         self, memories: List[Dict[str, Any]], similarity_threshold: float = 0.85
     ) -> List[Dict[str, Any]]:
-        """
-        Identify potential relationships (associations) between existing memories.
+        """Identify potential relationships (associations) between existing memories.
         Ported from automem-ai-memory.
         """
         associations = []
@@ -240,8 +235,7 @@ class MemoryConsolidationCore:
         age_days: int,
         is_manually_protected: bool = False,
     ) -> bool:
-        """
-        Determine if a memory should be protected from archival/deletion.
+        """Determine if a memory should be protected from archival/deletion.
         """
         if is_manually_protected:
             return True
@@ -258,8 +252,7 @@ class MemoryConsolidationCore:
         return False
 
     async def cluster_memories(self, memories: List[Dict[str, Any]]) -> List[List[str]]:
-        """
-        Identify semantic clusters of memories for potential compression (summarization).
+        """Identify semantic clusters of memories for potential compression (summarization).
         Placeholder for vector similarity measurement logic.
         """
         # This would typically rely on a Vector Database or local embeddings
@@ -267,8 +260,7 @@ class MemoryConsolidationCore:
         return []
 
     def get_summary_prompt(self, cluster: List[Dict[str, Any]]) -> str:
-        """
-        Generate a prompt to summarize a cluster of memories into a single high-level insight.
+        """Generate a prompt to summarize a cluster of memories into a single high-level insight.
         """
         content_block = "\n---\n".join([m.get("content", "") for m in cluster])
         return (

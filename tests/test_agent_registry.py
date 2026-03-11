@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+"""Tests for the AgentRegistry class."""
 import time
 
 from swarm.agent_registry import AgentRegistry

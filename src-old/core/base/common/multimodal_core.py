@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/multimodal_core.description.md
 
@@ -29,10 +28,12 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """Core logic for multimodal alignment, synchronization, and streaming."""
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -45,21 +46,17 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import logging
 import math
 import re
-import time
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
-
-from src.infrastructure.engine.multimodal import (Muxer, QuantizedMultimediaEngine)
+from src.infrastructure.engine.multimodal import Muxer, QuantizedMultimediaEngine
 
 from .base_core import BaseCore
 from .multimodal_buffer import TemporalModalityBuffer
 from .multimodal_encoders import StreamingAudioProcessor, StreamingVisionEncoder
-from .multimodal_logic import MultimodalCore as MultimodalLogicCore
 from .multimodal_session import MultimodalStreamSession
 from .multimodal_state import StreamState
 
@@ -81,8 +78,7 @@ __all__ = [
 
 
 class MultimodalCore(BaseCore):
-    """
-    Unified Multimodal Alignment and Streaming Core.
+    """Unified Multimodal Alignment and Streaming Core.
     Implements efficient modality alignments (sequence-dimension concatenation)
     and simultaneous stream parsing for "see-while-hear" experiences.
     """
@@ -141,22 +137,19 @@ class MultimodalCore(BaseCore):
         }
 
     def set_active_channel(self, modality: str, channel_id: str) -> None:
-        """
-        Switch the active channel for a specific modality (e.g. switch Audio to 'EN').
+        """Switch the active channel for a specific modality (e.g. switch Audio to 'EN').
         """
         self.active_channels[modality] = channel_id
         logger.info("Modality %s channel switched to: %s", modality, channel_id)
 
     def parse_and_filter_stream(self, stream_id: str, chunk: str) -> List[Dict[str, Any]]:
-        """
-        Incrementally parse and automatically filter for active channels.
+        """Incrementally parse and automatically filter for active channels.
         """
         fragments = self.parse_stream_incremental(stream_id, chunk)
         return self.select_channels(fragments, self.active_channels)
 
     def parse_stream_incremental(self, stream_id: str, chunk: str) -> List[Dict[str, Any]]:
-        """
-        Incrementally parse a stream chunk, handling partial tags.
+        """Incrementally parse a stream chunk, handling partial tags.
         """
         if stream_id not in self._stream_states:
             self._stream_states[stream_id] = StreamState()
@@ -184,8 +177,7 @@ class MultimodalCore(BaseCore):
         self.registry[tag] = uri
 
     def mux_dvd_channels(self, audio: bytes, video: bytes, text: str) -> bytes:
-        """
-        Packs separate modalities into a single sync-packet for 120fps DVD-like streaming.
+        """Packs separate modalities into a single sync-packet for 120fps DVD-like streaming.
         Uses 0xDEADBEEF binary muxer.
         """
         return self.muxer.synchronize_tick(audio, video, text)
@@ -199,8 +191,7 @@ class MultimodalCore(BaseCore):
         return self.registry.get(tag)
 
     def calculate_audio_features(self, samples: List[float], num_bins: int = 80) -> List[float]:
-        """
-        Extract Mel-frequency features for audio alignment.
+        """Extract Mel-frequency features for audio alignment.
         """
         if rc and hasattr(rc, "calculate_mel_features_rust"):
             return rc.calculate_mel_features_rust(samples, num_bins, 16000)
@@ -212,8 +203,7 @@ class MultimodalCore(BaseCore):
     def synchronize_streams(
         self, transcriptions: List[Tuple[float, str]], responses: List[Tuple[float, str]]
     ) -> List[Tuple[float, str, str]]:
-        """
-        Synchronize multiple modality streams (e.g. ASR + LLM) for "see-while-hear".
+        """Synchronize multiple modality streams (e.g. ASR + LLM) for "see-while-hear".
         """
         if rc and hasattr(rc, "synchronize_modalities_rust"):
             return rc.synchronize_modalities_rust(transcriptions, responses)
@@ -229,8 +219,7 @@ class MultimodalCore(BaseCore):
     def project_alignment(
         self, embedding: List[float], weights: List[float], bias: Optional[List[float]] = None
     ) -> List[float]:
-        """
-        Apply layer-dimension mapping (projection) for modality alignment.
+        """Apply layer-dimension mapping (projection) for modality alignment.
         """
         if rc and hasattr(rc, "project_modality_embeddings_rust"):
             in_dim = len(embedding)
@@ -248,16 +237,14 @@ class MultimodalCore(BaseCore):
         return res.tolist()
 
     def quantize_audio(self, samples: List[float]) -> List[int]:
-        """
-        Reduce audio bit-depth for low-latency streaming.
+        """Reduce audio bit-depth for low-latency streaming.
         """
         if rc and hasattr(rc, "audio_quantize_int8_rust"):
             return rc.audio_quantize_int8_rust(samples)
         return [int(max(-1.0, min(1.0, s)) * 127) for s in samples]
 
     def split_image_grid(self, pixels: bytes, width: int, height: int, rows: int = 2, cols: int = 2) -> List[bytes]:
-        """
-        Split high-resolution images into manageable tiles for multimodal tokens.
+        """Split high-resolution images into manageable tiles for multimodal tokens.
         """
         if rc and hasattr(rc, "image_grid_split_rust"):
             tiles = rc.image_grid_split_rust(list(pixels), width, height, rows, cols)
@@ -276,8 +263,7 @@ class MultimodalCore(BaseCore):
         return tiles
 
     def get_modality_weights(self, audio_energy: float, text_density: float) -> Tuple[float, float]:
-        """
-        Calculate importance weights for fusing modalities.
+        """Calculate importance weights for fusing modalities.
         """
         if rc and hasattr(rc, "calculate_dynamic_modality_weights_rust"):
             return rc.calculate_dynamic_modality_weights_rust(audio_energy, text_density)
@@ -287,8 +273,7 @@ class MultimodalCore(BaseCore):
         return ea / s, et / s
 
     def parse_stream(self, content: str) -> List[Dict[str, Any]]:
-        """
-        Parse a streaming response for modality tags (e.g. <Audio:EN_123>).
+        """Parse a streaming response for modality tags (e.g. <Audio:EN_123>).
         Supports multi-channel interleaved streams (DVD-style).
         """
         if rc and hasattr(rc, "parse_modality_stream_rust"):
@@ -358,8 +343,7 @@ class MultimodalCore(BaseCore):
         return parts
 
     def select_channels(self, fragments: List[Dict[str, Any]], channels: Dict[str, str]) -> List[Dict[str, Any]]:
-        """
-        Filter a multi-channel stream to show only active tracks (e.g. EN audio, Angle 1 video).
+        """Filter a multi-channel stream to show only active tracks (e.g. EN audio, Angle 1 video).
         """
         if rc and hasattr(rc, "switch_modality_channel_rust"):
             # Convert dicts back to tuples for Rust processing
@@ -391,8 +375,7 @@ class MultimodalCore(BaseCore):
         return output
 
     def create_mosaic(self, feeds: List[bytes], width: int, height: int, rows: int, cols: int) -> bytes:
-        """
-        Combine multiple camera feeds into a single mosaic.
+        """Combine multiple camera feeds into a single mosaic.
         """
         if rc and hasattr(rc, "create_vision_mosaic_rust"):
             mosaic = rc.create_vision_mosaic_rust([list(f) for f in feeds], width, height, rows, cols)
@@ -448,8 +431,7 @@ class MultimodalCore(BaseCore):
         return []
 
     def extract_roi(self, pixels: bytes, width: int, height: int, x: int, y: int, rw: int, rh: int) -> bytes:
-        """
-        Crop a sub-region (Region of Interest) from a frame.
+        """Crop a sub-region (Region of Interest) from a frame.
         Useful for "zooming in" on active regions detected by saliency.
         """
         if rc and hasattr(rc, "extract_vision_roi_rust"):
@@ -465,8 +447,7 @@ class MultimodalCore(BaseCore):
         return bytes(roi)
 
     def calculate_audio_direction(self, left: List[float], right: List[float], sample_rate: int = 16000) -> float:
-        """
-        Estimate source angle (-90 to 90) using Interaural Time Difference (ITD).
+        """Estimate source angle (-90 to 90) using Interaural Time Difference (ITD).
         """
         if rc and hasattr(rc, "calculate_audio_direction_rust"):
             return rc.calculate_audio_direction_rust(left, right, sample_rate)

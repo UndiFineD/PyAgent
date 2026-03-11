@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/firewall_agent.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -87,8 +87,7 @@ except ImportError:
 class FirewallAgent(
     BaseAgent
 ):  # pylint: disable=too-many-ancestors,too-many-return-statements
-    """
-    Firewall Agent: Gatekeeper for agent actions.
+    """Firewall Agent: Gatekeeper for agent actions.
     Ensures 'thought_stream' signals are analyzed and clearance is granted
     before agents act on their reasoning.
     """
@@ -229,15 +228,13 @@ class FirewallAgent(
         return f"{agent_name}:{thought[:200]}"
 
     def has_clearance(self, agent_name: str, thought: str) -> bool:
-        """
-        Interrogated by other agents or the orchestrator before execution.
+        """Interrogated by other agents or the orchestrator before execution.
         """
         cid = self._generate_cid(agent_name, thought)
         return self.clearance_registry.get(cid, False)
 
     async def request_clearance_blocking(self, agent_name: str, thought: str) -> bool:
-        """
-        A synchronous-like awaitable call for agents that need immediate clearance.
+        """A synchronous-like awaitable call for agents that need immediate clearance.
         """
         # Trigger analysis if it wasn't already caught by signal
         await self._analyze_thought({"data": {"agent": agent_name, "thought": thought}})

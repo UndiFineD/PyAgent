@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/agent/AgentUpdateManager.description.md
 
 # AgentUpdateManager
 
-**File**: `src\classes\agent\AgentUpdateManager.py`  
+**File**: `src\\classes\agent\\AgentUpdateManager.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 13 imports  
 **Lines**: 229  
@@ -54,7 +53,7 @@ Implements Version Gatekeeping to prevent unstable mutations.
 
 # Improvements for AgentUpdateManager
 
-**File**: `src\classes\agent\AgentUpdateManager.py`  
+**File**: `src\\classes\agent\\AgentUpdateManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 229 lines (medium)  
 **Complexity**: 8 score (moderate)
@@ -107,19 +106,18 @@ from __future__ import annotations
 
 """Specialized manager for handling agent improvement iterations."""
 
-from src.core.base.version import VERSION
 import logging
 import sys
 from pathlib import Path
-from typing import List, Dict, Any
-from src.core.base.version import is_gate_open, EVOLUTION_PHASE
+from typing import Any
+
+from src.core.base.version import EVOLUTION_PHASE, VERSION, is_gate_open
 
 __version__ = VERSION
 
 
 class AgentUpdateManager:
-    """
-    Handles the update logic for code files, including errors, improvements, and tests.
+    """Handles the update logic for code files, including errors, improvements, and tests.
     Implements Version Gatekeeping to prevent unstable mutations.
     """
 
@@ -150,8 +148,7 @@ class AgentUpdateManager:
         return True
 
     def update_errors_improvements(self, code_file: Path) -> bool:
-        """
-        Update errors and improvements for a specific code file.
+        """Update errors and improvements for a specific code file.
         Returns True if changes were written.
         """
         if not self._check_gate():
@@ -300,8 +297,7 @@ class AgentUpdateManager:
         return changes_made
 
     def update_code(self, code_file: Path) -> bool:
-        """
-        Update the code file based on improvements.
+        """Update the code file based on improvements.
         Returns True if changes were written.
         """
         if not self._check_gate():

@@ -1,9 +1,11 @@
+#!/usr/bin/env python
+"""Test the message model validation."""
 import pytest
 
 from swarm.message_model import validate_message
 
 
-def test_validate_message_accepts_valid():
+def test_validate_message_accepts_valid() -> None:
     """A valid message should pass validation without exceptions."""
     valid = {
         "id": "uuid-1",
@@ -18,8 +20,8 @@ def test_validate_message_accepts_valid():
     assert validate_message(valid)
 
 
-def test_validate_message_rejects_missing_field():
+def test_validate_message_rejects_missing_field() -> None:
     """A message missing required fields should raise a ValueError."""
     invalid = {"id": "uuid-1"}
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         validate_message(invalid)

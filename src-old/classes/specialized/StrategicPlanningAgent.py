@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/StrategicPlanningAgent.description.md
 
@@ -84,6 +83,10 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+from typing import Any
+
+from src.core.base.BaseAgent import BaseAgent
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -102,17 +105,13 @@ from __future__ import annotations
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
 from src.core.base.version import VERSION
-from typing import Dict, List, Any
-from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
 
 
 class StrategicPlanningAgent(BaseAgent):
-    """
-    Strategic Planning Agent: Handles long-term goal setting, roadmap
+    """Strategic Planning Agent: Handles long-term goal setting, roadmap
     prioritization, and autonomous project management for the fleet.
     """
 

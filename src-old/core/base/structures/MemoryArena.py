@@ -1,11 +1,10 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/structures/MemoryArena.description.md
 
 # MemoryArena
 
-**File**: `src\core\base\structures\MemoryArena.py`  
+**File**: `src\\core\base\\structures\\MemoryArena.py`  
 **Type**: Python Module  
 **Summary**: 5 classes, 3 functions, 14 imports  
 **Lines**: 559  
@@ -167,7 +166,7 @@ Yields:
 
 # Improvements for MemoryArena
 
-**File**: `src\core\base\structures\MemoryArena.py`  
+**File**: `src\\core\base\\structures\\MemoryArena.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 559 lines (large)  
 **Complexity**: 36 score (complex)
@@ -201,6 +200,7 @@ Yields:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -212,9 +212,9 @@ Phase 19: Beyond vLLM - Performance Patterns
 Arena allocation for reduced allocation overhead.
 """
 
-import mmap
 import threading
-from dataclasses import dataclass, field
+from contextlib import contextmanager
+from dataclasses import dataclass
 from typing import (
     Any,
     Dict,
@@ -222,10 +222,7 @@ from typing import (
     List,
     Optional,
     TypeVar,
-    Union,
 )
-from contextlib import contextmanager
-import weakref
 
 T = TypeVar("T")
 
@@ -260,8 +257,7 @@ class ArenaStats:
 
 
 class MemoryArena:
-    """
-    Bump allocator for fast temporary allocations.
+    """Bump allocator for fast temporary allocations.
 
     Allocates memory in a single large block and bumps a pointer
     for each allocation. Extremely fast for temporary data that
@@ -284,6 +280,7 @@ class MemoryArena:
 
         # Free everything at once
         arena.reset()
+
     """
 
     DEFAULT_BLOCK_SIZE = 1024 * 1024  # 1 MB
@@ -294,13 +291,13 @@ class MemoryArena:
         max_blocks: int = 100,
         alignment: int = 8,
     ):
-        """
-        Initialize memory arena.
+        """Initialize memory arena.
 
         Args:
             block_size: Size of each memory block
             max_blocks: Maximum number of blocks
             alignment: Byte alignment for allocations
+
         """
         self._block_size = block_size
         self._max_blocks = max_blocks
@@ -330,8 +327,7 @@ class MemoryArena:
         return (size + self._alignment - 1) & ~(self._alignment - 1)
 
     def alloc(self, size: int) -> memoryview:
-        """
-        Allocate memory from the arena.
+        """Allocate memory from the arena.
 
         Args:
             size: Number of bytes to allocate
@@ -341,6 +337,7 @@ class MemoryArena:
 
         Raises:
             MemoryError: If allocation fails
+
         """
         aligned_size = self._align(size)
 
@@ -370,21 +367,20 @@ class MemoryArena:
             return memoryview(block)[start : start + size]
 
     def alloc_bytes(self, size: int) -> bytearray:
-        """
-        Allocate and return a bytearray copy.
+        """Allocate and return a bytearray copy.
 
         Args:
             size: Number of bytes
 
         Returns:
             New bytearray (copy of arena memory)
+
         """
         view = self.alloc(size)
         return bytearray(view)
 
     def reset(self) -> None:
-        """
-        Reset arena, freeing all allocations.
+        """Reset arena, freeing all allocations.
 
         Does not deallocate blocks, just resets pointers.
         """
@@ -394,8 +390,7 @@ class MemoryArena:
             self._stats.resets += 1
 
     def clear(self) -> None:
-        """
-        Clear arena and deallocate all but first block.
+        """Clear arena and deallocate all but first block.
         """
         with self._lock:
             # Keep first block
@@ -429,8 +424,7 @@ class MemoryArena:
 
     @contextmanager
     def scope(self):
-        """
-        Create a scoped region that auto-resets on exit.
+        """Create a scoped region that auto-resets on exit.
 
         Useful for temporary allocations within a function.
         """
@@ -448,8 +442,7 @@ class MemoryArena:
 
 
 class TypedArena(Generic[T]):
-    """
-    Typed arena for allocating arrays of a specific type.
+    """Typed arena for allocating arrays of a specific type.
 
     Works with fixed-size types using struct.
     """
@@ -460,13 +453,13 @@ class TypedArena(Generic[T]):
         block_count: int = 1024,
         max_blocks: int = 100,
     ):
-        """
-        Initialize typed arena.
+        """Initialize typed arena.
 
         Args:
             type_size: Size of each element in bytes
             block_count: Elements per block
             max_blocks: Maximum number of blocks
+
         """
         self._type_size = type_size
         self._block_count = block_count
@@ -478,14 +471,14 @@ class TypedArena(Generic[T]):
         )
 
     def alloc(self, count: int = 1) -> memoryview:
-        """
-        Allocate space for count elements.
+        """Allocate space for count elements.
 
         Args:
             count: Number of elements
 
         Returns:
             Memoryview for elements
+
         """
         return self._arena.alloc(self._type_size * count)
 
@@ -500,18 +493,17 @@ class TypedArena(Generic[T]):
 
 
 class StackArena:
-    """
-    Stack-based arena with LIFO deallocation.
+    """Stack-based arena with LIFO deallocation.
 
     Allows partial deallocation in stack order.
     """
 
     def __init__(self, size: int = 1024 * 1024):
-        """
-        Initialize stack arena.
+        """Initialize stack arena.
 
         Args:
             size: Total arena size
+
         """
         self._buffer = bytearray(size)
         self._size = size
@@ -521,22 +513,22 @@ class StackArena:
         self._stats = ArenaStats()
 
     def push_mark(self) -> int:
-        """
-        Push a mark for later rollback.
+        """Push a mark for later rollback.
 
         Returns:
             Mark identifier
+
         """
         with self._lock:
             self._marks.append(self._top)
             return len(self._marks) - 1
 
     def pop_to_mark(self, mark: Optional[int] = None) -> None:
-        """
-        Pop back to a mark, freeing allocations.
+        """Pop back to a mark, freeing allocations.
 
         Args:
             mark: Mark to pop to (None = last mark)
+
         """
         with self._lock:
             if mark is None:
@@ -548,8 +540,7 @@ class StackArena:
                     self._marks = self._marks[:mark]
 
     def alloc(self, size: int, alignment: int = 8) -> memoryview:
-        """
-        Allocate from stack arena.
+        """Allocate from stack arena.
 
         Args:
             size: Bytes to allocate
@@ -557,6 +548,7 @@ class StackArena:
 
         Returns:
             Memoryview of allocation
+
         """
         with self._lock:
             # Align
@@ -598,8 +590,7 @@ class StackArena:
 
     @contextmanager
     def frame(self):
-        """
-        Create a stack frame that auto-pops on exit.
+        """Create a stack frame that auto-pops on exit.
         """
         mark = self.push_mark()
         try:
@@ -609,8 +600,7 @@ class StackArena:
 
 
 class SlabAllocator(Generic[T]):
-    """
-    Slab allocator for fixed-size objects.
+    """Slab allocator for fixed-size objects.
 
     Efficient for allocating many objects of the same size.
     """
@@ -621,13 +611,13 @@ class SlabAllocator(Generic[T]):
         slab_size: int = 64,
         max_slabs: int = 100,
     ):
-        """
-        Initialize slab allocator.
+        """Initialize slab allocator.
 
         Args:
             object_size: Size of each object
             slab_size: Objects per slab
             max_slabs: Maximum number of slabs
+
         """
         self._object_size = object_size
         self._slab_size = slab_size
@@ -661,11 +651,11 @@ class SlabAllocator(Generic[T]):
             self._free_list.append((slab_idx, offset))
 
     def alloc(self) -> memoryview:
-        """
-        Allocate one object slot.
+        """Allocate one object slot.
 
         Returns:
             Memoryview of allocated slot
+
         """
         with self._lock:
             if not self._free_list:
@@ -680,11 +670,11 @@ class SlabAllocator(Generic[T]):
             return memoryview(slab)[offset : offset + self._object_size]
 
     def free(self, view: memoryview) -> None:
-        """
-        Free an allocated slot.
+        """Free an allocated slot.
 
         Args:
             view: Memoryview from previous alloc
+
         """
         with self._lock:
             # Find which slab this belongs to
@@ -721,14 +711,14 @@ _thread_local = threading.local()
 
 
 def get_thread_arena(size: int = 1024 * 1024) -> MemoryArena:
-    """
-    Get thread-local arena for temporary allocations.
+    """Get thread-local arena for temporary allocations.
 
     Args:
         size: Arena block size
 
     Returns:
         Thread-local arena instance
+
     """
     if not hasattr(_thread_local, "arena"):
         _thread_local.arena = MemoryArena(block_size=size)
@@ -737,14 +727,14 @@ def get_thread_arena(size: int = 1024 * 1024) -> MemoryArena:
 
 @contextmanager
 def temp_arena(size: int = 1024 * 1024):
-    """
-    Context manager for temporary arena that resets on exit.
+    """Context manager for temporary arena that resets on exit.
 
     Args:
         size: Arena size
 
     Yields:
         Arena for temporary allocations
+
     """
     arena = MemoryArena(block_size=size, max_blocks=1)
     try:
@@ -755,11 +745,11 @@ def temp_arena(size: int = 1024 * 1024):
 
 @contextmanager
 def thread_temp_alloc():
-    """
-    Use thread-local arena with auto-reset.
+    """Use thread-local arena with auto-reset.
 
     Yields:
         Thread-local arena in a scope
+
     """
     arena = get_thread_arena()
     with arena.scope():

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/priority_core.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -64,8 +64,7 @@ from .models import FilePriority, FilePriorityConfig
 
 
 class PriorityCore(BaseCore):
-    """
-    Authoritative engine for determining file priorities.
+    """Authoritative engine for determining file priorities.
     """
 
     def __init__(self, config: Optional[FilePriorityConfig] = None) -> None:
@@ -81,8 +80,7 @@ class PriorityCore(BaseCore):
         }
 
     def get_priority(self, path: Path) -> FilePriority:
-        """
-        Determines the priority level regarding a given file path.
+        """Determines the priority level regarding a given file path.
         """
         path_str = str(path)
 
@@ -106,7 +104,6 @@ class PriorityCore(BaseCore):
         return self.config.default_priority
 
     def sort_by_priority(self, paths: List[Path]) -> List[Path]:
-        """
-        Sorts a list of file paths by their priority level in descending order.
+        """Sorts a list of file paths by their priority level in descending order.
         """
         return sorted(paths, key=lambda p: self.get_priority(p).value, reverse=True)

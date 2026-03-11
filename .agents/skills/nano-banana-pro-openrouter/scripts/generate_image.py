@@ -5,8 +5,7 @@
 #     "openai",
 # ]
 # ///
-"""
-Generate or edit images via OpenRouter using openai-python.
+"""Generate or edit images via OpenRouter using openai-python.
 """
 
 import argparse
@@ -16,7 +15,6 @@ import os
 from pathlib import Path
 
 from openai import OpenAI
-
 
 # Configuration
 MAX_INPUT_IMAGES = 3

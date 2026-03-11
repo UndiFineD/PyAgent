@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/alerting.description.md
 
@@ -44,8 +43,7 @@ import logging
 from datetime import datetime
 from typing import Any
 
-from .observability_core import (Alert, AlertSeverity, RetentionPolicy,
-                                 Threshold)
+from .observability_core import Alert, AlertSeverity, RetentionPolicy, Threshold
 
 try:
     from rust_core import match_policies_rust

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/base_agent/managers/ConversationManagers.description.md
 
 # ConversationManagers
 
-**File**: `src\classes\base_agent\managers\ConversationManagers.py`  
+**File**: `src\\classes\base_agent\\managers\\ConversationManagers.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 27  
@@ -43,7 +42,7 @@ Manages a conversation history with message storage and retrieval.
 
 # Improvements for ConversationManagers
 
-**File**: `src\classes\base_agent\managers\ConversationManagers.py`  
+**File**: `src\\classes\base_agent\\managers\\ConversationManagers.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 27 lines (small)  
 **Complexity**: 4 score (simple)
@@ -79,9 +78,9 @@ LLM_CONTEXT_END
 from __future__ import annotations
 
 # Copyright (c) 2025 PyAgent contributors
+from typing import List
 
-from typing import Any, List
-from ..models import MessageRole, ConversationMessage
+from ..models import ConversationMessage, MessageRole
 
 
 class ConversationHistory:

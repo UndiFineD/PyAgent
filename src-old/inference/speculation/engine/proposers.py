@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/inference/speculation/engine/proposers.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # SPDX-License-Identifier: Apache-2.0
@@ -52,11 +52,13 @@ LLM_CONTEXT_END
 import logging
 import time
 from contextlib import suppress
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
-from src.core.base.lifecycle.version import VERSION
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
-from numba import jit as _jit, njit as _njit, prange as _prange
+from numba import jit as _jit
+from numba import njit as _njit
+from numba import prange as _prange
+from src.core.base.lifecycle.version import VERSION
 
 from .base import DrafterBase
 from .config import SpecMethod, SpeculativeConfig

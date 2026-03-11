@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/system/core_expansion_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -62,8 +62,7 @@ __version__ = VERSION
 
 
 class CoreExpansionAgent(BaseAgent):
-    """
-    Agent responsible for autonomous environment expansion.
+    """Agent responsible for autonomous environment expansion.
     Detects missing libraries and installs them into the active Python environment.
     """
 
@@ -78,8 +77,7 @@ class CoreExpansionAgent(BaseAgent):
 
     @as_tool
     def install_missing_dependency(self, package_name: str) -> str:
-        """
-        Attempts to install a missing Python package using pip.
+        """Attempts to install a missing Python package using pip.
         """
         logging.info(
             f"CoreExpansionAgent: Attempting to install package: {package_name}"
@@ -120,8 +118,7 @@ class CoreExpansionAgent(BaseAgent):
 
     @as_tool
     def audit_environment(self) -> list[str]:
-        """
-        Lists currently installed packages in the environment.
+        """Lists currently installed packages in the environment.
         Uses importlib.metadata with a silent fallback to pkg_resources.
         """
         # 1. Try standard importlib.metadata (Python 3.8+)

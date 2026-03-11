@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/DocumentationAgent.description.md
 
@@ -83,8 +82,7 @@ LLM_CONTEXT_END
 """Agent specializing in automated documentation generation and maintenance."""
 
 import logging
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import create_main_function
 from src.classes.context.KnowledgeAgent import KnowledgeAgent

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/SecurityAuditorMixin.description.md
 
 # SecurityAuditorMixin
 
-**File**: `src\logic\agents\development\mixins\SecurityAuditorMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\SecurityAuditorMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 72  
@@ -38,7 +37,7 @@ Mixin for command and shell script auditing.
 
 # Improvements for SecurityAuditorMixin
 
-**File**: `src\logic\agents\development\mixins\SecurityAuditorMixin.py`  
+**File**: `src\\logic\agents\\development\\mixins\\SecurityAuditorMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 72 lines (small)  
 **Complexity**: 2 score (simple)
@@ -69,6 +68,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -85,6 +85,7 @@ from __future__ import annotations
 """Command and script auditing logic for SecurityCore."""
 
 import re
+
 
 class SecurityAuditorMixin:
     """Mixin for command and shell script auditing."""

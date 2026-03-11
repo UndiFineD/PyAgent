@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Excalidraw Library Splitter
+"""Excalidraw Library Splitter
 
 This script splits an Excalidraw library file (*.excalidrawlib) into individual
 icon JSON files and generates a reference.md file for easy lookup.
@@ -14,24 +13,24 @@ Usage:
 
 Example:
     python split-excalidraw-library.py skills/excalidraw-diagram-generator/libraries/aws-architecture-icons/
+
 """
 
 import json
-import os
 import re
 import sys
 from pathlib import Path
 
 
 def sanitize_filename(name: str) -> str:
-    """
-    Sanitize icon name to create a valid filename.
+    """Sanitize icon name to create a valid filename.
 
     Args:
         name: Original icon name
 
     Returns:
         Sanitized filename safe for all platforms
+
     """
     # Replace spaces with hyphens
     filename = name.replace(' ', '-')
@@ -49,8 +48,7 @@ def sanitize_filename(name: str) -> str:
 
 
 def find_library_file(directory: Path) -> Path:
-    """
-    Find the .excalidrawlib file in the given directory.
+    """Find the .excalidrawlib file in the given directory.
 
     Args:
         directory: Directory to search
@@ -60,6 +58,7 @@ def find_library_file(directory: Path) -> Path:
 
     Raises:
         SystemExit: If no library file or multiple library files found
+
     """
     library_files = list(directory.glob('*.excalidrawlib'))
 
@@ -77,11 +76,11 @@ def find_library_file(directory: Path) -> Path:
 
 
 def split_library(library_dir: str) -> None:
-    """
-    Split an Excalidraw library file into individual icon files.
+    """Split an Excalidraw library file into individual icon files.
 
     Args:
         library_dir: Path to the directory containing the .excalidrawlib file
+
     """
     library_dir = Path(library_dir)
 
@@ -98,7 +97,7 @@ def split_library(library_dir: str) -> None:
     print(f"Found library: {library_path.name}")
 
     # Load library file
-    print(f"Loading library data...")
+    print("Loading library data...")
     with open(library_path, 'r', encoding='utf-8') as f:
         library_data = json.load(f)
 

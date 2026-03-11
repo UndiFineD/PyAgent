@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/find_syntax_errors.description.md
 
@@ -78,7 +77,7 @@ def find_syntax_errors(root_dir):
                         ast.parse(f.read())
                 except SyntaxError as e:
                     print(f"Syntax Error in {path}: {e}")
-                except Exception as e:
+                except Exception:
                     # Some files might have encoding issues
                     pass
 

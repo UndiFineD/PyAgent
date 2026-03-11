@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/ScalingManager.description.md
 
 # ScalingManager
 
-**File**: `src\classes\fleet\ScalingManager.py`  
+**File**: `src\\classes\fleet\\ScalingManager.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 8 imports  
 **Lines**: 42  
@@ -49,7 +48,7 @@ Handles fleet orchestration while delegating logic to ScalingCore.
 
 # Improvements for ScalingManager
 
-**File**: `src\classes\fleet\ScalingManager.py`  
+**File**: `src\\classes\fleet\\ScalingManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 42 lines (small)  
 **Complexity**: 4 score (simple)
@@ -85,13 +84,12 @@ Monitors system load and spawns new agent instances as needed.
 
 import logging
 import time
-from typing import Dict, List, Any, Optional, Type
+
 from .ScalingCore import ScalingCore
 
 
 class ScalingManager:
-    """
-    Shell for ScalingManager.
+    """Shell for ScalingManager.
     Handles fleet orchestration while delegating logic to ScalingCore.
     """
 

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/mcp/bridge.description.md
 
 # bridge
 
-**File**: `src\tools\mcp\bridge.py`  
+**File**: `src\tools\\mcp\bridge.py`  
 **Type**: Python Module  
 **Summary**: 8 classes, 0 functions, 22 imports  
 **Lines**: 619  
@@ -113,7 +112,7 @@ Uses AI to select the best MCP tools for a given task.
 
 # Improvements for bridge
 
-**File**: `src\tools\mcp\bridge.py`  
+**File**: `src\tools\\mcp\bridge.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 619 lines (large)  
 **Complexity**: 14 score (moderate)
@@ -150,6 +149,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -175,17 +175,12 @@ import asyncio
 import json
 import logging
 import subprocess
-import sys
-import time
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
-from urllib.parse import urlparse
+from typing import Any, Dict, List, Optional
 
 import aiohttp
-import requests
-
 from src.core.base.models.communication_models import CascadeContext
 
 logger = logging.getLogger("pyagent.tools.mcp")
@@ -193,6 +188,7 @@ logger = logging.getLogger("pyagent.tools.mcp")
 
 class MCPServerType(Enum):
     """Types of MCP servers."""
+
     LOCAL = "local"
     REMOTE = "remote"
     DOCKER = "docker"
@@ -201,6 +197,7 @@ class MCPServerType(Enum):
 
 class MCPCategory(Enum):
     """MCP server categories."""
+
     DATABASE = "database"
     API = "api"
     FILESYSTEM = "filesystem"
@@ -216,6 +213,7 @@ class MCPCategory(Enum):
 @dataclass
 class MCPServerConfig:
     """Configuration for an MCP server."""
+
     name: str
     description: str
     category: MCPCategory
@@ -236,6 +234,7 @@ class MCPServerConfig:
 @dataclass
 class MCPTool:
     """Represents an MCP tool."""
+
     name: str
     description: str
     input_schema: Dict[str, Any]
@@ -245,8 +244,7 @@ class MCPTool:
 
 
 class MCPServerRegistry:
-    """
-    Registry of available MCP servers.
+    """Registry of available MCP servers.
 
     Manages discovery, configuration, and lifecycle of MCP servers.
     """
@@ -382,8 +380,7 @@ class MCPServerRegistry:
                 if capability in config.capabilities and config.enabled]
 
     async def discover_servers(self) -> List[MCPServerConfig]:
-        """
-        Discover available MCP servers from external sources.
+        """Discover available MCP servers from external sources.
 
         This would integrate with awesome-mcp-servers and other registries.
         """
@@ -402,8 +399,7 @@ class MCPServerRegistry:
 
 
 class MCPServerInstance:
-    """
-    Instance of a running MCP server.
+    """Instance of a running MCP server.
 
     Manages the lifecycle of an MCP server process.
     """
@@ -570,8 +566,7 @@ class MCPServerInstance:
 
 
 class MCPBridge:
-    """
-    MCP Protocol Bridge.
+    """MCP Protocol Bridge.
 
     Provides standardized interface for external services through MCP servers.
     """
@@ -624,8 +619,7 @@ class MCPBridge:
 
     async def call_tool(self, tool_name: str, arguments: Dict[str, Any],
                        context: Optional[CascadeContext] = None) -> Any:
-        """
-        Call an MCP tool.
+        """Call an MCP tool.
 
         Args:
             tool_name: Name of the tool to call
@@ -634,6 +628,7 @@ class MCPBridge:
 
         Returns:
             Tool execution result
+
         """
         # Find which server has this tool
         for server_name, server in self.active_servers.items():
@@ -669,8 +664,7 @@ class MCPBridge:
 
 
 class MCPToolOrchestrator:
-    """
-    Intelligent tool selection and orchestration.
+    """Intelligent tool selection and orchestration.
 
     Uses AI to select the best MCP tools for a given task.
     """
@@ -681,8 +675,7 @@ class MCPToolOrchestrator:
         self.logger = logging.getLogger("pyagent.tools.mcp.orchestrator")
 
     async def select_tools(self, task_description: str, max_tools: int = 3) -> List[MCPTool]:
-        """
-        Select the most appropriate MCP tools for a task.
+        """Select the most appropriate MCP tools for a task.
 
         Args:
             task_description: Description of the task
@@ -690,6 +683,7 @@ class MCPToolOrchestrator:
 
         Returns:
             List of selected tools
+
         """
         available_tools = self.mcp_bridge.get_available_tools()
 
@@ -736,8 +730,7 @@ Select at most {max_tools} tools."""
 
     async def orchestrate_tools(self, task_description: str,
                                context: Optional[CascadeContext] = None) -> Dict[str, Any]:
-        """
-        Orchestrate tool execution for a complex task.
+        """Orchestrate tool execution for a complex task.
 
         Args:
             task_description: Description of the task
@@ -745,6 +738,7 @@ Select at most {max_tools} tools."""
 
         Returns:
             Orchestration result
+
         """
         # Select appropriate tools
         selected_tools = await self.select_tools(task_description)

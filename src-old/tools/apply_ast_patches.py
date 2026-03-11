@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/apply_ast_patches.description.md
 
@@ -80,9 +79,8 @@ from __future__ import annotations
 This script applies patches conservatively: it verifies context lines before applying
 and backs up original files as `.bak` when a patch is applied.
 """
-from pathlib import Path
 import re
-import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 PATCH_DIR = ROOT / ".external" / "patches_ast"

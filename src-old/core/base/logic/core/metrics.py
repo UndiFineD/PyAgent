@@ -12,8 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/metrics.description.md
 
@@ -42,6 +41,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 """
@@ -49,8 +49,7 @@ Core logic regarding metrics.
 (Facade regarding src.core.base.common.metrics_core)
 """
 
-from src.core.base.common.metrics_core import \
-    MetricsCore as StandardMetricsCore
+from src.core.base.common.metrics_core import MetricsCore as StandardMetricsCore
 
 
 class MetricsCore(StandardMetricsCore):

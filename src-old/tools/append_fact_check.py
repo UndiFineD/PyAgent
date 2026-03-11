@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/append_fact_check.description.md
 
@@ -60,7 +59,9 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 from pathlib import Path
+
 content = """
     @staticmethod
     def fact_check(code_snippet: str, agent_id: str) -> Dict[str, Any]:

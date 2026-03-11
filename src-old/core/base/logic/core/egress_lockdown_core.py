@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/egress_lockdown_core.description.md
 
 # egress_lockdown_core
 
-**File**: `src\core\base\logic\core\egress_lockdown_core.py`  
+**File**: `src\\core\base\\logic\\core\\egress_lockdown_core.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 5 imports  
 **Lines**: 58  
@@ -57,7 +56,7 @@ Pattern harvested from agentic-patterns.
 
 # Improvements for egress_lockdown_core
 
-**File**: `src\core\base\logic\core\egress_lockdown_core.py`  
+**File**: `src\\core\base\\logic\\core\\egress_lockdown_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 58 lines (small)  
 **Complexity**: 4 score (simple)
@@ -91,13 +90,12 @@ LLM_CONTEXT_END
 """
 
 import re
-from typing import List, Set, Optional
+from typing import List, Optional, Set
 from urllib.parse import urlparse
 
 
 class EgressLockdownCore:
-    """
-    Simulates an egress firewall for agent tools to prevent data exfiltration.
+    """Simulates an egress firewall for agent tools to prevent data exfiltration.
     Pattern harvested from agentic-patterns.
     """
 
@@ -116,8 +114,7 @@ class EgressLockdownCore:
         self.allowed_domains.add(domain)
 
     def validate_request(self, url: str) -> bool:
-        """
-        Validates if a URL is permitted under current lockdown rules.
+        """Validates if a URL is permitted under current lockdown rules.
         """
         parsed = urlparse(url)
         domain = parsed.netloc.split(":")[0]  # Remove port if present

@@ -1,12 +1,11 @@
 # Copyright 2026 PyAgent Authors
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/core_logic/validation.description.md
 
 # validation
 
-**File**: `src\core\base\core_logic\validation.py`  
+**File**: `src\\core\base\\core_logic\validation.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 4 imports  
 **Lines**: 46  
@@ -41,7 +40,7 @@ Class ValidationCore implementation.
 
 # Improvements for validation
 
-**File**: `src\core\base\core_logic\validation.py`  
+**File**: `src\\core\base\\core_logic\validation.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 46 lines (small)  
 **Complexity**: 3 score (simple)
@@ -77,7 +76,8 @@ Class ValidationCore implementation.
 LLM_CONTEXT_END
 """
 
-from typing import Tuple, Optional
+from typing import Tuple
+
 from src.core.base.models import AgentConfig
 
 try:

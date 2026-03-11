@@ -2,9 +2,10 @@
 """Test the watch_file utility for monitoring file changes."""
 import asyncio
 from pathlib import Path
+
 import pytest
 
-from runtime_py import watch_file
+import runtime_py
 
 
 @pytest.mark.asyncio
@@ -20,7 +21,7 @@ async def test_watch_file(tmp_path: Path) -> None:
         # any notification from the watcher is sufficient for the test
         event.set()
 
-    watch_file(str(file), cb)
+    runtime_py.watch_file(str(file), cb)
 
     # give the background watcher a moment to start up
     await asyncio.sleep(0.1)

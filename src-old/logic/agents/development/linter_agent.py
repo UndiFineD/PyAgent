@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/linter_agent.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -63,14 +63,12 @@ __version__ = VERSION
 
 
 class LinterAgent(BaseAgent):
-    """
-    Agent responsible for finding code quality issues using multiple linters.
+    """Agent responsible for finding code quality issues using multiple linters.
     Integrates Ruff, Pylint, and Flake8.
     """
 
     def __init__(self, file_path: str = "", **kwargs: Any) -> None:
-        """
-        Initialize the Linter Agent.
+        """Initialize the Linter Agent.
         :param file_path: Optional initial file to focus on.
         """
         super().__init__(file_path, **kwargs)
@@ -86,8 +84,7 @@ class LinterAgent(BaseAgent):
 
     @as_tool
     def lint_file(self, file_path: str, tools: str = "ruff,pylint,flake8") -> str:
-        """
-        Lints a python file using specified tools (comma separated).
+        """Lints a python file using specified tools (comma separated).
         Returns a human-readable report of discovered issues.
         """
         file_p = Path(file_path)
@@ -123,8 +120,7 @@ class LinterAgent(BaseAgent):
 
     @as_tool
     def get_issues_json(self, file_path: str) -> str:
-        """
-        Lints a file and returns the issues in raw JSON format.
+        """Lints a file and returns the issues in raw JSON format.
         Useful for programmatic processing by other agents.
         """
         if not Path(file_path).exists():

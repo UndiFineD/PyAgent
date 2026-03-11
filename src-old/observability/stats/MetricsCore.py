@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/MetricsCore.description.md
 
@@ -174,11 +173,11 @@ No I/O operations, no file access, no external calls.
 """
 
 import ast
+import logging
 import math
 import operator
-import logging
-from typing import Any, Dict, List, Tuple
 from dataclasses import dataclass
+from typing import Any, Dict, List, Tuple
 
 try:
     import rust_core as rc
@@ -232,6 +231,7 @@ class TokenCostCore:
 
         Returns:
             TokenCostResult with cost breakdown
+
         """
         # Optimized with Rust if available
         if rc:
@@ -290,6 +290,7 @@ class TokenCostCore:
 
         Returns:
             Dict with input and output cost per token
+
         """
         pricing = self.MODEL_COSTS.get(model, self.MODEL_COSTS["gpt-3.5-turbo"])
         return {
@@ -319,6 +320,7 @@ class ModelFallbackCore:
 
         Returns:
             Selected model name
+
         """
         if rc:
             try:
@@ -359,6 +361,7 @@ class ModelFallbackCore:
 
         Returns:
             List of models in fallback order
+
         """
         if rc:
             try:
@@ -637,6 +640,7 @@ class CorrelationCore:
 
         Returns:
             Correlation coefficient (-1.0 to 1.0)
+
         """
         if rc:
             try:
@@ -676,6 +680,7 @@ class ABTestCore:
 
         Returns:
             Dict with p_value, t_statistic, effect_size
+
         """
         if rc:
             try:
@@ -730,6 +735,7 @@ class ABTestCore:
 
         Returns:
             Required sample size per group
+
         """
         if rc:
             try:

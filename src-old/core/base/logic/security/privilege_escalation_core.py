@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/security/privilege_escalation_core.description.md
 
 # privilege_escalation_core
 
-**File**: `src\core\base\logic\security\privilege_escalation_core.py`  
+**File**: `src\\core\base\\logic\\security\\privilege_escalation_core.py`  
 **Type**: Python Module  
 **Summary**: 5 classes, 0 functions, 5 imports  
 **Lines**: 205  
@@ -70,7 +69,7 @@ Core class for Windows privilege escalation operations.
 
 # Improvements for privilege_escalation_core
 
-**File**: `src\core\base\logic\security\privilege_escalation_core.py`  
+**File**: `src\\core\base\\logic\\security\\privilege_escalation_core.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 205 lines (medium)  
 **Complexity**: 5 score (moderate)

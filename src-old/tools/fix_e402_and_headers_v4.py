@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/fix_e402_and_headers_v4.description.md
 
@@ -70,7 +69,6 @@ LLM_CONTEXT_END
 
 import ast
 import os
-import sys
 
 
 def fix_imports_and_headers(path):
@@ -83,7 +81,7 @@ def fix_imports_and_headers(path):
 
     try:
         tree = ast.parse(content)
-    except Exception as e:
+    except Exception:
         # Skip files with syntax errors
         return
 

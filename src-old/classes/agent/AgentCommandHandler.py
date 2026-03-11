@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/agent/AgentCommandHandler.description.md
 
 # AgentCommandHandler
 
-**File**: `src\classes\agent\AgentCommandHandler.py`  
+**File**: `src\\classes\agent\\AgentCommandHandler.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 15 imports  
 **Lines**: 171  
@@ -55,7 +54,7 @@ Handles command execution for the Agent, including sub-agent orchestration.
 
 # Improvements for AgentCommandHandler
 
-**File**: `src\classes\agent\AgentCommandHandler.py`  
+**File**: `src\\classes\agent\\AgentCommandHandler.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 171 lines (medium)  
 **Complexity**: 6 score (moderate)
@@ -90,6 +89,15 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+import contextlib
+import logging
+import os
+import subprocess
+import sys
+from collections.abc import Iterator
+from pathlib import Path
+from typing import Any
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -102,17 +110,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from src.core.base.version import VERSION
-import os
-import sys
-import logging
-import subprocess
-import contextlib
-from pathlib import Path
-from typing import List, Dict, Any, Optional, Tuple
-from collections.abc import Iterator
 
 __version__ = VERSION
 

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/QuantumReasonerAgent.description.md
 
@@ -86,16 +85,15 @@ LLM_CONTEXT_END
 """
 
 import logging
-import json
 import random
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
 
 class QuantumReasonerAgent(BaseAgent):
-    """
-    Agent that uses 'Quantum-Inspired Reasoning' to handle ambiguity.
+    """Agent that uses 'Quantum-Inspired Reasoning' to handle ambiguity.
     It explores multiple 'superposition' states (plans) in parallel and
     collapses them into a single coherent execution path.
     """
@@ -112,8 +110,7 @@ class QuantumReasonerAgent(BaseAgent):
     def reason_with_superposition(
         self, task: str, branch_count: int = 3
     ) -> Dict[str, Any]:
-        """
-        Generates multiple reasoning branches for a task and selects the best one.
+        """Generates multiple reasoning branches for a task and selects the best one.
         """
         logging.info(
             f"QuantumReasoner: Exploring {branch_count} parallel states for task: {task}"
@@ -151,16 +148,14 @@ class QuantumReasonerAgent(BaseAgent):
         }
 
     def _generate_reasoning_branch(self, task: str, branch_id: int) -> str:
-        """
-        Generates a specific reasoning branch for the task.
+        """Generates a specific reasoning branch for the task.
         """
         # This would normally call the LLM with a specific 'flavor' or variation
         return f"Reasoning Path {branch_id}: Focusing on alternative approach for '{task}'."
 
     @as_tool
     def collapse_quantum_states(self, branches: List[Dict[str, Any]]) -> str:
-        """
-        Manually collapses provided reasoning states into a single decision.
+        """Manually collapses provided reasoning states into a single decision.
         """
         if not branches:
             return "No states to collapse."

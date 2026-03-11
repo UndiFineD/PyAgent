@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/types/TemplateManager.description.md
 
 # TemplateManager
 
-**File**: `src\core\base\types\TemplateManager.py`  
+**File**: `src\\core\base\types\\TemplateManager.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 101  
@@ -54,7 +53,7 @@ Example:
 
 # Improvements for TemplateManager
 
-**File**: `src\core\base\types\TemplateManager.py`  
+**File**: `src\\core\base\types\\TemplateManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 101 lines (medium)  
 **Complexity**: 4 score (simple)
@@ -82,6 +81,7 @@ Example:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -102,10 +102,11 @@ from __future__ import annotations
 
 """Auto-extracted class from agent_changes.py"""
 
-from src.core.base.version import VERSION
-from .EntryTemplate import EntryTemplate
-from typing import Dict, List
 import re
+
+from src.core.base.version import VERSION
+
+from .EntryTemplate import EntryTemplate
 
 __version__ = VERSION
 
@@ -122,6 +123,7 @@ class TemplateManager:
         >>> manager=TemplateManager()
         >>> manager.add_template("bug_fix", "Fixed {issue} in {component}")
         >>> text=manager.apply_template("bug_fix", {"issue": "#123", "component": "auth"})
+
     """
 
     def __init__(self) -> None:
@@ -140,6 +142,7 @@ class TemplateManager:
 
         Returns:
             The created EntryTemplate.
+
         """
         # Extract placeholders
         placeholders = re.findall(r"\{(\w+)\}", template_text)
@@ -162,6 +165,7 @@ class TemplateManager:
 
         Returns:
             Filled - in template text.
+
         """
         template = self.templates.get(name)
         if not template:
@@ -180,6 +184,7 @@ class TemplateManager:
 
         Returns:
             List of placeholder names.
+
         """
         template = self.templates.get(name)
         return template.placeholders if template else []

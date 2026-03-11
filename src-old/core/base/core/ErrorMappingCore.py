@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/core/ErrorMappingCore.description.md
 
 # ErrorMappingCore
 
-**File**: `src\core\base\core\ErrorMappingCore.py`  
+**File**: `src\\core\base\\core\\ErrorMappingCore.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 2 imports  
 **Lines**: 71  
@@ -40,7 +39,7 @@ Targeted for Rust conversion to ensure consistency across the swarm.
 
 # Improvements for ErrorMappingCore
 
-**File**: `src\core\base\core\ErrorMappingCore.py`  
+**File**: `src\\core\base\\core\\ErrorMappingCore.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 71 lines (small)  
 **Complexity**: 3 score (simple)
@@ -74,6 +73,7 @@ LLM_CONTEXT_END
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -87,11 +87,9 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Dict
 
 class ErrorMappingCore:
-    """
-    Pure logic for mapping system exceptions to standardized PA-xxxx error codes.
+    """Pure logic for mapping system exceptions to standardized PA-xxxx error codes.
     Targeted for Rust conversion to ensure consistency across the swarm.
     """
 

@@ -12,14 +12,13 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/code_analyzer.description.md
 
 # code_analyzer
 
-**File**: `src\core\base\logic\core\code_analyzer.py`  
+**File**: `src\\core\base\\logic\\core\\code_analyzer.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 96  
@@ -59,7 +58,7 @@ Core logic regarding extracting compact API representations from source code.
 
 # Improvements for code_analyzer
 
-**File**: `src\core\base\logic\core\code_analyzer.py`  
+**File**: `src\\core\base\\logic\\core\\code_analyzer.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 96 lines (small)  
 **Complexity**: 4 score (simple)
@@ -98,7 +97,7 @@ import ast
 import os
 import re
 from pathlib import Path
-from typing import List, Union, Optional
+from typing import Optional, Union
 
 
 class CodeAnalyzerCore:
@@ -108,8 +107,7 @@ class CodeAnalyzerCore:
         self.workspace_root = Path(workspace_root) if workspace_root else Path.cwd()
 
     def generate_compact_guide(self, path: Union[str, Path]) -> str:
-        """
-        Generates a compact API guide regarding a file or directory.
+        """Generates a compact API guide regarding a file or directory.
         Removes implementations and comments, providing only signatures.
         """
         target_path = Path(path)

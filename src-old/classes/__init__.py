@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/__init__.description.md
 
@@ -78,8 +77,8 @@ Core class hierarchy for the PyAgent ecosystem.
 # Classes package initialization
 
 from .base_agent import BaseAgent
-from .context.KnowledgeAgent import KnowledgeAgent
 from .context.GraphContextEngine import GraphContextEngine
+from .context.KnowledgeAgent import KnowledgeAgent
 from .context.MemoryEngine import MemoryEngine
 
 try:
@@ -88,20 +87,18 @@ try:
 except ImportError:
     # Handle cases where stats might have import issues during heavy refactoring
     pass
-from .coder.SecurityGuardAgent import SecurityGuardAgent
-
+from .coder.ArchAdvisorAgent import ArchAdvisorAgent
+from .coder.DocumentationAgent import DocumentationAgent
 from .coder.LintingAgent import LintingAgent
+from .coder.QualityGateAgent import QualityGateAgent
+from .coder.ReasoningAgent import ReasoningAgent
+from .coder.SecurityGuardAgent import SecurityGuardAgent
+from .coder.SelfHealingAgent import SelfHealingAgent
 from .coder.SelfOptimizerAgent import SelfOptimizerAgent
 from .coder.TypeSafetyAgent import TypeSafetyAgent
-from .coder.DocumentationAgent import DocumentationAgent
-from .coder.QualityGateAgent import QualityGateAgent
-from .coder.ArchAdvisorAgent import ArchAdvisorAgent
-from .fleet.FleetManager import FleetManager
-
+from .context.GlobalContextEngine import GlobalContextEngine
 from .fleet.AsyncFleetManager import AsyncFleetManager
+from .fleet.FleetManager import FleetManager
 from .fleet.TaskPlannerAgent import TaskPlannerAgent
 from .fleet.WorkflowState import WorkflowState
-from .coder.ReasoningAgent import ReasoningAgent
-from .coder.SelfHealingAgent import SelfHealingAgent
 from .orchestration.ToolRegistry import ToolRegistry
-from .context.GlobalContextEngine import GlobalContextEngine

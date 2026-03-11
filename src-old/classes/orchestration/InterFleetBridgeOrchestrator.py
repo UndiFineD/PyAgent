@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/InterFleetBridgeOrchestrator.description.md
 
@@ -86,14 +85,12 @@ LLM_CONTEXT_END
 """
 
 import logging
-import json
 import uuid
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, Optional
 
 
 class InterFleetBridgeOrchestrator:
-    """
-    Phase 35: Swarm-to-Swarm Telepathy.
+    """Phase 35: Swarm-to-Swarm Telepathy.
     Direct state-synchronized communication between different PyAgent instances.
     """
 

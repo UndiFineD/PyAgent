@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/agent/ConfigLoader.description.md
 
 # ConfigLoader
 
-**File**: `src\classes\agent\ConfigLoader.py`  
+**File**: `src\\classes\agent\\ConfigLoader.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 15 imports  
 **Lines**: 178  
@@ -61,7 +60,7 @@ Attributes:
 
 # Improvements for ConfigLoader
 
-**File**: `src\classes\agent\ConfigLoader.py`  
+**File**: `src\\classes\agent\\ConfigLoader.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 178 lines (medium)  
 **Complexity**: 5 score (moderate)
@@ -89,6 +88,7 @@ Attributes:
 *Auto-generated improvement suggestions*
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -109,13 +109,14 @@ from __future__ import annotations
 
 """Auto-extracted class from agent.py"""
 
-from src.core.base.version import VERSION
-from src.core.base.AgentConfig import AgentConfig
-from src.core.base.models import AgentPluginConfig, ConfigFormat, RateLimitConfig
-from pathlib import Path
-from typing import Optional, Any, cast
 import json
 import logging
+from pathlib import Path
+from typing import Any, cast
+
+from src.core.base.AgentConfig import AgentConfig
+from src.core.base.models import AgentPluginConfig, ConfigFormat, RateLimitConfig
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -129,6 +130,7 @@ class ConfigLoader:
     Attributes:
         config_path: Path to configuration file.
         format: Configuration file format.
+
     """
 
     SUPPORTED_EXTENSIONS = {
@@ -144,6 +146,7 @@ class ConfigLoader:
 
         Args:
             config_path: Path to configuration file.
+
         """
         self.config_path = config_path
         self.format: ConfigFormat | None = None
@@ -157,6 +160,7 @@ class ConfigLoader:
 
         Returns:
             AgentConfig with loaded settings.
+
         """
         if not self.config_path or not self.config_path.exists():
             return AgentConfig()
@@ -261,6 +265,7 @@ class ConfigLoader:
 
         Returns:
             Path to config file if found, None otherwise.
+
         """
         config_names = [
             "agent.yaml",

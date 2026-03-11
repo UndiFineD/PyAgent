@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # Governance Mixin for BaseAgent
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/GovernanceMixin.description.md
 
 # GovernanceMixin
 
-**File**: `src\core\base\mixins\GovernanceMixin.py`  
+**File**: `src\\core\base\\mixins\\GovernanceMixin.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 6 imports  
 **Lines**: 63  
@@ -44,7 +43,7 @@ Handles resource quotas, preemption, and security clearance.
 
 # Improvements for GovernanceMixin
 
-**File**: `src\core\base\mixins\GovernanceMixin.py`  
+**File**: `src\\core\base\\mixins\\GovernanceMixin.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 63 lines (small)  
 **Complexity**: 3 score (simple)
@@ -80,9 +79,10 @@ LLM_CONTEXT_END
 import asyncio
 import logging
 from typing import Any
+
 from src.core.base.managers.ResourceQuotaManager import (
-    ResourceQuotaManager,
     QuotaConfig,
+    ResourceQuotaManager,
 )
 
 

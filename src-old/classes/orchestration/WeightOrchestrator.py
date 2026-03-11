@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/WeightOrchestrator.description.md
 
@@ -91,10 +90,11 @@ Manages the lifecycle of neural weights (LoRA/QLoRA adapters) across the fleet.
 Coordinates between the ModelForgeAgent and individual agents to hot-swap capabilities.
 """
 
-import logging
 import json
+import logging
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Dict, Optional
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 

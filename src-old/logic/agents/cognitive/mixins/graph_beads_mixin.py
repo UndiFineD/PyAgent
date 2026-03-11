@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/mixins/graph_beads_mixin.description.md
 
@@ -30,6 +29,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -53,8 +53,9 @@ Provides hierarchical task management and dependency tracking using the 'Beads' 
 """
 
 import logging
-from src.core.base.lifecycle.version import VERSION
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -75,6 +76,7 @@ class GraphBeadsMixin:
 
         Returns:
             Success message with the new task ID.
+
         """
         if not hasattr(self, "tasks"):
             return "Error: Tasks not initialized."
@@ -118,6 +120,7 @@ class GraphBeadsMixin:
 
         Returns:
             Success or error message.
+
         """
         if not hasattr(self, "tasks"):
             return "Error: Tasks not initialized."
@@ -139,6 +142,7 @@ class GraphBeadsMixin:
 
         Returns:
             Summary of the compaction process.
+
         """
         _ = threshold_days  # Logic to be implemented in Phase 15
         if not hasattr(self, "tasks"):

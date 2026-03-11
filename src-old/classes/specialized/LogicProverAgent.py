@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/LogicProverAgent.description.md
 
@@ -78,6 +77,8 @@ LLM_CONTEXT_END
 
 from __future__ import annotations
 
+from typing import Any
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -96,16 +97,13 @@ from __future__ import annotations
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
 from src.core.base.version import VERSION
-from typing import Dict, List, Any
 
 __version__ = VERSION
 
 
 class LogicProverAgent:
-    """
-    Formally verifies agent reasoning chains and solves complex
+    """Formally verifies agent reasoning chains and solves complex
     spatial/temporal constraints.
     """
 
@@ -115,8 +113,7 @@ class LogicProverAgent:
     def verify_reasoning_step(
         self, hypothesis: str, evidence: list[str], conclusion: str
     ) -> dict[str, Any]:
-        """
-        Simulates formal logic verification (TPTP-like).
+        """Simulates formal logic verification (TPTP-like).
         """
         # Crude simulation of logical consistency
         if not evidence or len(evidence) == 0:
@@ -132,8 +129,7 @@ class LogicProverAgent:
     def solve_scheduling_constraints(
         self, tasks: list[str], deadlines: dict[str, float]
     ) -> dict[str, Any]:
-        """
-        Solves for an optimal schedule using simulated constraint satisfaction (CSP).
+        """Solves for an optimal schedule using simulated constraint satisfaction (CSP).
         """
         schedule = []
         # Sort by deadline (Earliest Deadline First simulation)
@@ -158,8 +154,7 @@ class LogicProverAgent:
     def generate_formal_proof_log(
         self, reasoning_chain: list[dict[str, Any]]
     ) -> dict[str, Any]:
-        """
-        Exports a log of verified steps for auditing.
+        """Exports a log of verified steps for auditing.
         """
         return {
             "chain_id": "logic_v1_001",

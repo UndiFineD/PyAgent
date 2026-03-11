@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/orchestrator_diff_mixin.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -64,15 +64,15 @@ class OrchestratorDiffMixin:
         self, output_format: DiffOutputFormat = DiffOutputFormat.UNIFIED
     ) -> None:
         """Enable diff preview mode."""
-        setattr(self, "diff_generator", DiffGenerator(output_format))
+        self.diff_generator = DiffGenerator(output_format)
         logging.info(f"Diff preview enabled (format: {output_format.name})")
 
     def preview_changes(self, file_path: Path, new_content: str) -> str:
         """Preview changes to a file without applying them."""
         if not hasattr(self, "diff_generator"):
-            setattr(self, "diff_generator", DiffGenerator())
+            self.diff_generator = DiffGenerator()
         original = file_path.read_text(encoding="utf-8") if file_path.exists() else ""
-        diff_gen = getattr(self, "diff_generator")
+        diff_gen = self.diff_generator
         return diff_gen.generate_diff(original, new_content, str(file_path))
 
     def show_pending_diffs(self) -> None:
@@ -81,12 +81,12 @@ class OrchestratorDiffMixin:
             logging.info("No pending changes.")
             return
 
-        pending_diffs = getattr(self, "pending_diffs")
+        pending_diffs = self.pending_diffs
         logging.info(f"=== Pending Changes ({len(pending_diffs)} files) ===")
         for diff in pending_diffs:
             logging.info(f"--- {diff.file_path} ---")
             logging.info(f"  +{diff.additions} -{diff.deletions}")
             if hasattr(self, "diff_generator"):
-                diff_gen = getattr(self, "diff_generator")
+                diff_gen = self.diff_generator
                 diff_gen.print_diff(diff)
             logging.info("")

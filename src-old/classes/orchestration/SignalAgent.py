@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/orchestration/SignalAgent.description.md
 
@@ -82,11 +81,13 @@ LLM_CONTEXT_END
 
 """Agent that monitor inter-agent signals and coordinates responses."""
 
-from src.classes.base_agent import BaseAgent
-from .SignalRegistry import SignalRegistry
-import logging
 import json
-from typing import Dict, List, Any, Optional
+import logging
+from typing import Any, Dict
+
+from src.classes.base_agent import BaseAgent
+
+from .SignalRegistry import SignalRegistry
 
 
 class SignalAgent(BaseAgent):

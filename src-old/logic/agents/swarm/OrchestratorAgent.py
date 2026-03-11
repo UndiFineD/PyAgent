@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/OrchestratorAgent.description.md
 
 # OrchestratorAgent
 
-**File**: `src\logic\agents\swarm\OrchestratorAgent.py`  
+**File**: `src\\logic\agents\\swarm\\OrchestratorAgent.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 12 imports  
 **Lines**: 205  
@@ -63,7 +62,7 @@ integration requirements (Phase 317 consolidation).
 
 # Improvements for OrchestratorAgent
 
-**File**: `src\logic\agents\swarm\OrchestratorAgent.py`  
+**File**: `src\\logic\agents\\swarm\\OrchestratorAgent.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 205 lines (medium)  
 **Complexity**: 12 score (moderate)
@@ -100,22 +99,22 @@ from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Standardized OrchestratorAgent for Swarm Intelligence
-
 import logging
 import time
 from pathlib import Path
 from typing import Any
-from src.core.base.Version import VERSION
-from src.core.base.BaseAgent import BaseAgent
+
 from src.core.base.AgentCommandHandler import AgentCommandHandler
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.Version import VERSION
+
 from .OrchestratorFeatures import OrchestratorFeatures
 
 __version__ = VERSION
 
 
 class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
-    """
-    Primary orchestrator for swarm agentic workflows.
+    """Primary orchestrator for swarm agentic workflows.
     Combines core BaseAgent capabilities with specialized orchestrator features.
 
     This class satisfies both modern Mixin-based architecture and legacy
@@ -163,8 +162,7 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
         self._metrics = value
 
     def register_plugin(self, plugin: Any) -> None:
-        """
-        Registers a plugin. Overrides BaseAgent classmethod
+        """Registers a plugin. Overrides BaseAgent classmethod
         to use OrchestratorPluginMixin instance method.
         """
         # Ensure plugins dict exists on instance
@@ -189,8 +187,7 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
 
     @classmethod
     def from_config_file(cls, config_path: Path | str) -> OrchestratorAgent:
-        """
-        Creates an OrchestratorAgent from a configuration file.
+        """Creates an OrchestratorAgent from a configuration file.
         Legacy support for config-driven initialization.
         """
         import json
@@ -206,8 +203,7 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
         return cls(file_path=repo_root, **config)
 
     def generate_improvement_report(self) -> dict[str, Any]:
-        """
-        Generates a summary of changes and improvements made.
+        """Generates a summary of changes and improvements made.
         Legacy support for Phase 5 reporting tools.
         """
         processed = self._metrics.get("files_processed", 0)
@@ -227,8 +223,7 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
         }
 
     def benchmark_execution(self, files: list[Path]) -> dict[str, Any]:
-        """
-        Benchmarks the execution time per file.
+        """Benchmarks the execution time per file.
         Legacy support for Phase 5 benchmarking.
         """
         total_files = len(files)
@@ -241,8 +236,7 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
         }
 
     def cost_analysis(self, cost_per_request: float = 0.0) -> dict[str, Any]:
-        """
-        Analyzes the estimated cost of operations.
+        """Analyzes the estimated cost of operations.
         Legacy support for Phase 5 cost tracking.
         """
         agent_runs = sum(self._metrics.get("agents_applied", {}).values())
@@ -254,8 +248,7 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
         }
 
     def update_code(self, target: Path) -> str:
-        """
-        Stub for update_code which was used in older integration tests.
+        """Stub for update_code which was used in older integration tests.
         Redirects to modern sub-agent execution via command_handler.
         """
         logging.info(f"Orchestrator: Updating code for {target}")
@@ -273,8 +266,7 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
         return f"Error: {result.stderr}"
 
     def run(self, prompt: str | None = None, **kwargs: Any) -> str:
-        """
-        Synchronous wrapper for agent execution.
+        """Synchronous wrapper for agent execution.
         If no prompt is provided, runs the main processing loop.
         """
         if prompt is None:

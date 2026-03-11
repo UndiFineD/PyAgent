@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/utils/agent_template.description.md
 
@@ -28,9 +27,11 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -51,8 +52,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from src.core.base.common.utils.helpers import (_empty_dict_str_any,
-                                                _empty_list_str)
+from src.core.base.common.utils.helpers import _empty_dict_str_any, _empty_list_str
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
@@ -68,6 +68,7 @@ class AgentTemplate:
         agents: List of agents to execute.
         config: Default configuration.
         file_patterns: File patterns to process.
+
     """
 
     name: str

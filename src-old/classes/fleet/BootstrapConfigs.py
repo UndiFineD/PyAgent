@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/BootstrapConfigs.description.md
 
 # BootstrapConfigs
 
-**File**: `src\classes\fleet\BootstrapConfigs.py`  
+**File**: `src\\classes\fleet\\BootstrapConfigs.py`  
 **Type**: Python Module  
 **Summary**: 0 classes, 0 functions, 0 imports  
 **Lines**: 73  
@@ -24,7 +23,7 @@ These must remain static to ensure the system can boot up before dynamic discove
 
 # Improvements for BootstrapConfigs
 
-**File**: `src\classes\fleet\BootstrapConfigs.py`  
+**File**: `src\\classes\fleet\\BootstrapConfigs.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 73 lines (small)  
 **Complexity**: 0 score (simple)

@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/forensics/archive_intelligence.description.md
 
 # archive_intelligence
 
-**File**: `src\logic\agents\forensics\archive_intelligence.py`  
+**File**: `src\\logic\agents\forensics\archive_intelligence.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 7 imports  
 **Lines**: 74  
@@ -53,7 +52,7 @@ Focuses on detecting malicious patterns like ZipSlip or massive compression rati
 
 # Improvements for archive_intelligence
 
-**File**: `src\logic\agents\forensics\archive_intelligence.py`  
+**File**: `src\\logic\agents\forensics\archive_intelligence.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 74 lines (small)  
 **Complexity**: 0 score (simple)
@@ -86,17 +85,12 @@ Focuses on detecting malicious patterns like ZipSlip or massive compression rati
 LLM_CONTEXT_END
 """
 
-import zipfile
 import tarfile
-import os
-import shutil
-from typing import List, Optional
-from pathlib import Path
+import zipfile
 
 
 class ArchiveIntelligence:
-    """
-    Refactored logic from Archive Alchemist for safe archive analysis.
+    """Refactored logic from Archive Alchemist for safe archive analysis.
     Focuses on detecting malicious patterns like ZipSlip or massive compression ratios.
     """
 

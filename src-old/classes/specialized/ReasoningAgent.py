@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ReasoningAgent.description.md
 
@@ -75,7 +74,6 @@ LLM_CONTEXT_END
 
 """Agent specializing in logical analysis and hypothesis generation."""
 
-import logging
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 

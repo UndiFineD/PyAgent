@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/common/formula_core.description.md
 
@@ -41,6 +40,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 # you may not use this file except in compliance with the License.
@@ -64,8 +64,7 @@ logger = logging.getLogger("pyagent.formula")
 
 
 class FormulaCore:
-    """
-    Safely evaluates mathematical expressions using AST.
+    """Safely evaluates mathematical expressions using AST.
     Standardized math primitives with Rust acceleration.
     """
 
@@ -140,8 +139,7 @@ class FormulaCore:
 
     @classmethod
     def evaluate(cls, expression: str, variables: dict[str, float]) -> float:
-        """
-        Evaluate a mathematical expression with variable substitution.
+        """Evaluate a mathematical expression with variable substitution.
 
         Args:
             expression: String formula (e.g., "a + b * 2")
@@ -149,6 +147,7 @@ class FormulaCore:
 
         Returns:
             Computed float result.
+
         """
         result = cls._try_rust_evaluate(expression, variables)
         if result is not None:

@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/FleetManager.description.md
 
 # FleetManager
 
-**File**: `src\classes\fleet\FleetManager.py`  
+**File**: `src\\classes\fleet\\FleetManager.py`  
 **Type**: Python Module  
 **Summary**: 1 classes, 0 functions, 29 imports  
 **Lines**: 559  
@@ -64,7 +63,7 @@ system-wide stability through various orchestrators.
 
 # Improvements for FleetManager
 
-**File**: `src\classes\fleet\FleetManager.py`  
+**File**: `src\\classes\fleet\\FleetManager.py`  
 **Analysis Date**: 2026-03-01 00:18  
 **Size**: 559 lines (large)  
 **Complexity**: 24 score (complex)
@@ -99,38 +98,37 @@ LLM_CONTEXT_END
 
 """Coordinator for deploying and aggregating results from multiple agents."""
 
-import logging
 import json
+import logging
 import time
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Type, TYPE_CHECKING
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
+from pathlib import Path
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type
 
 # Type Hinting Imports (Phase 106)
 from src.classes.backend.LocalContextRecorder import LocalContextRecorder
 from src.classes.backend.SqlAgent import SqlAgent
-from src.classes.stats.ObservabilityEngine import ObservabilityEngine
-from src.classes.orchestration.ToolRegistry import ToolRegistry
-from src.classes.orchestration.SignalRegistry import SignalRegistry
-from src.classes.stats.ModelFallbackEngine import ModelFallbackEngine
 from src.classes.context.GlobalContextEngine import GlobalContextEngine
 from src.classes.orchestration.SelfHealingOrchestrator import SelfHealingOrchestrator
+from src.classes.orchestration.SignalRegistry import SignalRegistry
+from src.classes.orchestration.ToolRegistry import ToolRegistry
+from src.classes.stats.ModelFallbackEngine import ModelFallbackEngine
+from src.classes.stats.ObservabilityEngine import ObservabilityEngine
 
 if TYPE_CHECKING:
     from src.classes.orchestration.SelfImprovementOrchestrator import SelfImprovementOrchestrator
 
 # Core Components
 from src.classes.base_agent import BaseAgent
-from src.classes.fleet.WorkflowState import WorkflowState
 
 # Registry and Orchestrators
 from src.classes.fleet.AgentRegistry import AgentRegistry
 from src.classes.fleet.OrchestratorRegistry import OrchestratorRegistry
+from src.classes.fleet.WorkflowState import WorkflowState
 
 
 class FleetManager:
-    """
-    The central hub for the PyAgent ecosystem. Orchestrates a swarm of specialized
+    """The central hub for the PyAgent ecosystem. Orchestrates a swarm of specialized
     agents to complete complex workflows, manages resource scaling, and ensures
     system-wide stability through various orchestrators.
     """
@@ -215,7 +213,6 @@ class FleetManager:
     def self_improvement(self) -> "SelfImprovementOrchestrator":
         """Provides access to the self-improvement orchestrator for continuous learning and system optimization."""
         # Imported lazily here to avoid circular dependency with BaseAgent
-        from src.classes.orchestration.SelfImprovementOrchestrator import SelfImprovementOrchestrator  # type: ignore
         return self.orchestrators.self_improvement
 
     @property
@@ -285,7 +282,7 @@ class FleetManager:
             self.recorder.record_interaction(
                 provider="fleet_internal", model=model, prompt=prompt, result=result
             )
-        except Exception as e:
+        except Exception:
             # Silent failure for non-critical logging
             pass
 
@@ -320,12 +317,11 @@ class FleetManager:
     def register_remote_node(
         self, node_url: str, agent_names: List[str], remote_version: str = "1.0.0"
     ) -> str:
-        """
-        Registers a remote node and its available agents.
+        """Registers a remote node and its available agents.
         Uses VersionGate to ensure compatibility (Phase 104).
         """
-        from src.version import SDK_VERSION
         from src.classes.fleet.VersionGate import VersionGate
+        from src.version import SDK_VERSION
 
         if not VersionGate.is_compatible(SDK_VERSION, remote_version):
             logging.warning(
@@ -449,8 +445,7 @@ class FleetManager:
     # --- Biological Cell-Swarm Pattern (Phase 17) ---
 
     def cell_divide(self, agent_name: str) -> str:
-        """
-        Simulates biological mitosis by creating a clone of an existing agent.
+        """Simulates biological mitosis by creating a clone of an existing agent.
         """
         if agent_name not in self.agents:
             return f"Error: Agent {agent_name} not found for division."
@@ -473,8 +468,7 @@ class FleetManager:
         return f"Agent {agent_name} successfully divided into {clone_name}."
 
     def cell_differentiate(self, agent_name: str, specialization: str) -> str:
-        """
-        Changes an agent's characteristics or 'role' based on environmental signals.
+        """Changes an agent's characteristics or 'role' based on environmental signals.
         """
         if agent_name not in self.agents:
             return f"Error: Agent {agent_name} not found for differentiation."
@@ -490,8 +484,7 @@ class FleetManager:
         return f"Agent {agent_name} successfully differentiated into {specialization}."
 
     def cell_apoptosis(self, agent_name: str) -> str:
-        """
-        Cleanly shuts down and removes an agent from the fleet (programmed cell death).
+        """Cleanly shuts down and removes an agent from the fleet (programmed cell death).
         """
         if agent_name not in self.agents:
             return f"Error: Agent {agent_name} not found for apoptosis."
@@ -726,8 +719,7 @@ class FleetManager:
     def execute_with_consensus(
         self, task: str, primary_agent: str, secondary_agents: List[str]
     ) -> Dict[str, Any]:
-        """
-        Executes a task across multiple agents and uses ByzantineConsensusAgent to pick the winner.
+        """Executes a task across multiple agents and uses ByzantineConsensusAgent to pick the winner.
         Useful for high-integrity changes. (Phase 41)
         """
         logging.info(f"Fleet: Running consensus vote for task: {task[:50]}")

@@ -1,5 +1,4 @@
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/execution/shell_executor.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -56,7 +56,7 @@ import json
 import logging
 import os
 import subprocess
-from typing import Any, Optional, Dict
+from typing import Any, Dict, Optional
 
 from src.core.base.common.shell_core import ShellCore
 from src.core.base.lifecycle.version import VERSION
@@ -65,8 +65,7 @@ __version__ = VERSION
 
 
 class ShellExecutor:
-    """
-    Safely executes shell commands and records outcomes.
+    """Safely executes shell commands and records outcomes.
     Standardized Facade over ShellCore (Phase 317).
     """
 

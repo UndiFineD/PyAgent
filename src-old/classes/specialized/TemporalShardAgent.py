@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/TemporalShardAgent.description.md
 
@@ -83,15 +82,13 @@ LLM_CONTEXT_END
 """
 
 import logging
-import json
-from typing import Dict, List, Any, Optional
+
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
 
 class TemporalShardAgent(BaseAgent):
-    """
-    Agent responsible for temporal sharding of memory.
+    """Agent responsible for temporal sharding of memory.
     Allows for 'flashbacks' and retrieval of context based on temporal relevance.
     """
 
@@ -108,8 +105,7 @@ class TemporalShardAgent(BaseAgent):
     def retrieve_temporal_context(
         self, current_task: str, time_window: str = "last_24h"
     ) -> str:
-        """
-        Retrieves relevant context from a specific temporal shard.
+        """Retrieves relevant context from a specific temporal shard.
         """
         logging.info(
             f"TemporalShardAgent: Retrieving context for {current_task} from {time_window}"
@@ -120,8 +116,7 @@ class TemporalShardAgent(BaseAgent):
 
     @as_tool
     def create_temporal_anchor(self, event_description: str) -> bool:
-        """
-        Creates a high-resolution temporal anchor for future retrieval.
+        """Creates a high-resolution temporal anchor for future retrieval.
         """
         logging.info(
             f"TemporalShardAgent: Creating anchor for {event_description[:30]}..."

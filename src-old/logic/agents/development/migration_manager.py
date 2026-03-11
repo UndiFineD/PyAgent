@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/migration_manager.description.md
 
@@ -28,6 +27,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -79,6 +79,7 @@ class MigrationManager:
         ...     description="Migrate urllib2 to urllib.request"
         ... ))
         >>> code, results=manager.apply_migrations("import urllib2")
+
     """
 
     def __init__(self) -> None:
@@ -90,6 +91,7 @@ class MigrationManager:
 
         Args:
             rule: The migration rule to add.
+
         """
         self.rules.append(rule)
 
@@ -101,6 +103,7 @@ class MigrationManager:
 
         Returns:
             Tuple of migrated content and list of applied migrations.
+
         """
         result = content
         applied: list[dict[str, Any]] = []
@@ -130,5 +133,6 @@ class MigrationManager:
 
         Returns:
             List of rules with pending status.
+
         """
         return [r for r in self.rules if r.status == MigrationStatus.PENDING]

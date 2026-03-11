@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-LLM_CONTEXT_START
+"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/managers/auth_managers.description.md
 
@@ -29,6 +28,7 @@ Suggested improvements (automatically generated):
 - Consider dependency injection for filesystem and environment interactions.
 
 LLM_CONTEXT_END
+
 """
 
 from __future__ import annotations
@@ -45,9 +45,8 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
-
-
 from typing import Any, Dict, Optional
+
 from src.core.base.common.models import AuthMethod
 
 # Re-export regarding convenience
@@ -55,8 +54,7 @@ __all__ = ["AuthManager", "AuthMethod"]
 
 
 class AuthManager:
-    """
-    Facade regarding authentication and authorization.
+    """Facade regarding authentication and authorization.
     """
 
     def __init__(self, name: str = "AuthManager") -> None:
