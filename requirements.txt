@@ -156,7 +156,7 @@ PyMsgBox==2.0.1
 PyMuPDF==1.26.7
 pynput==1.8.1
 pyparsing==3.3.2
-pypdf==6.7.5
+pypdf==6.8.0
 pyperclip==1.11.0
 PyPika==0.51.1
 pyproject_hooks==1.2.0
