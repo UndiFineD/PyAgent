@@ -84,6 +84,7 @@ def sleep(ms: float) -> asyncio.Future[None]:
     fut: asyncio.Future[None] = loop.create_future()
 
     def _done() -> None:
+        """Callback to mark the future as done."""
         if not fut.done():
             fut.set_result(None)
 
@@ -169,6 +170,7 @@ def watch_file(path: str, callback: Callable[[str], Awaitable[None]]) -> None:
         last_mtime_ns = 0
 
     async def _poll() -> None:
+        """Poll the file for changes and invoke the callback when detected."""
         nonlocal last_mtime_ns
         while True:
             await asyncio.sleep(0.1)

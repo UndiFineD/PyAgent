@@ -2,7 +2,7 @@
 """Workflow engine for processing tasks."""
 import asyncio
 
-from .task import Task
+from src.core.workflow.task import Task
 
 
 class TaskQueue:

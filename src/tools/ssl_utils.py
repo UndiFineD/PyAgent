@@ -21,6 +21,7 @@ from typing import List
 
 
 def main(args: List[str] | None = None) -> int:
+    """Placeholder for SSL certificate management utilities."""
     if args is None:
         args = sys.argv[1:]
     print("ssl_utils placeholder", args)

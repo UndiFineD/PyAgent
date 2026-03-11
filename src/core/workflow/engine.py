@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Workflow engine for processing tasks."""
-from .queue import TaskQueue
-from .task import Task, TaskState
+from src.core.workflow.queue import TaskQueue
+from src.core.workflow.task import Task, TaskState
 
 
 class WorkflowEngine:
