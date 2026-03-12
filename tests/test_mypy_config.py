@@ -16,6 +16,7 @@ def test_mypy_detects_problem(tmp_path: Path) -> None:
         [sys.executable, "-m", "mypy", str(bad)],
         capture_output=True,
         text=True,
+        check=False,
     )
     if "No module named mypy" in (res.stderr or ""):
         pytest.skip("mypy not installed in environment")
