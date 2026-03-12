@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Meta-test to ensure mypy is configured and detects type issues."""
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -20,10 +21,16 @@ def test_mypy_detects_problem(tmp_path: Path) -> None:
         pytest.skip("mypy not installed in environment")
 
     # some configurations or newer versions occasionally return zero when a
-    # trivial error is introduced; treat that as a skip rather than a hard
-    # failure so our CI isn't blocked by environment quirks.
+    # trivial error is introduced. we used to skip unconditionally, but that
+    # made the assertions below unreachable; now we only skip if the caller
+    # explicitly requests leniency via an environment variable. this keeps the
+    # test strict by default and will surface real configuration problems.
     if res.returncode == 0:
-        pytest.skip("mypy ran but did not report the deliberate type error")
+        if os.environ.get("MYPY_LENIENT"):
+            pytest.skip(
+                "mypy did not report the deliberate type error (lenient mode)"
+            )
+        # otherwise we fall through to the assertions so the failure is visible
 
     assert res.returncode != 0
     assert (res.stdout or res.stderr) != ""
