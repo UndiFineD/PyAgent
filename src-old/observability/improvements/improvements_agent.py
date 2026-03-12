@@ -598,7 +598,7 @@ class ImprovementsAgent(BaseAgent):
 
         # Check for standard markdown checkboxes
         has_checkboxes = (
-            "- [ ] " in content or "- [x] " in content or "- [X] " in content
+            "- [ ] " in content or "- " in content or "- " in content
         )
 
         if not has_priority:
