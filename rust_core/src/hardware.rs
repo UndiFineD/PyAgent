@@ -47,6 +47,9 @@ pub fn run_tensorrt_inference_rust(
 /// Currently requires the AMD Ryzen AI SDK to be installed and linked.
 pub mod amd_npu {
     #[cfg(feature = "amd_npu")]
+    use std::ffi::{c_int, c_char, CString};
+
+    #[cfg(feature = "amd_npu")]
     #[link(name = "amd_npu")]
     extern "C" {
         fn amd_npu_init() -> c_int;
