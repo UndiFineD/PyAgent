@@ -1,0 +1,12 @@
+---
+sourceLocationPrefix: C:\Dev\PyAgent\codeql-custom-queries-python
+baselineLinesOfCode: 0
+unicodeNewlines: false
+columnKind: utf32
+primaryLanguage: python
+creationMetadata:
+  cliVersion: 2.24.3
+  creationTime: 2026-03-12T22:39:37.131446600Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true

@@ -15,8 +15,6 @@
 
 from __future__ import annotations
 
-from typing import list
-
 
 class ContextManager:
     """A simple context manager that maintains a list of text segments and prunes old ones based on a token limit."""

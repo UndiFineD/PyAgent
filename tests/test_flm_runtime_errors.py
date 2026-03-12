@@ -36,7 +36,7 @@ class _FakeModel:
 
 
 @dataclass
-class _FakeModelslist:
+class _FakeModelsList:
     """Mimics the structure of a models list response from the FLM client."""
 
     data: list[_FakeModel]
@@ -49,11 +49,11 @@ class _FakeModels:
         """Initialize the fake models interface, with a mode to control behavior."""
         self.mode = mode
 
-    def list(self) -> _FakeModelslist:
+    def list(self) -> _FakeModelsList:
         """Return a fake models list or raise an error based on the mode."""
         if self.mode == "error":
             raise RuntimeError("connection refused")
-        return _FakeModelslist(data=[_FakeModel(id="llama3.2:1b")])
+        return _FakeModelsList(data=[_FakeModel(id="llama3.2:1b")])
 
 
 class _FailingCompletions:
@@ -69,8 +69,10 @@ class _FailingClient:
 
     def __init__(self) -> None:
         """Initialize the fake client with a chat interface that has failing completions."""
-        self.chat = type("Chat", (), {})()
-        self.chat.completions = _FailingCompletions()
+        from types import SimpleNamespace
+
+        self.chat = SimpleNamespace()
+        self.chat.completions = _FailingCompletions()  # type: ignore[attr-defined]
         self.models = _FakeModels(mode="ok")
 
 
@@ -79,8 +81,10 @@ class _ModelErrorClient:
 
     def __init__(self) -> None:
         """Initialize the fake client with a chat interface that has working completions but failing models."""
-        self.chat = type("Chat", (), {})()
-        self.chat.completions = _FailingCompletions()
+        from types import SimpleNamespace
+
+        self.chat = SimpleNamespace()
+        self.chat.completions = _FailingCompletions()  # type: ignore[attr-defined]
         self.models = _FakeModels(mode="error")
 
 
@@ -97,7 +101,10 @@ def _make_config() -> FlmProviderConfig:
 
 def test_create_completion_wraps_runtime_error_with_context() -> None:
     """Completion failures should include model/base_url diagnostics."""
-    adapter = FlmChatAdapter(config=_make_config(), client_factory=lambda **_: _FailingClient())
+    adapter = FlmChatAdapter(
+        config=_make_config(),
+        client_factory=lambda *, base_url, api_key: _FailingClient(),
+    )
 
     with pytest.raises(FlmRuntimeError, match="base_url"):
         adapter.create_completion(messages=[{"role": "user", "content": "ping"}])
@@ -105,7 +112,10 @@ def test_create_completion_wraps_runtime_error_with_context() -> None:
 
 def test_check_endpoint_available_wraps_errors() -> None:
     """Endpoint checks should raise actionable FLM runtime diagnostics."""
-    adapter = FlmChatAdapter(config=_make_config(), client_factory=lambda **_: _ModelErrorClient())
+    adapter = FlmChatAdapter(
+        config=_make_config(),
+        client_factory=lambda *, base_url, api_key: _ModelErrorClient(),
+    )
 
     with pytest.raises(FlmRuntimeError, match="timeout"):
         adapter.check_endpoint_available()
@@ -113,7 +123,10 @@ def test_check_endpoint_available_wraps_errors() -> None:
 
 def test_ensure_model_available_reports_missing_model() -> None:
     """Model availability checks should mention missing model and endpoint."""
-    adapter = FlmChatAdapter(config=_make_config(), client_factory=lambda **_: _FailingClient())
+    adapter = FlmChatAdapter(
+        config=_make_config(),
+        client_factory=lambda *, base_url, api_key: _FailingClient(),
+    )
 
     with pytest.raises(FlmRuntimeError, match="missing-model"):
         adapter.ensure_model_available("missing-model")

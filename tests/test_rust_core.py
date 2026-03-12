@@ -10,7 +10,6 @@ import time
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
-from collections.abc import Callable
 from re import Pattern
 
 import rust_core
@@ -43,7 +42,7 @@ def _extract_functions_from_file(filepath: str, fn_pattern: Pattern[str]) -> lis
 
     Args:
         filepath: path to a ``.rs`` file to scan.
-        fn_pattern: compiled regex capturing the function name 
+        fn_pattern: compiled regex capturing the function name
         and parameter list in two groups.
 
     Returns:
@@ -142,8 +141,18 @@ def generate_test_args(function_name: str, arg_count: int = 1) -> list[tuple[Any
     return test_cases
 
 
-def safe_call_function(func_obj: Callable[..., object], args: tuple[Any, ...]) -> tuple[bool, str, object | None]:
-    """Safely call a function with error handling and timing."""
+def safe_call_function(func_obj: object, args: tuple[Any, ...]) -> tuple[bool, str, object | None]:
+    """Safely call *callable* objects with error handling and timing.
+
+    The previous signature required a ``Callable`` which made static
+    analyzers unhappy when the caller couldn’t guarantee that the
+    value was callable (e.g. type checkers thought ``func`` might be a
+    ``dict[str, Any]``).  The implementation already guarded against
+    non‑callables, so the annotation now reflects the looser runtime
+    behaviour.
+    """
+    if not callable(func_obj):
+        return False, "✗ NotCallable", None
     try:
         start_time = time.time()
         func_result = func_obj(*args)
@@ -420,8 +429,8 @@ health_checks = [
     ("Core imports loadable", len(public_exports) > 0),
 ]
 
-for name, ok in health_checks:
-    print(f"  • {name:40s} | {'OK' if ok else 'MISSING'}")
+for check_name, ok in health_checks:
+    print(f"  • {check_name:40s} | {'OK' if ok else 'MISSING'}")
 
 # Ensure this module contains at least one top-level assert so meta-quality checks detect it as a test file
 assert True

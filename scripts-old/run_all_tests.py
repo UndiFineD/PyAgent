@@ -7,7 +7,7 @@ import sys
 import time
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Callable, dict, list, Tuple
+from typing import Any, Callable
 
 # Fix Unicode on Windows
 if sys.platform == 'win32':
@@ -54,7 +54,7 @@ def discover_test_files(src_paths: list[str] | str = None) -> dict[str, Path]:
     return discovered_files
 
 
-def discover_test_functions(test_module) -> Tuple[list[Tuple[str, Callable]], list[Tuple[str, str, type, Callable]]]:
+def discover_test_functions(test_module) -> tuple[list[tuple[str, Callable]], list[tuple[str, str, type, Callable]]]:
     """Discover all test functions and test classes in a module."""
     discovered_functions = []
     discovered_classes = []
@@ -96,7 +96,7 @@ def load_module_from_path(file_path: Path) -> Any:
     return None
 
 
-def run_test_function(test_func: Callable) -> Tuple[bool, str, float]:
+def run_test_function(test_func: Callable) -> tuple[bool, str, float]:
     """Run a single test function with error handling."""
     start_time = time.time()
     try:
@@ -112,7 +112,7 @@ def run_test_function(test_func: Callable) -> Tuple[bool, str, float]:
         return False, f"{error_type}: {str(e)[:65]}", elapsed_time
 
 
-def run_test_method(test_class_type: type, test_method: Callable) -> Tuple[bool, str, float]:
+def run_test_method(test_class_type: type, test_method: Callable) -> tuple[bool, str, float]:
     """Run a test method from a test class."""
     start_time = time.time()
     try:

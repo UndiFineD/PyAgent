@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import list, Tuple
+from typing import Tuple
 
 
 async def parse_manifest(path: Path) -> list[Tuple[str, str]]:

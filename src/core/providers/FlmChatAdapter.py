@@ -20,7 +20,8 @@ FLM stands for Fastflow Language Model.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Callable, Protocol, cast
+from typing import Any, Protocol, cast
+from collections.abc import Callable
 
 from openai import OpenAI
 
@@ -54,7 +55,10 @@ class _ClientProtocol(Protocol):
 class _ClientFactory(Protocol):
     """Protocol for FLM/OpenAI-compatible client factories."""
 
-    def __call__(self, *, base_url: str, api_key: str) -> _ClientProtocol:
+    # the return type is intentionally narrow; implementations always return a
+    # concrete client.  Pylance incorrectly warns that a protocol method may
+    # not return on all paths, so we silence that here.
+    def __call__(self, *, base_url: str, api_key: str) -> _ClientProtocol:  # type: ignore[return]
         """Create a protocol-compatible FLM client instance."""
 
 
@@ -90,6 +94,10 @@ class FlmChatAdapter:
             base_url=self.config.base_url,
             api_key=self.api_key,
         )
+        # Pylance occasionally thinks the factory might return ``None``; guard
+        # against that with a runtime assertion so the return type is provably
+        # ``_ClientProtocol`` on all code paths.
+        assert client is not None, "client factory returned None"
         return client
 
     def check_endpoint_available(self) -> None:

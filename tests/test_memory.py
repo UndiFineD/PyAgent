@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Test the memory package."""
+
 from rust_core import SharedMemory
 
 

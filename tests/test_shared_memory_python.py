@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Python-level tests for rust_core SharedMemory wrapper."""
 
-from rust_core import SharedMemory
+from rust_core import SharedMemory  # type: ignore[attr-defined]
 
 
 def test_shared_memory_python_basics() -> None:

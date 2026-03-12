@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 """Documentation and Test Generator for PyAgent
 Automatically generates .description.md, .improvements.md, .splice.md, and *_test.py files
 
@@ -32,7 +33,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, dict, list, Optional, Tuple
+from typing import Any, Optional
 
 # Optional dependencies
 AI_ENHANCED = False

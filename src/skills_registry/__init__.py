@@ -28,7 +28,7 @@ class SkillsRegistry:
         self.skills_dir = Path(skills_dir)
 
     async def list_skills(self) -> list[str]:
-        """list the names of all skills available in the registry."""
+        """List the names of all skills available in the registry."""
         names: list[str] = []
         for path in self.skills_dir.glob("*.yaml"):
             try:

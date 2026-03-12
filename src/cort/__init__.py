@@ -15,7 +15,7 @@
 
 from __future__ import annotations
 
-from typing import list, Optional
+from typing import Optional
 
 from context_manager import ContextManager
 
