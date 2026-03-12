@@ -535,7 +535,7 @@ from .improvement_manager import ImprovementManager
         has_priority = any(p in content_upper for p in ["## HIGH", "## MEDIUM", "## LOW", "## URGENT", "## BACKLOG"])
 
         # Check for standard markdown checkboxes
-        has_checkboxes = "- [ ] " in content or "- [x] " in content or "- [X] " in content
+        has_checkboxes = "- [ ] " in content or "- " in content or "- " in content
 
         if not has_priority:
             logging.warning("Improved content missing priority headers (e.g. ## HIGH)")

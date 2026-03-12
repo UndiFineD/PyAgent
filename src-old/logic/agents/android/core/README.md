@@ -381,10 +381,10 @@ screen_json = get_screen_state()
 ## Roadmap
 
 ### Now (MVP - 48 hours)
-- [x] Core agent loop (perception → reasoning → action)
-- [x] Accessibility tree parsing
-- [x] GPT-4 integration
-- [x] Basic actions (tap, type, navigate)
+- Core agent loop (perception → reasoning → action)
+- Accessibility tree parsing
+- GPT-4 integration
+- Basic actions (tap, type, navigate)
 
 ### Next 2 Weeks
 - [ ] **PyPI package:** `pip install android-use`
