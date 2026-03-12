@@ -7,5 +7,4 @@ dependencies:
   codeql/python-all: ^7.0.0
 
 # extractor declaration required for dataset tests
-extractors:
-  python: codeql/python-all
+extractor: python
