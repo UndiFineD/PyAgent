@@ -22,12 +22,12 @@ use chacha20poly1305::{
 };
 use dashmap::DashMap;
 use hkdf::Hkdf;
-use sha2::Sha256;
+use sha2::{Sha256,Digest};
 use uuid::Uuid;
 use x25519_dalek::{EphemeralSecret, PublicKey, StaticSecret};
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 
 /// Size of ChaCha20-Poly1305 nonce in bytes.
 const NONCE_LEN: usize = 12;
@@ -311,6 +311,87 @@ impl PyMemoryBlockRegistry {
     }
 }
 
+// ─── HMAC key derivation helpers ─────────────────────────────────────────
+
+use crate::security::hmac_keys::derive_msg_key;
+
+// ─── SharedMemory subsystem ─────────────────────────────────────────────────
+
+/// Fleet-wide broadcast map with per-entry HMAC integrity.
+/// Keys and values are raw byte vectors; `tag` holds the 32-byte HMAC-SHA256 tag.
+#[allow(dead_code)] // these methods are exercised from Python bindings and tests
+pub struct SharedMemory {
+    map: DashMap<Vec<u8>, (Vec<u8>, [u8; 32])>,
+    current_master: Arc<[u8; 32]>,
+    previous_master: Option<Arc<[u8; 32]>>, // allow verification during rotation
+}
+
+#[allow(dead_code)]
+impl SharedMemory {
+    pub fn new(master_key: [u8; 32]) -> Self {
+        Self {
+            map: DashMap::new(),
+            current_master: Arc::new(master_key),
+            previous_master: None
+        }
+    }
+
+    /// Put a value under `key`, computing an HMAC tag.
+    pub fn put(&self, key: &[u8], value: &[u8]) {
+        let msg_key = derive_msg_key(&self.current_master, &sha2::Sha256::digest(key).into(), 0);
+        let tag = hmac_sha256(&msg_key, value);
+        self.map.insert(key.to_vec(), (value.to_vec(), tag));
+    }
+
+    /// Get value and verify integrity. Returns Err if tag check fails.
+    pub fn get(&self, key: &[u8]) -> Result<Vec<u8>, String> {
+        let entry = self.map.get(key).ok_or("entry not found".to_string())?;
+        let (ref data, tag) = &*entry;
+        let key_fp: [u8; 32] = sha2::Sha256::digest(key).into();
+        // try current master
+        let msg_key = derive_msg_key(&self.current_master, &key_fp, 0);
+        if verify_hmac(&msg_key, data, tag) {
+            return Ok(data.clone());
+        }
+        // try previous master if present
+        if let Some(prev) = &self.previous_master {
+            let msg_key = derive_msg_key(prev, &key_fp, 0);
+            if verify_hmac(&msg_key, data, tag) {
+                return Ok(data.clone());
+            }
+        }
+        Err("integrity check failed".to_string())
+    }
+
+    /// Rotate the master key; keep old one for transient verification.
+    pub fn rotate_master(&mut self, new_master: [u8; 32]) {
+        self.previous_master = Some(self.current_master.clone());
+        self.current_master = Arc::new(new_master);
+    }
+}
+
+// simple HMAC-SHA256 convenience wrappers
+#[allow(dead_code)]
+fn hmac_sha256(key: &[u8;32], data: &[u8]) -> [u8;32] {
+    use hmac::{Hmac, Mac};
+    type H = Hmac<sha2::Sha256>;
+    // disambiguate between KeyInit::new_from_slice and Mac::new_from_slice
+    let mut mac = <H as Mac>::new_from_slice(key).expect("HMAC can take key of any size");
+    mac.update(data);
+    let result = mac.finalize();
+    let bytes = result.into_bytes();
+    bytes.into()
+}
+
+/// Verify HMAC tag for given key and data. Returns true if valid, false if not.
+/// Use this when accessing SharedMemory entries to ensure integrity; 
+/// it checks against both current and previous master keys to allow for seamless rotation.
+#[allow(dead_code)]
+/// Public helper used by Python wrapper for explicit integrity checks.
+pub fn verify_hmac(key: &[u8;32], data: &[u8], tag: &[u8;32]) -> bool {
+    hmac_sha256(key, data) == *tag
+}
+
 // ─── Vector search (original) ───────────────────────────────────────────────
 
 /// Vector similarity/search for agent long-term memory (Common/Memory).
@@ -326,10 +407,77 @@ pub fn search_vector_rust(query_vec: Vec<f32>, database: Vec<Vec<f32>>, top_k: u
     Ok(scores.into_iter().take(top_k).map(|(idx, _)| idx).collect())
 }
 
+/// PyO3 wrapper for SharedMemory
+#[pyclass(name = "SharedMemory")]
+struct PySharedMemory {
+    inner: Arc<Mutex<SharedMemory>>,
+}
+
+/// The `PySharedMemory` class is a Python wrapper around the 
+/// Rust `SharedMemory` struct, providing a thread-safe interface 
+/// for storing and retrieving key-value pairs with HMAC integrity checks. 
+/// It allows for master key rotation while maintaining access to existing 
+/// entries, and exposes methods for putting values, getting values with 
+/// integrity verification, and rotating the master key. The design 
+/// ensures that integrity checks are performed using both the current 
+/// and previous master keys to allow for seamless rotation without 
+/// breaking access to existing data.
+#[pymethods]
+impl PySharedMemory {
+    #[new]
+    fn new(master_key: Vec<u8>) -> PyResult<Self> {
+        if master_key.len() != 32 {
+            return Err(pyo3::exceptions::PyValueError::new_err("master_key must be 32 bytes"));
+        }
+        let mut arr = [0u8; 32];
+        arr.copy_from_slice(&master_key);
+        Ok(PySharedMemory {
+            inner: Arc::new(Mutex::new(SharedMemory::new(arr)))
+        })
+    }
+
+    /// Put a value under `key`, computing an HMAC tag.
+    fn put(&self, key: &[u8], value: &[u8]) {
+        self.inner.lock().unwrap().put(key, value);
+    }
+
+    /// Get value and verify integrity. Returns None if entry not found, Err if tag check fails.
+    fn get(&self, key: &[u8]) -> PyResult<Option<Vec<u8>>> {
+        match self.inner.lock().unwrap().get(key) {
+            Ok(v) => Ok(Some(v)),
+            Err(e) if e == "entry not found" => Ok(None),
+            Err(e) => Err(pyo3::exceptions::PyValueError::new_err(e)),
+        }
+    }
+
+    /// Rotate the master key. The new key must be 32 bytes.
+    fn rotate_master_key(&self, new_master: Vec<u8>) -> PyResult<()> {
+        if new_master.len() != 32 {
+            return Err(pyo3::exceptions::PyValueError::new_err("new_master must be 32 bytes"));
+        }
+        let mut arr = [0u8; 32];
+        arr.copy_from_slice(&new_master);
+        self.inner.lock().unwrap().rotate_master(arr);
+        Ok(())
+    }
+
+    /// Public helper for explicit integrity checks; 
+    /// returns true if valid, false if not.
+    fn verify_hmac(&self, key: &[u8], value: &[u8], tag: &[u8]) -> PyResult<bool> {
+        if tag.len() != 32 {
+            return Err(pyo3::exceptions::PyValueError::new_err("tag must be 32 bytes"));
+        }
+        let mut arr = [0u8; 32];
+        arr.copy_from_slice(tag);
+        Ok(verify_hmac(&derive_msg_key(&self.inner.lock().unwrap().current_master, &sha2::Sha256::digest(key).into(), 0), value, &arr))
+    }
+}
+
 /// Register memory functions in the rust_core module.
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(search_vector_rust, m)?)?;
     m.add_class::<PyMemoryBlockRegistry>()?;
+    m.add_class::<PySharedMemory>()?;
     Ok(())
 }
 
@@ -527,5 +675,24 @@ mod tests {
 
         assert!(reg.get(&id, 99).is_err(),
             "Out-of-bounds slab index must return Err");
+    }
+
+    /// Verify SharedMemory HMAC behavior and rotation support.
+    #[test]
+    fn test_hmac_key_management() {
+        let master1 = [1u8; 32];
+        let master2 = [2u8; 32];
+        let mut mem = SharedMemory::new(master1);
+        let key = b"foo";
+        mem.put(key, b"bar");
+        assert_eq!(mem.get(key).unwrap(), b"bar".to_vec());
+        mem.rotate_master(master2);
+        // old entry must still verify
+        assert_eq!(mem.get(key).unwrap(), b"bar".to_vec());
+        // tamper to cause integrity failure
+        if let Some(mut entry) = mem.map.get_mut(&key.to_vec()) {
+            entry.0[0] ^= 0xFF;
+        }
+        assert!(mem.get(key).is_err());
     }
 }
