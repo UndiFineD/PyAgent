@@ -6,7 +6,7 @@ def analyze_todo_structure():
     """Analyze the todo list structure without complex file operations."""
     todo_file = r"c:\dev\PyAgent\docs\todo-tree-20260303-1743.txt"
 
-    print("Analyzing PyAgent Improvement Todo List Structure")
+    print("Analyzing PyAgent Improvement Todo list Structure")
     print("=" * 55)
 
     # Read the file and count items manually

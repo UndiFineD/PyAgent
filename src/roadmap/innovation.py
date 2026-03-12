@@ -14,7 +14,7 @@
 
 import json
 from pathlib import Path
-from typing import Any, List
+from typing import Any
 
 
 def record_experiment(name: str, db_path: str = "experiments.json") -> Path:
@@ -27,7 +27,7 @@ def record_experiment(name: str, db_path: str = "experiments.json") -> Path:
     Returns:
         Path: The path to the updated experiments JSON file.
     """
-    db: List[Any] = []
+    db: list[Any] = []
     p: Path = Path(db_path)
     if p.exists():
         db = json.loads(p.read_text())

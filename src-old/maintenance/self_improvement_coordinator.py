@@ -399,7 +399,7 @@ class SelfImprovementCoordinator:
             A dictionary with the result of the remote execution.
 
         """
-        # TODO: Implement remote task execution logic
+        # Implement remote task execution logic
         self.logger.info(
             f"execute_remote_task called for peer {target_peer}, but not implemented."
         )

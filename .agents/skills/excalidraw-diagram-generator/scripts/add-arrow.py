@@ -86,7 +86,7 @@ def create_arrow(
         label: Optional text label on the arrow
     
     Returns:
-        List of elements (arrow and optional label)
+        list of elements (arrow and optional label)
 
     """
     elements = []

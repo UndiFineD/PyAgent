@@ -17,10 +17,10 @@
 from __future__ import annotations
 
 import sys
-from typing import List
+from typing import list
 
 
-def main(args: List[str] | None = None) -> int:
+def main(args: list[str] | None = None) -> int:
     """CLI entrypoint; returns 0 on success."""
     if args is None:
         args = sys.argv[1:]

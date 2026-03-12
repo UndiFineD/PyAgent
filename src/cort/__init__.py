@@ -15,7 +15,7 @@
 
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import list, Optional
 
 from context_manager import ContextManager
 
@@ -55,7 +55,7 @@ class ThoughtNode:
         """
         self.text = text
         self.cort = cort
-        self.children: List[ThoughtNode] = []
+        self.children: list[ThoughtNode] = []
 
     async def fork(self, text: str) -> "ThoughtNode":
         """Create a new child thought node with the given text.

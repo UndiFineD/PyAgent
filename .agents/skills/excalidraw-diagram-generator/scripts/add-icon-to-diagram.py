@@ -25,7 +25,7 @@ import json
 import sys
 import uuid
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, dict, list, Tuple
 
 
 def generate_unique_id() -> str:
@@ -33,7 +33,7 @@ def generate_unique_id() -> str:
     return str(uuid.uuid4()).replace('-', '')[:16]
 
 
-def calculate_bounding_box(elements: List[Dict[str, Any]]) -> Tuple[float, float, float, float]:
+def calculate_bounding_box(elements: list[dict[str, Any]]) -> Tuple[float, float, float, float]:
     """Calculate the bounding box (min_x, min_y, max_x, max_y) of icon elements."""
     if not elements:
         return (0, 0, 0, 0)
@@ -59,10 +59,10 @@ def calculate_bounding_box(elements: List[Dict[str, Any]]) -> Tuple[float, float
 
 
 def transform_icon_elements(
-    elements: List[Dict[str, Any]],
+    elements: list[dict[str, Any]],
     target_x: float,
     target_y: float
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """Transform icon elements to target coordinates with unique IDs.
     
     Args:
@@ -155,7 +155,7 @@ def transform_icon_elements(
     return transformed
 
 
-def load_icon(icon_name: str, library_path: Path) -> List[Dict[str, Any]]:
+def load_icon(icon_name: str, library_path: Path) -> list[dict[str, Any]]:
     """Load icon elements from library.
     
     Args:
@@ -163,7 +163,7 @@ def load_icon(icon_name: str, library_path: Path) -> List[Dict[str, Any]]:
         library_path: Path to the icon library directory
     
     Returns:
-        List of icon elements
+        list of icon elements
 
     """
     icon_file = library_path / "icons" / f"{icon_name}.json"
@@ -213,7 +213,7 @@ def finalize_edit_path(work_path: Path, final_path: Path | None) -> None:
     work_path.rename(final_path)
 
 
-def create_text_label(text: str, x: float, y: float) -> Dict[str, Any]:
+def create_text_label(text: str, x: float, y: float) -> dict[str, Any]:
     """Create a text label element.
     
     Args:

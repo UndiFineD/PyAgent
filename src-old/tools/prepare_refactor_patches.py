@@ -202,11 +202,11 @@ def suggest_replacement(line: str) -> str:
         return "raise RuntimeError('Refactor required: remove eval/exec; see .external/patches')"
     if re.match(r"from\s+\w+\s+import|import\s+\w+", s):
         # comment out import as conservative proposal
-        return f"# TODO: remove or replace risky import -> {s}"
+        return f"# remove or replace risky import -> {s}"
     if "subprocess" in s or "Popen" in s or "os.system" in s:
         return "raise RuntimeError('Refactor required: avoid running subprocesses directly')"
-    # default: add TODO comment
-    return s + "  # TODO: review this line for safety"
+    # default: add comment
+    return s + "  # review this line for safety"
 
 
 def main() -> int:

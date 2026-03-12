@@ -16,14 +16,14 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 
 @dataclass
 class AgentRegistry:
     """Simple registry for agent instances or definitions."""
 
-    _registry: Optional[Dict[str, Any]] = None
+    _registry: Optional[dict[str, Any]] = None
 
     def __post_init__(self) -> None:
         """Post-init to ensure the registry dict is created lazily."""

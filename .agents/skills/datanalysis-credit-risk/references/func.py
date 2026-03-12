@@ -1,6 +1,6 @@
 """Data processing functions module"""
 from datetime import datetime
-from typing import Dict, List, Tuple
+from typing import dict, list, Tuple
 
 import numpy as np
 import pandas as pd
@@ -16,9 +16,9 @@ except:
 
 
 def get_dataset(data_pth: str, date_colName: str, y_colName: str,
-                org_colName: str, data_encode: str, key_colNames: List[str],
-                drop_colNames: List[str] = None,
-                miss_vals: List[int] = None) -> pd.DataFrame:
+                org_colName: str, data_encode: str, key_colNames: list[str],
+                drop_colNames: list[str] = None,
+                miss_vals: list[int] = None) -> pd.DataFrame:
     """Load and format data
     
     Args:
@@ -29,7 +29,7 @@ def get_dataset(data_pth: str, date_colName: str, y_colName: str,
         data_encode: Data encoding
         key_colNames: Primary key columns (for deduplication)
         drop_colNames: Columns to drop
-        miss_vals: List of abnormal values to replace with NaN, default [-1, -999, -1111]
+        miss_vals: list of abnormal values to replace with NaN, default [-1, -999, -1111]
 
     """
     if drop_colNames is None:
@@ -66,7 +66,7 @@ def get_dataset(data_pth: str, date_colName: str, y_colName: str,
     return data
 
 
-def org_analysis(data: pd.DataFrame, oos_orgs: List[str] = None) -> pd.DataFrame:
+def org_analysis(data: pd.DataFrame, oos_orgs: list[str] = None) -> pd.DataFrame:
     """Organization sample statistics analysis
     
     Args:
@@ -100,7 +100,7 @@ def org_analysis(data: pd.DataFrame, oos_orgs: List[str] = None) -> pd.DataFrame
     return stat[['机构', '年月', '单月坏样本数', '单月总样本数', '单月坏样率', '总坏样本数', '总样本数', '总坏样率', '样本类型']]
 
 
-def missing_check(data: pd.DataFrame, channel: Dict[str, List[str]] = None) -> Tuple[pd.DataFrame, pd.DataFrame]:
+def missing_check(data: pd.DataFrame, channel: dict[str, list[str]] = None) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """Calculate missing rate - including overall and organization-level missing rates
     
     Returns:
@@ -150,7 +150,7 @@ def missing_check(data: pd.DataFrame, channel: Dict[str, List[str]] = None) -> T
     return miss_detail, miss_ch
 
 
-def calculate_iv(data: pd.DataFrame, features: List[str], n_jobs: int = 4) -> pd.DataFrame:
+def calculate_iv(data: pd.DataFrame, features: list[str], n_jobs: int = 4) -> pd.DataFrame:
     """Calculate IV value - use toad.transform.Combiner for binning, set number of bins to 5, keep NaN values"""
     from joblib import Parallel, delayed
 
@@ -186,7 +186,7 @@ def calculate_iv(data: pd.DataFrame, features: List[str], n_jobs: int = 4) -> pd
     return pd.DataFrame(iv_list).sort_values('IV', ascending=False)
 
 
-def calculate_corr(data: pd.DataFrame, features: List[str]) -> pd.DataFrame:
+def calculate_corr(data: pd.DataFrame, features: list[str]) -> pd.DataFrame:
     """Calculate correlation matrix"""
     corr = data[features].corr().abs()
     return corr

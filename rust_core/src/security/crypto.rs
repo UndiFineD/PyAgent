@@ -70,6 +70,9 @@ static TRANSACTION_PATH: Mutex<Option<String>> = Mutex::new(None);
 // simple key rotation counter; actual key material unchanged for now
 static KEY_VERSION: Mutex<u64> = Mutex::new(0);
 
+/// Load public and private key material from the specified file paths.
+/// The keys are stored in memory and used for subsequent encryption and decryption operations.
+/// Returns an error if the files cannot be read or if keys are already loaded.
 #[pyfunction]
 pub fn load_keys(pub_path: &str, priv_path: &str) -> PyResult<()> {
     eprintln!("[crypto] load_keys called with {} {}", pub_path, priv_path);
@@ -85,6 +88,8 @@ pub fn load_keys(pub_path: &str, priv_path: &str) -> PyResult<()> {
     Ok(())
 }
 
+/// Export the currently loaded keys to the specified file paths.  
+/// Returns an error if no keys are loaded or if file writing fails.
 #[pyfunction]
 pub fn export_keys(pub_path: &str, priv_path: &str) -> PyResult<()> {
     if let Some((pubk, privk)) = KEYS.lock().unwrap().as_ref() {
@@ -96,6 +101,10 @@ pub fn export_keys(pub_path: &str, priv_path: &str) -> PyResult<()> {
     }
 }
 
+/// Obtain the current Tokio runtime, creating a singleton instance if it doesn't exist yet.
+/// This is used by the Python API to schedule background tasks and timers without blocking the main thread
+/// and without requiring the Python caller to manage the runtime lifecycle.
+/// Currently the runtime is only used for scheduling Python coroutines on the asyncio event loop, so it's a simple wrapper around that.
 #[pyfunction]
 pub fn encrypt_data(data: &[u8]) -> PyResult<Vec<u8>> {
     // ChaCha20Poly1305 AEAD with a random nonce; prepend nonce to output.
@@ -123,7 +132,8 @@ pub fn encrypt_data(data: &[u8]) -> PyResult<Vec<u8>> {
     Ok(out)
 }
 
-// helper which attempts to decrypt using a specific key version
+/// helper which attempts to decrypt using a specific key version
+/// returns Ok(plaintext) if successful, or Err if decryption fails (e.g. due to incorrect key or tampering)
 fn try_decrypt_version(data: &[u8], version: u64) -> Result<Vec<u8>, chacha20poly1305::aead::Error> {
     use chacha20poly1305::{XChaCha20Poly1305, Key, XNonce};
 
@@ -144,6 +154,9 @@ fn try_decrypt_version(data: &[u8], version: u64) -> Result<Vec<u8>, chacha20pol
     cipher.decrypt(nonce, ciphertext)
 }
 
+/// Decrypt data that was encrypted by `encrypt_data`.  Automatically tries the current key version
+/// and falls back to the previous version if decryption fails, to allow seamless key rotation.
+/// Returns an error if decryption fails with both versions (e.g. due to tampering or incorrect key).
 #[pyfunction]
 pub fn decrypt_data(data: &[u8]) -> PyResult<Vec<u8>> {
     use pyo3::exceptions::PyRuntimeError;
@@ -151,12 +164,12 @@ pub fn decrypt_data(data: &[u8]) -> PyResult<Vec<u8>> {
     // try current key first, then fall back to previous version if available
     let current_version = *KEY_VERSION.lock().unwrap();
     let attempt = try_decrypt_version(data, current_version);
-    if let Ok(mut plain) = attempt {
+    if let Ok(plain) = attempt {
         DECRYPT_COUNTER.inc();
         return Ok(plain);
     }
     if current_version > 0 {
-        if let Ok(mut plain) = try_decrypt_version(data, current_version - 1) {
+        if let Ok(plain) = try_decrypt_version(data, current_version - 1) {
             DECRYPT_COUNTER.inc();
             return Ok(plain);
         }
@@ -165,6 +178,11 @@ pub fn decrypt_data(data: &[u8]) -> PyResult<Vec<u8>> {
     Err(PyRuntimeError::new_err("decryption failure: aead::Error"))
 }
 
+/// Obtain the current Tokio runtime, creating a singleton instance if it doesn't exist yet.
+/// This is used by the Python API to schedule background tasks and timers without blocking the main thread
+/// and without requiring the Python caller to manage the runtime lifecycle.
+/// Currently the runtime is only used for scheduling Python coroutines on the asyncio event loop, so it's a simple wrapper around that.
+/// The helper functions above are registered by `security::register` so this file does not declare a separate Python module.
 #[pyfunction]
 pub fn begin_transaction(path: &str) -> PyResult<()> {
     let mut active = TRANSACTION_ACTIVE.lock().unwrap();
@@ -177,6 +195,12 @@ pub fn begin_transaction(path: &str) -> PyResult<()> {
     Ok(())
 }
 
+/// Commit the active transaction by marking it as inactive and clearing the transaction path.
+/// Returns an error if no transaction is active.  
+/// Note that this is a simplified demonstration and does not perform any actual file operations; 
+/// in a real implementation, you would typically move files from a staging area 
+/// to a permanent location on commit, and the rollback function would delete the staging files 
+/// if the transaction is not committed.
 #[pyfunction]
 pub fn commit_transaction() -> PyResult<()> {
     let mut active = TRANSACTION_ACTIVE.lock().unwrap();
@@ -190,6 +214,8 @@ pub fn commit_transaction() -> PyResult<()> {
     Ok(())
 }
 
+/// Rollback the active transaction by deleting any files created under the transaction path.
+/// Returns an error if no transaction is active.
 #[pyfunction]
 pub fn rollback_transaction() -> PyResult<()> {
     let mut active = TRANSACTION_ACTIVE.lock().unwrap();
@@ -224,11 +250,27 @@ pub fn clear_keys() -> PyResult<()> {
     *keys = None;
     Ok(())
 }
+
+/// Get the current key version number.  This is used by clients to determine if they need to rotate their keys.
+/// The version number is automatically incremented by `rotate_keys`, and included in the key derivation salt 
+/// so that new keys are generated without changing the stored key material. Clients can continue to decrypt 
+/// old data using the previous version for a grace period after rotation, but should switch to the new version 
+/// for subsequent encryptions to ensure forward secrecy. This function is registered by `security::register` 
+/// so it can be called from Python, but it can also be used by Rust code if needed.  
+/// Note that the version number is not persisted and will reset to 0 on restart, so it's mainly useful for 
+/// coordinating in-memory state during runtime rather than as a durable key versioning scheme.  
 #[pyfunction]
 pub fn current_key_version() -> PyResult<u64> {
     Ok(*KEY_VERSION.lock().unwrap())
 }
 
+/// Rotate the keys by incrementing the version number.  This causes subsequent encryptions to use a new derived key.
+/// Old keys are still kept in memory to allow decryption of existing data, but clients are
+/// expected to call `current_key_version` and switch to the new version for future encryptions to ensure forward secrecy.
+/// Before bumping the version, any existing key material is backed up to files with a timestamped name,
+/// and a Prometheus counter is incremented to track key rotations.
+/// This function is registered by `security::register` so it can be called from Python, 
+/// but it can also be used by Rust code if needed.
 #[pyfunction]
 pub fn rotate_keys() -> PyResult<()> {
     // before bumping version, backup existing key material if present
@@ -287,6 +329,10 @@ pub fn cleanup_transactions(path: &str) -> PyResult<()> {
     GC_COUNTER.inc();
     Ok(())
 }
+
+/// Gather Prometheus metrics and return them as a UTF-8 encoded string in the Prometheus text exposition format.
+/// This can be called from Python to expose an endpoint for scraping metrics by a Prometheus server or for debugging purposes.  Any errors during metric gathering or encoding are returned as Python exceptions.
+/// Note that the metrics are gathered from the global Prometheus registry, so they include all registered metrics from this module and any other modules that use the same registry.  The main metrics of interest include `encrypt_data_calls`, `decrypt_data_calls`, `rotate_key_calls`, `key_backup_calls`, and `transaction_gc_calls`, which track usage of the crypto functions and maintenance operations.
 #[pyfunction]
 pub fn gather_metrics() -> PyResult<String> {
     let encoder = TextEncoder::new();

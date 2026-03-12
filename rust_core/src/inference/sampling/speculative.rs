@@ -2,6 +2,16 @@ use pyo3::prelude::*;
 use std::collections::HashMap;
 
 /// Build speculation tree from sequences (Speculative/Tree).
+/// Returns (tokens, parents, probs) for tree verification.  
+/// The `context` is the initial token sequence, and `ngram_index` 
+/// maps n-grams to possible next tokens and their probabilities.  
+/// The `top_k` parameter controls how many candidates to consider 
+/// at each step, and `threshold` can be used to filter out low-probability candidates.  
+/// This function is registered by `speculative::register` so it can be called 
+/// from Python, but it can also be used by Rust code if needed.  
+/// The returned `parents` list contains indices of parent nodes 
+/// for each token in the flattened tree, which can be used to 
+/// reconstruct the tree structure during verification.
 #[pyfunction]
 #[allow(unused_variables)]
 pub fn build_speculation_tree_rust(
@@ -23,6 +33,7 @@ pub fn build_speculation_tree_rust(
 }
 
 /// Rejection sampling verification for speculative decoding
+/// Returns (accepted_count, recovered_token, all_accepted)
 #[pyfunction]
 pub fn rejection_sample_verify_rust(
     draft_tokens: Vec<i64>,
@@ -186,6 +197,7 @@ pub fn speculation_tree_parse_rust(
 
 
 /// EAGLE top-k candidates extraction from logits
+/// Returns list of (token_id, logit) pairs for the top-k candidates.
 #[pyfunction]
 pub fn eagle_top_k_candidates_rust(
     logits: Vec<f64>,
@@ -203,6 +215,11 @@ pub fn eagle_top_k_candidates_rust(
 }
 
 /// EAGLE verify and accept tokens using rejection sampling
+/// Returns (accepted_tokens, acceptance_mask) where accepted_tokens 
+/// is the list of tokens that were accepted, and acceptance_mask 
+/// is a boolean list indicating which tokens were accepted in the original order.  
+/// The acceptance probability is based on the ratio of target to draft probabilities, 
+/// with an optional epsilon added for smoothing.
 #[pyfunction]
 pub fn eagle_verify_accept_rust(
     draft_tokens: Vec<i64>,
@@ -241,6 +258,8 @@ pub fn eagle_verify_accept_rust(
 }
 
 /// EAGLE extrapolate hidden states for next step prediction
+/// Returns extrapolated hidden states based on the last two states in the input sequence,
+/// using a simple linear extrapolation.  If there are fewer than 2 hidden states, returns the input as is.
 #[pyfunction]
 pub fn eagle_extrapolate_hidden_rust(
     hidden_states: Vec<Vec<f64>>,
@@ -268,6 +287,12 @@ pub fn eagle_extrapolate_hidden_rust(
 }
 
 /// EAGLE prepare inputs with padding for batch processing
+/// Returns padded token IDs, positions, and optionally hidden states for a batch of sequences,
+/// where each sequence is padded to the maximum length in the batch.  
+/// The hidden states are also padded with zeros if provided, 
+/// and the positions are generated accordingly.  
+/// This function is useful for preparing inputs for the EAGLE speculative decoding process, 
+/// which may require batching sequences of different lengths.
 #[pyfunction]
 pub fn eagle_prepare_inputs_padded_rust(
     token_ids: Vec<Vec<i64>>,
@@ -308,7 +333,11 @@ pub fn eagle_prepare_inputs_padded_rust(
 }
 
 /// Prompt lookup propose from prompt tokens
+/// Returns a list of proposed token IDs based on the longest suffix 
+/// of generated tokens that matches a subsequence in the prompt tokens, 
+/// within the specified length range.
 #[pyfunction]
+#[allow(dead_code)]
 pub fn prompt_lookup_propose_spec_rust(
     prompt_tokens: Vec<i64>,
     generated_tokens: Vec<i64>,
@@ -340,6 +369,9 @@ pub fn prompt_lookup_propose_spec_rust(
 }
 
 /// Build cumulative indices for speculative decode metadata
+/// Returns (cu_draft, cu_sampled) where cu_draft[i] is the cumulative sum of draft tokens up to index i,
+/// and cu_sampled[i] is the cumulative sum of (draft tokens + 1) 
+/// up to index i, which accounts for the potential bonus token at each step.
 #[pyfunction]
 pub fn spec_decode_build_cu_indices_rust(
     num_draft_tokens: Vec<usize>,
@@ -361,6 +393,24 @@ pub fn spec_decode_build_cu_indices_rust(
 }
 
 /// Build logits indices for verification
+/// Returns (target_logits_indices, bonus_logits_indices, logits_indices) where:
+/// - target_logits_indices is a flat list of indices for the target model logits 
+///   corresponding to each draft token,
+/// - bonus_logits_indices is a list of indices for the potential bonus tokens 
+///   (one per draft token, at the position after the last draft token for that step),
+/// - logits_indices is a list of all indices for the combined draft and bonus tokens, 
+///   which can be used to gather logits for the entire speculation tree in a single batch.
+/// The `num_draft_tokens` list specifies how many draft tokens are proposed at each step, 
+/// and the cumulative sums from `spec_decode_build_cu_indices_rust` can be used 
+/// to calculate the correct indices for the target and bonus logits.
+/// For example, if num_draft_tokens = [2, 3], then 
+/// the target_logits_indices would be [0, 1, 2, 3, 4] for the draft tokens, 
+/// the bonus_logits_indices would be [2, 5] for the bonus tokens after each step, 
+/// and the logits_indices would be [0, 1, 2, 3, 4, 5] for all tokens in the speculation tree.
+/// This function is used to prepare the indices for gathering logits 
+/// from the target model during the verification phase of speculative decoding, 
+/// allowing us to efficiently compare the proposed draft tokens 
+/// against the target model's predictions and determine which tokens were accepted or rejected.
 #[pyfunction]
 pub fn spec_decode_build_logits_indices_rust(
     num_draft_tokens: Vec<usize>,
@@ -381,6 +431,9 @@ pub fn spec_decode_build_logits_indices_rust(
 }
 
 /// Rejection sampling verification for speculative decode
+/// Returns (accepted_tokens, acceptance_mask) where accepted_tokens
+/// is the list of accepted token IDs based on the target logits, 
+/// and acceptance_mask is a boolean list indicating which draft tokens were accepted.
 #[pyfunction]
 pub fn spec_decode_verify_rejection_rust(
     draft_token_ids: Vec<i64>,
@@ -418,6 +471,8 @@ pub fn spec_decode_verify_rejection_rust(
 }
 
 /// Tree verification path extraction
+/// Returns a list of token ID paths extracted from the speculation tree 
+/// based on the provided tree topology and token IDs.
 #[pyfunction]
 pub fn tree_verification_paths_rust(
     tree_token_ids: Vec<i64>,
@@ -448,7 +503,10 @@ pub fn tree_verification_paths_rust(
 
 
 /// Verify speculative tokens with target model logits
-/// Returns (accepted_indices, bonus_token)
+/// Returns (accepted_indices, bonus_token) where accepted_indices 
+/// is a list of indices of the accepted draft tokens,
+/// and bonus_token is an optional token ID for the bonus token 
+/// if the first rejection occurs at a particular node.
 #[pyfunction]
 pub fn verify_speculation_tree_rust(
     tree_tokens: Vec<i64>,
@@ -521,6 +579,8 @@ pub fn verify_speculation_tree_rust(
 
 /// Extract accepted token sequence from tree
 /// Returns tokens along the accepted path
+/// This function traces back from the deepest accepted node to the root using the parent indices,
+/// collecting the token IDs along the way to reconstruct the accepted token sequence from the speculation tree.
 #[pyfunction]
 pub fn extract_accepted_path_rust(
     tree_tokens: Vec<i64>,
@@ -568,4 +628,3 @@ pub fn speculation_stats_rust(
     
     (acceptance_rate, avg_accepted, speedup)
 }
-

@@ -3,7 +3,7 @@
 import heapq
 import time
 import uuid
-from typing import Any, Dict
+from typing import Any
 
 
 class TaskScheduler:
@@ -12,8 +12,8 @@ class TaskScheduler:
     def __init__(self) -> None:
         """Initialize the task scheduler with empty queues and task store."""
         # priority -> list of tuples (enqueue_time, task_id)
-        self._queues: Dict[int, list[tuple[float, str]]] = {1: [], 2: [], 3: [], 4: []}
-        self._tasks: Dict[str, Dict[str, Any]] = {}
+        self._queues: dict[int, list[tuple[float, str]]] = {1: [], 2: [], 3: [], 4: []}
+        self._tasks: dict[str, dict[str, Any]] = {}
 
     def enqueue(self, payload: dict[str, Any], priority: int = 3) -> str:
         """Add a task to the scheduler with the given payload and priority,

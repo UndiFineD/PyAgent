@@ -14,7 +14,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 
 class ChatRoom:
@@ -25,19 +25,19 @@ class ChatRoom:
     implementation plan.
     """
 
-    def __init__(self, name: str, participants: Optional[List[str]] = None) -> None:
+    def __init__(self, name: str, participants: Optional[list[str]] = None) -> None:
         self.name = name
         # participants may include human user ids and agent identifiers
         self.participants = participants or []
         # internal message history list; each entry is a dict with sender/text
-        self._messages: List[Dict[str, Any]] = []
+        self._messages: list[dict[str, Any]] = []
 
     def post(self, sender: str, text: str) -> None:
         """Append a message from *sender* with the given *text* to history."""
         # In the simplest form we don't validate sender membership yet
         self._messages.append({"sender": sender, "text": text})
 
-    def history(self) -> List[Dict[str, Any]]:
+    def history(self) -> list[dict[str, Any]]:
         """Return a copy of the chat history."""
         # return a shallow copy so callers can't mutate internal list
         return list(self._messages)

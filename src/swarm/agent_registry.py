@@ -1,13 +1,16 @@
+#!/usr/bin/env python3
+"""Registry to manage agent registrations and heartbeats."""
 import time
-from typing import Any, Dict
+from typing import Any
 
 
 class AgentRegistry:
     """Registry to manage agent registrations and heartbeats."""
 
     def __init__(self, heartbeat_interval: float = 30.0) -> None:
+        """Initialize the agent registry with a heartbeat interval for health checks."""
         self.heartbeat_interval = heartbeat_interval
-        self._agents: Dict[str, Dict[str, Any]] = {}
+        self._agents: dict[str, dict[str, Any]] = {}
 
     def register(self, agent_type: str, capabilities: list[str]) -> str:
         """Register a new agent and return its ID."""

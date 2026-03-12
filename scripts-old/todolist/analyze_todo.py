@@ -31,7 +31,7 @@ def analyze_todo_list():
     """Analyze the entire todo list structure."""
     todo_file = r"c:\dev\PyAgent\docs\todo-tree-20260303-1743.txt"
 
-    print("Analyzing PyAgent Improvement Todo List")
+    print("Analyzing PyAgent Improvement Todo list")
     print("=" * 50)
 
     # Count total items from the todo file

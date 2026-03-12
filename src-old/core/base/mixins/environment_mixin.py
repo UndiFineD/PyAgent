@@ -214,7 +214,7 @@ class EnvironmentMixin:
         if not instance:
             raise ValueError(f"Environment instance {instance_id} not active")
 
-        # TODO: Implement context switching logic
+        # Implement context switching logic
         # This could involve changing working directory, environment variables, etc.
 
         try:

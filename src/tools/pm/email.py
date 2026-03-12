@@ -13,10 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Dict
 
-
-async def render(template: str, context: Dict[str, str]) -> str:
+async def render(template: str, context: dict[str, str]) -> str:
     """Render a simple template by substituting {{key}} with values.
 
     This is intentionally unsophisticated; templating libraries will be

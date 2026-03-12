@@ -15,10 +15,10 @@
 
 
 from pathlib import Path
-from typing import List, Union
+from typing import Union
 
 
-async def create(path: Union[str, Path], items: List[str]) -> None:
+async def create(path: Union[str, Path], items: list[str]) -> None:
     """Create a markdown file at *path* with a list of *items* as milestones."""
     p = Path(path)
     with open(p, "w", encoding="utf-8") as f:

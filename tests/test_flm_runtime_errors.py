@@ -36,7 +36,7 @@ class _FakeModel:
 
 
 @dataclass
-class _FakeModelsList:
+class _FakeModelslist:
     """Mimics the structure of a models list response from the FLM client."""
 
     data: list[_FakeModel]
@@ -49,11 +49,11 @@ class _FakeModels:
         """Initialize the fake models interface, with a mode to control behavior."""
         self.mode = mode
 
-    def list(self) -> _FakeModelsList:
+    def list(self) -> _FakeModelslist:
         """Return a fake models list or raise an error based on the mode."""
         if self.mode == "error":
             raise RuntimeError("connection refused")
-        return _FakeModelsList(data=[_FakeModel(id="llama3.2:1b")])
+        return _FakeModelslist(data=[_FakeModel(id="llama3.2:1b")])
 
 
 class _FailingCompletions:

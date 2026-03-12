@@ -21,7 +21,7 @@ import json
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, dict, list, Optional, Set
 
 # Exit codes for --exit-code option
 EXIT_NO_CHANGES = 0
@@ -43,7 +43,7 @@ class Config:
     ignore_case: bool = False
     quiet: bool = False
     verbose: bool = False
-    warnings: List[str] = []
+    warnings: list[str] = []
 
 
 CONFIG = Config()
@@ -56,7 +56,7 @@ def warn(message: str) -> None:
         print(f"Warning: {message}", file=sys.stderr)
 
 
-def load_set_attributes(path: Optional[Path] = None) -> Dict[str, Dict[str, Any]]:
+def load_set_attributes(path: Optional[Path] = None) -> dict[str, dict[str, Any]]:
     """Load Set-type attributes from external JSON file."""
     attributes_path = path or DEFAULT_ATTRIBUTES_PATH
 
@@ -73,7 +73,7 @@ def load_set_attributes(path: Optional[Path] = None) -> Dict[str, Dict[str, Any]
 
 
 # Global variable to hold loaded attributes (initialized in main)
-AZURERM_SET_ATTRIBUTES: Dict[str, Any] = {}
+AZURERM_SET_ATTRIBUTES: dict[str, Any] = {}
 
 
 def get_attr_config(attr_def: Any) -> tuple:
@@ -104,14 +104,14 @@ class SetAttributeChange:
         ""  # Full path for nested attributes (e.g., "rewrite_rule_set.rewrite_rule")
     )
     order_only_count: int = 0
-    added: List[str] = field(default_factory=list)
-    removed: List[str] = field(default_factory=list)
-    modified: List[tuple] = field(default_factory=list)
-    nested_changes: List["SetAttributeChange"] = field(default_factory=list)
+    added: list[str] = field(default_factory=list)
+    removed: list[str] = field(default_factory=list)
+    modified: list[tuple] = field(default_factory=list)
+    nested_changes: list["SetAttributeChange"] = field(default_factory=list)
     # For primitive sets (string/number arrays)
     is_primitive: bool = False
-    primitive_added: List[Any] = field(default_factory=list)
-    primitive_removed: List[Any] = field(default_factory=list)
+    primitive_added: list[Any] = field(default_factory=list)
+    primitive_removed: list[Any] = field(default_factory=list)
 
 
 @dataclass
@@ -120,9 +120,9 @@ class ResourceChange:
 
     address: str
     resource_type: str
-    actions: List[str] = field(default_factory=list)
-    set_changes: List[SetAttributeChange] = field(default_factory=list)
-    other_changes: List[str] = field(default_factory=list)
+    actions: list[str] = field(default_factory=list)
+    set_changes: list[SetAttributeChange] = field(default_factory=list)
+    other_changes: list[str] = field(default_factory=list)
     is_replace: bool = False
     is_create: bool = False
     is_delete: bool = False
@@ -132,17 +132,17 @@ class ResourceChange:
 class AnalysisResult:
     """Overall analysis result."""
 
-    resources: List[ResourceChange] = field(default_factory=list)
+    resources: list[ResourceChange] = field(default_factory=list)
     order_only_count: int = 0
     actual_set_changes_count: int = 0
     replace_count: int = 0
     create_count: int = 0
     delete_count: int = 0
     other_changes_count: int = 0
-    warnings: List[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
 
 
-def get_element_key(element: Dict[str, Any], key_attr: Optional[str]) -> str:
+def get_element_key(element: dict[str, Any], key_attr: Optional[str]) -> str:
     """Extract the key value from a Set element."""
     if key_attr and key_attr in element:
         val = element[key_attr]
@@ -179,7 +179,7 @@ def values_equivalent(before_val: Any, after_val: Any) -> bool:
 
 
 def compare_elements(
-    before: Dict[str, Any], after: Dict[str, Any], nested_attrs: Dict[str, Any] = None
+    before: dict[str, Any], after: dict[str, Any], nested_attrs: dict[str, Any] = None
 ) -> tuple:
     """Compare two elements and return (simple_diffs, nested_set_attrs).
 
@@ -207,8 +207,8 @@ def compare_elements(
 
 
 def analyze_primitive_set(
-    before_list: Optional[List[Any]],
-    after_list: Optional[List[Any]],
+    before_list: Optional[list[Any]],
+    after_list: Optional[list[Any]],
     attr_name: str,
     path: str = "",
 ) -> SetAttributeChange:
@@ -246,13 +246,13 @@ def analyze_primitive_set(
 
 
 def analyze_set_attribute(
-    before_list: Optional[List[Dict[str, Any]]],
-    after_list: Optional[List[Dict[str, Any]]],
+    before_list: Optional[list[dict[str, Any]]],
+    after_list: Optional[list[dict[str, Any]]],
     key_attr: Optional[str],
     attr_name: str,
-    nested_attrs: Dict[str, Any] = None,
+    nested_attrs: dict[str, Any] = None,
     path: str = "",
-    after_unknown: Optional[Dict[str, Any]] = None,
+    after_unknown: Optional[dict[str, Any]] = None,
 ) -> SetAttributeChange:
     """Analyze changes in a Set-type attribute, including nested Sets."""
     full_path = f"{path}.{attr_name}" if path else attr_name
@@ -281,8 +281,8 @@ def analyze_set_attribute(
         return analyze_primitive_set(before_list, after_list, attr_name, path)
 
     # Build maps keyed by the key attribute
-    before_map: Dict[str, Dict[str, Any]] = {}
-    after_map: Dict[str, Dict[str, Any]] = {}
+    before_map: dict[str, dict[str, Any]] = {}
+    after_map: dict[str, dict[str, Any]] = {}
 
     # Detect duplicate keys
     for e in before_list:
@@ -360,9 +360,9 @@ def analyze_set_attribute(
 
 
 def analyze_resource_change(
-    resource_change: Dict[str, Any],
-    include_filter: Optional[List[str]] = None,
-    exclude_filter: Optional[List[str]] = None,
+    resource_change: dict[str, Any],
+    include_filter: Optional[list[str]] = None,
+    exclude_filter: Optional[list[str]] = None,
 ) -> Optional[ResourceChange]:
     """Analyze a single resource change from terraform plan."""
     resource_type = resource_change.get("type", "")
@@ -508,7 +508,7 @@ def collect_all_changes(set_change: SetAttributeChange, prefix: str = "") -> tup
     return (order_only, actual)
 
 
-def format_set_change(change: SetAttributeChange, indent: int = 0) -> List[str]:
+def format_set_change(change: SetAttributeChange, indent: int = 0) -> list[str]:
     """Format a single SetAttributeChange for output."""
     lines = []
     prefix = "  " * indent
@@ -574,12 +574,12 @@ def format_markdown_output(result: AnalysisResult) -> str:
     lines.append("")
 
     # Categorize changes (including nested)
-    order_only_changes: List[tuple] = []
-    actual_set_changes: List[tuple] = []
-    replace_resources: List[ResourceChange] = []
-    create_resources: List[ResourceChange] = []
-    delete_resources: List[ResourceChange] = []
-    other_changes: List[tuple] = []
+    order_only_changes: list[tuple] = []
+    actual_set_changes: list[tuple] = []
+    replace_resources: list[ResourceChange] = []
+    create_resources: list[ResourceChange] = []
+    delete_resources: list[ResourceChange] = []
+    other_changes: list[tuple] = []
 
     for res in result.resources:
         if res.is_replace:
@@ -729,9 +729,9 @@ def format_summary_output(result: AnalysisResult) -> str:
 
 
 def analyze_plan(
-    plan_json: Dict[str, Any],
-    include_filter: Optional[List[str]] = None,
-    exclude_filter: Optional[List[str]] = None,
+    plan_json: dict[str, Any],
+    include_filter: Optional[list[str]] = None,
+    exclude_filter: Optional[list[str]] = None,
 ) -> AnalysisResult:
     """Analyze a terraform plan JSON and return results."""
     result = AnalysisResult()

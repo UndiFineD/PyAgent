@@ -16,7 +16,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import List
 
 import yaml
 
@@ -28,9 +27,9 @@ class SkillsRegistry:
         """Initialize the SkillsRegistry with a directory containing skill YAML files."""
         self.skills_dir = Path(skills_dir)
 
-    async def list_skills(self) -> List[str]:
-        """List the names of all skills available in the registry."""
-        names: List[str] = []
+    async def list_skills(self) -> list[str]:
+        """list the names of all skills available in the registry."""
+        names: list[str] = []
         for path in self.skills_dir.glob("*.yaml"):
             try:
                 data = yaml.safe_load(path.read_text())

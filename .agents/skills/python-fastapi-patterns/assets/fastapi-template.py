@@ -146,7 +146,7 @@ async def list_items(
     skip: int = 0,
     limit: int = 10,
 ):
-    """List all items."""
+    """list all items."""
     # items = await db.execute(select(Item).offset(skip).limit(limit))
     # return items.scalars().all()
     return []

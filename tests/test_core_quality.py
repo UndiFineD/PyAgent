@@ -8,14 +8,14 @@ from __future__ import annotations
 
 import ast
 import pathlib
-from typing import Dict, List, Set
+from typing import Set
 
 ROOT = pathlib.Path(".")
 SRC = ROOT / "src"
 TESTS = ROOT / "tests"
 
 
-def _iter_py_files(root: pathlib.Path) -> List[pathlib.Path]:
+def _iter_py_files(root: pathlib.Path) -> list[pathlib.Path]:
     """Recursively yield all .py files under the given root, excluding __pycache__."""
     return [p for p in root.rglob("*.py") if "__pycache__" not in p.parts]
 
@@ -60,7 +60,7 @@ def test_each_core_has_test_file() -> None:
 def test_test_files_have_assertions() -> None:
     """Ensure test files contain at least 3 assertions (not trivial smoke tests)."""
     pytests = [p for p in _iter_py_files(TESTS) if p.name.startswith("test_")]
-    bad: List[str] = []
+    bad: list[str] = []
     for p in pytests:
         text = p.read_text(encoding="utf-8")
         # Count 'assert' keywords not inside comments/strings using AST
@@ -85,7 +85,7 @@ def test_validate_function_exists() -> None:
     This test parses module ASTs and looks for a top-level `validate` function.
     """
     core_files = [p for p in _iter_py_files(SRC / "core")]
-    missing: List[str] = []
+    missing: list[str] = []
     for p in core_files:
         try:
             tree = ast.parse(p.read_text(encoding="utf-8"))
@@ -107,7 +107,7 @@ def test_no_circular_imports_within_src() -> None:
     This builds a simple directed graph of imports (only intra-src) and checks for cycles.
     """
     files = _iter_py_files(SRC)
-    module_by_file: Dict[str, pathlib.Path] = {str(p.relative_to(SRC)): p for p in files}
+    module_by_file: dict[str, pathlib.Path] = {str(p.relative_to(SRC)): p for p in files}
 
     def _imports_of(p: pathlib.Path) -> Set[str]:
         """Parse the file and return a set of imported module paths (relative to src)."""
@@ -132,7 +132,7 @@ def test_no_circular_imports_within_src() -> None:
         return mapped
 
     # Build graph using relative module keys (a/b.py -> a/b.py)
-    graph: Dict[str, List[str]] = {k: [] for k in module_by_file.keys()}
+    graph: dict[str, list[str]] = {k: [] for k in module_by_file.keys()}
     for key, path in module_by_file.items():
         imps = _imports_of(path)
         for im in imps:

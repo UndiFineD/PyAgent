@@ -17,7 +17,7 @@
 import logging
 import unittest
 from pathlib import Path
-from typing import List
+from typing import list
 
 import pytest
 
@@ -40,7 +40,7 @@ class TestPluginManager(unittest.TestCase):
         self.plugin_manager = PluginManager(self.workspace)
 
     def test_discovery(self) -> None:
-        plugins: List[str] = self.plugin_manager.discover()
+        plugins: list[str] = self.plugin_manager.discover()
         print(f"Discovered plugins: {plugins}")
         # We expect at least the example_math_plugin if it exists
         # or verify the logic runs without crashing
@@ -55,7 +55,7 @@ class TestPluginManager(unittest.TestCase):
 
         if math_plugin_path.exists():
             print("Found example_math_plugin")
-            plugins: List[str] = self.plugin_manager.discover()
+            plugins: list[str] = self.plugin_manager.discover()
             self.assertIn("example_math_plugin", plugins)
 
 

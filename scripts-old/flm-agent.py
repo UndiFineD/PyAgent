@@ -113,7 +113,7 @@ class MCPClient:
             server_id: Unique identifier for this server
             session: Connected ClientSession
         """
-        # List available tools
+        # list available tools
         response = await session.list_tools()
         tools = response.tools
         # Store server connection info

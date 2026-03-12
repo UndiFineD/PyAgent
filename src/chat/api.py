@@ -15,10 +15,11 @@
 
 from __future__ import annotations
 
-from typing import Dict
-
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+
+from chat.models import ChatRoom
+
 
 try:
     from prometheus_client import Counter
@@ -49,12 +50,11 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for minimal envs
             """Increment counter by one."""
             self._value.set(self._value.get() + 1)
 
-from chat.models import ChatRoom
 
 app = FastAPI()
 
 # simple in-memory storage mapping room name to ChatRoom instance
-rooms: Dict[str, ChatRoom] = {}
+rooms: dict[str, ChatRoom] = {}
 
 # metrics
 messages_counter = Counter(
@@ -77,7 +77,7 @@ class MessageRequest(BaseModel):
 
 
 @app.post("/rooms")
-def create_room(request: RoomCreateRequest) -> Dict[str, str]:
+def create_room(request: RoomCreateRequest) -> dict[str, str]:
     """Create a new chat room."""
     if request.name in rooms:
         raise HTTPException(status_code=400, detail="room already exists")
@@ -86,7 +86,7 @@ def create_room(request: RoomCreateRequest) -> Dict[str, str]:
 
 
 @app.post("/rooms/{room_name}/messages")
-def post_message(room_name: str, request: MessageRequest) -> Dict[str, str]:
+def post_message(room_name: str, request: MessageRequest) -> dict[str, str]:
     """Post a message to a room."""
     room = rooms.get(room_name)
     if room is None:
@@ -98,7 +98,7 @@ def post_message(room_name: str, request: MessageRequest) -> Dict[str, str]:
 
 
 @app.get("/rooms/{room_name}/messages")
-def get_history(room_name: str) -> list[Dict[str, str]]:
+def get_history(room_name: str) -> list[dict[str, str]]:
     """Get message history for a room."""
     room = rooms.get(room_name)
     if room is None:

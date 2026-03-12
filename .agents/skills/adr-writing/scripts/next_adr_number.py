@@ -87,7 +87,7 @@ def main() -> int:
     parser.add_argument(
         "--list",
         action="store_true",
-        help="List existing ADR numbers",
+        help="list existing ADR numbers",
     )
     parser.add_argument(
         "--count",
