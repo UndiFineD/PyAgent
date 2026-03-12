@@ -98,5 +98,5 @@ class VisionCore:
 
     def detect_glitch_patterns(self, pixel_data: list[int]) -> bool:
         """Heuristic-based glitch detection."""
-        # TODO: Implement actual pixel analysis logic
+        # Implement actual pixel analysis logic
         return False

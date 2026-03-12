@@ -9,7 +9,9 @@ import sys
 import time
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Pattern, Tuple
+from typing import Any
+from collections.abc import Callable
+from re import Pattern
 
 import rust_core
 
@@ -36,19 +38,19 @@ def print_section(title: str) -> None:
     print(f"{'─' * 100}")
 
 
-def _extract_functions_from_file(filepath: str, fn_pattern: Pattern[str]) -> List[Dict[str, Any]]:
+def _extract_functions_from_file(filepath: str, fn_pattern: Pattern[str]) -> list[dict[str, Any]]:
     """Extract function definitions from a single Rust file.
 
     Args:
         filepath: path to a ``.rs`` file to scan.
-        fn_pattern: compiled regex capturing the function name and parameter
-            list in two groups.
+        fn_pattern: compiled regex capturing the function name 
+        and parameter list in two groups.
 
     Returns:
         A list of dictionaries with keys ``name``, ``params`` and
         ``arg_count`` (the number of non-reference parameters).
     """
-    functions: List[Dict[str, Any]] = []
+    functions: list[dict[str, Any]] = []
     try:
         # use Path.read_text for simplicity and explicit encoding
         content = Path(filepath).read_text(encoding="utf-8", errors="ignore")
@@ -70,9 +72,9 @@ def _extract_functions_from_file(filepath: str, fn_pattern: Pattern[str]) -> Lis
     return functions
 
 
-def scan_rust_files(rust_src_path: Path) -> Dict[str, List[Dict[str, Any]]]:
+def scan_rust_files(rust_src_path: Path) -> dict[str, list[dict[str, Any]]]:
     """Recursively scan rust_core/src for all .rs files and extract function definitions."""
-    functions_by_file: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    functions_by_file: dict[str, list[dict[str, Any]]] = defaultdict(list)
 
     rust_src_path = Path(rust_src_path)
     if not rust_src_path.is_dir():
@@ -88,9 +90,9 @@ def scan_rust_files(rust_src_path: Path) -> Dict[str, List[Dict[str, Any]]]:
     return functions_by_file
 
 
-def generate_test_args(function_name: str, arg_count: int = 1) -> List[Tuple[Any, ...]]:
+def generate_test_args(function_name: str, arg_count: int = 1) -> list[tuple[Any, ...]]:
     """Generate intelligent test arguments for functions based on name patterns."""
-    test_cases: List[Tuple[Any, ...]] = []
+    test_cases: list[tuple[Any, ...]] = []
     func_lower = function_name.lower()
 
     # Grammar-based argument generation
@@ -140,7 +142,7 @@ def generate_test_args(function_name: str, arg_count: int = 1) -> List[Tuple[Any
     return test_cases
 
 
-def safe_call_function(func_obj: Callable[..., object], args: Tuple[Any, ...]) -> Tuple[bool, str, object | None]:
+def safe_call_function(func_obj: Callable[..., object], args: tuple[Any, ...]) -> tuple[bool, str, object | None]:
     """Safely call a function with error handling and timing."""
     try:
         start_time = time.time()
@@ -198,9 +200,9 @@ print(f"  • Public exports:  {len(public_exports)}")
 print(f"  • Private exports: {len(private_exports)}")
 
 # Categorize exports
-class_exports: List[str] = []
-function_exports: List[str] = []
-special_exports: List[str] = []
+class_exports: list[str] = []
+function_exports: list[str] = []
+special_exports: list[str] = []
 
 for item in public_exports:
     try:
@@ -230,10 +232,10 @@ print(f"Total Classes Found: {len(class_exports)}\n")
 for i, cls in enumerate(sorted(class_exports), 1):
     try:
         obj = getattr(rust_core, cls)
-        DOC_STR = ""
+        doc_string = ""
         if hasattr(obj, '__doc__') and obj.__doc__:
-            DOC_STR = obj.__doc__.strip().split('\n')[0][:60]
-        print(f"  {i:2d}. {cls:30s} {f'- {DOC_STR}' if DOC_STR else ''}")
+            doc_string = obj.__doc__.strip().split('\n')[0][:60]
+        print(f"  {i:2d}. {cls:30s} {f'- {doc_string}' if doc_string else ''}")
     except (AttributeError, TypeError):
         pass
 
@@ -243,7 +245,7 @@ for i, cls in enumerate(sorted(class_exports), 1):
 print_section("STEP 3: FUNCTION CATEGORIZATION")
 
 # Group functions by prefix
-prefixes: Dict[str, List[str]] = defaultdict(list)
+prefixes: dict[str, list[str]] = defaultdict(list)
 for func_name in function_exports:
     try:
         if '_' in func_name:
@@ -257,7 +259,7 @@ for func_name in function_exports:
 print(f"Function categories identified: {len(prefixes)}")
 print("Functions per category:\n")
 
-sorted_prefixes: List[Tuple[str, List[str]]] = sorted(
+sorted_prefixes: list[tuple[str, list[str]]] = sorted(
     prefixes.items(), key=lambda x: len(x[1]), reverse=True
 )
 
@@ -277,7 +279,7 @@ else:
 print_section("STEP 4: DYNAMIC FUNCTION TESTING")
 
 # results dictionary carries counters and detailed info
-test_results: Dict[str, Any] = {
+test_results: dict[str, Any] = {
     'pass': 0,
     'fail': 0,
     'skip': 0,
@@ -286,7 +288,7 @@ test_results: Dict[str, Any] = {
 }
 
 # Select subset of functions based on configuration
-test_functions: List[str] = sorted(function_exports)
+test_functions: list[str] = sorted(function_exports)
 if TEST_ALL_FUNCTIONS and len(test_functions) > MAX_FUNCTIONS_TO_TEST:
     test_functions = test_functions[:MAX_FUNCTIONS_TO_TEST]
 

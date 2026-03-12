@@ -46,11 +46,11 @@ print(f"  Metadata: {result.metadata}\n")
 print("[TEST 4] Multimodal tokenization (text + image + audio):")
 audio_frames = [[0.1], [0.2], [0.3], [0.4]]
 result = tokenizer.encode_multimodal(
-    text="Listen to this sound",
+    text="listen to this sound",
     image_patches=[[0.5, 0.6]],
     audio_frames=audio_frames
 )
-print("  Text: 'Listen to this sound'")
+print("  Text: 'listen to this sound'")
 print("  Image patches: 1")
 print("  Audio frames: 4")
 print(f"  Total tokens: {result.num_tokens}")

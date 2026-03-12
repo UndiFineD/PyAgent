@@ -1,16 +1,15 @@
 """Self‑healing helper utilities."""
 
 import sys
-from typing import Dict, List
 
 
-def detect_misconfig() -> Dict[str, str]:
+def detect_misconfig() -> dict[str, str]:
     """Placeholder for misconfiguration detection logic."""
     # placeholder returns nothing wrong
     return {}
 
 
-def main(args: List[str] | None = None) -> int:
+def main(args: list[str] | None = None) -> int:
     """Main entry point for self‑healing utilities."""
     if args is None:
         args = sys.argv[1:]

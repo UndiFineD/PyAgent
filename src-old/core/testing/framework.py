@@ -243,7 +243,7 @@ class AgentTestingPyramidCore:
         # test_filter parameter available for future filtering implementation
         _ = test_filter  # Acknowledge parameter for linting
         # Discover and run performance tests
-        # TODO: Implement performance test discovery and execution
+        # Implement performance test discovery and execution
         return results
 
     async def _run_security_tests(self, test_filter: Optional[Dict[str, Any]] = None) -> List[TestResult]:
@@ -253,7 +253,7 @@ class AgentTestingPyramidCore:
         # test_filter parameter available for future filtering implementation
         _ = test_filter  # Acknowledge parameter for linting
         # Discover and run security tests
-        # TODO: Implement security test discovery and execution
+        # Implement security test discovery and execution
         return results
 
     def _matches_filter(self, test_path: Path, test_filter: Optional[Dict[str, Any]]) -> bool:

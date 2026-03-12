@@ -15,7 +15,7 @@
 
 from __future__ import annotations
 
-from typing import List
+from typing import list
 
 
 class ContextManager:
@@ -23,7 +23,7 @@ class ContextManager:
 
     def __init__(self, max_tokens: int):
         """Initialize the ContextManager with a maximum token limit."""
-        self._data: List[str] = []
+        self._data: list[str] = []
         self.max_tokens = max_tokens
 
     async def push(self, text: str) -> None:

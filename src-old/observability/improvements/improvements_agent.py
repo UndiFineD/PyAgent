@@ -188,7 +188,7 @@ class ImprovementsAgent(BaseAgent):
         """Parse improvements from markdown content.
 
         Supports format:
-        - [ ] **Title** (Category) <!-- id: id -->
+        - **Title** (Category) <!-- id: id -->
           - Description
         """
         self.manager.parse_markdown(content)

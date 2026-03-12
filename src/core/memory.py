@@ -16,14 +16,14 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 
 @dataclass
 class MemoryStore:
     """Simple in-memory key-value store."""
 
-    _store: Optional[Dict[str, Any]] = None
+    _store: Optional[dict[str, Any]] = None
 
     def __post_init__(self) -> None:
         """Post-init to ensure the store dict is created lazily."""

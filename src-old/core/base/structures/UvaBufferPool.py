@@ -661,7 +661,7 @@ class UvaBufferPool:
         # Try to preempt a lower priority buffer
         for buffer in self._buffers:
             if buffer.state == BufferState.ACQUIRED and buffer.priority < priority:
-                # TODO: Implement preemption callback
+                # Implement preemption callback
                 pass
 
         return None

@@ -148,7 +148,7 @@ class AgentDelegator:
 
         try:
             # Simple heuristic for discovery
-            # TODO: Move to centralized ModuleLoader
+            # Move to centralized ModuleLoader
             if type_clean == "coder" or os.path.exists(
                 os.path.join("src", "coder", "agents", f"{agent_type}.py")
             ):

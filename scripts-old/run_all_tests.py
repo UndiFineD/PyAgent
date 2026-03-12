@@ -7,7 +7,7 @@ import sys
 import time
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Tuple
+from typing import Any, Callable, dict, list, Tuple
 
 # Fix Unicode on Windows
 if sys.platform == 'win32':
@@ -35,13 +35,13 @@ def print_section(title: str) -> None:
     print(f"{'-' * 110}")
 
 
-def discover_test_files(src_paths: list[str] | str = None) -> Dict[str, Path]:
+def discover_test_files(src_paths: list[str] | str = None) -> dict[str, Path]:
     """Recursively discover all *_test.py files in one or more roots."""
     if src_paths is None:
         src_paths = ["src", "tests"]
     elif isinstance(src_paths, str):
         src_paths = [src_paths]
-    discovered_files: Dict[str, Path] = {}
+    discovered_files: dict[str, Path] = {}
     for src_path in src_paths:
         if not os.path.isdir(src_path):
             continue
@@ -54,7 +54,7 @@ def discover_test_files(src_paths: list[str] | str = None) -> Dict[str, Path]:
     return discovered_files
 
 
-def discover_test_functions(test_module) -> Tuple[List[Tuple[str, Callable]], List[Tuple[str, str, type, Callable]]]:
+def discover_test_functions(test_module) -> Tuple[list[Tuple[str, Callable]], list[Tuple[str, str, type, Callable]]]:
     """Discover all test functions and test classes in a module."""
     discovered_functions = []
     discovered_classes = []
@@ -175,8 +175,8 @@ if len(test_files) > 20:
 # ============================================================================
 print_section("STEP 2: TEST DISCOVERY & MODULE LOADING")
 
-loaded_modules: Dict[str, Any] = {}
-test_inventory: defaultdict[str, Dict[str, Any]] = defaultdict(
+loaded_modules: dict[str, Any] = {}
+test_inventory: defaultdict[str, dict[str, Any]] = defaultdict(
     lambda: {'functions': 0, 'classes': 0, 'methods': 0, 'errors': 0}
 )
 
@@ -239,7 +239,7 @@ print(f"  • Test Methods: {total_methods}")
 # ============================================================================
 print_section("STEP 3: TEST EXECUTION")
 
-test_results: Dict[str, Any] = {
+test_results: dict[str, Any] = {
     'pass': 0,
     'fail': 0,
     'skip': 0,

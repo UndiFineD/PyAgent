@@ -1,4 +1,6 @@
-from typing import Any, Dict
+#!/usr/bin/env python3
+"""Memory management for PyAgent."""
+from typing import Any
 
 
 class SharedMemory:
@@ -6,7 +8,7 @@ class SharedMemory:
 
     def __init__(self) -> None:
         """Initialize the shared memory."""
-        self._store: Dict[Any, Any] = {}
+        self._store: dict[Any, Any] = {}
 
     def put(self, k: Any, v: Any) -> None:
         """Store a value in the shared memory under the given key."""
@@ -23,7 +25,7 @@ class AgentMemory:
     def __init__(self, agent_id: str) -> None:
         """Initialize the agent memory with an identifier."""
         self.agent_id = agent_id
-        self._local: Dict[Any, Any] = {}
+        self._local: dict[Any, Any] = {}
 
     def set(self, k: Any, v: Any) -> None:
         """Store a value in the agent's private memory under the given key."""

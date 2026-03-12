@@ -13,10 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Dict, List
 
-
-def read_matrix(path: str) -> List[Dict[str, str]]:
+def read_matrix(path: str) -> list[dict[str, str]]:
     """Read a markdown-based risk matrix and return a list of dictionaries.
 
     The initial implementation is deliberately naive: it only returns the
@@ -27,7 +25,7 @@ def read_matrix(path: str) -> List[Dict[str, str]]:
         return []
     # naive parse: strip any leading list marker and parse key/value
     line = lines[0].lstrip("- ")
-    result: Dict[str, str] = {}
+    result: dict[str, str] = {}
     if ":" in line:
         k, v = line.split(":", 1)
         result[k.strip()] = v.strip()

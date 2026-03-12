@@ -14,7 +14,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any
 
 from fastapi import FastAPI
 
@@ -22,7 +22,7 @@ app = FastAPI()
 
 
 @app.post("/webhook")
-def webhook(payload: Dict[str, Any]) -> Dict[str, Any]:
+def webhook(payload: dict[str, Any]) -> dict[str, Any]:
     """Endpoint to receive GitHub webhook events."""
     # Basic reception logic; real processing will be added later
     return {"received": True}

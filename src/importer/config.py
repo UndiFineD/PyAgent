@@ -1,10 +1,10 @@
 from pathlib import Path
-from typing import List, Tuple
+from typing import list, Tuple
 
 
-async def parse_manifest(path: Path) -> List[Tuple[str, str]]:
+async def parse_manifest(path: Path) -> list[Tuple[str, str]]:
     """Read a github manifest file and return list of (user, repo) tuples."""
-    repos: List[Tuple[str, str]] = []
+    repos: list[Tuple[str, str]] = []
     with open(path, "r", encoding="utf-8") as f:
         for line in f:
             line = line.strip()

@@ -17,10 +17,9 @@
 from __future__ import annotations
 
 import sys
-from typing import List
 
 
-def main(args: List[str] | None = None) -> int:
+def main(args: list[str] | None = None) -> int:
     """Main entry point for network calculation utilities."""
     if args is None:
         args = sys.argv[1:]

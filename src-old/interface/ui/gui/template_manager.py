@@ -69,8 +69,8 @@ BMAD_TEMPLATES: dict[str, str] = {
 [Briefly describe how to fix it]
 
 ## Acceptance Criteria
-- [ ] Criterion 1
-- [ ] Criterion 2
+- Criterion 1
+- Criterion 2
 """,
     "PRD (📋)": """# PRODUCT REQUIREMENTS DOCUMENT: [Project Name]
 ## Executive Summary

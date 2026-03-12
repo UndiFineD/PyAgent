@@ -387,22 +387,22 @@ screen_json = get_screen_state()
 - Basic actions (tap, type, navigate)
 
 ### Next 2 Weeks
-- [ ] **PyPI package:** `pip install android-use`
-- [ ] **Multi-LLM support:** Claude, Gemini, Llama
-- [ ] **WhatsApp integration:** Pre-built actions for messaging
-- [ ] **Error recovery:** Retry logic, fallback strategies
+- **PyPI package:** `pip install android-use`
+- **Multi-LLM support:** Claude, Gemini, Llama
+- **WhatsApp integration:** Pre-built actions for messaging
+- **Error recovery:** Retry logic, fallback strategies
 
 ### Next 3 Months
-- [ ] **App-specific agents:** Pre-trained for RTS Pro, OTR Capital, factoring apps
-- [ ] **Cloud device farms:** Run at scale on AWS Device Farm, BrowserStack
-- [ ] **Vision augmentation:** Screenshot fallback when accessibility insufficient
-- [ ] **Multi-step memory:** Remember context across sessions
+- **App-specific agents:** Pre-trained for RTS Pro, OTR Capital, factoring apps
+- **Cloud device farms:** Run at scale on AWS Device Farm, BrowserStack
+- **Vision augmentation:** Screenshot fallback when accessibility insufficient
+- **Multi-step memory:** Remember context across sessions
 
 ### Long-term Vision
-- [ ] **Hosted Cloud API:** No-code agent execution (waitlist below)
-- [ ] **Agent marketplace:** Buy/sell vertical-specific automations
-- [ ] **Enterprise platform:** SOC2, audit logs, PII redaction, fleet management
-- [ ] **Industry partnerships:** Direct integration with factoring companies, gig platforms
+- **Hosted Cloud API:** No-code agent execution (waitlist below)
+- **Agent marketplace:** Buy/sell vertical-specific automations
+- **Enterprise platform:** SOC2, audit logs, PII redaction, fleet management
+- **Industry partnerships:** Direct integration with factoring companies, gig platforms
 
 ---
 

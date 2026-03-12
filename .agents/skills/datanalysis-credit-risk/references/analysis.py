@@ -2,7 +2,7 @@
 PSI calculation is reused in func.py, analysis.py only handles variable selection
 """
 from datetime import datetime
-from typing import List, Tuple
+from typing import list, Tuple
 
 import lightgbm as lgb
 import numpy as np
@@ -61,7 +61,7 @@ def drop_highmiss_features(data: pd.DataFrame, miss_channel: pd.DataFrame,
     return data, high_miss[['变量', '缺失率', '去除条件']]
 
 
-def drop_lowiv_features(data: pd.DataFrame, features: List[str],
+def drop_lowiv_features(data: pd.DataFrame, features: list[str],
                        overall_iv_threshold: float = 0.05, org_iv_threshold: float = 0.02,
                        max_org_threshold: int = 8, n_jobs: int = 4) -> tuple:
     """Drop low IV features - multi-process version, returns IV details and IV processing table
@@ -211,7 +211,7 @@ def drop_lowiv_features(data: pd.DataFrame, features: List[str],
     return data, iv_detail, iv_process
 
 
-def drop_highcorr_features(data: pd.DataFrame, features: List[str],
+def drop_highcorr_features(data: pd.DataFrame, features: list[str],
                            threshold: float = 0.8, gain_dict: dict = None, top_n_keep: int = 20) -> tuple:
     """Drop high correlation features - based on original gain, drop one feature at a time
     
@@ -336,7 +336,7 @@ def drop_highcorr_features(data: pd.DataFrame, features: List[str],
     return data, dropped_df
 
 
-def drop_highnoise_features(data: pd.DataFrame, features: List[str],
+def drop_highnoise_features(data: pd.DataFrame, features: list[str],
                            n_estimators: int = 100, max_depth: int = 5, gain_threshold: float = 50) -> tuple:
     """Null Importance to remove high noise features"""
     # Check if feature list is empty
@@ -432,7 +432,7 @@ def drop_highnoise_features(data: pd.DataFrame, features: List[str],
     comparison['gain_diff'] = (comparison['gain_real'] - comparison['gain_perm']).abs()
     noise_features = comparison[comparison['gain_diff'] < gain_threshold]['feature'].tolist()
 
-    # List original gain and permuted gain for all features
+    # list original gain and permuted gain for all features
     dropped_info = pd.DataFrame({
         '变量': comparison['feature'].values,
         '原始gain': comparison['gain_real'].values,
@@ -528,7 +528,7 @@ def _calc_single_psi(args):
         }
 
 
-def drop_highpsi_features(data: pd.DataFrame, features: List[str],
+def drop_highpsi_features(data: pd.DataFrame, features: list[str],
                          psi_threshold: float = 0.1, max_months_ratio: float = 1/3,
                          max_orgs: int = 4, min_sample_per_month: int = 100, n_jobs: int = 4) -> tuple:
     """Drop high PSI features - by organization + month-by-month version
@@ -799,7 +799,7 @@ def psi_distribution_by_org(psi_detail: pd.DataFrame, oos_orgs: list = None, psi
     return pd.DataFrame(result)
 
 
-def value_ratio_distribution_by_org(data: pd.DataFrame, features: List[str],
+def value_ratio_distribution_by_org(data: pd.DataFrame, features: list[str],
                                      oos_orgs: list = None,
                                      value_bins: list = [0, 0.15, 0.35, 0.65, 0.95, 1.0]) -> pd.DataFrame:
     """Count number and proportion of features in different value ratio ranges for each organization
@@ -860,7 +860,7 @@ def value_ratio_distribution_by_org(data: pd.DataFrame, features: List[str],
     return pd.DataFrame(result)
 
 
-def calculate_iv_by_org(data: pd.DataFrame, features: List[str],
+def calculate_iv_by_org(data: pd.DataFrame, features: list[str],
                         n_jobs: int = 4) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """Calculate IV by organization and overall
     
@@ -892,7 +892,7 @@ def calculate_iv_by_org(data: pd.DataFrame, features: List[str],
     return iv_by_org, iv_overall
 
 
-def calculate_psi_detail(data: pd.DataFrame, features: List[str],
+def calculate_psi_detail(data: pd.DataFrame, features: list[str],
                          max_psi: float = 0.1, min_months_unstable: int = 3,
                          min_sample: int = 100, n_jobs: int = 4) -> tuple:
     """Calculate month-by-month PSI details for each feature in each organization, and mark whether to drop

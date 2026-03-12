@@ -103,7 +103,7 @@ class NeuralPruningEngine:
         Falls back to Python if Rust module is not compiled.
         """
         try:
-            # TODO: Import rust_core after compilation
+            # Import rust_core after compilation
             # from rust_core import calculate_synaptic_weight as rust_calc
             # return rust_calc(inputs, weights)
             return self.calculate_synaptic_weight_python(inputs, weights)

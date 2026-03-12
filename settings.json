@@ -36,8 +36,11 @@
       "max_retries": 3
     },
     "ollama": {
+      "id": "ollama/llama3",
+      "provider": "openai", 
       "base_url": "http://localhost:11434",
-      "default_model": "qwen2.5-coder:32b",
+      "default_model": "qwen3.5:35b",
+      "apiKey": "not-needed",
       "timeout": 180
     },
   },

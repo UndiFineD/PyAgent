@@ -32,7 +32,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, dict, list, Optional, Tuple
 
 # Optional dependencies
 AI_ENHANCED = False
@@ -89,10 +89,10 @@ class ProcessingStats:
     start_time: float = 0.0
 
     # Detailed breakdowns
-    files_by_size: Dict[str, int] = None  # type: ignore
-    files_by_complexity: Dict[str, int] = None  # type: ignore
-    error_types: Dict[str, int] = None  # type: ignore
-    largest_files: List[Tuple[str, int]] = None  # type: ignore
+    files_by_size: dict[str, int] = None  # type: ignore
+    files_by_complexity: dict[str, int] = None  # type: ignore
+    error_types: dict[str, int] = None  # type: ignore
+    largest_files: list[Tuple[str, int]] = None  # type: ignore
 
     def __post_init__(self):
         if self.files_by_size is None:
@@ -145,9 +145,9 @@ class PythonFileAnalyzer:
         self.filepath: Path = filepath
         self.content: Optional[str] = self.read_file()
         self.tree: Optional[ast.AST] = None
-        self.classes: List[Dict[str, Any]] = []
-        self.functions: List[Dict[str, Any]] = []
-        self.imports: List[str] = []
+        self.classes: list[dict[str, Any]] = []
+        self.functions: list[dict[str, Any]] = []
+        self.imports: list[str] = []
         self.docstring: Optional[str] = None
         self.complexity_score: int = 0
         self.line_count: int = len(self.content.splitlines()) if self.content else 0
@@ -630,7 +630,7 @@ Format as markdown suitable for a .improvements.md file."""
             print(f"  [!] AI improvements failed: {e}")
         return None
 
-def discover_python_files(src_path: str) -> List[Path]:
+def discover_python_files(src_path: str) -> list[Path]:
     """Discover all .py files excluding *_test.py files."""
     python_files = []
 
@@ -670,7 +670,7 @@ def save_checkpoint(checkpoint_file: str, processed_files: set):
     except Exception as e:
         print(f"[!] Cannot save checkpoint: {e}")
 
-def save_error_log(error_log_file: str, errors: List[ErrorRecord]):
+def save_error_log(error_log_file: str, errors: list[ErrorRecord]):
     """Save error log to file."""
     error_log_path = Path(error_log_file)
     error_log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -680,7 +680,7 @@ def save_error_log(error_log_file: str, errors: List[ErrorRecord]):
     except Exception as e:
         print(f"[!] Cannot save error log: {e}")
 
-def save_stats_json(stats_file: str, stats: ProcessingStats, errors: List[ErrorRecord]):
+def save_stats_json(stats_file: str, stats: ProcessingStats, errors: list[ErrorRecord]):
     """Save statistics to JSON file."""
     stats_path = Path(stats_file)
     stats_path.parent.mkdir(parents=True, exist_ok=True)
@@ -704,9 +704,9 @@ def process_single_file(
     use_ai: bool,
     file_index: int,
     show_details: bool = True
-) -> Tuple[Dict[str, Any], Optional[ErrorRecord]]:
+) -> Tuple[dict[str, Any], Optional[ErrorRecord]]:
     """Process a single Python file (for parallel execution)."""
-    result: Dict[str, Any] = {
+    result: dict[str, Any] = {
         'filepath': str(file_path.relative_to(Path.cwd())),
         'description_created': 0,
         'improvements_created': 0,
@@ -801,17 +801,17 @@ def process_single_file(
     return result, error
 
 def analyze_and_generate(
-    python_files: List[Path],
+    python_files: list[Path],
     dry_run: bool = True,
     use_ai: bool = False,
     resume: bool = False,
     checkpoint_file: str = CHECKPOINT_FILE,
     error_log_file: str = ERROR_LOG,
     workers: int = 4
-) -> Tuple[ProcessingStats, List[ErrorRecord]]:
+) -> Tuple[ProcessingStats, list[ErrorRecord]]:
     """Analyze Python files and generate missing documentation with optional parallel processing."""
     stats = ProcessingStats(total_files=len(python_files), start_time=time.time())
-    errors: List[ErrorRecord] = []
+    errors: list[ErrorRecord] = []
 
     # Load checkpoint if resuming
     processed_files = set()
@@ -934,7 +934,7 @@ def analyze_and_generate(
 
     return stats, errors
 
-def print_enhanced_stats(stats: ProcessingStats, errors: List[ErrorRecord]):
+def print_enhanced_stats(stats: ProcessingStats, errors: list[ErrorRecord]):
     """Print enhanced statistics report."""
     print("\n" + "=" * 110)
     print("  GENERATION SUMMARY".center(110))

@@ -2,7 +2,7 @@
 """Core task and task state definitions for the workflow engine."""
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict
+from typing import Any
 
 
 class TaskState(Enum):
@@ -20,8 +20,8 @@ class Task:
     """Represents a task in the workflow, with metadata, context, and state."""
 
     id: str
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    context: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
+    context: dict[str, Any] = field(default_factory=dict)
     state: TaskState = field(default_factory=lambda: TaskState.ACTIVE)
 
     def transition(self, new_state: TaskState) -> None:

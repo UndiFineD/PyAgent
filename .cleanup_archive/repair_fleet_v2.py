@@ -49,7 +49,7 @@ def repair() -> None:
                     # from functools import lru_cache
 
                     content = content.replace("from __future__ from functools import lru_cache", "from __future__ import annotations\nfrom functools import lru_cache")
-                    content = content.replace("from typing from functools import lru_cache", "from typing import Any, Dict, List\nfrom functools import lru_cache")
+                    content = content.replace("from typing from functools import lru_cache", "from typing import Any, dict, list\nfrom functools import lru_cache")
                     content = content.replace("from dataclasses from functools import lru_cache", "from dataclasses import dataclass\nfrom functools import lru_cache")
                     content = content.replace("from .CodeLanguage from functools import lru_cache", "from .CodeLanguage import CodeLanguage\nfrom functools import lru_cache")
                     content = content.replace("from src.core.base.BaseAgent from functools import lru_cache", "from src.core.base.BaseAgent import BaseAgent\nfrom functools import lru_cache")

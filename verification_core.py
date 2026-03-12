@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, dict
 
 """Verification module for PyAgent (Phase 257-258)."""
 
@@ -6,7 +6,7 @@ class VerificationCore:
     """Core verification logic for multi-agent consensus (Phase 257-258)."""
 
     @staticmethod
-    def fact_check(code_snippet: str, agent_id: str) -> Dict[str, Any]:
+    def fact_check(code_snippet: str, agent_id: str) -> dict[str, Any]:
         """Cross-references generated code snippets against the sharded knowledge base (Phase 257).
         """
         return {"valid": True, "hallucinations": []}

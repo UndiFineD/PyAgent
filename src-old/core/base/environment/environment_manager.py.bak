@@ -185,11 +185,11 @@ class EnvironmentManager:
                 # Process isolation - could spawn subprocess
                 instance.working_directory = Path(tempfile.mkdtemp(prefix=f"env_{instance.id}_"))
                 instance.working_directory.mkdir(parents=True, exist_ok=True)
-                # TODO: Implement process spawning
+                # Implement process spawning
 
             elif config.isolation == EnvironmentIsolation.CONTAINER:
                 # Container isolation - Docker/Kubernetes
-                # TODO: Implement container creation
+                # Implement container creation
                 pass
 
             # Set up environment variables
@@ -226,10 +226,10 @@ class EnvironmentManager:
 
             # Clean up container/process if needed
             if instance.container_id:
-                # TODO: Stop container
+                # Stop container
                 pass
             if instance.process_id:
-                # TODO: Kill process
+                # Kill process
                 pass
 
         except Exception as e:

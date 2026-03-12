@@ -61,7 +61,7 @@ def test_indent_after_type_checking():
     """
     content = (
         "if TYPE_CHECKING:\n"
-        "from typing import List\n"
+        "from typing import list\n"
         "Alias = int\n"
         "# comment\n"
         "print('runtime')\n"
@@ -70,7 +70,7 @@ def test_indent_after_type_checking():
     fixes = engine.evaluate("typing_support.py", content)
     assert len(fixes) == 1
     replaced = fixes[0].replacement
-    assert "    from typing import List" in replaced
+    assert "    from typing import list" in replaced
     assert "    Alias = int" in replaced
     # the runtime print should not be indented since it belongs outside
     assert "print('runtime')" in replaced
