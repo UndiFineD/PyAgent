@@ -43,7 +43,7 @@ async def test_ruff_finds_error(tmp_path: Path) -> None:
             returncode = proc2.returncode or 0
         return returncode, stdout or "", stderr or ""
 
-    res_code, res_stdout, res_stderr = await run_ruff_for_file(bad)
+    res_code, _, res_stderr = await run_ruff_for_file(bad)
     # if ruff is not installed we skip early; the return code check comes
     # afterwards so we can also skip when ruff runs but the project config
     # suppresses the simple error used here (this happens in some environments).
