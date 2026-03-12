@@ -14,15 +14,15 @@
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
 use std::collections::HashMap;
+
 use std::fs;
-use serde_json;
 
 /// High-speed parsing of multi-GB configuration files (Common/Config).
 #[pyfunction]
 pub fn load_config_rust(path: String) -> PyResult<HashMap<String, String>> {
     let content = fs::read_to_string(path)
         .map_err(|e| pyo3::exceptions::PyIOError::new_err(e.to_string()))?;
-    
+
     // Simple flat parser for high speed
     let mut config = HashMap::new();
     for line in content.lines() {
@@ -30,10 +30,10 @@ pub fn load_config_rust(path: String) -> PyResult<HashMap<String, String>> {
         if line.is_empty() || line.starts_with('#') || line.starts_with("//") {
             continue;
         }
-        
+
         if let Some(idx) = line.find('=') {
             let key = line[..idx].trim().to_string();
-            let val = line[idx+1..].trim().to_string();
+            let val = line[idx + 1..].trim().to_string();
             config.insert(key, val);
         }
     }
@@ -46,7 +46,7 @@ pub fn parse_config_fragment_rust(fragment: &str) -> PyResult<HashMap<String, St
     // In a real implementation, this might use a faster SIMD-JSON approach
     let v: serde_json::Value = serde_json::from_str(fragment)
         .map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?;
-    
+
     let mut map = HashMap::new();
     if let Some(obj) = v.as_object() {
         for (k, val) in obj {
@@ -59,7 +59,10 @@ pub fn parse_config_fragment_rust(fragment: &str) -> PyResult<HashMap<String, St
 /// Deep merge two configuration dictionaries (Common/Config).
 /// Optimized for complex hierarchical structures in fleet deployments.
 #[pyfunction]
-pub fn merge_configs_rust(base: HashMap<String, String>, override_map: HashMap<String, String>) -> PyResult<HashMap<String, String>> {
+pub fn merge_configs_rust(
+    base: HashMap<String, String>,
+    override_map: HashMap<String, String>,
+) -> PyResult<HashMap<String, String>> {
     let mut result = base.clone();
     for (k, v) in override_map {
         result.insert(k, v);

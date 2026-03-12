@@ -17,12 +17,12 @@ use pyo3::prelude::*;
 // Encrypted memory block subsystem
 // ────────────────────────────────────────────────────────────────────────────
 use chacha20poly1305::{
-    aead::{Aead, KeyInit, OsRng as AeadOsRng, rand_core::RngCore as _},
-    ChaCha20Poly1305, Nonce, Key,
+    aead::{rand_core::RngCore as _, Aead, KeyInit, OsRng as AeadOsRng},
+    ChaCha20Poly1305, Key, Nonce,
 };
 use dashmap::DashMap;
 use hkdf::Hkdf;
-use sha2::{Sha256,Digest};
+use sha2::{Digest, Sha256};
 use uuid::Uuid;
 use x25519_dalek::{EphemeralSecret, PublicKey, StaticSecret};
 use zeroize::{Zeroize, ZeroizeOnDrop};
@@ -72,7 +72,7 @@ impl EncryptedMemoryBlock {
     /// Create an empty block and generate its ephemeral key-pair.
     fn new() -> (Self, EphemeralSecret) {
         let ephemeral_secret = EphemeralSecret::random_from_rng(rand::thread_rng());
-        let ephemeral_pub   = PublicKey::from(&ephemeral_secret);
+        let ephemeral_pub = PublicKey::from(&ephemeral_secret);
         let block = EncryptedMemoryBlock {
             id: Uuid::new_v4(),
             ephemeral_pub,
@@ -83,7 +83,7 @@ impl EncryptedMemoryBlock {
 
     /// Encrypt `data` with `dek` and append the resulting slab.
     fn put_raw(&mut self, data: &[u8], dek: &Dek) -> Result<usize, String> {
-        let key   = Key::from(dek.0);
+        let key = Key::from(dek.0);
         let cipher = ChaCha20Poly1305::new(&key);
 
         let mut nonce_bytes = [0u8; NONCE_LEN];
@@ -103,16 +103,20 @@ impl EncryptedMemoryBlock {
 
     /// Decrypt slab at `index` using `dek`.
     fn get_raw(&self, index: usize, dek: &Dek) -> Result<Vec<u8>, String> {
-        let slab = self.slabs.get(index)
-            .ok_or_else(|| format!("slab index {index} out of bounds (len={})", self.slabs.len()))?;
+        let slab = self.slabs.get(index).ok_or_else(|| {
+            format!(
+                "slab index {index} out of bounds (len={})",
+                self.slabs.len()
+            )
+        })?;
 
         if slab.len() < NONCE_LEN {
             return Err(format!("slab {index} is too short to contain a nonce"));
         }
 
         let (nonce_bytes, ct) = slab.split_at(NONCE_LEN);
-        let nonce  = Nonce::from_slice(nonce_bytes);
-        let key    = Key::from(dek.0);
+        let nonce = Nonce::from_slice(nonce_bytes);
+        let key = Key::from(dek.0);
         let cipher = ChaCha20Poly1305::new(&key);
 
         cipher
@@ -163,7 +167,6 @@ impl MemoryBlockRegistry {
     /// The design ensures that blocks created by one registry cannot be accessed by another registry, as they use different static secrets for DEK derivation.
     /// The registry also handles secure deletion of blocks by purging their data before removal.
     /// Overall, this design provides a secure and concurrent in-memory storage solution for encrypted data blocks, with clear ownership and access control via the static secrets.
-
     /// Create a new registry with a random static secret and empty block set.
     fn new() -> Self {
         MemoryBlockRegistry {
@@ -187,10 +190,12 @@ impl MemoryBlockRegistry {
         id
     }
 
-    /// Helper: get the DEK for block `id` by looking up the block's ephemeral public key 
+    /// Helper: get the DEK for block `id` by looking up the block's ephemeral public key
     /// and deriving with the registry's static secret.
     fn dek_for(&self, id: &str) -> Result<Dek, String> {
-        let block = self.blocks.get(id)
+        let block = self
+            .blocks
+            .get(id)
             .ok_or_else(|| format!("block '{id}' not found"))?;
         Ok(derive_dek(&self.static_secret, &block.ephemeral_pub))
     }
@@ -198,7 +203,9 @@ impl MemoryBlockRegistry {
     /// Encrypt and store `data` in block `id`; returns the slab index.
     fn put(&self, id: &str, data: &[u8]) -> Result<usize, String> {
         let dek = self.dek_for(id)?;
-        let mut block = self.blocks.get_mut(id)
+        let mut block = self
+            .blocks
+            .get_mut(id)
             .ok_or_else(|| format!("block '{id}' not found"))?;
         block.put_raw(data, &dek)
     }
@@ -206,21 +213,27 @@ impl MemoryBlockRegistry {
     /// Decrypt and return slab `index` from block `id`.
     fn get(&self, id: &str, index: usize) -> Result<Vec<u8>, String> {
         let dek = self.dek_for(id)?;
-        let block = self.blocks.get(id)
+        let block = self
+            .blocks
+            .get(id)
             .ok_or_else(|| format!("block '{id}' not found"))?;
         block.get_raw(index, &dek)
     }
 
     /// Return the number of slabs stored in block `id`.
     fn slab_count(&self, id: &str) -> Result<usize, String> {
-        Ok(self.blocks.get(id)
+        Ok(self
+            .blocks
+            .get(id)
             .ok_or_else(|| format!("block '{id}' not found"))?
             .slab_count())
     }
 
     /// Wipe all slab data from block `id` (in place; block remains registered).
     fn purge(&self, id: &str) -> Result<(), String> {
-        let mut block = self.blocks.get_mut(id)
+        let mut block = self
+            .blocks
+            .get_mut(id)
             .ok_or_else(|| format!("block '{id}' not found"))?;
         block.purge();
         Ok(())
@@ -240,10 +253,7 @@ impl MemoryBlockRegistry {
 /// at read time by computing ECDH(static_secret, ephemeral_pub).  The first
 /// call (at block creation) uses the ephemeral secret directly to get the
 /// shared point without storing it.
-fn derive_dek_from_ephemeral(
-    ephemeral: EphemeralSecret,
-    static_sec: &StaticSecret,
-) -> Dek {
+fn derive_dek_from_ephemeral(ephemeral: EphemeralSecret, static_sec: &StaticSecret) -> Dek {
     // ephemeral.diffie_hellman moves the secret — zeroization is automatic.
     let static_pub = PublicKey::from(static_sec);
     let shared = ephemeral.diffie_hellman(&static_pub);
@@ -269,11 +279,12 @@ impl PyMemoryBlockRegistry {
     /// The design ensures that blocks created by one registry cannot be accessed by another registry, as they use different static secrets for DEK derivation.
     /// The registry also handles secure deletion of blocks by purging their data before removal.
     /// Overall, this design provides a secure and concurrent in-memory storage solution for encrypted data blocks, with clear ownership and access control via the static secrets.
-
     /// Create a new `PyMemoryBlockRegistry` instance.
     #[new]
     fn new() -> Self {
-        PyMemoryBlockRegistry { inner: MemoryBlockRegistry::new() }
+        PyMemoryBlockRegistry {
+            inner: MemoryBlockRegistry::new(),
+        }
     }
 
     /// Create a new encrypted memory block and return its ID.
@@ -283,25 +294,29 @@ impl PyMemoryBlockRegistry {
 
     /// Encrypt and store `data` in block `id`; returns the slab index.
     fn put(&self, id: &str, data: &[u8]) -> PyResult<usize> {
-        self.inner.put(id, data)
+        self.inner
+            .put(id, data)
             .map_err(|e| pyo3::exceptions::PyValueError::new_err(e))
     }
 
     /// Decrypt and return slab `index` from block `id`.
     fn get(&self, id: &str, index: usize) -> PyResult<Vec<u8>> {
-        self.inner.get(id, index)
+        self.inner
+            .get(id, index)
             .map_err(|e| pyo3::exceptions::PyValueError::new_err(e))
     }
 
     /// Return the number of slabs stored in block `id`.
     fn slab_count(&self, id: &str) -> PyResult<usize> {
-        self.inner.slab_count(id)
+        self.inner
+            .slab_count(id)
             .map_err(|e| pyo3::exceptions::PyValueError::new_err(e))
     }
 
     /// Wipe all slab data from block `id` (in place; block remains registered).
     fn purge(&self, id: &str) -> PyResult<()> {
-        self.inner.purge(id)
+        self.inner
+            .purge(id)
             .map_err(|e| pyo3::exceptions::PyValueError::new_err(e))
     }
 
@@ -332,7 +347,7 @@ impl SharedMemory {
         Self {
             map: DashMap::new(),
             current_master: Arc::new(master_key),
-            previous_master: None
+            previous_master: None,
         }
     }
 
@@ -372,7 +387,7 @@ impl SharedMemory {
 
 // simple HMAC-SHA256 convenience wrappers
 #[allow(dead_code)]
-fn hmac_sha256(key: &[u8;32], data: &[u8]) -> [u8;32] {
+fn hmac_sha256(key: &[u8; 32], data: &[u8]) -> [u8; 32] {
     use hmac::{Hmac, Mac};
     type H = Hmac<sha2::Sha256>;
     // disambiguate between KeyInit::new_from_slice and Mac::new_from_slice
@@ -384,11 +399,11 @@ fn hmac_sha256(key: &[u8;32], data: &[u8]) -> [u8;32] {
 }
 
 /// Verify HMAC tag for given key and data. Returns true if valid, false if not.
-/// Use this when accessing SharedMemory entries to ensure integrity; 
+/// Use this when accessing SharedMemory entries to ensure integrity;
 /// it checks against both current and previous master keys to allow for seamless rotation.
 #[allow(dead_code)]
 /// Public helper used by Python wrapper for explicit integrity checks.
-pub fn verify_hmac(key: &[u8;32], data: &[u8], tag: &[u8;32]) -> bool {
+pub fn verify_hmac(key: &[u8; 32], data: &[u8], tag: &[u8; 32]) -> bool {
     hmac_sha256(key, data) == *tag
 }
 
@@ -396,11 +411,19 @@ pub fn verify_hmac(key: &[u8;32], data: &[u8], tag: &[u8;32]) -> bool {
 
 /// Vector similarity/search for agent long-term memory (Common/Memory).
 #[pyfunction]
-pub fn search_vector_rust(query_vec: Vec<f32>, database: Vec<Vec<f32>>, top_k: usize) -> PyResult<Vec<usize>> {
-    let mut scores: Vec<(usize, f32)> = database.iter().enumerate().map(|(idx, vec)| {
-        let score: f32 = query_vec.iter().zip(vec.iter()).map(|(q, v)| q * v).sum();
-        (idx, score)
-    }).collect();
+pub fn search_vector_rust(
+    query_vec: Vec<f32>,
+    database: Vec<Vec<f32>>,
+    top_k: usize,
+) -> PyResult<Vec<usize>> {
+    let mut scores: Vec<(usize, f32)> = database
+        .iter()
+        .enumerate()
+        .map(|(idx, vec)| {
+            let score: f32 = query_vec.iter().zip(vec.iter()).map(|(q, v)| q * v).sum();
+            (idx, score)
+        })
+        .collect();
 
     scores.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
 
@@ -413,26 +436,28 @@ struct PySharedMemory {
     inner: Arc<Mutex<SharedMemory>>,
 }
 
-/// The `PySharedMemory` class is a Python wrapper around the 
-/// Rust `SharedMemory` struct, providing a thread-safe interface 
-/// for storing and retrieving key-value pairs with HMAC integrity checks. 
-/// It allows for master key rotation while maintaining access to existing 
-/// entries, and exposes methods for putting values, getting values with 
-/// integrity verification, and rotating the master key. The design 
-/// ensures that integrity checks are performed using both the current 
-/// and previous master keys to allow for seamless rotation without 
+/// The `PySharedMemory` class is a Python wrapper around the
+/// Rust `SharedMemory` struct, providing a thread-safe interface
+/// for storing and retrieving key-value pairs with HMAC integrity checks.
+/// It allows for master key rotation while maintaining access to existing
+/// entries, and exposes methods for putting values, getting values with
+/// integrity verification, and rotating the master key. The design
+/// ensures that integrity checks are performed using both the current
+/// and previous master keys to allow for seamless rotation without
 /// breaking access to existing data.
 #[pymethods]
 impl PySharedMemory {
     #[new]
     fn new(master_key: Vec<u8>) -> PyResult<Self> {
         if master_key.len() != 32 {
-            return Err(pyo3::exceptions::PyValueError::new_err("master_key must be 32 bytes"));
+            return Err(pyo3::exceptions::PyValueError::new_err(
+                "master_key must be 32 bytes",
+            ));
         }
         let mut arr = [0u8; 32];
         arr.copy_from_slice(&master_key);
         Ok(PySharedMemory {
-            inner: Arc::new(Mutex::new(SharedMemory::new(arr)))
+            inner: Arc::new(Mutex::new(SharedMemory::new(arr))),
         })
     }
 
@@ -453,7 +478,9 @@ impl PySharedMemory {
     /// Rotate the master key. The new key must be 32 bytes.
     fn rotate_master_key(&self, new_master: Vec<u8>) -> PyResult<()> {
         if new_master.len() != 32 {
-            return Err(pyo3::exceptions::PyValueError::new_err("new_master must be 32 bytes"));
+            return Err(pyo3::exceptions::PyValueError::new_err(
+                "new_master must be 32 bytes",
+            ));
         }
         let mut arr = [0u8; 32];
         arr.copy_from_slice(&new_master);
@@ -461,15 +488,25 @@ impl PySharedMemory {
         Ok(())
     }
 
-    /// Public helper for explicit integrity checks; 
+    /// Public helper for explicit integrity checks;
     /// returns true if valid, false if not.
     fn verify_hmac(&self, key: &[u8], value: &[u8], tag: &[u8]) -> PyResult<bool> {
         if tag.len() != 32 {
-            return Err(pyo3::exceptions::PyValueError::new_err("tag must be 32 bytes"));
+            return Err(pyo3::exceptions::PyValueError::new_err(
+                "tag must be 32 bytes",
+            ));
         }
         let mut arr = [0u8; 32];
         arr.copy_from_slice(tag);
-        Ok(verify_hmac(&derive_msg_key(&self.inner.lock().unwrap().current_master, &sha2::Sha256::digest(key).into(), 0), value, &arr))
+        Ok(verify_hmac(
+            &derive_msg_key(
+                &self.inner.lock().unwrap().current_master,
+                &sha2::Sha256::digest(key).into(),
+                0,
+            ),
+            value,
+            &arr,
+        ))
     }
 }
 
@@ -496,7 +533,7 @@ mod tests {
     fn dek_is_deterministic_from_static_secret_and_pub() {
         let static_secret = StaticSecret::random_from_rng(rand::thread_rng());
         let ephemeral_secret = EphemeralSecret::random_from_rng(rand::thread_rng());
-        let ephemeral_pub   = PublicKey::from(&ephemeral_secret);
+        let ephemeral_pub = PublicKey::from(&ephemeral_secret);
 
         let dek_a = derive_dek(&static_secret, &ephemeral_pub);
 
@@ -504,8 +541,11 @@ mod tests {
         let dek_b = derive_dek(&static_secret, &ephemeral_pub);
 
         // Use subtle ConstantTimeEq to compare without timing side-channel.
-        assert_eq!(1u8, dek_a.0.ct_eq(&dek_b.0).unwrap_u8(),
-            "DEK must be deterministic given the same (static_secret, ephemeral_pub)");
+        assert_eq!(
+            1u8,
+            dek_a.0.ct_eq(&dek_b.0).unwrap_u8(),
+            "DEK must be deterministic given the same (static_secret, ephemeral_pub)"
+        );
     }
 
     /// Verify that different ephemeral keys yield different DEKs (with the same static secret).
@@ -521,8 +561,10 @@ mod tests {
         let dek1 = derive_dek(&static_secret, &pub1);
         let dek2 = derive_dek(&static_secret, &pub2);
 
-        assert_ne!(dek1.0, dek2.0,
-            "Different ephemeral keys must yield different DEKs");
+        assert_ne!(
+            dek1.0, dek2.0,
+            "Different ephemeral keys must yield different DEKs"
+        );
     }
 
     // ── Task 4/5: put_raw / get_raw round-trip ───────────────────────────────
@@ -535,11 +577,14 @@ mod tests {
         let dek = derive_dek(&static_secret, &block.ephemeral_pub);
 
         let payload = b"hello encrypted memory world";
-        let idx     = block.put_raw(payload, &dek).unwrap();
-        let output  = block.get_raw(idx, &dek).unwrap();
+        let idx = block.put_raw(payload, &dek).unwrap();
+        let output = block.get_raw(idx, &dek).unwrap();
 
-        assert_eq!(payload.as_ref(), output.as_slice(),
-            "Round-trip must recover the original plaintext");
+        assert_eq!(
+            payload.as_ref(),
+            output.as_slice(),
+            "Round-trip must recover the original plaintext"
+        );
     }
 
     /// Verify that attempting to decrypt with the wrong DEK fails.
@@ -569,9 +614,9 @@ mod tests {
         let dek = derive_dek(&static_secret, &block.ephemeral_pub);
 
         assert_eq!(0, block.slab_count());
-        block.put_raw(b"one",   &dek).unwrap();
+        block.put_raw(b"one", &dek).unwrap();
         assert_eq!(1, block.slab_count());
-        block.put_raw(b"two",   &dek).unwrap();
+        block.put_raw(b"two", &dek).unwrap();
         assert_eq!(2, block.slab_count());
         block.put_raw(b"three", &dek).unwrap();
         assert_eq!(3, block.slab_count());
@@ -591,8 +636,7 @@ mod tests {
         assert_eq!(2, block.slab_count());
 
         block.purge();
-        assert_eq!(0, block.slab_count(),
-            "After purge, slab_count must be 0");
+        assert_eq!(0, block.slab_count(), "After purge, slab_count must be 0");
     }
 
     /// Verify that attempting to get a slab after purge returns an error (index out of bounds).
@@ -605,8 +649,10 @@ mod tests {
         block.put_raw(b"temp", &dek).unwrap();
         block.purge();
 
-        assert!(block.get_raw(0, &dek).is_err(),
-            "get_raw after purge must return Err (index out of bounds)");
+        assert!(
+            block.get_raw(0, &dek).is_err(),
+            "get_raw after purge must return Err (index out of bounds)"
+        );
     }
 
     // ── Task 10/11/12: MemoryBlockRegistry ──────────────────────────────────
@@ -615,11 +661,11 @@ mod tests {
     #[test]
     fn registry_create_put_get_roundtrip() {
         let reg = MemoryBlockRegistry::new();
-        let id  = reg.create_block();
+        let id = reg.create_block();
 
         let payload = b"registry round-trip test";
-        let idx     = reg.put(&id, payload).unwrap();
-        let output  = reg.get(&id, idx).unwrap();
+        let idx = reg.put(&id, payload).unwrap();
+        let output = reg.get(&id, idx).unwrap();
 
         assert_eq!(payload.as_ref(), output.as_slice());
     }
@@ -628,7 +674,7 @@ mod tests {
     #[test]
     fn registry_slab_count_and_purge() {
         let reg = MemoryBlockRegistry::new();
-        let id  = reg.create_block();
+        let id = reg.create_block();
 
         reg.put(&id, b"x").unwrap();
         reg.put(&id, b"y").unwrap();
@@ -649,32 +695,38 @@ mod tests {
 
         // reg_b doesn't know about id_a at all → error expected.
         let result = reg_b.get(&id_a, 0);
-        assert!(result.is_err(),
-            "Registry B must not access blocks belonging to Registry A");
+        assert!(
+            result.is_err(),
+            "Registry B must not access blocks belonging to Registry A"
+        );
     }
 
     /// Verify that removing a block makes its ID inaccessible.
     #[test]
     fn registry_remove_block_makes_id_inaccessible() {
         let reg = MemoryBlockRegistry::new();
-        let id  = reg.create_block();
+        let id = reg.create_block();
         reg.put(&id, b"to be removed").unwrap();
 
         reg.remove_block(&id);
 
-        assert!(reg.get(&id, 0).is_err(),
-            "After remove_block the ID must no longer be accessible");
+        assert!(
+            reg.get(&id, 0).is_err(),
+            "After remove_block the ID must no longer be accessible"
+        );
     }
 
     /// Verify that accessing a slab with an out-of-bounds index returns an error.
     #[test]
     fn slab_index_out_of_bounds_returns_error() {
         let reg = MemoryBlockRegistry::new();
-        let id  = reg.create_block();
+        let id = reg.create_block();
         reg.put(&id, b"only one slab").unwrap();
 
-        assert!(reg.get(&id, 99).is_err(),
-            "Out-of-bounds slab index must return Err");
+        assert!(
+            reg.get(&id, 99).is_err(),
+            "Out-of-bounds slab index must return Err"
+        );
     }
 
     /// Verify SharedMemory HMAC behavior and rotation support.

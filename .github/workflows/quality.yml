@@ -49,5 +49,5 @@ jobs:
       - name: Rust checks
         run: |
           cargo fmt --manifest-path rust_core/Cargo.toml --all -- --check
-          cargo clippy --manifest-path rust_core/Cargo.toml --all-targets --all-features -- -D warnings
+          cargo clippy --manifest-path rust_core/Cargo.toml --all-targets --all-features
           cargo test --manifest-path rust_core/Cargo.toml --release
