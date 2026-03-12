@@ -13,38 +13,37 @@
 
 use pyo3::prelude::*;
 
-
 mod agents;
-mod base;
-mod stats;
-mod utils;
-mod security;
-mod neural;
-mod text;
-mod inference;
-mod multimodal;
-mod quantlora;
-mod hardware;
-mod fs;
-mod metrics;
-mod config;
-mod auction;
-mod registry;
-mod template;
-mod validation;
-mod memory;
-mod search;
 mod analysis;
-mod connectivity;
-mod kv;
-mod shell;
-mod time;
-mod mux;
 mod attention;
-mod workspace;
-mod scheduling;
+mod auction;
+mod base;
+mod config;
+mod connectivity;
 mod distributed;
 mod formula;
+mod fs;
+mod hardware;
+mod inference;
+mod kv;
+mod memory;
+mod metrics;
+mod multimodal;
+mod mux;
+mod neural;
+mod quantlora;
+mod registry;
+mod scheduling;
+mod search;
+mod security;
+mod shell;
+mod stats;
+mod template;
+mod text;
+mod time;
+mod utils;
+mod validation;
+mod workspace;
 mod infrastructure {
     pub mod services {
         pub mod dev {

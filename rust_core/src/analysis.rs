@@ -40,21 +40,23 @@ pub fn get_imports_rust(source: &str) -> PyResult<Vec<String>> {
 
     // Regex for 'import X ...'
     // Matches: import numpy, import os etc.
-    let re_import = Regex::new(r"(?m)^import\s+([\w.]+)").map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?;
-    
+    let re_import = Regex::new(r"(?m)^import\s+([\w.]+)")
+        .map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?;
+
     // Regex for 'from X import ...'
     // Matches: from src.core import ...
-    let re_from = Regex::new(r"(?m)^from\s+([\w.]+)\s+import").map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?;
+    let re_from = Regex::new(r"(?m)^from\s+([\w.]+)\s+import")
+        .map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?;
 
     for cap in re_import.captures_iter(source) {
         if let Some(m) = cap.get(1) {
-             imports.push(m.as_str().to_string());
+            imports.push(m.as_str().to_string());
         }
     }
-    
+
     for cap in re_from.captures_iter(source) {
-         if let Some(m) = cap.get(1) {
-             imports.push(m.as_str().to_string());
+        if let Some(m) = cap.get(1) {
+            imports.push(m.as_str().to_string());
         }
     }
 

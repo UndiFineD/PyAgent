@@ -1,5 +1,5 @@
-use pyo3::prelude::*;
 use ndarray::prelude::*;
+use pyo3::prelude::*;
 
 /// Key-Value Cache for optimized multi-step inference.
 #[pyclass]

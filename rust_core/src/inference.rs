@@ -76,7 +76,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(architecture_fingerprint_rust, m)?)?;
     m.add_function(wrap_pyfunction!(async_output_merge_rust, m)?)?;
     m.add_function(wrap_pyfunction!(attention_dispatch_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(attention_pool_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(attention_pool_rust, m)?)?;
     m.add_function(wrap_pyfunction!(attention_weighted_pool_rust, m)?)?;
     m.add_function(wrap_pyfunction!(bad_words_match_ngram_rust, m)?)?;
     m.add_function(wrap_pyfunction!(bad_words_prefix_check_rust, m)?)?;
@@ -84,7 +84,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(batch_apply_penalties_rust, m)?)?;
     m.add_function(wrap_pyfunction!(batch_block_hash_rust, m)?)?;
     m.add_function(wrap_pyfunction!(compute_block_hashes_batched_rust, m)?)?; // Restored
-    m.add_function(wrap_pyfunction!(batch_descriptor_key_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(batch_descriptor_key_rust, m)?)?;
     m.add_function(wrap_pyfunction!(batch_estimate_tokens_rust, m)?)?;
     m.add_function(wrap_pyfunction!(batch_fill_bitmask_rust, m)?)?;
     m.add_function(wrap_pyfunction!(batch_grammar_mask_rust, m)?)?;
@@ -94,9 +94,9 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(batch_write_indices_rust, m)?)?;
     m.add_function(wrap_pyfunction!(blake3_hash_rust, m)?)?;
     m.add_function(wrap_pyfunction!(compute_balanced_packing_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(block_hash_compute_rust, m)?)?; 
-    m.add_function(wrap_pyfunction!(compute_block_hash_rust, m)?)?; 
-    m.add_function(wrap_pyfunction!(compute_block_hashes_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(block_hash_compute_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(compute_block_hash_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(compute_block_hashes_rust, m)?)?;
     m.add_function(wrap_pyfunction!(block_pool_evict_lru_rust, m)?)?;
     m.add_function(wrap_pyfunction!(block_table_lookup_rust, m)?)?;
     m.add_function(wrap_pyfunction!(block_table_slot_mapping_rust, m)?)?;
@@ -104,7 +104,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(bpe_encode_fast_rust, m)?)?;
     m.add_function(wrap_pyfunction!(build_ngram_index_rust, m)?)?;
     m.add_function(wrap_pyfunction!(build_speculation_tree_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(build_suffix_array_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(build_suffix_array_rust, m)?)?;
     m.add_function(wrap_pyfunction!(cache_hit_score_rust, m)?)?;
     m.add_function(wrap_pyfunction!(cache_observe_rust, m)?)?;
     m.add_function(wrap_pyfunction!(rank_completions_rust, m)?)?; // Restored
@@ -116,7 +116,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(check_capability_rust, m)?)?;
     m.add_function(wrap_pyfunction!(chunk_boundaries_rust, m)?)?;
     m.add_function(wrap_pyfunction!(classify_token_context_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(cls_pool_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(cls_pool_rust, m)?)?;
     m.add_function(wrap_pyfunction!(coalesce_writes_rust, m)?)?;
     m.add_function(wrap_pyfunction!(validate_chat_messages_rust, m)?)?; // Ensure this is registered
     m.add_function(wrap_pyfunction!(estimate_tokens_from_messages_rust, m)?)?; // Renamed from estimate_tokens_rust
@@ -141,9 +141,9 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(constraint_hash_rust, m)?)?;
     m.add_function(wrap_pyfunction!(counter_increment_rust, m)?)?;
     m.add_function(wrap_pyfunction!(cudagraph_key_hash_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(cudagraph_stats_compute_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(cudagraph_stats_compute_rust, m)?)?;
     m.add_function(wrap_pyfunction!(dcp_group_coordinate_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(deadline_check_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(deadline_check_rust, m)?)?;
     m.add_function(wrap_pyfunction!(defragment_blocks_rust, m)?)?;
     m.add_function(wrap_pyfunction!(detect_anomalies_rust, m)?)?;
     m.add_function(wrap_pyfunction!(detect_architecture_rust, m)?)?;
@@ -159,11 +159,11 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(eagle_verify_accept_rust, m)?)?;
     m.add_function(wrap_pyfunction!(ema_update_rust, m)?)?;
     m.add_function(wrap_pyfunction!(encode_sse_event_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(encoder_cache_lru_evict_rust, m)?)?; 
-    m.add_function(wrap_pyfunction!(encoder_content_hash_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(encoder_cache_lru_evict_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(encoder_content_hash_rust, m)?)?;
     m.add_function(wrap_pyfunction!(estimate_memory_footprint_rust, m)?)?;
     m.add_function(wrap_pyfunction!(estimate_vram_bytes_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(event_query_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(event_query_rust, m)?)?;
     m.add_function(wrap_pyfunction!(eviction_breakdown_rust, m)?)?;
     m.add_function(wrap_pyfunction!(expand_idx_mapping_rust, m)?)?;
     m.add_function(wrap_pyfunction!(extract_accepted_path_rust, m)?)?;
@@ -173,8 +173,8 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(extract_top_k_logprobs_rust, m)?)?;
     m.add_function(wrap_pyfunction!(fast_token_count_rust, m)?)?;
     m.add_function(wrap_pyfunction!(fill_token_bitmask_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(find_continuations_rust, m)?)?; 
-    m.add_function(wrap_pyfunction!(find_placeholders_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(find_continuations_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(find_placeholders_rust, m)?)?;
     m.add_function(wrap_pyfunction!(find_prefix_match_rust, m)?)?;
     m.add_function(wrap_pyfunction!(fused_packkv_attention_rust, m)?)?;
     m.add_function(wrap_pyfunction!(future_batch_complete_rust, m)?)?;
@@ -184,15 +184,15 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(gpu_memory_snapshot_rust, m)?)?;
     m.add_function(wrap_pyfunction!(grammar_cache_key_rust, m)?)?;
     m.add_function(wrap_pyfunction!(gumbel_noise_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(hash_conversation_context_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(hash_conversation_context_rust, m)?)?;
     m.add_function(wrap_pyfunction!(histogram_observe_rust, m)?)?;
     m.add_function(wrap_pyfunction!(json_schema_fsm_rust, m)?)?;
     m.add_function(wrap_pyfunction!(json_schema_paths_rust, m)?)?;
     m.add_function(wrap_pyfunction!(kv_cache_metrics_aggregate_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(kv_connector_score_rust, m)?)?; 
-    m.add_function(wrap_pyfunction!(kv_metrics_aggregate_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(kv_connector_score_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(kv_metrics_aggregate_rust, m)?)?;
     m.add_function(wrap_pyfunction!(kv_transfer_metadata_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(last_token_pool_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(last_token_pool_rust, m)?)?;
     m.add_function(wrap_pyfunction!(lfu_evict_rust, m)?)?;
     m.add_function(wrap_pyfunction!(linearize_chat_rust, m)?)?;
     m.add_function(wrap_pyfunction!(log_softmax_stable_rust, m)?)?;
@@ -207,8 +207,8 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(lru_evict_candidates_rust, m)?)?;
     m.add_function(wrap_pyfunction!(lru_evict_rust, m)?)?;
     m.add_function(wrap_pyfunction!(lru_eviction_priority_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(matryoshka_truncate_rust, m)?)?; 
-    m.add_function(wrap_pyfunction!(mean_pool_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(matryoshka_truncate_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(mean_pool_rust, m)?)?;
     m.add_function(wrap_pyfunction!(memory_pressure_rust, m)?)?;
     m.add_function(wrap_pyfunction!(min_p_threshold_rust, m)?)?;
     m.add_function(wrap_pyfunction!(mirostat_sample_rust, m)?)?;
@@ -221,7 +221,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(ngram_find_match_rust, m)?)?;
     m.add_function(wrap_pyfunction!(ngram_fuzzy_match_rust, m)?)?;
     m.add_function(wrap_pyfunction!(ngram_match_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(ngram_propose_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(ngram_propose_rust, m)?)?;
     m.add_function(wrap_pyfunction!(optimize_block_copy_order_rust, m)?)?;
     m.add_function(wrap_pyfunction!(p2c_select_worker_rust, m)?)?;
     m.add_function(wrap_pyfunction!(pack_tensor_metadata_rust, m)?)?;
@@ -232,16 +232,16 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(parse_tool_arguments_rust, m)?)?;
     m.add_function(wrap_pyfunction!(parse_tool_calls_rust, m)?)?;
     m.add_function(wrap_pyfunction!(perceptual_hash_distance_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(persistent_gemm_tile_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(persistent_gemm_tile_rust, m)?)?;
     m.add_function(wrap_pyfunction!(platform_fingerprint_rust, m)?)?;
     m.add_function(wrap_pyfunction!(pool_sequences_rust, m)?)?;
     m.add_function(wrap_pyfunction!(pooling_cursor_advance_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(preemption_score_rust, m)?)?; 
-    m.add_function(wrap_pyfunction!(prefix_tree_lookup_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(preemption_score_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(prefix_tree_lookup_rust, m)?)?;
     m.add_function(wrap_pyfunction!(prepare_positions_rust, m)?)?;
     m.add_function(wrap_pyfunction!(priority_heap_ops_rust, m)?)?;
     m.add_function(wrap_pyfunction!(prompt_lookup_propose_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(rank_assignment_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(rank_assignment_rust, m)?)?;
     // m.add_function(wrap_pyfunction!(rank_completions_rust, m)?)?; // Missing
     m.add_function(wrap_pyfunction!(regex_dfa_transition_rust, m)?)?;
     m.add_function(wrap_pyfunction!(regex_to_fsm_rust, m)?)?;
@@ -265,19 +265,19 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(step_counter_sync_rust, m)?)?;
     m.add_function(wrap_pyfunction!(stream_sync_rust, m)?)?;
     m.add_function(wrap_pyfunction!(structural_tag_parse_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(suffix_search_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(suffix_search_rust, m)?)?;
     m.add_function(wrap_pyfunction!(task_priority_sort_rust, m)?)?;
     m.add_function(wrap_pyfunction!(template_extract_variables_rust, m)?)?;
     m.add_function(wrap_pyfunction!(tensorizer_checksum_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(token_budget_check_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(token_budget_check_rust, m)?)?;
     m.add_function(wrap_pyfunction!(tokenizer_cache_key_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(track_compile_event_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(track_compile_event_rust, m)?)?;
     m.add_function(wrap_pyfunction!(tree_verification_paths_rust, m)?)?;
     m.add_function(wrap_pyfunction!(triton_attention_dispatch_rust, m)?)?;
     m.add_function(wrap_pyfunction!(truncate_tokens_rust, m)?)?;
     m.add_function(wrap_pyfunction!(uva_copy_rust, m)?)?;
     m.add_function(wrap_pyfunction!(validate_chat_messages_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(validate_json_schema_fast_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(validate_json_schema_fast_rust, m)?)?;
     m.add_function(wrap_pyfunction!(validate_mcp_schema_rust, m)?)?;
     m.add_function(wrap_pyfunction!(validate_partial_json_rust, m)?)?;
     m.add_function(wrap_pyfunction!(validate_shard_shapes_rust, m)?)?;
@@ -287,7 +287,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(verify_draft_tokens_batch_rust, m)?)?;
     m.add_function(wrap_pyfunction!(verify_draft_tokens_rust, m)?)?;
     m.add_function(wrap_pyfunction!(verify_speculation_tree_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(warmup_sizes_rust, m)?)?; 
+    m.add_function(wrap_pyfunction!(warmup_sizes_rust, m)?)?;
     m.add_function(wrap_pyfunction!(wave_id_barrier_rust, m)?)?;
     m.add_function(wrap_pyfunction!(weight_hash_compute_rust, m)?)?;
     m.add_function(wrap_pyfunction!(worker_health_check_rust, m)?)?;
@@ -299,4 +299,3 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(pad_input_ids_rust, m)?)?;
     Ok(())
 }
-

@@ -12,8 +12,8 @@
 // limitations under the License.
 
 use pyo3::prelude::*;
-use std::collections::HashMap;
 use serde_json::Value;
+use std::collections::HashMap;
 
 /// Validate JSON against a schema (Common/Validation).
 #[pyfunction]
@@ -22,34 +22,37 @@ pub fn json_schema_validate_rust(json_str: &str, schema_str: &str) -> PyResult<b
         .map_err(|e| pyo3::exceptions::PyValueError::new_err(format!("Invalid JSON: {}", e)))?;
     let _schema: Value = serde_json::from_str(schema_str)
         .map_err(|e| pyo3::exceptions::PyValueError::new_err(format!("Invalid Schema: {}", e)))?;
-    
-    // For now, simple implement or use a crate. 
+
+    // For now, simple implement or use a crate.
     // Since we don't have jsonschema crate in Cargo.toml, we'll do basic type checking or just return true for now if valid JSON.
     // Ideally we'd add 'jsonschema' crate to Cargo.toml.
-    Ok(true) 
+    Ok(true)
 }
 
 /// Fast regex/string matching for security and content safety (Common/Validation).
 #[pyfunction]
 pub fn validate_content_rust(
-    _file_path: &str, 
-    content: &str, 
-    rule_names: Vec<String>
+    _file_path: &str,
+    content: &str,
+    rule_names: Vec<String>,
 ) -> PyResult<Vec<HashMap<String, String>>> {
     let mut findings = Vec::new();
-    
+
     for rule in rule_names {
         if rule == "no_secrets" {
             if content.contains("sk-") || content.contains("AIza") {
                 let mut finding = HashMap::new();
                 finding.insert("rule".to_string(), rule);
                 finding.insert("severity".to_string(), "high".to_string());
-                finding.insert("message".to_string(), "Potential secret detected".to_string());
+                finding.insert(
+                    "message".to_string(),
+                    "Potential secret detected".to_string(),
+                );
                 findings.push(finding);
             }
         }
     }
-    
+
     Ok(findings)
 }
 

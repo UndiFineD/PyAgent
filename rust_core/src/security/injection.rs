@@ -16,7 +16,7 @@ pub fn scan_injections_rust(input_text: &str) -> PyResult<Vec<(usize, String)>> 
         r"(?i)SELECT .* FROM .* WHERE",
         r"(?i)rm -rf /",
     ];
-    
+
     let mut findings = Vec::new();
     for (idx, p) in patterns.iter().enumerate() {
         if let Ok(re) = Regex::new(p) {
@@ -25,6 +25,6 @@ pub fn scan_injections_rust(input_text: &str) -> PyResult<Vec<(usize, String)>> 
             }
         }
     }
-    
+
     Ok(findings)
 }

@@ -1,5 +1,5 @@
 use pyo3::prelude::*;
-use sha2::{Sha256, Sha512, Digest};
+use sha2::{Digest, Sha256, Sha512};
 
 /// Generate cache key (SHA256 hash).
 #[pyfunction]
@@ -14,15 +14,15 @@ pub fn generate_cache_key(prompt: &str, context: &str) -> PyResult<String> {
 #[pyfunction]
 pub fn generate_challenge(agent_id: &str, timestamp: f64) -> PyResult<String> {
     let ts_str = timestamp.to_string();
-    
+
     // Hash the timestamp first (inner hash)
     let mut hasher_inner = Sha256::new();
     hasher_inner.update(ts_str.as_bytes());
     let ts_hash = hex::encode(hasher_inner.finalize());
-    
+
     // Create seed
     let seed = format!("{}_{}_{}", agent_id, ts_str, ts_hash);
-    
+
     // Outer hash
     let mut hasher_outer = Sha256::new();
     hasher_outer.update(seed.as_bytes());

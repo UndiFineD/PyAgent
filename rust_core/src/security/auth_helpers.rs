@@ -6,7 +6,14 @@ use sha2::Digest;
 pub fn generate_challenge(agent_id: &str) -> PyResult<String> {
     let mut hasher = sha2::Sha256::new();
     hasher.update(agent_id.as_bytes());
-    hasher.update(std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))?.as_secs().to_string().as_bytes());
+    hasher.update(
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))?
+            .as_secs()
+            .to_string()
+            .as_bytes(),
+    );
     Ok(format!("{:x}", hasher.finalize()))
 }
 

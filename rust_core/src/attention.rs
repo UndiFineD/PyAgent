@@ -26,13 +26,13 @@ pub fn cross_modal_attention_rust(
         return Ok(vec![]);
     }
     let d = q[0].len();
-    
+
     let mut outputs = vec![vec![0.0; d]; n_q];
-    
+
     for i in 0..n_q {
         let mut weights = vec![0.0; n_k];
         let mut sum_exp = 0.0;
-        
+
         // Compute dot product and softmax
         for j in 0..n_k {
             let dot: f32 = zip(&q[i], &k[j]).map(|(a, b)| a * b).sum();
@@ -40,7 +40,7 @@ pub fn cross_modal_attention_rust(
             weights[j] = score;
             sum_exp += score;
         }
-        
+
         // Normalize and generate value output
         if sum_exp > 0.0 {
             for j in 0..n_k {
@@ -51,23 +51,20 @@ pub fn cross_modal_attention_rust(
             }
         }
     }
-    
+
     Ok(outputs)
 }
 
 #[pyfunction]
 /// Align two sequences (e.g. video frames and audio samples) using attention mapping.
 /// Returns a list of indices in seq_b that most closely align with seq_a.
-pub fn align_sequences_rust(
-    seq_a: Vec<Vec<f32>>,
-    seq_b: Vec<Vec<f32>>,
-) -> PyResult<Vec<usize>> {
+pub fn align_sequences_rust(seq_a: Vec<Vec<f32>>, seq_b: Vec<Vec<f32>>) -> PyResult<Vec<usize>> {
     let mut alignment = Vec::with_capacity(seq_a.len());
-    
+
     for vec_a in seq_a {
         let mut best_idx = 0;
         let mut max_sim = -1.0;
-        
+
         for (j, vec_b) in seq_b.iter().enumerate() {
             let dot: f32 = zip(&vec_a, vec_b).map(|(a, b)| a * b).sum();
             if dot > max_sim {
@@ -77,7 +74,7 @@ pub fn align_sequences_rust(
         }
         alignment.push(best_idx);
     }
-    
+
     Ok(alignment)
 }
 
@@ -91,14 +88,14 @@ pub fn calculate_multimodal_coherence_rust(
     if channel_a.is_empty() || channel_b.is_empty() {
         return Ok(0.0);
     }
-    
+
     let n = channel_a.len().min(channel_b.len());
     let mut total_sim = 0.0;
-    
+
     for i in 0..n {
         let dot: f32 = zip(&channel_a[i], &channel_b[i]).map(|(a, b)| a * b).sum();
         total_sim += dot;
     }
-    
+
     Ok(total_sim / n as f32)
 }

@@ -1,7 +1,7 @@
-use pyo3::prelude::*;
-use ndarray::prelude::*;
-use crate::neural::layers::init_kaiming;
 use crate::neural::config::HardwareProfile;
+use crate::neural::layers::init_kaiming;
+use ndarray::prelude::*;
+use pyo3::prelude::*;
 
 /// A flexible-size neural network that adapts its architecture to available resources.
 #[pyclass]
@@ -19,7 +19,7 @@ impl FlexibleNeuralNetwork {
     pub fn new(profile: HardwareProfile) -> Self {
         // 1. Decide layer sizes based on available memory
         let mut layers = vec![profile.cpu_cores * 16]; // Input layer
-        
+
         // Safety check for small systems
         let mut depth = 1;
         if profile.available_memory_gb > 32.0 {
@@ -40,7 +40,7 @@ impl FlexibleNeuralNetwork {
 
         for i in 0..layers.len() - 1 {
             let rows = layers[i];
-            let cols = layers[i+1];
+            let cols = layers[i + 1];
             weights.push(init_kaiming(rows, cols));
             // Initialize biases to zero
             biases.push(Array1::zeros(cols));
@@ -62,7 +62,7 @@ impl FlexibleNeuralNetwork {
 
         // Convert input
         let mut current = Array1::from_vec(data);
-        
+
         // Ensure input size matches first layer
         if current.len() != self.layer_sizes[0] {
             let mut padded = Array1::zeros(self.layer_sizes[0]);

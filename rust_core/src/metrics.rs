@@ -51,23 +51,18 @@ pub fn calculate_percentiles_rust(mut values: Vec<f64>) -> HashMap<String, f64> 
     if values.is_empty() {
         return results;
     }
-    
+
     // Sort for percentile calculation
     values.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
     let len = values.len();
-    
-    let p_indices = [
-        ("p50", 0.50),
-        ("p90", 0.90),
-        ("p95", 0.95),
-        ("p99", 0.99),
-    ];
-    
+
+    let p_indices = [("p50", 0.50), ("p90", 0.90), ("p95", 0.95), ("p99", 0.99)];
+
     for (name, p) in p_indices {
         let idx = ((p * (len - 1) as f64).round() as usize).min(len - 1);
         results.insert(name.to_string(), values[idx]);
     }
-    
+
     results
 }
 
@@ -158,7 +153,7 @@ pub fn predict_linear(x: Vec<f64>, steps: usize) -> PyResult<Vec<f64>> {
     }
     let n = x.len() as f64;
     let indices: Vec<f64> = (0..x.len()).map(|i| i as f64).collect();
-    
+
     let sum_x: f64 = indices.iter().sum();
     let sum_y: f64 = x.iter().sum();
     let sum_xy: f64 = indices.iter().zip(&x).map(|(i, val)| i * val).sum();

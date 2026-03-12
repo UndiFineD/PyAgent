@@ -15,7 +15,13 @@ use pyo3::prelude::*;
 
 /// Low-level memory management for paged attention (Inference/KV).
 #[pyfunction]
-pub fn page_copy_rust(src: Vec<f32>, mut dst: Vec<f32>, src_offset: usize, dst_offset: usize, len: usize) -> PyResult<Vec<f32>> {
+pub fn page_copy_rust(
+    src: Vec<f32>,
+    mut dst: Vec<f32>,
+    src_offset: usize,
+    dst_offset: usize,
+    len: usize,
+) -> PyResult<Vec<f32>> {
     for i in 0..len {
         if src_offset + i < src.len() && dst_offset + i < dst.len() {
             dst[dst_offset + i] = src[src_offset + i];
@@ -41,11 +47,19 @@ pub fn block_table_update_size_rust(_block_id: usize, _new_size: usize) -> PyRes
 }
 
 #[pyfunction]
-pub fn block_table_cp_mask_rust(blocks: Vec<usize>, rank: usize, world_size: usize) -> PyResult<Vec<usize>> {
+pub fn block_table_cp_mask_rust(
+    blocks: Vec<usize>,
+    rank: usize,
+    world_size: usize,
+) -> PyResult<Vec<usize>> {
     // Phase 53: Context parallel block masking
     let chunk_size = blocks.len() / world_size;
     let start = rank * chunk_size;
-    let end = if rank == world_size - 1 { blocks.len() } else { start + chunk_size };
+    let end = if rank == world_size - 1 {
+        blocks.len()
+    } else {
+        start + chunk_size
+    };
     Ok(blocks[start..end].to_vec())
 }
 

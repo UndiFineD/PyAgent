@@ -15,30 +15,31 @@ pub fn bpe_encode_fast_rust(
 ) -> Vec<i64> {
     // Convert text to bytes/chars
     let chars: Vec<String> = text.chars().map(|c| c.to_string()).collect();
-    
+
     if chars.is_empty() {
         return Vec::new();
     }
-    
+
     // Build merge priority map
-    let merge_priority: HashMap<(String, String), usize> = merges.iter()
+    let merge_priority: HashMap<(String, String), usize> = merges
+        .iter()
         .enumerate()
         .map(|(i, (a, b))| ((a.clone(), b.clone()), i))
         .collect();
-    
+
     // Start with character tokens
     let mut tokens = chars;
-    
+
     // Apply merges iteratively
     loop {
         if tokens.len() < 2 {
             break;
         }
-        
+
         // Find best merge pair
         let mut best_pair: Option<(usize, (String, String))> = None;
         let mut best_priority = usize::MAX;
-        
+
         for i in 0..tokens.len() - 1 {
             let pair = (tokens[i].clone(), tokens[i + 1].clone());
             if let Some(&priority) = merge_priority.get(&pair) {
@@ -48,7 +49,7 @@ pub fn bpe_encode_fast_rust(
                 }
             }
         }
-        
+
         // Apply best merge
         match best_pair {
             Some((idx, (a, b))) => {
@@ -59,20 +60,19 @@ pub fn bpe_encode_fast_rust(
             None => break,
         }
     }
-    
+
     // Convert to IDs
-    tokens.iter()
+    tokens
+        .iter()
         .filter_map(|t| vocab.get(t).copied())
         .collect()
 }
 
 /// Batch token count estimation without full encoding
 #[pyfunction]
-pub fn batch_estimate_tokens_rust(
-    texts: Vec<String>,
-    chars_per_token: f64,
-) -> Vec<usize> {
-    texts.iter()
+pub fn batch_estimate_tokens_rust(texts: Vec<String>, chars_per_token: f64) -> Vec<usize> {
+    texts
+        .iter()
         .map(|t| (t.chars().count() as f64 / chars_per_token).ceil() as usize)
         .collect()
 }
@@ -85,9 +85,9 @@ pub fn tokenizer_cache_key_rust(
     trust_remote: bool,
     revision: String,
 ) -> u64 {
-    use std::hash::{Hash, Hasher};
     use std::collections::hash_map::DefaultHasher;
-    
+    use std::hash::{Hash, Hasher};
+
     let mut hasher = DefaultHasher::new();
     model_name.hash(&mut hasher);
     backend.hash(&mut hasher);
@@ -98,32 +98,26 @@ pub fn tokenizer_cache_key_rust(
 
 /// Fast approximate token count
 #[pyfunction]
-pub fn fast_token_count_rust(
-    text: String,
-) -> usize {
+pub fn fast_token_count_rust(text: String) -> usize {
     // Approximate tokenization: ~4 chars per token on average
     // More accurate for English text
     let chars = text.len();
     let words = text.split_whitespace().count();
-    
+
     // Heuristic: max of char-based and word-based estimates
-    let char_estimate = (chars + 3) / 4;  // ~4 chars per token
-    let word_estimate = (words * 4 + 2) / 3;  // ~1.33 tokens per word
-    
+    let char_estimate = (chars + 3) / 4; // ~4 chars per token
+    let word_estimate = (words * 4 + 2) / 3; // ~1.33 tokens per word
+
     char_estimate.max(word_estimate)
 }
 
 /// Truncate token sequence with strategy
 #[pyfunction]
-pub fn truncate_tokens_rust(
-    tokens: Vec<i64>,
-    max_tokens: usize,
-    strategy: String,
-) -> Vec<i64> {
+pub fn truncate_tokens_rust(tokens: Vec<i64>, max_tokens: usize, strategy: String) -> Vec<i64> {
     if tokens.len() <= max_tokens {
         return tokens;
     }
-    
+
     match strategy.as_str() {
         "left" => tokens[tokens.len() - max_tokens..].to_vec(),
         "right" => tokens[..max_tokens].to_vec(),
@@ -134,7 +128,7 @@ pub fn truncate_tokens_rust(
             result.extend_from_slice(&tokens[tokens.len() - keep_end..]);
             result
         }
-        _ => tokens[tokens.len() - max_tokens..].to_vec(),  // Default to left
+        _ => tokens[tokens.len() - max_tokens..].to_vec(), // Default to left
     }
 }
 
@@ -145,4 +139,3 @@ pub fn count_tokens_rust(text: &str, _model_name: Option<String>) -> PyResult<us
     let char_count = text.chars().count();
     Ok((char_count as f64 / 3.5).ceil() as usize)
 }
-

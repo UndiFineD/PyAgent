@@ -65,13 +65,13 @@ pub fn calculate_token_estimate(text: &str, chars_per_token: f64) -> PyResult<i3
 pub fn deduplicate_entries(entries: Vec<String>) -> PyResult<Vec<String>> {
     let mut seen = std::collections::HashSet::new();
     let mut result = Vec::new();
-    
+
     for entry in entries {
         if seen.insert(entry.clone()) {
             result.push(entry);
         }
     }
-    
+
     Ok(result)
 }
 
@@ -80,10 +80,10 @@ pub fn deduplicate_entries(entries: Vec<String>) -> PyResult<Vec<String>> {
 pub fn normalize_response(response: &str) -> PyResult<String> {
     // Strip whitespace
     let normalized = response.trim();
-    
+
     // Normalize line endings
     let normalized = normalized.replace("\r\n", "\n");
-    
+
     // Collapse multiple spaces
     let words: Vec<&str> = normalized.split_whitespace().collect();
     Ok(words.join(" "))
@@ -92,18 +92,21 @@ pub fn normalize_response(response: &str) -> PyResult<String> {
 /// Assess response quality (Logic only).
 /// Returns a score from 0.0 to 1.0.
 #[pyfunction]
-pub fn assess_response_quality(response: &str, metadata: Option<HashMap<String, bool>>) -> PyResult<f64> {
+pub fn assess_response_quality(
+    response: &str,
+    metadata: Option<HashMap<String, bool>>,
+) -> PyResult<f64> {
     let mut score: f64 = 0.5;
-    
+
     if response.len() > 100 {
         score += 0.1;
     }
-    
+
     let lower = response.to_lowercase();
     if !lower.contains("error") && !lower.contains("fail") {
         score += 0.1;
     }
-    
+
     if let Some(m) = metadata {
         if *m.get("has_references").unwrap_or(&false) {
             score += 0.1;
@@ -112,6 +115,6 @@ pub fn assess_response_quality(response: &str, metadata: Option<HashMap<String, 
             score += 0.1;
         }
     }
-    
+
     Ok(score.min(1.0))
 }

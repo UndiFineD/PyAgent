@@ -11,15 +11,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use pyo3::prelude::*;
-use pyo3::wrap_pyfunction;
-use std::path::Path;
-use walkdir::WalkDir;
 use glob::Pattern;
+use pyo3::prelude::*;
+use pyo3::types::{PyBool, PyDict, PyList, PyTuple};
+use pyo3::wrap_pyfunction;
+use serde_json::{Map, Number, Value};
 use std::fs;
 use std::io::Write;
-use pyo3::types::{PyList, PyDict, PyTuple, PyBool};
-use serde_json::{Value, Number, Map};
+use std::path::Path;
+use walkdir::WalkDir;
 
 fn py_to_json(obj: &Bound<'_, PyAny>) -> PyResult<Value> {
     if obj.is_none() {
@@ -36,7 +36,7 @@ fn py_to_json(obj: &Bound<'_, PyAny>) -> PyResult<Value> {
         return Ok(Value::Number(Number::from(i)));
     }
     if let Ok(f) = obj.extract::<f64>() {
-         if let Some(n) = Number::from_f64(f) {
+        if let Some(n) = Number::from_f64(f) {
             return Ok(Value::Number(n));
         }
         return Ok(Value::Null); // Handle NaN/Infinity
@@ -63,7 +63,7 @@ fn py_to_json(obj: &Bound<'_, PyAny>) -> PyResult<Value> {
         }
         return Ok(Value::Object(map));
     }
-    
+
     // Fallback: convert to string
     Ok(Value::String(obj.to_string()))
 }
@@ -73,9 +73,11 @@ fn py_to_json(obj: &Bound<'_, PyAny>) -> PyResult<Value> {
 pub fn to_json_rust(data: &Bound<'_, PyAny>, indent: Option<usize>) -> PyResult<String> {
     let value = py_to_json(data)?;
     let s = if indent.is_some() {
-        serde_json::to_string_pretty(&value).map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?
+        serde_json::to_string_pretty(&value)
+            .map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?
     } else {
-        serde_json::to_string(&value).map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?
+        serde_json::to_string(&value)
+            .map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?
     };
     Ok(s)
 }
@@ -120,17 +122,19 @@ pub fn discover_files_rust(
 ) -> PyResult<Vec<String>> {
     let root = Path::new(&root_path);
     if !root.exists() {
-        return Err(pyo3::exceptions::PyFileNotFoundError::new_err("Root path does not exist"));
+        return Err(pyo3::exceptions::PyFileNotFoundError::new_err(
+            "Root path does not exist",
+        ));
     }
 
     let mut found_files = Vec::new();
-    
+
     // Compile patterns
     let match_globs: Vec<Pattern> = match_patterns
         .into_iter()
         .filter_map(|p| Pattern::new(&p).ok())
         .collect();
-        
+
     let ignore_globs: Vec<Pattern> = ignore_patterns
         .into_iter()
         .filter_map(|p| Pattern::new(&p).ok())

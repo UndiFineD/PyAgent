@@ -21,11 +21,11 @@ pub fn execute_shell_rust(command: &str, args: Vec<String>) -> PyResult<(i32, St
         .args(args)
         .output()
         .map_err(|e| pyo3::exceptions::PyIOError::new_err(e.to_string()))?;
-    
+
     let stdout = String::from_utf8_lossy(&output.stdout).to_string();
     let stderr = String::from_utf8_lossy(&output.stderr).to_string();
     let code = output.status.code().unwrap_or(-1);
-    
+
     Ok((code, stdout, stderr))
 }
 

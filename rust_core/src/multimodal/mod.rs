@@ -1,10 +1,10 @@
 use pyo3::prelude::*;
 
-pub mod image;
 pub mod audio;
-pub mod grammar;
-pub mod distributed;
 pub mod container;
+pub mod distributed;
+pub mod grammar;
+pub mod image;
 
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     // Image
@@ -18,7 +18,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(image::overlay_vision_feeds_rust, m)?)?;
     m.add_function(wrap_pyfunction!(image::transform_vision_feed_rust, m)?)?;
     m.add_function(wrap_pyfunction!(image::extract_vision_roi_rust, m)?)?;
-    
+
     // Container
     m.add_function(wrap_pyfunction!(container::parse_modality_stream_rust, m)?)?;
     m.add_function(wrap_pyfunction!(image::layout_vision_feeds_rust, m)?)?;
@@ -27,7 +27,10 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(image::calculate_visual_deltas_rust, m)?)?;
     m.add_function(wrap_pyfunction!(image::apply_visual_deltas_rust, m)?)?;
     m.add_function(wrap_pyfunction!(image::calculate_vision_saliency_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(image::match_vision_color_profiles_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(
+        image::match_vision_color_profiles_rust,
+        m
+    )?)?;
 
     // Audio
     m.add_function(wrap_pyfunction!(audio::resample_audio_rust, m)?)?;
@@ -47,16 +50,34 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     // Distributed
     m.add_function(wrap_pyfunction!(distributed::consistent_hash_rust, m)?)?;
     m.add_function(wrap_pyfunction!(distributed::select_worker_lb_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(distributed::aggregate_worker_metrics_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(
+        distributed::aggregate_worker_metrics_rust,
+        m
+    )?)?;
 
     // Container
     m.add_function(wrap_pyfunction!(container::parse_modality_stream_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(container::switch_modality_channel_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(container::project_modality_embeddings_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(
+        container::switch_modality_channel_rust,
+        m
+    )?)?;
+    m.add_function(wrap_pyfunction!(
+        container::project_modality_embeddings_rust,
+        m
+    )?)?;
     m.add_function(wrap_pyfunction!(container::synchronize_modalities_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(container::calculate_dynamic_modality_weights_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(container::calculate_multimodal_fusion_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(container::calculate_av_alignment_score_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(
+        container::calculate_dynamic_modality_weights_rust,
+        m
+    )?)?;
+    m.add_function(wrap_pyfunction!(
+        container::calculate_multimodal_fusion_rust,
+        m
+    )?)?;
+    m.add_function(wrap_pyfunction!(
+        container::calculate_av_alignment_score_rust,
+        m
+    )?)?;
 
     Ok(())
 }

@@ -17,7 +17,8 @@ use std::collections::{HashMap, HashSet};
 /// Detect cycles in an agent dependency graph (Common/Registry).
 #[pyfunction]
 pub fn detect_cycles_rust(nodes: Vec<String>, edges: Vec<(String, String)>) -> bool {
-    let mut adj: HashMap<String, Vec<String>> = nodes.into_iter().map(|n| (n, Vec::new())).collect();
+    let mut adj: HashMap<String, Vec<String>> =
+        nodes.into_iter().map(|n| (n, Vec::new())).collect();
     for (u, v) in edges {
         if let Some(neighbors) = adj.get_mut(&u) {
             neighbors.push(v);
@@ -67,8 +68,12 @@ fn dfs_cycle(
 
 /// Perform topological sort on agent tasks (Common/Registry).
 #[pyfunction]
-pub fn topological_sort_rust(nodes: Vec<String>, edges: Vec<(String, String)>) -> PyResult<Vec<String>> {
-    let mut adj: HashMap<String, Vec<String>> = nodes.into_iter().map(|n| (n, Vec::new())).collect();
+pub fn topological_sort_rust(
+    nodes: Vec<String>,
+    edges: Vec<(String, String)>,
+) -> PyResult<Vec<String>> {
+    let mut adj: HashMap<String, Vec<String>> =
+        nodes.into_iter().map(|n| (n, Vec::new())).collect();
     for (u, v) in edges {
         if let Some(neighbors) = adj.get_mut(&u) {
             neighbors.push(v);
@@ -83,7 +88,9 @@ pub fn topological_sort_rust(nodes: Vec<String>, edges: Vec<(String, String)>) -
     for node in keys {
         if !visited.contains(&node) {
             if dfs_topo(&node, &adj, &mut visited, &mut on_stack, &mut stack) {
-                return Err(pyo3::exceptions::PyValueError::new_err("Cycle detected in graph"));
+                return Err(pyo3::exceptions::PyValueError::new_err(
+                    "Cycle detected in graph",
+                ));
             }
         }
     }

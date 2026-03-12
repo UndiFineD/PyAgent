@@ -12,9 +12,9 @@ pub fn extract_video_frames_rust(
     if total_frames == 0 || target_frames == 0 {
         return Vec::new();
     }
-    
+
     let actual_target = target_frames.min(total_frames);
-    
+
     match strategy {
         "uniform" => {
             // Evenly spaced frames
@@ -66,22 +66,18 @@ pub fn extract_video_frames_rust(
 /// Detect significant motion between two video frames to optimize token usage (Phase 139).
 /// Returns true if motion exceeds threshold.
 #[pyfunction]
-pub fn detect_motion_rust(
-    prev_frame: Vec<u8>,
-    curr_frame: Vec<u8>,
-    threshold: f32,
-) -> bool {
+pub fn detect_motion_rust(prev_frame: Vec<u8>, curr_frame: Vec<u8>, threshold: f32) -> bool {
     if prev_frame.len() != curr_frame.len() || prev_frame.is_empty() {
         return false;
     }
-    
+
     let mut diff_sum: u64 = 0;
     // Sample every 4th pixel for speed
     for i in (0..prev_frame.len()).step_by(4) {
         let diff = (prev_frame[i] as i16 - curr_frame[i] as i16).abs();
         diff_sum += diff as u64;
     }
-    
+
     let avg_diff = diff_sum as f32 / (prev_frame.len() / 4) as f32;
     avg_diff > threshold
 }
@@ -97,7 +93,7 @@ pub fn detect_visual_scene_change_rust(
     if prev_hist.len() != curr_hist.len() || prev_hist.is_empty() {
         return false;
     }
-    
+
     // Calculate Bhattacharyya distance or simple Chi-Squared
     let mut dist = 0.0;
     for i in 0..prev_hist.len() {
@@ -107,26 +103,28 @@ pub fn detect_visual_scene_change_rust(
             dist += (p - c).powi(2) / (p + c);
         }
     }
-    
+
     dist > threshold
 }
 
 /// Calculate temporal entropy across a sequence of vision frames (Phase 150/Motion-Intelligence).
 /// Measures how "surprising" or "dynamic" a sequence is.
 #[pyfunction]
-pub fn calculate_temporal_entropy_rust(
-    frame_sequence: Vec<Vec<u8>>,
-) -> f32 {
-    if frame_sequence.len() < 2 { return 0.0; }
-    
+pub fn calculate_temporal_entropy_rust(frame_sequence: Vec<Vec<u8>>) -> f32 {
+    if frame_sequence.len() < 2 {
+        return 0.0;
+    }
+
     let mut total_diff: f32 = 0.0;
     let n = frame_sequence.len();
-    
+
     for i in 1..n {
-        let prev = &frame_sequence[i-1];
+        let prev = &frame_sequence[i - 1];
         let curr = &frame_sequence[i];
-        if prev.len() != curr.len() { continue; }
-        
+        if prev.len() != curr.len() {
+            continue;
+        }
+
         let mut diff: u64 = 0;
         // Sample for speed
         for j in (0..prev.len()).step_by(8) {
@@ -134,7 +132,7 @@ pub fn calculate_temporal_entropy_rust(
         }
         total_diff += diff as f32 / (prev.len() / 8) as f32;
     }
-    
+
     total_diff / (n - 1) as f32
 }
 
@@ -146,19 +144,21 @@ pub fn calculate_visual_deltas_rust(
     curr_frame: Vec<u8>,
     threshold: u8,
 ) -> Vec<(usize, u8, u8, u8)> {
-    if prev_frame.len() != curr_frame.len() { return Vec::new(); }
+    if prev_frame.len() != curr_frame.len() {
+        return Vec::new();
+    }
     let mut deltas = Vec::new();
-    
+
     for i in (0..prev_frame.len()).step_by(3) {
         let dr = (prev_frame[i] as i16 - curr_frame[i] as i16).abs() as u8;
-        let dg = (prev_frame[i+1] as i16 - curr_frame[i+1] as i16).abs() as u8;
-        let db = (prev_frame[i+2] as i16 - curr_frame[i+2] as i16).abs() as u8;
-        
+        let dg = (prev_frame[i + 1] as i16 - curr_frame[i + 1] as i16).abs() as u8;
+        let db = (prev_frame[i + 2] as i16 - curr_frame[i + 2] as i16).abs() as u8;
+
         if dr > threshold || dg > threshold || db > threshold {
-            deltas.push((i, curr_frame[i], curr_frame[i+1], curr_frame[i+2]));
+            deltas.push((i, curr_frame[i], curr_frame[i + 1], curr_frame[i + 2]));
         }
     }
-    
+
     deltas
 }
 

@@ -56,17 +56,17 @@ pub fn mux_channels_rust(packets: Vec<ModalityPacket>) -> PyResult<Vec<u8>> {
     for packet in packets {
         // Magic header: 0xDEADBEEF
         buffer.extend_from_slice(&[0xDE, 0xAD, 0xBE, 0xEF]);
-        
+
         let cid_bytes = packet.channel_id.as_bytes();
         buffer.push(cid_bytes.len() as u8);
         buffer.extend_from_slice(cid_bytes);
-        
+
         let type_bytes = packet.modality_type.as_bytes();
         buffer.push(type_bytes.len() as u8);
         buffer.extend_from_slice(type_bytes);
-        
+
         buffer.extend_from_slice(&packet.timestamp.to_le_bytes());
-        
+
         buffer.extend_from_slice(&(packet.payload.len() as u32).to_le_bytes());
         buffer.extend_from_slice(&packet.payload);
     }
@@ -79,39 +79,53 @@ pub fn demux_channels_rust(data: Vec<u8>) -> PyResult<Vec<ModalityPacket>> {
     let mut packets = Vec::new();
     let mut i = 0;
     while i + 4 <= data.len() {
-        if &data[i..i+4] == &[0xDE, 0xAD, 0xBE, 0xEF] {
+        if &data[i..i + 4] == &[0xDE, 0xAD, 0xBE, 0xEF] {
             i += 4;
-            
-            if i >= data.len() { break; }
+
+            if i >= data.len() {
+                break;
+            }
             let cid_len = data[i] as usize;
             i += 1;
-            if i + cid_len > data.len() { break; }
-            let channel_id = String::from_utf8_lossy(&data[i..i+cid_len]).to_string();
+            if i + cid_len > data.len() {
+                break;
+            }
+            let channel_id = String::from_utf8_lossy(&data[i..i + cid_len]).to_string();
             i += cid_len;
-            
-            if i >= data.len() { break; }
+
+            if i >= data.len() {
+                break;
+            }
             let type_len = data[i] as usize;
             i += 1;
-            if i + type_len > data.len() { break; }
-            let modality_type = String::from_utf8_lossy(&data[i..i+type_len]).to_string();
+            if i + type_len > data.len() {
+                break;
+            }
+            let modality_type = String::from_utf8_lossy(&data[i..i + type_len]).to_string();
             i += type_len;
-            
-            if i + 8 > data.len() { break; }
+
+            if i + 8 > data.len() {
+                break;
+            }
             let mut ts_bytes = [0u8; 8];
-            ts_bytes.copy_from_slice(&data[i..i+8]);
+            ts_bytes.copy_from_slice(&data[i..i + 8]);
             let timestamp = f64::from_le_bytes(ts_bytes);
             i += 8;
-            
-            if i + 4 > data.len() { break; }
+
+            if i + 4 > data.len() {
+                break;
+            }
             let mut plen_bytes = [0u8; 4];
-            plen_bytes.copy_from_slice(&data[i..i+4]);
+            plen_bytes.copy_from_slice(&data[i..i + 4]);
             let payload_len = u32::from_le_bytes(plen_bytes) as usize;
             i += 4;
-            
-            if i + payload_len > data.len() { break; }
-            let payload = data[i..i+payload_len].to_vec();
+
+            if i + payload_len > data.len() {
+                break;
+            }
+            let payload = data[i..i + payload_len].to_vec();
             i += payload_len;
-            
+
             packets.push(ModalityPacket {
                 channel_id,
                 modality_type,

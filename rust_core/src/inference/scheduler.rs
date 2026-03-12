@@ -7,10 +7,7 @@ use pyo3::prelude::*;
 /// Calculate throughput from timing data
 /// Returns tokens per second
 #[pyfunction]
-pub fn calculate_throughput_rust(
-    num_tokens: u64,
-    elapsed_ms: f64,
-) -> f64 {
+pub fn calculate_throughput_rust(num_tokens: u64, elapsed_ms: f64) -> f64 {
     if elapsed_ms <= 0.0 {
         return 0.0;
     }
@@ -24,20 +21,20 @@ pub fn aggregate_stats_window_rust(values: Vec<f64>) -> (f64, f64, f64, f64, f64
     if values.is_empty() {
         return (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     }
-    
+
     let mut sorted = values.clone();
     sorted.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
-    
+
     let n = sorted.len();
     let sum: f64 = sorted.iter().sum();
     let avg = sum / n as f64;
     let min = sorted[0];
     let max = sorted[n - 1];
-    
+
     let p50 = percentile(&sorted, 50.0);
     let p95 = percentile(&sorted, 95.0);
     let p99 = percentile(&sorted, 99.0);
-    
+
     (avg, min, max, p50, p95, p99)
 }
 
@@ -64,7 +61,7 @@ pub fn ema_update_rust(current_ema: f64, new_value: f64, alpha: f64) -> f64 {
 /// Returns sorted priority order for requests
 #[pyfunction]
 pub fn priority_heap_ops_rust(
-    priorities: Vec<(f64, f64, i64)>,  // (priority, deadline, sequence)
+    priorities: Vec<(f64, f64, i64)>, // (priority, deadline, sequence)
 ) -> Vec<usize> {
     // Return indices sorted by priority
     let mut indexed: Vec<_> = priorities.iter().enumerate().collect();
@@ -88,7 +85,7 @@ pub fn token_budget_check_rust(
     // Return indices of requests that fit in budget
     let mut result = Vec::new();
     let mut remaining = budget;
-    
+
     for (idx, &tokens) in request_tokens.iter().enumerate() {
         if result.len() >= max_requests {
             break;
@@ -98,7 +95,7 @@ pub fn token_budget_check_rust(
             remaining -= tokens;
         }
     }
-    
+
     result
 }
 
@@ -138,7 +135,7 @@ pub fn preemption_score_rust(
     } else {
         0.0
     };
-    
+
     // Score: higher priority value + lower progress + higher time = easier to preempt
     (priority as f64) - progress * 2.0 + elapsed_time * 0.1
 }
@@ -154,12 +151,12 @@ pub fn deadline_check_rust(
 ) -> (Vec<usize>, Vec<usize>) {
     let mut missed = Vec::new();
     let mut urgent = Vec::new();
-    
+
     for (i, &deadline) in deadlines.iter().enumerate() {
         if deadline < 0.0 {
-            continue;  // No deadline
+            continue; // No deadline
         }
-        
+
         let remaining = deadline - current_time;
         if remaining < 0.0 {
             missed.push(i);
@@ -167,10 +164,9 @@ pub fn deadline_check_rust(
             urgent.push(i);
         }
     }
-    
+
     (missed, urgent)
 }
-
 
 /// Compute fair share scheduling order
 #[pyfunction]
@@ -182,21 +178,26 @@ pub fn compute_fair_schedule_rust(
     if client_ids.len() != client_weights.len() || client_ids.len() != client_served.len() {
         return Vec::new();
     }
-    
+
     // Calculate fair share ratio for each client
-    let mut indexed: Vec<_> = client_ids.iter()
+    let mut indexed: Vec<_> = client_ids
+        .iter()
         .enumerate()
         .zip(client_weights.iter())
         .zip(client_served.iter())
         .map(|(((idx, _), &weight), &served)| {
-            let ratio = if weight > 0.0 { served as f64 / weight } else { f64::MAX };
+            let ratio = if weight > 0.0 {
+                served as f64 / weight
+            } else {
+                f64::MAX
+            };
             (idx, ratio)
         })
         .collect();
-    
+
     // Sort by ratio (lower ratio gets priority)
     indexed.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap_or(std::cmp::Ordering::Equal));
-    
+
     indexed.into_iter().map(|(idx, _)| idx).collect()
 }
 
@@ -207,22 +208,22 @@ pub fn compute_deadline_priorities_rust(
     deadlines: Vec<Option<f64>>,
     current_time: f64,
 ) -> Vec<(String, f64)> {
-    request_ids.iter()
+    request_ids
+        .iter()
         .zip(deadlines.iter())
         .map(|(id, deadline)| {
             let urgency = match deadline {
                 Some(dl) => {
                     let remaining = dl - current_time;
                     if remaining <= 0.0 {
-                        f64::MAX  // Overdue
+                        f64::MAX // Overdue
                     } else {
-                        1.0 / remaining  // Higher urgency for closer deadlines
+                        1.0 / remaining // Higher urgency for closer deadlines
                     }
                 }
-                None => 0.0,  // No deadline
+                None => 0.0, // No deadline
             };
             (id.clone(), urgency)
         })
         .collect()
 }
-

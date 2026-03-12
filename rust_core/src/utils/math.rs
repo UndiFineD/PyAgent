@@ -97,7 +97,8 @@ fn parse_factor<I: Iterator<Item = char>>(it: &mut std::iter::Peekable<I>) -> Re
                     break;
                 }
             }
-            s.parse::<f64>().map_err(|_| format!("Invalid number: {}", s))
+            s.parse::<f64>()
+                .map_err(|_| format!("Invalid number: {}", s))
         }
         Some(c) => Err(format!("Unexpected character: {}", c)),
         None => Err("Unexpected end of expression".into()),
@@ -109,7 +110,9 @@ fn parse_factor<I: Iterator<Item = char>>(it: &mut std::iter::Peekable<I>) -> Re
 #[pyfunction]
 pub fn cdiv_rust(a: i64, b: i64) -> PyResult<i64> {
     if b == 0 {
-        return Err(pyo3::exceptions::PyZeroDivisionError::new_err("division by zero"));
+        return Err(pyo3::exceptions::PyZeroDivisionError::new_err(
+            "division by zero",
+        ));
     }
     // For ceiling division: (a + b - 1) / b for positive a and b
     // General formula that works for any signs:
@@ -129,7 +132,7 @@ pub fn next_power_of_2_rust(n: u64) -> PyResult<u64> {
         return Ok(1);
     }
     if n & (n - 1) == 0 {
-        return Ok(n);  // Already a power of 2
+        return Ok(n); // Already a power of 2
     }
     Ok(1u64 << (64 - n.leading_zeros()))
 }
@@ -147,7 +150,9 @@ pub fn prev_power_of_2_rust(n: u64) -> PyResult<u64> {
 #[pyfunction]
 pub fn round_up_rust(n: i64, multiple: i64) -> PyResult<i64> {
     if multiple == 0 {
-        return Err(pyo3::exceptions::PyZeroDivisionError::new_err("multiple cannot be zero"));
+        return Err(pyo3::exceptions::PyZeroDivisionError::new_err(
+            "multiple cannot be zero",
+        ));
     }
     let abs_multiple = multiple.abs();
     // (n + multiple - 1) / multiple * multiple for positive, but we use cdiv
@@ -165,7 +170,9 @@ pub fn round_up_rust(n: i64, multiple: i64) -> PyResult<i64> {
 #[pyfunction]
 pub fn round_down_rust(n: i64, multiple: i64) -> PyResult<i64> {
     if multiple == 0 {
-        return Err(pyo3::exceptions::PyZeroDivisionError::new_err("multiple cannot be zero"));
+        return Err(pyo3::exceptions::PyZeroDivisionError::new_err(
+            "multiple cannot be zero",
+        ));
     }
     Ok((n / multiple) * multiple)
 }
@@ -180,7 +187,9 @@ pub fn atomic_counter_add_rust(current: i64, delta: i64) -> PyResult<i64> {
 #[pyfunction]
 pub fn batch_cdiv_rust(values: Vec<i64>, divisor: i64) -> PyResult<Vec<i64>> {
     if divisor == 0 {
-        return Err(pyo3::exceptions::PyZeroDivisionError::new_err("division by zero"));
+        return Err(pyo3::exceptions::PyZeroDivisionError::new_err(
+            "division by zero",
+        ));
     }
     Ok(values.into_iter().map(|a| -(a / -divisor)).collect())
 }
@@ -188,15 +197,18 @@ pub fn batch_cdiv_rust(values: Vec<i64>, divisor: i64) -> PyResult<Vec<i64>> {
 /// Batch next_power_of_2 for multiple values.
 #[pyfunction]
 pub fn batch_next_power_of_2_rust(values: Vec<u64>) -> PyResult<Vec<u64>> {
-    Ok(values.into_iter().map(|n| {
-        if n == 0 {
-            1
-        } else if n & (n - 1) == 0 {
-            n
-        } else {
-            1u64 << (64 - n.leading_zeros())
-        }
-    }).collect())
+    Ok(values
+        .into_iter()
+        .map(|n| {
+            if n == 0 {
+                1
+            } else if n & (n - 1) == 0 {
+                n
+            } else {
+                1u64 << (64 - n.leading_zeros())
+            }
+        })
+        .collect())
 }
 
 #[pyfunction]
@@ -206,27 +218,31 @@ pub fn calculate_statistical_significance(
 ) -> PyResult<HashMap<String, f64>> {
     let n1 = control.len() as f64;
     let n2 = treatment.len() as f64;
-    
+
     if n1 < 2.0 || n2 < 2.0 {
-         let mut min_res = HashMap::new();
-         min_res.insert("t_statistic".to_string(), 0.0);
-         min_res.insert("p_value".to_string(), 1.0);
-         min_res.insert("effect_size".to_string(), 0.0);
-         return Ok(min_res);
+        let mut min_res = HashMap::new();
+        min_res.insert("t_statistic".to_string(), 0.0);
+        min_res.insert("p_value".to_string(), 1.0);
+        min_res.insert("effect_size".to_string(), 0.0);
+        return Ok(min_res);
     }
-    
+
     let mean1 = control.iter().sum::<f64>() / n1;
     let mean2 = treatment.iter().sum::<f64>() / n2;
-    
+
     let var1 = control.iter().map(|x| (x - mean1).powi(2)).sum::<f64>() / (n1 - 1.0);
     let var2 = treatment.iter().map(|x| (x - mean2).powi(2)).sum::<f64>() / (n2 - 1.0);
-    
+
     let pooled_sd = ((var1 * (n1 - 1.0) + var2 * (n2 - 1.0)) / (n1 + n2 - 2.0)).sqrt();
-    let se = (var1/n1 + var2/n2).sqrt();
-    
+    let se = (var1 / n1 + var2 / n2).sqrt();
+
     let t_stat = if se != 0.0 { (mean2 - mean1) / se } else { 0.0 };
-    let effect_size = if pooled_sd != 0.0 { (mean2 - mean1) / pooled_sd } else { 0.0 };
-    
+    let effect_size = if pooled_sd != 0.0 {
+        (mean2 - mean1) / pooled_sd
+    } else {
+        0.0
+    };
+
     // P-value approximation
     let p_value = if t_stat.abs() > 1.96 { 0.05 } else { 0.5 }; // Dummy
 
@@ -242,13 +258,16 @@ pub fn calculate_jaccard_similarity(s1: &str, s2: &str) -> PyResult<f64> {
     // Word-based Jaccard
     let set1: HashSet<&str> = s1.split_whitespace().collect();
     let set2: HashSet<&str> = s2.split_whitespace().collect();
-    
-    if set1.is_empty() && set2.is_empty() { return Ok(1.0); }
-    
+
+    if set1.is_empty() && set2.is_empty() {
+        return Ok(1.0);
+    }
+
     let intersection = set1.intersection(&set2).count();
     let union = set1.len() + set2.len() - intersection;
-    
-    if union == 0 { return Ok(0.0); }
-    Ok(intersection as f64 / union as f64)
-} 
 
+    if union == 0 {
+        return Ok(0.0);
+    }
+    Ok(intersection as f64 / union as f64)
+}

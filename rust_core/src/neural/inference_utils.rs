@@ -1,12 +1,14 @@
 use pyo3::prelude::*;
 use rand::prelude::*;
 
-use crate::neural::types::GenerationStats;
 use crate::neural::config::{HardwareProfile, TransformerConfig};
 use crate::neural::transformer::NeuralTransformer;
+use crate::neural::types::GenerationStats;
 
 #[pyfunction]
-pub fn generate_synthetic_snippets_with_stats(count: usize) -> PyResult<(Vec<String>, GenerationStats)> {
+pub fn generate_synthetic_snippets_with_stats(
+    count: usize,
+) -> PyResult<(Vec<String>, GenerationStats)> {
     let start = std::time::Instant::now();
     let mut rng = thread_rng();
     let templates = [
@@ -56,28 +58,35 @@ pub fn generate_synthetic_snippets(count: usize) -> PyResult<Vec<String>> {
 #[pyfunction]
 pub fn vectorize_text_insight_with_stats(text: &str) -> PyResult<(Vec<f32>, GenerationStats)> {
     let start = std::time::Instant::now();
-    
+
     // We create a fresh instance here as a stateless utility
     let profile = HardwareProfile::new(None);
     let config = TransformerConfig::auto_configure(&profile);
     let transformer = NeuralTransformer::new(config);
-    
+
     let vector = transformer.vectorize(text)?;
     let tokens = text.split_whitespace().count().max(1);
-    
+
     let duration = start.elapsed();
     let duration_secs = duration.as_secs_f64();
-    let tps = if duration_secs > 0.0 { tokens as f64 / duration_secs } else { 0.0 };
-    
+    let tps = if duration_secs > 0.0 {
+        tokens as f64 / duration_secs
+    } else {
+        0.0
+    };
+
     // Cost: 0.0005 cent per token = 0.000005 USD per token
     let cost_usd = (tokens as f64) * 0.000005;
 
-    Ok((vector, GenerationStats {
-        token_count: tokens,
-        tps,
-        duration_ms: duration_secs * 1000.0,
-        cost_usd,
-    }))
+    Ok((
+        vector,
+        GenerationStats {
+            token_count: tokens,
+            tps,
+            duration_ms: duration_secs * 1000.0,
+            cost_usd,
+        },
+    ))
 }
 
 #[pyfunction]

@@ -7,7 +7,10 @@ use std::collections::HashSet;
 
 /// Returns a list of agent indices that are designated to 'fail' (Phase 181).
 #[pyfunction]
-pub fn calculate_stochastic_failures(agent_count: usize, failure_rate: f64) -> PyResult<Vec<usize>> {
+pub fn calculate_stochastic_failures(
+    agent_count: usize,
+    failure_rate: f64,
+) -> PyResult<Vec<usize>> {
     let mut rng = rand::thread_rng();
     let num_failures = (agent_count as f64 * failure_rate) as usize;
     let mut indices: Vec<usize> = (0..agent_count).collect();

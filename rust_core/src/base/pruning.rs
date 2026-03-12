@@ -2,7 +2,11 @@ use pyo3::prelude::*;
 
 /// Calculate synaptic decay (PruningCore).
 #[pyfunction]
-pub fn calculate_decay(current_weight: f64, idle_time_sec: f64, half_life_sec: f64) -> PyResult<f64> {
+pub fn calculate_decay(
+    current_weight: f64,
+    idle_time_sec: f64,
+    half_life_sec: f64,
+) -> PyResult<f64> {
     // ln(2) approx 0.69314718056
     let decay_constant = 0.69314718056 / half_life_sec;
     let new_weight = current_weight * (-decay_constant * idle_time_sec).exp();

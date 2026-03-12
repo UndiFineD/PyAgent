@@ -1,8 +1,8 @@
+use md5::{Digest, Md5};
 use pyo3::prelude::*;
+use sha2::Sha256;
 use std::collections::HashMap;
 use std::fs;
-use md5::{Md5, Digest};
-use sha2::Sha256;
 
 /// Fast hashing for shard lookup (Phase 131).
 /// Uses a simplified FNV-1a hash for sub-millisecond page access.
@@ -36,7 +36,7 @@ pub fn fast_cache_hash_rust(key: &str, prefix: Option<&str>) -> PyResult<String>
         Some(p) => format!("{}:{}", p, key),
         None => key.to_string(),
     };
-    
+
     let mut hash: u64 = 0xcbf29ce484222325;
     for byte in full_key.as_bytes() {
         hash ^= *byte as u64;
@@ -51,11 +51,11 @@ pub fn calculate_interaction_shard_md5(key: &str, shard_count: usize) -> PyResul
     let mut hasher = Md5::new();
     hasher.update(key.as_bytes());
     let result = hasher.finalize();
-    
+
     let mut seed_bytes = [0u8; 8];
     seed_bytes.copy_from_slice(&result[..8]);
     let seed = u64::from_be_bytes(seed_bytes);
-    
+
     Ok((seed as usize) % shard_count)
 }
 

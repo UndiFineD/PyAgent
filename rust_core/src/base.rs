@@ -1,23 +1,28 @@
-pub mod autonomy;
 pub mod auth;
-pub mod resilience;
-pub mod identity;
-pub mod pruning;
-pub mod verification;
+pub mod autonomy;
 pub mod convergence;
 pub mod error_mapping;
-pub mod privacy;
-pub mod logging;
+pub mod identity;
 pub mod io;
-
+pub mod logging;
+pub mod privacy;
+pub mod pruning;
+pub mod resilience;
+pub mod verification;
 
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
 
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(autonomy::identify_blind_spots, m)?)?;
-    m.add_function(wrap_pyfunction!(autonomy::calculate_daemon_sleep_interval, m)?)?;
-    m.add_function(wrap_pyfunction!(autonomy::generate_self_improvement_plan, m)?)?;
+    m.add_function(wrap_pyfunction!(
+        autonomy::calculate_daemon_sleep_interval,
+        m
+    )?)?;
+    m.add_function(wrap_pyfunction!(
+        autonomy::generate_self_improvement_plan,
+        m
+    )?)?;
 
     m.add_function(wrap_pyfunction!(auth::generate_cache_key, m)?)?;
     m.add_function(wrap_pyfunction!(auth::generate_challenge, m)?)?;
@@ -39,14 +44,20 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(pruning::update_weight_on_fire_rust, m)?)?;
     m.add_function(wrap_pyfunction!(pruning::should_prune, m)?)?;
 
-    m.add_function(wrap_pyfunction!(verification::calculate_anchoring_fallback, m)?)?;
+    m.add_function(wrap_pyfunction!(
+        verification::calculate_anchoring_fallback,
+        m
+    )?)?;
     m.add_function(wrap_pyfunction!(verification::check_latent_reasoning, m)?)?;
     m.add_function(wrap_pyfunction!(verification::is_response_valid_rust, m)?)?;
 
     m.add_function(wrap_pyfunction!(convergence::verify_fleet_health, m)?)?;
 
     m.add_function(wrap_pyfunction!(error_mapping::get_error_code, m)?)?;
-    m.add_function(wrap_pyfunction!(error_mapping::get_error_documentation_link, m)?)?;
+    m.add_function(wrap_pyfunction!(
+        error_mapping::get_error_documentation_link,
+        m
+    )?)?;
 
     m.add_function(wrap_pyfunction!(privacy::redact_pii, m)?)?;
 

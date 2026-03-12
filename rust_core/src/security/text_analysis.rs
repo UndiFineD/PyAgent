@@ -5,13 +5,27 @@ use std::collections::HashSet;
 /// Analyze a thought for destructive patterns and unauthorized network access.
 /// Returns (is_cleared, reason).
 #[pyfunction]
-pub fn analyze_thought_rust(thought: &str, whitelisted_domains: Vec<String>) -> PyResult<(bool, String)> {
+pub fn analyze_thought_rust(
+    thought: &str,
+    whitelisted_domains: Vec<String>,
+) -> PyResult<(bool, String)> {
     // 1. Destructive Operations Check
     let destructive_patterns = [
-        r"(?i)\bDELETE\b", r"(?i)\bFORMAT\b", r"(?i)\bPARTITION\b", r"(?i)\bDISK\b",
-        r"(?i)\bRM\s+-RF\b", r"(?i)\bWIPE\b", r"(?i)\bERASE\b", r"(?i)DROP\s+TABLE",
-        r"(?i)\bMKFS\b", r"(?i)\bFDISK\b", r"(?i)\bMKDIR\b", r"(?i)\bRMDIR\b",
-        r"(?i)\bOS\.REMOVE\b", r"(?i)\bSHUTIL\.RMTREE\b", r"(?i)\bPATH\.UNLINK\b"
+        r"(?i)\bDELETE\b",
+        r"(?i)\bFORMAT\b",
+        r"(?i)\bPARTITION\b",
+        r"(?i)\bDISK\b",
+        r"(?i)\bRM\s+-RF\b",
+        r"(?i)\bWIPE\b",
+        r"(?i)\bERASE\b",
+        r"(?i)DROP\s+TABLE",
+        r"(?i)\bMKFS\b",
+        r"(?i)\bFDISK\b",
+        r"(?i)\bMKDIR\b",
+        r"(?i)\bRMDIR\b",
+        r"(?i)\bOS\.REMOVE\b",
+        r"(?i)\bSHUTIL\.RMTREE\b",
+        r"(?i)\bPATH\.UNLINK\b",
     ];
 
     let destructive_set = RegexSet::new(destructive_patterns)
@@ -24,7 +38,8 @@ pub fn analyze_thought_rust(thought: &str, whitelisted_domains: Vec<String>) -> 
     }
 
     // 2. Internet Access Check
-    let url_regex = Regex::new(r"https?://([a-zA-Z0-9.-]+)").map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?;
+    let url_regex = Regex::new(r"https?://([a-zA-Z0-9.-]+)")
+        .map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?;
     let mut found_urls = false;
     let whitelist_set: HashSet<String> = whitelisted_domains.into_iter().collect();
 
@@ -32,7 +47,10 @@ pub fn analyze_thought_rust(thought: &str, whitelisted_domains: Vec<String>) -> 
         found_urls = true;
         let domain = &cap[1];
         if !whitelist_set.contains(domain) {
-            return Ok((false, format!("Internet access to non-whitelisted domain: {}", domain)));
+            return Ok((
+                false,
+                format!("Internet access to non-whitelisted domain: {}", domain),
+            ));
         }
     }
 
@@ -42,7 +60,10 @@ pub fn analyze_thought_rust(thought: &str, whitelisted_domains: Vec<String>) -> 
         let thought_upper = thought.to_uppercase();
         for kw in network_keywords {
             if thought_upper.contains(kw) {
-                return Ok((false, format!("Undisclosed internet access intent detected: {}", kw)));
+                return Ok((
+                    false,
+                    format!("Undisclosed internet access intent detected: {}", kw),
+                ));
             }
         }
     }
@@ -70,10 +91,10 @@ pub fn scan_hardcoded_secrets_rust(content: &str) -> PyResult<Vec<(String, usize
         ("token", r"(?i)\btoken\b\s*[:=]\s*['][^']+[']"),
         ("auth_key", r"(?i)\bauth[-_]?key\b\s*[:=]\s*['][^']+[']"),
     ];
-    
+
     let mut findings = Vec::new();
     let lines: Vec<&str> = content.lines().collect();
-    
+
     for (name, p) in patterns {
         if let Ok(re) = Regex::new(p) {
             for mat in re.find_iter(content) {
@@ -87,7 +108,7 @@ pub fn scan_hardcoded_secrets_rust(content: &str) -> PyResult<Vec<(String, usize
             }
         }
     }
-    
+
     Ok(findings)
 }
 
@@ -96,7 +117,7 @@ pub fn scan_hardcoded_secrets_rust(content: &str) -> PyResult<Vec<(String, usize
 #[pyfunction]
 pub fn scan_insecure_patterns_rust(content: &str) -> PyResult<Vec<(String, String)>> {
     let mut findings = Vec::new();
-    
+
     if !content.contains("SecurityAuditAgent") && !content.contains("SecurityScanner") {
         if let Ok(re) = Regex::new(r"\beval\s*\(") {
             let lines: Vec<&str> = content.lines().collect();
@@ -108,7 +129,7 @@ pub fn scan_insecure_patterns_rust(content: &str) -> PyResult<Vec<(String, Strin
             }
         }
     }
-    
+
     if !content.contains("SecurityAuditAgent") {
         if let Ok(re) = Regex::new(r"shell\s*=\s*True") {
             let lines: Vec<&str> = content.lines().collect();
@@ -120,6 +141,6 @@ pub fn scan_insecure_patterns_rust(content: &str) -> PyResult<Vec<(String, Strin
             }
         }
     }
-    
+
     Ok(findings)
 }

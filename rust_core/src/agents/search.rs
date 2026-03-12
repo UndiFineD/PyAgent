@@ -5,15 +5,15 @@ use std::collections::HashMap;
 #[pyfunction]
 pub fn aggregate_search_results(queries: Vec<String>) -> PyResult<HashMap<String, Vec<String>>> {
     let mut agg = HashMap::new();
-    
+
     for q in queries {
         let results = vec![
             format!("Result A for {}", q),
             format!("Result B for {}", q),
-            format!("Result C for {}", q)
+            format!("Result C for {}", q),
         ];
         agg.insert(q, results);
     }
-    
+
     Ok(agg)
 }

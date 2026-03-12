@@ -3,7 +3,11 @@ use pyo3::prelude::*;
 /// Calculate token cost based on model pricing (MetricsCore).
 /// Returns (total_cost, input_cost, output_cost).
 #[pyfunction]
-pub fn calculate_token_cost(input_tokens: i64, output_tokens: i64, model: &str) -> PyResult<(f64, f64, f64)> {
+pub fn calculate_token_cost(
+    input_tokens: i64,
+    output_tokens: i64,
+    model: &str,
+) -> PyResult<(f64, f64, f64)> {
     let (input_price, output_price) = match model {
         "gpt-4" => (0.03, 0.06),
         "gpt-4-turbo" => (0.01, 0.03),
@@ -34,11 +38,36 @@ pub fn select_best_model(max_cost: f64, req_speed: f64, req_quality: f64) -> PyR
     }
 
     let models = vec![
-        ModelCaps { name: "gpt-4", speed: 0.5, quality: 1.0, cost: 0.1 },
-        ModelCaps { name: "gpt-4-turbo", speed: 0.7, quality: 0.95, cost: 0.3 },
-        ModelCaps { name: "gpt-3.5-turbo", speed: 0.9, quality: 0.7, cost: 0.8 },
-        ModelCaps { name: "claude-3-opus", speed: 0.6, quality: 0.98, cost: 0.15 },
-        ModelCaps { name: "gemini-1.5-pro", speed: 0.8, quality: 0.85, cost: 0.4 },
+        ModelCaps {
+            name: "gpt-4",
+            speed: 0.5,
+            quality: 1.0,
+            cost: 0.1,
+        },
+        ModelCaps {
+            name: "gpt-4-turbo",
+            speed: 0.7,
+            quality: 0.95,
+            cost: 0.3,
+        },
+        ModelCaps {
+            name: "gpt-3.5-turbo",
+            speed: 0.9,
+            quality: 0.7,
+            cost: 0.8,
+        },
+        ModelCaps {
+            name: "claude-3-opus",
+            speed: 0.6,
+            quality: 0.98,
+            cost: 0.15,
+        },
+        ModelCaps {
+            name: "gemini-1.5-pro",
+            speed: 0.8,
+            quality: 0.85,
+            cost: 0.4,
+        },
     ];
 
     let mut best_model = "gpt-3.5-turbo";
@@ -64,7 +93,7 @@ pub fn calculate_p95(values: Vec<f64>) -> PyResult<f64> {
     if values.is_empty() {
         return Ok(0.0);
     }
-    
+
     // Check for small list edge case in Python code (< 20 items -> max)
     if values.len() < 20 {
         // Return max
@@ -75,10 +104,14 @@ pub fn calculate_p95(values: Vec<f64>) -> PyResult<f64> {
     let mut sorted_vals = values.clone();
     // sort_by for f64 handles NaNs via unwrap or partial_cmp, assuming clean input per constraints
     sorted_vals.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
-    
+
     let idx = (sorted_vals.len() as f64 * 0.95) as usize;
     // Bounds check
-    let idx = if idx >= sorted_vals.len() { sorted_vals.len() - 1 } else { idx };
-    
+    let idx = if idx >= sorted_vals.len() {
+        sorted_vals.len() - 1
+    } else {
+        idx
+    };
+
     Ok(sorted_vals[idx])
 }

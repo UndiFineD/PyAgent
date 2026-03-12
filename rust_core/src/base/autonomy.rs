@@ -27,7 +27,10 @@ pub fn calculate_daemon_sleep_interval(optimization_score: f64) -> PyResult<i32>
 
 /// Generate self improvement plan (AutonomyCore).
 #[pyfunction]
-pub fn generate_self_improvement_plan(agent_id: &str, blind_spots: Vec<String>) -> PyResult<String> {
+pub fn generate_self_improvement_plan(
+    agent_id: &str,
+    blind_spots: Vec<String>,
+) -> PyResult<String> {
     let mut plan = format!("AGENT SELF-MODEL UPDATE for {}:\n", agent_id);
     if blind_spots.is_empty() {
         plan.push_str("Status: Optimal. No immediate changes required.");

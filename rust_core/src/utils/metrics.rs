@@ -25,7 +25,8 @@ pub fn calculate_metrics_rust(content: &str) -> PyResult<HashMap<String, f64>> {
     }
 
     // Cyclomatic Complexity decision points (C901 approximation)
-    let re_cc = regex::Regex::new(r"(?:\bif\b|\bwhile\b|\bfor\b|\bexcept\b|\band\b|\bor\b)").unwrap();
+    let re_cc =
+        regex::Regex::new(r"(?:\bif\b|\bwhile\b|\bfor\b|\bexcept\b|\band\b|\bor\b)").unwrap();
     let re_func = regex::Regex::new(r"(?m)^\s*(?:async\s+)?def\s+").unwrap();
     let re_class = regex::Regex::new(r"(?m)^\s*class\s+").unwrap();
     let re_import = regex::Regex::new(r"(?m)^\s*(?:from|import)\s+").unwrap();
@@ -37,11 +38,8 @@ pub fn calculate_metrics_rust(content: &str) -> PyResult<HashMap<String, f64>> {
 
     // Maintainability Index (MI)
     let halstead_volume = loc * (func_count + class_count + 1.0).log10() / 2.0_f64.log10(); // log2
-    let mi = 171.0 
-        - 5.2 * (halstead_volume + 1.0).ln() 
-        - 0.23 * cc 
-        - 16.2 * (loc + 1.0).ln() 
-        + 50.0 * ( (2.4 * (comments / (loc + comments + 1.0))).sqrt() ).sin();
+    let mi = 171.0 - 5.2 * (halstead_volume + 1.0).ln() - 0.23 * cc - 16.2 * (loc + 1.0).ln()
+        + 50.0 * ((2.4 * (comments / (loc + comments + 1.0))).sqrt()).sin();
 
     results.insert("lines_of_code".to_string(), loc);
     results.insert("lines_of_comments".to_string(), comments);
@@ -72,7 +70,7 @@ pub fn structured_counter_diff_rust(
     baseline: HashMap<String, i64>,
 ) -> PyResult<HashMap<String, i64>> {
     let mut diff = HashMap::new();
-    
+
     for (key, current_val) in current.iter() {
         let baseline_val = baseline.get(key).unwrap_or(&0);
         let delta = current_val - baseline_val;
@@ -80,13 +78,13 @@ pub fn structured_counter_diff_rust(
             diff.insert(key.clone(), delta);
         }
     }
-    
+
     // Check for keys only in baseline (negative diffs)
     for (key, baseline_val) in baseline.iter() {
         if !current.contains_key(key) && *baseline_val != 0 {
             diff.insert(key.clone(), -baseline_val);
         }
     }
-    
+
     Ok(diff)
 }

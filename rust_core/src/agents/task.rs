@@ -19,7 +19,7 @@ pub fn generate_heuristic_plan(goal: &str) -> PyResult<Vec<HashMap<String, Strin
         step1.insert("task".to_string(), format!("Analyze '{}'", goal));
     }
     // Test expects plan[0]["agent"] == "ResearchAgent" for "Please research...", so logic above covers it.
-    
+
     steps.push(step1);
 
     Ok(steps)

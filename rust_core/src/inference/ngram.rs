@@ -18,16 +18,16 @@ pub fn ngram_match_rust(
     if prompt_tokens.len() < n || target_ngram.len() != n {
         return Vec::new();
     }
-    
+
     let mut matches = Vec::new();
-    
+
     for i in 0..=prompt_tokens.len() - n {
         let window = &prompt_tokens[i..i + n];
         if window == target_ngram.as_slice() {
             matches.push((i, window.to_vec()));
         }
     }
-    
+
     matches
 }
 
@@ -43,18 +43,18 @@ pub fn advanced_ngram_propose_rust(
     if tokens.is_empty() {
         return Vec::new();
     }
-    
+
     let len = tokens.len();
     let mut proposals = Vec::new();
-    
+
     // Try matching suffixes from max_n down to min_n
     for n in (min_n..=max_n).rev() {
         if len < n {
             continue;
         }
-        
+
         let suffix = &tokens[len - n..];
-        
+
         // Search for suffix earlier in sequence
         // We scan from end backwards to find most recent context
         for i in (0..len - n).rev() {
@@ -71,14 +71,14 @@ pub fn advanced_ngram_propose_rust(
                 }
             }
         }
-        
+
         // If we found any proposals at this N, we might stop or continue?
         // Usually we prefer longer matches.
         if !proposals.is_empty() {
             break;
         }
     }
-    
+
     proposals
 }
 
@@ -86,17 +86,13 @@ pub fn advanced_ngram_propose_rust(
 /// Returns HashMap mapping n-gram tuples to list of positions
 #[pyfunction]
 #[pyo3(signature = (tokens, n=4))]
-pub fn build_ngram_index_rust(
-    py: Python<'_>,
-    tokens: Vec<i64>,
-    n: usize,
-) -> PyResult<PyObject> {
+pub fn build_ngram_index_rust(py: Python<'_>, tokens: Vec<i64>, n: usize) -> PyResult<PyObject> {
     let index = PyDict::new(py);
-    
+
     if tokens.len() < n {
         return Ok(index.into_any().unbind());
     }
-    
+
     for i in 0..=tokens.len() - n {
         let ngram = PyTuple::new(py, &tokens[i..i + n])?;
         let list = match index.get_item(&ngram)? {
@@ -109,7 +105,7 @@ pub fn build_ngram_index_rust(
         };
         list.append(i)?;
     }
-    
+
     Ok(index.into_any().unbind())
 }
 
@@ -127,9 +123,9 @@ pub fn find_continuations_rust(
     if tokens.len() < n + continuation_len {
         return Vec::new();
     }
-    
+
     let mut continuation_counts: HashMap<Vec<i64>, usize> = HashMap::new();
-    
+
     for i in 0..=tokens.len() - n - continuation_len {
         let window = &tokens[i..i + n];
         if window == context_ngram.as_slice() {
@@ -137,12 +133,12 @@ pub fn find_continuations_rust(
             *continuation_counts.entry(continuation).or_default() += 1;
         }
     }
-    
+
     // Sort by frequency descending
     let mut results: Vec<_> = continuation_counts.into_iter().collect();
     results.sort_by(|a, b| b.1.cmp(&a.1));
     results.truncate(max_continuations);
-    
+
     results
 }
 
@@ -158,15 +154,15 @@ pub fn build_suffix_array_rust(tokens: Vec<i64>) -> Vec<usize> {
     if n == 0 {
         return Vec::new();
     }
-    
+
     let mut indices: Vec<usize> = (0..n).collect();
-    
+
     indices.sort_by(|&a, &b| {
         let suffix_a = &tokens[a..];
         let suffix_b = &tokens[b..];
         suffix_a.cmp(suffix_b)
     });
-    
+
     indices
 }
 
@@ -181,14 +177,14 @@ pub fn suffix_search_rust(
     if pattern.is_empty() || suffix_array.is_empty() {
         return (0, 0);
     }
-    
+
     // Binary search for lower bound
     let lower = suffix_array.partition_point(|&i| {
         let suffix = &tokens[i..];
         let cmp_len = pattern.len().min(suffix.len());
         suffix[..cmp_len].cmp(&pattern[..]) == std::cmp::Ordering::Less
     });
-    
+
     // Binary search for upper bound
     let upper = suffix_array.partition_point(|&i| {
         let suffix = &tokens[i..];
@@ -196,7 +192,7 @@ pub fn suffix_search_rust(
         let prefix_cmp = suffix[..cmp_len].cmp(&pattern[..]);
         prefix_cmp == std::cmp::Ordering::Less || prefix_cmp == std::cmp::Ordering::Equal
     });
-    
+
     (lower, upper)
 }
 
@@ -227,34 +223,35 @@ pub fn ngram_find_match_rust(
     if context.len() < n {
         return None;
     }
-    
+
     let excluded_set: std::collections::HashSet<i64> = excluded.into_iter().collect();
-    
+
     let mut best_pos: Option<usize> = None;
     let mut best_following: Vec<i64> = Vec::new();
-    
+
     // Search from end (more recent matches preferred)
     for i in (0..=context.len().saturating_sub(n)).rev() {
         if context[i..i + n] == prefix[..] {
             let start = i + n;
             let end = (start + k).min(context.len());
-            
-            let following: Vec<i64> = context[start..end].iter()
+
+            let following: Vec<i64> = context[start..end]
+                .iter()
                 .filter(|t| !excluded_set.contains(t))
                 .copied()
                 .collect();
-            
+
             if following.len() > best_following.len() {
                 best_pos = Some(i);
                 best_following = following;
             }
-            
+
             if best_following.len() >= k {
                 break;
             }
         }
     }
-    
+
     best_pos.map(|pos| (pos, n, best_following))
 }
 
@@ -270,34 +267,36 @@ pub fn ngram_fuzzy_match_rust(
     if context.len() < n {
         return None;
     }
-    
+
     let mut best_following: Vec<i64> = Vec::new();
     let mut best_score = 0.0;
-    
+
     for i in 0..=context.len().saturating_sub(n) {
         let candidate = &context[i..i + n];
-        
+
         // Hamming distance
-        let distance: usize = prefix.iter()
+        let distance: usize = prefix
+            .iter()
             .zip(candidate.iter())
             .filter(|(a, b)| a != b)
             .count();
-        
+
         if distance <= max_distance {
             let start = i + n;
             let end = (start + k).min(context.len());
             let following = context[start..end].to_vec();
-            
+
             let score = 1.0 - (distance as f64 / (max_distance + 1) as f64);
-            
-            if following.len() > best_following.len() || 
-               (following.len() == best_following.len() && score > best_score) {
+
+            if following.len() > best_following.len()
+                || (following.len() == best_following.len() && score > best_score)
+            {
                 best_following = following;
                 best_score = score;
             }
         }
     }
-    
+
     if best_following.is_empty() {
         None
     } else {
@@ -318,14 +317,14 @@ pub fn prompt_lookup_propose_rust(
     if generated_tokens.is_empty() {
         return Vec::new();
     }
-    
+
     for suffix_len in (min_len..=max_len).rev() {
         if generated_tokens.len() < suffix_len {
             continue;
         }
-        
+
         let suffix = &generated_tokens[generated_tokens.len() - suffix_len..];
-        
+
         // Search in prompt from end to find most recent occurrence
         for i in (0..=prompt_tokens.len().saturating_sub(suffix_len)).rev() {
             if &prompt_tokens[i..i + suffix_len] == suffix {
@@ -335,7 +334,6 @@ pub fn prompt_lookup_propose_rust(
             }
         }
     }
-    
+
     Vec::new()
 }
-

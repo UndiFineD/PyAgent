@@ -4,17 +4,25 @@ use walkdir::WalkDir;
 
 /// Simplified data structure for secretive leak info.
 #[pyfunction]
-pub fn scan_secrets_rust(target_dir: &str) -> PyResult<Vec<std::collections::HashMap<String, String>>> {
+pub fn scan_secrets_rust(
+    target_dir: &str,
+) -> PyResult<Vec<std::collections::HashMap<String, String>>> {
     let patterns = [
         ("AWS_KEY", r"(?i)AKIA[0-9A-Z]{16}"),
         ("AWS_SECRET", r"(?i)SECRET.*[']?[a-zA-Z0-9/+=]{40}[']?"),
-        ("GENERIC_TOKEN", r"(?i)(token|auth|key|secret)[ \t]*[:=][ \t]*[']?[a-zA-Z0-9_.-]{16,}[']?"),
+        (
+            "GENERIC_TOKEN",
+            r"(?i)(token|auth|key|secret)[ \t]*[:=][ \t]*[']?[a-zA-Z0-9_.-]{16,}[']?",
+        ),
         ("GITHUB_TOKEN", r"ghp_[a-zA-Z0-9]{36}"),
     ];
 
     let mut compiled_patterns = Vec::new();
     for (name, p) in patterns {
-        compiled_patterns.push((name, Regex::new(p).map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?));
+        compiled_patterns.push((
+            name,
+            Regex::new(p).map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?,
+        ));
     }
 
     let mut leaks = Vec::new();
@@ -22,7 +30,7 @@ pub fn scan_secrets_rust(target_dir: &str) -> PyResult<Vec<std::collections::Has
     for entry in WalkDir::new(target_dir).into_iter().filter_map(|e| e.ok()) {
         if entry.file_type().is_file() {
             let path = entry.path();
-            
+
             // Skip common non-code / hidden dirs
             let path_str = path.to_string_lossy();
             if path_str.contains(".git") || path_str.contains("__pycache__") {
@@ -37,7 +45,11 @@ pub fn scan_secrets_rust(target_dir: &str) -> PyResult<Vec<std::collections::Has
                             leak.insert("file".to_string(), path_str.to_string());
                             leak.insert("line".to_string(), (i + 1).to_string());
                             leak.insert("type".to_string(), name.to_string());
-                            let snippet = if line.len() > 50 { format!("{}...", &line[..50]) } else { line.to_string() };
+                            let snippet = if line.len() > 50 {
+                                format!("{}...", &line[..50])
+                            } else {
+                                line.to_string()
+                            };
                             leak.insert("snippet".to_string(), snippet.trim().to_string());
                             leaks.push(leak);
                         }

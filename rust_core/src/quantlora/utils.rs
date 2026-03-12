@@ -2,10 +2,7 @@ use pyo3::prelude::*;
 
 /// Check if a token ID is in the stop token set.
 #[pyfunction]
-pub fn check_stop_tokens_rust(
-    token_id: i64,
-    stop_tokens: Vec<i64>,
-) -> PyResult<bool> {
+pub fn check_stop_tokens_rust(token_id: i64, stop_tokens: Vec<i64>) -> PyResult<bool> {
     Ok(stop_tokens.contains(&token_id))
 }
 
@@ -33,26 +30,26 @@ pub fn hash_block_tokens_rust(
 ) -> PyResult<Vec<u8>> {
     use std::collections::hash_map::DefaultHasher;
     use std::hash::{Hash, Hasher};
-    
+
     let mut hasher = DefaultHasher::new();
-    
+
     // Include parent hash
     if let Some(ref ph) = parent_hash {
         ph.hash(&mut hasher);
     }
-    
+
     // Hash token IDs
     for tid in &token_ids {
         tid.hash(&mut hasher);
     }
-    
+
     // Include extra keys
     if let Some(ref keys) = extra_keys {
         for key in keys {
             key.hash(&mut hasher);
         }
     }
-    
+
     let hash_value = hasher.finish();
     Ok(hash_value.to_le_bytes().to_vec())
 }
@@ -69,10 +66,10 @@ pub fn check_stop_strings_rust(
     if stop_strings.is_empty() || output_text.is_empty() {
         return Ok(None);
     }
-    
+
     // Find max stop string length for search window
     let max_stop_len = stop_strings.iter().map(|s| s.len()).max().unwrap_or(0);
-    
+
     // Calculate search start position
     let text_len = output_text.len();
     let check_start = if new_char_count + max_stop_len > text_len {
@@ -80,9 +77,9 @@ pub fn check_stop_strings_rust(
     } else {
         text_len - new_char_count - max_stop_len
     };
-    
+
     let check_text = &output_text[check_start..];
-    
+
     // Check each stop string
     for (idx, stop_str) in stop_strings.iter().enumerate() {
         if let Some(pos) = check_text.find(stop_str) {
@@ -95,7 +92,7 @@ pub fn check_stop_strings_rust(
             return Ok(Some((idx, truncate_to)));
         }
     }
-    
+
     Ok(None)
 }
 
@@ -126,6 +123,6 @@ pub fn detokenize_batch_rust(
                 .join("")
         })
         .collect();
-    
+
     Ok(results)
 }

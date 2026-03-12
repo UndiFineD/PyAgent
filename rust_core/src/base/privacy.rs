@@ -10,11 +10,10 @@ pub fn redact_pii(text: &str) -> PyResult<String> {
     let email_re = EMAIL_RE.get_or_init(|| {
         regex::Regex::new(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+").unwrap()
     });
-    
-    let ip_re = IP_RE.get_or_init(|| {
-        regex::Regex::new(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b").unwrap()
-    });
-    
+
+    let ip_re =
+        IP_RE.get_or_init(|| regex::Regex::new(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b").unwrap());
+
     let key_re = KEY_RE.get_or_init(|| {
         regex::Regex::new(r"(?P<key>api_key|secret_key|secret|token)\s*[:=]\s*[']?(?P<val>[a-zA-Z0-9_.~-]{16,})[']?").unwrap()
     });
