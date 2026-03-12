@@ -19,9 +19,9 @@ FLM stands for Fastflow Language Model.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, Protocol, cast
-from collections.abc import Callable
 
 from openai import OpenAI
 
@@ -87,6 +87,11 @@ class FlmChatAdapter:
     config: FlmProviderConfig
     api_key: str = "dummy"
     client_factory: _ClientFactory = cast(_ClientFactory, OpenAI)
+
+    @staticmethod
+    def validate() -> None:
+        """Stub method used by unit tests to ensure the class is importable."""
+        pass
 
     def _create_client(self) -> _ClientProtocol:
         """Create a new FLM client instance using the provided factory and configuration."""

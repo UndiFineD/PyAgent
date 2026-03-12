@@ -13,3 +13,15 @@
 # limitations under the License.
 
 """Provider adapters and configuration contracts for model runtimes."""
+
+# expose convenient imports for consumers so tests and other modules can
+# simply import from ``src.core.providers`` instead of digging into
+# individual files.  These names were recently snake-cased and need to be
+# kept in sync.
+from .flm_chat_adapter import FlmChatAdapter  # noqa: F401
+from .FlmProviderConfig import FlmProviderConfig  # noqa: F401
+
+__all__ = [
+    "FlmChatAdapter",
+    "FlmProviderConfig",
+]
