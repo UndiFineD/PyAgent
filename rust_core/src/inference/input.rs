@@ -15,12 +15,23 @@ fn extract_messages(messages: &Bound<'_, PyList>) -> PyResult<Vec<ChatMessage>> 
     let mut result = Vec::with_capacity(messages.len());
     for item in messages.iter() {
         if let Ok(dict) = item.downcast::<PyDict>() {
-            let role = dict.get_item("role")?.map(|s| s.extract::<String>()).transpose()?.unwrap_or_else(|| "user".to_string());
-            let content = dict.get_item("content")?.map(|s| s.extract::<String>()).transpose()?.unwrap_or_default();
+            let role = dict
+                .get_item("role")?
+                .map(|s| s.extract::<String>())
+                .transpose()?
+                .unwrap_or_else(|| "user".to_string());
+            let content = dict
+                .get_item("content")?
+                .map(|s| s.extract::<String>())
+                .transpose()?
+                .unwrap_or_default();
             result.push(ChatMessage { role, content });
         } else if let Ok(tuple) = item.downcast::<PyTuple>() {
             if tuple.len() >= 2 {
-                let role = tuple.get_item(0)?.extract::<String>().unwrap_or_else(|_| "user".to_string());
+                let role = tuple
+                    .get_item(0)?
+                    .extract::<String>()
+                    .unwrap_or_else(|_| "user".to_string());
                 let content = tuple.get_item(1)?.extract::<String>().unwrap_or_default();
                 result.push(ChatMessage { role, content });
             }
@@ -39,9 +50,9 @@ pub fn linearize_chat_rust(
 ) -> PyResult<String> {
     let msg_list = extract_messages(messages)?;
     let add_gen_prompt = add_generation_prompt.unwrap_or(false);
-    
+
     let mut buffer = String::with_capacity(msg_list.len() * 100);
-    
+
     match template_format {
         "chatml" => {
             // <|im_start|>role\ncontent<|im_end|>\n
@@ -60,7 +71,7 @@ pub fn linearize_chat_rust(
             // [INST] <<SYS>>\n{sys}\n<</SYS>>\n\n{usr} [/INST] {asst} </s><s>[INST] {usr} [/INST]
             let mut sys_msg = String::new();
             let mut first_user = true;
-            
+
             for msg in &msg_list {
                 match msg.role.as_str() {
                     "system" => {
@@ -106,11 +117,17 @@ pub fn linearize_chat_rust(
                 buffer.push_str(&msg_list[0].content);
                 buffer.push('\n');
             }
-            
+
             for msg in &msg_list {
-                if msg.role == "system" { continue; }
-                
-                let prefix = if msg.role == "user" { "USER: " } else { "ASSISTANT: " };
+                if msg.role == "system" {
+                    continue;
+                }
+
+                let prefix = if msg.role == "user" {
+                    "USER: "
+                } else {
+                    "ASSISTANT: "
+                };
                 buffer.push_str(prefix);
                 buffer.push_str(&msg.content);
                 if msg.role == "assistant" {
@@ -122,7 +139,8 @@ pub fn linearize_chat_rust(
                 buffer.push_str("ASSISTANT: ");
             }
         }
-        _ => { // alpaca logic as fallback for now
+        _ => {
+            // alpaca logic as fallback for now
             // ### Instruction:\n{content}\n\n### Response:\n{content}
             for msg in &msg_list {
                 match msg.role.as_str() {
@@ -148,7 +166,7 @@ pub fn linearize_chat_rust(
             }
         }
     }
-    
+
     Ok(buffer)
 }
 
@@ -165,21 +183,29 @@ pub fn validate_chat_messages_rust(
 
     for (i, item) in messages.iter().enumerate() {
         let (role, content) = if let Ok(dict) = item.downcast::<PyDict>() {
-             if !dict.contains("role")? || !dict.contains("content")? {
-                 return Ok((false, format!("Message {} missing role or content", i)));
-             }
-             let r = dict.get_item("role")?.map(|s| s.extract::<String>()).transpose()?.unwrap_or_default();
-             let c = dict.get_item("content")?.map(|s| s.extract::<String>()).transpose()?.unwrap_or_default();
-             (r, c)
+            if !dict.contains("role")? || !dict.contains("content")? {
+                return Ok((false, format!("Message {} missing role or content", i)));
+            }
+            let r = dict
+                .get_item("role")?
+                .map(|s| s.extract::<String>())
+                .transpose()?
+                .unwrap_or_default();
+            let c = dict
+                .get_item("content")?
+                .map(|s| s.extract::<String>())
+                .transpose()?
+                .unwrap_or_default();
+            (r, c)
         } else if let Ok(tuple) = item.downcast::<PyTuple>() {
-             if tuple.len() != 2 {
-                  continue; // Or error? Test says "invalid role" is caught.
-             }
-             let r = tuple.get_item(0)?.extract::<String>()?;
-             let c = tuple.get_item(1)?.extract::<String>()?;
-             (r, c)
+            if tuple.len() != 2 {
+                continue; // Or error? Test says "invalid role" is caught.
+            }
+            let r = tuple.get_item(0)?.extract::<String>()?;
+            let c = tuple.get_item(1)?.extract::<String>()?;
+            (r, c)
         } else {
-             return Ok((false, format!("Message {} invalid type", i)));
+            return Ok((false, format!("Message {} invalid type", i)));
         };
 
         if !allowed_roles.contains(&role) {
@@ -189,7 +215,7 @@ pub fn validate_chat_messages_rust(
         if content.trim().is_empty() {
             // warning
         }
-        
+
         if role == "system" && i != 0 {
             // Warning
         }
@@ -209,9 +235,9 @@ pub fn estimate_tokens_from_messages_rust(
     for msg in msg_list {
         total_chars += msg.content.len();
         // Add overhead for wrappers
-        total_chars += 10; 
+        total_chars += 10;
     }
-    
+
     Ok((total_chars as f64 / chars_per_token).ceil() as usize)
 }
 
@@ -230,7 +256,7 @@ pub fn truncate_chat_history_rust(
         total_chars += msg.content.len() + 10;
     }
     let estimated_total = (total_chars as f64 / chars_per_token).ceil() as usize;
-    
+
     // We construct the output format (Dicts)
     let to_dict = |m: ChatMessage| {
         let mut map = HashMap::new();
@@ -240,10 +266,10 @@ pub fn truncate_chat_history_rust(
     };
 
     if estimated_total <= max_tokens {
-         // Return as list of dicts
-         return Ok(msg_list.into_iter().map(to_dict).collect());
+        // Return as list of dicts
+        return Ok(msg_list.into_iter().map(to_dict).collect());
     }
-    
+
     let mut result_list = Vec::new();
     let mut current_tokens = 0;
     let mut system_msg = None;
@@ -272,7 +298,7 @@ pub fn truncate_chat_history_rust(
     if let Some(sys) = system_msg {
         result_list.insert(0, sys);
     }
-    
+
     Ok(result_list.into_iter().map(to_dict).collect())
 }
 
@@ -283,11 +309,11 @@ pub fn pad_input_ids_rust(
     pad_token_id: i64,
     padding_side: &str, // "left" or "right"
     max_len: Option<usize>,
-) -> (Vec<Vec<i64>>, Vec<Vec<i64>>) { // (padded_ids, attention_mask)
+) -> (Vec<Vec<i64>>, Vec<Vec<i64>>) {
+    // (padded_ids, attention_mask)
     let batch_size = input_ids.len();
-    let max_seq_len = max_len.unwrap_or_else(|| {
-        input_ids.iter().map(|s| s.len()).max().unwrap_or(0)
-    });
+    let max_seq_len =
+        max_len.unwrap_or_else(|| input_ids.iter().map(|s| s.len()).max().unwrap_or(0));
 
     let mut padded_ids = vec![vec![pad_token_id; max_seq_len]; batch_size];
     let mut attention_mask = vec![vec![0; max_seq_len]; batch_size];
@@ -354,9 +380,8 @@ pub fn classify_token_context_rust(
     let is_thinking = open_count > close_count;
 
     // Check if token is part of tool call
-    let is_tool_call = combined.contains("\"name\"") &&
-                       (combined.ends_with("\"arguments\"") ||
-                        combined.contains("\"arguments\":"));
+    let is_tool_call = combined.contains("\"name\"")
+        && (combined.ends_with("\"arguments\"") || combined.contains("\"arguments\":"));
 
     // Content is default
     let is_content = !is_thinking && !is_tool_call;

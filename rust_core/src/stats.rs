@@ -1,8 +1,8 @@
+pub mod general;
 pub mod metrics;
+pub mod profiling;
 pub mod stability;
 pub mod tracing;
-pub mod profiling;
-pub mod general;
 
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
@@ -20,7 +20,10 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(tracing::create_span_context, m)?)?;
     m.add_function(wrap_pyfunction!(tracing::calculate_latency_breakdown, m)?)?;
     // profiling
-    m.add_function(wrap_pyfunction!(profiling::calculate_optimization_priority, m)?)?;
+    m.add_function(wrap_pyfunction!(
+        profiling::calculate_optimization_priority,
+        m
+    )?)?;
     m.add_function(wrap_pyfunction!(profiling::identify_bottlenecks, m)?)?;
     // general
     m.add_function(wrap_pyfunction!(general::calculate_baseline, m)?)?;

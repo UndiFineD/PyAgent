@@ -12,12 +12,12 @@ pub fn calculate_optimization_priority(total_time: f64, call_count: i64) -> PyRe
 pub fn identify_bottlenecks(stats: Vec<(String, f64)>, threshold_ms: f64) -> PyResult<Vec<String>> {
     let threshold_sec = threshold_ms / 1000.0;
     let mut bottlenecks = Vec::new();
-    
+
     for (name, time) in stats {
         if time > threshold_sec {
             bottlenecks.push(name);
         }
     }
-    
+
     Ok(bottlenecks)
 }

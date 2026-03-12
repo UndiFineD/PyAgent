@@ -1,12 +1,12 @@
-pub mod config;
 pub mod cache;
-pub mod layers;
 pub mod clustering;
-pub mod ops;
+pub mod config;
 pub mod inference_utils;
-pub mod types;
+pub mod layers;
 pub mod network;
+pub mod ops;
 pub mod transformer;
+pub mod types;
 
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
@@ -22,12 +22,27 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(clustering::cluster_interactions_rust, m)?)?;
     m.add_function(wrap_pyfunction!(ops::top_k_cosine_similarity, m)?)?;
     m.add_function(wrap_pyfunction!(ops::average_feature_vectors, m)?)?;
-    
-    m.add_function(wrap_pyfunction!(inference_utils::generate_synthetic_snippets_with_stats, m)?)?;
-    m.add_function(wrap_pyfunction!(inference_utils::generate_synthetic_snippets, m)?)?;
-    m.add_function(wrap_pyfunction!(inference_utils::vectorize_text_insight_with_stats, m)?)?;
-    m.add_function(wrap_pyfunction!(inference_utils::vectorize_text_insight, m)?)?;
-    m.add_function(wrap_pyfunction!(inference_utils::generate_neural_response, m)?)?;
+
+    m.add_function(wrap_pyfunction!(
+        inference_utils::generate_synthetic_snippets_with_stats,
+        m
+    )?)?;
+    m.add_function(wrap_pyfunction!(
+        inference_utils::generate_synthetic_snippets,
+        m
+    )?)?;
+    m.add_function(wrap_pyfunction!(
+        inference_utils::vectorize_text_insight_with_stats,
+        m
+    )?)?;
+    m.add_function(wrap_pyfunction!(
+        inference_utils::vectorize_text_insight,
+        m
+    )?)?;
+    m.add_function(wrap_pyfunction!(
+        inference_utils::generate_neural_response,
+        m
+    )?)?;
 
     Ok(())
 }

@@ -24,28 +24,31 @@ pub fn blake3_hash_rust(data: Vec<u8>) -> String {
 }
 #[pyfunction]
 pub fn perceptual_hash_distance_rust(hash1: &str, hash2: &str) -> PyResult<f64> {
-  // Test expects 1.0 for same hash, < 1.0 for different.
-  // This implies similarity.
-  
-  if hash1 == hash2 {
-      return Ok(1.0);
-  }
-  
-  // Calculate rudimentary string distance/similarity
-  let len = hash1.len().max(hash2.len());
-  if len == 0 { return Ok(1.0); }
-  
-  let match_count = hash1.chars().zip(hash2.chars()).filter(|(a, b)| a == b).count();
-  Ok(match_count as f64 / len as f64)
+    // Test expects 1.0 for same hash, < 1.0 for different.
+    // This implies similarity.
+
+    if hash1 == hash2 {
+        return Ok(1.0);
+    }
+
+    // Calculate rudimentary string distance/similarity
+    let len = hash1.len().max(hash2.len());
+    if len == 0 {
+        return Ok(1.0);
+    }
+
+    let match_count = hash1
+        .chars()
+        .zip(hash2.chars())
+        .filter(|(a, b)| a == b)
+        .count();
+    Ok(match_count as f64 / len as f64)
 }
 
 /// Compute blockwise hashes for long context caching
 /// Returns list of hashes for each block_size chunk
 #[pyfunction]
-pub fn compute_block_hashes_rust(
-    input_ids: Vec<i64>,
-    block_size: usize,
-) -> Vec<u64> {
+pub fn compute_block_hashes_rust(input_ids: Vec<i64>, block_size: usize) -> Vec<u64> {
     if input_ids.is_empty() {
         return Vec::new();
     }
@@ -68,7 +71,6 @@ pub fn compute_block_hashes_batched_rust(
     block_size: usize,
     hash_seed: u64,
 ) -> Vec<u64> {
-    
     if token_ids.is_empty() || block_size == 0 {
         return Vec::new();
     }
@@ -101,10 +103,7 @@ pub fn compute_block_hashes_batched_rust(
 
 /// Find prefix match length between cached hashes and new hashes
 #[pyfunction]
-pub fn find_prefix_match_rust(
-    cached_hashes: Vec<u64>,
-    new_hashes: Vec<u64>,
-) -> usize {
+pub fn find_prefix_match_rust(cached_hashes: Vec<u64>, new_hashes: Vec<u64>) -> usize {
     let len = cached_hashes.len().min(new_hashes.len());
     let mut matching_blocks = 0;
 
@@ -122,10 +121,7 @@ pub fn find_prefix_match_rust(
 /// Multimodal input hasher
 /// Hashes mixed modality inputs (text + image_embeddings)
 #[pyfunction]
-pub fn multi_modal_hash_rust(
-    text_ids: Vec<i64>,
-    image_features: Vec<Vec<f32>>,
-) -> String {
+pub fn multi_modal_hash_rust(text_ids: Vec<i64>, image_features: Vec<Vec<f32>>) -> String {
     let mut hasher = DefaultHasher::new();
 
     text_ids.hash(&mut hasher);
@@ -155,12 +151,13 @@ pub fn identify_blocks_to_evict_rust(
     }
 
     let num_to_evict = (current_blocks + required_slots) - max_blocks;
-    
+
     // Sort by timestamp (ascending = oldest first)
     let mut sorted_usage = block_usage.clone();
     sorted_usage.sort_by_key(|k| k.1);
 
-    sorted_usage.iter()
+    sorted_usage
+        .iter()
         .take(num_to_evict)
         .map(|(id, _)| *id)
         .collect()
@@ -168,9 +165,7 @@ pub fn identify_blocks_to_evict_rust(
 
 /// Compute encoder cache content hash
 #[pyfunction]
-pub fn encoder_content_hash_rust(
-    data: Vec<u8>,
-) -> String {
+pub fn encoder_content_hash_rust(data: Vec<u8>) -> String {
     use std::collections::hash_map::DefaultHasher;
     use std::hash::{Hash, Hasher};
 
@@ -184,26 +179,22 @@ pub fn encoder_content_hash_rust(
 /// Test says: access_times = [5.0, 1.0, 3.0, 2.0, 4.0]. Valid output [1, 3] (values 1.0 and 2.0).
 /// So LOWER is EVICTED.
 #[pyfunction]
-pub fn lru_evict_candidates_rust(
-    access_times: Vec<f64>,
-    num_to_evict: usize,
-) -> Vec<usize> {
+pub fn lru_evict_candidates_rust(access_times: Vec<f64>, num_to_evict: usize) -> Vec<usize> {
     let mut indexed: Vec<(usize, f64)> = access_times.into_iter().enumerate().collect();
     // Sort by access time ascending (oldest/least used first if smaller is older)
     indexed.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap_or(std::cmp::Ordering::Equal));
-    
+
     indexed.iter().take(num_to_evict).map(|(i, _)| *i).collect()
 }
 
 #[pyfunction]
 #[pyo3(signature = (frequency, recency, size_bytes=0.0, alpha=0.5))]
-pub fn arc_cache_priority_rust(
-    frequency: f64,
-    recency: f64,
-    size_bytes: f64,
-    alpha: f64,
-) -> f64 {
+pub fn arc_cache_priority_rust(frequency: f64, recency: f64, size_bytes: f64, alpha: f64) -> f64 {
     // Simple heuristic combining them
-    let size_penalty = if size_bytes > 0.0 { 1.0 / size_bytes.ln() } else { 1.0 };
+    let size_penalty = if size_bytes > 0.0 {
+        1.0 / size_bytes.ln()
+    } else {
+        1.0
+    };
     (frequency * alpha) + (recency * (1.0 - alpha)) * size_penalty
 }

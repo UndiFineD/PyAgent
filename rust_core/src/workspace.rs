@@ -17,7 +17,7 @@ use std::collections::HashMap;
 #[pyfunction]
 pub fn workspace_init_rust(_size: usize) -> PyResult<u64> {
     // Phase 52: Initialize DBO workspace
-    Ok(0x52525252) 
+    Ok(0x52525252)
 }
 
 #[pyfunction]

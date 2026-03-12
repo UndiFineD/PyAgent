@@ -4,25 +4,20 @@ use std::collections::HashMap;
 /// Prepare position IDs for different attention backends
 /// Returns list of position IDs for each sequence (offset by provided offsets)
 #[pyfunction]
-pub fn prepare_positions_rust(
-    ends: Vec<i64>,
-    starts: Vec<i64>,
-) -> Vec<Vec<i64>> {
-    ends.iter().zip(starts.iter()).map(|(&end, &start)| {
-        (start..end).collect()
-    }).collect()
+pub fn prepare_positions_rust(ends: Vec<i64>, starts: Vec<i64>) -> Vec<Vec<i64>> {
+    ends.iter()
+        .zip(starts.iter())
+        .map(|(&end, &start)| (start..end).collect())
+        .collect()
 }
 
 /// Compute index mapping for paged attention
 /// Returns (mapping, count)
 #[pyfunction]
-pub fn compute_idx_mapping_rust(
-    valid_mask: Vec<bool>,
-    _block_size: usize,
-) -> (Vec<i32>, usize) {
+pub fn compute_idx_mapping_rust(valid_mask: Vec<bool>, _block_size: usize) -> (Vec<i32>, usize) {
     let mut mapping = Vec::with_capacity(valid_mask.len());
     let mut count = 0;
-    
+
     for &is_valid in &valid_mask {
         if is_valid {
             mapping.push(count as i32);
@@ -31,17 +26,14 @@ pub fn compute_idx_mapping_rust(
             mapping.push(-1);
         }
     }
-    
+
     (mapping, count)
 }
 
 /// Expand index mapping for gathered access
 /// Reads inputs as (mapping, repeat_counts) and expands
 #[pyfunction]
-pub fn expand_idx_mapping_rust(
-    mapping: Vec<i32>,
-    elements: Vec<usize>,
-) -> Vec<i32> {
+pub fn expand_idx_mapping_rust(mapping: Vec<i32>, elements: Vec<usize>) -> Vec<i32> {
     let mut expanded = Vec::new();
     // Assuming strictly that mapping.len() == elements.len() per test implied logic
     for (&idx, &count) in mapping.iter().zip(elements.iter()) {
@@ -94,40 +86,40 @@ pub fn warmup_sizes_rust(
 /// Compute numerically stable softmax (CPU reference)
 /// Returns probability distribution
 #[pyfunction]
-pub fn softmax_stable_rust(
-    logits: Vec<f32>,
-) -> Vec<f32> {
+pub fn softmax_stable_rust(logits: Vec<f32>) -> Vec<f32> {
     let temperature = 1.0;
     if logits.is_empty() {
         return vec![];
     }
     let max_logit = logits.iter().fold(f32::NEG_INFINITY, |a, &b| a.max(b));
     let mut sum_exp = 0.0;
-    let exps: Vec<f32> = logits.iter().map(|&x| {
-        let e = ((x - max_logit) / temperature).exp();
-        sum_exp += e;
-        e
-    }).collect();
-    
+    let exps: Vec<f32> = logits
+        .iter()
+        .map(|&x| {
+            let e = ((x - max_logit) / temperature).exp();
+            sum_exp += e;
+            e
+        })
+        .collect();
+
     exps.into_iter().map(|x| x / sum_exp).collect()
 }
 
 /// Performs a simple matrix multiplication (GEMM) for testing
 /// Replaces the old tile size calculator to match Python test expectations
 #[pyfunction]
-pub fn persistent_gemm_tile_rust(
-    a: Vec<Vec<f64>>,
-    b: Vec<Vec<f64>>,
-) -> PyResult<Vec<Vec<f64>>> {
+pub fn persistent_gemm_tile_rust(a: Vec<Vec<f64>>, b: Vec<Vec<f64>>) -> PyResult<Vec<Vec<f64>>> {
     if a.is_empty() || b.is_empty() {
         return Ok(vec![]);
     }
     let m = a.len();
     let k = a[0].len();
     let n = b[0].len(); // Assuming b is standard (not transposed)
-    
+
     if b.len() != k {
-        return Err(pyo3::exceptions::PyValueError::new_err("Dimension mismatch"));
+        return Err(pyo3::exceptions::PyValueError::new_err(
+            "Dimension mismatch",
+        ));
     }
 
     let mut c = vec![vec![0.0; n]; m];
@@ -150,12 +142,12 @@ pub fn persistent_gemm_tile_rust(
 #[allow(clippy::too_many_arguments)]
 pub fn attention_dispatch_rust(
     _seq_len: usize,
-    _head_size: usize, 
+    _head_size: usize,
     _num_heads: usize,
     _head_dim: usize,
     use_flash: bool,
     _use_vllm: bool,
-    _scaling: bool, 
+    _scaling: bool,
     is_decoding: bool,
 ) -> usize {
     if is_decoding && use_flash {
@@ -166,7 +158,6 @@ pub fn attention_dispatch_rust(
         2 // fallback
     }
 }
-
 
 /// Compute rotary embedding cos/sin tables (RoPE)
 /// Returns (cos, sin) tables (batch_size, dim)
@@ -180,16 +171,16 @@ pub fn rotary_embedding_kernel_rust(
     let theta_base = base.unwrap_or(10000.0);
     let mut cos_table = Vec::with_capacity(positions.len());
     let mut sin_table = Vec::with_capacity(positions.len());
-    
+
     for &pos in &positions {
         let mut row_cos = Vec::with_capacity(dim);
         let mut row_sin = Vec::with_capacity(dim);
-        
+
         for i in (0..dim).step_by(2) {
             let theta = (pos as f64) * (1.0 / theta_base.powf((i as f64) / (dim as f64)));
             let sin_val = theta.sin() as f32;
             let cos_val = theta.cos() as f32;
-            
+
             row_cos.push(cos_val);
             row_cos.push(cos_val);
             row_sin.push(sin_val);
@@ -198,7 +189,7 @@ pub fn rotary_embedding_kernel_rust(
         cos_table.push(row_cos);
         sin_table.push(row_sin);
     }
-    
+
     (cos_table, sin_table)
 }
 
@@ -207,17 +198,17 @@ pub fn rotary_embedding_kernel_rust(
 #[pyfunction]
 #[pyo3(signature = (dim, temporal_sections=None, height_sections=None, width_sections=None, lengths=None, padding=None))]
 pub fn mrope_section_indices_rust(
-    dim: usize,        
+    dim: usize,
     temporal_sections: Option<usize>,
-    height_sections: Option<usize>, 
-    width_sections: Option<usize>,  
-    lengths: Option<Vec<usize>>,    
+    height_sections: Option<usize>,
+    width_sections: Option<usize>,
+    lengths: Option<Vec<usize>>,
     padding: Option<usize>,
 ) -> (Vec<i64>, Vec<i64>, Vec<i64>) {
     let _ = dim;
     let _ = padding;
     let _ = lengths;
-    
+
     // Generate indices for each dimension
     // Simple mock implementation matching test expectations for shape/values
     let temp_len = temporal_sections.unwrap_or(0);
@@ -227,7 +218,7 @@ pub fn mrope_section_indices_rust(
     let t_idxs: Vec<i64> = (0..temp_len).map(|i| i as i64).collect();
     let h_idxs: Vec<i64> = (0..h_len).map(|i| i as i64).collect();
     let w_idxs: Vec<i64> = (0..w_len).map(|i| i as i64).collect();
-    
+
     (t_idxs, h_idxs, w_idxs)
 }
 
@@ -243,12 +234,12 @@ pub fn dynamic_ntk_alpha_rust(
 ) -> f64 {
     let _ = method;
     if seq_len <= max_pos {
-        return base; 
+        return base;
     }
-    
+
     let scale = (seq_len as f64) / (max_pos as f64);
-    let alpha = base * scale.powf(20.0 / (20.0 - 2.0)); 
-    
+    let alpha = base * scale.powf(20.0 / (20.0 - 2.0));
+
     alpha
 }
 
@@ -258,10 +249,10 @@ pub fn dynamic_ntk_alpha_rust(
 /// Returns (backend, config) tuple
 #[pyfunction]
 #[pyo3(signature = (
-    head_dim, 
-    batch_size=None, 
-    seq_len=None, 
-    num_heads=None, 
+    head_dim,
+    batch_size=None,
+    seq_len=None,
+    num_heads=None,
     num_kv_heads=None,
     is_prefill=false,
     has_sliding_window=false,
@@ -275,7 +266,7 @@ pub fn triton_attention_dispatch_rust(
     batch_size: Option<usize>,
     seq_len: Option<usize>,
     num_heads: Option<usize>,
-    num_kv_heads: Option<usize>, 
+    num_kv_heads: Option<usize>,
     is_prefill: bool,
     has_sliding_window: bool,
     sliding_window_size: Option<usize>,
@@ -286,7 +277,7 @@ pub fn triton_attention_dispatch_rust(
     let _ = has_sliding_window;
     let _ = sliding_window_size;
     let _ = dtype;
-    
+
     let mut config = HashMap::new();
     // 0: FlashAttn, 1: Triton, 2: Xformers, 3: Torch
     let backend_id = if head_dim > 128 || !use_flash {
@@ -295,19 +286,23 @@ pub fn triton_attention_dispatch_rust(
     } else {
         config.insert("BLOCK_SIZE".to_string(), "64".to_string());
         if let Some(bs) = batch_size {
-             if bs > 32 { 0 } else { 0 }
+            if bs > 32 {
+                0
+            } else {
+                0
+            }
         } else {
             0
         }
     };
-    
+
     if let (Some(nh), Some(nkv)) = (num_heads, num_kv_heads) {
         if nkv > 0 {
-             let ratio = nh / nkv;
-             config.insert("gqa_ratio".to_string(), ratio.to_string());
+            let ratio = nh / nkv;
+            config.insert("gqa_ratio".to_string(), ratio.to_string());
         }
     }
-    
+
     (backend_id, config)
 }
 
@@ -325,19 +320,19 @@ pub fn batch_descriptor_key_rust(
     is_prefill: bool,
     pad_to: usize,
 ) -> u64 {
-    use std::hash::{Hash, Hasher};
     use std::collections::hash_map::DefaultHasher;
-    
+    use std::hash::{Hash, Hasher};
+
     // Pad to alignment
     let padded_tokens = ((num_tokens + pad_to - 1) / pad_to) * pad_to;
     let padded_reqs = ((num_reqs + pad_to - 1) / pad_to) * pad_to;
-    
+
     let mut hasher = DefaultHasher::new();
     padded_tokens.hash(&mut hasher);
     padded_reqs.hash(&mut hasher);
     max_seq_len.hash(&mut hasher);
     is_prefill.hash(&mut hasher);
-    
+
     hasher.finish()
 }
 
@@ -353,37 +348,37 @@ pub fn compute_ubatch_slices_rust(
     if num_ubatches == 0 || num_tokens == 0 {
         return vec![];
     }
-    
+
     // Determine effective ubatch count based on max tokens
     let effective_ubatches = if max_tokens_per_ubatch > 0 {
         ((num_tokens + max_tokens_per_ubatch - 1) / max_tokens_per_ubatch).max(num_ubatches)
     } else {
         num_ubatches
     };
-    
+
     let tokens_per_ubatch = (num_tokens + effective_ubatches - 1) / effective_ubatches;
     let reqs_per_ubatch = (num_reqs + effective_ubatches - 1) / effective_ubatches;
-    
+
     let mut slices = Vec::with_capacity(effective_ubatches);
     let mut token_pos = 0;
     let mut req_pos = 0;
-    
+
     for _ in 0..effective_ubatches {
         let token_end = (token_pos + tokens_per_ubatch).min(num_tokens);
         let req_end = (req_pos + reqs_per_ubatch).min(num_reqs);
-        
+
         if token_end > token_pos {
             slices.push((token_pos, token_end, req_pos, req_end));
         }
-        
+
         token_pos = token_end;
         req_pos = req_end;
-        
+
         if token_pos >= num_tokens {
             break;
         }
     }
-    
+
     slices
 }
 
@@ -399,33 +394,33 @@ pub fn cudagraph_stats_compute_rust(
     total_replay_time_ms: f64,
 ) -> HashMap<String, f64> {
     let mut stats = HashMap::new();
-    
+
     let total_lookups = cache_hits + cache_misses;
     let hit_rate = if total_lookups > 0 {
         cache_hits as f64 / total_lookups as f64
     } else {
         0.0
     };
-    
+
     // Replay is typically 10-100x faster than capture
     let avg_capture_time = if captures > 0 {
         total_capture_time_ms / captures as f64
     } else {
         0.0
     };
-    
+
     let avg_replay_time = if replays > 0 {
         total_replay_time_ms / replays as f64
     } else {
         0.0
     };
-    
+
     let speedup = if avg_replay_time > 0.0 {
         avg_capture_time / avg_replay_time
     } else {
         0.0
     };
-    
+
     // Cache efficiency = (replays * speedup) / (captures + replays)
     let total_ops = captures + replays;
     let cache_efficiency = if total_ops > 0 {
@@ -433,7 +428,7 @@ pub fn cudagraph_stats_compute_rust(
     } else {
         0.0
     };
-    
+
     stats.insert("hit_rate".to_string(), hit_rate);
     stats.insert("avg_capture_time_ms".to_string(), avg_capture_time);
     stats.insert("avg_replay_time_ms".to_string(), avg_replay_time);
@@ -441,7 +436,7 @@ pub fn cudagraph_stats_compute_rust(
     stats.insert("cache_efficiency".to_string(), cache_efficiency);
     stats.insert("captures".to_string(), captures as f64);
     stats.insert("replays".to_string(), replays as f64);
-    
+
     stats
 }
 
@@ -461,20 +456,20 @@ pub fn dispatch_decision_rust(
     if num_tokens < min_tokens || num_tokens > max_tokens {
         return 0; // EAGER
     }
-    
+
     // Ignore num_reqs for now, can be used for scaling
     let _ = num_reqs;
     // Check if graph exists
     let has_graph = available_graph_keys.contains(&current_key);
-    
+
     if !has_graph {
         return 0; // EAGER
     }
-    
+
     if prefer_piecewise {
         return 2; // PIECEWISE
     }
-    
+
     1 // CUDAGRAPH
 }
 
@@ -491,7 +486,7 @@ pub fn compute_padded_buffer_size_rust(
     let padded_batch = ((batch_size + batch_pad - 1) / batch_pad) * batch_pad;
     let padded_seq = ((seq_len + seq_pad - 1) / seq_pad) * seq_pad;
     let total_elements = padded_batch * padded_seq * hidden_size;
-    
+
     (padded_batch, padded_seq, total_elements)
 }
 
@@ -502,22 +497,22 @@ pub fn analyze_shape_patterns_rust(
     shapes: Vec<(usize, usize)>, // (batch, seq_len) pairs
 ) -> (usize, HashMap<(usize, usize), usize>, Vec<usize>) {
     let mut freq_map: HashMap<(usize, usize), usize> = HashMap::new();
-    
+
     for shape in &shapes {
         *freq_map.entry(*shape).or_default() += 1;
     }
-    
+
     let num_unique = freq_map.len();
-    
+
     // Analyze which dimensions vary most
     let mut batch_values: HashMap<usize, usize> = HashMap::new();
     let mut seq_values: HashMap<usize, usize> = HashMap::new();
-    
+
     for &(batch, seq) in &shapes {
         *batch_values.entry(batch).or_default() += 1;
         *seq_values.entry(seq).or_default() += 1;
     }
-    
+
     // Suggest dynamic dims (dims with high variability)
     let mut suggested_dynamic = Vec::new();
     if batch_values.len() > 3 {
@@ -526,7 +521,7 @@ pub fn analyze_shape_patterns_rust(
     if seq_values.len() > 3 {
         suggested_dynamic.push(1); // Seq dim
     }
-    
+
     (num_unique, freq_map, suggested_dynamic)
 }
 
@@ -546,7 +541,7 @@ pub fn track_compile_event_rust(
     let mut cache_hits = current_cache_hits;
     let mut fallbacks = current_fallbacks;
     let mut errors = current_errors;
-    
+
     match event_type {
         0 => compiles += 1,
         1 => recompiles += 1,
@@ -555,7 +550,7 @@ pub fn track_compile_event_rust(
         4 => errors += 1,
         _ => {}
     }
-    
+
     (compiles, recompiles, cache_hits, fallbacks, errors)
 }
 
@@ -569,16 +564,16 @@ pub fn compute_optimal_graph_sizes_rust(
     additional_sizes: Vec<usize>,
 ) -> Vec<usize> {
     let mut sizes: Vec<usize> = (min_batch..=max_batch).step_by(step).collect();
-    
+
     // Add additional specific sizes
     for size in additional_sizes {
         if size >= min_batch && size <= max_batch && !sizes.contains(&size) {
             sizes.push(size);
         }
     }
-    
+
     sizes.sort();
     sizes.dedup();
-    
+
     sizes
 }

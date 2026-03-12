@@ -1,7 +1,7 @@
 use pyo3::prelude::*;
+use std::collections::HashMap;
 use std::fs;
 use std::io::Write;
-use std::collections::HashMap;
 
 /// Atomic save for system state (BaseCore Support).
 /// Ensures transactional speed and safety when writing large state files.

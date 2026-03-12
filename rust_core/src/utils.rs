@@ -1,13 +1,13 @@
+pub mod fs;
 pub mod hash;
+pub mod json;
 pub mod math;
-pub mod text;
+pub mod metrics;
 pub mod search;
 pub mod sim;
-pub mod json;
-pub mod fs;
 pub mod system;
-pub mod metrics;
 pub mod tensor;
+pub mod text;
 pub mod validation;
 
 // Re-export everything to maintain flat access if needed by lib.rs
@@ -63,7 +63,10 @@ pub fn register(m: &pyo3::Bound<'_, pyo3::prelude::PyModule>) -> pyo3::PyResult<
     m.add_function(wrap_pyfunction!(json::json_get_path_rust, m)?)?;
     m.add_function(wrap_pyfunction!(json::json_iter_leaves_rust, m)?)?;
     m.add_function(wrap_pyfunction!(json::json_validate_leaves_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(tensor::msgpack_encode_tensor_meta_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(
+        tensor::msgpack_encode_tensor_meta_rust,
+        m
+    )?)?;
     m.add_function(wrap_pyfunction!(math::next_power_of_2_rust, m)?)?;
     m.add_function(wrap_pyfunction!(system::parse_adb_devices_rust, m)?)?;
     m.add_function(wrap_pyfunction!(search::parse_bing_results, m)?)?;
@@ -84,7 +87,10 @@ pub fn register(m: &pyo3::Bound<'_, pyo3::prelude::PyModule>) -> pyo3::PyResult<
     m.add_function(wrap_pyfunction!(hash::generate_hash, m)?)?;
     m.add_function(wrap_pyfunction!(hash::verify_integrity, m)?)?;
     m.add_function(wrap_pyfunction!(hash::get_adler32_shard, m)?)?;
-    m.add_function(wrap_pyfunction!(math::calculate_statistical_significance, m)?)?;
+    m.add_function(wrap_pyfunction!(
+        math::calculate_statistical_significance,
+        m
+    )?)?;
     m.add_function(wrap_pyfunction!(math::calculate_jaccard_similarity, m)?)?;
     Ok(())
 }

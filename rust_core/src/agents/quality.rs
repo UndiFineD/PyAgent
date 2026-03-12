@@ -18,7 +18,11 @@ impl CodeQualityCore {
     }
 
     /// Analyzes Python source code for style issues (e.g., long lines).
-    fn check_python_source_quality(&self, py: Python<'_>, source: String) -> PyResult<Vec<PyObject>> {
+    fn check_python_source_quality(
+        &self,
+        py: Python<'_>,
+        source: String,
+    ) -> PyResult<Vec<PyObject>> {
         let mut issues = Vec::new();
         if source.is_empty() {
             return Ok(issues);
@@ -40,17 +44,20 @@ impl CodeQualityCore {
     fn analyze_rust_source(&self, py: Python<'_>, source: String) -> PyResult<Vec<PyObject>> {
         let mut issues = Vec::new();
         if source.is_empty() || source.trim().len() < 5 {
-             let dict = pyo3::types::PyDict::new(py);
-             dict.set_item("type", "Suggestion")?;
-             dict.set_item("message", "clippy: source too sparse for deep analysis.")?;
-             issues.push(dict.into());
-             return Ok(issues);
+            let dict = pyo3::types::PyDict::new(py);
+            dict.set_item("type", "Suggestion")?;
+            dict.set_item("message", "clippy: source too sparse for deep analysis.")?;
+            issues.push(dict.into());
+            return Ok(issues);
         }
 
         if source.contains("unwrap()") {
             let dict = pyo3::types::PyDict::new(py);
             dict.set_item("type", "Safety")?;
-            dict.set_item("message", "Avoid '.unwrap()', use proper error handling or '.expect()'.")?;
+            dict.set_item(
+                "message",
+                "Avoid '.unwrap()', use proper error handling or '.expect()'.",
+            )?;
             issues.push(dict.into());
         }
 
@@ -58,7 +65,10 @@ impl CodeQualityCore {
         if source.contains("match") && source.matches("=>").count() == 1 {
             let dict = pyo3::types::PyDict::new(py);
             dict.set_item("type", "Suggestion")?;
-            dict.set_item("message", "Consider using 'if let' instead of 'match' for single pattern.")?;
+            dict.set_item(
+                "message",
+                "Consider using 'if let' instead of 'match' for single pattern.",
+            )?;
             issues.push(dict.into());
         }
         Ok(issues)
@@ -68,7 +78,7 @@ impl CodeQualityCore {
     fn analyze_js_source(&self, py: Python<'_>, source: String) -> PyResult<Vec<PyObject>> {
         let mut issues = Vec::new();
         if source.is_empty() {
-             return Ok(issues);
+            return Ok(issues);
         }
 
         // Check for var
@@ -76,16 +86,22 @@ impl CodeQualityCore {
             if re.is_match(&source) {
                 let dict = pyo3::types::PyDict::new(py);
                 dict.set_item("type", "Insecure")?;
-                dict.set_item("message", "Avoid using 'var', use 'let' or 'const' instead.")?;
+                dict.set_item(
+                    "message",
+                    "Avoid using 'var', use 'let' or 'const' instead.",
+                )?;
                 issues.push(dict.into());
             }
         }
 
         if source.contains("==") && !source.contains("===") {
-             let dict = pyo3::types::PyDict::new(py);
-             dict.set_item("type", "Style")?;
-             dict.set_item("message", "Use '===' instead of '==' for strict equality check.")?;
-             issues.push(dict.into());
+            let dict = pyo3::types::PyDict::new(py);
+            dict.set_item("type", "Style")?;
+            dict.set_item(
+                "message",
+                "Use '===' instead of '==' for strict equality check.",
+            )?;
+            issues.push(dict.into());
         }
 
         Ok(issues)

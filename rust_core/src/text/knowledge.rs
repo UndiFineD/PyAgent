@@ -11,7 +11,7 @@ pub fn normalize_and_hash_rust(content: &str) -> PyResult<String> {
         .chars()
         .filter(|c| !c.is_whitespace())
         .collect();
-        
+
     let mut hasher = DefaultHasher::new();
     normalized.hash(&mut hasher);
     Ok(format!("{:x}", hasher.finish()))
@@ -27,7 +27,9 @@ pub fn fast_cache_key_rust(parts: &Bound<'_, PyAny>) -> PyResult<String> {
             part.hash(&mut hasher);
         }
     } else {
-        return Err(pyo3::exceptions::PyTypeError::new_err("Expected string or list of strings"));
+        return Err(pyo3::exceptions::PyTypeError::new_err(
+            "Expected string or list of strings",
+        ));
     }
     Ok(format!("{:x}", hasher.finish()))
 }
@@ -47,7 +49,7 @@ pub fn partition_to_shards_rust(
     shard_count: usize,
 ) -> PyResult<Vec<Vec<String>>> {
     let mut shards = vec![Vec::new(); shard_count];
-    
+
     for item in items {
         let mut hasher = DefaultHasher::new();
         item.hash(&mut hasher);
@@ -55,15 +57,12 @@ pub fn partition_to_shards_rust(
         let shard_idx = (hash as usize) % shard_count;
         shards[shard_idx].push(item);
     }
-    
+
     Ok(shards)
 }
 
 #[pyfunction]
-pub fn calculate_shard_id_rust(
-    key: &str,
-    total_shards: usize,
-) -> PyResult<usize> {
+pub fn calculate_shard_id_rust(key: &str, total_shards: usize) -> PyResult<usize> {
     let mut hasher = DefaultHasher::new();
     key.hash(&mut hasher);
     let hash = hasher.finish();
@@ -74,16 +73,15 @@ pub fn calculate_shard_id_rust(
 pub fn merge_knowledge_rust(base_json: &str, delta_json: &str) -> PyResult<String> {
     let mut base: HashMap<String, serde_json::Value> = serde_json::from_str(base_json)
         .map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?;
-        
+
     let delta: HashMap<String, serde_json::Value> = serde_json::from_str(delta_json)
         .map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?;
-        
+
     for (k, v) in delta {
         base.insert(k, v);
     }
-    
-    serde_json::to_string(&base)
-        .map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))
+
+    serde_json::to_string(&base).map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))
 }
 
 #[pyfunction]
@@ -93,9 +91,9 @@ pub fn filter_stable_knowledge_rust(
 ) -> PyResult<String> {
     let knowledge: HashMap<String, serde_json::Value> = serde_json::from_str(knowledge_json)
         .map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?;
-        
+
     let mut filtered = HashMap::new();
-    
+
     for (k, v) in knowledge {
         // Assuming value schema has "stability" or "confidence" field
         // If it's just a raw value, we can't filter.
@@ -114,7 +112,7 @@ pub fn filter_stable_knowledge_rust(
             filtered.insert(k, v);
         }
     }
-    
+
     serde_json::to_string(&filtered)
         .map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))
 }

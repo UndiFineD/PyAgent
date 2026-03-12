@@ -1,8 +1,7 @@
-
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
-use serde::{Deserialize, Serialize};
 use regex::Regex;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Finding {
@@ -17,14 +16,22 @@ pub struct Finding {
 }
 
 #[pyfunction]
-fn analyze_content(content: &str, file_path_rel: &str, allow_triton_check: bool) -> PyResult<String> {
+fn analyze_content(
+    content: &str,
+    file_path_rel: &str,
+    allow_triton_check: bool,
+) -> PyResult<String> {
     // Call all analysis functions and aggregate results
     let mut findings = Vec::new();
     findings.extend(analyze_security_impl(content, file_path_rel));
     findings.extend(analyze_complexity_impl(content, file_path_rel));
     findings.extend(analyze_documentation_impl(content, file_path_rel));
     findings.extend(analyze_typing_impl(content, file_path_rel));
-    findings.extend(analyze_robustness_and_perf_impl(content, file_path_rel, allow_triton_check));
+    findings.extend(analyze_robustness_and_perf_impl(
+        content,
+        file_path_rel,
+        allow_triton_check,
+    ));
     Ok(serde_json::to_string(&findings).unwrap())
 }
 
@@ -49,18 +56,33 @@ fn analyze_typing(content: &str, file_path_rel: &str) -> PyResult<String> {
 }
 
 #[pyfunction]
-fn analyze_robustness_and_perf(content: &str, file_path_rel: &str, allow_triton_check: bool) -> PyResult<String> {
-    Ok(serde_json::to_string(&analyze_robustness_and_perf_impl(content, file_path_rel, allow_triton_check)).unwrap())
+fn analyze_robustness_and_perf(
+    content: &str,
+    file_path_rel: &str,
+    allow_triton_check: bool,
+) -> PyResult<String> {
+    Ok(serde_json::to_string(&analyze_robustness_and_perf_impl(
+        content,
+        file_path_rel,
+        allow_triton_check,
+    ))
+    .unwrap())
 }
 
 #[pyfunction]
 fn generate_simple_fix(issue_type: &str, content: &str) -> PyResult<Option<String>> {
     // Example: simple fix for unsafe YAML
     if issue_type == "Robustness Issue" {
-        let fixed = content.replace("except Exception as e:  # pylint: disable=broad-exception-caught", "except Exception as e:");
+        let fixed = content.replace(
+            "except Exception as e:  # pylint: disable=broad-exception-caught",
+            "except Exception as e:",
+        );
         return Ok(Some(fixed));
     }
-    if issue_type == "Unsafe YAML" && content.contains("yaml.load(") && !content.contains("yaml.safe_load(") {
+    if issue_type == "Unsafe YAML"
+        && content.contains("yaml.load(")
+        && !content.contains("yaml.safe_load(")
+    {
         let fixed = content.replace("yaml.load(", "yaml.safe_load(");
         return Ok(Some(fixed));
     }
@@ -77,7 +99,7 @@ fn apply_patch(original: &str, _patch: &str) -> PyResult<String> {
 
 fn analyze_security_impl(content: &str, file_path_rel: &str) -> Vec<Finding> {
     let mut findings = Vec::new();
-    
+
     // Check for eval() but skip ast.literal_eval() and model.eval()
     // Using regex for word boundary and negative lookbehind simulation (naive)
     let eval_re = Regex::new(r"(?m)^.*[^\w.]eval\s*\(.*$").unwrap();
@@ -87,7 +109,11 @@ fn analyze_security_impl(content: &str, file_path_rel: &str) -> Vec<Finding> {
         if trimmed.starts_with("#") || trimmed.starts_with("\"") || trimmed.starts_with("'") {
             continue;
         }
-        if eval_re.is_match(line) && !line.contains("ast.literal_eval") && !line.contains(".eval()") && !line.contains("# nosec") {
+        if eval_re.is_match(line)
+            && !line.contains("ast.literal_eval")
+            && !line.contains(".eval()")
+            && !line.contains("# nosec")
+        {
             findings.push(Finding {
                 finding_type: "Security Risk".to_string(),
                 message: "Use of eval() is highly insecure.".to_string(),
@@ -106,7 +132,7 @@ fn analyze_complexity_impl(_content: &str, _file_path_rel: &str) -> Vec<Finding>
 
 fn analyze_documentation_impl(content: &str, file_path_rel: &str) -> Vec<Finding> {
     let mut findings = Vec::new();
-    
+
     // Skip shebang and comments at top
     let lines: Vec<&str> = content.lines().collect();
     let mut has_docstring = false;
@@ -137,7 +163,11 @@ fn analyze_typing_impl(_content: &str, _file_path_rel: &str) -> Vec<Finding> {
     Vec::new()
 }
 
-fn analyze_robustness_and_perf_impl(content: &str, file_path_rel: &str, _allow_triton_check: bool) -> Vec<Finding> {
+fn analyze_robustness_and_perf_impl(
+    content: &str,
+    file_path_rel: &str,
+    _allow_triton_check: bool,
+) -> Vec<Finding> {
     let mut findings = Vec::new();
     for (i, line) in content.lines().enumerate() {
         let trimmed = line.trim();
@@ -145,7 +175,10 @@ fn analyze_robustness_and_perf_impl(content: &str, file_path_rel: &str, _allow_t
         if trimmed.starts_with("#") || trimmed.starts_with("\"") || trimmed.starts_with("'") {
             continue;
         }
-        if line.contains("time.sleep(") && !file_path_rel.contains("test") && !line.contains("# nosec") {
+        if line.contains("time.sleep(")
+            && !file_path_rel.contains("test")
+            && !line.contains("# nosec")
+        {
             findings.push(Finding {
                 finding_type: "Performance Warning".to_string(),
                 message: "Found active time.sleep() in non-test code.".to_string(),

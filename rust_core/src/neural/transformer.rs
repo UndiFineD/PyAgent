@@ -1,5 +1,5 @@
-use pyo3::prelude::*;
 use ndarray::prelude::*;
+use pyo3::prelude::*;
 use rayon::prelude::*;
 
 use crate::neural::config::TransformerConfig;
@@ -19,7 +19,12 @@ impl NeuralTransformer {
     pub fn new(config: TransformerConfig) -> Self {
         let mut layers = Vec::with_capacity(config.n_layers);
         for _ in 0..config.n_layers {
-            layers.push(TransformerLayer::new(config.d_model, config.d_ff, config.n_heads, config.n_kv_heads));
+            layers.push(TransformerLayer::new(
+                config.d_model,
+                config.d_ff,
+                config.n_heads,
+                config.n_kv_heads,
+            ));
         }
         NeuralTransformer { config, layers }
     }
@@ -30,7 +35,7 @@ impl NeuralTransformer {
         if seq_len == 0 {
             return Ok(input);
         }
-        
+
         // Convert input to ndarray: [Seq, D_Model]
         let mut x = Array2::zeros((seq_len, self.config.d_model));
         for (i, row) in input.iter().enumerate() {
@@ -41,12 +46,13 @@ impl NeuralTransformer {
 
         let n_heads = self.config.n_heads;
         let n_kv_heads = self.config.n_kv_heads;
-        
+
         // Safety check for GQA parameters
         if n_kv_heads == 0 || n_heads % n_kv_heads != 0 {
-            return Err(pyo3::exceptions::PyValueError::new_err(
-                format!("Invalid GQA config: heads ({}) must be divisible by kv_heads ({})", n_heads, n_kv_heads)
-            ));
+            return Err(pyo3::exceptions::PyValueError::new_err(format!(
+                "Invalid GQA config: heads ({}) must be divisible by kv_heads ({})",
+                n_heads, n_kv_heads
+            )));
         }
 
         let head_dim = self.config.d_model / n_heads;
@@ -66,53 +72,56 @@ impl NeuralTransformer {
             let mut attn_out_full = Array2::zeros((seq_len, self.config.d_model));
 
             // Parallelized Grouped processing
-            let group_results: Vec<(usize, Array2<f32>)> = (0..n_kv_heads).into_par_iter().map(|kv_h| {
-                let kv_start = kv_h * head_dim;
-                let kv_end = kv_start + head_dim;
-                
-                let mut k = k_all.slice(s![.., kv_start..kv_end]).to_owned();
-                let v = v_all.slice(s![.., kv_start..kv_end]).to_owned();
-                
-                // RoPE for Keys
-                layer.rope.apply(&mut k);
+            let group_results: Vec<(usize, Array2<f32>)> = (0..n_kv_heads)
+                .into_par_iter()
+                .map(|kv_h| {
+                    let kv_start = kv_h * head_dim;
+                    let kv_end = kv_start + head_dim;
 
-                let mut group_attn = Array2::zeros((seq_len, group_size * head_dim));
+                    let mut k = k_all.slice(s![.., kv_start..kv_end]).to_owned();
+                    let v = v_all.slice(s![.., kv_start..kv_end]).to_owned();
 
-                // Process all query heads in this group
-                for g in 0..group_size {
-                    let q_h = kv_h * group_size + g;
-                    let q_start = q_h * head_dim;
-                    let q_end = q_start + head_dim;
-                    
-                    let mut q = q_all.slice(s![.., q_start..q_end]).to_owned();
-                    layer.rope.apply(&mut q);
+                    // RoPE for Keys
+                    layer.rope.apply(&mut k);
 
-                    // Scores: [Seq, Seq]
-                    let mut scores = q.dot(&k.t()) / scale;
-                    
-                    // Softmax (row-wise)
-                    for mut row in scores.axis_iter_mut(Axis(0)) {
-                        let max = row.fold(f32::NEG_INFINITY, |m, &x| m.max(x));
-                        let mut sum_val = 0.0;
-                        for val in row.iter_mut() {
-                            *val = (*val - max).exp();
-                            sum_val += *val;
+                    let mut group_attn = Array2::zeros((seq_len, group_size * head_dim));
+
+                    // Process all query heads in this group
+                    for g in 0..group_size {
+                        let q_h = kv_h * group_size + g;
+                        let q_start = q_h * head_dim;
+                        let q_end = q_start + head_dim;
+
+                        let mut q = q_all.slice(s![.., q_start..q_end]).to_owned();
+                        layer.rope.apply(&mut q);
+
+                        // Scores: [Seq, Seq]
+                        let mut scores = q.dot(&k.t()) / scale;
+
+                        // Softmax (row-wise)
+                        for mut row in scores.axis_iter_mut(Axis(0)) {
+                            let max = row.fold(f32::NEG_INFINITY, |m, &x| m.max(x));
+                            let mut sum_val = 0.0;
+                            for val in row.iter_mut() {
+                                *val = (*val - max).exp();
+                                sum_val += *val;
+                            }
+                            for val in row.iter_mut() {
+                                *val /= sum_val;
+                            }
                         }
-                        for val in row.iter_mut() {
-                            *val /= sum_val;
+
+                        let head_attn = scores.dot(&v);
+                        for i in 0..seq_len {
+                            for j in 0..head_dim {
+                                group_attn[[i, (g * head_dim) + j]] = head_attn[[i, j]];
+                            }
                         }
                     }
 
-                    let head_attn = scores.dot(&v);
-                    for i in 0..seq_len {
-                        for j in 0..head_dim {
-                            group_attn[[i, (g * head_dim) + j]] = head_attn[[i, j]];
-                        }
-                    }
-                }
-                
-                (kv_h, group_attn)
-            }).collect();
+                    (kv_h, group_attn)
+                })
+                .collect();
 
             // Stitch groups back together
             for (kv_h, group_attn) in group_results {
@@ -131,11 +140,11 @@ impl NeuralTransformer {
             let norm_x_ff = layer.norm.forward(&x);
             let gate = norm_x_ff.dot(&layer.ff_gate);
             let up = norm_x_ff.dot(&layer.ff_up);
-            
+
             // Fast SiLU activation: x / (1 + exp(-x))
             let silu_gate = gate.mapv(|v| v / (1.0 + (-v).exp()));
             let ff_hidden = silu_gate * up;
-            
+
             x = x + ff_hidden.dot(&layer.ff_down);
         }
 
@@ -162,12 +171,15 @@ impl NeuralTransformer {
         let start = std::time::Instant::now();
         let words: Vec<&str> = text.split_whitespace().collect();
         if words.is_empty() {
-            return Ok((vec![0.0; self.config.d_model], GenerationStats {
-                token_count: 0,
-                tps: 0.0,
-                duration_ms: 0.0,
-                cost_usd: 0.0,
-            }));
+            return Ok((
+                vec![0.0; self.config.d_model],
+                GenerationStats {
+                    token_count: 0,
+                    tps: 0.0,
+                    duration_ms: 0.0,
+                    cost_usd: 0.0,
+                },
+            ));
         }
 
         let mut input_embeddings = Vec::new();
@@ -200,15 +212,22 @@ impl NeuralTransformer {
         let duration = start.elapsed();
         let duration_secs = duration.as_secs_f64();
         let tokens = seq_len as usize;
-        let tps = if duration_secs > 0.0 { tokens as f64 / duration_secs } else { 0.0 };
+        let tps = if duration_secs > 0.0 {
+            tokens as f64 / duration_secs
+        } else {
+            0.0
+        };
         let cost_usd = (tokens as f64) * 0.000005;
 
-        Ok((pooled, GenerationStats {
-            token_count: tokens,
-            tps,
-            duration_ms: duration_secs * 1000.0,
-            cost_usd,
-        }))
+        Ok((
+            pooled,
+            GenerationStats {
+                token_count: tokens,
+                tps,
+                duration_ms: duration_secs * 1000.0,
+                cost_usd,
+            },
+        ))
     }
 
     pub fn vectorize(&self, text: &str) -> PyResult<Vec<f32>> {

@@ -39,11 +39,7 @@ pub fn calculate_vcg_prices_rust(
     // VCG Price for each winner
     // If bidder i vanishes, the (N)th bidder (first loser) takes the last slot.
     // In a simple multi-unit auction, VCG price is simply the highest losing bid.
-    let highest_losing_bid = if others.is_empty() {
-        0.0
-    } else {
-        others[0].1
-    };
+    let highest_losing_bid = if others.is_empty() { 0.0 } else { others[0].1 };
 
     for (name, _) in winners {
         prices.insert(name.clone(), highest_losing_bid);

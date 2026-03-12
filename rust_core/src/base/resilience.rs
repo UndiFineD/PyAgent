@@ -31,13 +31,17 @@ pub fn calculate_backoff(
             f64::max(base_timeout / 2.0, backoff + jitter)
         }
     };
-    
+
     Ok(result)
 }
 
 /// Should attempt recovery (ResilienceCore).
 #[pyfunction]
-pub fn should_attempt_recovery(last_failure: f64, current_time: f64, timeout: f64) -> PyResult<bool> {
+pub fn should_attempt_recovery(
+    last_failure: f64,
+    current_time: f64,
+    timeout: f64,
+) -> PyResult<bool> {
     Ok((current_time - last_failure) > timeout)
 }
 
@@ -48,7 +52,7 @@ pub fn evaluate_state_transition(
     success_count: i32,
     needed: i32,
     failure_count: i32,
-    threshold: i32
+    threshold: i32,
 ) -> PyResult<String> {
     let new_state = match current_state {
         "CLOSED" => {
@@ -57,14 +61,14 @@ pub fn evaluate_state_transition(
             } else {
                 "CLOSED"
             }
-        },
+        }
         "HALF_OPEN" => {
             if success_count >= needed {
                 "CLOSED"
             } else {
                 "HALF_OPEN"
             }
-        },
+        }
         _ => current_state,
     };
     Ok(new_state.to_string())

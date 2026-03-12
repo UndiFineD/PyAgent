@@ -1,28 +1,26 @@
 use pyo3::prelude::*;
-use std::collections::HashMap;
 use regex::Regex;
+use std::collections::HashMap;
 
 /// Build FSM transition table from regex pattern
 /// Returns (transition_table, accepting_states, initial_state)
 #[pyfunction]
-pub fn regex_to_fsm_rust(
-    pattern: String,
-    vocab_size: usize,
-) -> (Vec<Vec<i32>>, Vec<usize>, usize) {
+pub fn regex_to_fsm_rust(pattern: String, vocab_size: usize) -> (Vec<Vec<i32>>, Vec<usize>, usize) {
     // Simplified FSM construction for common patterns
     let pattern_chars: Vec<char> = pattern.chars().collect();
     let num_states = pattern_chars.len() + 1;
-    
+
     // Build transition table: [state][char] -> next_state (-1 = invalid)
     let mut transitions = vec![vec![-1i32; 256]; num_states];
     let mut accepting = Vec::new();
-    
+
     for (i, &c) in pattern_chars.iter().enumerate() {
         match c {
             '.' => {
                 // Match any character
                 for ch in 0..256 {
-                    if ch >= 32 && ch < 127 { // printable ASCII
+                    if ch >= 32 && ch < 127 {
+                        // printable ASCII
                         transitions[i][ch] = (i + 1) as i32;
                     }
                 }
@@ -49,12 +47,12 @@ pub fn regex_to_fsm_rust(
             }
         }
     }
-    
+
     // Final state is accepting
     accepting.push(num_states - 1);
-    
-    let _ = vocab_size; 
-    
+
+    let _ = vocab_size;
+
     (transitions, accepting, 0)
 }
 
@@ -68,16 +66,16 @@ pub fn fill_token_bitmask_rust(
 ) -> Vec<bool> {
     let vocab_size = token_to_chars.len();
     let mut bitmask = vec![false; vocab_size];
-    
+
     if state >= transitions.len() {
         return bitmask;
     }
-    
+
     for (token_id, chars) in token_to_chars.iter().enumerate() {
         // Check if token leads to valid state
         let mut current_state = state;
         let mut valid = true;
-        
+
         for &ch in chars {
             let ch_idx = ch as usize;
             if ch_idx < 256 && current_state < transitions.len() {
@@ -93,10 +91,10 @@ pub fn fill_token_bitmask_rust(
                 break;
             }
         }
-        
+
         bitmask[token_id] = valid;
     }
-    
+
     bitmask
 }
 
@@ -112,16 +110,16 @@ pub fn validate_token_sequence_rust(
 ) -> (bool, usize, usize) {
     let mut state = initial_state;
     let mut accepted_len = 0;
-    
+
     for token in &tokens {
         let token_idx = *token as usize;
         if token_idx >= token_to_chars.len() {
             break;
         }
-        
+
         let chars = &token_to_chars[token_idx];
         let mut valid = true;
-        
+
         for &ch in chars {
             let ch_idx = ch as usize;
             if ch_idx < 256 && state < transitions.len() {
@@ -137,13 +135,13 @@ pub fn validate_token_sequence_rust(
                 break;
             }
         }
-        
+
         if !valid {
             break;
         }
         accepted_len += 1;
     }
-    
+
     let is_accepting = accepting_states.contains(&state);
     (is_accepting, state, accepted_len)
 }
@@ -158,7 +156,7 @@ pub fn json_schema_fsm_rust(
     let states: usize;
     let mut transitions: Vec<Vec<i32>>;
     let mut accepting = Vec::new();
-    
+
     match schema_type.as_str() {
         "object" => {
             // States: 0={, 1="key", 2=:, 3=value, 4=, or }, 5=accepting
@@ -167,19 +165,25 @@ pub fn json_schema_fsm_rust(
             transitions[0]['{' as usize] = 1;
             transitions[1]['"' as usize] = 2;
             transitions[1]['}' as usize] = 5;
-            for ch in 'a' as usize..='z' as usize { transitions[2][ch] = 2; }
-            for ch in 'A' as usize..='Z' as usize { transitions[2][ch] = 2; }
+            for ch in 'a' as usize..='z' as usize {
+                transitions[2][ch] = 2;
+            }
+            for ch in 'A' as usize..='Z' as usize {
+                transitions[2][ch] = 2;
+            }
             transitions[2]['_' as usize] = 2;
-            transitions[2]['"' as usize] = 3; 
+            transitions[2]['"' as usize] = 3;
             transitions[3][':' as usize] = 4;
-            transitions[4]['"' as usize] = 4; 
-            for ch in '0' as usize..='9' as usize { transitions[4][ch] = 4; }
+            transitions[4]['"' as usize] = 4;
+            for ch in '0' as usize..='9' as usize {
+                transitions[4][ch] = 4;
+            }
             transitions[4]['-' as usize] = 4;
-            transitions[4]['t' as usize] = 4; 
-            transitions[4]['f' as usize] = 4; 
-            transitions[4]['n' as usize] = 4; 
-            transitions[4][',' as usize] = 1; 
-            transitions[4]['}' as usize] = 5; 
+            transitions[4]['t' as usize] = 4;
+            transitions[4]['f' as usize] = 4;
+            transitions[4]['n' as usize] = 4;
+            transitions[4][',' as usize] = 1;
+            transitions[4]['}' as usize] = 5;
             accepting.push(5);
         }
         "array" => {
@@ -187,7 +191,9 @@ pub fn json_schema_fsm_rust(
             transitions = vec![vec![-1i32; 256]; states];
             transitions[0]['[' as usize] = 1;
             transitions[1][']' as usize] = 3;
-            for ch in '0' as usize..='9' as usize { transitions[1][ch] = 1; }
+            for ch in '0' as usize..='9' as usize {
+                transitions[1][ch] = 1;
+            }
             transitions[1]['"' as usize] = 1;
             transitions[1]['-' as usize] = 1;
             transitions[1][',' as usize] = 1;
@@ -198,9 +204,15 @@ pub fn json_schema_fsm_rust(
             states = 4;
             transitions = vec![vec![-1i32; 256]; states];
             transitions[0]['"' as usize] = 1;
-            for ch in 32..127 { if ch != '"' as usize && ch != '\\' as usize { transitions[1][ch] = 1; } }
-            transitions[1]['\\' as usize] = 2; 
-            for ch in &['n', 'r', 't', '"', '\\'] { transitions[2][*ch as usize] = 1; }
+            for ch in 32..127 {
+                if ch != '"' as usize && ch != '\\' as usize {
+                    transitions[1][ch] = 1;
+                }
+            }
+            transitions[1]['\\' as usize] = 2;
+            for ch in &['n', 'r', 't', '"', '\\'] {
+                transitions[2][*ch as usize] = 1;
+            }
             transitions[1]['"' as usize] = 3;
             accepting.push(3);
         }
@@ -210,8 +222,8 @@ pub fn json_schema_fsm_rust(
             accepting.push(1);
         }
     }
-    
-    let _ = required_keys; 
+
+    let _ = required_keys;
     (transitions, accepting, 0)
 }
 
@@ -238,7 +250,8 @@ pub fn batch_fill_bitmask_rust(
     transitions: Vec<Vec<i32>>,
     token_to_chars: Vec<Vec<u8>>,
 ) -> Vec<Vec<bool>> {
-    states.iter()
+    states
+        .iter()
         .map(|&state| fill_token_bitmask_rust(state, transitions.clone(), token_to_chars.clone()))
         .collect()
 }
@@ -246,10 +259,7 @@ pub fn batch_fill_bitmask_rust(
 /// Fill bitmask for grammar-constrained tokens
 /// Sets allowed positions to 1, others to 0
 #[pyfunction]
-pub fn xgrammar_bitmask_fill_rust(
-    allowed_token_ids: Vec<i32>,
-    vocab_size: usize,
-) -> Vec<i32> {
+pub fn xgrammar_bitmask_fill_rust(allowed_token_ids: Vec<i32>, vocab_size: usize) -> Vec<i32> {
     let mut bitmask = vec![0i32; vocab_size];
     for token_id in allowed_token_ids {
         if token_id >= 0 && (token_id as usize) < vocab_size {
@@ -261,14 +271,10 @@ pub fn xgrammar_bitmask_fill_rust(
 
 /// Compute cache key for grammar compilation
 #[pyfunction]
-pub fn grammar_cache_key_rust(
-    grammar_type: &str,
-    content: &str,
-    tokenizer_hash: u64,
-) -> String {
+pub fn grammar_cache_key_rust(grammar_type: &str, content: &str, tokenizer_hash: u64) -> String {
     use std::collections::hash_map::DefaultHasher;
     use std::hash::{Hash, Hasher};
-    
+
     let mut hasher = DefaultHasher::new();
     grammar_type.hash(&mut hasher);
     content.hash(&mut hasher);
@@ -288,29 +294,27 @@ pub fn batch_update_indices_rust(
         .into_iter()
         .filter(|i| !removed_set.contains(i))
         .collect();
-    
+
     // Add new indices at the end
     let max_existing = result.iter().max().copied().unwrap_or(-1);
     for i in 0..added_count {
         result.push(max_existing + 1 + i);
     }
-    
+
     result
 }
 
 /// Parse structural tag to extract grammar type
 #[pyfunction]
-pub fn structural_tag_parse_rust(
-    tag_content: &str,
-) -> (String, String, HashMap<String, String>) {
+pub fn structural_tag_parse_rust(tag_content: &str) -> (String, String, HashMap<String, String>) {
     // Format: <type:value;key1=val1;key2=val2>
     let mut grammar_type = String::new();
     let mut grammar_value = String::new();
     let mut attributes: HashMap<String, String> = HashMap::new();
-    
+
     let trimmed = tag_content.trim_start_matches('<').trim_end_matches('>');
     let parts: Vec<&str> = trimmed.split(';').collect();
-    
+
     if let Some(first) = parts.first() {
         if let Some((t, v)) = first.split_once(':') {
             grammar_type = t.to_string();
@@ -319,13 +323,13 @@ pub fn structural_tag_parse_rust(
             grammar_type = first.to_string();
         }
     }
-    
+
     for part in parts.iter().skip(1) {
         if let Some((k, v)) = part.split_once('=') {
             attributes.insert(k.to_string(), v.to_string());
         }
     }
-    
+
     (grammar_type, grammar_value, attributes)
 }
 
@@ -333,14 +337,14 @@ pub fn structural_tag_parse_rust(
 #[pyfunction]
 pub fn regex_dfa_transition_rust(
     current_state: i32,
-    transitions: Vec<(i32, String, i32)>,  // (from_state, char_class, to_state)
+    transitions: Vec<(i32, String, i32)>, // (from_state, char_class, to_state)
     input_char: &str,
 ) -> i32 {
     for (from_state, char_class, to_state) in transitions {
         if from_state != current_state {
             continue;
         }
-        
+
         // Check character class matching
         let matches = if char_class.starts_with('[') && char_class.ends_with(']') {
             // Character class like [a-z]
@@ -355,13 +359,13 @@ pub fn regex_dfa_transition_rust(
             // Literal match
             char_class == input_char
         };
-        
+
         if matches {
             return to_state;
         }
     }
-    
-    -1  // No valid transition
+
+    -1 // No valid transition
 }
 
 fn match_char_class(class: &str, input: &str) -> bool {
@@ -369,21 +373,21 @@ fn match_char_class(class: &str, input: &str) -> bool {
         return false;
     }
     let c = input.chars().next().unwrap();
-    
+
     // Parse character class [abc] or [a-z]
-    let inner = &class[1..class.len()-1];
+    let inner = &class[1..class.len() - 1];
     let mut chars = inner.chars().peekable();
     let mut negate = false;
-    
+
     if chars.peek() == Some(&'^') {
         negate = true;
         chars.next();
     }
-    
+
     let mut result = false;
     while let Some(ch) = chars.next() {
         if chars.peek() == Some(&'-') {
-            chars.next();  // consume '-'
+            chars.next(); // consume '-'
             if let Some(end) = chars.next() {
                 if c >= ch && c <= end {
                     result = true;
@@ -395,8 +399,12 @@ fn match_char_class(class: &str, input: &str) -> bool {
             break;
         }
     }
-    
-    if negate { !result } else { result }
+
+    if negate {
+        !result
+    } else {
+        result
+    }
 }
 
 fn match_escape_sequence(escape: &str, input: &str) -> bool {
@@ -404,7 +412,7 @@ fn match_escape_sequence(escape: &str, input: &str) -> bool {
         return false;
     }
     let c = input.chars().next().unwrap();
-    
+
     match escape {
         "\\d" => c.is_ascii_digit(),
         "\\D" => !c.is_ascii_digit(),
@@ -427,13 +435,14 @@ pub fn batch_grammar_mask_rust(
     batch_allowed: Vec<Vec<i32>>,
     mask_value: f32,
 ) -> Vec<Vec<f32>> {
-    batch_logits.into_iter()
+    batch_logits
+        .into_iter()
         .zip(batch_allowed.into_iter())
         .map(|(logits, allowed)| {
-            let allowed_set: std::collections::HashSet<i32> = 
-                allowed.iter().copied().collect();
-            
-            logits.into_iter()
+            let allowed_set: std::collections::HashSet<i32> = allowed.iter().copied().collect();
+
+            logits
+                .into_iter()
                 .enumerate()
                 .map(|(i, v)| {
                     if allowed_set.contains(&(i as i32)) {
@@ -449,41 +458,33 @@ pub fn batch_grammar_mask_rust(
 
 /// Template variable extraction
 #[pyfunction]
-pub fn template_extract_variables_rust(
-    template: &str,
-) -> Vec<(String, usize, usize)> {
+pub fn template_extract_variables_rust(template: &str) -> Vec<(String, usize, usize)> {
     let mut variables = Vec::new();
     let pattern = Regex::new(r"\{\{(\w+)(?::[^}]+)?\}\}").unwrap_or_else(|_| {
         // Fallback if regex crate not available
         return Regex::new(r"").unwrap();
     });
-    
+
     for cap in pattern.captures_iter(template) {
         if let (Some(full), Some(name)) = (cap.get(0), cap.get(1)) {
-            variables.push((
-                name.as_str().to_string(),
-                full.start(),
-                full.end(),
-            ));
+            variables.push((name.as_str().to_string(), full.start(), full.end()));
         }
     }
-    
+
     variables
 }
 
 /// JSON schema path extraction for validation
 #[pyfunction]
-pub fn json_schema_paths_rust(
-    schema_str: &str,
-) -> Vec<(String, String)> {
+pub fn json_schema_paths_rust(schema_str: &str) -> Vec<(String, String)> {
     // Returns (json_path, type) pairs
     let mut paths = Vec::new();
-    
+
     // Simple parsing - for complex schemas use serde_json
     if let Ok(schema) = serde_json::from_str::<serde_json::Value>(schema_str) {
         extract_schema_paths(&schema, String::new(), &mut paths);
     }
-    
+
     paths
 }
 
@@ -496,7 +497,7 @@ fn extract_schema_paths(
         if let Some(type_val) = obj.get("type") {
             let type_str = type_val.as_str().unwrap_or("unknown");
             paths.push((path.clone(), type_str.to_string()));
-            
+
             if type_str == "object" {
                 if let Some(props) = obj.get("properties") {
                     if let Some(props_obj) = props.as_object() {

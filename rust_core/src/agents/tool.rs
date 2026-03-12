@@ -15,6 +15,11 @@ impl ToolDraftingCore {
     pub fn validate_tool_name(&self, name: String) -> bool {
         // Python: name.isidentifier() and len(name) > 3
         // Rust approximation
-        name.len() > 3 && name.chars().all(|c| c.is_alphanumeric() || c == '_') && name.chars().next().map_or(false, |c| c.is_alphabetic() || c == '_')
+        name.len() > 3
+            && name.chars().all(|c| c.is_alphanumeric() || c == '_')
+            && name
+                .chars()
+                .next()
+                .map_or(false, |c| c.is_alphabetic() || c == '_')
     }
 }

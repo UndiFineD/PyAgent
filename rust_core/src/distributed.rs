@@ -15,7 +15,9 @@ use pyo3::prelude::*;
 use std::collections::HashMap;
 
 #[pyfunction]
-pub fn dp_stats_aggregate_rust(rank_stats: HashMap<usize, HashMap<String, f64>>) -> PyResult<HashMap<String, f64>> {
+pub fn dp_stats_aggregate_rust(
+    rank_stats: HashMap<usize, HashMap<String, f64>>,
+) -> PyResult<HashMap<String, f64>> {
     // Phase 55: High-speed DP statistics aggregation
     let mut result = HashMap::new();
     let mut total_latency = 0.0;
@@ -30,7 +32,7 @@ pub fn dp_stats_aggregate_rust(rank_stats: HashMap<usize, HashMap<String, f64>>)
         result.insert("avg_latency".to_string(), total_latency / count);
         result.insert("total_throughput".to_string(), total_throughput);
     }
-    
+
     Ok(result)
 }
 
@@ -57,7 +59,11 @@ pub fn load_balance_select_rust(ranks: Vec<usize>, loads: Vec<f64>) -> PyResult<
 }
 
 #[pyfunction]
-pub fn multi_node_coordinate_rust(_node_id: usize, total_nodes: usize, shape: Vec<usize>) -> PyResult<HashMap<usize, Vec<usize>>> {
+pub fn multi_node_coordinate_rust(
+    _node_id: usize,
+    total_nodes: usize,
+    shape: Vec<usize>,
+) -> PyResult<HashMap<usize, Vec<usize>>> {
     // Phase 55: Topology-aware tensor split calculation
     let mut result = HashMap::new();
     let last_dim = shape[shape.len() - 1];
@@ -66,7 +72,11 @@ pub fn multi_node_coordinate_rust(_node_id: usize, total_nodes: usize, shape: Ve
     for i in 0..total_nodes {
         let mut new_shape = shape.clone();
         let start = i * chunk;
-        let end = if i == total_nodes - 1 { last_dim } else { start + chunk };
+        let end = if i == total_nodes - 1 {
+            last_dim
+        } else {
+            start + chunk
+        };
         new_shape[shape.len() - 1] = end - start;
         result.insert(i, new_shape);
     }

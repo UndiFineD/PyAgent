@@ -1,17 +1,17 @@
 use pyo3::prelude::*;
 use std::fs;
 // bring KeyInit into scope so we can call `XChaCha20Poly1305::new`
-use chacha20poly1305::KeyInit;
 use chacha20poly1305::aead::Aead;
+use chacha20poly1305::KeyInit;
+use chrono::Utc;
 use hkdf::Hkdf;
-use sha2::Sha256;
 use rand_core::OsRng;
 use rand_core::RngCore;
-use chrono::Utc;
+use sha2::Sha256;
 
 // prometheus metrics
 use once_cell::sync::Lazy;
-use prometheus::{IntCounter, register_int_counter, Encoder, TextEncoder};
+use prometheus::{register_int_counter, Encoder, IntCounter, TextEncoder};
 
 static ENCRYPT_COUNTER: Lazy<IntCounter> = Lazy::new(|| {
     eprintln!("[crypto] registering encrypt_data_calls metric");
@@ -32,7 +32,11 @@ static KEY_BACKUP_COUNTER: Lazy<IntCounter> = Lazy::new(|| {
     register_int_counter!("key_backup_calls", "Number of key backups before rotation").unwrap()
 });
 static GC_COUNTER: Lazy<IntCounter> = Lazy::new(|| {
-    register_int_counter!("transaction_gc_calls", "Number of transaction garbage collection operations").unwrap()
+    register_int_counter!(
+        "transaction_gc_calls",
+        "Number of transaction garbage collection operations"
+    )
+    .unwrap()
 });
 
 // store key material; wrapped in a mutex so we can clear or replace during tests
@@ -76,12 +80,18 @@ static KEY_VERSION: Mutex<u64> = Mutex::new(0);
 #[pyfunction]
 pub fn load_keys(pub_path: &str, priv_path: &str) -> PyResult<()> {
     eprintln!("[crypto] load_keys called with {} {}", pub_path, priv_path);
-    let pub_bytes = fs::read(pub_path).map_err(|e| PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("failed to read pub key: {}", e)))?;
-    let priv_bytes = fs::read(priv_path).map_err(|e| PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("failed to read priv key: {}", e)))?;
+    let pub_bytes = fs::read(pub_path).map_err(|e| {
+        PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("failed to read pub key: {}", e))
+    })?;
+    let priv_bytes = fs::read(priv_path).map_err(|e| {
+        PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("failed to read priv key: {}", e))
+    })?;
     let mut keys = KEYS.lock().unwrap();
     if keys.is_some() {
         eprintln!("[crypto] load_keys: keys already loaded");
-        return Err(pyo3::exceptions::PyRuntimeError::new_err("keys already loaded"));
+        return Err(pyo3::exceptions::PyRuntimeError::new_err(
+            "keys already loaded",
+        ));
     }
     *keys = Some((pub_bytes, priv_bytes));
     eprintln!("[crypto] load_keys: keys stored");
@@ -93,8 +103,12 @@ pub fn load_keys(pub_path: &str, priv_path: &str) -> PyResult<()> {
 #[pyfunction]
 pub fn export_keys(pub_path: &str, priv_path: &str) -> PyResult<()> {
     if let Some((pubk, privk)) = KEYS.lock().unwrap().as_ref() {
-        fs::write(pub_path, pubk).map_err(|e| PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("failed to write pub key: {}", e)))?;
-        fs::write(priv_path, privk).map_err(|e| PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("failed to write priv key: {}", e)))?;
+        fs::write(pub_path, pubk).map_err(|e| {
+            PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("failed to write pub key: {}", e))
+        })?;
+        fs::write(priv_path, privk).map_err(|e| {
+            PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("failed to write priv key: {}", e))
+        })?;
         Ok(())
     } else {
         Err(pyo3::exceptions::PyRuntimeError::new_err("no keys loaded"))
@@ -108,7 +122,7 @@ pub fn export_keys(pub_path: &str, priv_path: &str) -> PyResult<()> {
 #[pyfunction]
 pub fn encrypt_data(data: &[u8]) -> PyResult<Vec<u8>> {
     // ChaCha20Poly1305 AEAD with a random nonce; prepend nonce to output.
-    use chacha20poly1305::{XChaCha20Poly1305, Key, XNonce};
+    use chacha20poly1305::{Key, XChaCha20Poly1305, XNonce};
 
     let key_bytes = derive_key();
     let cipher = XChaCha20Poly1305::new(Key::from_slice(&key_bytes));
@@ -118,11 +132,9 @@ pub fn encrypt_data(data: &[u8]) -> PyResult<Vec<u8>> {
     OsRng.fill_bytes(&mut nonce_bytes);
     let nonce = XNonce::from_slice(&nonce_bytes);
 
-    let ciphertext = cipher
-        .encrypt(nonce, data)
-        .map_err(|e| PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(
-            format!("encryption failure: {}", e)
-        ))?;
+    let ciphertext = cipher.encrypt(nonce, data).map_err(|e| {
+        PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(format!("encryption failure: {}", e))
+    })?;
 
     // return nonce || ciphertext
     let mut out = Vec::with_capacity(24 + ciphertext.len());
@@ -134,8 +146,11 @@ pub fn encrypt_data(data: &[u8]) -> PyResult<Vec<u8>> {
 
 /// helper which attempts to decrypt using a specific key version
 /// returns Ok(plaintext) if successful, or Err if decryption fails (e.g. due to incorrect key or tampering)
-fn try_decrypt_version(data: &[u8], version: u64) -> Result<Vec<u8>, chacha20poly1305::aead::Error> {
-    use chacha20poly1305::{XChaCha20Poly1305, Key, XNonce};
+fn try_decrypt_version(
+    data: &[u8],
+    version: u64,
+) -> Result<Vec<u8>, chacha20poly1305::aead::Error> {
+    use chacha20poly1305::{Key, XChaCha20Poly1305, XNonce};
 
     if data.len() < 24 {
         return Err(chacha20poly1305::aead::Error);
@@ -187,7 +202,9 @@ pub fn decrypt_data(data: &[u8]) -> PyResult<Vec<u8>> {
 pub fn begin_transaction(path: &str) -> PyResult<()> {
     let mut active = TRANSACTION_ACTIVE.lock().unwrap();
     if *active {
-        return Err(pyo3::exceptions::PyRuntimeError::new_err("transaction already active"));
+        return Err(pyo3::exceptions::PyRuntimeError::new_err(
+            "transaction already active",
+        ));
     }
     *active = true;
     let mut txpath = TRANSACTION_PATH.lock().unwrap();
@@ -197,15 +214,17 @@ pub fn begin_transaction(path: &str) -> PyResult<()> {
 
 /// Commit the active transaction by marking it as inactive and clearing the transaction path.
 /// Returns an error if no transaction is active.  
-/// Note that this is a simplified demonstration and does not perform any actual file operations; 
-/// in a real implementation, you would typically move files from a staging area 
-/// to a permanent location on commit, and the rollback function would delete the staging files 
+/// Note that this is a simplified demonstration and does not perform any actual file operations;
+/// in a real implementation, you would typically move files from a staging area
+/// to a permanent location on commit, and the rollback function would delete the staging files
 /// if the transaction is not committed.
 #[pyfunction]
 pub fn commit_transaction() -> PyResult<()> {
     let mut active = TRANSACTION_ACTIVE.lock().unwrap();
     if !*active {
-        return Err(pyo3::exceptions::PyRuntimeError::new_err("no active transaction"));
+        return Err(pyo3::exceptions::PyRuntimeError::new_err(
+            "no active transaction",
+        ));
     }
     *active = false;
     // drop stored path since transaction finished successfully
@@ -220,18 +239,23 @@ pub fn commit_transaction() -> PyResult<()> {
 pub fn rollback_transaction() -> PyResult<()> {
     let mut active = TRANSACTION_ACTIVE.lock().unwrap();
     if !*active {
-        return Err(pyo3::exceptions::PyRuntimeError::new_err("no active transaction"));
+        return Err(pyo3::exceptions::PyRuntimeError::new_err(
+            "no active transaction",
+        ));
     }
     *active = false;
     ROLLBACK_COUNTER.inc();
     // remove any files that were created under the transaction path
     if let Some(base) = TRANSACTION_PATH.lock().unwrap().take() {
         match fs::remove_dir_all(&base) {
-            Ok(_) => {},
-            Err(e) if e.kind() == std::io::ErrorKind::NotFound => {},
-            Err(e) => return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(
-                format!("failed to cleanup transaction path: {}", e)
-            )),
+            Ok(_) => {}
+            Err(e) if e.kind() == std::io::ErrorKind::NotFound => {}
+            Err(e) => {
+                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
+                    "failed to cleanup transaction path: {}",
+                    e
+                )))
+            }
         }
         // recreate the directory so tests can inspect absence of file
         let _ = fs::create_dir_all(&base);
@@ -252,12 +276,12 @@ pub fn clear_keys() -> PyResult<()> {
 }
 
 /// Get the current key version number.  This is used by clients to determine if they need to rotate their keys.
-/// The version number is automatically incremented by `rotate_keys`, and included in the key derivation salt 
-/// so that new keys are generated without changing the stored key material. Clients can continue to decrypt 
-/// old data using the previous version for a grace period after rotation, but should switch to the new version 
-/// for subsequent encryptions to ensure forward secrecy. This function is registered by `security::register` 
+/// The version number is automatically incremented by `rotate_keys`, and included in the key derivation salt
+/// so that new keys are generated without changing the stored key material. Clients can continue to decrypt
+/// old data using the previous version for a grace period after rotation, but should switch to the new version
+/// for subsequent encryptions to ensure forward secrecy. This function is registered by `security::register`
 /// so it can be called from Python, but it can also be used by Rust code if needed.  
-/// Note that the version number is not persisted and will reset to 0 on restart, so it's mainly useful for 
+/// Note that the version number is not persisted and will reset to 0 on restart, so it's mainly useful for
 /// coordinating in-memory state during runtime rather than as a durable key versioning scheme.  
 #[pyfunction]
 pub fn current_key_version() -> PyResult<u64> {
@@ -269,7 +293,7 @@ pub fn current_key_version() -> PyResult<u64> {
 /// expected to call `current_key_version` and switch to the new version for future encryptions to ensure forward secrecy.
 /// Before bumping the version, any existing key material is backed up to files with a timestamped name,
 /// and a Prometheus counter is incremented to track key rotations.
-/// This function is registered by `security::register` so it can be called from Python, 
+/// This function is registered by `security::register` so it can be called from Python,
 /// but it can also be used by Rust code if needed.
 #[pyfunction]
 pub fn rotate_keys() -> PyResult<()> {
@@ -278,15 +302,18 @@ pub fn rotate_keys() -> PyResult<()> {
         let date = Utc::now().format("%Y-%m-%d").to_string();
         let pubfile = format!("{}-keys.pub", date);
         let privfile = format!("{}-keys.priv", date);
-        fs::write(&pubfile, pubk).map_err(|e| PyErr::new::<pyo3::exceptions::PyIOError, _>(
-            format!("backup pub key failed: {}", e)
-        ))?;
-        fs::write(&privfile, privk).map_err(|e| PyErr::new::<pyo3::exceptions::PyIOError, _>(
-            format!("backup priv key failed: {}", e)
-        ))?;
+        fs::write(&pubfile, pubk).map_err(|e| {
+            PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("backup pub key failed: {}", e))
+        })?;
+        fs::write(&privfile, privk).map_err(|e| {
+            PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("backup priv key failed: {}", e))
+        })?;
         eprintln!("[crypto] backed up keys to {} {}", pubfile, privfile);
         KEY_BACKUP_COUNTER.inc();
-        eprintln!("[crypto] notifying clients about decommissioning version {}", *KEY_VERSION.lock().unwrap());
+        eprintln!(
+            "[crypto] notifying clients about decommissioning version {}",
+            *KEY_VERSION.lock().unwrap()
+        );
     }
     let mut v = KEY_VERSION.lock().unwrap();
     *v += 1;
@@ -306,12 +333,12 @@ pub fn cleanup_transactions(path: &str) -> PyResult<()> {
     let cutoff = Utc::now() - chrono::Duration::days(30);
     let base = std::path::Path::new(path);
     if base.is_dir() {
-        for entry in std::fs::read_dir(base).map_err(|e| PyErr::new::<pyo3::exceptions::PyIOError,_>(
-            format!("gc read dir error: {}", e)
-        ))? {
-            let entry = entry.map_err(|e| PyErr::new::<pyo3::exceptions::PyIOError,_>(
-                format!("gc entry error: {}", e)
-            ))?;
+        for entry in std::fs::read_dir(base).map_err(|e| {
+            PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("gc read dir error: {}", e))
+        })? {
+            let entry = entry.map_err(|e| {
+                PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("gc entry error: {}", e))
+            })?;
             if let Ok(metadata) = entry.metadata() {
                 if let Ok(modified) = metadata.modified() {
                     let datetime: chrono::DateTime<Utc> = modified.into();
@@ -338,12 +365,12 @@ pub fn gather_metrics() -> PyResult<String> {
     let encoder = TextEncoder::new();
     let mf = prometheus::gather();
     let mut buf = Vec::new();
-    encoder.encode(&mf, &mut buf).map_err(|e| PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(
-        format!("metrics encoding error: {}", e)
-    ))?;
-    String::from_utf8(buf).map_err(|e| PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(
-        format!("utf8 error: {}", e)
-    ))
+    encoder.encode(&mf, &mut buf).map_err(|e| {
+        PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(format!("metrics encoding error: {}", e))
+    })?;
+    String::from_utf8(buf).map_err(|e| {
+        PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(format!("utf8 error: {}", e))
+    })
 }
 
 // The helper functions above are registered by `security::register`

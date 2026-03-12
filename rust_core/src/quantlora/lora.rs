@@ -16,25 +16,25 @@ pub fn lora_merge_rust(
 ) -> PyResult<Vec<f32>> {
     if base_weight.len() != out_features * in_features {
         return Err(pyo3::exceptions::PyValueError::new_err(
-            "base_weight size mismatch"
+            "base_weight size mismatch",
         ));
     }
     if lora_a.len() != rank * in_features {
         return Err(pyo3::exceptions::PyValueError::new_err(
-            "lora_a size mismatch"
+            "lora_a size mismatch",
         ));
     }
     if lora_b.len() != out_features * rank {
         return Err(pyo3::exceptions::PyValueError::new_err(
-            "lora_b size mismatch"
+            "lora_b size mismatch",
         ));
     }
-    
+
     // Compute delta = B @ A * scaling
     // B is [out_features, rank], A is [rank, in_features]
     // Result is [out_features, in_features]
     let mut result = base_weight.clone();
-    
+
     for o in 0..out_features {
         for i in 0..in_features {
             let mut delta = 0.0f32;
@@ -45,7 +45,7 @@ pub fn lora_merge_rust(
             result[o * in_features + i] += delta * scaling;
         }
     }
-    
+
     Ok(result)
 }
 
@@ -65,11 +65,11 @@ pub fn lora_forward_rust(
     // x: [batch_size, in_features]
     // lora_a: [rank, in_features]
     // lora_b: [out_features, rank]
-    
+
     if x.len() != batch_size * in_features {
         return Err(pyo3::exceptions::PyValueError::new_err("x size mismatch"));
     }
-    
+
     // Step 1: hidden = x @ A.T -> [batch_size, rank]
     let mut hidden = vec![0.0f32; batch_size * rank];
     for b in 0..batch_size {
@@ -81,7 +81,7 @@ pub fn lora_forward_rust(
             hidden[b * rank + r] = sum;
         }
     }
-    
+
     // Step 2: output = hidden @ B.T * scaling -> [batch_size, out_features]
     let mut output = vec![0.0f32; batch_size * out_features];
     for b in 0..batch_size {
@@ -93,6 +93,6 @@ pub fn lora_forward_rust(
             output[b * out_features + o] = sum * scaling;
         }
     }
-    
+
     Ok(output)
 }

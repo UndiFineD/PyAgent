@@ -65,13 +65,31 @@ impl TransformerConfig {
         // Scaling logic based on VRAM and Total RAM
         if profile.vram_gb >= 24.0 || profile.available_memory_gb >= 64.0 {
             // "Heavy" scale: Grouped-Query Attention (GQA) with 16Q/8KV
-            TransformerConfig { d_model: 1024, n_heads: 16, n_kv_heads: 8, n_layers: 24, d_ff: 4 * 1024 }
+            TransformerConfig {
+                d_model: 1024,
+                n_heads: 16,
+                n_kv_heads: 8,
+                n_layers: 24,
+                d_ff: 4 * 1024,
+            }
         } else if profile.vram_gb >= 8.0 || profile.available_memory_gb >= 16.0 {
             // "Medium" scale: 8Q/4KV
-            TransformerConfig { d_model: 512, n_heads: 8, n_kv_heads: 4, n_layers: 12, d_ff: 2 * 1024 }
+            TransformerConfig {
+                d_model: 512,
+                n_heads: 8,
+                n_kv_heads: 4,
+                n_layers: 12,
+                d_ff: 2 * 1024,
+            }
         } else {
             // "Light" scale: 4Q/2KV
-            TransformerConfig { d_model: 256, n_heads: 4, n_kv_heads: 2, n_layers: 6, d_ff: 1024 }
+            TransformerConfig {
+                d_model: 256,
+                n_heads: 4,
+                n_kv_heads: 2,
+                n_layers: 6,
+                d_ff: 1024,
+            }
         }
     }
 }

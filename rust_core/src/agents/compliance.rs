@@ -1,7 +1,10 @@
 use pyo3::prelude::*;
 
 #[pyfunction]
-pub fn audit_content_rust(content: &str, file_path: &str) -> PyResult<Vec<(String, String, String, String)>> {
+pub fn audit_content_rust(
+    content: &str,
+    file_path: &str,
+) -> PyResult<Vec<(String, String, String, String)>> {
     static RE_PATTERNS: std::sync::OnceLock<Vec<regex::Regex>> = std::sync::OnceLock::new();
     let res = RE_PATTERNS.get_or_init(|| {
         vec![
@@ -25,7 +28,10 @@ pub fn audit_content_rust(content: &str, file_path: &str) -> PyResult<Vec<(Strin
             issues.push((
                 "CRITICAL".to_string(),
                 "Secret Leak".to_string(),
-                format!("Potential credential found matching pattern: {}", pattern_str),
+                format!(
+                    "Potential credential found matching pattern: {}",
+                    pattern_str
+                ),
                 file_path.to_string(),
             ));
         }

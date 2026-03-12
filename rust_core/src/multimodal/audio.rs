@@ -8,42 +8,36 @@ use std::f32::consts::PI;
 /// Basic audio resampling using linear interpolation
 #[pyfunction]
 #[pyo3(signature = (samples, orig_sr, target_sr))]
-pub fn resample_audio_rust(
-    samples: Vec<f32>,
-    orig_sr: u32,
-    target_sr: u32,
-) -> Vec<f32> {
+pub fn resample_audio_rust(samples: Vec<f32>, orig_sr: u32, target_sr: u32) -> Vec<f32> {
     if orig_sr == target_sr || samples.is_empty() {
         return samples;
     }
-    
+
     let ratio = orig_sr as f32 / target_sr as f32;
     let new_len = (samples.len() as f32 / ratio).ceil() as usize;
     let mut output = Vec::with_capacity(new_len);
-    
+
     for i in 0..new_len {
         let src_idx = i as f32 * ratio;
         let idx0 = src_idx.floor() as usize;
         let idx1 = (idx0 + 1).min(samples.len() - 1);
         let frac = src_idx - idx0 as f32;
-        
+
         let s0 = samples.get(idx0).copied().unwrap_or(0.0);
         let s1 = samples.get(idx1).copied().unwrap_or(0.0);
-        
+
         output.push(s0 * (1.0 - frac) + s1 * frac);
     }
-    
+
     output
 }
 
 /// Simple noise gate for noise suppression
 #[pyfunction]
 #[pyo3(signature = (samples, threshold = 0.01))]
-pub fn audio_noise_suppression_rust(
-    samples: Vec<f32>,
-    threshold: f32,
-) -> Vec<f32> {
-    samples.into_iter()
+pub fn audio_noise_suppression_rust(samples: Vec<f32>, threshold: f32) -> Vec<f32> {
+    samples
+        .into_iter()
         .map(|s| if s.abs() < threshold { 0.0 } else { s })
         .collect()
 }
@@ -52,17 +46,14 @@ pub fn audio_noise_suppression_rust(
 /// Assumes interleaved channels (e.g., L, R, L, R...)
 /// Returns angle in radians (-PI to PI)
 #[pyfunction]
-pub fn calculate_audio_direction_rust(
-    interleaved_samples: Vec<f32>,
-    channels: usize,
-) -> f32 {
+pub fn calculate_audio_direction_rust(interleaved_samples: Vec<f32>, channels: usize) -> f32 {
     if channels < 2 || interleaved_samples.len() < channels {
         return 0.0;
     }
-    
+
     let mut l_energy = 0.0;
     let mut r_energy = 0.0;
-    
+
     // Simple intensity panning approximation for stereo
     for chunk in interleaved_samples.chunks(channels) {
         if chunk.len() >= 2 {
@@ -70,11 +61,11 @@ pub fn calculate_audio_direction_rust(
             r_energy += chunk[1].abs();
         }
     }
-    
+
     if l_energy + r_energy == 0.0 {
         return 0.0;
     }
-    
+
     // Map energy balance to angle: Left = -PI/2, Right = PI/2, Center = 0
     let balance = (r_energy - l_energy) / (r_energy + l_energy);
     balance * (PI / 2.0)
@@ -82,28 +73,27 @@ pub fn calculate_audio_direction_rust(
 
 /// Mix multiple audio tracks into one
 #[pyfunction]
-pub fn audio_mix_tracks_rust(
-    tracks: Vec<Vec<f32>>,
-    weights: Vec<f32>,
-) -> Vec<f32> {
-    if tracks.is_empty() { return Vec::new(); }
-    
+pub fn audio_mix_tracks_rust(tracks: Vec<Vec<f32>>, weights: Vec<f32>) -> Vec<f32> {
+    if tracks.is_empty() {
+        return Vec::new();
+    }
+
     let max_len = tracks.iter().map(|t| t.len()).max().unwrap_or(0);
     let mut mixed = vec![0.0f32; max_len];
     let default_weight = 1.0;
-    
+
     for (i, track) in tracks.iter().enumerate() {
         let w = weights.get(i).copied().unwrap_or(default_weight);
         for (j, &sample) in track.iter().enumerate() {
             mixed[j] += sample * w;
         }
     }
-    
+
     // Normalize to prevent clipping? Optionally clamp
     for s in mixed.iter_mut() {
         *s = s.clamp(-1.0, 1.0);
     }
-    
+
     mixed
 }
 
@@ -121,7 +111,7 @@ pub fn calculate_mel_features_rust(
     if samples.len() < n_fft || n_fft == 0 || hop_length == 0 || n_mels == 0 {
         return Vec::new();
     }
-    
+
     let num_frames = (samples.len() - n_fft) / hop_length + 1;
     let mut mels = Vec::with_capacity(num_frames);
 
@@ -240,9 +230,10 @@ pub fn calculate_mel_features_rust(
 /// Quantize audio samples to int8
 #[pyfunction]
 pub fn audio_quantize_int8_rust(samples: Vec<f32>) -> Vec<i8> {
-    samples.into_iter().map(|s| {
-        (s.clamp(-1.0, 1.0) * 127.0).round() as i8
-    }).collect()
+    samples
+        .into_iter()
+        .map(|s| (s.clamp(-1.0, 1.0) * 127.0).round() as i8)
+        .collect()
 }
 
 /// Simple Voice Activity Detection (VAD) based on energy
@@ -253,18 +244,19 @@ pub fn speech_vad_rust(
     sample_rate: u32,
     frame_duration_ms: usize,
     threshold: f32,
-) -> Vec<(usize, usize)> { // Returns list of (start_sample, end_sample) tuples
+) -> Vec<(usize, usize)> {
+    // Returns list of (start_sample, end_sample) tuples
     let frame_size = (sample_rate as usize * frame_duration_ms) / 1000;
     let mut segments = Vec::new();
     let mut in_speech = false;
     let mut start = 0;
-    
+
     for (i, frame) in samples.chunks(frame_size).enumerate() {
         let energy: f32 = frame.iter().map(|x| x * x).sum::<f32>() / frame.len() as f32;
         let is_speech = energy > threshold;
-        
+
         let current_pos = i * frame_size;
-        
+
         if is_speech && !in_speech {
             in_speech = true;
             start = current_pos;
@@ -273,10 +265,10 @@ pub fn speech_vad_rust(
             segments.push((start, current_pos));
         }
     }
-    
+
     if in_speech {
         segments.push((start, samples.len()));
     }
-    
+
     segments
 }

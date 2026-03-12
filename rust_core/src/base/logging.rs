@@ -7,17 +7,12 @@ pub fn mask_sensitive_logs(text: &str) -> PyResult<String> {
     static BEARER_RE: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
     static GITHUB_RE: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
 
-    let openai_re = OPENAI_RE.get_or_init(|| {
-        regex::Regex::new(r"sk-[a-zA-Z0-9]{32,}").unwrap()
-    });
+    let openai_re = OPENAI_RE.get_or_init(|| regex::Regex::new(r"sk-[a-zA-Z0-9]{32,}").unwrap());
 
-    let bearer_re = BEARER_RE.get_or_init(|| {
-         regex::Regex::new(r"Bearer\s+[a-zA-Z0-9\-\._~+/]+=*").unwrap()
-    });
+    let bearer_re =
+        BEARER_RE.get_or_init(|| regex::Regex::new(r"Bearer\s+[a-zA-Z0-9\-\._~+/]+=*").unwrap());
 
-    let github_re = GITHUB_RE.get_or_init(|| {
-        regex::Regex::new(r"gh[ps]_[a-zA-Z0-9]{36}").unwrap()
-    });
+    let github_re = GITHUB_RE.get_or_init(|| regex::Regex::new(r"gh[ps]_[a-zA-Z0-9]{36}").unwrap());
 
     let t1 = openai_re.replace_all(text, "[REDACTED]");
     let t2 = bearer_re.replace_all(&t1, "Bearer [REDACTED]");
@@ -43,17 +38,12 @@ pub fn build_log_entry_rust(
     static BEARER_RE: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
     static GITHUB_RE: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
 
-    let openai_re = OPENAI_RE.get_or_init(|| {
-        regex::Regex::new(r"sk-[a-zA-Z0-9]{32,}").unwrap()
-    });
+    let openai_re = OPENAI_RE.get_or_init(|| regex::Regex::new(r"sk-[a-zA-Z0-9]{32,}").unwrap());
 
-    let bearer_re = BEARER_RE.get_or_init(|| {
-         regex::Regex::new(r"Bearer\s+[a-zA-Z0-9\-\._~+/]+=*").unwrap()
-    });
+    let bearer_re =
+        BEARER_RE.get_or_init(|| regex::Regex::new(r"Bearer\s+[a-zA-Z0-9\-\._~+/]+=*").unwrap());
 
-    let github_re = GITHUB_RE.get_or_init(|| {
-        regex::Regex::new(r"gh[ps]_[a-zA-Z0-9]{36}").unwrap()
-    });
+    let github_re = GITHUB_RE.get_or_init(|| regex::Regex::new(r"gh[ps]_[a-zA-Z0-9]{36}").unwrap());
 
     let t1 = openai_re.replace_all(message, "[REDACTED]");
     let t2 = bearer_re.replace_all(&t1, "Bearer [REDACTED]");

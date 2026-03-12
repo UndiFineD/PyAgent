@@ -4,13 +4,15 @@ use regex::Regex;
 /// Scan code for optimization patterns (PerformanceAgent).
 /// Returns Vec<(line_number, pattern_index, matched_groups)>
 #[pyfunction]
-pub fn scan_optimization_patterns_rust(content: &str) -> PyResult<Vec<(usize, usize, Vec<String>)>> {
+pub fn scan_optimization_patterns_rust(
+    content: &str,
+) -> PyResult<Vec<(usize, usize, Vec<String>)>> {
     let patterns = [
         r"for\s+\w+\s+in\s+range\(len\((\w+)\)\)",
         r"\+=\s*.*?for\s+",
         r"time\.sleep\(\d+\)",
     ];
-    
+
     let mut results = Vec::new();
     for (line_num, line) in content.lines().enumerate() {
         for (idx, p) in patterns.iter().enumerate() {
@@ -26,6 +28,6 @@ pub fn scan_optimization_patterns_rust(content: &str) -> PyResult<Vec<(usize, us
             }
         }
     }
-    
+
     Ok(results)
 }

@@ -7,7 +7,9 @@ use walkdir::WalkDir;
 pub fn prune_directory_rust(directory: &str, max_age_days: i64) -> PyResult<u64> {
     let mut count = 0;
     let threshold = std::time::SystemTime::now()
-        .checked_sub(std::time::Duration::from_secs((max_age_days as u64) * 86400))
+        .checked_sub(std::time::Duration::from_secs(
+            (max_age_days as u64) * 86400,
+        ))
         .unwrap_or_else(std::time::SystemTime::now);
 
     for entry in WalkDir::new(directory).into_iter().filter_map(|e| e.ok()) {
@@ -31,12 +33,12 @@ pub fn prune_directory_rust(directory: &str, max_age_days: i64) -> PyResult<u64>
 #[pyfunction]
 pub fn deep_clean_pycache_rust(root_dir: &str) -> PyResult<u64> {
     let mut count = 0;
-    
+
     let mut targets = Vec::new();
     for entry in WalkDir::new(root_dir).into_iter().filter_map(|e| e.ok()) {
-         if entry.file_type().is_dir() && entry.file_name() == "__pycache__" {
-             targets.push(entry.path().to_owned());
-         }
+        if entry.file_type().is_dir() && entry.file_name() == "__pycache__" {
+            targets.push(entry.path().to_owned());
+        }
     }
 
     for path in targets {

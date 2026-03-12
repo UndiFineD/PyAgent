@@ -11,12 +11,12 @@ pub fn platform_fingerprint_rust(
     platform_type: String,
     device_infos: Vec<HashMap<String, String>>,
 ) -> String {
-    use std::hash::{Hash, Hasher};
     use std::collections::hash_map::DefaultHasher;
-    
+    use std::hash::{Hash, Hasher};
+
     let mut hasher = DefaultHasher::new();
     platform_type.hash(&mut hasher);
-    
+
     for device in device_infos {
         // Sort keys for consistent hashing
         let mut keys: Vec<_> = device.keys().collect();
@@ -28,7 +28,7 @@ pub fn platform_fingerprint_rust(
             }
         }
     }
-    
+
     format!("{:016x}", hasher.finish())
 }
 
@@ -64,14 +64,12 @@ pub fn estimate_memory_footprint_rust(
 
 /// Parse OpenAI API response JSON efficiently
 #[pyfunction]
-pub fn parse_response_json_rust(
-    json_str: String,
-) -> PyResult<HashMap<String, String>> {
+pub fn parse_response_json_rust(json_str: String) -> PyResult<HashMap<String, String>> {
     let parsed: serde_json::Value = serde_json::from_str(&json_str)
         .map_err(|e| pyo3::exceptions::PyValueError::new_err(format!("JSON parse error: {}", e)))?;
-    
+
     let mut result = HashMap::new();
-    
+
     if let serde_json::Value::Object(obj) = parsed {
         for (key, value) in obj {
             let val_str = match value {
@@ -84,19 +82,17 @@ pub fn parse_response_json_rust(
             result.insert(key, val_str);
         }
     }
-    
+
     Ok(result)
 }
 
 /// Extract SSE event data from stream chunk
 #[pyfunction]
-pub fn parse_sse_event_rust(
-    chunk: String,
-) -> (String, String, Option<String>) {
+pub fn parse_sse_event_rust(chunk: String) -> (String, String, Option<String>) {
     let mut event_type = String::new();
     let mut data = String::new();
     let mut event_id = None;
-    
+
     for line in chunk.lines() {
         if let Some(rest) = line.strip_prefix("event: ") {
             event_type = rest.trim().to_string();
@@ -109,29 +105,25 @@ pub fn parse_sse_event_rust(
             event_id = Some(rest.trim().to_string());
         }
     }
-    
+
     (event_type, data, event_id)
 }
 
 /// Encode SSE event for streaming
 #[pyfunction]
-pub fn encode_sse_event_rust(
-    event_type: String,
-    data: String,
-    event_id: Option<String>,
-) -> String {
+pub fn encode_sse_event_rust(event_type: String, data: String, event_id: Option<String>) -> String {
     let mut result = String::new();
-    
+
     if let Some(id) = event_id {
         result.push_str(&format!("id: {}\n", id));
     }
     result.push_str(&format!("event: {}\n", event_type));
-    
+
     for line in data.lines() {
         result.push_str(&format!("data: {}\n", line));
     }
     result.push('\n');
-    
+
     result
 }
 
@@ -143,7 +135,7 @@ pub fn render_simple_template_rust(
     add_generation_prompt: bool,
 ) -> String {
     let mut result = String::new();
-    
+
     match template_type.as_str() {
         "chatml" | "qwen" => {
             for msg in &messages {
@@ -161,7 +153,8 @@ pub fn render_simple_template_rust(
                 let content = msg.get("content").map(|s| s.as_str()).unwrap_or("");
                 result.push_str(&format!(
                     "<|start_header_id|>{}<|end_header_id|>\n\n{}<|eot_id|>",
-                    role, content.trim()
+                    role,
+                    content.trim()
                 ));
             }
             if add_generation_prompt {
@@ -194,17 +187,15 @@ pub fn render_simple_template_rust(
             }
         }
     }
-    
+
     result
 }
 
 /// Detect chat template type from model name
 #[pyfunction]
-pub fn detect_chat_template_rust(
-    model_name: String,
-) -> String {
+pub fn detect_chat_template_rust(model_name: String) -> String {
     let model_lower = model_name.to_lowercase();
-    
+
     let patterns = [
         ("llama-3", "llama3"),
         ("llama3", "llama3"),
@@ -224,24 +215,21 @@ pub fn detect_chat_template_rust(
         ("openchat", "chatml"),
         ("dolphin", "chatml"),
     ];
-    
+
     for (pattern, template) in patterns {
         if model_lower.contains(pattern) {
             return template.to_string();
         }
     }
-    
+
     "chatml".to_string()
 }
 
 /// Find placeholder positions in text
 #[pyfunction]
-pub fn find_placeholders_rust(
-    text: String,
-    patterns: Vec<String>,
-) -> Vec<usize> {
+pub fn find_placeholders_rust(text: String, patterns: Vec<String>) -> Vec<usize> {
     let mut positions = Vec::new();
-    
+
     for pattern in patterns {
         let mut start = 0;
         while let Some(pos) = text[start..].find(&pattern) {
@@ -249,21 +237,19 @@ pub fn find_placeholders_rust(
             start = start + pos + pattern.len();
         }
     }
-    
+
     positions.sort();
     positions
 }
 
 /// Hash conversation context for caching
 #[pyfunction]
-pub fn hash_conversation_context_rust(
-    messages: Vec<HashMap<String, String>>,
-) -> String {
-    use std::hash::{Hash, Hasher};
+pub fn hash_conversation_context_rust(messages: Vec<HashMap<String, String>>) -> String {
     use std::collections::hash_map::DefaultHasher;
-    
+    use std::hash::{Hash, Hasher};
+
     let mut hasher = DefaultHasher::new();
-    
+
     for msg in messages {
         // Sort keys for consistent hashing
         let mut keys: Vec<_> = msg.keys().collect();
@@ -275,7 +261,7 @@ pub fn hash_conversation_context_rust(
             }
         }
     }
-    
+
     format!("{:016x}", hasher.finish())
 }
 
@@ -287,11 +273,11 @@ pub fn generate_cache_salt_rust(
     add_special_tokens: bool,
     truncation: Option<String>,
 ) -> String {
-    use std::hash::{Hash, Hasher};
     use std::collections::hash_map::DefaultHasher;
-    
+    use std::hash::{Hash, Hasher};
+
     let mut hasher = DefaultHasher::new();
-    
+
     if let Some(t) = template_hash {
         t.hash(&mut hasher);
     }
@@ -300,6 +286,6 @@ pub fn generate_cache_salt_rust(
     if let Some(tr) = truncation {
         tr.hash(&mut hasher);
     }
-    
+
     format!("{:016x}", hasher.finish())
 }

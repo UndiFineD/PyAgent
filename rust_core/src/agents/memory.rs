@@ -9,9 +9,12 @@ pub fn calculate_new_utility(old_score: f64, increment: f64) -> PyResult<f64> {
 
 /// Filter relevant memories by utility (MemoryCore).
 #[pyfunction]
-pub fn filter_relevant_memories(memories: Vec<Bound<'_, PyDict>>, min_utility: f64) -> PyResult<Vec<PyObject>> {
+pub fn filter_relevant_memories(
+    memories: Vec<Bound<'_, PyDict>>,
+    min_utility: f64,
+) -> PyResult<Vec<PyObject>> {
     let mut relevant = Vec::new();
-    
+
     for mem in memories {
         // "utility_score" optional, default 0.0
         let score: f64 = if let Some(item) = mem.get_item("utility_score")? {
@@ -19,12 +22,12 @@ pub fn filter_relevant_memories(memories: Vec<Bound<'_, PyDict>>, min_utility: f
         } else {
             0.0
         };
-        
+
         if score >= min_utility {
             relevant.push(mem.clone().into());
         }
     }
-    
+
     Ok(relevant)
 }
 
@@ -40,7 +43,7 @@ pub fn create_episode_struct(
     baseline_utility: f64,
 ) -> PyResult<PyObject> {
     let dict = pyo3::types::PyDict::new(py);
-    
+
     // Logic: if success +0.2 else -0.3
     let mut utility = baseline_utility;
     if success {
@@ -49,9 +52,9 @@ pub fn create_episode_struct(
         utility -= 0.3;
     }
     utility = utility.min(1.0).max(0.0);
-    
+
     let now = chrono::Utc::now().to_rfc3339();
-    
+
     dict.set_item("timestamp", now)?;
     dict.set_item("agent", agent_name)?;
     dict.set_item("task", task)?;
@@ -59,6 +62,6 @@ pub fn create_episode_struct(
     dict.set_item("success", success)?;
     dict.set_item("utility_score", utility)?;
     dict.set_item("metadata", pyo3::types::PyDict::new(py))?;
-    
+
     Ok(dict.into())
 }

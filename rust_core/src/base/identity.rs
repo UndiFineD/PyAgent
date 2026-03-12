@@ -1,11 +1,15 @@
-use pyo3::prelude::*;
-use sha2::{Sha256, Digest};
 use hmac::{Hmac, Mac};
+use pyo3::prelude::*;
+use sha2::{Digest, Sha256};
 type HmacSha256 = Hmac<Sha256>;
 
 /// Generate agent ID (IdentityCore).
 #[pyfunction]
-pub fn generate_agent_id(public_key: &str, metadata_type: &str, birth_cycle: i64) -> PyResult<String> {
+pub fn generate_agent_id(
+    public_key: &str,
+    metadata_type: &str,
+    birth_cycle: i64,
+) -> PyResult<String> {
     let seed = format!("{}_{}_{}", public_key, metadata_type, birth_cycle);
     let mut hasher = Sha256::new();
     hasher.update(seed.as_bytes());
@@ -21,8 +25,9 @@ pub fn generate_agent_id(public_key: &str, metadata_type: &str, birth_cycle: i64
 /// Sign payload (IdentityCore).
 #[pyfunction]
 pub fn sign_payload(payload: &str, secret_key: &str) -> PyResult<String> {
-    let mut mac = HmacSha256::new_from_slice(secret_key.as_bytes())
-        .map_err(|e| PyErr::new::<pyo3::exceptions::PyValueError, _>(format!("Invalid key length: {}", e)))?;
+    let mut mac = HmacSha256::new_from_slice(secret_key.as_bytes()).map_err(|e| {
+        PyErr::new::<pyo3::exceptions::PyValueError, _>(format!("Invalid key length: {}", e))
+    })?;
     mac.update(payload.as_bytes());
     let result = mac.finalize();
     Ok(hex::encode(result.into_bytes()))
