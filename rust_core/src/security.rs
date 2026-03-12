@@ -5,6 +5,7 @@ pub mod injection;
 pub mod patterns;
 pub mod auth_helpers;
 pub mod crypto;
+pub mod hmac_keys;
 
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;

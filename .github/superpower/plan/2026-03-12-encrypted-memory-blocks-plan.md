@@ -695,3 +695,45 @@ block_id: <uuid-string>
 total_used_bytes: 0
 released OK
 ```
+
+---
+
+### Task 17 — Implement HMAC key management for SharedMemory
+
+**Step 1: Add new key‑derivation module**
+- Create `rust_core/src/security/hmac_keys.rs` with functions:
+  ```rust
+  use hkdf::Hkdf;
+  use sha2::Sha256;
+  use rand_core::OsRng;
+  
+  pub fn derive_msg_key(master: &[u8;32], agent: &[u8;32], seq: u64) -> [u8;32] {
+      let info = [agent, &seq.to_be_bytes()].concat();
+      let hk = Hkdf::<Sha256>::new(None, master);
+      let mut out = [0u8;32];
+      hk.expand(&info, &mut out).unwrap();
+      out
+  }
+  ```
+
+**Step 2: Modify `SharedMemory` code**
+- Before writing an entry, call `derive_msg_key()` and compute HMAC tag.
+- When loading an entry, attempt verification with active master keys.
+- Update `rust_core/src/memory.rs` `SharedMemory` wrapper accordingly.
+
+**Step 3: Add tests**
+- New Rust test verifying correct tag generation/verification and failure
+  when using wrong master key; add to `memory.rs` tests.
+
+**Step 4: Extend Python wrapper**
+- Add `verify_hmac` and `rotate_master_key` methods to `PySharedMemory`.
+
+**Step 5: Add HMAC key distribution note**
+- Document that agents obtain `K_master` via cluster CA during startup.
+
+**Step 6: Run full memory+security test suite**
+```powershell
+cd rust_core; cargo test memory::tests::test_hmac_key_management 2>&1
+``` 
+Expected new test passes and suite still passes.
+
