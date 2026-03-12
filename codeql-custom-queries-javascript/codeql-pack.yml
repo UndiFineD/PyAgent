@@ -7,5 +7,4 @@ dependencies:
   codeql/javascript-all: ^2.6.23
 
 # extractor declaration required for dataset tests
-extractors:
-  javascript: codeql/javascript-all
+extractor: javascript
