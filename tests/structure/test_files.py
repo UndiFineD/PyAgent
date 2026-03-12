@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Tests for important files in the project."""
 import os
-import pathlib as Path
+from pathlib import Path
 
 
 def test_important_files_exist(tmp_path: Path) -> None:

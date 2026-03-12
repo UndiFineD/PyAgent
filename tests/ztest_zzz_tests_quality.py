@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Meta-test to ensure all test files meet basic quality standards:"""
+"""Meta-test to ensure all test files meet basic quality standards."""
 import ast
 import subprocess
 import sys

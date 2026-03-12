@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Unit tests for the risk matrix helper in the pm package."""
 
-import pathlib as Path
+from pathlib import Path
+
 from tools.pm import risk
 
 
