@@ -143,7 +143,7 @@
 - Code:
   ```python
   import pytest
-  from src.core.providers.flm_chat_adapter import FlmChatAdapter, FlmRuntimeError
+  from src.core.providers.FlmChatAdapter import FlmChatAdapter, FlmRuntimeError
   from src.core.providers.FlmProviderConfig import FlmProviderConfig
 
   class DummyClient:

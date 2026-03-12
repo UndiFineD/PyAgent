@@ -9,8 +9,8 @@ import sys
 import time
 from collections import defaultdict
 from pathlib import Path
-from typing import Any
 from re import Pattern
+from typing import Any
 
 import rust_core
 
@@ -48,6 +48,7 @@ def _extract_functions_from_file(filepath: str, fn_pattern: Pattern[str]) -> lis
     Returns:
         A list of dictionaries with keys ``name``, ``params`` and
         ``arg_count`` (the number of non-reference parameters).
+
     """
     functions: list[dict[str, Any]] = []
     try:

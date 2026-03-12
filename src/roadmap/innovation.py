@@ -26,6 +26,7 @@ def record_experiment(name: str, db_path: str = "experiments.json") -> Path:
 
     Returns:
         Path: The path to the updated experiments JSON file.
+
     """
     db: list[Any] = []
     p: Path = Path(db_path)

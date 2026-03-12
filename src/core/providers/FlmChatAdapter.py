@@ -91,7 +91,6 @@ class FlmChatAdapter:
     @staticmethod
     def validate() -> None:
         """Stub method used by unit tests to ensure the class is importable."""
-        pass
 
     def _create_client(self) -> _ClientProtocol:
         """Create a new FLM client instance using the provided factory and configuration."""

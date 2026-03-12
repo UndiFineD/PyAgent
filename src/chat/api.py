@@ -16,12 +16,12 @@
 from __future__ import annotations
 
 from typing import Any
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 from chat.models import ChatRoom
 from MemoryTransactionManager import MemoryTransaction  # ensure atomic updates
-
 
 try:
     from prometheus_client import Counter

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """Meta-test to ensure test files meet basic linting standards."""
+# Apache 2.0 License applies to this file; see LICENSE for details.
+
 
 import asyncio
 import sys

@@ -18,7 +18,7 @@
 # simply import from ``src.core.providers`` instead of digging into
 # individual files.  These names were recently snake-cased and need to be
 # kept in sync.
-from .flm_chat_adapter import FlmChatAdapter  # noqa: F401
+from .FlmChatAdapter import FlmChatAdapter  # noqa: F401
 from .FlmProviderConfig import FlmProviderConfig  # noqa: F401
 
 __all__ = [

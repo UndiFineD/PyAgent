@@ -110,7 +110,7 @@ FLM (Fastflow Language Model) is a local, OpenAI-compatible model server optimiz
 
 **Key Components Added**:
 - **Provider Configuration**: `src/core/providers/FlmProviderConfig.py` - Config validation with required fields (`base_url`, `default_model`, `timeout`, `max_retries`) and optional paths (`health_path`, `chat_path`)
-- **Chat Adapter**: `src/core/providers/flm_chat_adapter.py` - OpenAI SDK-compatible adapter supporting:
+- **Chat Adapter**: `src/core/providers/FlmChatAdapter.py` - OpenAI SDK-compatible adapter supporting:
   - Standard chat completions (`chat.completions.create`)
   - Deterministic tool-call loop with bounded iterations
   - Runtime diagnostics (endpoint availability, model checks)

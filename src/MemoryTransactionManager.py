@@ -30,7 +30,7 @@ log, etc.) without touching the clients.
 from __future__ import annotations
 
 import threading
-from typing import Optional, Type, Any
+from typing import Any, Optional, Type
 
 # global lock used by all transactions; reentrant so that nested
 # transactions from the same thread do not deadlock.
