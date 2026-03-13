@@ -1,2 +1,8 @@
-| codeql-pack.lock.yml:0:0:0:0 | codeql-pack.lock.yml | Hello, world! |
-| codeql-pack.yml:0:0:0:0 | codeql-pack.yml | Hello, world! |
+ERROR: could not resolve type Literal (example.ql:21,32-39)
+ERROR: could not resolve type Literal (example.ql:22,22-29)
+ERROR: could not resolve type NamedArgument (example.ql:17,14-27)
+ERROR: getTarget() cannot be resolved for type Exprs::Call (example.ql:13,9-18)
+ERROR: getTarget() cannot be resolved for type Exprs::Call (example.ql:18,9-18)
+ERROR: query module contains multiple select clauses (example.ql:1,1-1)
+ERROR: select clause select conflicts with select clause select from example.ql:12 (example.ql:17,1-23,53)
+ERROR: select clause select conflicts with select clause select from example.ql:17 (example.ql:12,1-14,44)
