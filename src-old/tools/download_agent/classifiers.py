@@ -80,11 +80,10 @@ Classifies URLs by type and determines appropriate download strategy.
 LLM_CONTEXT_END
 """
 
-"""
-URL classification logic for the Download Agent.
-"""
+# URL classification logic for the Download Agent.
 
 import re
+import urllib.parse
 from typing import Dict, Tuple
 
 
@@ -115,14 +114,17 @@ class URLClassifier:
             }
 
         # ArXiv papers
-        if "arxiv.org" in url_lower:
-            if "/abs/" in url_lower or "/pdf/" in url_lower:
-                paper_id = re.search(r"/(\d+\.\d+)", url_lower)
+        # Ensure we only match the actual arxiv.org domain, not URLs that merely contain the string.
+        parsed = urllib.parse.urlparse(url_lower)
+        hostname = parsed.hostname or ""
+        if hostname.endswith("arxiv.org"):
+            if parsed.path.startswith("/abs/") or parsed.path.startswith("/pdf/"):
+                paper_id = re.search(r"/(\d+\.\d+)", parsed.path)
                 if paper_id:
                     return "arxiv_paper", {
                         "paper_id": paper_id.group(1),
                         "destination": "data/research",
-                        "format": "pdf" if "/pdf/" in url_lower else "html",
+                        "format": "pdf" if parsed.path.startswith("/pdf/") else "html",
                     }
 
         # Research paper PDFs
