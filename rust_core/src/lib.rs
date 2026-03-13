@@ -14,7 +14,6 @@
 // suppress a handful of clippy lints that are noisy in the current codebase
 // and not worth fixing urgently; they were causing the GitHub Actions
 // rust job to fail with `-D warnings`.
-#![allow(clippy::all)]
 #![allow(
     clippy::manual_div_ceil,
     clippy::type_complexity,
@@ -32,6 +31,19 @@
     clippy::needless_return,
     clippy::too_many_arguments,
     clippy::if_same_then_else,
+    clippy::collapsible_if,
+    clippy::same_item_push,
+    clippy::redundant_closure,
+    clippy::wildcard_in_or_patterns,
+    clippy::ptr_arg,
+    clippy::cast_abs_to_unsigned,
+    clippy::op_ref,
+    clippy::unwrap_or_default,
+    clippy::iter_cloned_collect,
+    clippy::implicit_saturating_sub,
+    clippy::for_kv_map,
+    clippy::is_digit_ascii_radix,
+    clippy::useless_vec,
 )]
 
 /// Core Rust module for PyAgent, providing high-performance implementations of critical components.
