@@ -73,7 +73,7 @@ rust = [
 # Optimization for 'uv' package manager
 cache-keys = [{ file = "requirements.txt" }]
 
-[tool.ruff.lint]
+[tool.ruff]
 line-length = 120
 target-version = "py312"
 exclude = ["src-old/**"]
