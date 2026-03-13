@@ -327,7 +327,14 @@ class NetworkReconnaissanceCore(BaseCore):
         """Analyze SSL/TLS certificates for subdomains."""
         try:
             # Get certificate from direct connection
+            # Ensure modern TLS versions only (disable TLSv1 and TLSv1.1)
             context = ssl.create_default_context()
+            if hasattr(ssl, "TLSVersion"):
+                context.minimum_version = ssl.TLSVersion.TLSv1_2
+            else:
+                # Python < 3.7 fallback
+                context.options |= ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1
+
             context.check_hostname = False
             context.verify_mode = ssl.CERT_NONE
 
