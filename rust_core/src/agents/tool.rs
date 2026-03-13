@@ -20,6 +20,6 @@ impl ToolDraftingCore {
             && name
                 .chars()
                 .next()
-                .is_some_and(|c| c.is_alphabetic() || c == '_')
+                .map_or(false, |c| c.is_alphabetic() || c == '_')
     }
 }

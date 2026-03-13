@@ -285,8 +285,15 @@ pub fn triton_attention_dispatch_rust(
         1 // Triton
     } else {
         config.insert("BLOCK_SIZE".to_string(), "64".to_string());
-        // both branches previously returned 0; simplify
-        0
+        if let Some(bs) = batch_size {
+            if bs > 32 {
+                0
+            } else {
+                0
+            }
+        } else {
+            0
+        }
     };
 
     if let (Some(nh), Some(nkv)) = (num_heads, num_kv_heads) {
@@ -317,8 +324,8 @@ pub fn batch_descriptor_key_rust(
     use std::hash::{Hash, Hasher};
 
     // Pad to alignment
-    let padded_tokens = num_tokens.div_ceil(pad_to) * pad_to;
-    let padded_reqs = num_reqs.div_ceil(pad_to) * pad_to;
+    let padded_tokens = ((num_tokens + pad_to - 1) / pad_to) * pad_to;
+    let padded_reqs = ((num_reqs + pad_to - 1) / pad_to) * pad_to;
 
     let mut hasher = DefaultHasher::new();
     padded_tokens.hash(&mut hasher);
@@ -349,8 +356,8 @@ pub fn compute_ubatch_slices_rust(
         num_ubatches
     };
 
-    let tokens_per_ubatch = num_tokens.div_ceil(effective_ubatches);
-    let reqs_per_ubatch = num_reqs.div_ceil(effective_ubatches);
+    let tokens_per_ubatch = (num_tokens + effective_ubatches - 1) / effective_ubatches;
+    let reqs_per_ubatch = (num_reqs + effective_ubatches - 1) / effective_ubatches;
 
     let mut slices = Vec::with_capacity(effective_ubatches);
     let mut token_pos = 0;
@@ -476,8 +483,8 @@ pub fn compute_padded_buffer_size_rust(
     seq_pad: usize,
     hidden_size: usize,
 ) -> (usize, usize, usize) {
-    let padded_batch = batch_size.div_ceil(batch_pad) * batch_pad;
-    let padded_seq = seq_len.div_ceil(seq_pad) * seq_pad;
+    let padded_batch = ((batch_size + batch_pad - 1) / batch_pad) * batch_pad;
+    let padded_seq = ((seq_len + seq_pad - 1) / seq_pad) * seq_pad;
     let total_elements = padded_batch * padded_seq * hidden_size;
 
     (padded_batch, padded_seq, total_elements)

@@ -73,7 +73,7 @@ rust = [
 # Optimization for 'uv' package manager
 cache-keys = [{ file = "requirements.txt" }]
 
-[tool.ruff]
+[tool.ruff.lint]
 line-length = 120
 target-version = "py312"
 exclude = ["src-old/**"]
@@ -108,9 +108,9 @@ ignore = [
 [tool.mypy]
 python_version = "3.12"
 strict = true
-ignore_errors = true  # temporarily allow type errors in CI
-# Additional strictness flags for clarity, though 'strict = true' covers most
-disallow_untyped_defs = false  # relaxed for CI
+# ignore_errors is deliberately OFF; CI will invoke mypy only on specific
+# packages or run in warning-only mode so that existing issues don’t block
+disallow_untyped_defs = false  # relaxed for gradual adoption
 disallow_incomplete_defs = true
 no_implicit_optional = true
 warn_unused_ignores = true
@@ -120,13 +120,27 @@ warn_unreachable = true
 # Exclude the 'generated' directory from mypy checks, as generated code might not always be fully type-hinted
 exclude = ["generated/"]
 
+# keep external imports from causing failures
+ignore_missing_imports = true  # avoid errors on generated / external modules
+
+# per-module overrides allow us to progressively tighten the checks
+[[tool.mypy.overrides]]
+module = "tests.*"
+ignore_errors = true  # tests are free-form for now
+
+[[tool.mypy.overrides]]
+module = "src-old.*"
+ignore_errors = true  # legacy code being phased out
+
+[[tool.mypy.overrides]]
+module = "src.core.base.*"
+strict = true  # apply full strictness to the core package
+
 # You can add specific overrides for modules or packages if needed, for example:
 # [[tool.mypy.overrides]]
 # module = "src.core.base.*"
 # disallow_untyped_defs = true
 # disallow_incomplete_defs = true
-
-ignore_missing_imports = true  # avoid errors on generated / external modules
 
 
 [tool.pytest.ini_options]

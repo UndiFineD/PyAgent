@@ -5,7 +5,7 @@ use pyo3::prelude::*;
 pub fn calculate_decay_rust(weights: Vec<f64>, decay_factor: f64) -> Vec<f64> {
     // decay_factor = age_seconds / half_life
     // Formula: weight * exp(-ln(2) * decay_factor)
-    let ln2 = std::f64::consts::LN_2;
+    let ln2 = 0.69314718056;
     let exponent = -ln2 * decay_factor;
     let factor = exponent.exp();
 

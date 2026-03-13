@@ -53,7 +53,7 @@ pub fn compute_block_hashes_rust(input_ids: Vec<i64>, block_size: usize) -> Vec<
         return Vec::new();
     }
 
-    let num_blocks = input_ids.len().div_ceil(block_size);
+    let num_blocks = (input_ids.len() + block_size - 1) / block_size;
     let mut hashes = Vec::with_capacity(num_blocks);
 
     for chunk in input_ids.chunks(block_size) {
@@ -75,7 +75,7 @@ pub fn compute_block_hashes_batched_rust(
         return Vec::new();
     }
 
-    let num_blocks = token_ids.len().div_ceil(block_size);
+    let num_blocks = (token_ids.len() + block_size - 1) / block_size;
     let mut hashes: Vec<u64> = Vec::with_capacity(num_blocks);
 
     for i in 0..num_blocks {
