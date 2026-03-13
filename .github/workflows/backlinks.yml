@@ -42,7 +42,11 @@ jobs:
 
       - name: Update Backlinks
         run: |
-          python src/agent_knowledge.py --update-backlinks --dir docs --build-index
+          if [ -f src/agent_knowledge.py ]; then
+            python src/agent_knowledge.py --update-backlinks --dir docs --build-index
+          else
+            echo "agent_knowledge.py not found, skipping backlinks update"
+          fi
 
       - name: Check for changes
         id: git-check
