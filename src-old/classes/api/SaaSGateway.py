@@ -155,7 +155,9 @@ class SaaSGateway:
     def validate_request(self, api_key: str, cost: int = 1) -> bool:
         """Checks if a request is authorized and within quota/rate limits."""
         if api_key not in self.api_keys:
-            logging.warning(f"SAAS: Unauthorized access attempt with key {api_key}")
+            # Avoid logging API keys directly (sensitive information).
+            masked_key = api_key[:8] + "..." if api_key else "<empty>"
+            logging.warning(f"SAAS: Unauthorized access attempt with key {masked_key}")
             return False
 
         # Rate Limiting (Simple Token Bucket: max 5 requests per second)
