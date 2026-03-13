@@ -35,12 +35,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Install maturin & build runtime extension
-        run: |
-          pip install maturin
-          maturin develop --release
+      - name: Set up Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Install maturin & build runtime extension
+        working-directory: rust_core
         run: |
           pip install maturin
           maturin develop --release
@@ -54,9 +53,6 @@ jobs:
       # build documentation to ensure no broken links or formatting errors
       - name: Build docs
         run: mkdocs build --strict --clean
-
-      - name: Set up Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
 
       - name: Run Rust unit tests
         working-directory: rust_core

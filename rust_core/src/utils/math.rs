@@ -86,12 +86,15 @@ fn parse_factor<I: Iterator<Item = char>>(it: &mut std::iter::Peekable<I>) -> Re
         }
         Some('-') => Ok(-parse_factor(it)?),
         Some('+') => Ok(parse_factor(it)?),
-        Some(c) if c.is_digit(10) || c == '.' => {
+        Some(c) if c.is_ascii_digit() || c == '.' => {
             let mut s = c.to_string();
             while let Some(&c) = it.peek() {
-                if c.is_digit(10) || c == '.' || c == 'e' || c == 'E' {
-                    s.push(it.next().unwrap());
-                } else if (c == '+' || c == '-') && (s.ends_with('e') || s.ends_with('E')) {
+                if c.is_ascii_digit()
+                    || c == '.'
+                    || c == 'e'
+                    || c == 'E'
+                    || ((c == '+' || c == '-') && (s.ends_with('e') || s.ends_with('E')))
+                {
                     s.push(it.next().unwrap());
                 } else {
                     break;

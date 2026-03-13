@@ -14,7 +14,7 @@ pub fn calculate_coupling_rust(
 
     // Calculate incoming dependencies (afferent coupling)
     let mut afferent: HashMap<String, f64> = HashMap::new();
-    for (_module, deps) in &imports {
+    for deps in imports.values() {
         for dep in deps {
             *afferent.entry(dep.clone()).or_default() += 1.0;
         }

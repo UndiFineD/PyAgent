@@ -2,13 +2,15 @@ use pyo3::prelude::*;
 use regex::Regex;
 use std::collections::{HashMap, HashSet};
 
+type TokenIndex = HashMap<String, Vec<(String, String, usize)>>;
+
 /// Tokenize text content and build a search index.
 #[pyfunction]
 pub fn tokenize_and_index_rust(
     file_path: &str,
     report_type: &str,
     content: &str,
-) -> PyResult<HashMap<String, Vec<(String, String, usize)>>> {
+) -> PyResult<TokenIndex> {
     let word_regex =
         Regex::new(r#"\w+"#).map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?;
 

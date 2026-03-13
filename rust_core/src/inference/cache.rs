@@ -371,9 +371,9 @@ pub fn prefix_tree_lookup_rust(
         // Check if this length matches any prefix
         for (idx, (&hash, &len)) in prefix_hashes.iter().zip(prefix_lengths.iter()).enumerate() {
             if len == current_len && hash == query_hash && current_len > best_match_len as usize {
-            best_match_len = current_len as i64;
-            best_match_idx = idx as i64;
-        }
+                best_match_len = current_len as i64;
+                best_match_idx = idx as i64;
+            }
         }
     }
 

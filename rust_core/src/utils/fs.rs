@@ -16,10 +16,8 @@ pub fn prune_directory_rust(directory: &str, max_age_days: i64) -> PyResult<u64>
         if let Ok(metadata) = entry.metadata() {
             if metadata.is_file() {
                 if let Ok(modified) = metadata.modified() {
-                    if modified < threshold {
-                        if std::fs::remove_file(entry.path()).is_ok() {
-                            count += 1;
-                        }
+                    if modified < threshold && std::fs::remove_file(entry.path()).is_ok() {
+                        count += 1;
                     }
                 }
             }

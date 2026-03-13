@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 /// Core Rust module for PyAgent, providing high-performance implementations of critical components.
 /// This module is designed to be imported from Python and serves as the backbone
 /// for performance-sensitive operations across the PyAgent ecosystem.
@@ -19,6 +18,7 @@
 /// and efficient data structures to support the demanding workloads of large-scale agent fleets.
 /// The module is organized into sub-modules for different functional areas,
 /// such as security, hardware, config parsing, etc.
+// clippy is not a solution, it is suppressing warnings and errors that need fixes.
 use pyo3::prelude::*;
 
 mod agents;

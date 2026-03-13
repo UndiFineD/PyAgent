@@ -48,7 +48,7 @@ pub fn calculate_metrics_rust(content: &str) -> PyResult<HashMap<String, f64>> {
     results.insert("function_count".to_string(), func_count);
     results.insert("class_count".to_string(), class_count);
     results.insert("import_count".to_string(), import_count);
-    results.insert("maintainability_index".to_string(), mi.max(0.0).min(100.0));
+    results.insert("maintainability_index".to_string(), mi.clamp(0.0, 100.0));
 
     Ok(results)
 }
