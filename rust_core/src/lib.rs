@@ -11,6 +11,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#![allow(
+    clippy::type_complexity,
+    clippy::needless_range_loop,
+    clippy::collapsible_if,
+    clippy::useless_conversion,
+    clippy::manual_is_multiple_of,
+    clippy::let_and_return,
+    clippy::get_first
+)]
+
 use pyo3::prelude::*;
 
 mod agents;
