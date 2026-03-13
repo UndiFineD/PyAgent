@@ -1,14 +1,25 @@
 #!/usr/bin/env python3
 """Meta-test to ensure all test files meet basic quality standards."""
+# Copyright 2026 UndiFineD
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import ast
 import subprocess
 import sys
 from pathlib import Path
 
 import pytest
-
-failures: list[str] = []
-warnings: list[str] = []
 
 
 def _has_pytest_raises(tree: ast.AST) -> bool:
@@ -33,6 +44,9 @@ def test_all_test_files_meet_quality(pytestconfig: pytest.Config) -> None:
     - passes mypy type check
     This helps ensure "who tests the tester" by enforcing quality on test files themselves.
     """
+    failures: list[str] = []
+    warnings: list[str] = []
+
     repo_root = Path(__file__).resolve().parent.parent
     test_files = sorted(repo_root.glob("tests/test_*.py"))
     assert test_files, "no test files found"
@@ -65,9 +79,12 @@ def test_all_test_files_meet_quality(pytestconfig: pytest.Config) -> None:
         if verbose:
             print(f"  running ruff: {' '.join(ruff_cmd)}")
         try:
-            ruff = subprocess.run(ruff_cmd, capture_output=True, text=True, check=False)
+            ruff = subprocess.run(ruff_cmd, capture_output=True, text=True, check=False, timeout=60)
         except FileNotFoundError:
             warnings.append(f"{f}: ruff not installed or not available in PATH")
+            ruff = None
+        except subprocess.TimeoutExpired:
+            warnings.append(f"{f}: ruff timed out after 60 seconds")
             ruff = None
         if ruff is not None and ruff.returncode != 0:
             # if ruff isn't installed in the venv, python -m ruff will exit with ModuleNotFoundError
@@ -75,7 +92,6 @@ def test_all_test_files_meet_quality(pytestconfig: pytest.Config) -> None:
                 warnings.append(f"{f}: ruff not installed in environment: {ruff.stderr}")
             else:
                 failures.append(f"{f}: ruff reported issues:\n{ruff.stdout}{ruff.stderr}")
-
         # run mypy on this single file (ignore missing imports to reduce noise)
         mypy_cmd = [
             sys.executable,

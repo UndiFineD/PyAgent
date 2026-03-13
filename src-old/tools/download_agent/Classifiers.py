@@ -117,7 +117,7 @@ class URLClassifier:
         # Ensure we only match the actual arxiv.org domain, not URLs that merely contain the string.
         parsed = urllib.parse.urlparse(url_lower)
         hostname = parsed.hostname or ""
-        if hostname.endswith("arxiv.org"):
+        if hostname.endswith(".arxiv.org"):
             if parsed.path.startswith("/abs/") or parsed.path.startswith("/pdf/"):
                 paper_id = re.search(r"/(\d+\.\d+)", parsed.path)
                 if paper_id:
