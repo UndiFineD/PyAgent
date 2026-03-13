@@ -5,6 +5,10 @@ use std::collections::HashMap;
 use std::fs;
 use walkdir::WalkDir;
 
+type MatchEntry = (usize, String, String);
+type FileMatchEntry = (String, usize, String);
+type MatchResult = HashMap<String, Vec<MatchEntry>>;
+
 /// Match a list of regex patterns against content.
 /// Returns the index of the first pattern resulting in a match, or -1.
 #[pyfunction]
@@ -84,7 +88,7 @@ pub fn check_suppression_rust(
 pub fn scan_lines_multi_pattern_rust(
     content: &str,
     patterns: HashMap<String, String>,
-) -> PyResult<Vec<(usize, String, String)>> {
+) -> PyResult<Vec<MatchEntry>> {
     let mut results = Vec::new();
 
     // Compile regexes
@@ -109,14 +113,14 @@ pub fn scan_lines_multi_pattern_rust(
 pub fn batch_scan_files_rust(
     file_map: HashMap<String, String>, // path -> content
     patterns: HashMap<String, String>, // name -> regex
-) -> PyResult<HashMap<String, Vec<(usize, String, String)>>> {
+) -> PyResult<MatchResult> {
     // Compile regexes
     let regexes: Vec<(String, Regex)> = patterns
         .into_iter()
         .filter_map(|(name, p)| Regex::new(&p).ok().map(|r| (name, r)))
         .collect();
 
-    let results: HashMap<String, Vec<(usize, String, String)>> = file_map
+    let results: MatchResult = file_map
         .par_iter()
         .map(|(path, content)| {
             let mut file_matches = Vec::new();
@@ -182,16 +186,12 @@ pub fn apply_patterns_rust(
         .into_iter()
         .filter(|item| {
             // If includes are specified, must match at least one
-            if !includes.is_empty() {
-                if !includes.iter().any(|r| r.is_match(item)) {
-                    return false;
-                }
+            if !includes.is_empty() && !includes.iter().any(|r| r.is_match(item)) {
+                return false;
             }
             // Must not match any excludes
-            if !excludes.is_empty() {
-                if excludes.iter().any(|r| r.is_match(item)) {
-                    return false;
-                }
+            if !excludes.is_empty() && excludes.iter().any(|r| r.is_match(item)) {
+                return false;
             }
             true
         })
@@ -205,8 +205,8 @@ pub fn scan_compliance_patterns_rust(
     root_dir: &str,
     patterns: HashMap<String, String>,
     extensions: Vec<String>,
-) -> PyResult<HashMap<String, Vec<(String, usize, String)>>> {
-    let mut violations: HashMap<String, Vec<(String, usize, String)>> = HashMap::new();
+) -> PyResult<HashMap<String, Vec<FileMatchEntry>>> {
+    let mut violations: HashMap<String, Vec<FileMatchEntry>> = HashMap::new();
 
     let regexes: Vec<(String, Regex)> = patterns
         .into_iter()

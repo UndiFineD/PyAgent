@@ -341,9 +341,7 @@ pub fn compute_ubatch_slices_rust(
 
     // Determine effective ubatch count based on max tokens
     let effective_ubatches = if max_tokens_per_ubatch > 0 {
-        num_tokens
-            .div_ceil(max_tokens_per_ubatch)
-            .max(num_ubatches)
+        num_tokens.div_ceil(max_tokens_per_ubatch).max(num_ubatches)
     } else {
         num_ubatches
     };

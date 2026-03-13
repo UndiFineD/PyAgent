@@ -219,7 +219,7 @@ pub fn calculate_median_rust(mut data: Vec<f64>) -> PyResult<f64> {
     }
     data.sort_by(|a, b| a.partial_cmp(b).unwrap());
     let mid = data.len() / 2;
-    if data.len() % 2 == 0 {
+    if data.len().is_multiple_of(2) {
         Ok((data[mid - 1] + data[mid]) / 2.0)
     } else {
         Ok(data[mid])

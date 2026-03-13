@@ -16,7 +16,7 @@ pub fn audit_content_rust(
     });
 
     let mut issues = Vec::new();
-    let display_patterns = vec![
+    let display_patterns = [
         r#"password\s*=\s*['\"].+['\"]"#,
         r#"api_key\s*=\s*['\"].+['\"]"#,
         r"aws_secret",

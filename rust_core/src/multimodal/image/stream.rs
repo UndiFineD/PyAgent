@@ -128,7 +128,7 @@ pub fn calculate_temporal_entropy_rust(frame_sequence: Vec<Vec<u8>>) -> f32 {
         let mut diff: u64 = 0;
         // Sample for speed
         for j in (0..prev.len()).step_by(8) {
-            diff += (prev[j] as i16 - curr[j] as i16).abs() as u64;
+            diff += (prev[j] as i16 - curr[j] as i16).unsigned_abs() as u64;
         }
         total_diff += diff as f32 / (prev.len() / 8) as f32;
     }

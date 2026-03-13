@@ -39,17 +39,15 @@ pub fn validate_content_rust(
     let mut findings = Vec::new();
 
     for rule in rule_names {
-        if rule == "no_secrets" {
-            if content.contains("sk-") || content.contains("AIza") {
-                let mut finding = HashMap::new();
-                finding.insert("rule".to_string(), rule);
-                finding.insert("severity".to_string(), "high".to_string());
-                finding.insert(
-                    "message".to_string(),
-                    "Potential secret detected".to_string(),
-                );
-                findings.push(finding);
-            }
+        if rule == "no_secrets" && (content.contains("sk-") || content.contains("AIza")) {
+            let mut finding = HashMap::new();
+            finding.insert("rule".to_string(), rule);
+            finding.insert("severity".to_string(), "high".to_string());
+            finding.insert(
+                "message".to_string(),
+                "Potential secret detected".to_string(),
+            );
+            findings.push(finding);
         }
     }
 

@@ -206,8 +206,12 @@ pub fn json_schema_fsm_rust(
             transitions = vec![vec![-1i32; 256]; states];
             transitions[0]['[' as usize] = 1;
             transitions[1][']' as usize] = 3;
-            for ch in '0' as usize..='9' as usize {
-                transitions[1][ch] = 1;
+            for slot in transitions[1]
+                .iter_mut()
+                .skip('0' as usize)
+                .take(('9' as usize) - ('0' as usize) + 1)
+            {
+                *slot = 1;
             }
             transitions[1]['"' as usize] = 1;
             transitions[1]['-' as usize] = 1;
@@ -219,12 +223,7 @@ pub fn json_schema_fsm_rust(
             states = 4;
             transitions = vec![vec![-1i32; 256]; states];
             transitions[0]['"' as usize] = 1;
-            for (ch, slot) in transitions[1]
-                .iter_mut()
-                .enumerate()
-                .take(127)
-                .skip(32)
-            {
+            for (ch, slot) in transitions[1].iter_mut().enumerate().take(127).skip(32) {
                 if ch != '"' as usize && ch != '\\' as usize {
                     *slot = 1;
                 }

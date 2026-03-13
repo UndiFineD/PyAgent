@@ -456,7 +456,10 @@ pub fn spec_decode_verify_rejection_rust(
             accepted.push(*draft_token);
             mask.push(true);
         } else {
-            mask.extend(std::iter::repeat(false).take(draft_token_ids.len().saturating_sub(i + 1)));
+            mask.extend(std::iter::repeat_n(
+                false,
+                draft_token_ids.len().saturating_sub(i + 1),
+            ));
             break;
         }
     }

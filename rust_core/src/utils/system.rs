@@ -42,10 +42,8 @@ pub fn parse_adb_devices_rust(output: &str) -> PyResult<Vec<String>> {
         }
 
         let parts: Vec<&str> = trimmed.split_whitespace().collect();
-        if parts.len() >= 2 {
-            if parts[1] == "device" {
-                devices.push(parts[0].to_string());
-            }
+        if parts.len() >= 2 && parts[1] == "device" {
+            devices.push(parts[0].to_string());
         }
     }
     Ok(devices)
