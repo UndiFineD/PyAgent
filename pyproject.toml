@@ -74,11 +74,10 @@ rust = [
 cache-keys = [{ file = "requirements.txt" }]
 
 [tool.ruff]
-# general settings (non-lint) can go here
+# ruff configuration lives here; older versions (including 0.15.x) expect
+# all lint-related keys directly in this table. hyphenated names are
+# required for compatibility.
 
-# lint-specific configuration is under [tool.ruff.lint]
-
-[tool.ruff.lint]
 line-length = 120
 target-version = "py312"
 exclude = ["src-old/**"]
@@ -109,6 +108,7 @@ ignore = [
     "D103", # missing docstring public function
     "ANN001", # missing type annotation for argument
 ]
+
 
 [tool.mypy]
 python_version = "3.12"
