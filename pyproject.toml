@@ -76,6 +76,7 @@ cache-keys = [{ file = "requirements.txt" }]
 [tool.ruff]
 line-length = 120
 target-version = "py312"
+exclude = ["src-old/**"]
 select = [
     "E",  # pycodestyle errors
     "W",  # pycodestyle warnings
@@ -126,7 +127,7 @@ exclude = ["generated/"]
 # disallow_incomplete_defs = true
 
 ignore_missing_imports = true  # avoid errors on generated / external modules
-per-file-ignores = { "src/*" = ["*"] }  # suppress all mypy errors in source modules during CI
+
 
 [tool.pytest.ini_options]
 minversion = "6.0"
