@@ -125,6 +125,11 @@ pub fn calculate_temporal_entropy_rust(frame_sequence: Vec<Vec<u8>>) -> f32 {
             continue;
         }
 
+        // Guard against tiny frames where `prev.len()/8 == 0` would cause a divide-by-zero.
+        if prev.len() < 8 {
+            continue;
+        }
+
         let mut diff: u64 = 0;
         // Sample for speed
         for j in (0..prev.len()).step_by(8) {
