@@ -74,6 +74,11 @@ rust = [
 cache-keys = [{ file = "requirements.txt" }]
 
 [tool.ruff]
+# general settings (non-lint) can go here
+
+# lint-specific configuration is under [tool.ruff.lint]
+
+[tool.ruff.lint]
 line-length = 120
 target-version = "py312"
 exclude = ["src-old/**"]
