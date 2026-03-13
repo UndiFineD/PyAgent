@@ -168,17 +168,17 @@ pub fn gpu_memory_snapshot_rust(
     let mut free_regions = Vec::new();
     let mut allocated_regions = Vec::new();
 
-    for i in 0..region_ids.len() {
+    for (i, &region_id) in region_ids.iter().enumerate() {
         let size = region_sizes.get(i).copied().unwrap_or(0);
         total_bytes += size;
 
         if is_free.get(i).copied().unwrap_or(true) {
             free_bytes += size;
-            free_regions.push(region_ids[i]);
+            free_regions.push(region_id);
         } else {
             allocated_bytes += size;
             num_allocations += 1;
-            allocated_regions.push(region_ids[i]);
+            allocated_regions.push(region_id);
         }
     }
 

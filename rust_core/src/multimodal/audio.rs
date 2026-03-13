@@ -192,7 +192,7 @@ pub fn calculate_mel_features_rust(
             windowed[i] = samples[start + i] * hann_window[i];
         }
 
-        for k in 0..n_freq_bins {
+        for (k, ps) in power_spectrum.iter_mut().enumerate().take(n_freq_bins) {
             let omega = 2.0 * PI * k as f32 / n_fft as f32;
             let cos_w = omega.cos();
             let sin_w = omega.sin();
@@ -210,7 +210,7 @@ pub fn calculate_mel_features_rust(
                 c = next_c;
             }
 
-            power_spectrum[k] = (re * re + im * im) * fft_norm;
+            *ps = (re * re + im * im) * fft_norm;
         }
 
         let mut frame = vec![0.0f32; n_mels];

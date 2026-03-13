@@ -46,8 +46,7 @@ pub fn calculate_vcg_auction(
     let take = std::cmp::min(count, slots);
     let mut winners = Vec::with_capacity(take);
 
-    for i in 0..take {
-        let (bid, _) = &bids_with_val[i];
+    for (bid, _) in bids_with_val.iter().take(take) {
         bid.set_item("price_paid", clearing_price)?;
         winners.push(bid.clone().into());
     }

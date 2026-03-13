@@ -19,7 +19,7 @@ pub fn calculate_stability_score(
     score -= latency_penalty;
 
     // Clamp between 0.0 and 1.0
-    Ok(score.max(0.0).min(1.0))
+    Ok(score.clamp(0.0, 1.0))
 }
 
 /// Check if fleet is in stasis (StabilityCore).

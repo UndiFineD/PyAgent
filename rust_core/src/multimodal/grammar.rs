@@ -29,7 +29,7 @@ fn schema_to_regex(schema: &serde_json::Value) -> String {
             if let Some(enum_vals) = schema.get("enum").and_then(|v| v.as_array()) {
                 let options: Vec<String> = enum_vals
                     .iter()
-                    .filter_map(|v| v.as_str().map(|s| regex_escape(s)))
+                    .filter_map(|v| v.as_str().map(regex_escape))
                     .collect();
                 format!("({})", options.join("|"))
             } else {

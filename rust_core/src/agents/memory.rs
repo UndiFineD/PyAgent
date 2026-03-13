@@ -4,7 +4,7 @@ use pyo3::types::PyDict;
 /// Calculate new utility score (MemoryCore).
 #[pyfunction]
 pub fn calculate_new_utility(old_score: f64, increment: f64) -> PyResult<f64> {
-    Ok((old_score + increment).min(1.0).max(0.0))
+    Ok((old_score + increment).clamp(0.0, 1.0))
 }
 
 /// Filter relevant memories by utility (MemoryCore).
@@ -51,7 +51,7 @@ pub fn create_episode_struct(
     } else {
         utility -= 0.3;
     }
-    utility = utility.min(1.0).max(0.0);
+    utility = utility.clamp(0.0, 1.0);
 
     let now = chrono::Utc::now().to_rfc3339();
 

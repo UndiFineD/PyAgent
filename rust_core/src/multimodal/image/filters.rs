@@ -8,20 +8,21 @@ pub fn apply_vision_filter_rust(pixels: Vec<u8>, filter_type: &str, intensity: f
 
     match filter_type {
         "grayscale" => {
-            for i in (0..output.len()).step_by(3) {
-                let r = output[i] as f32;
-                let g = output[i + 1] as f32;
-                let b = output[i + 2] as f32;
+            for chunk in output.chunks_exact_mut(3) {
+                let r = chunk[0] as f32;
+                let g = chunk[1] as f32;
+                let b = chunk[2] as f32;
                 let gray = (0.299 * r + 0.587 * g + 0.114 * b) as u8;
-                output[i] = (gray as f32 * intensity + r * (1.0 - intensity)) as u8;
-                output[i + 1] = (gray as f32 * intensity + g * (1.0 - intensity)) as u8;
-                output[i + 2] = (gray as f32 * intensity + b * (1.0 - intensity)) as u8;
+                chunk[0] = (gray as f32 * intensity + r * (1.0 - intensity)) as u8;
+                chunk[1] = (gray as f32 * intensity + g * (1.0 - intensity)) as u8;
+                chunk[2] = (gray as f32 * intensity + b * (1.0 - intensity)) as u8;
             }
         }
         "inverse" => {
-            for i in 0..output.len() {
-                let inv = 255 - output[i];
-                output[i] = (inv as f32 * intensity + output[i] as f32 * (1.0 - intensity)) as u8;
+            for pixel in &mut output {
+                let original = *pixel;
+                let inv = 255 - original;
+                *pixel = (inv as f32 * intensity + original as f32 * (1.0 - intensity)) as u8;
             }
         }
         _ => {}
@@ -50,9 +51,9 @@ pub fn match_vision_color_profiles_rust(mut pixels: Vec<u8>, ref_pixels: Vec<u8>
     }
 
     let gains = [
-        (sum_ref[0] as f32 / sum_curr[0] as f32).max(0.5).min(2.0),
-        (sum_ref[1] as f32 / sum_curr[1] as f32).max(0.5).min(2.0),
-        (sum_ref[2] as f32 / sum_curr[2] as f32).max(0.5).min(2.0),
+        (sum_ref[0] as f32 / sum_curr[0] as f32).clamp(0.5, 2.0),
+        (sum_ref[1] as f32 / sum_curr[1] as f32).clamp(0.5, 2.0),
+        (sum_ref[2] as f32 / sum_curr[2] as f32).clamp(0.5, 2.0),
     ];
 
     // Apply gains

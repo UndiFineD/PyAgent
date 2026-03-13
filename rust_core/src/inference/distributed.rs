@@ -1,6 +1,8 @@
 use pyo3::prelude::*;
 use std::collections::HashMap;
 
+type UintMatrix = Vec<Vec<usize>>;
+
 /// Mock All-Reduce sum for testing distributed logic
 /// Returns reduced values (summed across "ranks")
 #[pyfunction]
@@ -48,7 +50,7 @@ pub fn compute_balanced_packing_rust(
     weights: Vec<Vec<f64>>,
     num_packs: usize,
     strategy: Option<String>,
-) -> PyResult<(Vec<Vec<usize>>, Vec<Vec<usize>>)> {
+) -> PyResult<(UintMatrix, UintMatrix)> {
     let mut batch_pack_indices = Vec::new();
     let mut batch_ranks = Vec::new();
 
@@ -262,7 +264,7 @@ pub fn step_counter_sync_rust(current_step: u64, _dp_rank: usize, dp_size: usize
     let new_step = current_step + 1;
 
     // Check if all ranks are synchronized
-    let is_synced = (new_step % dp_size as u64) == 0;
+    let is_synced = new_step.is_multiple_of(dp_size as u64);
 
     (new_step, is_synced)
 }
@@ -338,8 +340,8 @@ pub fn dp_rank_coordinate_rust(
     let mut worker_localities = vec![0usize; num_workers];
 
     // Assign ranks round-robin
-    for worker_id in 0..num_workers {
-        worker_ranks[worker_id] = worker_id % dp_size;
+    for (worker_id, rank) in worker_ranks.iter_mut().enumerate().take(num_workers) {
+        *rank = worker_id % dp_size;
     }
 
     // Assign locality groups

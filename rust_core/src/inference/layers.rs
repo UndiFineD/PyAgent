@@ -1,5 +1,7 @@
 use pyo3::prelude::*;
 
+type Tensor3 = Vec<Vec<Vec<f64>>>;
+
 // =============================================================================
 // State Space Model (SSM) / Mamba Acceleration
 // =============================================================================
@@ -12,7 +14,7 @@ pub fn ssm_discretize_rust(
     a_log: Vec<f64>,   // [d_inner * ssm_state] - log of A diagonal
     b: Vec<Vec<f64>>,  // [batch, ssm_state]
     dt: Vec<Vec<f64>>, // [batch, d_inner]
-) -> (Vec<Vec<Vec<f64>>>, Vec<Vec<Vec<f64>>>) {
+) -> (Tensor3, Tensor3) {
     let batch_size = dt.len();
     let d_inner = if dt.is_empty() { 0 } else { dt[0].len() };
     let ssm_state = if b.is_empty() { 0 } else { b[0].len() };

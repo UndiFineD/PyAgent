@@ -101,7 +101,8 @@ pub fn select_worker_lb_rust(
             let mut rng = rand::thread_rng();
             get_id(rng.gen_range(0..len))
         }
-        "round_robin" | _ => get_id(0),
+        "round_robin" => get_id(0),
+        _ => get_id(0),
     }
 }
 

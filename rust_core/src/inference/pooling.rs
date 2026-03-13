@@ -15,7 +15,7 @@ pub fn pool_sequences_rust(
         if *start >= hidden_states.len() || end <= *start {
             results.push(vec![
                 0.0;
-                hidden_states.get(0).map(|v| v.len()).unwrap_or(0)
+                hidden_states.first().map(|v| v.len()).unwrap_or(0)
             ]);
             continue;
         }

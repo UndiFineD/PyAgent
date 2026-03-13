@@ -9,7 +9,7 @@ pub fn top_k_mask_rust(logits: Vec<f32>, k: usize) -> PyResult<Vec<f32>> {
     }
 
     // Find k-th largest value
-    let mut sorted: Vec<f32> = logits.iter().cloned().collect();
+    let mut sorted = logits.to_vec();
     sorted.sort_by(|a, b| b.partial_cmp(a).unwrap_or(std::cmp::Ordering::Equal));
     let threshold = sorted[k - 1];
 
@@ -98,7 +98,7 @@ pub fn gumbel_sample_rust(logits: Vec<f32>, temperature: f32, seed: u64) -> PyRe
         }
         // Gumbel noise: -log(-log(U))
         let u = next_random();
-        let u = u.max(1e-10).min(1.0 - 1e-10);
+        let u = u.clamp(1e-10, 1.0 - 1e-10);
         let gumbel = -(-u.ln()).ln();
         let score = (logit as f64 / temp) + gumbel;
 

@@ -23,7 +23,9 @@ pub fn execute_dcap_cycle(topic: &str, content: &str) -> PyResult<HashMap<String
     );
 
     // Phase 3: Action
-    let sanitized_topic = topic.to_lowercase().replace(' ', "_").replace('-', "_");
+    let sanitized_topic = topic
+        .to_lowercase()
+        .replace([' ', '-'], "_");
     let tool_code = format!(
         "def {}_tool():\n    return 'Logic from {}'",
         sanitized_topic, topic

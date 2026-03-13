@@ -296,28 +296,28 @@ impl PyMemoryBlockRegistry {
     fn put(&self, id: &str, data: &[u8]) -> PyResult<usize> {
         self.inner
             .put(id, data)
-            .map_err(|e| pyo3::exceptions::PyValueError::new_err(e))
+            .map_err(pyo3::exceptions::PyValueError::new_err)
     }
 
     /// Decrypt and return slab `index` from block `id`.
     fn get(&self, id: &str, index: usize) -> PyResult<Vec<u8>> {
         self.inner
             .get(id, index)
-            .map_err(|e| pyo3::exceptions::PyValueError::new_err(e))
+            .map_err(pyo3::exceptions::PyValueError::new_err)
     }
 
     /// Return the number of slabs stored in block `id`.
     fn slab_count(&self, id: &str) -> PyResult<usize> {
         self.inner
             .slab_count(id)
-            .map_err(|e| pyo3::exceptions::PyValueError::new_err(e))
+            .map_err(pyo3::exceptions::PyValueError::new_err)
     }
 
     /// Wipe all slab data from block `id` (in place; block remains registered).
     fn purge(&self, id: &str) -> PyResult<()> {
         self.inner
             .purge(id)
-            .map_err(|e| pyo3::exceptions::PyValueError::new_err(e))
+            .map_err(pyo3::exceptions::PyValueError::new_err)
     }
 
     /// Remove block `id` from the registry and wipe its data.

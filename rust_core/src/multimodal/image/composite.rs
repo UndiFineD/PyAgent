@@ -43,6 +43,7 @@ pub fn create_vision_mosaic_rust(
 
 /// Overlay multiple vision feeds with support for alpha blending and coordinates (Phase 145/PiP).
 /// Allows for "Picture-in-Picture" (PiP) or dynamic UI overlays.
+#[allow(clippy::too_many_arguments)]
 #[pyfunction]
 pub fn overlay_vision_feeds_rust(
     base_pixels: Vec<u8>,
@@ -250,8 +251,31 @@ pub fn layout_vision_feeds_rust(
                 }
             }
         }
-        "grid" | _ => {
+        "grid" => {
             // Standard N x M grid (using previous create_vision_mosaic_rust logic)
+            let count = feeds.len();
+            let cols = (count as f32).sqrt().ceil() as usize;
+            let rows = (count as f32 / cols as f32).ceil() as usize;
+            let cell_w = target_w / cols;
+            let cell_h = target_h / rows;
+
+            for (idx, feed) in feeds.iter().enumerate() {
+                let cell = transform_vision_feed_rust(
+                    feed.clone(),
+                    feed_sizes[idx].0,
+                    feed_sizes[idx].1,
+                    cell_w,
+                    cell_h,
+                    true,
+                    (0, 0, 0),
+                );
+                let x = (idx % cols) * cell_w;
+                let y = (idx / cols) * cell_h;
+                copy_to_composite(&mut composite, &cell, cell_w, cell_h, target_w, x, y);
+            }
+        }
+        _ => {
+            // Fallback to grid layout
             let count = feeds.len();
             let cols = (count as f32).sqrt().ceil() as usize;
             let rows = (count as f32 / cols as f32).ceil() as usize;
@@ -279,7 +303,7 @@ pub fn layout_vision_feeds_rust(
 }
 
 fn copy_to_composite(
-    target: &mut Vec<u8>,
+    target: &mut [u8],
     src: &[u8],
     sw: usize,
     sh: usize,

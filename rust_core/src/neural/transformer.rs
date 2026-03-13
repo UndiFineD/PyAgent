@@ -48,7 +48,7 @@ impl NeuralTransformer {
         let n_kv_heads = self.config.n_kv_heads;
 
         // Safety check for GQA parameters
-        if n_kv_heads == 0 || n_heads % n_kv_heads != 0 {
+        if n_kv_heads == 0 || !n_heads.is_multiple_of(n_kv_heads) {
             return Err(pyo3::exceptions::PyValueError::new_err(format!(
                 "Invalid GQA config: heads ({}) must be divisible by kv_heads ({})",
                 n_heads, n_kv_heads
@@ -186,11 +186,11 @@ impl NeuralTransformer {
         for word in words {
             let mut emb = vec![0.0; self.config.d_model];
             use std::hash::{Hash, Hasher};
-            for i in 0..self.config.d_model {
+            for (i, emb_val) in emb.iter_mut().enumerate().take(self.config.d_model) {
                 let mut hasher = std::collections::hash_map::DefaultHasher::new();
                 word.hash(&mut hasher);
                 i.hash(&mut hasher);
-                emb[i] = ((hasher.finish() % 2000) as f32 - 1000.0) / 1000.0;
+                *emb_val = ((hasher.finish() % 2000) as f32 - 1000.0) / 1000.0;
             }
             input_embeddings.push(emb);
         }

@@ -17,11 +17,10 @@ pub fn regex_to_fsm_rust(pattern: String, vocab_size: usize) -> (Vec<Vec<i32>>, 
     for (i, &c) in pattern_chars.iter().enumerate() {
         match c {
             '.' => {
-                // Match any character
-                for ch in 0..256 {
-                    if ch >= 32 && ch < 127 {
-                        // printable ASCII
-                        transitions[i][ch] = (i + 1) as i32;
+                // Match any printable ASCII character
+                for (ch, entry) in transitions[i].iter_mut().enumerate().take(256) {
+                    if (32..127).contains(&ch) {
+                        *entry = (i + 1) as i32;
                     }
                 }
             }
@@ -31,9 +30,13 @@ pub fn regex_to_fsm_rust(pattern: String, vocab_size: usize) -> (Vec<Vec<i32>>, 
                     let prev_char = pattern_chars[i - 1] as usize;
                     transitions[i][prev_char] = i as i32;
                     // Also allow transition to next state
-                    for ch in 0..256 {
-                        if transitions[i - 1][ch] >= 0 {
-                            transitions[i][ch] = (i + 1) as i32;
+                    // Use split_at_mut to avoid borrowing issues between rows
+                    let (prev_rows, curr_rows) = transitions.split_at_mut(i);
+                    let prev_row = &prev_rows[i - 1];
+                    let curr_row = &mut curr_rows[0];
+                    for (ch, entry) in curr_row.iter_mut().enumerate().take(256) {
+                        if prev_row[ch] >= 0 {
+                            *entry = (i + 1) as i32;
                         }
                     }
                 }
@@ -165,18 +168,30 @@ pub fn json_schema_fsm_rust(
             transitions[0]['{' as usize] = 1;
             transitions[1]['"' as usize] = 2;
             transitions[1]['}' as usize] = 5;
-            for ch in 'a' as usize..='z' as usize {
-                transitions[2][ch] = 2;
+            for slot in transitions[2]
+                .iter_mut()
+                .skip('a' as usize)
+                .take(('z' as usize) - ('a' as usize) + 1)
+            {
+                *slot = 2;
             }
-            for ch in 'A' as usize..='Z' as usize {
-                transitions[2][ch] = 2;
+            for slot in transitions[2]
+                .iter_mut()
+                .skip('A' as usize)
+                .take(('Z' as usize) - ('A' as usize) + 1)
+            {
+                *slot = 2;
             }
             transitions[2]['_' as usize] = 2;
             transitions[2]['"' as usize] = 3;
             transitions[3][':' as usize] = 4;
             transitions[4]['"' as usize] = 4;
-            for ch in '0' as usize..='9' as usize {
-                transitions[4][ch] = 4;
+            for slot in transitions[4]
+                .iter_mut()
+                .skip('0' as usize)
+                .take(('9' as usize) - ('0' as usize) + 1)
+            {
+                *slot = 4;
             }
             transitions[4]['-' as usize] = 4;
             transitions[4]['t' as usize] = 4;
@@ -204,9 +219,14 @@ pub fn json_schema_fsm_rust(
             states = 4;
             transitions = vec![vec![-1i32; 256]; states];
             transitions[0]['"' as usize] = 1;
-            for ch in 32..127 {
+            for (ch, slot) in transitions[1]
+                .iter_mut()
+                .enumerate()
+                .take(127)
+                .skip(32)
+            {
                 if ch != '"' as usize && ch != '\\' as usize {
-                    transitions[1][ch] = 1;
+                    *slot = 1;
                 }
             }
             transitions[1]['\\' as usize] = 2;
@@ -437,7 +457,7 @@ pub fn batch_grammar_mask_rust(
 ) -> Vec<Vec<f32>> {
     batch_logits
         .into_iter()
-        .zip(batch_allowed.into_iter())
+        .zip(batch_allowed)
         .map(|(logits, allowed)| {
             let allowed_set: std::collections::HashSet<i32> = allowed.iter().copied().collect();
 
@@ -462,7 +482,7 @@ pub fn template_extract_variables_rust(template: &str) -> Vec<(String, usize, us
     let mut variables = Vec::new();
     let pattern = Regex::new(r"\{\{(\w+)(?::[^}]+)?\}\}").unwrap_or_else(|_| {
         // Fallback if regex crate not available
-        return Regex::new(r"").unwrap();
+        Regex::new(r"").unwrap()
     });
 
     for cap in pattern.captures_iter(template) {

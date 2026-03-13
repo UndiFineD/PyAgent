@@ -15,7 +15,7 @@ pub fn update_prefix_offset_rust(
     _prev_read: usize,
 ) -> PyResult<(usize, usize)> {
     // Keep last 6 tokens as prefix for context
-    let new_prefix = if num_tokens > 6 { num_tokens - 6 } else { 0 };
+    let new_prefix = num_tokens.saturating_sub(6);
     let new_read = num_tokens;
     Ok((new_prefix, new_read))
 }

@@ -74,7 +74,7 @@ pub fn detect_motion_rust(prev_frame: Vec<u8>, curr_frame: Vec<u8>, threshold: f
     let mut diff_sum: u64 = 0;
     // Sample every 4th pixel for speed
     for i in (0..prev_frame.len()).step_by(4) {
-        let diff = (prev_frame[i] as i16 - curr_frame[i] as i16).abs();
+        let diff = (prev_frame[i] as i16 - curr_frame[i] as i16).unsigned_abs();
         diff_sum += diff as u64;
     }
 
@@ -150,9 +150,9 @@ pub fn calculate_visual_deltas_rust(
     let mut deltas = Vec::new();
 
     for i in (0..prev_frame.len()).step_by(3) {
-        let dr = (prev_frame[i] as i16 - curr_frame[i] as i16).abs() as u8;
-        let dg = (prev_frame[i + 1] as i16 - curr_frame[i + 1] as i16).abs() as u8;
-        let db = (prev_frame[i + 2] as i16 - curr_frame[i + 2] as i16).abs() as u8;
+        let dr = (prev_frame[i] as i16 - curr_frame[i] as i16).unsigned_abs() as u8;
+        let dg = (prev_frame[i + 1] as i16 - curr_frame[i + 1] as i16).unsigned_abs() as u8;
+        let db = (prev_frame[i + 2] as i16 - curr_frame[i + 2] as i16).unsigned_abs() as u8;
 
         if dr > threshold || dg > threshold || db > threshold {
             deltas.push((i, curr_frame[i], curr_frame[i + 1], curr_frame[i + 2]));

@@ -61,7 +61,7 @@ pub mod amd_npu {
     pub fn initialize() -> i32 {
         #[cfg(feature = "amd_npu")]
         unsafe {
-            return amd_npu_init() as i32;
+            amd_npu_init() as i32
         }
 
         #[cfg(not(feature = "amd_npu"))]
@@ -76,7 +76,7 @@ pub mod amd_npu {
         #[cfg(feature = "amd_npu")]
         unsafe {
             let c_path = CString::new(path).unwrap_or_else(|_| CString::new("").unwrap());
-            return amd_npu_run_model(c_path.as_ptr()) as i32;
+            amd_npu_run_model(c_path.as_ptr()) as i32
         }
 
         #[cfg(not(feature = "amd_npu"))]

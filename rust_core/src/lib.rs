@@ -11,44 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// suppress a handful of clippy lints that are noisy in the current codebase
-// and not worth fixing urgently; they were causing the GitHub Actions
-// rust job to fail with `-D warnings`.
-#![allow(
-    clippy::manual_div_ceil,
-    clippy::type_complexity,
-    clippy::needless_range_loop,
-    clippy::useless_conversion,
-    clippy::manual_is_multiple_of,
-    clippy::let_and_return,
-    clippy::get_first,
-    clippy::manual_range_contains,
-    // errors surfaced when CI ran clippy without -D warnings; suppress
-    clippy::approx_constant,
-    clippy::manual_clamp,
-    clippy::collapsible_str_replace,
-    clippy::unnecessary_map_or,
-    clippy::needless_return,
-    clippy::too_many_arguments,
-    clippy::if_same_then_else,
-    clippy::collapsible_if,
-    clippy::same_item_push,
-    clippy::redundant_closure,
-    clippy::wildcard_in_or_patterns,
-    clippy::ptr_arg,
-    clippy::cast_abs_to_unsigned,
-    clippy::op_ref,
-    clippy::unwrap_or_default,
-    clippy::iter_cloned_collect,
-    clippy::implicit_saturating_sub,
-    clippy::for_kv_map,
-    clippy::is_digit_ascii_radix,
-    clippy::useless_vec,
-)]
 
 /// Core Rust module for PyAgent, providing high-performance implementations of critical components.
 /// This module is designed to be imported from Python and serves as the backbone
-/// for performance-sensitive operations across the PyAgent ecosystem.  
+/// for performance-sensitive operations across the PyAgent ecosystem.
 /// It includes optimized algorithms, hardware acceleration bindings,
 /// and efficient data structures to support the demanding workloads of large-scale agent fleets.
 /// The module is organized into sub-modules for different functional areas,

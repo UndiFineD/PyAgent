@@ -86,12 +86,12 @@ pub fn topological_sort_rust(
 
     let keys: Vec<String> = adj.keys().cloned().collect();
     for node in keys {
-        if !visited.contains(&node) {
-            if dfs_topo(&node, &adj, &mut visited, &mut on_stack, &mut stack) {
-                return Err(pyo3::exceptions::PyValueError::new_err(
-                    "Cycle detected in graph",
-                ));
-            }
+        if !visited.contains(&node)
+            && dfs_topo(&node, &adj, &mut visited, &mut on_stack, &mut stack)
+        {
+            return Err(pyo3::exceptions::PyValueError::new_err(
+                "Cycle detected in graph",
+            ));
         }
     }
 

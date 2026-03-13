@@ -79,7 +79,7 @@ pub fn demux_channels_rust(data: Vec<u8>) -> PyResult<Vec<ModalityPacket>> {
     let mut packets = Vec::new();
     let mut i = 0;
     while i + 4 <= data.len() {
-        if &data[i..i + 4] == &[0xDE, 0xAD, 0xBE, 0xEF] {
+        if data[i..i + 4] == [0xDE, 0xAD, 0xBE, 0xEF] {
             i += 4;
 
             if i >= data.len() {
@@ -149,7 +149,7 @@ pub fn synchronize_channels_rust(
     let mut grouped: HashMap<u64, Vec<ModalityPacket>> = HashMap::new();
     for packet in packets {
         let bucket = (packet.timestamp / (window_ms / 1000.0)).floor() as u64;
-        grouped.entry(bucket).or_insert_with(Vec::new).push(packet);
+        grouped.entry(bucket).or_default().push(packet);
     }
     Ok(grouped)
 }

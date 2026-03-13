@@ -227,7 +227,7 @@ pub fn eagle_verify_accept_rust(
     let mut rng = rand::thread_rng();
 
     let mut accepted = Vec::new();
-    let mut mask = Vec::new();
+    let mut mask = vec![false; draft_tokens.len()];
 
     for (i, ((draft_token, draft_lp), target_lp)) in draft_tokens
         .iter()
@@ -240,13 +240,8 @@ pub fn eagle_verify_accept_rust(
 
         if random_val < ratio + sampling_eps {
             accepted.push(*draft_token);
-            mask.push(true);
+            mask[i] = true;
         } else {
-            mask.push(false);
-            // Fill remaining with false
-            for _ in (i + 1)..draft_tokens.len() {
-                mask.push(false);
-            }
             break;
         }
     }
@@ -316,8 +311,8 @@ pub fn eagle_prepare_inputs_padded_rust(
 
     let padded_hidden = hidden_states.map(|states| {
         let hidden_size = states
-            .get(0)
-            .and_then(|s| s.get(0))
+            .first()
+            .and_then(|s| s.first())
             .map(|v| v.len())
             .unwrap_or(0);
         let mut result = Vec::new();
@@ -461,10 +456,7 @@ pub fn spec_decode_verify_rejection_rust(
             accepted.push(*draft_token);
             mask.push(true);
         } else {
-            mask.push(false);
-            for _ in (i + 1)..draft_token_ids.len() {
-                mask.push(false);
-            }
+            mask.extend(std::iter::repeat(false).take(draft_token_ids.len().saturating_sub(i + 1)));
             break;
         }
     }

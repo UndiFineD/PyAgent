@@ -92,7 +92,7 @@ pub fn dequantize_int4_rust(packed: Vec<i8>, scale: f32, zero_point: i32) -> PyR
 /// Pack two int4 values into one int8.
 #[pyfunction]
 pub fn pack_int4_rust(values: Vec<i8>) -> PyResult<Vec<i8>> {
-    let mut packed = Vec::with_capacity((values.len() + 1) / 2);
+    let mut packed = Vec::with_capacity(values.len().div_ceil(2));
 
     for chunk in values.chunks(2) {
         let lower = chunk[0] & 0x0F;
@@ -122,7 +122,7 @@ pub fn compute_scales_rust(
         ((1u32 << bits) - 1) as f32
     };
 
-    let num_groups = (weights.len() + group_size - 1) / group_size;
+    let num_groups = weights.len().div_ceil(group_size);
     let mut scales = Vec::with_capacity(num_groups);
 
     for chunk in weights.chunks(group_size) {

@@ -52,7 +52,7 @@ pub fn gqa_expand_kv_rust(
     seq_len: usize,
     head_dim: usize,
 ) -> PyResult<Vec<f32>> {
-    if num_heads % num_kv_heads != 0 {
+    if !num_heads.is_multiple_of(num_kv_heads) {
         return Err(pyo3::exceptions::PyValueError::new_err(
             "num_heads must be divisible by num_kv_heads",
         ));

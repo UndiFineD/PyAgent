@@ -1,6 +1,7 @@
 use pyo3::prelude::*;
 use std::collections::HashMap;
 
+#[allow(clippy::too_many_arguments)]
 #[pyfunction]
 pub fn arc_cache_balance_rust(
     _t1_size: usize,
@@ -369,12 +370,10 @@ pub fn prefix_tree_lookup_rust(
 
         // Check if this length matches any prefix
         for (idx, (&hash, &len)) in prefix_hashes.iter().zip(prefix_lengths.iter()).enumerate() {
-            if len == current_len && hash == query_hash {
-                if current_len > best_match_len as usize {
-                    best_match_len = current_len as i64;
-                    best_match_idx = idx as i64;
-                }
-            }
+            if len == current_len && hash == query_hash && current_len > best_match_len as usize {
+            best_match_len = current_len as i64;
+            best_match_idx = idx as i64;
+        }
         }
     }
 
@@ -503,15 +502,13 @@ pub fn arc_adaptation_delta_rust(
     is_b1_hit: bool,
     adaptation_speed: f64,
 ) -> f64 {
-    let delta = if is_b1_hit {
+    if is_b1_hit {
         // B1 hit: favor recency
         adaptation_speed * (1.0_f64).max(b2_size as f64 / (b1_size.max(1) as f64))
     } else {
         // B2 hit: favor frequency
         -adaptation_speed * (1.0_f64).max(b1_size as f64 / (b2_size.max(1) as f64))
-    };
-
-    delta
+    }
 }
 
 /// LRU eviction priority calculation
@@ -604,8 +601,8 @@ pub fn encoder_cache_lru_evict_rust(
     // Create (key, time, ref_count) tuples, preferring unreferenced
     let mut candidates: Vec<(String, f64, i32)> = keys
         .into_iter()
-        .zip(last_access_times.into_iter())
-        .zip(reference_counts.into_iter())
+        .zip(last_access_times)
+        .zip(reference_counts)
         .map(|((k, t), r)| (k, t, r))
         .collect();
 

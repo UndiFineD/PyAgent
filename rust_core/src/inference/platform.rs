@@ -58,8 +58,7 @@ pub fn estimate_memory_footprint_rust(
     overhead_factor: f64,
 ) -> i64 {
     let base_memory = num_params * dtype_bytes as i64;
-    let total = (base_memory as f64 * overhead_factor) as i64 + kv_cache_size;
-    total
+    (base_memory as f64 * overhead_factor) as i64 + kv_cache_size
 }
 
 /// Parse OpenAI API response JSON efficiently

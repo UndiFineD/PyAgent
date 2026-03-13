@@ -1,5 +1,7 @@
 use pyo3::prelude::*;
 
+type Matrix2I64 = Vec<Vec<i64>>;
+
 /// Compute top-k expert routing indices and weights
 /// Returns (expert_indices, expert_weights) for each token
 #[pyfunction]
@@ -183,7 +185,7 @@ pub fn soft_moe_route_rust(
 pub fn compute_expert_replication_rust(
     weights: Vec<Vec<f64>>,
     num_physical: usize,
-) -> (Vec<Vec<i64>>, Vec<Vec<i64>>, Vec<Vec<i64>>) {
+) -> (Matrix2I64, Matrix2I64, Matrix2I64) {
     if weights.is_empty() {
         return (vec![], vec![], vec![]);
     }
@@ -200,14 +202,14 @@ pub fn compute_expert_replication_rust(
     let mut log_count = vec![vec![1i64; num_logical]; num_layers];
 
     // Initialize 1:1 mapping for first num_logical physical experts
-    for layer in 0..num_layers {
-        for i in 0..num_logical {
-            phy_to_log[layer][i] = i as i64;
+    for phy_to_log_layer in phy_to_log.iter_mut() {
+        for (i, entry) in phy_to_log_layer.iter_mut().enumerate().take(num_logical) {
+            *entry = i as i64;
         }
     }
 
     // Add redundant experts to highest-load logical experts
-    for layer in 0..num_layers {
+    for (layer, phy_to_log_layer) in phy_to_log.iter_mut().enumerate() {
         for phy_idx in num_logical..num_physical {
             // Find logical expert with highest load per replica
             let mut best_logical = 0;
@@ -221,7 +223,7 @@ pub fn compute_expert_replication_rust(
                 }
             }
 
-            phy_to_log[layer][phy_idx] = best_logical as i64;
+            phy_to_log_layer[phy_idx] = best_logical as i64;
             rank[layer][phy_idx] = log_count[layer][best_logical];
             log_count[layer][best_logical] += 1;
         }
@@ -326,7 +328,7 @@ pub fn compute_moe_balanced_packing_rust(
     }
 
     let num_groups = weights[0].len();
-    if num_packs == 0 || num_groups % num_packs != 0 {
+    if num_packs == 0 || !num_groups.is_multiple_of(num_packs) {
         return (vec![], vec![]);
     }
 
@@ -355,11 +357,9 @@ pub fn compute_moe_balanced_packing_rust(
             let mut min_weight = f64::MAX;
 
             for p in 0..num_packs {
-                if p_items[p] < groups_per_pack {
-                    if p_weights[p] < min_weight {
-                        min_weight = p_weights[p];
-                        best_pack = Some(p);
-                    }
+                if p_items[p] < groups_per_pack && p_weights[p] < min_weight {
+                    min_weight = p_weights[p];
+                    best_pack = Some(p);
                 }
             }
 

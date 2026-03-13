@@ -108,10 +108,8 @@ pub fn histogram_observe_rust(
     let mut total_count = 0i64;
 
     for (i, &bucket) in buckets.iter().enumerate() {
-        if value <= bucket {
-            if i < new_counts.len() {
-                new_counts[i] += 1;
-            }
+        if value <= bucket && i < new_counts.len() {
+            new_counts[i] += 1;
         }
         if i < new_counts.len() {
             total_count += new_counts[i];
@@ -224,15 +222,15 @@ pub fn logprobs_to_lists_rust(
 ) -> Vec<Vec<Vec<(usize, f64)>>> {
     logprobs
         .into_iter()
-        .zip(token_ids.into_iter())
+        .zip(token_ids)
         .map(|(seq_lp, seq_ids)| {
             seq_lp
                 .into_iter()
-                .zip(seq_ids.into_iter())
+                .zip(seq_ids)
                 .map(|(pos_lp, pos_ids)| {
                     pos_lp
                         .into_iter()
-                        .zip(pos_ids.into_iter())
+                        .zip(pos_ids)
                         .map(|(lp, id)| (id, lp))
                         .collect()
                 })

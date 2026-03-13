@@ -7,8 +7,8 @@ pub fn calculate_decay(
     idle_time_sec: f64,
     half_life_sec: f64,
 ) -> PyResult<f64> {
-    // ln(2) approx 0.69314718056
-    let decay_constant = 0.69314718056 / half_life_sec;
+    // ln(2) constant from std lib
+    let decay_constant = std::f64::consts::LN_2 / half_life_sec;
     let new_weight = current_weight * (-decay_constant * idle_time_sec).exp();
     Ok(f64::max(new_weight, 0.05))
 }

@@ -52,6 +52,7 @@ pub fn lora_merge_rust(
 /// Compute LoRA output: x @ A.T @ B.T * scaling
 /// For fused LoRA application during inference.
 #[pyfunction]
+#[allow(clippy::too_many_arguments)]
 pub fn lora_forward_rust(
     x: Vec<f32>,
     lora_a: Vec<f32>,

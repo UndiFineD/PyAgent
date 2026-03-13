@@ -105,8 +105,8 @@ pub fn fast_token_count_rust(text: String) -> usize {
     let words = text.split_whitespace().count();
 
     // Heuristic: max of char-based and word-based estimates
-    let char_estimate = (chars + 3) / 4; // ~4 chars per token
-    let word_estimate = (words * 4 + 2) / 3; // ~1.33 tokens per word
+    let char_estimate = chars.div_ceil(4); // ~4 chars per token
+    let word_estimate = (words * 4).div_ceil(3); // ~1.33 tokens per word
 
     char_estimate.max(word_estimate)
 }
