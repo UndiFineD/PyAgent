@@ -274,13 +274,11 @@ pub fn truncate_chat_history_rust(
     let mut current_tokens = 0;
     let mut system_msg = None;
 
-    if preserve_system && !msg_list.is_empty() {
-        if msg_list[0].role == "system" {
-            let sys = msg_list.remove(0);
-            let sys_tokens = (sys.content.len() + 10) as f64 / chars_per_token;
-            current_tokens += sys_tokens.ceil() as usize;
-            system_msg = Some(sys);
-        }
+    if preserve_system && !msg_list.is_empty() && msg_list[0].role == "system" {
+        let sys = msg_list.remove(0);
+        let sys_tokens = (sys.content.len() + 10) as f64 / chars_per_token;
+        current_tokens += sys_tokens.ceil() as usize;
+        system_msg = Some(sys);
     }
 
     // Add messages from end until full
