@@ -15,6 +15,10 @@
 import torch
 import torch.nn as nn
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 class ARCQuantLayer(nn.Module):
     """
     Augmented Residual Channel (ARC) Quantization Layer (arXiv:2601.07475).
@@ -37,7 +41,11 @@ class ARCQuantLayer(nn.Module):
         self.arc_weight = nn.Parameter(torch.randn(out_features, num_outliers))
 
     def simulated_nvfp4_quant(self, x: torch.Tensor) -> torch.Tensor:
+<<<<<<< HEAD
+        # TODO Placeholder for hardware-native NVFP4 quantization
+=======
         # Placeholder for hardware-native NVFP4 quantization
+>>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
         return torch.round(x * 8) / 8
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:

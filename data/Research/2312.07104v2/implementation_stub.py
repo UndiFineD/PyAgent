@@ -12,13 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 """
 RadixAttention: Automatic KV Cache Reuse for Structural LLM Programs
 Ref: arXiv:2312.07104 (SGLang)
 Implementation Stub for PyAgent (Radix Tree Prefix Caching)
 """
 
+<<<<<<< HEAD
+from typing import Dict, List, Optional
+
+=======
 from typing import Dict, List, Optional, Any
+>>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 
 class RadixNode:
     def __init__(self, tokens: List[int], physical_blocks: List[int]):
@@ -27,6 +36,10 @@ class RadixNode:
         self.physical_blocks = physical_blocks # Pointers to PagedAttention indices
         self.last_access_time = 0.0
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 class RadixTreeManager:
     def __init__(self):
         self.root = RadixNode(tokens=[], physical_blocks=[])
