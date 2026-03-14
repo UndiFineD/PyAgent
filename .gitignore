@@ -67,7 +67,6 @@ htmlcov/
 target/
 rust_lib/target/
 *.pyd
-*.so
 *.dylib
 *.dll
 *.lib
