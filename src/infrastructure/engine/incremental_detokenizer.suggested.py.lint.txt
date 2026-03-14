@@ -1,0 +1,14 @@
+=== mypy report ===
+C:\Users\Keimpe\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\python.exe: No module named mypy
+
+
+=== pylint report ===
+************* Module src.infrastructure.engine.incremental_detokenizer.suggested
+src\infrastructure\engine\incremental_detokenizer.suggested.py:178:4: R1711: Useless return at end of function or method (useless-return)
+src\infrastructure\engine\incremental_detokenizer.suggested.py:353:15: W0718: Catching too general exception Exception (broad-exception-caught)
+
+-----------------------------------
+Your code has been rated at 9.92/10
+
+
+

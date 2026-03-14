@@ -1,0 +1,11 @@
+=== mypy report ===
+C:\Users\Keimpe\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\python.exe: No module named mypy
+
+
+=== pylint report ===
+
+------------------------------------
+Your code has been rated at 10.00/10
+
+
+

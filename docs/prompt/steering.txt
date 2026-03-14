@@ -1,0 +1,4 @@
+
+# Directive Added on 2026-02-11 16:15:15
+research: read docs\architecture files reason our shortcomings and update our PyAgent Improvement Research Roadmap
+

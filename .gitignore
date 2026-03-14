@@ -63,10 +63,6 @@ htmlcov/
 .nox/
 .tox/
 
-# Local logs and artifacts
-collection_log.txt
-*.txt
-
 # Rust Build Artifacts
 target/
 rust_lib/target/
@@ -86,13 +82,4 @@ tests\__pycache__
 
 #files
 .env
-
-# Data and Models
-data/models/
-data/logs/
-data/cache/
-data/agent_cache/
-data/memory/
-data/shards/
-*.jsonl
 

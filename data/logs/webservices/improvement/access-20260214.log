@@ -1,0 +1,6 @@
+[2026-02-14 18:42:43] Starting improvement with command: C:\DEV\PyAgent\.venv\Scripts\python.exe -m streamlit run src/interface/ui/web/improvement_web.py --server.port 8502 --server.headless true
+Usage: streamlit run [OPTIONS] [TARGET] [ARGS]...
+Try 'streamlit run --help' for help.
+System.Management.Automation.RemoteException
+Error: Invalid value: File does not exist: src\interface\ui\web\improvement_web.py
+[2026-02-14 18:43:30] ERROR: process exited before binding port 8502

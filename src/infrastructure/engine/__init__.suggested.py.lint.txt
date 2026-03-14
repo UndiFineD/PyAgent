@@ -1,0 +1,26 @@
+=== mypy report ===
+C:\Users\Keimpe\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\python.exe: No module named mypy
+
+
+=== pylint report ===
+************* Module src.infrastructure.engine.__init__.suggested
+src\infrastructure\engine\__init__.suggested.py:39:0: E0401: Unable to import 'src.infrastructure.engine.__init__.engine_core' (import-error)
+src\infrastructure\engine\__init__.suggested.py:46:0: E0401: Unable to import 'src.infrastructure.engine.__init__.engine_core' (import-error)
+src\infrastructure\engine\__init__.suggested.py:47:0: E0401: Unable to import 'src.infrastructure.engine.__init__.engine_core' (import-error)
+src\infrastructure\engine\__init__.suggested.py:48:0: E0401: Unable to import 'src.infrastructure.engine.__init__.engine_core' (import-error)
+src\infrastructure\engine\__init__.suggested.py:49:0: E0401: Unable to import 'src.infrastructure.engine.__init__.engine_core' (import-error)
+src\infrastructure\engine\__init__.suggested.py:50:0: E0401: Unable to import 'src.infrastructure.engine.__init__.engine_core' (import-error)
+src\infrastructure\engine\__init__.suggested.py:58:0: E0401: Unable to import 'src.infrastructure.engine.__init__.engine_core_client' (import-error)
+src\infrastructure\engine\__init__.suggested.py:67:0: E0401: Unable to import 'src.infrastructure.engine.__init__.engine_lifecycle' (import-error)
+src\infrastructure\engine\__init__.suggested.py:70:0: E0401: Unable to import 'src.infrastructure.engine.__init__.incremental_detokenizer' (import-error)
+src\infrastructure\engine\__init__.suggested.py:85:0: E0401: Unable to import 'src.infrastructure.engine.__init__.output_processor' (import-error)
+src\infrastructure\engine\__init__.suggested.py:95:0: E0401: Unable to import 'src.infrastructure.engine.__init__.output_processor' (import-error)
+src\infrastructure\engine\__init__.suggested.py:96:0: E0401: Unable to import 'src.infrastructure.engine.__init__.output_processor' (import-error)
+src\infrastructure\engine\__init__.suggested.py:104:0: E0401: Unable to import 'src.infrastructure.engine.__init__.prefix_cache_manager' (import-error)
+src\infrastructure\engine\__init__.suggested.py:118:0: E0401: Unable to import 'src.infrastructure.engine.__init__.request_lifecycle' (import-error)
+
+-----------------------------------
+Your code has been rated at 0.00/10
+
+
+

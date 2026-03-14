@@ -1,0 +1,13 @@
+=== mypy report ===
+C:\Users\Keimpe\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\python.exe: No module named mypy
+
+
+=== pylint report ===
+************* Module src.infrastructure.engine.request_lifecycle.suggested
+src\infrastructure\engine\request_lifecycle.suggested.py:26:0: E0401: Unable to import 'src.infrastructure.engine.request_lifecycle.lifecycle' (import-error)
+
+-----------------------------------
+Your code has been rated at 0.00/10
+
+
+

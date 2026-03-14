@@ -1,0 +1,13 @@
+=== mypy report ===
+C:\Users\Keimpe\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\python.exe: No module named mypy
+
+
+=== pylint report ===
+************* Module src.infrastructure.engine.kv_cache_coordinator.suggested
+src\infrastructure\engine\kv_cache_coordinator.suggested.py:22:0: E0401: Unable to import 'src.infrastructure.engine.kv_cache_coordinator.kv_cache' (import-error)
+
+-----------------------------------
+Your code has been rated at 0.00/10
+
+
+

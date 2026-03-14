@@ -1,0 +1,15 @@
+=== mypy report ===
+C:\Users\Keimpe\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\python.exe: No module named mypy
+
+
+=== pylint report ===
+************* Module mdns_service.suggested
+src\infrastructure\swarm\discovery\mdns_service.suggested.py:83:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src\infrastructure\swarm\discovery\mdns_service.suggested.py:82:12: C0103: Variable name "IP" doesn't conform to snake_case naming style (invalid-name)
+src\infrastructure\swarm\discovery\mdns_service.suggested.py:84:12: C0103: Variable name "IP" doesn't conform to snake_case naming style (invalid-name)
+
+-----------------------------------
+Your code has been rated at 9.43/10
+
+
+

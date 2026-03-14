@@ -1,0 +1,15 @@
+=== mypy report ===
+C:\Users\Keimpe\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\python.exe: No module named mypy
+
+
+=== pylint report ===
+************* Module src.infrastructure.engine.engine_core_client.suggested
+src\infrastructure\engine\engine_core_client.suggested.py:35:0: E0401: Unable to import 'src.infrastructure.engine.engine_core_client.engine_core' (import-error)
+src\infrastructure\engine\engine_core_client.suggested.py:36:0: E0401: Unable to import 'src.infrastructure.engine.engine_core_client.output_processor' (import-error)
+src\infrastructure\engine\engine_core_client.suggested.py:353:19: W0718: Catching too general exception Exception (broad-exception-caught)
+
+-----------------------------------
+Your code has been rated at 9.44/10
+
+
+

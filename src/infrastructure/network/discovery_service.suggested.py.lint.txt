@@ -1,0 +1,14 @@
+=== mypy report ===
+C:\Users\Keimpe\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\python.exe: No module named mypy
+
+
+=== pylint report ===
+************* Module discovery_service.suggested
+src\infrastructure\network\discovery_service.suggested.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+src\infrastructure\network\discovery_service.suggested.py:23:4: C0116: Missing function or method docstring (missing-function-docstring)
+
+-----------------------------------
+Your code has been rated at 6.00/10
+
+
+
