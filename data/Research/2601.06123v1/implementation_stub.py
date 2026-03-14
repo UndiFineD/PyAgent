@@ -14,7 +14,12 @@
 
 import torch
 import torch.nn as nn
+<<<<<<< HEAD
+from typing import Dict
+
+=======
 from typing import Dict, Any
+>>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 
 class CrossModelAdapter(nn.Module):
     """
@@ -31,6 +36,10 @@ class CrossModelAdapter(nn.Module):
     def from_latent(self, latent_state: torch.Tensor) -> torch.Tensor:
         return self.decoder(latent_state)
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 class LatentCommunicator:
     def __init__(self, agent_adapters: Dict[str, CrossModelAdapter]):
         self.adapters = agent_adapters

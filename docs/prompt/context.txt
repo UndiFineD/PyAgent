@@ -54,6 +54,13 @@ supporting 1M+ token context sharding, multi-tenancy, and federated meta-optimiz
 - delegate among multiple agents
 - update and maintain a roadmap in docs\prompt\roadmap.txt
 - update docs\prompt\context.txt and docs\prompt\prompt.txt
+<<<<<<< HEAD
+
+## Context Management
+- **Cascade Context**: Passing a `CascadeContext` object through all recursive agent calls to track lineage and prevent "hallucination loops."
+
+=======
+>>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 - work towards automating the self improvement process 
 - monitor docs\prompt\improvements.md for new texts and websites that may have new insights.
 - we have a lot of code, some of it may need refactoring, 

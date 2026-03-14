@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 """
 TALON: Confidence-Aware Speculative Decoding with Adaptive Token Trees
 Ref: arXiv:2601.07353
@@ -19,7 +23,11 @@ Implementation Stub for PyAgent
 """
 
 import torch
+<<<<<<< HEAD
+
+=======
 from typing import List, Dict, Optional
+>>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 
 class TalonTreeBuilder:
     def __init__(self, budget: int = 60, mu_threshold: float = 0.03):

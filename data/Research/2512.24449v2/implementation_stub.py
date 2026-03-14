@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 """
 PackKV: Reducing KV Cache Memory via LLM-Aware Lossy Compression
 Ref: arXiv:2512.24449
@@ -19,7 +23,11 @@ Implementation Stub for PyAgent (Quantization & Permutation Repacking)
 """
 
 import torch
+<<<<<<< HEAD
+
+=======
 import numpy as np
+>>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 
 class PackKVCompressor:
     def __init__(self, block_size: int = 64, bit_width: int = 4):

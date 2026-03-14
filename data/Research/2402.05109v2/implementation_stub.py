@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 """
 Hydra: Sequentially-Dependent Draft Heads
 Ref: arXiv:2402.05109
@@ -21,6 +25,10 @@ Implementation Stub for PyAgent (Sequential Head Dependencies)
 import torch
 import torch.nn as nn
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 class HydraHead(nn.Module):
     def __init__(self, hidden_dim: int, embed_dim: int, vocab_size: int, head_index: int):
         super().__init__()
@@ -41,6 +49,10 @@ class HydraHead(nn.Module):
         x = torch.cat([h_t, prev_embeds.flatten(start_dim=1)], dim=-1)
         return self.mlp(x)
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 class HydraModel(nn.Module):
     def __init__(self, base_model, num_heads=4):
         super().__init__()

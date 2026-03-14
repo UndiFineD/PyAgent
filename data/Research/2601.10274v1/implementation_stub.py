@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 class LoadAwareReasoningScheduler:
     """
     Dynamically adjusts reasoning token budget based on queue pressure (arXiv:2601.10274).

@@ -109,7 +109,11 @@ class LazyLoader:
 # Usage:
 class InfrastructureModule:
     EagleProposer = LazyLoader(
+<<<<<<< HEAD
+        "src.infrastructure.engine.speculative.EagleProposer",
+=======
         "src.infrastructure.speculative_v2.EagleProposer",
+>>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
         "EagleProposer"
     )
 ```
@@ -233,3 +237,19 @@ reasoning/
 5. **Import Depth**: Keep under 5 levels
 
 ================================================================================
+<<<<<<< HEAD
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======
+>>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
