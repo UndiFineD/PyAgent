@@ -34,4 +34,4 @@ jobs:
     - name: Run Ruff
       run: ruff check .
     - name: Run Mypy
-      run: mypy --strict src/core/base/
+      run: python -m mypy --strict src/core/base/
