@@ -13,6 +13,9 @@
 
 use std::collections::VecDeque;
 use std::sync::{Arc, Condvar, Mutex};
+use std::time::Duration;
+
+use crate::transport::TRANSPORT_TIMEOUT_MAX_SECS;
 
 /// In-memory pipe that supports pushing frames on one side and blocking pops on the other.
 ///
@@ -33,14 +36,22 @@ impl Pipe {
         cvar.notify_one();
     }
 
-    pub fn pop(&self) -> Vec<u8> {
+    pub fn pop(&self) -> Result<Vec<u8>, String> {
         let (lock, cvar) = &*self.0;
         let mut q = lock.lock().unwrap();
+        let timeout = Duration::from_secs(TRANSPORT_TIMEOUT_MAX_SECS as u64);
         loop {
             if let Some(frame) = q.pop_front() {
-                return frame;
+                return Ok(frame);
             }
-            q = cvar.wait(q).unwrap();
+            let (guard, result) = cvar.wait_timeout(q, timeout).unwrap();
+            q = guard;
+            if result.timed_out() {
+                return Err(format!(
+                    "loopback recv_raw timed out after {} seconds",
+                    TRANSPORT_TIMEOUT_MAX_SECS
+                ));
+            }
         }
     }
 }
@@ -60,7 +71,7 @@ impl crate::transport::channel::Transport for LoopbackHandle {
     }
 
     fn recv_raw(&self) -> Result<Vec<u8>, String> {
-        Ok(self.rx.pop())
+        self.rx.pop()
     }
 }
 
