@@ -18,7 +18,7 @@ use pyo3::prelude::*;
 /// Placeholder function to ensure the module is linked and can be extended.
 #[pyfunction]
 pub fn transport_quic_supported() -> PyResult<bool> {
-    Ok(true)
+    Ok(cfg!(feature = "async-transport"))
 }
 
 /// Register the module's functions with Python.
