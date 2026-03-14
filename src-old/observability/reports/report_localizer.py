@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,92 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from generate_agent_reports.py"""
-
-
-import logging
-
-from src.core.base.lifecycle.version import VERSION
-
-from .locale_code import LocaleCode
-from .localized_string import LocalizedString
-
-__version__: str = VERSION
-
-
-class ReportLocalizer:
-    """Localizer for report internationalization.
-    Handles translation of report strings.
-
-    Attributes:
-        strings: Localized strings.
-        current_locale: Current locale.
-
-    Example:
-        localizer=ReportLocalizer()
-        localizer.add_string("error.syntax", {"en-US": "Syntax Error"})
-        text=localizer.get("error.syntax")
-
-    """
-
-    def __init__(self, locale: LocaleCode = LocaleCode.EN_US) -> None:
-        """Initialize localizer.
-
-        Args:
-            locale: Default locale.
-
-        """
-        self.strings: dict[str, LocalizedString] = {}
-        self.current_locale: LocaleCode = locale
-        self._init_defaults()
-        logging.debug(f"ReportLocalizer initialized with {locale.value}")
-
-    def _init_defaults(self) -> None:
-        """Initialize default strings."""
-        defaults: dict[str, dict[str, str]] = {
-            "report.description": {"en-US": "Description", "de-DE": "Beschreibung"},
-            "report.errors": {"en-US": "Errors", "de-DE": "Fehler"},
-            "report.improvements": {"en-US": "Improvements", "de-DE": "Verbesserungen"},
-            "severity.info": {"en-US": "Info", "de-DE": "Info"},
-            "severity.warning": {"en-US": "Warning", "de-DE": "Warnung"},
-            "severity.error": {"en-US": "Error", "de-DE": "Fehler"},
-        }
-        for key, translations in defaults.items():
-            self.add_string(key, translations)
-
-    def add_string(self, key: str, translations: dict[str, str]) -> None:
-        """Add a localized string.
-
-        Args:
-            key: String key.
-            translations: Locale to text mapping.
-
-        """
-        default: str = translations.get("en-US", list(translations.values())[0] if translations else "")
-        self.strings[key] = LocalizedString(key=key, translations=translations, default=default)
-
-    def get(self, key: str, locale: LocaleCode | None = None) -> str:
-        """Get localized string.
-
-        Args:
-            key: String key.
-            locale: Override locale.
-
-        Returns:
-            Localized text.
-
-        """
-        loc: LocaleCode = locale or self.current_locale
-        if key not in self.strings:
-            return key
-        string: LocalizedString = self.strings[key]
-        return string.translations.get(loc.value, string.default)
-
-    def set_locale(self, locale: LocaleCode) -> None:
-        """Set current locale.
-
-        Args:
-            locale: New locale.
-
-        """
-        self.current_locale: LocaleCode = locale
+r"""Auto-extracted class from generate_agent_reports.py"""

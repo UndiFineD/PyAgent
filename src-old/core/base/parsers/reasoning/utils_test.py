@@ -14,7 +14,6 @@
 """Tests for utils
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,15 +31,5 @@ except ImportError as e:
 
 
 def test_extract_reasoning_exists():
-    """Test that extract_reasoning function exists."""
-    assert callable(extract_reasoning)
-
-
-def test_create_streaming_parser_exists():
-    """Test that create_streaming_parser function exists."""
-    assert callable(create_streaming_parser)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

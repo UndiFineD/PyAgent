@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/ContextPriority.description.md
@@ -79,19 +80,5 @@ Priority levels for context relevance.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from enum import Enum
-
-
-class ContextPriority(Enum):
-    """Priority levels for context relevance."""
-
-    CRITICAL = 5
-    HIGH = 4
-    MEDIUM = 3
-    LOW = 2
-    MINIMAL = 1
+r"""Auto-extracted class from agent_context.py"""

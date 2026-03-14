@@ -175,38 +175,6 @@ class ContextAgent(
 # Example usage
 ```
 """
-
     def _get_fallback_response(self) -> str:
-        """Return fallback response when Copilot is unavailable."""
-        return (
-            "# AI Improvement Unavailable\n"
-            "# GitHub CLI not found. Install from https://cli.github.com/\n\n"
-            "# Original content preserved below:\n\n"
-        )
-
-    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Use AI to improve the context.
-
-        When Copilot CLI is unavailable, BaseAgent keeps the existing file
-        content unchanged instead of injecting duplicated placeholder blocks.
         """
-        _ = prompt
-        _ = target_file
-        logging.info(f"Improving context for {self.file_path}")
-        # Include source code in AI context for accurate descriptions
-        if self.source_path and self.source_path.exists():
-            logging.debug(f"Using source file: {self.source_path}")
-            try:
-                # Limit source code to 8000 chars to avoid token limits
-                source_code = self.source_path.read_text(encoding="utf-8")[:8000]
-                enhanced_prompt = (
-                    f"{prompt}\n\n"
-                    f"Source code to analyze ({self.source_path.name}):\n"
-                    f"```\n{source_code}\n```\n\n"
-                    "Based on the source code above, provide a comprehensive description."
-                )
-                return await super().improve_content(enhanced_prompt)
-            except (OSError, UnicodeDecodeError):
-                pass
-
-        return await super().improve_content(prompt)
+        """

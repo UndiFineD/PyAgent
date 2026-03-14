@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/CompilationCounter.description.md
@@ -168,7 +169,6 @@ Reset global counter.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 """
 CompilationCounter - Statistics and counters for compilation metrics.

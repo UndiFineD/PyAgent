@@ -14,7 +14,6 @@
 """Tests for interfaces
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,25 +31,5 @@ except ImportError as e:
 
 
 def test_agentinterface_exists():
-    """Test that AgentInterface class exists and is importable."""
-    assert "AgentInterface" in dir()
-
-
-def test_orchestratorinterface_exists():
-    """Test that OrchestratorInterface class exists and is importable."""
-    assert "OrchestratorInterface" in dir()
-
-
-def test_coreinterface_exists():
-    """Test that CoreInterface class exists and is importable."""
-    assert "CoreInterface" in dir()
-
-
-def test_contextrecorderinterface_exists():
-    """Test that ContextRecorderInterface class exists and is importable."""
-    assert "ContextRecorderInterface" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

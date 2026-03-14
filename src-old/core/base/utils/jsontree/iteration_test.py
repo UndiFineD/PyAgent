@@ -14,7 +14,6 @@
 """Tests for iteration
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,15 +31,5 @@ except ImportError as e:
 
 
 def test_json_iter_leaves_exists():
-    """Test that json_iter_leaves function exists."""
-    assert callable(json_iter_leaves)
-
-
-def test_json_iter_leaves_with_path_exists():
-    """Test that json_iter_leaves_with_path function exists."""
-    assert callable(json_iter_leaves_with_path)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

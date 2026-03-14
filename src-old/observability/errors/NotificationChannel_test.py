@@ -32,10 +32,9 @@ except ImportError as e:
 
 
 def test_notificationchannel_exists():
-    """Test that NotificationChannel class exists and is importable."""
-    assert "NotificationChannel" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """Test that NotificationChannel class can be imported and instantiated."""
+    try:
+        channel = NotificationChannel("test_channel")
+        assert channel.name == "test_channel"
+    except Exception as e:
+        pytest.fail(f"Failed to instantiate NotificationChannel: {e}")

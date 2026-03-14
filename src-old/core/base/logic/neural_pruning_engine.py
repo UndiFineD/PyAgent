@@ -49,8 +49,3 @@ LLM_CONTEXT_END
 Engine regarding neural synaptic pruning.
 (Facade regarding src.core.base.common.pruning_core)
 """
-
-from src.core.base.common.pruning_core import PruningCore as NeuralPruningEngine
-from src.core.base.common.pruning_core import SynapticWeight
-
-__all__ = ["NeuralPruningEngine", "SynapticWeight"]

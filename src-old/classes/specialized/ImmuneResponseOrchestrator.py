@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ImmuneResponseOrchestrator.description.md
@@ -85,7 +86,6 @@ by acting as an attractive but isolated target.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 import time
 from typing import Any

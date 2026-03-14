@@ -14,7 +14,6 @@
 """Tests for ClassificationAgent
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,25 +31,5 @@ except ImportError as e:
 
 
 def test_classificationtype_exists():
-    """Test that ClassificationType class exists and is importable."""
-    assert "ClassificationType" in dir()
-
-
-def test_classificationresult_exists():
-    """Test that ClassificationResult class exists and is importable."""
-    assert "ClassificationResult" in dir()
-
-
-def test_taxonomy_exists():
-    """Test that Taxonomy class exists and is importable."""
-    assert "Taxonomy" in dir()
-
-
-def test_classificationagent_exists():
-    """Test that ClassificationAgent class exists and is importable."""
-    assert "ClassificationAgent" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

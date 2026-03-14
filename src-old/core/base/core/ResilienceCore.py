@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/core/ResilienceCore.description.md
 
@@ -71,8 +71,8 @@ Audited for Rust conversion.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -90,68 +90,5 @@ import random
 
 
 class ResilienceCore:
-    """Pure logic for Circuit Breaker and Retry mechanisms.
-    Audited for Rust conversion.
     """
-
-    @staticmethod
-    def calculate_backoff(
-        failure_count: int,
-        threshold: int,
-        base_timeout: float,
-        multiplier: float,
-        max_timeout: float,
-        jitter_mode: str = "full"
-    ) -> float:
-        """Phase 145: Enhanced backoff with Full Jitter.
-        Prevents thundering herd better than standard 10% jitter.
-        """
-        if failure_count < threshold:
-            return 0.0
-
-        exponent = max(0, failure_count - threshold)
-        backoff = min(max_timeout, base_timeout * (multiplier ** exponent))
-
-        if jitter_mode == "full":
-            # AWS style Full Jitter: random between 0 and exponential backoff
-            return random.uniform(base_timeout / 2, backoff)
-        elif jitter_mode == "equal":
-            # Half of backoff + random half
-            return (backoff / 2) + random.uniform(0, backoff / 2)
-        else:
-            # Legacy 10% jitter
-            jitter = backoff * 0.1 * random.uniform(-1, 1)
-            return max(base_timeout / 2, backoff + jitter)
-
-    @staticmethod
-    def should_attempt_recovery(
-        last_failure_time: float,
-        current_time: float,
-        timeout: float
-    ) -> bool:
-        """Determines if the cooldown period has passed."""
-        return (current_time - last_failure_time) > timeout
-
-    @staticmethod
-    def evaluate_state_transition(
-        current_state: str,
-        success_count: int,
-        consecutive_successes_needed: int,
-        failure_count: int,
-        failure_threshold: int
-    ) -> str:
-        """Pure state machine logic for transition.
-        Transitions:
-            CLOSED -> OPEN (if failure_count >= threshold)
-            OPEN -> HALF_OPEN (externally timed)
-            HALF_OPEN -> CLOSED (if success_count >= needed)
-            HALF_OPEN -> OPEN (if any failure during half-open)
-        """
-        if current_state == "CLOSED":
-            if failure_count >= failure_threshold:
-                return "OPEN"
-        elif current_state == "HALF_OPEN":
-            if success_count >= consecutive_successes_needed:
-                return "CLOSED"
-
-        return current_state
+    """

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/ContextValidationMixin.description.md
 
@@ -72,8 +72,8 @@ Validation methods for ContextAgent.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -107,52 +107,5 @@ DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
 
 
 class ContextValidationMixin:
-    """Validation methods for ContextAgent."""
-
-    def add_validation_rule(self, rule: ValidationRule) -> None:
-        """Add a validation rule."""
-        if not hasattr(self, "_validation_rules"):
-            self._validation_rules = list(DEFAULT_VALIDATION_RULES)
-        self._validation_rules.append(rule)
-
-    def validate_content(self, content: str | None = None) -> list[dict[str, Any]]:
-        """Validate content against all rules."""
-        if content is None:
-            content = getattr(self, "current_content", None) or getattr(
-                self, "previous_content", ""
-            )
-
-        issues: list[dict[str, Any]] = []
-        rules = getattr(self, "_validation_rules", DEFAULT_VALIDATION_RULES)
-
-        for rule in rules:
-            if rule.required:
-                # Required patterns must be present
-                if not re.search(rule.pattern, content):
-                    issues.append(
-                        {
-                            "rule": rule.name,
-                            "message": rule.message,
-                            "severity": rule.severity,
-                            "required": True,
-                        }
-                    )
-            else:
-                # Non - required patterns are warnings when matched
-                matches = re.findall(rule.pattern, content)
-                if matches and rule.severity != "info":
-                    issues.append(
-                        {
-                            "rule": rule.name,
-                            "message": rule.message,
-                            "severity": rule.severity,
-                            "matches": len(matches),
-                        }
-                    )
-
-        return issues
-
-    def is_valid(self, content: str | None = None) -> bool:
-        """Check if content passes all required validations."""
-        issues = self.validate_content(content)
-        return not any(i.get("severity") == "error" for i in issues)
+    """
+    """

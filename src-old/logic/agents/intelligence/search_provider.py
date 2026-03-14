@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,14 +49,3 @@ from __future__ import annotations
 """
 Search Agent: Perform deep research and search operations across the workspace.
 """
-
-
-from src.core.base.common.base_utilities import create_main_function
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.intelligence.search_agent import SearchAgent
-
-__version__ = VERSION
-
-if __name__ == "__main__":
-    main = create_main_function(SearchAgent, "Research Agent", "Topic/File to research")
-    main()

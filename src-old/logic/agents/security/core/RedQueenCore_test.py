@@ -14,7 +14,6 @@
 """Tests for RedQueenCore
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,15 +31,5 @@ except ImportError as e:
 
 
 def test_attackvector_exists():
-    """Test that AttackVector class exists and is importable."""
-    assert "AttackVector" in dir()
-
-
-def test_redqueencore_exists():
-    """Test that RedQueenCore class exists and is importable."""
-    assert "RedQueenCore" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

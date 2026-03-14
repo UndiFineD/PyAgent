@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/stats/__init__.description.md
@@ -70,7 +71,6 @@ Auto-generated module exports.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 """Auto-generated module exports.
 

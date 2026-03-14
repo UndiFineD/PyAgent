@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,28 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py"""
-
-from dataclasses import dataclass, field
-
-from src.core.base.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class ContextRecommendation:
-    """Recommendation for context improvement.
-
-    Attributes:
-        source_file: File used as reference.
-        suggested_sections: Sections to add.
-        reason: Why this recommendation was made.
-        confidence: Recommendation confidence.
-
-    """
-
-    source_file: str
-    suggested_sections: list[str] = field(default_factory=lambda: [])
-    reason: str = ""
-    confidence: float = 0.0
+r"""Auto-extracted class from agent_context.py"""

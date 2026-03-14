@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,95 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Agent for voice-based interaction and thought-to-speech conversion."""
-
-
-import logging
-from pathlib import Path
-
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-# pylint: disable=too-many-ancestors
-class VoiceInteractionAgent(BaseAgent):
-    """Voice interface for the swarm, supporting STT and TTS."""
-
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-        self._system_prompt = (
-            "You are the Voice Interaction Agent. "
-            "You process audio streams into text and convert agent thoughts into speech. "
-            "Your goal is to provide a seamless natural language audio interface."
-        )
-
-    @as_tool
-    def synthesize_speech(self, text: str, voice_profile: str = "neutral") -> str:
-        """Converts text into an audio file path (Simulation/gTTS)."""
-        logging.info(f"VoiceAgent: Synthesizing speech with profile {voice_profile}...")
-        audio_dir = Path("data/audio")
-        audio_dir.mkdir(parents=True, exist_ok=True)
-
-        target_path = audio_dir / f"speech_{abs(hash(text))}.mp3"
-
-        try:
-            from gtts import gTTS
-
-            tts = gTTS(text=text, lang="en")
-            tts.save(str(target_path))
-            return str(target_path)
-        except ImportError:
-            logging.warning("gTTS not installed. Returning simulation path.")
-            return f"data/audio/simulation_{abs(hash(text))}.wav"
-
-    @as_tool
-    def transcribe_audio(self, audio_path: str) -> str:
-        """Transcribes audio file to text using speech recognition."""
-        logging.info(f"VoiceAgent: Transcribing {audio_path}...")
-
-        try:
-            import speech_recognition as sr
-
-            r = sr.Recognizer()
-            with sr.AudioFile(audio_path) as source:
-                audio = r.record(source)
-            text = r.recognize_google(audio)
-            return text
-        except (ImportError, RuntimeError, OSError) as e:
-            logging.error(f"Transcription failed: {str(e)}")
-            return "### Transcription Unavailable (Check dependencies)"
-
-    def think_aloud(self, thought: str) -> str:
-        """Standard Swarm UX: Agents can broadcast their 'internal' monologue via voice."""
-        audio_file = self.synthesize_speech(thought)
-        logging.info(
-            f"Agent {self.id} Thinking Aloud: '{thought}' (Audio: {audio_file})"
-        )
-        return audio_file
-
-    @as_tool
-    async def run_omni_pipeline(self, audio_input_path: str) -> dict[str, str]:
-        """Executes the full 'See-While-Hear' pipeline: hiding latency by pipelining.
-        Audio -> Transcribe -> LLM Think -> Synthesize -> Output Audio.
-        """
-        # 1. Speech to Text
-        transcription = self.transcribe_audio(audio_input_path)
-        if transcription.startswith("###"):
-            return {"error": transcription}
-
-        # 2. Cognitive Processing (LLM)
-        response_text = await self.think(
-            f"User said: '{transcription}'. Respond naturally."
-        )
-
-        # 3. Text to Speech (CosyVoice/gTTS)
-        output_audio = self.synthesize_speech(response_text)
-
-        return {
-            "transcription": transcription,
-            "response_text": response_text,
-            "output_audio": output_audio,
-        }
+r"""Agent for voice-based interaction and thought-to-speech conversion."""

@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,32 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-from datetime import datetime
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-class AssignmentManager:
-    """Tracks assignees and ownership history."""
-
-    def __init__(self) -> None:
-        self.assignments: dict[str, str] = {}
-        self._history: dict[str, list[dict[str, Any]]] = {}
-
-    def assign(self, improvement_id: str, assignee: str) -> None:
-        self.assignments[improvement_id] = assignee
-        self._history.setdefault(improvement_id, []).append(
-            {"assignee": assignee, "timestamp": datetime.now().isoformat()}
-        )
-
-    def get_assignee(self, improvement_id: str) -> str | None:
-        return self.assignments.get(improvement_id)
-
-    def get_ownership_history(self, improvement_id: str) -> list[dict[str, Any]]:
-        return list(self._history.get(improvement_id, []))
+r"""Auto-extracted class from agent_improvements.py"""

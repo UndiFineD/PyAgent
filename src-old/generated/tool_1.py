@@ -1,4 +1,4 @@
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/generated/tool_1.description.md
 
@@ -53,12 +53,3 @@ Generated tool for CSV Parsing
 
 LLM_CONTEXT_END
 """
-
-"""
-Generated tool for CSV Parsing
-"""
-
-
-def run(data):
-    # Requirements: Read CSV and sum column A
-    return f"Processed {data} using tool_1.py"

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/exporters/PrometheusExporter.description.md
@@ -73,7 +74,6 @@ Formats fleet telemetry into Prometheus-compatible metrics.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -101,38 +101,5 @@ __version__ = VERSION
 
 
 class PrometheusExporter:
-    """Formats fleet telemetry into Prometheus-compatible metrics."""
-
-    def __init__(self) -> None:
-        self.metrics_registry: dict[str, float] = {}
-
-    def record_metric(
-        self, name: str, value: float, labels: dict[str, str] | None = None
-    ) -> str:
-        """Records a metric with optional labels."""
-        label_str = ""
-        if labels:
-            label_str = "{" + ",".join([f'{k}="{v}"' for k, v in labels.items()]) + "}"
-
-        metric_key = f"{name}{label_str}"
-        self.metrics_registry[metric_key] = value
-
-    def generate_scrape_response(self) -> str:
-        """Generates the text response for a Prometheus scrape endpoint."""
-        lines = []
-        for key, value in self.metrics_registry.items():
-            # Basic Prometheus format: metric_name{labels} value
-            lines.append(f"pyagent_{key} {value}")
-
-        return "\n".join(lines)
-
-    def get_grafana_info(self) -> dict[str, Any]:
-        """Returns connection details for Grafana integration."""
-        return {
-            "datasource_type": "Prometheus",
-            "scrape_interval": "15s",
-            "endpoint": "/metrics",
-            "suggested_dashboard_uid": "pyagent-swarm-health-main",
-            "provisioning_status": "Ready",
-            "metric_prefix": "pyagent_",
-        }
+    """
+    """

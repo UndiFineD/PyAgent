@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,20 +49,3 @@ from __future__ import annotations
 """
 Context Agent: Maintains and improves context/description files.
 """
-
-
-from src.core.base.common.base_utilities import create_main_function
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context_agent import ContextAgent
-
-__version__ = VERSION
-
-# Create main function using the helper
-main = create_main_function(
-    ContextAgent,
-    "Context Agent: Maintains and improves context/description files",
-    "Path to the context file (e.g., file.description.md)",
-)
-
-if __name__ == "__main__":
-    main()

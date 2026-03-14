@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/CoderValidationMixin.description.md
 
@@ -72,8 +72,8 @@ Mixin for validating syntax and linting code.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -91,7 +91,6 @@ from __future__ import annotations
 """
 Syntax validation and linting logic for CoderCore.
 """
-
 import ast
 import logging
 import os
@@ -103,41 +102,5 @@ from src.core.base.types.CodeLanguage import CodeLanguage
 
 
 class CoderValidationMixin:
-    """Mixin for validating syntax and linting code."""
-
-    def validate_syntax(self, content: str) -> bool:
-        """Validate Python syntax using ast."""
-        if self.language != CodeLanguage.PYTHON:
-            return True
-        try:
-            ast.parse(content)
-            return True
-        except (SyntaxError, RecursionError, MemoryError) as e:
-            logging.error(f"Syntax error in generated code: {e}")
-            return False
-
-    def validate_flake8(self, content: str) -> bool:
-        """Validate Python code using flake8 if available."""
-        if self.language != CodeLanguage.PYTHON:
-            return True
-        if not shutil.which("flake8"):
-            logging.warning("flake8 not found, skipping style validation")
-            return True
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as tmp:
-            tmp.write(content)
-            tmp_path = tmp.name
-        try:
-            # Run flake8 on the temporary file
-            result = subprocess.run(
-                ["flake8", "--ignore=E501,F401,W291,W293", tmp_path],
-                capture_output=True,
-                text=True,
-                check=False,
-            )
-            return result.returncode == 0
-        except Exception as e:
-            logging.error(f"flake8 validation failed: {e}")
-            return True
-        finally:
-            if os.path.exists(tmp_path):
-                os.unlink(tmp_path)
+    """
+    """

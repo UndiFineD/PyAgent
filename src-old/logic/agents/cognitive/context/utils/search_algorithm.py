@@ -32,8 +32,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -54,7 +54,6 @@ from __future__ import annotations
 This module defines the available algorithms for semantic and keyword-based
 search within the agent's context and memory.
 """
-
 from enum import Enum
 
 from src.core.base.lifecycle.version import VERSION
@@ -63,9 +62,5 @@ __version__ = VERSION
 
 
 class SearchAlgorithm(Enum):
-    """Algorithms for semantic search."""
-
-    KEYWORD = "keyword"
-    FUZZY = "fuzzy"
-    SEMANTIC = "semantic"
-    HYBRID = "hybrid"
+    """
+    """

@@ -43,11 +43,4 @@ LLM_CONTEXT_END
 
 """
 
-"""Multimodal state definitions."""
-
-
-class StreamState:
-    """State management for incomplete modality tags in a stream."""
-
-    def __init__(self) -> None:
-        self.buffer = ""
+r"""Multimodal state definitions."""

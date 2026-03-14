@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,25 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_coder.py"""
-
-
-from enum import Enum
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-class CodeLanguage(Enum):
-    """Supported code languages."""
-
-    PYTHON = "python"
-    JAVASCRIPT = "javascript"
-    TYPESCRIPT = "typescript"
-    JAVA = "java"
-    CPP = "cpp"
-    GO = "go"
-    RUST = "rust"
-    RUBY = "ruby"
-    UNKNOWN = "unknown"
+r"""Auto-extracted class from agent_coder.py"""

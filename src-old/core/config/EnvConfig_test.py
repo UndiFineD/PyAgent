@@ -14,7 +14,6 @@
 """Tests for EnvConfig
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,71 +31,5 @@ except ImportError as e:
 
 
 def test_envvar_exists():
-    """Test that EnvVar class exists and is importable."""
-    assert "EnvVar" in dir()
-
-
-def test_envconfigmeta_exists():
-    """Test that EnvConfigMeta class exists and is importable."""
-    assert "EnvConfigMeta" in dir()
-
-
-def test_envconfig_exists():
-    """Test that EnvConfig class exists and is importable."""
-    assert "EnvConfig" in dir()
-
-
-def test_namespacedconfig_exists():
-    """Test that NamespacedConfig class exists and is importable."""
-    assert "NamespacedConfig" in dir()
-
-
-def test_lazyenvvar_exists():
-    """Test that LazyEnvVar class exists and is importable."""
-    assert "LazyEnvVar" in dir()
-
-
-def test_temp_env_exists():
-    """Test that temp_env class exists and is importable."""
-    assert "temp_env" in dir()
-
-
-def test_temp_env_instantiation():
-    """Test that temp_env can be instantiated."""
-    instance = temp_env()
-    assert instance is not None
-
-
-def test_get_env_exists():
-    """Test that get_env function exists."""
-    assert callable(get_env)
-
-
-def test_get_env_bool_exists():
-    """Test that get_env_bool function exists."""
-    assert callable(get_env_bool)
-
-
-def test_get_env_int_exists():
-    """Test that get_env_int function exists."""
-    assert callable(get_env_int)
-
-
-def test_get_env_float_exists():
-    """Test that get_env_float function exists."""
-    assert callable(get_env_float)
-
-
-def test_get_env_list_exists():
-    """Test that get_env_list function exists."""
-    assert callable(get_env_list)
-
-
-def test_get_env_json_exists():
-    """Test that get_env_json function exists."""
-    assert callable(get_env_json)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

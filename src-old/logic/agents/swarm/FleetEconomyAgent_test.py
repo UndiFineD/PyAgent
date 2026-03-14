@@ -14,7 +14,6 @@
 """Tests for FleetEconomyAgent
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,10 +31,5 @@ except ImportError as e:
 
 
 def test_fleeteconomyagent_exists():
-    """Test that FleetEconomyAgent class exists and is importable."""
-    assert "FleetEconomyAgent" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

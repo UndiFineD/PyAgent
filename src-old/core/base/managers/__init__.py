@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/managers/__init__.description.md
 
@@ -70,8 +70,8 @@ Internal managers for prompt, conversation, auth, and batch processing.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -128,5 +128,3 @@ except Exception:
 """
 Internal managers for prompt, conversation, auth, and batch processing.
 """
-
-__version__ = VERSION

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/download_agent/models.description.md
 
@@ -83,33 +83,11 @@ LLM_CONTEXT_END
 """
 Data models for the Download Agent.
 """
-
 from dataclasses import dataclass
 from typing import Dict
 
 
 @dataclass
 class DownloadResult:
-    """Result of a download operation."""
-
-    url: str
-    success: bool
-    destination: str
-    file_type: str
-    size_bytes: int = 0
-    error_message: str = ""
-    metadata: Dict = None
-
-
-@dataclass
-class DownloadConfig:
-    """Configuration for download operations."""
-
-    urls_file: str = "docs/download/urls.txt"
-    base_dir: str = "."
-    max_retries: int = 3
-    timeout_seconds: int = 30
-    delay_between_downloads: float = 1.0
-    skip_existing: bool = True
-    dry_run: bool = False
-    verbose: bool = False
+    """
+    """

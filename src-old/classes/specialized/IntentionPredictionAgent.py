@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/IntentionPredictionAgent.description.md
@@ -80,7 +81,6 @@ Integrated with MetacognitiveCore for intent prediction and pre-warming.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 import logging
 import random

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/SecurityReporterMixin.description.md
 
@@ -68,8 +68,8 @@ Mixin for security reporting and recording findings.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -84,40 +84,4 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Reporting and recording logic for SecurityCore."""
-
-import logging
-import time
-
-from src.core.base.types.SecurityVulnerability import SecurityVulnerability
-
-
-class SecurityReporterMixin:
-    """Mixin for security reporting and recording findings."""
-
-    def _record_finding(self, issue_type: str, severity: str, desc: str) -> None:
-        """Records security findings for fleet intelligence (Phase 108)."""
-        if hasattr(self, "recorder") and self.recorder:
-            try:
-                self.recorder.record_lesson(
-                    "security_vulnerability",
-                    {
-                        "type": issue_type,
-                        "severity": severity,
-                        "description": desc,
-                        "timestamp": time.time(),
-                    },
-                )
-            except Exception as e:
-                logging.debug(f"SecurityCore: Failed to record finding: {e}")
-
-    def get_risk_level(self, vulnerabilities: list[SecurityVulnerability]) -> str:
-        """Determines the overall risk level for a report."""
-        severities = [v.severity for v in vulnerabilities]
-        if "critical" in severities or "CRITICAL" in [s.upper() for s in severities]:
-            return "CRITICAL"
-        if "high" in severities or "HIGH" in [s.upper() for s in severities]:
-            return "HIGH"
-        if "medium" in severities or "MEDIUM" in [s.upper() for s in severities]:
-            return "MEDIUM"
-        return "LOW"
+r"""Reporting and recording logic for SecurityCore."""

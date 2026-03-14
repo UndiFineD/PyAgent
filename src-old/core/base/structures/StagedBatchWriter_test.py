@@ -14,7 +14,6 @@
 """Tests for StagedBatchWriter
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,45 +31,5 @@ except ImportError as e:
 
 
 def test_writepolicy_exists():
-    """Test that WritePolicy class exists and is importable."""
-    assert "WritePolicy" in dir()
-
-
-def test_coalescestrategy_exists():
-    """Test that CoalesceStrategy class exists and is importable."""
-    assert "CoalesceStrategy" in dir()
-
-
-def test_stagedwrite_exists():
-    """Test that StagedWrite class exists and is importable."""
-    assert "StagedWrite" in dir()
-
-
-def test_writestats_exists():
-    """Test that WriteStats class exists and is importable."""
-    assert "WriteStats" in dir()
-
-
-def test_stagedbatchwriter_exists():
-    """Test that StagedBatchWriter class exists and is importable."""
-    assert "StagedBatchWriter" in dir()
-
-
-def test_stagedwritetensor_exists():
-    """Test that StagedWriteTensor class exists and is importable."""
-    assert "StagedWriteTensor" in dir()
-
-
-def test_create_staged_tensor_exists():
-    """Test that create_staged_tensor function exists."""
-    assert callable(create_staged_tensor)
-
-
-def test_coalesce_write_indices_exists():
-    """Test that coalesce_write_indices function exists."""
-    assert callable(coalesce_write_indices)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ResearchSynthesisAgent.description.md
@@ -79,7 +80,6 @@ external/internal sources and synthesizing complex findings.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 from typing import Any
 

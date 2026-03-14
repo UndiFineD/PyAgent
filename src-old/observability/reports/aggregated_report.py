@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,33 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from generate_agent_reports.py"""
-
-
-import time
-from dataclasses import dataclass, field
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .code_issue import CodeIssue
-
-__version__ = VERSION
-
-
-@dataclass
-class AggregatedReport:
-    """Report aggregated from multiple sources.
-
-    Attributes:
-        sources: Source report paths.
-        combined_issues: Combined issues from all sources.
-        summary: Aggregation summary.
-        generated_at: Generation timestamp.
-
-    """
-
-    sources: list[str] = field(default_factory=list)  # type: ignore[assignment]
-    combined_issues: list[CodeIssue] = field(default_factory=list)  # type: ignore[assignment]
-    summary: dict[str, Any] = field(default_factory=dict)  # type: ignore[assignment]
-    generated_at: float = field(default_factory=time.time)  # type: ignore[assignment]
+r"""Auto-extracted class from generate_agent_reports.py"""

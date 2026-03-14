@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,29 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py"""
-
-from dataclasses import dataclass, field
-
-from src.core.base.version import VERSION
-from src.logic.agents.cognitive.context.models.InheritanceMode import InheritanceMode
-
-__version__ = VERSION
-
-
-@dataclass
-class InheritedContext:
-    """Inherited context from parent file.
-
-    Attributes:
-        parent_path: Path to parent context file.
-        inherited_sections: Sections inherited from parent.
-        mode: Inheritance mode used.
-        overrides: Sections that override parent.
-
-    """
-
-    parent_path: str
-    inherited_sections: list[str] = field(default_factory=lambda: [])
-    mode: InheritanceMode = InheritanceMode.MERGE
-    overrides: list[str] = field(default_factory=lambda: [])
+r"""Auto-extracted class from agent_context.py"""

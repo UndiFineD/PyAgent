@@ -30,8 +30,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,27 +50,6 @@ from __future__ import annotations
 Bridge regarding Rust Acceleration.
 Interfaces with rust_core via PyO3 or CFFI.
 """
-
-
 class NeuralPruningEngine:
-    """Core engine regarding pruning neural connections in the swarm."""
-
-    def calculate_synaptic_weight_python(
-        self, inputs: list[float], weights: list[float]
-    ) -> float:
-        """Native Python implementation regarding weight calculation."""
-        return sum(map(lambda pair: pair[0] * pair[1], zip(inputs, weights)))
-
-    def calculate_synaptic_weight(
-        self, inputs: list[float], weights: list[float]
-    ) -> float:
-        """Accelerated implementation using Rust core.
-        Falls back to Python if Rust module is not compiled.
-        """
-        try:
-            # pylint: disable=import-outside-toplevel
-            import rust_core as rc
-
-            return rc.calculate_synaptic_weight(inputs, weights)  # type: ignore[attr-defined]
-        except (ImportError, AttributeError):
-            return self.calculate_synaptic_weight_python(inputs, weights)
+    """
+    """

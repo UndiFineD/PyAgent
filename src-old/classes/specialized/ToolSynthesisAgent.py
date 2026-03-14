@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ToolSynthesisAgent.description.md
@@ -76,7 +77,6 @@ recurring task patterns in the fleet.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 from pathlib import Path
 from typing import Any

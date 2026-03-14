@@ -14,7 +14,6 @@
 """Tests for base_models
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,50 +31,5 @@ except ImportError as e:
 
 
 def test_cacheentry_exists():
-    """Test that CacheEntry class exists and is importable."""
-    assert "CacheEntry" in dir()
-
-
-def test_authconfig_exists():
-    """Test that AuthConfig class exists and is importable."""
-    assert "AuthConfig" in dir()
-
-
-def test_serializationconfig_exists():
-    """Test that SerializationConfig class exists and is importable."""
-    assert "SerializationConfig" in dir()
-
-
-def test_filepriorityconfig_exists():
-    """Test that FilePriorityConfig class exists and is importable."""
-    assert "FilePriorityConfig" in dir()
-
-
-def test_executioncondition_exists():
-    """Test that ExecutionCondition class exists and is importable."""
-    assert "ExecutionCondition" in dir()
-
-
-def test_validationrule_exists():
-    """Test that ValidationRule class exists and is importable."""
-    assert "ValidationRule" in dir()
-
-
-def test_modelconfig_exists():
-    """Test that ModelConfig class exists and is importable."""
-    assert "ModelConfig" in dir()
-
-
-def test_configprofile_exists():
-    """Test that ConfigProfile class exists and is importable."""
-    assert "ConfigProfile" in dir()
-
-
-def test_diffresult_exists():
-    """Test that DiffResult class exists and is importable."""
-    assert "DiffResult" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

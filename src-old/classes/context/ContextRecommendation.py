@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/ContextRecommendation.description.md
@@ -84,28 +85,5 @@ LLM_CONTEXT_END
 
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from dataclasses import dataclass, field
-from typing import List
-
-
-@dataclass
-class ContextRecommendation:
-    """Recommendation for context improvement.
-
-    Attributes:
-        source_file: File used as reference.
-        suggested_sections: Sections to add.
-        reason: Why this recommendation was made.
-        confidence: Recommendation confidence.
-
-    """
-
-    source_file: str
-    suggested_sections: List[str] = field(default_factory=lambda: [])
-    reason: str = ""
-    confidence: float = 0.0
+r"""Auto-extracted class from agent_context.py"""

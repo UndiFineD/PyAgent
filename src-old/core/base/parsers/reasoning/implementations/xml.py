@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-"""
+r"""
 LLM_CONTEXT_START
 
 ## Source: src-old/core/base/parsers/reasoning/implementations/xml.description.md

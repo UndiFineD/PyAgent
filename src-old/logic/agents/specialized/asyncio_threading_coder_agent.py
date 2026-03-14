@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,8 +48,6 @@ from __future__ import annotations
 """
 Asyncio threading coder agent.py module.
 """
-
-
 from typing import Any
 
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -57,27 +55,5 @@ from src.core.base.lifecycle.version import VERSION
 
 
 class AsyncioThreadingCoderAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """Specialized Agent for high-concurrency coding tasks using asyncio and threading.
     """
-
-    def __init__(self, workspace_path: str) -> None:
-        super().__init__(workspace_path)
-        self.version = VERSION
-        self.specializations: list[Any] = []
-
-    async def think(self, prompt: str, fleet_state: dict[str, Any] | None = None) -> str:
-        """Analyze current fleet state and suggest configuration for parallel execution."""
-        _ = fleet_state
-        return f"Analyzing parallel execution strategy for: {prompt}"
-
-    async def run_speciation(self, fleet_state: dict[str, Any]) -> list[str]:
-        """Runs the speciation logic to generate new agent definitions."""
-        # Simulated speciation logic
-        new_agents = ["HyperParallelIOAgent", "MemoryCompressedAgent"]
-        _ = fleet_state
-        return new_agents
-
-    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Improves content using asyncio and threading patterns."""
-        _ = target_file
-        return f"Optimized {prompt} for asyncio/threading concurrency."
+    """

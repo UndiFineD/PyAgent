@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/agent/AgentPluginBase.description.md
 
@@ -91,8 +91,8 @@ Attributes:
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -108,83 +108,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent.py"""
-
-import logging
-from abc import ABC, abstractmethod
-from pathlib import Path
-from typing import Any
-
-from src.core.base.models import AgentHealthCheck, AgentPriority, HealthStatus
-from src.core.base.version import VERSION
-
-__version__ = VERSION
-
-
-class AgentPluginBase(ABC):
-    """Abstract base class for agent plugins.
-
-    Provides interface for third - party agents to integrate with
-    the agent orchestrator without modifying core code.
-
-    Attributes:
-        name: Plugin name.
-        priority: Execution priority.
-        config: Plugin configuration.
-
-    """
-
-    def __init__(
-        self,
-        name: str,
-        priority: AgentPriority = AgentPriority.NORMAL,
-        config: dict[str, Any] | None = None,
-    ) -> None:
-        """Initialize the plugin.
-
-        Args:
-            name: Unique plugin name.
-            priority: Execution priority.
-            config: Plugin - specific configuration.
-
-        """
-        self.name = name
-        self.priority = priority
-        self.config = config or {}
-        self.logger = logging.getLogger(f"plugin.{name}")
-
-    @abstractmethod
-    def run(self, file_path: Path, context: dict[str, Any]) -> bool:
-        """Execute the plugin on a file.
-
-        Args:
-            file_path: Path to the file to process.
-            context: Execution context with agent state.
-
-        Returns:
-            bool: True if changes were made, False otherwise.
-
-        """
-        raise NotImplementedError()
-
-    def setup(self) -> None:
-        """Called once when plugin is loaded. Override for initialization."""
-        pass
-
-    @abstractmethod
-    def shutdown(self) -> None:
-        """Handle graceful shutdown, cleanup resources, and terminate processes."""
-        raise NotImplementedError()
-
-    def teardown(self) -> None:
-        """Called once when plugin is unloaded. Override for cleanup."""
-        pass
-
-    def health_check(self) -> AgentHealthCheck:
-        """Check plugin health status.
-
-        Returns:
-            AgentHealthCheck: Health check result.
-
-        """
-        return AgentHealthCheck(agent_name=self.name, status=HealthStatus.HEALTHY)
+r"""Auto-extracted class from agent.py"""

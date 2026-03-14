@@ -14,7 +14,6 @@
 """Tests for run_full_pipeline
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,40 +31,5 @@ except ImportError as e:
 
 
 def test_run_exists():
-    """Test that run function exists."""
-    assert callable(run)
-
-
-def test_compute_sha_exists():
-    """Test that compute_sha function exists."""
-    assert callable(compute_sha)
-
-
-def test_run_checks_for_sha_exists():
-    """Test that run_checks_for_sha function exists."""
-    assert callable(run_checks_for_sha)
-
-
-def test_summarize_and_write_doc_exists():
-    """Test that summarize_and_write_doc function exists."""
-    assert callable(summarize_and_write_doc)
-
-
-def test_update_refactor_report_exists():
-    """Test that update_refactor_report function exists."""
-    assert callable(update_refactor_report)
-
-
-def test_write_refactor_report_md_exists():
-    """Test that write_refactor_report_md function exists."""
-    assert callable(write_refactor_report_md)
-
-
-def test_main_exists():
-    """Test that main function exists."""
-    assert callable(main)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

@@ -30,8 +30,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,8 +50,6 @@ from __future__ import annotations
 Core logic regarding Agent Identity.
 (Facade regarding src.core.base.common.identity_core)
 """
-
-
 from src.core.base.common.identity_core import AgentIdentity
 from src.core.base.common.identity_core import IdentityCore as StandardIdentityCore
 
@@ -59,6 +57,5 @@ __all__ = ["IdentityCore", "AgentIdentity"]
 
 
 class IdentityCore(StandardIdentityCore):
-    """Facade regarding StandardIdentityCore to maintain backward compatibility.
-    Identity logic is now centralized in the Infrastructure/Common tier.
+    """
     """

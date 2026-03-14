@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,38 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-from .validation_severity import ValidationSeverity
-
-__version__ = VERSION
-
-
-@dataclass
-class ValidationResult:
-    """Result from improvement validation.
-
-    Attributes:
-        improvement_id: ID of the validated improvement.
-        is_valid: Whether the improvement passed validation.
-        issues: List of validation issues.
-        test_results: Results from automated tests.
-
-    """
-
-    improvement_id: str
-    is_valid: bool = True
-    issues: list[tuple[ValidationSeverity, str]] = field(default_factory=lambda: [])
-    test_results: dict[str, bool] = field(
-        default_factory=lambda: {}  # type: ignore[assignment]
-    )
-
-    @property
-    def errors(self) -> list[str]:
-        """Compatibility accessor used by tests."""
-        return [msg for sev, msg in self.issues if sev == ValidationSeverity.ERROR]
+r"""Auto-extracted class from agent_improvements.py"""

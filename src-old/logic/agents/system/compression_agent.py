@@ -31,8 +31,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,8 +52,6 @@ from __future__ import annotations
 Specializes in context window optimization, recursive summarization,
 and minimizing token usage for long-running sub-swarm dialogues.
 """
-
-
 import logging
 
 from src.core.base.common.base_utilities import as_tool
@@ -64,56 +62,5 @@ __version__ = VERSION
 
 
 class CompressionAgent(BaseAgent):
-    """Agent that compresses multi-turn histories into essential state representations."""
-
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-        self._system_prompt = (
-            "You are the Compression Agent. Your goal is to maximize information density. "
-            "You summarize internal dialogues, extract core decision points, and remove redundant chatter. "
-            "Deliver a high-fidelity summary that fits within a small token budget."
-        )
-
-    @as_tool
-    async def compress_history(self, history: list[dict[str, str]], target_tokens: int = 500) -> str:
-        """Compresses a conversation history into a dense summary block."""
-        logging.info(f"CompressionAgent: Summarizing {len(history)} messages into ~{target_tokens} tokens.")
-
-        # Serialize history for prompting
-        history_text = "\n".join([f"{m.get('role', 'user')}: {m.get('content', '')}" for m in history])
-
-        prompt = (
-            f"Please compress the following conversation history into a dense summary. "
-            f"Focus on key decisions, tool outputs, and unresolved state. "
-            f"Target length: {target_tokens} vocabulary-rich tokens.\n\n"
-            f"HISTORY:\n{history_text}"
-        )
-
-        compressed_summary = await self.think(prompt)
-        return compressed_summary
-
-    @as_tool
-    async def extract_gist(self, complex_report: str) -> str:
-        """Extracts the 'gist' or 'bottom line' from a technical report."""
-        logging.info("CompressionAgent: Extracting gist from report.")
-        prompt = (
-            "Provide a one-paragraph 'gist' of this technical report. "
-            "Focus on the final conclusion.\n\n"
-            f"REPORT:\n{complex_report}"
-        )
-
-        return await self.think(prompt)
-
-    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        return "Context compression logic is active. Information density is optimal."
-
-
-if __name__ == "__main__":
-    from src.core.base.common.base_utilities import create_main_function
-
-    main = create_main_function(
-        CompressionAgent,
-        "Compression Agent",
-        "Token efficiency and summarization optimizer",
-    )
-    main()
+    """
+    """

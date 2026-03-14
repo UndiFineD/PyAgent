@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/RefactoringSuggestion.description.md
@@ -84,28 +85,5 @@ LLM_CONTEXT_END
 
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from dataclasses import dataclass, field
-from typing import List
-
-
-@dataclass
-class RefactoringSuggestion:
-    """Context-based refactoring suggestion.
-
-    Attributes:
-        suggestion_type: Type of refactoring.
-        description: What to refactor.
-        affected_files: Files affected by refactoring.
-        estimated_impact: Impact assessment.
-
-    """
-
-    suggestion_type: str
-    description: str
-    affected_files: List[str] = field(default_factory=lambda: [])
-    estimated_impact: str = "medium"
+r"""Auto-extracted class from agent_context.py"""

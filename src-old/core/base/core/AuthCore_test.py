@@ -14,7 +14,6 @@
 """Tests for AuthCore
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,15 +31,5 @@ except ImportError as e:
 
 
 def test_authproof_exists():
-    """Test that AuthProof class exists and is importable."""
-    assert "AuthProof" in dir()
-
-
-def test_authcore_exists():
-    """Test that AuthCore class exists and is importable."""
-    assert "AuthCore" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

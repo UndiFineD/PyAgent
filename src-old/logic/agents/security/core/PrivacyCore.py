@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/security/core/PrivacyCore.description.md
 
@@ -77,8 +77,8 @@ Provides high-speed text redaction and log scanning for PII.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Recovered and standardized for Phase 317
@@ -92,7 +92,6 @@ For more information, visit:
 
 No commands will be executed.
 """
-
 import logging
 import re
 from typing import Any
@@ -103,38 +102,5 @@ __version__ = VERSION
 
 
 class PrivacyCore:
-    """PrivacyCore recovered after Copilot CLI deprecation event.
-    Provides high-speed text redaction and log scanning for PII.
     """
-
-    def __init__(self, *args, **kwargs) -> None:
-        self.version = VERSION
-        logging.info("PrivacyCore initialized.")
-
-    @staticmethod
-    def redact_text(text: str) -> str:
-        """Redacts PII from text using regex patterns."""
-        if not text:
-            return text
-
-        patterns = {
-            r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+": "[EMAIL_REDACTED]",
-            r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b": "[IP_REDACTED]",
-            r"(api_key|secret_key|secret|token)\s*[:=]\s*[']?[a-zA-Z0-9_.~-]{16,}[']?": r"\1=[REDACTED]",
-        }
-
-        result = text
-        for pattern, replacement in patterns.items():
-            result = re.sub(pattern, replacement, result)
-        return result
-
-    @staticmethod
-    def scan_log_entry(data: Any) -> Any:
-        """Recursively scan and redact data structures."""
-        if isinstance(data, str):
-            return PrivacyCore.redact_text(data)
-        elif isinstance(data, list):
-            return [PrivacyCore.scan_log_entry(item) for item in data]
-        elif isinstance(data, dict):
-            return {k: PrivacyCore.scan_log_entry(v) for k, v in data.items()}
-        return data
+    """

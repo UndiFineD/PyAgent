@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/SeverityLevel.description.md
 
@@ -65,8 +65,8 @@ Severity level for issues.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -82,19 +82,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from generate_agent_reports.py"""
-
-from enum import Enum
-
-from src.core.base.version import VERSION
-
-__version__ = VERSION
-
-
-class SeverityLevel(Enum):
-    """Severity level for issues."""
-
-    INFO = 1
-    WARNING = 2
-    ERROR = 3
-    CRITICAL = 4
+r"""Auto-extracted class from generate_agent_reports.py"""

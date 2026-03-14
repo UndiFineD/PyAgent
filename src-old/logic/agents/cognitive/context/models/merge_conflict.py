@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,31 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py"""
-
-from dataclasses import dataclass
-
-from src.core.base.version import VERSION
-from src.logic.agents.cognitive.context.utils.ConflictResolution import (
-    ConflictResolution,
-)
-
-__version__ = VERSION
-
-
-@dataclass
-class MergeConflict:
-    """Merge conflict information.
-
-    Attributes:
-        section: Section with conflict.
-        ours: Our version of content.
-        theirs: Their version of content.
-        resolution: Applied resolution.
-
-    """
-
-    section: str
-    ours: str
-    theirs: str
-    resolution: ConflictResolution | None = None
+r"""Auto-extracted class from agent_context.py"""

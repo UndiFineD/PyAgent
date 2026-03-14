@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,31 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_changes.py"""
-
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-from .localization_language import LocalizationLanguage
-
-__version__ = VERSION
-
-
-@dataclass
-class LocalizedEntry:
-    """A changelog entry with localization support.
-
-    Attributes:
-        original_text: Original entry text.
-        language: Source language of the entry.
-        translations: Dictionary of translations by language code.
-        auto_translated: Whether translations were auto - generated.
-
-    """
-
-    original_text: str
-    language: LocalizationLanguage = LocalizationLanguage.ENGLISH
-    translations: dict[str, str] = field(default_factory=lambda: {})
-    auto_translated: bool = False
+r"""Auto-extracted class from agent_changes.py"""

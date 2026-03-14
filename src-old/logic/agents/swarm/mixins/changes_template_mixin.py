@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,8 +48,6 @@ from __future__ import annotations
 """
 Template management logic for ChangesAgent.
 """
-
-
 import logging
 from typing import List
 
@@ -57,60 +55,5 @@ from ..changelog_template import ChangelogTemplate
 
 
 class ChangesTemplateMixin:
-    """Mixin for managing changelog templates."""
-
-    # Default templates for different project types
-    DEFAULT_TEMPLATES: dict[str, ChangelogTemplate] = {
-        "python": ChangelogTemplate(
-            name="Python",
-            project_type="python",
-            sections=["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"],
-            include_contributors=True,
-        ),
-        "javascript": ChangelogTemplate(
-            name="JavaScript",
-            project_type="javascript",
-            sections=["Features", "Bug Fixes", "Breaking Changes", "Documentation"],
-        ),
-        "generic": ChangelogTemplate(
-            name="Generic",
-            project_type="generic",
-            sections=["Added", "Changed", "Fixed", "Removed"],
-        ),
-    }
-
-    def set_template(self, template_name: str) -> None:
-        """Set the changelog template by name."""
-        if template_name in self.DEFAULT_TEMPLATES:
-            self._template = self.DEFAULT_TEMPLATES[template_name]
-            logging.info(f"Using template: {self._template.name}")
-        else:
-            logging.warning(f"Unknown template '{template_name}', using generic")
-            self._template = self.DEFAULT_TEMPLATES["generic"]
-
-    def create_custom_template(
-        self,
-        name: str,
-        project_type: str,
-        sections: List[str],
-        header_format: str = "## [{version}] - {date}",
-        include_links: bool = True,
-        include_contributors: bool = False,
-    ) -> ChangelogTemplate:
-        """Create a custom changelog template."""
-        template = ChangelogTemplate(
-            name=name,
-            project_type=project_type,
-            sections=sections,
-            header_format=header_format,
-            include_links=include_links,
-            include_contributors=include_contributors,
-        )
-        self._template = template
-        return template
-
-    def get_template_sections(self) -> List[str]:
-        """Get the sections for the current template."""
-        if hasattr(self, "_template") and self._template:
-            return self._template.sections
-        return ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]
+    """
+    """

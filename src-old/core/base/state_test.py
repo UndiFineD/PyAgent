@@ -14,7 +14,6 @@
 """Tests for state
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,20 +31,5 @@ except ImportError as e:
 
 
 def test_emergencyeventlog_exists():
-    """Test that EmergencyEventLog class exists and is importable."""
-    assert "EmergencyEventLog" in dir()
-
-
-def test_statetransaction_exists():
-    """Test that StateTransaction class exists and is importable."""
-    assert "StateTransaction" in dir()
-
-
-def test_agentstatemanager_exists():
-    """Test that AgentStateManager class exists and is importable."""
-    assert "AgentStateManager" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

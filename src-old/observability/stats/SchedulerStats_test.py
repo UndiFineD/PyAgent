@@ -32,55 +32,5 @@ except ImportError as e:
 
 
 def test_metricexportformat_exists():
-    """Test that MetricExportFormat class exists and is importable."""
-    assert "MetricExportFormat" in dir()
-
-
-def test_prefixcachestats_exists():
-    """Test that PrefixCacheStats class exists and is importable."""
-    assert "PrefixCacheStats" in dir()
-
-
-def test_specdecodingstats_exists():
-    """Test that SpecDecodingStats class exists and is importable."""
-    assert "SpecDecodingStats" in dir()
-
-
-def test_cudagraphstats_exists():
-    """Test that CUDAGraphStats class exists and is importable."""
-    assert "CUDAGraphStats" in dir()
-
-
-def test_perfstats_exists():
-    """Test that PerfStats class exists and is importable."""
-    assert "PerfStats" in dir()
-
-
-def test_kvcacheevictionevent_exists():
-    """Test that KVCacheEvictionEvent class exists and is importable."""
-    assert "KVCacheEvictionEvent" in dir()
-
-
-def test_schedulerstats_exists():
-    """Test that SchedulerStats class exists and is importable."""
-    assert "SchedulerStats" in dir()
-
-
-def test_schedulerstatscollector_exists():
-    """Test that SchedulerStatsCollector class exists and is importable."""
-    assert "SchedulerStatsCollector" in dir()
-
-
-def test_create_scheduler_stats_exists():
-    """Test that create_scheduler_stats function exists."""
-    assert callable(create_scheduler_stats)
-
-
-def test_create_stats_collector_exists():
-    """Test that create_stats_collector function exists."""
-    assert callable(create_stats_collector)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

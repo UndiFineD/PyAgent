@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/core/TracingCore.description.md
@@ -73,7 +74,6 @@ It prepares trace data for OpenTelemetry (OTel) exporters.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 import time
 from typing import Any

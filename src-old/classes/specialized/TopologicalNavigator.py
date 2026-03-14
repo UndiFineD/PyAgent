@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/TopologicalNavigator.description.md
@@ -76,7 +77,6 @@ and determines the impact of changes using graph-based dependency analysis.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -95,7 +95,6 @@ from __future__ import annotations
 """Agent specializing in Topological Context Navigation.
 Builds a semantic map of the codebase for graph-based dependency exploration.
 """
-
 import os
 from pathlib import Path
 
@@ -112,19 +111,5 @@ __version__ = VERSION
 class TopologicalNavigator(
     BaseAgent, MapBuilderMixin, GraphAnalysisMixin, FederationMixin
 ):
-    """Tier 2 (Cognitive Logic) - Topological Navigator: Maps code relationships
-    and determines the impact of changes using graph-based dependency analysis.
     """
-
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-        self.graph: dict[str, set[str]] = {}
-        self.reverse_graph: dict[str, set[str]] = {}
-        self.root_dir = Path(os.getcwd())
-        self._system_prompt = (
-            "You are the Topological Context Navigator. "
-            "You map relationships between code entities (classes, functions, modules) "
-            "to determine the impact of changes across the codebase."
-        )
-
-    # Logic delegated to mixins
+    """

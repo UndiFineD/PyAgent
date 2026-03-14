@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,26 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_coder.py"""
-
-
-from enum import Enum
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-class AccessibilityIssueType(Enum):
-    """Types of accessibility issues in UI code."""
-
-    MISSING_ALT_TEXT = "missing_alt_text"
-    LOW_COLOR_CONTRAST = "low_color_contrast"
-    MISSING_LABEL = "missing_label"
-    KEYBOARD_NAVIGATION = "keyboard_navigation"
-    FOCUS_MANAGEMENT = "focus_management"
-    ARIA_MISSING = "aria_missing"
-    ARIA_INVALID = "aria_invalid"
-    HEADING_HIERARCHY = "heading_hierarchy"
-    FORM_VALIDATION = "form_validation"
-    SEMANTIC_HTML = "semantic_html"
+r"""Auto-extracted class from agent_coder.py"""

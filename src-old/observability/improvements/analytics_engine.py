@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,31 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-from src.core.base.lifecycle.version import VERSION
-
-from .completion_trend import CompletionTrend
-from .improvement import Improvement
-
-__version__ = VERSION
-
-
-class AnalyticsEngine:
-    """Very small analytics engine used by tests."""
-
-    def __init__(self) -> None:
-        self._completed: list[Improvement] = []
-
-    def record_completion(self, improvement: Improvement) -> None:
-        self._completed.append(improvement)
-
-    def get_completion_trend(self, period_days: int = 30) -> CompletionTrend:
-        return CompletionTrend(total_completed=len(self._completed))
-
-    def calculate_velocity(self, sprint_days: int = 14) -> float:
-        total_points = 0.0
-        for imp in self._completed:
-            total_points += float(getattr(imp, "story_points", 0) or 0)
-        return total_points / (float(sprint_days) / 7.0) if sprint_days else 0.0
+r"""Auto-extracted class from agent_improvements.py"""

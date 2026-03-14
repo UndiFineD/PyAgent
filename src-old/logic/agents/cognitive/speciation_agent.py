@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -110,7 +110,6 @@ class {new_agent_name}(BaseAgent):
         super().__init__(workspace_path)
         self._system_prompt = \"Specialized logic for {niche_domain}\"
 """
-
         # Save to file atomically
         temp_path = output_path.with_suffix(".tmp")
         try:
@@ -135,71 +134,5 @@ class {new_agent_name}(BaseAgent):
     def detect_red_queen_stagnation(
         self, agent_a_name: str, agent_b_name: str
     ) -> dict[str, Any]:
-        """Detects if two agents are converging in their specialized roles (Red Queen stagnation).
-        If similarity is > 80%, it recommends a divergence event.
         """
-        # In a real scenario, we'd load both classes and compare _system_prompts.
-        # For simulation, we use a placeholder similarity check.
-        similarity = (
-            0.85 if "Coder" in agent_a_name and "Coder" in agent_b_name else 0.3
-        )
-
-        stagnated = similarity > 0.8
-        recommendation = (
-            "Divergence required" if stagnated else "Healthy niche separation"
-        )
-
-        return {
-            "similarity": similarity,
-            "stagnated": stagnated,
-            "recommendation": recommendation,
-            "action": "trigger_divergence" if stagnated else "none",
-        }
-
-    @as_tool
-    def trigger_divergence(self, agent_name: str) -> str:
-        """Forces an agent to diverge its specialization to avoid redundant evolution.
-        Mutates the system prompt to explore a more distant niche.
         """
-        logging.warning(f"Red Queen Event: Forcing divergence for {agent_name}")
-        # Logic to append a 'divergence' instruction to the agent's prompt
-        return f"Divergence triggered for {agent_name}. Mutation applied to explore orthogonal capabilities."
-
-    def _generate_test_for_agent(self, agent_name: str, agent_path: Path) -> None:
-        """Generates a boilerplate unit test for the newly created agent."""
-        test_dir = Path("tests/specialists")
-        test_dir.mkdir(parents=True, exist_ok=True)
-        test_path = test_dir / f"test_{agent_name.lower()}_UNIT.py"
-
-        # Determine relative import path
-        rel_import = (
-            str(agent_path.with_suffix("")).replace(os.path.sep, ".").replace("/", ".")
-        )
-        if rel_import.startswith("src."):
-            pass  # Already correct
-        else:
-            rel_import = f"src.{rel_import}"
-
-        test_code = f"""
-        import unittest
-        import os
-        from {rel_import} import {agent_name}
-        from src.core.base.lifecycle.version import VERSION
-__version__ = VERSION
-
-class Test{agent_name}(unittest.TestCase):
-    def setUp(self) -> None:
-        self.agent = {agent_name}("dummy_path.py")
-
-    def test_initialization(self) -> None:
-        self.assertIsNotNone(self.agent)
-        self.assertIn("{agent_name}", self.agent.__class__.__name__)
-
-if __name__ == "__main__":
-    unittest.main()
-"""
-        with open(test_path, "w", encoding="utf-8") as f:
-            f.write(test_code.strip())
-        logging.info(
-            f"SpeciationAgent: Generated unit test for {agent_name} at {test_path}"
-        )

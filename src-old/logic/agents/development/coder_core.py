@@ -30,8 +30,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,7 +51,6 @@ from __future__ import annotations
 Computational core for code analysis, metrics, and quality assessment.
 Designed for high-performance rule checking with future Rust integration.
 """
-
 # pylint: disable=too-many-ancestors
 
 
@@ -121,74 +120,5 @@ class CoderCore(
     CoderDocMixin,
     CoderValidationMixin,
 ):
-    """Core logic for CoderAgent, target for Rust conversion."""
-
-    def __init__(
-        self,
-        language: CodeLanguage,
-        workspace_root: str | None = None,
-        recorder: Optional[ContextRecorderInterface] = None,
-    ) -> None:
-        LogicCore.__init__(self)  # Ensure proper base init
-        self.language = language
-        self.workspace_root = workspace_root
-        self.recorder = recorder
-        try:
-            import rust_core
-
-            self._rust_core = rust_core.CoderCore(str(language))  # type: ignore[attr-defined]
-        except (ImportError, AttributeError):
-            self._rust_core = None
-
-    def calculate_metrics(self, content: str) -> CodeMetrics:
-        """Analyze code structure and compute metrics."""
-        from src.core.rust_bridge import RustBridge
-
-        raw_metrics = RustBridge.calculate_metrics(content)
-        if raw_metrics:
-            metrics = CodeMetrics()
-            metrics.lines_of_code = int(raw_metrics.get("lines_of_code", 0.0))
-            metrics.lines_of_comments = int(raw_metrics.get("lines_of_comments", 0.0))
-            metrics.blank_lines = int(raw_metrics.get("blank_lines", 0.0))
-            metrics.cyclomatic_complexity = int(raw_metrics.get("cyclomatic_complexity", 1.0))
-            metrics.function_count = int(raw_metrics.get("function_count", 0.0))
-            metrics.class_count = int(raw_metrics.get("class_count", 0.0))
-            metrics.import_count = int(raw_metrics.get("import_count", 0.0))
-            metrics.maintainability_index = raw_metrics.get("maintainability_index", 100.0)
-            return metrics
-
-        lines = content.split("\n")
-        metrics = CodeMetrics()
-
-        # Basic line counts
-        for line in lines:
-            stripped = line.strip()
-            if not stripped:
-                metrics.blank_lines += 1
-            elif stripped.startswith("#") or stripped.startswith("//"):
-                metrics.lines_of_comments += 1
-            else:
-                metrics.lines_of_code += 1
-
-        # Language-specific deep analysis
-        if self.language == CodeLanguage.PYTHON:
-            try:
-                tree = ast.parse(content)
-                metrics = self._analyze_python_ast(tree, metrics)
-            except SyntaxError:
-                pass
-
-        # General Maintainability Index
-        metrics.maintainability_index = self.compute_maintainability_index(metrics)
-
-        return metrics
-
-    def _calculate_cyclomatic_complexity(self, node: ast.AST) -> int:
-        """Calculate cyclomatic complexity for a function node."""
-        cc = 1
-        for child in ast.walk(node):
-            if isinstance(child, (ast.If, ast.While, ast.For, ast.ExceptHandler)):
-                cc += 1
-            elif isinstance(child, ast.BoolOp):
-                cc += len(child.values) - 1
-        return cc
+    """
+    """

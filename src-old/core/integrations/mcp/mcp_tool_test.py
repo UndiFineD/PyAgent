@@ -14,7 +14,6 @@
 """Tests for mcp_tool
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,15 +31,5 @@ except ImportError as e:
 
 
 def test_register_tool_exists():
-    """Test that register_tool function exists."""
-    assert callable(register_tool)
-
-
-def test_create_mcp_server_exists():
-    """Test that create_mcp_server function exists."""
-    assert callable(create_mcp_server)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/MemoryEngine.description.md
 
@@ -73,8 +73,8 @@ Stores and retrieves historical agent contexts and lessons learned.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -90,29 +90,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Engine for persistent episodic memory of agent actions and outcomes."""
-
-from pathlib import Path
-from typing import Any
-
-from src.core.base.Version import VERSION
-from src.logic.agents.cognitive.context.engines.MemoryCore import MemoryCore
-
-from .memory_mixins.MemoryEpisodeMixin import MemoryEpisodeMixin
-from .memory_mixins.MemorySearchMixin import MemorySearchMixin
-from .memory_mixins.MemoryStorageMixin import MemoryStorageMixin
-
-__version__ = VERSION
-
-
-class MemoryEngine(MemoryStorageMixin, MemoryEpisodeMixin, MemorySearchMixin):
-    """Stores and retrieves historical agent contexts and lessons learned."""
-
-    def __init__(self, workspace_root: str) -> None:
-        self.workspace_root = Path(workspace_root)
-        self.memory_file = self.workspace_root / ".agent_memory.json"
-        self.db_path = self.workspace_root / "data/db/.agent_memory_db"
-        self.episodes: list[dict[str, Any]] = []
-        self._collection = None
-        self.core = MemoryCore()
-        self.load()
+r"""Engine for persistent episodic memory of agent actions and outcomes."""

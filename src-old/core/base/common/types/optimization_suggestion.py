@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,34 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_coder.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.common.types.optimization_type import OptimizationType
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class OptimizationSuggestion:
-    """A suggestion for code optimization.
-
-    Attributes:
-        type: Type of optimization.
-        description: What to optimize.
-        impact: Expected performance impact (low / medium / high).
-        code_location: File and line information.
-        before_snippet: Code before optimization.
-        after_snippet: Suggested optimized code.
-
-    """
-
-    type: OptimizationType
-    description: str
-    impact: str
-    code_location: str
-    before_snippet: str = ""
-    after_snippet: str = ""
+r"""Auto-extracted class from agent_coder.py"""

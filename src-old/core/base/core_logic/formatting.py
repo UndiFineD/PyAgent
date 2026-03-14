@@ -1,5 +1,5 @@
 # Copyright 2026 PyAgent Authors
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/core_logic/formatting.description.md
 

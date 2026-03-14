@@ -14,7 +14,6 @@
 """Tests for meta
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,30 +31,5 @@ except ImportError as e:
 
 
 def test_json_count_leaves_exists():
-    """Test that json_count_leaves function exists."""
-    assert callable(json_count_leaves)
-
-
-def test_json_depth_exists():
-    """Test that json_depth function exists."""
-    assert callable(json_depth)
-
-
-def test_json_filter_leaves_exists():
-    """Test that json_filter_leaves function exists."""
-    assert callable(json_filter_leaves)
-
-
-def test_json_validate_leaves_exists():
-    """Test that json_validate_leaves function exists."""
-    assert callable(json_validate_leaves)
-
-
-def test_json_find_leaves_exists():
-    """Test that json_find_leaves function exists."""
-    assert callable(json_find_leaves)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

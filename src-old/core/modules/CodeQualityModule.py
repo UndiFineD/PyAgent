@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/modules/CodeQualityModule.description.md
@@ -81,7 +82,6 @@ Migrated from CodeQualityCore.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");

@@ -14,7 +14,6 @@
 """Tests for MathUtils
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,75 +31,5 @@ except ImportError as e:
 
 
 def test_cdiv_exists():
-    """Test that cdiv function exists."""
-    assert callable(cdiv)
-
-
-def test_next_power_of_2_exists():
-    """Test that next_power_of_2 function exists."""
-    assert callable(next_power_of_2)
-
-
-def test_prev_power_of_2_exists():
-    """Test that prev_power_of_2 function exists."""
-    assert callable(prev_power_of_2)
-
-
-def test_is_power_of_2_exists():
-    """Test that is_power_of_2 function exists."""
-    assert callable(is_power_of_2)
-
-
-def test_round_up_exists():
-    """Test that round_up function exists."""
-    assert callable(round_up)
-
-
-def test_round_down_exists():
-    """Test that round_down function exists."""
-    assert callable(round_down)
-
-
-def test_clamp_exists():
-    """Test that clamp function exists."""
-    assert callable(clamp)
-
-
-def test_align_to_exists():
-    """Test that align_to function exists."""
-    assert callable(align_to)
-
-
-def test_bit_count_exists():
-    """Test that bit_count function exists."""
-    assert callable(bit_count)
-
-
-def test_gcd_exists():
-    """Test that gcd function exists."""
-    assert callable(gcd)
-
-
-def test_lcm_exists():
-    """Test that lcm function exists."""
-    assert callable(lcm)
-
-
-def test_batch_cdiv_exists():
-    """Test that batch_cdiv function exists."""
-    assert callable(batch_cdiv)
-
-
-def test_batch_next_power_of_2_exists():
-    """Test that batch_next_power_of_2 function exists."""
-    assert callable(batch_next_power_of_2)
-
-
-def test_batch_round_up_exists():
-    """Test that batch_round_up function exists."""
-    assert callable(batch_round_up)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

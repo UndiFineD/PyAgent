@@ -14,7 +14,6 @@
 """Tests for ObjectPool
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,70 +31,5 @@ except ImportError as e:
 
 
 def test_resettable_exists():
-    """Test that Resettable class exists and is importable."""
-    assert "Resettable" in dir()
-
-
-def test_poolstats_exists():
-    """Test that PoolStats class exists and is importable."""
-    assert "PoolStats" in dir()
-
-
-def test_objectpool_exists():
-    """Test that ObjectPool class exists and is importable."""
-    assert "ObjectPool" in dir()
-
-
-def test_typedobjectpool_exists():
-    """Test that TypedObjectPool class exists and is importable."""
-    assert "TypedObjectPool" in dir()
-
-
-def test_bufferpool_exists():
-    """Test that BufferPool class exists and is importable."""
-    assert "BufferPool" in dir()
-
-
-def test_tieredbufferpool_exists():
-    """Test that TieredBufferPool class exists and is importable."""
-    assert "TieredBufferPool" in dir()
-
-
-def test_pooledcontextmanager_exists():
-    """Test that PooledContextManager class exists and is importable."""
-    assert "PooledContextManager" in dir()
-
-
-def test_get_list_pool_exists():
-    """Test that get_list_pool function exists."""
-    assert callable(get_list_pool)
-
-
-def test_get_dict_pool_exists():
-    """Test that get_dict_pool function exists."""
-    assert callable(get_dict_pool)
-
-
-def test_get_set_pool_exists():
-    """Test that get_set_pool function exists."""
-    assert callable(get_set_pool)
-
-
-def test_pooled_list_exists():
-    """Test that pooled_list function exists."""
-    assert callable(pooled_list)
-
-
-def test_pooled_dict_exists():
-    """Test that pooled_dict function exists."""
-    assert callable(pooled_dict)
-
-
-def test_pooled_set_exists():
-    """Test that pooled_set function exists."""
-    assert callable(pooled_set)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,8 +48,6 @@ from __future__ import annotations
 """
 Orchestrator diff mixin module.
 """
-
-
 import logging
 from pathlib import Path
 
@@ -58,35 +56,5 @@ from src.core.base.common.utils.diff_generator import DiffGenerator
 
 
 class OrchestratorDiffMixin:
-    """Diff preview methods for OrchestratorAgent."""
-
-    def enable_diff_preview(
-        self, output_format: DiffOutputFormat = DiffOutputFormat.UNIFIED
-    ) -> None:
-        """Enable diff preview mode."""
-        self.diff_generator = DiffGenerator(output_format)
-        logging.info(f"Diff preview enabled (format: {output_format.name})")
-
-    def preview_changes(self, file_path: Path, new_content: str) -> str:
-        """Preview changes to a file without applying them."""
-        if not hasattr(self, "diff_generator"):
-            self.diff_generator = DiffGenerator()
-        original = file_path.read_text(encoding="utf-8") if file_path.exists() else ""
-        diff_gen = self.diff_generator
-        return diff_gen.generate_diff(original, new_content, str(file_path))
-
-    def show_pending_diffs(self) -> None:
-        """Show all pending diffs for dry-run mode."""
-        if not hasattr(self, "pending_diffs"):
-            logging.info("No pending changes.")
-            return
-
-        pending_diffs = self.pending_diffs
-        logging.info(f"=== Pending Changes ({len(pending_diffs)} files) ===")
-        for diff in pending_diffs:
-            logging.info(f"--- {diff.file_path} ---")
-            logging.info(f"  +{diff.additions} -{diff.deletions}")
-            if hasattr(self, "diff_generator"):
-                diff_gen = self.diff_generator
-                diff_gen.print_diff(diff)
-            logging.info("")
+    """
+    """

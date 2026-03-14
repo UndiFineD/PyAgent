@@ -31,8 +31,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,8 +52,6 @@ from __future__ import annotations
 Specializes in parsing, summarizing, and indexing external research links,
 blog posts, and technical papers into the agent's knowledge base.
 """
-
-
 import json
 from typing import Any
 
@@ -65,73 +63,5 @@ __version__ = VERSION
 
 
 class ResourceCurationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """Manages the 'Good Read Unit' and research link lifecycle."""
-
-    def __init__(self, file_path: str = ".") -> None:
-        super().__init__(file_path)
-        self.library_path = "data/memory/knowledge_exports/research_library.json"
-        self._system_prompt = (
-            "You are the Resource Curation Agent. Your goal is to keep the fleet's knowledge "
-            "up-to-date by parsing research links, extracting actionable insights, and "
-            "categorizing content for the KnowledgeAgent and FeatureStoreAgent."
-        )
-
-    @as_tool
-    def add_resource(
-        self,
-        url: str,
-        title: str,
-        summary: str | None = None,
-        tags: list[str] | None = None,
-    ) -> str:
-        """Adds a new research resource to the library."""
-        resource = {
-            "url": url,
-            "title": title,
-            "summary": summary or "Pending automated summary",
-            "tags": tags or [],
-            "status": "Archived",
-        }
-
-        try:
-            library = self._load_library()
-            library.append(resource)
-            self._save_library(library)
-            return f"Resource '{title}' added to the Research Library."
-        except (IOError, json.JSONDecodeError) as e:
-            return f"Failed to add resource: {e}"
-
-    @as_tool
-    def process_research_queue(self, urls: list[str]) -> str:
-        """Bulk processes a list of discovery URLs."""
-        # Simulated extraction logic
-        return f"Processed {len(urls)} research items. Recommendations sent to KnowledgeAgent."
-
-    def _load_library(self) -> list[dict[str, Any]]:
-        import os  # pylint: disable=import-outside-toplevel
-
-        if not os.path.exists(self.library_path):
-            return []
-
-        with open(self.library_path, encoding="utf-8") as f:
-            return json.load(f)
-
-    def _save_library(self, data: list[dict[str, Any]]) -> None:
-        with open(self.library_path, "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=4)
-
-    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Updates the library summary (Phase 284: Ensure async)."""
-        _ = (prompt, target_file)
-        return f"Library currently contains {len(self._load_library())} curated research units."
-
-
-if __name__ == "__main__":
-    from src.core.base.common.base_utilities import create_main_function
-
-    main = create_main_function(
-        ResourceCurationAgent,
-        "Resource Curation Agent",
-        "Curating research and documentation",
-    )
-    main()
+    """
+    """

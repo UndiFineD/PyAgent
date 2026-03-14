@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,37 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-from .effort_estimate import EffortEstimate
-from .improvement_category import ImprovementCategory
-from .improvement_priority import ImprovementPriority
-from .improvement_status import ImprovementStatus
-
-__version__ = VERSION
-
-
-@dataclass
-class Improvement:
-    """A single improvement suggestion."""
-
-    id: str
-    title: str
-    description: str
-    file_path: str
-    priority: ImprovementPriority = ImprovementPriority.MEDIUM
-    category: ImprovementCategory = ImprovementCategory.OTHER
-    status: ImprovementStatus = ImprovementStatus.PROPOSED
-    effort: EffortEstimate = EffortEstimate.MEDIUM
-    impact_score: float = 50.0
-    created_at: str = ""
-    updated_at: str = ""
-    assignee: str | None = None
-    tags: list[str] = field(default_factory=list)  # type: ignore[assignment]
-    dependencies: list[str] = field(default_factory=list)  # type: ignore[assignment]
-    votes: int = 0
+r"""Auto-extracted class from agent_improvements.py"""

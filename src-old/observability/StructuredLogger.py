@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/StructuredLogger.description.md
@@ -88,7 +89,6 @@ Phase 277: Added log hygiene with automated GZIP compression.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -134,137 +134,5 @@ __version__ = VERSION
 
 
 class StructuredLogger:
-    """JSON logger for PyAgent swarm observability.
-    Phase 277: Added log hygiene with automated GZIP compression.
     """
-
-    # regex for sensitive data masking (Phase 227)
-    SENSITIVE_PATTERNS = [
-        re.compile(r"sk-[a-zA-Z0-9]{32,}"),  # OpenAI Keys
-        re.compile(r"Bearer\s+[a-zA-Z0-9\-\._~+/]+=*"),  # Bearer Tokens
-        re.compile(r"gh[ps]_[a-zA-Z0-9]{36}"),  # GitHub Tokens
-    ]
-
-    def __init__(
-        self,
-        agent_id: str,
-        trace_id: str | None = None,
-        log_file: str = "data/logs/structured.json",
-    ) -> None:
-        self.agent_id = agent_id
-        self.trace_id = trace_id or f"trace_{int(time.time())}"
-        self.log_file = Path(log_file)
-        self._ensure_log_dir()
-
-    def _ensure_log_dir(self) -> None:
-        self.log_file.parent.mkdir(parents=True, exist_ok=True)
-        # Phase 277: Compress if > 100MB
-        if self.log_file.exists() and self.log_file.stat().st_size > 100 * 1024 * 1024:
-            self._compress_logs()
-
-    def _compress_logs(self) -> None:
-        """Compresses current log file to .json.gz (Phase 277)."""
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        compressed_file = self.log_file.with_name(
-            f"{self.log_file.stem}_{timestamp}.json.gz"
-        )
-        logging.info(
-            f"StructuredLogger: Compressing log file ({self.log_file.name}) to {compressed_file.name}"
-        )
-
-        try:
-            with open(self.log_file, "rb") as f_in:
-                with gzip.open(compressed_file, "wb") as f_out:
-                    shutil.copyfileobj(f_in, f_out)
-            self.log_file.unlink()  # Delete original
-        except Exception as e:
-            logging.error(f"StructuredLogger compression failed: {e}")
-
-    def _mask_sensitive(self, text: str) -> str:
-        """Automated masking for API keys and tokens (Phase 227)."""
-        # Use Rust acceleration when available (2-3x faster)
-        if _RUST_ACCEL and rc is not None:
-            try:
-                return rc.mask_sensitive_logs(text)
-            except Exception:
-                pass
-        # Python fallback
-        masked = text
-        for pattern in self.SENSITIVE_PATTERNS:
-            masked = pattern.sub("[REDACTED]", masked)
-        return masked
-
-    def log(self, level: str, message: str, **kwargs: Any) -> None:
-        """Log a structured entry."""
-        timestamp = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-
-        # Fast path: Use Rust for building the log entry (includes masking)
-        if _RUST_ACCEL and rc is not None:
-            try:
-                extra_json = json.dumps(kwargs) if kwargs else None
-                entry_json = rc.build_log_entry_rust(
-                    timestamp,
-                    self.agent_id,
-                    self.trace_id,
-                    level,
-                    message,
-                    extra_json,
-                )
-                # Console logging (quick)
-                std_logger = logging.getLogger(f"PyAgent.{self.agent_id}")
-                log_func = getattr(std_logger, level.lower(), std_logger.info)
-                log_func(f"[{self.agent_id}] {message[:200]}")
-
-                # File write
-                try:
-                    with open(self.log_file, "a", encoding="utf-8") as f:
-                        f.write(entry_json + "\n")
-                except Exception as e:
-                    logging.error(f"StructuredLogger failed to write: {e}")
-                return
-            except Exception:
-                pass  # Fall through to Python path
-
-        # Python fallback path
-        clean_message = self._mask_sensitive(message)
-        clean_kwargs = {
-            k: (self._mask_sensitive(str(v)) if isinstance(v, str) else v)
-            for k, v in kwargs.items()
-        }
-
-        entry = {
-            "timestamp": timestamp,
-            "agent_id": self.agent_id,
-            "trace_id": self.trace_id,
-            "level": level.upper(),
-            "message": clean_message,
-            **clean_kwargs,
-        }
-
-        # Also log to standard logging for console visibility
-        std_logger = logging.getLogger(f"PyAgent.{self.agent_id}")
-        log_func = getattr(std_logger, level.lower(), std_logger.info)
-        log_func(
-            f"[{self.agent_id}] {clean_message} {json.dumps(clean_kwargs) if clean_kwargs else ''}"
-        )
-
-        try:
-            with open(self.log_file, "a", encoding="utf-8") as f:
-                f.write(json.dumps(entry) + "\n")
-        except Exception as e:
-            logging.error(f"StructuredLogger failed to write: {e}")
-
-    def info(self, message: str, **kwargs: Any) -> None:
-        self.log("info", message, **kwargs)
-
-    def error(self, message: str, **kwargs: Any) -> None:
-        self.log("error", message, **kwargs)
-
-    def warning(self, message: str, **kwargs: Any) -> None:
-        self.log("warning", message, **kwargs)
-
-    def debug(self, message: str, **kwargs: Any) -> None:
-        self.log("debug", message, **kwargs)
-
-    def success(self, message: str, **kwargs: Any) -> None:
-        self.log("success", message, **kwargs)
+    """

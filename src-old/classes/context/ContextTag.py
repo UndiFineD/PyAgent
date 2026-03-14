@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/ContextTag.description.md
@@ -77,20 +78,5 @@ A tag for categorizing context.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from dataclasses import dataclass
-from typing import Optional
-
-
-@dataclass
-class ContextTag:
-    """A tag for categorizing context."""
-
-    name: str
-    description: str = ""
-    color: str = "#666666"
-    parent: Optional[str] = None
+r"""Auto-extracted class from agent_context.py"""

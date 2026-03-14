@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/base_agent/managers.description.md
 
@@ -73,8 +73,8 @@ Python module containing implementation for managers.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -88,5 +88,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Manager and utility classes for BaseAgent (Facade)."""
-
+r"""Manager and utility classes for BaseAgent (Facade)."""

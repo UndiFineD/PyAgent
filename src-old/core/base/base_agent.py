@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/base_agent.description.md
 
@@ -60,8 +60,8 @@ external code and tests.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -76,13 +76,9 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Compatibility shim for older imports expecting `src.core.base.base_agent`.
+r"""Compatibility shim for older imports expecting `src.core.base.base_agent`.
 
 This module re-exports the modern BaseAgent implementation located under
 `src.core.base.lifecycle.base_agent` to maintain backward compatibility with
 external code and tests.
 """
-
-from src.core.base.lifecycle.base_agent import BaseAgent  # noqa: F401
-
-__all__ = ["BaseAgent"]

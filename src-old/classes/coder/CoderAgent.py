@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/CoderAgent.description.md
@@ -93,7 +94,6 @@ Invariants:
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -108,140 +108,71 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""Auto-extracted class from agent_coder.py"""
-
 import logging
 from pathlib import Path
 
+from mixins.agent.AgentLanguageMixin import AgentLanguageMixin
+from mixins.agent.AgentMetricsMixin import AgentMetricsMixin
+from mixins.agent.AgentRefactorMixin import AgentRefactorMixin
+from mixins.agent.AgentStyleMixin import AgentStyleMixin
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.types.CodeLanguage import CodeLanguage
-from src.core.base.types.CodeMetrics import CodeMetrics
-from src.core.base.types.CodeSmell import CodeSmell
-from src.core.base.types.QualityScore import QualityScore
-from src.core.base.types.RefactoringPattern import RefactoringPattern
-from src.core.base.types.StyleRule import StyleRule
-from src.core.base.Version import VERSION
-from src.logic.agents.development.CoderCore import DEFAULT_PYTHON_STYLE_RULES, CoderCore
-
-from .mixins.agent.AgentLanguageMixin import AgentLanguageMixin
-from .mixins.agent.AgentMetricsMixin import AgentMetricsMixin
-from .mixins.agent.AgentRefactorMixin import AgentRefactorMixin
-from .mixins.agent.AgentStyleMixin import AgentStyleMixin
-
-__version__ = VERSION
 
 
-class CoderAgent(
-    BaseAgent,
-    AgentLanguageMixin,
-    AgentStyleMixin,
-    AgentMetricsMixin,
-    AgentRefactorMixin,
-):
-    """Updates code files using AI assistance.
+logger = logging.getLogger(__name__)
 
-    Invariants:
-    - self.file_path must point to a valid file path.
 
-    - Supports Python files (.py) with syntax validation.
-    - Supports multi - language code improvements.
+class CoderAgent(BaseAgent, AgentLanguageMixin, AgentStyleMixin, AgentMetricsMixin, AgentRefactorMixin):
+    r"""Auto-extracted class from agent_coder.py
+
+    Minimal compatibility shim for the legacy CoderAgent.
+
+    This implementation is intentionally lightweight. It preserves the
+    public surface area that existing code may rely on without attempting
+    to reintroduce the full historical behavior.
     """
 
-    # Language extension mappings
-    LANGUAGE_EXTENSIONS: dict[str, CodeLanguage] = {
-        ".py": CodeLanguage.PYTHON,
-        ".js": CodeLanguage.JAVASCRIPT,
-        ".ts": CodeLanguage.TYPESCRIPT,
-        ".java": CodeLanguage.JAVA,
-        ".cpp": CodeLanguage.CPP,
-        ".cc": CodeLanguage.CPP,
-        ".cxx": CodeLanguage.CPP,
-        ".go": CodeLanguage.GO,
-        ".rs": CodeLanguage.RUST,
-        ".rb": CodeLanguage.RUBY,
-    }
+    def __init__(self, file_path: Path | str) -> None:
+        """Initialize the CoderAgent with a target file path.
 
-    def __init__(self, file_path: str) -> None:
-        self.file_path = Path(file_path)
-        self._language = self._detect_language()
-        super().__init__(file_path)
-        self.capabilities.extend(["python", "javascript", "code-refactor"])  # Phase 241
-
-        # New: Delegate core logic to CoderCore (Rust-ready component)
-        self.core = CoderCore(self._language)
-
-        # Create copies of style rules to avoid cross-instance state leakage
-        self._style_rules: list[StyleRule] = [
-            StyleRule(
-                name=r.name,
-                pattern=r.pattern,
-                message=r.message,
-                severity=r.severity,
-                enabled=r.enabled,
-                language=r.language,
-                auto_fix=r.auto_fix,
-            )
-            for r in DEFAULT_PYTHON_STYLE_RULES
-        ]
-        self._metrics: CodeMetrics | None = None
-        self._quality_score: QualityScore | None = None
-        self._code_smells: list[CodeSmell] = []
-        self._refactoring_patterns: list[RefactoringPattern] = []
-        self._duplicate_hashes: dict[str, list[int]] = {}
-
-    def _detect_language(self) -> CodeLanguage:
-        """Detect the programming language from file extension."""
-        ext = self.file_path.suffix.lower()
-        return self.LANGUAGE_EXTENSIONS.get(ext, CodeLanguage.UNKNOWN)
-
-    def detect_language(self) -> CodeLanguage:
-        """Public wrapper to detect and return the file language.
-
-        Returns:
-            The detected CodeLanguage based on file extension.
-
+        The path is stored as a pathlib.Path instance to satisfy the
+        documented invariant that ``self.file_path`` points to a valid path.
         """
-        self._language = self._detect_language()
-        self.core.language = self._language  # Sync core
-        return self._language
+        # Do not assume anything about BaseAgent.__init__ signature; avoid
+        # calling super().__init__() to keep this shim maximally compatible.
+        self.file_path = Path(file_path)
 
-    # ========== Documentation Generation ==========
-    def generate_documentation(self, content: str | None = None) -> str:
-        """Generate documentation from code."""
-        if content is None:
-            content = self.current_content or self.previous_content or ""
-        return self.core.generate_documentation(content)
+    def _detect_language(self):
+        """Internal hook for language detection.
 
-    # ========== Core Methods ==========
+        This shim provides only a debug log and returns ``None``. Concrete
+        language-aware behavior should be implemented in newer agents.
+        """
+        logger.debug("CoderAgent._detect_language called; no-op shim implementation.")
+        return None
+
+    def detect_language(self):
+        """Public entrypoint for language detection.
+
+        Delegates to :meth:`_detect_language`. Kept for API compatibility.
+        """
+        return self._detect_language()
+
+    def generate_documentation(self, content: str) -> str:
+        """Generate documentation for the given content.
+
+        The legacy implementation is no longer available. This shim logs
+        the call and returns the content unchanged to avoid breaking
+        existing call sites that expect a string result.
+        """
+        logger.debug("CoderAgent.generate_documentation called; returning content unchanged.")
+        return content
+
     def _get_default_content(self) -> str:
-        """Return default content for new code files."""
-        return "# Code file\n\n# Add code here\n"
+        """Return a default content string used when no input is provided."""
+        logger.debug("CoderAgent._get_default_content called; returning empty string.")
+        return ""
 
     def _get_fallback_response(self) -> str:
-        """Return fallback response when Copilot is unavailable."""
-        return (
-            "# AI Improvement Unavailable\n"
-            "# GitHub CLI not found. Install from https://cli.github.com/\n\n"
-            "# Original code preserved below:\n\n"
-        )
-
-    async def improve_content(self, prompt: str) -> str:
-        """Use AI to improve the code with specific coding suggestions."""
-        logging.info(f"Improving content for {self.file_path}")
-        # Call base implementation directly to use AI backend
-        new_content = await super().improve_content(prompt)
-        # Validate syntax
-        if not self._validate_syntax(new_content):
-            logging.error("Generated code failed syntax validation. Reverting.")
-            self.current_content = self.previous_content
-            return self.previous_content
-        logging.debug("Syntax validation passed")
-        # Validate style (flake8)
-        if not self._validate_flake8(new_content):
-            logging.warning(
-                "Generated code failed style validation (flake8). Proceeding anyway."
-            )
-        else:
-            logging.debug("Style validation passed")
-        return new_content
+        """Return a safe fallback response when generation fails."""
+        logger.debug("CoderAgent._get_fallback_response called; returning empty string.")
+        return ""

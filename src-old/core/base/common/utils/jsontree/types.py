@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,23 +48,3 @@ from __future__ import annotations
 """
 Types.py module.
 """
-
-
-from typing import TypeAlias, TypeVar
-
-_T = TypeVar("_T")
-_U = TypeVar("_U")
-
-# Type alias for nested JSON structures where leaves can be any type
-JSONTree: TypeAlias = dict[str, "JSONTree[_T]"] | list["JSONTree[_T]"] | tuple["JSONTree[_T]", ...] | _T
-
-# Extended type alias for overload compatibility
-_JSONTree: TypeAlias = (
-    dict[str, "JSONTree[_T]"]
-    | list["JSONTree[_T]"]
-    | tuple["JSONTree[_T]", ...]
-    | dict[str, _T]
-    | list[_T]
-    | tuple[_T, ...]
-    | _T
-)

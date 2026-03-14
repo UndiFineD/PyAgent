@@ -1,7 +1,7 @@
 # Copyright 2026 PyAgent Authors
 # Assistant for managing the knowledge graph and impact radius.
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/KnowledgeGraphAssistant.description.md
 

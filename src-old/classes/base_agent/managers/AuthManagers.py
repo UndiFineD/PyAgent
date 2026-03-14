@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/base_agent/managers/AuthManagers.description.md
 
@@ -91,8 +91,8 @@ Manages authentication.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 import logging
 from dataclasses import dataclass, field
@@ -105,95 +105,5 @@ __version__ = VERSION
 
 
 class AuthenticationManager:
-    """Manager for authentication methods."""
-
-    def __init__(self, config: AuthConfig | None = None) -> None:
-        """Initialize the AuthenticationManager with an optional AuthConfig."""
-        self.config = config or AuthConfig()
-        self.token_cache: dict[str, str] = {}
-        logging.debug(
-            f"AuthenticationManager initialized with method={self.config.method.value}"
-        )
-
-    def get_headers(self) -> dict[str, str]:
-        """Generate authentication headers based on the configured method."""
-        headers: dict[str, str] = {}
-        if self.config.method == AuthMethod.API_KEY:
-            headers["X-API-Key"] = self.config.api_key
-        elif self.config.method == AuthMethod.BEARER_TOKEN:
-            headers["Authorization"] = f"Bearer {self.config.token}"
-        elif self.config.method == AuthMethod.BASIC_AUTH:
-            import base64
-
-            credentials = f"{self.config.username}:{self.config.password}"
-            encoded = base64.b64encode(credentials.encode()).decode()
-            headers["Authorization"] = f"Basic {encoded}"
-        elif self.config.method == AuthMethod.OAUTH2:
-            token = self._get_oauth_token()
-            headers["Authorization"] = f"Bearer {token}"
-        headers.update(self.config.custom_headers)
-        return headers
-
-    def _get_oauth_token(self) -> str:
-        """Retrieve OAuth token, using cache if available."""
-        cache_key = f"oauth_{self.config.oauth_client_id}"
-        if cache_key in self.token_cache:
-            return self.token_cache[cache_key]
-        token = self.config.token
-        if not token:
-            logging.error("OAuth token missing")
-            return ""
-        self.token_cache[cache_key] = token
-        return token
-
-    def refresh_token(self) -> None:
-        """Clear the token cache to force retrieval of a new token on next request."""
-        self.token_cache.clear()
-
-    def set_custom_header(self, key: str, value: str) -> None:
-        """Add or update a custom header in the authentication configuration."""
-        self.config.custom_headers[key] = value
-
-    def validate(self) -> bool:
-        """Validate that the current authentication configuration is sufficient for use."""
-        if self.config.method == AuthMethod.NONE:
-            return True
-        if self.config.method == AuthMethod.API_KEY:
-            return bool(self.config.api_key)
-        if self.config.method == AuthMethod.BEARER_TOKEN:
-            return bool(self.config.token)
-        if self.config.method == AuthMethod.BASIC_AUTH:
-            return bool(self.config.username and self.config.password)
-        if self.config.method == AuthMethod.OAUTH2:
-            return bool(self.config.oauth_client_id and self.config.oauth_client_secret)
-        return True
-
-
-@dataclass
-class AuthManager:
-    """Manages authentication."""
-
-    method: AuthMethod | str | None = None
-    credentials: dict[str, str] = field(default_factory=_empty_dict_str_str)
-    custom_headers: dict[str, str] = field(default_factory=_empty_dict_str_str)
-
-    def set_method(self, method: str, **kwargs: str) -> None:
-        """Set the authentication method and associated credentials."""
-        self.method = method
-        self.credentials = kwargs
-
-    def add_custom_header(self, header: str, value: str) -> None:
-        """Add a custom header to be included in authentication requests."""
-        self.custom_headers[header] = value
-
-    def get_headers(self) -> dict[str, str]:
-        """Generate headers based on the current authentication method and credentials."""
-        headers = dict(self.custom_headers)
-        method = self.method
-        if isinstance(method, AuthMethod):
-            method = method.value
-        if method == "api_key" and "api_key" in self.credentials:
-            headers["X-API-Key"] = self.credentials["api_key"]
-        elif method in ("token", "bearer_token") and "token" in self.credentials:
-            headers["Authorization"] = f"Bearer {self.credentials['token']}"
-        return headers
+    """
+    """

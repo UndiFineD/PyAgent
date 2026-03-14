@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,8 +48,6 @@ from __future__ import annotations
 """
 Rust.py module.
 """
-
-
 import logging
 from collections.abc import Iterable
 
@@ -74,45 +72,5 @@ try:
     _json_flatten_native = json_flatten
 
     def json_iter_leaves_fast(value: JSONTree[_T]) -> Iterable[_T]:
-        """Rust-accelerated leaf iteration."""
-        try:
-            return json_iter_leaves_rust(value)
-        except (
-            Exception
-        ):  # pylint: disable=broad-exception-caught, unused-variable
-            # pylint: disable=broad-exception-caught
-            return _json_iter_leaves_native(value)
-
-    def json_count_leaves_fast(value: JSONTree[_T]) -> int:
-        """Rust-accelerated leaf counting."""
-        try:
-            return json_count_leaves_rust(value)
-        except (
-            Exception
-        ):  # pylint: disable=broad-exception-caught, unused-variable
-            # pylint: disable=broad-exception-caught
-            return _json_count_leaves_native(value)
-
-    def json_flatten_fast(
-        value: JSONTree[_T],
-        separator: str = ".",
-    ) -> dict[str, _T]:
-        """Rust-accelerated flattening."""
-        try:
-            return json_flatten_rust(value, separator)
-        except (
-            Exception
-        ):  # pylint: disable=broad-exception-caught, unused-variable
-            # pylint: disable=broad-exception-caught
-            return _json_flatten_native(value, separator)
-
-    RUST_ACCELERATION_AVAILABLE = True
-    logger.debug("JSONTreeUtils: Rust acceleration available")
-
-except ImportError:
-    # Rust not available, use pure Python
-    json_iter_leaves_fast = json_iter_leaves
-    json_count_leaves_fast = json_count_leaves
-    json_flatten_fast = json_flatten
-    RUST_ACCELERATION_AVAILABLE = False
-    logger.debug("JSONTreeUtils: Using pure Python (Rust not available)")
+        """
+        """

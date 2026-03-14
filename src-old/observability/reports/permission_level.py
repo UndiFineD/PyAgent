@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,20 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from generate_agent_reports.py"""
-
-
-from enum import Enum
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-class PermissionLevel(Enum):
-    """Permission levels for report access."""
-
-    NONE = 0
-    READ = 1
-    WRITE = 2
-    ADMIN = 3
+r"""Auto-extracted class from generate_agent_reports.py"""

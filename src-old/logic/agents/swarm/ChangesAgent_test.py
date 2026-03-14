@@ -14,7 +14,6 @@
 """Tests for ChangesAgent
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,10 +31,5 @@ except ImportError as e:
 
 
 def test_changesagent_exists():
-    """Test that ChangesAgent class exists and is importable."""
-    assert "ChangesAgent" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/environment/__init__.description.md
 
@@ -75,7 +75,3 @@ LLM_CONTEXT_END
 Environment management module for PyAgent.
 Provides isolated execution environments for agents.
 """
-
-from .environment_manager import EnvironmentManager, get_environment_manager
-
-__all__ = ["EnvironmentManager", "get_environment_manager"]

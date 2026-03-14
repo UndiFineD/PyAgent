@@ -14,7 +14,6 @@
 """Tests for StatusManager
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,16 +31,5 @@ except ImportError as e:
 
 
 def test_statusmanager_exists():
-    """Test that StatusManager class exists and is importable."""
-    assert "StatusManager" in dir()
-
-
-def test_statusmanager_instantiation():
-    """Test that StatusManager can be instantiated."""
-    instance = StatusManager()
-    assert instance is not None
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

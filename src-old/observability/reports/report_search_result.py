@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,33 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from generate_agent_reports.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-from .report_type import ReportType
-
-__version__ = VERSION
-
-
-@dataclass
-class ReportSearchResult:
-    """Result from report search.
-
-    Attributes:
-        file_path: Path to report file.
-        report_type: Type of report.
-        match_text: Matched text snippet.
-        line_number: Line number of match.
-        score: Relevance score.
-
-    """
-
-    file_path: str
-    report_type: ReportType
-    match_text: str
-    line_number: int
-    score: float = 1.0
+r"""Auto-extracted class from generate_agent_reports.py"""

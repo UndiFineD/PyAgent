@@ -1,13 +1,4 @@
 #!/usr/bin/env python3
-"""Compatibility shim for `src.classes.improvements` package.
+r"""Compatibility shim for `src.classes.improvements` package.
 Prefer observability implementation when available.
 """
-
-try:
-    from src.observability.improvements import *  # type: ignore
-except Exception:
-
-    class ImprovementsAgent:  # minimal placeholder
-        pass
-
-    __all__ = ["ImprovementsAgent"]

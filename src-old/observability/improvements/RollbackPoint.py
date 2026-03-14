@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/improvements/RollbackPoint.description.md
@@ -71,7 +72,6 @@ Class RollbackPoint implementation.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -87,19 +87,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Any
-
-from src.core.base.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class RollbackPoint:
-    improvement_id: str
-    state: dict[str, Any]
-    created_at: datetime = field(default_factory=datetime.now)
+r"""Auto-extracted class from agent_improvements.py"""

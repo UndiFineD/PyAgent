@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,28 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-from src.core.base.lifecycle.version import VERSION
-
-from .improvement import Improvement
-
-__version__ = VERSION
-
-
-class ArchiveManager:
-    """Archives completed improvements."""
-
-    def __init__(self) -> None:
-        self.archived: list[Improvement] = []
-
-    def archive(self, improvement: Improvement) -> None:
-        self.archived.append(improvement)
-
-    def restore(self, improvement_id: str) -> Improvement:
-        for i, imp in enumerate(list(self.archived)):
-            if imp.id == improvement_id:
-                self.archived.pop(i)
-                return imp
-        raise KeyError(improvement_id)
+r"""Auto-extracted class from agent_improvements.py"""

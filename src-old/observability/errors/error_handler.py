@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,32 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Agent specializing in analyzing, documenting, and suggesting fixes for errors."""
-
-
-import sys
-from pathlib import Path
-
-from src.core.base.entrypoint import create_main_function
-from src.core.base.lifecycle.version import VERSION
-
-from .errors_agent import ErrorsAgent
-
-# Ensure project root and src are in path for modular imports
-root = Path(__file__).resolve().parents[2]
-if str(root) not in sys.path:
-    sys.path.append(str(root))
-if str(root / "src") not in sys.path:
-    sys.path.append(str(root / "src"))
-
-__version__ = VERSION
-
-# Create main function using the helper
-main = create_main_function(
-    ErrorsAgent,
-    "Errors Agent: Updates code file error reports",
-    "Path to the errors file (e.g., file.errors.md)",
-)
-
-if __name__ == "__main__":
-    main()
+r"""Agent specializing in analyzing, documenting, and suggesting fixes for errors."""

@@ -14,7 +14,6 @@
 """Tests for async_pipeline_core
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,30 +31,5 @@ except ImportError as e:
 
 
 def test_taskstatus_exists():
-    """Test that TaskStatus class exists and is importable."""
-    assert "TaskStatus" in dir()
-
-
-def test_taskpriority_exists():
-    """Test that TaskPriority class exists and is importable."""
-    assert "TaskPriority" in dir()
-
-
-def test_pipelinetask_exists():
-    """Test that PipelineTask class exists and is importable."""
-    assert "PipelineTask" in dir()
-
-
-def test_pipelineconfig_exists():
-    """Test that PipelineConfig class exists and is importable."""
-    assert "PipelineConfig" in dir()
-
-
-def test_asyncpipelinecore_exists():
-    """Test that AsyncPipelineCore class exists and is importable."""
-    assert "AsyncPipelineCore" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

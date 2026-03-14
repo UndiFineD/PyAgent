@@ -30,8 +30,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 from typing import TYPE_CHECKING, Any, Callable
 
@@ -59,80 +59,5 @@ if TYPE_CHECKING:
 
 
 def _empty_agent_event_handlers() -> dict[AgentEvent, list[Callable[..., None]]]:
-    """Factory for agent event handlers."""
-    return {}
-
-
-def _empty_dict_str_configprofile() -> dict[str, "ConfigProfile"]:
-    """Factory for ConfigProfile dict."""
-    return {}
-
-
-def _empty_dict_str_filepriority() -> dict[str, FilePriority]:
-    """Factory for FilePriority dict."""
-    return {}
-
-
-def _empty_dict_str_modelconfig() -> dict[str, "ModelConfig"]:
-    """Factory for ModelConfig dict."""
-    return {}
-
-
-def _empty_routes_list() -> list[tuple[Callable[[Any], bool], Callable[[Any], Any]]]:
-    """Factory for routes list."""
-    return []
-
-
-def _empty_list_str() -> list[str]:
-    """Factory for empty list of strings."""
-    return []
-
-
-def _empty_list_int() -> list[int]:
-    """Factory for empty list of integers."""
-    return []
-
-
-def _empty_list_float() -> list[float]:
-    """Factory for empty list of floats."""
-    return []
-
-
-def _empty_list_dict_str_any() -> list[dict[str, Any]]:
-    """Factory for empty list of dicts."""
-    return []
-
-
-def _empty_dict_str_any() -> dict[str, Any]:
-    """Factory for empty dict."""
-    return {}
-
-
-def _empty_dict_str_str() -> dict[str, str]:
-    """Factory for empty dict of strings."""
-    return {}
-
-
-def _empty_dict_str_int() -> dict[str, int]:
-    """Factory for empty dict of integers."""
-    return {}
-
-
-def _empty_dict_str_float() -> dict[str, float]:
-    """Factory for empty dict of floats."""
-    return {}
-
-
-def _empty_dict_str_callable_any_any() -> dict[str, Callable[[Any], Any]]:
-    """Factory for empty dict of callables."""
-    return {}
-
-
-def _empty_dict_str_health_checks() -> dict[str, Callable[[], dict[str, Any]]]:
-    """Factory for empty health checks dict."""
-    return {}
-
-
-def _empty_dict_str_quality_criteria() -> dict[str, tuple[Callable[[str], float], float]]:
-    """Factory for quality criteria."""
-    return {}
+    """
+    """

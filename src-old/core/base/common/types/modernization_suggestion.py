@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,31 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_coder.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class ModernizationSuggestion:
-    """Suggestion to modernize deprecated API usage.
-
-    Attributes:
-        old_api: The deprecated API being used.
-        new_api: The modern replacement API.
-        deprecation_version: Version where the old API was deprecated.
-        removal_version: Version where it will be removed.
-        migration_guide: URL or text explaining migration.
-
-    """
-
-    old_api: str
-    new_api: str
-    deprecation_version: str
-    removal_version: str | None = None
-    migration_guide: str = ""
+r"""Auto-extracted class from agent_coder.py"""

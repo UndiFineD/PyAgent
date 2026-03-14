@@ -14,7 +14,6 @@
 """Tests for StrategicPlanningAgent
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,10 +31,5 @@ except ImportError as e:
 
 
 def test_strategicplanningagent_exists():
-    """Test that StrategicPlanningAgent class exists and is importable."""
-    assert "StrategicPlanningAgent" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

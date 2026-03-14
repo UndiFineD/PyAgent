@@ -12,10 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Package marker for `src.core.base.utils`.
+r"""Package marker for `src.core.base.utils`.
 
 Minimal package initializer to ensure consistent import resolution
 during pytest collection.
 """
-
-__all__ = []

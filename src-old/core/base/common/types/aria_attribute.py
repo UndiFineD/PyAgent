@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,31 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_coder.py"""
-
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class ARIAAttribute:
-    """ARIA attribute definition.
-
-    Attributes:
-        name: ARIA attribute name (e.g., "aria-label").
-        value: Current value.
-        is_valid: Whether the value is valid.
-        allowed_values: List of allowed values (if constrained).
-        suggestion: Suggested improvement.
-
-    """
-
-    name: str
-    value: str = ""
-    is_valid: bool = True
-    allowed_values: list[str] = field(default_factory=lambda: [])
-    suggestion: str | None = None
+r"""Auto-extracted class from agent_coder.py"""

@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,65 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Metacognitive Monitor for handling logging and alerting."""
-
-
-import logging
-from typing import Any
-
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.core.metacognitive_core import MetacognitiveCore
-
-__version__ = VERSION
-
-
-# pylint: disable=too-many-ancestors
-class MetacognitiveMonitor(BaseAgent):
-    """Tier 2 (Cognitive Logic) - Metacognitive Monitor: Evaluates the internal
-    consistency and certainty of agent reasoning.
-    """
-
-    def __init__(self, workspace_root: str = ".") -> None:
-        super().__init__(workspace_root)
-        self.uncertainty_log: list[dict[str, Any]] = []
-        self.core = MetacognitiveCore()
-        # Track weights for agents reporting to this monitor
-        self.agent_weights: dict[str, float] = {}
-
-    def calibrate_agent(
-        self, agent_name: str, reported_conf: float, actual_correct: bool
-    ) -> None:
-        """Calibrates an agent's consensus weight based on performance."""
-        current_weight = self.agent_weights.get(agent_name, 1.0)
-        new_weight = self.core.calibrate_confidence_weight(
-            reported_conf, actual_correct, current_weight
-        )
-        self.agent_weights[agent_name] = new_weight
-
-        if new_weight < current_weight:
-            logging.info(
-                f"Metacognitive: Penalized {agent_name} weight to {new_weight:.2f} due to overconfidence."
-            )
-
-    def evaluate_reasoning(
-        self, agent_name: str, task: str, reasoning_chain: str
-    ) -> dict[str, Any]:
-        """Analyzes a reasoning chain via core and handles alerts."""
-        evaluation_base = self.core.calculate_confidence(reasoning_chain)
-
-        evaluation = {"agent": agent_name, "task": task, **evaluation_base}
-
-        self.uncertainty_log.append(evaluation)
-
-        # Shell-specific side effect: Logging/Alerting
-        if evaluation["confidence"] < 0.5:
-            logging.warning(
-                f"Metacognitive Alert: {agent_name} is highly uncertain about task '{task}'"
-            )
-
-        return evaluation
-
-    def get_summary(self) -> dict[str, Any]:
-        """Aggregates log via Core."""
-        return self.core.aggregate_summary(self.uncertainty_log)
+r"""Metacognitive Monitor for handling logging and alerting."""

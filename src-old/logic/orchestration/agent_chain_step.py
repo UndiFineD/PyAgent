@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,33 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent.py"""
-
-
-from collections.abc import Callable
-from dataclasses import dataclass
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class AgentChainStep:
-    """A step in an agent chain.
-
-    Attributes:
-        agent_name: Name of the agent to execute.
-        input_transform: Optional function to transform input.
-        output_transform: Optional function to transform output.
-        enabled: Whether this step is enabled.
-        condition: Optional condition function to check before execution.
-
-    """
-
-    agent_name: str
-    input_transform: Callable[[Any], Any] | None = None
-    output_transform: Callable[[Any], Any] | None = None
-    enabled: bool = True
-    condition: Callable[[Any], bool] | None = None
+r"""Auto-extracted class from agent.py"""

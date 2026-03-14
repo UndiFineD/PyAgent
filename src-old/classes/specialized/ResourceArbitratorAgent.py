@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ResourceArbitratorAgent.description.md
@@ -77,7 +78,6 @@ Manages consensus across multiple agents and tracks behavioral reputation.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 from typing import Any
 

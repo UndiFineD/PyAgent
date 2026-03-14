@@ -7,5 +7,5 @@ from src.logic.agents.cognitive.context.engines.memory_mixins.MemorySearchMixin 
 
 __all__ = ["MemorySearchMixin"]
 
-"""Shim to expose MemorySearchMixin under src.classes.context.memory_mixins.
+r"""Shim to expose MemorySearchMixin under src.classes.context.memory_mixins.
 """

@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,33 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from generate_agent_reports.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-from .permission_level import PermissionLevel
-
-__version__: str = VERSION
-
-
-@dataclass
-class ReportPermission:
-    """Permission for report access.
-
-    Attributes:
-        user_id: User identifier.
-        report_pattern: Glob pattern for reports.
-        level: Permission level.
-        granted_by: Who granted permission.
-        expires_at: Expiration timestamp.
-
-    """
-
-    user_id: str
-    report_pattern: str
-    level: PermissionLevel = PermissionLevel.READ
-    granted_by: str = ""
-    expires_at: float | None = None
+r"""Auto-extracted class from generate_agent_reports.py"""

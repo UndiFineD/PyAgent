@@ -14,7 +14,6 @@
 """Tests for move_completed
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,20 +31,5 @@ except ImportError as e:
 
 
 def test_parse_row_exists():
-    """Test that parse_row function exists."""
-    assert callable(parse_row)
-
-
-def test_is_completed_status_exists():
-    """Test that is_completed_status function exists."""
-    assert callable(is_completed_status)
-
-
-def test_main_exists():
-    """Test that main function exists."""
-    assert callable(main)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/MemoryReplayAgent.description.md
@@ -78,7 +79,6 @@ to consolidate knowledge, identify patterns, and prune low-utility data.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 import random
 import time

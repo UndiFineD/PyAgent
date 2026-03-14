@@ -14,7 +14,6 @@
 """Tests for update_tracking_from_report
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,35 +31,9 @@ except ImportError as e:
 
 
 def test_load_report_exists():
-    """Test that load_report function exists."""
-    assert callable(load_report)
-
-
-def test_append_tracking_exists():
-    """Test that append_tracking function exists."""
-    assert callable(append_tracking)
-
-
-def test_move_completed_rows_exists():
-    """Test that move_completed_rows function exists."""
-    assert callable(move_completed_rows)
-
-
-def test_build_candidates_exists():
-    """Test that build_candidates function exists."""
-    assert callable(build_candidates)
-
-
-def test_write_candidates_exists():
-    """Test that write_candidates function exists."""
-    assert callable(write_candidates)
-
-
-def test_main_exists():
-    """Test that main function exists."""
-    assert callable(main)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """Test that load_report function can be imported and called."""
+    try:
+        result = load_report("test_report")
+        assert result is not None
+    except Exception as e:
+        pytest.fail(f"Failed to call load_report: {e}")

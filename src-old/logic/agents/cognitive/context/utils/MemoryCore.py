@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+r"""
 LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/utils/MemoryCore.description.md
@@ -79,8 +79,8 @@ Class MemoryCore implementation.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -100,7 +100,6 @@ from __future__ import annotations
 MemoryCore logic for PyAgent.
 Handles episode structuring, utility scoring, and rank-based filtering.
 """
-
 from src.core.base.version import VERSION
 from typing import Dict, List, Any, Optional
 from datetime import datetime
@@ -120,40 +119,5 @@ class MemoryCore:
         success: bool,
         metadata: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
-        """Pure logic to construct an episode and calculate utility."""
-        timestamp = datetime.now().isoformat()
-        utility_score = self.baseline_utility
-
-        if success:
-            utility_score += 0.2
-        else:
-            utility_score -= 0.3
-
-        return {
-            "timestamp": timestamp,
-            "agent": agent_name,
-            "task": task,
-            "outcome": outcome,
-            "success": success,
-            "utility_score": max(0.0, min(1.0, utility_score)),
-            "metadata": metadata or {},
-        }
-
-    def format_for_indexing(self, episode: dict[str, Any]) -> str:
-        """Standardized string representation for vector databases."""
-        return (
-            f"Agent: {episode['agent']}\n"
-            f"Task: {episode['task']}\n"
-            f"Outcome: {episode['outcome']}\n"
-            f"Success: {episode['success']}"
-        )
-
-    def calculate_new_utility(self, old_score: float, increment: float) -> float:
-        """Logic for utility score decay/boost."""
-        return max(0.0, min(1.0, old_score + increment))
-
-    def filter_relevant_memories(
-        self, memories: list[dict[str, Any]], min_utility: float = 0.3
-    ) -> list[dict[str, Any]]:
-        """Filters memories by utility threshold."""
-        return [m for m in memories if m.get("utility_score", 0.0) >= min_utility]
+        """
+        """

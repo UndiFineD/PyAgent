@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,43 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-import time
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-from .branch_comparison_status import BranchComparisonStatus
-from .improvement_diff import ImprovementDiff
-
-__version__ = VERSION
-
-
-@dataclass
-class BranchComparison:
-    """Result of comparing improvements across branches.
-
-    Attributes:
-        source_branch: Source branch name.
-        target_branch: Target branch name.
-        file_path: Path to improvements file.
-        status: Comparison status.
-        diffs: List of improvement differences.
-        added_count: Number of improvements added.
-        removed_count: Number of improvements removed.
-        modified_count: Number of improvements modified.
-        compared_at: Comparison timestamp.
-
-    """
-
-    source_branch: str
-    target_branch: str
-    file_path: str
-    status: BranchComparisonStatus = BranchComparisonStatus.PENDING
-    diffs: list[ImprovementDiff] = field(default_factory=list)  # type: ignore[assignment]
-    added_count: int = 0
-    removed_count: int = 0
-    modified_count: int = 0
-    compared_at: float = field(default_factory=time.time)
+r"""Auto-extracted class from agent_improvements.py"""

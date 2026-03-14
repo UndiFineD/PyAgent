@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,31 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_errors.py"""
-
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class ErrorImpact:
-    """Impact analysis for an error.
-
-    Attributes:
-        error_id: ID of the analyzed error.
-        affected_files: List of files affected by the error.
-        affected_functions: Functions impacted by the error.
-        downstream_effects: Downstream components affected.
-        impact_score: Overall impact score (0 - 100).
-
-    """
-
-    error_id: str
-    affected_files: list[str] = field(default_factory=lambda: [])
-    affected_functions: list[str] = field(default_factory=lambda: [])
-    downstream_effects: list[str] = field(default_factory=lambda: [])
-    impact_score: float = 0.0
+r"""Auto-extracted class from agent_errors.py"""

@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,33 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class ProgressReport:
-    """Progress report for improvements dashboard.
-
-    Attributes:
-        report_date: Date of the report.
-        completed_count: Number of completed improvements.
-        in_progress_count: Number of in - progress improvements.
-        blocked_count: Number of blocked improvements.
-        velocity: Average improvements completed per week.
-        burndown_data: Data for burndown chart.
-
-    """
-
-    report_date: str
-    completed_count: int = 0
-    in_progress_count: int = 0
-    blocked_count: int = 0
-    velocity: float = 0.0
-    burndown_data: list[tuple[str, int]] = field(default_factory=list)  # type: ignore[assignment]
+r"""Auto-extracted class from agent_improvements.py"""

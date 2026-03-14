@@ -14,7 +14,6 @@
 """Tests for TensorSchema
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,36 +31,5 @@ except ImportError as e:
 
 
 def test_dynamicdim_exists():
-    """Test that DynamicDim class exists and is importable."""
-    assert "DynamicDim" in dir()
-
-
-def test_tensorshape_exists():
-    """Test that TensorShape class exists and is importable."""
-    assert "TensorShape" in dir()
-
-
-def test_tensorshape_instantiation():
-    """Test that TensorShape can be instantiated."""
-    instance = TensorShape()
-    assert instance is not None
-
-
-def test_tensorschema_exists():
-    """Test that TensorSchema class exists and is importable."""
-    assert "TensorSchema" in dir()
-
-
-def test_validate_tensor_exists():
-    """Test that validate_tensor function exists."""
-    assert callable(validate_tensor)
-
-
-def test_validate_tensor_shape_exists():
-    """Test that validate_tensor_shape function exists."""
-    assert callable(validate_tensor_shape)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

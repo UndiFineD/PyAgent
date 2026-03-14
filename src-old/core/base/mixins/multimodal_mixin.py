@@ -30,8 +30,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,39 +50,11 @@ from __future__ import annotations
 Multimodal Mixin for BaseAgent.
 Provides support for interleaved modality tags and streaming sessions.
 """
-
-
 from typing import Any, Dict, List
 
 from src.core.base.common.multimodal_core import MultimodalCore, MultimodalStreamSession
 
 
 class MultimodalMixin:
-    """Mixin to provide multimodal capabilities to agents.
-    Enables handling of interleaved channel tracks and feedback loops.
     """
-
-    def __init__(self, **_kwargs: Any) -> None:
-        self.multimodal_core = MultimodalCore()
-        # Initialize a default stream session for the agent
-        self.multimodal_session = MultimodalStreamSession(self.multimodal_core)
-
-    def get_multimodal_instructions(self) -> str:
-        """Returns the system instructions for the multimodal tag system."""
-        channels: str = ", ".join(self.multimodal_core.active_channels.keys())
-        return (
-            "MODALITY PROTOCOL ENABLED.\n"
-            "You can interleave modality tags in your output using the format <Type:Channel_ID>.\n"
-            f"Available Modalities: {channels}\n"
-            "Use <Thought_...> for internal reasoning and "
-            "<Hardware:NPU_...> for acceleration hooks.\n"
-            "Example: '<Audio:EN_01> Hello world <Thought_Greeting user>'."
-        )
-
-    def process_multimodal_output(self, raw_output: str) -> List[Dict[str, Any]]:
-        """Processes agent output through the multimodal feedback loop and filter."""
-        return self.multimodal_session.filter_response(raw_output)
-
-    def set_output_track(self, modality: str, channel: str) -> None:
-        """Switch the active output track for a modality."""
-        self.multimodal_session.set_output_channel(modality, channel)
+    """

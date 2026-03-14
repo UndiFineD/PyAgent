@@ -12,10 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Package marker for `src.core.base.utils.jsontree`.
+r"""Package marker for `src.core.base.utils.jsontree`.
 
 Ensures `jsontree` is a proper package so pytest imports use fully
 qualified module names instead of ambiguous top-level modules.
 """
-
-__all__ = []

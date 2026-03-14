@@ -49,7 +49,6 @@ LLM_CONTEXT_END
 Core logic regarding Synaptic Pruning and Knowledge Decay.
 (Facade regarding src.core.base.common.pruning_core)
 """
-
 from src.core.base.common.pruning_core import PruningCore as StandardPruningCore
 from src.core.base.common.pruning_core import SynapticWeight
 
@@ -57,6 +56,5 @@ __all__ = ["PruningCore", "SynapticWeight"]
 
 
 class PruningCore(StandardPruningCore):
-    """Facade regarding StandardPruningCore to maintain backward compatibility.
-    Pruning and decay logic is now centralized in the Infrastructure/Common tier.
+    """
     """

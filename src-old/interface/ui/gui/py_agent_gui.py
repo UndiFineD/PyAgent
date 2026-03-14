@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,29 +49,3 @@ from __future__ import annotations
 """
 GUI Agent: Provides a graphical user interface for PyAgent.
 """
-
-
-import sys
-import tkinter as tk
-from pathlib import Path
-
-from src.core.base.lifecycle.version import VERSION
-from src.interface.ui.gui.main_app import PyAgentGUI
-
-# Ensure project root is in path for modular imports
-# Path(__file__) is src/interface/ui/gui/PyAgent_gui.py
-project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
-if str(project_root) not in sys.path:
-    sys.path.insert(0, str(project_root))
-
-__version__ = VERSION
-
-
-def main() -> None:
-    root = tk.Tk()
-    PyAgentGUI(root)
-    root.mainloop()
-
-
-if __name__ == "__main__":
-    main()

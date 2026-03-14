@@ -5,7 +5,7 @@ from src.core.base.shell import ShellExecutor  # type: ignore
 
 __all__ = ["ShellExecutor"]
 
-"""Compatibility shim to expose `ShellExecutor` at
+r"""Compatibility shim to expose `ShellExecutor` at
 `src.core.base.ShellExecutor` (capitalized module name).
 
 Some modules import the capitalized module path; re-export the

@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/config/EnvConfig.description.md
@@ -232,7 +233,6 @@ LLM_CONTEXT_END
 
 """
 
-from __future__ import annotations
 
 """
 Environment Configuration Module - Phase 20: Production Infrastructure

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/core/__init__.description.md
 
@@ -42,15 +42,3 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
-from .profiling_core import ProfileStats, ProfilingCore  # noqa: F401
-from .stability_core import FleetMetrics, StabilityCore  # noqa: F401
-from .tracing_core import TracingCore  # noqa: F401
-
-__all__ = [
-    "ProfilingCore",
-    "ProfileStats",
-    "StabilityCore",
-    "FleetMetrics",
-    "TracingCore",
-]

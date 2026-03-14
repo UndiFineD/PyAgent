@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/SecurityAuditAgent.description.md
@@ -79,7 +80,6 @@ vulnerable patterns, and insecure file permissions.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 import os
 import re

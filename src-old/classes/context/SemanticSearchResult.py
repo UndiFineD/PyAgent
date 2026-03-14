@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/SemanticSearchResult.description.md
@@ -85,30 +86,5 @@ LLM_CONTEXT_END
 
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from dataclasses import dataclass
-from typing import Tuple
-
-
-@dataclass
-class SemanticSearchResult:
-    """Result from semantic code search.
-
-    Attributes:
-        file_path: Path to the matching file.
-        content_snippet: Relevant code snippet.
-        similarity_score: Similarity score (0 - 1).
-        context_type: Type of context matched.
-        line_range: Tuple of start and end line numbers.
-
-    """
-
-    file_path: str
-    content_snippet: str
-    similarity_score: float
-    context_type: str = ""
-    line_range: Tuple[int, int] = (0, 0)
+r"""Auto-extracted class from agent_context.py"""

@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/InterFleetIdentityAgent.description.md
@@ -83,7 +84,6 @@ identities for agents across multiple fleets using cryptographic signing and DID
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 import hashlib
 import time

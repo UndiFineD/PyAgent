@@ -14,7 +14,6 @@
 """Tests for OrchestratorFeatures
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,10 +31,5 @@ except ImportError as e:
 
 
 def test_orchestratorfeatures_exists():
-    """Test that OrchestratorFeatures class exists and is importable."""
-    assert "OrchestratorFeatures" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

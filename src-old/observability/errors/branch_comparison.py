@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,31 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_errors.py"""
-
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class BranchComparison:
-    """Comparison of errors across branches.
-
-    Attributes:
-        branch_a: First branch name.
-        branch_b: Second branch name.
-        errors_only_in_a: Error IDs only in branch A.
-        errors_only_in_b: Error IDs only in branch B.
-        common_errors: Error IDs in both branches.
-
-    """
-
-    branch_a: str
-    branch_b: str
-    errors_only_in_a: list[str] = field(default_factory=lambda: [])
-    errors_only_in_b: list[str] = field(default_factory=lambda: [])
-    common_errors: list[str] = field(default_factory=lambda: [])
+r"""Auto-extracted class from agent_errors.py"""

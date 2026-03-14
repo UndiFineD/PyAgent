@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/egress_lockdown_core.description.md
 
@@ -88,51 +88,11 @@ Pattern harvested from agentic-patterns.
 
 LLM_CONTEXT_END
 """
-
 import re
 from typing import List, Optional, Set
 from urllib.parse import urlparse
 
 
 class EgressLockdownCore:
-    """Simulates an egress firewall for agent tools to prevent data exfiltration.
-    Pattern harvested from agentic-patterns.
     """
-
-    def __init__(self, allowed_domains: Optional[List[str]] = None):
-        self.allowed_domains: Set[str] = set(
-            allowed_domains or ["localhost", "127.0.0.1"]
-        )
-        self.deny_patterns: List[re.Pattern] = [
-            re.compile(r".*\?.*=.*PII_.*"),  # Block queries containing PII signatures
-            re.compile(
-                r".*\?.*=.*TOKEN_.*"
-            ),  # Block queries containing Token signatures
-        ]
-
-    def add_allowed_domain(self, domain: str):
-        self.allowed_domains.add(domain)
-
-    def validate_request(self, url: str) -> bool:
-        """Validates if a URL is permitted under current lockdown rules.
-        """
-        parsed = urlparse(url)
-        domain = parsed.netloc.split(":")[0]  # Remove port if present
-
-        # 1. Check Default-Deny Allowlist
-        if domain not in self.allowed_domains:
-            return False
-
-        # 2. Check for exfiltration patterns in query params
-        for pattern in self.deny_patterns:
-            if pattern.match(url):
-                return False
-
-        # 3. Block excessively long URLs (common exfiltration technique)
-        if len(url) > 2048:
-            return False
-
-        return True
-
-    def get_security_policy(self) -> str:
-        return f"EGRESS_LOCKDOWN: Allowed={list(self.allowed_domains)}, DenyPatterns={len(self.deny_patterns)}"
+    """

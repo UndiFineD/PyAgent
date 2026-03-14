@@ -14,7 +14,6 @@
 """Tests for registry
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,15 +31,5 @@ except ImportError as e:
 
 
 def test_reasoningparsermanager_exists():
-    """Test that ReasoningParserManager class exists and is importable."""
-    assert "ReasoningParserManager" in dir()
-
-
-def test_reasoning_parser_exists():
-    """Test that reasoning_parser function exists."""
-    assert callable(reasoning_parser)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

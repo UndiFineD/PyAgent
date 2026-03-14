@@ -1,5 +1,5 @@
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/swarm/core/AuctionCore.description.md
 

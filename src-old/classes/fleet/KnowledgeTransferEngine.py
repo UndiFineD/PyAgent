@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/KnowledgeTransferEngine.description.md
 
@@ -80,7 +80,6 @@ LLM_CONTEXT_END
 """Engine for cross-fleet knowledge transfer.
 Enables sharing lessons between decoupled fleet instances.
 """
-
 import json
 import logging
 from pathlib import Path
@@ -90,38 +89,5 @@ from .KnowledgeTransferCore import KnowledgeTransferCore
 
 
 class KnowledgeTransferEngine:
-    """Manages export and import of knowledge/lessons between fleets.
-    Shell for KnowledgeTransferCore.
     """
-
-    def __init__(self, workspace_root: str) -> None:
-        self.workspace_root = Path(workspace_root)
-        self.export_path = self.workspace_root / "knowledge_exports"
-        self.export_path.mkdir(parents=True, exist_ok=True)
-        self.core = KnowledgeTransferCore()
-
-    def export_knowledge(self, fleet_id: str, knowledge_data: Dict[str, Any]) -> str:
-        """Exports a fleet's knowledge (lessons, entities) to a shareable file."""
-        export_file = self.export_path / f"knowledge_{fleet_id}.json"
-
-        with open(export_file, "w") as f:
-            json.dump(knowledge_data, f, indent=2)
-
-        logging.info(f"KnowledgeTransfer: Exported knowledge for {fleet_id} to {export_file}")
-        return str(export_file)
-
-    def import_knowledge(self, source_file: str) -> Dict[str, Any]:
-        """Imports knowledge from an external JSON file."""
-        source_path = Path(source_file)
-        if not source_path.exists():
-            raise FileNotFoundError(f"Knowledge file not found: {source_file}")
-
-        with open(source_path, "r") as f:
-            data = json.load(f)
-
-        logging.info(f"KnowledgeTransfer: Imported knowledge from {source_file}")
-        return data
-
-    def merge_lessons(self, current_lessons: List[Any], imported_lessons: List[Any]) -> List[Any]:
-        """Merges imported lessons into the current set, avoiding duplicates."""
-        return self.core.merge_lessons(current_lessons, imported_lessons)
+    """

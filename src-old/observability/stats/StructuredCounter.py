@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/StructuredCounter.description.md
@@ -152,7 +153,6 @@ Reset all global counters.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 """
 StructuredCounter - Dataclass-based structured metric counters.

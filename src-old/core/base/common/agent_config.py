@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,77 +45,4 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent.py"""
-
-
-from dataclasses import dataclass, field
-from typing import Any
-
-from src.core.base.common.models.agent_models import AgentPluginConfig
-from src.core.base.common.models.fleet_models import RateLimitConfig
-from src.core.base.lifecycle.version import VERSION
-
-# When this file is loaded directly via importlib.spec_from_file_location in tests,
-# the package context may be missing, causing relative imports to fail.  We attempt
-# the relative import first and fall back to the absolute path if necessary.
-try:
-    from .utils.helpers import (
-        _empty_dict_str_any,
-        _empty_dict_str_int,
-        _empty_list_str,
-        _empty_plugin_config_list,
-    )
-except ImportError:  # pragma: no cover - only in test environment
-    from src.core.base.common.utils.helpers import (
-        _empty_dict_str_any,
-        _empty_dict_str_int,
-        _empty_list_str,
-        _empty_plugin_config_list,
-    )
-
-__version__ = VERSION
-
-
-@dataclass
-class AgentConfig:  # pylint: disable=too-many-instance-attributes
-    """Full agent configuration loaded from config file.
-
-    Attributes:
-        repo_root: Repository root directory.
-        agents_only: Process only agent files.
-        max_files: Maximum files to process.
-        loop: Number of processing loops.
-        dry_run: Preview mode without modifications.
-        no_git: Skip git operations.
-        verbosity: Logging verbosity level.
-        rate_limit: Rate limiting configuration.
-        plugins: List of plugin configurations.
-        selective_agents: Agents to execute.
-        timeout_per_agent: Timeout settings per agent.
-
-    """
-
-    repo_root: str = "."
-    agents_only: bool = False
-    max_files: int | None = None
-    loop: int = 1
-    dry_run: bool = False
-    no_git: bool = False
-    verbosity: str = "normal"
-    rate_limit: RateLimitConfig | None = None
-    plugins: list[AgentPluginConfig] = field(default_factory=_empty_plugin_config_list)
-    selective_agents: list[str] = field(default_factory=_empty_list_str)
-    timeout_per_agent: dict[str, int] = field(default_factory=_empty_dict_str_int)
-    # Additional CLI-equivalent settings
-    enable_async: bool = False
-    enable_multiprocessing: bool = False
-    max_workers: int = 4
-    strategy: str = "direct"
-    enable_file_locking: bool = False
-    incremental: bool = False
-    graceful_shutdown: bool = False
-    health_check: bool = False
-    resume: bool = False
-    diff_preview: bool = False
-    webhook: list[str] = field(default_factory=_empty_list_str)
-    models: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+r"""Auto-extracted class from agent.py"""

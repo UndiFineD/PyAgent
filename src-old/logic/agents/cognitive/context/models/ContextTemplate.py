@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/models/ContextTemplate.description.md
 
@@ -65,8 +65,8 @@ Template for context documentation.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -82,21 +82,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py"""
-
-from dataclasses import dataclass, field
-
-from src.core.base.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class ContextTemplate:
-    """Template for context documentation."""
-
-    name: str
-    file_type: str
-    sections: list[str]
-    template_content: str
-    required_fields: list[str] = field(default_factory=lambda: [])
+r"""Auto-extracted class from agent_context.py"""

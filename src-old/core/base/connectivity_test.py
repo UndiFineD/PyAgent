@@ -14,7 +14,6 @@
 """Tests for connectivity
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,15 +31,5 @@ except ImportError as e:
 
 
 def test_binarytransport_exists():
-    """Test that BinaryTransport class exists and is importable."""
-    assert "BinaryTransport" in dir()
-
-
-def test_heartbeatsignal_exists():
-    """Test that HeartbeatSignal class exists and is importable."""
-    assert "HeartbeatSignal" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

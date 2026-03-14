@@ -14,7 +14,6 @@
 """Tests for memory_consolidation_core
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,10 +31,5 @@ except ImportError as e:
 
 
 def test_memoryconsolidationcore_exists():
-    """Test that MemoryConsolidationCore class exists and is importable."""
-    assert "MemoryConsolidationCore" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

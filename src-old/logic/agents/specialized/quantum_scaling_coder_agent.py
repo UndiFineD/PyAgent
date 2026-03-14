@@ -46,16 +46,10 @@ LLM_CONTEXT_END
 """
 Quantum Scaling Coder Agent.
 """
-
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 
 class QuantumScalingCoderAgent(BaseAgent):
-    """Agent specialized in quantum scaling coding tasks.
     """
-
-    def __init__(self, path: str, **kwargs) -> None:
-        super().__init__(**kwargs)
-        self.path = path
-        self.version = VERSION
+    """

@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,34 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_errors.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-from .error_severity import ErrorSeverity
-from .notification_channel import NotificationChannel
-
-__version__ = VERSION
-
-
-@dataclass
-class NotificationConfig:
-    """Configuration for error notifications.
-
-    Attributes:
-        channel: Notification channel type.
-        endpoint: Webhook URL or email address.
-        min_severity: Minimum severity to notify.
-        enabled: Whether notifications are enabled.
-        template: Message template.
-
-    """
-
-    channel: NotificationChannel
-    endpoint: str
-    min_severity: ErrorSeverity = ErrorSeverity.HIGH
-    enabled: bool = True
-    template: str = "Error: {message} in {file}:{line}"
+r"""Auto-extracted class from agent_errors.py"""

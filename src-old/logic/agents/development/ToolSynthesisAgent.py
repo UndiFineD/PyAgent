@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/ToolSynthesisAgent.description.md
 
@@ -73,8 +73,8 @@ Standardized placeholder for future re-implementation.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Recovered and standardized for Phase 317
@@ -88,7 +88,6 @@ For more information, visit:
 
 No commands will be executed.
 """
-
 import logging
 
 from src.core.base.Version import VERSION
@@ -97,10 +96,5 @@ __version__ = VERSION
 
 
 class ToolSynthesisAgent:
-    """ToolSynthesisAgent recovered after Copilot CLI deprecation event.
-    Standardized placeholder for future re-implementation.
     """
-
-    def __init__(self, *args, **kwargs) -> None:
-        self.version = VERSION
-        logging.info("ToolSynthesisAgent initialized (Placeholder).")
+    """

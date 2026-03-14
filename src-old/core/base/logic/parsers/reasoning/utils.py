@@ -48,7 +48,6 @@ LLM_CONTEXT_END
 """
 Utility functions regarding reasoning extraction and streaming parsing.
 """
-
 from typing import Any
 
 from .models import ReasoningResult, StreamingReasoningState
@@ -61,19 +60,5 @@ def extract_reasoning(
     tokenizer: Any = None,
     **kwargs: Any,
 ) -> ReasoningResult:
-    """Convenience function to extract reasoning from model output.
     """
-    parser = ReasoningParserManager.create_parser(parser_name, tokenizer, **kwargs)
-    return parser.extract_reasoning(model_output)
-
-
-def create_streaming_parser(
-    parser_name: str = "xml",
-    tokenizer: Any = None,
-    **kwargs: Any,
-) -> tuple[Any, StreamingReasoningState]:
-    """Create a parser and state regarding streaming extraction.
     """
-    parser = ReasoningParserManager.create_parser(parser_name, tokenizer, **kwargs)
-    state = StreamingReasoningState()
-    return parser, state

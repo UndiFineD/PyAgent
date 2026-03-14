@@ -1,6 +1,7 @@
-from typing import Any, dict
+#!/usr/bin/env python3
+"""Verification core for PyAgent (Phase 257-258)."""
+from typing import Any
 
-"""Verification module for PyAgent (Phase 257-258)."""
 
 class VerificationCore:
     """Core verification logic for multi-agent consensus (Phase 257-258)."""

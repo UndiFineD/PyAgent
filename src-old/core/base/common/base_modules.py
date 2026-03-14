@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,32 +49,4 @@ from __future__ import annotations
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-"""Lifecycle definitions for core modules."""
-
-
-from abc import ABC, abstractmethod
-from typing import Any
-
-
-class BaseModule(ABC):
-    """Base class for all core modules in the swarm.
-    Standardizes the lifecycle of global specialized logic.
-    """
-
-    def __init__(self, config: dict[str, Any] | None = None) -> None:
-        self.config = config or {}
-        self.initialized = False
-
-    def initialize(self) -> bool:
-        """Sets up the module resources."""
-        self.initialized = True
-        return True
-
-    @abstractmethod
-    def execute(self, *args: Any, **kwargs: Any) -> Any:
-        """Main entry point for module logic."""
-
-    def shutdown(self) -> bool:
-        """Cleans up the module resources."""
-        self.initialized = False
-        return True
+r"""Lifecycle definitions for core modules."""

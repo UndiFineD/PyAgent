@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,29 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_changes.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class LinkedReference:
-    """A linked reference to commit or issue.
-
-    Attributes:
-        ref_type: Type of reference ('commit' or 'issue').
-        ref_id: ID of the reference.
-        url: URL to the reference.
-        title: Title / description of the reference.
-
-    """
-
-    ref_type: str
-    ref_id: str
-    url: str = ""
-    title: str = ""
+r"""Auto-extracted class from agent_changes.py"""

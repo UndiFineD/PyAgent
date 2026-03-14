@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/models/ContextTag.description.md
 
@@ -64,8 +64,8 @@ A tag for categorizing context.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -81,20 +81,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py"""
-
-from dataclasses import dataclass
-
-from src.core.base.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class ContextTag:
-    """A tag for categorizing context."""
-
-    name: str
-    description: str = ""
-    color: str = "#666666"
-    parent: str | None = None
+r"""Auto-extracted class from agent_context.py"""

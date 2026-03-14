@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/exceptions.description.md
 
@@ -109,8 +109,8 @@ Interruption of an agent cycle (e.g., quota exceeded).
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -127,26 +127,5 @@ from __future__ import annotations
 
 
 class PyAgentException(Exception):
-    """Base exception for all PyAgent errors."""
-
-    def __init__(self, message: str, error_code: str | None = None) -> None:
-        super().__init__(message)
-        self.error_code = error_code
-
-class InfrastructureError(PyAgentException):
-    """Errors related to system infrastructure (I/O, Network)."""
-
-class LogicError(PyAgentException):
-    """Errors related to agent logic or reasoning failure."""
-
-class SecurityError(PyAgentException):
-    """Errors related to unauthorized access or safety violations."""
-
-class ModelError(PyAgentException):
-    """Errors related to LLM connectivity or output parsing."""
-
-class ConfigurationError(PyAgentException):
-    """Errors in settings or manifest validation."""
-
-class CycleInterrupt(PyAgentException):
-    """Interruption of an agent cycle (e.g., quota exceeded)."""
+    """
+    """

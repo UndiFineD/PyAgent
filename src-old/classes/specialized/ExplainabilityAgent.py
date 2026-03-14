@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ExplainabilityAgent.description.md
@@ -82,7 +83,6 @@ reasoning chains. Enhanced with SAE (Sparse Autoencoder) neural interpretability
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 import json
 import os

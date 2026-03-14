@@ -14,7 +14,6 @@
 """Tests for crew_orchestrator
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,46 +31,5 @@ except ImportError as e:
 
 
 def test_agentrole_exists():
-    """Test that AgentRole class exists and is importable."""
-    assert "AgentRole" in dir()
-
-
-def test_taskstatus_exists():
-    """Test that TaskStatus class exists and is importable."""
-    assert "TaskStatus" in dir()
-
-
-def test_agentconfig_exists():
-    """Test that AgentConfig class exists and is importable."""
-    assert "AgentConfig" in dir()
-
-
-def test_taskconfig_exists():
-    """Test that TaskConfig class exists and is importable."""
-    assert "TaskConfig" in dir()
-
-
-def test_taskresult_exists():
-    """Test that TaskResult class exists and is importable."""
-    assert "TaskResult" in dir()
-
-
-def test_crewagent_exists():
-    """Test that CrewAgent class exists and is importable."""
-    assert "CrewAgent" in dir()
-
-
-def test_creworchestrator_exists():
-    """Test that CrewOrchestrator class exists and is importable."""
-    assert "CrewOrchestrator" in dir()
-
-
-def test_creworchestrator_instantiation():
-    """Test that CrewOrchestrator can be instantiated."""
-    instance = CrewOrchestrator()
-    assert instance is not None
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

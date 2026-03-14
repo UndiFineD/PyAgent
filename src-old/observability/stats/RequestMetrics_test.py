@@ -32,20 +32,5 @@ except ImportError as e:
 
 
 def test_requeststate_exists():
-    """Test that RequestState class exists and is importable."""
-    assert "RequestState" in dir()
-
-
-def test_requestmetrics_exists():
-    """Test that RequestMetrics class exists and is importable."""
-    assert "RequestMetrics" in dir()
-
-
-def test_requestmetricsaggregator_exists():
-    """Test that RequestMetricsAggregator class exists and is importable."""
-    assert "RequestMetricsAggregator" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

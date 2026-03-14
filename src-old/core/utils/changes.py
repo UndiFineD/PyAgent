@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,32 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Agent specializing in tracking, summarizing, and documenting code changes."""
-
-
-import sys
-from pathlib import Path
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-# Ensure project root and src are in path for modular imports
-root = Path(__file__).parent.parent
-if str(root) not in sys.path:
-    sys.path.append(str(root))
-if str(root / "src") not in sys.path:
-    sys.path.append(str(root / "src"))
-
-from src.core.base.common.base_utilities import create_main_function  # noqa: E402
-from src.logic.agents.swarm.changes_agent import ChangesAgent  # noqa: E402
-
-# Create main function using the helper
-main = create_main_function(
-    ChangesAgent,
-    "Changes Agent: Updates code file changelogs",
-    "Path to the changes file (e.g., file.changes.md)",
-)
-
-if __name__ == "__main__":
-    main()
+r"""Agent specializing in tracking, summarizing, and documenting code changes."""

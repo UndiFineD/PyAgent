@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,48 +57,5 @@ except Exception:
 
 
 class MemoryStorageMixin:
-    """Methods for storage and DB initialization."""
-
-    def __init__(self) -> None:
-        """Initialize memory storage attributes."""
-        self.memory_file: Any = None
-        self.db_path: Any = None
-        self._collection: Any = None
-        self.episodes: list[Any] = []
-
-    def _init_db(self) -> Any:
-        if not HAS_CHROMA:
-            return None
-        if self._collection:
-            return self._collection
-        try:
-            client = chromadb.PersistentClient(path=str(self.db_path))  # type: ignore
-            self._collection = client.get_or_create_collection(name="agent_memory")
-            return self._collection
-        except (ImportError, RuntimeError, ValueError) as e:
-            logging.error(f"Memory DB init error: {e}")
-            return None
-
-    def save(self) -> None:
-        """Persist memory to disk."""
-        try:
-            self.memory_file.write_text(
-                json.dumps(self.episodes, indent=2), encoding="utf-8"
-            )
-        except (IOError, OSError) as e:
-            logging.error(f"Failed to save memory: {e}")
-
-    def load(self) -> None:
-        """Load memory from disk."""
-        if self.memory_file.exists():
-            try:
-                self.episodes = json.loads(self.memory_file.read_text(encoding="utf-8"))
-            except (json.JSONDecodeError, IOError, OSError) as e:
-                logging.error(f"Failed to load memory: {e}")
-                self.episodes = []
-
-    def clear(self) -> None:
-        """Wipe memory."""
-        self.episodes = []
-        if self.memory_file.exists():
-            self.memory_file.unlink()
+    """
+    """

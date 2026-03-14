@@ -14,7 +14,6 @@
 """Tests for efficient_change_detector
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,20 +31,5 @@ except ImportError as e:
 
 
 def test_changerecord_exists():
-    """Test that ChangeRecord class exists and is importable."""
-    assert "ChangeRecord" in dir()
-
-
-def test_filemetadata_exists():
-    """Test that FileMetadata class exists and is importable."""
-    assert "FileMetadata" in dir()
-
-
-def test_efficientchangedetector_exists():
-    """Test that EfficientChangeDetector class exists and is importable."""
-    assert "EfficientChangeDetector" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

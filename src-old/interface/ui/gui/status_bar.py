@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,31 +50,4 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""Status Bar component for the PyAgent GUI."""
-
-
-import tkinter as tk
-from tkinter import ttk
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-class StatusBar:
-    """Handles status messages and UI feedback in the footer."""
-
-    def __init__(self, parent, status_var) -> None:
-        self.status_var: Any = status_var
-        self.label = ttk.Label(
-            parent,
-            textvariable=self.status_var,
-            relief=tk.SUNKEN,
-            anchor="w",
-            padding=2,
-        )
-        self.label.pack(side=tk.BOTTOM, fill=tk.X)
-
-    def set_status(self, message: str) -> None:
-        self.status_var.set(message)
+r"""Status Bar component for the PyAgent GUI."""

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/coder/SecurityIssueType.description.md
@@ -79,23 +80,5 @@ Types of security vulnerabilities.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_coder.py"""
-
-
-from enum import Enum
-
-
-class SecurityIssueType(Enum):
-    """Types of security vulnerabilities."""
-
-    SQL_INJECTION = "sql_injection"
-    XSS = "xss"
-    HARDCODED_SECRET = "hardcoded_secret"
-    INSECURE_DESERIALIZATION = "insecure_deserialization"
-    PATH_TRAVERSAL = "path_traversal"
-    COMMAND_INJECTION = "command_injection"
-    INSECURE_RANDOM = "insecure_random"
-    INJECTION_ATTEMPT = "injection_attempt"
-    OTHER = "other"
+r"""Auto-extracted class from agent_coder.py"""

@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,30 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py"""
-
-from src.core.base.version import VERSION
-from typing import List, TYPE_CHECKING
-from dataclasses import dataclass, field
-
-    pass
-__version__ = VERSION
-
-
-@dataclass
-class BranchComparison:
-    """Comparison of context across branches.
-
-    Attributes:
-        branch_a: First branch name.
-        branch_b: Second branch name.
-        files_only_in_a: Files only in branch A.
-        files_only_in_b: Files only in branch B.
-        modified_files: Files modified between branches.
-    """
-
-    branch_a: str
-    branch_b: str
-    files_only_in_a: list[str] = field(default_factory=lambda: [])
-    files_only_in_b: list[str] = field(default_factory=lambda: [])
-    modified_files: list[str] = field(default_factory=lambda: [])
+r"""Auto-extracted class from agent_context.py"""

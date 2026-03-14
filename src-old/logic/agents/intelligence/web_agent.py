@@ -46,7 +46,6 @@ LLM_CONTEXT_END
 """
 Web agent.py module.
 """
-
 try:
     from .web_intelligence_agent import WebIntelligenceAgent
 except Exception:
@@ -54,8 +53,5 @@ from src.logic.agents.intelligence.web_intelligence_agent import WebIntelligence
 
 
 class WebAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
-    """Agent specialized in web content extraction and scraping orchestration."""
-
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-        self._system_prompt = "You are the WebAgent (via WebIntelligence core)."
+    """
+    """

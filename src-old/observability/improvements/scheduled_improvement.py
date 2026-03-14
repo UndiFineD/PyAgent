@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,35 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-from .schedule_status import ScheduleStatus
-
-__version__ = VERSION
-
-
-@dataclass
-class ScheduledImprovement:
-    """A scheduled improvement with resource allocation.
-
-    Attributes:
-        improvement_id: ID of the scheduled improvement.
-        scheduled_start: Planned start date.
-        scheduled_end: Planned end date.
-        assigned_resources: List of assigned team members.
-        status: Current schedule status.
-        sprint_id: Optional sprint identifier.
-
-    """
-
-    improvement_id: str
-    scheduled_start: str = ""
-    scheduled_end: str = ""
-    assigned_resources: list[str] = field(default_factory=list)  # type: ignore[assignment]
-    status: ScheduleStatus = ScheduleStatus.UNSCHEDULED
-    sprint_id: str = ""
+r"""Auto-extracted class from agent_improvements.py"""

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/mixins/GraphStorageMixin.description.md
 
@@ -70,8 +70,8 @@ Mixin for graph storage and bead persistence.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -86,91 +86,4 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Storage logic for GraphMemoryAgent."""
-
-import json
-import logging
-from typing import Any
-
-
-class GraphStorageMixin:
-    """Mixin for graph storage and bead persistence."""
-
-    def _load_graph(self) -> None:
-        """Loads entities and relationships from persistent storage."""
-        if (
-            not hasattr(self, "graph_store_path")
-            or not hasattr(self, "entities")
-            or not hasattr(self, "relationships")
-        ):
-            return
-
-        if self.graph_store_path.exists():
-            try:
-                with open(self.graph_store_path, encoding="utf-8") as f:
-                    data = json.load(f)
-                    self.entities.update(data.get("entities", {}))
-                    # Convert 'relations' from GraphRelational format to 'relationships' if needed
-                    rels = data.get("relations", [])
-                    for r in rels:
-                        self.relationships.append(
-                            {
-                                "subject": r.get("source", r.get("subject")),
-                                "predicate": r.get("type", r.get("predicate")),
-                                "object": r.get("target", r.get("object")),
-                            }
-                        )
-                    # Also handle if it was already in GraphMemory format
-                    m_rels = data.get("relationships", [])
-                    for r in m_rels:
-                        if r not in self.relationships:
-                            self.relationships.append(r)
-            except Exception as e:
-                logging.error(f"GraphMemoryAgent: Failed to load graph: {e}")
-
-    def _save_graph(self) -> None:
-        """Persists entities and relationships to disk."""
-        if (
-            not hasattr(self, "graph_store_path")
-            or not hasattr(self, "entities")
-            or not hasattr(self, "relationships")
-        ):
-            return
-
-        try:
-            self.graph_store_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(self.graph_store_path, "w", encoding="utf-8") as f:
-                json.dump(
-                    {"entities": self.entities, "relationships": self.relationships},
-                    f,
-                    indent=4,
-                )
-        except Exception as e:
-            logging.error(f"GraphMemoryAgent: Failed to save graph: {e}")
-
-    def _load_beads(self) -> dict[str, dict[str, Any]]:
-        """Loads tasks from .beads/ directory JSONL files."""
-        tasks = {}
-        if not hasattr(self, "beads_dir"):
-            return tasks
-
-        task_file = self.beads_dir / "tasks.jsonl"
-        if task_file.exists():
-            with open(task_file, encoding="utf-8") as f:
-                for line in f:
-                    try:
-                        task = json.loads(line)
-                        tasks[task["id"]] = task["data"]
-                    except Exception:
-                        continue
-        return tasks
-
-    def _save_bead(self, task_id: str, data: dict[str, Any]) -> str:
-        """Persists a single task to the beads JSONL (Append-only)."""
-        if not hasattr(self, "beads_dir"):
-            return ""
-
-        task_file = self.beads_dir / "tasks.jsonl"
-        with open(task_file, "a", encoding="utf-8") as f:
-            f.write(json.dumps({"id": task_id, "data": data}) + "\n")
-        return task_id
+r"""Storage logic for GraphMemoryAgent."""

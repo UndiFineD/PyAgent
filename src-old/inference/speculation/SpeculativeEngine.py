@@ -103,4 +103,3 @@ __all__ = [
     "SpeculativeEngine",
     "create_speculative_decoder",
 ]
-

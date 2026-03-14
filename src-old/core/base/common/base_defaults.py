@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,41 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Standard default configurations and templates for BaseAgent."""
-
-
-from src.core.base.common.models import PromptTemplate
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-DEFAULT_PROMPT_TEMPLATES: list[PromptTemplate] = [
-    PromptTemplate(
-        id="improve_code",
-        name="Code Improvement",
-        template="Improve the following code:\n\n{content}\n\nFocus on: {focus}",
-        description="General code improvement template",
-        tags=["code", "improvement"],
-    ),
-    PromptTemplate(
-        id="add_docstrings",
-        name="Add Docstrings",
-        template="Add comprehensive docstrings to all functions and classes:\n\n{content}",
-        description="Template for adding documentation",
-        tags=["documentation"],
-    ),
-    PromptTemplate(
-        id="fix_bugs",
-        name="Bug Fix",
-        template="Analyze and fix bugs in this code:\n\n{content}\n\nKnown issues: {issues}",
-        description="Template for bug fixing",
-        tags=["bugs", "fix"],
-    ),
-    PromptTemplate(
-        id="add_tests",
-        name="Generate Tests",
-        template="Generate comprehensive tests for:\n\n{content}\n\nCoverage focus: {coverage}",
-        description="Template for test generation",
-        tags=["tests", "coverage"],
-    ),
-]
+r"""Standard default configurations and templates for BaseAgent."""

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/ExportFormat.description.md
@@ -79,19 +80,5 @@ Formats for context export.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from enum import Enum
-
-
-class ExportFormat(Enum):
-    """Formats for context export."""
-
-    MARKDOWN = "markdown"
-    HTML = "html"
-    PDF = "pdf"
-    DOCX = "docx"
-    RST = "rst"
+r"""Auto-extracted class from agent_context.py"""

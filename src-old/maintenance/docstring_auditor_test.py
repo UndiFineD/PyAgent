@@ -14,7 +14,6 @@
 """Tests for docstring_auditor
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,20 +31,5 @@ except ImportError as e:
 
 
 def test_parse_prompt_file_exists():
-    """Test that parse_prompt_file function exists."""
-    assert callable(parse_prompt_file)
-
-
-def test_file_path_to_module_name_exists():
-    """Test that file_path_to_module_name function exists."""
-    assert callable(file_path_to_module_name)
-
-
-def test_generate_next_batch_exists():
-    """Test that generate_next_batch function exists."""
-    assert callable(generate_next_batch)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

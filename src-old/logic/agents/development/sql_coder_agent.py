@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,36 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Agent specializing in SQL and database scripts."""
-
-# pylint: disable=too-many-ancestors
-
-
-from src.core.base.common.base_utilities import create_main_function
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.development.coder_agent import CoderAgent
-
-__version__ = VERSION
-
-
-class SQLCoderAgent(CoderAgent):
-    """Agent for auditing and improving SQL scripts."""
-
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-        self._language = "sql"
-
-        # SQL-specific instructions
-        self._system_prompt = (
-            "You are a SQL Expert and Database Administrator. "
-            "Focus on query performance, indexing, security (injection prevention), "
-            "and adherence to standard SQL patterns or specific dialects (PostgreSQL, MySQL, T-SQL)."
-        )
-
-    def _get_default_content(self) -> str:
-        return "-- SQL Script\nSELECT 1;\n"
-
-
-if __name__ == "__main__":
-    main = create_main_function(SQLCoderAgent, "SQL Agent", "Path to SQL file")
-    main()
+r"""Agent specializing in SQL and database scripts."""

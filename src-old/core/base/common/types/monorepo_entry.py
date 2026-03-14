@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,31 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_changes.py"""
-
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-from .changelog_entry import ChangelogEntry
-
-__version__ = VERSION
-
-
-@dataclass
-class MonorepoEntry:
-    """Changelog entry for monorepo aggregation.
-
-    Attributes:
-        package_name: Name of the package.
-        version: Package version.
-        entries: List of changelog entries for this package.
-        path: Path to the package in the repo.
-
-    """
-
-    package_name: str
-    version: str
-    entries: list[ChangelogEntry] = field(default_factory=lambda: [])
-    path: str = ""
+r"""Auto-extracted class from agent_changes.py"""

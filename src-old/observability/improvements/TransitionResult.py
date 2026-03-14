@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/improvements/TransitionResult.description.md
@@ -67,7 +68,6 @@ Class TransitionResult implementation.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -83,16 +83,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-from dataclasses import dataclass
-
-from src.core.base.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class TransitionResult:
-    success: bool
-    message: str = ""
+r"""Auto-extracted class from agent_improvements.py"""

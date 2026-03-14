@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/ContextDiff.description.md
@@ -86,32 +87,5 @@ LLM_CONTEXT_END
 
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from dataclasses import dataclass, field
-from typing import List
-
-
-@dataclass
-class ContextDiff:
-    """Diff between context versions.
-
-    Attributes:
-        version_from: Source version.
-        version_to: Target version.
-        added_sections: List of added sections.
-        removed_sections: List of removed sections.
-        modified_sections: List of modified section names.
-        change_summary: Brief summary of changes.
-
-    """
-
-    version_from: str
-    version_to: str
-    added_sections: List[str] = field(default_factory=lambda: [])
-    removed_sections: List[str] = field(default_factory=lambda: [])
-    modified_sections: List[str] = field(default_factory=lambda: [])
-    change_summary: str = ""
+r"""Auto-extracted class from agent_context.py"""

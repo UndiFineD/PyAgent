@@ -30,8 +30,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -54,47 +54,5 @@ __all__ = ["AuthManager", "AuthMethod"]
 
 
 class AuthManager:
-    """Facade regarding authentication and authorization.
     """
-
-    def __init__(self, name: str = "AuthManager") -> None:
-        """Initialize the AuthManager with a core AuthCore instance."""
-        from src.core.base.common.auth_core import AuthCore
-
-        self._core = AuthCore(name=name)
-        self._config: Optional[Any] = None
-
-    def generate_challenge(self, agent_id: str) -> str:
-        """Generates a unique challenge regarding an agent."""
-        return self._core.generate_challenge(agent_id)
-
-    def generate_proof(self, challenge: str, secret_key: str) -> str:
-        """Generates a proof regarding a challenge using a secret key."""
-        return self._core.generate_proof(challenge, secret_key)
-
-    def verify_proof(self, challenge: str, proof: str, secret_hash: str) -> bool:
-        """Verifies proof against the secret hash."""
-        return self._core.verify_proof(challenge, proof, secret_hash)
-
-    def set_method(self, method: AuthMethod, **kwargs: Any) -> None:
-        """Set the authentication method and credentials."""
-        from src.core.base.common.models import AuthConfig
-
-        # Capture credentials in an AuthConfig object
-        self._config = AuthConfig(method=method, **kwargs)
-
-    def get_headers(self) -> Dict[str, str]:
-        """Get authentication headers based on current configuration."""
-        if (
-            hasattr(self, "_config")
-            and self._config is not None
-            and self._core is not None
-        ):
-            return self._core.get_auth_headers(self._config)
-        return {}
-
-    def authenticate(self, method: AuthMethod, credentials: Dict[str, Any]) -> bool:
-        """Authenticate using a specific method."""
-        # Simple implementation regarding now
-        del method, credentials
-        return True
+    """

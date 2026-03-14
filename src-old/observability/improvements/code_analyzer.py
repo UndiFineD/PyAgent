@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,37 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-from src.core.base.lifecycle.version import VERSION
-
-from .improvement import Improvement
-
-__version__ = VERSION
-
-
-class CodeAnalyzer:
-    """Suggests analysis tools based on improvement content."""
-
-    def __init__(self) -> None:
-        self.tools: list[str] = [
-            "security scan",
-            "linter",
-            "type checker",
-            "coverage",
-        ]
-
-    def suggest_tools(self, improvement: Improvement) -> list[str]:
-        text = f"{improvement.title} {improvement.description}".lower()
-        suggestions: list[str] = []
-        if "sql" in text or "injection" in text or "security" in text:
-            suggestions.append("Security scan")
-            suggestions.append("Dependency vulnerability scan")
-        if "type" in text:
-            suggestions.append("Type checker")
-        if "test" in text:
-            suggestions.append("Coverage")
-        if not suggestions:
-            suggestions.append("Linter")
-        return suggestions
+r"""Auto-extracted class from agent_improvements.py"""

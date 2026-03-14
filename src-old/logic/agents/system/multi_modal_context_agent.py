@@ -35,8 +35,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -67,8 +67,6 @@ For more information, visit:
 
 No commands will be executed.
 """
-
-
 import logging
 
 from src.core.base.lifecycle.version import VERSION
@@ -77,10 +75,5 @@ __version__ = VERSION
 
 
 class MultiModalContextAgent:
-    """MultiModalContextAgent recovered after Copilot CLI deprecation event.
-    Standardized placeholder for future re-implementation.
     """
-
-    def __init__(self, *args, **kwargs) -> None:
-        self.version = VERSION
-        logging.info("MultiModalContextAgent initialized (Placeholder).")
+    """

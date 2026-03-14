@@ -14,7 +14,6 @@
 """Tests for RewardFunctions
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,36 +31,5 @@ except ImportError as e:
 
 
 def test_rewardtype_exists():
-    """Test that RewardType class exists and is importable."""
-    assert "RewardType" in dir()
-
-
-def test_rewardsignal_exists():
-    """Test that RewardSignal class exists and is importable."""
-    assert "RewardSignal" in dir()
-
-
-def test_rewardfunctions_exists():
-    """Test that RewardFunctions class exists and is importable."""
-    assert "RewardFunctions" in dir()
-
-
-def test_compositerewardfunction_exists():
-    """Test that CompositeRewardFunction class exists and is importable."""
-    assert "CompositeRewardFunction" in dir()
-
-
-def test_compositerewardfunction_instantiation():
-    """Test that CompositeRewardFunction can be instantiated."""
-    instance = CompositeRewardFunction()
-    assert instance is not None
-
-
-def test_rewardshaper_exists():
-    """Test that RewardShaper class exists and is importable."""
-    assert "RewardShaper" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

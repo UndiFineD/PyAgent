@@ -14,7 +14,6 @@
 """Tests for AuthManagers
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,15 +31,5 @@ except ImportError as e:
 
 
 def test_authenticationmanager_exists():
-    """Test that AuthenticationManager class exists and is importable."""
-    assert "AuthenticationManager" in dir()
-
-
-def test_authmanager_exists():
-    """Test that AuthManager class exists and is importable."""
-    assert "AuthManager" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

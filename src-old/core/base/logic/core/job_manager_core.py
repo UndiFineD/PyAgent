@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/job_manager_core.description.md
 
@@ -102,7 +102,6 @@ Harvested from LiveKit Agents patterns.
 
 LLM_CONTEXT_END
 """
-
 import uuid
 from dataclasses import dataclass, field
 from enum import Enum
@@ -127,35 +126,5 @@ class AgentJob:
 
 
 class JobManagerCore:
-    """Manages the lifecycle of persistent agent jobs (sessions).
-    Harvested from LiveKit Agents patterns.
     """
-
-    def __init__(self):
-        self._jobs: Dict[str, AgentJob] = {}
-
-    async def create_job(self, payload: Dict[str, Any]) -> str:
-        job = AgentJob(payload=payload)
-        self._jobs[job.id] = job
-        return job.id
-
-    async def update_job_status(
-        self, job_id: str, status: JobStatus, result: Any = None, error: str = None
-    ):
-        if job_id in self._jobs:
-            job = self._jobs[job_id]
-            job.status = status
-            if result is not None:
-                job.result = result
-            if error is not None:
-                job.error = error
-
-    def get_job(self, job_id: str) -> Optional[AgentJob]:
-        return self._jobs.get(job_id)
-
-    async def list_active_jobs(self) -> list[AgentJob]:
-        return [
-            j
-            for j in self._jobs.values()
-            if j.status in (JobStatus.PENDING, JobStatus.RUNNING)
-        ]
+    """

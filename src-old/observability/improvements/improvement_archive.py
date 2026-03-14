@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,101 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-from datetime import datetime
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .archived_improvement import ArchivedImprovement
-from .improvement import Improvement
-from .improvement_category import ImprovementCategory
-
-__version__ = VERSION
-
-
-class ImprovementArchive:
-    """Archives old or completed improvements.
-
-    Maintains history of archived improvements.
-
-    Attributes:
-        archive: List of archived improvements.
-
-    """
-
-    def __init__(self) -> None:
-        """Initialize the archive."""
-        self.archive: list[ArchivedImprovement] = []
-
-    def archive_improvement(self, improvement: Improvement, reason: str, archived_by: str = "") -> ArchivedImprovement:
-        """Archive an improvement.
-
-        Args:
-            improvement: The improvement to archive.
-            reason: Why it's being archived.
-            archived_by: Who archived it.
-
-        Returns:
-            The archived improvement record.
-
-        """
-        archived = ArchivedImprovement(
-            improvement=improvement,
-            archived_date=datetime.now().isoformat(),
-            archived_by=archived_by,
-            archive_reason=reason,
-        )
-        self.archive.append(archived)
-        return archived
-
-    def restore(self, improvement_id: str) -> Improvement | None:
-        """Restore an archived improvement.
-
-        Args:
-            improvement_id: ID of the improvement to restore.
-
-        Returns:
-            The restored improvement or None.
-
-        """
-        for i, archived in enumerate(self.archive):
-            if archived.improvement.id == improvement_id:
-                imp = archived.improvement
-                del self.archive[i]
-                return imp
-        return None
-
-    def search_archive(
-        self, query: str = "", category: ImprovementCategory | None = None
-    ) -> list[ArchivedImprovement]:
-        """Search the archive.
-
-        Args:
-            query: Text to search for.
-            category: Filter by category.
-
-        Returns:
-            Matching archived improvements.
-
-        """
-        results: list[ArchivedImprovement] = []
-        for archived in self.archive:
-            imp = archived.improvement
-            if category and imp.category != category:
-                continue
-            if query and query.lower() not in imp.title.lower():
-                continue
-            results.append(archived)
-        return results
-
-    def get_archive_stats(self) -> dict[str, Any]:
-        """Get archive statistics."""
-        by_category: dict[str, int] = {}
-        for archived in self.archive:
-            cat = archived.improvement.category.value
-            by_category[cat] = by_category.get(cat, 0) + 1
-
-        return {"total_archived": len(self.archive), "by_category": by_category}
+r"""Auto-extracted class from agent_improvements.py"""

@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,67 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_coder.py"""
-
-
-from src.core.base.common.types.dependency_node import DependencyNode
-from src.core.base.common.types.dependency_type import DependencyType
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.analysis.dependency_core import DependencyCore
-
-__version__ = VERSION
-
-
-class DependencyAgent:
-    """Analyzes code dependencies.
-
-    Builds a dependency graph and provides analysis capabilities.
-
-    Attributes:
-        nodes: Dictionary of dependency nodes.
-
-    """
-
-    def __init__(self) -> None:
-        """Initialize the dependency analyzer."""
-        self.nodes: dict[str, DependencyNode] = {}
-        self.core = DependencyCore()
-
-    def analyze(self, content: str, file_path: str = "") -> dict[str, DependencyNode]:
-        """Analyze code dependencies."""
-        self.nodes = self.core.parse_dependencies(content, file_path)
-        return self.nodes
-
-    def get_external_dependencies(self) -> list[str]:
-        """Get list of external (non-local) dependencies.
-
-        Returns:
-            List of external dependency names.
-
-        """
-        stdlib_modules = {
-            "os",
-            "sys",
-            "re",
-            "json",
-            "ast",
-            "hashlib",
-            "logging",
-            "pathlib",
-            "typing",
-            "dataclasses",
-            "enum",
-            "subprocess",
-            "tempfile",
-            "shutil",
-            "math",
-            "collections",
-            "functools",
-        }
-        external: list[str] = []
-        for name, node in self.nodes.items():
-            if node.type == DependencyType.IMPORT:
-                base_module = name.split(".")[0]
-                if base_module not in stdlib_modules:
-                    external.append(name)
-        return external
+r"""Auto-extracted class from agent_coder.py"""

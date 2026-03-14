@@ -1,7 +1,7 @@
 # Copyright 2026 PyAgent Authors
 # Assistant for indexing the workspace for vector search.
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/KnowledgeIndexingAssistant.description.md
 

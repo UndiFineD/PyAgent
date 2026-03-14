@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/MergeConflict.description.md
@@ -84,30 +85,5 @@ LLM_CONTEXT_END
 
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from dataclasses import dataclass
-from typing import Optional
-
-from .ConflictResolution import ConflictResolution
-
-
-@dataclass
-class MergeConflict:
-    """Merge conflict information.
-
-    Attributes:
-        section: Section with conflict.
-        ours: Our version of content.
-        theirs: Their version of content.
-        resolution: Applied resolution.
-
-    """
-
-    section: str
-    ours: str
-    theirs: str
-    resolution: Optional[ConflictResolution] = None
+r"""Auto-extracted class from agent_context.py"""

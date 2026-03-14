@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/ValidationRule.description.md
@@ -77,20 +78,5 @@ Rule for validating context content.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from dataclasses import dataclass
-
-
-@dataclass
-class ValidationRule:
-    """Rule for validating context content."""
-
-    name: str
-    pattern: str
-    message: str
-    severity: str = "warning"
-    required: bool = False
+r"""Auto-extracted class from agent_context.py"""

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/maintenance/mixins/header_fixer_mixin.description.md
@@ -67,7 +68,6 @@ Provides automated fixes for license headers and __future__ imports.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -85,8 +85,6 @@ from __future__ import annotations
 """
 Mixin for fixing license headers and docstring placement.
 """
-
-
 import logging
 from pathlib import Path
 
@@ -94,108 +92,5 @@ logger = logging.getLogger(__name__)
 
 
 class HeaderFixerMixin:
-    """Provides automated fixes for license headers and __future__ imports."""
-
-    def clean_file_headers(self, file_path: Path) -> bool:
-        """Remove duplicate license headers and docstrings, fix __future__ positioning.
-        Salvaged from temp fix scripts.
-        """
-        try:
-            content = file_path.read_text(encoding="utf-8")
-            lines = content.split("\n")
-            result = []
-            in_first_docstring = False
-            docstring_count = 0
-            seen_copyright = False
-
-            i = 0
-            while i < len(lines):
-                line = lines[i]
-
-                # Keep shebang and copyright header
-                if line.startswith("#!") or (
-                    line.startswith("#") and "Copyright" in line
-                ):
-                    result.append(line)
-                    if "Copyright" in line:
-                        seen_copyright = True
-                    i += 1
-                    continue
-
-                # Skip other header comments for now, keep actual content
-                if line.startswith("#") and not any(
-                    x in line for x in ["pylint", "noqa", "type:"]
-                ):
-                    if seen_copyright and any(
-                        x in line for x in ["Without", "See the", "limitations"]
-                    ):
-                        # This is likely part of a duplicate license block
-                        pass
-                    elif not seen_copyright:
-                        result.append(line)
-                    else:
-                        # Likely a normal comment or a repeat
-                        result.append(line)
-                    i += 1
-                    continue
-
-                # Handle docstrings - keep only the first one
-                if line.strip().startswith('"""') or line.strip().startswith("'''"):
-                    if docstring_count == 0:
-                        in_first_docstring = True
-                        docstring_count += 1
-                        result.append(line)
-                    elif in_first_docstring:
-                        result.append(line)
-                        if (
-                            line.strip().endswith('"""') or line.strip().endswith("'''")
-                        ) and len(line.strip()) > 3:
-                            in_first_docstring = False
-                    i += 1
-                    continue
-
-                # Add non-duplicate content
-                if not in_first_docstring or docstring_count == 0:
-                    result.append(line)
-
-                i += 1
-
-            # Ensure __future__ imports come after docstring
-            final_lines = []
-            future_imports = []
-            docstring_done = False
-
-            for line in result:
-                if '"""' in line or "'''" in line:
-                    final_lines.append(line)
-                    if line.strip().count('"""') >= 1 or line.strip().count("'''") >= 1:
-                        # Simple detection for end of docstring
-                        if line.strip().endswith('"""') or line.strip().endswith("'''"):
-                            docstring_done = True
-                elif line.strip().startswith("from __future__"):
-                    if not docstring_done:
-                        future_imports.append(line)
-                    else:
-                        final_lines.append(line)
-                else:
-                    if (
-                        future_imports
-                        and not line.strip().startswith("from __future__")
-                        and line.strip()
-                    ):
-                        final_lines.extend(future_imports)
-                        future_imports = []
-                        docstring_done = True
-                    final_lines.append(line)
-
-            if future_imports:
-                final_lines.extend(future_imports)
-
-            new_content = "\n".join(final_lines)
-            if new_content != content:
-                file_path.write_text(new_content, encoding="utf-8")
-                return True
-            return False
-        except Exception as e:
-            logger.error(f"Failed to fix headers in {file_path}: {e}")
-            return False
+    """
+    """

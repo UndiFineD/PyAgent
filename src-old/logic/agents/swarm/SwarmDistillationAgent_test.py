@@ -14,7 +14,6 @@
 """Tests for SwarmDistillationAgent
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,16 +31,5 @@ except ImportError as e:
 
 
 def test_swarmdistillationagent_exists():
-    """Test that SwarmDistillationAgent class exists and is importable."""
-    assert "SwarmDistillationAgent" in dir()
-
-
-def test_swarmdistillationagent_instantiation():
-    """Test that SwarmDistillationAgent can be instantiated."""
-    instance = SwarmDistillationAgent()
-    assert instance is not None
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

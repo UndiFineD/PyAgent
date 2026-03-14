@@ -14,7 +14,6 @@
 """Tests for version
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,10 +31,9 @@ except ImportError as e:
 
 
 def test_is_gate_open_exists():
-    """Test that is_gate_open function exists."""
-    assert callable(is_gate_open)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """Test that is_gate_open function can be imported and called."""
+    try:
+        result = is_gate_open("test_gate")
+        assert isinstance(result, bool)
+    except Exception as e:
+        pytest.fail(f"Failed to call is_gate_open: {e}")

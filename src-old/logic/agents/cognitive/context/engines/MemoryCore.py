@@ -5,5 +5,5 @@ from .memory_core import MemoryCore  # type: ignore
 
 __all__ = ["MemoryCore"]
 
-"""CamelCase shim exposing `MemoryCore` module name.
+r"""CamelCase shim exposing `MemoryCore` module name.
 """

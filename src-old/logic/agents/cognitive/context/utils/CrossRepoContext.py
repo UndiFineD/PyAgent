@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+r"""
 LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/utils/CrossRepoContext.description.md
@@ -73,8 +73,8 @@ Attributes:
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -90,29 +90,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py"""
-
-from src.core.base.version import VERSION
-from dataclasses import dataclass, field
-from typing import List
-
-__version__ = VERSION
-
-
-@dataclass
-class CrossRepoContext:
-    """Context from cross-repository analysis.
-
-    Attributes:
-        repo_name: Name of the repository.
-        repo_url: URL to the repository.
-        related_files: List of related file paths.
-        similarity_score: Overall similarity score.
-        common_patterns: Patterns shared between repos.
-    """
-
-    repo_name: str
-    repo_url: str
-    related_files: list[str] = field(default_factory=lambda: [])
-    similarity_score: float = 0.0
-    common_patterns: list[str] = field(default_factory=lambda: [])
+r"""Auto-extracted class from agent_context.py"""

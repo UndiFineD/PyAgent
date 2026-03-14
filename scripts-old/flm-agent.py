@@ -51,7 +51,6 @@ class MCPClient:
             api_key=os.environ.get("CUSTOM_OPENAI_API_KEY", "dummy"),
         )
 
-
     async def connect_stdio_server(
         self, server_id: str, command: str, args: list[str], env: Optional[dict[str, str]] = None
     ):
@@ -74,7 +73,6 @@ class MCPClient:
         # Register the server
         await self._register_server(server_id, session)
 
-
     async def connect_sse_server(self, server_id: str, url: str, headers: Optional[dict[str, str]] = None):
         """Connect to an MCP server using SSE transport
 
@@ -91,7 +89,6 @@ class MCPClient:
         # Register the server
         await self._register_server(server_id, session)
 
-
     async def connect_http_server(self, server_id: str, url: str, headers: Optional[dict[str, str]] = None):
         """Connect to an MCP server using HTTP transport
         Args:
@@ -105,7 +102,6 @@ class MCPClient:
         await session.initialize()
         # Register the server
         await self._register_server(server_id, session)
-
 
     async def _register_server(self, server_id: str, session: ClientSession):
         """Register a server and its tools in the client
@@ -125,7 +121,6 @@ class MCPClient:
         for tool in tools:
             self._tool_to_server_map[tool.name] = server_id
         print(f"\nConnected to server '{server_id}' with tools:", [tool.name for tool in tools])
-
 
     async def chat_with_tools(self, messages: list[Any]) -> str | None:
         """Chat with model and using tools
@@ -160,8 +155,10 @@ class MCPClient:
             has_tool_call = response.choices[0].message.tool_calls
             if has_tool_call:
                 for tool in has_tool_call:
-                    tool_name = tool.function.name if hasattr(tool, 'function') else tool.get('function', {}).get('name')
-                    tool_arguments = tool.function.arguments if hasattr(tool, 'function') else tool.get('function', {}).get('arguments')
+                    tool_name = tool.function.name if hasattr(
+                        tool, 'function') else tool.get('function', {}).get('name')
+                    tool_arguments = tool.function.arguments if hasattr(
+                        tool, 'function') else tool.get('function', {}).get('arguments')
                     tool_args = json.loads(tool_arguments)
                     messages.append({
                         "role": "assistant",
@@ -193,7 +190,6 @@ class MCPClient:
                 })
                 print(f"[Model Response]: {response.choices[0].message.content}")
                 return response.choices[0].message.content
-
 
     async def cleanup(self):
         """Clean up resources"""
@@ -268,7 +264,6 @@ async def main():
         print(f"\nError: {str(e)}")
     finally:
         await client.cleanup()
-
 
 if __name__ == "__main__":
     asyncio.run(main())

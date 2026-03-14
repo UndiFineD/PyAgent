@@ -5,5 +5,5 @@ from src.core.base.interfaces import ContextRecorderInterface  # type: ignore
 
 __all__ = ["ContextRecorderInterface"]
 
-"""Compatibility shim exposing `BaseInterfaces` (capitalized) module.
+r"""Compatibility shim exposing `BaseInterfaces` (capitalized) module.
 """

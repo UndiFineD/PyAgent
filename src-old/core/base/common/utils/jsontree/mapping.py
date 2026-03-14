@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,8 +48,6 @@ from __future__ import annotations
 """
 Mapping.py module.
 """
-
-
 from typing import Any, Callable, overload
 
 from src.core.base.common.utils.jsontree.types import _T, _U, JSONTree, _JSONTree
@@ -87,44 +85,5 @@ def json_map_leaves(
     func: Callable[[_T], _U],
     value: Any,
 ) -> _JSONTree[_U]:
-    """Apply a function to each leaf in a nested JSON structure.
-
-    Preserves the structure of the input, replacing each leaf with
-    the result of applying func to it.
-
-    Args:
-        func: Function to apply to each leaf value.
-        value: A nested JSON structure.
-
-    Returns:
-        A new structure with the same shape, but with transformed leaves.
-
     """
-    if isinstance(value, dict):
-        return {k: json_map_leaves(func, v) for k, v in value.items()}  # type: ignore
-    if isinstance(value, list):
-        return [json_map_leaves(func, v) for v in value]  # type: ignore
-    if isinstance(value, tuple):
-        return tuple(json_map_leaves(func, v) for v in value)
-
-    return func(value)
-
-
-def json_map_leaves_async(
-    func: Callable[[_T], _U],
-    value: Any,
-) -> _JSONTree[_U]:
-    """Apply a function to each leaf (async-ready version).
-
-    Same as json_map_leaves but can be used with async functions
-    when combined with asyncio.gather.
-
-    Args:
-        func: Function to apply to each leaf value.
-        value: A nested JSON structure.
-
-    Returns:
-        A new structure with transformed leaves.
-
     """
-    return json_map_leaves(func, value)

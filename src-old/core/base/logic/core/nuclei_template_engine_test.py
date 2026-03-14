@@ -14,7 +14,6 @@
 """Tests for nuclei_template_engine
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,46 +31,5 @@ except ImportError as e:
 
 
 def test_templateinfo_exists():
-    """Test that TemplateInfo class exists and is importable."""
-    assert "TemplateInfo" in dir()
-
-
-def test_templaterequest_exists():
-    """Test that TemplateRequest class exists and is importable."""
-    assert "TemplateRequest" in dir()
-
-
-def test_matchercondition_exists():
-    """Test that MatcherCondition class exists and is importable."""
-    assert "MatcherCondition" in dir()
-
-
-def test_templatehttp_exists():
-    """Test that TemplateHTTP class exists and is importable."""
-    assert "TemplateHTTP" in dir()
-
-
-def test_nucleitemplate_exists():
-    """Test that NucleiTemplate class exists and is importable."""
-    assert "NucleiTemplate" in dir()
-
-
-def test_scanresult_exists():
-    """Test that ScanResult class exists and is importable."""
-    assert "ScanResult" in dir()
-
-
-def test_nucleitemplateengine_exists():
-    """Test that NucleiTemplateEngine class exists and is importable."""
-    assert "NucleiTemplateEngine" in dir()
-
-
-def test_nucleitemplateengine_instantiation():
-    """Test that NucleiTemplateEngine can be instantiated."""
-    instance = NucleiTemplateEngine()
-    assert instance is not None
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

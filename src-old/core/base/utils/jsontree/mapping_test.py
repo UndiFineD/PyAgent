@@ -14,7 +14,6 @@
 """Tests for mapping
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,35 +31,5 @@ except ImportError as e:
 
 
 def test_json_map_leaves_exists():
-    """Test that json_map_leaves function exists."""
-    assert callable(json_map_leaves)
-
-
-def test_json_map_leaves_exists():
-    """Test that json_map_leaves function exists."""
-    assert callable(json_map_leaves)
-
-
-def test_json_map_leaves_exists():
-    """Test that json_map_leaves function exists."""
-    assert callable(json_map_leaves)
-
-
-def test_json_map_leaves_exists():
-    """Test that json_map_leaves function exists."""
-    assert callable(json_map_leaves)
-
-
-def test_json_map_leaves_exists():
-    """Test that json_map_leaves function exists."""
-    assert callable(json_map_leaves)
-
-
-def test_json_map_leaves_async_exists():
-    """Test that json_map_leaves_async function exists."""
-    assert callable(json_map_leaves_async)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

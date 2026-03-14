@@ -48,11 +48,9 @@ LLM_CONTEXT_END
 Core logic regarding Agent Resilience and Fault Tolerance.
 (Facade regarding src.core.base.common.resilience_core)
 """
-
 from src.core.base.common.resilience_core import ResilienceCore as StandardResilienceCore
 
 
 class ResilienceCore(StandardResilienceCore):
-    """Facade regarding StandardResilienceCore to maintain backward compatibility.
-    Resilience logic is now centralized in the Infrastructure/Common tier.
+    """
     """

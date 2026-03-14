@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/SharedContext.description.md
@@ -85,32 +86,5 @@ LLM_CONTEXT_END
 
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from dataclasses import dataclass, field
-from typing import List
-
-from .SharingPermission import SharingPermission
-
-
-@dataclass
-class SharedContext:
-    """Context shared with team members.
-
-    Attributes:
-        context_id: Unique identifier.
-        owner: Owner username.
-        shared_with: List of usernames shared with.
-        permission: Permission level.
-        last_sync: Last synchronization timestamp.
-
-    """
-
-    context_id: str
-    owner: str
-    shared_with: List[str] = field(default_factory=lambda: [])
-    permission: SharingPermission = SharingPermission.READ_ONLY
-    last_sync: str = ""
+r"""Auto-extracted class from agent_context.py"""

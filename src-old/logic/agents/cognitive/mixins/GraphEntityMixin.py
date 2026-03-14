@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/mixins/GraphEntityMixin.description.md
 
@@ -70,8 +70,8 @@ Mixin for entity and relationship management.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -86,74 +86,4 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Entity and relationship logic for GraphMemoryAgent."""
-
-import logging
-from typing import Any
-
-from src.core.base.BaseUtilities import as_tool
-
-
-class GraphEntityMixin:
-    """Mixin for entity and relationship management."""
-
-    @as_tool
-    def add_entity(
-        self, name: str, properties: dict[str, Any], entity_type: str | None = None
-    ) -> str:
-        """Adds or updates an entity in the graph."""
-        if not hasattr(self, "entities"):
-            return "Error: Entities not initialized."
-
-        if entity_type:
-            properties["type"] = entity_type
-        self.entities[name] = properties
-        if hasattr(self, "_save_graph"):
-            self._save_graph()
-        logging.info(f"GraphMemory: Added entity {name}")
-        return f"Entity '{name}' cached in graph memory."
-
-    @as_tool
-    def add_relationship(self, subject: str, predicate: str, object_: str) -> str:
-        """Adds a directed relationship between two entities."""
-        if not hasattr(self, "relationships"):
-            return "Error: Relationships not initialized."
-
-        rel = {"subject": subject, "predicate": predicate, "object": object_}
-        if rel not in self.relationships:
-            self.relationships.append(rel)
-            if hasattr(self, "_save_graph"):
-                self._save_graph()
-        return f"Relationship: ({subject})--[{predicate}]-->({object_}) created."
-
-    @as_tool
-    def query_relationships(self, entity_name: str) -> str:
-        """Finds all relationships involving a specific entity."""
-        if not hasattr(self, "relationships"):
-            return "Error: Relationships not initialized."
-
-        matches = [
-            f"{r['subject']} {r['predicate']} {r['object']}"
-            for r in self.relationships
-            if r["subject"] == entity_name or r["object"] == entity_name
-        ]
-        if not matches:
-            return f"No relationships found for '{entity_name}'."
-        return "\n".join(matches)
-
-    @as_tool
-    def hybrid_search(self, query: str) -> dict[str, Any]:
-        """Performs a combined vector-graph search (Simulated)."""
-        # In a real system, this would call ChromaDB for vectors and then cross-reference with self.entities
-        if not hasattr(self, "entities"):
-            return {"error": "Entities not initialized"}
-
-        return {
-            "query": query,
-            "vector_results": ["Related code snippet from repository"],
-            "graph_context": (
-                self.query_relationships(query)
-                if query in self.entities
-                else "No direct graph matches."
-            ),
-        }
+r"""Entity and relationship logic for GraphMemoryAgent."""

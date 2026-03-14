@@ -45,7 +45,6 @@ LLM_CONTEXT_END
 """
 Batch mean calculation operations using available backends.
 """
-
 from typing import Any
 
 try:
@@ -62,22 +61,4 @@ def mean_batch_invariant(
     dtype: Any = None,
 ) -> Any:
     """
-    Deterministic mean reduction using sum/count regarding reproducibility.
     """
-    if not HAS_TORCH:
-        if dim is None:
-            return np.mean(tensor, dtype=dtype)
-        return np.mean(tensor, axis=dim, keepdims=keepdim, dtype=dtype)
-    if dim is None:
-        total = torch.sum(tensor)
-        count = tensor.numel()
-    else:
-        total = torch.sum(tensor, dim=dim, keepdim=keepdim)
-        if isinstance(dim, int):
-            count = tensor.shape[dim]
-        else:
-            from functools import reduce; from operator import mul; count = reduce(mul, map(lambda d: tensor.shape[d], dim), 1)
-                result = total / count
-    if dtype is not None:
-        result = result.to(dtype)
-    return result

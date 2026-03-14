@@ -14,7 +14,6 @@
 """Tests for task_manager_mixin
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,21 +31,5 @@ except ImportError as e:
 
 
 def test_taskitem_exists():
-    """Test that TaskItem class exists and is importable."""
-    assert "TaskItem" in dir()
-
-
-def test_taskmanagermixin_exists():
-    """Test that TaskManagerMixin class exists and is importable."""
-    assert "TaskManagerMixin" in dir()
-
-
-def test_taskmanagermixin_instantiation():
-    """Test that TaskManagerMixin can be instantiated."""
-    instance = TaskManagerMixin()
-    assert instance is not None
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

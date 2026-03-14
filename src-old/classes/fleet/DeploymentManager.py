@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/fleet/DeploymentManager.description.md
 
@@ -132,6 +132,5 @@ services:
         return str(file_path)
 
     def get_deployment_status(self) -> str:
-        """Returns status of generated assets."""
-        manifests = list(self.deployment_dir.glob("*"))
-        return f"Deployment Manager: Generated {len(manifests)} orchestration assets in {self.deployment_dir}"
+        """
+        """

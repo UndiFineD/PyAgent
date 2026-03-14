@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,23 +49,3 @@ from __future__ import annotations
 """
 Strategies Module: Unified interface for agent decision-making strategies.
 """
-
-
-import sys
-from collections.abc import Awaitable, Callable
-from pathlib import Path
-
-from src.core.base.lifecycle.version import VERSION
-
-# Ensure project root and src are in path for modular imports
-root = Path(__file__).parent.parent
-if str(root) not in sys.path:
-    sys.path.append(str(root))
-if str(root / "src") not in sys.path:
-    sys.path.append(str(root / "src"))
-
-# Modular imports
-__version__ = VERSION
-
-# Type alias for functional compatibility
-BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], Awaitable[str]]

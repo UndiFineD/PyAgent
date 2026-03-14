@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,34 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-from .improvement import Improvement
-from .improvement_diff_type import ImprovementDiffType
-
-__version__ = VERSION
-
-
-@dataclass
-class ImprovementDiff:
-    """Difference in a single improvement between branches.
-
-    Attributes:
-        improvement_id: Unique improvement identifier.
-        diff_type: Type of difference.
-        source_version: Improvement in source branch (if exists).
-        target_version: Improvement in target branch (if exists).
-        change_summary: Summary of changes.
-
-    """
-
-    improvement_id: str
-    diff_type: ImprovementDiffType
-    source_version: Improvement | None = None
-    target_version: Improvement | None = None
-    change_summary: str = ""
+r"""Auto-extracted class from agent_improvements.py"""

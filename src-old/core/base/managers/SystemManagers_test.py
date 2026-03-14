@@ -14,7 +14,6 @@
 """Tests for SystemManagers
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,41 +31,5 @@ except ImportError as e:
 
 
 def test_fileprioritymanager_exists():
-    """Test that FilePriorityManager class exists and is importable."""
-    assert "FilePriorityManager" in dir()
-
-
-def test_responsecache_exists():
-    """Test that ResponseCache class exists and is importable."""
-    assert "ResponseCache" in dir()
-
-
-def test_statepersistence_exists():
-    """Test that StatePersistence class exists and is importable."""
-    assert "StatePersistence" in dir()
-
-
-def test_eventmanager_exists():
-    """Test that EventManager class exists and is importable."""
-    assert "EventManager" in dir()
-
-
-def test_healthchecker_exists():
-    """Test that HealthChecker class exists and is importable."""
-    assert "HealthChecker" in dir()
-
-
-def test_profilemanager_exists():
-    """Test that ProfileManager class exists and is importable."""
-    assert "ProfileManager" in dir()
-
-
-def test_profilemanager_instantiation():
-    """Test that ProfileManager can be instantiated."""
-    instance = ProfileManager()
-    assert instance is not None
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

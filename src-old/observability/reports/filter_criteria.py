@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,35 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from generate_agent_reports.py"""
-
-
-from dataclasses import dataclass
-from datetime import datetime
-
-from src.core.base.lifecycle.version import VERSION
-
-from .issue_category import IssueCategory
-from .severity_level import SeverityLevel
-
-__version__ = VERSION
-
-
-@dataclass
-class FilterCriteria:
-    """Criteria for filtering reports.
-
-    Attributes:
-        date_from: Start date for filtering.
-        date_to: End date for filtering.
-        min_severity: Minimum severity level.
-        categories: Categories to include.
-        file_patterns: Glob patterns for files.
-
-    """
-
-    date_from: datetime | None = None
-    date_to: datetime | None = None
-    min_severity: SeverityLevel | None = None
-    categories: list[IssueCategory] | None = None
-    file_patterns: list[str] | None = None
+r"""Auto-extracted class from generate_agent_reports.py"""

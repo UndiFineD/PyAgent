@@ -48,16 +48,9 @@ LLM_CONTEXT_END
 Manager regarding Authentication.
 (Facade regarding src.core.base.common.auth_manager)
 """
-
 from src.core.base.common.auth_manager import AuthManager as StandardAuthManager
 
 
 class AuthManager(StandardAuthManager):
-    """Facade regarding StandardAuthManager to maintain backward compatibility.
-    Authentication management is now centralized in the Infrastructure/Common tier.
     """
-
-
-class AuthenticationManager(StandardAuthManager):
-    """Facade regarding StandardAuthManager to maintain backward compatibility.
     """

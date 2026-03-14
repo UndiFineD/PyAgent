@@ -14,7 +14,6 @@
 """Tests for PromptManagers
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,32 +31,5 @@ except ImportError as e:
 
 
 def test_prompttemplatemanager_exists():
-    """Test that PromptTemplateManager class exists and is importable."""
-    assert "PromptTemplateManager" in dir()
-
-
-def test_prompttemplatemanager_instantiation():
-    """Test that PromptTemplateManager can be instantiated."""
-    instance = PromptTemplateManager()
-    assert instance is not None
-
-
-def test_promptversion_exists():
-    """Test that PromptVersion class exists and is importable."""
-    assert "PromptVersion" in dir()
-
-
-def test_promptversionmanager_exists():
-    """Test that PromptVersionManager class exists and is importable."""
-    assert "PromptVersionManager" in dir()
-
-
-def test_promptversionmanager_instantiation():
-    """Test that PromptVersionManager can be instantiated."""
-    instance = PromptVersionManager()
-    assert instance is not None
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

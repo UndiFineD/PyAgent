@@ -43,10 +43,4 @@ LLM_CONTEXT_END
 
 """
 
-"""Facade for AuthCore to maintain backward compatibility with AuthManager."""
-
-# Use absolute import to avoid relative import issues when the module is loaded
-# via different mechanisms (e.g. pytest spec loader).
-from src.core.base.common.auth_core import AuthCore as AuthManager
-
-__all__ = ["AuthManager"]
+r"""Facade for AuthCore to maintain backward compatibility with AuthManager."""

@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,32 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py"""
-
-from dataclasses import dataclass, field
-from typing import Any
-
-from src.core.base.version import VERSION
-from src.logic.agents.cognitive.context.models.VisualizationType import (
-    VisualizationType,
-)
-
-__version__ = VERSION
-
-
-@dataclass
-class VisualizationData:
-    """Data for context visualization.
-
-    Attributes:
-        viz_type: Type of visualization.
-        nodes: List of node data.
-        edges: List of edge connections.
-        layout: Layout algorithm to use.
-
-    """
-
-    viz_type: VisualizationType
-    nodes: list[dict[str, Any]] = field(default_factory=lambda: [])
-    edges: list[tuple[str, str]] = field(default_factory=lambda: [])
-    layout: str = "hierarchical"
+r"""Auto-extracted class from agent_context.py"""

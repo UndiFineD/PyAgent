@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/cognitive/MemoryConsolidatorCore.description.md
@@ -75,7 +76,6 @@ Pure logic core for memory consolidation.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -101,7 +101,6 @@ MemoryConsolidatorCore logic for PyAgent.
 Pure logic for distilling interactions into insights.
 No I/O or side effects.
 """
-
 import time
 from typing import Any
 
@@ -111,53 +110,5 @@ __version__ = VERSION
 
 
 class MemoryConsolidatorCore:
-    """Pure logic core for memory consolidation."""
-
-    @staticmethod
-    def create_interaction_entry(agent: str, task: str, outcome: str) -> dict[str, Any]:
-        """Formats a single interaction for the buffer."""
-        return {
-            "timestamp": time.time(),
-            "agent": agent,
-            "task": task,
-            "outcome": outcome,
-        }
-
-    @staticmethod
-    def distill_buffer(buffer: list[dict[str, Any]]) -> list[str]:
-        """Groups interactions and generates summary strings (insights)."""
-        if not buffer:
-            return []
-
-        summary: dict[str, list[str]] = {}
-        for entry in buffer:
-            agent = entry.get("agent", "Unknown")
-            if agent not in summary:
-                summary[agent] = []
-            summary[agent].append(entry.get("task", "Unknown Task"))
-
-        consolidated: list[str] = []
-        for agent, tasks in summary.items():
-            # In a real scenario, this might involve LLM calls (via the Shell)
-            # but the logic of collation is here.
-            insight = f"{agent} completed {len(tasks)} tasks. Key focus: {tasks[-1]}."
-            consolidated.append(insight)
-
-        return consolidated
-
-    @staticmethod
-    def filter_memory_by_query(memory: list[dict[str, Any]], query: str) -> list[str]:
-        """Logic for keyword search across consolidated insights."""
-        matches: list[str] = []
-        query_lower = query.lower()
-        for day in memory:
-            date_str = day.get("date", "Unknown Date")
-            for insight in day.get("insights", []):
-                if query_lower in insight.lower():
-                    matches.append(f"{date_str}: {insight}")
-        return matches
-
-    @staticmethod
-    def format_daily_memory(insights: list[str]) -> dict[str, Any]:
-        """Prepares the daily record object."""
-        return {"date": time.strftime("%Y-%m-%d"), "insights": insights}
+    """
+    """

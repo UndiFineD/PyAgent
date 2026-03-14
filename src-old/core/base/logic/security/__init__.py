@@ -12,6 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-generated package marker to ensure consistent imports during pytest collection."""
-
-__all__ = []
+r"""Auto-generated package marker to ensure consistent imports during pytest collection."""

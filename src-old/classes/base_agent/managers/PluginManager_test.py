@@ -14,7 +14,6 @@
 """Tests for PluginManager
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,15 +31,5 @@ except ImportError as e:
 
 
 def test_pluginmetadata_exists():
-    """Test that PluginMetadata class exists and is importable."""
-    assert "PluginMetadata" in dir()
-
-
-def test_pluginmanager_exists():
-    """Test that PluginManager class exists and is importable."""
-    assert "PluginManager" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

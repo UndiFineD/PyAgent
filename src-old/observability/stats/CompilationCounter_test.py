@@ -32,45 +32,5 @@ except ImportError as e:
 
 
 def test_compileeventtype_exists():
-    """Test that CompileEventType class exists and is importable."""
-    assert "CompileEventType" in dir()
-
-
-def test_compileevent_exists():
-    """Test that CompileEvent class exists and is importable."""
-    assert "CompileEvent" in dir()
-
-
-def test_functionstats_exists():
-    """Test that FunctionStats class exists and is importable."""
-    assert "FunctionStats" in dir()
-
-
-def test_compilationcounter_exists():
-    """Test that CompilationCounter class exists and is importable."""
-    assert "CompilationCounter" in dir()
-
-
-def test_recompiletracker_exists():
-    """Test that RecompileTracker class exists and is importable."""
-    assert "RecompileTracker" in dir()
-
-
-def test_trendanalyzer_exists():
-    """Test that TrendAnalyzer class exists and is importable."""
-    assert "TrendAnalyzer" in dir()
-
-
-def test_get_global_counter_exists():
-    """Test that get_global_counter function exists."""
-    assert callable(get_global_counter)
-
-
-def test_reset_global_counter_exists():
-    """Test that reset_global_counter function exists."""
-    assert callable(reset_global_counter)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

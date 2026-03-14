@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,68 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-from dataclasses import dataclass
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .effort_estimate import EffortEstimate
-from .improvement_category import ImprovementCategory
-from .improvement_priority import ImprovementPriority
-
-__version__ = VERSION
-
-
-@dataclass(init=False)
-class ImprovementTemplate:
-    """Template for creating improvements.
-
-    Compatibility notes:
-    - Tests construct templates without `id`/`category`.
-    - Tests sometimes pass `description_pattern` instead of `description_template`.
-    - `instantiate()` returns a dict with `title` and `description`.
-    """
-
-    id: str
-    name: str
-    category: ImprovementCategory
-    title_pattern: str
-    description_template: str
-    default_priority: ImprovementPriority
-    default_effort: EffortEstimate
-
-    def __init__(
-        self,
-        id: str = "",
-        name: str = "",
-        category: ImprovementCategory = ImprovementCategory.OTHER,
-        title_pattern: str = "",
-        description_template: str = "",
-        description_pattern: str = "",
-        default_priority: ImprovementPriority = ImprovementPriority.MEDIUM,
-        default_effort: EffortEstimate = EffortEstimate.MEDIUM,
-        **_: Any,
-    ) -> None:
-        if not description_template and description_pattern:
-            description_template = description_pattern
-
-        resolved_id = (id or name or "template").strip()
-        resolved_name = (name or resolved_id).strip()
-
-        self.id = resolved_id
-        self.name = resolved_name
-        self.category = category
-        self.title_pattern = title_pattern
-        self.description_template = description_template
-        self.default_priority = default_priority
-        self.default_effort = default_effort
-
-    def instantiate(self, variables: dict[str, str]) -> dict[str, str]:
-        """Instantiate the template with variables."""
-        return {
-            "title": self.title_pattern.format(**variables),
-            "description": self.description_template.format(**variables),
-        }
+r"""Auto-extracted class from agent_improvements.py"""

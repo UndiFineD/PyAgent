@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 import sys
 
@@ -68,49 +68,5 @@ Report generator cli.py module.
 
 
 def _sha256_text(text: str) -> str:
-    """Helper for legacy tests."""
-    import hashlib
-
-    return hashlib.sha256(text.encode("utf-8")).hexdigest()
-
-
-class ReportGeneratorCli:
-    """Minimal CLI wrapper used by the package and tests.
-
-    Provides a small programmatic interface for generating and exporting
-    reports without executing top-level CLI behavior at import time.
     """
-
-    def __init__(self, directory: str = ".", output: str = "reports") -> None:
-        self.directory = directory
-        self.output = output
-
-    def run(self) -> str:
-        generator = ReportGenerator(self.directory)
-        report: str = generator.generate_full_report()
-
-        output_dir = Path(self.output)
-        output_dir.mkdir(parents=True, exist_ok=True)
-
-        exporter = ReportExporter()
-        exporter.export(report, ExportFormat.HTML, output_dir / "report.html")
-        (output_dir / "PROGRESS_DASHBOARD.md").write_text(report, encoding="utf-8")
-
-        return str(output_dir)
-
-
-def main() -> None:
-    import argparse
-
-    parser = argparse.ArgumentParser(description="Generate Agent Reports")
-    parser.add_argument("--dir", default=".", help="Directory to scan")
-    parser.add_argument("--output", default="reports", help="Output directory")
-    args: Namespace = parser.parse_args()
-
-    cli = ReportGeneratorCli(directory=args.dir, output=args.output)
-    out = cli.run()
-    print(f"Reports generated in {out}")
-
-
-if __name__ == "__main__":
-    main()
+    """

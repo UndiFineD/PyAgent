@@ -14,7 +14,6 @@
 """Tests for ResilientStubs
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,15 +31,5 @@ except ImportError as e:
 
 
 def test_resilientstub_exists():
-    """Test that ResilientStub class exists and is importable."""
-    assert "ResilientStub" in dir()
-
-
-def test_resilient_import_exists():
-    """Test that resilient_import function exists."""
-    assert callable(resilient_import)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

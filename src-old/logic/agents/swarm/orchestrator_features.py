@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,8 +48,6 @@ from __future__ import annotations
 """
 OrchestratorFeatures: Mixin class for OrchestratorAgent features.
 """
-
-
 from .orchestrator_diff_mixin import OrchestratorDiffMixin
 from .orchestrator_execution_mixin import OrchestratorExecutionMixin
 from .orchestrator_lifecycle_mixin import OrchestratorLifecycleMixin
@@ -66,6 +64,5 @@ class OrchestratorFeatures(
     OrchestratorExecutionMixin,
     OrchestratorWorkPatternMixin,
 ):  # pylint: disable=too-many-ancestors
-    """Mixin class that provides additional features to OrchestratorAgent.
-    This helps keep the main OrchestratorAgent file small (<30KB).
+    """
     """

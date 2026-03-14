@@ -32,8 +32,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -54,8 +54,6 @@ Specializes in managing 'Agentic Features' - high-utility context fragments,
 pre-computed embeddings, and specialized tool-discovery metadata.
 Inspired by MLOps best practices.
 """
-
-
 import json
 import logging
 from pathlib import Path
@@ -70,92 +68,5 @@ __version__ = VERSION
 
 
 class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """Manages the lifecycle of high-utility context features for the fleet.
-    Integrated with SynthesisCore for feature vectorization and insight merging.
     """
-
-    def __init__(self, file_path: str = ".") -> None:
-        super().__init__(file_path)
-        self.feature_dir = (
-            Path(self._workspace_root) / "data/memory/agent_store/features"
-        )
-        self.feature_dir.mkdir(parents=True, exist_ok=True)
-        self.core = SynthesisCore()
-
-    @as_tool
-    def store_vectorized_insight(self, insight_text: str, tags: list[str]) -> str:
-        """Vectorizes a text insight and stores it for swarm-wide retrieval.
-        """
-        vector = self.core.vectorize_insight(insight_text)
-        feature_name = f"insight_{hash(insight_text)}"
-        return self.register_feature(
-            feature_name, vector, {"original_text": insight_text, "tags": tags}
-        )
-
-    @as_tool
-    def merge_swarm_insights(self, feature_names: list[str]) -> list[float]:
-        """Merges multiple vectorized insights into a single 'Global Fleet Vector'.
-        """
-        vectors = []
-        for name in feature_names:
-            v = self.get_feature(name)
-            if v:
-                vectors.append(v)
-
-        return self.core.merge_feature_vectors(vectors)
-
-    @as_tool
-    def register_feature(
-        self, feature_name: str, value: Any, metadata: dict[str, Any] | None = None
-    ) -> str:
-        """Registers a new feature in the store.
-
-        Args:
-            feature_name: Unique identifier for the feature (e.g., 'python_error_patterns').
-            value: The data or logic representing the feature.
-            metadata: Additional context (e.g., 'version', 'source_agent').
-
-        """
-        output_path = self.feature_dir / f"{feature_name}.json"
-        try:
-            with open(output_path, "w", encoding="utf-8") as f:
-                json.dump({"value": value, "metadata": metadata or {}}, f, indent=4)
-            return f"Feature '{feature_name}' successfully registered in store."
-        except (IOError, ValueError, TypeError) as e:
-            return f"Failed to register feature: {e}"
-
-    @as_tool
-    def get_feature(self, feature_name: str) -> Any | None:
-        """Retrieves a feature from the store."""
-        path = self.feature_dir / f"{feature_name}.json"
-
-        if not path.exists():
-            return None
-        try:
-            with open(path, encoding="utf-8") as f:
-                data = json.load(f)
-                return data.get("value")
-        except (IOError, ValueError, json.JSONDecodeError) as e:
-            logging.error(f"Error reading feature {feature_name}: {e}")
-            return None
-
-    @as_tool
-    def list_features(self) -> list[str]:
-        """Lists all available features in the store."""
-        return [f.stem for f in self.feature_dir.glob("*.json")]
-
-    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Advisory on feature engineering for agents."""
-        _ = (prompt, target_file)
-        return (
-            "I am serving current agentic features. Recommend a feature for extraction?"
-        )
-
-
-if __name__ == "__main__":
-    from src.core.base.common.base_utilities import create_main_function
-
-    main = create_main_function(
-        FeatureStoreAgent, "Feature Store Agent", "Feature life-cycle management"
-    )
-    main()
+    """

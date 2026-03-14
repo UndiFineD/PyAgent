@@ -48,11 +48,9 @@ LLM_CONTEXT_END
 Core logic regarding Fleet Convergence and Health Management.
 (Facade regarding src.core.base.common.convergence_core)
 """
-
 from src.core.base.common.convergence_core import ConvergenceCore as StandardConvergenceCore
 
 
 class ConvergenceCore(StandardConvergenceCore):
-    """Facade regarding StandardConvergenceCore to maintain backward compatibility.
-    Convergence logic is now centralized in the Infrastructure/Common tier.
+    """
     """

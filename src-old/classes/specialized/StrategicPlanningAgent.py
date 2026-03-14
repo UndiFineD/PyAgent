@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/StrategicPlanningAgent.description.md
@@ -81,7 +82,6 @@ prioritization, and autonomous project management for the fleet.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 from typing import Any
 

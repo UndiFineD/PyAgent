@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,39 +50,4 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""Custom logging handler for redirecing output to Tkinter widgets."""
-
-
-import logging
-import tkinter as tk
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-class WidgetLogger(logging.Handler):
-    """Logging handler that redirects formatted log records to a Tkinter Text widget."""
-
-    def __init__(self, widget: tk.Text, thread_id: int | None = None) -> None:
-        super().__init__()
-        self.widget: Any = widget
-        self.thread_id = thread_id
-
-    def emit(self, record: logging.LogRecord) -> None:
-        # Filter by thread if ID is provided
-        if self.thread_id and record.thread != self.thread_id:
-            return
-
-        msg: str = self.format(record)
-
-        def append() -> None:
-            try:
-                self.widget.insert(tk.END, msg + "\n")
-                self.widget.see(tk.END)
-            except tk.TclError:
-                # Widget might have been destroyed
-                pass
-
-        self.widget.after(0, append)
+r"""Custom logging handler for redirecing output to Tkinter widgets."""

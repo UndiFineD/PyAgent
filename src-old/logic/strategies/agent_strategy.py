@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,45 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 from collections.abc import Callable
 
-"""Auto-extracted class from agent_strategies.py"""
-
-
-from abc import ABC, abstractmethod
-
-from src.core.base.lifecycle.version import VERSION
-
-BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
-
-__version__ = VERSION
-
-
-class AgentStrategy(ABC):
-    """Abstract base class for agent execution strategies."""
-
-    @abstractmethod
-    async def execute(
-        self,
-        prompt: str,
-        context: str,
-        backend_call: BackendFunction,
-        system_prompt: str | None = None,
-        history: list[dict[str, str]] | None = None,
-        agent_name: str = "UnknownAgent",
-        task_id: str = "UnknownTask",
-    ) -> str:
-        """Execute the strategy to generate a response.
-
-        Args:
-            prompt: The user's request or instruction.
-            context: The current file content or context.
-            backend_call: A callable to invoke the LLM.
-            system_prompt: Optional system prompt.
-            history: Optional conversation history.
-            agent_name: The name of the agent executing the strategy.
-            task_id: A unique identifier for the current task.
-
-        Returns:
-            The final generated content.
-
-        """
-        ...
+r"""Auto-extracted class from agent_strategies.py"""

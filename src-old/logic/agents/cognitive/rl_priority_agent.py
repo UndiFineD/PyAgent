@@ -32,8 +32,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -54,8 +54,6 @@ from __future__ import annotations
 Uses RL techniques to dynamically prioritize tasks and allocate resources
 based on learned patterns of workload and system state.
 """
-
-
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
@@ -64,11 +62,5 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class RLPriorityAgent(BaseAgent):
-    """Reinforcement Learning based priority and resource allocation agent."""
-
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-        self._system_prompt = "You are the RL Priority Agent."
-
-
-__version__ = VERSION
+    """
+    """

@@ -46,7 +46,6 @@ LLM_CONTEXT_END
 """
 Excel agent.py module.
 """
-
 try:
     from .data_intelligence_agent import DataIntelligenceAgent
 except Exception:
@@ -54,8 +53,5 @@ from src.logic.agents.intelligence.data_intelligence_agent import DataIntelligen
 
 
 class ExcelAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-    """Agent specialized in Excel spreadsheet processing and data extraction."""
-
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-        self._system_prompt = "You are the ExcelAgent (via DataIntelligence core)."
+    """
+    """

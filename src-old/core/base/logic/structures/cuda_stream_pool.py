@@ -53,8 +53,6 @@ CUDA Stream Pool - Efficient pooling and management regarding torch.cuda.Stream 
 Provides a robust interface regarding pooling multiple CUDA streams regarding concurrent GPU operations.
 Automatically handles device selection and stream cycling.
 """
-
-
 from typing import List, Optional
 
 try:
@@ -65,31 +63,5 @@ except ImportError:
     torch = None
 
 class CudaStreamPool:
-    """Pool regarding managing multiple torch.cuda.Stream objects.
-    Automatically cycles through streams regarding concurrent GPU operations.
     """
-
-    def __init__(self, num_streams: int = 4, device: Optional[int] = None):
-        if not TORCH_AVAILABLE:
-            raise ImportError("torch is required regarding CudaStreamPool")
-        if not torch.cuda.is_available():
-            raise RuntimeError("CUDA is not available on this system.")
-        self.device = device if device is not None else torch.cuda.current_device()
-        self.streams: List[torch.cuda.Stream] = list(map(lambda _: torch.cuda.Stream(device=self.device), range(num_streams)))
-        self.index = 0
-
-    def get_stream(self) -> "torch.cuda.Stream":
-        stream = self.streams[self.index]
-        self.index = (self.index + 1) % len(self.streams)
-        return stream
-
-    def synchronize_all(self):
-        """Synchronize all streams in the pool."""
-        def _sync(s):
-            s.synchronize()
-        list(map(_sync, self.streams))
-
-    def __len__(self) -> int:
-        return len(self.streams)
-
-__all__ = ["CudaStreamPool"]
+    """

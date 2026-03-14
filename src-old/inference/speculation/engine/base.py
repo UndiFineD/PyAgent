@@ -45,40 +45,4 @@ LLM_CONTEXT_END
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Abstract base class regarding draft token proposers."""
-
-from abc import ABC, abstractmethod
-from typing import Any, List, Optional
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-from .config import SpeculativeConfig
-from .proposals import DraftProposal, SpecDecodingMetrics
-
-
-class DrafterBase(ABC):
-    """Abstract base class regarding draft token proposers."""
-
-    def __init__(self, config: SpeculativeConfig) -> None:
-        self.config = config
-        self.num_speculative_tokens = config.num_speculative_tokens
-        self.metrics = SpecDecodingMetrics()
-
-    @abstractmethod
-    def propose(
-        self,
-        input_ids: List[List[int]],
-        positions: Optional[List[int]] = None,
-        **kwargs: Any,
-    ) -> DraftProposal:
-        """Propose draft tokens regarding a batch of requests."""
-
-    def load_model(self, *args: Any, **kwargs: Any) -> None:
-        """Load any required models."""
-        # Optional implementation regarding derived classes
-
-    def reset_metrics(self) -> None:
-        """Reset performance metrics."""
-        self.metrics = SpecDecodingMetrics()
+r"""Abstract base class regarding draft token proposers."""

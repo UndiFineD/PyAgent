@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,35 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-from collections.abc import Callable
-
-from src.core.base.lifecycle.version import VERSION
-
-from .improvement import Improvement
-
-__version__ = VERSION
-
-
-class ImprovementDashboard:
-    """Renders a lightweight dashboard and emits update callbacks."""
-
-    def __init__(self) -> None:
-        self._callbacks: list[Callable[[], None]] = []
-        self._improvements: list[Improvement] = []
-
-    def on_update(self, callback: Callable[[], None]) -> None:
-        self._callbacks.append(callback)
-
-    def add_improvement(self, improvement: Improvement) -> None:
-        self._improvements.append(improvement)
-        for cb in list(self._callbacks):
-            cb()
-
-    def render(self, improvements: list[Improvement]) -> str:
-        lines = ["# Improvements Dashboard"]
-        for imp in improvements:
-            lines.append(f"- {imp.title}")
-        return "\n".join(lines)
+r"""Auto-extracted class from agent_improvements.py"""

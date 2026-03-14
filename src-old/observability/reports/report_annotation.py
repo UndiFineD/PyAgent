@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,34 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from generate_agent_reports.py"""
-
-
-import time
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class ReportAnnotation:
-    """Annotation on a report.
-
-    Attributes:
-        annotation_id: Unique annotation identifier.
-        report_id: Associated report ID.
-        author: Author of annotation.
-        content: Annotation content.
-        line_number: Line number if applicable.
-        created_at: Creation timestamp.
-
-    """
-
-    annotation_id: str
-    report_id: str
-    author: str
-    content: str
-    line_number: int | None = None
-    created_at: float = field(default_factory=time.time)  # type: ignore[assignment]
+r"""Auto-extracted class from generate_agent_reports.py"""

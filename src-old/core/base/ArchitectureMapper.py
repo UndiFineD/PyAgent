@@ -1,7 +1,7 @@
 # c:\DEV\PyAgent\src\core\base\ArchitectureMapper.py
 # Evolution Phase 236: Documentation Architecture - Mermaid C4 System Context Diagram
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/ArchitectureMapper.description.md
 

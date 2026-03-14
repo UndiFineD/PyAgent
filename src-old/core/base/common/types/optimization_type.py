@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,21 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_coder.py"""
-
-
-from enum import Enum
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-class OptimizationType(Enum):
-    """Types of code optimization."""
-
-    ALGORITHMIC = "algorithmic"
-    MEMORY = "data/memory"
-    IO = "io"
-    CONCURRENCY = "concurrency"
-    CACHING = "caching"
+r"""Auto-extracted class from agent_coder.py"""

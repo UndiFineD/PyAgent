@@ -43,4 +43,4 @@ LLM_CONTEXT_END
 
 """
 
-"""Auto-generated module discovery for System."""
+r"""Auto-generated module discovery for System."""

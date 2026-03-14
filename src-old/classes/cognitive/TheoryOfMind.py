@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/cognitive/TheoryOfMind.description.md
@@ -76,7 +77,6 @@ Acts as the I/O Shell for TheoryOfMindCore.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -92,55 +92,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Shell for TheoryOfMind, managing agent profiles and state."""
-
-from typing import Any
-
-from src.core.base.version import VERSION
-from src.logic.cognitive.TheoryOfMindCore import TheoryOfMindCore
-
-__version__ = VERSION
-
-
-class TheoryOfMind:
-    """Models the mental states and knowledge domains of other agents.
-
-    Acts as the I/O Shell for TheoryOfMindCore.
-    """
-
-    def __init__(self) -> None:
-        self.agent_profiles: dict[str, dict[str, Any]] = {}
-        self.core = TheoryOfMindCore()
-
-    def update_model(self, agent_name: str, observations: dict[str, Any]) -> None:
-        """Updates the internal model via Core."""
-        current_profile = self.agent_profiles.get(
-            agent_name,
-            {
-                "knowledge_domains": [],
-                "strengths": [],
-                "limitations": [],
-                "last_active": 0.0,
-            },
-        )
-
-        updated = self.core.update_profile_logic(current_profile, observations)
-        self.agent_profiles[agent_name] = updated
-
-    def estimate_knowledge(self, agent_name: str, topic: str) -> float:
-        """Estimates knowledge probability via Core."""
-        if agent_name not in self.agent_profiles:
-            return 0.5
-
-        return self.core.estimate_knowledge_score(
-            self.agent_profiles[agent_name], topic
-        )
-
-    def suggest_collaborator(self, task: str) -> list[str]:
-        """Suggests collaborators via Core."""
-        return self.core.rank_collaborators(self.agent_profiles, task)
-
-    def get_mental_map(self) -> dict[str, Any]:
-        """Returns the collective mental map."""
-        # The core already returns serializable lists
-        return self.agent_profiles
+r"""Shell for TheoryOfMind, managing agent profiles and state."""

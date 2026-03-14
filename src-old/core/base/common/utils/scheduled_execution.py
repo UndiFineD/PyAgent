@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,35 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent.py"""
-
-
-from dataclasses import dataclass, field
-from typing import Any
-
-from src.core.base.common.utils.helpers import _empty_dict_str_any
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class ScheduledExecution:
-    """A scheduled agent execution.
-
-    Attributes:
-        name: Schedule name.
-        cron: Cron expression (simplified).
-        agent_config: Agent configuration.
-        enabled: Whether schedule is enabled.
-        last_run: Last run timestamp.
-        next_run: Next run timestamp.
-
-    """
-
-    name: str
-    cron: str  # Simplified: "hourly", "daily", "weekly", or HH:MM
-    agent_config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
-    enabled: bool = True
-    last_run: float | None = None
-    next_run: float | None = None
+r"""Auto-extracted class from agent.py"""

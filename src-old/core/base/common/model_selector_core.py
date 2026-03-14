@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,8 +53,6 @@ from __future__ import annotations
 """
 Core logic for model selection and routing.
 """
-
-
 import logging
 from dataclasses import dataclass, field
 from typing import Dict
@@ -65,26 +63,5 @@ from .models import ModelConfig
 
 @dataclass
 class ModelSelectorCore(BaseCore):
-    """Authoritative engine for selecting models based on agent type and task size.
     """
-
-    models: Dict[str, ModelConfig] = field(
-        default_factory=lambda: {
-            "default": ModelConfig(model_id="gpt-3.5-turbo"),
-            "coding": ModelConfig(model_id="glm-4.7"),
-            "reasoning": ModelConfig(model_id="deepseek-reasoner"),
-        }
-    )
-
-    def __post_init__(self) -> None:
-        super().__init__()
-        if "default" not in self.models:
-            self.models["default"] = ModelConfig(model_id="gpt-3.5-turbo")
-
-    def select(self, agent_type: str, token_estimate: int = 0) -> ModelConfig:
-        """Selects the best model based on agent type and workload size.
-        """
-        if agent_type == "coding" and token_estimate > 4000:
-            logging.info("Routing high-token task (%d) to GLM-4.7.", token_estimate)
-            return self.models.get("coding", self.models["default"])
-        return self.models.get(agent_type, self.models["default"])
+    """

@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/SwarmDistillationAgent.description.md
@@ -81,7 +82,6 @@ Integrated with LessonCore for failure mode propagation.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 from pathlib import Path
 from typing import Any

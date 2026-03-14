@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/core/StabilityCore.description.md
@@ -79,7 +80,6 @@ Integrates SAE activation metrics and error trends into a unified score.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 

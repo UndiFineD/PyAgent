@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/core/ProfilingCore.description.md
@@ -80,7 +81,6 @@ Identifies slow methods and calculates optimization priority.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 import pstats
 from dataclasses import dataclass

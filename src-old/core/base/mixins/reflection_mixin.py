@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,8 +48,6 @@ from __future__ import annotations
 """
 Reflection Mixin: Enables autonomous self-critique and lesson learning for all agents.
 """
-
-
 import logging
 from typing import Any
 
@@ -57,69 +55,5 @@ from src.core.base.logic.core.lesson_core import Lesson, LessonCore
 
 
 class ReflectionMixin:
-    """Adds a self-reflection loop to agents to ensure output correctness and
-    long-term learning from reasoning failures.
     """
-
-    def __init__(self, **kwargs: Any) -> None:
-        """Initialize reflection state."""
-        self._reflection_enabled: bool = kwargs.get("reflection_enabled", True)
-        self._reflection_count: int = 0
-        self._max_reflections: int = 1  # User requested "one-time self reflection"
-        self._lesson_core = LessonCore()
-
-    async def reflect(self, prompt: str, result: str) -> str:
-        """Evaluates the generated output against the original prompt.
-        If flaws are detected, attempts a single corrective pass and records a lesson.
-        """
-        if not self._reflection_enabled or self._reflection_count >= self._max_reflections:
-            return result
-
-        logging.info("[%s] Initiating one-time self-reflection...", self.__class__.__name__)
-        self._reflection_count += 1
-
-        # Craft reflection instructions
-        reflection_instructions = (
-            "### SELF-REFLECTION MANDATE\n"
-            "You are now in reflection mode. Review your previous output for the task below.\n"
-            f"ORIGINAL PROMPT: {prompt}\n"
-            f"YOUR OUTPUT:\n---\n{result}\n---\n"
-            "CRITIQUE CRITERIA:\n"
-            "1. Is the answer factually correct?\n"
-            "2. Does it follow all constraints provided in the prompt?\n"
-            "3. Are there logic errors or code bugs?\n\n"
-            "If you find mistakes, provide the COMPLETE corrected version.\n"
-            "If the output is already optimal, respond ONLY with the word 'VERIFIED'."
-        )
-
-        try:
-            # We use the agent's think method to process the reflection
-            # We temporarily disable reflection for this call to prevent recursion
-            self._reflection_enabled = False
-            reflection_output = await self.think(reflection_instructions)
-            self._reflection_enabled = True
-
-            if reflection_output.strip().upper() == "VERIFIED":
-                logging.info("[%s] Self-reflection confirmed output stability.", self.__class__.__name__)
-                return result
-
-            # Mistake found - record a lesson
-            lesson = Lesson(
-                error_pattern=f"Task: {prompt[:100]}",
-                cause="Initial reasoning failed reflection check",
-                solution="Refined during self-critique pass",
-                impact_score=0.8,
-            )
-            self._lesson_core.record_lesson(lesson)
-            logging.warning("[%s] Mistake identified; corrective lesson recorded.", self.__class__.__name__)
-
-            return reflection_output
-
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error("[%s] Reflection cycle failed: %s", self.__class__.__name__, e)
-            self._reflection_enabled = True
-            return result
-
-    def reset_reflection(self) -> None:
-        """Resets the reflection count for a new task session."""
-        self._reflection_count = 0
+    """

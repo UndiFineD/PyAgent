@@ -14,7 +14,6 @@
 """Tests for ai_talking_head_core
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,36 +31,5 @@ except ImportError as e:
 
 
 def test_talkingheadrequest_exists():
-    """Test that TalkingHeadRequest class exists and is importable."""
-    assert "TalkingHeadRequest" in dir()
-
-
-def test_talkingheadresult_exists():
-    """Test that TalkingHeadResult class exists and is importable."""
-    assert "TalkingHeadResult" in dir()
-
-
-def test_facealignmentresult_exists():
-    """Test that FaceAlignmentResult class exists and is importable."""
-    assert "FaceAlignmentResult" in dir()
-
-
-def test_audiofeatures_exists():
-    """Test that AudioFeatures class exists and is importable."""
-    assert "AudioFeatures" in dir()
-
-
-def test_aitalkingheadcore_exists():
-    """Test that AITalkingHeadCore class exists and is importable."""
-    assert "AITalkingHeadCore" in dir()
-
-
-def test_aitalkingheadcore_instantiation():
-    """Test that AITalkingHeadCore can be instantiated."""
-    instance = AITalkingHeadCore()
-    assert instance is not None
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

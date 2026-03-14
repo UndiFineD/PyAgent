@@ -5,6 +5,6 @@ from src.core.base.state.agent_history import AgentConversationHistory  # type: 
 
 __all__ = ["AgentConversationHistory"]
 
-"""Compatibility shim exposing `AgentConversationHistory` at
+r"""Compatibility shim exposing `AgentConversationHistory` at
 `src.core.base.AgentHistory` to match older import paths.
 """

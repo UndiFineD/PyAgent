@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/InheritedContext.description.md
@@ -84,30 +85,5 @@ LLM_CONTEXT_END
 
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from dataclasses import dataclass, field
-from typing import List
-
-from .InheritanceMode import InheritanceMode
-
-
-@dataclass
-class InheritedContext:
-    """Inherited context from parent file.
-
-    Attributes:
-        parent_path: Path to parent context file.
-        inherited_sections: Sections inherited from parent.
-        mode: Inheritance mode used.
-        overrides: Sections that override parent.
-
-    """
-
-    parent_path: str
-    inherited_sections: List[str] = field(default_factory=lambda: [])
-    mode: InheritanceMode = InheritanceMode.MERGE
-    overrides: List[str] = field(default_factory=lambda: [])
+r"""Auto-extracted class from agent_context.py"""

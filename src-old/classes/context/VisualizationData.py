@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/VisualizationData.description.md
@@ -84,30 +85,5 @@ LLM_CONTEXT_END
 
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Tuple
-
-from .VisualizationType import VisualizationType
-
-
-@dataclass
-class VisualizationData:
-    """Data for context visualization.
-
-    Attributes:
-        viz_type: Type of visualization.
-        nodes: List of node data.
-        edges: List of edge connections.
-        layout: Layout algorithm to use.
-
-    """
-
-    viz_type: VisualizationType
-    nodes: List[Dict[str, Any]] = field(default_factory=lambda: [])
-    edges: List[Tuple[str, str]] = field(default_factory=lambda: [])
-    layout: str = "hierarchical"
+r"""Auto-extracted class from agent_context.py"""

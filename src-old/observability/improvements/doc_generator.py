@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,33 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-from typing import Any, cast
-
-from src.core.base.lifecycle.version import VERSION
-
-from .improvement import Improvement
-
-__version__ = VERSION
-
-
-class DocGenerator:
-    """Generates simple documentation text for improvements."""
-
-    def __init__(self) -> None:
-        self.templates: dict[str, str] = {
-            "default": "## {title}\n\n{description}\n",
-        }
-
-    def generate(self, improvement: Improvement, include_metadata: bool = False) -> str:
-        base = self.templates["default"].format(title=improvement.title, description=improvement.description)
-        if include_metadata:
-            meta = getattr(improvement, "metadata", None)
-            if isinstance(meta, dict) and meta:
-                base += "\n## Metadata\n"
-                meta_dict = cast(dict[str, Any], meta)
-                for k, v in meta_dict.items():
-                    base += f"- {k}: {v}\n"
-        return base
+r"""Auto-extracted class from agent_improvements.py"""

@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,8 +48,6 @@ from __future__ import annotations
 """
 Agent for deduplicating redundant data in shards.
 """
-
-
 import gzip
 import hashlib
 import json
@@ -66,121 +64,5 @@ __version__ = VERSION
 
 
 class ShardDeduplicationAgent(BaseAgent):
-    """Analyzes and deduplicates shard data to reduce storage and noise.
-    Identifies redundant records based on prompt hash and result content.
     """
-
-    def __init__(self, workspace_path: str) -> None:
-        super().__init__(workspace_path)
-        self.name = "ShardDeduplicator"
-        self.stats = {
-            "files_processed": 0,
-            "records_read": 0,
-            "duplicates_removed": 0,
-            "bytes_saved": 0,
-        }
-
-    def deduplicate_shards(self, data_dir: str) -> dict[str, Any]:
-        """Scans directory for .jsonl.gz files and removes duplicate entries.
-
-        Definition of Duplicate:
-        - Same `prompt_hash` AND same `result` content.
-        - Timestamps and metadata are ignored for equality check.
-        """
-        data_path = Path(data_dir)
-        if not data_path.exists():
-            logging.warning(f"Data directory {data_dir} does not exist.")
-            return self.stats
-
-        logging.info(f"Starting deduplication in {data_dir}")
-
-        for shard_file in data_path.rglob("*.jsonl.gz"):
-            self._process_single_shard(shard_file)
-
-        logging.info(f"Deduplication complete. Stats: {self.stats}")
-        return self.stats
-
-    def _process_single_shard(self, file_path: Path) -> None:
-        """Deduplicates a single compressed shard file."""
-        self.stats["files_processed"] += 1
-        original_size = file_path.stat().st_size
-
-        temp_file = file_path.with_suffix(".tmp.gz")
-        unique_records = {}  # Map (prompt_hash, result_hash) -> record_line
-
-        try:
-            with gzip.open(file_path, "rt", encoding="utf-8") as f_in:
-                lines = f_in.readlines()
-
-            new_lines = []
-            for line in lines:
-                self.stats["records_read"] += 1
-                try:
-                    data = json.loads(line)
-
-                    # Construct a unique key for the semantic content
-                    prompt_hash = data.get("prompt_hash", "")
-                    result = data.get("result", "")
-
-                    if not prompt_hash:
-                        # Fallback if hash missing: hash the prompt
-                        prompt = data.get("prompt", "")
-                        prompt_hash = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
-
-                    # Hash the result to ensure safe key usage
-                    result_hash = hashlib.sha256(
-                        str(result).encode("utf-8")
-                    ).hexdigest()
-
-                    key = (prompt_hash, result_hash)
-
-                    if key in unique_records:
-                        self.stats["duplicates_removed"] += 1
-                        # We optimize by keeping the *first* occurrence (usually oldest)
-                        # or potentially the one with more metadata?
-                        # For now, keep first.
-                        continue
-
-                    unique_records[key] = True
-                    new_lines.append(line)
-
-                except json.JSONDecodeError:
-                    # Keep malformed lines to avoid data loss, or log warning
-                    logging.warning(f"Malformed JSON in {file_path}, preserving line.")
-                    new_lines.append(line)
-
-            if len(new_lines) < len(lines):
-                # Write back only if we removed something
-                with gzip.open(temp_file, "wt", encoding="utf-8") as f_out:
-                    f_out.writelines(new_lines)
-
-                # atomic replacement
-                shutil.move(str(temp_file), str(file_path))
-
-                new_size = file_path.stat().st_size
-                saved = original_size - new_size
-                self.stats["bytes_saved"] += saved
-                logging.info(
-                    f"Deduplicated {file_path}: Removed {len(lines) - len(new_lines)} duplicates."
-                )
-            else:
-                if temp_file.exists():
-                    os.remove(temp_file)
-
-        except Exception as e:
-            logging.error(f"Failed to process {file_path}: {e}")
-            if temp_file.exists():
-                os.remove(temp_file)
-
-    if __name__ == "__main__":
-        # Simple CLI for testing
-        import sys
-
-        logging.basicConfig(level=logging.INFO)
-
-        target_dir = (
-            sys.argv[1] if len(sys.argv) > 1 else "data/logs/external_ai_learning"
-        )
-        agent = ShardDeduplicationAgent(os.getcwd())
-        result = agent.deduplicate_shards(target_dir)
-        print(json.dumps(result, indent=2))
+    """

@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 """
 Handy file system mixin.py module.
@@ -49,27 +49,5 @@ from src.core.base.common.base_utilities import as_tool
 
 
 class HandyFileSystemMixin:
-    """Mixin for file system operations in HandyAgent."""
-
-    @as_tool
-    def fast_find(self: HandyAgent, query: str, path: str = ".") -> str:
-        """Intelligently find files using system tools (find/fd or git ls-files)."""
-        try:
-            # Check if fd is available, otherwise use find
-            if shutil.which("fd"):
-                result = subprocess.check_output(["fd", query, path], text=True)
-            elif shutil.which("git"):
-                # git ls-files | grep required shell or manual piping
-                # Using 'with' for resource allocation
-                with subprocess.Popen(["git", "ls-files"], stdout=subprocess.PIPE) as p1:  # nosec
-                    result = subprocess.check_output(["grep", query], stdin=p1.stdout, text=True)  # nosec
-            else:
-                result = subprocess.check_output(["find", path, "-name", f"*{query}*"], text=True)
-
-            res = f"### 🔍 Search Results for '{query}':\n```text\n{result[:1000]}\n```"
-            self._record("fast_find", {"query": query, "path": path}, res)
-            return res
-        except (subprocess.SubprocessError, IOError, OSError) as e:
-            err_msg = f"Search failed: {e}"
-            self._record("fast_find_error", {"query": query, "path": path}, err_msg)
-            return err_msg
+    """
+    """

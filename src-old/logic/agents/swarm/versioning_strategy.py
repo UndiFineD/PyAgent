@@ -46,12 +46,9 @@ LLM_CONTEXT_END
 """
 Versioning strategy.py module.
 """
-
 from enum import Enum
 
 
 class VersioningStrategy(Enum):
-    """Supported versioning schemes for the fleet."""
-
-    SEMVER = "semver"
-    CALVER = "calver"
+    """
+    """

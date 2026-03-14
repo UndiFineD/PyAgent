@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/DependencyGraphAgent.description.md
@@ -81,7 +82,6 @@ Helps in understanding the impact of changes and optimizing imports.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 import ast
 import os

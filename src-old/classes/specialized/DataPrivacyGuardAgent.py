@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/DataPrivacyGuardAgent.description.md
@@ -78,7 +79,6 @@ Identifiable Information), performs redaction, and tracks compliance.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 import re
 from typing import Any

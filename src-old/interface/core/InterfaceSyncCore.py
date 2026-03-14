@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/interface/core/InterfaceSyncCore.description.md
@@ -75,7 +76,6 @@ It manages the central state and 'Theme Engine' propagation.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 from typing import Any
 

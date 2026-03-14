@@ -12,10 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Package marker for top-level `src.generated`.
+r"""Package marker for top-level `src.generated`.
 
 Ensures generated modules under `src/generated` are importable as a
 package and disambiguates test module names during pytest collection.
 """
-
-__all__ = []

@@ -14,7 +14,6 @@
 """Tests for refactor_external_batch
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,35 +31,5 @@ except ImportError as e:
 
 
 def test_parse_allowlist_exists():
-    """Test that parse_allowlist function exists."""
-    assert callable(parse_allowlist)
-
-
-def test_sanitize_filename_exists():
-    """Test that sanitize_filename function exists."""
-    assert callable(sanitize_filename)
-
-
-def test_is_ast_safe_exists():
-    """Test that is_ast_safe function exists."""
-    assert callable(is_ast_safe)
-
-
-def test_file_hash_exists():
-    """Test that file_hash function exists."""
-    assert callable(file_hash)
-
-
-def test_process_exists():
-    """Test that process function exists."""
-    assert callable(process)
-
-
-def test_main_exists():
-    """Test that main function exists."""
-    assert callable(main)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

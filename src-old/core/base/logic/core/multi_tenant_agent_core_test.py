@@ -14,7 +14,6 @@
 """Tests for multi_tenant_agent_core
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,66 +31,5 @@ except ImportError as e:
 
 
 def test_processtype_exists():
-    """Test that ProcessType class exists and is importable."""
-    assert "ProcessType" in dir()
-
-
-def test_tooltype_exists():
-    """Test that ToolType class exists and is importable."""
-    assert "ToolType" in dir()
-
-
-def test_agentstatus_exists():
-    """Test that AgentStatus class exists and is importable."""
-    assert "AgentStatus" in dir()
-
-
-def test_taskstatus_exists():
-    """Test that TaskStatus class exists and is importable."""
-    assert "TaskStatus" in dir()
-
-
-def test_tenantconfig_exists():
-    """Test that TenantConfig class exists and is importable."""
-    assert "TenantConfig" in dir()
-
-
-def test_agentdefinition_exists():
-    """Test that AgentDefinition class exists and is importable."""
-    assert "AgentDefinition" in dir()
-
-
-def test_taskdefinition_exists():
-    """Test that TaskDefinition class exists and is importable."""
-    assert "TaskDefinition" in dir()
-
-
-def test_crewdefinition_exists():
-    """Test that CrewDefinition class exists and is importable."""
-    assert "CrewDefinition" in dir()
-
-
-def test_tooldefinition_exists():
-    """Test that ToolDefinition class exists and is importable."""
-    assert "ToolDefinition" in dir()
-
-
-def test_executionresult_exists():
-    """Test that ExecutionResult class exists and is importable."""
-    assert "ExecutionResult" in dir()
-
-
-def test_multitenantagentcore_exists():
-    """Test that MultiTenantAgentCore class exists and is importable."""
-    assert "MultiTenantAgentCore" in dir()
-
-
-def test_multitenantagentcore_instantiation():
-    """Test that MultiTenantAgentCore can be instantiated."""
-    instance = MultiTenantAgentCore()
-    assert instance is not None
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

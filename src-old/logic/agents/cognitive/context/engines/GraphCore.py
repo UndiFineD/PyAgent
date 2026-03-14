@@ -5,5 +5,5 @@ from .graph_core import GraphCore  # type: ignore
 
 __all__ = ["GraphCore"]
 
-"""CamelCase shim exposing `GraphCore` module name.
+r"""CamelCase shim exposing `GraphCore` module name.
 """

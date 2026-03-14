@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,35 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Agent specializing in Security Auditing and Vulnerability detection."""
-
-
-from src.core.base.common.base_utilities import create_main_function
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """Agent for security analysis of code and configuration."""
-
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-
-        self._system_prompt = (
-            "You are a Senior Security Auditor. "
-            "Scan the provided content for vulnerabilities, hardcoded secrets, "
-            "SQL injection risks, cross-site scripting (XSS), and insecure dependencies. "
-            "Provide detailed remediation steps for each finding."
-        )
-
-    def _get_default_content(self) -> str:
-        return "# Security Audit Report\n\n## Summary\nPending audit...\n"
-
-
-if __name__ == "__main__":
-    main = create_main_function(
-        SecurityAgent, "Security Agent", "File to audit for security"
-    )
-    main()
+r"""Agent specializing in Security Auditing and Vulnerability detection."""

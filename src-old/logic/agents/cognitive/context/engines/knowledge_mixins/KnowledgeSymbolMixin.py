@@ -1,7 +1,7 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/knowledge_mixins/KnowledgeSymbolMixin.description.md
 

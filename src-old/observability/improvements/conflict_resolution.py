@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,31 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-from .improvement import Improvement
-
-__version__ = VERSION
-
-
-@dataclass
-class ConflictResolution:
-    """Resolution for a conflicting improvement.
-
-    Attributes:
-        improvement_id: ID of conflicting improvement.
-        resolution: Resolved improvement version.
-        strategy: Resolution strategy used.
-        resolved_by: Who resolved the conflict.
-
-    """
-
-    improvement_id: str
-    resolution: Improvement
-    strategy: str = "manual"
-    resolved_by: str = ""
+r"""Auto-extracted class from agent_improvements.py"""

@@ -1,4 +1,4 @@
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/__init__.description.md
 
@@ -28,26 +28,3 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
-"""
-Core package.
-"""
-
-# Copyright 2026 PyAgent Authors
-from .code_analyzer import CodeAnalyzerCore  # noqa: F401
-from .events import EventCore  # noqa: F401
-from .formatting import FormattingCore  # noqa: F401
-from .memory_consolidation_core import MemoryConsolidationCore  # noqa: F401
-from .metrics import MetricsCore  # noqa: F401
-from .utils import UtilsCore  # noqa: F401
-from .validation import ValidationCore  # noqa: F401
-
-__all__ = [
-    "ValidationCore",
-    "MetricsCore",
-    "FormattingCore",
-    "UtilsCore",
-    "EventCore",
-    "CodeAnalyzerCore",
-    "MemoryConsolidationCore",
-]

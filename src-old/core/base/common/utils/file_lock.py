@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,33 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent.py"""
-
-
-from dataclasses import dataclass
-from pathlib import Path
-
-from src.core.base.common.models import LockType
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class FileLock:
-    """File lock information.
-
-    Attributes:
-        file_path: Path to the locked file.
-        lock_type: Type of lock.
-        owner: Lock owner identifier.
-        acquired_at: Timestamp when lock was acquired.
-        expires_at: Timestamp when lock expires (optional).
-
-    """
-
-    file_path: Path
-    lock_type: LockType
-    owner: str
-    acquired_at: float
-    expires_at: float | None = None
+r"""Auto-extracted class from agent.py"""

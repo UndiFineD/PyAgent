@@ -31,8 +31,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -131,69 +131,5 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
 
     @as_tool
     async def spawn_node(self, agent_name: str, agent_type: str) -> str:
-        """Simulates spawning a new agent node in the infrastructure.
-
-        Args:
-            agent_name: Unique name for the new node.
-            agent_type: The agent class to instantiate.
-
         """
-        logging.info(
-            f"FleetDeployer: Spawning new node '{agent_name}' of type '{agent_type}'"
-        )
-
-        spawn_log = {
-            "node_id": agent_name,
-            "type": agent_type,
-            "status": "provisioning",
-            "timestamp": time.time() if "time" in globals() else 0,
-        }
-
-        log_path = self.deploy_dir / "provisioning_logs.jsonl"
-
-        def append_log() -> str:
-            with open(log_path, "a", encoding="utf-8") as f:
-                f.write(json.dumps(spawn_log) + "\n")
-
-        await asyncio.to_thread(append_log)
-
-        return f"Node '{agent_name}' ({agent_type}) provisioning initialized."
-
-    @as_tool
-    async def list_active_nodes(self) -> list[str]:
-        """Lists nodes currently marked as active in the provisioning logs."""
-        log_path = self.deploy_dir / "provisioning_logs.jsonl"
-        if not log_path.exists():
-            return []
-
-        def read_logs() -> str:
-            nodes = []
-            with open(log_path, encoding="utf-8") as f:
-                for line in f:
-                    try:
-                        data = json.loads(line)
-                        nodes.append(data.get("node_id", "unknown"))
-                    except json.JSONDecodeError:
-                        continue
-            return nodes
-
-        return await asyncio.to_thread(read_logs)
-
-    @as_tool
-    async def scale_up(self, agent_type: str, count: int = 1) -> str:
-        """Scales up the number of instances for a specific agent type."""
-        results = []
-        for i in range(count):
-            node_name = f"{agent_type.lower()}-{i}-{os.urandom(2).hex()}"
-            res = await self.spawn_node(node_name, agent_type)
-            results.append(res)
-        return "\n".join(results)
-
-    @as_tool
-    async def consensus_driven_deploy(self, agent_type: str, node_name: str) -> str:
-        """Deploys an agent, but only after reaching consensus (Mock)."""
-        logging.info(
-            f"FleetDeployer: Requesting consensus for deployment of {node_name}..."
-        )
-        # Mock approval
-        return await self.spawn_node(node_name, agent_type)
+        """

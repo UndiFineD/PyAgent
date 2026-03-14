@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,33 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_errors.py"""
-
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-from .trend_direction import TrendDirection
-
-__version__ = VERSION
-
-
-@dataclass
-class TrendData:
-    """Error trend analysis data.
-
-    Attributes:
-        metric_name: Name of the metric being tracked.
-        values: Historical values.
-        timestamps: Timestamps for each value.
-        direction: Current trend direction.
-        prediction: Predicted next value.
-
-    """
-
-    metric_name: str
-    values: list[float] = field(default_factory=lambda: [])
-    timestamps: list[str] = field(default_factory=lambda: [])
-    direction: TrendDirection = TrendDirection.STABLE
-    prediction: float | None = None
+r"""Auto-extracted class from agent_errors.py"""

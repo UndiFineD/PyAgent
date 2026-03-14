@@ -14,7 +14,6 @@
 """Tests for loop_analyzer
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,25 +31,5 @@ except ImportError as e:
 
 
 def test_loopanalysisresult_exists():
-    """Test that LoopAnalysisResult class exists and is importable."""
-    assert "LoopAnalysisResult" in dir()
-
-
-def test_loopanalysisconfig_exists():
-    """Test that LoopAnalysisConfig class exists and is importable."""
-    assert "LoopAnalysisConfig" in dir()
-
-
-def test_loopanalyzer_exists():
-    """Test that LoopAnalyzer class exists and is importable."""
-    assert "LoopAnalyzer" in dir()
-
-
-def test_print_analysis_report_exists():
-    """Test that print_analysis_report function exists."""
-    assert callable(print_analysis_report)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

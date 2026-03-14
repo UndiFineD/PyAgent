@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/agent_card_core.description.md
 
@@ -105,7 +105,6 @@ Manages a registry of AgentCards for inter-agent communication (A2A).
 
 LLM_CONTEXT_END
 """
-
 from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, Field
@@ -119,47 +118,5 @@ class AgentCapability(BaseModel):
 
 
 class AgentCard(BaseModel):
-    """Standardized manifest for cross-agent discovery.
-    Pattern harvested from agentic_design_patterns.
     """
-
-    agent_id: str
-    name: str
-    version: str = "1.0.0"
-    role: str
-    description: str
-    capabilities: List[AgentCapability] = Field(default_factory=list)
-    contact_info: Dict[str, str] = Field(
-        default_factory=dict
-    )  # e.g., {"protocol": "voyager_p2p", "address": "peer_id"}
-    metadata: Dict[str, Any] = Field(default_factory=dict)
-
-
-class AgentCardCore:
-    """Manages a registry of AgentCards for inter-agent communication (A2A).
     """
-
-    def __init__(self):
-        self.registry: Dict[str, AgentCard] = {}
-
-    def register_agent(self, card: AgentCard):
-        self.registry[card.agent_id] = card
-
-    def find_agents_by_capability(self, capability_query: str) -> List[AgentCard]:
-        """Finds agents that have a specific capability."""
-        matches = []
-        for card in self.registry.values():
-            for cap in card.capabilities:
-                if (
-                    capability_query.lower() in cap.name.lower()
-                    or capability_query.lower() in cap.description.lower()
-                ):
-                    matches.append(card)
-                    break
-        return matches
-
-    def get_agent_manifest(self, agent_id: str) -> Optional[AgentCard]:
-        return self.registry.get(agent_id)
-
-    def export_all_cards(self) -> List[Dict[str, Any]]:
-        return [card.model_dump() for card in self.registry.values()]

@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,30 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py"""
-
-from dataclasses import dataclass
-
-from src.core.base.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class SemanticSearchResult:
-    """Result from semantic code search.
-
-    Attributes:
-        file_path: Path to the matching file.
-        content_snippet: Relevant code snippet.
-        similarity_score: Similarity score (0 - 1).
-        context_type: Type of context matched.
-        line_range: Tuple of start and end line numbers.
-
-    """
-
-    file_path: str
-    content_snippet: str
-    similarity_score: float
-    context_type: str = ""
-    line_range: tuple[int, int] = (0, 0)
+r"""Auto-extracted class from agent_context.py"""

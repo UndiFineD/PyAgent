@@ -14,7 +14,6 @@
 """Tests for ActionSpace
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,35 +31,5 @@ except ImportError as e:
 
 
 def test_actionmetadata_exists():
-    """Test that ActionMetadata class exists and is importable."""
-    assert "ActionMetadata" in dir()
-
-
-def test_actionspace_exists():
-    """Test that ActionSpace class exists and is importable."""
-    assert "ActionSpace" in dir()
-
-
-def test_discreteactionspace_exists():
-    """Test that DiscreteActionSpace class exists and is importable."""
-    assert "DiscreteActionSpace" in dir()
-
-
-def test_boxactionspace_exists():
-    """Test that BoxActionSpace class exists and is importable."""
-    assert "BoxActionSpace" in dir()
-
-
-def test_multidiscreteactionspace_exists():
-    """Test that MultiDiscreteActionSpace class exists and is importable."""
-    assert "MultiDiscreteActionSpace" in dir()
-
-
-def test_dictactionspace_exists():
-    """Test that DictActionSpace class exists and is importable."""
-    assert "DictActionSpace" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

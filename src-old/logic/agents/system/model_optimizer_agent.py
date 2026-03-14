@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -213,34 +213,6 @@ output = model.generate(
 
 print(model.tokenizer.decode(output.sequences[0]))
 """
-
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Suggests an optimization plan for a specific model deployment task."""
-        # Simple parser for "model size" and "vram" in text if provided
-        # For now, return a generic recommendation
-        return json.dumps(
-            {
-                "recommendation": (
-                    "Use 4-bit quantization and Layered Inference for models > 30B "
-                    "parameters on consumer hardware."
-                ),
-                "pattern": "AirLLM (Layered Loading)",
-                "benefits": [
-                    "Run 70B on 4GB VRAM",
-                    "Avoid OOM errors",
-                    "Simplified deployment",
-                ],
-            },
-            indent=2,
-        )
-
-
-if __name__ == "__main__":
-    from src.core.base.common.base_utilities import create_main_function
-
-    main = create_main_function(
-        ModelOptimizerAgent,
-        description="Optimizer Agent for model inference and quantization.",
-        context_help="Manage model loading strategies and inference performance.",
-    )
-    main()
+        """
+        """

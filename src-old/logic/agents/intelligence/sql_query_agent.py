@@ -46,7 +46,6 @@ LLM_CONTEXT_END
 """
 Sql query agent.py module.
 """
-
 try:
     from .data_intelligence_agent import DataIntelligenceAgent
 except Exception:
@@ -54,8 +53,5 @@ from src.logic.agents.intelligence.data_intelligence_agent import DataIntelligen
 
 
 class SqlQueryAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-    """Agent specialized in SQL query generation and database schema analysis."""
-
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-        self._system_prompt = "You are the SqlQueryAgent (via DataIntelligence core)."
+    """
+    """

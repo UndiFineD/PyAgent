@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/generate_ast_refactor_patches.description.md
 
@@ -97,8 +97,8 @@ Class SubprocessTransformer implementation.
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 """Generate conservative AST-based refactor patch proposals for top-priority files.
 
@@ -178,69 +178,6 @@ class SubprocessTransformer(ast.NodeTransformer):
 
 
 SAFE_WRAPPER_SRC = '''def safe_subprocess_run(*args, **kwargs):
-    """Conservative placeholder: replace with secure implementation.
-    This wrapper intentionally raises at runtime to force human review before enabling.
     """
-    raise RuntimeError('Refactor required: replace safe_subprocess_run with a secure executor')
-
-'''
-
-
-def create_patch_for_file(path: Path) -> Path | None:
-    try:
-        src = path.read_text(encoding="utf-8", errors="ignore")
-        tree = ast.parse(src)
-    except Exception:
-        return None
-    transformer = SubprocessTransformer()
-    new_tree = transformer.visit(tree)
-    ast.fix_missing_locations(new_tree)
-    try:
-        new_src = ast.unparse(new_tree)
-    except Exception:
-        # fallback: do not produce patch
-        return None
-    # ensure wrapper exists at top-level
-    if "safe_subprocess_run" not in new_src:
-        new_src = SAFE_WRAPPER_SRC + "\n" + new_src
-
-    if src == new_src:
-        return None
-
-    PATCH_DIR.mkdir(parents=True, exist_ok=True)
-    rel = path.relative_to(ROOT)
-    patch_path = PATCH_DIR / (re.sub(r"[^0-9A-Za-z_.-]", "_", str(rel)) + ".patch")
-    diff = difflib.unified_diff(
-        src.splitlines(keepends=True),
-        new_src.splitlines(keepends=True),
-        fromfile=f"a/{rel}",
-        tofile=f"b/{rel}",
-    )
-    patch_path.write_text("".join(diff), encoding="utf-8")
-    return patch_path
-
-
-def main() -> int:
-    results = load_bandit_results()
-    top_files = top_files_from_bandit(results, top_n=40)
-    created = 0
-    for f in top_files:
-        p = Path(f)
-        # try to map bandit filename to extracted candidate path if it is under workspace
-        if not p.exists():
-            # try to find filename basename under TARGET_PREFIX
-            candidates = list(TARGET_PREFIX.rglob(p.name))
-            if candidates:
-                p = candidates[0]
-        if not p.exists():
-            continue
-        patch = create_patch_for_file(p)
-        if patch:
-            created += 1
-            print("Created AST patch:", patch)
-    print("AST patch generation complete. patches created:", created)
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+    """
+    '''

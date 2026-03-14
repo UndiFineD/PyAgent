@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,39 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-from src.core.base.lifecycle.version import VERSION
-
-from .improvement import Improvement
-from .transition_result import TransitionResult
-
-__version__ = VERSION
-
-
-class WorkflowEngine:
-    """Manages improvement workflow transitions."""
-
-    def __init__(self) -> None:
-        self.states: list[str] = [
-            "pending",
-            "in_progress",
-            "completed",
-            "blocked",
-        ]
-        self._transitions: dict[str, list[str]] = {
-            "pending": ["in_progress", "blocked"],
-            "in_progress": ["completed", "blocked"],
-            "blocked": ["in_progress"],
-            "completed": [],
-        }
-
-    def transition(self, improvement: Improvement, from_status: str, to_status: str) -> TransitionResult:
-        allowed = self._transitions.get(from_status, [])
-        if to_status not in allowed:
-            return TransitionResult(success=False, message="Invalid transition")
-
-        # Tests expect string status updates.
-        improvement.status = to_status
-        return TransitionResult(success=True)
+r"""Auto-extracted class from agent_improvements.py"""

@@ -80,7 +80,6 @@ Ensures that high-priority state changes in one node are mirrored to all entangl
 
 LLM_CONTEXT_END
 """
-
 import logging
 import threading
 from typing import Any, Dict
@@ -89,50 +88,5 @@ from src.classes.orchestration.SignalBusOrchestrator import SignalBusOrchestrato
 
 
 class EntanglementOrchestrator:
-    """Manages instantaneous state synchronization across distributed agent nodes.
-    Ensures that high-priority state changes in one node are mirrored to all entangled peers.
     """
-
-    def __init__(self, signal_bus: SignalBusOrchestrator) -> None:
-        self.signal_bus = signal_bus
-        self.shared_state: Dict[str, Any] = {}
-        self._lock = threading.Lock()
-
-        # Subscribe to entanglement sync signals
-        self.signal_bus.subscribe("entanglement_sync", self._handle_sync_signal)
-
-    def update_state(self, key: str, value: Any, propagate: bool = True) -> None:
-        """Updates local state and optionally propagates to the swarm."""
-        with self._lock:
-            self.shared_state[key] = value
-            logging.debug(f"Entanglement: Local state update {key}={value}")
-
-        if propagate:
-            self.signal_bus.publish(
-                "entanglement_sync",
-                {"key": key, "value": value},
-                sender="EntanglementOrchestrator",
-            )
-
-    def get_state(self, key: str) -> Any:
-        """Retrieves an entangled state value."""
-        with self._lock:
-            return self.shared_state.get(key)
-
-    def _handle_sync_signal(self, payload: Any, sender: str) -> None:
-        """Internal handler for incoming state synchronization signals."""
-        if sender == "EntanglementOrchestrator":
-            return  # Ignore local propagation
-
-        key = payload.get("key")
-        value = payload.get("value")
-
-        if key is not None:
-            with self._lock:
-                self.shared_state[key] = value
-                logging.info(f"Entanglement: Synced state from {sender}: {key}={value}")
-
-    def get_all_state(self) -> Dict[str, Any]:
-        """Returns the entire entangled state snapshot."""
-        with self._lock:
-            return self.shared_state.copy()
+    """

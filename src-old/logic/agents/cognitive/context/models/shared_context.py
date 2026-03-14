@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,33 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py"""
-
-from dataclasses import dataclass, field
-
-from src.core.base.version import VERSION
-from src.logic.agents.cognitive.context.models.SharingPermission import (
-    SharingPermission,
-)
-
-__version__ = VERSION
-
-
-@dataclass
-class SharedContext:
-    """Context shared with team members.
-
-    Attributes:
-        context_id: Unique identifier.
-        owner: Owner username.
-        shared_with: List of usernames shared with.
-        permission: Permission level.
-        last_sync: Last synchronization timestamp.
-
-    """
-
-    context_id: str
-    owner: str
-    shared_with: list[str] = field(default_factory=lambda: [])
-    permission: SharingPermission = SharingPermission.READ_ONLY
-    last_sync: str = ""
+r"""Auto-extracted class from agent_context.py"""

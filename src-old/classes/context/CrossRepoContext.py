@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/CrossRepoContext.description.md
@@ -85,30 +86,5 @@ LLM_CONTEXT_END
 
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from dataclasses import dataclass, field
-from typing import List
-
-
-@dataclass
-class CrossRepoContext:
-    """Context from cross-repository analysis.
-
-    Attributes:
-        repo_name: Name of the repository.
-        repo_url: URL to the repository.
-        related_files: List of related file paths.
-        similarity_score: Overall similarity score.
-        common_patterns: Patterns shared between repos.
-
-    """
-
-    repo_name: str
-    repo_url: str
-    related_files: List[str] = field(default_factory=lambda: [])
-    similarity_score: float = 0.0
-    common_patterns: List[str] = field(default_factory=lambda: [])
+r"""Auto-extracted class from agent_context.py"""

@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,35 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_coder.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class ColorContrastResult:
-    """Result of color contrast analysis.
-
-    Attributes:
-        foreground: Foreground color (hex).
-        background: Background color (hex).
-        contrast_ratio: Calculated contrast ratio.
-        passes_aa: Whether it passes WCAG AA.
-        passes_aaa: Whether it passes WCAG AAA.
-        min_ratio_aa: Minimum required ratio for AA.
-        min_ratio_aaa: Minimum required ratio for AAA.
-
-    """
-
-    foreground: str
-    background: str
-    contrast_ratio: float
-    passes_aa: bool = False
-    passes_aaa: bool = False
-    min_ratio_aa: float = 4.5
-    min_ratio_aaa: float = 7.0
+r"""Auto-extracted class from agent_coder.py"""

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/download_agent/__init__.description.md
 
@@ -81,10 +81,3 @@ PyAgent Download Agent
 A comprehensive download agent that handles different types of URLs and downloads
 them using appropriate mechanisms based on their type.
 """
-
-from .classifiers import URLClassifier
-from .core import DownloadAgent
-from .models import DownloadConfig, DownloadResult
-
-__version__ = "1.0.0"
-__all__ = ["DownloadAgent", "DownloadConfig", "DownloadResult", "URLClassifier"]

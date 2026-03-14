@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/MemorySnapshot.description.md
@@ -166,7 +167,6 @@ LLM_CONTEXT_END
 
 """
 
-from __future__ import annotations
 
 """
 MemorySnapshot - Device memory profiling with GC tracking.

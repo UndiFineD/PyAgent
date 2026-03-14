@@ -46,7 +46,6 @@ LLM_CONTEXT_END
 """
 Browsing agent.py module.
 """
-
 try:
     from .web_intelligence_agent import WebIntelligenceAgent
 except Exception:  # fallback when module executed without package context
@@ -54,8 +53,5 @@ from src.logic.agents.intelligence.web_intelligence_agent import WebIntelligence
 
 
 class BrowsingAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
-    """Agent specialized in web browsing and high-level information retrieval."""
-
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-        self._system_prompt = "You are the BrowsingAgent (via WebIntelligence core)."
+    """
+    """

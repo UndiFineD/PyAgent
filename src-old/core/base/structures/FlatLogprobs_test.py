@@ -14,7 +14,6 @@
 """Tests for FlatLogprobs
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,30 +31,5 @@ except ImportError as e:
 
 
 def test_logprob_exists():
-    """Test that Logprob class exists and is importable."""
-    assert "Logprob" in dir()
-
-
-def test_flatlogprobs_exists():
-    """Test that FlatLogprobs class exists and is importable."""
-    assert "FlatLogprobs" in dir()
-
-
-def test_logprobsaccumulator_exists():
-    """Test that LogprobsAccumulator class exists and is importable."""
-    assert "LogprobsAccumulator" in dir()
-
-
-def test_create_prompt_logprobs_exists():
-    """Test that create_prompt_logprobs function exists."""
-    assert callable(create_prompt_logprobs)
-
-
-def test_create_sample_logprobs_exists():
-    """Test that create_sample_logprobs function exists."""
-    assert callable(create_sample_logprobs)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

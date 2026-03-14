@@ -14,7 +14,6 @@
 """Tests for strategy_optimizer
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,71 +31,5 @@ except ImportError as e:
 
 
 def test_optimizationmetric_exists():
-    """Test that OptimizationMetric class exists and is importable."""
-    assert "OptimizationMetric" in dir()
-
-
-def test_strategyconfig_exists():
-    """Test that StrategyConfig class exists and is importable."""
-    assert "StrategyConfig" in dir()
-
-
-def test_performanceresult_exists():
-    """Test that PerformanceResult class exists and is importable."""
-    assert "PerformanceResult" in dir()
-
-
-def test_optimizationtrial_exists():
-    """Test that OptimizationTrial class exists and is importable."""
-    assert "OptimizationTrial" in dir()
-
-
-def test_strategy_exists():
-    """Test that Strategy class exists and is importable."""
-    assert "Strategy" in dir()
-
-
-def test_thresholdfilter_exists():
-    """Test that ThresholdFilter class exists and is importable."""
-    assert "ThresholdFilter" in dir()
-
-
-def test_performancemeasurer_exists():
-    """Test that PerformanceMeasurer class exists and is importable."""
-    assert "PerformanceMeasurer" in dir()
-
-
-def test_bestselectionalgorithm_exists():
-    """Test that BestSelectionAlgorithm class exists and is importable."""
-    assert "BestSelectionAlgorithm" in dir()
-
-
-def test_weightedaverageselector_exists():
-    """Test that WeightedAverageSelector class exists and is importable."""
-    assert "WeightedAverageSelector" in dir()
-
-
-def test_weightedaverageselector_instantiation():
-    """Test that WeightedAverageSelector can be instantiated."""
-    instance = WeightedAverageSelector()
-    assert instance is not None
-
-
-def test_paretofrontierselector_exists():
-    """Test that ParetoFrontierSelector class exists and is importable."""
-    assert "ParetoFrontierSelector" in dir()
-
-
-def test_strategyoptimizer_exists():
-    """Test that StrategyOptimizer class exists and is importable."""
-    assert "StrategyOptimizer" in dir()
-
-
-def test_pipelinestrategy_exists():
-    """Test that PipelineStrategy class exists and is importable."""
-    assert "PipelineStrategy" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

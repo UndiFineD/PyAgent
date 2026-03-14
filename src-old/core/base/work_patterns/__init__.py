@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/work_patterns/__init__.description.md
 
@@ -71,14 +71,4 @@ Work patterns for PyAgent swarm collaboration.
 LLM_CONTEXT_END
 """
 
-"""Work patterns for PyAgent swarm collaboration."""
-
-from .base_pattern import WorkPattern
-from .debate_pattern import DebateWorkPattern
-from .peer_pattern import PeerWorkPattern
-
-__all__ = [
-    "WorkPattern",
-    "PeerWorkPattern",
-    "DebateWorkPattern",
-]
+r"""Work patterns for PyAgent swarm collaboration."""

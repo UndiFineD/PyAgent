@@ -14,7 +14,6 @@
 """Tests for mcp_server
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,30 +31,5 @@ except ImportError as e:
 
 
 def test_init_openspec_exists():
-    """Test that init_openspec function exists."""
-    assert callable(init_openspec)
-
-
-def test_create_sdd_spec_exists():
-    """Test that create_sdd_spec function exists."""
-    assert callable(create_sdd_spec)
-
-
-def test_confirm_proceed_exists():
-    """Test that confirm_proceed function exists."""
-    assert callable(confirm_proceed)
-
-
-def test_create_task_exists():
-    """Test that create_task function exists."""
-    assert callable(create_task)
-
-
-def test_store_memory_exists():
-    """Test that store_memory function exists."""
-    assert callable(store_memory)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

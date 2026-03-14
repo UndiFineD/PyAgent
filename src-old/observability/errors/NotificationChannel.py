@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+r"""
 LLM_CONTEXT_START
 
 ## Source: src-old/observability/errors/NotificationChannel.description.md
@@ -66,8 +66,8 @@ Notification channel types.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -83,19 +83,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_errors.py"""
-
-from src.core.base.version import VERSION
-from enum import Enum
-
-__version__ = VERSION
-
-
-class NotificationChannel(Enum):
-    """Notification channel types."""
-
-    SLACK = "slack"
-    TEAMS = "teams"
-    EMAIL = "email"
-    WEBHOOK = "webhook"
-    DISCORD = "discord"
+r"""Auto-extracted class from agent_errors.py"""

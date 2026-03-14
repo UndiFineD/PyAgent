@@ -30,8 +30,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -111,7 +111,5 @@ resource "{provider}_instance" "pyagent_node" {{
         return template.strip()
 
     def select_optimal_region(self, latency_data: dict[str, float]) -> str:
-        """Selects the region with the lowest latency from a provided map."""
-        if not latency_data:
-            return "us-east-1"  # Default
-        return min(latency_data, key=latency_data.get)
+        """
+        """

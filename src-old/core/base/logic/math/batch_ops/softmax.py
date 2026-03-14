@@ -45,7 +45,6 @@ LLM_CONTEXT_END
 """
 Softmax activation operations regarding batch processing.
 """
-
 from typing import Any
 
 try:
@@ -61,18 +60,5 @@ def softmax_batch_invariant(
     dim: int = -1,
     dtype: Any = None,
 ) -> Any:
-    """Numerically stable softmax that is deterministic across batch orderings.
     """
-    if not HAS_TORCH:
-        input_max = np.max(tensor, axis=dim, keepdims=True)
-        exp_x = np.exp(tensor - input_max)
-        sum_exp_x = np.sum(exp_x, axis=dim, keepdims=True)
-        return exp_x / sum_exp_x
-    input_max = torch.amax(tensor, dim=dim, keepdim=True)
-    input_shifted = tensor - input_max
-    exp_x = torch.exp(input_shifted)
-    sum_exp_x = torch.sum(exp_x, dim=dim, keepdim=True)
-    result = exp_x / sum_exp_x
-    if dtype is not None:
-        result = result.to(dtype)
-    return result
+    """

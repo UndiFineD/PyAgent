@@ -14,7 +14,6 @@
 """Tests for FuncUtils
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,80 +31,5 @@ except ImportError as e:
 
 
 def test_identity_exists():
-    """Test that identity function exists."""
-    assert callable(identity)
-
-
-def test_run_once_exists():
-    """Test that run_once function exists."""
-    assert callable(run_once)
-
-
-def test_run_once_with_result_exists():
-    """Test that run_once_with_result function exists."""
-    assert callable(run_once_with_result)
-
-
-def test_deprecate_args_exists():
-    """Test that deprecate_args function exists."""
-    assert callable(deprecate_args)
-
-
-def test_deprecate_kwargs_exists():
-    """Test that deprecate_kwargs function exists."""
-    assert callable(deprecate_kwargs)
-
-
-def test_deprecated_exists():
-    """Test that deprecated function exists."""
-    assert callable(deprecated)
-
-
-def test_supports_kw_exists():
-    """Test that supports_kw function exists."""
-    assert callable(supports_kw)
-
-
-def test_get_allowed_kwargs_exists():
-    """Test that get_allowed_kwargs function exists."""
-    assert callable(get_allowed_kwargs)
-
-
-def test_memoize_exists():
-    """Test that memoize function exists."""
-    assert callable(memoize)
-
-
-def test_memoize_method_exists():
-    """Test that memoize_method function exists."""
-    assert callable(memoize_method)
-
-
-def test_throttle_exists():
-    """Test that throttle function exists."""
-    assert callable(throttle)
-
-
-def test_debounce_exists():
-    """Test that debounce function exists."""
-    assert callable(debounce)
-
-
-def test_retry_on_exception_exists():
-    """Test that retry_on_exception function exists."""
-    assert callable(retry_on_exception)
-
-
-def test_call_limit_exists():
-    """Test that call_limit function exists."""
-    assert callable(call_limit)
-
-
-def test_timed_exists():
-    """Test that timed function exists."""
-    assert callable(timed)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

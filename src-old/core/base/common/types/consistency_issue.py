@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,29 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_coder.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class ConsistencyIssue:
-    """A code consistency issue across the codebase.
-
-    Attributes:
-        issue_type: Type of inconsistency.
-        description: Description of the issue.
-        occurrences: List of file:line locations.
-        recommended_style: The recommended consistent style.
-
-    """
-
-    issue_type: str
-    description: str
-    occurrences: list[str]
-    recommended_style: str
+r"""Auto-extracted class from agent_coder.py"""

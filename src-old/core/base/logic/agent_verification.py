@@ -31,31 +31,7 @@ LLM_CONTEXT_END
 
 """
 
-"""Agent Verification Module: Implements verification logic for agent outputs, 
+r"""Agent Verification Module: Implements verification logic for agent outputs, 
 including Stanford Research 'Anchoring Strength' 
 and Keio University 'Self-Verification' methodologies.
 """
-from __future__ import annotations
-
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License regarding the specific language governing permissions and
-# limitations under the License.
-from src.core.base.lifecycle.version import VERSION
-
-# Phase 317: Modularized Verification Classes
-from .verification.agent_verifier import AgentVerifier
-from .verification.code_health_auditor import CodeHealthAuditor
-from .verification.code_integrity_verifier import CodeIntegrityVerifier
-
-__version__ = VERSION
-
-__all__ = ["AgentVerifier", "CodeHealthAuditor", "CodeIntegrityVerifier"]

@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/stats/SchedulerStats.description.md
@@ -173,7 +174,6 @@ Create a stats collector.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 """
 Scheduler Statistics.

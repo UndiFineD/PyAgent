@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/InheritanceMode.description.md
@@ -79,17 +80,5 @@ Modes for context inheritance.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from enum import Enum
-
-
-class InheritanceMode(Enum):
-    """Modes for context inheritance."""
-
-    OVERRIDE = "override"
-    MERGE = "merge"
-    APPEND = "append"
+r"""Auto-extracted class from agent_context.py"""

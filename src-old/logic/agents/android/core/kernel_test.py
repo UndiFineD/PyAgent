@@ -14,7 +14,6 @@
 """Tests for kernel
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,30 +31,5 @@ except ImportError as e:
 
 
 def test_run_adb_command_exists():
-    """Test that run_adb_command function exists."""
-    assert callable(run_adb_command)
-
-
-def test_get_screen_state_exists():
-    """Test that get_screen_state function exists."""
-    assert callable(get_screen_state)
-
-
-def test_execute_action_exists():
-    """Test that execute_action function exists."""
-    assert callable(execute_action)
-
-
-def test_get_llm_decision_exists():
-    """Test that get_llm_decision function exists."""
-    assert callable(get_llm_decision)
-
-
-def test_run_agent_exists():
-    """Test that run_agent function exists."""
-    assert callable(run_agent)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

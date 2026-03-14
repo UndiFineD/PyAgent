@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/maintenance/fix_headers/__init__.description.md
 
@@ -76,8 +76,3 @@ PyAgent Fix Headers Tool
 
 A maintenance tool for ensuring all Python files have proper Apache 2.0 license headers.
 """
-
-from .fix_headers_agent import FixHeadersAgent
-
-__version__ = "1.0.0"
-__all__ = ["FixHeadersAgent"]

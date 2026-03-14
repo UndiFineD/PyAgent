@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,34 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_coder.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.common.types.migration_status import MigrationStatus
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class MigrationRule:
-    """A rule for code migration from old to new API.
-
-    Attributes:
-        name: Rule identifier.
-        old_pattern: Regex pattern to match old API usage.
-        new_pattern: Replacement pattern for new API.
-        description: Human - readable description of the migration.
-        status: Current status of this migration rule.
-        breaking_change: Whether this is a breaking change.
-
-    """
-
-    name: str
-    old_pattern: str
-    new_pattern: str
-    description: str
-    status: MigrationStatus = MigrationStatus.PENDING
-    breaking_change: bool = False
+r"""Auto-extracted class from agent_coder.py"""

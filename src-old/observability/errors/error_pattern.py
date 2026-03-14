@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,26 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_errors.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-from .error_category import ErrorCategory
-from .error_severity import ErrorSeverity
-
-__version__ = VERSION
-
-
-@dataclass
-class ErrorPattern:
-    """A recognized error pattern."""
-
-    name: str
-    regex: str
-    severity: ErrorSeverity
-    category: ErrorCategory
-    suggested_fix: str = ""
-    occurrences: int = 0
+r"""Auto-extracted class from agent_errors.py"""

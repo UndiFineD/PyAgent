@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/PolicyEnforcementAgent.description.md
@@ -77,7 +78,6 @@ and enforces restrictions (quarantining) if violations occur.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 import time
 from typing import Any

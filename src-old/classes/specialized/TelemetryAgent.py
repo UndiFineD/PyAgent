@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/TelemetryAgent.description.md
@@ -82,7 +83,6 @@ telemetry and archiving interactions for swarm intelligence harvesting.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 import json
 import time

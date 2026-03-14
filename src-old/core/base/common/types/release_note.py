@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,33 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_changes.py"""
-
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class ReleaseNote:
-    """Generated release notes.
-
-    Attributes:
-        version: Release version.
-        title: Release title.
-        summary: Brief summary.
-        highlights: Key highlights.
-        breaking_changes: List of breaking changes.
-        full_changelog: Complete changelog text.
-
-    """
-
-    version: str
-    title: str
-    summary: str
-    highlights: list[str] = field(default_factory=lambda: [])
-    breaking_changes: list[str] = field(default_factory=lambda: [])
-    full_changelog: str = ""
+r"""Auto-extracted class from agent_changes.py"""

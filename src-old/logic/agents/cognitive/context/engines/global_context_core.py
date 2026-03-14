@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,7 +58,6 @@ from __future__ import annotations
 """
 Global context core logic for cognitive agents.
 """
-
 from src.core.base.lifecycle.version import VERSION
 
 from .core_mixins.core_partition_mixin import CorePartitionMixin
@@ -69,7 +68,5 @@ __version__ = VERSION
 
 
 class GlobalContextCore(CorePartitionMixin, CoreResolutionMixin, CoreSummaryMixin):
-    """Pure logic for GlobalContext.
-    Handles data merging, pruning, and summary formatting.
-    No I/O or direct disk access.
+    """
     """

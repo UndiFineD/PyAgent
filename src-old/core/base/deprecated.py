@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/deprecated.description.md
 
@@ -58,8 +58,8 @@ Central orchestrator for coordinating specialized AI agents in code improvement 
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -75,23 +75,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Central orchestrator for coordinating specialized AI agents in code improvement workflows."""
-
-import sys
-from pathlib import Path
-
-from src.core.base.version import VERSION
-
-__version__ = VERSION
-
-# Ensure project root and src are in path for modular imports
-root = Path(__file__).parent.parent
-if str(root) not in sys.path:
-    sys.path.append(str(root))
-if str(root / "src") not in sys.path:
-    sys.path.append(str(root / "src"))
-
-if __name__ == "__main__":
-    # OrchestratorAgent does not have a main function.
-    # This file is deprecated.
-    pass
+r"""Central orchestrator for coordinating specialized AI agents in code improvement workflows."""

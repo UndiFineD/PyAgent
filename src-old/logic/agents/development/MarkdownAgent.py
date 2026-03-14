@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/MarkdownAgent.description.md
 
@@ -76,8 +76,8 @@ MarkdownAgent specializing in technical documentation and markdown optimization.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Recovered and standardized for Phase 317
@@ -91,8 +91,6 @@ For more information, visit:
 
 No commands will be executed.
 """
-
-
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.Version import VERSION
 
@@ -100,15 +98,5 @@ __version__ = VERSION
 
 
 class MarkdownAgent(BaseAgent):
-    """MarkdownAgent specializing in technical documentation and markdown optimization.
     """
-
-    def __init__(self, file_path: str, **kwargs) -> None:
-        super().__init__(file_path, **kwargs)
-        self._system_prompt = (
-            "You are a Markdown specialist. Your goal is to optimize documentation, "
-            "ensure technical accuracy, and maintain style consistency in .md files."
-        )
-
-    def _get_default_content(self) -> str:
-        return "# New Documentation\n\nContent pending..."
+    """

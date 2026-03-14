@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,37 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Agent specializing in PowerShell scripting."""
-
-# pylint: disable=too-many-ancestors
-
-
-from src.core.base.common.base_utilities import create_main_function
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.development.coder_agent import CoderAgent
-
-__version__ = VERSION
-
-
-class PowershellAgent(CoderAgent):
-    """Agent for PowerShell scripts."""
-
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-
-        self._language = "powershell"
-        self._system_prompt = (
-            "You are an Expert PowerShell Scripter. "
-            "Focus on idiomatic PowerShell, proper naming conventions (Verb-Noun), "
-            "error handling (Try/Catch), and pipeline efficiency."
-        )
-
-    def _get_default_content(self) -> str:
-        return "# PowerShell Script\nWrite-Host 'Hello World'\n"
-
-
-if __name__ == "__main__":
-    main = create_main_function(
-        PowershellAgent, "PowerShell Agent", "Path to .ps1 file"
-    )
-    main()
+r"""Agent specializing in PowerShell scripting."""

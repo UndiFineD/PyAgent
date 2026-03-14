@@ -30,8 +30,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,8 +50,6 @@ from __future__ import annotations
 """Agent specializing in automated testing and coverage analysis.
 Inspired by SGI-Bench and py.test.
 """
-
-
 import logging
 import subprocess
 
@@ -67,132 +65,5 @@ __version__ = VERSION
 
 
 class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """Executes unit and integration tests and analyzes failures."""
-
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-        self.workspace_root = self.file_path.parent.parent.parent
-        self._system_prompt = (
-            "You are the Test Agent. "
-            "Your role is to ensure the functional correctness of the codebase. "
-            "Execute pytest suites, capture failures, and explain them to the developers. "
-            "Always suggest a potential cause for every test failure."
-        )
-
-    def shard_integrity_check(self, bypass: bool = False) -> bool:
-        """Verify validation of shards, with optional bypass.
-        Refactored to decouple testing from shard state (Phase 336).
-        """
-        if ShardCore().verify_integrity():
-            return True
-
-        msg = "Shard integrity check failed."
-        if not bypass:
-            logging.critical(f"{msg} Aborting operation. Use bypass=True to ignore.")
-            if hasattr(self, "context") and self.context:
-                self.context.log_failure(
-                    stage="shard_integrity_check_abort",
-                    error=msg,
-                    details={},
-                    failure_type=FailureClassification.SHARD_CORRUPTION.value
-                )
-            return False
-        else:
-            logging.warning(f"{msg} Proceeding due to bypass=True.")
-            if hasattr(self, "context") and self.context:
-                self.context.log_failure(
-                    stage="shard_integrity_check_bypass",
-                    error=msg,
-                    details={},
-                    failure_type=FailureClassification.SHARD_CORRUPTION.value
-                )
-            return True
-
-    @as_tool
-    def run_tests(self, path: str = "tests", force: bool = False, bypass_shard_validation: bool = False) -> str:
-        """Executes pytest on the specified directory."""
-        # Merge force and bypass flags
-        should_bypass = force or bypass_shard_validation
-
-        # Phase 336: Pattern 3 - TestAgent-Shard Coupling Mitigation
-        # Verify shard integrity before running tests to prevent deadlocks
-        if not self.shard_integrity_check(bypass=should_bypass):
-             msg = "Shard integrity check failed."
-             return f"❌ **system_error**: {msg} (Use force=True or bypass_shard_validation=True to bypass)"
-
-        logging.info(f"TestAgent running tests in: {path}")
-        try:
-            import sys
-
-            # Converted to list-based execution to prevent shell injection
-            cmd = [sys.executable, "-m", "pytest", path, "--tb=short", "--maxfail=5"]
-            result = subprocess.run(cmd, shell=False, capture_output=True, text=True, check=False)
-
-            # Phase 108: Record test execution patterns
-            self._record(
-                f"pytest {path}",
-                f"RC={result.returncode}\n{result.stdout[-1000:]}",
-                provider="Shell",
-                model="pytest",
-            )
-
-            # Phase 336: Validation failure capture
-            if result.returncode != 0 and hasattr(self, "context") and self.context:
-                 self.context.log_failure(
-                    stage="test_execution_fail",
-                    error=f"Tests failed in {path}",
-                    details={
-                        "return_code": result.returncode,
-                        "stdout_tail": result.stdout[-500:],
-                        "stderr_tail": result.stderr[-500:] if result.stderr else "",
-                    },
-                    failure_type=FailureClassification.TEST_INFRASTRUCTURE.value
-                 )
-
-            report = ["## 🧪 Test Execution Report\n"]
-            if result.returncode == 0:
-                report.append("✅ **Status**: All tests passed.")
-                report.append(f"```text\n{result.stdout.splitlines()[-1] if result.stdout else 'No output'}\n```")
-            else:
-                report.append(f"❌ **Status**: {result.returncode} tests FAILED.\n")
-                report.append("### Failure Details")
-                report.append(f"```text\n{result.stdout}\n```")
-
-            return "\n".join(report)
-        except (subprocess.SubprocessError, RuntimeError, OSError) as e:
-            import traceback
-            tb = traceback.format_exc()
-
-            # Phase 275: Log failure to context lineage if available
-            if hasattr(self, "context") and self.context:
-
-                # Heuristic classification of OS errors
-                f_type = FailureClassification.TEST_INFRASTRUCTURE.value
-                str_e = str(e).lower()
-                if "recursion" in str_e:
-                    f_type = FailureClassification.RECURSION_LIMIT.value
-                elif "memory" in str_e:
-                    f_type = FailureClassification.RESOURCE_EXHAUSTION.value
-                elif "file not found" in str_e or "no such file" in str_e:
-                    f_type = FailureClassification.STATE_CORRUPTION.value
-
-                self.context.log_failure(
-                    stage="test_execution_exception",
-                    error=str(e),
-                    details={"path": path, "command": cmd if 'cmd' in locals() else "unknown"},
-                    stack_trace=tb,
-                    failure_type=f_type
-                )
-
-            logging.error(f"TestAgent execution failed: {e}\n{tb}")
-            return f"Error running tests: {e}\nTraceback:\n{tb}"
-
-    @as_tool
-    def run_file_tests(self, file_path: str) -> str:
-        """Runs tests for a single file."""
-        return self.run_tests(file_path)
-
-    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Runs tests based on user prompt."""
-        path = target_file if target_file else (prompt if prompt else "tests")
-        return self.run_tests(path)
+    """
+    """

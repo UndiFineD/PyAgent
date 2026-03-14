@@ -30,8 +30,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -65,9 +65,6 @@ Automates compliance checks and remediation workflows.
 """
 Compliance agent.py module.
 """
-
-
-
 from pathlib import Path
 
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -81,31 +78,5 @@ __version__ = VERSION
 
 
 class ComplianceAgent(BaseAgent, PrivacyScannerMixin, PrivacyAssessmentMixin):  # pylint: disable=too-many-ancestors
-    """Phase 57: Data Privacy & Compliance.
-    Scans memory shards for PII and sensitive data patterns.
     """
-
-    def __init__(self, path: str) -> None:
-        super().__init__(path)
-        self.pii_patterns = {
-            "email": r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}",
-            "ssn": r"\b\d{3}-\d{2}-\d{4}\b",
-            "credit_card": r"\b\d{4}-\d{4}-\d{4}-\d{4}\b",
-            "phone": r"\b\d{3}-\d{3}-\d{4}\b",
-        }
-
-        # Phase 108: Intelligence Recording
-        work_root = getattr(self, "_workspace_root", None)
-        self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
-
-    # Logic delegated to mixins
-
-    def scan_shard(self, shard_data: str) -> dict:
-        """Scans a memory shard for compliance issues (Phase 57)."""
-        import re
-
-        findings = []
-        for name, pattern in self.pii_patterns.items():
-            if re.search(pattern, shard_data):
-                findings.append(name)
-        return {"compliant": len(findings) == 0, "findings": findings, "pii_detected": len(findings) > 0}
+    """

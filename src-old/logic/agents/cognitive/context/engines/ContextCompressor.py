@@ -5,5 +5,5 @@ from .context_compressor import ContextCompressor  # type: ignore
 
 __all__ = ["ContextCompressor"]
 
-"""CamelCase shim exposing `ContextCompressor` module name.
+r"""CamelCase shim exposing `ContextCompressor` module name.
 """

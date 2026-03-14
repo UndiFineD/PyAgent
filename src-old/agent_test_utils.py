@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/agent_test_utils.description.md
 
@@ -47,44 +47,3 @@ LLM_CONTEXT_END
 """
 Test Utils: Common utilities for agent and backend unit tests.
 """
-
-import sys
-from contextlib import contextmanager
-from pathlib import Path
-from typing import Iterator
-
-# Ensure project root and src are in path for modular imports
-root = Path(__file__).parent.parent
-if str(root) not in sys.path:
-    sys.path.append(str(root))
-if str(root / "src") not in sys.path:
-    sys.path.append(str(root / "src"))
-
-# Modular imports
-from src.classes.test_utils import *
-
-# Shared loader for constants
-_loader = ModuleLoader()
-AGENT_DIR = _loader.agent_dir
-
-# Re-expose methods as expected by legacy tests
-load_module_from_path = _loader.load_module_from_path
-
-
-@contextmanager
-def agent_dir_on_path() -> Iterator[None]:
-    with _loader.agent_dir_on_path():
-        yield
-
-
-@contextmanager
-def agent_sys_path() -> Iterator[None]:
-    with _loader.agent_sys_path():
-        yield
-
-
-# Aliases for legacy compatibility
-MockBackend = MockAIBackend
-FileSystemIsolation = FileSystemIsolator
-SnapshotTester = SnapshotManager
-LoggingCapture = LogCapturer

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/reports/ReportType.description.md
 
@@ -65,8 +65,8 @@ Type of report to generate.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -82,19 +82,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from generate_agent_reports.py"""
-
-from enum import Enum
-
-from src.core.base.version import VERSION
-
-__version__ = VERSION
-
-
-class ReportType(Enum):
-    """Type of report to generate."""
-
-    DESCRIPTION = "description"
-    ERRORS = "errors"
-    IMPROVEMENTS = "improvements"
-    SUMMARY = "summary"
+r"""Auto-extracted class from generate_agent_reports.py"""

@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/SwarmVisualizerAgent.description.md
@@ -76,7 +77,6 @@ Tracks message flows, agent dependencies, and swarm health metrics.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 import time
 from typing import Any

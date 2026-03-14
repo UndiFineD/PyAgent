@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/tools/download_agent/classifiers.description.md
 
@@ -79,7 +79,6 @@ Classifies URLs by type and determines appropriate download strategy.
 
 LLM_CONTEXT_END
 """
-
 # URL classification logic for the Download Agent.
 
 import re
@@ -88,74 +87,5 @@ from typing import Dict, Tuple
 
 
 class URLClassifier:
-    """Classifies URLs by type and determines appropriate download strategy."""
-
-    @staticmethod
-    def classify_url(url: str) -> Tuple[str, Dict]:
-        """Classify URL and return type with metadata."""
-        url_lower = url.lower().strip()
-
-        # GitHub repositories
-        if re.match(r"^https?://github\.com/[^/]+/[^/]+/?$", url_lower):
-            owner, repo = url.split("/")[-2:]
-            return "github_repo", {
-                "owner": owner,
-                "repo": repo,
-                "destination": ".external",
-            }
-
-        # GitHub Gists
-        if re.match(r"^https?://gist\.github\.com/[^/]+/[^/]+/?$", url_lower):
-            owner, gist_id = url.split("/")[-2:]
-            return "github_gist", {
-                "owner": owner,
-                "gist_id": gist_id,
-                "destination": ".external/gists",
-            }
-
-        # ArXiv papers
-        # Ensure we only match the actual arxiv.org domain, not URLs that merely contain the string.
-        parsed = urllib.parse.urlparse(url_lower)
-        hostname = parsed.hostname or ""
-        if hostname.endswith(".arxiv.org"):
-            if parsed.path.startswith("/abs/") or parsed.path.startswith("/pdf/"):
-                paper_id = re.search(r"/(\d+\.\d+)", parsed.path)
-                if paper_id:
-                    return "arxiv_paper", {
-                        "paper_id": paper_id.group(1),
-                        "destination": "data/research",
-                        "format": "pdf" if parsed.path.startswith("/pdf/") else "html",
-                    }
-
-        # Research paper PDFs
-        if url_lower.endswith(".pdf") and any(
-            term in url_lower for term in ["paper", "research", "arxiv", "ieee", "acm"]
-        ):
-            return "research_paper", {"destination": "data/research", "format": "pdf"}
-
-        # Dataset URLs
-        if any(
-            term in url_lower
-            for term in ["dataset", "data", "kaggle", "huggingface.co/datasets"]
-        ):
-            return "dataset", {"destination": "data/datasets"}
-
-        # Documentation URLs
-        if any(
-            term in url_lower
-            for term in [
-                "docs",
-                "documentation",
-                "readme",
-                "wiki",
-                "raw.githubusercontent.com",
-            ]
-        ):
-            return "documentation", {"destination": "docs/external"}
-
-        # Generic web page (Wikipedia, etc.)
-        if any(domain in url_lower for domain in ["wikipedia.org", "wikimedia.org"]):
-            return "webpage", {"destination": "data/webpages"}
-
-        # Default fallback
-        return "unknown", {"destination": "data/downloads"}
+    """
+    """

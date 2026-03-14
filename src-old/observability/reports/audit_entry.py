@@ -25,8 +25,8 @@ Suggested improvements (automatically generated):
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,36 +42,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from generate_agent_reports.py"""
-
-
-from dataclasses import dataclass, field
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .audit_action import AuditAction
-
-__version__ = VERSION
-
-
-@dataclass
-class AuditEntry:
-    """Audit log entry.
-
-    Attributes:
-        entry_id: Unique entry identifier.
-        timestamp: Event timestamp.
-        action: Audit action.
-        user_id: User who performed action.
-        report_id: Affected report.
-        details: Additional details.
-
-    """
-
-    entry_id: str
-    timestamp: float
-    action: AuditAction
-    user_id: str
-    report_id: str
-    details: dict[str, Any] = field(default_factory=dict)  # type: ignore[assignment]
+r"""Auto-extracted class from generate_agent_reports.py"""

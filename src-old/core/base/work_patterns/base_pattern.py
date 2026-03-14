@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/work_patterns/base_pattern.description.md
 
@@ -90,54 +90,4 @@ inspired by agentUniverse PEER pattern and other collaborative frameworks.
 LLM_CONTEXT_END
 """
 
-"""Base Work Pattern for PyAgent swarm collaboration patterns."""
-
-from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional
-
-from src.core.base.common.models.communication_models import CascadeContext
-
-
-class WorkPattern(ABC):
-    """Abstract base class for work patterns in PyAgent swarm.
-
-    Work patterns define how multiple agents collaborate on tasks,
-    inspired by agentUniverse PEER pattern and other collaborative frameworks.
-    """
-
-    def __init__(self, name: str, description: Optional[str] = None):
-        self.name = name
-        self.description = description or f"Work pattern: {name}"
-
-    @abstractmethod
-    async def execute(self, context: CascadeContext, **kwargs) -> Dict[str, Any]:
-        """Execute the work pattern with the given context.
-
-        Args:
-            context: The cascade context containing task information
-            **kwargs: Additional parameters for the pattern
-
-        Returns:
-            Dict containing the results of the pattern execution
-
-        """
-        pass
-
-    @abstractmethod
-    def validate_agents(self) -> bool:
-        """Validate that required agents are available for this pattern.
-
-        Returns:
-            True if all required agents are present
-
-        """
-        pass
-
-    def get_required_agents(self) -> list[str]:
-        """Get the list of agent types required for this pattern.
-
-        Returns:
-            List of agent type names
-
-        """
-        return []
+r"""Base Work Pattern for PyAgent swarm collaboration patterns."""

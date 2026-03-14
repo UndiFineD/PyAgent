@@ -12,7 +12,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/work_pattern.description.md
 
@@ -99,7 +99,6 @@ LLM_CONTEXT_END
 Synaptic Modularization: The Work Pattern regarding structured multi-agent loops.
 Inspired by agentUniverse.
 """
-
 import abc
 from typing import Any
 
@@ -107,38 +106,5 @@ from src.core.base.models.communication_models import CascadeContext
 
 
 class BaseWorkPattern(abc.ABC):
-    """Abstract base class regarding a 'Work Pattern'.
-    Encapsulates orchestration logic regarding multiple agent roles or steps.
     """
-
-    def __init__(self, name: str, description: str = ""):
-        self.name = name
-        self.description = description
-
-    @abc.abstractmethod
-    async def execute(
-        self, input_data: Any, context: CascadeContext, **kwargs: Any
-    ) -> Any:
-        """Execute the work pattern orchestration."""
-        pass
-
-
-class PeerReviewPattern(BaseWorkPattern):
-    """Standard work pattern regarding a peer-review loop: Plan -> Execute -> Review.
     """
-
-    def __init__(self):
-        super().__init__(
-            name="peer_review",
-            description="A loop regarding structured task execution with iterative reviews.",
-        )
-
-    async def execute(
-        self, input_data: Any, context: CascadeContext, **kwargs: Any
-    ) -> Any:
-        """Executes the Peer-Review pattern.
-        Expected kwargs: 'planner', 'executor', 'reviewer', 'eval_threshold', 'max_retries'.
-        """
-        # Orchestration logic goes here...
-        # This is a placeholder for the actual roles provided by the swarm.
-        return {"status": "Pattern initialized", "pattern": self.name}

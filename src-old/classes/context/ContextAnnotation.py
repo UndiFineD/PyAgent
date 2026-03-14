@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/ContextAnnotation.description.md
@@ -77,21 +78,5 @@ An annotation / comment on context.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from dataclasses import dataclass
-
-
-@dataclass
-class ContextAnnotation:
-    """An annotation / comment on context."""
-
-    id: str
-    line_number: int
-    content: str
-    author: str = ""
-    timestamp: str = ""
-    resolved: bool = False
+r"""Auto-extracted class from agent_context.py"""

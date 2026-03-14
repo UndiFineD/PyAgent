@@ -124,16 +124,5 @@ export default {name};
 
     @as_tool
     def update_dashboard_layout(self, active_agents: List[str]) -> str:
-        """Updates the dashboard layout with the current fleet status."""
-        logging.info("Updating Dashboard Layout...")
-        # In a real scenario, this might write to a JSON config for a Next.js frontend
-        return f"Dashboard layout updated for {len(active_agents)} agents."
-
-
-if __name__ == "__main__":
-    from src.classes.base_agent.utilities import create_main_function
-
-    main = create_main_function(
-        DashboardAgent, "Dashboard Agent", "Dashboard source path"
-    )
-    main()
+        """
+        """

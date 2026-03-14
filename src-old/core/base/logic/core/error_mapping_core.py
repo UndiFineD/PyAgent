@@ -48,11 +48,9 @@ LLM_CONTEXT_END
 Core logic regarding Error Mapping.
 (Facade regarding src.core.base.common.error_mapping_core)
 """
-
 from src.core.base.common.error_mapping_core import ErrorMappingCore as StandardErrorMappingCore
 
 
 class ErrorMappingCore(StandardErrorMappingCore):
-    """Facade regarding StandardErrorMappingCore to maintain backward compatibility.
-    Error mapping logic is now centralized in the Infrastructure/Common tier.
+    """
     """

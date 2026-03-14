@@ -48,7 +48,6 @@ LLM_CONTEXT_END
 Unified Model Provider Registry.
 Ports the extensive provider list from .code_puppy's models.dev integration.
 """
-
 from typing import Dict, List, TypedDict
 
 
@@ -61,120 +60,5 @@ class ModelSpec(TypedDict):
     literals: List[str] # Trigger keywords
 
 class ProviderRegistry:
-    """Central repository for 65+ LLM/multimodal providers and their pricing.
     """
-
-    # --------------------------------------------------------------------------
-    # TIER 1: FOUNDATION MODELS
-    # --------------------------------------------------------------------------
-    OPENAI = "openai"
-    ANTHROPIC = "anthropic"
-    GOOGLE = "google"
-    META = "meta"
-    MISTRAL = "mistral"
-
-    # --------------------------------------------------------------------------
-    # TIER 2: SPECIALIZED & OPEN SOURCE
-    # --------------------------------------------------------------------------
-    GROQ = "groq"
-    TOGETHER = "together"
-    PERPLEXITY = "perplexity"
-    COHERE = "cohere"
-    DEEPSEEK = "deepseek"
-    QWEN = "qwen"
-    YI = "01-ai"
-
-    # --------------------------------------------------------------------------
-    # TIER 3: EDGE & LOCAL
-    # --------------------------------------------------------------------------
-    OLLAMA = "ollama"
-    LMSTUDIO = "lmstudio"
-    VLLM = "vllm"
-    FASTFLOWLM = "fastflowlm" # NPU Optimized
-
-    @staticmethod
-    def get_all_models() -> Dict[str, ModelSpec]:
-        """Returns the full catalog of supported models."""
-        return {
-            # OpenAI
-            "gpt-4o": {
-                "id": "gpt-4o-2024-05-13",
-                "context_window": 128000,
-                "input_price": 5.0,
-                "output_price": 15.0,
-                "provider": "openai",
-                "literals": ["gpt4o", "omni"]
-            },
-            "gpt-4-turbo": {
-                "id": "gpt-4-turbo-2024-04-09",
-                "context_window": 128000,
-                "input_price": 10.0,
-                "output_price": 30.0,
-                "provider": "openai",
-                "literals": ["gpt4t", "turbo"]
-            },
-            # Anthropic
-            "claude-3-5-sonnet": {
-                "id": "claude-3-5-sonnet-20240620",
-                "context_window": 200000,
-                "input_price": 3.0,
-                "output_price": 15.0,
-                "provider": "anthropic",
-                "literals": ["sonnet3.5", "claude"]
-            },
-            "claude-3-opus": {
-                "id": "claude-3-opus-20240229",
-                "context_window": 200000,
-                "input_price": 15.0,
-                "output_price": 75.0,
-                "provider": "anthropic",
-                "literals": ["opus"]
-            },
-            # Google
-            "gemini-1.5-pro": {
-                "id": "gemini-1.5-pro-latest",
-                "context_window": 2000000,
-                "input_price": 3.5,
-                "output_price": 10.5,
-                "provider": "google",
-                "literals": ["gemini1.5", "pro"]
-            },
-            "gemini-1.5-flash": {
-                "id": "gemini-1.5-flash-latest",
-                "context_window": 1000000,
-                "input_price": 0.35,
-                "output_price": 1.05,
-                "provider": "google",
-                "literals": ["flash"]
-            },
-            # Groq (Llama 3)
-            "llama3-70b-groq": {
-                "id": "llama3-70b-8192",
-                "context_window": 8192,
-                "input_price": 0.59,
-                "output_price": 0.79,
-                "provider": "groq",
-                "literals": ["groq70"]
-            },
-            # DeepSeek
-            "deepseek-v2": {
-                "id": "deepseek-coder-v2",
-                "context_window": 128000,
-                "input_price": 0.14,
-                "output_price": 0.28,
-                "provider": "deepseek",
-                "literals": ["deepseek"]
-            },
-            # ... (Placeholder for remaining 50+ models)
-        }
-
-    @staticmethod
-    def get_provider_list() -> List[str]:
-        """Returns list of supported providers."""
-        return [
-            "openai", "anthropic", "google", "meta", "mistral",
-            "groq", "together", "perplexity", "cohere", "deepseek",
-            "qwen", "01-ai", "ollama", "lmstudio", "vllm", "fastflowlm",
-            "databricks", "anyscale", "friendli", "replicate", "fireworks",
-            "lepton", "octo", "novita", "monsterapi", "deepinfra"
-        ]
+    """

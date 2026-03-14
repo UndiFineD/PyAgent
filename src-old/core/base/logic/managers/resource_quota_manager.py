@@ -48,15 +48,10 @@ LLM_CONTEXT_END
 Manager regarding Resource Quotas and budget enforcement.
 (Facade regarding src.core.base.common.resource_core)
 """
-
 from src.core.base.common.resource_core import QuotaConfig
 from src.core.base.common.resource_core import ResourceCore as StandardResourceQuotaManager
 
 
 class ResourceQuotaManager(StandardResourceQuotaManager):
-    """Facade regarding ResourceCore to maintain backward compatibility.
-    Resource enforcement logic is now centralized in the Infrastructure/Common tier.
     """
-
-
-__all__ = ["QuotaConfig", "ResourceQuotaManager"]
+    """

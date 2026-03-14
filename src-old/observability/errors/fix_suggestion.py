@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,31 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_errors.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class FixSuggestion:
-    """Automated fix suggestion for an error.
-
-    Attributes:
-        error_id: ID of the error to fix.
-        suggestion: The suggested fix.
-        confidence: Confidence score (0 - 1).
-        code_snippet: Example code for the fix.
-        source: Source of the suggestion.
-
-    """
-
-    error_id: str
-    suggestion: str
-    confidence: float = 0.0
-    code_snippet: str = ""
-    source: str = "pattern_match"
+r"""Auto-extracted class from agent_errors.py"""

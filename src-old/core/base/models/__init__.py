@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/models/__init__.description.md
 
@@ -71,8 +71,8 @@ Unified entry point for re-exporting all sub-modules.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -91,99 +91,3 @@ from __future__ import annotations
 Data models for PyAgent.
 Unified entry point for re-exporting all sub-modules.
 """
-
-from src.core.base.version import VERSION as VERSION
-
-from .agent_models import (
-    AgentConfig,
-    AgentHealthCheck,
-    AgentParallel,
-    AgentPipeline,
-    AgentPluginConfig,
-    AgentRouter,
-    ComposedAgent,
-    ExecutionProfile,
-)
-from .base_models import (
-    AuthConfig,
-    CacheEntry,
-    ConfigProfile,
-    DiffResult,
-    EventHook,
-    ExecutionCondition,
-    FilePriorityConfig,
-    ModelConfig,
-    SerializationConfig,
-    ValidationRule,
-    _empty_agent_event_handlers,
-    _empty_dict_str_any,
-    _empty_dict_str_callable_any_any,
-    _empty_dict_str_configprofile,
-    _empty_dict_str_filepriority,
-    _empty_dict_str_float,
-    _empty_dict_str_health_checks,
-    _empty_dict_str_int,
-    _empty_dict_str_modelconfig,
-    _empty_dict_str_quality_criteria,
-    _empty_dict_str_str,
-    _empty_list_dict_str_any,
-    _empty_list_float,
-    _empty_list_int,
-    _empty_list_str,
-    _empty_routes_list,
-)
-from .communication_models import (
-    BatchRequest,
-    BatchResult,
-    CachedResult,
-    CascadeContext,
-    ContextWindow,
-    ConversationHistory,
-    ConversationMessage,
-    MultimodalBuilder,
-    MultimodalInput,
-    PromptTemplate,
-    PromptTemplateManager,
-    PromptVersion,
-    ResponsePostProcessor,
-    SpanContext,
-    TelemetrySpan,
-)
-from .enums import (
-    AgentEvent,
-    AgentExecutionState,
-    AgentPriority,
-    AgentState,
-    AgentType,
-    AuthMethod,
-    ConfigFormat,
-    DiffOutputFormat,
-    EventType,
-    FilePriority,
-    HealthStatus,
-    InputType,
-    LockType,
-    MessageRole,
-    RateLimitStrategy,
-    ResponseQuality,
-    SerializationFormat,
-)
-from .fleet_models import HealthCheckResult, IncrementalState, RateLimitConfig, ShutdownState, TokenBudget
-
-__version__ = VERSION
-
-__all__ = [
-    "AgentState", "ResponseQuality", "EventType", "AuthMethod", "SerializationFormat",
-    "FilePriority", "InputType", "AgentType", "MessageRole", "AgentEvent",
-    "AgentExecutionState", "AgentPriority", "ConfigFormat", "DiffOutputFormat",
-    "HealthStatus", "LockType", "RateLimitStrategy", "CacheEntry", "AuthConfig",
-    "SerializationConfig", "FilePriorityConfig", "ExecutionCondition", "ValidationRule",
-    "ModelConfig", "ConfigProfile", "DiffResult", "EventHook", "AgentConfig", "ComposedAgent",
-    "AgentHealthCheck", "AgentPluginConfig", "ExecutionProfile", "AgentPipeline",
-    "AgentParallel", "AgentRouter", "HealthCheckResult", "IncrementalState",
-    "ShutdownState", "RateLimitConfig", "TokenBudget", "PromptTemplate",
-    "ConversationMessage", "PromptVersion", "BatchRequest", "BatchResult",
-    "MultimodalInput", "ContextWindow", "CachedResult", "TelemetrySpan", "SpanContext",
-    "ConversationHistory", "PromptTemplateManager", "ResponsePostProcessor",
-    "MultimodalBuilder", "CascadeContext"
-]

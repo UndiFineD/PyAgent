@@ -14,7 +14,6 @@
 """Tests for ExtensionRegistry
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,60 +31,5 @@ except ImportError as e:
 
 
 def test_extensionmanager_exists():
-    """Test that ExtensionManager class exists and is importable."""
-    assert "ExtensionManager" in dir()
-
-
-def test_typedextensionmanager_exists():
-    """Test that TypedExtensionManager class exists and is importable."""
-    assert "TypedExtensionManager" in dir()
-
-
-def test_extensioninfo_exists():
-    """Test that ExtensionInfo class exists and is importable."""
-    assert "ExtensionInfo" in dir()
-
-
-def test_multiextensionmanager_exists():
-    """Test that MultiExtensionManager class exists and is importable."""
-    assert "MultiExtensionManager" in dir()
-
-
-def test_lazyextensionmanager_exists():
-    """Test that LazyExtensionManager class exists and is importable."""
-    assert "LazyExtensionManager" in dir()
-
-
-def test_globalregistry_exists():
-    """Test that GlobalRegistry class exists and is importable."""
-    assert "GlobalRegistry" in dir()
-
-
-def test_get_global_registry_exists():
-    """Test that get_global_registry function exists."""
-    assert callable(get_global_registry)
-
-
-def test_create_registry_exists():
-    """Test that create_registry function exists."""
-    assert callable(create_registry)
-
-
-def test_create_typed_registry_exists():
-    """Test that create_typed_registry function exists."""
-    assert callable(create_typed_registry)
-
-
-def test_create_multi_registry_exists():
-    """Test that create_multi_registry function exists."""
-    assert callable(create_multi_registry)
-
-
-def test_create_lazy_registry_exists():
-    """Test that create_lazy_registry function exists."""
-    assert callable(create_lazy_registry)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

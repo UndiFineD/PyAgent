@@ -52,7 +52,6 @@ LLM_CONTEXT_END
 Standardized Base for all stateful Managers in the swarm.
 Inherits from BaseCore for lifecycle and I/O.
 """
-
 import logging
 from typing import Any, Dict, Optional
 
@@ -60,29 +59,5 @@ from .base_core import BaseCore
 
 
 class BaseManager(BaseCore):
-    """Standard implementation for stateful Managers.
-    Provides a dictionary-based state cache and standard operations.
     """
-
-    def __init__(self, name: Optional[str] = None) -> None:
-        super().__init__()
-        self._name = name or self.__class__.__name__
-        self._state: Dict[str, Any] = {}
-        self._logger = logging.getLogger(f"pyagent.manager.{self._name.lower()}")
-
-    def set_state(self, key: str, value: Any) -> None:
-        """Set a state value in the manager's cache."""
-        self._state[key] = value
-        self._logger.debug("State set: %s = %s", key, value)
-
-    def get_state(self, key: str, default: Any = None) -> Any:
-        """Retrieve a state value from the manager's cache."""
-        return self._state.get(key, default)
-
-    def clear_state(self) -> None:
-        """Clear the manager's state cache."""
-        self._state.clear()
-        self._logger.debug("State cleared.")
-
-    def __repr__(self) -> str:
-        return f"<{self._name} state_count={len(self._state)}>"
+    """

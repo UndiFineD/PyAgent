@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/testing/framework.description.md
 
@@ -70,7 +71,6 @@ Python module containing implementation for framework.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 import json
 import logging
@@ -478,198 +478,5 @@ tags:
         return template
 
     async def run_scenario_file(self, scenario_path: Path) -> List[TestResult]:
-        """Run all scenarios in a YAML file."""
-        return await self.testing_core.run_scenario_tests(scenario_path)
-
-    async def run_scenario_by_name(self, suite_name: str, scenario_name: str) -> Optional[TestResult]:
-        """Run a specific scenario by name."""
-        scenario_file = self.testing_core.scenarios_dir / f"{suite_name}.yaml"
-
-        if not scenario_file.exists():
-            return None
-
-        results = await self.run_scenario_file(scenario_file)
-
-        for result in results:
-            if result.test_id == scenario_name:
-                return result
-
-        return None
-
-
-class PromptVersioningSystem:
-    """Version control and A/B testing for prompt optimization.
-
-    Tracks prompt versions and enables comparative testing.
-    """
-
-    def __init__(self, prompts_dir: Path):
-        self.prompts_dir = prompts_dir
-        self.prompts_dir.mkdir(exist_ok=True)
-        self.logger = logging.getLogger("pyagent.testing.prompts")
-
-    def save_prompt_version(self, prompt_name: str, prompt_content: str,
-                           metadata: Optional[Dict[str, Any]] = None) -> str:
-        """Save a new version of a prompt."""
-        version_id = f"{int(time.time())}_{hash(prompt_content) % 10000:04d}"
-
-        prompt_data = {
-            'version_id': version_id,
-            'name': prompt_name,
-            'content': prompt_content,
-            'timestamp': time.time(),
-            'metadata': metadata or {}
-        }
-
-        version_file = self.prompts_dir / f"{prompt_name}_{version_id}.json"
-
-        with open(version_file, 'w', encoding='utf-8') as f:
-            json.dump(prompt_data, f, indent=2)
-
-        self.logger.info(f"Saved prompt version: {version_id}")
-        return version_id
-
-    def load_prompt_version(self, prompt_name: str, version_id: str) -> Optional[Dict[str, Any]]:
-        """Load a specific prompt version."""
-        version_file = self.prompts_dir / f"{prompt_name}_{version_id}.json"
-
-        if version_file.exists():
-            with open(version_file, 'r', encoding='utf-8') as f:
-                return json.load(f)
-
-        return None
-
-    def list_prompt_versions(self, prompt_name: str) -> List[Dict[str, Any]]:
-        """List all versions of a prompt."""
-        versions = []
-
-        for version_file in self.prompts_dir.glob(f"{prompt_name}_*.json"):
-            with open(version_file, 'r', encoding='utf-8') as f:
-                versions.append(json.load(f))
-
-        # Sort by timestamp
-        versions.sort(key=lambda x: x['timestamp'], reverse=True)
-        return versions
-
-    async def run_ab_test(self, prompt_name: str, version_a: str, version_b: str,
-                         num_runs: int = 10) -> Dict[str, Any]:
-        """Run A/B test between two prompt versions.
-
-        Returns comparative results.
         """
-        results_a = []
-        results_b = []
-
-        for i in range(num_runs):
-            # Test version A
-            prompt_a = self.load_prompt_version(prompt_name, version_a)
-            if prompt_a:
-                # This would integrate with inference engine
-                result_a = f"Result A {i}"  # Placeholder
-                results_a.append(result_a)
-
-            # Test version B
-            prompt_b = self.load_prompt_version(prompt_name, version_b)
-            if prompt_b:
-                result_b = f"Result B {i}"  # Placeholder
-                results_b.append(result_b)
-
-        return {
-            'version_a': version_a,
-            'version_b': version_b,
-            'results_a': results_a,
-            'results_b': results_b,
-            'comparison': {
-                'a_count': len(results_a),
-                'b_count': len(results_b)
-            }
-        }
-
-
-class EvaluationNotebookSystem:
-    """Jupyter-based evaluation and performance analysis.
-
-    Enables interactive analysis of test results and agent performance.
-    """
-
-    def __init__(self, notebooks_dir: Path):
-        self.notebooks_dir = notebooks_dir
-        self.notebooks_dir.mkdir(exist_ok=True)
-        self.logger = logging.getLogger("pyagent.testing.notebooks")
-
-    def create_evaluation_notebook(self, test_results: List[TestResult], notebook_name: str) -> str:
-        """Create a Jupyter notebook for test result analysis."""
-        notebook_content = {
-            "cells": [
-                {
-                    "cell_type": "markdown",
-                    "metadata": {},
-                    "source": [
-                        "# Agent Testing Evaluation\n",
-                        f"Generated: {time.strftime('%Y-%m-%d %H:%M:%S')}\n",
-                        f"Total Tests: {len(test_results)}\n"
-                    ]
-                },
-                {
-                    "cell_type": "code",
-                    "metadata": {},
-                    "source": [
-                        "import pandas as pd\n",
-                        "import matplotlib.pyplot as plt\n",
-                        "import json\n",
-                        "\n",
-                        "# Load test results\n",
-                        "results_data = " +
-                        json.dumps([{
-                            'test_id': 'r.test_id',
-                            'test_type': 'r.test_type.value',
-                            'status': 'r.status.value',
-                            'duration': 'r.duration',
-                            'timestamp': 'r.timestamp'
-                        } for r in test_results], indent=2) +
-                        "\n",
-                        "\n",
-                        "df = pd.DataFrame(results_data)\n",
-                        "df.head()"
-                    ]
-                },
-                {
-                    "cell_type": "code",
-                    "metadata": {},
-                    "source": [
-                        "# Test status distribution\n",
-                        "status_counts = df['status'].value_counts()\n",
-                        "status_counts.plot(kind='bar', title='Test Status Distribution')\n",
-                        "plt.show()"
-                    ]
-                },
-                {
-                    "cell_type": "code",
-                    "metadata": {},
-                    "source": [
-                        "# Performance analysis\n",
-                        "df.groupby('test_type')['duration'].describe()"
-                    ]
-                }
-            ],
-            "metadata": {
-                "kernelspec": {
-                    "display_name": "Python 3",
-                    "language": "python",
-                    "name": "python3"
-                }
-            },
-            "nbformat": 4,
-            "nbformat_minor": 4
-        }
-
-        notebook_path = self.notebooks_dir / f"{notebook_name}.ipynb"
-
-        try:
-            with open(notebook_path, 'w', encoding='utf-8') as f:
-                json.dump(notebook_content, f, indent=2)
-            self.logger.info(f"Created evaluation notebook: {notebook_path}")
-            return str(notebook_path)
-        except (OSError, IOError, json.JSONDecodeError, TypeError) as e:
-            self.logger.error(f"Failed to create evaluation notebook: {e}")
-            return ""
+        """

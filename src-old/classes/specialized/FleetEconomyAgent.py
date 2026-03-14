@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/FleetEconomyAgent.description.md
@@ -82,7 +83,6 @@ Phase 284: Implemented persistent SQLite backend and Second-Price auctions.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 import logging
 import sqlite3

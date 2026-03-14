@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,42 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_coder.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.common.types.accessibility_issue_type import AccessibilityIssueType
-from src.core.base.common.types.accessibility_severity import AccessibilitySeverity
-from src.core.base.common.types.wcag_level import WCAGLevel
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class AccessibilityIssue:
-    """An accessibility issue found in UI code.
-
-    Attributes:
-        issue_type: Type of accessibility issue.
-        severity: Severity level.
-        wcag_level: WCAG conformance level affected.
-        wcag_criterion: Specific WCAG criterion (e.g., "1.1.1").
-        description: Human - readable description.
-        element: UI element identifier or selector.
-        line_number: Line number in source file.
-        suggested_fix: Suggested fix for the issue.
-        auto_fixable: Whether the issue can be auto - fixed.
-
-    """
-
-    issue_type: AccessibilityIssueType
-    severity: AccessibilitySeverity
-    wcag_level: WCAGLevel
-    wcag_criterion: str
-    description: str
-    element: str
-    line_number: int | None = None
-    suggested_fix: str | None = None
-    auto_fixable: bool = False
+r"""Auto-extracted class from agent_coder.py"""

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/FileCategory.description.md
@@ -79,21 +80,5 @@ Categories for context files.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from enum import Enum
-
-
-class FileCategory(Enum):
-    """Categories for context files."""
-
-    CODE = "code"
-    DOCUMENTATION = "documentation"
-    CONFIGURATION = "configuration"
-    TEST = "test"
-    BUILD = "build"
-    DATA = "data"
-    OTHER = "other"
+r"""Auto-extracted class from agent_context.py"""

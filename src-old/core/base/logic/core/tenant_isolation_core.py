@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/logic/core/tenant_isolation_core.description.md
 
@@ -100,7 +100,6 @@ Patterns harvested from AgentCloud.
 
 LLM_CONTEXT_END
 """
-
 import time
 from typing import Any, Dict, Optional
 
@@ -116,58 +115,5 @@ class TenantContext(BaseModel):
 
 
 class TenantIsolationCore:
-    """Handles isolation of agent sessions between different tenants/users.
-    Patterns harvested from AgentCloud.
     """
-
-    def __init__(self, secret_key: str = "default_unsafe_secret"):
-        self.secret_key = secret_key
-        self.active_sessions: Dict[str, TenantContext] = {}
-
-    def authorize_session(self, token_payload: Dict[str, Any]) -> TenantContext:
-        """Validates a JWT-like payload and creates a tenant context.
-        """
-        tenant_id = token_payload.get("tenant_id")
-        if not tenant_id:
-            raise PermissionError("Missing tenant_id in token")
-
-        # Mock validation logic
-        context = TenantContext(
-            tenant_id=tenant_id,
-            user_id=token_payload.get("user_id"),
-            role=token_payload.get("role", "viewer"),
-            scopes=token_payload.get("scopes", []),
-            exp=token_payload.get("exp", int(time.time() + 3600)),
-        )
-
-        self.active_sessions[tenant_id] = context
-        return context
-
-    def check_access(self, tenant_id: str, required_scope: str) -> bool:
-        """Verifies if the tenant has the required scope for an action."""
-        context = self.active_sessions.get(tenant_id)
-        if not context:
-            return False
-
-        if "admin" in context.scopes:
-            return True
-
-        return required_scope in context.scopes
-
-    def isolate_path(self, base_path: str, tenant_id: str) -> str:
-        """Generates a tenant-specific filesystem path for sandboxing."""
-        import os
-
-        return os.path.join(base_path, "tenants", tenant_id)
-
-    def scrub_metadata(
-        self, metadata: Dict[str, Any], tenant_id: str
-    ) -> Dict[str, Any]:
-        """Ensures cross-tenant data leak prevention by scrubbing sensitive keys."""
-        scrubbed = metadata.copy()
-        # Remove any keys that don't belong to this tenant_id if present
-        if "_internal_tenant" in scrubbed and scrubbed["_internal_tenant"] != tenant_id:
-            return {"error": "Tenant mismatch detected during scrub"}
-
-        scrubbed["_internal_tenant"] = tenant_id
-        return scrubbed
+    """

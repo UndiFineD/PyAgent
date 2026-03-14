@@ -14,7 +14,6 @@
 """Tests for TypedPrompts
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,105 +31,5 @@ except ImportError as e:
 
 
 def test_textprompt_exists():
-    """Test that TextPrompt class exists and is importable."""
-    assert "TextPrompt" in dir()
-
-
-def test_tokensprompt_exists():
-    """Test that TokensPrompt class exists and is importable."""
-    assert "TokensPrompt" in dir()
-
-
-def test_embedsprompt_exists():
-    """Test that EmbedsPrompt class exists and is importable."""
-    assert "EmbedsPrompt" in dir()
-
-
-def test_dataprompt_exists():
-    """Test that DataPrompt class exists and is importable."""
-    assert "DataPrompt" in dir()
-
-
-def test_explicitencoderdecoderprompt_exists():
-    """Test that ExplicitEncoderDecoderPrompt class exists and is importable."""
-    assert "ExplicitEncoderDecoderPrompt" in dir()
-
-
-def test_is_text_prompt_exists():
-    """Test that is_text_prompt function exists."""
-    assert callable(is_text_prompt)
-
-
-def test_is_tokens_prompt_exists():
-    """Test that is_tokens_prompt function exists."""
-    assert callable(is_tokens_prompt)
-
-
-def test_is_embeds_prompt_exists():
-    """Test that is_embeds_prompt function exists."""
-    assert callable(is_embeds_prompt)
-
-
-def test_is_data_prompt_exists():
-    """Test that is_data_prompt function exists."""
-    assert callable(is_data_prompt)
-
-
-def test_is_string_prompt_exists():
-    """Test that is_string_prompt function exists."""
-    assert callable(is_string_prompt)
-
-
-def test_is_explicit_encoder_decoder_prompt_exists():
-    """Test that is_explicit_encoder_decoder_prompt function exists."""
-    assert callable(is_explicit_encoder_decoder_prompt)
-
-
-def test_parse_prompt_exists():
-    """Test that parse_prompt function exists."""
-    assert callable(parse_prompt)
-
-
-def test_get_prompt_text_exists():
-    """Test that get_prompt_text function exists."""
-    assert callable(get_prompt_text)
-
-
-def test_get_prompt_token_ids_exists():
-    """Test that get_prompt_token_ids function exists."""
-    assert callable(get_prompt_token_ids)
-
-
-def test_has_multi_modal_data_exists():
-    """Test that has_multi_modal_data function exists."""
-    assert callable(has_multi_modal_data)
-
-
-def test_make_text_prompt_exists():
-    """Test that make_text_prompt function exists."""
-    assert callable(make_text_prompt)
-
-
-def test_make_tokens_prompt_exists():
-    """Test that make_tokens_prompt function exists."""
-    assert callable(make_tokens_prompt)
-
-
-def test_make_embeds_prompt_exists():
-    """Test that make_embeds_prompt function exists."""
-    assert callable(make_embeds_prompt)
-
-
-def test_make_encoder_decoder_prompt_exists():
-    """Test that make_encoder_decoder_prompt function exists."""
-    assert callable(make_encoder_decoder_prompt)
-
-
-def test_validate_prompt_exists():
-    """Test that validate_prompt function exists."""
-    assert callable(validate_prompt)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

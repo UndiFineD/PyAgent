@@ -12,10 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Package marker for `src.core.base.common.utils.jsontree`.
+r"""Package marker for `src.core.base.common.utils.jsontree`.
 
 Minimal initializer to ensure consistent import resolution during pytest
 collection when multiple similarly-named test modules exist.
 """
-
-__all__ = []

@@ -177,27 +177,6 @@ output = model.generate(
 
 print(model.tokenizer.decode(output.sequences[0]))
 """
-
     def improve_content(self, task_description: str) -> str:
-        """Suggests an optimization plan for a specific model deployment task."""
-        # Simple parser for "model size" and "vram" in text if provided
-        # For now, return a generic recommendation
-        return json.dumps(
-            {
-                "recommendation": "Use 4-bit quantization and Layered Inference for models > 30B parameters on consumer hardware.",
-                "pattern": "AirLLM (Layered Loading)",
-                "benefits": [
-                    "Run 70B on 4GB VRAM",
-                    "Avoid OOM errors",
-                    "Simplified deployment",
-                ],
-            },
-            indent=2,
-        )
-
-
-if __name__ == "__main__":
-    from src.classes.base_agent.utilities import create_main_function
-
-    main = create_main_function(ModelOptimizerAgent)
-    main()
+        """
+        """

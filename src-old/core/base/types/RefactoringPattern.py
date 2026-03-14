@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/types/RefactoringPattern.description.md
 
@@ -64,8 +64,8 @@ A code refactoring pattern.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -81,22 +81,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_coder.py"""
-
-from dataclasses import dataclass
-
-from src.core.base.types.CodeLanguage import CodeLanguage
-from src.core.base.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class RefactoringPattern:
-    """A code refactoring pattern."""
-
-    name: str
-    description: str
-    pattern: str
-    replacement: str
-    language: CodeLanguage = CodeLanguage.PYTHON
+r"""Auto-extracted class from agent_coder.py"""

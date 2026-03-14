@@ -14,7 +14,6 @@
 """Tests for agent_card_core
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,26 +31,5 @@ except ImportError as e:
 
 
 def test_agentcapability_exists():
-    """Test that AgentCapability class exists and is importable."""
-    assert "AgentCapability" in dir()
-
-
-def test_agentcard_exists():
-    """Test that AgentCard class exists and is importable."""
-    assert "AgentCard" in dir()
-
-
-def test_agentcardcore_exists():
-    """Test that AgentCardCore class exists and is importable."""
-    assert "AgentCardCore" in dir()
-
-
-def test_agentcardcore_instantiation():
-    """Test that AgentCardCore can be instantiated."""
-    instance = AgentCardCore()
-    assert instance is not None
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

@@ -46,74 +46,10 @@ LLM_CONTEXT_END
 """
 Core resolution mixin for conflict management.
 """
-
 from datetime import datetime
 from typing import Any
 
 
 class CoreResolutionMixin:
-    """Methods for conflict resolution and fact preparation."""
-
-    def prepare_fact(self, _key: str, value: Any) -> dict[str, Any]:
-        """Prepares a fact entry with timestamp."""
-        return {"value": value, "updated_at": datetime.now().isoformat()}
-
-    def prepare_insight(self, insight: str, source_agent: str) -> dict[str, Any]:
-        """Prepares an insight entry."""
-        return {
-            "text": insight,
-            "source": source_agent,
-            "timestamp": datetime.now().isoformat(),
-        }
-
-    def merge_entity_info(
-        self, existing: dict[str, Any], new_attributes: dict[str, Any]
-    ) -> dict[str, Any]:
-        """Merges new attributes into an entity record."""
-        updated = existing.copy()
-        updated.update(new_attributes)
-        updated["last_modified"] = datetime.now().isoformat()
-        return updated
-
-    def resolve_conflict(
-        self, existing: Any, incoming: Any, strategy: str = "latest"
-    ) -> Any:
-        """Logic to resolve conflicts when multiple agents update the same key."""
-        if strategy == "latest":
-            return self._resolve_latest(existing, incoming)
-
-        if strategy == "merge":
-            return self._resolve_merge(existing, incoming)
-
-        if strategy == "accumulate":
-            return self._resolve_accumulate(existing, incoming)
-
-        return incoming
-
-    def _resolve_latest(self, existing: Any, incoming: Any) -> Any:
-        """Helper for latest strategy."""
-        if isinstance(existing, dict) and isinstance(incoming, dict):
-            e_ts = existing.get("updated_at", "")
-            i_ts = incoming.get("updated_at", "")
-            return incoming if i_ts >= e_ts else existing
-        return incoming
-
-    def _resolve_merge(self, existing: Any, incoming: Any) -> Any:
-        """Helper for merge strategy."""
-        if isinstance(existing, dict) and isinstance(incoming, dict):
-            merged = existing.copy()
-            merged.update(incoming)
-            return merged
-        if isinstance(existing, list) and isinstance(incoming, list):
-            # Convert to list(set()) only if all elements are hashable
-            try:
-                return list(set(existing + incoming))
-            except TypeError:
-                return existing + incoming
-        return incoming
-
-    def _resolve_accumulate(self, existing: Any, incoming: Any) -> Any:
-        """Helper for accumulate strategy."""
-        if isinstance(existing, (int, float)) and isinstance(incoming, (int, float)):
-            return existing + incoming
-        return incoming
+    """
+    """

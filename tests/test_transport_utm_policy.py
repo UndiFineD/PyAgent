@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+"""Tests for UTM transport policy constants."""
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from rust_core import (
+    TRANSPORT_FALLBACK_TO_QUEUE,
+    TRANSPORT_RETRY_COUNT,
+    TRANSPORT_TIMEOUT_MAX_SECS,
+    TX_RECV_PORT,
+    TX_SEND_PORT,
+    UTM_CONTROL_PORT,
+    UTM_DEFAULT_PORT,
+)
+
+
+def test_utm_transport_port_constants():
+    """UTM transport port constants should match expected values."""
+    assert UTM_DEFAULT_PORT == 4031
+    assert UTM_CONTROL_PORT == 4032
+    assert TX_SEND_PORT == 54001
+    assert TX_RECV_PORT == 54002
+
+
+def test_utm_transport_policy_constants():
+    """UTM transport policy constants should match expected values."""
+    assert TRANSPORT_TIMEOUT_MAX_SECS == 30
+    assert TRANSPORT_RETRY_COUNT == 1
+    assert TRANSPORT_FALLBACK_TO_QUEUE is True

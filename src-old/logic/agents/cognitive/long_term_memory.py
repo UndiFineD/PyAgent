@@ -65,7 +65,6 @@ For more information, visit:
 
 No commands will be executed.
 """
-
 import logging
 
 from src.core.base.lifecycle.version import VERSION
@@ -74,12 +73,5 @@ __version__ = VERSION
 
 
 class LongTermMemory:
-    """LongTermMemory recovered after Copilot CLI deprecation event.
-    Standardized placeholder for future re-implementation.
     """
-
-    def __init__(self, *args, **kwargs) -> None:
-        _ = args
-        _ = kwargs
-        self.version = VERSION
-        logging.info("LongTermMemory initialized (Placeholder).")
+    """

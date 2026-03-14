@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/DocGenAgent.description.md
@@ -76,7 +77,6 @@ and generates Markdown files compatible with Sphinx/Jekyll.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 import ast
 import os

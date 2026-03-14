@@ -24,8 +24,8 @@ Suggested improvements (automatically generated):
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,31 +41,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from generate_agent_reports.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class ReportCache:
-    """Cache for report data.
-
-    Attributes:
-        path: File path for the cached report.
-        content_hash: Hash of the cached content.
-        content: The cached report content.
-        created_at: Timestamp when cache was created.
-        ttl_seconds: Time - to - live for cache entries.
-
-    """
-
-    path: str = ""
-    content_hash: str = ""
-    content: str = ""
-    created_at: float = 0.0
-    ttl_seconds: int = 3600
+r"""Auto-extracted class from generate_agent_reports.py"""

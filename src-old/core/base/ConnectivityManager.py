@@ -22,45 +22,9 @@ ConnectivityManager` succeed during pytest collection. The real
 implementation may live elsewhere; this shim is intentionally small
 and safe for import-time.
 """
-
-
 from typing import Optional
 
 
 class ConnectivityManager:
-    """Lightweight connectivity manager stub."""
-
-    _instance: Optional["ConnectivityManager"] = None
-
-    def __init__(self) -> None:
-        self._connected = False
-
-    @classmethod
-    def get_instance(cls) -> "ConnectivityManager":
-        if cls._instance is None:
-            cls._instance = cls()
-        return cls._instance
-
-    def connect(self) -> bool:
-        """Mark manager as connected. Returns True on success."""
-        self._connected = True
-        return True
-
-    def disconnect(self) -> None:
-        """Mark manager as disconnected."""
-        self._connected = False
-
-    def is_connected(self) -> bool:
-        """Return whether connectivity is available."""
-        return bool(self._connected)
-
-    def check(self) -> bool:
-        """Check connectivity; safe no-op that returns True.
-
-        Real checks may reach network resources; for collection we
-        simply return True to avoid side-effects.
-        """
-        return True
-
-
-__all__ = ["ConnectivityManager"]
+    """
+    """

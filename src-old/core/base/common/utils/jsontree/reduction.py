@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,8 +48,6 @@ from __future__ import annotations
 """
 Reduction.py module.
 """
-
-
 from functools import reduce
 from typing import Callable, overload
 
@@ -104,20 +102,5 @@ def json_reduce_leaves(
     initial: _U = ...,  # type: ignore[assignment]
     /,
 ) -> _T | _U:
-    """Apply a function of two arguments cumulatively to each leaf.
-
-    Reduces all leaves to a single value, from left to right.
-
-    Args:
-        func: A binary function (accumulator, leaf) -> result.
-        value: A nested JSON structure.
-        initial: Optional initial value for the reduction.
-
-    Returns:
-        The reduced value.
-
     """
-    if initial is ...:
-        return reduce(func, json_iter_leaves(value))  # type: ignore
-
-    return reduce(func, json_iter_leaves(value), initial)  # type: ignore
+    """

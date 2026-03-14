@@ -23,8 +23,8 @@ Potential improvements:
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,60 +40,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from generate_agent_reports.py"""
-
-
-from src.core.base.lifecycle.version import VERSION
-
-from .code_issue import CodeIssue
-from .filter_criteria import FilterCriteria
-
-__version__ = VERSION
-
-
-class ReportFilter:
-    """Filters reports based on criteria.
-
-    Attributes:
-        criteria: Filter criteria to apply.
-
-    """
-
-    def __init__(self, criteria: FilterCriteria | None = None) -> None:
-        """Initialize filter.
-
-        Args:
-            criteria: Filter criteria. Uses defaults if not provided.
-
-        """
-        self.criteria = criteria or FilterCriteria()
-
-    def matches(self, issue: CodeIssue) -> bool:
-        """Check if issue matches filter criteria.
-
-        Args:
-            issue: Code issue to check.
-
-        Returns:
-            True if issue matches all criteria.
-
-        """
-        # Check severity
-        if self.criteria.min_severity and issue.severity.value < self.criteria.min_severity.value:
-            return False
-        # Check category
-        if self.criteria.categories and issue.category not in self.criteria.categories:
-            return False
-        return True
-
-    def filter_issues(self, issues: list[CodeIssue]) -> list[CodeIssue]:
-        """Filter list of issues.
-
-        Args:
-            issues: List of issues to filter.
-
-        Returns:
-            Filtered list of issues.
-
-        """
-        return [i for i in issues if self.matches(i)]
+r"""Auto-extracted class from generate_agent_reports.py"""

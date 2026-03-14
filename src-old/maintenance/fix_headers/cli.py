@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/maintenance/fix_headers/cli.description.md
 
@@ -80,59 +80,11 @@ LLM_CONTEXT_END
 """
 CLI interface for the Fix Headers Tool.
 """
-
 import argparse
 
 from .fix_headers_agent import FixHeadersAgent
 
 
 def main():
-    """CLI entry point for the Fix Headers Tool."""
-    parser = argparse.ArgumentParser(
-        description="Fix Apache 2.0 headers in Python files",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-Examples:
-  python -m src.maintenance.fix_headers.cli src/logic/agents/
-  python -m src.maintenance.fix_headers.cli --dry-run --verbose src/
-  python -m src.maintenance.fix_headers.cli single_file.py
-
-This tool ensures all Python files have proper Apache 2.0 license headers
-with PyAgent copyright notices.
-        """
-    )
-
-    parser.add_argument(
-        'target',
-        help='File or directory to process'
-    )
-
-    parser.add_argument(
-        '--dry-run',
-        action='store_true',
-        help='Show what would be changed without modifying files'
-    )
-
-    parser.add_argument(
-        '--verbose', '-v',
-        action='store_true',
-        help='Provide detailed output for each file'
-    )
-
-    parser.add_argument(
-        '--exclude',
-        action='append',
-        help='Directory patterns to exclude (can be used multiple times)'
-    )
-
-    args = parser.parse_args()
-
-    exclude_patterns = set(args.exclude or [])
-    exclude_patterns.update({'__pycache__', '.git', '.venv', 'node_modules', '.pytest_cache'})
-
-    agent = FixHeadersAgent(dry_run=args.dry_run, verbose=args.verbose)
-    agent.run(args.target, exclude_patterns)
-
-
-if __name__ == "__main__":
-    main()
+    """
+    """

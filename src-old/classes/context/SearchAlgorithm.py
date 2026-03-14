@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/SearchAlgorithm.description.md
@@ -79,18 +80,5 @@ Algorithms for semantic search.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from enum import Enum
-
-
-class SearchAlgorithm(Enum):
-    """Algorithms for semantic search."""
-
-    KEYWORD = "keyword"
-    FUZZY = "fuzzy"
-    SEMANTIC = "semantic"
-    HYBRID = "hybrid"
+r"""Auto-extracted class from agent_context.py"""

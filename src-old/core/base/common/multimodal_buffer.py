@@ -43,37 +43,4 @@ LLM_CONTEXT_END
 
 """
 
-"""Multimodal buffer management."""
-
-from typing import List
-
-try:
-    import rust_core as rc
-except ImportError:
-    rc = None
-
-
-class TemporalModalityBuffer:
-    """Rolling buffer for multimodal sequences (Short-term memory).
-    Stores recent frames/audio to allow temporal reasoning.
-    """
-
-    def __init__(self, max_size: int = 10) -> None:
-        """Initializes the TemporalModalityBuffer with a maximum size."""
-        self.max_size = max_size
-        self.frames: List[bytes] = []
-        self.timestamps: List[float] = []
-
-    def push(self, frame: bytes, timestamp: float) -> None:
-        """Add a frame and timestamp to the buffer."""
-        self.frames.append(frame)
-        self.timestamps.append(timestamp)
-        if len(self.frames) > self.max_size:
-            self.frames.pop(0)
-            self.timestamps.pop(0)
-
-    def get_dynamics(self) -> float:
-        """Calculate how much change is happening in this buffer."""
-        if rc and hasattr(rc, "calculate_temporal_entropy_rust"):
-            return rc.calculate_temporal_entropy_rust([list(f) for f in self.frames])
-        return 0.0
+r"""Multimodal buffer management."""

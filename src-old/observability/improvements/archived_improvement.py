@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,31 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-from .improvement import Improvement
-
-__version__ = VERSION
-
-
-@dataclass
-class ArchivedImprovement:
-    """An archived improvement.
-
-    Attributes:
-        improvement: The archived improvement data.
-        archived_date: When it was archived.
-        archived_by: Who archived it.
-        archive_reason: Why it was archived.
-
-    """
-
-    improvement: Improvement
-    archived_date: str = ""
-    archived_by: str = ""
-    archive_reason: str = ""
+r"""Auto-extracted class from agent_improvements.py"""

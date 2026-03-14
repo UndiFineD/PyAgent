@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/maintenance/fix_headers/fix_headers_agent.description.md
 
@@ -91,8 +91,8 @@ CLI entry point for the Fix Headers Agent.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -303,82 +303,6 @@ Files updated:    {self.files_updated}
 Files skipped:    {self.files_skipped}
 Mode:             {'DRY RUN' if self.dry_run else 'LIVE'}
 """
-
     def run(self, target: str | Path, exclude_patterns: Set[str] = None) -> None:
-        """Run the header fixing process on a target.
-
-        Args:
-            target: File or directory path to process
-            exclude_patterns: Directory patterns to exclude
-
         """
-        target_path = Path(target)
-
-        if target_path.is_file():
-            if target_path.suffix == ".py":
-                self.process_file(target_path)
-                self.files_processed = 1
-            else:
-                print(f"❌ {target} is not a Python file")
-                return
-        elif target_path.is_dir():
-            self.process_directory(target_path, exclude_patterns)
-        else:
-            print(f"❌ {target} does not exist")
-            return
-
-        print(self.get_summary())
-
-
-def main():
-    """CLI entry point for the Fix Headers Agent."""
-    import argparse
-
-    parser = argparse.ArgumentParser(
-        description="Fix Apache 2.0 headers in Python files",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-Examples:
-  python -m src.maintenance.fix_headers_agent src/logic/agents/
-  python -m src.maintenance.fix_headers_agent --dry-run --verbose src/
-  python -m src.maintenance.fix_headers_agent single_file.py
-
-This tool ensures all Python files have proper Apache 2.0 license headers
-with PyAgent copyright notices.
-        """,
-    )
-
-    parser.add_argument("target", help="File or directory to process")
-
-    parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="Show what would be changed without modifying files",
-    )
-
-    parser.add_argument(
-        "--verbose",
-        "-v",
-        action="store_true",
-        help="Provide detailed output for each file",
-    )
-
-    parser.add_argument(
-        "--exclude",
-        action="append",
-        help="Directory patterns to exclude (can be used multiple times)",
-    )
-
-    args = parser.parse_args()
-
-    exclude_patterns = set(args.exclude or [])
-    exclude_patterns.update(
-        {"__pycache__", ".git", ".venv", "node_modules", ".pytest_cache"}
-    )
-
-    agent = FixHeadersAgent(dry_run=args.dry_run, verbose=args.verbose)
-    agent.run(args.target, exclude_patterns)
-
-
-if __name__ == "__main__":
-    main()
+        """

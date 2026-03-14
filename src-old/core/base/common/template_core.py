@@ -30,8 +30,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,8 +50,6 @@ from __future__ import annotations
 Unified Template Core for PyAgent.
 Handles variable substitution, template registration, and versioning.
 """
-
-
 from typing import Any, Dict, List
 
 try:
@@ -63,46 +61,5 @@ from .base_core import BaseCore
 
 
 class TemplateCore(BaseCore):
-    """Standard implementation for manage structured templates.
-    Supports variable substitution using {{variable}} or [variable] syntax.
     """
-
-    def __init__(self) -> None:
-        """Initialize the template registry."""
-        super().__init__()
-        self.templates: Dict[str, str] = {
-            "python_full": "Python code template: [code]",
-            "improvement": "Suggested improvement: [description]",
-            "report": "Analysis report for [file]: [content]"
-        }
-
-    def register_template(self, name: str, content: str) -> None:
-        """Adds a new template to the registry."""
-        self.templates[name] = content
-
-    def get_template(self, name: str) -> str | None:
-        """Retrieves a template by name."""
-        return self.templates.get(name)
-
-    def apply_template(self, name: str, context: Dict[str, Any]) -> str:
-        """Applies context variables to a template."""
-        if name not in self.templates:
-            return ""
-
-        content = self.templates[name]
-
-        # Try Rust acceleration for high-performance substitution
-        if rc and hasattr(rc, "apply_template_rust"):
-            # Convert context to string dict
-            str_context = {k: str(v) for k, v in context.items()}
-            return rc.apply_template_rust(content, str_context)  # pylint: disable=no-member
-
-        # Python fallback
-        for key, value in context.items():
-            content = content.replace(f"{{{{{key}}}}}", str(value))
-            content = content.replace(f"[{key}]", str(value))
-        return content
-
-    def list_templates(self) -> List[str]:
-        """Returns list of registered template names."""
-        return list(self.templates.keys())
+    """

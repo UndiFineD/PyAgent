@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/base_agent/managers/__init__.description.md
 
@@ -76,23 +76,3 @@ LLM_CONTEXT_END
 """
 Internal managers for prompt, conversation, auth, and batch processing.
 """
-
-from .AuthManagers import AuthenticationManager, AuthManager
-from .BatchManagers import BatchRequest, RequestBatcher
-from .ConversationManagers import ConversationHistory
-from .OrchestrationManagers import ABTest, AgentComposer, ModelSelector, QualityScorer
-from .ProcessorManagers import (
-    MultimodalProcessor,
-    ResponsePostProcessor,
-    SerializationManager,
-)
-from .PromptManagers import PromptTemplateManager, PromptVersion, PromptVersionManager
-from .SystemManagers import (
-    EventManager,
-    FilePriorityManager,
-    HealthChecker,
-    PluginManager,
-    ProfileManager,
-    ResponseCache,
-    StatePersistence,
-)

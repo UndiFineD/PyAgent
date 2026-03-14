@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/ConflictResolution.description.md
@@ -79,18 +80,5 @@ Strategies for merge conflict resolution.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from enum import Enum
-
-
-class ConflictResolution(Enum):
-    """Strategies for merge conflict resolution."""
-
-    OURS = "ours"
-    THEIRS = "theirs"
-    MANUAL = "manual"
-    AUTO = "auto"
+r"""Auto-extracted class from agent_context.py"""

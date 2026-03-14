@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+r"""
 LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/utils/GlobalContextEngine.description.md
@@ -78,8 +78,8 @@ Shell for GlobalContextCore.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -99,7 +99,6 @@ from __future__ import annotations
 Consolidates episodic memories into semantic knowledge and persistent preferences.
 Inspired by mem0 and BabyAGI patterns.
 """
-
 from src.core.base.Version import VERSION
 from pathlib import Path
 from typing import Any
@@ -118,28 +117,4 @@ class GlobalContextEngine(
     ContextShardMixin, ContextDataMixin, ContextEntityMixin, ContextConsolidationMixin
 ):
     """
-    Manages persistent project-wide knowledge and agent preferences.
-    Shell for GlobalContextCore.
     """
-
-    def __init__(self, workspace_root: str | None = None, fleet: Any = None) -> None:
-        if fleet and hasattr(fleet, "workspace_root"):
-            self.workspace_root = Path(fleet.workspace_root)
-        elif workspace_root:
-            self.workspace_root = Path(workspace_root)
-        else:
-            self.workspace_root = Path(".")
-
-        self.context_file = self.workspace_root / ".agent_global_context.json"
-        self.shard_dir = self.workspace_root / ".agent_shards"
-        self.core = GlobalContextCore()
-        self.memory: dict[str, Any] = {
-            "facts": {},
-            "preferences": {},
-            "constraints": [],
-            "insights": [],
-            "entities": {},
-            "lessons_learned": [],
-        }
-        self._loaded_shards: set[Any] = set()
-        self.load()

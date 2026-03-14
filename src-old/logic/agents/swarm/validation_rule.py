@@ -46,15 +46,10 @@ LLM_CONTEXT_END
 """
 Validation rule.py module.
 """
-
 from dataclasses import dataclass
 
 
 @dataclass
 class ValidationRule:
-    """Rule used by ChangesAgent to validate changelog entries against standards."""
-
-    name: str
-    pattern: str
-    message: str
-    severity: str
+    """
+    """

@@ -1,7 +1,7 @@
 # Copyright 2026 PyAgent Authors
 # MIRIX 6-tier memory engine utilizing ChromaDB.
 
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/cognitive/context/engines/TieredMemoryEngine.description.md
 

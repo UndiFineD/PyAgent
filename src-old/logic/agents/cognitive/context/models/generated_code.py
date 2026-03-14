@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,28 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py"""
-
-from dataclasses import dataclass, field
-
-from src.core.base.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class GeneratedCode:
-    """Context-aware generated code.
-
-    Attributes:
-        language: Programming language.
-        code: Generated code content.
-        context_used: Context files used for generation.
-        description: Description of what the code does.
-
-    """
-
-    language: str
-    code: str
-    context_used: list[str] = field(default_factory=lambda: [])
-    description: str = ""
+r"""Auto-extracted class from agent_context.py"""

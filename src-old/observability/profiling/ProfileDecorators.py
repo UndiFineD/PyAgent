@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/observability/profiling/ProfileDecorators.description.md
@@ -194,7 +195,6 @@ LLM_CONTEXT_END
 
 """
 
-from __future__ import annotations
 
 """
 ProfileDecorators - cProfile-based profiling utilities.

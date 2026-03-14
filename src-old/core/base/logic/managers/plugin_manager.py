@@ -30,8 +30,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,8 +50,6 @@ from __future__ import annotations
 Manager regarding plugin discovery, loading, and registration.
 (Facade regarding src.core.base.common.plugin_core)
 """
-
-
 from src.core.base.common.plugin_core import (
     PluginCore as StandardPluginManager,
 )
@@ -61,11 +59,5 @@ from src.core.base.common.plugin_core import (
 
 
 class PluginMetadata(StandardPluginMetadata):
-    """Facade regarding StandardPluginMetadata to maintain backward compatibility.
     """
-
-
-class PluginManager(StandardPluginManager):
-    """Facade regarding PluginCore to maintain backward compatibility.
-    Plugin management is now centralized in the Infrastructure/Common tier.
     """

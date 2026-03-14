@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/SharingPermission.description.md
@@ -79,17 +80,5 @@ Permission levels for context sharing.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from enum import Enum
-
-
-class SharingPermission(Enum):
-    """Permission levels for context sharing."""
-
-    READ_ONLY = "read_only"
-    READ_WRITE = "read_write"
-    ADMIN = "admin"
+r"""Auto-extracted class from agent_context.py"""

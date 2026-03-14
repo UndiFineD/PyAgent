@@ -52,6 +52,7 @@ mod time;
 mod utils;
 mod validation;
 mod workspace;
+mod transport;
 mod infrastructure {
     pub mod services {
         pub mod dev {
@@ -94,6 +95,7 @@ fn rust_core(m: &Bound<'_, PyModule>) -> PyResult<()> {
     mux::register(m)?;
     attention::register(m)?;
     workspace::register(m)?;
+    transport::register(m)?;
     scheduling::register(m)?;
     distributed::register(m)?;
     m.add_function(pyo3::wrap_pyfunction!(formula::evaluate_formula, m)?)?;

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/context/BranchComparison.description.md
@@ -85,31 +86,7 @@ LLM_CONTEXT_END
 
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-"""Auto-extracted class from agent_context.py"""
-
-
-from typing import List
-
-
-@dataclass
-class BranchComparison:
-    """Comparison of context across branches.
-
-    Attributes:
-        branch_a: First branch name.
-        branch_b: Second branch name.
-        files_only_in_a: Files only in branch A.
-        files_only_in_b: Files only in branch B.
-        modified_files: Files modified between branches.
-
-    """
-
-    branch_a: str
-    branch_b: str
-    files_only_in_a: List[str] = field(default_factory=lambda: [])
-    files_only_in_b: List[str] = field(default_factory=lambda: [])
-    modified_files: List[str] = field(default_factory=lambda: [])
+r"""Auto-extracted class from agent_context.py"""

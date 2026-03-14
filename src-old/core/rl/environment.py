@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 """LLM_CONTEXT_START
 
@@ -36,7 +37,6 @@ Environment.py module.
 # Copyright 2026 PyAgent Authors
 # Reinforcement Learning Environment Framework - Phase 319 Enhanced
 
-from __future__ import annotations
 
 import abc
 import logging

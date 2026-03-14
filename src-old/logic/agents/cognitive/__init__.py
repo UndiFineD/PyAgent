@@ -43,16 +43,4 @@ LLM_CONTEXT_END
 
 """
 
-"""Cognitive Agents for PyAgent Swarm."""
-
-from .context_agent import ContextAgent
-from .knowledge_agent import KnowledgeAgent
-from .reasoning_agent import ReasoningAgent
-from .speciation_agent import SpeciationAgent
-
-__all__ = [
-    "KnowledgeAgent",
-    "ReasoningAgent",
-    "ContextAgent",
-    "SpeciationAgent",
-]
+r"""Cognitive Agents for PyAgent Swarm."""

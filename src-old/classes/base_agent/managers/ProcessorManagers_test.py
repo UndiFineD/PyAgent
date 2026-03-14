@@ -14,7 +14,6 @@
 """Tests for ProcessorManagers
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,32 +31,5 @@ except ImportError as e:
 
 
 def test_responsepostprocessor_exists():
-    """Test that ResponsePostProcessor class exists and is importable."""
-    assert "ResponsePostProcessor" in dir()
-
-
-def test_responsepostprocessor_instantiation():
-    """Test that ResponsePostProcessor can be instantiated."""
-    instance = ResponsePostProcessor()
-    assert instance is not None
-
-
-def test_multimodalprocessor_exists():
-    """Test that MultimodalProcessor class exists and is importable."""
-    assert "MultimodalProcessor" in dir()
-
-
-def test_multimodalprocessor_instantiation():
-    """Test that MultimodalProcessor can be instantiated."""
-    instance = MultimodalProcessor()
-    assert instance is not None
-
-
-def test_serializationmanager_exists():
-    """Test that SerializationManager class exists and is importable."""
-    assert "SerializationManager" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

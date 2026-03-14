@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ModelForgeAgent.description.md
@@ -82,7 +83,6 @@ Orchestrates local model fine-tuning and adapter management.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -106,7 +106,6 @@ from __future__ import annotations
 """Model Forge Agent for PyAgent.
 Specializes in local fine-tuning and model optimization (LoRA/QLoRA).
 """
-
 import asyncio
 import json
 import logging
@@ -122,111 +121,5 @@ __version__ = VERSION
 
 
 class ModelForgeAgent(BaseAgent):
-    """Orchestrates local model fine-tuning and adapter management."""
-
-    def __init__(self, path: str) -> None:
-        super().__init__(path)
-        self.name = "ModelForge"
-        self.forge_dir = Path("models/forge")
-        self.forge_dir.mkdir(parents=True, exist_ok=True)
-        self.adapters_dir = self.forge_dir / "adapters"
-        self.adapters_dir.mkdir(parents=True, exist_ok=True)
-        self.datasets_dir = self.forge_dir / "datasets"
-        self.datasets_dir.mkdir(parents=True, exist_ok=True)
-
-        self.registry = ModelRegistryCore()
-        # Simulated quality history for agents
-        self.agent_quality_history: dict[str, list[float]] = {}
-
-    async def monitor_agent_quality(self, agent_name: str, last_score: float) -> str:
-        """Monitors agent response quality and triggers fine-tuning if needed."""
-        if agent_name not in self.agent_quality_history:
-            self.agent_quality_history[agent_name] = []
-
-        self.agent_quality_history[agent_name].append(last_score)
-
-        if self.registry.should_trigger_finetuning(
-            self.agent_quality_history[agent_name]
-        ):
-            logging.warning(
-                f"ModelForge: Triggering autonomous fine-tuning for {agent_name} due to low quality scores."
-            )
-            return await self.start_finetuning(f"fix_{agent_name.lower()}")
-        return f"Quality for {agent_name} is acceptable."
-
-    @as_tool
-    async def prepare_dataset(
-        self, task_name: str, examples: list[dict[str, str]]
-    ) -> str:
-        """Prepares a JSONL dataset for fine-tuning.
-
-        Args:
-            task_name: Unique name for the fine-tuning task.
-            examples: List of dictionaries with 'instruction' and 'output'.
-
-        """
-        output_path = self.datasets_dir / f"{task_name}.jsonl"
-
-        def write_dataset() -> None:
-            with open(output_path, "w", encoding="utf-8") as f:
-                for ex in examples:
-                    f.write(json.dumps(ex) + "\n")
-
-        try:
-            await asyncio.to_thread(write_dataset)
-            return f"Dataset prepared at {output_path} with {len(examples)} examples."
-        except Exception as e:
-            return f"Failed to prepare dataset: {e}"
-
-    @as_tool
-    async def start_finetuning(
-        self, task_name: str, base_model: str = "unsloth/llama-3-8b-bnb-4bit"
-    ) -> str:
-        """Simulates starting a LoRA fine-tuning session.
-
-        Args:
-            task_name: Name of the task/dataset to use.
-            base_model: The base model to fine-tune.
-
-        """
-        dataset_path = self.datasets_dir / f"{task_name}.jsonl"
-
-        def setup_job() -> str | None:
-            if not dataset_path.exists():
-                return None
-
-            job_id = f"job_{task_name}_{int(time.time())}"
-            adapter_path = self.adapters_dir / task_name
-            adapter_path.mkdir(parents=True, exist_ok=True)
-            with open(adapter_path / "adapter_config.json", "w") as f:
-                json.dump(
-                    {"base_model": base_model, "peft_type": "LORA", "job_id": job_id}, f
-                )
-            return job_id
-
-        job_id = await asyncio.to_thread(setup_job)
-        if job_id is None:
-            return f"Error: Dataset {dataset_path} not found."
-
-        if hasattr(self, "recorder") and self.recorder:
-            self.recorder.record_lesson(
-                "model_forge_finetune", {"task": task_name, "base": base_model}
-            )
-
-        logging.info(
-            f"ModelForge: Starting fine-tuning for '{task_name}' on '{base_model}'..."
-        )
-        return f"SUCCESS: Fine-tuning job '{job_id}' started. Monitoring progress at {self.forge_dir}/logs/{job_id}.log"
-
-    @as_tool
-    async def get_adapter_config(self, task_name: str) -> str:
-        """Retrieves config for a specific adapter."""
-        adapter_path = self.adapters_dir / task_name / "adapter_config.json"
-        if not adapter_path.exists():
-            return f"Error: Adapter '{task_name}' not found."
-
-        def read_config() -> str:
-            with open(adapter_path) as f:
-                return f.read()
-
-        return await asyncio.to_thread(read_config)
+    """
+    """

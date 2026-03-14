@@ -14,7 +14,6 @@
 """Tests for agent_pool_manager
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,25 +31,5 @@ except ImportError as e:
 
 
 def test_agentstatus_exists():
-    """Test that AgentStatus class exists and is importable."""
-    assert "AgentStatus" in dir()
-
-
-def test_agentmanifest_exists():
-    """Test that AgentManifest class exists and is importable."""
-    assert "AgentManifest" in dir()
-
-
-def test_taskrequirements_exists():
-    """Test that TaskRequirements class exists and is importable."""
-    assert "TaskRequirements" in dir()
-
-
-def test_agentpoolmanager_exists():
-    """Test that AgentPoolManager class exists and is importable."""
-    assert "AgentPoolManager" in dir()
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

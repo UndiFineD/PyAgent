@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/development/mixins/CoderMetricsMixin.description.md
 
@@ -71,8 +71,8 @@ Mixin for CoderCore to handle complex metrics calculations.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -93,51 +93,5 @@ from src.core.base.types.CodeMetrics import CodeMetrics
 
 
 class CoderMetricsMixin:
-    """Mixin for CoderCore to handle complex metrics calculations."""
-
-    def _analyze_python_ast(self, tree: ast.AST, metrics: CodeMetrics) -> CodeMetrics:
-        """Deep AST analysis for Python."""
-        function_lengths: list[int] = []
-        for node in ast.walk(tree):
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                metrics.function_count += 1
-                if hasattr(node, "end_lineno") and node.end_lineno is not None:
-                    length = node.end_lineno - node.lineno + 1
-                    function_lengths.append(length)
-                    # Use the complexity calculation from the main class (will be provided via self)
-                    metrics.cyclomatic_complexity += (
-                        self._calculate_cyclomatic_complexity(node)
-                    )
-            elif isinstance(node, ast.ClassDef):
-                metrics.class_count += 1
-            elif isinstance(node, (ast.Import, ast.ImportFrom)):
-                metrics.import_count += 1
-
-        if function_lengths:
-            metrics.average_function_length = sum(function_lengths) / len(
-                function_lengths
-            )
-            metrics.max_function_length = max(function_lengths)
-
-        return metrics
-
-    def compute_maintainability_index(self, metrics: CodeMetrics) -> float:
-        """Computes the Maintainability Index (MI) based on Halstead and CC."""
-        if metrics.lines_of_code <= 0:
-            return 100.0
-
-        halstead_volume = metrics.lines_of_code * math.log2(
-            max(1, metrics.function_count + metrics.class_count + 1)
-        )
-        cc = max(1, metrics.cyclomatic_complexity)
-        loc = metrics.lines_of_code
-        cm = metrics.lines_of_comments
-
-        mi = (
-            171
-            - 5.2 * math.log(halstead_volume + 1)
-            - 0.23 * cc
-            - 16.2 * math.log(loc + 1)
-            + 50 * math.sin(math.sqrt(2.4 * (cm / (loc + cm + 1))))
-        )
-        return max(0, min(100, mi))
+    """
+    """

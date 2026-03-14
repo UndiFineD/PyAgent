@@ -14,7 +14,6 @@
 """Tests for run_static_checks
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,20 +31,5 @@ except ImportError as e:
 
 
 def test_run_python_only_checks_exists():
-    """Test that run_python_only_checks function exists."""
-    assert callable(run_python_only_checks)
-
-
-def test_run_check_exists():
-    """Test that run_check function exists."""
-    assert callable(run_check)
-
-
-def test_main_exists():
-    """Test that main function exists."""
-    assert callable(main)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

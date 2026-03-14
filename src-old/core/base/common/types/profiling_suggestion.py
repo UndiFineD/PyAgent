@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,32 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_coder.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.common.types.profiling_category import ProfilingCategory
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class ProfilingSuggestion:
-    """A code profiling suggestion.
-
-    Attributes:
-        category: Category of the profiling suggestion.
-        function_name: Function that could benefit from profiling.
-        reason: Why this function should be profiled.
-        estimated_impact: Estimated performance impact.
-        profiling_approach: Suggested profiling approach.
-
-    """
-
-    category: ProfilingCategory
-    function_name: str
-    reason: str
-    estimated_impact: str
-    profiling_approach: str
+r"""Auto-extracted class from agent_coder.py"""

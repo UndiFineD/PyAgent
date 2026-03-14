@@ -32,8 +32,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -54,7 +54,6 @@ from __future__ import annotations
 This module provides tools for exporting agent context and memory structures
 to various formats including Markdown, HTML, and RST.
 """
-
 import re
 from datetime import datetime
 
@@ -66,79 +65,5 @@ __version__ = VERSION
 
 
 class ContextExporter:
-    """Exports context to documentation systems.
-
-    Provides functionality to export context to various formats.
-
-    Example:
-        >>> exporter = ContextExporter()
-        >>> exported = exporter.export("content", ExportFormat.HTML)
-
     """
-
-    def __init__(self, default_format: ExportFormat = ExportFormat.MARKDOWN) -> None:
-        self.default_format: ExportFormat = default_format
-
-    def set_format(self, export_format: ExportFormat) -> None:
-        """Set the default export format.
-
-        Args:
-            export_format: The format to set as default.
-
-        """
-        self.default_format = export_format
-
-    def get_supported_formats(self) -> list[ExportFormat]:
-        """Return all supported export formats."""
-        return list(ExportFormat)
-
-    def export(
-        self, content: str, export_format: ExportFormat | None = None
-    ) -> ExportedContext:
-        """Export context to specified format.
-
-        Args:
-            content: Context content to export.
-            export_format: Target export format. If omitted, uses default_format.
-
-        Returns:
-            ExportedContext with exported content.
-
-        """
-        fmt = export_format if export_format is not None else self.default_format
-
-        exported_content = content
-        if fmt == ExportFormat.HTML:
-            exported_content = self._to_html(content)
-        elif fmt == ExportFormat.RST:
-            exported_content = self._to_rst(content)
-        return ExportedContext(
-            format=fmt, content=exported_content, created_at=datetime.now().isoformat()
-        )
-
-    def _to_html(self, content: str) -> str:
-        """Convert markdown to HTML."""
-        # Simplified conversion
-        html = content
-        html = re.sub(r"^# (.+)$", r"<h1>\1</h1>", html, flags=re.M)
-        html = re.sub(r"^## (.+)$", r"<h2>\1</h2>", html, flags=re.M)
-        html = re.sub(r"^- (.+)$", r"<li>\1</li>", html, flags=re.M)
-        return f"<html><body>{html}</body></html>"
-
-    def _to_rst(self, content: str) -> str:
-        """Convert markdown to RST."""
-        rst = content
-        # Convert headers
-        rst = re.sub(
-            r"^# (.+)$",
-            lambda m: m.group(1) + "\n" + "=" * len(m.group(1)),
-            rst,
-            flags=re.M,
-        )
-        rst = re.sub(
-            r"^## (.+)$",
-            lambda m: m.group(1) + "\n" + "-" * len(m.group(1)),
-            rst,
-            flags=re.M,
-        )
-        return rst
+    """

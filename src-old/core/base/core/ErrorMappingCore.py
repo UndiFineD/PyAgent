@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/core/ErrorMappingCore.description.md
 
@@ -71,8 +71,8 @@ Targeted for Rust conversion to ensure consistency across the swarm.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -89,55 +89,5 @@ from __future__ import annotations
 
 
 class ErrorMappingCore:
-    """Pure logic for mapping system exceptions to standardized PA-xxxx error codes.
-    Targeted for Rust conversion to ensure consistency across the swarm.
     """
-
-    # Primary Error Code Map
-    ERROR_CODES: dict[str, str] = {
-        # 10xx: Infrastructure & I/O
-        "FileSystemError": "PA-1001",
-        "NetworkTimeout": "PA-1002",
-        "DiskFull": "PA-1003",
-        "PermissionsDenied": "PA-1004",
-
-        # 20xx: Model & AI
-        "ModelTimeout": "PA-2001",
-        "InvalidResponse": "PA-2002",
-        "ContextWindowExceeded": "PA-2003",
-        "RateLimitExceeded": "PA-2004",
-
-        # 30xx: Logic & Reasoning
-        "DecompositionFailure": "PA-3001",
-        "CircularDependency": "PA-3002",
-         "InfiniteLoopDetected": "PA-3003",
-
-        # 40xx: Security & Compliance
-        "UnauthorizedAccess": "PA-4001",
-        "SafetyFilterTriggered": "PA-4002",
-        "SensitiveDataExposure": "PA-4003",
-
-        # 50xx: Configuration
-        "ManifestMismatch": "PA-5001",
-        "EnvVarMissing": "PA-5002"
-    }
-
-    @classmethod
-    def get_code(cls, exception_name: str) -> str:
-        """Returns the standardized PA-xxxx code for a given exception name."""
-        return cls.ERROR_CODES.get(exception_name, "PA-0000")
-
-    @classmethod
-    def get_troubleshooting_link(cls, error_code: str) -> str:
-        """Generates a documentation link for the specific error code."""
-        return f"https://docs.pyagent.ai/errors/{error_code}"
-
-    @classmethod
-    def describe_error(cls, error_code: str) -> str:
-        """Returns a human-readable description (Core logic)."""
-        descriptions = {
-            "PA-1001": "FileSystemError: The workspace could not be accessed.",
-            "PA-2001": "ModelTimeout: The LLM backend did not respond in time.",
-            "PA-4002": "SafetyFilterTriggered: The generated content was blocked by safety guardrails."
-        }
-        return descriptions.get(error_code, "Unknown System Error")
+    """

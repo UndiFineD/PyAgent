@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,27 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_coder.py"""
-
-
-from collections.abc import Callable
-from dataclasses import dataclass
-
-from src.core.base.common.types.code_language import CodeLanguage
-from src.core.base.common.types.style_rule_severity import StyleRuleSeverity
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class StyleRule:
-    """A configurable code style rule."""
-
-    name: str
-    pattern: str
-    message: str
-    severity: StyleRuleSeverity = StyleRuleSeverity.WARNING
-    enabled: bool = True
-    language: CodeLanguage | None = None
-    auto_fix: Callable[[str], str] | None = None
+r"""Auto-extracted class from agent_coder.py"""

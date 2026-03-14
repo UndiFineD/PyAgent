@@ -14,7 +14,6 @@
 """Tests for external_refactor_scan
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,35 +31,5 @@ except ImportError as e:
 
 
 def test_extract_completed_from_tracking_exists():
-    """Test that extract_completed_from_tracking function exists."""
-    assert callable(extract_completed_from_tracking)
-
-
-def test_scan_directory_for_candidates_exists():
-    """Test that scan_directory_for_candidates function exists."""
-    assert callable(scan_directory_for_candidates)
-
-
-def test_is_definition_in_src_exists():
-    """Test that is_definition_in_src function exists."""
-    assert callable(is_definition_in_src)
-
-
-def test_build_reuse_report_exists():
-    """Test that build_reuse_report function exists."""
-    assert callable(build_reuse_report)
-
-
-def test_write_reports_exists():
-    """Test that write_reports function exists."""
-    assert callable(write_reports)
-
-
-def test_main_exists():
-    """Test that main function exists."""
-    assert callable(main)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,41 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-import json
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .improvement import Improvement
-
-__version__ = VERSION
-
-
-class ImprovementExporter:
-    """Exports improvements to json/csv."""
-
-    def __init__(self) -> None:
-        self.formats: list[str] = ["json", "csv"]
-
-    def export(self, improvements: list[Improvement], format: str = "json") -> str:
-        fmt = format.lower()
-        if fmt == "json":
-            rows: list[dict[str, Any]] = []
-            for imp in improvements:
-                rows.append(
-                    {
-                        "id": imp.id,
-                        "title": imp.title,
-                        "description": imp.description,
-                    }
-                )
-            return json.dumps(rows)
-        if fmt == "csv":
-            lines = ["id,title,description"]
-            for imp in improvements:
-                lines.append(f"{imp.id},{imp.title},{imp.description}")
-            return "\n".join(lines)
-        raise ValueError("Unsupported format")
+r"""Auto-extracted class from agent_improvements.py"""

@@ -48,9 +48,9 @@ LLM_CONTEXT_END
 Core logic regarding metrics.
 (Facade regarding src.core.base.common.metrics_core)
 """
-
 from src.core.base.common.metrics_core import MetricsCore as StandardMetricsCore
 
 
 class MetricsCore(StandardMetricsCore):
-    """Facade regarding MetricsCore."""
+    """
+    """

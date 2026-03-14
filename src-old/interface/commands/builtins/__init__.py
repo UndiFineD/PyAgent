@@ -43,9 +43,4 @@ LLM_CONTEXT_END
 
 """
 
-"""Built-in command modules."""
-
-from .system_commands import register_system_commands  # noqa: F401
-from .utility_commands import register_utility_commands  # noqa: F401
-
-__all__ = ["register_system_commands", "register_utility_commands"]
+r"""Built-in command modules."""

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/SelfSearchAgent.description.md
@@ -74,7 +75,6 @@ Provides internal knowledge retrieval using structural prompting (SSRL pattern).
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -131,21 +131,6 @@ Query: {query}
 5. If internal search fails, explicitly state: INTERNAL_SEARCH_EMPTY.
 </SelfSearchTask>
 """
-
     def perform_internal_search(self, query: str) -> str:
-        """Executes the self-search cycle."""
-        # In a real implementation, this would call the LLM with the generated structure
-        structure = self.generate_search_structure(query)
-        logging.info(f"SelfSearchAgent: Executing internal search for '{query}'")
-        return f"Executing structured self-search for: {query}\nStructure:\n{structure}"
-
-    def improve_content(self, query: str) -> str:
-        """Returns the self-search results for a given query."""
-        return self.perform_internal_search(query)
-
-
-if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-
-    main = create_main_function(SelfSearchAgent)
-    main()
+        """
+        """

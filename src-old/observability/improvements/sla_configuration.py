@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,31 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
-
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-from .sla_level import SLALevel
-
-__version__ = VERSION
-
-
-@dataclass
-class SLAConfiguration:
-    """SLA configuration for improvements.
-
-    Attributes:
-        level: SLA priority level.
-        max_hours: Maximum hours to resolution.
-        escalation_hours: Hours before escalation.
-        notification_emails: Emails to notify.
-
-    """
-
-    level: SLALevel
-    max_hours: int
-    escalation_hours: int
-    notification_emails: list[str] = field(default_factory=list)  # type: ignore[assignment]
+r"""Auto-extracted class from agent_improvements.py"""

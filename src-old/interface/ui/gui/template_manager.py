@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -112,20 +112,10 @@ BMAD_TEMPLATES: dict[str, str] = {
 2. [Edge Case]
    - Input: ...
    - Expected: ...
-""",
+r""",
 }
 
 
 class TemplateManager:
-    """Manages insertion of BMAD-standard templates into text widgets."""
-
-    @staticmethod
-    def get_template_names() -> list[str]:
-        return list(BMAD_TEMPLATES.keys())
-
-    @staticmethod
-    def apply_template(text_widget: tk.Text, template_name: str) -> None:
-        template: str = BMAD_TEMPLATES.get(template_name, "")
-        if template:
-            text_widget.delete("1.0", tk.END)
-            text_widget.insert("1.0", template)
+    """
+    """

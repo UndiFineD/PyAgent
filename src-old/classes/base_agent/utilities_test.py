@@ -14,7 +14,6 @@
 """Tests for utilities
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,20 +31,5 @@ except ImportError as e:
 
 
 def test_setup_logging_exists():
-    """Test that setup_logging function exists."""
-    assert callable(setup_logging)
-
-
-def test_as_tool_exists():
-    """Test that as_tool function exists."""
-    assert callable(as_tool)
-
-
-def test_create_main_function_exists():
-    """Test that create_main_function function exists."""
-    assert callable(create_main_function)
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

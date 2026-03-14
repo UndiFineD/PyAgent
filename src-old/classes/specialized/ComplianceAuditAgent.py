@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/ComplianceAuditAgent.description.md
@@ -79,7 +80,6 @@ industry standards (e.g., SOC2, GDPR, HIPAA patterns).
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 from typing import Any
 

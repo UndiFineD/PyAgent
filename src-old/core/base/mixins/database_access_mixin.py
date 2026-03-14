@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/core/base/mixins/database_access_mixin.description.md
 
@@ -76,8 +76,8 @@ Mixin providing database access features using ODBC.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -97,8 +97,6 @@ Module: database_access_mixin
 Database access mixin for BaseAgent, implementing ODBC database operations.
 Inspired by ADSyncDump-BOF database connection patterns.
 """
-
-
 import platform
 from typing import Any, Dict, List, Optional
 
@@ -106,26 +104,5 @@ from src.core.base.logic.processing.database_access_core import DatabaseAccessCo
 
 
 class DatabaseAccessMixin:
-    """Mixin providing database access features using ODBC."""
-
-    def __init__(self, **kwargs: Any) -> None:
-        if platform.system() != "Windows":
-            raise RuntimeError("DatabaseAccessMixin is only supported on Windows")
-
-        self.db_core = DatabaseAccessCore()
-
-    def connect_odbc(self, connection_string: str) -> bool:
-        """Connect to database using ODBC connection string."""
-        return self.db_core.connect(connection_string)
-
-    def execute_query(self, query: str) -> Optional[List[Dict[str, Any]]]:
-        """Execute SQL query and return results."""
-        return self.db_core.execute_query(query)
-
-    def disconnect(self) -> None:
-        """Disconnect from database."""
-        self.db_core.disconnect()
-
-    def get_last_error(self) -> str:
-        """Get last database error message."""
-        return self.db_core.get_last_error()
+    """
+    """

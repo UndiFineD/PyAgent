@@ -1,3 +1,4 @@
+from __future__ import annotations
 r"""LLM_CONTEXT_START
 
 ## Source: src-old/classes/specialized/PerformanceProfilingAgent.description.md
@@ -80,7 +81,6 @@ proposes optimizations for throughput and latency.
 LLM_CONTEXT_END
 """
 
-from __future__ import annotations
 
 import random
 import time

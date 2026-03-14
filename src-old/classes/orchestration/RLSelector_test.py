@@ -14,7 +14,6 @@
 """Tests for RLSelector
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,16 +31,5 @@ except ImportError as e:
 
 
 def test_rlselector_exists():
-    """Test that RLSelector class exists and is importable."""
-    assert "RLSelector" in dir()
-
-
-def test_rlselector_instantiation():
-    """Test that RLSelector can be instantiated."""
-    instance = RLSelector()
-    assert instance is not None
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

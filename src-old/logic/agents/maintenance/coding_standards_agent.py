@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM_CONTEXT_START
+r"""LLM_CONTEXT_START
 
 ## Source: src-old/logic/agents/maintenance/coding_standards_agent.description.md
 
@@ -73,8 +73,8 @@ headers, and basic syntax integrity.
 
 LLM_CONTEXT_END
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -92,8 +92,6 @@ from __future__ import annotations
 """
 Agent for enforcing coding standards, fixing headers, and correcting syntax issues.
 """
-
-
 import logging
 from typing import Any
 
@@ -104,43 +102,5 @@ logger = logging.getLogger(__name__)
 
 
 class CodingStandardsAgent(BaseAgent):
-    """Agent that autonomously maintains the codebase by enforcing style,
-    headers, and basic syntax integrity.
     """
-
-    def __init__(self, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
-        self.maintenance = WorkspaceMaintenance(
-            workspace_root=(
-                self.state.workspace_root
-                if hasattr(self.state, "workspace_root")
-                else "."
-            )
-        )
-        logger.info("CodingStandardsAgent initialized.")
-
-    async def execute_task(self, task: dict[str, Any]) -> dict[str, Any]:
-        """Executes a maintenance task.
-
-        Supported commands:
-        - run_full_cycle: Executes all maintenance checks and fixes.
-        - fix_headers: Specifically fixes license headers and docstring placement.
-        - fix_syntax: Fixes common syntax errors like invalid for-loop hints.
-        """
-        command = task.get("command", "run_full_cycle")
-        results = {"status": "success", "command": command}
-
-        if command == "run_full_cycle":
-            self.maintenance.run_standard_cycle()
-        elif command == "fix_headers":
-            self.maintenance.apply_header_compliance()
-        elif command == "fix_syntax":
-            self.maintenance.apply_syntax_fixes()
-        else:
-            results["status"] = "error"
-            results["message"] = f"Unknown command: {command}"
-
-        return results
-
-    def get_capabilities(self) -> list[str]:
-        return ["code_cleanup", "header_enforcement", "syntax_correction"]
+    """

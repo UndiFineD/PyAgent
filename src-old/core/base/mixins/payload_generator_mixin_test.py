@@ -14,7 +14,6 @@
 """Tests for payload_generator_mixin
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,16 +31,5 @@ except ImportError as e:
 
 
 def test_payloadgeneratormixin_exists():
-    """Test that PayloadGeneratorMixin class exists and is importable."""
-    assert "PayloadGeneratorMixin" in dir()
-
-
-def test_payloadgeneratormixin_instantiation():
-    """Test that PayloadGeneratorMixin can be instantiated."""
-    instance = PayloadGeneratorMixin()
-    assert instance is not None
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

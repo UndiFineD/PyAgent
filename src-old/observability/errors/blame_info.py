@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,31 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_errors.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class BlameInfo:
-    """Git blame information for an error.
-
-    Attributes:
-        error_id: ID of the error.
-        commit_hash: Commit that introduced the error.
-        author: Author of the commit.
-        commit_date: Date of the commit.
-        commit_message: Commit message.
-
-    """
-
-    error_id: str
-    commit_hash: str = ""
-    author: str = ""
-    commit_date: str = ""
-    commit_message: str = ""
+r"""Auto-extracted class from agent_errors.py"""

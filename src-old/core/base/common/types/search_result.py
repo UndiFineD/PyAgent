@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,29 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_changes.py"""
-
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class SearchResult:
-    """Result from changelog search.
-
-    Attributes:
-        version: Version where match was found.
-        line_number: Line number of the match.
-        context: Surrounding text context.
-        match_score: Relevance score (0 - 1).
-
-    """
-
-    version: str
-    line_number: int
-    context: str
-    match_score: float = 1.0
+r"""Auto-extracted class from agent_changes.py"""

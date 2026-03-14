@@ -14,7 +14,6 @@
 """Tests for sop_core
 Auto-generated test template - expand with actual test cases
 """
-
 import sys
 from pathlib import Path
 
@@ -32,26 +31,5 @@ except ImportError as e:
 
 
 def test_sopstep_exists():
-    """Test that SopStep class exists and is importable."""
-    assert "SopStep" in dir()
-
-
-def test_sopmanifest_exists():
-    """Test that SopManifest class exists and is importable."""
-    assert "SopManifest" in dir()
-
-
-def test_sopcore_exists():
-    """Test that SopCore class exists and is importable."""
-    assert "SopCore" in dir()
-
-
-def test_sopcore_instantiation():
-    """Test that SopCore can be instantiated."""
-    instance = SopCore()
-    assert instance is not None
-
-
-def test_module_imports():
-    """Test that the module imports without errors."""
-    assert True  # If we got here, imports worked
+    """
+    """

@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,8 +48,6 @@ from __future__ import annotations
 """
 Localization agent.py module.
 """
-
-
 import logging
 import re
 from typing import Any
@@ -62,62 +60,5 @@ __version__ = VERSION
 
 
 class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """Handles localization and internationalization (i18n) tasks.
-    Integrated with LocalizationCore for cultural guardrails and multi-lang support.
     """
-
-    def __init__(self, workspace_path: str) -> None:
-        super().__init__(workspace_path)
-        self.workspace_path = workspace_path
-        self.core = LocalizationCore()
-        self.supported_locales = self.core.get_supported_locales()
-
-    def check_cultural_compliance(self, text: str) -> dict[str, Any]:
-        """Runs cultural guardrails on agent communication.
-        """
-        issues = self.core.detect_cultural_issues(text)
-        return {"compliant": not issues, "issues": issues, "count": len(issues)}
-
-    async def translate_comment(self, text: str, target_lang: str) -> str:
-        """Translates a single agent comment using the core's formatting.
-        """
-        if target_lang not in self.supported_locales:
-            logging.warning(
-                f"Target language {target_lang} not in core supported list."
-            )
-
-        request = self.core.format_translation_request(text, target_lang)
-        # In a real scenario, this would call self.improve_content or an API
-        return await self.solve_translation_task(request)
-
-    def extract_strings(self, file_path: str) -> list[str]:
-        """Extracts potential user-facing strings for translation."""
-        # Simple heuristic for potential translatable strings
-        # (e.g., strings in print() or gettext calls)
-        found_strings = []
-        try:
-            with open(file_path, encoding="utf-8") as f:
-                content = f.read()
-                # Matches gettext style calls _("string") or _('string')
-                matches = re.finditer(r'_\(["\'](.*?)["\']\)', content)
-                for match in matches:
-                    found_strings.append(match.group(1))
-        except (IOError, ValueError, RuntimeError) as e:
-            logging.error(f"LocalizationAgent: Error reading {file_path}: {e}")
-        return found_strings
-
-    def generate_translation_file(
-        self, locale: str, strings: list[str]
-    ) -> dict[str, str]:
-        """Generates a JSON translation dictionary for a specific locale."""
-        if locale not in self.supported_locales:
-            logging.warning(f"Locale {locale} not officially supported.")
-
-        translation_map = {s: f"TRANSLATED_{locale}_{s}" for s in strings}
-        return translation_map
-
-    async def solve_translation_task(self, prompt: str) -> str:
-        """Uses LLM to help with complex translation tasks."""
-        return await self.improve_content(
-            f"Translate the following content preserving formatting: {prompt}"
-        )
+    """

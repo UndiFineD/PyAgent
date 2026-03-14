@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,19 +53,5 @@ __version__ = VERSION
 
 @dataclass
 class TestGap:
-    """An identified gap in test coverage.
-
-    Attributes:
-        function_name: Name of the untested function.
-        file_path: Path to the file containing the function.
-        line_number: Line where the function is defined.
-        complexity: Cyclomatic complexity of the function.
-        suggested_tests: List of suggested test cases.
-
     """
-
-    function_name: str
-    file_path: str
-    line_number: int
-    complexity: int
-    suggested_tests: list[str] = field(default_factory=lambda: [])
+    """

@@ -29,8 +29,8 @@ Suggested improvements (automatically generated):
 LLM_CONTEXT_END
 
 """
-
 from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,33 +46,4 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent.py"""
-
-
-from dataclasses import dataclass, field
-from typing import Any
-
-from src.core.base.common.utils.helpers import _empty_dict_str_any, _empty_list_str
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class AgentTemplate:
-    """A template for creating agents.
-
-    Attributes:
-        name: Template name.
-        description: Template description.
-        agents: List of agents to execute.
-        config: Default configuration.
-        file_patterns: File patterns to process.
-
-    """
-
-    name: str
-    description: str = ""
-    agents: list[str] = field(default_factory=_empty_list_str)
-    config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
-    file_patterns: list[str] = field(default_factory=lambda: ["*.py"])
+r"""Auto-extracted class from agent.py"""

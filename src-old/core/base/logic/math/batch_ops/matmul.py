@@ -45,7 +45,6 @@ LLM_CONTEXT_END
 """
 Batch matrix multiplication operations using available backends.
 """
-
 from typing import Any
 
 try:
@@ -62,32 +61,5 @@ def mm_batch_invariant(
     *,
     out: Any | None = None,
 ) -> Any:
-    """Deterministic matrix multiplication (2D x 2D).
     """
-    if not HAS_TORCH:
-        result = np.matmul(a, b)
-        if out is not None:
-            out[:] = result
-            return out
-        return result
-    if out is not None:
-        return torch.mm(a, b, out=out)
-    return torch.mm(a, b)
-
-def bmm_batch_invariant(
-    a: Any,
-    b: Any,
-    *,
-    out: Any | None = None,
-) -> Any:
-    """Deterministic batched matrix multiplication (3D x 3D).
     """
-    if not HAS_TORCH:
-        result = np.matmul(a, b)
-        if out is not None:
-            out[:] = result
-            return out
-        return result
-    if out is not None:
-        return torch.bmm(a, b, out=out)
-    return torch.bmm(a, b)
