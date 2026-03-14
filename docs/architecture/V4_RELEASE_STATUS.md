@@ -30,17 +30,17 @@
 - **Synaptic Decay**: Knowledge pruning logic for keeping the swarm's memory lean and efficient.
 
 ## 🏁 Completed v4.0.0 Milestones
-- [x] **Zero-Trust Firewall (ECDSA)**: Fully integrated into `FleetManager` with identity verification.
-- [x] **Shard RAID-10 Distributed Backup**: Logic implemented for mirroring agent state across nodes.
-- [x] **Universal Agent Shell**: Composition-based agent shell with lazy-loaded logic cores.
-- [x] **Paged KV_v2 Cache**: Rust-accelerated block management for long-context stability.
-- [x] **Synaptic Topology HUD**: High-fidelity 3D swarm visualization with traffic heatmap integration.
-- [x] **Neural Pruning Engine**: Autonomous synaptic decay loop integrated into the Evolution cycle.
-- [x] **Signal Double Ratchet**: Hardened KDF chain with 64-byte key splitting and perfect forward secrecy.
+- **Zero-Trust Firewall (ECDSA)**: Fully integrated into `FleetManager` with identity verification.
+- **Shard RAID-10 Distributed Backup**: Logic implemented for mirroring agent state across nodes.
+- **Universal Agent Shell**: Composition-based agent shell with lazy-loaded logic cores.
+- **Paged KV_v2 Cache**: Rust-accelerated block management for long-context stability.
+- **Synaptic Topology HUD**: High-fidelity 3D swarm visualization with traffic heatmap integration.
+- **Neural Pruning Engine**: Autonomous synaptic decay loop integrated into the Evolution cycle.
+- **Signal Double Ratchet**: Hardened KDF chain with 64-byte key splitting and perfect forward secrecy.
 
 ## 🛠 Next Steps (v4.1.0)
-- [ ] Migrate `msgspec` serialization fully to `rust_core` for sub-millisecond overhead.
-- [ ] Finalize the "Fleet Load Balancer" for public community mesh nodes.
-- [ ] Integrate real-time P2P Byzantine voting into `ScamDetector`.
+- Migrate `msgspec` serialization fully to `rust_core` for sub-millisecond overhead.
+- Finalize the "Fleet Load Balancer" for public community mesh nodes.
+- Integrate real-time P2P Byzantine voting into `ScamDetector`.
 
 **Ready for Swarm Deployment.**

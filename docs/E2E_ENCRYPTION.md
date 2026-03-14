@@ -262,14 +262,14 @@ user_sees = "My credit card is 1234-5678-9012-3456"  # Decrypted
 
 ## Production Deployment Checklist
 
-- [ ] **Key Storage**: Encrypt user keys at rest with password/PIN (PBKDF2 or Argon2)
-- [ ] **OAuth Setup**: Register OAuth apps with GitHub, Google, etc.
-- [ ] **HTTPS**: Enforce TLS 1.3+ for all connections
-- [ ] **Key Backup**: Implement secure key backup/recovery (optional but recommended)
-- [ ] **Audit Logging**: Log authentication events (not decryption events)
-- [ ] **Rate Limiting**: Prevent brute-force attacks on authentication
-- [ ] **Session Management**: Implement session timeout and rotation
-- [ ] **Key Rotation**: Periodic rotation of OAuth tokens (keys auto-rotate via ratchet)
+- **Key Storage**: Encrypt user keys at rest with password/PIN (PBKDF2 or Argon2)
+- **OAuth Setup**: Register OAuth apps with GitHub, Google, etc.
+- **HTTPS**: Enforce TLS 1.3+ for all connections
+- **Key Backup**: Implement secure key backup/recovery (optional but recommended)
+- **Audit Logging**: Log authentication events (not decryption events)
+- **Rate Limiting**: Prevent brute-force attacks on authentication
+- **Session Management**: Implement session timeout and rotation
+- **Key Rotation**: Periodic rotation of OAuth tokens (keys auto-rotate via ratchet)
 
 ## Comparison with Other Systems
 

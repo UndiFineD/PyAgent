@@ -254,13 +254,13 @@ class AuditLogger:
 
 ## Acceptance Criteria
 
-- [ ] All new modules pass `pytest tests/` with 95%+ coverage
-- [ ] All new code passes `ruff check` and `mypy` validation
-- [ ] Sandbox violations raise `PermissionError` with clear messages
-- [ ] Circuit breaker prevents >5 consecutive LLM failures
-- [ ] Audit chain integrity verified via `verify_chain()`
-- [ ] Documentation added to `docs/ARCHITECTURE.md` and `docs/SECURITY.md`
-- [ ] Integration tests demonstrate end-to-end functionality
+- All new modules pass `pytest tests/` with 95%+ coverage
+- All new code passes `ruff check` and `mypy` validation
+- Sandbox violations raise `PermissionError` with clear messages
+- Circuit breaker prevents >5 consecutive LLM failures
+- Audit chain integrity verified via `verify_chain()`
+- Documentation added to `docs/ARCHITECTURE.md` and `docs/SECURITY.md`
+- Integration tests demonstrate end-to-end functionality
 
 ---
 

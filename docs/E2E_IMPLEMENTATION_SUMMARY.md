@@ -157,14 +157,14 @@ Result: Server authenticates user but can't decrypt their data
 
 Before deploying to production:
 
-- [ ] **Add password/PIN protection** for stored user keys (PBKDF2 or Argon2)
-- [ ] **Set up OAuth apps** with GitHub, Google, etc.
-- [ ] **Enable HTTPS/TLS 1.3+** for all connections
-- [ ] **Implement key backup/recovery** (optional but recommended)
-- [ ] **Add rate limiting** on authentication endpoints
-- [ ] **Configure session timeouts** (currently 24 hours)
-- [ ] **Test key rotation** and session recovery
-- [ ] **Audit logging** for security events (not decryption events!)
+- **Add password/PIN protection** for stored user keys (PBKDF2 or Argon2)
+- **Set up OAuth apps** with GitHub, Google, etc.
+- **Enable HTTPS/TLS 1.3+** for all connections
+- **Implement key backup/recovery** (optional but recommended)
+- **Add rate limiting** on authentication endpoints
+- **Configure session timeouts** (currently 24 hours)
+- **Test key rotation** and session recovery
+- **Audit logging** for security events (not decryption events!)
 
 ## 🧪 Testing
 
