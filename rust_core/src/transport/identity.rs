@@ -15,8 +15,11 @@ use ed25519_dalek::{Signature, Signer, SigningKey, Verifier, VerifyingKey};
 use once_cell::sync::Lazy;
 use pyo3::prelude::*;
 use rand::rngs::OsRng;
+use std::path::Path;
 use std::sync::Mutex;
 use zeroize::Zeroize;
+#[cfg(unix)]
+use std::os::unix::fs::OpenOptionsExt;
 
 /// Global node identity — lazily initialised on first `generate_node_identity()`.
 pub static IDENTITY: Lazy<Mutex<Option<NodeIdentity>>> = Lazy::new(|| Mutex::new(None));
@@ -91,14 +94,42 @@ pub fn get_node_id() -> PyResult<Vec<u8>> {
 
 /// Save the current identity (raw signing-key bytes) to `path`.
 /// NOTE: T-1 writes plaintext; at-rest encryption is a T-7 hardening task.
+fn write_key_atomic(path: &Path, data: &[u8]) -> std::io::Result<()> {
+    use std::fs::OpenOptions;
+    use std::io::{self, Write};
+
+    let parent = path.parent().unwrap_or_else(|| Path::new("."));
+    let file_name = path.file_name().ok_or_else(|| {
+        io::Error::new(io::ErrorKind::InvalidInput, "path must have a file name")
+    })?;
+    let mut tmp_path = parent.to_path_buf();
+    tmp_path.push(format!(".{}.tmp", file_name.to_string_lossy()));
+
+    let mut options = OpenOptions::new();
+    options.write(true).create(true).truncate(true);
+    #[cfg(unix)]
+    {
+        options.mode(0o600);
+    }
+
+    let mut file = options.open(&tmp_path)?;
+    file.write_all(data)?;
+    file.sync_all()?;
+    std::fs::rename(&tmp_path, path)?;
+    Ok(())
+}
+
 #[pyfunction]
 pub fn save_node_identity(path: &str) -> PyResult<()> {
     let guard = IDENTITY.lock().unwrap();
-    let id = guard.as_ref().ok_or_else(|| {
-        pyo3::exceptions::PyRuntimeError::new_err("No identity loaded")
-    })?;
-    std::fs::write(path, id.to_bytes())
-        .map_err(|e| pyo3::exceptions::PyIOError::new_err(e.to_string()))
+    let id = guard
+        .as_ref()
+        .ok_or_else(|| pyo3::exceptions::PyRuntimeError::new_err("No identity loaded"))?;
+    let mut key_bytes = id.to_bytes();
+    let result = write_key_atomic(Path::new(path), &key_bytes)
+        .map_err(|e| pyo3::exceptions::PyIOError::new_err(e.to_string()));
+    key_bytes.zeroize();
+    result
 }
 
 /// Load a previously saved identity from `path`.
