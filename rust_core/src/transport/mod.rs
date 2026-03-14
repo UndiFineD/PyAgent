@@ -19,13 +19,8 @@ pub mod utm_ports;
 use pyo3::prelude::*;
 
 use crate::transport::utm_ports::{
-    TRANSPORT_FALLBACK_TO_QUEUE,
-    TRANSPORT_RETRY_COUNT,
-    TRANSPORT_TIMEOUT_MAX_SECS,
-    TX_RECV_PORT,
-    TX_SEND_PORT,
-    UTM_CONTROL_PORT,
-    UTM_DEFAULT_PORT,
+    TRANSPORT_FALLBACK_TO_QUEUE, TRANSPORT_RETRY_COUNT, TRANSPORT_TIMEOUT_MAX_SECS, TX_RECV_PORT,
+    TX_SEND_PORT, UTM_CONTROL_PORT, UTM_DEFAULT_PORT,
 };
 
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {

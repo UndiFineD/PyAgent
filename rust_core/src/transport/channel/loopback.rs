@@ -15,7 +15,7 @@ use std::collections::VecDeque;
 use std::sync::{Arc, Condvar, Mutex};
 use std::time::Duration;
 
-use crate::transport::TRANSPORT_TIMEOUT_MAX_SECS;
+use crate::transport::utm_ports::TRANSPORT_TIMEOUT_MAX_SECS;
 
 /// In-memory pipe that supports pushing frames on one side and blocking pops on the other.
 ///
@@ -80,7 +80,15 @@ pub fn create_pair() -> (LoopbackHandle, LoopbackHandle) {
     let pipe_ab = Pipe::new(); // A→B
     let pipe_ba = Pipe::new(); // B→A
     (
-        LoopbackHandle { id: 0, tx: pipe_ab.clone(), rx: pipe_ba.clone() },
-        LoopbackHandle { id: 1, tx: pipe_ba, rx: pipe_ab },
+        LoopbackHandle {
+            id: 0,
+            tx: pipe_ab.clone(),
+            rx: pipe_ba.clone(),
+        },
+        LoopbackHandle {
+            id: 1,
+            tx: pipe_ba,
+            rx: pipe_ab,
+        },
     )
 }

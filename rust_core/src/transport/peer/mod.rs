@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-mod handshake;
+pub mod handshake;
 pub mod link;
 
 use pyo3::prelude::*;

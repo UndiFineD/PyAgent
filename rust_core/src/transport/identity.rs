@@ -15,11 +15,11 @@ use ed25519_dalek::{Signature, Signer, SigningKey, Verifier, VerifyingKey};
 use once_cell::sync::Lazy;
 use pyo3::prelude::*;
 use rand::rngs::OsRng;
+#[cfg(unix)]
+use std::os::unix::fs::OpenOptionsExt;
 use std::path::Path;
 use std::sync::Mutex;
 use zeroize::Zeroize;
-#[cfg(unix)]
-use std::os::unix::fs::OpenOptionsExt;
 
 /// Global node identity — lazily initialised on first `generate_node_identity()`.
 pub static IDENTITY: Lazy<Mutex<Option<NodeIdentity>>> = Lazy::new(|| Mutex::new(None));
@@ -33,7 +33,10 @@ impl NodeIdentity {
     pub fn generate() -> Self {
         let signing_key = SigningKey::generate(&mut OsRng);
         let node_id = *signing_key.verifying_key().as_bytes();
-        Self { signing_key, node_id }
+        Self {
+            signing_key,
+            node_id,
+        }
     }
 
     pub fn sign(&self, msg: &[u8]) -> [u8; 64] {
@@ -60,7 +63,10 @@ impl NodeIdentity {
         key_bytes.copy_from_slice(raw);
         let signing_key = SigningKey::from_bytes(&key_bytes);
         let node_id = *signing_key.verifying_key().as_bytes();
-        Ok(Self { signing_key, node_id })
+        Ok(Self {
+            signing_key,
+            node_id,
+        })
     }
 }
 
@@ -88,7 +94,9 @@ pub fn generate_node_identity() -> PyResult<Vec<u8>> {
 pub fn get_node_id() -> PyResult<Vec<u8>> {
     match IDENTITY.lock().unwrap().as_ref() {
         Some(id) => Ok(id.node_id.to_vec()),
-        None => Err(pyo3::exceptions::PyRuntimeError::new_err("No identity loaded")),
+        None => Err(pyo3::exceptions::PyRuntimeError::new_err(
+            "No identity loaded",
+        )),
     }
 }
 
@@ -99,9 +107,9 @@ fn write_key_atomic(path: &Path, data: &[u8]) -> std::io::Result<()> {
     use std::io::{self, Write};
 
     let parent = path.parent().unwrap_or_else(|| Path::new("."));
-    let file_name = path.file_name().ok_or_else(|| {
-        io::Error::new(io::ErrorKind::InvalidInput, "path must have a file name")
-    })?;
+    let file_name = path
+        .file_name()
+        .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "path must have a file name"))?;
     let mut tmp_path = parent.to_path_buf();
     tmp_path.push(format!(".{}.tmp", file_name.to_string_lossy()));
 
@@ -135,10 +143,11 @@ pub fn save_node_identity(path: &str) -> PyResult<()> {
 /// Load a previously saved identity from `path`.
 #[pyfunction]
 pub fn load_node_identity(path: &str) -> PyResult<()> {
-    let raw = std::fs::read(path)
-        .map_err(|e| pyo3::exceptions::PyIOError::new_err(e.to_string()))?;
-    let id = NodeIdentity::from_bytes(&raw)
-        .map_err(pyo3::exceptions::PyValueError::new_err)?;
+    let mut raw =
+        std::fs::read(path).map_err(|e| pyo3::exceptions::PyIOError::new_err(e.to_string()))?;
+    let id = NodeIdentity::from_bytes(&raw).map_err(pyo3::exceptions::PyValueError::new_err);
+    raw.zeroize();
+    let id = id?;
     *IDENTITY.lock().unwrap() = Some(id);
     Ok(())
 }
@@ -147,9 +156,9 @@ pub fn load_node_identity(path: &str) -> PyResult<()> {
 #[pyfunction]
 pub fn transport_sign(msg: &[u8]) -> PyResult<Vec<u8>> {
     let guard = IDENTITY.lock().unwrap();
-    let id = guard.as_ref().ok_or_else(|| {
-        pyo3::exceptions::PyRuntimeError::new_err("No identity loaded")
-    })?;
+    let id = guard
+        .as_ref()
+        .ok_or_else(|| pyo3::exceptions::PyRuntimeError::new_err("No identity loaded"))?;
     Ok(id.sign(msg).to_vec())
 }
 

@@ -1,5 +1,5 @@
 use pyo3::prelude::*;
-use std::collections::HashMap;
+use std::collections::{HashMap, VecDeque};
 
 /// Build speculation tree from sequences (Speculative/Tree).
 /// Returns (tokens, parents, probs) for tree verification.  
@@ -13,22 +13,86 @@ use std::collections::HashMap;
 /// for each token in the flattened tree, which can be used to
 /// reconstruct the tree structure during verification.
 #[pyfunction]
-#[allow(unused_variables)]
 pub fn build_speculation_tree_rust(
     context: Vec<i64>,
     ngram_index: HashMap<Vec<i64>, Vec<i64>>,
     top_k: usize,
-    threshold: i64, // Test passes int '2'? Or float? context is [int], top_k is 3. threshold 2.
+    threshold: i64,
 ) -> PyResult<(Vec<i64>, Vec<i64>, Vec<f64>)> {
-    // Dummy implementation to match test signature
-    // The test passes: context (List[int]), ngram_index (dict), 3 (int), 2 (int)
-    // Wait, last arg '2' -> threshold. Is it depth? Or min count?
-    // If it's a threshold, usually float. If int, maybe count.
+    // threshold is treated as a minimum count (not a probability)
+    let threshold = threshold.max(0);
 
-    // For now, return empty lists to pass "isinstance" checks
-    let tokens = Vec::new();
-    let parents = Vec::new();
-    let probs = Vec::new();
+    if top_k == 0 || ngram_index.is_empty() {
+        return Ok((Vec::new(), Vec::new(), Vec::new()));
+    }
+
+    let mut tokens: Vec<i64> = Vec::new();
+    let mut parents: Vec<i64> = Vec::new();
+    let mut probs: Vec<f64> = Vec::new();
+
+    // BFS queue of (context so far, parent node index)
+    let mut queue: VecDeque<(Vec<i64>, i64)> = VecDeque::new();
+    queue.push_back((context.clone(), -1));
+
+    while let Some((node_ctx, parent_idx)) = queue.pop_front() {
+        // Find longest suffix match in ngram_index
+        let mut matched_counts: Option<&Vec<i64>> = None;
+        for suffix_len in (1..=node_ctx.len()).rev() {
+            let suffix = &node_ctx[node_ctx.len() - suffix_len..];
+            if let Some(counts) = ngram_index.get(suffix) {
+                matched_counts = Some(counts);
+                break;
+            }
+        }
+
+        let counts = if let Some(c) = matched_counts { c } else { continue };
+
+        let mut candidates: Vec<(i64, i64)> = counts
+            .iter()
+            .enumerate()
+            .filter_map(|(token_id, &count)| {
+                if count >= threshold {
+                    Some((token_id as i64, count))
+                } else {
+                    None
+                }
+            })
+            .collect();
+
+        if candidates.is_empty() {
+            continue;
+        }
+
+        candidates.sort_unstable_by(|a, b| b.1.cmp(&a.1));
+        candidates.truncate(top_k);
+
+        let sum_counts: i64 = candidates.iter().map(|(_, count)| *count).sum();
+        let sum_counts_f = sum_counts as f64;
+
+        for (token_id, count) in candidates {
+            let node_index = tokens.len() as i64;
+            tokens.push(token_id);
+            parents.push(parent_idx);
+            probs.push(if sum_counts_f > 0.0 {
+                (count as f64) / sum_counts_f
+            } else {
+                0.0
+            });
+
+            let mut next_ctx = node_ctx.clone();
+            next_ctx.push(token_id);
+            queue.push_back((next_ctx, node_index));
+
+            if tokens.len() > 100_000 {
+                break;
+            }
+        }
+
+        if tokens.len() > 100_000 {
+            break;
+        }
+    }
+
     Ok((tokens, parents, probs))
 }
 
@@ -458,9 +522,7 @@ pub fn spec_decode_verify_rejection_rust(
         } else {
             // If we reject at index `i`, mark the rejected token and all remaining draft tokens
             // as rejected too. Use `repeat().take()` for compatibility with Rust < 1.82.
-            mask.extend(std::iter::repeat(false).take(
-                draft_token_ids.len().saturating_sub(i)
-            ));
+            mask.extend(std::iter::repeat(false).take(draft_token_ids.len().saturating_sub(i)));
             break;
         }
     }
