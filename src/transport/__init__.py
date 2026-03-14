@@ -73,7 +73,6 @@ def transport_handshake_finalize(a: int, b: int) -> None:
 
 def placeholder() -> bool:
     """A no-op placeholder to validate that the transport package is importable."""
-
     return True
 
 

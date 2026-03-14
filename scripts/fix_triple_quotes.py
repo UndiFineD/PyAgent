@@ -42,8 +42,8 @@ def ensure_balanced_triple_quotes(text: str) -> tuple[str, int]:
 
     Returns:
         (fixed_text, num_fixes)
-    """
 
+    """
     fixed = 0
 
     # Normalize raw markers first.
@@ -107,7 +107,6 @@ def process_file(path: pathlib.Path, dry_run: bool) -> int:
 
     Returns the number of edits applied.
     """
-
     text = path.read_text(encoding='utf-8', errors='ignore')
     fixed_text, fixes = ensure_balanced_triple_quotes(text)
     if fixes and not dry_run:

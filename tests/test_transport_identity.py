@@ -13,9 +13,9 @@
 # limitations under the License.
 """T-1 transport identity tests — run against compiled rust_core extension."""
 
+import importlib.util
 import os
 import sys
-import importlib.util
 
 import pytest
 
