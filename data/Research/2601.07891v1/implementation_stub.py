@@ -14,12 +14,8 @@
 
 import torch
 import torch.nn as nn
-<<<<<<< HEAD
-from typing import Tuple
-
-=======
 from typing import Optional, Tuple
->>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
+
 
 class KVzapSurrogate(nn.Module):
     """
@@ -38,6 +34,7 @@ class KVzapSurrogate(nn.Module):
             self.model = nn.Linear(hidden_dim, num_heads)
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
+        """Predicts importance scores for each head at each position."""
         # hidden_states: [batch, seq_len, hidden_dim]
         # output: [batch, seq_len, num_heads]
         return self.model(hidden_states)
@@ -63,20 +60,13 @@ def kvzap_prune(
             scores[:, -window_size:, :] = float('inf')
 
         # Create mask: True means KEEP
-<<<<<<< HEAD
-=======
         mask = scores >= threshold # [B, T, H]
->>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 
         # Note: In practice, implementing this efficiently requires handling
         # non-uniform lengths across heads/layers or block-level pruning.
         # This stub shows the logical filtering.
 
-<<<<<<< HEAD
-        # TODO Placeholder for filtered tensors (Actual vLLM use PagedAttention)
-=======
         # Placeholder for filtered tensors (Actual vLLM use PagedAttention)
->>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
         # filtered_keys = keys[mask]
         # ...
 

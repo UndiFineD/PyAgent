@@ -141,13 +141,13 @@
 ## COMPLETED SWARM IMPROVEMENTS (Phases 71-90)
 ================================================================================
 
-- [x] **Federated Meta-Optimizer**: Dynamic hyperparameter self-governance.
-- [x] **LSH (Locality Sensitive Hashing)**: $O(1)$ semantic retrieval for distributed context.
-- [x] **Context Distillation**: High-fidelity landmark compression for fast migration.
-- [x] **Swarm Raft Consensus**: Decentralized agreement on rank states.
-- [x] **P2P Shard Migration**: RDMA-simulated KV-cache transfer between swarm nodes.
-- [x] **Knowledge Bridge**: Anonymized cross-tenant wisdom synthesis.
-- [x] **Query De-duplication**: Semantic joining of redundant swarm tasks.
+- **Federated Meta-Optimizer**: Dynamic hyperparameter self-governance.
+- **LSH (Locality Sensitive Hashing)**: $O(1)$ semantic retrieval for distributed context.
+- **Context Distillation**: High-fidelity landmark compression for fast migration.
+- **Swarm Raft Consensus**: Decentralized agreement on rank states.
+- **P2P Shard Migration**: RDMA-simulated KV-cache transfer between swarm nodes.
+- **Knowledge Bridge**: Anonymized cross-tenant wisdom synthesis.
+- **Query De-duplication**: Semantic joining of redundant swarm tasks.
 
 ================================================================================
 ## RESEARCH INSIGHTS (SWARM EDITION)
