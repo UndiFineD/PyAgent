@@ -143,9 +143,11 @@ pub fn save_node_identity(path: &str) -> PyResult<()> {
 /// Load a previously saved identity from `path`.
 #[pyfunction]
 pub fn load_node_identity(path: &str) -> PyResult<()> {
-    let raw =
+    let mut raw =
         std::fs::read(path).map_err(|e| pyo3::exceptions::PyIOError::new_err(e.to_string()))?;
-    let id = NodeIdentity::from_bytes(&raw).map_err(pyo3::exceptions::PyValueError::new_err)?;
+    let id = NodeIdentity::from_bytes(&raw).map_err(pyo3::exceptions::PyValueError::new_err);
+    raw.zeroize();
+    let id = id?;
     *IDENTITY.lock().unwrap() = Some(id);
     Ok(())
 }
