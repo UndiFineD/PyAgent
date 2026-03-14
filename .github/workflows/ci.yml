@@ -38,16 +38,7 @@ jobs:
       - name: Set up Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Install maturin & build runtime extension (Linux/macOS)
-        if: runner.os != 'Windows'
-        working-directory: rust_core
-        run: |
-          pip install --upgrade pip
-          pip install maturin
-          maturin develop --release
-
-      - name: Install maturin & build runtime extension (Windows)
-        if: runner.os == 'Windows'
+      - name: Install maturin & build runtime extension
         working-directory: rust_core
         run: |
           python -m pip install --upgrade pip
