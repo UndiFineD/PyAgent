@@ -85,6 +85,16 @@ LLM_CONTEXT_END
 """
 from __future__ import annotations
 
+from typing import Any, Dict, List
+
+try:
+    from src.core.base.types.ReviewCategory import ReviewCategory
+    from src.core.base.types.ReviewFinding import ReviewFinding
+    from src.core.base.version import VERSION
+except Exception:  # pragma: no cover - optional runtime dependencies
+    ReviewCategory = Any  # type: ignore[assignment]
+    ReviewFinding = Any  # type: ignore[assignment]
+    VERSION = "unknown"  # type: ignore[assignment]
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -105,4 +115,79 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-r"""Auto-extracted class from agent_coder.py"""
+class CodeReviewer:
+    """Automated code review system.
+
+    This class was originally auto-extracted from ``agent_coder.py``. The
+    full implementation has been intentionally removed from this legacy
+    module under ``src-old/``.
+
+    The current definition is a stub that preserves the public interface
+    (constructor and method signatures) but does not implement any review
+    logic. All behavioral methods raise :class:`NotImplementedError` with
+    guidance on how to migrate.
+
+    Consumers should either:
+
+    * migrate to the agent-based implementation in ``agent_coder.py``, or
+    * replace this stub with a concrete implementation that delegates to
+      the current review engine.
+    """
+
+    __version__: str = str(VERSION)
+    findings: List[ReviewFinding]
+
+    def __init__(self) -> None:
+        """Initialize an empty review session.
+
+        The original implementation tracked review findings produced by
+        running static analysis on code. This stub retains the ``findings``
+        attribute for compatibility but does not populate it.
+        """
+        self.findings = []
+
+    def review_code(self, content: str) -> List[ReviewFinding]:
+        """Run an automated review on the given source code.
+
+        Parameters
+        ----------
+        content:
+            The source code to review.
+
+        Returns
+        -------
+        List[ReviewFinding]
+            The list of findings produced by the review.
+
+        Raises
+        ------
+        NotImplementedError
+            Always raised in this stub implementation.
+        """
+        raise NotImplementedError(
+            "CodeReviewer.review_code is not implemented in "
+            "src-old/classes/coder/CodeReviewer.py. "
+            "Use the agent-based reviewer from agent_coder.py or provide a "
+            "concrete implementation that delegates to the current review engine."
+        )
+
+    def get_summary(self) -> Dict[ReviewCategory, int]:
+        """Return an aggregate summary of findings by review category.
+
+        Returns
+        -------
+        Dict[ReviewCategory, int]
+            A mapping from review category to the number of findings in
+            that category.
+
+        Raises
+        ------
+        NotImplementedError
+            Always raised in this stub implementation.
+        """
+        raise NotImplementedError(
+            "CodeReviewer.get_summary is not implemented in "
+            "src-old/classes/coder/CodeReviewer.py. "
+            "Use the agent-based reviewer from agent_coder.py or provide a "
+            "concrete implementation that delegates to the current review engine."
+        )
