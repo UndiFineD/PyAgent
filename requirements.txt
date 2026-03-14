@@ -78,7 +78,6 @@ joblib==1.5.3
 jsonschema==4.26.0
 jsonschema-specifications==2025.9.1
 kiwisolver==1.4.9
-kubernetes==34.1.0
 lark==1.2.2
 llvmlite==0.46.0
 lm-format-enforcer==0.11.3
@@ -111,7 +110,7 @@ networkx==3.6.1
 ninja==1.13.0
 nodeenv==1.10.0
 numba==0.64.0
-numpy==1.26.4
+numpy==2.3.5
 nvidia-ml-py==13.590.44
 oauthlib==3.3.1
 ollama==0.6.1
@@ -217,7 +216,7 @@ types-requests==2.32.4.20260107
 typing-inspection==0.4.2
 typing_extensions==4.15.0
 tzdata==2025.3
-urllib3==2.6.3
+urllib3==2.3.0
 uvicorn==0.40.0
 virtualenv==21.1.0
 watchdog==6.0.0
