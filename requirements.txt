@@ -150,7 +150,7 @@ pydantic-settings==2.13.1
 pydantic_core==2.41.5
 PyGetWindow==0.0.9
 Pygments==2.19.2
-PyJWT==2.11.0
+PyJWT==2.12.1
 pymdown-extensions==10.21
 PyMsgBox==2.0.1
 PyMuPDF==1.26.7
