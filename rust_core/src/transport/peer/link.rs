@@ -11,15 +11,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::transport::channel::{LoopbackHandle, Transport};
 use crate::transport::channel::loopback::Pipe;
+use crate::transport::channel::{LoopbackHandle, Transport};
 use crate::transport::identity;
 use crate::transport::peer::handshake::{run_initiator, run_responder, NoiseSession};
 use dashmap::DashMap;
 use once_cell::sync::Lazy;
 use pyo3::prelude::*;
-use std::sync::{Arc, Mutex};
 use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::{Arc, Mutex};
 use x25519_dalek::{PublicKey, StaticSecret};
 
 static LINKS: Lazy<DashMap<usize, Arc<Mutex<PeerLink>>>> = Lazy::new(DashMap::new);
@@ -44,8 +44,18 @@ pub fn transport_loopback_pair() -> PyResult<(usize, usize)> {
     let (la, lb) = crate::transport::channel::loopback::create_pair();
     let id_a = HANDLE_COUNTER.fetch_add(2, Ordering::SeqCst);
     let id_b = id_a + 1;
-    alloc_handle(PeerLink { handle_id: id_a, loopback: la, static_key: None, session: None });
-    alloc_handle(PeerLink { handle_id: id_b, loopback: lb, static_key: None, session: None });
+    alloc_handle(PeerLink {
+        handle_id: id_a,
+        loopback: la,
+        static_key: None,
+        session: None,
+    });
+    alloc_handle(PeerLink {
+        handle_id: id_b,
+        loopback: lb,
+        static_key: None,
+        session: None,
+    });
     Ok((id_a, id_b))
 }
 
@@ -121,7 +131,10 @@ pub fn transport_handshake_responder(handle: usize) -> PyResult<()> {
 /// Complete the Noise_XX handshake between `initiator_handle` and `responder_handle`.
 /// Both must be ends of the same loopback pair.
 #[pyfunction]
-pub fn transport_handshake_finalize(initiator_handle: usize, responder_handle: usize) -> PyResult<()> {
+pub fn transport_handshake_finalize(
+    initiator_handle: usize,
+    responder_handle: usize,
+) -> PyResult<()> {
     // Use the static keys that were captured when the initiator/responder were marked.
     // This allows the protocol to reject unknown peers even if the global node identity changes.
     let initiator_key = {
@@ -130,8 +143,9 @@ pub fn transport_handshake_finalize(initiator_handle: usize, responder_handle: u
             .ok_or_else(|| pyo3::exceptions::PyValueError::new_err("initiator handle not found"))?
             .clone();
         let link = arc.lock().unwrap();
-        link.static_key
-            .ok_or_else(|| pyo3::exceptions::PyRuntimeError::new_err("initiator identity not set"))?
+        link.static_key.ok_or_else(|| {
+            pyo3::exceptions::PyRuntimeError::new_err("initiator identity not set")
+        })?
     };
     let responder_key = {
         let arc = LINKS
@@ -139,8 +153,9 @@ pub fn transport_handshake_finalize(initiator_handle: usize, responder_handle: u
             .ok_or_else(|| pyo3::exceptions::PyValueError::new_err("responder handle not found"))?
             .clone();
         let link = arc.lock().unwrap();
-        link.static_key
-            .ok_or_else(|| pyo3::exceptions::PyRuntimeError::new_err("responder identity not set"))?
+        link.static_key.ok_or_else(|| {
+            pyo3::exceptions::PyRuntimeError::new_err("responder identity not set")
+        })?
     };
 
     fn x25519_public_from_static(secret: &[u8; 32]) -> [u8; 32] {
@@ -161,34 +176,54 @@ pub fn transport_handshake_finalize(initiator_handle: usize, responder_handle: u
     let responder_pub = initiator_pub;
 
     // Bridge pipes used only during handshake (avoids holding both LINKS locks simultaneously)
-    struct BridgePipe { tx: Pipe, rx: Pipe }
+    struct BridgePipe {
+        tx: Pipe,
+        rx: Pipe,
+    }
     impl Transport for BridgePipe {
-        fn send_raw(&self, frame: Vec<u8>) -> Result<(), String> { self.tx.push(frame); Ok(()) }
-        fn recv_raw(&self) -> Result<Vec<u8>, String> { self.rx.pop() }
+        fn send_raw(&self, frame: Vec<u8>) -> Result<(), String> {
+            self.tx.push(frame);
+            Ok(())
+        }
+        fn recv_raw(&self) -> Result<Vec<u8>, String> {
+            self.rx.pop()
+        }
     }
 
     let pipe_ir = Pipe::new(); // initiator→responder
     let pipe_ri = Pipe::new(); // responder→initiator
-    let bridge_i = BridgePipe { tx: pipe_ir.clone(), rx: pipe_ri.clone() };
-    let bridge_r = BridgePipe { tx: pipe_ri, rx: pipe_ir };
+    let bridge_i = BridgePipe {
+        tx: pipe_ir.clone(),
+        rx: pipe_ri.clone(),
+    };
+    let bridge_r = BridgePipe {
+        tx: pipe_ri,
+        rx: pipe_ir,
+    };
 
     // Run both sides concurrently; the handshake protocol is synchronous and each side
     // may block waiting for its peer's next message.
-    let handle_i = std::thread::spawn(move || {
-        run_initiator(&bridge_i, &initiator_key, &responder_pub)
-    });
-    let handle_r = std::thread::spawn(move || {
-        run_responder(&bridge_r, &responder_key, &initiator_pub)
-    });
+    let handle_i =
+        std::thread::spawn(move || run_initiator(&bridge_i, &initiator_key, &responder_pub));
+    let handle_r =
+        std::thread::spawn(move || run_responder(&bridge_r, &responder_key, &initiator_pub));
 
     let session_i = handle_i
         .join()
-        .map_err(|_| pyo3::exceptions::PyRuntimeError::new_err("handshake initiator thread panicked"))?
-        .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(format!("handshake initiator: {e}")))?;
+        .map_err(|_| {
+            pyo3::exceptions::PyRuntimeError::new_err("handshake initiator thread panicked")
+        })?
+        .map_err(|e| {
+            pyo3::exceptions::PyRuntimeError::new_err(format!("handshake initiator: {e}"))
+        })?;
     let session_r = handle_r
         .join()
-        .map_err(|_| pyo3::exceptions::PyRuntimeError::new_err("handshake responder thread panicked"))?
-        .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(format!("handshake responder: {e}")))?;
+        .map_err(|_| {
+            pyo3::exceptions::PyRuntimeError::new_err("handshake responder thread panicked")
+        })?
+        .map_err(|e| {
+            pyo3::exceptions::PyRuntimeError::new_err(format!("handshake responder: {e}"))
+        })?;
 
     LINKS
         .get(&initiator_handle)

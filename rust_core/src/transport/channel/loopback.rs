@@ -80,7 +80,15 @@ pub fn create_pair() -> (LoopbackHandle, LoopbackHandle) {
     let pipe_ab = Pipe::new(); // A→B
     let pipe_ba = Pipe::new(); // B→A
     (
-        LoopbackHandle { id: 0, tx: pipe_ab.clone(), rx: pipe_ba.clone() },
-        LoopbackHandle { id: 1, tx: pipe_ba, rx: pipe_ab },
+        LoopbackHandle {
+            id: 0,
+            tx: pipe_ab.clone(),
+            rx: pipe_ba.clone(),
+        },
+        LoopbackHandle {
+            id: 1,
+            tx: pipe_ba,
+            rx: pipe_ab,
+        },
     )
 }

@@ -458,9 +458,7 @@ pub fn spec_decode_verify_rejection_rust(
         } else {
             // If we reject at index `i`, mark the rejected token and all remaining draft tokens
             // as rejected too. Use `repeat().take()` for compatibility with Rust < 1.82.
-            mask.extend(std::iter::repeat(false).take(
-                draft_token_ids.len().saturating_sub(i)
-            ));
+            mask.extend(std::iter::repeat(false).take(draft_token_ids.len().saturating_sub(i)));
             break;
         }
     }

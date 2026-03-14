@@ -28,11 +28,7 @@ pub fn run_initiator<T: Transport>(
     static_key: &[u8; 32],
     expected_remote_static: &[u8; 32],
 ) -> Result<NoiseSession, String> {
-    let builder = Builder::new(
-        NOISE_PATTERN
-            .parse()
-            .map_err(|e| format!("{e:?}"))?,
-    );
+    let builder = Builder::new(NOISE_PATTERN.parse().map_err(|e| format!("{e:?}"))?);
     let mut hs = builder
         .local_private_key(static_key)
         .remote_public_key(expected_remote_static)
@@ -42,19 +38,18 @@ pub fn run_initiator<T: Transport>(
     let mut buf = vec![0u8; MAX_NOISE_MSG];
 
     // → e
-    let n = hs
-        .write_message(&[], &mut buf)
-        .map_err(|e| e.to_string())?;
-    channel.send_raw(buf[..n].to_vec()).map_err(|e| format!("send e: {e}"))?;
+    let n = hs.write_message(&[], &mut buf).map_err(|e| e.to_string())?;
+    channel
+        .send_raw(buf[..n].to_vec())
+        .map_err(|e| format!("send e: {e}"))?;
 
     // ← e, ee, s, es
     let msg = channel.recv_raw().map_err(|e| format!("recv ee: {e}"))?;
-    hs.read_message(&msg, &mut buf).map_err(|e| format!("read ee: {e}"))?;
+    hs.read_message(&msg, &mut buf)
+        .map_err(|e| format!("read ee: {e}"))?;
 
     // → s, se
-    let n = hs
-        .write_message(&[], &mut buf)
-        .map_err(|e| e.to_string())?;
+    let n = hs.write_message(&[], &mut buf).map_err(|e| e.to_string())?;
     channel
         .send_raw(buf[..n].to_vec())
         .map_err(|e| format!("send se: {e}"))?;
@@ -69,11 +64,7 @@ pub fn run_responder<T: Transport>(
     static_key: &[u8; 32],
     expected_remote_static: &[u8; 32],
 ) -> Result<NoiseSession, String> {
-    let builder = Builder::new(
-        NOISE_PATTERN
-            .parse()
-            .map_err(|e| format!("{e:?}"))?,
-    );
+    let builder = Builder::new(NOISE_PATTERN.parse().map_err(|e| format!("{e:?}"))?);
     let mut hs = builder
         .local_private_key(static_key)
         .remote_public_key(expected_remote_static)
@@ -84,19 +75,19 @@ pub fn run_responder<T: Transport>(
 
     // ← e
     let msg = channel.recv_raw().map_err(|e| format!("recv e: {e}"))?;
-    hs.read_message(&msg, &mut buf).map_err(|e| format!("read e: {e}"))?;
+    hs.read_message(&msg, &mut buf)
+        .map_err(|e| format!("read e: {e}"))?;
 
     // → e, ee, s, es
-    let n = hs
-        .write_message(&[], &mut buf)
-        .map_err(|e| e.to_string())?;
+    let n = hs.write_message(&[], &mut buf).map_err(|e| e.to_string())?;
     channel
         .send_raw(buf[..n].to_vec())
         .map_err(|e| format!("send ee: {e}"))?;
 
     // ← s, se
     let msg = channel.recv_raw().map_err(|e| format!("recv se: {e}"))?;
-    hs.read_message(&msg, &mut buf).map_err(|e| format!("read se: {e}"))?;
+    hs.read_message(&msg, &mut buf)
+        .map_err(|e| format!("read se: {e}"))?;
 
     let transport = hs.into_transport_mode().map_err(|e| e.to_string())?;
     Ok(NoiseSession { transport })
