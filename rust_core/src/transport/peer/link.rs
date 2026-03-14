@@ -164,7 +164,7 @@ pub fn transport_handshake_finalize(initiator_handle: usize, responder_handle: u
     struct BridgePipe { tx: Pipe, rx: Pipe }
     impl Transport for BridgePipe {
         fn send_raw(&self, frame: Vec<u8>) -> Result<(), String> { self.tx.push(frame); Ok(()) }
-        fn recv_raw(&self) -> Result<Vec<u8>, String> { Ok(self.rx.pop()) }
+        fn recv_raw(&self) -> Result<Vec<u8>, String> { self.rx.pop() }
     }
 
     let pipe_ir = Pipe::new(); // initiator→responder
