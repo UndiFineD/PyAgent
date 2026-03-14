@@ -15,7 +15,7 @@ use std::collections::VecDeque;
 use std::sync::{Arc, Condvar, Mutex};
 use std::time::Duration;
 
-use crate::transport::TRANSPORT_TIMEOUT_MAX_SECS;
+use crate::transport::utm_ports::TRANSPORT_TIMEOUT_MAX_SECS;
 
 /// In-memory pipe that supports pushing frames on one side and blocking pops on the other.
 ///
