@@ -47,16 +47,16 @@ pub fn build_speculation_tree_rust(
 
         let counts = if let Some(c) = matched_counts { c } else { continue };
 
-        // Interpret `counts` as a multiset of occurrence values and aggregate
-        // frequencies by the value itself, rather than by index position.
-        let mut freq_by_value: HashMap<i64, i64> = HashMap::new();
-        for &value in counts.iter() {
-            *freq_by_value.entry(value).or_insert(0) += 1;
-        }
-
-        let mut candidates: Vec<(i64, i64)> = freq_by_value
-            .into_iter()
-            .filter(|&(_token_id, count)| count >= threshold)
+        let mut candidates: Vec<(i64, i64)> = counts
+            .iter()
+            .enumerate()
+            .filter_map(|(token_id, &count)| {
+                if count >= threshold {
+                    Some((token_id as i64, count))
+                } else {
+                    None
+                }
+            })
             .collect();
 
         if candidates.is_empty() {
