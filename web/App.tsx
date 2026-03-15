@@ -37,7 +37,7 @@ export default function App() {
   
   // Taskbar Auto-hide State
   const [isTaskbarVisible, setIsTaskbarVisible] = useState(true);
-  const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Clock
   useEffect(() => {
