@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip setuptools wheel
-          pip install --prefer-binary -r requirements.txt
+          pip install --prefer-binary -r requirements-ci.txt
 
       - name: Set up Rust toolchain
         uses: dtolnay/rust-toolchain@stable
