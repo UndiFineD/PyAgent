@@ -1,6 +1,6 @@
-# Vertex AI Studio Frontend App with Node.js Backend
+# Vertex AI Studio Web App with FastAPI Backend
 
-This repository contains a frontend and a Node.js backend, designed to run together.
+This repository contains a web frontend and a Python FastAPI backend, designed to run together.
 The backend acts as a proxy, handling Google Cloud API calls.
 
 This project is intended for demonstration and prototyping purposes only.
@@ -14,22 +14,23 @@ To run this application locally, you need:
 
 *   **gcloud Initialization**:
     *   Initialize the gcloud CLI:
-        ```bash
+        ```powershell
         gcloud init
         ```
     *   Authenticate for Application Default Credentials (needed to call Google Cloud APIs):
-        ```bash
+        ```powershell
         gcloud auth application-default login
         ```
 
+*   **Python**: Ensure you have a recent version of Python 3 and `pip` installed on your machine.
 *   **Node.js and npm**: Ensure you have Node.js and its package manager, `npm`, installed on your machine.
 
 ## Project Structure
 
 The project is organized into two main directories:
 
-*   `frontend/`: Contains the Frontend application code.
-*   `backend/`: Contains the Node.js/Express server code to proxy Google Cloud API calls.
+*   `web/`: Contains the frontend application code.
+*   `backend/`: Contains the Python FastAPI server code to proxy Google Cloud API calls.
 
 ## Backend Environment Variables
 
@@ -47,7 +48,22 @@ You can modify the values in `backend/.env.local` if you need to change them.
 
 ## Installation and Running the App
 
-To install dependencies and run your Google Cloud Vertex AI Studio App locally, execute the following command:
+To install dependencies and run your Google Cloud Vertex AI Studio App locally, use the following commands in PowerShell:
 
-```bash
-npm install && npm run dev
+```powershell
+# Backend (FastAPI) - from the repository root
+Set-Location backend
+python -m venv .venv
+. .\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+uvicorn main:app --reload --port $env:API_BACKEND_PORT
+```
+
+In a separate PowerShell session, start the frontend:
+
+```powershell
+# Frontend - from the repository root
+Set-Location web
+npm install
+npm run dev
+```
