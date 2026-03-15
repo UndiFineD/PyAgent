@@ -12,24 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-<<<<<<< HEAD
 from typing import List, Optional
 
 
-=======
-import torch
-from typing import List, Optional
-
->>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 class TableTrieNode:
     def __init__(self):
         self.children = {}
         self.kv_cache_pointer = None # Reference to paged attention block indices
 
-<<<<<<< HEAD
 
-=======
->>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 class TableTrie:
     """
     Trie structure for canonical table-set lookup (arXiv:2601.08743).
@@ -54,10 +45,7 @@ class TableTrie:
             node = node.children[tid]
         return node.kv_cache_pointer
 
-<<<<<<< HEAD
 
-=======
->>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 class TableCacheManager:
     """
     Manages precomputed table KV caches with 'Hot-Swapping' logic.
