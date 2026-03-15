@@ -59,7 +59,6 @@ impl Pipe {
 /// Handle for one end of a loopback channel.
 /// `tx` is the pipe this side writes to; `rx` is the pipe it reads from.
 pub struct LoopbackHandle {
-    pub id: usize,
     pub tx: Pipe,
     pub rx: Pipe,
 }
@@ -81,12 +80,10 @@ pub fn create_pair() -> (LoopbackHandle, LoopbackHandle) {
     let pipe_ba = Pipe::new(); // B→A
     (
         LoopbackHandle {
-            id: 0,
             tx: pipe_ab.clone(),
             rx: pipe_ba.clone(),
         },
         LoopbackHandle {
-            id: 1,
             tx: pipe_ba,
             rx: pipe_ab,
         },
