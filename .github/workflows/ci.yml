@@ -38,11 +38,24 @@ jobs:
       - name: Set up Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Install maturin & build runtime extension
+      - name: Install maturin & build runtime extension (unix)
+        if: runner.os != 'Windows'
         working-directory: rust_core
         shell: bash
         run: |
-          # Install maturin into the current Python environment and build the Rust extension.
+          python -m venv .venv
+          source .venv/bin/activate
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install maturin
+          python -m maturin develop --release
+
+      - name: Install maturin & build runtime extension (windows)
+        if: runner.os == 'Windows'
+        working-directory: rust_core
+        shell: pwsh
+        run: |
+          python -m venv .venv
+          & .\.venv\Scripts\Activate.ps1
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install maturin
           python -m maturin develop --release
