@@ -14,7 +14,7 @@
 """Pydantic models for WebSocket message schema."""
 from __future__ import annotations
 from typing import Any, Literal, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 # ── Client → Backend ────────────────────────────────────────────────────────
@@ -22,14 +22,14 @@ from pydantic import BaseModel
 class InitMessage(BaseModel):
     type: Literal["init"]
     session_id: str
-    client_info: dict[str, Any] = {}
+    client_info: dict[str, Any] = Field(default_factory=dict)
 
 
 class RunTaskMessage(BaseModel):
     type: Literal["runTask"]
     task_id: str
     task: str
-    payload: dict[str, Any] = {}
+    payload: dict[str, Any] = Field(default_factory=dict)
 
 
 class ControlMessage(BaseModel):
@@ -66,7 +66,7 @@ class TaskDeltaMessage(BaseModel):
     type: Literal["taskDelta"] = "taskDelta"
     task_id: str
     delta: str
-    meta: dict[str, Any] = {}
+    meta: dict[str, Any] = Field(default_factory=dict)
 
 
 class TaskCompleteMessage(BaseModel):
@@ -87,5 +87,5 @@ class ActionRequestMessage(BaseModel):
     """AI-driven command: backend asks the UI to perform an action."""
     type: Literal["actionRequest"] = "actionRequest"
     action: str
-    params: dict[str, Any] = {}
+    params: dict[str, Any] = Field(default_factory=dict)
     task_id: Optional[str] = None
