@@ -22,7 +22,7 @@ from fastapi import WebSocket
 from .session_manager import SessionManager
 from .models import (
     TaskStartedMessage, TaskDeltaMessage,
-    TaskCompleteMessage, TaskErrorMessage,
+    TaskCompleteMessage,
 )
 
 logger = logging.getLogger(__name__)
