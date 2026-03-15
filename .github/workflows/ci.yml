@@ -43,10 +43,7 @@ jobs:
         working-directory: rust_core
         shell: bash
         run: |
-          python -m venv .venv
-          source .venv/bin/activate
-          python -m pip install --upgrade pip setuptools wheel
-          python -m pip install maturin
+          pip install maturin
           python -m maturin develop --release
 
       - name: Install maturin & build runtime extension (windows)
@@ -54,10 +51,7 @@ jobs:
         working-directory: rust_core
         shell: pwsh
         run: |
-          python -m venv .venv
-          & .\.venv\Scripts\Activate.ps1
-          python -m pip install --upgrade pip setuptools wheel
-          python -m pip install maturin
+          pip install maturin
           python -m maturin develop --release
 
       - name: Run Python tests
