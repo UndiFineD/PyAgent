@@ -45,7 +45,11 @@ pub fn build_speculation_tree_rust(
             }
         }
 
-        let counts = if let Some(c) = matched_counts { c } else { continue };
+        let counts = if let Some(c) = matched_counts {
+            c
+        } else {
+            continue;
+        };
 
         let mut candidates: Vec<(i64, i64)> = counts
             .iter()
