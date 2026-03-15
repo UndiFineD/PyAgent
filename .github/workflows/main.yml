@@ -24,9 +24,6 @@ jobs:
       with:
         python-version: '3.13'
         cache: pip
-    - name: Build CI requirements file
-      run: |
-        grep -vE '^win32_setctime==' requirements.txt > requirements-ci.txt
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
