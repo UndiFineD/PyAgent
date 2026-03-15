@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Python wrapper package for the Rust-based `rust_core` extension.
 
 This package exists purely to avoid the namespace collision between the Rust
