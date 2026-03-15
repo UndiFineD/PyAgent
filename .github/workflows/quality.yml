@@ -37,7 +37,7 @@ jobs:
           python -m mypy src
 
       - name: Run meta-tests
-        run: pytest -q tests/ztest_zzz_tests_quality.py
+        run: pytest -q tests/test_tests_quality.py
 
   rust:
     runs-on: ubuntu-latest

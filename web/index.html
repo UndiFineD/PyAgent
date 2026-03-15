@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NebulaOS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              os: {
+                bg: 'var(--os-bg)',
+                window: 'var(--os-window)',
+                header: 'var(--os-header)',
+                text: 'var(--os-text)',
+                border: 'var(--os-border)',
+                accent: 'var(--os-accent)',
+              }
+            },
+            fontFamily: {
+              mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', "Liberation Mono", "Courier New", 'monospace'],
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(156, 163, 175, 0.5);
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(156, 163, 175, 0.8);
+      }
+      
+      /* Theme Variables */
+      :root {
+        --os-bg: #0f172a;
+        --os-window: #1e293b;
+        --os-header: #334155;
+        --os-text: #f8fafc;
+        --os-border: #475569;
+        --os-accent: #3b82f6;
+      }
+      
+      .theme-light {
+        --os-bg: #f1f5f9;
+        --os-window: #ffffff;
+        --os-header: #e2e8f0;
+        --os-text: #0f172a;
+        --os-border: #cbd5e1;
+        --os-accent: #2563eb;
+      }
+
+      .theme-retro {
+        --os-bg: #008080;
+        --os-window: #c0c0c0;
+        --os-header: #000080;
+        --os-text: #000000;
+        --os-border: #ffffff;
+        --os-accent: #000080;
+      }
+    </style>
+      </head>
+  <body class="overflow-hidden select-none">
+    <div id="root"></div>
+  </body>
+</html>

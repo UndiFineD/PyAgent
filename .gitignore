@@ -95,3 +95,7 @@ fixes/
 # Ignore key pairs created during testing in rust_core
 rust_core/*-keys.*
 .cleanup_archive/
+
+# Node.js
+node_modules/
+web/dist/
