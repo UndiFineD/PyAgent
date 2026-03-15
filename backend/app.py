@@ -13,12 +13,15 @@
 # limitations under the License.
 """FastAPI backend worker — WebSocket + signaling endpoints."""
 from __future__ import annotations
+
 import asyncio
 import json
 import logging
 from typing import Any
+
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+
 from .session_manager import SessionManager
 from .ws_handler import handle_message
 
