@@ -40,7 +40,13 @@ jobs:
 
       - name: Install maturin & build runtime extension
         working-directory: rust_core
+        shell: bash
         run: |
+          # Create and activate a virtual environment so maturin can install the built extension
+          python -m venv .venv
+          source .venv/bin/activate
+
+          python -m pip install --upgrade pip setuptools wheel
           python -m pip install maturin
           python -m maturin develop --release
 
