@@ -78,5 +78,5 @@ The current flat structure of 50+ files will be grouped:
 4. **Test Verification**: Run the full 3,800+ test suite to ensure no regressions.
 
 ## 5. Next Steps
-- [ ] Review and approve the tier groupings.
-- [ ] Initialize the Tier 1 migration (Engine).
+- Review and approve the tier groupings.
+- Initialize the Tier 1 migration (Engine).

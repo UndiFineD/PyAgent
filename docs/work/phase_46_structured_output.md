@@ -25,12 +25,12 @@
 | `structured_output_orchestrator.py` | Multi-backend fallback | ⏳ NOT STARTED |
 
 ## 🧪 Testing State
-- [ ] XGrammar compilation tests
-- [ ] Guidance template rendering tests
-- [ ] Format Enforcement validation
-- [ ] BatchUpdate state transitions
+- XGrammar compilation tests
+- Guidance template rendering tests
+- Format Enforcement validation
+- BatchUpdate state transitions
 
 ## 🦀 Rust Accelerations
-- [ ] `xgrammar_bitmask_fill_rust`
-- [ ] `grammar_cache_key_rust`
-- [ ] `batch_update_indices_rust`
+- `xgrammar_bitmask_fill_rust`
+- `grammar_cache_key_rust`
+- `batch_update_indices_rust`

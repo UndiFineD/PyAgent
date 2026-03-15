@@ -50,12 +50,12 @@
 - Python performance: 18.69 microseconds per call (simple operation)
 - Expected Rust speedup: 10-50x
 - Tasks completed:
-  - [x] All return types annotated and verified
-  - [x] 4 property-based tests created (hypothesis framework)
-  - [x] 10 integration tests created for comprehensive coverage
-  - [x] Python baseline benchmarked: 10,000 iterations in 0.187s
-  - [x] Rust stub created with meval dependency (awaiting Rust build environment)
-  - [x] PyO3 bindings prepared for evaluate_formula()
+  - All return types annotated and verified
+  - 4 property-based tests created (hypothesis framework)
+  - 10 integration tests created for comprehensive coverage
+  - Python baseline benchmarked: 10,000 iterations in 0.187s
+  - Rust stub created with meval dependency (awaiting Rust build environment)
+  - PyO3 bindings prepared for evaluate_formula()
 - Tests passing: 14/14 ✅ (unit + integration)
 - Fleet validated: Cycle 13 passed (0 regressions)
 
@@ -64,11 +64,11 @@
 - Python performance: 0.141 microseconds per call
 - Expected Rust speedup: 2-5x
 - Tasks completed:
-  - [x] All return types annotated and verified
-  - [x] 21 property-based tests created (hypothesis + edge cases)
-  - [x] Python baseline benchmarked: 100,000 iterations in 0.014s
-  - [x] Rust stub created with match-based error code mapping
-  - [x] PyO3 bindings prepared for get_error_code() + get_error_documentation_link()
+  - All return types annotated and verified
+  - 21 property-based tests created (hypothesis + edge cases)
+  - Python baseline benchmarked: 100,000 iterations in 0.014s
+  - Rust stub created with match-based error code mapping
+  - PyO3 bindings prepared for get_error_code() + get_error_documentation_link()
 - Tests passing: 21/21 ✅ (basics + property-based + edge cases)
 - Fleet validated: Cycle 14 passed (0 regressions)
 - Rust readiness: HIGH (pure enum lookup, zero I/O)
@@ -78,11 +78,11 @@
 - Python performance: 0.177 microseconds per call
 - Expected Rust speedup: 10-30x
 - Tasks completed:
-  - [x] All return types annotated and verified
-  - [x] 20 property-based tests created (hypothesis + consistency checks)
-  - [x] Python baseline benchmarked: 100,000 iterations in 0.018s
-  - [x] Rust stub created with pure calculation functions
-  - [x] PyO3 bindings prepared for calculate_baseline(), check_regression(), score_efficiency()
+  - All return types annotated and verified
+  - 20 property-based tests created (hypothesis + consistency checks)
+  - Python baseline benchmarked: 100,000 iterations in 0.018s
+  - Rust stub created with pure calculation functions
+  - PyO3 bindings prepared for calculate_baseline(), check_regression(), score_efficiency()
 - Tests passing: 20/20 ✅ (basics + property-based + edge cases + consistency)
 - Fleet validated: Cycle 14 passed (0 regressions)
 - Rust readiness: CRITICAL (performance-intensive calculations)
@@ -92,12 +92,12 @@
 - Python performance: 1.025 microseconds per call (priority calculation)
 - Expected Rust speedup: 10-25x
 - Tasks completed:
-  - [x] All return types annotated and verified
-  - [x] Fixed assess_response_quality() to return ResponseQuality enum
-  - [x] 32 comprehensive tests created (7 basic + 6 property-based + 19 specialty)
-  - [x] Python baseline benchmarked: 100,000 iterations in 0.103s
-  - [x] Rust stubs created for 5 core methods (priority, tokens, dedup, normalize, etc.)
-  - [x] PyO3 bindings prepared for key calculation functions
+  - All return types annotated and verified
+  - Fixed assess_response_quality() to return ResponseQuality enum
+  - 32 comprehensive tests created (7 basic + 6 property-based + 19 specialty)
+  - Python baseline benchmarked: 100,000 iterations in 0.103s
+  - Rust stubs created for 5 core methods (priority, tokens, dedup, normalize, etc.)
+  - PyO3 bindings prepared for key calculation functions
 - Tests passing: 32/32 ✅ (validation + calculations + data ops + property-based)
 - Fleet validated: Cycle 15 passed (0 regressions)
 - Rust readiness: HIGH (13 pure logic methods, zero I/O dependencies)
@@ -107,11 +107,11 @@
 - Python performance: TokenCost (~0.24μs), ModelFallback (~2.43μs), StatsRollup (~6.12μs)
 - Expected Rust speedup: 8-20x
 - Tasks completed:
-  - [x] All return types verified
-  - [x] 11 property-based tests created in tests/unit/test_metrics_core.py
-  - [x] Python benchmarks established in tests/performance/test_metrics_benchmark.py
-  - [x] Rust stubs implemented for TokenCost, ModelFallback, and StatsRollup
-  - [x] PyO3 bindings prepared (calculate_token_cost, select_best_model, calculate_p95)
+  - All return types verified
+  - 11 property-based tests created in tests/unit/test_metrics_core.py
+  - Python benchmarks established in tests/performance/test_metrics_benchmark.py
+  - Rust stubs implemented for TokenCost, ModelFallback, and StatsRollup
+  - PyO3 bindings prepared (calculate_token_cost, select_best_model, calculate_p95)
 - Tests passing: 11/11 ✅ (cost + fallback + rollup + AB tests)
 - Rust readiness: HIGH (Pure calculation logic ready for compilation)
 
@@ -193,10 +193,10 @@ KnowledgeAgent, ArchitectAgent, HandyAgent, CircuitBreaker,
 ImprovementsAgent, ReportAPI, AgentAPIServer, StatsQueryEngine, FormulaEngineCore
 
 ### Add missing return type hints (5+ functions)
-- [ ] HopperSim.run_swarm_stress_test() → None
-- [ ] EvolutionCore.perform_specialized_task() → Any
-- [ ] SpeciationAgent.setUp() → None
-- [ ] SpeciationAgent.test_initialization() → None
+- HopperSim.run_swarm_stress_test() → None
+- EvolutionCore.perform_specialized_task() → Any
+- SpeciationAgent.setUp() → None
+- SpeciationAgent.test_initialization() → None
 
 ### Add missing class docstrings (24 classes)
 Required format:
@@ -220,8 +220,8 @@ APICore, TelemetryManager
 ## PHASE 4: LARGE FILE DECOMPOSITION
 
 ### Completed
-- [x] BaseAgent.py decomposed → BaseAgent.py + BaseAgentCore.py (Core/Shell)
-- [x] metrics_engine.py decomposed → metrics_engine.py + MetricsCore.py (Core/Shell)
+- BaseAgent.py decomposed → BaseAgent.py + BaseAgentCore.py (Core/Shell)
+- metrics_engine.py decomposed → metrics_engine.py + MetricsCore.py (Core/Shell)
 
 ### Remaining Targets
 - OrchestratorAgent.py (44 KB): Analyze for Core/Shell split
@@ -232,17 +232,17 @@ APICore, TelemetryManager
 ## PHASE 5: DOCUMENTATION & MAINTENANCE
 
 ### Fix TODO/FIXME comments (3 actionable)
-- [ ] VisionCore.py line 29: Implement pixel analysis (TODO in docstring)
-- [ ] acceleration.py line 34: Update Rust core import path
-- [ ] delegation.py line 71: Move to centralized ModuleLoader
+- VisionCore.py line 29: Implement pixel analysis (TODO in docstring)
+- acceleration.py line 34: Update Rust core import path
+- delegation.py line 71: Move to centralized ModuleLoader
 
 ### Fix naming issues (1 typo)
-- [ ] AgentAPIServer.py line 49: TelemetryManger → TelemetryManager
+- AgentAPIServer.py line 49: TelemetryManger → TelemetryManager
 
 ### Add missing module docstrings (3 files)
-- [ ] ArchitectAgent.py
-- [ ] observability/reports/utils.py
-- [ ] FleetExecutionCore.py
+- ArchitectAgent.py
+- observability/reports/utils.py
+- FleetExecutionCore.py
 
 ---
 
@@ -298,7 +298,7 @@ python src/infrastructure/dev/scripts/run_fleet_self_improvement.py \
 6. Then remaining phases in order
 
 ### Progress Tracking
-- Mark items as [ ] uncompleted or [x] completed
+- Mark items as uncompleted or completed
 - Update this file after each completed batch
 - Run fleet scan after major changes: `python run_fleet_self_improvement.py -p docs/work/prompt.txt`
 - Archive old versions as prompt-oldN.txt

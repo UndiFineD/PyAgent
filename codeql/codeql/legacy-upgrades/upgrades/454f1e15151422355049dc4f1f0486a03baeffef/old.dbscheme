@@ -384,7 +384,7 @@ function_template_argument(int function_id: @function ref,
   is_fract_type(1) = declared with _Fract
   saturating(1) = declared with _Sat
 */
-/* TODO
+/*  
 fixedpointtypes(unique int id: @fixedpointtype,
                 int precision: int ref,
                 int is_unsigned: int ref,
@@ -510,7 +510,7 @@ varattributes(int var_id: @accessible ref,
 stmtattributes(int stmt_id: @stmt ref,
                int spec_id: @attribute ref);
 
-@type = @builtintype | @derivedtype | @usertype /* TODO | @fixedpointtype */ | @routinetype | @ptrtomember | @decltype; 
+@type = @builtintype | @derivedtype | @usertype /*   | @fixedpointtype */ | @routinetype | @ptrtomember | @decltype; 
       
 member(int parent: @type ref,
        int index: int ref,
@@ -634,7 +634,7 @@ funrefbind(int fun: @function ref,
            int expr: @funref ref);
 */
 
-/* TODO
+/*  
 memberprefix(int member: @expr ref,
              int prefix: @expr ref);
 */
@@ -651,7 +651,7 @@ memberprefix(int member: @expr ref,
    kind(9) = staticmbrreadexpr // static x.y
    kind(10) = staticmbrptrreadexpr // static p->y
 */
-/* TODO
+/*  
 memberaccess(int member: @expr ref,
              int kind: int ref);
 */

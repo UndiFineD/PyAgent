@@ -49,11 +49,11 @@ This document tracks modules that have been audited, decoupled from side-effects
 3.  **BaseCore.is_path_ignored**: High-frequency path matching during file scans.
 
 ## 🧪 Audit Criteria
-- [x] **Pure Functions**: No direct calls to os, pathlib.Path.write_text, 
+- **Pure Functions**: No direct calls to os, pathlib.Path.write_text, 
 equests, or sqlite3.
-- [x] **Explicit State**: Data must be passed in as arguments or held in dataclasses.
-- [x] **Strong Typing**: 100% return type hints and parameter annotations.
-- [x] **No Multi-processing/Threading**: Logic must be single-threaded (Rust will handle parallelism).
+- **Explicit State**: Data must be passed in as arguments or held in dataclasses.
+- **Strong Typing**: 100% return type hints and parameter annotations.
+- **No Multi-processing/Threading**: Logic must be single-threaded (Rust will handle parallelism).
 
 ## 🚀 Recent Audits (Phase 114)
 - **AgentCore**: Verified side-effect free path calculation.
