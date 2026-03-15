@@ -34,7 +34,7 @@ the core philosophy:
 ## Legacy Content Highlights
 
 - `src-old/core/base/base_agent.py` and `metrics_engine.py` were previously
-  monolithic; todo list items mention decomposing them into `BaseAgent`/
+  monolithic; list items mention decomposing them into `BaseAgent`/
   `BaseAgentCore` and `MetricsCore` respectively.  Refactoring should continue
   along this “core/shell” pattern.
 - `verification_core.py` illustrates how independent core modules encapsulate a

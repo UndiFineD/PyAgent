@@ -311,18 +311,18 @@ Let's dive in!
 
 When writing documentation, verify:
 
-- [ ] Using "you" instead of "the user"
-- [ ] Active voice throughout
-- [ ] No unnecessary words
-- [ ] Headings are descriptive
-- [ ] Page is self-contained
-- [ ] Proper heading hierarchy
-- [ ] One term per concept
-- [ ] Prerequisites listed
-- [ ] Acronyms defined
-- [ ] Code examples are complete
-- [ ] No product-centric language
-- [ ] No colloquialisms
+- Using "you" instead of "the user"
+- Active voice throughout
+- No unnecessary words
+- Headings are descriptive
+- Page is self-contained
+- Proper heading hierarchy
+- One term per concept
+- Prerequisites listed
+- Acronyms defined
+- Code examples are complete
+- No product-centric language
+- No colloquialisms
 
 ## Applying This Skill
 

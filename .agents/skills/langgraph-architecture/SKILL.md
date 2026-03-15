@@ -323,11 +323,11 @@ def check_budget(state):
 
 Before implementing:
 
-1. [ ] Is LangGraph the right tool? (vs simpler alternatives)
-2. [ ] State schema defined with appropriate reducers?
-3. [ ] Persistence strategy chosen? (dev vs prod checkpointer)
-4. [ ] Streaming needs identified?
-5. [ ] Human-in-the-loop points defined?
-6. [ ] Error handling and retry strategy?
-7. [ ] Multi-agent coordination pattern? (if applicable)
-8. [ ] Resource limits configured?
+1. Is LangGraph the right tool? (vs simpler alternatives)
+2. State schema defined with appropriate reducers?
+3. Persistence strategy chosen? (dev vs prod checkpointer)
+4. Streaming needs identified?
+5. Human-in-the-loop points defined?
+6. Error handling and retry strategy?
+7. Multi-agent coordination pattern? (if applicable)
+8. Resource limits configured?

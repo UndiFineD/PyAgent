@@ -216,11 +216,11 @@ Use for:
 
 ## Validation Checklist
 
-- [ ] RLS applied to dimension tables (not fact tables)
-- [ ] Filters propagate correctly through relationships
-- [ ] Dynamic RLS uses USERPRINCIPALNAME()
-- [ ] Tested with valid and invalid users
-- [ ] Edge cases handled (NULL, unknown users)
-- [ ] Performance tested under load
-- [ ] Role mappings documented
-- [ ] Workspace roles understood (Admins bypass RLS)
+- RLS applied to dimension tables (not fact tables)
+- Filters propagate correctly through relationships
+- Dynamic RLS uses USERPRINCIPALNAME()
+- Tested with valid and invalid users
+- Edge cases handled (NULL, unknown users)
+- Performance tested under load
+- Role mappings documented
+- Workspace roles understood (Admins bypass RLS)

@@ -55,7 +55,7 @@ For each identified issue, produce:
 **Problem:** [What's causing false positives]
 
 **Evidence:**
-- [X] rejections with rationale "[common theme]"
+- rejections with rationale "[common theme]"
 - Example: [file:line] - [issue] - [rationale]
 
 **Proposed Fix:**

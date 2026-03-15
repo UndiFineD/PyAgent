@@ -93,12 +93,12 @@ title: "[iOS/Android] Phone number input screen"
 team: "Mobile"
 description: |
   ## Tasks
-  - [ ] Create PhoneInputScreen widget
-  - [ ] Implement country code picker
-  - [ ] Add phone number formatting
-  - [ ] Input validation
-  - [ ] Handle iOS keyboard properly
-  - [ ] Test on various Android devices
+  - Create PhoneInputScreen widget
+  - Implement country code picker
+  - Add phone number formatting
+  - Input validation
+  - Handle iOS keyboard properly
+  - Test on various Android devices
 
   ## Platform-Specific
   - iOS: Match iOS design guidelines
@@ -122,13 +122,13 @@ title: "[Backend + Mobile] SMS verification implementation"
 team: "Mobile"
 description: |
   ## Tasks
-  - [ ] Integrate Firebase Auth
-  - [ ] Implement SMS sending
-  - [ ] Create OTP input screen
-  - [ ] Auto-read SMS on Android
-  - [ ] Manual entry on iOS
-  - [ ] Handle verification errors
-  - [ ] Implement retry logic
+  - Integrate Firebase Auth
+  - Implement SMS sending
+  - Create OTP input screen
+  - Auto-read SMS on Android
+  - Manual entry on iOS
+  - Handle verification errors
+  - Implement retry logic
 
   ## Platform Testing
   - Test on real iOS devices
@@ -196,14 +196,14 @@ title: "[iOS/Android] Chat list screen with real-time updates"
 team: "Mobile"
 description: |
   ## Tasks
-  - [ ] Create ChatListScreen widget
-  - [ ] Implement chat list tile
-  - [ ] Real-time updates from Firebase
-  - [ ] Unread message badges
-  - [ ] Last message preview
-  - [ ] Swipe actions (iOS style, Android style)
-  - [ ] Pull to refresh
-  - [ ] Empty state design
+  - Create ChatListScreen widget
+  - Implement chat list tile
+  - Real-time updates from Firebase
+  - Unread message badges
+  - Last message preview
+  - Swipe actions (iOS style, Android style)
+  - Pull to refresh
+  - Empty state design
 
   ## Performance
   - Lazy loading for 100+ chats
@@ -231,21 +231,21 @@ title: "[iOS/Android] Individual chat screen"
 team: "Mobile"
 description: |
   ## Tasks
-  - [ ] Create ChatScreen widget
-  - [ ] Message bubbles (sent/received)
-  - [ ] Timestamp display
-  - [ ] Message status indicators
-  - [ ] Input field with attachment button
-  - [ ] Emoji keyboard
-  - [ ] Scroll to bottom behavior
-  - [ ] Load more messages on scroll up
+  - Create ChatScreen widget
+  - Message bubbles (sent/received)
+  - Timestamp display
+  - Message status indicators
+  - Input field with attachment button
+  - Emoji keyboard
+  - Scroll to bottom behavior
+  - Load more messages on scroll up
 
   ## Message Features
-  - [ ] Copy message
-  - [ ] Reply to message
-  - [ ] Forward message
-  - [ ] Delete message
-  - [ ] React to message
+  - Copy message
+  - Reply to message
+  - Forward message
+  - Delete message
+  - React to message
 
   ## Platform-Specific
   - iOS: Native keyboard handling
@@ -276,17 +276,17 @@ description: |
   Integrate CallKit for native iOS calling experience
 
   ## Tasks
-  - [ ] Setup CallKit provider
-  - [ ] Handle incoming call UI
-  - [ ] Lock screen call interface
-  - [ ] Call history in iOS phone app
-  - [ ] Handle interruptions
-  - [ ] Background call handling
+  - Setup CallKit provider
+  - Handle incoming call UI
+  - Lock screen call interface
+  - Call history in iOS phone app
+  - Handle interruptions
+  - Background call handling
 
   ## Apple Requirements
-  - [ ] VoIP push notifications
-  - [ ] Proper Info.plist permissions
-  - [ ] App Store review compliance
+  - VoIP push notifications
+  - Proper Info.plist permissions
+  - App Store review compliance
 
   ## Testing
   - Test on various iOS versions (14, 15, 16, 17)
@@ -314,17 +314,17 @@ description: |
   Integrate ConnectionService for native Android calling
 
   ## Tasks
-  - [ ] Implement ConnectionService
-  - [ ] Full-screen incoming call UI
-  - [ ] Lock screen call interface
-  - [ ] Call logs integration
-  - [ ] Handle Bluetooth audio
-  - [ ] Background call handling
+  - Implement ConnectionService
+  - Full-screen incoming call UI
+  - Lock screen call interface
+  - Call logs integration
+  - Handle Bluetooth audio
+  - Background call handling
 
   ## Android-Specific
-  - [ ] Request proper permissions
-  - [ ] Handle battery optimization
-  - [ ] Foreground service for active calls
+  - Request proper permissions
+  - Handle battery optimization
+  - Foreground service for active calls
 
   ## Testing
   - Test on different Android versions (8-14)
@@ -414,48 +414,48 @@ description: |
   ## Pre-Submission Testing
 
   ### Functionality
-  - [ ] All features work on iOS 14, 15, 16, 17
-  - [ ] Tested on iPhone SE, 13, 14, 15
-  - [ ] Tested on iPad
-  - [ ] Landscape mode works
-  - [ ] Dark mode works correctly
-  - [ ] All localizations tested
+  - All features work on iOS 14, 15, 16, 17
+  - Tested on iPhone SE, 13, 14, 15
+  - Tested on iPad
+  - Landscape mode works
+  - Dark mode works correctly
+  - All localizations tested
 
   ### Permissions
-  - [ ] Camera permission flow
-  - [ ] Microphone permission flow
-  - [ ] Photo library permission
-  - [ ] Contacts permission
-  - [ ] Notifications permission
-  - [ ] All permission messages clear
+  - Camera permission flow
+  - Microphone permission flow
+  - Photo library permission
+  - Contacts permission
+  - Notifications permission
+  - All permission messages clear
 
   ### App Store Requirements
-  - [ ] Privacy policy linked
-  - [ ] Terms of service linked
-  - [ ] Support URL working
-  - [ ] Account deletion flow
-  - [ ] App Store screenshots prepared
-  - [ ] App preview video created
+  - Privacy policy linked
+  - Terms of service linked
+  - Support URL working
+  - Account deletion flow
+  - App Store screenshots prepared
+  - App preview video created
 
   ### Performance
-  - [ ] App size < 50MB
-  - [ ] Launch time < 2 seconds
-  - [ ] No memory leaks
-  - [ ] Battery drain acceptable
+  - App size < 50MB
+  - Launch time < 2 seconds
+  - No memory leaks
+  - Battery drain acceptable
 
   ### Edge Cases
-  - [ ] Poor network handling
-  - [ ] Offline mode works
-  - [ ] Background refresh works
-  - [ ] Push notifications work
-  - [ ] Deep linking works
+  - Poor network handling
+  - Offline mode works
+  - Background refresh works
+  - Push notifications work
+  - Deep linking works
 
   ## Review Checklist
-  - [ ] Metadata prepared
-  - [ ] Build uploaded to TestFlight
-  - [ ] Internal testing complete
-  - [ ] External beta testing complete
-  - [ ] All blocking bugs fixed
+  - Metadata prepared
+  - Build uploaded to TestFlight
+  - Internal testing complete
+  - External beta testing complete
+  - All blocking bugs fixed
 
   ## Assigned Testers
   - iOS Tester 1: Functionality
@@ -484,29 +484,29 @@ description: |
   - Platform: iOS
 
   ## Pre-Release Checklist
-  - [ ] All features complete
-  - [ ] All bugs fixed
-  - [ ] QA testing passed
-  - [ ] Performance benchmarks met
-  - [ ] Privacy policy updated
-  - [ ] App Store assets ready
+  - All features complete
+  - All bugs fixed
+  - QA testing passed
+  - Performance benchmarks met
+  - Privacy policy updated
+  - App Store assets ready
 
   ## Submission Checklist
-  - [ ] Build uploaded to App Store Connect
-  - [ ] TestFlight testing complete
-  - [ ] App Store metadata complete
-  - [ ] Screenshots uploaded (all sizes)
-  - [ ] Privacy nutrition labels filled
-  - [ ] Age rating set
-  - [ ] Support URL working
-  - [ ] Submit for review
+  - Build uploaded to App Store Connect
+  - TestFlight testing complete
+  - App Store metadata complete
+  - Screenshots uploaded (all sizes)
+  - Privacy nutrition labels filled
+  - Age rating set
+  - Support URL working
+  - Submit for review
 
   ## Post-Submission
-  - [ ] Monitor review status
-  - [ ] Respond to review feedback
-  - [ ] Release after approval
-  - [ ] Monitor crash reports
-  - [ ] Monitor user reviews
+  - Monitor review status
+  - Respond to review feedback
+  - Release after approval
+  - Monitor crash reports
+  - Monitor user reviews
 
   ## Rollback Plan
   - Previous version: 0.9.5 (build 95)
@@ -614,7 +614,7 @@ Parameters:
     - Total Issues: 78
     - Completed: 58 (74%)
     - In Progress: 12 (15%)
-    - Todo: 8 (10%)
+    -  8 (10%)
 
     ## Next Week
     - Complete payment integration

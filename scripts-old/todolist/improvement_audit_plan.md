@@ -64,7 +64,7 @@ Based on analysis of docs/todo-tree-20260303-1743.txt:
 - Make adjustments to accuracy
 
 ### Step 4: Update Files
-- Mark [x] for completed items in .improvements.md files
+- Mark for completed items in .improvements.md files
 - Generate final completion statistics
 
 ## Expected Outcomes

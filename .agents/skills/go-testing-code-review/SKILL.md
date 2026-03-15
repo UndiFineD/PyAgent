@@ -14,18 +14,18 @@ description: Reviews Go test code for proper table-driven tests, assertions, and
 
 ## Review Checklist
 
-- [ ] Tests are table-driven with clear case names
-- [ ] Subtests use t.Run for parallel execution
-- [ ] Test names describe behavior, not implementation
-- [ ] Errors include got/want with descriptive message
-- [ ] Cleanup registered with t.Cleanup
-- [ ] Parallel tests don't share mutable state
-- [ ] Mocks use interfaces defined in test file
-- [ ] Coverage includes edge cases and error paths
-- [ ] Performance-critical functions have `Benchmark*` tests
-- [ ] Input parsers/validators have `Fuzz*` tests (Go 1.18+)
-- [ ] HTTP handlers tested with `httptest.NewRequest`/`httptest.NewRecorder`
-- [ ] Golden file tests use `testdata/*.golden` pattern with `-update` flag
+- Tests are table-driven with clear case names
+- Subtests use t.Run for parallel execution
+- Test names describe behavior, not implementation
+- Errors include got/want with descriptive message
+- Cleanup registered with t.Cleanup
+- Parallel tests don't share mutable state
+- Mocks use interfaces defined in test file
+- Coverage includes edge cases and error paths
+- Performance-critical functions have `Benchmark*` tests
+- Input parsers/validators have `Fuzz*` tests (Go 1.18+)
+- HTTP handlers tested with `httptest.NewRequest`/`httptest.NewRecorder`
+- Golden file tests use `testdata/*.golden` pattern with `-update` flag
 
 ## Critical Patterns
 

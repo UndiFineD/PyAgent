@@ -44,9 +44,9 @@ Copy and customize these templates for issue bodies.
 [How should this feature work?]
 
 ## Acceptance Criteria
-- [ ] [Criterion 1]
-- [ ] [Criterion 2]
-- [ ] [Criterion 3]
+- [Criterion 1]
+- [Criterion 2]
+- [Criterion 3]
 
 ## Alternatives Considered
 [Other approaches considered and why they weren't chosen]
@@ -65,9 +65,9 @@ Copy and customize these templates for issue bodies.
 [Detailed description of the work]
 
 ## Checklist
-- [ ] [Subtask 1]
-- [ ] [Subtask 2]
-- [ ] [Subtask 3]
+- [Subtask 1]
+- [Subtask 2]
+- [Subtask 3]
 
 ## Dependencies
 [Any blockers or related work]
@@ -85,6 +85,6 @@ For simple issues:
 [What and why]
 
 ## Tasks
-- [ ] [Task 1]
-- [ ] [Task 2]
+- [Task 1]
+- [Task 2]
 ```

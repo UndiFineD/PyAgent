@@ -245,22 +245,22 @@ catch { showError(error) }
 ## Review Questions
 
 ### Error Handling
-- [ ] Are both transport errors and HTTP status codes handled?
-- [ ] Is there a centralized error handling strategy?
-- [ ] Are error types mapped to user-friendly messages?
+- Are both transport errors and HTTP status codes handled?
+- Is there a centralized error handling strategy?
+- Are error types mapped to user-friendly messages?
 
 ### Response Validation
-- [ ] Is response cast to HTTPURLResponse?
-- [ ] Are non-2xx status codes treated as errors?
-- [ ] Are error response bodies parsed for messages?
+- Is response cast to HTTPURLResponse?
+- Are non-2xx status codes treated as errors?
+- Are error response bodies parsed for messages?
 
 ### Retry Logic
-- [ ] Are only appropriate errors retried (not 4xx)?
-- [ ] Is exponential backoff with jitter implemented?
-- [ ] Is there a maximum retry count?
-- [ ] Is Retry-After header respected for 429/503?
+- Are only appropriate errors retried (not 4xx)?
+- Is exponential backoff with jitter implemented?
+- Is there a maximum retry count?
+- Is Retry-After header respected for 429/503?
 
 ### User Experience
-- [ ] Are cancellation errors handled silently?
-- [ ] Is there a retry option for recoverable errors?
-- [ ] Are authentication errors handled separately?
+- Are cancellation errors handled silently?
+- Is there a retry option for recoverable errors?
+- Are authentication errors handled separately?

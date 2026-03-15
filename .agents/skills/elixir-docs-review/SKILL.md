@@ -15,32 +15,32 @@ description: Reviews Elixir documentation for completeness, quality, and ExDoc b
 ## Review Checklist
 
 ### Module Documentation
-- [ ] All public modules have @moduledoc
-- [ ] First-line summary is concise (one line, used by tools as summary)
-- [ ] @moduledoc includes ## Examples where appropriate
-- [ ] @moduledoc false only on internal/implementation modules
+- All public modules have @moduledoc
+- First-line summary is concise (one line, used by tools as summary)
+- @moduledoc includes ## Examples where appropriate
+- @moduledoc false only on internal/implementation modules
 
 ### Function Documentation
-- [ ] All public functions have @doc
-- [ ] All public functions have @spec
-- [ ] @doc describes return values clearly
-- [ ] Multi-clause functions documented before first clause
-- [ ] Function head declared when arg names need clarification
+- All public functions have @doc
+- All public functions have @spec
+- @doc describes return values clearly
+- Multi-clause functions documented before first clause
+- Function head declared when arg names need clarification
 
 ### Doctests
-- [ ] Doctests present for pure, deterministic functions
-- [ ] No doctests for side-effectful operations (DB, HTTP, etc.)
-- [ ] Doctests actually run (module included in test file)
+- Doctests present for pure, deterministic functions
+- No doctests for side-effectful operations (DB, HTTP, etc.)
+- Doctests actually run (module included in test file)
 
 ### Cross-References
-- [ ] Module references use backtick auto-linking (`MyModule`)
-- [ ] Function refs use proper arity format (`function/2`)
-- [ ] Type refs use t: prefix (`t:typename/0`)
-- [ ] No plain-text references where auto-links are possible
+- Module references use backtick auto-linking (`MyModule`)
+- Function refs use proper arity format (`function/2`)
+- Type refs use t: prefix (`t:typename/0`)
+- No plain-text references where auto-links are possible
 
 ### Metadata
-- [ ] @since annotations on new public API additions
-- [ ] @deprecated with migration guidance where appropriate
+- @since annotations on new public API additions
+- @deprecated with migration guidance where appropriate
 
 ## Valid Patterns (Do NOT Flag)
 

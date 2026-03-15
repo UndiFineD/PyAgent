@@ -2058,7 +2058,7 @@ createRoot(document.getElementById("root")).render(
 A functional component is a JavaScript function that returns JSX:
 
 ```jsx
-function Todo(props) {
+function (props) {
   return (
     <li className="todo stack-small">
       <div className="c-cb">
@@ -2079,7 +2079,7 @@ function Todo(props) {
   );
 }
 
-export default Todo;
+export default ;
 ```
 
 ### Passing Props
@@ -2172,7 +2172,7 @@ export default Form;
 // src/App.jsx
 import Form from "./components/Form";
 import FilterButton from "./components/FilterButton";
-import Todo from "./components/Todo";
+import from "./components/Todo";
 
 function App(props) {
   const taskList = props.tasks?.map((task) => (

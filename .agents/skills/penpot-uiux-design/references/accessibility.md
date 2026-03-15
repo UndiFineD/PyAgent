@@ -4,16 +4,16 @@
 
 ### Level AA Requirements (Minimum Standard)
 
-- [ ] Color contrast 4.5:1 for normal text
-- [ ] Color contrast 3:1 for large text (18px+ or 14px bold)
-- [ ] Touch targets minimum 44×44px
-- [ ] All functionality available via keyboard
-- [ ] Visible focus indicators
-- [ ] No content flashes more than 3 times/second
-- [ ] Page has descriptive title
-- [ ] Link purpose clear from text
-- [ ] Form inputs have labels
-- [ ] Error messages are descriptive
+- Color contrast 4.5:1 for normal text
+- Color contrast 3:1 for large text (18px+ or 14px bold)
+- Touch targets minimum 44×44px
+- All functionality available via keyboard
+- Visible focus indicators
+- No content flashes more than 3 times/second
+- Page has descriptive title
+- Link purpose clear from text
+- Form inputs have labels
+- Error messages are descriptive
 
 ---
 
@@ -278,14 +278,14 @@ role="status" - Status updates (like polite)
 
 ### Common Issues to Check
 
-- [ ] Missing or empty alt text
-- [ ] Empty links or buttons
-- [ ] Missing form labels
-- [ ] Insufficient color contrast
-- [ ] Missing language attribute
-- [ ] Incorrect heading structure
-- [ ] Missing skip navigation link
-- [ ] Inaccessible custom widgets
+- Missing or empty alt text
+- Empty links or buttons
+- Missing form labels
+- Insufficient color contrast
+- Missing language attribute
+- Incorrect heading structure
+- Missing skip navigation link
+- Inaccessible custom widgets
 
 ---
 

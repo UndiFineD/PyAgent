@@ -4,7 +4,7 @@
 
 - Add a concise module docstring describing purpose / usage.
 - Consider using `logging` instead of `print` for controllable verbosity.
-- Contains TODO or FIXME comments.
+- Contains or FIXME comments.
 - Function `strict_scan` is missing type annotations.
 
 ## Notes

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Simple script to analyze PyAgent improvement todo list structure.
+"""Simple script to analyze PyAgent improvement list structure.
 """
 
 def analyze_todo_structure():
-    """Analyze the todo list structure without complex file operations."""
-    todo_file = r"c:\dev\PyAgent\docs\todo-tree-20260303-1743.txt"
+    """Analyze the list structure without complex file operations."""
+    _file = r"c:\dev\PyAgent\docs\todo-tree-20260303-1743.txt"
 
-    print("Analyzing PyAgent Improvement Todo list Structure")
+    print("Analyzing PyAgent Improvement list Structure")
     print("=" * 55)
 
     # Read the file and count items manually
@@ -48,7 +48,7 @@ def analyze_todo_structure():
         print(f"\nEstimated total improvement files: {file_count}")
 
     except Exception as e:
-        print(f"Error analyzing todo list: {e}")
+        print(f"Error analyzing list: {e}")
 
 if __name__ == "__main__":
     analyze_todo_structure()

@@ -259,12 +259,12 @@ my-package/
 ## Checklist Before Publishing
 
 ```markdown
-- [ ] Version updated in pyproject.toml
-- [ ] CHANGELOG.md updated
-- [ ] README.md current
-- [ ] All tests passing
-- [ ] Type checks passing
-- [ ] Build succeeds locally
-- [ ] TestPyPI upload works
-- [ ] Installation from TestPyPI works
+- Version updated in pyproject.toml
+- CHANGELOG.md updated
+- README.md current
+- All tests passing
+- Type checks passing
+- Build succeeds locally
+- TestPyPI upload works
+- Installation from TestPyPI works
 ```

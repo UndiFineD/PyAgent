@@ -148,7 +148,7 @@
               <arg>--should-stop=ifError=FLOW</arg>
 
               <!-- https://errorprone.info/docs/installation#maven -->
-              <!-- TODO(cpovirk): Enable NullArgumentForNonNullParameter for
+              <!-- (cpovirk): Enable NullArgumentForNonNullParameter for
                    prod code. It's disabled automatically for "test code"
                    (which is good: our tests have intentional violations), but
                    Error Prone doesn't know it's building test code unless we
@@ -158,7 +158,7 @@
                    compilation only. -->
               <arg>-Xplugin:ErrorProne -Xep:NullArgumentForNonNullParameter:OFF -Xep:Java8ApiChecker:ERROR</arg>
               <!-- https://github.com/google/error-prone/blob/f8e33bc460be82ab22256a7ef8b979d7a2cacaba/docs/installation.md#jdk-16 -->
-              <!-- TODO(cpovirk): Use .mvn/jvm.config instead (per
+              <!-- (cpovirk): Use .mvn/jvm.config instead (per
                    https://errorprone.info/docs/installation#maven). -->
               <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
               <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
@@ -178,7 +178,7 @@
                 <version>2.36.0</version>
               </path>
             </annotationProcessorPaths>
-            <!-- Fork because we need args like add-exports. (But see the TODO above about .mvn/jvm.config.) -->
+            <!-- Fork because we need args like add-exports. (But see the above about .mvn/jvm.config.) -->
             <fork>true</fork>
           </configuration>
         </plugin>
@@ -317,7 +317,7 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>3.11.1</version>
           <configuration>
-            <!-- TODO: b/286965322 - Use a newer version (probably the default toolchain we set up?) if it doesn't break Javadoc (including causing trouble for our later run of JDiff, which we do outside Maven, during snapshots/releases). -->
+            <!--  b/286965322 - Use a newer version (probably the default toolchain we set up?) if it doesn't break Javadoc (including causing trouble for our later run of JDiff, which we do outside Maven, during snapshots/releases). -->
             <jdkToolchain>
               <version>11</version>
               <vendor>zulu</vendor>

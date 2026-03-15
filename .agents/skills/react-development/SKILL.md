@@ -245,7 +245,7 @@ function UserProfile() {
 
 **State with Arrays:**
 ```jsx
-function TodoList() {
+function List() {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState('');
 
@@ -255,7 +255,7 @@ function TodoList() {
   };
 
   const removeTodo = (id) => {
-    setTodos(prev => prev.filter(todo => todo.id !== id));
+    setTodos(prev => prev.filter(todo => .id !== id));
   };
 
   return (
@@ -664,19 +664,19 @@ const AddToCartButton = memo(({ onAdd }) => {
 
 **Optimizing Child Components:**
 ```jsx
-function TodoList() {
+function List() {
   const [todos, setTodos] = useState(initialTodos);
 
   const handleToggle = useCallback((id) => {
     setTodos(prevTodos =>
       prevTodos.map(todo =>
-        todo.id === id ? { ...todo, done: !todo.done } : todo
+        .id === id ? { ...todo, done: !todo.done } : 
       )
     );
   }, []);
 
   const handleDelete = useCallback((id) => {
-    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+    setTodos(prevTodos => prevTodos.filter(todo => .id !== id));
   }, []);
 
   return (
@@ -684,7 +684,7 @@ function TodoList() {
       {todos.map(todo => (
         <TodoItem
           key={todo.id}
-          todo={todo}
+          ={todo}
           onToggle={handleToggle}
           onDelete={handleDelete}
         />

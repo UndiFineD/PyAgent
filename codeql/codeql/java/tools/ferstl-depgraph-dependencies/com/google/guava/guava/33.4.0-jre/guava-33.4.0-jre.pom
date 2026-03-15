@@ -152,7 +152,7 @@
             </tag>
           </tags>
 
-          <!-- TODO(cpovirk): Move this to the parent after making the package-list files available there. -->
+          <!-- (cpovirk): Move this to the parent after making the package-list files available there. -->
           <!-- We add the link ourselves so that we can choose Java 21 over the version that -source suggests. -->
           <detectJavaApiLink>false</detectJavaApiLink>
           <offlineLinks>

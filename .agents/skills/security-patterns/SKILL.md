@@ -89,12 +89,12 @@ def verify_password(password: str, hashed: bytes) -> bool:
 ```
 
 ### Auth Checklist
-- [ ] Hash passwords with bcrypt/argon2 (cost factor 12+)
-- [ ] Implement rate limiting on login
-- [ ] Use secure session tokens (random, long)
-- [ ] Set secure cookie flags (HttpOnly, Secure, SameSite)
-- [ ] Implement account lockout after failed attempts
-- [ ] Support MFA for sensitive operations
+- Hash passwords with bcrypt/argon2 (cost factor 12+)
+- Implement rate limiting on login
+- Use secure session tokens (random, long)
+- Set secure cookie flags (HttpOnly, Secure, SameSite)
+- Implement account lockout after failed attempts
+- Support MFA for sensitive operations
 
 ## Authorization
 
@@ -165,7 +165,7 @@ rg "execute\(f['\"]|format\(" --type py
 # Find eval/exec usage
 rg "\b(eval|exec)\s*\(" --type py
 
-# Check for TODO security items
+# Check for security items
 rg -i "TODO.*security|FIXME.*security"
 ```
 

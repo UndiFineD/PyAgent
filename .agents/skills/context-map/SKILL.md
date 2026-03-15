@@ -44,9 +44,9 @@ Before implementing any changes, analyze the codebase and create a context map.
 | path/to/similar | example to follow |
 
 ### Risk Assessment
-- [ ] Breaking changes to public API
-- [ ] Database migrations needed
-- [ ] Configuration changes required
+- Breaking changes to public API
+- Database migrations needed
+- Configuration changes required
 ```
 
 Do not proceed with implementation until this map is reviewed.

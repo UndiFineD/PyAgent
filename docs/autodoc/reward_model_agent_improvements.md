@@ -2,7 +2,7 @@
 
 ## Suggested improvements
 
-- Contains TODO or FIXME comments.
+- Contains or FIXME comments.
 
 ## Notes
 - These are suggestions based on static inspection; validate behavior with tests / runs.

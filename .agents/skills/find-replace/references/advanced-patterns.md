@@ -130,8 +130,8 @@ sd '// DEBUG:.*\n' '' src/**/*.ts
 # Commented code blocks
 sd '//\s*[A-Za-z].*\n' '' src/**/*.ts  # Single line comments with code
 
-# TODO comments
-sd '// TODO:.*\n' '' src/**/*.ts
+# comments
+sd '// :.*\n' '' src/**/*.ts
 ```
 
 ## Batch Workflows

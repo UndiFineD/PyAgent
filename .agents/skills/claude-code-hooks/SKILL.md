@@ -79,11 +79,11 @@ TOOL=$(echo "$INPUT" | jq -r '.tool_name')
 
 ## Security Checklist
 
-- [ ] Quote all variables: `"$VAR"` not `$VAR`
-- [ ] Validate paths (no `..` traversal)
-- [ ] Use `$CLAUDE_PROJECT_DIR` for paths
-- [ ] Set reasonable timeouts
-- [ ] Handle jq parsing errors
+- Quote all variables: `"$VAR"` not `$VAR`
+- Validate paths (no `..` traversal)
+- Use `$CLAUDE_PROJECT_DIR` for paths
+- Set reasonable timeouts
+- Handle jq parsing errors
 
 ## Troubleshooting
 

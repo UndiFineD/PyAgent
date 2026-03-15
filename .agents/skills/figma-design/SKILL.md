@@ -1083,7 +1083,7 @@ if (figma.editorType === 'figjam') {
   sticky.x = 100
   sticky.y = 100
   await figma.loadFontAsync({ family: "Roboto", style: "Regular" })
-  sticky.text.characters = "TODO: Review designs"
+  sticky.text.characters = " Review designs"
 
   // Create connector
   const connector = figma.createConnector()

@@ -272,26 +272,26 @@ newBoard.resize(375, 812);
 
 ### Buttons
 
-- [ ] Clear, action-oriented label (2-3 words)
-- [ ] Minimum touch target: 44×44px
-- [ ] Visual states: default, hover, active, disabled, loading
-- [ ] Sufficient contrast (3:1 against background)
-- [ ] Consistent border radius across app
+- Clear, action-oriented label (2-3 words)
+- Minimum touch target: 44×44px
+- Visual states: default, hover, active, disabled, loading
+- Sufficient contrast (3:1 against background)
+- Consistent border radius across app
 
 ### Forms
 
-- [ ] Labels above inputs (not just placeholders)
-- [ ] Required field indicators
-- [ ] Error messages adjacent to fields
-- [ ] Logical tab order
-- [ ] Input types match content (email, tel, etc.)
+- Labels above inputs (not just placeholders)
+- Required field indicators
+- Error messages adjacent to fields
+- Logical tab order
+- Input types match content (email, tel, etc.)
 
 ### Navigation
 
-- [ ] Current location clearly indicated
-- [ ] Consistent position across screens
-- [ ] Maximum 7±2 top-level items
-- [ ] Touch-friendly on mobile (48px targets)
+- Current location clearly indicated
+- Consistent position across screens
+- Maximum 7±2 top-level items
+- Touch-friendly on mobile (48px targets)
 
 ## Accessibility Quick Checks
 
@@ -306,14 +306,14 @@ newBoard.resize(375, 812);
 
 Before finalizing any design:
 
-- [ ] Visual hierarchy is clear
-- [ ] Consistent spacing and alignment
-- [ ] Typography is readable (16px+ body text)
-- [ ] Color contrast meets WCAG AA
-- [ ] Interactive elements are obvious
-- [ ] Mobile-friendly touch targets
-- [ ] Loading/empty/error states considered
-- [ ] Consistent with design system
+- Visual hierarchy is clear
+- Consistent spacing and alignment
+- Typography is readable (16px+ body text)
+- Color contrast meets WCAG AA
+- Interactive elements are obvious
+- Mobile-friendly touch targets
+- Loading/empty/error states considered
+- Consistent with design system
 
 ## Validating Designs
 

@@ -16,17 +16,17 @@ description: Reviews Swift code for concurrency safety, error handling, memory m
 
 ## Review Checklist
 
-- [ ] No force unwraps (`!`) on runtime data (network, user input, files)
-- [ ] Closures stored as properties use `[weak self]`
-- [ ] Delegate properties are `weak`
-- [ ] Independent async operations use `async let` or `TaskGroup`
-- [ ] Long-running Tasks check `Task.isCancelled`
-- [ ] Actors have mutable state to protect (no stateless actors)
-- [ ] Sendable types are truly thread-safe (beware `@unchecked`)
-- [ ] Errors handled explicitly (no empty catch blocks)
-- [ ] Custom errors conform to `LocalizedError` with descriptive messages
-- [ ] Nested @Observable objects are also marked @Observable
-- [ ] @Bindable used for two-way bindings to Observable objects
+- No force unwraps (`!`) on runtime data (network, user input, files)
+- Closures stored as properties use `[weak self]`
+- Delegate properties are `weak`
+- Independent async operations use `async let` or `TaskGroup`
+- Long-running Tasks check `Task.isCancelled`
+- Actors have mutable state to protect (no stateless actors)
+- Sendable types are truly thread-safe (beware `@unchecked`)
+- Errors handled explicitly (no empty catch blocks)
+- Custom errors conform to `LocalizedError` with descriptive messages
+- Nested @Observable objects are also marked @Observable
+- @Bindable used for two-way bindings to Observable objects
 
 ## When to Load References
 

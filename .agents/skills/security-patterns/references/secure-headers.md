@@ -230,11 +230,11 @@ curl -I https://example.com
 
 ## Quick Checklist
 
-- [ ] CSP with restrictive default-src
-- [ ] HSTS with 1 year max-age
-- [ ] X-Frame-Options: DENY
-- [ ] X-Content-Type-Options: nosniff
-- [ ] Referrer-Policy set
-- [ ] Permissions-Policy restricting unused features
-- [ ] No X-Powered-By header (remove it)
-- [ ] Test with securityheaders.com
+- CSP with restrictive default-src
+- HSTS with 1 year max-age
+- X-Frame-Options: DENY
+- X-Content-Type-Options: nosniff
+- Referrer-Policy set
+- Permissions-Policy restricting unused features
+- No X-Powered-By header (remove it)
+- Test with securityheaders.com

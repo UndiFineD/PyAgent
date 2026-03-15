@@ -16,16 +16,16 @@ description: Reviews React Router code for proper data loading, mutations, error
 
 ## Review Checklist
 
-- [ ] Data loaded via `loader` not `useEffect`
-- [ ] Route params accessed type-safely with validation
-- [ ] Using `defer()` for parallel data fetching when appropriate
-- [ ] Mutations use `<Form>` or `useFetcher` not manual fetch
-- [ ] Actions handle both success and error cases
-- [ ] Error boundaries with `errorElement` on routes
-- [ ] Using `isRouteErrorResponse()` to check error types
-- [ ] Navigation uses `<Link>` over `navigate()` where possible
-- [ ] Pending states shown via `useNavigation()` or `fetcher.state`
-- [ ] No navigation in render (only in effects or handlers)
+- Data loaded via `loader` not `useEffect`
+- Route params accessed type-safely with validation
+- Using `defer()` for parallel data fetching when appropriate
+- Mutations use `<Form>` or `useFetcher` not manual fetch
+- Actions handle both success and error cases
+- Error boundaries with `errorElement` on routes
+- Using `isRouteErrorResponse()` to check error types
+- Navigation uses `<Link>` over `navigate()` where possible
+- Pending states shown via `useNavigation()` or `fetcher.state`
+- No navigation in render (only in effects or handlers)
 
 ## Valid Patterns (Do NOT Flag)
 

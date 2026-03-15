@@ -16,16 +16,16 @@ description: Reviews Combine framework code for memory leaks, operator misuse, a
 
 ## Review Checklist
 
-- [ ] All `sink` closures use `[weak self]` when self owns cancellable
-- [ ] No `assign(to:on:self)` usage (use `assign(to: &$property)` or sink)
-- [ ] All AnyCancellables stored in Set or property (not discarded)
-- [ ] Subjects exposed as `AnyPublisher` via `eraseToAnyPublisher()`
-- [ ] `flatMap` used correctly (not when `map + switchToLatest` needed)
-- [ ] Error handling inside `flatMap` to keep main chain alive
-- [ ] `tryMap` followed by `mapError` to restore error types
-- [ ] `receive(on: DispatchQueue.main)` before UI updates
-- [ ] PassthroughSubject for events, CurrentValueSubject for state
-- [ ] Future wrapped in Deferred when used with retry
+- All `sink` closures use `[weak self]` when self owns cancellable
+- No `assign(to:on:self)` usage (use `assign(to: &$property)` or sink)
+- All AnyCancellables stored in Set or property (not discarded)
+- Subjects exposed as `AnyPublisher` via `eraseToAnyPublisher()`
+- `flatMap` used correctly (not when `map + switchToLatest` needed)
+- Error handling inside `flatMap` to keep main chain alive
+- `tryMap` followed by `mapError` to restore error types
+- `receive(on: DispatchQueue.main)` before UI updates
+- PassthroughSubject for events, CurrentValueSubject for state
+- Future wrapped in Deferred when used with retry
 
 ## When to Load References
 

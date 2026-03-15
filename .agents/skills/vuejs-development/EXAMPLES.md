@@ -139,9 +139,9 @@ button:hover {
 
 ---
 
-## 2. Todo List with Local Storage
+## 2. List with Local Storage
 
-A complete todo list with persistence using localStorage.
+A complete list with persistence using localStorage.
 
 ```vue
 <script setup>
@@ -149,31 +149,31 @@ import { ref, computed, watch, onMounted } from 'vue'
 
 const STORAGE_KEY = 'vue-todos'
 
-const todos = ref([])
+const s = ref([])
 const newTodoText = ref('')
 const filter = ref('all')
 
 const filteredTodos = computed(() => {
   switch (filter.value) {
     case 'active':
-      return todos.value.filter(t => !t.completed)
+      return s.value.filter(t => !t.completed)
     case 'completed':
-      return todos.value.filter(t => t.completed)
+      return s.value.filter(t => t.completed)
     default:
-      return todos.value
+      return s.value
   }
 })
 
 const stats = computed(() => ({
-  total: todos.value.length,
-  active: todos.value.filter(t => !t.completed).length,
-  completed: todos.value.filter(t => t.completed).length
+  total: s.value.length,
+  active: s.value.filter(t => !t.completed).length,
+  completed: s.value.filter(t => t.completed).length
 }))
 
 const allCompleted = computed({
-  get: () => todos.value.every(t => t.completed),
+  get: () => s.value.every(t => t.completed),
   set: (value) => {
-    todos.value.forEach(t => t.completed = value)
+    s.value.forEach(t => t.completed = value)
   }
 })
 
@@ -181,7 +181,7 @@ function addTodo() {
   const text = newTodoText.value.trim()
   if (!text) return
 
-  todos.value.push({
+  s.value.push({
     id: Date.now(),
     text,
     completed: false,
@@ -192,21 +192,21 @@ function addTodo() {
 }
 
 function removeTodo(id) {
-  todos.value = todos.value.filter(t => t.id !== id)
+  s.value = s.value.filter(t => t.id !== id)
 }
 
 function toggleTodo(id) {
-  const todo = todos.value.find(t => t.id === id)
-  if (todo) todo.completed = !todo.completed
+  const = s.value.find(t => t.id === id)
+  if (todo) .completed = !todo.completed
 }
 
 function editTodo(id, newText) {
-  const todo = todos.value.find(t => t.id === id)
-  if (todo) todo.text = newText
+  const = s.value.find(t => t.id === id)
+  if (todo) .text = newText
 }
 
 function clearCompleted() {
-  todos.value = todos.value.filter(t => !t.completed)
+  s.value = s.value.filter(t => !t.completed)
 }
 
 // Persistence
@@ -217,7 +217,7 @@ function saveTodos() {
 function loadTodos() {
   const stored = localStorage.getItem(STORAGE_KEY)
   if (stored) {
-    todos.value = JSON.parse(stored)
+    s.value = JSON.parse(stored)
   }
 }
 
@@ -230,7 +230,7 @@ onMounted(() => {
 
 <template>
   <div class="todo-app">
-    <h1>Vue Todo List</h1>
+    <h1>Vue List</h1>
 
     <div class="add-todo">
       <input
@@ -291,12 +291,12 @@ onMounted(() => {
   </div>
 </template>
 
-<!-- TodoItem Component -->
+<!-- Item Component -->
 <script setup>
 import { ref } from 'vue'
 
 const props = defineProps({
-  todo: {
+   {
     type: Object,
     required: true
   }
@@ -327,15 +327,15 @@ function cancelEdit() {
 </script>
 
 <template>
-  <li :class="{ completed: todo.completed, editing: isEditing }">
+  <li :class="{ completed: .completed, editing: isEditing }">
     <div v-if="!isEditing" class="view">
       <input
         type="checkbox"
         :checked="todo.completed"
-        @change="emit('toggle', todo.id)"
+        @change="emit('toggle', .id)"
       >
-      <label @dblclick="startEdit">{{ todo.text }}</label>
-      <button class="destroy" @click="emit('remove', todo.id)">×</button>
+      <label @dblclick="startEdit">{{ .text }}</label>
+      <button class="destroy" @click="emit('remove', .id)">×</button>
     </div>
 
     <div v-else class="edit-view">

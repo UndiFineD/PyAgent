@@ -3,7 +3,7 @@
 
 # Advanced Research & Experimental Features
 
-The final block of the todo list contains speculative or high‑level research
+The final block of the list contains speculative or high‑level research
 ideas. They do not yet correspond to concrete source code locations, but each
 one can be broken down later into an implementation plan once the research
 lands.

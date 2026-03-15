@@ -938,14 +938,14 @@ Ensure Tailwind scans all files:
 
 ### Production Build Checklist
 
-- [ ] Enable CSS minification
-- [ ] Configure content sources correctly
-- [ ] Remove unused custom utilities
-- [ ] Optimize image assets
-- [ ] Test dark mode variants
-- [ ] Verify responsive breakpoints
-- [ ] Check accessibility (contrast, focus states)
-- [ ] Test performance (Lighthouse scores)
+- Enable CSS minification
+- Configure content sources correctly
+- Remove unused custom utilities
+- Optimize image assets
+- Test dark mode variants
+- Verify responsive breakpoints
+- Check accessibility (contrast, focus states)
+- Test performance (Lighthouse scores)
 
 ## Plugins and Extensions
 

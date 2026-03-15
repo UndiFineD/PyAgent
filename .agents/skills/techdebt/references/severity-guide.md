@@ -9,7 +9,7 @@ How to rank technical debt findings by severity and impact.
 | **P0** | Critical | Block merge | Security vulnerabilities, data loss risks |
 | **P1** | High | Address soon | Major duplication, high complexity |
 | **P2** | Medium | Plan to fix | Minor duplication, moderate complexity |
-| **P3** | Low | Nice to have | Dead code, style issues, minor TODOs |
+| **P3** | Low | Nice to have | Dead code, style issues, minor s |
 
 ## Classification Framework
 
@@ -136,7 +136,7 @@ How to rank technical debt findings by severity and impact.
 
 **Criteria:**
 - Minor style inconsistencies
-- Recent TODOs (<30 days old)
+- Recent s (<30 days old)
 - Small magic numbers
 - Minor naming issues
 
@@ -146,12 +146,12 @@ How to rank technical debt findings by severity and impact.
 
 ### Age-Based Adjustments
 
-**Old TODOs:**
+**Old s:**
 - >90 days → P1 (likely forgotten, needs resolution)
 - 30-90 days → P2 (track and prioritize)
 - <30 days → P3 (fresh, being actively worked on)
 
-**Rationale:** Old TODOs indicate unresolved design decisions or deferred work that should be addressed.
+**Rationale:** Old s indicate unresolved design decisions or deferred work that should be addressed.
 
 ### Context-Based Adjustments
 
@@ -329,10 +329,10 @@ For intentional debt:
 
 ### Pre-Merge Checklist
 
-- [ ] All P0 issues resolved
-- [ ] P1 issues tracked in backlog (with tickets)
-- [ ] Debt score not increased significantly
-- [ ] New code doesn't introduce P0/P1 debt
+- All P0 issues resolved
+- P1 issues tracked in backlog (with tickets)
+- Debt score not increased significantly
+- New code doesn't introduce P0/P1 debt
 
 ### Regular Debt Reviews
 

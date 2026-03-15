@@ -18,32 +18,32 @@ description: Reviews Python code for type safety, async patterns, error handling
 ## Review Checklist
 
 ### PEP8 Style
-- [ ] 4-space indentation (no tabs)
-- [ ] Line length ≤79 characters (≤72 for docstrings/comments)
-- [ ] Two blank lines around top-level definitions, one within classes
-- [ ] Imports grouped: stdlib → third-party → local (blank line between groups)
-- [ ] No whitespace inside brackets or before colons/commas
-- [ ] Naming: `snake_case` for functions/variables, `CamelCase` for classes, `UPPER_CASE` for constants
-- [ ] Inline comments separated by at least two spaces
+- 4-space indentation (no tabs)
+- Line length ≤79 characters (≤72 for docstrings/comments)
+- Two blank lines around top-level definitions, one within classes
+- Imports grouped: stdlib → third-party → local (blank line between groups)
+- No whitespace inside brackets or before colons/commas
+- Naming: `snake_case` for functions/variables, `CamelCase` for classes, `UPPER_CASE` for constants
+- Inline comments separated by at least two spaces
 
 ### Type Safety
-- [ ] Type hints on all function parameters and return types
-- [ ] No `Any` unless necessary (with comment explaining why)
-- [ ] Proper `T | None` syntax (Python 3.10+)
+- Type hints on all function parameters and return types
+- No `Any` unless necessary (with comment explaining why)
+- Proper `T | None` syntax (Python 3.10+)
 
 ### Async Patterns
-- [ ] No blocking calls (`time.sleep`, `requests`) in async functions
-- [ ] Proper `await` on all coroutines
+- No blocking calls (`time.sleep`, `requests`) in async functions
+- Proper `await` on all coroutines
 
 ### Error Handling
-- [ ] No bare `except:` clauses
-- [ ] Specific exception types with context
-- [ ] `raise ... from` to preserve stack traces
+- No bare `except:` clauses
+- Specific exception types with context
+- `raise ... from` to preserve stack traces
 
 ### Common Mistakes
-- [ ] No mutable default arguments
-- [ ] Using `logger` not `print()` for output
-- [ ] f-strings preferred over `.format()` or `%`
+- No mutable default arguments
+- Using `logger` not `print()` for output
+- f-strings preferred over `.format()` or `%`
 
 ## Valid Patterns (Do NOT Flag)
 

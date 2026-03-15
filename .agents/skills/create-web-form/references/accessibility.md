@@ -220,11 +220,11 @@ thresholds.
 
 ### Implementation Checklist
 
-- [ ] Add `@media (prefers-reduced-motion: reduce)` rules to CSS.
-- [ ] Disable auto-play animations when the user preference is set.
-- [ ] Ensure GIFs have pause controls.
-- [ ] Test in Windows and macOS accessibility modes.
-- [ ] Validate against WCAG 2.3.1 (Three Flashes criterion).
+- Add `@media (prefers-reduced-motion: reduce)` rules to CSS.
+- Disable auto-play animations when the user preference is set.
+- Ensure GIFs have pause controls.
+- Test in Windows and macOS accessibility modes.
+- Validate against WCAG 2.3.1 (Three Flashes criterion).
 
 ---
 

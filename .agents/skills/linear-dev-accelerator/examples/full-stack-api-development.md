@@ -195,25 +195,25 @@ description: |
   Response: New access + refresh tokens
 
   ## Implementation Tasks
-  - [ ] Password validation rules
-  - [ ] Email format validation
-  - [ ] Bcrypt password hashing
-  - [ ] JWT token generation
-  - [ ] Refresh token rotation
-  - [ ] Error handling
-  - [ ] Rate limiting (5 attempts/minute)
+  - Password validation rules
+  - Email format validation
+  - Bcrypt password hashing
+  - JWT token generation
+  - Refresh token rotation
+  - Error handling
+  - Rate limiting (5 attempts/minute)
 
   ## Security Checklist
-  - [ ] Passwords never logged
-  - [ ] Tokens properly signed
-  - [ ] Secure HTTP headers
-  - [ ] Input sanitization
+  - Passwords never logged
+  - Tokens properly signed
+  - Secure HTTP headers
+  - Input sanitization
 
   ## Testing
-  - [ ] Unit tests for each endpoint
-  - [ ] Integration tests
-  - [ ] Security tests
-  - [ ] Load tests
+  - Unit tests for each endpoint
+  - Integration tests
+  - Security tests
+  - Load tests
 
   ## Acceptance Criteria
   - All endpoints working
@@ -295,12 +295,12 @@ title: "[Frontend] Setup API client with authentication"
 team: "Frontend"
 description: |
   ## Tasks
-  - [ ] Create Axios instance with base configuration
-  - [ ] Implement request interceptor for auth token
-  - [ ] Implement response interceptor for token refresh
-  - [ ] Handle 401 responses (redirect to login)
-  - [ ] Setup environment variables for API URL
-  - [ ] Create TypeScript types for API responses
+  - Create Axios instance with base configuration
+  - Implement request interceptor for auth token
+  - Implement response interceptor for token refresh
+  - Handle 401 responses (redirect to login)
+  - Setup environment variables for API URL
+  - Create TypeScript types for API responses
 
   ## API Client Structure
   ```typescript
@@ -356,13 +356,13 @@ title: "[Frontend] Authentication flow integration"
 team: "Frontend"
 description: |
   ## Tasks
-  - [ ] Create auth context/provider
-  - [ ] Implement login form
-  - [ ] Implement registration form
-  - [ ] Implement logout functionality
-  - [ ] Implement forgot password flow
-  - [ ] Setup protected routes
-  - [ ] Handle auth state persistence
+  - Create auth context/provider
+  - Implement login form
+  - Implement registration form
+  - Implement logout functionality
+  - Implement forgot password flow
+  - Setup protected routes
+  - Handle auth state persistence
 
   ## Components to Create
   - LoginPage
@@ -407,25 +407,25 @@ title: "[Integration] Task API ↔️ Frontend Task Management"
 team: "Full-Stack"
 description: |
   ## Backend Status
-  - [x] Database schema complete
-  - [x] CRUD endpoints implemented
-  - [ ] Filtering/sorting endpoints
-  - [ ] File upload endpoint
-  - [ ] WebSocket events
+  - Database schema complete
+  - CRUD endpoints implemented
+  - Filtering/sorting endpoints
+  - File upload endpoint
+  - WebSocket events
 
   ## Frontend Status
-  - [x] API client setup
-  - [x] Task components created
-  - [ ] List view implementation
-  - [ ] Create/Edit forms
-  - [ ] File upload UI
+  - API client setup
+  - Task components created
+  - List view implementation
+  - Create/Edit forms
+  - File upload UI
 
   ## Integration Checklist
-  - [ ] API types synced with frontend
-  - [ ] Error handling coordinated
-  - [ ] Loading states consistent
-  - [ ] Validation rules match
-  - [ ] E2E tests passing
+  - API types synced with frontend
+  - Error handling coordinated
+  - Loading states consistent
+  - Validation rules match
+  - E2E tests passing
 
   ## Blockers
   - ⚠️ Frontend blocked on file upload endpoint
@@ -456,19 +456,19 @@ description: |
   ## Documentation Requirements
 
   ### OpenAPI Spec
-  - [ ] All endpoints documented
-  - [ ] Request schemas defined
-  - [ ] Response schemas defined
-  - [ ] Error responses documented
-  - [ ] Authentication documented
-  - [ ] Examples for all endpoints
+  - All endpoints documented
+  - Request schemas defined
+  - Response schemas defined
+  - Error responses documented
+  - Authentication documented
+  - Examples for all endpoints
 
   ### Additional Documentation
-  - [ ] Postman collection updated
-  - [ ] README with quickstart
-  - [ ] Authentication guide
-  - [ ] Error handling guide
-  - [ ] Rate limiting docs
+  - Postman collection updated
+  - README with quickstart
+  - Authentication guide
+  - Error handling guide
+  - Rate limiting docs
 
   ## Tools
   - Swagger UI hosted at /api-docs
@@ -500,25 +500,25 @@ description: |
   ## Test Coverage Requirements
 
   ### Unit Tests (80% coverage)
-  - [ ] Auth service tests
-  - [ ] Task service tests
-  - [ ] User service tests
-  - [ ] Validation tests
-  - [ ] Utility function tests
+  - Auth service tests
+  - Task service tests
+  - User service tests
+  - Validation tests
+  - Utility function tests
 
   ### Integration Tests
-  - [ ] Auth endpoints (register, login, logout, refresh)
-  - [ ] Task CRUD operations
-  - [ ] Project CRUD operations
-  - [ ] Comment operations
-  - [ ] File upload/download
-  - [ ] Authorization checks
+  - Auth endpoints (register, login, logout, refresh)
+  - Task CRUD operations
+  - Project CRUD operations
+  - Comment operations
+  - File upload/download
+  - Authorization checks
 
   ### E2E Tests
-  - [ ] Complete user workflows
-  - [ ] Error scenarios
-  - [ ] Rate limiting
-  - [ ] Concurrent requests
+  - Complete user workflows
+  - Error scenarios
+  - Rate limiting
+  - Concurrent requests
 
   ## Test Framework
   - Jest for unit tests
@@ -548,23 +548,23 @@ description: |
   ## Test Coverage
 
   ### Unit Tests (70% coverage)
-  - [ ] Component tests (React Testing Library)
-  - [ ] Hook tests
-  - [ ] Utility function tests
-  - [ ] API client tests (mocked)
+  - Component tests (React Testing Library)
+  - Hook tests
+  - Utility function tests
+  - API client tests (mocked)
 
   ### Integration Tests
-  - [ ] Auth flow tests (with mocked API)
-  - [ ] Task management flow
-  - [ ] Form validation
-  - [ ] Error handling
+  - Auth flow tests (with mocked API)
+  - Task management flow
+  - Form validation
+  - Error handling
 
   ### E2E Tests (Cypress)
-  - [ ] Login/Register flow
-  - [ ] Create/Edit task flow
-  - [ ] Project management
-  - [ ] File upload
-  - [ ] Responsive design
+  - Login/Register flow
+  - Create/Edit task flow
+  - Project management
+  - File upload
+  - Responsive design
 
   ## Test Framework
   - Jest + React Testing Library
@@ -596,39 +596,39 @@ description: |
   ## Containerization
 
   ### Backend Dockerfile
-  - [ ] Multi-stage build for optimization
-  - [ ] Production dependencies only
-  - [ ] Health check endpoint
-  - [ ] Non-root user
+  - Multi-stage build for optimization
+  - Production dependencies only
+  - Health check endpoint
+  - Non-root user
 
   ### Frontend Dockerfile
-  - [ ] Nginx for serving static files
-  - [ ] GZIP compression
-  - [ ] Cache headers
-  - [ ] Security headers
+  - Nginx for serving static files
+  - GZIP compression
+  - Cache headers
+  - Security headers
 
   ### Docker Compose
-  - [ ] Development environment
-  - [ ] Backend + Frontend + Database
-  - [ ] Volume mounts for hot reload
-  - [ ] Environment variables
+  - Development environment
+  - Backend + Frontend + Database
+  - Volume mounts for hot reload
+  - Environment variables
 
   ## AWS Deployment
 
   ### Infrastructure
-  - [ ] ECS cluster setup
-  - [ ] RDS PostgreSQL instance
-  - [ ] Application Load Balancer
-  - [ ] CloudFront CDN for frontend
-  - [ ] S3 bucket for file uploads
-  - [ ] Route53 DNS configuration
+  - ECS cluster setup
+  - RDS PostgreSQL instance
+  - Application Load Balancer
+  - CloudFront CDN for frontend
+  - S3 bucket for file uploads
+  - Route53 DNS configuration
 
   ### CI/CD Pipeline
-  - [ ] GitHub Actions workflow
-  - [ ] Automated testing
-  - [ ] Docker image builds
-  - [ ] ECS deployment
-  - [ ] Rollback strategy
+  - GitHub Actions workflow
+  - Automated testing
+  - Docker image builds
+  - ECS deployment
+  - Rollback strategy
 
   ## Acceptance Criteria
   - App deploys successfully

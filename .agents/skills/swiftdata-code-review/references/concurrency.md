@@ -155,11 +155,11 @@ class ViewModel {
 
 ## Review Questions
 
-- [ ] Is @ModelActor used for heavy data operations?
-- [ ] Are model objects passed between actors? (They shouldn't be)
-- [ ] Is Task.detached used for background actor creation?
-- [ ] Is explicit `save()` called in Task contexts?
-- [ ] Are ViewModels marked @Observable @MainActor?
-- [ ] Are Sendable DTOs used for cross-actor data?
-- [ ] Could a single actor become a bottleneck?
-- [ ] Are PersistentIdentifiers used for cross-context references?
+- Is @ModelActor used for heavy data operations?
+- Are model objects passed between actors? (They shouldn't be)
+- Is Task.detached used for background actor creation?
+- Is explicit `save()` called in Task contexts?
+- Are ViewModels marked @Observable @MainActor?
+- Are Sendable DTOs used for cross-actor data?
+- Could a single actor become a bottleneck?
+- Are PersistentIdentifiers used for cross-context references?

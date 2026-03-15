@@ -384,7 +384,7 @@ export const user = writable({
   loggedIn: false
 });
 
-export const todos = writable([]);
+export const s = writable([]);
 
 // Custom store with methods
 function createCounter() {
@@ -463,24 +463,24 @@ export const mousePosition = readable({ x: 0, y: 0 }, (set) => {
 // stores.js
 import { writable, derived } from 'svelte/store';
 
-export const todos = writable([
+export const s = writable([
   { id: 1, text: 'Buy milk', done: false },
   { id: 2, text: 'Walk dog', done: true },
   { id: 3, text: 'Code review', done: false }
 ]);
 
 export const completedTodos = derived(
-  todos,
+  s,
   $todos => $todos.filter(t => t.done)
 );
 
 export const activeTodos = derived(
-  todos,
+  s,
   $todos => $todos.filter(t => !t.done)
 );
 
-export const todoStats = derived(
-  todos,
+export const Stats = derived(
+  s,
   $todos => ({
     total: $todos.length,
     completed: $todos.filter(t => t.done).length,
@@ -784,21 +784,21 @@ Svelte provides built-in transitions and animations for smooth UI effects.
   import { flip } from 'svelte/animate';
   import { quintOut } from 'svelte/easing';
 
-  let todos = $state([
+  let s = $state([
     { id: 1, text: 'Buy milk' },
     { id: 2, text: 'Walk dog' },
     { id: 3, text: 'Code review' }
   ]);
 
   function shuffle() {
-    todos = todos.sort(() => Math.random() - 0.5);
+    s = s.sort(() => Math.random() - 0.5);
   }
 </script>
 
 <button on:click={shuffle}>Shuffle</button>
 
 <ul>
-  {#each todos as todo (todo.id)}
+  {#each s as (todo.id)}
     <li animate:flip={{ duration: 300, easing: quintOut }}>
       {todo.text}
     </li>
@@ -829,13 +829,13 @@ Svelte provides built-in transitions and animations for smooth UI effects.
     }
   });
 
-  let todos = $state([
+  let s = $state([
     { id: 1, text: 'Buy milk', done: false },
     { id: 2, text: 'Walk dog', done: true }
   ]);
 
   function toggleDone(id) {
-    todos = todos.map(t =>
+    s = s.map(t =>
       t.id === id ? { ...t, done: !t.done } : t
     );
   }
@@ -844,11 +844,11 @@ Svelte provides built-in transitions and animations for smooth UI effects.
 <div class="board">
   <div class="column">
     <h2>Todo</h2>
-    {#each todos.filter(t => !t.done) as todo (todo.id)}
+    {#each s.filter(t => !t.done) as (todo.id)}
       <div
         class="card"
-        in:receive={{ key: todo.id }}
-        out:send={{ key: todo.id }}
+        in:receive={{ key: .id }}
+        out:send={{ key: .id }}
         on:click={() => toggleDone(todo.id)}
       >
         {todo.text}
@@ -858,11 +858,11 @@ Svelte provides built-in transitions and animations for smooth UI effects.
 
   <div class="column">
     <h2>Done</h2>
-    {#each todos.filter(t => t.done) as todo (todo.id)}
+    {#each s.filter(t => t.done) as (todo.id)}
       <div
         class="card"
-        in:receive={{ key: todo.id }}
-        out:send={{ key: todo.id }}
+        in:receive={{ key: .id }}
+        out:send={{ key: .id }}
         on:click={() => toggleDone(todo.id)}
       >
         {todo.text}
@@ -1083,13 +1083,13 @@ Svelte provides powerful two-way binding capabilities.
 
 **Container/Presenter Pattern:**
 ```svelte
-<!-- TodoContainer.svelte -->
+<!-- Container.svelte -->
 <script>
-  import TodoList from './TodoList.svelte';
-  import { todos } from './stores.js';
+  import List from './TodoList.svelte';
+  import { s } from './stores.js';
 
   function addTodo(text) {
-    todos.update(list => [...list, {
+    s.update(list => [...list, {
       id: Date.now(),
       text,
       done: false
@@ -1097,26 +1097,26 @@ Svelte provides powerful two-way binding capabilities.
   }
 
   function toggleTodo(id) {
-    todos.update(list => list.map(t =>
+    s.update(list => list.map(t =>
       t.id === id ? { ...t, done: !t.done } : t
     ));
   }
 
   function deleteTodo(id) {
-    todos.update(list => list.filter(t => t.id !== id));
+    s.update(list => list.filter(t => t.id !== id));
   }
 </script>
 
 <TodoList
-  todos={$todos}
+  s={$todos}
   onAdd={addTodo}
   onToggle={toggleTodo}
   onDelete={deleteTodo}
 />
 
-<!-- TodoList.svelte (Presenter) -->
+<!-- List.svelte (Presenter) -->
 <script>
-  let { todos, onAdd, onToggle, onDelete } = $props();
+  let { s, onAdd, onToggle, onDelete } = $props();
   let newTodo = $state('');
 
   function handleSubmit() {
@@ -1128,12 +1128,12 @@ Svelte provides powerful two-way binding capabilities.
 </script>
 
 <form on:submit|preventDefault={handleSubmit}>
-  <input bind:value={newTodo} placeholder="Add todo" />
+  <input bind:value={newTodo} placeholder="Add " />
   <button type="submit">Add</button>
 </form>
 
 <ul>
-  {#each todos as todo}
+  {#each s as }
     <li>
       <input
         type="checkbox"
@@ -1613,6 +1613,6 @@ This Svelte development skill covers:
 7. **Bindings**: Input, component, element bindings
 8. **Workflow Patterns**: Component composition, state management, forms, data fetching
 9. **Best Practices**: Performance, accessibility, TypeScript, CSS scoping
-10. **Real-world Patterns**: Todo apps, modals, forms with validation
+10. **Real-world Patterns**: apps, modals, forms with validation
 
 All patterns are based on Svelte 5 with runes and represent modern Svelte development practices focusing on compile-time optimization and reactive programming.

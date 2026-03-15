@@ -16,16 +16,16 @@ description: Reviews PostgreSQL code for indexing strategies, JSONB operations, 
 
 ## Review Checklist
 
-- [ ] WHERE/JOIN columns have appropriate indexes
-- [ ] Composite indexes match query patterns (column order matters)
-- [ ] JSONB columns use GIN indexes when queried
-- [ ] Using proper JSONB operators (`->`, `->>`, `@>`, `?`)
-- [ ] Connection pool configured with appropriate limits
-- [ ] Connections properly released (context managers, try/finally)
-- [ ] Appropriate transaction isolation level for use case
-- [ ] No long-running transactions holding locks
-- [ ] Advisory locks used for application-level coordination
-- [ ] Queries use parameterized statements (no SQL injection)
+- WHERE/JOIN columns have appropriate indexes
+- Composite indexes match query patterns (column order matters)
+- JSONB columns use GIN indexes when queried
+- Using proper JSONB operators (`->`, `->>`, `@>`, `?`)
+- Connection pool configured with appropriate limits
+- Connections properly released (context managers, try/finally)
+- Appropriate transaction isolation level for use case
+- No long-running transactions holding locks
+- Advisory locks used for application-level coordination
+- Queries use parameterized statements (no SQL injection)
 
 ## When to Load References
 

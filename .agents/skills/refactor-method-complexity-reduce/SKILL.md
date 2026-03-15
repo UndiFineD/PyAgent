@@ -90,9 +90,9 @@ The refactored method should:
 5. **Check cognitive complexity** - Confirm the metric is at or below the target threshold of `${input:complexityThreshold}`
 
 ## Confirmation Checklist
-- [ ] Code compiles without errors
-- [ ] **Test results explicitly state "failed=0"** (verified by reading the output)
-- [ ] All test failures analyzed and corrected (if any occurred)
-- [ ] Cognitive complexity is at or below the target threshold of `${input:complexityThreshold}`
-- [ ] All original functionality is preserved
-- [ ] Code follows project conventions and standards
+- Code compiles without errors
+- **Test results explicitly state "failed=0"** (verified by reading the output)
+- All test failures analyzed and corrected (if any occurred)
+- Cognitive complexity is at or below the target threshold of `${input:complexityThreshold}`
+- All original functionality is preserved
+- Code follows project conventions and standards

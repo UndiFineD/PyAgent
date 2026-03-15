@@ -16,18 +16,18 @@ description: Reviews WidgetKit code for timeline management, view composition, c
 
 ## Review Checklist
 
-- [ ] `placeholder(in:)` returns immediately without async work
-- [ ] Timeline entries spaced at least 5 minutes apart
-- [ ] `getSnapshot` checks `context.isPreview` for gallery previews
-- [ ] `containerBackground(for:)` used for iOS 17+ compatibility
-- [ ] `widgetURL` used for systemSmall (not Link)
-- [ ] No Button views (use Link or widgetURL)
-- [ ] No AsyncImage or UIViewRepresentable in widget views
-- [ ] Images downsampled to widget display size (~30MB limit)
-- [ ] App Groups configured for data sharing between app and widget
-- [ ] EntityQuery implements `defaultResult()` for non-optional parameters
-- [ ] New intent parameters handle nil for existing widgets after updates
-- [ ] `reloadTimelines` called strategically (not on every data change)
+- `placeholder(in:)` returns immediately without async work
+- Timeline entries spaced at least 5 minutes apart
+- `getSnapshot` checks `context.isPreview` for gallery previews
+- `containerBackground(for:)` used for iOS 17+ compatibility
+- `widgetURL` used for systemSmall (not Link)
+- No Button views (use Link or widgetURL)
+- No AsyncImage or UIViewRepresentable in widget views
+- Images downsampled to widget display size (~30MB limit)
+- App Groups configured for data sharing between app and widget
+- EntityQuery implements `defaultResult()` for non-optional parameters
+- New intent parameters handle nil for existing widgets after updates
+- `reloadTimelines` called strategically (not on every data change)
 
 ## When to Load References
 

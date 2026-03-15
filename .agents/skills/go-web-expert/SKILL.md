@@ -394,32 +394,32 @@ func (s *UserService) Delete(ctx context.Context, id string) error {
 Before considering any handler or service complete, verify all five rules:
 
 ### Zero Global State
-- [ ] No package-level `var` for mutable state (db, logger, clients)
-- [ ] All handlers are methods on a struct
-- [ ] Dependencies injected through constructor
+- No package-level `var` for mutable state (db, logger, clients)
+- All handlers are methods on a struct
+- Dependencies injected through constructor
 
 ### Explicit Error Handling
-- [ ] No `_` ignoring returned errors
-- [ ] All errors wrapped with `fmt.Errorf("doing X: %w", err)`
-- [ ] `json.NewEncoder(w).Encode(...)` error checked or logged
-- [ ] Structured `AppError` used for HTTP error responses
+- No `_` ignoring returned errors
+- All errors wrapped with `fmt.Errorf("doing X: %w", err)`
+- `json.NewEncoder(w).Encode(...)` error checked or logged
+- Structured `AppError` used for HTTP error responses
 
 ### Validation First
-- [ ] All request structs have `validate` tags
-- [ ] `validate.Struct(req)` called before any business logic
-- [ ] Validation errors return 422 with field-level detail
-- [ ] Service layer does not re-validate handler-validated data
+- All request structs have `validate` tags
+- `validate.Struct(req)` called before any business logic
+- Validation errors return 422 with field-level detail
+- Service layer does not re-validate handler-validated data
 
 ### Testability
-- [ ] `_test.go` file exists for every handler file
-- [ ] Tests use `httptest.NewRequest` and `httptest.NewRecorder`
-- [ ] Table-driven tests cover happy path and error paths
-- [ ] Mocks implement narrow interfaces, not concrete types
+- `_test.go` file exists for every handler file
+- Tests use `httptest.NewRequest` and `httptest.NewRecorder`
+- Table-driven tests cover happy path and error paths
+- Mocks implement narrow interfaces, not concrete types
 
 ### Documentation
-- [ ] Every exported function has a doc comment starting with its name
-- [ ] Error return values are documented
-- [ ] Package has a doc comment
+- Every exported function has a doc comment starting with its name
+- Error return values are documented
+- Package has a doc comment
 
 ## When to Load References
 

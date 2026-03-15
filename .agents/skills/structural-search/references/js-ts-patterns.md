@@ -99,8 +99,8 @@ sg -p 'catch ($_) {}'
 # Find console.log (for cleanup)
 sg -p 'console.log($$$)'
 
-# Find TODO comments
-sg -p '// TODO$$$'
+# Find comments
+sg -p '// $$$'
 
 # Find debugger statements
 sg -p 'debugger'

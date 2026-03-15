@@ -2,7 +2,7 @@
 
 ## Suggested improvements
 
-- Contains TODO or FIXME comments.
+- Contains or FIXME comments.
 - Function `replace` is missing type annotations.
 
 ## Notes

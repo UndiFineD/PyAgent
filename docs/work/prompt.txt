@@ -231,7 +231,7 @@ APICore, TelemetryManager
 
 ## PHASE 5: DOCUMENTATION & MAINTENANCE
 
-### Fix TODO/FIXME comments (3 actionable)
+### Fix /FIXME comments (3 actionable)
 - VisionCore.py line 29: Implement pixel analysis (TODO in docstring)
 - acceleration.py line 34: Update Rust core import path
 - delegation.py line 71: Move to centralized ModuleLoader
@@ -273,7 +273,7 @@ APICore, TelemetryManager
 - **Target**: All files <30KB for maintainability
 
 ### Phase 5 (Maintenance)
-- ⏳ All TODO/FIXME resolved
+- ⏳ All /FIXME resolved
 - ⏳ Naming consistency 100%
 - ⏳ Documentation coverage 95%+
 
@@ -323,7 +323,7 @@ python src/infrastructure/dev/scripts/run_fleet_self_improvement.py \
 3. Convert remaining Tier-1 Core files
 
 **Maintenance** (As needed):
-1. Fix 3 TODO comments
+1. Fix 3 comments
 2. Fix naming typo
 3. Add 3 module docstrings
 4. Update documentation

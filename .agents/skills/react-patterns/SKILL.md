@@ -447,14 +447,14 @@ const cachedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
 ```javascript
 import { useMemo } from 'react';
 
-function TodoList({ todos, filter }) {
-  // Only recompute when todos or filter changes
+function List({ s, filter }) {
+  // Only recompute when s or filter changes
   const visibleTodos = useMemo(() => {
-    console.log('Filtering todos...');
-    return todos.filter(todo => {
+    console.log('Filtering s...');
+    return s.filter(todo => {
       if (filter === 'all') return true;
       if (filter === 'active') return !todo.done;
-      if (filter === 'completed') return todo.done;
+      if (filter === 'completed') return .done;
       return true;
     });
   }, [todos, filter]);
@@ -498,8 +498,8 @@ const cachedFn = useCallback(() => {
 ```javascript
 import { useState, useCallback, memo } from 'react';
 
-const TodoItem = memo(function TodoItem({ todo, onChange, onDelete }) {
-  console.log('TodoItem rendered:', todo.id);
+const Item = memo(function Item({ , onChange, onDelete }) {
+  console.log('TodoItem rendered:', .id);
 
   return (
     <li>
@@ -514,13 +514,13 @@ const TodoItem = memo(function TodoItem({ todo, onChange, onDelete }) {
   );
 });
 
-function TodoList() {
+function List() {
   const [todos, setTodos] = useState([]);
 
-  // Memoize handlers to prevent TodoItem re-renders
+  // Memoize handlers to prevent Item re-renders
   const handleChange = useCallback((todo) => {
     setTodos(prev => prev.map(t =>
-      t.id === todo.id ? { ...t, done: !t.done } : t
+      t.id === .id ? { ...t, done: !t.done } : t
     ));
   }, []);
 
@@ -533,7 +533,7 @@ function TodoList() {
       {todos.map(todo => (
         <TodoItem
           key={todo.id}
-          todo={todo}
+          ={todo}
           onChange={handleChange}
           onDelete={handleDelete}
         />

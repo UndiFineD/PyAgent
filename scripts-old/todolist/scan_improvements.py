@@ -15,7 +15,7 @@ def count_completed_items_in_file(file_path: str) -> tuple[int, int]:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
 
-        # Look for checklist items in the format [ ] or [x]
+        # Look for checklist items in the format or [x]
         total_items = len(re.findall(r'\[ \]', content))
         completed_items = len(re.findall(r'\[x\]', content))
         return total_items, completed_items

@@ -185,11 +185,11 @@ RETURN
 
 ## Validation Checklist
 
-- [ ] All key business metrics have explicit measures
-- [ ] Measures have clear, descriptive names
-- [ ] Measures have descriptions
-- [ ] Appropriate format strings applied
-- [ ] Display folders organize related measures
-- [ ] Column references are fully qualified
-- [ ] Measure references are not qualified
-- [ ] Variables used for complex calculations
+- All key business metrics have explicit measures
+- Measures have clear, descriptive names
+- Measures have descriptions
+- Appropriate format strings applied
+- Display folders organize related measures
+- Column references are fully qualified
+- Measure references are not qualified
+- Variables used for complex calculations

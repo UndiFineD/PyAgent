@@ -998,16 +998,16 @@ class Ticket(BaseModel):
 
 When using this skill, ensure you:
 
-- [ ] Define clear, typed models with appropriate constraints
-- [ ] Implement custom validators for business logic
-- [ ] Handle ValidationError exceptions gracefully
-- [ ] Use appropriate serialization for different contexts (API, database, logs)
-- [ ] Configure models appropriately (frozen, validate_assignment, etc.)
-- [ ] Write comprehensive tests for validation logic
-- [ ] Document models with descriptions and examples
-- [ ] Use BaseSettings for configuration management
-- [ ] Optimize performance for high-volume operations
-- [ ] Follow security best practices for PII and sensitive data
+- Define clear, typed models with appropriate constraints
+- Implement custom validators for business logic
+- Handle ValidationError exceptions gracefully
+- Use appropriate serialization for different contexts (API, database, logs)
+- Configure models appropriately (frozen, validate_assignment, etc.)
+- Write comprehensive tests for validation logic
+- Document models with descriptions and examples
+- Use BaseSettings for configuration management
+- Optimize performance for high-volume operations
+- Follow security best practices for PII and sensitive data
 
 ## References and Resources
 

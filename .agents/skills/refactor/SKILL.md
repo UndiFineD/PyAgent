@@ -594,31 +594,31 @@ Use this skill when:
 
 ### Code Quality
 
-- [ ] Functions are small (< 50 lines)
-- [ ] Functions do one thing
-- [ ] No duplicated code
-- [ ] Descriptive names (variables, functions, classes)
-- [ ] No magic numbers/strings
-- [ ] Dead code removed
+- Functions are small (< 50 lines)
+- Functions do one thing
+- No duplicated code
+- Descriptive names (variables, functions, classes)
+- No magic numbers/strings
+- Dead code removed
 
 ### Structure
 
-- [ ] Related code is together
-- [ ] Clear module boundaries
-- [ ] Dependencies flow in one direction
-- [ ] No circular dependencies
+- Related code is together
+- Clear module boundaries
+- Dependencies flow in one direction
+- No circular dependencies
 
 ### Type Safety
 
-- [ ] Types defined for all public APIs
-- [ ] No `any` types without justification
-- [ ] Nullable types explicitly marked
+- Types defined for all public APIs
+- No `any` types without justification
+- Nullable types explicitly marked
 
 ### Testing
 
-- [ ] Refactored code is tested
-- [ ] Tests cover edge cases
-- [ ] All tests pass
+- Refactored code is tested
+- Tests cover edge cases
+- All tests pass
 
 ---
 

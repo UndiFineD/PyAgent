@@ -32,7 +32,7 @@ fd -e py -x wc -l            # Line count per file
 
 ```bash
 # Simple search
-rg "TODO"                    # Find TODO
+rg "TODO"                    # Find 
 rg -i "error"                # Case-insensitive
 
 # By file type

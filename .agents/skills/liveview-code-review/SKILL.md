@@ -17,26 +17,26 @@ description: Reviews Phoenix LiveView code for lifecycle patterns, assigns/strea
 ## Review Checklist
 
 ### Critical Issues
-- [ ] No socket copying into async functions (extract values first)
-- [ ] Every handle_event validates authorization
-- [ ] No sensitive data in assigns (visible in DOM)
-- [ ] phx-value data is validated (user-modifiable)
+- No socket copying into async functions (extract values first)
+- Every handle_event validates authorization
+- No sensitive data in assigns (visible in DOM)
+- phx-value data is validated (user-modifiable)
 
 ### Lifecycle
-- [ ] Subscriptions wrapped in `connected?(socket)`
-- [ ] handle_params used for URL-based state
-- [ ] handle_async handles :loading and :error states
+- Subscriptions wrapped in `connected?(socket)`
+- handle_params used for URL-based state
+- handle_async handles :loading and :error states
 
 ### Data Management
-- [ ] Streams used for large collections (100+ items)
-- [ ] temporary_assigns for data not needed after render
-- [ ] AsyncResult patterns for loading states
+- Streams used for large collections (100+ items)
+- temporary_assigns for data not needed after render
+- AsyncResult patterns for loading states
 
 ### Components
-- [ ] Function components preferred over LiveComponents
-- [ ] LiveComponents preserve :inner_block in update/2
-- [ ] Slots use proper attr declarations
-- [ ] phx-debounce on text inputs
+- Function components preferred over LiveComponents
+- LiveComponents preserve :inner_block in update/2
+- Slots use proper attr declarations
+- phx-debounce on text inputs
 
 ## Valid Patterns (Do NOT Flag)
 

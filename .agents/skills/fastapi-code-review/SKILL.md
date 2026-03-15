@@ -16,18 +16,18 @@ description: Reviews FastAPI code for routing patterns, dependency injection, va
 
 ## Review Checklist
 
-- [ ] APIRouter with proper prefix and tags
-- [ ] All routes specify `response_model` for type safety
-- [ ] Correct HTTP methods (GET, POST, PUT, DELETE, PATCH)
-- [ ] Proper status codes (200, 201, 204, 404, etc.)
-- [ ] Dependencies use `Depends()` not manual calls
-- [ ] Yield dependencies have proper cleanup
-- [ ] Request/Response models use Pydantic
-- [ ] HTTPException with status code and detail
-- [ ] All route handlers are `async def`
-- [ ] No blocking I/O (`requests`, `time.sleep`, `open()`)
-- [ ] Background tasks for non-blocking operations
-- [ ] No bare `except` in route handlers
+- APIRouter with proper prefix and tags
+- All routes specify `response_model` for type safety
+- Correct HTTP methods (GET, POST, PUT, DELETE, PATCH)
+- Proper status codes (200, 201, 204, 404, etc.)
+- Dependencies use `Depends()` not manual calls
+- Yield dependencies have proper cleanup
+- Request/Response models use Pydantic
+- HTTPException with status code and detail
+- All route handlers are `async def`
+- No blocking I/O (`requests`, `time.sleep`, `open()`)
+- Background tasks for non-blocking operations
+- No bare `except` in route handlers
 
 ## Valid Patterns (Do NOT Flag)
 

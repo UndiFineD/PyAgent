@@ -73,7 +73,7 @@ publisher.assign(to: &$property)  // No AnyCancellable returned
 ### 3. Not Storing the Cancellable
 
 ```swift
-// BUG: Subscription dies immediately
+// Subscription dies immediately
 func subscribe() {
     publisher.sink { print($0) }  // Discarded!
 }

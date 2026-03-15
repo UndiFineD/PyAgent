@@ -150,7 +150,7 @@ request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
 ### 3. Content-Type/Body Mismatch
 
 ```swift
-// BUG: JSON body but wrong Content-Type
+// JSON body but wrong Content-Type
 request.httpBody = try JSONEncoder().encode(user)
 request.setValue("text/plain", forHTTPHeaderField: "Content-Type")
 
@@ -199,19 +199,19 @@ class NetworkManager {
 ## Review Questions
 
 ### Security
-- [ ] Are header values sanitized for CRLF characters?
-- [ ] Are secrets from Keychain, not hardcoded?
-- [ ] Is SSL/TLS validation proper (no blanket trust)?
-- [ ] Are credentials excluded from URLs and logs?
+- Are header values sanitized for CRLF characters?
+- Are secrets from Keychain, not hardcoded?
+- Is SSL/TLS validation proper (no blanket trust)?
+- Are credentials excluded from URLs and logs?
 
 ### Correctness
-- [ ] Does Content-Type match body encoding?
-- [ ] Is HTTP method appropriate (no body on GET)?
-- [ ] Are query parameters built with URLComponents?
-- [ ] Are special characters (+, ;, ,) encoded correctly?
+- Does Content-Type match body encoding?
+- Is HTTP method appropriate (no body on GET)?
+- Are query parameters built with URLComponents?
+- Are special characters (+, ;, ,) encoded correctly?
 
 ### Performance
-- [ ] Is URLSession reused across requests?
-- [ ] Are timeouts configured appropriately?
-- [ ] Are large uploads using file-based API?
-- [ ] Is `timeoutIntervalForResource` set (not 7-day default)?
+- Is URLSession reused across requests?
+- Are timeouts configured appropriately?
+- Are large uploads using file-based API?
+- Is `timeoutIntervalForResource` set (not 7-day default)?

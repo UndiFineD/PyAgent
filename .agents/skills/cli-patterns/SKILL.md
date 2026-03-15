@@ -582,24 +582,24 @@ $ echo $?
 
 ### Must-Have Checklist
 
-- [ ] `<tool> --version`
-- [ ] `<tool> --help` with examples
-- [ ] `<tool> <resource> list [--json]`
-- [ ] `<tool> <resource> get <id> [--json]`
-- [ ] Semantic exit codes (0, 1, 2, 3, 4, 5, 6, 7)
-- [ ] Errors to stderr, data to stdout
-- [ ] Valid JSON on `--json`
-- [ ] Stream separation (stdout = data, stderr = UI)
+- `<tool> --version`
+- `<tool> --help` with examples
+- `<tool> <resource> list [--json]`
+- `<tool> <resource> get <id> [--json]`
+- Semantic exit codes (0, 1, 2, 3, 4, 5, 6, 7)
+- Errors to stderr, data to stdout
+- Valid JSON on `--json`
+- Stream separation (stdout = data, stderr = UI)
 
 ### Recommended Additions
 
-- [ ] Authentication commands (`auth login`, `auth status`, `auth logout`)
-- [ ] Create/Update/Delete operations
-- [ ] `--quiet` and `--verbose` modes
-- [ ] `--dry-run` for mutations
-- [ ] Pagination (`--limit`, `--page`)
-- [ ] Filtering (status, date range, search)
-- [ ] Automated tests
+- Authentication commands (`auth login`, `auth status`, `auth logout`)
+- Create/Update/Delete operations
+- `--quiet` and `--verbose` modes
+- `--dry-run` for mutations
+- Pagination (`--limit`, `--page`)
+- Filtering (status, date range, search)
+- Automated tests
 
 ---
 

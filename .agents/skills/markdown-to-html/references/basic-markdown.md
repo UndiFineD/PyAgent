@@ -349,16 +349,16 @@ For more examples, see the [GitHub Flavored Markdown Spec](https://github.github
 To create a task list, preface list items with a hyphen and space followed by `[ ]`. To mark a task as complete, use `[x]`.
 
 ```markdown
-- [x] #739
-- [ ] https://github.com/octo-org/octo-repo/issues/740
-- [ ] Add delight to the experience when all tasks are complete :tada:
+- #739
+- https://github.com/octo-org/octo-repo/issues/740
+- Add delight to the experience when all tasks are complete :tada:
 ```
 
 ![Screenshot showing the rendered version of the markdown. The references to issues are rendered as issue titles.](https://docs.github.com/assets/images/help/writing/task-list-rendered-simple.png)
 
 If a task list item description begins with a parenthesis, you'll need to escape it with <kbd>\\</kbd>:
 
-`- [ ] \(Optional) Open a followup issue`
+`- \(Optional) Open a followup issue`
 
 For more information, see [About tasklists](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/about-task-lists).
 

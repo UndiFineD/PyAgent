@@ -16,16 +16,16 @@ description: Reviews Go code for idiomatic patterns, error handling, concurrency
 
 ## Review Checklist
 
-- [ ] All errors are checked (no `_ = err`)
-- [ ] Errors wrapped with context (`fmt.Errorf("...: %w", err)`)
-- [ ] Resources closed with `defer` immediately after creation
-- [ ] No goroutine leaks (channels closed, contexts canceled)
-- [ ] Interfaces defined by consumers, not producers
-- [ ] Interface names end in `-er` (Reader, Writer, Handler)
-- [ ] Exported names have doc comments
-- [ ] No naked returns in functions > 5 lines
-- [ ] Context passed as first parameter
-- [ ] Mutexes protect shared state, not methods
+- All errors are checked (no `_ = err`)
+- Errors wrapped with context (`fmt.Errorf("...: %w", err)`)
+- Resources closed with `defer` immediately after creation
+- No goroutine leaks (channels closed, contexts canceled)
+- Interfaces defined by consumers, not producers
+- Interface names end in `-er` (Reader, Writer, Handler)
+- Exported names have doc comments
+- No naked returns in functions > 5 lines
+- Context passed as first parameter
+- Mutexes protect shared state, not methods
 
 ## When to Load References
 

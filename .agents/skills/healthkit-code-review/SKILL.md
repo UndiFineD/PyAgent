@@ -16,18 +16,18 @@ description: Reviews HealthKit code for authorization patterns, query usage, bac
 
 ## Review Checklist
 
-- [ ] `HKHealthStore.isHealthDataAvailable()` called before any HealthKit operations
-- [ ] Authorization requested only for needed data types (minimal permissions)
-- [ ] `requestAuthorization` completion handler not misinterpreted as permission granted
-- [ ] No attempt to determine read permission status (privacy by design)
-- [ ] Query results dispatched to main thread for UI updates
-- [ ] `HKObjectQueryNoLimit` used only with bounded predicates
-- [ ] `HKStatisticsQuery` used for aggregations instead of manual summing
-- [ ] Observer query `completionHandler()` always called (use `defer`)
-- [ ] Background delivery registered in `application(_:didFinishLaunchingWithOptions:)`
-- [ ] Background delivery entitlement added (iOS 15+)
-- [ ] Correct units used for quantity types (e.g., `count/min` for heart rate)
-- [ ] Long-running queries stored as properties and stopped in `deinit`
+- `HKHealthStore.isHealthDataAvailable()` called before any HealthKit operations
+- Authorization requested only for needed data types (minimal permissions)
+- `requestAuthorization` completion handler not misinterpreted as permission granted
+- No attempt to determine read permission status (privacy by design)
+- Query results dispatched to main thread for UI updates
+- `HKObjectQueryNoLimit` used only with bounded predicates
+- `HKStatisticsQuery` used for aggregations instead of manual summing
+- Observer query `completionHandler()` always called (use `defer`)
+- Background delivery registered in `application(_:didFinishLaunchingWithOptions:)`
+- Background delivery entitlement added (iOS 15+)
+- Correct units used for quantity types (e.g., `count/min` for heart rate)
+- Long-running queries stored as properties and stopped in `deinit`
 
 ## When to Load References
 

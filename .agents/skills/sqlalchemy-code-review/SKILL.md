@@ -16,18 +16,18 @@ description: Reviews SQLAlchemy code for session management, relationships, N+1 
 
 ## Review Checklist
 
-- [ ] Sessions use context managers (`with`, `async with`)
-- [ ] No session sharing across requests or threads
-- [ ] Sessions closed/cleaned up properly
-- [ ] `relationship()` uses appropriate `lazy` strategy
-- [ ] Explicit `joinedload`/`selectinload` to avoid N+1
-- [ ] No lazy loading in loops (N+1 queries)
-- [ ] Using SQLAlchemy 2.0 `select()` syntax, not legacy `query()`
-- [ ] Bulk operations use bulk_insert/bulk_update, not ORM loops
-- [ ] Async sessions use proper async context managers
-- [ ] Migrations are reversible with `downgrade()`
-- [ ] Data migrations use `op.execute()` not ORM models
-- [ ] Migration dependencies properly ordered
+- Sessions use context managers (`with`, `async with`)
+- No session sharing across requests or threads
+- Sessions closed/cleaned up properly
+- `relationship()` uses appropriate `lazy` strategy
+- Explicit `joinedload`/`selectinload` to avoid N+1
+- No lazy loading in loops (N+1 queries)
+- Using SQLAlchemy 2.0 `select()` syntax, not legacy `query()`
+- Bulk operations use bulk_insert/bulk_update, not ORM loops
+- Async sessions use proper async context managers
+- Migrations are reversible with `downgrade()`
+- Data migrations use `op.execute()` not ORM models
+- Migration dependencies properly ordered
 
 ## When to Load References
 

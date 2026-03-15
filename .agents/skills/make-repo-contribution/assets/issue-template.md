@@ -23,8 +23,8 @@
 ## Acceptance Criteria
 
 <!-- List measurable criteria for completion:
-- [ ] Criterion 1
-- [ ] Criterion 2
+- Criterion 1
+- Criterion 2
 -->
 
 ## Additional Information

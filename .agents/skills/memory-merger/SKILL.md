@@ -7,7 +7,7 @@ description: 'Merges mature lessons from a domain memory file into its instructi
 
 You consolidate mature learnings from a domain's memory file into its instruction file, ensuring knowledge preservation with minimal redundancy.
 
-**Use the todo list** to track your progress through the process steps and keep the user informed.
+**Use the list** to track your progress through the process steps and keep the user informed.
 
 ## Scopes
 

@@ -86,8 +86,8 @@ function CreateUser() {
 
 ```tsx
 // BAD - Form causes navigation away from current page
-function TodoList() {
-  const todos = useLoaderData<Todo[]>();
+function List() {
+  const s = useLoaderData<Todo[]>();
 
   return (
     <div>
@@ -107,25 +107,25 @@ function TodoList() {
 // GOOD - useFetcher stays on current page
 import { useFetcher } from 'react-router-dom';
 
-function TodoList() {
-  const todos = useLoaderData<Todo[]>();
+function List() {
+  const s = useLoaderData<Todo[]>();
 
   return (
     <div>
       {todos.map(todo => (
-        <TodoItem key={todo.id} todo={todo} />
+        <TodoItem key={todo.id} ={todo} />
       ))}
     </div>
   );
 }
 
-function TodoItem({ todo }) {
+function Item({ }) {
   const fetcher = useFetcher();
 
   // Optimistic UI - show state immediately
   const isComplete = fetcher.formData
     ? fetcher.formData.get('complete') === 'true'
-    : todo.complete;
+    : .complete;
 
   return (
     <div>

@@ -384,12 +384,12 @@ yappi.get_func_stats().print_all()
 ## Performance Checklist
 
 ```markdown
-- [ ] uvloop installed and configured
-- [ ] Connection pools properly sized
-- [ ] Timeouts on all external calls
-- [ ] Semaphores limiting concurrency
-- [ ] Large responses streamed
-- [ ] DNS caching enabled
-- [ ] Connection keep-alive configured
-- [ ] Profiling in place for hot paths
+- uvloop installed and configured
+- Connection pools properly sized
+- Timeouts on all external calls
+- Semaphores limiting concurrency
+- Large responses streamed
+- DNS caching enabled
+- Connection keep-alive configured
+- Profiling in place for hot paths
 ```

@@ -427,21 +427,21 @@ Disk (L5)    ──── accessed recently ──►  RAM (L3/L4)
 ## Open Questions / Future Work
 
 ### Implementation work (priority order)
-- [ ] Implement `#[pyclass] MemoryStore` with `get`/`set`/`store`/`query` in `rust_core/src/memory.rs`; delete `src/core/memory.py` and `src/memory/__init__.py`
-- [ ] Implement `#[pyclass] SharedMemory` (`DashMap`) and `#[pyclass] AgentMemory` (`HashMap`) in `rust_core/src/memory.rs`; delete `src/swarm/memory.py`
-- [ ] Implement `#[pyclass] MemoryTransaction` with `__aenter__`/`__aexit__`, WAL journal via `rusqlite`
-- [ ] Implement `#[pyclass] EncryptedMemoryBlock` with `put`/`get`/`purge`/`used_bytes`/`slab_count` in `rust_core/src/memory.rs` (ECDH X25519 + HKDF-SHA256 → DEK, ChaCha20-Poly1305 per entry, growable 1 MB warm + 10 MB slabs)
-- [ ] Implement `#[pyclass] MemoryBlockRegistry` with `allocate`/`get_block`/`release`/`total_used_bytes` — `DashMap` keyed by SHA-256(owner_pubkey); constant-time fingerprint compare via `subtle` crate
-- [ ] Add `x25519-dalek`, `dashmap`, `zeroize`, `uuid`, `subtle` to `rust_core/Cargo.toml`
-- [ ] Route `MemoryStore`, `AgentMemory`, `EpisodeStore` writes through `EncryptedMemoryBlock.put()` — no raw plaintext held outside a single call
-- [ ] Implement encrypted disk tier in Rust (`bincode` + `ring` Ed25519/X25519 + `rusqlite` WAL); no Python surface; disk tier writes slab ciphertext verbatim (DEK handles encryption)
-- [ ] Implement `#[pyclass] EpisodeStore` in `rust_core/src/agents/memory.rs`; wire persistence to disk tier
-- [ ] Wire `pyo3-asyncio` for all `async fn` methods across all `#[pyclass]` types
-- [ ] Expose Graph index via `petgraph` `DiGraph` in Rust; add `#[pymethods]` for relationship queries
-- [ ] Synaptic pruning background task (`tokio::spawn`) in Rust — configurable TTL + `utility_floor`
-- [ ] Memory compression for archived entries (`zstd` crate, pure Rust)
-- [ ] Horizontal sharding for fleet-scale `SharedMemory`
-- [ ] ML-based prefetch prediction (access pattern learning)
+- Implement `#[pyclass] MemoryStore` with `get`/`set`/`store`/`query` in `rust_core/src/memory.rs`; delete `src/core/memory.py` and `src/memory/__init__.py`
+- Implement `#[pyclass] SharedMemory` (`DashMap`) and `#[pyclass] AgentMemory` (`HashMap`) in `rust_core/src/memory.rs`; delete `src/swarm/memory.py`
+- Implement `#[pyclass] MemoryTransaction` with `__aenter__`/`__aexit__`, WAL journal via `rusqlite`
+- Implement `#[pyclass] EncryptedMemoryBlock` with `put`/`get`/`purge`/`used_bytes`/`slab_count` in `rust_core/src/memory.rs` (ECDH X25519 + HKDF-SHA256 → DEK, ChaCha20-Poly1305 per entry, growable 1 MB warm + 10 MB slabs)
+- Implement `#[pyclass] MemoryBlockRegistry` with `allocate`/`get_block`/`release`/`total_used_bytes` — `DashMap` keyed by SHA-256(owner_pubkey); constant-time fingerprint compare via `subtle` crate
+- Add `x25519-dalek`, `dashmap`, `zeroize`, `uuid`, `subtle` to `rust_core/Cargo.toml`
+- Route `MemoryStore`, `AgentMemory`, `EpisodeStore` writes through `EncryptedMemoryBlock.put()` — no raw plaintext held outside a single call
+- Implement encrypted disk tier in Rust (`bincode` + `ring` Ed25519/X25519 + `rusqlite` WAL); no Python surface; disk tier writes slab ciphertext verbatim (DEK handles encryption)
+- Implement `#[pyclass] EpisodeStore` in `rust_core/src/agents/memory.rs`; wire persistence to disk tier
+- Wire `pyo3-asyncio` for all `async fn` methods across all `#[pyclass]` types
+- Expose Graph index via `petgraph` `DiGraph` in Rust; add `#[pymethods]` for relationship queries
+- Synaptic pruning background task (`tokio::spawn`) in Rust — configurable TTL + `utility_floor`
+- Memory compression for archived entries (`zstd` crate, pure Rust)
+- Horizontal sharding for fleet-scale `SharedMemory`
+- ML-based prefetch prediction (access pattern learning)
 
 ---
 

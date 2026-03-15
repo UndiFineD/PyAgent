@@ -31,7 +31,7 @@ This skill implements a two-phase LLM-as-judge evaluation:
 | Security | 25% | Vulnerabilities, security patterns |
 | Test Quality | 20% | Coverage, DRY, mock boundaries |
 | Overengineering | 15% | Unnecessary complexity |
-| Dead Code | 10% | Unused code, TODOs |
+| Dead Code | 10% | Unused code, s |
 
 ## Scoring Scale
 

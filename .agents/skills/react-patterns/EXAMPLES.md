@@ -653,13 +653,13 @@ export default useDocumentTitle;
 
 ## Performance Examples
 
-### 7. Optimized Todo List
+### 7. Optimized List
 
 ```javascript
 import { useState, useMemo, useCallback, memo } from 'react';
 
-const TodoItem = memo(function TodoItem({ todo, onToggle, onDelete }) {
-  console.log('Rendering TodoItem:', todo.id);
+const Item = memo(function Item({ , onToggle, onDelete }) {
+  console.log('Rendering Item:', .id);
 
   return (
     <li className={todo.completed ? 'completed' : ''}>
@@ -674,7 +674,7 @@ const TodoItem = memo(function TodoItem({ todo, onToggle, onDelete }) {
   );
 });
 
-function TodoList() {
+function List() {
   const [todos, setTodos] = useState([
     { id: 1, text: 'Learn React', completed: false },
     { id: 2, text: 'Build a project', completed: false },
@@ -683,16 +683,16 @@ function TodoList() {
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Memoized filtered and searched todos
+  // Memoized filtered and searched s
   const filteredTodos = useMemo(() => {
-    console.log('Filtering todos...');
+    console.log('Filtering s...');
 
-    let result = todos;
+    let result = s;
 
     // Apply search filter
     if (searchTerm) {
       result = result.filter(todo =>
-        todo.text.toLowerCase().includes(searchTerm.toLowerCase())
+        .text.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -700,7 +700,7 @@ function TodoList() {
     if (filter === 'active') {
       result = result.filter(todo => !todo.completed);
     } else if (filter === 'completed') {
-      result = result.filter(todo => todo.completed);
+      result = result.filter(todo => .completed);
     }
 
     return result;
@@ -708,20 +708,20 @@ function TodoList() {
 
   // Memoized statistics
   const stats = useMemo(() => ({
-    total: todos.length,
-    active: todos.filter(t => !t.completed).length,
-    completed: todos.filter(t => t.completed).length
+    total: s.length,
+    active: s.filter(t => !t.completed).length,
+    completed: s.filter(t => t.completed).length
   }), [todos]);
 
   // Memoized callbacks
   const handleToggle = useCallback((id) => {
     setTodos(prev => prev.map(todo =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      .id === id ? { ...todo, completed: !todo.completed } : 
     ));
   }, []);
 
   const handleDelete = useCallback((id) => {
-    setTodos(prev => prev.filter(todo => todo.id !== id));
+    setTodos(prev => prev.filter(todo => .id !== id));
   }, []);
 
   const handleAdd = useCallback((text) => {
@@ -735,7 +735,7 @@ function TodoList() {
 
   return (
     <div className="todo-list">
-      <h1>Optimized Todo List</h1>
+      <h1>Optimized List</h1>
 
       <div className="stats">
         <span>Total: {stats.total}</span>
@@ -745,7 +745,7 @@ function TodoList() {
 
       <input
         type="text"
-        placeholder="Search todos..."
+        placeholder="Search s..."
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
       />
@@ -775,7 +775,7 @@ function TodoList() {
         {filteredTodos.map(todo => (
           <TodoItem
             key={todo.id}
-            todo={todo}
+            ={todo}
             onToggle={handleToggle}
             onDelete={handleDelete}
           />
@@ -804,14 +804,14 @@ const AddTodoForm = memo(function AddTodoForm({ onAdd }) {
         type="text"
         value={text}
         onChange={e => setText(e.target.value)}
-        placeholder="Add new todo..."
+        placeholder="Add new ..."
       />
       <button type="submit">Add</button>
     </form>
   );
 });
 
-export default TodoList;
+export default List;
 ```
 
 ### 8. Virtual Scroll List

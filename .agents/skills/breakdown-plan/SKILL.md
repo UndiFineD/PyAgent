@@ -104,21 +104,21 @@ graph TD
 
 ## Epic Acceptance Criteria
 
-- [ ] {High-level requirement 1}
-- [ ] {High-level requirement 2}
-- [ ] {High-level requirement 3}
+- {High-level requirement 1}
+- {High-level requirement 2}
+- {High-level requirement 3}
 
 ## Features in this Epic
 
-- [ ] #{feature-issue-number} - {Feature Name}
+- #{feature-issue-number} - {Feature Name}
 
 ## Definition of Done
 
-- [ ] All feature stories completed
-- [ ] End-to-end testing passed
-- [ ] Performance benchmarks met
-- [ ] Documentation updated
-- [ ] User acceptance testing completed
+- All feature stories completed
+- End-to-end testing passed
+- Performance benchmarks met
+- Documentation updated
+- User acceptance testing completed
 
 ## Labels
 
@@ -144,13 +144,13 @@ graph TD
 
 ## User Stories in this Feature
 
-- [ ] #{story-issue-number} - {User Story Title}
-- [ ] #{story-issue-number} - {User Story Title}
+- #{story-issue-number} - {User Story Title}
+- #{story-issue-number} - {User Story Title}
 
 ## Technical Enablers
 
-- [ ] #{enabler-issue-number} - {Enabler Title}
-- [ ] #{enabler-issue-number} - {Enabler Title}
+- #{enabler-issue-number} - {Enabler Title}
+- #{enabler-issue-number} - {Enabler Title}
 
 ## Dependencies
 
@@ -159,16 +159,16 @@ graph TD
 
 ## Acceptance Criteria
 
-- [ ] {Feature-level requirement 1}
-- [ ] {Feature-level requirement 2}
+- {Feature-level requirement 1}
+- {Feature-level requirement 2}
 
 ## Definition of Done
 
-- [ ] All user stories delivered
-- [ ] Technical enablers completed
-- [ ] Integration testing passed
-- [ ] UX review approved
-- [ ] Performance testing completed
+- All user stories delivered
+- Technical enablers completed
+- Integration testing passed
+- UX review approved
+- Performance testing completed
 
 ## Labels
 
@@ -194,18 +194,18 @@ As a **{user type}**, I want **{goal}** so that **{benefit}**.
 
 ## Acceptance Criteria
 
-- [ ] {Specific testable requirement 1}
-- [ ] {Specific testable requirement 2}
-- [ ] {Specific testable requirement 3}
+- {Specific testable requirement 1}
+- {Specific testable requirement 2}
+- {Specific testable requirement 3}
 
 ## Technical Tasks
 
-- [ ] #{task-issue-number} - {Implementation task}
-- [ ] #{task-issue-number} - {Integration task}
+- #{task-issue-number} - {Implementation task}
+- #{task-issue-number} - {Integration task}
 
 ## Testing Requirements
 
-- [ ] #{test-issue-number} - {Test implementation}
+- #{test-issue-number} - {Test implementation}
 
 ## Dependencies
 
@@ -213,12 +213,12 @@ As a **{user type}**, I want **{goal}** so that **{benefit}**.
 
 ## Definition of Done
 
-- [ ] Acceptance criteria met
-- [ ] Code review approved
-- [ ] Unit tests written and passing
-- [ ] Integration tests passing
-- [ ] UX design implemented
-- [ ] Accessibility requirements met
+- Acceptance criteria met
+- Code review approved
+- Unit tests written and passing
+- Integration tests passing
+- UX design implemented
+- Accessibility requirements met
 
 ## Labels
 
@@ -244,13 +244,13 @@ As a **{user type}**, I want **{goal}** so that **{benefit}**.
 
 ## Technical Requirements
 
-- [ ] {Technical requirement 1}
-- [ ] {Technical requirement 2}
+- {Technical requirement 1}
+- {Technical requirement 2}
 
 ## Implementation Tasks
 
-- [ ] #{task-issue-number} - {Implementation detail}
-- [ ] #{task-issue-number} - {Infrastructure setup}
+- #{task-issue-number} - {Implementation detail}
+- #{task-issue-number} - {Infrastructure setup}
 
 ## User Stories Enabled
 
@@ -261,17 +261,17 @@ This enabler supports:
 
 ## Acceptance Criteria
 
-- [ ] {Technical validation 1}
-- [ ] {Technical validation 2}
-- [ ] Performance benchmarks met
+- {Technical validation 1}
+- {Technical validation 2}
+- Performance benchmarks met
 
 ## Definition of Done
 
-- [ ] Implementation completed
-- [ ] Unit tests written
-- [ ] Integration tests passing
-- [ ] Documentation updated
-- [ ] Code review approved
+- Implementation completed
+- Unit tests written
+- Integration tests passing
+- Documentation updated
+- Code review approved
 
 ## Labels
 
@@ -453,32 +453,32 @@ jobs:
 
 #### Pre-Creation Preparation
 
-- [ ] **Feature artifacts complete**: PRD, UX design, technical breakdown, testing plan
-- [ ] **Epic exists**: Parent epic issue created with proper labels and milestone
-- [ ] **Project board configured**: Columns, custom fields, and automation rules set up
-- [ ] **Team capacity assessed**: Sprint planning and resource allocation completed
+- **Feature artifacts complete**: PRD, UX design, technical breakdown, testing plan
+- **Epic exists**: Parent epic issue created with proper labels and milestone
+- **Project board configured**: Columns, custom fields, and automation rules set up
+- **Team capacity assessed**: Sprint planning and resource allocation completed
 
 #### Epic Level Issues
 
-- [ ] **Epic issue created** with comprehensive description and acceptance criteria
-- [ ] **Epic milestone created** with target release date
-- [ ] **Epic labels applied**: `epic`, priority, value, and team labels
-- [ ] **Epic added to project board** in appropriate column
+- **Epic issue created** with comprehensive description and acceptance criteria
+- **Epic milestone created** with target release date
+- **Epic labels applied**: `epic`, priority, value, and team labels
+- **Epic added to project board** in appropriate column
 
 #### Feature Level Issues
 
-- [ ] **Feature issue created** linking to parent epic
-- [ ] **Feature dependencies identified** and documented
-- [ ] **Feature estimation completed** using t-shirt sizing
-- [ ] **Feature acceptance criteria defined** with measurable outcomes
+- **Feature issue created** linking to parent epic
+- **Feature dependencies identified** and documented
+- **Feature estimation completed** using t-shirt sizing
+- **Feature acceptance criteria defined** with measurable outcomes
 
 #### Story/Enabler Level Issues documented in `/docs/ways-of-work/plan/{epic-name}/{feature-name}/issues-checklist.md`
 
-- [ ] **User stories created** following INVEST criteria
-- [ ] **Technical enablers identified** and prioritized
-- [ ] **Story point estimates assigned** using Fibonacci scale
-- [ ] **Dependencies mapped** between stories and enablers
-- [ ] **Acceptance criteria detailed** with testable requirements
+- **User stories created** following INVEST criteria
+- **Technical enablers identified** and prioritized
+- **Story point estimates assigned** using Fibonacci scale
+- **Dependencies mapped** between stories and enablers
+- **Acceptance criteria detailed** with testable requirements
 
 ## Success Metrics
 

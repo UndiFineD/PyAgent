@@ -38,20 +38,20 @@ Create a detailed plan for this refactoring task.
 ### Execution Plan
 
 #### Phase 1: Types and Interfaces
-- [ ] Step 1.1: [action] in `file.ts`
-- [ ] Verify: [how to check it worked]
+- Step 1.1: [action] in `file.ts`
+- Verify: [how to check it worked]
 
 #### Phase 2: Implementation
-- [ ] Step 2.1: [action] in `file.ts`
-- [ ] Verify: [how to check]
+- Step 2.1: [action] in `file.ts`
+- Verify: [how to check]
 
 #### Phase 3: Tests
-- [ ] Step 3.1: Update tests in `file.test.ts`
-- [ ] Verify: Run `npm test`
+- Step 3.1: Update tests in `file.test.ts`
+- Verify: Run `npm test`
 
 #### Phase 4: Cleanup
-- [ ] Remove deprecated code
-- [ ] Update documentation
+- Remove deprecated code
+- Update documentation
 
 ### Rollback Plan
 If something fails:

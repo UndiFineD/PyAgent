@@ -101,7 +101,7 @@ URLSession.shared.dataTaskPublisher(for: url)
 ### 3. combineLatest with Publisher That Never Emits
 
 ```swift
-// BUG: Won't emit until ALL publishers emit at least once
+// Won't emit until ALL publishers emit at least once
 Publishers.CombineLatest(requiredField, optionalAction)
 // If optionalAction never fires, stream never starts
 ```

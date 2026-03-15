@@ -133,7 +133,7 @@ func badFetch(_ url: URL) async throws -> Data {
 ### 1. Memory Leak from Strong Delegate
 
 ```swift
-// BUG: URLSession retains delegate forever
+// URLSession retains delegate forever
 class LeakyManager {
     var session: URLSession!
     init() {
@@ -157,7 +157,7 @@ class CorrectManager {
 ### 2. Background Session Identifier Conflicts
 
 ```swift
-// BUG: Same identifier in app and extension
+// Same identifier in app and extension
 // Main app
 let config = URLSessionConfiguration.background(withIdentifier: "downloads")
 // Extension (CONFLICT!)
@@ -171,7 +171,7 @@ let config = URLSessionConfiguration.background(withIdentifier: "downloads")
 ### 3. Data-Based Background Uploads
 
 ```swift
-// BUG: Data uploads don't persist in background
+// Data uploads don't persist in background
 backgroundSession.uploadTask(with: request, from: data)  // Fails!
 
 // CORRECT: File-based uploads
@@ -182,7 +182,7 @@ backgroundSession.uploadTask(with: request, fromFile: fileURL)
 ### 4. Completion Handlers in Background Sessions
 
 ```swift
-// BUG: Completion handlers not called
+// Completion handlers not called
 backgroundSession.dataTask(with: url) { data, _, _ in
     // Never executed!
 }
@@ -193,7 +193,7 @@ backgroundSession.dataTask(with: url) { data, _, _ in
 ### 5. Inadequate Cache Size
 
 ```swift
-// BUG: Default 512KB memory, 10MB disk - too small
+// Default 512KB memory, 10MB disk - too small
 let session = URLSession.shared
 
 // CORRECT: Configure adequate cache
@@ -217,7 +217,7 @@ config.isDiscretionary = true  // Waits for WiFi, charging
 ### 7. Missing Background Event Handler
 
 ```swift
-// BUG: No handleEventsForBackgroundURLSession
+// No handleEventsForBackgroundURLSession
 class IncompleteAppDelegate: UIResponder, UIApplicationDelegate {
     // App never notified of completion
 }
@@ -226,7 +226,7 @@ class IncompleteAppDelegate: UIResponder, UIApplicationDelegate {
 ### 8. Unresumed Tasks
 
 ```swift
-// BUG: Task created but never resumed
+// Task created but never resumed
 task = session.dataTask(with: url) { ... }
 // MISSING: task.resume()
 // Completion handler retained indefinitely
@@ -238,24 +238,24 @@ task.resume()  // Always call
 ## Review Questions
 
 ### Cache
-- [ ] Is URLCache configured with adequate capacity?
-- [ ] Is cache configured before network calls?
-- [ ] Is ephemeral config used for sensitive data?
+- Is URLCache configured with adequate capacity?
+- Is cache configured before network calls?
+- Is ephemeral config used for sensitive data?
 
 ### Session Management
-- [ ] Are sessions reused (not created per request)?
-- [ ] Is session invalidated when done?
-- [ ] Are timeouts configured (not 7-day default)?
+- Are sessions reused (not created per request)?
+- Is session invalidated when done?
+- Are timeouts configured (not 7-day default)?
 
 ### Background Sessions
-- [ ] Is identifier unique (especially with extensions)?
-- [ ] Is `handleEventsForBackgroundURLSession` implemented?
-- [ ] Is `urlSessionDidFinishEvents` calling completion handler?
-- [ ] Are uploads file-based (not data-based)?
-- [ ] Are delegate methods used (not completion handlers)?
-- [ ] Is `isDiscretionary` set for non-urgent transfers?
-- [ ] Is background session at app level (not ViewController)?
+- Is identifier unique (especially with extensions)?
+- Is `handleEventsForBackgroundURLSession` implemented?
+- Is `urlSessionDidFinishEvents` calling completion handler?
+- Are uploads file-based (not data-based)?
+- Are delegate methods used (not completion handlers)?
+- Is `isDiscretionary` set for non-urgent transfers?
+- Is background session at app level (not ViewController)?
 
 ### Memory
-- [ ] Is session delegate invalidated to break retain cycle?
-- [ ] Are tasks always resumed after creation?
+- Is session delegate invalidated to break retain cycle?
+- Are tasks always resumed after creation?

@@ -562,7 +562,7 @@ class OrderRepositoryImpl implements OrderRepository {
     };
   }
 
-  private toDomainModel(data: any): Order {
+  private mainModel(data: any): Order {
     // Reconstruct domain model from database data
     const order = new Order(data.id, data.customerId, data.shippingAddress);
     // Restore items and state

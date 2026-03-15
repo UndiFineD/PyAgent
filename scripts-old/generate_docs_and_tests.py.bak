@@ -401,14 +401,14 @@ def generate_improvements_md(file_path: Path, analyzer: PythonFileAnalyzer, use_
         content += "[OK] No major improvements identified.\n"
     
     content += "\n\n## Best Practices Checklist\n\n"
-    content += "- [ ] All classes have docstrings\n"
-    content += "- [ ] All public methods have docstrings\n"
-    content += "- [ ] Type hints are present\n"
-    content += "- [ ] pytest tests cover main functionality\n"
-    content += "- [ ] Error handling is robust\n"
-    content += "- [ ] Code follows PEP 8 style guide\n"
-    content += "- [ ] No code duplication\n"
-    content += "- [ ] Proper separation of concerns\n"
+    content += "- All classes have docstrings\n"
+    content += "- All public methods have docstrings\n"
+    content += "- Type hints are present\n"
+    content += "- pytest tests cover main functionality\n"
+    content += "- Error handling is robust\n"
+    content += "- Code follows PEP 8 style guide\n"
+    content += "- No code duplication\n"
+    content += "- Proper separation of concerns\n"
     
     content += "\n---\n"
     content += "*Auto-generated improvement suggestions*\n"
@@ -795,7 +795,7 @@ def process_single_file(
             traceback=None
         )
         if show_details and file_index <= 20:
-            print(f"  [X] Error processing {file_path.name}: {error_type} - {e}")
+            print(f"  Error processing {file_path.name}: {error_type} - {e}")
     
     return result, error
 

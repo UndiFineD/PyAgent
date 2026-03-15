@@ -542,22 +542,22 @@ Match governance strictness to risk level:
 ## Agent Governance Implementation Checklist
 
 ### Setup
-- [ ] Define governance policy (allowed tools, blocked patterns, rate limits)
-- [ ] Choose governance level (open/standard/strict/locked)
-- [ ] Set up audit trail storage
+- Define governance policy (allowed tools, blocked patterns, rate limits)
+- Choose governance level (open/standard/strict/locked)
+- Set up audit trail storage
 
 ### Implementation
-- [ ] Add @govern decorator to all tool functions
-- [ ] Add intent classification to user input processing
-- [ ] Implement trust scoring for multi-agent interactions
-- [ ] Wire up audit trail export
+- Add @govern decorator to all tool functions
+- Add intent classification to user input processing
+- Implement trust scoring for multi-agent interactions
+- Wire up audit trail export
 
 ### Validation
-- [ ] Test that blocked tools are properly denied
-- [ ] Test that content filters catch sensitive patterns
-- [ ] Test rate limiting behavior
-- [ ] Verify audit trail captures all events
-- [ ] Test policy composition (most-restrictive-wins)
+- Test that blocked tools are properly denied
+- Test that content filters catch sensitive patterns
+- Test rate limiting behavior
+- Verify audit trail captures all events
+- Test policy composition (most-restrictive-wins)
 ```
 
 ---

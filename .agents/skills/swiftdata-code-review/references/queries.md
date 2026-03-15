@@ -137,11 +137,11 @@ descriptor.fetchOffset = offset
 
 ## Review Questions
 
-- [ ] Is @Query loading only what the view needs?
-- [ ] Are external values captured in local variables?
-- [ ] Are comparisons using scalars, not object references?
-- [ ] Are string methods limited to supported ones?
-- [ ] Is `!isEmpty` used instead of `isEmpty == false`?
-- [ ] Is `fetchCount()` used instead of fetching for counts?
-- [ ] Are `fetchLimit`/`fetchOffset` used for pagination?
-- [ ] Are frequently filtered properties indexed (iOS 18+)?
+- Is @Query loading only what the view needs?
+- Are external values captured in local variables?
+- Are comparisons using scalars, not object references?
+- Are string methods limited to supported ones?
+- Is `!isEmpty` used instead of `isEmpty == false`?
+- Is `fetchCount()` used instead of fetching for counts?
+- Are `fetchLimit`/`fetchOffset` used for pagination?
+- Are frequently filtered properties indexed (iOS 18+)?

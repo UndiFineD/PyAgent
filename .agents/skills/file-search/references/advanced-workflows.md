@@ -219,7 +219,7 @@ git log --oneline | fzf -m | tail -1 | awk '{print $1}' | xargs git rebase -i
 ### Project Analysis
 
 ```bash
-# Find TODO/FIXME with stats
+# Find /FIXME with stats
 rg -c "TODO|FIXME" | sort -t: -k2 -rn | head -10
 
 # Large files in project

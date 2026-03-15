@@ -76,7 +76,7 @@ JSON schema for structured facts gathered by Phase 1 Repo Agents.
     "unused_imports": ["array of file:line references"],
     "unused_functions": ["array of file:line references"],
     "unused_variables": ["array of file:line references"],
-    "todo_comments": "number - Count of TODO/FIXME",
+    "todo_comments": "number - Count of /FIXME",
     "commented_code_blocks": "number - Count of commented code"
   }
 }

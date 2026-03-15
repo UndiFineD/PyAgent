@@ -258,20 +258,20 @@ export function UserProfile({ userId }: { userId: string }) {
 
 ```typescript
 // Model - Data and business logic
-class TodoModel {
-  private todos: Todo[] = [];
-  private observers: Set<(todos: Todo[]) => void> = new Set();
+class Model {
+  private s: [] = [];
+  private observers: Set<(todos: []) => void> = new Set();
 
   addTodo(text: string) {
-    const todo = { id: Date.now(), text, completed: false };
+    const = { id: Date.now(), text, completed: false };
     this.todos.push(todo);
     this.notify();
   }
 
   toggleTodo(id: number) {
-    const todo = this.todos.find(t => t.id === id);
+    const = this.todos.find(t => t.id === id);
     if (todo) {
-      todo.completed = !todo.completed;
+      .completed = !todo.completed;
       this.notify();
     }
   }
@@ -280,7 +280,7 @@ class TodoModel {
     return [...this.todos];
   }
 
-  subscribe(observer: (todos: Todo[]) => void) {
+  subscribe(observer: (todos: []) => void) {
     this.observers.add(observer);
     return () => this.observers.delete(observer);
   }
@@ -291,8 +291,8 @@ class TodoModel {
 }
 
 // Controller - Handles user input
-class TodoController {
-  constructor(private model: TodoModel) {}
+class Controller {
+  constructor(private model: Model) {}
 
   handleAddTodo(text: string) {
     if (text.trim()) {
@@ -306,9 +306,9 @@ class TodoController {
 }
 
 // View - React component
-function TodoView() {
-  const [model] = useState(() => new TodoModel());
-  const [controller] = useState(() => new TodoController(model));
+function View() {
+  const [model] = useState(() => new Model());
+  const [controller] = useState(() => new Controller(model));
   const [todos, setTodos] = useState(model.getTodos());
   const [inputValue, setInputValue] = useState('');
 
@@ -1021,53 +1021,53 @@ function useCart() {
 import create from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
-interface TodoState {
-  todos: Todo[];
+interface State {
+  s: [];
   filter: 'all' | 'active' | 'completed';
-  addTodo: (text: string) => void;
-  toggleTodo: (id: string) => void;
-  removeTodo: (id: string) => void;
+  add (text: string) => void;
+  toggle (id: string) => void;
+  remove (id: string) => void;
   setFilter: (filter: 'all' | 'active' | 'completed') => void;
-  filteredTodos: () => Todo[];
+  filteredTodos: () => [];
 }
 
 const useTodoStore = create<TodoState>()(
   devtools(
     persist(
       (set, get) => ({
-        todos: [],
+        s: [],
         filter: 'all',
 
-        addTodo: (text) =>
+        add (text) =>
           set((state) => ({
-            todos: [...state.todos, {
+            s: [...state.todos, {
               id: crypto.randomUUID(),
               text,
               completed: false
             }]
           })),
 
-        toggleTodo: (id) =>
+        toggle (id) =>
           set((state) => ({
-            todos: state.todos.map(todo =>
-              todo.id === id
+            s: state.todos.map(todo =>
+              .id === id
                 ? { ...todo, completed: !todo.completed }
-                : todo
+                : 
             )
           })),
 
-        removeTodo: (id) =>
+        remove (id) =>
           set((state) => ({
-            todos: state.todos.filter(todo => todo.id !== id)
+            s: state.todos.filter(todo => .id !== id)
           })),
 
         setFilter: (filter) => set({ filter }),
 
         filteredTodos: () => {
-          const { todos, filter } = get();
-          if (filter === 'active') return todos.filter(t => !t.completed);
-          if (filter === 'completed') return todos.filter(t => t.completed);
-          return todos;
+          const { s, filter } = get();
+          if (filter === 'active') return s.filter(t => !t.completed);
+          if (filter === 'completed') return s.filter(t => t.completed);
+          return s;
         }
       }),
       { name: 'todo-storage' }
@@ -1076,8 +1076,8 @@ const useTodoStore = create<TodoState>()(
 );
 
 // Usage
-function TodoList() {
-  const todos = useTodoStore(state => state.filteredTodos());
+function List() {
+  const s = useTodoStore(state => state.filteredTodos());
   const toggleTodo = useTodoStore(state => state.toggleTodo);
 
   return (

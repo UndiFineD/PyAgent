@@ -110,29 +110,29 @@ updateNodeData(nodeId, { config: { nested: 'value' } });
 
 ### Node Rendering
 
-- [ ] Custom nodes wrapped in `memo()`
-- [ ] nodeTypes defined outside component or memoized
-- [ ] Heavy computations inside nodes use `useMemo`
-- [ ] Event handlers use `useCallback`
+- Custom nodes wrapped in `memo()`
+- nodeTypes defined outside component or memoized
+- Heavy computations inside nodes use `useMemo`
+- Event handlers use `useCallback`
 
 ### Edge Rendering
 
-- [ ] Custom edges wrapped in `memo()`
-- [ ] edgeTypes defined outside component or memoized
-- [ ] Edge path calculations are not duplicated
+- Custom edges wrapped in `memo()`
+- edgeTypes defined outside component or memoized
+- Edge path calculations are not duplicated
 
 ### State Updates
 
-- [ ] Using functional form of setState: `setNodes((nds) => ...)`
-- [ ] Not spreading entire state for single property updates
-- [ ] Using `updateNodeData` for data-only changes
-- [ ] Batch updates when adding multiple nodes/edges
+- Using functional form of setState: `setNodes((nds) => ...)`
+- Not spreading entire state for single property updates
+- Using `updateNodeData` for data-only changes
+- Batch updates when adding multiple nodes/edges
 
 ### Viewport
 
-- [ ] Not calling `fitView()` on every render
-- [ ] Using `fitViewOptions` for initial fit only
-- [ ] Animation durations are reasonable (< 500ms)
+- Not calling `fitView()` on every render
+- Using `fitViewOptions` for initial fit only
+- Animation durations are reasonable (< 500ms)
 
 ## Common Mistakes
 

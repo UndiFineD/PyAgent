@@ -10,7 +10,7 @@ description: Implements agents using Deep Agents. Use when building agents with 
 Deep Agents provides a batteries-included agent harness built on LangGraph:
 
 - **`create_deep_agent`**: Factory function that creates a configured agent
-- **Middleware**: Injected capabilities (filesystem, todos, subagents, summarization)
+- **Middleware**: Injected capabilities (filesystem, s, subagents, summarization)
 - **Backends**: Pluggable file storage (state, filesystem, store, composite)
 - **Subagents**: Isolated task execution via the `task` tool
 

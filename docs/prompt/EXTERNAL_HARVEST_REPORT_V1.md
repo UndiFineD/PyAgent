@@ -48,15 +48,15 @@ We have successfully scanned 12 high-value repositories from the `downloads.txt`
 
 | Lesson ID | Feature | Core Module | Status | NOTE |
 |---|---|---|---|---|
-| #17 | Task Guardrails | `GuardrailCore.py` | [x] INTEGRATED | Pydantic validation active. |
-| #17 | A2A AgentCard | `agent_card.py` | [x] INTEGRATED | Standardized manifest defined. |
-| #19 | Job Lifecycle | `JobManagerCore.py` | [x] INTEGRATED | Persistence handled. |
-| #20 | Self-Evolution | `EvolutionCore.py` | [x] INTEGRATED | Moving-average promotion logic. |
-| #22 | Structured Feedback| `GuardrailCore.py` | [x] INTEGRATED | Steps/Status schema enforced. |
-| #23 | Session Control | `SessionControlCore.py` | [x] INTEGRATED | Stop/Pause signals implemented. |
-| #24 | DAG Workflows | `DAGWorkflowCore.py` | [x] INTEGRATED | Kahn's algorithm topological sort. |
-| #25 | Browser Outline | `BrowserOutlineCore.py` | [x] INTEGRATED | High-density DOM abstraction. |
-| #28 | Red Teaming | `RedTeamCore.py` | [x] INTEGRATED | Automated challenge scoring. |
+| #17 | Task Guardrails | `GuardrailCore.py` | INTEGRATED | Pydantic validation active. |
+| #17 | A2A AgentCard | `agent_card.py` | INTEGRATED | Standardized manifest defined. |
+| #19 | Job Lifecycle | `JobManagerCore.py` | INTEGRATED | Persistence handled. |
+| #20 | Self-Evolution | `EvolutionCore.py` | INTEGRATED | Moving-average promotion logic. |
+| #22 | Structured Feedback| `GuardrailCore.py` | INTEGRATED | Steps/Status schema enforced. |
+| #23 | Session Control | `SessionControlCore.py` | INTEGRATED | Stop/Pause signals implemented. |
+| #24 | DAG Workflows | `DAGWorkflowCore.py` | INTEGRATED | Kahn's algorithm topological sort. |
+| #25 | Browser Outline | `BrowserOutlineCore.py` | INTEGRATED | High-density DOM abstraction. |
+| #28 | Red Teaming | `RedTeamCore.py` | INTEGRATED | Automated challenge scoring. |
 
 ## Harvest #29: Asterisk-AI-Voice-Agent (Audio Streaming)
 - **Lesson**: RTP/UDP Bidirectional Audio. Use `audioop` for real-time codec normalization (u-law -> PCM) and resampling.
@@ -82,17 +82,17 @@ We have successfully scanned 12 high-value repositories from the `downloads.txt`
 
 | Lesson ID | Feature | Core Module | Status | NOTE |
 |---|---|---|---|---|
-| #17 | Task Guardrails | `GuardrailCore.py` | [x] INTEGRATED | Pydantic validation active. |
-| #17 | A2A AgentCard | `agent_card.py` | [x] INTEGRATED | Standardized manifest defined. |
-| #19 | Job Lifecycle | `JobManagerCore.py` | [x] INTEGRATED | Persistence handled. |
-| #20 | Self-Evolution | `EvolutionCore.py` | [x] INTEGRATED | Moving-average promotion logic. |
-| #22 | Structured Feedback| `GuardrailCore.py` | [x] INTEGRATED | Steps/Status schema enforced. |
-| #23 | Session Control | `SessionControlCore.py` | [x] INTEGRATED | Stop/Pause signals implemented. |
-| #24 | DAG Workflows | `DAGWorkflowCore.py` | [x] INTEGRATED | Kahn's algorithm topological sort. |
-| #25 | Browser Outline | `BrowserOutlineCore.py` | [x] INTEGRATED | High-density DOM abstraction. |
-| #28 | Red Teaming | `RedTeamCore.py` | [x] INTEGRATED | Automated challenge scoring. |
-| #29 | Audio Streaming | `AudioStreamCore.py` | [x] INTEGRATED | `audioop` based normalization. |
-| #31 | Artifact Cleanup | `src/maintenance/artifact_cleanup.py` | [x] INTEGRATED | Background cleanup workers with TTL-based purging.
+| #17 | Task Guardrails | `GuardrailCore.py` | INTEGRATED | Pydantic validation active. |
+| #17 | A2A AgentCard | `agent_card.py` | INTEGRATED | Standardized manifest defined. |
+| #19 | Job Lifecycle | `JobManagerCore.py` | INTEGRATED | Persistence handled. |
+| #20 | Self-Evolution | `EvolutionCore.py` | INTEGRATED | Moving-average promotion logic. |
+| #22 | Structured Feedback| `GuardrailCore.py` | INTEGRATED | Steps/Status schema enforced. |
+| #23 | Session Control | `SessionControlCore.py` | INTEGRATED | Stop/Pause signals implemented. |
+| #24 | DAG Workflows | `DAGWorkflowCore.py` | INTEGRATED | Kahn's algorithm topological sort. |
+| #25 | Browser Outline | `BrowserOutlineCore.py` | INTEGRATED | High-density DOM abstraction. |
+| #28 | Red Teaming | `RedTeamCore.py` | INTEGRATED | Automated challenge scoring. |
+| #29 | Audio Streaming | `AudioStreamCore.py` | INTEGRATED | `audioop` based normalization. |
+| #31 | Artifact Cleanup | `src/maintenance/artifact_cleanup.py` | INTEGRATED | Background cleanup workers with TTL-based purging.
 
 ## Next Steps
 - Implement the `MemoryManagementPattern` using the new `MemoryConsolidationCore`.

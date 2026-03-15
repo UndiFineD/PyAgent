@@ -323,7 +323,7 @@
     </mailingList>
   </mailingLists>
   <build>
-    <!-- TODO find a better way to add N&L files to jars and test jars
+    <!-- find a better way to add N&L files to jars and test jars
       See also maven-remote-resources-plugin configuration below.
     -->
     <resources>
@@ -409,7 +409,7 @@
           </configuration>
         </plugin>
         <plugin>
-          <!-- TODO see above - find better way to add N&L files to jars and test jars -->
+          <!-- see above - find better way to add N&L files to jars and test jars -->
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-remote-resources-plugin</artifactId>
           <configuration>

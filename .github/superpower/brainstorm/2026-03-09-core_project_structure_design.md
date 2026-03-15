@@ -24,7 +24,7 @@ project/
 ├── llms-architecture.txt              # Detailed architecture documentation
 ├── llms-improvements.txt              # Proposed improvements and enhancements
 ├── PyAgent.md                           # Project README and overview
-├── todolist.md                          # Comprehensive todo list for project tasks
+├── list.md                          # Comprehensive list for project tasks
 ├── scripts/                             # Project scripts and utilities
 │   ├── setup.py                       # Project setup and initialization
 │   └── deploy.py                     # Deployment scripts

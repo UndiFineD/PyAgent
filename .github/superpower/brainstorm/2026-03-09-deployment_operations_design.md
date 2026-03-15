@@ -42,11 +42,11 @@ Deployment/
 
 ### 1. Pre-Deployment Checklist
 
-- [ ] Verify project configuration files (pyproject.toml, .gitignore)
-- [ ] Confirm all dependencies are installed and versioned
-- [ ] Validate all configuration parameters and environment variables
-- [ ] Ensure all security policies and compliance requirements are met
-- [ ] Verify backup and disaster recovery plans are in place
+- Verify project configuration files (pyproject.toml, .gitignore)
+- Confirm all dependencies are installed and versioned
+- Validate all configuration parameters and environment variables
+- Ensure all security policies and compliance requirements are met
+- Verify backup and disaster recovery plans are in place
 
 ### 2. Deployment Workflow
 

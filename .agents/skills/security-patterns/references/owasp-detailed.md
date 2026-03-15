@@ -38,11 +38,11 @@ def get_resource(resource_id):
 ```
 
 ### Checklist
-- [ ] Deny by default except for public resources
-- [ ] Implement access control once, reuse everywhere
-- [ ] Record access control failures, alert on repeated attempts
-- [ ] Disable web server directory listing
-- [ ] Ensure file metadata not accessible
+- Deny by default except for public resources
+- Implement access control once, reuse everywhere
+- Record access control failures, alert on repeated attempts
+- Disable web server directory listing
+- Ensure file metadata not accessible
 
 ## A02: Cryptographic Failures
 
@@ -76,12 +76,12 @@ cipher = Cipher(algorithms.AES(key), modes.GCM(iv))
 ```
 
 ### Checklist
-- [ ] Classify data by sensitivity
-- [ ] Don't store sensitive data unnecessarily
-- [ ] Encrypt all sensitive data at rest
-- [ ] Use TLS for all data in transit
-- [ ] Use strong, standard algorithms
-- [ ] Store passwords with bcrypt, scrypt, Argon2, or PBKDF2
+- Classify data by sensitivity
+- Don't store sensitive data unnecessarily
+- Encrypt all sensitive data at rest
+- Use TLS for all data in transit
+- Use strong, standard algorithms
+- Store passwords with bcrypt, scrypt, Argon2, or PBKDF2
 
 ## A03: Injection
 

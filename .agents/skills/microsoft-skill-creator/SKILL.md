@@ -65,11 +65,11 @@ microsoft_docs_search(query="{technology} troubleshooting errors")
 #### Investigation Checklist
 
 After investigating, verify:
-- [ ] Can explain what the technology does in one paragraph
-- [ ] Identified 3-5 key concepts
-- [ ] Have working code for basic usage
-- [ ] Know the most common API patterns
-- [ ] Have search queries for deeper topics
+- Can explain what the technology does in one paragraph
+- Identified 3-5 key concepts
+- Have working code for basic usage
+- Know the most common API patterns
+- Have search queries for deeper topics
 
 ### Step 2: Clarify with User
 

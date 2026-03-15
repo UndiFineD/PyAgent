@@ -17,25 +17,25 @@ description: Reviews Elixir code for performance issues including GenServer bott
 ## Review Checklist
 
 ### GenServer
-- [ ] Not a single-process bottleneck for all requests
-- [ ] No blocking operations in handle_call/cast
-- [ ] Proper timeout configuration
-- [ ] Consider ETS for read-heavy state
+- Not a single-process bottleneck for all requests
+- No blocking operations in handle_call/cast
+- Proper timeout configuration
+- Consider ETS for read-heavy state
 
 ### Memory
-- [ ] Large binaries not copied between processes
-- [ ] Streams used for large data transformations
-- [ ] No unbounded data accumulation
+- Large binaries not copied between processes
+- Streams used for large data transformations
+- No unbounded data accumulation
 
 ### Concurrency
-- [ ] Task.Supervisor for dynamic tasks (not raw Task.async)
-- [ ] No unbounded process spawning
-- [ ] Proper backpressure for message producers
+- Task.Supervisor for dynamic tasks (not raw Task.async)
+- No unbounded process spawning
+- Proper backpressure for message producers
 
 ### Database
-- [ ] Preloading to avoid N+1 queries
-- [ ] Pagination for large result sets
-- [ ] Indexes for frequent queries
+- Preloading to avoid N+1 queries
+- Pagination for large result sets
+- Indexes for frequent queries
 
 ## Valid Patterns (Do NOT Flag)
 

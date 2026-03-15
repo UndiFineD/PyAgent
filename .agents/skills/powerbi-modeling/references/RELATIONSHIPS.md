@@ -139,9 +139,9 @@ Columns may have different data types.
 
 ## Validation Checklist
 
-- [ ] All relationships are one-to-many where possible
-- [ ] Cross-filter is single direction by default
-- [ ] Only one active path between any two tables
-- [ ] Role-playing dimensions use inactive relationships
-- [ ] No circular reference paths
-- [ ] Key columns have matching data types
+- All relationships are one-to-many where possible
+- Cross-filter is single direction by default
+- Only one active path between any two tables
+- Role-playing dimensions use inactive relationships
+- No circular reference paths
+- Key columns have matching data types

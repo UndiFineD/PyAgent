@@ -58,12 +58,12 @@ title: "Setup React + TypeScript + Vite project"
 team: "Frontend"
 description: |
   ## Tasks
-  - [ ] Initialize Vite project with React + TS template
-  - [ ] Configure ESLint and Prettier
-  - [ ] Setup Tailwind CSS
-  - [ ] Configure path aliases
-  - [ ] Setup Git hooks with Husky
-  - [ ] Configure environment variables
+  - Initialize Vite project with React + TS template
+  - Configure ESLint and Prettier
+  - Setup Tailwind CSS
+  - Configure path aliases
+  - Setup Git hooks with Husky
+  - Configure environment variables
 
   ## Acceptance Criteria
   - Project builds successfully
@@ -85,12 +85,12 @@ description: |
   Create reusable design system components and tokens
 
   ## Tasks
-  - [ ] Define color palette (light/dark modes)
-  - [ ] Setup typography scale
-  - [ ] Create spacing and sizing tokens
-  - [ ] Build primitive components (Button, Input, Card)
-  - [ ] Document components in Storybook
-  - [ ] Setup design tokens export
+  - Define color palette (light/dark modes)
+  - Setup typography scale
+  - Create spacing and sizing tokens
+  - Build primitive components (Button, Input, Card)
+  - Document components in Storybook
+  - Setup design tokens export
 
   ## Resources
   - Figma: [link to design file]
@@ -150,11 +150,11 @@ title: "Product Grid Component"
 team: "Frontend"
 description: |
   ## Tasks
-  - [ ] Create ProductCard component
-  - [ ] Implement grid layout with Tailwind
-  - [ ] Add image lazy loading
-  - [ ] Implement infinite scroll
-  - [ ] Add loading skeletons
+  - Create ProductCard component
+  - Implement grid layout with Tailwind
+  - Add image lazy loading
+  - Implement infinite scroll
+  - Add loading skeletons
 
   ## Acceptance Criteria
   - Renders 100+ products smoothly
@@ -174,12 +174,12 @@ title: "Product Filtering System"
 team: "Frontend"
 description: |
   ## Tasks
-  - [ ] Create FilterPanel component
-  - [ ] Implement category filters
-  - [ ] Add price range slider
-  - [ ] Implement rating filter
-  - [ ] Add search within results
-  - [ ] URL state management for filters
+  - Create FilterPanel component
+  - Implement category filters
+  - Add price range slider
+  - Implement rating filter
+  - Add search within results
+  - URL state management for filters
 
   ## Acceptance Criteria
   - Filters update URL query params

@@ -7,13 +7,13 @@ description: Reviews Prometheus instrumentation in Go code for proper metric typ
 
 ## Review Checklist
 
-- [ ] Metric types match measurement semantics (Counter/Gauge/Histogram)
-- [ ] Labels have low cardinality (no user IDs, timestamps, paths)
-- [ ] Metric names follow conventions (snake_case, unit suffix)
-- [ ] Histograms use appropriate bucket boundaries
-- [ ] Metrics registered once, not per-request
-- [ ] Collectors don't panic on race conditions
-- [ ] /metrics endpoint exposed and accessible
+- Metric types match measurement semantics (Counter/Gauge/Histogram)
+- Labels have low cardinality (no user IDs, timestamps, paths)
+- Metric names follow conventions (snake_case, unit suffix)
+- Histograms use appropriate bucket boundaries
+- Metrics registered once, not per-request
+- Collectors don't panic on race conditions
+- /metrics endpoint exposed and accessible
 
 ## Metric Type Selection
 

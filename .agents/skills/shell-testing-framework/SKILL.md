@@ -256,12 +256,12 @@ EOF
 ```
 
 **Unit Test Checklist:**
-- [ ] Test with valid input
-- [ ] Test with invalid input
-- [ ] Test with empty input
-- [ ] Test with boundary values
-- [ ] Test return codes
-- [ ] Test output format
+- Test with valid input
+- Test with invalid input
+- Test with empty input
+- Test with boundary values
+- Test return codes
+- Test output format
 
 #### Category 2: Integration Tests
 
@@ -334,12 +334,12 @@ test_bookmark_creation_and_navigation() {
 ```
 
 **Integration Test Checklist:**
-- [ ] Test common user workflows
-- [ ] Test module interactions
-- [ ] Test data persistence
-- [ ] Test state changes
-- [ ] Test error propagation
-- [ ] Test cleanup behavior
+- Test common user workflows
+- Test module interactions
+- Test data persistence
+- Test state changes
+- Test error propagation
+- Test cleanup behavior
 
 #### Category 3: Edge Cases
 
@@ -460,14 +460,14 @@ test_concurrent_cache_access() {
 ```
 
 **Edge Case Test Checklist:**
-- [ ] Empty inputs
-- [ ] Missing files
-- [ ] Malformed data
-- [ ] Very large inputs
-- [ ] Special characters
-- [ ] Concurrent access
-- [ ] Resource exhaustion
-- [ ] Permission errors
+- Empty inputs
+- Missing files
+- Malformed data
+- Very large inputs
+- Special characters
+- Concurrent access
+- Resource exhaustion
+- Permission errors
 
 #### Category 4: Performance Tests
 
@@ -579,12 +579,12 @@ test_benchmark_cache_at_scale() {
 ```
 
 **Performance Test Checklist:**
-- [ ] Measure critical path operations
-- [ ] Compare against defined targets
-- [ ] Test at realistic scale
-- [ ] Test with maximum load
-- [ ] Calculate statistics (min/max/mean/median)
-- [ ] Verify no performance regressions
+- Measure critical path operations
+- Compare against defined targets
+- Test at realistic scale
+- Test with maximum load
+- Calculate statistics (min/max/mean/median)
+- Verify no performance regressions
 
 ### Assertion Patterns
 
@@ -1293,22 +1293,22 @@ Total test suite should run in <5 seconds.
 
 ### Test Template Checklist
 
-- [ ] Shebang and set -e
-- [ ] Source required modules
-- [ ] Initialize test counters
-- [ ] Define pass/fail helpers
-- [ ] Organize tests by category
-- [ ] Use arrange-act-assert pattern
-- [ ] Print summary with exit code
+- Shebang and set -e
+- Source required modules
+- Initialize test counters
+- Define pass/fail helpers
+- Organize tests by category
+- Use arrange-act-assert pattern
+- Print summary with exit code
 
 ### Coverage Checklist
 
-- [ ] All public functions tested
-- [ ] All code paths exercised
-- [ ] All return codes validated
-- [ ] All error conditions tested
-- [ ] All edge cases covered
-- [ ] Performance targets verified
+- All public functions tested
+- All code paths exercised
+- All return codes validated
+- All error conditions tested
+- All edge cases covered
+- Performance targets verified
 
 ### Essential Test Commands
 

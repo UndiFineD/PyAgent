@@ -204,12 +204,12 @@ External tool for:
 
 ## Validation Checklist
 
-- [ ] Unnecessary columns removed
-- [ ] Appropriate data types used
-- [ ] High-cardinality columns addressed
-- [ ] Bidirectional relationships minimized
-- [ ] DAX uses variables for repeated expressions
-- [ ] No FILTER on entire tables
-- [ ] DIVIDE used instead of division operator
-- [ ] Auto date/time disabled for DirectQuery
-- [ ] Performance tested with representative data
+- Unnecessary columns removed
+- Appropriate data types used
+- High-cardinality columns addressed
+- Bidirectional relationships minimized
+- DAX uses variables for repeated expressions
+- No FILTER on entire tables
+- DIVIDE used instead of division operator
+- Auto date/time disabled for DirectQuery
+- Performance tested with representative data

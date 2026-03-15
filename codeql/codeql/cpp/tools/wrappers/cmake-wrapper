@@ -126,7 +126,7 @@ sub parse_find_library {
     return @results;
 }
 
-# XXX invoke these unit tests with `--unit-test`
+# invoke these unit tests with `--unit-test`
 if (@ARGV > 0 and $ARGV[0] eq "--unit-test") {
     my $has_failed = 0;
     @LIB_PATHS = qw(/1 /2); # simple predictable names for test

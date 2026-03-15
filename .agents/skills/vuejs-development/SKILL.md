@@ -854,10 +854,10 @@ const user = reactive({
 ### Emits (Child to Parent)
 
 ```vue
-<!-- Child Component: TodoItem.vue -->
+<!-- Child Component: Item.vue -->
 <script setup>
 const props = defineProps({
-  todo: {
+   {
     type: Object,
     required: true
   }
@@ -902,40 +902,40 @@ function handleUpdate(newText) {
       :checked="todo.completed"
       @change="handleToggle"
     >
-    <span>{{ todo.text }}</span>
+    <span>{{ .text }}</span>
     <button @click="handleDelete">Delete</button>
   </div>
 </template>
 
 <!-- Parent Component -->
 <script setup>
-import TodoItem from './TodoItem.vue'
+import Item from './TodoItem.vue'
 import { ref } from 'vue'
 
-const todos = ref([
+const s = ref([
   { id: 1, text: 'Learn Vue', completed: false },
   { id: 2, text: 'Build app', completed: false }
 ])
 
 function toggleTodo(id) {
-  const todo = todos.value.find(t => t.id === id)
-  if (todo) todo.completed = !todo.completed
+  const = s.value.find(t => t.id === id)
+  if (todo) .completed = !todo.completed
 }
 
 function deleteTodo(id) {
-  todos.value = todos.value.filter(t => t.id !== id)
+  s.value = s.value.filter(t => t.id !== id)
 }
 
 function updateTodo(id, text) {
-  const todo = todos.value.find(t => t.id === id)
-  if (todo) todo.text = text
+  const = s.value.find(t => t.id === id)
+  if (todo) .text = text
 }
 </script>
 
 <template>
   <div>
     <TodoItem
-      v-for="todo in todos"
+      v-for="todo in s"
       :key="todo.id"
       :todo="todo"
       @toggle="toggleTodo"
@@ -1055,11 +1055,11 @@ const props = defineProps({
 </template>
 
 <!-- Scoped Slots: Child exposes data to parent -->
-<!-- Child Component: TodoList.vue -->
+<!-- Child Component: List.vue -->
 <script setup>
 import { ref } from 'vue'
 
-const todos = ref([
+const s = ref([
   { id: 1, text: 'Learn Vue', completed: false },
   { id: 2, text: 'Build app', completed: true }
 ])
@@ -1067,8 +1067,8 @@ const todos = ref([
 
 <template>
   <ul>
-    <li v-for="todo in todos" :key="todo.id">
-      <!-- Expose todo to parent via slot props -->
+    <li v-for="todo in s" :key="todo.id">
+      <!-- Expose to parent via slot props -->
       <slot :todo="todo" :index="todo.id"></slot>
     </li>
   </ul>
@@ -1078,16 +1078,16 @@ const todos = ref([
 <template>
   <TodoList>
     <!-- Access slot props -->
-    <template #default="{ todo, index }">
-      <span :class="{ completed: todo.completed }">
-        {{ index }}. {{ todo.text }}
+    <template #default="{ , index }">
+      <span :class="{ completed: .completed }">
+        {{ index }}. {{ .text }}
       </span>
     </template>
   </TodoList>
 
   <!-- Shorthand for default slot -->
-  <TodoList v-slot="{ todo }">
-    <span>{{ todo.text }}</span>
+  <TodoList v-slot="{ }">
+    <span>{{ .text }}</span>
   </TodoList>
 </template>
 ```

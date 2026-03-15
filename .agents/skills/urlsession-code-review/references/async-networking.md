@@ -193,11 +193,11 @@ listenerTask = Task { [weak self] in
 
 ## Review Questions
 
-- [ ] Are HTTP status codes validated (not just assuming success)?
-- [ ] Are downloaded files moved/deleted after use?
-- [ ] Are upload requests setting HTTP method (POST/PUT)?
-- [ ] Are long-running tasks using `[weak self]`?
-- [ ] Are stored Task references cancelled when appropriate?
-- [ ] Is cancellation handled in `viewWillDisappear`?
-- [ ] Is SwiftUI's `.task` modifier used instead of manual Task management?
-- [ ] For streaming, is response status checked before iterating?
+- Are HTTP status codes validated (not just assuming success)?
+- Are downloaded files moved/deleted after use?
+- Are upload requests setting HTTP method (POST/PUT)?
+- Are long-running tasks using `[weak self]`?
+- Are stored Task references cancelled when appropriate?
+- Is cancellation handled in `viewWillDisappear`?
+- Is SwiftUI's `.task` modifier used instead of manual Task management?
+- For streaming, is response status checked before iterating?

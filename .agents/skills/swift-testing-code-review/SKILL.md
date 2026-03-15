@@ -16,17 +16,17 @@ description: Reviews Swift Testing code for proper use of #expect/#require, para
 
 ## Review Checklist
 
-- [ ] Expressions embedded directly in `#expect` (not pre-computed booleans)
-- [ ] `#require` used only for preconditions, `#expect` for assertions
-- [ ] Error tests check specific types (not generic `(any Error).self`)
-- [ ] Parameterized tests with pairs use `zip()` (not Cartesian product)
-- [ ] No logic mirroring implementation in parameterized expected values
-- [ ] Async sequences tested with `confirmation(expectedCount:)`
-- [ ] Completion handlers use `withCheckedContinuation`, not `confirmation`
-- [ ] `.serialized` applied only where necessary (shared resources)
-- [ ] Sibling serialized suites nested under parent if mutually exclusive
-- [ ] No assumption of state persistence between `@Test` functions
-- [ ] Disabled tests have explanations and bug links
+- Expressions embedded directly in `#expect` (not pre-computed booleans)
+- `#require` used only for preconditions, `#expect` for assertions
+- Error tests check specific types (not generic `(any Error).self`)
+- Parameterized tests with pairs use `zip()` (not Cartesian product)
+- No logic mirroring implementation in parameterized expected values
+- Async sequences tested with `confirmation(expectedCount:)`
+- Completion handlers use `withCheckedContinuation`, not `confirmation`
+- `.serialized` applied only where necessary (shared resources)
+- Sibling serialized suites nested under parent if mutually exclusive
+- No assumption of state persistence between `@Test` functions
+- Disabled tests have explanations and bug links
 
 ## When to Load References
 

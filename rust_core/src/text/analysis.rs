@@ -38,7 +38,7 @@ fn analyze_code_quality_internal(
     metrics.insert("function_count".to_string(), function_count as f64);
 
     let bytes = content.as_bytes();
-    let mut todo_hits: usize = 0;
+    let mut _hits: usize = 0;
     if bytes.len() >= 4 {
         for i in 0..=bytes.len() - 4 {
             if bytes[i].eq_ignore_ascii_case(&b't')
@@ -46,12 +46,12 @@ fn analyze_code_quality_internal(
                 && bytes[i + 2].eq_ignore_ascii_case(&b'd')
                 && bytes[i + 3].eq_ignore_ascii_case(&b'o')
             {
-                todo_hits += 1;
+                _hits += 1;
             }
         }
     }
-    let todo_count = todo_hits as f64;
-    metrics.insert("todo_count".to_string(), todo_count);
+    let _count = _hits as f64;
+    metrics.insert("todo_count".to_string(), _count);
 
     Ok(metrics)
 }

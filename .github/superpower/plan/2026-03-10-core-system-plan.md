@@ -18,10 +18,10 @@ Overview & constraints
 ---
 
 Top-level checklist
-- [x] Read core design and gather context (`.github/superpower/brainstorm/design/core_design.md`).
-- [x] Present an executable, TDD-first implementation plan to the user.
-- [x] User approved the plan (2026-03-10).
-- [x] Save this plan as `.github/superpower/plan/2026-03-10-core-system-plan.md`.
+- Read core design and gather context (`.github/superpower/brainstorm/design/core_design.md`).
+- Present an executable, TDD-first implementation plan to the user.
+- User approved the plan (2026-03-10).
+- Save this plan as `.github/superpower/plan/2026-03-10-core-system-plan.md`.
 - [blocked] Implement core modules (Runtime, TaskQueue, AgentRegistry, MemoryStore, Observability) — blocked until user authorizes execution.
 - [blocked] Write per-core tests and iterate to passing — blocked until implementation step is executed.
 - [blocked] Add CI workflow `.github/workflows/core-quality.yml` enforcing ruff/mypy/pytest — blocked.

@@ -11,12 +11,12 @@ This protocol MUST be followed before reporting any code review finding. Skippin
 
 Before flagging ANY issue, verify:
 
-- [ ] **I read the actual code** - Not just the diff context, but the full function/class
-- [ ] **I searched for usages** - Before claiming "unused", searched all references
-- [ ] **I checked surrounding code** - The issue may be handled elsewhere (guards, earlier checks)
-- [ ] **I verified syntax against current docs** - Framework syntax evolves (Tailwind v4, TS 5.x, React 19)
-- [ ] **I distinguished "wrong" from "different style"** - Both approaches may be valid
-- [ ] **I considered intentional design** - Checked comments, CLAUDE.md, architectural context
+- **I read the actual code** - Not just the diff context, but the full function/class
+- **I searched for usages** - Before claiming "unused", searched all references
+- **I checked surrounding code** - The issue may be handled elsewhere (guards, earlier checks)
+- **I verified syntax against current docs** - Framework syntax evolves (Tailwind v4, TS 5.x, React 19)
+- **I distinguished "wrong" from "different style"** - Both approaches may be valid
+- **I considered intentional design** - Checked comments, CLAUDE.md, architectural context
 
 ## Verification by Issue Type
 
@@ -177,26 +177,26 @@ if (isUser(data)) {
 ### React Keys
 
 Flag array index as key **ONLY IF ALL** of these are true:
-- [ ] Items CAN be reordered (sortable list, drag-drop)
-- [ ] Items CAN be inserted/removed from middle
-- [ ] Items HAVE stable identifiers available (id, uuid)
-- [ ] The list is NOT completely replaced atomically
+- Items CAN be reordered (sortable list, drag-drop)
+- Items CAN be inserted/removed from middle
+- Items HAVE stable identifiers available (id, uuid)
+- The list is NOT completely replaced atomically
 
 ### useEffect Dependencies
 
 Flag missing dependency **ONLY IF**:
-- [ ] The value actually changes during component lifetime
-- [ ] Stale closure would cause incorrect behavior
-- [ ] The value is NOT a ref (refs are stable)
-- [ ] The value is NOT a stable callback (useCallback with empty deps)
+- The value actually changes during component lifetime
+- Stale closure would cause incorrect behavior
+- The value is NOT a ref (refs are stable)
+- The value is NOT a stable callback (useCallback with empty deps)
 
 ### Error Handling
 
 Flag missing try/catch **ONLY IF**:
-- [ ] No error boundary catches this at a higher level
-- [ ] The framework doesn't handle errors (loader errorElement)
-- [ ] The error would cause a crash, not just a failed operation
-- [ ] User needs specific feedback for this error type
+- No error boundary catches this at a higher level
+- The framework doesn't handle errors (loader errorElement)
+- The error would cause a crash, not just a failed operation
+- User needs specific feedback for this error type
 
 ## Before Submitting Review
 

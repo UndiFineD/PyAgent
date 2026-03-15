@@ -139,7 +139,7 @@ This document provides detailed, real-world examples of wireframes across differ
 | Shopping Cart (3 items)                                    |
 |                                                            |
 | +--------------------------------------------------------+ |
-| | [X]  [Image]  Product Name                             | |
+| |  [Image]  Product Name                             | |
 | |              Color: Black, Size: Large                 | |
 | |              SKU: ABC123                               | |
 | |                                          $XX.XX        | |
@@ -149,7 +149,7 @@ This document provides detailed, real-world examples of wireframes across differ
 | +--------------------------------------------------------+ |
 |                                                            |
 | +--------------------------------------------------------+ |
-| | [X]  [Image]  Product Name 2                           | |
+| |  [Image]  Product Name 2                           | |
 | |              Color: Blue                               | |
 | |              In Stock                   $XX.XX         | |
 | |              Qty: [-] 1 [+]            Subtotal: $XX.XX| |
@@ -158,7 +158,7 @@ This document provides detailed, real-world examples of wireframes across differ
 | +--------------------------------------------------------+ |
 |                                                            |
 | +--------------------------------------------------------+ |
-| | [X]  [Image]  Product Name 3                           | |
+| |  [Image]  Product Name 3                           | |
 | |              Low Stock - Only 2 left!                  | |
 | |              Ships in 3-5 days          $XX.XX         | |
 | |              Qty: [-] 1 [+]            Subtotal: $XX.XX| |
@@ -435,7 +435,7 @@ This document provides detailed, real-world examples of wireframes across differ
 4. **Card Detail Modal** (on click):
    ```
    +------------------------------------------+
-   | Task #1 Title                        [X] |
+   | Task #1 Title                        |
    +------------------------------------------+
    | Status: [To Do ▼]      Assignee: [@User▼]|
    | Priority: [Medium ▼]   Due: [Date picker]|
@@ -449,7 +449,7 @@ This document provides detailed, real-world examples of wireframes across differ
    | Checklist (2/5 complete)                  |
    | [✓] Subtask 1                             |
    | [✓] Subtask 2                             |
-   | [ ] Subtask 3                             |
+   | Subtask 3                             |
    | [+ Add subtask]                           |
    |                                           |
    | Comments (3)                              |
@@ -953,7 +953,7 @@ This document provides detailed, real-world examples of wireframes across differ
 | Marital Status                                             |
 | [Select...                                              ▼] |
 |                                                            |
-| [ ] I consent to the privacy policy and terms of service  |
+| I consent to the privacy policy and terms of service  |
 |                                                            |
 |                                     [Continue to Step 2 >] |
 |                                                            |
@@ -1036,18 +1036,18 @@ This document provides detailed, real-world examples of wireframes across differ
 | Property Damage Liability                                  |
 | [$50,000 ▼]                            [What's this?]      |
 |                                                            |
-| [ ] Comprehensive Coverage                                 |
+| Comprehensive Coverage                                 |
 |     Covers damage from theft, vandalism, weather           |
 |     Deductible: [$500 ▼]                                   |
 |                                                            |
-| [ ] Collision Coverage                                     |
+| Collision Coverage                                     |
 |     Covers damage from accidents                           |
 |     Deductible: [$500 ▼]                                   |
 |                                                            |
-| [ ] Rental Car Reimbursement                               |
+| Rental Car Reimbursement                               |
 |     Up to $XX/day while your car is being repaired         |
 |                                                            |
-| [ ] Roadside Assistance                                    |
+| Roadside Assistance                                    |
 |     24/7 towing, jump starts, tire changes                 |
 |                                                            |
 | Estimated Monthly Premium: $XXX                            |
@@ -1114,8 +1114,8 @@ This document provides detailed, real-world examples of wireframes across differ
 | |                 (Save $XX.XX)                          | |
 | +========================================================+ |
 |                                                            |
-| [ ] I agree to the terms and conditions                    |
-| [ ] Send me emails about discounts and offers (optional)   |
+| I agree to the terms and conditions                    |
+| Send me emails about discounts and offers (optional)   |
 |                                                            |
 | [< Back]                                  [Get My Quote >] |
 |                                                            |
@@ -1412,14 +1412,14 @@ This document provides detailed, real-world examples of wireframes across differ
 | | (•) Everyone  ( ) Connections only  ( ) Only me        | |
 | |                                                        | |
 | | Activity Status                                        | |
-| | [ ] Show when I'm online                               | |
+| | Show when I'm online                               | |
 | |                                                        | |
 | | Data Collection                                        | |
-| | [ ] Allow analytics and usage data collection          | |
-| | [ ] Personalize my experience based on my activity     | |
+| | Allow analytics and usage data collection          | |
+| | Personalize my experience based on my activity     | |
 | |                                                        | |
 | | Search Engine Indexing                                 | |
-| | [ ] Allow search engines to index my profile           | |
+| | Allow search engines to index my profile           | |
 | |                                                        | |
 | | [Learn more about privacy]                             | |
 | +--------------------------------------------------------+ |

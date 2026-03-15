@@ -125,13 +125,13 @@ my-awesome-skill/
 
 ## Validation Checklist
 
-- [ ] Folder name is lowercase with hyphens
-- [ ] `name` field matches folder name exactly
-- [ ] `description` is 10-1024 characters
-- [ ] `description` explains WHAT and WHEN
-- [ ] `description` is wrapped in single quotes
-- [ ] Body content is under 500 lines
-- [ ] Bundled assets are under 5MB each
+- Folder name is lowercase with hyphens
+- `name` field matches folder name exactly
+- `description` is 10-1024 characters
+- `description` explains WHAT and WHEN
+- `description` is wrapped in single quotes
+- Body content is under 500 lines
+- Bundled assets are under 5MB each
 
 ## Troubleshooting
 

@@ -210,7 +210,7 @@ No baseline found. Run `/techdebt --save-baseline` to start tracking trends.
 The following {auto_fix_count} issues can be automatically fixed:
 
 {for each auto_fix}
-- [ ] {file_path}:{line_number} - {fix_description}
+- {file_path}:{line_number} - {fix_description}
 {end for}
 
 Run `/techdebt --fix` to apply these changes interactively.

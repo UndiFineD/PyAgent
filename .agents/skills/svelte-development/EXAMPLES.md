@@ -245,39 +245,39 @@ A comprehensive counter demonstrating state management, derived values, and effe
 
 ---
 
-## 2. Todo List with Filtering
+## 2. List with Filtering
 
-A complete todo list with filtering, persistence, and statistics.
+A complete list with filtering, persistence, and statistics.
 
 ```svelte
-<!-- TodoList.svelte -->
+<!-- List.svelte -->
 <script>
   import { onMount } from 'svelte';
   import { fade, slide } from 'svelte/transition';
   import { flip } from 'svelte/animate';
 
-  let todos = $state([]);
+  let s = $state([]);
   let newTodoText = $state('');
   let filter = $state('all'); // all, active, completed
 
   let filteredTodos = $derived(
     filter === 'all'
-      ? todos
+      ? s
       : filter === 'active'
-      ? todos.filter(t => !t.done)
-      : todos.filter(t => t.done)
+      ? s.filter(t => !t.done)
+      : s.filter(t => t.done)
   );
 
   let stats = $derived({
-    total: todos.length,
-    active: todos.filter(t => !t.done).length,
-    completed: todos.filter(t => t.done).length
+    total: s.length,
+    active: s.filter(t => !t.done).length,
+    completed: s.filter(t => t.done).length
   });
 
   onMount(() => {
     const saved = localStorage.getItem('todos');
     if (saved) {
-      todos = JSON.parse(saved);
+      s = JSON.parse(saved);
     }
   });
 
@@ -287,7 +287,7 @@ A complete todo list with filtering, persistence, and statistics.
 
   function addTodo() {
     if (newTodoText.trim()) {
-      todos = [...todos, {
+      s = [...todos, {
         id: Date.now(),
         text: newTodoText.trim(),
         done: false,
@@ -298,28 +298,28 @@ A complete todo list with filtering, persistence, and statistics.
   }
 
   function toggleTodo(id) {
-    todos = todos.map(t =>
+    s = s.map(t =>
       t.id === id ? { ...t, done: !t.done } : t
     );
   }
 
   function deleteTodo(id) {
-    todos = todos.filter(t => t.id !== id);
+    s = s.filter(t => t.id !== id);
   }
 
   function editTodo(id, newText) {
-    todos = todos.map(t =>
+    s = s.map(t =>
       t.id === id ? { ...t, text: newText } : t
     );
   }
 
   function clearCompleted() {
-    todos = todos.filter(t => !t.done);
+    s = s.filter(t => !t.done);
   }
 
   function toggleAll() {
-    const allDone = todos.every(t => t.done);
-    todos = todos.map(t => ({ ...t, done: !allDone }));
+    const allDone = s.every(t => t.done);
+    s = s.map(t => ({ ...t, done: !allDone }));
   }
 </script>
 
@@ -363,7 +363,7 @@ A complete todo list with filtering, persistence, and statistics.
     </button>
   </div>
 
-  {#if todos.length > 0}
+  {#if s.length > 0}
     <div class="bulk-actions">
       <button on:click={toggleAll}>Toggle All</button>
       {#if stats.completed > 0}
@@ -373,7 +373,7 @@ A complete todo list with filtering, persistence, and statistics.
   {/if}
 
   <ul class="todo-list">
-    {#each filteredTodos as todo (todo.id)}
+    {#each filteredTodos as (todo.id)}
       <li
         class:completed={todo.done}
         transition:slide={{ duration: 200 }}
@@ -389,24 +389,24 @@ A complete todo list with filtering, persistence, and statistics.
     {/each}
   </ul>
 
-  {#if filteredTodos.length === 0 && todos.length > 0}
-    <p class="empty" transition:fade>No {filter} todos</p>
+  {#if filteredTodos.length === 0 && s.length > 0}
+    <p class="empty" transition:fade>No {filter} s</p>
   {/if}
 
-  {#if todos.length === 0}
-    <p class="empty" transition:fade>No todos yet. Add one above!</p>
+  {#if s.length === 0}
+    <p class="empty" transition:fade>No s yet. Add one above!</p>
   {/if}
 </div>
 
-<!-- TodoItem Component -->
+<!-- Item Component -->
 <script context="module">
-  export function TodoItem({ todo, onToggle, onDelete, onEdit }) {
+  export function Item({ , onToggle, onDelete, onEdit }) {
     let editing = $state(false);
     let editText = $state(todo.text);
 
     function startEdit() {
       editing = true;
-      editText = todo.text;
+      editText = .text;
     }
 
     function saveEdit() {
@@ -418,7 +418,7 @@ A complete todo list with filtering, persistence, and statistics.
 
     function cancelEdit() {
       editing = false;
-      editText = todo.text;
+      editText = .text;
     }
 
     return {

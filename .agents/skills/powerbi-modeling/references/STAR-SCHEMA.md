@@ -95,9 +95,9 @@ Keep transaction identifiers (OrderNumber, InvoiceID) in fact table.
 
 ## Validation Checklist
 
-- [ ] Each table is clearly dimension or fact
-- [ ] Fact tables have foreign keys to all related dimensions
-- [ ] Dimensions have unique key columns
-- [ ] Date table exists and is marked
-- [ ] No circular relationship paths
-- [ ] Consistent naming conventions
+- Each table is clearly dimension or fact
+- Fact tables have foreign keys to all related dimensions
+- Dimensions have unique key columns
+- Date table exists and is marked
+- No circular relationship paths
+- Consistent naming conventions

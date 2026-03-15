@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Script to analyze PyAgent improvement todo list and count remaining items.
+"""Script to analyze PyAgent improvement list and count remaining items.
 """
 
 import re
 
 
 def count_todo_items(file_path):
-    """Count total and completed items in a todo file."""
+    """Count total and completed items in a file."""
     total = 0
     completed = 0
 
@@ -14,7 +14,7 @@ def count_todo_items(file_path):
         with open(file_path, 'r') as f:
             content = f.read()
 
-        # Look for checklist items (lines with [ ] or [x])
+        # Look for checklist items (lines with or [x])
         lines = content.split('\n')
         for line in lines:
             if '[ ]' in line or '[x]' in line:
@@ -28,17 +28,17 @@ def count_todo_items(file_path):
     return total, completed
 
 def analyze_todo_list():
-    """Analyze the entire todo list structure."""
-    todo_file = r"c:\dev\PyAgent\docs\todo-tree-20260303-1743.txt"
+    """Analyze the entire list structure."""
+    _file = r"c:\dev\PyAgent\docs\todo-tree-20260303-1743.txt"
 
-    print("Analyzing PyAgent Improvement Todo list")
+    print("Analyzing PyAgent Improvement list")
     print("=" * 50)
 
-    # Count total items from the todo file
+    # Count total items from the file
     total_items = 0
     completed_items = 0
 
-    # Parse the todo file to count items
+    # Parse the file to count items
     with open(todo_file, 'r') as f:
         content = f.read()
 

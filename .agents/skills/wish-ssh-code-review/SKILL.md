@@ -14,14 +14,14 @@ description: Reviews Wish SSH server code for proper middleware, session handlin
 
 ## Review Checklist
 
-- [ ] Host keys are loaded from file or generated securely
-- [ ] Middleware order is correct (logging first, auth early)
-- [ ] Session context is used for per-connection state
-- [ ] Graceful shutdown handles active sessions
-- [ ] PTY requests are handled for terminal apps
-- [ ] Connection limits prevent resource exhaustion
-- [ ] Timeout middleware prevents hung connections
-- [ ] BubbleTea middleware correctly configured
+- Host keys are loaded from file or generated securely
+- Middleware order is correct (logging first, auth early)
+- Session context is used for per-connection state
+- Graceful shutdown handles active sessions
+- PTY requests are handled for terminal apps
+- Connection limits prevent resource exhaustion
+- Timeout middleware prevents hung connections
+- BubbleTea middleware correctly configured
 
 ## Critical Patterns
 

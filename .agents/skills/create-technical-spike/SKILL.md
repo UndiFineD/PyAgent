@@ -50,20 +50,20 @@ tags: ["technical-spike", "${input:Category|technical}", "research"]
 
 ### Research Tasks
 
-- [ ] [Specific research task 1]
-- [ ] [Specific research task 2]
-- [ ] [Specific research task 3]
-- [ ] [Create proof of concept/prototype]
-- [ ] [Document findings and recommendations]
+- [Specific research task 1]
+- [Specific research task 2]
+- [Specific research task 3]
+- [Create proof of concept/prototype]
+- [Document findings and recommendations]
 
 ### Success Criteria
 
 **This spike is complete when:**
 
-- [ ] [Specific criteria 1]
-- [ ] [Specific criteria 2]
-- [ ] [Clear recommendation documented]
-- [ ] [Proof of concept completed (if applicable)]
+- [Specific criteria 1]
+- [Specific criteria 2]
+- [Clear recommendation documented]
+- [Proof of concept completed (if applicable)]
 
 ## Technical Context
 
@@ -106,10 +106,10 @@ tags: ["technical-spike", "${input:Category|technical}", "research"]
 
 ### Follow-up Actions
 
-- [ ] [Action item 1]
-- [ ] [Action item 2]
-- [ ] [Update architecture documents]
-- [ ] [Create implementation tasks]
+- [Action item 1]
+- [Action item 2]
+- [Update architecture documents]
+- [Create implementation tasks]
 
 ## Status History
 

@@ -320,13 +320,13 @@ Always include links to related content:
 
 Before considering a reference page complete:
 
-- [ ] Title matches the symbol/API name exactly
-- [ ] Description is one clear sentence
-- [ ] All parameters documented with types
-- [ ] Required vs optional clearly marked
-- [ ] Default values specified for optional parameters
-- [ ] Return type and structure documented
-- [ ] At least one complete, runnable example
-- [ ] Example uses realistic values
-- [ ] Related pages linked
-- [ ] Format matches other reference pages in the docs
+- Title matches the symbol/API name exactly
+- Description is one clear sentence
+- All parameters documented with types
+- Required vs optional clearly marked
+- Default values specified for optional parameters
+- Return type and structure documented
+- At least one complete, runnable example
+- Example uses realistic values
+- Related pages linked
+- Format matches other reference pages in the docs

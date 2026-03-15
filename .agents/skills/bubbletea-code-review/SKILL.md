@@ -42,27 +42,27 @@ description: Reviews BubbleTea TUI code for proper Elm architecture, model/updat
 ## Review Checklist
 
 ### Architecture
-- [ ] **No blocking I/O in Update()** (file, network, sleep)
-- [ ] Helper functions returning `tea.Cmd` are NOT flagged as blocking
-- [ ] Commands used for all async operations
+- **No blocking I/O in Update()** (file, network, sleep)
+- Helper functions returning `tea.Cmd` are NOT flagged as blocking
+- Commands used for all async operations
 
 ### Model & Update
-- [ ] Model is immutable (Update returns new model, not mutates)
-- [ ] Init returns proper initial command (or nil)
-- [ ] Update handles all expected message types
-- [ ] WindowSizeMsg handled for responsive layout
-- [ ] tea.Batch used for multiple commands
-- [ ] tea.Quit used correctly for exit
+- Model is immutable (Update returns new model, not mutates)
+- Init returns proper initial command (or nil)
+- Update handles all expected message types
+- WindowSizeMsg handled for responsive layout
+- tea.Batch used for multiple commands
+- tea.Quit used correctly for exit
 
 ### View & Styling
-- [ ] View is a pure function (no side effects)
-- [ ] Lipgloss styles defined once, not in View
-- [ ] Key bindings use key.Matches with help.KeyMap
+- View is a pure function (no side effects)
+- Lipgloss styles defined once, not in View
+- Key bindings use key.Matches with help.KeyMap
 
 ### Components
-- [ ] Sub-component updates propagated correctly
-- [ ] Bubbles components initialized with dimensions
-- [ ] Huh forms embedded via Update loop (not Run())
+- Sub-component updates propagated correctly
+- Bubbles components initialized with dimensions
+- Huh forms embedded via Update loop (not Run())
 
 ## Critical Patterns
 

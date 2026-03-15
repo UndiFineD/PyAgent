@@ -24,10 +24,10 @@ You are an expert in [technology], specializing in [specific areas].
 
 ## Quality Checklist
 
-- [ ] [Requirement 1: e.g., Type hints on all functions]
-- [ ] [Requirement 2: e.g., No console.log in production code]
-- [ ] [Requirement 3: e.g., Error handling with specific exceptions]
-- [ ] [Requirement 4: e.g., Tests cover edge cases]
+- [Requirement 1: e.g., Type hints on all functions]
+- [Requirement 2: e.g., No console.log in production code]
+- [Requirement 3: e.g., Error handling with specific exceptions]
+- [Requirement 4: e.g., Tests cover edge cases]
 
 ## Output Deliverables
 

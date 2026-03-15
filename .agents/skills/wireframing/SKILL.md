@@ -1301,15 +1301,15 @@ Home > Category > Subcategory
 | Filters    |  | [Sort: Dropdown]       |
 |            |  | [Grid View] [List View]|
 | Category   |  |                        |
-| [ ] Option |  | +----+  +----+  +----+ |
-| [ ] Option |  | |Img |  |Img |  |Img | |
+| Option |  | +----+  +----+  +----+ |
+| Option |  | |Img |  |Img |  |Img | |
 |            |  | |    |  |    |  |    | |
 | Price      |  | |Name|  |Name|  |Name| |
 | [Slider]   |  | |$XXX|  |$XXX|  |$XXX| |
 |            |  | +----+  +----+  +----+ |
 | Brand      |  |                        |
-| [ ] Option |  | +----+  +----+  +----+ |
-| [ ] Option |  | |Img |  |Img |  |Img | |
+| Option |  | +----+  +----+  +----+ |
+| Option |  | |Img |  |Img |  |Img | |
 |            |  | +----+  +----+  +----+ |
 | [Apply]    |  |                        |
 +------------+  | [Load More]            |
@@ -1358,7 +1358,7 @@ Home > Category > Subcategory
 | • Must be 8+ characters                  |
 | • Include number and special character   |
 |                                          |
-| [ ] I agree to Terms and Privacy Policy  |
+| I agree to Terms and Privacy Policy  |
 |                                          |
 | [     Create Account      ]              |
 |                                          |
@@ -1770,7 +1770,7 @@ Step 1: Cart → Step 2: Shipping → Step 3: Payment → Step 4: Review → Con
 +--------------------------------------------------+
 | [Logo]                                    [Help] |
 +--------------------------------------------------+
-| [✓] Cart  [✓] Shipping  [●] Payment  [ ] Review |
+| [✓] Cart  [✓] Shipping  [●] Payment  Review |
 +--------------------------------------------------+
 |                                                  |
 | Payment Method                                   |
@@ -1788,7 +1788,7 @@ Step 1: Cart → Step 2: Shipping → Step 3: Payment → Step 4: Review → Con
 | [_____________________________]                  |
 |                                                  |
 | Billing Address                                  |
-| [ ] Same as shipping address                     |
+| Same as shipping address                     |
 |                                                  |
 | [Apply Promo Code ▼]                             |
 |                                                  |
@@ -1863,13 +1863,13 @@ Step 1: Cart → Step 2: Shipping → Step 3: Payment → Step 4: Review → Con
 +--------------------------------------------------+
 | [+ New Item]           [Search: _____] [Filter▼]|
 +--------------------------------------------------+
-| [ ] | Name       | Status  | Date     | Actions  |
+| | Name       | Status  | Date     | Actions  |
 +--------------------------------------------------+
 | [✓] | Item Alpha | Active  | 01/15/24 | [•••]   |
-| [ ] | Item Beta  | Pending | 01/16/24 | [•••]   |
+| | Item Beta  | Pending | 01/16/24 | [•••]   |
 | [✓] | Item Gamma | Active  | 01/17/24 | [•••]   |
-| [ ] | Item Delta | Inactive| 01/18/24 | [•••]   |
-| [ ] | Item Echo  | Active  | 01/19/24 | [•••]   |
+| | Item Delta | Inactive| 01/18/24 | [•••]   |
+| | Item Echo  | Active  | 01/19/24 | [•••]   |
 +--------------------------------------------------+
 | Bulk Actions: [Delete] [Export] [Change Status]  |
 |                                                  |
@@ -1924,7 +1924,7 @@ Step 1: Cart → Step 2: Shipping → Step 3: Payment → Step 4: Review → Con
          | [_______________________]     |
          | [_______________________]     |
          |                               |
-         | [ ] Mark as featured          |
+         | Mark as featured          |
          |                               |
          | [Cancel]  [Add Item]          |
          +------------------------------+

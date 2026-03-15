@@ -16,18 +16,18 @@ description: Reviews shadcn/ui components for CVA patterns, composition with asC
 
 ## Review Checklist
 
-- [ ] `cn()` receives className, not CVA variants
-- [ ] `VariantProps<typeof variants>` exported for consumers
-- [ ] Compound variants used for complex state combinations
-- [ ] `asChild` pattern uses `@radix-ui/react-slot`
-- [ ] Context used for component composition (Card, Accordion, etc.)
-- [ ] `focus-visible:` states, not just `:focus`
-- [ ] `aria-invalid`, `aria-disabled` for form states
-- [ ] `disabled:` variants for all interactive elements
-- [ ] `sr-only` for screen reader text
-- [ ] `data-slot` attributes for targetable composition parts
-- [ ] CSS uses `has()` selectors for state-based styling
-- [ ] No direct className overrides of variant styles
+- `cn()` receives className, not CVA variants
+- `VariantProps<typeof variants>` exported for consumers
+- Compound variants used for complex state combinations
+- `asChild` pattern uses `@radix-ui/react-slot`
+- Context used for component composition (Card, Accordion, etc.)
+- `focus-visible:` states, not just `:focus`
+- `aria-invalid`, `aria-disabled` for form states
+- `disabled:` variants for all interactive elements
+- `sr-only` for screen reader text
+- `data-slot` attributes for targetable composition parts
+- CSS uses `has()` selectors for state-based styling
+- No direct className overrides of variant styles
 
 ## Valid Patterns (Do NOT Flag)
 

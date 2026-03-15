@@ -263,11 +263,11 @@ class PreProcessMiddleware(AgentMiddleware):
         return request
 
 agent = create_deep_agent(middleware=[PreProcessMiddleware()])
-# Actually runs AFTER TodoList, Filesystem, SubAgent, etc.
+# Actually runs AFTER List, Filesystem, SubAgent, etc.
 
 # GOOD - understand middleware runs after built-in stack
 # Built-in order:
-# 1. TodoListMiddleware
+# 1. ListMiddleware
 # 2. FilesystemMiddleware
 # 3. SubAgentMiddleware
 # 4. SummarizationMiddleware
@@ -334,7 +334,7 @@ agent = create_deep_agent(
 
     When using files, always use absolute paths..."""
 )
-# This duplicates what FilesystemMiddleware and TodoListMiddleware inject!
+# This duplicates what FilesystemMiddleware and ListMiddleware inject!
 
 # GOOD - focus on domain-specific guidance
 agent = create_deep_agent(
@@ -342,7 +342,7 @@ agent = create_deep_agent(
 
     Workflow:
     1. Read the files to review
-    2. Create a todo list of issues found
+    2. Create a list of issues found
     3. Delegate deep analysis to subagents if needed
     4. Compile findings into a report"""
 )
@@ -355,7 +355,7 @@ agent = create_deep_agent(
 agent = create_deep_agent(
     system_prompt="""Never use the task tool.
     Always process everything in the main thread.
-    Don't use todos, just remember everything."""
+    Don't use s, just remember everything."""
 )
 # Fighting against the framework!
 
@@ -363,7 +363,7 @@ agent = create_deep_agent(
 agent = create_deep_agent(
     system_prompt="""For simple tasks, handle directly.
     For complex multi-step research, use subagents.
-    Track progress with todos for tasks with 3+ steps."""
+    Track progress with s for tasks with 3+ steps."""
 )
 ```
 
@@ -463,36 +463,36 @@ agent = create_deep_agent(
 ## Code Review Checklist
 
 ### Configuration
-- [ ] Checkpointer provided if using `interrupt_on`
-- [ ] Store provided if using `StoreBackend`
-- [ ] Thread ID provided in config when using checkpointer
-- [ ] Backend appropriate for use case (ephemeral vs persistent)
+- Checkpointer provided if using `interrupt_on`
+- Store provided if using `StoreBackend`
+- Thread ID provided in config when using checkpointer
+- Backend appropriate for use case (ephemeral vs persistent)
 
 ### Backends
-- [ ] FilesystemBackend scoped to safe `root_dir`
-- [ ] StoreBackend has corresponding `store` parameter
-- [ ] CompositeBackend routes don't shadow each other unintentionally
-- [ ] Not expecting persistence from StateBackend across threads
+- FilesystemBackend scoped to safe `root_dir`
+- StoreBackend has corresponding `store` parameter
+- CompositeBackend routes don't shadow each other unintentionally
+- Not expecting persistence from StateBackend across threads
 
 ### Subagents
-- [ ] All required fields present (name, description, system_prompt, tools)
-- [ ] Unique subagent names
-- [ ] CompiledSubAgent has compatible state schema
-- [ ] Subagents used for complex tasks, not trivial operations
+- All required fields present (name, description, system_prompt, tools)
+- Unique subagent names
+- CompiledSubAgent has compatible state schema
+- Subagents used for complex tasks, not trivial operations
 
 ### Middleware
-- [ ] Custom middleware added after built-in stack (expected behavior)
-- [ ] Tools have descriptive docstrings
-- [ ] Not mutating request/response objects
+- Custom middleware added after built-in stack (expected behavior)
+- Tools have descriptive docstrings
+- Not mutating request/response objects
 
 ### System Prompt
-- [ ] Not duplicating built-in tool instructions
-- [ ] Not contradicting framework defaults
-- [ ] Stopping criteria defined for open-ended tasks
-- [ ] Parallelization guidance for independent tasks
+- Not duplicating built-in tool instructions
+- Not contradicting framework defaults
+- Stopping criteria defined for open-ended tasks
+- Parallelization guidance for independent tasks
 
 ### Performance
-- [ ] Large files routed to appropriate backend
-- [ ] Production uses persistent checkpointer
-- [ ] Recursion/iteration limits considered
-- [ ] Independent subagents parallelized
+- Large files routed to appropriate backend
+- Production uses persistent checkpointer
+- Recursion/iteration limits considered
+- Independent subagents parallelized

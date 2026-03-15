@@ -17,21 +17,21 @@ description: Reviews Elixir code for security vulnerabilities including code inj
 ## Review Checklist
 
 ### Critical (Block Merge)
-- [ ] No `Code.eval_string/1` on user input
-- [ ] No `:erlang.binary_to_term/1` without `:safe` on untrusted data
-- [ ] No `String.to_atom/1` on external input
-- [ ] No hardcoded secrets in source code
+- No `Code.eval_string/1` on user input
+- No `:erlang.binary_to_term/1` without `:safe` on untrusted data
+- No `String.to_atom/1` on external input
+- No hardcoded secrets in source code
 
 ### Major
-- [ ] ETS tables use appropriate access controls
-- [ ] No sensitive data in process dictionary
-- [ ] No dynamic module creation from user input
-- [ ] Path traversal prevented in file operations
+- ETS tables use appropriate access controls
+- No sensitive data in process dictionary
+- No dynamic module creation from user input
+- Path traversal prevented in file operations
 
 ### Configuration
-- [ ] Secrets loaded from environment
-- [ ] No secrets in config/*.exs committed to git
-- [ ] Runtime config used for deployment secrets
+- Secrets loaded from environment
+- No secrets in config/*.exs committed to git
+- Runtime config used for deployment secrets
 
 ## Valid Patterns (Do NOT Flag)
 

@@ -106,7 +106,7 @@ description: "Learn the basics of [product] by building a working [thing]"
 In this tutorial, you'll build a [concrete deliverable]. By the end, you'll have a working [thing] that [does something visible].
 
 <Note>
-This tutorial takes approximately [X] minutes to complete.
+This tutorial takes approximately minutes to complete.
 </Note>
 
 ## What you'll build
@@ -324,17 +324,17 @@ See [references/example-weather-api.md](references/example-weather-api.md) for a
 
 Before publishing, verify:
 
-- [ ] Title describes what they'll build, not what they'll learn
-- [ ] Introduction shows the concrete end result
-- [ ] Prerequisites are minimal (beginners don't have much)
-- [ ] Every step produces visible output
-- [ ] "You should see" appears after each significant action
-- [ ] No choices offered - one clear path only
-- [ ] No explanations of why things work (save for docs)
-- [ ] Potential failures are anticipated with recovery guidance
-- [ ] "What you've learned" summarizes concrete skills gained
-- [ ] Next steps guide to continued learning
-- [ ] Tutorial tested end-to-end by someone unfamiliar with it
+- Title describes what they'll build, not what they'll learn
+- Introduction shows the concrete end result
+- Prerequisites are minimal (beginners don't have much)
+- Every step produces visible output
+- "You should see" appears after each significant action
+- No choices offered - one clear path only
+- No explanations of why things work (save for docs)
+- Potential failures are anticipated with recovery guidance
+- "What you've learned" summarizes concrete skills gained
+- Next steps guide to continued learning
+- Tutorial tested end-to-end by someone unfamiliar with it
 
 ## When to Use Tutorial vs Other Doc Types
 

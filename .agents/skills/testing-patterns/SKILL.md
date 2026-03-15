@@ -140,13 +140,13 @@ Option 3: Contract testing
 
 ## Test Quality Checklist
 
-- [ ] Tests are independent (no order dependency)
-- [ ] Tests are deterministic (no flaky tests)
-- [ ] Tests are fast (unit < 100ms, integration < 5s)
-- [ ] Tests have clear names describing behavior
-- [ ] Tests cover happy path AND error cases
-- [ ] Tests don't repeat production logic
-- [ ] Mocks are minimal (only external boundaries)
+- Tests are independent (no order dependency)
+- Tests are deterministic (no flaky tests)
+- Tests are fast (unit < 100ms, integration < 5s)
+- Tests have clear names describing behavior
+- Tests cover happy path AND error cases
+- Tests don't repeat production logic
+- Mocks are minimal (only external boundaries)
 
 ## Additional Resources
 

@@ -178,11 +178,11 @@ For comprehensive coverage:
 ## Pre-flight Checklist
 
 Before proceeding, verify:
-- [ ] Dependencies installed
-- [ ] Configuration valid
-- [ ] Test data available
-- [ ] Permissions granted
-- [ ] Output directory writable
+- Dependencies installed
+- Configuration valid
+- Test data available
+- Permissions granted
+- Output directory writable
 ```
 
 **When to use:** Setup procedures, validation steps, quality gates.

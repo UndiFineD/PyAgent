@@ -249,7 +249,7 @@ limitations under the License.
     </developer>
   </developers>
 
-  <mailingLists><!-- TODO decide what we do with mailing lists now -->
+  <mailingLists><!-- decide what we do with mailing lists now -->
     <mailingList>
       <name>Plexus User List</name>
       <subscribe>http://xircles.codehaus.org/manage_email/user%40plexus.codehaus.org</subscribe>

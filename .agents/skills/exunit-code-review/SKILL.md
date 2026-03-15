@@ -29,26 +29,26 @@ description: Reviews ExUnit test code for proper patterns, boundary mocking with
 ## Review Checklist
 
 ### Test Structure
-- [ ] Tests are `async: true` unless sharing database state
-- [ ] Describe-blocks group related tests
-- [ ] Setup extracts common test data
-- [ ] Tests have clear arrange/act/assert structure
+- Tests are `async: true` unless sharing database state
+- Describe-blocks group related tests
+- Setup extracts common test data
+- Tests have clear arrange/act/assert structure
 
 ### Mocking
-- [ ] Mox used for external boundaries (HTTP, APIs)
-- [ ] Behaviors defined for mockable interfaces
-- [ ] No mocking of internal modules
-- [ ] verify_on_exit! in setup for strict mocking
+- Mox used for external boundaries (HTTP, APIs)
+- Behaviors defined for mockable interfaces
+- No mocking of internal modules
+- verify_on_exit! in setup for strict mocking
 
 ### Test Adapters
-- [ ] Bypass for HTTP endpoint mocking
-- [ ] Swoosh.TestAdapter for email testing
-- [ ] Oban.Testing for background job assertions
+- Bypass for HTTP endpoint mocking
+- Swoosh.TestAdapter for email testing
+- Oban.Testing for background job assertions
 
 ### Database
-- [ ] Ecto.Adapters.SQL.Sandbox for isolation
-- [ ] Async tests don't share database state
-- [ ] Fixtures/factories used consistently
+- Ecto.Adapters.SQL.Sandbox for isolation
+- Async tests don't share database state
+- Fixtures/factories used consistently
 
 ## Valid Patterns (Do NOT Flag)
 

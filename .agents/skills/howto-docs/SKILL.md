@@ -308,16 +308,16 @@ Check your endpoint logs to confirm receipt.
 
 Before publishing, verify:
 
-- [ ] Title starts with "How to" and describes a specific goal
-- [ ] Prerequisites section lists all requirements
-- [ ] Each step is a single, clear action
-- [ ] Action verbs start each step (Click, Enter, Select, Run)
-- [ ] Expected outcomes shown after key steps
-- [ ] Verification section explains how to confirm success
-- [ ] Troubleshooting covers common issues
-- [ ] Next steps link to related content
-- [ ] No unnecessary explanations - links to concepts instead
-- [ ] Written from user perspective, not product perspective
+- Title starts with "How to" and describes a specific goal
+- Prerequisites section lists all requirements
+- Each step is a single, clear action
+- Action verbs start each step (Click, Enter, Select, Run)
+- Expected outcomes shown after key steps
+- Verification section explains how to confirm success
+- Troubleshooting covers common issues
+- Next steps link to related content
+- No unnecessary explanations - links to concepts instead
+- Written from user perspective, not product perspective
 
 ## When to Use How-To vs Other Doc Types
 

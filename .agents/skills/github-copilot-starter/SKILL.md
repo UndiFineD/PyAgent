@@ -274,15 +274,15 @@ After creating all files, provide the user with:
 ## Quality Checklist
 
 Before completing, verify:
-- [ ] All files have proper YAML frontmatter
-- [ ] Language-specific best practices are included
-- [ ] Files reference each other appropriately using Markdown links
-- [ ] Prompts include relevant tools and variables
-- [ ] Instructions are comprehensive but not overwhelming
-- [ ] Security and performance considerations are addressed
-- [ ] Testing guidelines are included
-- [ ] Documentation standards are clear
-- [ ] Code review standards are defined
+- All files have proper YAML frontmatter
+- Language-specific best practices are included
+- Files reference each other appropriately using Markdown links
+- Prompts include relevant tools and variables
+- Instructions are comprehensive but not overwhelming
+- Security and performance considerations are addressed
+- Testing guidelines are included
+- Documentation standards are clear
+- Code review standards are defined
 
 ## Workflow Template Structure
 

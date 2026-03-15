@@ -90,16 +90,16 @@ Generate:
 ## Validation Checklist
 
 Ensure generated code:
-- [ ] No reference types in schemas
-- [ ] All type fields are single types
-- [ ] Enum handling via string with validation
-- [ ] Resources available through tool outputs
-- [ ] Full URI endpoints
-- [ ] JSON-RPC 2.0 compliance
-- [ ] Proper x-ms-agentic-protocol header
-- [ ] McpResponse/McpErrorResponse schemas
-- [ ] Clear tool descriptions for Copilot Studio
-- [ ] Generative Orchestration compatible
+- No reference types in schemas
+- All type fields are single types
+- Enum handling via string with validation
+- Resources available through tool outputs
+- Full URI endpoints
+- JSON-RPC 2.0 compliance
+- Proper x-ms-agentic-protocol header
+- McpResponse/McpErrorResponse schemas
+- Clear tool descriptions for Copilot Studio
+- Generative Orchestration compatible
 
 ## Example Usage
 

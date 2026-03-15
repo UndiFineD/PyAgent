@@ -94,7 +94,7 @@ Use fetchers when you DON'T want URL changes:
 ```tsx
 import { useFetcher } from "react-router";
 
-function TodoItem({ todo }) {
+function Item({ }) {
   const fetcher = useFetcher();
   const isDeleting = fetcher.state !== "idle";
 
@@ -164,12 +164,12 @@ function UserSearchCombobox() {
 ## Optimistic List Updates
 
 ```tsx
-function TodoList() {
-  const { todos } = useLoaderData();
+function List() {
+  const { s } = useLoaderData();
   const fetcher = useFetcher();
 
-  const displayedTodos = todos.filter(todo => {
-    const isDeleting = fetcher.formData?.get("id") === todo.id;
+  const displayedTodos = s.filter(todo => {
+    const isDeleting = fetcher.formData?.get("id") === .id;
     return !isDeleting;
   });
 

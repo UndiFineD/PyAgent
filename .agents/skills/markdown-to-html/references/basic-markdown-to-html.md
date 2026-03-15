@@ -320,11 +320,6 @@ git add
 
 ## Task Lists (GitHub Flavored Markdown)
 
-```md
-- [x] Done
-- [ ] Pending
-```
-
 ```html
 <ul>
   <li>

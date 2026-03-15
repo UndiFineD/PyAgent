@@ -2054,16 +2054,16 @@ body {
 
 ### Testing Checklist
 
-- [ ] Test on actual mobile devices (iOS and Android)
-- [ ] Test at various viewport sizes (not just standard breakpoints)
-- [ ] Test with slow network connections (3G)
-- [ ] Test touch interactions (tap, swipe, pinch)
-- [ ] Test with different font sizes (user preferences)
-- [ ] Test keyboard navigation
-- [ ] Test with screen readers
-- [ ] Test in landscape and portrait orientations
-- [ ] Test with different zoom levels
-- [ ] Validate HTML and CSS
+- Test on actual mobile devices (iOS and Android)
+- Test at various viewport sizes (not just standard breakpoints)
+- Test with slow network connections (3G)
+- Test touch interactions (tap, swipe, pinch)
+- Test with different font sizes (user preferences)
+- Test keyboard navigation
+- Test with screen readers
+- Test in landscape and portrait orientations
+- Test with different zoom levels
+- Validate HTML and CSS
 
 ### Common Pitfalls to Avoid
 

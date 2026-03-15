@@ -292,10 +292,10 @@ log_slow_callbacks.enable(0.05)  # Log callbacks > 50ms
 
 ## Quick Debug Checklist
 
-1. [ ] Enable debug mode: `asyncio.run(main(), debug=True)`
-2. [ ] Check for unawaited coroutines: warnings -> errors
-3. [ ] Look for blocking calls: time.sleep, requests, open()
-4. [ ] Verify all tasks are awaited or tracked
-5. [ ] Check for proper resource cleanup (sessions, connections)
-6. [ ] Monitor task count: `len(asyncio.all_tasks())`
-7. [ ] Profile with yappi for async-aware profiling
+1. Enable debug mode: `asyncio.run(main(), debug=True)`
+2. Check for unawaited coroutines: warnings -> errors
+3. Look for blocking calls: time.sleep, requests, open()
+4. Verify all tasks are awaited or tracked
+5. Check for proper resource cleanup (sessions, connections)
+6. Monitor task count: `len(asyncio.all_tasks())`
+7. Profile with yappi for async-aware profiling

@@ -16,18 +16,18 @@ description: Reviews pytest test code for async patterns, fixtures, parametrize,
 
 ## Review Checklist
 
-- [ ] Test functions are `async def test_*` for async code under test
-- [ ] AsyncMock used for async dependencies, not Mock
-- [ ] All async mocks and coroutines are awaited
-- [ ] Fixtures in conftest.py for shared setup
-- [ ] Fixture scope appropriate (function, class, module, session)
-- [ ] Yield fixtures have proper cleanup in finally block
-- [ ] @pytest.mark.parametrize for similar test cases
-- [ ] No duplicated test logic across multiple test functions
-- [ ] Mocks track calls properly (assert_called_once_with)
-- [ ] patch() targets correct location (where used, not defined)
-- [ ] No mocking of internals that should be tested
-- [ ] Test isolation (no shared mutable state between tests)
+- Test functions are `async def test_*` for async code under test
+- AsyncMock used for async dependencies, not Mock
+- All async mocks and coroutines are awaited
+- Fixtures in conftest.py for shared setup
+- Fixture scope appropriate (function, class, module, session)
+- Yield fixtures have proper cleanup in finally block
+- @pytest.mark.parametrize for similar test cases
+- No duplicated test logic across multiple test functions
+- Mocks track calls properly (assert_called_once_with)
+- patch() targets correct location (where used, not defined)
+- No mocking of internals that should be tested
+- Test isolation (no shared mutable state between tests)
 
 ## When to Load References
 

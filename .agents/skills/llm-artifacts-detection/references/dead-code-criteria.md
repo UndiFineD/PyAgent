@@ -69,7 +69,7 @@ def calculate(x):
 
 ---
 
-## 2. TODO/FIXME Comments
+## 2. /FIXME Comments
 
 ### What to Look For
 
@@ -82,14 +82,14 @@ Comments indicating incomplete work, technical debt, or known issues.
 def get_user(id):
     return db.query(User).get(id)
 
-# FIXME: this breaks with unicode  <-- Known bug
+# this breaks with unicode  <-- Known bug
 def parse_name(name):
     return name.split()[0]
 
-# HACK: temporary workaround for issue #123  <-- Tech debt
+# temporary workaround for issue #123  <-- Tech debt
 result = data.replace("\x00", "")
 
-# XXX: this needs to be refactored  <-- Acknowledged mess
+# this needs to be refactored  <-- Acknowledged mess
 def complex_function():
     # 200 lines of spaghetti
     pass
@@ -102,7 +102,7 @@ old_format = convert_legacy(data)
 
 | Marker | Meaning | Action |
 |--------|---------|--------|
-| TODO | Planned work | Complete or create ticket |
+| | Planned work | Complete or create ticket |
 | FIXME | Known bug | Fix or document as known issue |
 | HACK | Workaround | Refactor or document why needed |
 | XXX | Needs attention | Review and address |
@@ -225,7 +225,7 @@ def test_helper_function():
 ## Review Questions
 
 1. Are there functions with zero callers?
-2. How old are the TODO/FIXME comments?
+2. How old are the /FIXME comments?
 3. Is "deprecated" code actually deprecated (with timeline)?
 4. Do all test files have corresponding source files?
 5. Are there variables assigned but never read?

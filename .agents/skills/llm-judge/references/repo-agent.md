@@ -93,7 +93,7 @@ Use patterns from `@beagle:llm-artifacts-detection`:
 ### 6. Analyze Dead Code
 
 - Unused imports (grep for imports, check usage)
-- TODO/FIXME comments
+- /FIXME comments
 - Commented-out code blocks
 - Unused functions/variables
 

@@ -68,7 +68,7 @@ else
     echo -e "${GREEN}OK${NC}"
 fi
 
-echo -n "Checking: TODO/FIXME security items... "
+echo -n "Checking: /FIXME security items... "
 if rg -i "TODO.*security|FIXME.*security|HACK.*security" "$DIR" 2>/dev/null | head -5 | grep -q .; then
     echo -e "${YELLOW}FOUND${NC}"
     rg -i "TODO.*security|FIXME.*security|HACK.*security" "$DIR" 2>/dev/null | head -10

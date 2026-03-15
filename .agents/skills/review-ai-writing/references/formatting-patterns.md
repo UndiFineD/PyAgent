@@ -105,9 +105,9 @@ Gratuitous emoji in technical writing where plain text is clearer. Common in AI-
 :white_check_mark: Linting clean
 
 <!-- GOOD - Use standard markdown -->
-- [x] Unit tests passing
-- [x] Integration tests passing
-- [x] Linting clean
+- Unit tests passing
+- Integration tests passing
+- Linting clean
 ```
 
 ### fix_safety

@@ -8,10 +8,10 @@ An ADR is complete when it meets all five E.C.A.D.R. criteria.
 
 | Check | Criteria |
 |-------|----------|
-| [ ] | Context describes a real, specific problem |
-| [ ] | Problem is scoped (not too broad, not too narrow) |
-| [ ] | Constraints and requirements are stated |
-| [ ] | Reader understands WHY a decision is needed |
+| | Context describes a real, specific problem |
+| | Problem is scoped (not too broad, not too narrow) |
+| | Constraints and requirements are stated |
+| | Reader understands WHY a decision is needed |
 
 **Anti-patterns:**
 - "We need to choose a database" (too vague)
@@ -22,10 +22,10 @@ An ADR is complete when it meets all five E.C.A.D.R. criteria.
 
 | Check | Criteria |
 |-------|----------|
-| [ ] | At least 2 options considered |
-| [ ] | Options are genuinely viable (not strawmen) |
-| [ ] | Each option has pros AND cons listed |
-| [ ] | "Do nothing" considered if applicable |
+| | At least 2 options considered |
+| | Options are genuinely viable (not strawmen) |
+| | Each option has pros AND cons listed |
+| | "Do nothing" considered if applicable |
 
 **Anti-patterns:**
 - Single option presented as foregone conclusion
@@ -36,10 +36,10 @@ An ADR is complete when it meets all five E.C.A.D.R. criteria.
 
 | Check | Criteria |
 |-------|----------|
-| [ ] | Chosen option is clearly stated |
-| [ ] | Decision is specific enough to implement |
-| [ ] | Rationale links to decision drivers |
-| [ ] | No ambiguity about what was decided |
+| | Chosen option is clearly stated |
+| | Decision is specific enough to implement |
+| | Rationale links to decision drivers |
+| | No ambiguity about what was decided |
 
 **Anti-patterns:**
 - "We will use a modern approach" (vague)
@@ -50,10 +50,10 @@ An ADR is complete when it meets all five E.C.A.D.R. criteria.
 
 | Check | Criteria |
 |-------|----------|
-| [ ] | Good consequences listed |
-| [ ] | Bad consequences listed (honest tradeoffs) |
-| [ ] | Operational impacts considered |
-| [ ] | Future implications noted |
+| | Good consequences listed |
+| | Bad consequences listed (honest tradeoffs) |
+| | Operational impacts considered |
+| | Future implications noted |
 
 **Anti-patterns:**
 - Only positive consequences (overselling)
@@ -64,10 +64,10 @@ An ADR is complete when it meets all five E.C.A.D.R. criteria.
 
 | Check | Criteria |
 |-------|----------|
-| [ ] | Status is set appropriately |
-| [ ] | Decision-makers are identified |
-| [ ] | Language is accessible (not jargon-heavy) |
-| [ ] | Sufficient context for outsiders to understand |
+| | Status is set appropriately |
+| | Decision-makers are identified |
+| | Language is accessible (not jargon-heavy) |
+| | Sufficient context for outsiders to understand |
 
 **Anti-patterns:**
 - Missing metadata (date, status, authors)
@@ -119,8 +119,8 @@ Do not advance to `proposed` until all `[INVESTIGATE]` prompts are resolved.
 
 Final pass before marking `proposed`:
 
-- [ ] No `[INVESTIGATE]` prompts remain
-- [ ] All E.C.A.D.R. criteria checked
-- [ ] File named correctly (`NNNN-slugified-title.md`)
-- [ ] Frontmatter complete (status, date, decision-makers)
-- [ ] Links to related ADRs if superseding/related
+- No `[INVESTIGATE]` prompts remain
+- All E.C.A.D.R. criteria checked
+- File named correctly (`NNNN-slugified-title.md`)
+- Frontmatter complete (status, date, decision-makers)
+- Links to related ADRs if superseding/related

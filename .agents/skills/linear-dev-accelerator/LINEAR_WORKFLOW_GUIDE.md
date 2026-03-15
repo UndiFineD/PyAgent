@@ -33,7 +33,7 @@ Workspace (Organization)
 ### Issue Lifecycle
 
 ```
-Backlog → Todo → In Progress → In Review → Done
+Backlog → → In Progress → In Review → Done
                                          → Canceled
 ```
 
@@ -145,12 +145,12 @@ parentId: "[design-system-epic-id]"
 team: "Frontend"
 description: |
   ## Tasks
-  - [ ] Design variants (primary, secondary, ghost)
-  - [ ] Implement component
-  - [ ] Add loading state
-  - [ ] Add icon support
-  - [ ] Write unit tests
-  - [ ] Document in Storybook
+  - Design variants (primary, secondary, ghost)
+  - Implement component
+  - Add loading state
+  - Add icon support
+  - Write unit tests
+  - Document in Storybook
 
   ## Acceptance Criteria
   - All variants implemented
@@ -287,14 +287,14 @@ description: |
   Backend auth endpoints + Frontend login/register
 
   ## Backend Status
-  - [ ] POST /api/auth/register
-  - [ ] POST /api/auth/login
-  - [ ] POST /api/auth/refresh
+  - POST /api/auth/register
+  - POST /api/auth/login
+  - POST /api/auth/refresh
 
   ## Frontend Status
-  - [ ] Login form component
-  - [ ] Register form component
-  - [ ] Auth context setup
+  - Login form component
+  - Register form component
+  - Auth context setup
 
   ## Dependencies
   - Frontend blocked on: API endpoints complete
@@ -858,18 +858,18 @@ description: |
   - Type: Major release
 
   ## Features Included
-  - [ ] User dashboard redesign (CET-45)
-  - [ ] Real-time notifications (CET-67)
-  - [ ] Dark mode support (CET-78)
-  - [ ] Performance improvements (CET-89)
+  - User dashboard redesign (CET-45)
+  - Real-time notifications (CET-67)
+  - Dark mode support (CET-78)
+  - Performance improvements (CET-89)
 
   ## Pre-Release Checklist
-  - [ ] All features complete
-  - [ ] QA testing passed
-  - [ ] Performance benchmarks met
-  - [ ] Documentation updated
-  - [ ] Migration scripts ready
-  - [ ] Rollback plan documented
+  - All features complete
+  - QA testing passed
+  - Performance benchmarks met
+  - Documentation updated
+  - Migration scripts ready
+  - Rollback plan documented
 
   ## Deployment Plan
   1. Deploy to staging (March 13)
@@ -907,11 +907,11 @@ description: |
   - LCP: < 2s
 
   ## Optimization Tasks
-  - [ ] Code splitting by route
-  - [ ] Image lazy loading
-  - [ ] Bundle size reduction
-  - [ ] Server-side rendering
-  - [ ] Cache optimization
+  - Code splitting by route
+  - Image lazy loading
+  - Bundle size reduction
+  - Server-side rendering
+  - Cache optimization
 
   ## Metrics Tracking
   Will update with benchmark results
@@ -969,8 +969,8 @@ body: |
 Clear explanation of what and why
 
 ## Tasks
-- [ ] Specific, actionable task 1
-- [ ] Specific, actionable task 2
+- Specific, actionable task 1
+- Specific, actionable task 2
 
 ## Acceptance Criteria
 - Clear definition of "done"

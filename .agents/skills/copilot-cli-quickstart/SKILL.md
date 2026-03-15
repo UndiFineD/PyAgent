@@ -386,12 +386,12 @@ If no project folder: suggest `mkdir ~/copilot-playground && cd ~/copilot-playgr
 
 **Teach these concepts:**
 
-1. **Plan mode** — Ask Copilot to think before coding. It creates a structured plan with todos. Like blueprints before building! 🏛️
+1. **Plan mode** — Ask Copilot to think before coding. It creates a structured plan with s. Like blueprints before building! 🏛️
 
 2. **How to use it:**
    > - Type `/plan` followed by what you want
    > - Or `Shift+Tab` to switch to plan mode
-   > - Copilot creates a plan file and tracks todos
+   > - Copilot creates a plan file and tracks s
 
 3. **Example:**
    > ```

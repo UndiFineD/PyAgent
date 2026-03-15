@@ -172,18 +172,18 @@ def evaluate_with_rubric(output: str, rubric: dict) -> float:
 ## Evaluation Implementation Checklist
 
 ### Setup
-- [ ] Define evaluation criteria/rubric
-- [ ] Set score threshold for "good enough"
-- [ ] Configure max iterations (default: 3)
+- Define evaluation criteria/rubric
+- Set score threshold for "good enough"
+- Configure max iterations (default: 3)
 
 ### Implementation
-- [ ] Implement generate() function
-- [ ] Implement evaluate() function with structured output
-- [ ] Implement optimize() function
-- [ ] Wire up the refinement loop
+- Implement generate() function
+- Implement evaluate() function with structured output
+- Implement optimize() function
+- Wire up the refinement loop
 
 ### Safety
-- [ ] Add convergence detection
-- [ ] Log all iterations for debugging
-- [ ] Handle evaluation parse failures gracefully
+- Add convergence detection
+- Log all iterations for debugging
+- Handle evaluation parse failures gracefully
 ```

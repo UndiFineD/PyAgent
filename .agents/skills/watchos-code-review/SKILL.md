@@ -16,18 +16,18 @@ description: Reviews watchOS code for app lifecycle, complications (ClockKit/Wid
 
 ## Review Checklist
 
-- [ ] SwiftUI App protocol used with `@WKApplicationDelegateAdaptor` for lifecycle events
-- [ ] `scenePhase` read from root view (not sheets/modals where it's always `.active`)
-- [ ] `WKExtendedRuntimeSession` started only while app is active (not from background)
-- [ ] Workout sessions recovered in `applicationDidFinishLaunching` (not just delegate)
-- [ ] Background tasks scheduled at least 5 minutes apart; next scheduled before completing current
-- [ ] `URLSessionDownloadTask` (not `DataTask`) used for background network requests
-- [ ] WidgetKit used instead of ClockKit for watchOS 9+ complications
-- [ ] Timeline includes future entries (not just current state); gaps avoided
-- [ ] `TimelineEntryRelevance` implemented for Smart Stack prioritization
-- [ ] WCSession delegate set before `activate()`; singleton pattern used
-- [ ] `isReachable` checked before `sendMessage`; `transferUserInfo` for critical data
-- [ ] Received files moved synchronously before delegate callback returns
+- SwiftUI App protocol used with `@WKApplicationDelegateAdaptor` for lifecycle events
+- `scenePhase` read from root view (not sheets/modals where it's always `.active`)
+- `WKExtendedRuntimeSession` started only while app is active (not from background)
+- Workout sessions recovered in `applicationDidFinishLaunching` (not just delegate)
+- Background tasks scheduled at least 5 minutes apart; next scheduled before completing current
+- `URLSessionDownloadTask` (not `DataTask`) used for background network requests
+- WidgetKit used instead of ClockKit for watchOS 9+ complications
+- Timeline includes future entries (not just current state); gaps avoided
+- `TimelineEntryRelevance` implemented for Smart Stack prioritization
+- WCSession delegate set before `activate()`; singleton pattern used
+- `isReachable` checked before `sendMessage`; `transferUserInfo` for critical data
+- Received files moved synchronously before delegate callback returns
 
 ## When to Load References
 

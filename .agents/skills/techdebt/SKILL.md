@@ -292,10 +292,10 @@ Add to your workflow:
 ```markdown
 ## Session Wrap-Up Checklist
 
-- [ ] Run `/techdebt` to scan changes
-- [ ] Address any P0 issues found
-- [ ] Create tasks for P1/P2 items
-- [ ] Commit clean code
+- Run `/techdebt` to scan changes
+- Address any P0 issues found
+- Create tasks for P1/P2 items
+- Commit clean code
 ```
 
 ### Pre-Commit Hook
@@ -375,7 +375,7 @@ Add project-specific patterns in `.claude/techdebt-rules.json`:
     {
       "pattern": "TODO.*security",
       "severity": "P0",
-      "message": "Security TODO must be resolved"
+      "message": "Security must be resolved"
     }
   ],
   "complexity": {

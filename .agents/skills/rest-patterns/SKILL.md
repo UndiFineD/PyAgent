@@ -51,13 +51,13 @@ GET /users?role=admin               # Filtering
 
 ## Security Checklist
 
-- [ ] HTTPS/TLS only
-- [ ] OAuth 2.0 or JWT for auth
-- [ ] Validate all inputs
-- [ ] Rate limit per client
-- [ ] CORS headers configured
-- [ ] No sensitive data in URLs
-- [ ] Use `no-store` for sensitive responses
+- HTTPS/TLS only
+- OAuth 2.0 or JWT for auth
+- Validate all inputs
+- Rate limit per client
+- CORS headers configured
+- No sensitive data in URLs
+- Use `no-store` for sensitive responses
 
 ## Common Mistakes
 

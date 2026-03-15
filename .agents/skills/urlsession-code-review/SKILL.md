@@ -23,30 +23,30 @@ triggers:
 ## Review Checklist
 
 ### Response Validation
-- [ ] HTTP status codes validated - URLSession does NOT throw on 404/500
-- [ ] Response cast to HTTPURLResponse before checking status
-- [ ] Both transport errors (URLError) and HTTP errors handled
+- HTTP status codes validated - URLSession does NOT throw on 404/500
+- Response cast to HTTPURLResponse before checking status
+- Both transport errors (URLError) and HTTP errors handled
 
 ### Memory & Resources
-- [ ] Downloaded files moved/deleted (async API doesn't auto-delete)
-- [ ] Sessions with delegates call `finishTasksAndInvalidate()`
-- [ ] Long-running tasks use `[weak self]`
-- [ ] Stored Task references cancelled when appropriate
+- Downloaded files moved/deleted (async API doesn't auto-delete)
+- Sessions with delegates call `finishTasksAndInvalidate()`
+- Long-running tasks use `[weak self]`
+- Stored Task references cancelled when appropriate
 
 ### Configuration
-- [ ] `timeoutIntervalForResource` set (default is 7 days!)
-- [ ] URLCache sized adequately (default 512KB too small)
-- [ ] Sessions reused for connection pooling
+- `timeoutIntervalForResource` set (default is 7 days!)
+- URLCache sized adequately (default 512KB too small)
+- Sessions reused for connection pooling
 
 ### Background Sessions
-- [ ] Unique identifier (especially with app extensions)
-- [ ] File-based uploads (not data-based)
-- [ ] Delegate methods used (not completion handlers)
+- Unique identifier (especially with app extensions)
+- File-based uploads (not data-based)
+- Delegate methods used (not completion handlers)
 
 ### Security
-- [ ] No hardcoded secrets (use Keychain)
-- [ ] Header values sanitized for CRLF injection
-- [ ] Query params via URLComponents (not string concat)
+- No hardcoded secrets (use Keychain)
+- Header values sanitized for CRLF injection
+- Query params via URLComponents (not string concat)
 
 ## Output Format
 

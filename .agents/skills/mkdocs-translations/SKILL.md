@@ -29,12 +29,12 @@ Translate all documentation from the `docs/docs/en` and `docs/docs/includes/en` 
 
 The following is the task list you must complete. Check each item off as it is done and report that to the user.
 
-- [ ] Begin by listing all files and subdirectories under `docs/docs/en`.
-- [ ] Then list all files and subdirectories under `docs/docs/includes/en`.
-- [ ] Translate **every file** in the list **one by one** in the order shown. Do not skip, reorder, or stop after a fixed number of files.
-- [ ] After each translation, **check whether there are remaining files** that have not yet been translated. If there are, **continue automatically** with the next file.
-- [ ] Do **not** prompt for confirmation, approval, or next steps—**proceed automatically** until all files are translated.
-- [ ] Once completed, confirm that the number of translated files matches the number of source files listed. If any files remain unprocessed, resume from where you left off.
+- Begin by listing all files and subdirectories under `docs/docs/en`.
+- Then list all files and subdirectories under `docs/docs/includes/en`.
+- Translate **every file** in the list **one by one** in the order shown. Do not skip, reorder, or stop after a fixed number of files.
+- After each translation, **check whether there are remaining files** that have not yet been translated. If there are, **continue automatically** with the next file.
+- Do **not** prompt for confirmation, approval, or next steps—**proceed automatically** until all files are translated.
+- Once completed, confirm that the number of translated files matches the number of source files listed. If any files remain unprocessed, resume from where you left off.
 
 ---
 
@@ -69,11 +69,11 @@ Before starting to create **any** new files, create a new git branch using the t
 
 ## MkDocs Configuration Update
 
-- [ ] Modify the `mkdocs.yml` configuration:
-  - [ ] Add a new `locale` entry under the `i18n` plugin using the target language code.
-  - [ ] Provide appropriate translations for:
-    - [ ] `nav_translations`
-    - [ ] `admonition_translations`
+- Modify the `mkdocs.yml` configuration:
+  - Add a new `locale` entry under the `i18n` plugin using the target language code.
+  - Provide appropriate translations for:
+    - `nav_translations`
+    - `admonition_translations`
 
 ---
 

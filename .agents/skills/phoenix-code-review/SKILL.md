@@ -17,32 +17,32 @@ description: Reviews Phoenix code for controller patterns, context boundaries, r
 ## Review Checklist
 
 ### Controllers
-- [ ] Business logic in contexts, not controllers
-- [ ] Controllers return proper HTTP status codes
-- [ ] Action clauses handle all expected patterns
-- [ ] Fallback controllers handle errors consistently
+- Business logic in contexts, not controllers
+- Controllers return proper HTTP status codes
+- Action clauses handle all expected patterns
+- Fallback controllers handle errors consistently
 
 ### Contexts
-- [ ] Contexts are bounded by domain, not technical layer
-- [ ] Public functions have clear, domain-focused names
-- [ ] Changesets validate all user input
-- [ ] No Ecto queries in controllers
+- Contexts are bounded by domain, not technical layer
+- Public functions have clear, domain-focused names
+- Changesets validate all user input
+- No Ecto queries in controllers
 
 ### Routing
-- [ ] Verified routes (~p sigil) used, not string paths
-- [ ] Pipelines group related plugs
-- [ ] Resources use only needed actions
-- [ ] Scopes group related routes
+- Verified routes (~p sigil) used, not string paths
+- Pipelines group related plugs
+- Resources use only needed actions
+- Scopes group related routes
 
 ### Plugs
-- [ ] Authentication/authorization via plugs
-- [ ] Plugs are composable and single-purpose
-- [ ] Halt called after sending response in plugs
+- Authentication/authorization via plugs
+- Plugs are composable and single-purpose
+- Halt called after sending response in plugs
 
 ### JSON APIs
-- [ ] Proper content negotiation
-- [ ] Consistent error response format
-- [ ] Pagination for list endpoints
+- Proper content negotiation
+- Consistent error response format
+- Pagination for list endpoints
 
 ## Valid Patterns (Do NOT Flag)
 

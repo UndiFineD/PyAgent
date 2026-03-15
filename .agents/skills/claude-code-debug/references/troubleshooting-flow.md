@@ -201,13 +201,13 @@ Tool blocked unexpectedly?
 
 When all else fails:
 
-1. [ ] Run `claude --debug` and read output carefully
-2. [ ] Verify file locations and names
-3. [ ] Validate all JSON with `jq '.'`
-4. [ ] Check YAML frontmatter syntax
-5. [ ] Test components in isolation
-6. [ ] Check file permissions (`ls -la`)
-7. [ ] Verify environment variables
-8. [ ] Review recent changes to config
-9. [ ] Try with a fresh session
-10. [ ] Check Claude Code version (`claude --version`)
+1. Run `claude --debug` and read output carefully
+2. Verify file locations and names
+3. Validate all JSON with `jq '.'`
+4. Check YAML frontmatter syntax
+5. Test components in isolation
+6. Check file permissions (`ls -la`)
+7. Verify environment variables
+8. Review recent changes to config
+9. Try with a fresh session
+10. Check Claude Code version (`claude --version`)

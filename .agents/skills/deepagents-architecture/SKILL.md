@@ -194,7 +194,7 @@ agent = create_deep_agent(middleware=[MyMiddleware()])
 ### Subagent Middleware Inheritance
 
 Subagents receive their own middleware stack by default:
-- TodoListMiddleware
+- ListMiddleware
 - FilesystemMiddleware (shared backend)
 - SummarizationMiddleware
 - AnthropicPromptCachingMiddleware
@@ -206,22 +206,22 @@ Override with `default_middleware=[]` in SubAgentMiddleware or per-subagent `mid
 
 Before implementing:
 
-1. [ ] Is Deep Agents the right tool? (vs LangGraph directly, vs simpler agent)
-2. [ ] Backend strategy chosen?
-   - [ ] Ephemeral only → StateBackend (default)
-   - [ ] Need disk access → FilesystemBackend
-   - [ ] Need cross-thread persistence → StoreBackend or CompositeBackend
-3. [ ] Subagent strategy defined?
-   - [ ] Which tasks benefit from isolation?
-   - [ ] Custom subagents with specialized tools/prompts?
-   - [ ] Parallel execution opportunities identified?
-4. [ ] Human-in-the-loop points defined?
-   - [ ] Which tools need approval?
-   - [ ] Approval flow (approve/edit/reject)?
-5. [ ] Custom middleware needed?
-   - [ ] System prompt injection?
-   - [ ] Request/response transformation?
-6. [ ] Context management considered?
-   - [ ] Long conversations → summarization triggers
-   - [ ] Large file handling → use references
-7. [ ] Checkpointing strategy? (for persistence/resume)
+1. Is Deep Agents the right tool? (vs LangGraph directly, vs simpler agent)
+2. Backend strategy chosen?
+   - Ephemeral only → StateBackend (default)
+   - Need disk access → FilesystemBackend
+   - Need cross-thread persistence → StoreBackend or CompositeBackend
+3. Subagent strategy defined?
+   - Which tasks benefit from isolation?
+   - Custom subagents with specialized tools/prompts?
+   - Parallel execution opportunities identified?
+4. Human-in-the-loop points defined?
+   - Which tools need approval?
+   - Approval flow (approve/edit/reject)?
+5. Custom middleware needed?
+   - System prompt injection?
+   - Request/response transformation?
+6. Context management considered?
+   - Long conversations → summarization triggers
+   - Large file handling → use references
+7. Checkpointing strategy? (for persistence/resume)

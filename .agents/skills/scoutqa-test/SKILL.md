@@ -32,10 +32,10 @@ Use this skill in two scenarios:
 Copy this checklist and track your progress:
 
 Testing Progress:
-- [ ] Write specific test prompt with clear expectations
-- [ ] Run scoutqa command in background
-- [ ] Inform user of execution ID and browser URL
-- [ ] Extract and analyze results
+- Write specific test prompt with clear expectations
+- Run scoutqa command in background
+- Inform user of execution ID and browser URL
+- Extract and analyze results
 
 **Step 1: Write specific test prompt**
 

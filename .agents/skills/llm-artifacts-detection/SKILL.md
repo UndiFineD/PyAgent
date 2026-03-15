@@ -12,7 +12,7 @@ Detect and flag common patterns introduced by LLM coding agents that reduce code
 | Category | Reference | Key Issues |
 |----------|-----------|------------|
 | Tests | [references/tests-criteria.md](references/tests-criteria.md) | DRY violations, library testing, mock boundaries |
-| Dead Code | [references/dead-code-criteria.md](references/dead-code-criteria.md) | Unused code, TODO/FIXME, backwards compat cruft |
+| Dead Code | [references/dead-code-criteria.md](references/dead-code-criteria.md) | Unused code, /FIXME, backwards compat cruft |
 | Abstraction | [references/abstraction-criteria.md](references/abstraction-criteria.md) | Over-abstraction, copy-paste drift, over-configuration |
 | Style | [references/style-criteria.md](references/style-criteria.md) | Obvious comments, defensive overkill, unnecessary types |
 
@@ -54,7 +54,7 @@ Scan the codebase for dead code and cleanup opportunities:
    - Module-level variables never read
    - Unreachable code after returns
 
-2. **TODO/FIXME Comments**: Flag all TODO, FIXME, HACK, XXX comments that indicate incomplete work
+2. **TODO/FIXME Comments**: Flag all , FIXME, HACK, XXX comments that indicate incomplete work
 
 3. **Backwards Compat Cruft**: Look for patterns suggesting removed features:
    - Variables renamed with _unused, _old, _deprecated suffixes

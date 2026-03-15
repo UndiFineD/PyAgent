@@ -17,33 +17,33 @@ description: Reviews Elixir code for idiomatic patterns, OTP basics, and documen
 ## Review Checklist
 
 ### Code Style
-- [ ] Module names are CamelCase, function names are snake_case
-- [ ] Pipe chains start with raw data, not function calls
-- [ ] Private functions grouped after public functions
-- [ ] No unnecessary parentheses in function calls without arguments
+- Module names are CamelCase, function names are snake_case
+- Pipe chains start with raw data, not function calls
+- Private functions grouped after public functions
+- No unnecessary parentheses in function calls without arguments
 
 ### Pattern Matching
-- [ ] Functions use pattern matching over conditionals where appropriate
-- [ ] With clauses have else handling for error cases
-- [ ] Guards used instead of runtime checks where possible
-- [ ] Destructuring used in function heads, not body
+- Functions use pattern matching over conditionals where appropriate
+- With clauses have else handling for error cases
+- Guards used instead of runtime checks where possible
+- Destructuring used in function heads, not body
 
 ### OTP Basics
-- [ ] GenServers use handle_continue for expensive init work
-- [ ] Supervisors use appropriate restart strategies
-- [ ] No blocking calls in GenServer callbacks
-- [ ] Proper use of call vs cast (sync vs async)
+- GenServers use handle_continue for expensive init work
+- Supervisors use appropriate restart strategies
+- No blocking calls in GenServer callbacks
+- Proper use of call vs cast (sync vs async)
 
 ### Documentation
-- [ ] All public functions have @doc and @spec
-- [ ] Modules have @moduledoc describing purpose
-- [ ] Doctests for pure functions where appropriate
-- [ ] No @doc false on genuinely public functions
+- All public functions have @doc and @spec
+- Modules have @moduledoc describing purpose
+- Doctests for pure functions where appropriate
+- No @doc false on genuinely public functions
 
 ### Security
-- [ ] No `String.to_atom/1` on user input (use `to_existing_atom/1`)
-- [ ] No `Code.eval_string/1` on untrusted input
-- [ ] No `:erlang.binary_to_term/1` without `:safe` option
+- No `String.to_atom/1` on user input (use `to_existing_atom/1`)
+- No `Code.eval_string/1` on untrusted input
+- No `:erlang.binary_to_term/1` without `:safe` option
 
 ## Valid Patterns (Do NOT Flag)
 

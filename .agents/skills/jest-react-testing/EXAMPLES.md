@@ -1180,17 +1180,17 @@ describe('Navigation Component', () => {
 
 ## 9. Testing with Redux
 
-### Component: TodoList with Redux
+### Component: List with Redux
 
 ```javascript
-// TodoList.jsx
+// List.jsx
 import { useSelector, useDispatch } from 'react-redux';
 import { addTodo, toggleTodo, removeTodo } from './todosSlice';
 import { useState } from 'react';
 
-export const TodoList = () => {
+export const List = () => {
   const [input, setInput] = useState('');
-  const todos = useSelector((state) => state.todos.items);
+  const s = useSelector((state) => state.todos.items);
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
@@ -1208,7 +1208,7 @@ export const TodoList = () => {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Add todo"
+          placeholder="Add "
         />
         <button type="submit">Add</button>
       </form>
@@ -1222,7 +1222,7 @@ export const TodoList = () => {
               onChange={() => dispatch(toggleTodo(todo.id))}
               aria-label={`Toggle ${todo.text}`}
             />
-            <span style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
+            <span style={{ textDecoration: .completed ? 'line-through' : 'none' }}>
               {todo.text}
             </span>
             <button
@@ -1242,18 +1242,18 @@ export const TodoList = () => {
 ### Tests
 
 ```javascript
-// TodoList.test.jsx
+// List.test.jsx
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import { TodoList } from './TodoList';
-import todosReducer from './todosSlice';
+import { List } from './TodoList';
+import sReducer from './todosSlice';
 
 const createMockStore = (initialState = {}) => {
   return configureStore({
     reducer: {
-      todos: todosReducer,
+      s: sReducer,
     },
     preloadedState: initialState,
   });
@@ -1264,11 +1264,11 @@ const renderWithStore = (ui, { store = createMockStore() } = {}) => {
 };
 
 describe('TodoList with Redux', () => {
-  it('adds new todo', async () => {
+  it('adds new ', async () => {
     const user = userEvent.setup();
     renderWithStore(<TodoList />);
 
-    const input = screen.getByPlaceholderText(/add todo/i);
+    const input = screen.getByPlaceholderText(/add /i);
     const addButton = screen.getByRole('button', { name: /add/i });
 
     await user.type(input, 'Buy groceries');
@@ -1277,18 +1277,18 @@ describe('TodoList with Redux', () => {
     expect(screen.getByText(/buy groceries/i)).toBeInTheDocument();
   });
 
-  it('toggles todo completion', async () => {
+  it('toggles completion', async () => {
     const user = userEvent.setup();
     const initialState = {
-      todos: {
-        items: [{ id: 1, text: 'Test todo', completed: false }],
+      s: {
+        items: [{ id: 1, text: 'Test ', completed: false }],
       },
     };
 
     renderWithStore(<TodoList />, { store: createMockStore(initialState) });
 
-    const checkbox = screen.getByRole('checkbox', { name: /toggle test todo/i });
-    const text = screen.getByText(/test todo/i);
+    const checkbox = screen.getByRole('checkbox', { name: /toggle test /i });
+    const text = screen.getByText(/test /i);
 
     expect(checkbox).not.toBeChecked();
     expect(text).toHaveStyle({ textDecoration: 'none' });
@@ -1299,30 +1299,30 @@ describe('TodoList with Redux', () => {
     expect(text).toHaveStyle({ textDecoration: 'line-through' });
   });
 
-  it('removes todo', async () => {
+  it('removes ', async () => {
     const user = userEvent.setup();
     const initialState = {
-      todos: {
-        items: [{ id: 1, text: 'Test todo', completed: false }],
+      s: {
+        items: [{ id: 1, text: 'Test ', completed: false }],
       },
     };
 
     renderWithStore(<TodoList />, { store: createMockStore(initialState) });
 
-    expect(screen.getByText(/test todo/i)).toBeInTheDocument();
+    expect(screen.getByText(/test /i)).toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: /remove test todo/i }));
+    await user.click(screen.getByRole('button', { name: /remove test /i }));
 
-    expect(screen.queryByText(/test todo/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/test /i)).not.toBeInTheDocument();
   });
 
-  it('clears input after adding todo', async () => {
+  it('clears input after adding ', async () => {
     const user = userEvent.setup();
     renderWithStore(<TodoList />);
 
-    const input = screen.getByPlaceholderText(/add todo/i);
+    const input = screen.getByPlaceholderText(/add /i);
 
-    await user.type(input, 'New todo');
+    await user.type(input, 'New ');
     await user.click(screen.getByRole('button', { name: /add/i }));
 
     expect(input).toHaveValue('');

@@ -13,7 +13,7 @@ eventually house community‑contributed logic units, whereas a central
 Several variants of `PluginManager.py` exist in `src-old` (under
 `core/base/managers`, `classes/fleet`, `classes/base_agent/managers`), which
 points to a historically flexible registry capable of loading plugins from
-different domains (agent plugins, fleet plugins, etc.).  The todo list has
+different domains (agent plugins, fleet plugins, etc.).  The list has
 multiple entries referencing `PluginManager.py` as unimplemented items.
 
 ## Design Goals

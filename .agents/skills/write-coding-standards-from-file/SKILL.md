@@ -272,14 +272,6 @@ Depending on the programming language, for each link in list below, run `#fetch 
     - Keep comments up-to-date as code changes.
     - Public functions should include a short description of purpose and parameters.
 
-    Recommended tags:
-
-        ```text
-        TODO: follow-up work
-        FIXME: known incorrect behavior
-        NOTE: non-obvious design decision
-        ```
-
     ## 5. Error Handling
 
     - Handle error conditions explicitly.

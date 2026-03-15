@@ -39,7 +39,7 @@ Linear emphasizes speed, clarity, and focus for software teams:
 3. **Projects**: Collections of related issues for larger initiatives
 4. **Cycles**: Time-boxed iterations (similar to sprints)
 5. **Labels**: Categorization and filtering mechanism
-6. **Statuses**: Issue states (Backlog, Todo, In Progress, In Review, Done, Canceled)
+6. **Statuses**: Issue states (Backlog, , In Progress, In Review, Done, Canceled)
 7. **Comments**: Collaboration and discussion on issues
 8. **Documents**: Long-form documentation integrated with issues
 
@@ -112,10 +112,10 @@ description: |
   Add JWT-based authentication to the API
 
   ## Tasks
-  - [ ] Design auth flow
-  - [ ] Implement JWT tokens
-  - [ ] Add refresh token logic
-  - [ ] Write tests
+  - Design auth flow
+  - Implement JWT tokens
+  - Add refresh token logic
+  - Write tests
 
   ## Acceptance Criteria
   - Secure token generation
@@ -424,7 +424,7 @@ id: Document ID or slug
 
 3. Track progress
    - Update issue state as you work:
-     - Todo → In Progress → In Review → Done
+     - → In Progress → In Review → Done
    - Add comments with updates and blockers
    - Link PR when ready for review
 
@@ -486,7 +486,7 @@ id: Document ID or slug
    - list_issues with assignee: "me", state: "In Progress"
    - Update issue states as work progresses
    - Add comments for standup updates
-   - Move blocked issues back to Todo
+   - Move blocked issues back to 
 
 5. Cycle review
    - List completed issues in cycle
@@ -650,9 +650,9 @@ description: |
   So that {benefit}
 
   ## Acceptance Criteria
-  - [ ] {Criterion 1}
-  - [ ] {Criterion 2}
-  - [ ] {Criterion 3}
+  - {Criterion 1}
+  - {Criterion 2}
+  - {Criterion 3}
 
   ## Design Notes
   {Link to designs, wireframes}
@@ -961,8 +961,8 @@ description: |
   {What and why}
 
   ## Tasks
-  - [ ] Task 1
-  - [ ] Task 2
+  - Task 1
+  - Task 2
 
   ## Acceptance Criteria
   - Criterion 1

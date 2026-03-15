@@ -101,11 +101,11 @@ Evaluates cleanliness and absence of unused/obsolete code.
 
 | Score | Criteria |
 |-------|----------|
-| 5 | No dead code. No TODOs. Clean codebase. |
+| 5 | No dead code. No s. Clean codebase. |
 | 4 | 1-3 minor issues (unused imports). No significant dead code. |
-| 3 | 4-6 issues. Some unused functions or TODOs. |
-| 2 | 7-10 issues. Unused functions/classes. Multiple TODOs. |
-| 1 | 10+ issues. Significant dead code. Many TODOs/commented blocks. |
+| 3 | 4-6 issues. Some unused functions or s. |
+| 2 | 7-10 issues. Unused functions/classes. Multiple s. |
+| 1 | 10+ issues. Significant dead code. Many s/commented blocks. |
 
 **Key Evidence:**
 - `dead_code.unused_imports` (count)

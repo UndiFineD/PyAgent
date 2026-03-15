@@ -116,11 +116,11 @@ var email: String
 
 ## Review Questions
 
-- [ ] Is the model marked `final`?
-- [ ] Does it have an explicit initializer?
-- [ ] Are relationships `var`, not `let`?
-- [ ] Is @Relationship on only ONE side of bidirectional relationships?
-- [ ] Does delete rule match optionality?
-- [ ] Are relationships initialized to `= []`?
-- [ ] Are batch operations used for bulk additions?
-- [ ] If using CloudKit, are there any `.unique` attributes?
+- Is the model marked `final`?
+- Does it have an explicit initializer?
+- Are relationships `var`, not `let`?
+- Is @Relationship on only ONE side of bidirectional relationships?
+- Does delete rule match optionality?
+- Are relationships initialized to `= []`?
+- Are batch operations used for bulk additions?
+- If using CloudKit, are there any `.unique` attributes?

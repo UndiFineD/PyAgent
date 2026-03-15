@@ -412,17 +412,17 @@ refresh proactively to avoid mid-action expiry.
 
 Before publishing, verify:
 
-- [ ] Title indicates this explains a concept (not a how-to)
-- [ ] Introduction sets expectations for what reader will understand
-- [ ] Background section provides context and history
-- [ ] Core concepts explained with analogies or mental models
-- [ ] Design decisions include rationale, not just facts
-- [ ] Trade-offs discussed honestly
-- [ ] Alternatives mentioned and compared
-- [ ] Implications for different concerns addressed
-- [ ] Related concepts linked
-- [ ] Written for reading away from keyboard (no tasks to follow)
-- [ ] Progressive structure builds understanding step by step
+- Title indicates this explains a concept (not a how-to)
+- Introduction sets expectations for what reader will understand
+- Background section provides context and history
+- Core concepts explained with analogies or mental models
+- Design decisions include rationale, not just facts
+- Trade-offs discussed honestly
+- Alternatives mentioned and compared
+- Implications for different concerns addressed
+- Related concepts linked
+- Written for reading away from keyboard (no tasks to follow)
+- Progressive structure builds understanding step by step
 
 ## When to Use Explanation vs Other Doc Types
 

@@ -167,13 +167,13 @@ let container = try ModelContainer(
 
 ## Review Questions
 
-- [ ] Is every shipped schema wrapped in VersionedSchema?
-- [ ] Does each schema have a unique versionIdentifier?
-- [ ] Are schemas listed in chronological order?
-- [ ] Is there a MigrationStage for each version transition?
-- [ ] Is MigrationPlan passed to ModelContainer?
-- [ ] Do renamed properties use `@Attribute(originalName:)`?
-- [ ] If adding `.unique`, are duplicates handled in willMigrate?
-- [ ] Does willMigrate only access old schema models?
-- [ ] Is CloudKit enabled? (Custom migrations will crash)
-- [ ] Is `context.save()` called in migration closures?
+- Is every shipped schema wrapped in VersionedSchema?
+- Does each schema have a unique versionIdentifier?
+- Are schemas listed in chronological order?
+- Is there a MigrationStage for each version transition?
+- Is MigrationPlan passed to ModelContainer?
+- Do renamed properties use `@Attribute(originalName:)`?
+- If adding `.unique`, are duplicates handled in willMigrate?
+- Does willMigrate only access old schema models?
+- Is CloudKit enabled? (Custom migrations will crash)
+- Is `context.save()` called in migration closures?

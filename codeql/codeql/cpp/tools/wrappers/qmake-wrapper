@@ -19,7 +19,7 @@ sys.stderr.flush()
 
 # qmake will trigger installation of qtchooser, but then in order to trigger installation
 # of actual required qt5 files, you need to specify you want qt5
-# TODO see whether qt6 or precise selection of the qt version is required
+# see whether qt6 or precise selection of the qt version is required
 os.environ["QT_SELECT"] = "qt5"
 
 def process_output(data, sink):

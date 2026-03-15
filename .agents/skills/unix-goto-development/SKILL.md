@@ -491,15 +491,15 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 Before submitting ANY feature:
 
-- [ ] Implementation complete
-- [ ] Loaded in `goto.sh`
-- [ ] Integrated with main `goto` function
-- [ ] Tests written and passing (100% coverage)
-- [ ] API documented in `docs/API.md`
-- [ ] User documentation updated in `README.md`
-- [ ] Performance validated (if applicable)
-- [ ] Linear issue updated with results
-- [ ] Committed with proper message format
+- Implementation complete
+- Loaded in `goto.sh`
+- Integrated with main `goto` function
+- Tests written and passing (100% coverage)
+- API documented in `docs/API.md`
+- User documentation updated in `README.md`
+- Performance validated (if applicable)
+- Linear issue updated with results
+- Committed with proper message format
 
 ### Cache System Architecture
 
@@ -1200,10 +1200,10 @@ What problem does this solve?
 How will we solve it?
 
 ## Acceptance Criteria
-- [ ] Criterion 1
-- [ ] Criterion 2
-- [ ] Tests pass
-- [ ] Performance targets met
+- Criterion 1
+- Criterion 2
+- Tests pass
+- Performance targets met
 
 ## Performance Targets
 - Metric 1: <target>

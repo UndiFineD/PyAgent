@@ -225,14 +225,14 @@ LOG_FILE="$LOG_DIR/${SESSION}.jsonl"
 
 ### Before Deployment
 
-- [ ] All variables quoted
-- [ ] Path traversal checks implemented
-- [ ] Dangerous command patterns blocked
-- [ ] No secrets in logs
-- [ ] Proper file permissions set
-- [ ] Timeout configured
-- [ ] Error handling complete
-- [ ] Input JSON validated
+- All variables quoted
+- Path traversal checks implemented
+- Dangerous command patterns blocked
+- No secrets in logs
+- Proper file permissions set
+- Timeout configured
+- Error handling complete
+- Input JSON validated
 
 ### Script Header Template
 

@@ -32,7 +32,7 @@ subsystems into the new `runtime` framework.
 
 ## Next Candidates
 
-* [x] `src/core/base/metrics_engine` (full version) when ready – 
+* `src/core/base/metrics_engine` (full version) when ready – 
   large file migration will follow the same pattern as above.
 * Any remaining long-running loops uncovered by the async loop checker (currently none).
 
@@ -66,8 +66,8 @@ manageable components.
 
 ## Next Candidates
 
-* [X] Any remaining long-running loops uncovered by the async loop checker.
-* [X] ``src/core/base/metrics_engine`` (full version) when ready.
-* [X] `src/validation/rate_limiter.py` (hypothetical example)
+* Any remaining long-running loops uncovered by the async loop checker.
+* ``src/core/base/metrics_engine`` (full version) when ready.
+* `src/validation/rate_limiter.py` (hypothetical example)
 
 

@@ -16,18 +16,18 @@ description: Reviews App Intents code for intent structure, entities, shortcuts,
 
 ## Review Checklist
 
-- [ ] `perform()` marked with `@MainActor` if accessing UI/main thread resources
-- [ ] `perform()` completes within 30-second timeout (no heavy downloads/processing)
-- [ ] Custom errors conform to `CustomLocalizedStringResourceConvertible`
-- [ ] `EntityQuery.entities(for:)` handles missing identifiers gracefully
-- [ ] `EntityStringQuery` used if Siri voice input needed (not plain `EntityQuery`)
-- [ ] `suggestedEntities()` returns reasonable defaults for disambiguation
-- [ ] `AppShortcut` phrases include `.applicationName` parameter
-- [ ] Non-optional `@Parameter` has sensible defaults or uses `requestValue()`
-- [ ] `@IntentParameterDependency` not used on iOS 16 targets (crashes)
-- [ ] Phrases localized in `AppShortcuts.strings`, not `Localizable.strings`
-- [ ] App Intents defined in app bundle, not Swift Package (pre-iOS 17)
-- [ ] `isDiscoverable = false` for internal/widget-only intents
+- `perform()` marked with `@MainActor` if accessing UI/main thread resources
+- `perform()` completes within 30-second timeout (no heavy downloads/processing)
+- Custom errors conform to `CustomLocalizedStringResourceConvertible`
+- `EntityQuery.entities(for:)` handles missing identifiers gracefully
+- `EntityStringQuery` used if Siri voice input needed (not plain `EntityQuery`)
+- `suggestedEntities()` returns reasonable defaults for disambiguation
+- `AppShortcut` phrases include `.applicationName` parameter
+- Non-optional `@Parameter` has sensible defaults or uses `requestValue()`
+- `@IntentParameterDependency` not used on iOS 16 targets (crashes)
+- Phrases localized in `AppShortcuts.strings`, not `Localizable.strings`
+- App Intents defined in app bundle, not Swift Package (pre-iOS 17)
+- `isDiscoverable = false` for internal/widget-only intents
 
 ## When to Load References
 

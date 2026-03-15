@@ -7,7 +7,7 @@ Every agent created with `create_deep_agent` has these tools:
 | Tool | Description |
 |------|-------------|
 | `write_todos` | Create/update structured task lists |
-| `read_todos` | Read current todo list state |
+| `read_todos` | Read current list state |
 
 ## Filesystem Operations
 

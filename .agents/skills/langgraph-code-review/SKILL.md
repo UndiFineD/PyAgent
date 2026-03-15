@@ -307,13 +307,13 @@ def check_limit(state):
 
 ## Code Review Checklist
 
-1. [ ] State schema uses Annotated with reducers for collections
-2. [ ] Nodes return partial state updates, not mutations
-3. [ ] Conditional edges return valid node names or END
-4. [ ] Graph has path from START to all nodes
-5. [ ] Checkpointer provided if using interrupts
-6. [ ] Thread ID provided in config when using checkpointer
-7. [ ] Tool calls paired with ToolMessages
-8. [ ] Async nodes use async operations
-9. [ ] Production uses persistent checkpointer
-10. [ ] Recursion limits considered for loops
+1. State schema uses Annotated with reducers for collections
+2. Nodes return partial state updates, not mutations
+3. Conditional edges return valid node names or END
+4. Graph has path from START to all nodes
+5. Checkpointer provided if using interrupts
+6. Thread ID provided in config when using checkpointer
+7. Tool calls paired with ToolMessages
+8. Async nodes use async operations
+9. Production uses persistent checkpointer
+10. Recursion limits considered for loops

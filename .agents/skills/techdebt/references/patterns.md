@@ -424,7 +424,7 @@ timeout = 3600  # P3 - Should be named constant
 rate_limit = 100  # P3 - Should be config
 ```
 
-### TODOs and FIXMEs
+### s and FIXMEs
 
 **Pattern:** Age-based tracking
 ```

@@ -16,18 +16,18 @@ description: Reviews CloudKit code for container setup, record handling, subscri
 
 ## Review Checklist
 
-- [ ] Account status checked before private/shared database operations
-- [ ] Custom zones used (not default zone) for production data
-- [ ] All CloudKit errors handled with `retryAfterSeconds` respected
-- [ ] `serverRecordChanged` conflicts handled with proper merge logic
-- [ ] `CKErrorPartialFailure` parsed for individual record errors
-- [ ] Batch operations used (`CKModifyRecordsOperation`) not individual saves
-- [ ] Large binary data stored as `CKAsset` (records have 1MB limit)
-- [ ] Record keys type-safe (enums) not string literals
-- [ ] UI updates dispatched to main thread from callbacks
-- [ ] `CKAccountChangedNotification` observed for account switches
-- [ ] Subscriptions have unique IDs to prevent duplicates
-- [ ] CKShare uses custom zone (sharing requires custom zones)
+- Account status checked before private/shared database operations
+- Custom zones used (not default zone) for production data
+- All CloudKit errors handled with `retryAfterSeconds` respected
+- `serverRecordChanged` conflicts handled with proper merge logic
+- `CKErrorPartialFailure` parsed for individual record errors
+- Batch operations used (`CKModifyRecordsOperation`) not individual saves
+- Large binary data stored as `CKAsset` (records have 1MB limit)
+- Record keys type-safe (enums) not string literals
+- UI updates dispatched to main thread from callbacks
+- `CKAccountChangedNotification` observed for account switches
+- Subscriptions have unique IDs to prevent duplicates
+- CKShare uses custom zone (sharing requires custom zones)
 
 ## When to Load References
 

@@ -1032,13 +1032,13 @@ import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import userEvent from '@testing-library/user-event';
-import { TodoList } from './TodoList';
-import todosReducer from './todosSlice';
+import { List } from './TodoList';
+import sReducer from './todosSlice';
 
 const createMockStore = (initialState = {}) => {
   return configureStore({
     reducer: {
-      todos: todosReducer,
+      s: sReducer,
     },
     preloadedState: initialState,
   });
@@ -1049,11 +1049,11 @@ const renderWithStore = (ui, { store = createMockStore() } = {}) => {
 };
 
 describe('TodoList Integration', () => {
-  it('adds new todo', async () => {
+  it('adds new ', async () => {
     const user = userEvent.setup();
     renderWithStore(<TodoList />);
 
-    const input = screen.getByPlaceholderText(/new todo/i);
+    const input = screen.getByPlaceholderText(/new /i);
     const addButton = screen.getByRole('button', { name: /add/i });
 
     await user.type(input, 'Buy groceries');
@@ -1062,18 +1062,18 @@ describe('TodoList Integration', () => {
     expect(screen.getByText(/buy groceries/i)).toBeInTheDocument();
   });
 
-  it('renders initial todos from store', () => {
+  it('renders initial s from store', () => {
     const initialState = {
-      todos: {
+      s: {
         items: [
-          { id: 1, text: 'Existing todo', completed: false },
+          { id: 1, text: 'Existing ', completed: false },
         ],
       },
     };
 
     renderWithStore(<TodoList />, { store: createMockStore(initialState) });
 
-    expect(screen.getByText(/existing todo/i)).toBeInTheDocument();
+    expect(screen.getByText(/existing /i)).toBeInTheDocument();
   });
 });
 ```

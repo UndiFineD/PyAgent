@@ -248,7 +248,7 @@ Example: When building a `pdf-editor` skill to handle queries like "Help me rota
 1. Rotating a PDF requires re-writing the same code each time
 2. A `scripts/rotate_pdf.py` script would be helpful to store in the skill
 
-Example: When designing a `frontend-webapp-builder` skill for queries like "Build me a todo app" or "Build me a dashboard to track my steps," the analysis shows:
+Example: When designing a `frontend-webapp-builder` skill for queries like "Build me a app" or "Build me a dashboard to track my steps," the analysis shows:
 
 1. Writing a frontend webapp requires the same boilerplate HTML/React each time
 2. An `assets/hello-world/` template containing the boilerplate HTML/React project files would be helpful to store in the skill
@@ -277,7 +277,7 @@ scripts/init_skill.py <skill-name> --path <output-directory>
 The script:
 
 - Creates the skill directory at the specified path
-- Generates a SKILL.md template with proper frontmatter and TODO placeholders
+- Generates a SKILL.md template with proper frontmatter and placeholders
 - Creates example resource directories: `scripts/`, `references/`, and `assets/`
 - Adds example files in each directory that can be customized or deleted
 

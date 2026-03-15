@@ -46,7 +46,7 @@ The result: a **self-organizing, domain-driven knowledge base** that grows smart
 - `/remember >clojure workspace prefer threading macros for readability`
 - `/remember >testing ws use setup/teardown functions`
 
-**Use the todo list** to track your progress through the process steps and keep the user informed.
+**Use the list** to track your progress through the process steps and keep the user informed.
 
 ## Memory File Structure
 
