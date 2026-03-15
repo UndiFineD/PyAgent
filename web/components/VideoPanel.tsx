@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react';
-import { Camera, CameraOff, PhoneOff } from 'lucide-react';
-import { cn } from '../utils';
+import { Camera, PhoneOff } from 'lucide-react';
 
 interface VideoPanelProps {
   /** Called with SDP offer/answer/ICE payload to relay via WebSocket */
