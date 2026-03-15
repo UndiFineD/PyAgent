@@ -22,13 +22,13 @@
 | `gdn_attention.py` | Probabilistic attention | ⏳ NOT STARTED |
 
 ## 🧪 Testing State
-- [ ] FlexAttention block mask tests
-- [ ] Tree attention branch scoring tests
-- [ ] Linear attention causal masking tests
-- [ ] GDN uncertainty estimation tests
+- FlexAttention block mask tests
+- Tree attention branch scoring tests
+- Linear attention causal masking tests
+- GDN uncertainty estimation tests
 
 ## 🦀 Rust Accelerations
-- [ ] `flex_attention_mask_rust`
-- [ ] `tree_attention_paths_rust`
-- [ ] `linear_attention_feature_rust`
-- [ ] `attention_score_mod_rust`
+- `flex_attention_mask_rust`
+- `tree_attention_paths_rust`
+- `linear_attention_feature_rust`
+- `attention_score_mod_rust`

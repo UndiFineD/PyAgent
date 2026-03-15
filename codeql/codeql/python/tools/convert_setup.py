@@ -94,7 +94,7 @@ def convert_setup_to_requirements(root):
     import distutils.core
     setattr(distutils.core, "setup", setup_interceptor)
 
-    # TODO: WHY are we inserting at index 1?
+    # WHY are we inserting at index 1?
     # >>> l = [1,2,3]; l.insert(1, 'x'); print(l)
     # [1, 'x', 2, 3]
 

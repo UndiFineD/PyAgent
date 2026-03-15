@@ -78,7 +78,7 @@ Comments indicating incomplete work, technical debt, or known issues.
 ### Detection Patterns
 
 ```python
-# TODO: implement caching  <-- Incomplete feature
+# implement caching  <-- Incomplete feature
 def get_user(id):
     return db.query(User).get(id)
 

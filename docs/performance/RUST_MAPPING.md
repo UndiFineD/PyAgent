@@ -35,11 +35,11 @@ Rust should be used for the underlying implementation of:
 `src/core/base/common/` entities are already pre-wired with `try: import rust_core as rc` blocks to support graceful fallback.
 
 ### Completed Hooks:
-- [x] `CacheCore`: MD5 hashing.
-- [x] `PriorityCore`: Weight calculation.
-- [x] `AuctionCore`: Pricing algorithms.
-- [x] `PruningCore`: Synaptic decay math.
-- [x] `ConnectivityCore`: Connection establishment.
+- `CacheCore`: MD5 hashing.
+- `PriorityCore`: Weight calculation.
+- `AuctionCore`: Pricing algorithms.
+- `PruningCore`: Synaptic decay math.
+- `ConnectivityCore`: Connection establishment.
 
 ### Next Priority for Rust:
 1. **LoRA Adapter Merging**: Migrating `src/infrastructure/engine/adapters/lora/` math to Rust.

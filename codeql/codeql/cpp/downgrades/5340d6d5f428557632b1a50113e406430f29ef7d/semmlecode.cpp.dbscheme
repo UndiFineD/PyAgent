@@ -1569,7 +1569,7 @@ bitfield(
     int declared_bits: int ref
 );
 
-/* TODO
+/*  
 memberprefix(
     int member: @expr ref,
     int prefix: @expr ref
@@ -1588,7 +1588,7 @@ memberprefix(
    kind(9) = staticmbrreadexpr // static x.y
    kind(10) = staticmbrptrreadexpr // static p->y
 */
-/* TODO
+/*  
 memberaccess(
     int member: @expr ref,
     int kind: int ref
