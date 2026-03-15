@@ -41,7 +41,7 @@ class ARCQuantLayer(nn.Module):
         self.arc_weight = nn.Parameter(torch.randn(out_features, num_outliers))
 
     def simulated_nvfp4_quant(self, x: torch.Tensor) -> torch.Tensor:
-        # Placeholder for hardware-native NVFP4 quantization
+        # TODO Placeholder for hardware-native NVFP4 quantization
         return torch.round(x * 8) / 8
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:

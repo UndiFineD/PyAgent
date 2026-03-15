@@ -11,6 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#![allow(dead_code)]
+
 //! QUIC transport scaffolding for future T-2 work.
 
 use pyo3::prelude::*;
