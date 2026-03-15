@@ -13,11 +13,15 @@
 # limitations under the License.
 """Manages active WebSocket sessions."""
 from __future__ import annotations
+
 import uuid
+
 from fastapi import WebSocket
 
 
 class SessionManager:
+    """Registry mapping session IDs to their active WebSocket connections."""
+
     def __init__(self) -> None:
         self._sessions: dict[str, WebSocket] = {}
 

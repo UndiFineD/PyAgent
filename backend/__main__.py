@@ -11,8 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Run the PyAgent backend worker with: python -m backend"""
+"""Run the PyAgent backend worker with: python -m backend."""
 import uvicorn
+
 from .app import app
 
 if __name__ == "__main__":
