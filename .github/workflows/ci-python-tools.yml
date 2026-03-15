@@ -1,0 +1,71 @@
+name: CI — Python Tools
+
+on:
+  push:
+    branches: [main, "feature/**", "fix/**"]
+    paths:
+      - "src/**/*.py"
+      - "tests/test_tools*.py"
+      - "tests/test_dryrun*.py"
+      - "tests/test_downloader*.py"
+      - "tests/test_import*.py"
+      - "tests/test_importer*.py"
+      - "tests/test_describe*.py"
+      - "tests/test_research*.py"
+      - "tests/test_innovation*.py"
+      - "tests/test_milestone*.py"
+      - "tests/test_rl*.py"
+      - "tests/test_prioritization*.py"
+      - "tests/test_runtime*.py"
+      - "tests/test_repo_layout*.py"
+      - "tests/test_multimodal*.py"
+      - "tests/test_speculation*.py"
+      - "tests/test_transport_package*.py"
+      - ".github/workflows/ci-python-tools.yml"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python-tools:
+    name: Tools / CLI / importers tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tools/misc tests
+        run: |
+          python -m pytest -q --no-cov \
+            tests/test_tools_sanity.py \
+            tests/test_dryrun_lists_moves.py \
+            tests/test_downloader.py \
+            tests/test_import_config.py \
+            tests/test_importer_config.py \
+            tests/test_importer_flow.py \
+            tests/test_describe.py \
+            tests/test_research_packages.py \
+            tests/test_innovation_tracker.py \
+            tests/test_milestone_generator.py \
+            tests/test_rl_package.py \
+            tests/test_prioritization.py \
+            tests/test_runtime.py \
+            tests/test_repo_layout_scaffold.py \
+            tests/test_multimodal_package.py \
+            tests/test_speculation_package.py \
+            tests/test_transport_package.py

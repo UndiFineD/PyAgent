@@ -1,0 +1,52 @@
+name: CI — Python Quality
+
+on:
+  push:
+    branches: [main, "feature/**", "fix/**"]
+    paths:
+      - "src/**/*.py"
+      - "tests/test_quality*.py"
+      - "tests/test_precommit*.py"
+      - "tests/test_coverage*.py"
+      - "tests/test_zza*.py"
+      - "tests/test_zzb*.py"
+      - "tests/ztest_zzz*.py"
+      - ".pre-commit-config.yaml"
+      - "pyproject.toml"
+      - ".github/workflows/ci-python-quality.yml"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python-quality:
+    name: Meta quality / lint-config tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run quality meta-tests
+        run: |
+          python -m pytest -q --no-cov \
+            tests/test_quality_yaml.py \
+            tests/test_precommit.py \
+            tests/test_coverage_meta.py \
+            tests/test_zza_lint_config.py \
+            tests/test_zzb_mypy_config.py \
+            tests/ztest_zzz_tests_quality.py

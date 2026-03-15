@@ -1,0 +1,46 @@
+name: CI — Python Lint
+
+on:
+  push:
+    branches: [main, "feature/**", "fix/**"]
+    paths:
+      - "src/**/*.py"
+      - "tests/**/*.py"
+      - "pyproject.toml"
+      - "mypy.ini"
+      - ".github/workflows/ci-python-lint.yml"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python-lint:
+    name: ruff + mypy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install lint deps
+        run: pip install ruff mypy types-requests types-PyYAML
+
+      - name: ruff — lint
+        run: ruff check src tests
+
+      - name: ruff — format check
+        run: ruff format --check src tests
+
+      - name: mypy — core type-check
+        run: mypy --ignore-missing-imports src/core/base/

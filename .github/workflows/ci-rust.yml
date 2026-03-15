@@ -1,0 +1,96 @@
+name: CI — Rust
+
+on:
+  push:
+    branches: [main, "feature/**", "fix/**"]
+    paths:
+      - "rust_core/**"
+      - ".github/workflows/ci-rust.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "rust_core/**"
+      - ".github/workflows/ci-rust.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── Job 1: formatting & static analysis ────────────────────────────────────────────
+  rust-lint:
+    name: Rust fmt + clippy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust_core
+
+      - name: Check formatting
+        working-directory: rust_core
+        run: cargo fmt --all -- --check
+
+      - name: Clippy (deny warnings)
+        working-directory: rust_core
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+  # ── Job 2: unit tests ────────────────────────────────────────────────────────────
+  rust-test:
+    name: Rust unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: rust-lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust_core
+
+      - name: Build & test
+        working-directory: rust_core
+        run: cargo test --release -- --test-threads=1
+
+  # ── Job 3: build wheel artifact (used by python integration tests) ───────────────────
+  rust-build-wheel:
+    name: Build rust_core wheel
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: rust-test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust_core
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install maturin and build wheel
+        working-directory: rust_core
+        run: |
+          pip install maturin
+          maturin build --release --out dist/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rust-extension-wheel-${{ github.run_id }}
+          path: rust_core/dist/*.whl
+          retention-days: 1

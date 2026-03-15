@@ -1,0 +1,75 @@
+name: CI — Python Rust Extension
+
+# Tests that require the rust_core PyO3 extension to be compiled and installed.
+#
+# ROOT FIX: ci.yml used to create rust_core/.venv (a sub-venv), install the
+# extension there, but then run pytest in the workspace Python — causing
+# "import rust_core" to fail.  This workflow fixes that by running
+# `maturin develop --release` in the workspace Python (set up by
+# actions/setup-python), so the extension lands in the SAME environment
+# that pytest uses.
+
+on:
+  push:
+    branches: [main, "feature/**", "fix/**"]
+    paths:
+      - "rust_core/**"
+      - "tests/test_rust_core.py"
+      - "tests/test_shared_memory_python.py"
+      - "tests/test_transport_utm_policy.py"
+      - "tests/test_transport_identity.py"
+      - ".github/workflows/ci-python-rust-ext.yml"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python-rust-ext:
+    name: Rust-extension Python tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust_core
+
+      # actions/setup-python creates the workspace venv that pytest uses
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      # Install maturin into the SAME Python that setup-python activated.
+      # Then `maturin develop` installs rust_core into that venv — the
+      # identical environment pytest will use below.
+      - name: Install maturin (into workspace Python)
+        run: pip install maturin
+
+      - name: Build & install rust_core extension (into workspace Python)
+        working-directory: rust_core
+        run: maturin develop --release
+
+      - name: Verify import
+        run: python -c "import rust_core; print('rust_core imported OK')"
+
+      - name: Run Rust-extension tests
+        run: |
+          python -m pytest -q --no-cov \
+            tests/test_rust_core.py \
+            tests/test_shared_memory_python.py \
+            tests/test_transport_utm_policy.py \
+            tests/test_transport_identity.py

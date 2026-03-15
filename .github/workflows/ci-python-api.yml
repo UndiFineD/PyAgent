@@ -1,0 +1,49 @@
+name: CI — Python API
+
+on:
+  push:
+    branches: [main, "feature/**", "fix/**"]
+    paths:
+      - "src/**/*.py"
+      - "tests/test_backend*.py"
+      - "tests/test_registry_api.py"
+      - "tests/test_github_app.py"
+      - "tests/test_roadmap_cli.py"
+      - ".github/workflows/ci-python-api.yml"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python-api:
+    name: Backend / API tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run backend/API tests
+        run: |
+          python -m pytest -q --no-cov \
+            tests/test_backend_models.py \
+            tests/test_backend_session_manager.py \
+            tests/test_backend_worker.py \
+            tests/test_backend_ws_handler.py \
+            tests/test_registry_api.py \
+            tests/test_github_app.py \
+            tests/test_roadmap_cli.py

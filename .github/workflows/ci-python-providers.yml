@@ -1,0 +1,56 @@
+name: CI — Python Providers
+
+on:
+  push:
+    branches: [main, "feature/**", "fix/**"]
+    paths:
+      - "src/**/*.py"
+      - "tests/test_flm*.py"
+      - "tests/test_providers*.py"
+      - "tests/test_chat*.py"
+      - "tests/test_vision*.py"
+      - "tests/test_core_providers*.py"
+      - ".github/workflows/ci-python-providers.yml"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python-providers:
+    name: LLM provider + chat tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run provider tests
+        run: |
+          python -m pytest -q --no-cov \
+            tests/test_flm_chat_adapter.py \
+            tests/test_flm_provider_config.py \
+            tests/test_flm_provider_docs.py \
+            tests/test_flm_runtime_errors.py \
+            tests/test_flm_tool_loop.py \
+            tests/test_providers_flm.py \
+            tests/test_core_providers_FlmChatAdapter.py \
+            tests/test_core_providers_FlmProviderConfig.py \
+            tests/test_chat_api.py \
+            tests/test_chat_mcp.py \
+            tests/test_chat_models.py \
+            tests/test_chat_utils.py \
+            tests/test_vision_template.py
