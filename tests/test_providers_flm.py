@@ -127,9 +127,7 @@ def test_check_endpoint_success(base_config: FlmProviderConfig) -> None:
     """The adapter should successfully check endpoint availability when the client's list works."""
     adapter = FlmChatAdapter(
         config=base_config,
-        client_factory=cast(Any, lambda **kwargs: _DummyClient(
-            _DummyModels(available=["m1"]), _DummyChat()
-        )),
+        client_factory=cast(Any, lambda **kwargs: _DummyClient(_DummyModels(available=["m1"]), _DummyChat())),
     )
     # should not raise
     adapter.check_endpoint_available()
@@ -139,9 +137,7 @@ def test_check_endpoint_failure(base_config: FlmProviderConfig) -> None:
     """The adapter should raise FlmRuntimeError when the client's list raises an exception."""
     adapter = FlmChatAdapter(
         config=base_config,
-        client_factory=cast(Any, lambda **kwargs: _DummyClient(
-            _DummyModels(raise_exc=True), _DummyChat()
-        )),
+        client_factory=cast(Any, lambda **kwargs: _DummyClient(_DummyModels(raise_exc=True), _DummyChat())),
     )
     with pytest.raises(FlmRuntimeError):
         adapter.check_endpoint_available()
@@ -151,9 +147,7 @@ def test_ensure_model_missing(base_config: FlmProviderConfig) -> None:
     """The adapter should raise FlmRuntimeError when the required model is missing."""
     adapter = FlmChatAdapter(
         config=base_config,
-        client_factory=cast(Any, lambda **kwargs: _DummyClient(
-            _DummyModels(available=["other"]), _DummyChat()
-        )),
+        client_factory=cast(Any, lambda **kwargs: _DummyClient(_DummyModels(available=["other"]), _DummyChat())),
     )
     with pytest.raises(FlmRuntimeError):
         adapter.ensure_model_available()
@@ -178,9 +172,7 @@ def test_create_completion_raises(base_config: FlmProviderConfig) -> None:
 
     adapter = FlmChatAdapter(
         config=base_config,
-        client_factory=cast(Any, lambda **kwargs: _DummyClient(
-            _DummyModels(available=["m1"]), BadChat()
-        )),
+        client_factory=cast(Any, lambda **kwargs: _DummyClient(_DummyModels(available=["m1"]), BadChat())),
     )
     with pytest.raises(FlmRuntimeError):
         adapter.create_completion(messages=[{"role": "user", "content": "hi"}])
@@ -218,9 +210,7 @@ def test_run_until_terminal_tool_executor_missing(base_config: FlmProviderConfig
 
     adapter = FlmChatAdapter(
         config=base_config,
-        client_factory=cast(Any, lambda **kwargs: _DummyClient(
-            _DummyModels(available=["m1"]), ChatWithTool()
-        )),
+        client_factory=cast(Any, lambda **kwargs: _DummyClient(_DummyModels(available=["m1"]), ChatWithTool())),
     )
     with pytest.raises(FlmRuntimeError):
         asyncio.run(adapter.run_until_terminal(messages=[{"role": "user", "content": "hi"}]))
@@ -262,9 +252,7 @@ def test_run_until_terminal_max_iterations(base_config: FlmProviderConfig) -> No
 
     adapter = FlmChatAdapter(
         config=base_config,
-        client_factory=cast(Any, lambda **kwargs: _DummyClient(
-            _DummyModels(available=["m1"]), ChatLoop()
-        )),
+        client_factory=cast(Any, lambda **kwargs: _DummyClient(_DummyModels(available=["m1"]), ChatLoop())),
     )
     with pytest.raises(FlmRuntimeError):
         asyncio.run(adapter.run_until_terminal(messages=[{"role": "user", "content": "hi"}], tool_executor=noop))

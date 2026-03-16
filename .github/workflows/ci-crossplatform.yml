@@ -36,9 +36,11 @@ jobs:
           cache: pip
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install --prefer-binary -r requirements-ci.txt
 
       - name: Verify basic imports
+        env:
+          PYTHONPATH: ${{ github.workspace }}
         run: |
           python -c "
           import src.core.base.base_agent as ba

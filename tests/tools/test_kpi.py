@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Tests for KPI computation functions in the tools directory."""
+
 from tools.pm import kpi
 
 

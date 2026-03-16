@@ -29,9 +29,7 @@ def test_ci_yaml_python_job_has_steps() -> None:
     """Python job must contain at least a lint and a test step."""
     with open(".github/workflows/quality.yml", encoding="utf-8") as fh:
         cfg = yaml.safe_load(fh)
-    python_steps = [
-        s.get("name", "") for s in cfg["jobs"]["python"].get("steps", [])
-    ]
+    python_steps = [s.get("name", "") for s in cfg["jobs"]["python"].get("steps", [])]
     step_text = " ".join(python_steps).lower()
     assert "lint" in step_text or "ruff" in step_text, "No lint step found in python job"
     assert "test" in step_text or "pytest" in step_text, "No test step found in python job"

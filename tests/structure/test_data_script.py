@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Tests for the data generation script."""
+
 from pathlib import Path
 
 from scripts.generate_test_data import generate_sample_fixture

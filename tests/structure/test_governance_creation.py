@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Tests for governance documentation and templates."""
+
 import os
 import subprocess
 from pathlib import Path

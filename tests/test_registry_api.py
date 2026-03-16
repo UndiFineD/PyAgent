@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Test the AgentRegistry API using FastAPI's TestClient."""
+
 from typing import cast
 
 import pytest
@@ -56,10 +57,7 @@ def list_agents() -> list[dict[str, object]]:
 
     Production code should page or limit this result.
     """
-    return [
-        {"agent_id": agent_id, **agent_info}
-        for agent_id, agent_info in registry._agents.items()
-    ]
+    return [{"agent_id": agent_id, **agent_info} for agent_id, agent_info in registry._agents.items()]
 
 
 client = TestClient(app)
