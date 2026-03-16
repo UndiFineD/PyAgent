@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Smoke test for workflow engine module."""
+
 from src.core.workflow import engine
 
 

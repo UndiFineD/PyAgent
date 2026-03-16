@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Core task and task state definitions for the workflow engine."""
+
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any

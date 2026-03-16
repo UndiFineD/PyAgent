@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Test that the core system components can be imported and used together."""
+
 from pathlib import Path
 
 import pytest

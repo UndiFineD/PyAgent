@@ -2,7 +2,6 @@
 """Meta-test to ensure test files meet basic linting standards."""
 # Apache 2.0 License applies to this file; see LICENSE for details.
 
-
 import asyncio
 import sys
 from pathlib import Path
@@ -50,9 +49,7 @@ async def test_ruff_finds_error(tmp_path: Path) -> None:
     # afterwards so we can also skip when ruff runs but the project config
     # suppresses the simple error used here (this happens in some environments).
     if "No module named ruff" in (res_stderr or "") or res_code == 0:
-        pytest.skip(
-            "ruff is unavailable or configured not to report the dummy error"
-        )
+        pytest.skip("ruff is unavailable or configured not to report the dummy error")
 
     # certain ruff versions choke on the newer `[tool.ruff.lint]` table and
     # abort with a parse-failure. treat that as an environment issue rather
@@ -79,6 +76,7 @@ async def test_ruff_finds_error(tmp_path: Path) -> None:
     flake = tmp_path / ".flake8"
     # copy the project's .flake8 so we can inspect it without modifying
     import shutil
+
     proj = Path(".flake8")
     if proj.exists():
         shutil.copy(proj, flake)

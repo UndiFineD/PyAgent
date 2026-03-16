@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Test the WorkflowEngine processes tasks from the TaskQueue and updates their state."""
+
 import pytest
 
 from src.core.workflow.engine import WorkflowEngine

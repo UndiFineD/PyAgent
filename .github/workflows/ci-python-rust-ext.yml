@@ -51,14 +51,9 @@ jobs:
           cache: pip
 
       - name: Install Python dependencies
-        run: pip install -r requirements.txt
+        run: pip install --prefer-binary -r requirements-ci.txt
 
-      # Install maturin into the SAME Python that setup-python activated.
-      # Then `maturin develop` installs rust_core into that venv — the
-      # identical environment pytest will use below.
-      - name: Install maturin (into workspace Python)
-        run: pip install maturin
-
+      # `maturin` is installed via requirements-ci.txt (same env pytest uses).
       - name: Build & install rust_core extension (into workspace Python)
         working-directory: rust_core
         run: maturin develop --release

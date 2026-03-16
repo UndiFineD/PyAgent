@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Compile architecture descriptors into a single file."""
+
 from pathlib import Path
 
 

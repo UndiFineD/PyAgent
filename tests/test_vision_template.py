@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Test that the vision package's template function works as expected."""
+
 from pathlib import Path
 
 from roadmap import vision

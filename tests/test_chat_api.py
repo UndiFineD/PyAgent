@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Tests for the chat API."""
+
 import importlib
 from typing import Callable, Protocol, TypedDict, cast
 
@@ -76,8 +77,8 @@ def test_tool_posts(monkeypatch: MonkeyPatch) -> None:
 
     def fake_post(url: str, json: MessagePayload) -> object:
         """Fake httpx.post that captures the URL and JSON payload."""
-        captured['url'] = url
-        captured['json'] = json
+        captured["url"] = url
+        captured["json"] = json
 
         class Dummy:
             """Dummy response object with expected interface for the tool."""
@@ -98,9 +99,9 @@ def test_tool_posts(monkeypatch: MonkeyPatch) -> None:
     send_message_tool("proj", "u", "hi")
 
     # assert
-    assert captured['url'].endswith("/rooms/proj/messages")
-    assert captured['json']["sender"] == "u"
-    assert captured['json']["text"] == "hi"
+    assert captured["url"].endswith("/rooms/proj/messages")
+    assert captured["json"]["sender"] == "u"
+    assert captured["json"]["text"] == "hi"
 
 
 def test_metric_increment() -> None:

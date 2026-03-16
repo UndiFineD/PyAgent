@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Test the Task class."""
+
 import pytest
 
 from src.core.workflow.task import Task, TaskState

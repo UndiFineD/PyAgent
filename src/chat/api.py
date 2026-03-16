@@ -26,6 +26,7 @@ from MemoryTransactionManager import MemoryTransaction  # ensure atomic updates
 try:
     from prometheus_client import Counter
 except ModuleNotFoundError:  # pragma: no cover - fallback for minimal envs
+
     class _CounterValue:
         """Simple mutable value holder for fallback metrics."""
 
@@ -59,9 +60,7 @@ app = FastAPI()
 rooms: dict[str, ChatRoom] = {}
 
 # metrics
-messages_counter = Counter(
-    "chat_messages_total", "Total number of messages posted to chat rooms"
-)
+messages_counter = Counter("chat_messages_total", "Total number of messages posted to chat rooms")
 
 
 class RoomCreateRequest(BaseModel):

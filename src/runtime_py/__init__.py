@@ -122,6 +122,7 @@ def spawn(coro: Any) -> None:
     replacement for ``asyncio.create_task`` while preserving the global
     event loop semantics.
     """
+
     async def _wrapper() -> None:
         try:
             await coro
@@ -161,6 +162,7 @@ def watch_file(path: str, callback: Callable[[str], Awaitable[None]]) -> None:
     task scheduled via :func:`spawn` so users need not await anything.
     """
     import os
+
     # Record the initial modification timestamp in nanoseconds (or 0 if
     # missing). ``st_mtime_ns`` is more reliable on Windows where second-level
     # ``getmtime`` granularity can miss rapid writes in tests.

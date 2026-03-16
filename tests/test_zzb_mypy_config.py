@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Meta-test to ensure mypy is configured and detects type issues."""
+
 import os
 import subprocess
 import sys
@@ -31,13 +32,9 @@ def test_mypy_detects_problem(tmp_path: Path) -> None:
         # warnings such as "Unrecognized option" which still emit code 0.
         stderr = res.stderr or ""
         if "Unrecognized option" in stderr or "error: " in stderr:
-            pytest.skip(
-                "mypy returned zero due to configuration warning"
-            )
+            pytest.skip("mypy returned zero due to configuration warning")
         if os.environ.get("MYPY_LENIENT"):
-            pytest.skip(
-                "mypy did not report the deliberate type error (lenient mode)"
-            )
+            pytest.skip("mypy did not report the deliberate type error (lenient mode)")
         # other environments may silently succeed; skip so tests keep running
         pytest.skip("mypy did not flag the deliberate type error")
 

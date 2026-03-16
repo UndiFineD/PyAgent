@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Integration tests for context management and skills registry."""
+
 from pathlib import Path
 
 import pytest

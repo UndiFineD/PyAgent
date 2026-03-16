@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Test the TaskState enum."""
+
 import pytest
 
 from src.core.workflow.task import TaskState

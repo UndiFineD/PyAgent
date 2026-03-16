@@ -35,7 +35,7 @@ jobs:
           cache: pip
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install --prefer-binary -r requirements-ci.txt
 
       - name: Run backend/API tests
         run: |

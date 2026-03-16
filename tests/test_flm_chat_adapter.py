@@ -122,9 +122,7 @@ def test_create_completion_uses_default_model() -> None:
 
 def test_run_until_terminal_returns_final_content() -> None:
     """Adapter should return terminal assistant content when no tool calls are present."""
-    response = _FakeResponse(
-        choices=[_FakeChoice(message=_FakeMessage(content="terminal answer", tool_calls=None))]
-    )
+    response = _FakeResponse(choices=[_FakeChoice(message=_FakeMessage(content="terminal answer", tool_calls=None))])
     fake_client = _FakeClient([response])
 
     config = FlmProviderConfig.from_mapping(
@@ -142,6 +140,7 @@ def test_run_until_terminal_returns_final_content() -> None:
     messages: list[dict[str, Any]] = [{"role": "user", "content": "are you listening?"}]
 
     import asyncio
+
     answer = asyncio.run(adapter.run_until_terminal(messages=messages))
 
     assert answer == "terminal answer"

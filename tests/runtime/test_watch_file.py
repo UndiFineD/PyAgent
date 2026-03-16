@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Test the watch_file utility for monitoring file changes."""
+
 import asyncio
 from pathlib import Path
 
