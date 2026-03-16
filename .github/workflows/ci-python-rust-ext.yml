@@ -78,14 +78,3 @@ jobs:
             tests/test_shared_memory_python.py \
             tests/test_transport_utm_policy.py \
             tests/test_transport_identity.py
-
-      - name: Verify import
-        run: python -c "import rust_core; print('rust_core imported OK')"
-
-      - name: Run Rust-extension tests
-        run: |
-          python -m pytest -q --no-cov \
-            tests/test_rust_core.py \
-            tests/test_shared_memory_python.py \
-            tests/test_transport_utm_policy.py \
-            tests/test_transport_identity.py
