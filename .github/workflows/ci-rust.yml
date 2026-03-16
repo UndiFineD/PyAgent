@@ -72,10 +72,16 @@ jobs:
       - name: Configure Python for PyO3
         run: |
           echo "PYO3_PYTHON=$(python -c 'import sys; print(sys.executable)')" >> $GITHUB_ENV
-          python_ldflags=$(python -c "import sysconfig; print(sysconfig.get_config_var('LDLIBRARY'))")
+          python_ldlibrary=$(python -c "import sysconfig; print(sysconfig.get_config_var('LDLIBRARY'))")
           python_libdir=$(python -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
           python_libpl=$(python -c "import sysconfig; print(sysconfig.get_config_var('LIBPL'))")
-          echo "PYTHON_LDLIBRARY=$python_ldflags" >> $GITHUB_ENV
+
+          # Ensure the Python shared library is available at link time for PyO3.
+          # This makes the Rust linker explicitly search the Python lib directory and link the correct lib.
+          python_libname=$(python -c "import os; import sysconfig; lib=sysconfig.get_config_var('LDLIBRARY'); print(os.path.splitext(os.path.basename(lib))[0][3:])")
+          echo "RUSTFLAGS=-L$python_libdir -L$python_libpl -l${python_libname} ${RUSTFLAGS:-}" >> $GITHUB_ENV
+
+          echo "PYTHON_LDLIBRARY=$python_ldlibrary" >> $GITHUB_ENV
           echo "LD_LIBRARY_PATH=$python_libdir:$python_libpl:${LD_LIBRARY_PATH:-}" >> $GITHUB_ENV
 
       - name: Build & test
