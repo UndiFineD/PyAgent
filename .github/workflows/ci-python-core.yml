@@ -41,6 +41,10 @@ jobs:
       - name: Install dependencies
         run: pip install --prefer-binary -r requirements-ci.txt
 
+      - name: Build and install rust_core extension
+        working-directory: rust_core
+        run: maturin develop --release
+
       - name: Run core tests
         run: |
           python -m pytest -q --no-cov \
