@@ -56,10 +56,14 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
 
-      - name: Install system Python and dev headers
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Python dev headers
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3 python3-dev
+          sudo apt-get install -y python3.13-dev
 
       - uses: Swatinem/rust-cache@v2
         with:
@@ -67,9 +71,12 @@ jobs:
 
       - name: Configure Python for PyO3
         run: |
-          echo "PYO3_PYTHON=$(python3 -c 'import sys; print(sys.executable)')" >> $GITHUB_ENV
-          python_lib_dir=$(python3 -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
-          echo "LD_LIBRARY_PATH=$python_lib_dir:${LD_LIBRARY_PATH:-}" >> $GITHUB_ENV
+          echo "PYO3_PYTHON=$(python -c 'import sys; print(sys.executable)')" >> $GITHUB_ENV
+          python_ldflags=$(python -c "import sysconfig; print(sysconfig.get_config_var('LDLIBRARY'))")
+          python_libdir=$(python -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
+          python_libpl=$(python -c "import sysconfig; print(sysconfig.get_config_var('LIBPL'))")
+          echo "PYTHON_LDLIBRARY=$python_ldflags" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=$python_libdir:$python_libpl:${LD_LIBRARY_PATH:-}" >> $GITHUB_ENV
 
       - name: Build & test
         working-directory: rust_core
