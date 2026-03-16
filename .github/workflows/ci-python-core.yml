@@ -38,15 +38,22 @@ jobs:
           python-version: "3.13"
           cache: pip
 
-      - name: Install dependencies
-        run: pip install --prefer-binary -r requirements-ci.txt
+      - name: Create and activate venv
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install --prefer-binary -r requirements-ci.txt
 
       - name: Build and install rust_core extension
         working-directory: rust_core
-        run: maturin develop --release
+        run: |
+          source ../.venv/bin/activate
+          python -m maturin develop --release
 
       - name: Run core tests
         run: |
+          source .venv/bin/activate
           python -m pytest -q --no-cov \
             tests/test_core_agent_state_manager.py \
             tests/test_core_agent_registry.py \

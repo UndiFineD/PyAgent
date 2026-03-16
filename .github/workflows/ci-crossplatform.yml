@@ -43,8 +43,9 @@ jobs:
           PYTHONPATH: ${{ github.workspace }}/src
         run: |
           python -c "
-          import core.base.base_agent as ba
-          print('base_agent import OK')
+          import src.core.workflow.engine as engine
+          engine.validate()
+          print('basic imports OK')
           "
 
       - name: Run minimal core smoke tests
