@@ -1,0 +1,53 @@
+name: CI — Quality
+
+on:
+  push:
+    branches: [main, "feature/**", "fix/**"]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    name: Python quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install --prefer-binary -r requirements-ci.txt
+
+      - name: Lint
+        run: |
+          python -m ruff check src tests
+
+      - name: Run tests
+        run: |
+          python -m pytest -q --no-cov tests/test_quality_yaml.py
+
+  rust:
+    name: Rust quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust fmt + clippy
+        working-directory: rust_core
+        run: |
+          cargo fmt --all -- --check
+          cargo clippy --all-targets --all-features -- -D warnings

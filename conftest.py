@@ -26,6 +26,15 @@ src_dir = root_dir / "src"
 if str(src_dir) not in sys.path:
     sys.path.insert(0, str(src_dir))
 
+# Prevent accidental imports from legacy code paths (e.g. src-old) by removing
+# them from sys.path when running tests.
+sys.path = [p for p in sys.path if "src-old" not in str(p).replace("\\", "/")]
+
+# Ensure the standard library "types" module is used even if a different module
+# named "types" exists in the repository (e.g. src-old/core/base/.../types.py).
+import types as _stdlib_types
+sys.modules["types"] = _stdlib_types
+
 
 # ---------------------------------------------------------------------------
 # typing protocols

@@ -50,19 +50,29 @@ jobs:
           python-version: "3.13"
           cache: pip
 
-      - name: Install Python dependencies
-        run: pip install --prefer-binary -r requirements-ci.txt
+      - name: Create venv and install Python dependencies
+        working-directory: rust_core
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install --prefer-binary -r ../requirements-ci.txt
 
       # `maturin` is installed via requirements-ci.txt (same env pytest uses).
       - name: Build & install rust_core extension (into workspace Python)
         working-directory: rust_core
-        run: maturin develop --release
+        run: |
+          source .venv/bin/activate
+          python -m maturin develop --release
 
       - name: Verify import
-        run: python -c "import rust_core; print('rust_core imported OK')"
+        run: |
+          source rust_core/.venv/bin/activate
+          python -c "import rust_core; print('rust_core imported OK')"
 
       - name: Run Rust-extension tests
         run: |
+          source rust_core/.venv/bin/activate
           python -m pytest -q --no-cov \
             tests/test_rust_core.py \
             tests/test_shared_memory_python.py \
