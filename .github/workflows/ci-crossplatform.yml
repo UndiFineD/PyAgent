@@ -40,10 +40,10 @@ jobs:
 
       - name: Verify basic imports
         env:
-          PYTHONPATH: ${{ github.workspace }}
+          PYTHONPATH: ${{ github.workspace }}/src
         run: |
           python -c "
-          import src.core.base.base_agent as ba
+          import core.base.base_agent as ba
           print('base_agent import OK')
           "
 
