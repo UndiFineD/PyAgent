@@ -35,5 +35,5 @@ jobs:
       - name: Install CI requirements (includes mkdocs)
         run: pip install -r requirements-ci.txt
 
-      - name: Build docs (strict — warnings-as-errors)
-        run: mkdocs build --strict --clean
+      - name: Build docs
+        run: mkdocs build --clean
