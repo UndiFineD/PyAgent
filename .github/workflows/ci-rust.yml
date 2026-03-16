@@ -56,12 +56,29 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: rust_core
 
+      - name: Ensure Python development libraries are available
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3.13-dev
+
+      - name: Ensure Python shared library is discoverable
+        run: |
+          python_lib_dir=$(python -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
+          echo "LD_LIBRARY_PATH=$python_lib_dir:${LD_LIBRARY_PATH:-}" >> $GITHUB_ENV
+          echo "PATH=$python_lib_dir:$PATH" >> $GITHUB_ENV
+
       - name: Build & test
         working-directory: rust_core
+        env:
+          PYO3_PYTHON: python
         run: cargo test --release -- --test-threads=1
 
   # ── Job 3: build wheel artifact (used by python integration tests) ───────────────────
