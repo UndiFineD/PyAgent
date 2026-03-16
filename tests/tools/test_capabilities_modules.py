@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Tests for the capabilities modules in the tools directory."""
+
 import importlib.util
 import sys
 from pathlib import Path

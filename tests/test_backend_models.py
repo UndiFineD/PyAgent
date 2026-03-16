@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for WebSocket message schema models."""
+
 import pytest
 
 from backend.models import (
@@ -29,8 +30,7 @@ def test_init_message_valid():
 
 
 def test_run_task_message_valid():
-    msg = RunTaskMessage(type="runTask", task_id="t1", task="generateText",
-                        payload={"prompt": "hello"})
+    msg = RunTaskMessage(type="runTask", task_id="t1", task="generateText", payload={"prompt": "hello"})
     assert msg.task == "generateText"
 
 
@@ -45,8 +45,5 @@ def test_action_request_message_valid():
 
 
 def test_signal_message_valid():
-    msg = SignalMessage(
-        type="signal", session_id="s1", peer_id="p1",
-        signal_type="offer", payload={"sdp": "..."}
-    )
+    msg = SignalMessage(type="signal", session_id="s1", peer_id="p1", signal_type="offer", payload={"sdp": "..."})
     assert msg.signal_type == "offer"

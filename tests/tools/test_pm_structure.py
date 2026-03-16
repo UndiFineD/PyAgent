@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Tests for the PM structure in the tools directory."""
+
 import importlib.util
 import os
 

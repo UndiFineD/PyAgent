@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Test configuration for fake tests to ensure test infrastructure is working."""
+
 import os
 import sys
 

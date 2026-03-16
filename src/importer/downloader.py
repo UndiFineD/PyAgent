@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Downloader module for PyAgent."""
+
 from pathlib import Path
 
 

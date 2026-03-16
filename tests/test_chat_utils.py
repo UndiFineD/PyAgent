@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Tests for chat utilities."""
+
 import importlib
 from collections.abc import Callable, Sequence
 from typing import Protocol, cast

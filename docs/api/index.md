@@ -5,6 +5,6 @@ package docstrings.
 
 <!-- mkdocstrings begins -->
 
-::: PyAgent
+::: src
 
 <!-- mkdocstrings ends -->

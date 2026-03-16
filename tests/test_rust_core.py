@@ -63,11 +63,7 @@ def _extract_functions_from_file(filepath: str, fn_pattern: Pattern[str]) -> lis
         if any(skip in name for skip in ("test_", "main", "__")):
             continue
         # count actual arguments (ignore references)
-        arg_count = sum(
-            1
-            for p in params.split(",")
-            if p.strip() and not p.strip().startswith("&")
-        )
+        arg_count = sum(1 for p in params.split(",") if p.strip() and not p.strip().startswith("&"))
         functions.append({"name": name, "params": params, "arg_count": arg_count})
     return functions
 
@@ -81,9 +77,9 @@ def scan_rust_files(rust_src_path: Path) -> dict[str, list[dict[str, Any]]]:
         return functions_by_file
 
     # Pattern to match pub fn declarations (including async, generic params)
-    fn_pattern = re.compile(r'pub\s+(?:async\s+)?fn\s+(\w+)\s*(?:<[^>]*>)?\s*\(([^)]*)\)')
+    fn_pattern = re.compile(r"pub\s+(?:async\s+)?fn\s+(\w+)\s*(?:<[^>]*>)?\s*\(([^)]*)\)")
 
-    for filepath in rust_src_path.rglob('*.rs'):
+    for filepath in rust_src_path.rglob("*.rs"):
         functions = _extract_functions_from_file(str(filepath), fn_pattern)
         functions_by_file[filepath.name].extend(functions)
 
@@ -96,34 +92,34 @@ def generate_test_args(function_name: str, arg_count: int = 1) -> list[tuple[Any
     func_lower = function_name.lower()
 
     # Grammar-based argument generation
-    if any(x in func_lower for x in ['json', 'validate', 'check']):
+    if any(x in func_lower for x in ["json", "validate", "check"]):
         test_cases.append(('{"test": true, "value": 42}',))
 
-    if any(x in func_lower for x in ['metric', 'aggregate', 'stats']):
+    if any(x in func_lower for x in ["metric", "aggregate", "stats"]):
         test_cases.append(([1, 2, 3, 4, 5],))
 
-    if any(x in func_lower for x in ['complexity', 'code', 'analyze']):
-        test_cases.append(('def hello():\n    return 42',))
+    if any(x in func_lower for x in ["complexity", "code", "analyze"]):
+        test_cases.append(("def hello():\n    return 42",))
 
-    if any(x in func_lower for x in ['import', 'parse']):
-        test_cases.append(('import os\nimport sys',))
+    if any(x in func_lower for x in ["import", "parse"]):
+        test_cases.append(("import os\nimport sys",))
 
-    if any(x in func_lower for x in ['top_k', 'rank', 'sort']):
+    if any(x in func_lower for x in ["top_k", "rank", "sort"]):
         test_cases.append(([5.0, 4.0, 3.0, 2.0, 1.0], 2))
 
-    if any(x in func_lower for x in ['mask', 'token']):
+    if any(x in func_lower for x in ["mask", "token"]):
         test_cases.append(([1, 0, 1, 0, 1],))
 
-    if any(x in func_lower for x in ['tensor', 'matrix', 'vector']):
+    if any(x in func_lower for x in ["tensor", "matrix", "vector"]):
         test_cases.append(([1.0, 2.0, 3.0],))
 
-    if any(x in func_lower for x in ['hash', 'encode']):
-        test_cases.append(('test_string_value',))
+    if any(x in func_lower for x in ["hash", "encode"]):
+        test_cases.append(("test_string_value",))
 
-    if any(x in func_lower for x in ['weight', 'param', 'config']):
-        test_cases.append(({'key': 'value'},))
+    if any(x in func_lower for x in ["weight", "param", "config"]):
+        test_cases.append(({"key": "value"},))
 
-    if any(x in func_lower for x in ['compute', 'calculate', 'sum']):
+    if any(x in func_lower for x in ["compute", "calculate", "sum"]):
         test_cases.append(([1, 2, 3],))
 
     # Generic fallbacks
@@ -131,13 +127,13 @@ def generate_test_args(function_name: str, arg_count: int = 1) -> list[tuple[Any
         if arg_count == 0:
             test_cases.append(())
         elif arg_count == 1:
-            test_cases.append(('test',))
+            test_cases.append(("test",))
         elif arg_count == 2:
-            test_cases.append(('test', 1))
+            test_cases.append(("test", 1))
         elif arg_count == 3:
-            test_cases.append(('test', 1, 2))
+            test_cases.append(("test", 1, 2))
         else:
-            test_cases.append(tuple(['arg' + str(i) for i in range(arg_count)]))
+            test_cases.append(tuple(["arg" + str(i) for i in range(arg_count)]))
 
     return test_cases
 
@@ -158,10 +154,10 @@ def safe_call_function(func_obj: object, args: tuple[Any, ...]) -> tuple[bool, s
         start_time = time.time()
         func_result = func_obj(*args)
         duration = time.time() - start_time
-        return True, f"✓ Returned: {type(func_result).__name__} (took {duration*1000:.2f}ms)", func_result
+        return True, f"✓ Returned: {type(func_result).__name__} (took {duration * 1000:.2f}ms)", func_result
     except TypeError as e:
         type_error_msg = str(e)
-        if 'missing' in type_error_msg or 'required' in type_error_msg:
+        if "missing" in type_error_msg or "required" in type_error_msg:
             return False, f"⚠ MissingArgs: {type_error_msg[:60]}", None
         return False, f"✗ TypeError: {type_error_msg[:70]}", None
     except ValueError as e:
@@ -183,7 +179,7 @@ print(f"Test Config: Verbose={VERBOSE}, ScanSource={SCAN_SOURCE}, TestAll={TEST_
 # ============================================================================
 if SCAN_SOURCE:
     print_section("STEP 0: SOURCE CODE SCANNING")
-    src_path = Path(__file__).resolve().parent.parent / 'rust_core' / 'src'
+    src_path = Path(__file__).resolve().parent.parent / "rust_core" / "src"
     rust_functions = scan_rust_files(rust_src_path=src_path)
 
     total_rust_funcs = sum(len(funcs) for funcs in rust_functions.values())
@@ -229,9 +225,9 @@ for item in public_exports:
 print("\nExport Categories:")
 # Protect against division by zero when there are no public exports
 _denom = max(1, len(public_exports))
-print(f"  • Classes/Types: {len(class_exports):4d} ({100*len(class_exports)/_denom:.1f}%)")
-print(f"  • Functions:     {len(function_exports):4d} ({100*len(function_exports)/_denom:.1f}%)")
-print(f"  • Other:         {len(special_exports):4d} ({100*len(special_exports)/_denom:.1f}%)")
+print(f"  • Classes/Types: {len(class_exports):4d} ({100 * len(class_exports) / _denom:.1f}%)")
+print(f"  • Functions:     {len(function_exports):4d} ({100 * len(function_exports) / _denom:.1f}%)")
+print(f"  • Other:         {len(special_exports):4d} ({100 * len(special_exports) / _denom:.1f}%)")
 
 # ============================================================================
 # STEP 2: CLASS/TYPE INVENTORY
@@ -243,8 +239,8 @@ for i, cls in enumerate(sorted(class_exports), 1):
     try:
         obj = getattr(rust_core, cls)
         doc_string = ""
-        if hasattr(obj, '__doc__') and obj.__doc__:
-            doc_string = obj.__doc__.strip().split('\n')[0][:60]
+        if hasattr(obj, "__doc__") and obj.__doc__:
+            doc_string = obj.__doc__.strip().split("\n")[0][:60]
         print(f"  {i:2d}. {cls:30s} {f'- {doc_string}' if doc_string else ''}")
     except (AttributeError, TypeError):
         pass
@@ -258,20 +254,18 @@ print_section("STEP 3: FUNCTION CATEGORIZATION")
 prefixes: dict[str, list[str]] = defaultdict(list)
 for func_name in function_exports:
     try:
-        if '_' in func_name:
-            PREFIX = func_name.split('_')[0]
+        if "_" in func_name:
+            PREFIX = func_name.split("_")[0]
         else:
-            PREFIX = 'uncategorized'
+            PREFIX = "uncategorized"
         prefixes[PREFIX].append(func_name)
     except (ValueError, IndexError):
-        prefixes['uncategorized'].append(func_name)
+        prefixes["uncategorized"].append(func_name)
 
 print(f"Function categories identified: {len(prefixes)}")
 print("Functions per category:\n")
 
-sorted_prefixes: list[tuple[str, list[str]]] = sorted(
-    prefixes.items(), key=lambda x: len(x[1]), reverse=True
-)
+sorted_prefixes: list[tuple[str, list[str]]] = sorted(prefixes.items(), key=lambda x: len(x[1]), reverse=True)
 
 if sorted_prefixes:
     for prefix_name, prefix_funcs in sorted_prefixes[:15]:
@@ -279,7 +273,7 @@ if sorted_prefixes:
 
     if len(sorted_prefixes) > 15:
         remaining = sum(len(prefix_funcs) for _, prefix_funcs in sorted_prefixes[15:])
-        print(f"  {'OTHER':15s}: {remaining:4d} functions ({len(sorted_prefixes)-15} categories)")
+        print(f"  {'OTHER':15s}: {remaining:4d} functions ({len(sorted_prefixes) - 15} categories)")
 else:
     print("  No function categories found")
 
@@ -290,11 +284,11 @@ print_section("STEP 4: DYNAMIC FUNCTION TESTING")
 
 # results dictionary carries counters and detailed info
 test_results: dict[str, Any] = {
-    'pass': 0,
-    'fail': 0,
-    'skip': 0,
-    'errors': [],
-    'timings': [],
+    "pass": 0,
+    "fail": 0,
+    "skip": 0,
+    "errors": [],
+    "timings": [],
 }
 
 # Select subset of functions based on configuration
@@ -307,14 +301,14 @@ print(f"Testing {total_to_test} functions from {len(function_exports)} total:\n"
 
 for i, func_name in enumerate(test_functions, 1):
     if not hasattr(rust_core, func_name):
-        test_results['skip'] += 1
+        test_results["skip"] += 1
         continue
 
     try:
         func = getattr(rust_core, func_name)
     except AttributeError as exc:
         # Attribute unexpectedly missing despite hasattr check; treat as skip but surface details when verbose.
-        test_results['skip'] += 1
+        test_results["skip"] += 1
         if VERBOSE:
             print(f"  skipped {func_name} due to attribute error: {exc}")
         continue
@@ -330,28 +324,27 @@ for i, func_name in enumerate(test_functions, 1):
     for test_args in test_args_list:
         FUNC_SUCCESS, FUNC_MESSAGE, _ = safe_call_function(func, test_args)
         if FUNC_SUCCESS:
-            test_results['pass'] += 1
-            test_results['timings'].append((
-                func_name, FUNC_MESSAGE.split('took ')[1].split('ms')[0]
-                if 'took' in FUNC_MESSAGE else '0'
-            ))
+            test_results["pass"] += 1
+            test_results["timings"].append(
+                (func_name, FUNC_MESSAGE.split("took ")[1].split("ms")[0] if "took" in FUNC_MESSAGE else "0")
+            )
             break
 
     if not FUNC_SUCCESS:
-        test_results['fail'] += 1
-        if not any(func_name in prev for prev, _ in test_results['errors']):
-            test_results['errors'].append((func_name, FUNC_MESSAGE))
+        test_results["fail"] += 1
+        if not any(func_name in prev for prev, _ in test_results["errors"]):
+            test_results["errors"].append((func_name, FUNC_MESSAGE))
         # attempt call without arguments as fallback
         FUNC_SUCCESS, FUNC_MESSAGE, _ = safe_call_function(func, ())
         if FUNC_SUCCESS:
-            test_results['pass'] += 1
-            test_results['fail'] -= 1
+            test_results["pass"] += 1
+            test_results["fail"] -= 1
 
     # progress logging every tenth function or at end
     if i % 10 == 0 or i == total_to_test:
-        tested = test_results['pass'] + test_results['fail']
+        tested = test_results["pass"] + test_results["fail"]
         PCT = 100 * tested / max(1, tested)
-        pass_rate = 100 * test_results['pass'] / max(1, tested)
+        pass_rate = 100 * test_results["pass"] / max(1, tested)
         print(f"  Progress: {i}/{total_to_test} ({PCT:.0f}%) | Pass Rate: {pass_rate:.1f}%")
 print("\n" + "─" * 100)
 
@@ -367,22 +360,22 @@ key_classes = [
     "ToolDraftingCore",
     "FlexibleNeuralNetwork",
     "NeuralTransformer",
-    "KVCache"
+    "KVCache",
 ]
 
-class_results = {'found': 0, 'missing': 0}
+class_results = {"found": 0, "missing": 0}
 
 for cls_name in key_classes:
     try:
         if hasattr(rust_core, cls_name):
-            class_results['found'] += 1
+            class_results["found"] += 1
             cls_obj = getattr(rust_core, cls_name)
             print(f"  ✓ {cls_name:30s} | Type: {type(cls_obj).__name__:15s} Callable: {callable(cls_obj)}")
         else:
-            class_results['missing'] += 1
+            class_results["missing"] += 1
             print(f"  ✗ {cls_name:30s} | NOT FOUND")
     except (AttributeError, TypeError):
-        class_results['missing'] += 1
+        class_results["missing"] += 1
         print(f"  ✗ {cls_name:30s} | ERROR")
 
 # ============================================================================
@@ -390,8 +383,8 @@ for cls_name in key_classes:
 # ============================================================================
 print_section("STEP 6: DETAILED STATISTICS")
 
-TOTAL_FUNCTIONS_TESTED = test_results['pass'] + test_results['fail']
-pass_rate = 100 * test_results['pass'] / max(1, TOTAL_FUNCTIONS_TESTED)
+TOTAL_FUNCTIONS_TESTED = test_results["pass"] + test_results["fail"]
+pass_rate = 100 * test_results["pass"] / max(1, TOTAL_FUNCTIONS_TESTED)
 
 print("Export Statistics:")
 print(f"  • Total Exports:       {len(public_exports):6d}")
@@ -401,24 +394,24 @@ print(f"  • Functions:           {len(function_exports):6d}")
 print("\nFunction Test Statistics:")
 print(f"  • Tested:              {TOTAL_FUNCTIONS_TESTED:6d}")
 print(f"  • Passed:              {test_results['pass']:6d} ({pass_rate:5.1f}%)")
-print(f"  • Failed:              {test_results['fail']:6d} ({100-pass_rate:5.1f}%)")
+print(f"  • Failed:              {test_results['fail']:6d} ({100 - pass_rate:5.1f}%)")
 print(f"  • Skipped:             {test_results['skip']:6d}")
 
 print("\nClass Statistics:")
 print(f"  • Key Classes Found:   {class_results['found']:6d}/{len(key_classes)}")
 print(f"  • Missing Classes:     {class_results['missing']:6d}/{len(key_classes)}")
 
-if test_results['timings']:
-    timings = [float(t[1]) for t in test_results['timings'] if t[1].replace('.', '').isdigit()]
+if test_results["timings"]:
+    timings = [float(t[1]) for t in test_results["timings"] if t[1].replace(".", "").isdigit()]
     if timings:
         print("\nPerformance Metrics:")
         print(f"  • Fastest Function:    {min(timings):7.3f} ms")
         print(f"  • Slowest Function:    {max(timings):7.3f} ms")
-        print(f"  • Average Time:        {sum(timings)/len(timings):7.3f} ms")
+        print(f"  • Average Time:        {sum(timings) / len(timings):7.3f} ms")
 
-if test_results['errors']:
+if test_results["errors"]:
     print("\nFailed Function Details (first 10):")
-    for func_name, error_msg in test_results['errors'][:10]:
+    for func_name, error_msg in test_results["errors"][:10]:
         print(f"  • {func_name:30s} | {error_msg}")
 
 # ============================================================================

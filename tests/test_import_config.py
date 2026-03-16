@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Test the importer.config module."""
+
 import asyncio
 from pathlib import Path
 

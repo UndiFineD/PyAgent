@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Test the ChainOfThought module."""
+
 import pytest
 
 from context_manager import ContextManager

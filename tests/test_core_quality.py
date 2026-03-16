@@ -4,6 +4,7 @@
 These tests are intentionally conservative and use static analysis where
 possible to avoid importing production modules (which could have side-effects).
 """
+
 from __future__ import annotations
 
 import ast
@@ -49,7 +50,7 @@ def test_each_core_has_test_file() -> None:
         # __init__ modules are allowed to be untested
         if rel.name == "__init__.py":
             continue
-        norm = str(rel).replace('/', '_').replace('\\', '_')
+        norm = str(rel).replace("/", "_").replace("\\", "_")
         target1 = f"test_core_{norm}"
         target2 = f"test_{rel.name}"
         if not any(name.startswith(target1) or name.startswith(target2) for name in test_files):

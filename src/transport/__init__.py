@@ -78,9 +78,7 @@ except ImportError:  # pragma: no cover
 
 def _ensure_rust_core() -> None:
     if rust_core is None:
-        raise ImportError(
-            "rust_core extension is not available. Ensure the Rust extension is built."
-        )
+        raise ImportError("rust_core extension is not available. Ensure the Rust extension is built.")
 
 
 def generate_node_identity() -> bytes:

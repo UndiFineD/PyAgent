@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Test that no synchronous loops are used in the src/ codebase."""
+
 import ast
 import pathlib
 
@@ -35,9 +36,7 @@ class LoopChecker(ast.NodeVisitor):
         """Check if the loop is inside a synchronous function and record error."""
         # climb until we hit a function definition or module
         ancestor: ast.AST | None = node
-        while ancestor is not None and not isinstance(
-            ancestor, (ast.FunctionDef, ast.AsyncFunctionDef)
-        ):
+        while ancestor is not None and not isinstance(ancestor, (ast.FunctionDef, ast.AsyncFunctionDef)):
             ancestor = getattr(ancestor, "parent", None)
         if isinstance(ancestor, ast.FunctionDef):
             # synchronous function containing a loop -> error
@@ -62,9 +61,6 @@ def test_no_sync_loops() -> None:
             problematic.append(f"{path} lines {checker.errors}")
 
     if problematic:
-        pytest.fail(
-            "Synchronous loops detected (convert to async/event hooks):\n"
-            + "\n".join(problematic)
-        )
+        pytest.fail("Synchronous loops detected (convert to async/event hooks):\n" + "\n".join(problematic))
     # meta-test helper wants at least one assert keyword in the file
     assert True
