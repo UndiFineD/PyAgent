@@ -15,16 +15,15 @@
 import torch
 import torch.nn as nn
 
-<<<<<<< HEAD
 
-=======
->>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 class ARCQuantLayer(nn.Module):
     """
     Augmented Residual Channel (ARC) Quantization Layer (arXiv:2601.07475).
     Compensates for NVFP4 quantization loss in sensitive outlier channels.
     """
+
     def __init__(self, in_features: int, out_features: int, outlier_ratio: float = 0.05):
+        """Initializes the ARCQuantLayer."""
         super().__init__()
         self.in_features = in_features
         self.out_features = out_features
@@ -41,10 +40,12 @@ class ARCQuantLayer(nn.Module):
         self.arc_weight = nn.Parameter(torch.randn(out_features, num_outliers))
 
     def simulated_nvfp4_quant(self, x: torch.Tensor) -> torch.Tensor:
-        # TODO Placeholder for hardware-native NVFP4 quantization
+        """Simulates NVFP4 quantization for demonstration purposes."""
+        # Placeholder for hardware-native NVFP4 quantization
         return torch.round(x * 8) / 8
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Performs the forward pass with ARC quantization compensation."""
         # 1. Main 4-bit forward pass
         x_q = self.simulated_nvfp4_quant(x)
         main_out = torch.functional.F.linear(x_q, self.simulated_nvfp4_quant(self.weight))

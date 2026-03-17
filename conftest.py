@@ -216,8 +216,12 @@ class WriteTracker:
         self._orig_write = Path.write_text
         self._orig_open = builtins.open
 
-    def __enter__(self) -> None:
-        """Monkey-patches Path.write_text and built-in open to log file writes."""
+    def __enter__(self) -> "WriteTracker":
+        """Monkey-patches Path.write_text and built-in open to log file writes.
+
+        Returning ``self`` allows the context manager to be used in a ``with``
+        statement without needing to assign the result.
+        """
         tracker = self
         orig_write = tracker._orig_write
 
@@ -245,8 +249,17 @@ class WriteTracker:
                 newline=newline,
             )
 
-        def logged_open(file: Any, *args: Any, mode: str = "r", **kwargs: Any) -> IO[Any]:
-            """Logged version of built-in open that records files opened in write modes and a stack trace."""
+        def logged_open(
+            file: str | bytes | PathLike[str] | int,
+            *args: Any,
+            mode: str = "r",
+            **kwargs: Any,
+        ) -> IO[Any]:
+            """Logged version of built-in open that records files opened in write modes and a stack trace.
+
+            The ``file`` parameter is intentionally permissive to match the built-in
+            open() signature across Python versions.
+            """
             result = self._orig_open(file, mode, *args, **kwargs)
             if any(m in mode for m in ("w", "a", "+", "x")):
                 try:
@@ -259,10 +272,11 @@ class WriteTracker:
 
         Path.write_text = logged_write  # type: ignore[method-assign]
         builtins.open = logged_open  # type: ignore[assignment]
+        return self
 
     def __exit__(
         self,
-        exc_type: type | None,
+        exc_type: type[BaseException] | None,
         exc: BaseException | None,
         tb: Any,
     ) -> None:
@@ -455,9 +469,13 @@ class SessionManager:
         """Runs before each test, injecting star import names into the test's global namespace."""
         self.star_imports.inject_globals(item)
 
-    def session_finish(self, session: object, _exitstatus: int) -> None:
+    def session_finish(self, session: _SessionWithExitStatus, _exitstatus: int) -> None:
         """Runs at the end of the pytest session,
         checking for any file writes that occurred during testing and logging them.
+
+        We accept a **Protocol** rather than a concrete pytest.Session type so that
+        minimal mocks can be used in unit tests without requiring a full pytest
+        runtime object.
         """
         with suppress(Exception):
             result = subprocess.run(

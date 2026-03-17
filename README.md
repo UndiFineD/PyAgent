@@ -3,6 +3,40 @@
 ## Overview
 PyAgent is a comprehensive software development platform designed to streamline the development, testing, and deployment of secure and scalable applications.
 
+## Getting Started (Run Locally)
+This repo includes three runnable components:
+
+1. **Core runtime (Python + Rust)** — the main logic and CI-tested code.
+2. **Backend service** — a FastAPI/WebSocket worker in `backend/`.
+3. **Frontend website** — a Vite/React app in `web/`.
+
+### Run the core runtime & tests
+```powershell
+python -m pytest -q
+```
+
+### Run the backend
+```powershell
+python -m pip install -r backend/requirements.txt
+uvicorn backend.app:app --reload
+```
+
+Health check:
+```
+curl http://localhost:8000/health
+```
+
+### Run the frontend
+```powershell
+cd web
+npm install
+npm run dev
+```
+
+Vite will print the URL it is serving on (usually `http://localhost:5173`, but it may pick a different port if 5173 is already in use).
+
+> If you see a blank page, ensure the console has no errors and that the URL matches the port displayed by Vite.
+
 ## Asynchronous Runtime Helpers
 
 A lightweight Tokio-backed runtime is available via the `runtime_py` wrapper. These helpers were added as part of the async runtime rollout and are intended to replace any remaining synchronous loops in the codebase.
