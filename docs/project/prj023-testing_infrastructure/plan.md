@@ -169,7 +169,7 @@ Python 3.11+, `pytest`, GitHub Actions (ci.yml already present).
 Once this plan is executed, the testing infrastructure will be fully bootstrapped with
 a reproducible layout, configuration, sample tests, data script, coverage settings, and CI validation.
 
-Please review and approve before execution.  Once approved I’ll hand off to superpower-execute.
+Please review and approve before execution.  Once approved I’ll hand off to agent/runSubagent.
 
 ## Implementation Status
 

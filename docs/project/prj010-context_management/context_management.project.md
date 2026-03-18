@@ -4,8 +4,8 @@
 
 ## Links
 
-- Plan: `.github\superpower\plan\2026-03-09-context_management-plan.md`
-- Design: **MISSING** (`.github\superpower\brainstorm\2026-03-09-context_management-design.md`)
+- Plan: `plan.md`
+- Design: **MISSING** (`brainstorm.md`)
 
 ## Tasks
 
@@ -22,4 +22,4 @@ _No checkbox tasks found in the plan file._
 
 ## Missing design
 
-Design file not found: `.github\superpower\brainstorm\2026-03-09-context_management-design.md`
+Design file not found: `brainstorm.md`

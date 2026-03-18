@@ -283,4 +283,4 @@ security, scheduler persistence) will be added as separate tasks in Phase 2.
 
 
 **Next steps:** After you review and approve this plan, I'll save it and hand
-off to superpower-execute for implementation.
+off to agent/runSubagent for implementation.

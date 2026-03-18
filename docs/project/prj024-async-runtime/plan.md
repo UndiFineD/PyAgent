@@ -180,7 +180,7 @@ Once all tasks are complete:
 
 ---
 
-*Hand off to* **superpower-execute** *to carry out these steps.*
+*Hand off to* **agent/runSubagent** *to carry out these steps.*
 
 Good luck! Follow the plan exactly and report back after the first batch of
 three tasks are done.

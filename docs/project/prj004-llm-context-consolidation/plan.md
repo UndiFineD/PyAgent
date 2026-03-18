@@ -28,7 +28,7 @@
 - Support dry-run by default and `--apply` for real mutations.
 
 ### Out of Scope (for this plan iteration)
-- Updating external custom agents at `C:\Users\keimpe\.superpower-copilot\agents`.
+- Updating external custom agents at `C:\Users\keimpe\.agent-copilot\agents`.
 - CI workflow file changes beyond local script/test implementation.
 
 ### Definition of Done
@@ -265,5 +265,5 @@
 
 ## 6) Handoff
 
-After this plan is approved and saved, execute in `superpower-execute` mode.
-Do not implement code changes in `superpower-plan` mode.
+After this plan is approved and saved, execute in `agent/runSubagent` mode.
+Do not implement code changes in `agent-plan` mode.

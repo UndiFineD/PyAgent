@@ -164,8 +164,8 @@ response = client.chat.completions.create(
 - Provider fallback chain (FLM → Ollama → cloud)
 
 **Documentation**:
-- Design: `.github/superpower/brainstorm/2026-03-08-flm-design.md`
-- Implementation Plan: `.github/superpower/plan/2026-03-08-flm-plan.md`
+- Design: `docs/project/prj002-flm/brainstorm.md`
+- Implementation Plan: `docs/project/prj002-flm/plan.md`
 
 ---
 

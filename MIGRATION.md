@@ -19,7 +19,7 @@ subsystems into the new `runtime` framework.
 4. **Update tests** and run full suite (`pytest -q`) plus the loop checker to
    confirm no remaining sync loops.
 5. **Document change** in `MIGRATION.md` (this file) and, if appropriate,
-   add a migration plan entry to ``.github/superpower/plan/2026-03-10-async-runtime-plan.md``
+   add a migration plan entry to ``docs/project/prj001-async-runtime/plan.md``
    or a new plan file.
 6. **Create GitHub issue/PR** referencing the plan and tests.
 

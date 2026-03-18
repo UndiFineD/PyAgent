@@ -1,43 +1,54 @@
 # Development Tools
 
 This document catalogs the helper utilities bundled in `src/tools`.
-Each module exposes functions that may be invoked from the command line or
-imported by other scripts.  Future entries should include:
+Each tool is registered at import time and can be invoked via the shared CLI
+entrypoint:
 
-* `dependency_audit` – scan dependency manifests for outdated or vulnerable packages.
-* `metrics` – collect code complexity and coverage metrics.
-* `agent_plugins` – plugin loader framework.
+```sh
+python -m src.tools <tool> [args...]
+```
 
-The initial set of skeleton tools implemented for the 2026‑03‑09
-capabilities plan are:
+## Available tools
 
-* `git_utils` – wrappers for git/gh operations, PR checklist enforcement, and
-  changelog helpers.
-* `remote` – SSH/FTP helpers built on `paramiko`.
-* `ssl_utils` – certificate creation and expiry checking utilities.
-* `netcalc`/`nettest` – CIDR/address calculators and simple dual‑stack
-  connectivity tests.
-* `nginx`/`proxy_test` – nginx vhost rendering and live configuration validation.
-* `port_forward`/`knock` – firewall rule scripting and port-knocking client.
-* `boot` – polyglot project bootstrapper that generates starter manifests
-  (`package.json`, `pyproject.toml`, `Cargo.toml`).
-* `self_heal` – misconfiguration detection and remediation (autonomy support).
+The following tools are currently available and exercised via unit tests:
 
-The initial set of skeleton tools implemented for the 2026‑03‑09
-capabilities plan are:
+* `agent_plugins` – load and list additional agent plugin modules.
+* `boot` – bootstrap starter project manifests (`pyproject.toml`, `package.json`, `Cargo.toml`).
+* `dependency_audit` – audit dependency manifests (`pyproject.toml`, `requirements.txt`).
+* `git_utils` / `9git` – common git helper commands (status, log, branch, diff). `9git` is an alias used by the agent workflow.
+* `metrics` – gather basic repository metrics (line counts, file counts).
+* `netcalc` – CIDR and subnet calculation utilities.
+* `nettest` – TCP connectivity checks (async).
+* `nginx` – validate an NGINX configuration (`nginx -t`).
+* `port_forward` – simple async TCP port forwarder.
+* `proxy_test` – test HTTP proxy connectivity.
+* `remote` – local command runner (placeholder for SSH/FTP helpers).
+* `self_heal` – basic syntax scanning across Python files.
+* `ssl_utils` – inspect PEM certificates (expiry, subject).
+* `knock` – port knocking client.
 
-* `git_utils` – wrappers for git/gh operations, PR checklist enforcement, and
-  changelog helpers.
-* `remote` – SSH/FTP helpers built on `paramiko`.
-* `ssl_utils` – certificate creation and expiry checking utilities.
-* `netcalc`/`nettest` – CIDR/address calculators and simple dual‑stack
-  connectivity tests.
-* `nginx`/`proxy_test` – nginx vhost rendering and live configuration validation.
-* `port_forward`/`knock` – firewall rule scripting and port-knocking client.
-* `boot` – polyglot project bootstrapper that generates starter manifests
-  (`package.json`, `pyproject.toml`, `Cargo.toml`).
+## Usage examples
 
-Each tool currently has a placeholder `main()` that prints its name; real
-functionality will be added iteratively with full unit tests and docs.
-CLI utilities support `--help` output and follow standard exit codes.  See
-individual module docstrings for usage examples.
+### List available tools
+
+```sh
+python -m src.tools
+```
+
+### Run a tool
+
+```sh
+python -m src.tools netcalc cidr 192.168.0.0/24
+```
+
+### Get help for a tool
+
+```sh
+python -m src.tools git-utils --help
+```
+
+## Adding a new tool
+
+To add a tool, create a new module under `src/tools/` with a `main(args)`
+function and call `register_tool("<name>", main, "<description>")`.
+The tool will automatically be discoverable by the shared CLI.

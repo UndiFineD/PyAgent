@@ -165,7 +165,7 @@ A single WebSocket connection carries both control messages and streaming result
 
 ## 5) Where to put the design document
 
-Created here: `.github/superpower/brainstorm/designs/2026-03-15-streaming-website-design.md`
+Created here: `brainstorm.md
 
 If you'd like, I can also add:
 - a **scaffolded starter** in `web/` and `backend/` (with `package.json`, `Cargo.toml`, example entrypoints)

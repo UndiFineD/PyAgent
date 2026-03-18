@@ -1335,4 +1335,4 @@ Replace the placeholder content with accurate instructions:
 
 ---
 
-*Plan complete. Hand off to superpower-execute.*
+*Plan complete. Hand off to agent/runSubagent.*

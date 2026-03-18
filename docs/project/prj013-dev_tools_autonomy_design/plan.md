@@ -214,6 +214,6 @@ Also update `scripts/setup_structure.py` to create `src/tools/plugins` path
 
 With these tasks completed, the autonomy design document 
 will have concrete skeletons ready for iteration.  
-Hand off to superpower-execute when you want to implement them.  
+Hand off to agent/runSubagent when you want to implement them.  
 Let me know if you want to break this into smaller plans 
 or include more features!

@@ -43,7 +43,7 @@ are grouped by audience and generation mechanism.
   This lives at `docs/setup.md` and is referenced by README.
 * **Developer onboarding** – a narrative walkthrough (`docs/onboarding.md`) that
   covers project purpose, running tests, adding new tools, and writing design
-  docs.  It may include links to the `superpower` wiki pages.
+  docs.  It may include links to the `agent` wiki pages.
 
 ### Internal process docs
 

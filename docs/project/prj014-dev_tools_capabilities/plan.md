@@ -127,4 +127,4 @@ After these tasks the capabilities design will be translated into actual code
 artifacts and the repository will be ready for iterative improvement of each
 utility.  At that point the implementation plan will have been executed and we
 can circle back to expand individual modules with real functionality.  Hand off
-to superpower-execute when ready to implement.
+to agent/runSubagent when ready to implement.

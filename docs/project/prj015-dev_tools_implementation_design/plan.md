@@ -130,4 +130,4 @@ parser.  The following example may be included in each module eventually.
 
 Once these tasks are implemented, the implementation considerations will be
 satisfied and we can proceed to flesh out real utilities based on the earlier
-sketch.  Hand off to superpower-execute when ready to execute the plan.
+sketch.  Hand off to agent/runSubagent when ready to execute the plan.

@@ -35,5 +35,5 @@
 **CI / Dev Workflow Integration**
 - Add guidelines to `.github/copilot-instructions.md` instructing future AI agents to append new architectural decisions to the `llms-*.txt` files rather than creating new stray `.md` files.
 
-## 3. Superpower Copilot Agent Updates
-- Update the custom agents located at `C:\Users\keimpe\.superpower-copilot\agents` to reference this new tiered `llms.txt` structure, optimizing how they consume context going forward.
+## 3. Agent Copilot Updates
+- Update the custom agents located at `C:\Users\keimpe\.agent-copilot\agents` to reference this new tiered `llms.txt` structure, optimizing how they consume context going forward.

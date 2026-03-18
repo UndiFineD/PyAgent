@@ -4,8 +4,8 @@
 
 ## Links
 
-- Plan: `.github\superpower\plan\2026-03-08-conftest-typing-fixes-plan.md`
-- Design: `.github\superpower\brainstorm\2026-03-08-conftest-typing-fixes-design.md`
+- Plan: `plan.md`
+- Design: `brainstorm.md`
 
 ## Tasks
 

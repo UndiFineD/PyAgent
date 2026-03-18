@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-"""Generate project folders and a dashboard from superpower plan + brainstorm files."""
+"""Legacy compatibility wrapper for project dashboard generation.
+
+This script exists for users/scripts that expect `scripts/generate_project_dashboard.py`.
+It delegates to the modern `scripts/generate_project_dashboard_v2.py` implementation.
+"""
 
 from __future__ import annotations
-import re
-from datetime import datetime, timezone
+import subprocess
+import sys
 from pathlib import Path
 
-RE_PLAN = re.compile(r"^(?P<date>\d{4}-\d{2}-\d{2})-(?P<topic>.+?)(?:-plan|-implementation-plan|_plan)$")
-
-ROOT = Path(__file__).resolve().parents[1]
-PLAN_DIR = ROOT / ".github" / "superpower" / "plan"
-BRAINSTORM_DIR = ROOT / ".github" / "superpower" / "brainstorm"
-OUT_ROOT = ROOT / "docs" / "project"
+if __name__ == "__main__":
+    script = Path(__file__).with_name("generate_project_dashboard_v2.py")
+    subprocess.run([sys.executable, str(script)], check=True)
 
 OUT_ROOT.mkdir(parents=True, exist_ok=True)
 

@@ -103,4 +103,4 @@ capability has a placeholder module and import test, autonomy code is included,
 and the documentation mirrors the actual codebase.  Once complete, further
 plans can expand individual utilities with meaningful logic.
 
-Hand off to **superpower-execute** when ready to implement these steps.
+Hand off to **agent/runSubagent** when ready to implement these steps.

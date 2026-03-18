@@ -5,10 +5,10 @@
 # FLM (Fastflow Language Model) Implementation Plan
 
 ## Goal
-Implement FLM integration as a **local OpenAI-compatible Fastflow runtime** (NPU-optimized), matching the real usage contract in `flm-test-llama.py` and the design in `.github/superpower/brainstorm/2026-03-08-flm-design.md`.
+Implement FLM integration as a **local OpenAI-compatible Fastflow runtime** (NPU-optimized), matching the real usage contract in `flm-test-llama.py` and the design in `brainstorm.md
 
 ## Inputs and Alignment Source
-- Design source: `.github/superpower/brainstorm/2026-03-08-flm-design.md`
+- Design source: `brainstorm.md
 - Behavioral source: `flm-test-llama.py`
 - Existing runtime assumptions:
   - OpenAI SDK client
@@ -31,8 +31,8 @@ Implement FLM integration as a **local OpenAI-compatible Fastflow runtime** (NPU
 
 | Task | Description | Completed | Date |
 |------|-------------|-----------|------|
-| TASK-001 | Verify FLM naming in `.github/superpower/brainstorm/2026-03-08-flm-design.md` is Fastflow and not Foundation | ✅ | 2026-03-08 |
-| TASK-002 | Update `.github/superpower/plan/2026-03-08-flm-plan.md` with concrete, executable Fastflow-aligned tasks | ✅ | 2026-03-08 |
+| TASK-001 | Verify FLM naming in `brainstorm.md is Fastflow and not Foundation | ✅ | 2026-03-08 |
+| TASK-002 | Update `plan.md with concrete, executable Fastflow-aligned tasks | ✅ | 2026-03-08 |
 | TASK-003 | Scan local FLM docs/config comments for “Foundation Language Model” references and replace with Fastflow wording (if found) | ✅ | 2026-03-08 |
 
 ### Phase 2 — Provider Contract Hardening

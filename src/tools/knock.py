@@ -16,15 +16,39 @@
 
 from __future__ import annotations
 
+import argparse
+import socket
 import sys
+
+try:
+    from src.tools.tool_registry import register_tool
+except ImportError:  # pragma: no cover
+    from tools.tool_registry import register_tool
 
 
 def main(args: list[str] | None = None) -> int:
-    """Main entry point for port knocking client utility."""
-    if args is None:
-        args = sys.argv[1:]
-    print("knock placeholder", args)
+    parser = argparse.ArgumentParser(prog="knock")
+    parser.add_argument("host", help="Host to knock")
+    parser.add_argument("ports", nargs="+", type=int, help="Ports to knock in sequence")
+    parser.add_argument("--timeout", type=float, default=0.5, help="Connection timeout per port")
+
+    parsed = parser.parse_args(args=args)
+
+    for port in parsed.ports:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(parsed.timeout)
+        try:
+            sock.connect((parsed.host, port))
+            print(f"{parsed.host}:{port} -> OPEN")
+        except Exception:
+            print(f"{parsed.host}:{port} -> CLOSED")
+        finally:
+            sock.close()
+
     return 0
+
+
+register_tool("knock", main, "Port knocking client")
 
 
 if __name__ == "__main__":
