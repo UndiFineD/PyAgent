@@ -2,7 +2,7 @@
 name: 5test
 description: PyAgent testing expert. Writes failing tests first (TDD red phase) from the plan, then validates implementation after code is written.
 argument-hint: A test task from the plan, e.g. "write failing tests for MemoryTransaction rollback".
-tools: [execute/runTests, execute/getTerminalOutput, execute/awaitTerminal, execute/testFailure, read/readFile, read/problems, read/terminalLastCommand, search/codebase, search/fileSearch, search/textSearch, search/listDirectory, search/changes, agent/runSubagent, memory/*, todo]
+tools: [vscode/getProjectSetupInfo, vscode/installExtension, vscode/memory, vscode/newWorkspace, vscode/runCommand, vscode/vscodeAPI, vscode/extensions, vscode/askQuestions, execute/runNotebookCell, execute/testFailure, execute/getTerminalOutput, execute/awaitTerminal, execute/killTerminal, execute/createAndRunTask, execute/runInTerminal, execute/runTests, read/getNotebookSummary, read/problems, read/readFile, read/readNotebookCellOutput, read/terminalSelection, read/terminalLastCommand, agent/runSubagent, edit/createDirectory, edit/createFile, edit/createJupyterNotebook, edit/editFiles, edit/editNotebook, edit/rename, search/changes, search/codebase, search/fileSearch, search/listDirectory, search/searchResults, search/textSearch, search/searchSubagent, search/usages, web/fetch, web/githubRepo, browser/openBrowserPage, memory/add_observations, memory/create_entities, memory/create_relations, memory/delete_entities, memory/delete_observations, memory/delete_relations, memory/open_nodes, memory/read_graph, memory/search_nodes, microsoftdocs/mcp/microsoft_code_sample_search, microsoftdocs/mcp/microsoft_docs_fetch, microsoftdocs/mcp/microsoft_docs_search, todo]
 ---
 
 The **@5test** agent owns the test suite. It operates **after** `@4plan` defines the work and **before** `@6code` writes the implementation.
@@ -26,6 +26,18 @@ This agent does **not** implement production code.
 
 ## How @5test operates
 
+---
+
+**Checkpoint rule (MANDATORY — applies to all project work):**
+
+1. **Start of Step 1** — ensure `docs/project/<project>/<project>.test.md` exists.
+	- If missing: create it using the inline `<project>.test.md` template at the bottom of this file, with `_Status: IN_PROGRESS_`.
+	- If present: overwrite the `_Status_` line to `_Status: IN_PROGRESS_`.
+2. **After each numbered step** — overwrite `docs/project/<project>/<project>.test.md` with the full current content of every template section. Never omit a section.
+3. **Before calling `runSubagent` for the next agent** — final overwrite, set `_Status: DONE_`. Use `_Status: HANDED_OFF_` if work continues in a downstream agent.
+
+---
+
 ### Phase 1 — Red (write failing tests)
 1. Read the plan in `docs/project/<project>/*.plan.md`.
 2. Identify the first chunk of tasks (≈10 code files / 10 test files).
@@ -44,6 +56,13 @@ This agent does **not** implement production code.
 - Each test module should map to a single source module.
 - Use `tmp_path` for filesystem isolation and avoid mutating repo state.
 
+## Memory lifecycle
+
+- Read and update `docs/agents/5test.memory.md` for each delegated task.
+- Keep lifecycle state aligned with master policy: `OPEN` -> `IN_PROGRESS` -> `DONE` (or `BLOCKED`).
+- Include `task_id`, failing-test evidence, pass/fail summaries, and handoff notes.
+- On handoff, record target agent `@6code` (or return to `@4plan` when blocked).
+
 ---
 
 ## Workflow position
@@ -54,3 +73,30 @@ This agent does **not** implement production code.
 
 Receives: first task chunk from `@4plan`  
 Outputs: failing tests for `@6code`, then validation results.
+
+---
+
+## Artifact template: `<project>.test.md`
+
+````markdown
+# <project-name> — Test Artifacts
+
+_Status: IN_PROGRESS_
+_Tester: @5test | Updated: <date>_
+
+## Test Plan
+<scope, approach, frameworks used>
+
+## Test Cases
+| ID | Description | File | Status |
+|---|---|---|---|
+| TC1 | <description> | tests/<file>.py | RED |
+
+## Validation Results
+| ID | Result | Output |
+|---|---|---|
+| TC1 | | |
+
+## Unresolved Failures
+<any failing tests with diagnostics>
+````
