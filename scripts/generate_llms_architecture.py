@@ -83,8 +83,8 @@ def main() -> int:
     parser.add_argument(
         "--output",
         type=pathlib.Path,
-        default=pathlib.Path("docs/architecture/Architecture.md"),
-        help="Output file path (default: docs/architecture/Architecture.md)",
+        default=pathlib.Path("docs/architecture/Architecture.generated.md"),
+        help="Output file path (default: docs/architecture/Architecture.generated.md)",
     )
     parser.add_argument(
         "--repo-root",
