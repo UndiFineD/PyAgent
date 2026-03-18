@@ -33,20 +33,29 @@ import pathlib
 
 
 def _discover_architecture_docs(root: pathlib.Path) -> list[pathlib.Path]:
-    """Find markdown files under docs/architecture (excluding archive/ and adr/).
+    """Find markdown files under docs/architecture.
 
-    The target output file (Architecture.md) is excluded to avoid recursion.
+    Includes:
+    - `docs/architecture/Architecture.md` (only its pre-generated portion)
+    - files under `docs/architecture/adr/` (e.g., ADR templates)
+    - other top-level architecture docs
+
+    Excludes:
+    - `docs/architecture/archive/` (deep dive archives)
+    - the generated section of Architecture.md (to avoid recursion)
     """
     base = root / "docs" / "architecture"
     files: list[pathlib.Path] = []
 
     for path in sorted(base.rglob("*.md")):
-        # Skip archive and ADR folders
-        if "archive" in path.parts or "adr" in path.parts:
+        # Skip archive folder.
+        if "archive" in path.parts:
             continue
-        # Avoid including the destination file in the generated content
-        if path.name == "Architecture.md":
+        # Include ADR files.
+        if "adr" in path.parts:
+            files.append(path)
             continue
+        # Include Architecture.md, but it will be rendered only up to the marker.
         files.append(path)
 
     return sorted(files)
@@ -56,6 +65,13 @@ def _render_file(path: pathlib.Path, repo_root: pathlib.Path) -> str:
     """Render a markdown file with a header that includes its relative path."""
     rel = path.relative_to(repo_root).as_posix()
     content = path.read_text(encoding="utf-8")
+
+    # For Architecture.md, only include the portion above the generated marker.
+    if path.name == "Architecture.md":
+        marker = "<!-- GENERATED: DO NOT EDIT BELOW -->"
+        if marker in content:
+            content = content.split(marker, 1)[0].rstrip()
+
     header = f"\n\n---\n# Source: {rel}\n---\n\n"
     return header + content.strip() + "\n"
 
