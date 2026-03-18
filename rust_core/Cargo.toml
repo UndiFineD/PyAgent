@@ -8,7 +8,7 @@ name         = "rust_core"
 crate-type   = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.24.1", features = ["extension-module"] }
+pyo3 = { version = "0.24.1" }
 once_cell    = "1.17"
 sha2         = "0.10"
 hex          = "0.4"
