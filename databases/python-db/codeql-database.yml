@@ -1,0 +1,12 @@
+---
+sourceLocationPrefix: C:\Dev\PyAgent\src
+baselineLinesOfCode: 1171
+unicodeNewlines: false
+columnKind: utf32
+primaryLanguage: python
+creationMetadata:
+  cliVersion: 2.24.3
+  creationTime: 2026-03-15T21:49:30.944701Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true

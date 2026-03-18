@@ -1,0 +1,77 @@
+[2026-03-15 22:36:46] This is codeql database finalize C:\Dev\PyAgent\databases\rust-db
+[2026-03-15 22:36:46] Log file was started late.
+[2026-03-15 22:36:47] [PROGRESS] database finalize> Running TRAP import for CodeQL database at C:\Dev\PyAgent\databases\rust-db...
+[2026-03-15 22:36:47] Running plumbing command: codeql dataset import --dbscheme=C:\Dev\PyAgent\codeql\codeql\rust\rust.dbscheme -- C:\Dev\PyAgent\databases\rust-db\db-rust C:\Dev\PyAgent\databases\rust-db\trap\rust
+[2026-03-15 22:36:50] Clearing disk cache since the version file C:\Dev\PyAgent\databases\rust-db\db-rust\default\cache\version does not exist
+[2026-03-15 22:36:50] Tuple pool not found. Clearing relations with cached strings
+[2026-03-15 22:36:50] Trimming disk cache at C:\Dev\PyAgent\databases\rust-db\db-rust\default\cache in mode clear.
+[2026-03-15 22:36:50] Sequence stamp origin is -5936270965132392418
+[2026-03-15 22:36:50] Pausing evaluation to hard-clear memory at sequence stamp o+0
+[2026-03-15 22:36:50] Unpausing evaluation
+[2026-03-15 22:36:50] Pausing evaluation to quickly trim disk at sequence stamp o+1
+[2026-03-15 22:36:50] Unpausing evaluation
+[2026-03-15 22:36:50] Pausing evaluation to zealously trim disk at sequence stamp o+2
+[2026-03-15 22:36:50] Unpausing evaluation
+[2026-03-15 22:36:50] Trimming completed (136ms): Purged everything.
+[2026-03-15 22:36:53] Exception caught at top level: Error reading pool info file: C:\Dev\PyAgent\databases\rust-db\db-rust\default\idPool\info
+                      (eventual cause: NoSuchFileException "C:\Dev\PyAgent\databases\rust-db\db-rust\default\idPool\info")
+                      com.semmle.inmemory.util.DiskPoolInfo.readInfoFile(DiskPoolInfo.java:204)
+                      com.semmle.inmemory.util.DiskPoolInfo$DualSequentialDiskPoolInfo.readFrom(DiskPoolInfo.java:168)
+                      com.semmle.inmemory.util.DualSequentialDiskPool.readFrom(DualSequentialDiskPool.java:34)
+                      com.semmle.inmemory.populate.IdPool.loadStorageFrom(IdPool.java:35)
+                      com.semmle.inmemory.populate.IdPool.loadOrCreate(IdPool.java:27)
+                      com.semmle.inmemory.populate.IMBStorage.createIDPool(IMBStorage.java:34)
+                      com.semmle.inmemory.trap.TrapImporter.<init>(TrapImporter.java:77)
+                      com.semmle.cli2.ql.dataset.ImportCommand.executeSubcommand(ImportCommand.java:172)
+                      com.semmle.cli2.picocli.SubcommandCommon.lambda$executeSubcommandWithMessages$5(SubcommandCommon.java:886)
+                      com.semmle.cli2.picocli.SubcommandCommon.withCompilationMessages(SubcommandCommon.java:444)
+                      com.semmle.cli2.picocli.SubcommandCommon.executeSubcommandWithMessages(SubcommandCommon.java:884)
+                      com.semmle.cli2.picocli.PlumbingRunner.run(PlumbingRunner.java:123)
+                      com.semmle.cli2.picocli.SubcommandCommon.runPlumbingInProcess(SubcommandCommon.java:201)
+                      com.semmle.cli2.database.FinalizeCommand.doTrapImport(FinalizeCommand.java:272)
+                      com.semmle.cli2.database.FinalizeCommand.finalizeOne(FinalizeCommand.java:197)
+                      com.semmle.cli2.database.FinalizeCommand.executeSubcommand(FinalizeCommand.java:122)
+                      com.semmle.cli2.picocli.SubcommandCommon.lambda$executeSubcommandWithMessages$5(SubcommandCommon.java:886)
+                      com.semmle.cli2.picocli.SubcommandCommon.withCompilationMessages(SubcommandCommon.java:444)
+                      com.semmle.cli2.picocli.SubcommandCommon.executeSubcommandWithMessages(SubcommandCommon.java:884)
+                      com.semmle.cli2.picocli.SubcommandCommon.toplevelMain(SubcommandCommon.java:777)
+                      com.semmle.cli2.picocli.SubcommandCommon.call(SubcommandCommon.java:757)
+                      com.semmle.cli2.picocli.SubcommandMaker.runMain(SubcommandMaker.java:238)
+                      com.semmle.cli2.picocli.SubcommandMaker.runMain(SubcommandMaker.java:259)
+                      com.semmle.cli2.CodeQL.main(CodeQL.java:113)
+                      
+                       ... caused by:
+                      
+                      java.nio.file.NoSuchFileException: C:\Dev\PyAgent\databases\rust-db\db-rust\default\idPool\info
+                      java.base/sun.nio.fs.WindowsException.translateToIOException(Unknown Source)
+                      java.base/sun.nio.fs.WindowsException.rethrowAsIOException(Unknown Source)
+                      java.base/sun.nio.fs.WindowsException.rethrowAsIOException(Unknown Source)
+                      java.base/sun.nio.fs.WindowsFileSystemProvider.newByteChannel(Unknown Source)
+                      java.base/java.nio.file.Files.newByteChannel(Unknown Source)
+                      java.base/java.nio.file.Files.newByteChannel(Unknown Source)
+                      java.base/java.nio.file.spi.FileSystemProvider.newInputStream(Unknown Source)
+                      java.base/java.nio.file.Files.newInputStream(Unknown Source)
+                      com.semmle.inmemory.util.DiskPoolInfo.readInfoFile(DiskPoolInfo.java:193)
+                      com.semmle.inmemory.util.DiskPoolInfo$DualSequentialDiskPoolInfo.readFrom(DiskPoolInfo.java:168)
+                      com.semmle.inmemory.util.DualSequentialDiskPool.readFrom(DualSequentialDiskPool.java:34)
+                      com.semmle.inmemory.populate.IdPool.loadStorageFrom(IdPool.java:35)
+                      com.semmle.inmemory.populate.IdPool.loadOrCreate(IdPool.java:27)
+                      com.semmle.inmemory.populate.IMBStorage.createIDPool(IMBStorage.java:34)
+                      com.semmle.inmemory.trap.TrapImporter.<init>(TrapImporter.java:77)
+                      com.semmle.cli2.ql.dataset.ImportCommand.executeSubcommand(ImportCommand.java:172)
+                      com.semmle.cli2.picocli.SubcommandCommon.lambda$executeSubcommandWithMessages$5(SubcommandCommon.java:886)
+                      com.semmle.cli2.picocli.SubcommandCommon.withCompilationMessages(SubcommandCommon.java:444)
+                      com.semmle.cli2.picocli.SubcommandCommon.executeSubcommandWithMessages(SubcommandCommon.java:884)
+                      com.semmle.cli2.picocli.PlumbingRunner.run(PlumbingRunner.java:123)
+                      com.semmle.cli2.picocli.SubcommandCommon.runPlumbingInProcess(SubcommandCommon.java:201)
+                      com.semmle.cli2.database.FinalizeCommand.doTrapImport(FinalizeCommand.java:272)
+                      com.semmle.cli2.database.FinalizeCommand.finalizeOne(FinalizeCommand.java:197)
+                      com.semmle.cli2.database.FinalizeCommand.executeSubcommand(FinalizeCommand.java:122)
+                      com.semmle.cli2.picocli.SubcommandCommon.lambda$executeSubcommandWithMessages$5(SubcommandCommon.java:886)
+                      com.semmle.cli2.picocli.SubcommandCommon.withCompilationMessages(SubcommandCommon.java:444)
+                      com.semmle.cli2.picocli.SubcommandCommon.executeSubcommandWithMessages(SubcommandCommon.java:884)
+                      com.semmle.cli2.picocli.SubcommandCommon.toplevelMain(SubcommandCommon.java:777)
+                      com.semmle.cli2.picocli.SubcommandCommon.call(SubcommandCommon.java:757)
+                      com.semmle.cli2.picocli.SubcommandMaker.runMain(SubcommandMaker.java:238)
+                      com.semmle.cli2.picocli.SubcommandMaker.runMain(SubcommandMaker.java:259)
+                      com.semmle.cli2.CodeQL.main(CodeQL.java:113)
