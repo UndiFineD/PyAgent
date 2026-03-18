@@ -27,6 +27,7 @@ except ImportError:  # pragma: no cover
 
 
 def main(args: list[str] | None = None) -> int:
+    """Main entry point for the proxy_test tool."""
     parser = argparse.ArgumentParser(prog="proxy_test")
     parser.add_argument("--url", default="http://example.com", help="URL to fetch for proxy test")
     parser.add_argument("--proxy", help="Proxy URL (e.g. http://127.0.0.1:3128)")

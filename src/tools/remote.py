@@ -27,6 +27,7 @@ except ImportError:  # pragma: no cover
 
 
 def main(args: list[str] | None = None) -> int:
+    """Main entry point for the remote tool."""
     parser = argparse.ArgumentParser(prog="remote")
     parser.add_argument("--run", help="Command to run locally (shell)")
     parser.add_argument("--host", help="Remote host (placeholder, no ssh support yet)")

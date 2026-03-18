@@ -27,6 +27,7 @@ except ImportError:  # pragma: no cover
 
 
 def main(args: list[str] | None = None) -> int:
+    """Main entry point for the knock tool."""
     parser = argparse.ArgumentParser(prog="knock")
     parser.add_argument("host", help="Host to knock")
     parser.add_argument("ports", nargs="+", type=int, help="Ports to knock in sequence")

@@ -27,8 +27,9 @@ except ImportError:  # pragma: no cover
     from tools.tool_registry import register_tool
 
 
-def _read_pem_cert(path: str) -> ssl.SSLContext:
-    return ssl.create_default_context().load_verify_locations(cafile=path)  # type: ignore[return-value]
+# Function and surrounding blank lines are removed entirely    ctx = ssl.create_default_context()
+    ctx.load_verify_locations(cafile=path)
+    return ctx
 
 
 def main(args: list[str] | None = None) -> int:
@@ -37,11 +38,7 @@ def main(args: list[str] | None = None) -> int:
     parsed = parser.parse_args(args=args)
 
     try:
-        cert = ssl.PEM_cert_to_DER_cert(open(parsed.cert, "rb").read())
-        x509 = ssl.DER_cert_to_PEM_cert(cert)
-        # simplest: use ssl module to parse via SSLContext
-        ctx = ssl.create_default_context()
-        bio = ssl.PEM_cert_to_DER_cert(open(parsed.cert, "rb").read())
+        ctx = _read_pem_cert(parsed.cert)
         # can't parse expiration easily without cryptography; do basic check
         print(f"Loaded cert: {parsed.cert}")
         return 0

@@ -28,8 +28,6 @@
 - Support dry-run by default and `--apply` for real mutations.
 
 ### Out of Scope (for this plan iteration)
-- Updating external custom agents at `C:\Users\keimpe\.agent-copilot\agents`.
-- CI workflow file changes beyond local script/test implementation.
 
 ### Definition of Done
 - All new targeted tests pass.

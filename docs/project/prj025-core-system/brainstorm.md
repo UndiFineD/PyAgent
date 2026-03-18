@@ -187,7 +187,7 @@ This file runs automatically on every PR and validates:
 | Step | Action | Owner |
 |-----|--------|-------|
 | 1 | Create `core_design.md` in the specified path | You (Multi) |
-| 2 | Add to `brainstorm.md | You |
+| 2 | Add to `brainstorm.md` | You |
 | 3 | Review with team lead for alignment | Team Lead |
 | 4 | Integrate with CI pipeline (via `test_core_quality.py`) | DevOps |
 | 5 | Document quality gates in `TEST_QUALITY.md` | QA Lead |
@@ -259,7 +259,8 @@ so implementers can produce CI-ready, safe, and performant core code.
      and coverage per-module thresholds enforced in `quality.yml`.
 
 - Developer experience
-   - Provide a `core/scaffold/` template with `__init__.py`, `core.py`, `tests/test_core.py`, and a sample `validate()`.
+   - Provide a `core/scaffold/` template with `__init__.py`, `core.py`, 
+   `tests/test_core.py`, and a sample `validate()`.
 
 These additions are now part of the reference design
 and can be used to generate PR templates, scaffolds, and CI gates.

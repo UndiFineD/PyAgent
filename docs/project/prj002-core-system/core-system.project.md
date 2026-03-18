@@ -4,8 +4,8 @@
 
 ## Links
 
-- Plan: `plan.md
-- Design: `brainstorm.md
+- Plan: `plan.md`
+- Design: `brainstorm.md`
 
 ## Tasks
 
@@ -17,8 +17,8 @@
 - [x] Add meta-tests (`tests/test_core_quality.py`) that enforce core hygiene and circular import detection.
 - [x] Ensure all core modules have corresponding test files (`tests/test_core_*.py`).
 - [x] Ensure CI pipeline includes core tests via `/.github/workflows/ci-python-core.yml`.
-- [x] Add design doc (`brainstorm.md).
-- [x] Add plan doc (`plan.md) and generate project dashboard.
+- [x] Add design doc (`brainstorm.md`).
+- [x] Add plan doc (`plan.md`) and generate project dashboard.
 
 ## Status
 

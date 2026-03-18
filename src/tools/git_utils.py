@@ -27,10 +27,12 @@ except ImportError:  # pragma: no cover
 
 
 def _run_git(args: Iterable[str], capture_output: bool = False) -> subprocess.CompletedProcess[str]:
+    """Run a git command and optionally capture its output."""
     return subprocess.run(["git", *args], check=False, capture_output=capture_output, text=True)
 
 
 def _get_merge_base(base: str) -> str | None:
+    """Get the merge base between HEAD and the specified base branch."""
     proc = _run_git(["merge-base", "HEAD", base], capture_output=True)
     if proc.returncode != 0:
         return None

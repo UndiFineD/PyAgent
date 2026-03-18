@@ -1,6 +1,7 @@
 # 6code Memory
 
-This file tracks code implementation notes, refactor decisions, and code health observations.
+This file tracks code implementation notes, 
+refactor decisions, and code health observations.
 
 ## Auto-handoff
 

@@ -15,7 +15,8 @@ The following tools are currently available and exercised via unit tests:
 * `agent_plugins` – load and list additional agent plugin modules.
 * `boot` – bootstrap starter project manifests (`pyproject.toml`, `package.json`, `Cargo.toml`).
 * `dependency_audit` – audit dependency manifests (`pyproject.toml`, `requirements.txt`).
-* `git_utils` / `9git` – common git helper commands (status, log, branch, diff). `9git` is an alias used by the agent workflow.
+* `git_utils` / `9git` – common git helper commands (status, log, branch, diff). 
+  `9git` is an alias used by the agent workflow.
 * `metrics` – gather basic repository metrics (line counts, file counts).
 * `netcalc` – CIDR and subnet calculation utilities.
 * `nettest` – TCP connectivity checks (async).

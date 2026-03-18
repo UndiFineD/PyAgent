@@ -26,6 +26,7 @@ except ImportError:  # pragma: no cover
 
 
 def _check_py_syntax(root: str) -> dict[str, str]:
+    """Check Python syntax for all .py files in the given root directory."""
     issues: dict[str, str] = {}
     for dirpath, _, filenames in os.walk(root):
         for fn in filenames:
@@ -45,6 +46,7 @@ def detect_misconfig(root: str = ".") -> dict[str, str]:
 
 
 def main(args: list[str] | None = None) -> int:
+    """Main entry point for the self_heal tool."""
     parser = argparse.ArgumentParser(prog="self_heal")
     parser.add_argument(
         "--root", default=".", help="Root directory to scan for issues (defaults to current directory)"

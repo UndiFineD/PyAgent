@@ -57,10 +57,9 @@ The canonical files are required for every project folder. Chunked files are req
 2. **Create project overview**
    - Populate the overview with: project name, goal, scope, milestones, stakeholders, and key constraints.
    - Include links to the canonical local files and, when used, chunked files.
-   - If links to external artifacts (legacy `.github/superpower/*`) are present, keep them as references, but canonical local files (`docs/project/*/plan.md`, `docs/project/*/brainstorm.md`) stay authoritative.
-
+   - If links to external artifacts (legacy `.github/superpower/*`) are present, keep them as references, but canonical local files (`docs/project/prjNNN-name/<project>.think.md`, `docs/project/prjNNN-name/<project>.design.md`, `docs/project/prjNNN-name/<project>.plan.md`) stay authoritative.
 3. **Hand off to @2think**
-   - Ask `@2think` to explore options by creating `*.think.md` files in the project folder.
+   - Ask `@2think` to explore options by creating `*.think.md` files in the project folder, where they can use `docs/project/*/brainstorm.md` as a reference but not an authoritative source.
    - Provide the project overview and any relevant context.
 
 4. **Track progress**

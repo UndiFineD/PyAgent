@@ -178,7 +178,7 @@ python scripts/consolidate_llm_context.py
 
 ## Files to be created/edited (when approved to implement)
 
-- plan file: `plan.md (this file)
+- plan file: `plan.md` (this file)
 - tests under `tests/` as specified per task
 - scripts under `scripts/` (scaffold, dryrun, consolidate, move dryrun)
 - new modules under `plugins/`, `core/` (validator, wrappers, crdt_bridge, security_bridge)

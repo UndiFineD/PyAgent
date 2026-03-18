@@ -1,6 +1,7 @@
 # Tools Framework Implementation Plan
 
-**Goal:** Ensure the `src/tools/` framework is fully implemented, tested, and documented as a reusable set of CLI/agent utilities.
+**Goal:** Ensure the `src/tools/` framework is fully implemented, tested, 
+    and documented as a reusable set of CLI/agent utilities.
 
 ## Checklist (implementation status)
 
@@ -15,4 +16,7 @@
 
 ## Notes
 
-The tools framework is intended as a lightweight runtime utility layer for agents and CLI scripts. It should be safe to use in automated workflows (CI, development scripts) and should not introduce synchronous blocking loops that violate the async runtime constraints.
+The tools framework is intended as a lightweight runtime utility layer 
+for agents and CLI scripts. It should be safe to use in automated workflows 
+(CI, development scripts) and should not introduce synchronous blocking loops 
+that violate the async runtime constraints.

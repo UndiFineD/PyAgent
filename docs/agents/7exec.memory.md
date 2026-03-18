@@ -1,6 +1,7 @@
 # 7exec Memory
 
-This file records runtime validation results, integration checks, and smoke test outcomes.
+This file records runtime validation results, 
+integration checks, and smoke test outcomes.
 
 ## Auto-handoff
 

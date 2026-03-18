@@ -54,17 +54,20 @@ Also check:
 git diff --name-only HEAD 2>&1
 ```
 
-**Step 2 — Run CodeQL on Python changes**  
-The workspace has pre-configured CodeQL packs in `codeql-custom-queries-python/`.  
-Run analysis against changed Python files:
-```powershell
-# Check if codeql CLI is available
-codeql version 2>&1
+**Step 2 — Run code quality + CodeQL scans**  
+We provide a helper tool that runs targeted `code_quality` checks on changed files and then invokes CodeQL (when available). It also writes a scan report to the current project folder.
 
-# If available, run Python security suite
-codeql database analyze codeql/ python-security-and-quality.qls --format=sarif-latest --output=codeql-agent-results/latest.sarif 2>&1
+```powershell
+# Run the 8ql scan tool (run from repo root)
+python -m src.tools ql --base main
 ```
-If the `codeql` CLI is not present, skip to Step 3 and note it in memory.
+
+By default the tool writes its report to:  
+`docs/project/<project>/<project>.8ql.md`  
+
+If you need to force a specific project folder (e.g., a detached or temporary branch), use `--project <project>`.
+
+If the CodeQL CLI is missing, the tool will still run `code_quality` and record that CodeQL was skipped.
 
 **Step 3 — Run dependency audit**
 ```powershell

@@ -1,6 +1,7 @@
 # 4plan Memory
 
-This file tracks implementation plans, task breakdowns, and progress checklists.
+This file tracks implementation plans, 
+task breakdowns, and progress checklists.
 
 ## Auto-handoff
 

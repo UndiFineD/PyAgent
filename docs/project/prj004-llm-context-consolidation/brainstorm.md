@@ -36,4 +36,4 @@
 - Add guidelines to `.github/copilot-instructions.md` instructing future AI agents to append new architectural decisions to the `llms-*.txt` files rather than creating new stray `.md` files.
 
 ## 3. Agent Copilot Updates
-- Update the custom agents located at `C:\Users\keimpe\.agent-copilot\agents` to reference this new tiered `llms.txt` structure, optimizing how they consume context going forward.
+- Update the custom agents located at `%USERPROFILE%\.agent-copilot\agents` (Windows) or `~/.agent-copilot/agents` (Unix-like) to reference this new tiered `llms.txt` structure, optimizing how they consume context going forward.
