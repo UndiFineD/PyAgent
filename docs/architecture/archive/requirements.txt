@@ -1,3 +1,0 @@
-# Documentation architecture requirements delegate to canonical root requirements.
-# This avoids dependency drift and duplicate/conflicting version pins.
--r ../../requirements.txt
