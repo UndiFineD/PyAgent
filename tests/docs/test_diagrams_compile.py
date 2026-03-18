@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Tests for the compile_diagrams script."""
+
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -16,6 +17,7 @@ def test_compile_diagrams(tmp_path: Path, monkeypatch: Any) -> None:
     mmd.write_text("graph TD; A-->B")
     # monkeypatch the global path in script
     import scripts.compile_diagrams as cd
+
     cd.diagram_dir = arch
 
     # stub subprocess.run to create an output file instead of calling mmdc

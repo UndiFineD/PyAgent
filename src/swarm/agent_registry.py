@@ -28,7 +28,7 @@ class AgentRegistry:
 
     def register(self, agent_type: str, capabilities: list[str]) -> str:
         """Register a new agent and return its ID."""
-        aid = f"agent-{len(self._agents)+1}"
+        aid = f"agent-{len(self._agents) + 1}"
         self._agents[aid] = {
             "type": agent_type,
             "capabilities": capabilities,

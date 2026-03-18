@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Workflow engine for processing tasks."""
+
 import asyncio
 
 from src.core.workflow.task import Task
@@ -23,6 +24,7 @@ class TaskQueue:
 
 def validate() -> None:
     """Simple check that the queue supports enqueue/dequeue operations."""
+
     async def _run() -> None:
         q = TaskQueue()
         t = Task(id="x")

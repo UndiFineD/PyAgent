@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for WebSocket message handler dispatch."""
+
 import json
 from unittest.mock import AsyncMock
 
@@ -51,10 +52,17 @@ async def test_unknown_message_sends_error(ws, sessions):
 
 @pytest.mark.asyncio
 async def test_run_task_streams_deltas(ws, sessions):
-    await handle_message(sessions, "s1", ws, {
-        "type": "runTask", "task_id": "t1",
-        "task": "generateText", "payload": {"prompt": "hi"},
-    })
+    await handle_message(
+        sessions,
+        "s1",
+        ws,
+        {
+            "type": "runTask",
+            "task_id": "t1",
+            "task": "generateText",
+            "payload": {"prompt": "hi"},
+        },
+    )
     calls = [json.loads(c[0][0]) for c in ws.send_text.await_args_list]
     types = [c["type"] for c in calls]
     assert "taskStarted" in types

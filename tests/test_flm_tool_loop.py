@@ -122,9 +122,7 @@ async def test_tool_loop_executes_and_returns_terminal_answer() -> None:
             )
         ]
     )
-    final_response = _FakeResponse(
-        choices=[_FakeChoice(message=_FakeMessage(content="done", tool_calls=None))]
-    )
+    final_response = _FakeResponse(choices=[_FakeChoice(message=_FakeMessage(content="done", tool_calls=None))])
     fake_client = _FakeClient([tool_response, final_response])
 
     def _client_factory(*, base_url: str, api_key: str) -> _FakeClient:
@@ -159,7 +157,7 @@ async def test_tool_loop_raises_when_iterations_exceeded() -> None:
                         _FakeToolCall(
                             id="call_1",
                             type="function",
-                            function=_FakeFunction(name="echo", arguments='{}'),
+                            function=_FakeFunction(name="echo", arguments="{}"),
                         )
                     ],
                 )

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Test the github_app module."""
+
 import pytest
 
 # FastAPI may fail to import due to pydantic-core version mismatch; skip entire

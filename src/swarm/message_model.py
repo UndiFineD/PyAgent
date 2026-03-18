@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Message model for PyAgent."""
+
 from typing import Any
 
 from pydantic import BaseModel

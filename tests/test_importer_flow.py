@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Test the end-to-end importer flow using stubs."""
+
 import asyncio
 from pathlib import Path
 

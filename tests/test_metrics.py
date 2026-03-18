@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Test the metrics output of the AgentRegistry."""
+
 from swarm.agent_registry import AgentRegistry
 
 

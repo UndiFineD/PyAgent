@@ -22,10 +22,6 @@ Ref: ASEJ S2090447925006203
 Implementation of the 7-Phase Designing Framework
 """
 
-<<<<<<< HEAD
-
-=======
->>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 class ArchitecturalDesignAgent:
     def __init__(self):
         # The 7 phases defined in the ASEJ research
@@ -65,11 +61,6 @@ class ArchitecturalDesignAgent:
 
     def _calculate_shannon_entropy(self, geometry):
         # Simplified complexity metric for architectural form
-<<<<<<< HEAD
-        # ... logic ...
-        return 0.86 # TODO Placeholder score
-=======
-    import math
+        import math
         # ... logic ...
         return 0.86 # Placeholder score
->>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712

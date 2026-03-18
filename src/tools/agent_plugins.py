@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Agent plugins for extending PyAgent's capabilities."""
+
 from pathlib import Path
 from typing import Any
 

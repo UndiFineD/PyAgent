@@ -111,8 +111,7 @@ class FlmChatAdapter:
             _ = client.models.list()
         except Exception as exc:  # pragma: no cover - exception content tested
             raise FlmRuntimeError(
-                "FLM endpoint unavailable "
-                f"(base_url={self.config.base_url}, timeout={self.config.timeout}): {exc}"
+                f"FLM endpoint unavailable (base_url={self.config.base_url}, timeout={self.config.timeout}): {exc}"
             ) from exc
 
     def ensure_model_available(self, model: str | None = None) -> None:
@@ -125,8 +124,7 @@ class FlmChatAdapter:
             available = {getattr(item, "id", "") for item in getattr(listing, "data", [])}
         except Exception as exc:  # pragma: no cover - exception content tested
             raise FlmRuntimeError(
-                "FLM model listing failed "
-                f"(base_url={self.config.base_url}, timeout={self.config.timeout}): {exc}"
+                f"FLM model listing failed (base_url={self.config.base_url}, timeout={self.config.timeout}): {exc}"
             ) from exc
 
         if selected_model not in available:
@@ -192,9 +190,7 @@ class FlmChatAdapter:
                 return assistant_message.content or ""
 
             if tool_executor is None:
-                raise FlmRuntimeError(
-                    "FLM returned tool_calls but no tool_executor was provided"
-                )
+                raise FlmRuntimeError("FLM returned tool_calls but no tool_executor was provided")
 
             assistant_tool_calls: list[dict[str, Any]] = []
             for tool_call in tool_calls:
@@ -239,9 +235,7 @@ class FlmChatAdapter:
                     }
                 )
 
-        raise FlmRuntimeError(
-            f"Exceeded max tool iterations ({max_tool_iterations}) while processing FLM tool calls"
-        )
+        raise FlmRuntimeError(f"Exceeded max tool iterations ({max_tool_iterations}) while processing FLM tool calls")
 
 
 def validate() -> None:

@@ -14,12 +14,7 @@
 
 import torch
 import torch.nn as nn
-<<<<<<< HEAD
-from typing import Tuple
-
-=======
 from typing import Optional, Tuple
->>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 
 
 class KVzapSurrogate(nn.Module):
@@ -65,20 +60,13 @@ def kvzap_prune(
             scores[:, -window_size:, :] = float('inf')
 
         # Create mask: True means KEEP
-<<<<<<< HEAD
-=======
         mask = scores >= threshold # [B, T, H]
->>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
 
         # Note: In practice, implementing this efficiently requires handling
         # non-uniform lengths across heads/layers or block-level pruning.
         # This stub shows the logical filtering.
 
-<<<<<<< HEAD
-        # TODO Placeholder for filtered tensors (Actual vLLM use PagedAttention)
-=======
         # Placeholder for filtered tensors (Actual vLLM use PagedAttention)
->>>>>>> db77480ab833928cfe3ccd516009ba93e4a44712
         # filtered_keys = keys[mask]
         # ...
 

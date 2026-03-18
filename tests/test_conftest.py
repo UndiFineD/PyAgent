@@ -14,6 +14,7 @@ When we began this work there were 22 static analysis errors in
 all without changing runtime behaviour, and the current version is clean
 – `get_errors` reports **no errors**.
 """
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -24,9 +25,7 @@ import pytest
 import conftest as repo_conftest
 
 
-def test_session_finish_sets_exitstatus_when_git_dirty(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_session_finish_sets_exitstatus_when_git_dirty(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Verify session_finish sets exitstatus=1 when git status shows modifications."""
     _ = tmp_path
     _ = monkeypatch
@@ -39,6 +38,7 @@ def test_session_finish_sets_exitstatus_when_git_dirty(
 
     with patch("subprocess.run", side_effect=[mock_baseline, mock_dirty]):
         from conftest import SessionManager
+
         mgr = SessionManager(tmp_path)
         # simulate pytest_sessionstart hook to establish baseline
         mgr.session_start(Mock())
@@ -58,15 +58,14 @@ def test_session_finish_does_not_raise_with_minimal_session() -> None:
 
     with patch("subprocess.run", return_value=mock_result):
         from conftest import _mgr
+
         try:
             _mgr.session_finish(mock_session, 0)
         except AttributeError as e:
             pytest.fail(f"session_finish raised AttributeError with minimal session: {e}")
 
 
-def test_resolve_import_fixer_prefers_scripts_then_scripts_old(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_resolve_import_fixer_prefers_scripts_then_scripts_old(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Verify _resolve_import_fixer prefers scripts/ then scripts-old/ directories."""
     # parameters unused below
     _ = tmp_path
@@ -80,6 +79,7 @@ def test_resolve_import_fixer_prefers_scripts_then_scripts_old(
     scripts_old_fixer = scripts_old_dir / "fix_leading_imports.py"
 
     from conftest import SessionManager
+
     mgr = SessionManager(tmp_path)
     resolver = mgr._resolve_import_fixer
 

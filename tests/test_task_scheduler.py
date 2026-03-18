@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Test the task scheduler."""
+
 import pytest
 
 from src.swarm.task_scheduler import TaskScheduler

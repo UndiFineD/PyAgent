@@ -1,0 +1,39 @@
+name: CI — Docs
+
+on:
+  push:
+    branches: [main, "feature/**", "fix/**"]
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+      - "requirements-ci.txt"
+      - ".github/workflows/ci-docs.yml"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docs-build:
+    name: mkdocs build check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install CI requirements (includes mkdocs)
+        run: pip install -r requirements-ci.txt
+
+      - name: Build docs
+        run: mkdocs build --clean

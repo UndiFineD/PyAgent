@@ -1,0 +1,83 @@
+name: CI — Python Core
+
+on:
+  push:
+    branches: [main, "feature/**", "fix/**"]
+    paths:
+      - "src/**/*.py"
+      - "tests/test_core*.py"
+      - "tests/test_task*.py"
+      - "tests/test_context*.py"
+      - "tests/test_memory*.py"
+      - "tests/test_workflow*.py"
+      - "tests/test_cort*.py"
+      - "tests/test_metrics*.py"
+      - "tests/test_message_model*.py"
+      - ".github/workflows/ci-python-core.yml"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python-core:
+    name: Core agent / task / memory tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Create and activate venv
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install --prefer-binary -r requirements-ci.txt
+
+      - name: Build and install rust_core extension
+        working-directory: rust_core
+        run: |
+          source ../.venv/bin/activate
+          python -m maturin develop --release
+
+      - name: Run core tests
+        run: |
+          source .venv/bin/activate
+          python -m pytest -q --no-cov \
+            tests/test_core_agent_state_manager.py \
+            tests/test_core_agent_registry.py \
+            tests/test_core_helpers.py \
+            tests/test_core_observability.py \
+            tests/test_core_quality.py \
+            tests/test_core_runtime.py \
+            tests/test_core_task_queue.py \
+            tests/test_core_workflow_engine.py \
+            tests/test_workflow_engine.py \
+            tests/test_task.py \
+            tests/test_task_queue.py \
+            tests/test_task_scheduler.py \
+            tests/test_task_state.py \
+            tests/test_context_components.py \
+            tests/test_context_manager.py \
+            tests/test_memory.py \
+            tests/test_memory_package.py \
+            tests/test_cort.py \
+            tests/test_metrics.py \
+            tests/test_message_model.py \
+            tests/test_agent_registry.py \
+            tests/test_async_loops.py \
+            tests/test_conftest.py \
+            tests/test_compile.py \
+            tests/test_benchmarks.py \
+            tests/test_system_integration.py

@@ -39,7 +39,7 @@ impl Pipe {
     pub fn pop(&self) -> Result<Vec<u8>, String> {
         let (lock, cvar) = &*self.0;
         let mut q = lock.lock().unwrap();
-        let timeout = Duration::from_secs(TRANSPORT_TIMEOUT_MAX_SECS as u64);
+        let timeout = Duration::from_secs(TRANSPORT_TIMEOUT_MAX_SECS);
         loop {
             if let Some(frame) = q.pop_front() {
                 return Ok(frame);

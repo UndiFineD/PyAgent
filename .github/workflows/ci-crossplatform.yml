@@ -1,0 +1,57 @@
+name: CI — Cross-platform Smoke
+
+# Validates that the Python package imports and core tests pass on all three
+# supported operating systems.  Does NOT require the Rust extension.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    name: Smoke test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install --prefer-binary -r requirements-ci.txt
+
+      - name: Verify basic imports
+        run: |
+          python -c "
+          import sys
+          # Prepend workspace root and src directory so that both the
+          # `src` package and the top-level modules (e.g. importer) are importable.
+          sys.path.insert(0, r'${{ github.workspace }}/src')
+          sys.path.insert(0, r'${{ github.workspace }}')
+          import src.core.workflow.engine as engine
+          engine.validate()
+          print('basic imports OK')
+          "
+
+      - name: Run minimal core smoke tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}/src
+        run: python -m pytest -q --no-cov tests/test_compile.py tests/test_conftest.py tests/test_message_model.py

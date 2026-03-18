@@ -14,6 +14,7 @@ async def inner() -> None:
     _rt.spawn_task(worker())
     await asyncio.wait_for(event.wait(), timeout=1.0)
 
+
 if __name__ == "__main__":
     asyncio.run(inner())
     # shutdown tokio runtime to avoid threads touching Python after

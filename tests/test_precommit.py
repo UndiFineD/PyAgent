@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Meta-test to ensure pre-commit is configured and runs."""
+
 import pathlib
 import subprocess
 import sys
@@ -26,5 +27,6 @@ def test_precommit_yaml_exists() -> None:
     """Ensure .pre-commit-config.yaml exists in the repo."""
     cfg = pathlib.Path(".pre-commit-config.yaml")
     assert cfg.exists(), "pre-commit config missing"
+
 
 # additional behavioral tests could be added once hooks are configured

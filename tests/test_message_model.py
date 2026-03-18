@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Test the message model validation."""
+
 import pytest
 
 # importing the message model might raise a SystemError due to pydantic-core

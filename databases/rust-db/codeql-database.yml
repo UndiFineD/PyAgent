@@ -1,0 +1,12 @@
+---
+sourceLocationPrefix: C:\Dev\PyAgent\rust_core
+baselineLinesOfCode: 51215
+unicodeNewlines: false
+columnKind: utf8
+primaryLanguage: rust
+creationMetadata:
+  cliVersion: 2.24.3
+  creationTime: 2026-03-15T21:52:36.153020900Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true
