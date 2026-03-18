@@ -31,6 +31,10 @@ A template is available at:
 <!-- GENERATED: DO NOT EDIT BELOW -->
 
 
+## Architecture Decision Records
+- docs/architecture/adr/0001-architecture-decision-record-template.md
+
+
 
 ---
 # Source: docs/architecture/adr/0001-architecture-decision-record-template.md

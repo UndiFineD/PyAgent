@@ -108,6 +108,20 @@ def main() -> int:
 
     generated_text = "\n".join(generated)
 
+    # Add an index of ADR files to the generated section.
+    adr_dir = repo_root / "docs" / "architecture" / "adr"
+    adr_files = []
+    if adr_dir.exists():
+        adr_files = sorted(adr_dir.glob("*.md"))
+
+    if adr_files:
+        adr_section = "\n## Architecture Decision Records\n"
+        for adr in adr_files:
+            adr_rel = adr.relative_to(repo_root).as_posix()
+            adr_section += f"- {adr_rel}\n"
+        adr_section += "\n"
+        generated_text = adr_section + generated_text
+
     if output_path.name == "Architecture.md" and output_path.exists():
         # Preserve the top portion of Architecture.md above the marker.
         content = output_path.read_text(encoding="utf-8")
