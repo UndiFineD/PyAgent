@@ -24,6 +24,7 @@ The following tools are currently available and exercised via unit tests:
 * `proxy_test` – test HTTP proxy connectivity.
 * `remote` – local command runner (placeholder for SSH/FTP helpers).
 * `self_heal` – basic syntax scanning across Python files.
+* `code_quality` – focused lint/typecheck/test runner for changed files (intended for @8ql).
 * `ssl_utils` – inspect PEM certificates (expiry, subject).
 * `knock` – port knocking client.
 
