@@ -1,6 +1,7 @@
 # 8ql Memory
 
-This file tracks security scan results, CodeQL findings, and dependency audit outcomes.
+This file tracks security scan results, CodeQL findings, 
+and dependency audit outcomes.
 
 ## Auto-handoff
 

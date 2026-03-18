@@ -1,6 +1,7 @@
 # 2think Memory
 
-This file captures option exploration outputs, tradeoff analysis, and recommended directions.
+This file captures option exploration outputs, 
+tradeoff analysis, and recommended directions.
 
 # @1think Design Brief — Phase 1: Foundation & Infrastructure
 _Date: 2026-03-16_
@@ -10,27 +11,34 @@ _Analyst: @1think | Feeds: @2plan_
 
 ## 1. Problem Statement
 
-Phase 1 must deliver a **stable, trustworthy core** that every downstream phase can build
-on without revisiting basic assumptions. Four distinct problems must be solved together:
+Phase 1 must deliver a **stable, trustworthy core** 
+that every downstream phase can build
+on without revisiting basic assumptions. 
+Four distinct problems must be solved together:
 
 1. **Transaction fragmentation.** Only `MemoryTransaction` exists
    (`src/MemoryTransactionManager.py`). `StorageTransaction`, `ProcessTransaction`, and
-   `ContextTransaction` are referenced throughout design docs but are completely absent
-   from the codebase. Code that needs file-system atomicity, subprocess guarding, or
-   context-lineage tracking today has no contract to program against.
+   `ContextTransaction` are referenced throughout design docs 
+   but are completely absent from the codebase. 
+   Code that needs file-system atomicity, subprocess guarding, 
+   or context-lineage tracking today has no contract to program against.
 
-2. **Project structure ambiguity and circular-import risk.** `src/core/base/` contains
-   only `__init__.py`; the mixin layer mandated by the architecture does not exist yet.
+2. **Project structure ambiguity and circular-import risk.** 
+   `src/core/base/` contains only `__init__.py`; 
+   the mixin layer mandated by the architecture does not exist yet.
    Three overlapping "runtime" locations exist simultaneously:
-   `src/core/runtime.py`, `src/runtime/`, and `src/runtime_py/`. The transaction
-   manager lives at the `src/` root level rather than in a dedicated package. These
-   structural gaps invite circular imports and make module ownership unclear.
+   `src/core/runtime.py`, `src/runtime/`, and `src/runtime_py/`. 
+   The transaction manager lives at the `src/` root level 
+   rather than in a dedicated package. These structural gaps 
+   invite circular imports and make module ownership unclear.
 
-3. **No canonical ContextWindow for LLM token budgeting.** `src/context_manager/`
-   contains only a word-count-based `ContextManager`. No class tracks token budgets,
-   manages eviction policies, or provides the single surface that all agents should use
-   when constructing LLM prompts. The design docs call for a `ContextWindow` class but
-   none exists.
+3. **No canonical ContextWindow for LLM token budgeting.** 
+   `src/context_manager/` contains only a word-count-based 
+   `ContextManager`. No class tracks token budgets,
+   manages eviction policies, 
+   or provides the single surface that all agents should use
+   when constructing LLM prompts. 
+   The design docs call for a `ContextWindow` class but none exists.
 
 4. **CI enforces only pytest.** `ci.yml` runs `pytest -q` but does not gate on `ruff`,
    `mypy`, or coverage thresholds. Several specialist CI workflows exist

@@ -1,14 +1,17 @@
 # Async Runtime Rollout
-> **2026-03-10:** All synchronous loops have been eliminated; Node.js-like async infrastructure in place.
+> **2026-03-10:** All synchronous loops have been eliminated; 
+> Node.js-like async infrastructure in place.
 > See 2026-03-10-async-runtime-plan.md for details.
 
 # Project Management & Governance Implementation Plan
 
-The design document (`brainstorm.md) defines a lightweight governance framework.  This plan will bootstrap the corresponding artifacts under `project/` and add verification tests.
+The design document (`brainstorm.md`) defines a lightweight governance framework.  
+This plan will bootstrap the corresponding artifacts under `project/` and add verification tests.
 
 **Objectives:**
 
-Build the ancillary tools and documents required to support project governance, then verify them using automated tests.  The implementation will:
+Build the ancillary tools and documents required to support project governance, 
+then verify them using automated tests.  The implementation will:
 
 * Scaffold `project/` documents (governance, milestones, budget, risk, metrics, standups, incidents, templates).
 * Create a `src/tools/pm` package with helper functions for KPIs, risk matrices, and email templates.
@@ -192,17 +195,20 @@ Build the ancillary tools and documents required to support project governance, 
 
 ---
 
-This expands the previous simple objectives into a complete TDD plan aligned with the enhanced design.  Review and approve before execution.
+This expands the previous simple objectives into a complete TDD plan aligned with the enhanced design.  
+Review and approve before execution.
 ---
 
-Once this plan is executed all governance documents will be version controlled, providing a concrete starting point for project management and allowing automation or editing by developers as needed.
+Once this plan is executed all governance documents will be version controlled, 
+providing a concrete starting point for project management and allowing automation 
+or editing by developers as needed.
 
 Please review and approve before execution.
 
 ## Implementation Status
 
-Portions of this plan have already been implemented and are exercised by the
-accompanying tests:
+Portions of this plan have already been implemented 
+and are exercised by the accompanying tests:
 
 * `src/tools/pm` package exists with modules `kpi.py`, `risk.py`, and
   `email.py`.  Corresponding tests (`tests/tools/test_kpi.py`,

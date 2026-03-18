@@ -124,9 +124,7 @@ Python 3.11, `pytest`, standard library filesystem operations (`os`).
   import os
 
   def test_design_doc_present():
-      assert os.path.exists(
-          "brainstorm.md
-      )
+      assert os.path.exists("brainstorm.md")
   ```
 - Command:  `pytest tests/structure/test_design_doc.py -q`
 - Expected output: `.` (already exists).

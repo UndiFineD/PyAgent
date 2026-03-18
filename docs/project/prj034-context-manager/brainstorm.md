@@ -1,5 +1,6 @@
 # Async Runtime Update
-> **2026-03-10:** Project migrated to Node.js-like asynchronous runtime; synchronous loops are prohibited by automated tests.
+> **2026-03-10:** Project migrated to Node.js-like asynchronous runtime; 
+> synchronous loops are prohibited by automated tests.
 
 # Context Manager Design
 
@@ -34,8 +35,8 @@ created, merged, diffed, and shared between agents.  `src-old` contains many
 - Integration with memory and transport subsystems for distributed context
   propagation.
 
-We have already implemented `brainstorm.md
-with `plan.md
+We have already implemented `brainstorm.md`
+with `plan.md`
 
 We can expand with https://github.com/yarnpkg/yarn context cache, 
 locally we should be able to do megabytes of context cache, 

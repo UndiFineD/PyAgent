@@ -4,8 +4,8 @@
 
 ## Links
 
-- Plan: `plan.md
-- Design: `brainstorm.md
+- Plan: `plan.md`
+- Design: `brainstorm.md`
 
 ## Tasks
 

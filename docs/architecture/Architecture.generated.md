@@ -300,7 +300,7 @@ This document is a **placeholder for reasoning and exploration guidance**.
 This page tracks the most important remaining work items for the PyAgent repo.
 
 ## ✅ Completed (recent)
-- Migrated legacy brainstorm/plan documents into `docs/project/prjXXX-*` (agent-based tracking).
+- Migrated legacy brainstorm/plan documents into `docs/project/prjXXX-*` (agent-based project tracking).
 - Consolidated architecture context into `docs/architecture/PyAgent.md` (minimal, agent-focused).
 - Simplified CI to run only Ubuntu smoke tests.
 

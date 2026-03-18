@@ -40,6 +40,10 @@ jobs:
       actions: read
       contents: read
 
+    # Prevent Node.js 20 deprecation warnings in GitHub Actions logs.
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     strategy:
       fail-fast: false
       matrix:

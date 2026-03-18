@@ -105,8 +105,7 @@ This file runs automatically on every agent merge and validates:
 | Step | Action | Owner |
 |-----|--------|-------|
 | 1 | Create `agents_design.md` in the specified path | You (Multi) |
-| 2 | Add to `brainstorm.md | You |
-| 3 | Review with team lead for alignment | Team Lead |
+| 2 | Add reference to `agents_design.md` in `brainstorm.md` | You || 3 | Review with team lead for alignment | Team Lead |
 | 4 | Integrate with CI pipeline (via `test_agent_quality.py`) | DevOps |
 | 5 | Document quality gates in `TEST_QUALITY.md` | QA Lead |
 

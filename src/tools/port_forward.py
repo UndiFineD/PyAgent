@@ -27,9 +27,11 @@ except ImportError:  # pragma: no cover
 
 
 async def _handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWriter, remote_host: str, remote_port: int) -> None:
+    """Handle a client connection and forward data to the remote host."""
     remote_reader, remote_writer = await asyncio.open_connection(remote_host, remote_port)
 
     async def _pipe(src: asyncio.StreamReader, dst: asyncio.StreamWriter) -> None:
+        """Pipe data from src to dst."""
         try:
             while not src.at_eof():
                 data = await src.read(4096)
@@ -50,6 +52,7 @@ async def _handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWri
 
 
 async def main(args: list[str] | None = None) -> int:
+    """Main entry point for the port_forward tool."""
     parser = argparse.ArgumentParser(prog="port_forward")
     parser.add_argument("--listen-port", type=int, required=True, help="Local port to listen on")
     parser.add_argument("--target-host", required=True, help="Remote host to forward to")

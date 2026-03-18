@@ -32,6 +32,7 @@ def load_plugins() -> list[str]:
 
 
 def main(args: list[str] | None = None) -> int:
+    """Main entry point for the agent_plugins tool."""
     parser = argparse.ArgumentParser(prog="agent_plugins")
     parser.add_argument("--list", action="store_true", help="List available plugin modules")
     parser.add_argument("--json", action="store_true", help="Output as JSON")

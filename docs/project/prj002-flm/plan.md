@@ -1,15 +1,16 @@
 # Async Runtime Rollout
-> **2026-03-10:** All synchronous loops have been eliminated; Node.js-like async infrastructure in place.
+> **2026-03-10:** All synchronous loops have been eliminated; 
+> Node.js-like async infrastructure in place.
 > See 2026-03-10-async-runtime-plan.md for details.
 
 # FLM (Fastflow Language Model) Implementation Plan
 
 ## Goal
-Implement FLM integration as a **local OpenAI-compatible Fastflow runtime** (NPU-optimized), matching the real usage contract in `flm-test-llama.py` and the design in `brainstorm.md
+Implement FLM integration as a **local OpenAI-compatible Fastflow runtime** (NPU-optimized), 
+matching the real usage contract in `flm-test-llama.py` and the design in `brainstorm.md`
 
 ## Inputs and Alignment Source
-- Design source: `brainstorm.md
-- Behavioral source: `flm-test-llama.py`
+- Design source: `brainstorm.md`- Behavioral source: `flm-test-llama.py`
 - Existing runtime assumptions:
   - OpenAI SDK client
   - `base_url="http://127.0.0.1:52625/v1/"`
@@ -17,7 +18,8 @@ Implement FLM integration as a **local OpenAI-compatible Fastflow runtime** (NPU
   - optional tool-call loop (`assistant -> tool -> assistant`)
 
 ## Requirements and Constraints
-- **REQ-001**: FLM must be documented and implemented as **Fastflow Language Model**, not “Foundation Language Model”.
+- **REQ-001**: FLM must be documented and implemented as **Fastflow Language Model**, 
+  not “Foundation Language Model”.
 - **REQ-002**: Integration must remain OpenAI-compatible (`chat.completions.create`).
 - **REQ-003**: Tool-call execution must be deterministic and bounded.
 - **REQ-004**: Endpoint and model failures must return actionable diagnostics.
@@ -31,8 +33,8 @@ Implement FLM integration as a **local OpenAI-compatible Fastflow runtime** (NPU
 
 | Task | Description | Completed | Date |
 |------|-------------|-----------|------|
-| TASK-001 | Verify FLM naming in `brainstorm.md is Fastflow and not Foundation | ✅ | 2026-03-08 |
-| TASK-002 | Update `plan.md with concrete, executable Fastflow-aligned tasks | ✅ | 2026-03-08 |
+| TASK-001 | Verify FLM naming in `brainstorm.md` is Fastflow and not Foundation | ✅ | 2026-03-08 |
+| TASK-002 | Update `plan.md` with concrete, executable Fastflow-aligned tasks | ✅ | 2026-03-08 |
 | TASK-003 | Scan local FLM docs/config comments for “Foundation Language Model” references and replace with Fastflow wording (if found) | ✅ | 2026-03-08 |
 
 ### Phase 2 — Provider Contract Hardening

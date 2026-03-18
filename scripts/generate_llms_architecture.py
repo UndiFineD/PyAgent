@@ -51,6 +51,9 @@ def _discover_architecture_docs(root: pathlib.Path) -> list[pathlib.Path]:
         # Skip archive folder.
         if "archive" in path.parts:
             continue
+        # Skip generated output files (this script's own output and similar).
+        if path.name.endswith(".generated.md"):
+            continue
         # Include ADR files.
         if "adr" in path.parts:
             files.append(path)

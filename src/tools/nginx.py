@@ -28,6 +28,7 @@ except ImportError:  # pragma: no cover
 
 
 def main(args: list[str] | None = None) -> int:
+    """Main entry point for the nginx tool."""
     parser = argparse.ArgumentParser(prog="nginx")
     parser.add_argument("--config", help="Path to nginx.conf")
     parser.add_argument("--test", action="store_true", help="Run nginx -t to validate configuration")

@@ -51,6 +51,7 @@ def collect_metrics(root: str) -> dict[str, int]:
 
 
 def main(args: list[str] | None = None) -> int:
+    """Main entry point for the metrics tool."""
     parser = argparse.ArgumentParser(prog="metrics")
     parser.add_argument("--root", default=".", help="Root directory to scan")
     parser.add_argument("--json", action="store_true", help="Output JSON")
