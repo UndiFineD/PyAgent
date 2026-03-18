@@ -503,10 +503,31 @@ _Design brief complete. @2plan may begin sprint planning from Tier 0._
 
 ## Auto-handoff
 
-Once deep analysis and option exploration are complete, the next agent to run is **@3design**. The agent should continue the workflow using `agent/runSubagent`, e.g.
+Once deep analysis and option exploration are complete, 
+the next agent to run is **@3design**. 
+The agent should continue the workflow using `agent/runSubagent`, e.g.
 
 ```text
 agent/runSubagent --agent @3design
 ```
 
-This ensures a clean handoff from analysis (2think) into design (3design) and keeps the agent workflow chain explicit.
+This ensures a clean handoff from analysis (2think) 
+into design (3design) and keeps the agent workflow chain explicit.
+
+---
+
+## prj030 - agent-doc-frequency
+
+| Field | Value |
+|---|---|
+| **task_id** | prj030-agent-doc-frequency |
+| **owner_agent** | @2think |
+| **source** | @1project |
+| **created_at** | 2026-03-18 |
+| **updated_at** | 2026-03-18 |
+| **status** | DONE |
+| **summary** | Explored 4 options for incremental checkpoint writes and 5 new per-agent artifact files. Recommended Option A: Step-Gated Full Overwrite — add one checkpoint rule per agent Operating Procedure to rewrite artifact after each numbered step. Zero Python code changes; instruction-only. |
+| **handoff_target** | @3design |
+| **artifact_paths** | docs/project/prj030-agent-doc-frequency/agent-doc-frequency.think.md |
+| **key_decision** | Option A (Step-Gated Full Overwrite): one sentence per agent's Operating Procedure; no StorageTransaction dependency; matches existing write pattern |
+| **open_questions_for_3design** | Template authority (inline vs ARTIFACT_TEMPLATES.md); initialization ownership; checkpoint granularity; whether existing 4 artifact types also get the checkpoint rule |
