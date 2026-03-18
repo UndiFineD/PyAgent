@@ -54,7 +54,7 @@ Absolutely. Let's now **expand the plan** into a full, actionable,
 and well-structured implementation plan for the file:
 
 ```
-.github/superpower/brainstorm/design/core_design.md
+brainstorm.md
 ```
 
 This file will serve as the **core design blueprint** for the PyAgent system 
@@ -69,7 +69,7 @@ We will ensure this document:
 ---
 
 ## 📄 Final Implementation Plan:  
-### `github/superpower/brainstorm/design/core_design.md`
+### `github/agent/brainstorm/design/core_design.md`
 
 > **Title**: Core System Design & Quality Framework  
 > **Purpose**: Define the architecture, structure, quality gates, 
@@ -187,7 +187,7 @@ This file runs automatically on every PR and validates:
 | Step | Action | Owner |
 |-----|--------|-------|
 | 1 | Create `core_design.md` in the specified path | You (Multi) |
-| 2 | Add to `.github/superpower/brainstorm/design/` | You |
+| 2 | Add to `brainstorm.md | You |
 | 3 | Review with team lead for alignment | Team Lead |
 | 4 | Integrate with CI pipeline (via `test_core_quality.py`) | DevOps |
 | 5 | Document quality gates in `TEST_QUALITY.md` | QA Lead |

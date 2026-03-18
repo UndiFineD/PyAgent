@@ -16,15 +16,32 @@
 
 from __future__ import annotations
 
+import argparse
+import subprocess
 import sys
+
+try:
+    from src.tools.tool_registry import register_tool
+except ImportError:  # pragma: no cover
+    from tools.tool_registry import register_tool
 
 
 def main(args: list[str] | None = None) -> int:
-    """Main entry point for SSH/FTP helper utilities."""
-    if args is None:
-        args = sys.argv[1:]
-    print("remote placeholder", args)
-    return 0
+    parser = argparse.ArgumentParser(prog="remote")
+    parser.add_argument("--run", help="Command to run locally (shell)")
+    parser.add_argument("--host", help="Remote host (placeholder, no ssh support yet)")
+
+    parsed = parser.parse_args(args=args)
+
+    if parsed.run:
+        proc = subprocess.run(parsed.run, shell=True)
+        return proc.returncode
+
+    parser.print_help()
+    return 1
+
+
+register_tool("remote", main, "Local command runner (placeholder for SSH/FTP helpers)")
 
 
 if __name__ == "__main__":

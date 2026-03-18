@@ -16,15 +16,39 @@
 
 from __future__ import annotations
 
+import argparse
+import ipaddress
 import sys
+
+try:
+    from src.tools.tool_registry import register_tool
+except ImportError:  # pragma: no cover
+    from tools.tool_registry import register_tool
 
 
 def main(args: list[str] | None = None) -> int:
-    """Main entry point for network calculation utilities."""
-    if args is None:
-        args = sys.argv[1:]
-    print("netcalc placeholder", args)
-    return 0
+    """Run the netcalc CLI."""
+    parser = argparse.ArgumentParser(prog="netcalc")
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    cidr = sub.add_parser("cidr", help="Print network details for a CIDR block")
+    cidr.add_argument("cidr", help="CIDR notation (e.g. 192.168.0.0/24)")
+
+    parsed = parser.parse_args(args=args)
+
+    if parsed.command == "cidr":
+        net = ipaddress.ip_network(parsed.cidr, strict=False)
+        print(f"Network: {net.network_address}")
+        print(f"Netmask: {net.netmask}")
+        print(f"Broadcast: {net.broadcast_address}")
+        print(f"Hosts: {net.num_addresses}")
+        return 0
+
+    parser.print_help()
+    return 1
+
+
+register_tool("netcalc", main, "IP/CIDR calculation utilities")
 
 
 if __name__ == "__main__":

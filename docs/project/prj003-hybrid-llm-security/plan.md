@@ -311,5 +311,5 @@ This section records current completion status against Tasks 1–15 in this plan
   with a proper AES‑GCM implementation and for expanding the transaction mechanism 
   with actual file‑system staging logic.
 
-Once you approve this plan I'll save it to the canonical `.github/superpower/plan` 
-file and hand off to `superpower-execute` to start implementation.
+Once you approve this plan I'll save it to the canonical `.github/agent/plan` 
+file and hand off to `agent/runSubagent` to start implementation.

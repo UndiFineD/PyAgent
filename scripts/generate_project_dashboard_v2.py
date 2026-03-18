@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Generate project folders and a dashboard from superpower plan + brainstorm files.
+"""Generate project folders and a dashboard from agent-based project plans.
 
-This is a more robust successor to the original generator. It:
-- Keeps the same project folder + dashboard structure.
-- Improves implementation detection by searching common repo locations and
-  matching multiple token variants.
-- Avoids duplicated code detection logic.
+This generator creates/updates `docs/project/prjNNN-*/` project artifacts based on
+local `plan.md` and `brainstorm.md` files, and produces a central `PROJECT_DASHBOARD.md`.
+
+It improves implementation detection by searching common repo locations and
+matching multiple token variants, while avoiding duplicated code detection logic.
 """
 
 from __future__ import annotations
@@ -20,10 +20,11 @@ RE_PLAN = re.compile(
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-PLAN_DIR = ROOT / ".github" / "superpower" / "plan"
-BRAINSTORM_DIR = ROOT / ".github" / "superpower" / "brainstorm"
-OUT_ROOT = ROOT / "docs" / "project"
+PROJECTS_ROOT = ROOT / "docs" / "project"
 
+# The generator now uses the agent-based project tracking system rooted in docs/project.
+# Each project folder (prjNNN-*) should contain a `plan.md` and optionally `brainstorm.md`.
+OUT_ROOT = PROJECTS_ROOT
 OUT_ROOT.mkdir(parents=True, exist_ok=True)
 
 
@@ -86,29 +87,27 @@ def _find_code_files(topic_key: str) -> List[Path]:
     return sorted(matches)
 
 
-plan_files = sorted(PLAN_DIR.glob("*.md"))
 projects = []
 
-for idx, plan in enumerate(plan_files, start=1):
-    base = plan.stem
-    m = RE_PLAN.match(base)
-    if m:
-        date = m.group("date")
-        topic = m.group("topic")
-    else:
-        date = ""
-        topic = re.sub(r"^\d{4}-\d{2}-\d{2}-", "", base)
-        topic = re.sub(r"(-plan|-implementation-plan|_plan)$", "", topic)
+# Each project lives under docs/project/prjNNN-<topic> and contains plan.md + optional brainstorm.md
+project_dirs = sorted(
+    d
+    for d in OUT_ROOT.iterdir()
+    if d.is_dir() and d.name.startswith("prj")
+)
 
-    topic_key = _normalize_topic_key(topic)
+for prj_dir in project_dirs:
+    prj_id = prj_dir.name
+    topic_key = prj_id.split("-", 1)[1] if "-" in prj_id else prj_id
 
-    prj_id = f"prj{idx:03d}-{topic_key}"
-    prj_dir = OUT_ROOT / prj_id
-    prj_dir.mkdir(parents=True, exist_ok=True)
+    plan = prj_dir / "plan.md"
+    brainstorm = prj_dir / "brainstorm.md"
 
-    design_filename = f"{date}-{topic_key}-design.md" if date else f"{topic_key}-design.md"
-    design_path = BRAINSTORM_DIR / design_filename
-    design_exists = design_path.exists()
+    # Skip projects without a plan; they are not ready for the dashboard.
+    if not plan.exists():
+        continue
+
+    design_exists = brainstorm.exists()
 
     text = plan.read_text(encoding="utf-8")
     lines = [l.rstrip() for l in text.splitlines() if re.match(r"^[\s\-*]+\[[ xX]\]", l)]
@@ -126,13 +125,13 @@ for idx, plan in enumerate(plan_files, start=1):
         "",
         "## Links",
         "",
-        f"- Plan: `{plan.relative_to(ROOT)}`",
+        f"- Plan: `plan.md`",
     ]
 
     if design_exists:
-        out_lines.append(f"- Design: `{design_path.relative_to(ROOT)}`")
+        out_lines.append(f"- Design: `brainstorm.md`")
     else:
-        out_lines.append(f"- Design: **MISSING** (`{design_path.relative_to(ROOT)}`)")
+        out_lines.append(f"- Design: **MISSING** (`brainstorm.md`)")
 
     out_lines += ["", "## Tasks", ""]
     if total > 0:
@@ -157,7 +156,7 @@ for idx, plan in enumerate(plan_files, start=1):
             "",
             "## Missing design",
             "",
-            f"Design file not found: `{design_path.relative_to(ROOT)}`",
+            "Design file not found: `brainstorm.md`",
         ]
 
     out_file.write_text("\n".join(out_lines), encoding="utf-8")
@@ -183,6 +182,16 @@ lines = [
     "| Project | Completion | Code | Missing Design |",
     "|--------|------------|------|----------------|",
 ]
+def _color_yes_no(value: str) -> str:
+    """Return an ANSI-colored yes/no string."""
+
+    # Use green for "Yes" and red for "No" (works in most modern terminals).
+    if value.lower() == "yes":
+        return f"\x1b[32m{value}\x1b[0m"
+    if value.lower() == "no":
+        return f"\x1b[31m{value}\x1b[0m"
+    return value
+
 for p in projects:
     pct = round((p["Completed"] / p["Total"] * 100) if p["Total"] else 0)
     md = "Yes" if p["MissingDesign"] else "No"
@@ -193,4 +202,12 @@ for p in projects:
 
 (OUT_ROOT / "PROJECT_DASHBOARD.md").write_text("\n".join(lines), encoding="utf-8")
 
+# Also print a human-summary with colored yes/no on the console
 print(f"Generated {len(projects)} project folders and dashboard.")
+for p in projects:
+    pct = round((p["Completed"] / p["Total"] * 100) if p["Total"] else 0)
+    md = "Yes" if p["MissingDesign"] else "No"
+    code = "Yes" if p.get("CodeFound") else "No"
+    print(
+        f"{p['ProjectId']}: {pct}% ({p['Completed']}/{p['Total']}) | code: {_color_yes_no(code)} | missing design: {_color_yes_no(md)}"
+    )

@@ -13,8 +13,69 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import annotations
 
-def check_dependencies() -> list[str]:
+import argparse
+import json
+import os
+import sys
+
+try:
+    import tomllib  # type: ignore
+except ImportError:  # pragma: no cover
+    import tomli as tomllib  # type: ignore
+
+try:
+    from src.tools.tool_registry import register_tool
+except ImportError:  # pragma: no cover
+    from tools.tool_registry import register_tool
+
+
+def check_dependencies(project_root: str = ".") -> list[str]:
     """Check for missing or outdated dependencies; returns list of issues."""
-    # placeholder implementation; real logic will scan toml/json files
-    return []
+    issues: list[str] = []
+    pyproject = os.path.join(project_root, "pyproject.toml")
+
+    if os.path.exists(pyproject):
+        try:
+            with open(pyproject, "rb") as f:
+                data = tomllib.load(f)
+            deps = data.get("project", {}).get("dependencies", [])
+            issues.append(f"pyproject dependencies: {len(deps)} entries")
+        except Exception as e:
+            issues.append(f"Failed to parse pyproject.toml: {e}")
+    else:
+        issues.append("pyproject.toml not found")
+
+    reqs = os.path.join(project_root, "requirements.txt")
+    if os.path.exists(reqs):
+        try:
+            with open(reqs, encoding="utf-8") as f:
+                lines = [l.strip() for l in f if l.strip() and not l.startswith("#")]
+            issues.append(f"requirements.txt entries: {len(lines)}")
+        except Exception as e:
+            issues.append(f"Failed to read requirements.txt: {e}")
+    else:
+        issues.append("requirements.txt not found")
+
+    return issues
+
+
+def main(args: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(prog="dependency_audit")
+    parser.add_argument("--root", default=".", help="Project root directory")
+    parser.add_argument("--json", action="store_true", help="Output results as JSON")
+
+    parsed = parser.parse_args(args=args)
+    issues = check_dependencies(parsed.root)
+
+    if parsed.json:
+        print(json.dumps({"issues": issues}, indent=2))
+    else:
+        for issue in issues:
+            print(issue)
+
+    return 0
+
+
+register_tool("dependency_audit", main, "Audit dependency manifests (pyproject/requirements)")

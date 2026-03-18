@@ -34,7 +34,7 @@ _Last updated: 2026-03-16_
 - **Testing infrastructure** (`testing-infrastructure-plan.md`) — CI enforcement, async loop checker, pytest fixtures
 
 **Brainstorm designs to feed into @1think:**
-- `.github/superpower/brainstorm/` files covering: core architecture, transaction design, context management, testing
+- `docs/project/prj***-*/brainstorm.md` files covering: core architecture, transaction design, context management, testing
 
 **Acceptance criteria:**
 - All CI pipelines green (pytest, ruff, mypy)
@@ -116,8 +116,8 @@ _Last updated: 2026-03-16_
 
 ## 📁 Key file locations
 
-- Brainstorm designs: `.github/superpower/brainstorm/`
-- Implementation plans: `.github/superpower/plan/`
+- Brainstorm designs: `docs/project/*/brainstorm.md`
+- Implementation plans: `docs/project/*/plan.md`
 - Agent memory files: `docs/agents/<N><name>.memory.md`
 - Architecture docs: `docs/architecture/`
 - Agent definitions: `.github/agents/`

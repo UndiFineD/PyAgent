@@ -106,4 +106,4 @@ A lightweight Python script (`scripts/setup_structure.py`) creates required dire
 
 ---
 
-Once these steps are executed, the repository will be prepared for the development‑tools implementation plan.  Handing off to superpower-execute now.
+Once these steps are executed, the repository will be prepared for the development‑tools implementation plan.  Handing off to agent/runSubagent now.

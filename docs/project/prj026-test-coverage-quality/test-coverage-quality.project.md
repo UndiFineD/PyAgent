@@ -4,8 +4,8 @@
 
 ## Links
 
-- Plan: `.github\superpower\plan\2026-03-10-test-coverage-quality-plan.md`
-- Design: `.github\superpower\brainstorm\2026-03-10-test-coverage-quality-design.md`
+- Plan: `plan.md`
+- Design: `brainstorm.md`
 
 ## Tasks
 

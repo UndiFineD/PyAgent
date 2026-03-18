@@ -4,8 +4,8 @@
 
 ## Links
 
-- Plan: `.github\superpower\plan\2026-03-09-agent_workflow-plan.md`
-- Design: **MISSING** (`.github\superpower\brainstorm\2026-03-09-agent_workflow-design.md`)
+- Plan: `plan.md`
+- Design: `brainstorm.md`
 
 ## Tasks
 
@@ -23,7 +23,3 @@ _No checkbox tasks found in the plan file._
   - `src\core\agent_state_manager.py`
   - `src\swarm\agent_registry.py`
   - `src\tools\agent_plugins.py`
-
-## Missing design
-
-Design file not found: `.github\superpower\brainstorm\2026-03-09-agent_workflow-design.md`

@@ -15,15 +15,47 @@
 
 from __future__ import annotations
 
+import argparse
+import subprocess
 import sys
+from typing import Iterable
+
+try:
+    from src.tools.tool_registry import register_tool
+except ImportError:  # pragma: no cover
+    from tools.tool_registry import register_tool
+
+
+def _run_git(args: Iterable[str]) -> int:
+    proc = subprocess.run(["git", *args], check=False)
+    return proc.returncode
 
 
 def main(args: list[str] | None = None) -> int:
-    """CLI entrypoint; returns 0 on success."""
-    if args is None:
-        args = sys.argv[1:]
-    print("git_utils placeholder", args)
-    return 0
+    """CLI entrypoint for git helper utilities."""
+    parser = argparse.ArgumentParser(prog="git_utils")
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    sub.add_parser("status", help="Run `git status`")
+    log = sub.add_parser("log", help="Run `git log`")
+    log.add_argument("-n", "--number", type=int, default=5, help="Number of commits")
+
+    parsed = parser.parse_args(args=args)
+
+    if parsed.command == "status":
+        return _run_git(["status"])
+    if parsed.command == "log":
+        return _run_git(["log", f"-n{parsed.number}"])
+
+    parser.print_help()
+    return 1
+
+
+# Register tool for CLI discovery
+register_tool("git-utils", main, "Git wrapper utilities")
+
+# Alias for the 9git agent workflow
+register_tool("9git", main, "Git helper for the @9git agent")
 
 
 if __name__ == "__main__":

@@ -16,15 +16,43 @@
 
 from __future__ import annotations
 
+import argparse
+import asyncio
+import socket
 import sys
+from typing import Optional
+
+try:
+    from src.tools.tool_registry import register_tool
+except ImportError:  # pragma: no cover
+    from tools.tool_registry import register_tool
 
 
-def main(args: list[str] | None = None) -> int:
-    """Main entry point for network testing utilities."""
-    if args is None:
-        args = sys.argv[1:]
-    print("nettest placeholder", args)
-    return 0
+async def _check_host(host: str, port: int, timeout: float) -> bool:
+    try:
+        fut = asyncio.open_connection(host, port)
+        reader, writer = await asyncio.wait_for(fut, timeout)
+        writer.close()
+        await writer.wait_closed()
+        return True
+    except Exception:
+        return False
+
+
+async def main(args: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(prog="nettest")
+    parser.add_argument("host", help="Host to test")
+    parser.add_argument("port", type=int, help="TCP port to connect to")
+    parser.add_argument("--timeout", type=float, default=1.0, help="Connection timeout in seconds")
+
+    parsed = parser.parse_args(args=args)
+
+    success = await _check_host(parsed.host, parsed.port, parsed.timeout)
+    print("OK" if success else "FAIL")
+    return 0 if success else 1
+
+
+register_tool("nettest", main, "Test TCP connectivity to a host/port")
 
 
 if __name__ == "__main__":

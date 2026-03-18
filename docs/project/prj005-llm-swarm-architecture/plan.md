@@ -135,7 +135,7 @@ Task E3: Integrate with Python `StateTransaction`
 ## Phase F — CI, docs, and migration verification
 
 Task F1: CI workflow
-- File: `.github/workflows/superpower-plan-check.yml` to run pytest on Windows/Ubuntu
+- File: `.github/workflows/agent-plan-check.yml` to run pytest on Windows/Ubuntu
 
 Task F2: Migration dry-run & approval
 - Script: `scripts/move_src_and_scripts_dryrun.py` → `migration_plan.json`
@@ -178,12 +178,12 @@ python scripts/consolidate_llm_context.py
 
 ## Files to be created/edited (when approved to implement)
 
-- plan file: `.github/superpower/plan/2026-03-08-llm-swarm-architecture-plan.md` (this file)
+- plan file: `plan.md (this file)
 - tests under `tests/` as specified per task
 - scripts under `scripts/` (scaffold, dryrun, consolidate, move dryrun)
 - new modules under `plugins/`, `core/` (validator, wrappers, crdt_bridge, security_bridge)
 - rust crates under `rust_core/p2p` and `rust_core/security`
-- CI workflow `.github/workflows/superpower-plan-check.yml`
+- CI workflow `.github/workflows/agent-plan-check.yml`
 
 ---
 

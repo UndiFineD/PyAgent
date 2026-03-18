@@ -213,4 +213,4 @@ advanced agent hooks) can proceed more smoothly.
 
 This plan converts the chatroom design into a sequence of TDD steps. 
 After you review and approve, I’ll save this file 
-and hand off to superpower-execute for implementation.
+and hand off to agent/runSubagent for implementation.

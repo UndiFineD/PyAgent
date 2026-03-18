@@ -16,15 +16,44 @@
 
 from __future__ import annotations
 
+import argparse
+import shutil
+import subprocess
 import sys
+
+try:
+    from src.tools.tool_registry import register_tool
+except ImportError:  # pragma: no cover
+    from tools.tool_registry import register_tool
 
 
 def main(args: list[str] | None = None) -> int:
-    """Main entry point for NGINX configuration utilities."""
-    if args is None:
-        args = sys.argv[1:]
-    print("nginx placeholder", args)
-    return 0
+    parser = argparse.ArgumentParser(prog="nginx")
+    parser.add_argument("--config", help="Path to nginx.conf")
+    parser.add_argument("--test", action="store_true", help="Run nginx -t to validate configuration")
+
+    parsed = parser.parse_args(args=args)
+
+    if parsed.test:
+        nginx = shutil.which("nginx")
+        if not nginx:
+            print("nginx binary not found on PATH", file=sys.stderr)
+            return 1
+
+        cmd = [nginx, "-t"]
+        if parsed.config:
+            cmd.extend(["-c", parsed.config])
+
+        proc = subprocess.run(cmd, capture_output=True, text=True)
+        print(proc.stdout, end="")
+        print(proc.stderr, end="", file=sys.stderr)
+        return proc.returncode
+
+    parser.print_help()
+    return 1
+
+
+register_tool("nginx", main, "NGINX config validation")
 
 
 if __name__ == "__main__":

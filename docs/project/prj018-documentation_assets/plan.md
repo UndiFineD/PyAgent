@@ -135,5 +135,5 @@ created, an automated process checks their presence/format, and the repository
 is structured to generate reference material from code.  Afterward, authors can
 expand each guide with more content and the pipeline will catch missing files.
 
-Hand off to **superpower-execute** when you're ready to turn this plan into
+Hand off to **agent/runSubagent** when you're ready to turn this plan into
 actual code.

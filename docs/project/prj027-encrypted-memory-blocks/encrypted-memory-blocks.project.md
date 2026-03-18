@@ -4,8 +4,8 @@
 
 ## Links
 
-- Plan: `.github\superpower\plan\2026-03-12-encrypted-memory-blocks-plan.md`
-- Design: **MISSING** (`.github\superpower\brainstorm\2026-03-12-encrypted-memory-blocks-design.md`)
+- Plan: `plan.md`
+- Design: `brainstorm.md`
 
 ## Tasks
 
@@ -23,7 +23,3 @@ _No checkbox tasks found in the plan file._
   - `rust_core\src\memory.rs`
   - `src\core\memory.py`
   - `src\MemoryTransactionManager.py`
-
-## Missing design
-
-Design file not found: `.github\superpower\brainstorm\2026-03-12-encrypted-memory-blocks-design.md`

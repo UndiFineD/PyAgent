@@ -16,15 +16,73 @@
 
 from __future__ import annotations
 
+import argparse
 import sys
+import textwrap
+
+try:
+    from src.tools.tool_registry import register_tool
+except ImportError:  # pragma: no cover
+    from tools.tool_registry import register_tool
+
+
+def _render_pyproject(name: str) -> str:
+    return textwrap.dedent(
+        f"""
+        [project]
+        name = \"{name}\"
+        version = \"0.1.0\"
+        description = \"A PyAgent project\"
+        dependencies = []
+        """
+    )
 
 
 def main(args: list[str] | None = None) -> int:
-    """Main entry point for project bootstrapping utilities."""
-    if args is None:
-        args = sys.argv[1:]
-    print("boot placeholder", args)
+    parser = argparse.ArgumentParser(prog="boot")
+    parser.add_argument("--type", choices=["python", "node", "rust"], default="python")
+    parser.add_argument("--name", default="pyagent-project", help="Project name")
+    parser.add_argument("--show", action="store_true", help="Print scaffold output without writing files")
+    parser.add_argument("--out", help="Output file path (defaults to stdout)")
+
+    parsed = parser.parse_args(args=args)
+
+    if parsed.type == "python":
+        content = _render_pyproject(parsed.name)
+        filename = parsed.out or "pyproject.toml"
+    elif parsed.type == "node":
+        content = textwrap.dedent(
+            f"""
+            {{
+              \"name\": \"{parsed.name}\",
+              \"version\": \"0.1.0\",
+              \"dependencies\": {{}}
+            }}
+            """
+        )
+        filename = parsed.out or "package.json"
+    else:
+        content = textwrap.dedent(
+            f"""
+            [package]
+            name = \"{parsed.name}\"
+            version = \"0.1.0\"
+            """
+        )
+        filename = parsed.out or "Cargo.toml"
+
+    if parsed.show or not parsed.out:
+        print(content)
+        return 0
+
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(content)
+
+    print(f"Wrote {filename}")
     return 0
+
+
+register_tool("boot", main, "Generate starter project manifests (pyproject/package.json/Cargo.toml)")
 
 
 if __name__ == "__main__":

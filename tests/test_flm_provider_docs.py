@@ -19,8 +19,8 @@ from pathlib import Path
 
 def test_flm_docs_use_fastflow_expansion() -> None:
     """FLM docs in this scope should use Fastflow wording."""
-    design_path = Path(".github/superpower/brainstorm/2026-03-08-flm-design.md")
-    plan_path = Path(".github/superpower/plan/2026-03-08-flm-plan.md")
+    design_path = Path("docs/project/prj002-flm/brainstorm.md")
+    plan_path = Path("docs/project/prj002-flm/plan.md")
 
     design = design_path.read_text(encoding="utf-8")
     plan = plan_path.read_text(encoding="utf-8")

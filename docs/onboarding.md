@@ -12,8 +12,7 @@ speed quickly.
    * `tests/` includes unit and integration tests; `tests/docs/` contains
      documentation validation tests.
    * `scripts/` holds helper utilities for scaffolding and tooling.
-   * `.github/superpower/brainstorm/` stores design documents used by the
-     Copilot agent.
+   * `docs/project/` contains project tracking folders (plan.md + brainstorm.md) used by the agent system.
 4. **Writing code**:
    * Follow the coding standards in existing modules (type hints, logging,
      license header).
@@ -32,5 +31,5 @@ speed quickly.
    * The CI pipeline will run tests and build docs; address any failures.
 
 Enjoy working on PyAgent!  If you have questions, the design documents in
-`.github/superpower/brainstorm` are a great resource, and you can search the
+`docs/project/*/brainstorm.md` are a great resource, and you can search the
 codebase or ask in the project chat.
