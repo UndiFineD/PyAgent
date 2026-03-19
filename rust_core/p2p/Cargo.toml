@@ -1,0 +1,9 @@
+[package]
+name = "rust_core_p2p"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+libp2p = { version = "0.49", features = ["tcp-tokio", "dns-tokio", "identify", "ping", "mdns", "noise", "yamux"] }
+tokio = { version = "1", features = ["full"] }
+clap = { version = "4", features = ["derive"] }
