@@ -3,7 +3,23 @@ repos:
     rev: v0.15.5
     hooks:
       - id: ruff
+        # Only run on our source/test/scripts/docs files - avoids external data baggage.
+        files: '^(src|tests|scripts|docs)/.*\\.py$'
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.19.1
     hooks:
       - id: mypy
+        files: '^(src|tests|scripts|docs)/.*\\.py$'
+  - repo: local
+    hooks:
+      - id: enforce-branch
+        name: Enforce branch naming convention
+        entry: python scripts/enforce_branch.py
+        language: python
+        stages: [commit]
+      - id: run-precommit-checks
+        name: Run pre-commit shared checks
+        entry: python scripts/ci/run_checks.py --profile precommit
+        language: python
+        stages: [commit]
+        pass_filenames: false

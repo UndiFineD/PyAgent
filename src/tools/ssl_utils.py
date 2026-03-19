@@ -41,7 +41,7 @@ def main(args: list[str] | None = None) -> int:
     parsed = parser.parse_args(args=args)
 
     try:
-        ctx = _read_pem_cert(parsed.cert)
+        _read_pem_cert(parsed.cert)
         # can't parse expiration easily without cryptography; do basic check
         print(f"Loaded cert: {parsed.cert}")
         return 0

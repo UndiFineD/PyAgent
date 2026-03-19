@@ -5,13 +5,13 @@ Each tool module should register itself by calling `register_tool()` at import t
 This enables a single CLI entrypoint to enumerate and execute tools.
 
 Example:
-
     from src.tools.tool_registry import register_tool
 
     def main(args: list[str] | None = None) -> int:
         ...
 
     register_tool("git-utils", main, "Git/GitHub helper utilities")
+
 """
 
 from __future__ import annotations
@@ -21,12 +21,13 @@ import inspect
 from dataclasses import dataclass
 from typing import Any, Callable, Coroutine, Dict, List, Optional, Union
 
-
 ToolMain = Callable[[list[str] | None], Union[int, Coroutine[Any, Any, int]]]
 
 
 @dataclass(frozen=True)
 class Tool:
+    """A registered CLI tool."""
+
     name: str
     main: ToolMain
     description: str

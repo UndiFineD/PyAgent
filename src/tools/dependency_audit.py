@@ -51,7 +51,7 @@ def check_dependencies(project_root: str = ".") -> list[str]:
     if os.path.exists(reqs):
         try:
             with open(reqs, encoding="utf-8") as f:
-                lines = [l.strip() for l in f if l.strip() and not l.startswith("#")]
+                lines = [line.strip() for line in f if line.strip() and not line.startswith("#")]
             issues.append(f"requirements.txt entries: {len(lines)}")
         except Exception as e:
             issues.append(f"Failed to read requirements.txt: {e}")
