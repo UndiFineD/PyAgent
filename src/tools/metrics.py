@@ -29,25 +29,28 @@ except ImportError:  # pragma: no cover
 
 def collect_metrics(root: str) -> dict[str, int]:
     """Collect code metrics for the repository."""
-    metrics: dict[str, int] = {
-        "py_files": 0,
-        "lines": 0,
-        "blank_lines": 0,
-        "comment_lines": 0,
-    }
+    py_paths = list(pathlib.Path(root).rglob("*.py"))
 
-    for path in pathlib.Path(root).rglob("*.py"):
-        metrics["py_files"] += 1
+    def _counts_for_file(path: pathlib.Path) -> tuple[int, int, int]:
+        """Count total, blank, and comment lines for a single file."""
         with open(path, encoding="utf-8", errors="ignore") as f:
-            for line in f:
-                metrics["lines"] += 1
-                stripped = line.strip()
-                if not stripped:
-                    metrics["blank_lines"] += 1
-                elif stripped.startswith("#"):
-                    metrics["comment_lines"] += 1
+            lines = [l for l in f]
+        total = len(lines)
+        blank = sum(1 for line in lines if not line.strip())
+        comment = sum(1 for line in lines if line.strip().startswith("#"))
+        return total, blank, comment
 
-    return metrics
+    counts = list(map(_counts_for_file, py_paths))
+    total_lines = sum(c[0] for c in counts)
+    blank_lines = sum(c[1] for c in counts)
+    comment_lines = sum(c[2] for c in counts)
+
+    return {
+        "py_files": len(py_paths),
+        "lines": total_lines,
+        "blank_lines": blank_lines,
+        "comment_lines": comment_lines,
+    }
 
 
 def main(args: list[str] | None = None) -> int:
@@ -64,8 +67,7 @@ def main(args: list[str] | None = None) -> int:
 
         print(json.dumps(metrics, indent=2))
     else:
-        for k, v in sorted(metrics.items()):
-            print(f"{k}: {v}")
+        print("\n".join(f"{k}: {v}" for k, v in sorted(metrics.items())))
 
     return 0
 

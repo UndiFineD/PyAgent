@@ -22,22 +22,35 @@ from __future__ import annotations
 
 import pkgutil
 import runpy
+import sys
+from pathlib import Path
 
-import src.tools
+import pytest
 
 
+@pytest.mark.filterwarnings(
+    "ignore:'.*' found in sys\\.modules after import of package 'src\\.tools', but prior to execution:RuntimeWarning"
+)
 def test_tools_main_blocks() -> None:
     """Iterate through every module under src.tools (excluding subpackages).
 
     and execute it as a script.  The modules are simple placeholders and
     their `main()` functions simply print a message, so running them is safe.
     """
-    pkgpath = src.tools.__path__[0]
-    for _finder, modname, ispkg in pkgutil.iter_modules([pkgpath]):
+    # Avoid importing src.tools (and its submodules) to prevent warnings about
+    # partially-imported modules during runpy execution.
+    pkgpath = Path(__file__).resolve().parents[1] / "src" / "tools"
+    for _finder, modname, ispkg in pkgutil.iter_modules([str(pkgpath)]):
         if ispkg:
             # skip the pm subpackage and any others
             continue
         fullname = f"src.tools.{modname}"
+
+        # Ensure a clean import state to avoid runpy warnings about partially-
+        # imported modules.
+        sys.modules.pop(fullname, None)
+        sys.modules.pop("src.tools", None)
+
         try:
             runpy.run_module(fullname, run_name="__main__")
         except SystemExit:

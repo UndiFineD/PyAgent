@@ -27,17 +27,26 @@ except ImportError:  # pragma: no cover
 
 def _check_py_syntax(root: str) -> dict[str, str]:
     """Check Python syntax for all .py files in the given root directory."""
-    issues: dict[str, str] = {}
-    for dirpath, _, filenames in os.walk(root):
-        for fn in filenames:
-            if fn.endswith(".py"):
-                path = os.path.join(dirpath, fn)
-                try:
-                    with open(path, encoding="utf-8") as f:
-                        ast.parse(f.read(), filename=path)
-                except Exception as e:
-                    issues[path] = str(e)
-    return issues
+
+    def _check_file(path: str) -> tuple[str, str] | None:
+        """Check syntax for a single Python file. Returns (path, error)
+        if there's a syntax error, otherwise None.
+        """
+        try:
+            with open(path, encoding="utf-8") as f:
+                ast.parse(f.read(), filename=path)
+            return None
+        except Exception as e:
+            return path, str(e)
+
+    paths = (
+        os.path.join(dirpath, fn)
+        for dirpath, _, filenames in os.walk(root)
+        for fn in filenames
+        if fn.endswith(".py")
+    )
+    issues_list = list(filter(None, map(_check_file, paths)))
+    return dict(issues_list)
 
 
 def detect_misconfig(root: str = ".") -> dict[str, str]:
@@ -60,8 +69,7 @@ def main(args: list[str] | None = None) -> int:
         return 0
 
     print("Syntax issues detected:")
-    for path, err in issues.items():
-        print(f" - {path}: {err}")
+    print("\n".join(f" - {path}: {err}" for path, err in issues.items()))
     return 1
 
 

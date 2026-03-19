@@ -56,4 +56,4 @@ register_tool("nettest", main, "Test TCP connectivity to a host/port")
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(asyncio.run(main()))

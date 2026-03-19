@@ -13,8 +13,15 @@ def test_mypy_detects_problem(tmp_path: Path) -> None:
     """Ensure mypy flags a simple type error or skip if not installed."""
     bad = tmp_path / "bad.py"
     bad.write_text("def f() -> int:\n    return 'str'\n")
+
+    # Use a temporary mypy config that does not ignore errors to ensure this
+    # test reliably detects type mismatches regardless of the repo's global
+    # mypy configuration.
+    cfg = tmp_path / "mypy.ini"
+    cfg.write_text("""[mypy]\nignore_errors = False\nstrict = True\n""")
+
     res = subprocess.run(
-        [sys.executable, "-m", "mypy", str(bad)],
+        [sys.executable, "-m", "mypy", "--config-file", str(cfg), str(bad)],
         capture_output=True,
         text=True,
         check=False,

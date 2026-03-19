@@ -72,8 +72,7 @@ def main(args: list[str] | None = None) -> int:
     if parsed.json:
         print(json.dumps({"issues": issues}, indent=2))
     else:
-        for issue in issues:
-            print(issue)
+        print("\n".join(issues))
 
     return 0
 

@@ -18,10 +18,16 @@ from __future__ import annotations
 import asyncio
 import importlib
 import logging
+import threading
 from collections.abc import Awaitable, Callable
 from typing import Any
 
 _EXTENSION: object | None = None
+
+# Background loop used when no running asyncio loop is available.
+_background_loop: asyncio.AbstractEventLoop | None = None
+_background_thread: threading.Thread | None = None
+_background_loop_started: threading.Event | None = None
 
 
 class _PythonRuntimeExtension:
@@ -78,6 +84,33 @@ def _get_extension() -> object:
     return _EXTENSION
 
 
+def _ensure_background_loop() -> asyncio.AbstractEventLoop:
+    """Ensure an asyncio event loop is running in a dedicated background thread."""
+    global _background_loop, _background_thread, _background_loop_started
+    if _background_loop and _background_loop.is_running():
+        return _background_loop
+
+    # Create a fresh loop in a daemon thread.
+    loop = asyncio.new_event_loop()
+    started = threading.Event()
+
+    def _run_loop() -> None:
+        asyncio.set_event_loop(loop)
+        started.set()
+        loop.run_forever()
+
+    thread = threading.Thread(target=_run_loop, daemon=True, name="runtime_py_loop")
+    thread.start()
+
+    # Wait for the loop thread to start.
+    started.wait(timeout=1.0)
+
+    _background_loop = loop
+    _background_thread = thread
+    _background_loop_started = started
+    return loop
+
+
 def sleep(ms: float) -> asyncio.Future[None]:
     """Awaitable that completes after *ms* milliseconds."""
     loop = asyncio.get_event_loop()
@@ -121,17 +154,58 @@ def spawn(coro: Any) -> None:
     This wrapper exists so user code can treat the runtime as a drop-in
     replacement for ``asyncio.create_task`` while preserving the global
     event loop semantics.
+
+    If there is no running event loop (e.g. in synchronous tests), we fall
+    back to a dedicated background loop to avoid leaking un-awaited coroutines.
     """
 
+    # If we're running inside an asyncio loop, let the runtime extension
+    # handle scheduling. This keeps behavior consistent with a normal task.
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        # No running loop in this thread; fall back to background loop.
+        pass
+    else:
+        try:
+            _get_extension().spawn_task(coro)  # type: ignore
+            return
+        except Exception:
+            # If the extension fails, fall through to the background loop.
+            pass
+
+    # Background loop fallback: schedule the coroutine on a dedicated loop.
     async def _wrapper() -> None:
         try:
             await coro
         except Exception:  # noqa: E722
-            logger = _get_extension().logger  # type: ignore
+            try:
+                logger = _get_extension().logger  # type: ignore
+            except Exception:
+                import logging
+
+                logger = logging.getLogger("runtime_py")
             logger.exception("runtime task failed")
 
-    ext = _get_extension()
-    ext.spawn_task(_wrapper())  # type: ignore
+    wrapped = _wrapper()
+
+    bg_loop = _ensure_background_loop()
+    try:
+        future = asyncio.run_coroutine_threadsafe(wrapped, bg_loop)
+    except Exception:
+        # If scheduling fails, close the coroutine to avoid warnings.
+        try:
+            wrapped.close()  # type: ignore[attr-defined]
+        except Exception:
+            pass
+        return
+
+    # If the future is already done/cancelled, ensure we close the wrapper.
+    if future.cancelled():
+        try:
+            wrapped.close()  # type: ignore[attr-defined]
+        except Exception:
+            pass
 
 
 def on(event: str, handler: object) -> None:

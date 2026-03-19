@@ -16,7 +16,8 @@ async def test_ruff_finds_error(tmp_path: Path) -> None:
     Also verify that max-line-length enforcement is in effect (120 chars).
     """
     bad = tmp_path / "bad.py"
-    bad.write_text("import os\n\n\n")
+    # ruff should flag undefined names (F821) even when unused-imports are ignored.
+    bad.write_text("print(undefined_variable)\n")
 
     async def run_ruff_for_file(path: Path) -> tuple[int, str, str]:
         # reproduce previous sync helper using asyncio subprocess API

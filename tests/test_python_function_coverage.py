@@ -16,9 +16,14 @@ import inspect
 from pathlib import Path
 from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple
 
-
 ROOT = Path(__file__).resolve().parents[1]
 SRC_ROOT = ROOT / "src"
+
+# Ensure that `src/` is on sys.path so imports like `core.*` work when running tests.
+import sys
+
+sys.path.insert(0, str(ROOT))
+
 MAX_FUNCTIONS = 200  # limit to keep runtime reasonable
 
 
@@ -58,7 +63,7 @@ def _extract_functions_from_ast(source: str) -> List[Tuple[str, int]]:
 
 
 def _gen_call_args(func_name: str, required: int) -> List[Tuple[Any, ...]]:
-    """Generate plausible argument tuples for a function 
+    """Generate plausible argument tuples for a function
     based on its name and number of required arguments.
     """
     base = func_name.lower()
@@ -82,10 +87,10 @@ def _gen_call_args(func_name: str, required: int) -> List[Tuple[Any, ...]]:
 
     # generic fallbacks
     if not cases:
-        # Prefer passing an empty list for 0-argument functions to avoid argparse
-        # consuming pytest CLI args (e.g., -k, -q) when a function reads sys.argv.
+        # For 0-arg functions we prefer to call with no args; passing a dummy
+        # argument frequently causes TypeError and masks real failures.
         if required == 0:
-            cases.append(([],))
+            cases.append(())
         elif required == 1:
             cases.append(("test",))
         elif required == 2:
@@ -105,29 +110,41 @@ def _gen_call_args(func_name: str, required: int) -> List[Tuple[Any, ...]]:
 
 
 def _safe_call(func: Any, args: Tuple[Any, ...]) -> Tuple[bool, str]:
-    """Safely call a function with the given arguments 
+    """Safely call a function with the given arguments
     and return a tuple indicating success and a message.
     """
     if not callable(func):
         return False, "not callable"
+
+    result: Any = None
     try:
         result = func(*args)
 
         # If function returns a coroutine, run it to completion.
         if inspect.isawaitable(result):
-            asyncio.run(result)
+            try:
+                asyncio.run(result)
+            except RuntimeError:
+                # If an event loop is already running, close the coroutine to
+                # avoid "coroutine was never awaited" warnings.
+                if inspect.iscoroutine(result):
+                    result.close()  # type: ignore[attr-defined]
+                raise
 
         return True, f"returned {type(result).__name__}"
     except SystemExit as e:
         # Common when calling argparse-based entrypoints without required args.
         return True, f"SystemExit({e.code})"
     except Exception as e:
+        if inspect.iscoroutine(result):
+            result.close()  # type: ignore[attr-defined]
         return False, f"raised {type(e).__name__}: {e}"
 
 
 def test_exercise_python_functions() -> None:
     """Try to import and call many functions across the python codebase."""
     executed = 0
+    succeeded = 0
     failures: Dict[str, str] = {}
     import_errors: Dict[str, str] = {}
 
@@ -140,7 +157,6 @@ def test_exercise_python_functions() -> None:
         try:
             module = __import__(mod_name, fromlist=["*"])
         except Exception as e:
-            # If a module cannot import, record and continue.
             msg = f"ImportError: {e}"
             print(f"  [IMPORT ERROR] {mod_name}: {msg}")
             import_errors[mod_name] = msg
@@ -158,10 +174,11 @@ def test_exercise_python_functions() -> None:
             for args in _gen_call_args(fn_name, required):
                 ok, msg = _safe_call(func_obj, args)
                 executed += 1
-                if not ok:
+                if ok:
+                    succeeded += 1
+                else:
                     failures[f"{mod_name}.{fn_name}({args})"] = msg
                     print(f"    [FAIL] {mod_name}.{fn_name}({args}) -> {msg}")
-                # stop after enough coverage
                 if executed >= MAX_FUNCTIONS:
                     break
             if executed >= MAX_FUNCTIONS:
@@ -170,10 +187,45 @@ def test_exercise_python_functions() -> None:
             break
 
     print(f"\nSummary: executed {executed} function calls")
+    print(f"          successful calls: {succeeded}")
     print(f"          import errors: {len(import_errors)}")
     print(f"          failing calls: {len(failures)}")
 
-    assert executed > 0, "No functions were exercised"
-    # This is intentionally lenient: we only fail if *all* calls fail.
-    if len(failures) == executed:
-        raise AssertionError(f"All attempted function calls failed: {failures}")
+    # Fail only if nothing succeeded (to avoid noise from partial failures)
+    if executed == 0 or succeeded == 0:
+        raise AssertionError("No successful function calls were executed (check logs for details)")
+
+    # Still emit warnings in CI output, but do not fail the test if some calls fail.
+    if failures or import_errors:
+        def _format_map(m: Dict[str, str], limit: int = 10) -> str:
+            items = list(m.items())
+            lines = [f"  - {k}: {v}" for k, v in items[:limit]]
+            if len(items) > limit:
+                lines.append(f"  ... and {len(items) - limit} more")
+            return "\n".join(lines)
+
+        msg_lines = [
+            f"Found {len(import_errors)} import errors and {len(failures)} failing function calls.",
+        ]
+        if import_errors:
+            msg_lines.append("Import errors (sample):")
+            msg_lines.append(_format_map(import_errors))
+        if failures:
+            msg_lines.append("Failing function calls (sample):")
+            msg_lines.append(_format_map(failures))
+
+        print("\n".join(msg_lines))
+
+
+def main() -> int:
+    """Standalone entrypoint for local debugging and CI reruns."""
+    try:
+        test_exercise_python_functions()
+        return 0
+    except AssertionError as e:
+        print(str(e))
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

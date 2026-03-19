@@ -31,8 +31,7 @@ def main(argv: list[str] | None = None) -> int:
 
     if not parsed.tool:
         print("Available tools:")
-        for tool in list_tools():
-            print(f"  {tool.name:20}  {tool.description}")
+        print("\n".join(f"  {tool.name:20}  {tool.description}" for tool in list_tools()))
         return 0
 
     try:

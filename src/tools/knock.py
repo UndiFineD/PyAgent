@@ -35,17 +35,18 @@ def main(args: list[str] | None = None) -> int:
 
     parsed = parser.parse_args(args=args)
 
-    for port in parsed.ports:
+    def _check_port(port: int) -> str:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(parsed.timeout)
         try:
             sock.connect((parsed.host, port))
-            print(f"{parsed.host}:{port} -> OPEN")
+            return f"{parsed.host}:{port} -> OPEN"
         except Exception:
-            print(f"{parsed.host}:{port} -> CLOSED")
+            return f"{parsed.host}:{port} -> CLOSED"
         finally:
             sock.close()
 
+    print("\n".join(map(_check_port, parsed.ports)))
     return 0
 
 

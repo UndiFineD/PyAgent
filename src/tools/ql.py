@@ -132,10 +132,10 @@ def _render_markdown_report(
         "## Scan Scope",
         "| File | Scan type | Tool |",
         "|---|---|---|",
+    ] + [
+        f"| {f} | {('CodeQL + Code quality' if f.endswith('.py') else 'CodeQL')} | code_quality + codeql |"
+        for f in changed_files
     ]
-    for f in changed_files:
-        scan = "CodeQL + Code quality" if f.endswith(".py") else "CodeQL" if f.endswith(".rs") else "CodeQL"
-        scope.append(f"| {f} | {scan} | code_quality + codeql |")
 
     summary = [
         "## Summary",
@@ -176,6 +176,7 @@ def main(args: list[str] | None = None) -> int:
     """Main entry point for the `ql` tool."""
     parser = argparse.ArgumentParser(prog="ql")
     parser.add_argument("--base", default="main", help="Base branch to compare changes against")
+    parser.add_argument("--files", nargs="*", help="Explicit list of files to scan (overrides git diff)")
     parser.add_argument("--project", help="Project folder name under docs/project")
     parser.add_argument(
         "--output",
@@ -217,14 +218,11 @@ def main(args: list[str] | None = None) -> int:
     codeql_log = ""
     if not parsed.skip_codeql and shutil.which("codeql"):
         codeql_enabled = True
-        langs = set()
-        for f in changed_files:
-            if f.endswith(".py"):
-                langs.add("python")
-            elif f.endswith(".rs"):
-                langs.add("rust")
-            elif f.endswith(".js") or f.endswith(".ts"):
-                langs.add("javascript-typescript")
+        langs = (
+            {"python" for f in changed_files if f.endswith(".py")} | 
+            {"rust" for f in changed_files if f.endswith(".rs")} | 
+            {"javascript-typescript" for f in changed_files if f.endswith(".js") or f.endswith(".ts")}
+        )
         if not langs:
             codeql_log = "No supported CodeQL languages detected in changed files. Skipping CodeQL."
         else:
@@ -246,8 +244,7 @@ def main(args: list[str] | None = None) -> int:
                 ]
                 # Limit the database to the changed files when possible to avoid scanning legacy/broken files.
                 if changed_files:
-                    for f in changed_files:
-                        create_cmd.extend(["--include", f])
+                    create_cmd += [item for f in changed_files for item in ("--include", f)]
                 rc, out, err = _run_cmd(create_cmd, capture=True)
                 codeql_log += out + "\n" + err + "\n"
                 if rc != 0:

@@ -23,13 +23,20 @@ suite: ``spawn_task``, ``set_timeout``, ``create_queue``, and
 from __future__ import annotations
 
 import asyncio
+import inspect
 from collections.abc import Awaitable, Callable
 from typing import Any
 
 
 def spawn_task(py_coro: Awaitable[Any]) -> None:
     """Schedule a coroutine on the active asyncio event loop."""
-    asyncio.create_task(py_coro)
+    try:
+        asyncio.create_task(py_coro)
+    except Exception:
+        # Avoid leaving the coroutine un-awaited and emitting warnings.
+        if inspect.iscoroutine(py_coro):
+            py_coro.close()  # type: ignore[attr-defined]
+        raise
 
 
 def set_timeout(ms: float, callback: Callable[[], None]) -> None:

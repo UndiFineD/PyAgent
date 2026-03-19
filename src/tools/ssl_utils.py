@@ -27,12 +27,15 @@ except ImportError:  # pragma: no cover
     from tools.tool_registry import register_tool
 
 
-# Function and surrounding blank lines are removed entirely    ctx = ssl.create_default_context()
+def _read_pem_cert(path: str) -> ssl.SSLContext:
+    """Load a PEM certificate file as a trust root into an SSL context."""
+    ctx = ssl.create_default_context()
     ctx.load_verify_locations(cafile=path)
     return ctx
 
 
 def main(args: list[str] | None = None) -> int:
+    """Main entry point for the ssl_utils tool."""
     parser = argparse.ArgumentParser(prog="ssl_utils")
     parser.add_argument("cert", help="Path to PEM-encoded certificate")
     parsed = parser.parse_args(args=args)
