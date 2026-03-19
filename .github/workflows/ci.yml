@@ -10,7 +10,7 @@ on:
     branches: [main]
 
 jobs:
-  check:
+  test:
     name: Run CI checks
     runs-on: ubuntu-latest
 
@@ -23,4 +23,7 @@ jobs:
 
       - name: Install dependencies
         run: pip install --prefer-binary -r requirements-ci.txt
+
+      - name: Run tests
+        run: pytest -q
 
