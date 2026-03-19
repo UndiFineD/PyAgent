@@ -19,6 +19,7 @@
 /// The module is organized into sub-modules for different functional areas,
 /// such as security, hardware, config parsing, etc.
 // clippy is not a solution, it is suppressing warnings and errors that need fixes.
+use dotenvy::dotenv;
 use pyo3::prelude::*;
 
 mod agents;
@@ -66,6 +67,10 @@ mod infrastructure {
 /// A Python module implemented in Rust.
 #[pymodule]
 fn rust_core(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    // Load environment variables from a `.env` file (if present) so the runtime
+    // can be configured via env vars without requiring explicit setup.
+    let _ = dotenv();
+
     // Register each sub-module's functions/classes
     agents::register(m)?;
     base::register(m)?;
