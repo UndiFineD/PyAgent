@@ -23,3 +23,6 @@ _No checkbox tasks found in the plan file._
   - `rust_core\src\memory.rs`
   - `src\core\memory.py`
   - `src\MemoryTransactionManager.py`
+  - `tests\test_memory.py`
+  - `tests\test_memory_package.py`
+  - `tests\test_shared_memory_python.py`

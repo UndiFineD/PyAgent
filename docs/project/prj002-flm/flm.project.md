@@ -9,19 +9,22 @@
 
 ## Tasks
 
-- [x] Define goal, success criteria, and implementation plan.
-- [x] Implement FLM provider configuration and validation.
-- [x] Implement OpenAI-compatible chat adapter for Fastflow.
-- [x] Implement deterministic tool-call loop with loop guard.
-- [x] Add tests for configuration, adapter, tool loop, and error handling.
-- [x] Ensure CI validates FLM behavior via pre-commit and `ci.yml`.
+_No checkbox tasks found in the plan file._
 
 ## Status
 
-6 of 6 tasks completed
+0 of 0 tasks completed
 
 ## Code detection
 
 - Code detected in:
   - `src\core\providers\FlmChatAdapter.py`
   - `src\core\providers\FlmProviderConfig.py`
+  - `tests\test_core_providers_FlmChatAdapter.py`
+  - `tests\test_core_providers_FlmProviderConfig.py`
+  - `tests\test_flm_chat_adapter.py`
+  - `tests\test_flm_provider_config.py`
+  - `tests\test_flm_provider_docs.py`
+  - `tests\test_flm_runtime_errors.py`
+  - `tests\test_flm_tool_loop.py`
+  - `tests\test_providers_flm.py`

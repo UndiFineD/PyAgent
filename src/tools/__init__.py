@@ -11,8 +11,6 @@ from __future__ import annotations
 
 import importlib
 import pkgutil
-import sys
-from pathlib import Path
 
 # Import all modules in this package so they can register themselves.
 # This avoids requiring users to explicitly import each tool module.

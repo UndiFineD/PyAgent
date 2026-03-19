@@ -17,5 +17,8 @@ _No checkbox tasks found in the plan file._
 
 ## Code detection
 
-- No obvious implementation files found in `src/`, `rust_core/src/`, or repository root.
-  (This is a heuristic; adjust project topic naming if needed.)
+- Code detected in:
+  - `scripts\generate_project_dashboard.py`
+  - `scripts\setup_governance.py`
+  - `scripts\validate_project_implementation.py`
+  - `tests\structure\test_governance_creation.py`

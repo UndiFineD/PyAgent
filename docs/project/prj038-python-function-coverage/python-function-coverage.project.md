@@ -20,5 +20,8 @@
 
 ## Code detection
 
-- No obvious implementation files found in `src/`, `rust_core/src/`, or repository root.
-  (This is a heuristic; adjust project topic naming if needed.)
+- Code detected in:
+  - `tests\structure\test_coverage_option.py`
+  - `tests\test_coverage_meta.py`
+  - `tests\test_python_function_coverage.py`
+  - `tests\test_shared_memory_python.py`

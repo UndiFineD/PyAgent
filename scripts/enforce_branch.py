@@ -13,10 +13,10 @@ from __future__ import annotations
 
 import re
 import subprocess
-import sys
 
 
 def get_current_branch() -> str:
+    """Get the name of the current git branch using `git rev-parse --abrev-ref HEAD`."""
     result = subprocess.run(
         ["git", "rev-parse", "--abbrev-ref", "HEAD"],
         capture_output=True,
@@ -27,6 +27,7 @@ def get_current_branch() -> str:
 
 
 def main() -> int:
+    """Main entry point for the branch naming enforcement script."""
     branch = get_current_branch()
 
     allowed = {"main", "master", "dev", "develop"}

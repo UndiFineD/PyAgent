@@ -17,9 +17,7 @@
 from __future__ import annotations
 
 import argparse
-import os
 import pathlib
-import sys
 
 try:
     from src.tools.tool_registry import register_tool

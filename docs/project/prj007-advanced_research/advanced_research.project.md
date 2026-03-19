@@ -19,3 +19,4 @@ _No checkbox tasks found in the plan file._
 
 - Code detected in:
   - `rust_core\src\agents\research.rs`
+  - `tests\test_research_packages.py`

@@ -9,13 +9,27 @@
 
 ## Tasks
 
-_No checkbox tasks found in the plan file._
+- [x] Add `scripts/consolidate_llm_context.py` CLI tool with dry-run default and `--apply`.
+- [x] Generate deterministic `llms.txt`, `llms-architecture.txt`, and `llms-improvements.txt`.
+- [x] Discover source markdown from `docs/architecture/**/*.md`, `**/*.description.md`, and `**/*.improvements.md`.
+- [x] Add optional module docstring migration via `--migrate-docstrings`.
+- [x] Produce `consolidation_report.txt` with counts + source/output details.
+- [x] Add full test suite ensuring determinism, idempotence, and safe cleanup.
 
 ## Status
 
-0 of 0 tasks completed
+6 of 6 tasks completed
 
 ## Code detection
 
-- No obvious implementation files found in `src/`, `rust_core/src/`, or repository root.
-  (This is a heuristic; adjust project topic naming if needed.)
+- Code detected in:
+  - `scripts\consolidate_llm_context.py`
+  - `scripts\generate_llms_architecture.py`
+  - `tests\integration\test_context_and_skills.py`
+  - `tests\test_consolidate_llm_context_cleanup_report.py`
+  - `tests\test_consolidate_llm_context_cli.py`
+  - `tests\test_consolidate_llm_context_docstrings.py`
+  - `tests\test_consolidate_llm_context_integration.py`
+  - `tests\test_consolidate_llm_context_outputs.py`
+  - `tests\test_context_components.py`
+  - `tests\test_context_manager.py`

@@ -21,3 +21,9 @@ _No checkbox tasks found in the plan file._
   - `rust_core\src\base\autonomy.rs`
   - `rust_core\src\inference\tools.rs`
   - `src\chat\mcp_tools.py`
+  - `tests\structure\test_design_doc.py`
+  - `tests\structure\test_dev_tools_dirs.py`
+  - `tests\test_tools_sanity.py`
+  - `tests\tools\test_tools_cli.py`
+  - `tests\tools\test_tools_docs.py`
+  - `tests\tools\test_tools_registry.py`

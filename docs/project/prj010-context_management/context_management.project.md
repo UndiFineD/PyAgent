@@ -5,7 +5,7 @@
 ## Links
 
 - Plan: `plan.md`
-- Design: **MISSING** (`brainstorm.md`)
+- Design: `brainstorm.md`
 
 ## Tasks
 
@@ -17,9 +17,13 @@ _No checkbox tasks found in the plan file._
 
 ## Code detection
 
-- No obvious implementation files found in `src/`, `rust_core/src/`, or repository root.
-  (This is a heuristic; adjust project topic naming if needed.)
-
-## Missing design
-
-Design file not found: `brainstorm.md`
+- Code detected in:
+  - `scripts\consolidate_llm_context.py`
+  - `tests\integration\test_context_and_skills.py`
+  - `tests\test_consolidate_llm_context_cleanup_report.py`
+  - `tests\test_consolidate_llm_context_cli.py`
+  - `tests\test_consolidate_llm_context_docstrings.py`
+  - `tests\test_consolidate_llm_context_integration.py`
+  - `tests\test_consolidate_llm_context_outputs.py`
+  - `tests\test_context_components.py`
+  - `tests\test_context_manager.py`

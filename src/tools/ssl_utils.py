@@ -19,7 +19,6 @@ from __future__ import annotations
 import argparse
 import ssl
 import sys
-from datetime import datetime
 
 try:
     from src.tools.tool_registry import register_tool

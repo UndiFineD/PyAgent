@@ -1,6 +1,6 @@
-# llm-ui-backend-worker
+# context-manager
 
-**Project ID:** `prj029-llm-ui-backend-worker`
+**Project ID:** `prj034-context-manager`
 
 ## Links
 
@@ -9,24 +9,25 @@
 
 ## Tasks
 
-_No checkbox tasks found in the plan file._
+- [ ] Add plan details
 
 ## Status
 
-0 of 0 tasks completed
+0 of 1 tasks completed
 
 ## Code detection
 
 - Code detected in:
-  - `rust_core\src\transport\channel\quic.rs`
   - `scripts\consolidate_llm_context.py`
-  - `scripts\generate_llms_architecture.py`
-  - `tests\test_backend_models.py`
+  - `src\core\agent_state_manager.py`
+  - `src\MemoryTransactionManager.py`
+  - `tests\integration\test_context_and_skills.py`
   - `tests\test_backend_session_manager.py`
-  - `tests\test_backend_worker.py`
-  - `tests\test_backend_ws_handler.py`
   - `tests\test_consolidate_llm_context_cleanup_report.py`
   - `tests\test_consolidate_llm_context_cli.py`
   - `tests\test_consolidate_llm_context_docstrings.py`
   - `tests\test_consolidate_llm_context_integration.py`
   - `tests\test_consolidate_llm_context_outputs.py`
+  - `tests\test_context_components.py`
+  - `tests\test_context_manager.py`
+  - `tests\test_core_agent_state_manager.py`

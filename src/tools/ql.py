@@ -28,13 +28,12 @@ from __future__ import annotations
 
 import argparse
 import datetime
-import os
 import shutil
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
-from typing import Iterable, List, Optional, Tuple
+from typing import List, Optional, Tuple
 
 from src.tools.tool_registry import register_tool
 

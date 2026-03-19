@@ -19,3 +19,8 @@ _No checkbox tasks found in the plan file._
 
 - Code detected in:
   - `src\github_app.py`
+  - `tests\runtime\test_runtime_import.py`
+  - `tests\test_github_app.py`
+  - `tests\test_import_config.py`
+  - `tests\test_importer_config.py`
+  - `tests\test_importer_flow.py`

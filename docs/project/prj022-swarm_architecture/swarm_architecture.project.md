@@ -17,5 +17,5 @@ _No checkbox tasks found in the plan file._
 
 ## Code detection
 
-- No obvious implementation files found in `src/`, `rust_core/src/`, or repository root.
-  (This is a heuristic; adjust project topic naming if needed.)
+- Code detected in:
+  - `scripts\generate_llms_architecture.py`

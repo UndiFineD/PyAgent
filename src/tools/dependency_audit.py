@@ -18,7 +18,6 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import sys
 
 try:
     import tomllib  # type: ignore
@@ -62,6 +61,7 @@ def check_dependencies(project_root: str = ".") -> list[str]:
 
 
 def main(args: list[str] | None = None) -> int:
+    """Main entry point for the dependency audit tool."""
     parser = argparse.ArgumentParser(prog="dependency_audit")
     parser.add_argument("--root", default=".", help="Project root directory")
     parser.add_argument("--json", action="store_true", help="Output results as JSON")

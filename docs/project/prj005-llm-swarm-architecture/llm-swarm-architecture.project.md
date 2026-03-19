@@ -17,5 +17,11 @@ _No checkbox tasks found in the plan file._
 
 ## Code detection
 
-- No obvious implementation files found in `src/`, `rust_core/src/`, or repository root.
-  (This is a heuristic; adjust project topic naming if needed.)
+- Code detected in:
+  - `scripts\consolidate_llm_context.py`
+  - `scripts\generate_llms_architecture.py`
+  - `tests\test_consolidate_llm_context_cleanup_report.py`
+  - `tests\test_consolidate_llm_context_cli.py`
+  - `tests\test_consolidate_llm_context_docstrings.py`
+  - `tests\test_consolidate_llm_context_integration.py`
+  - `tests\test_consolidate_llm_context_outputs.py`

@@ -1,78 +1,140 @@
 #!/usr/bin/env python3
-"""Legacy compatibility wrapper for project dashboard generation.
+"""Generate project folders and a dashboard from agent-based project plans.
 
-This script exists for users/scripts that expect `scripts/generate_project_dashboard.py`.
-It delegates to the modern `scripts/generate_project_dashboard_v2.py` implementation.
+This generator creates/updates `docs/project/prjNNN-*/` project artifacts based on
+local `plan.md` and `brainstorm.md` files, and produces a central `PROJECT_DASHBOARD.md`.
+
+It improves implementation detection by searching common repo locations and
+matching multiple token variants, while avoiding duplicated code detection logic.
 """
 
 from __future__ import annotations
-import subprocess
-import sys
+
+import re
+from datetime import datetime, timezone
 from pathlib import Path
+from typing import List, Set
 
-if __name__ == "__main__":
-    script = Path(__file__).with_name("generate_project_dashboard_v2.py")
-    subprocess.run([sys.executable, str(script)], check=True)
+RE_PLAN = re.compile(
+    r"^(?P<date>\d{4}-\d{2}-\d{2})-(?P<topic>.+?)(?:-plan|-implementation-plan|_plan)$"
+)
 
+ROOT = Path(__file__).resolve().parents[1]
+PROJECTS_ROOT = ROOT / "docs" / "project"
+
+# The generator now uses the agent-based project tracking system rooted in docs/project.
+# Each project folder (prjNNN-*) should contain a `plan.md` and optionally `brainstorm.md`.
+OUT_ROOT = PROJECTS_ROOT
 OUT_ROOT.mkdir(parents=True, exist_ok=True)
 
-plan_files = sorted(PLAN_DIR.glob("*.md"))
+
+def _normalize_topic_key(topic: str) -> str:
+    """Normalize a topic string into a stable file-system friendly key."""
+
+    key = re.sub(r"\s+", "-", topic.strip())
+    key = re.sub(r"[^a-zA-Z0-9_-]", "", key)
+    return key
+
+
+def _code_search_candidates(topic_key: str) -> Set[str]:
+    """Generate a set of search tokens used to detect implementation files."""
+
+    snake = topic_key.replace("-", "_")
+    parts = re.split(r"[-_]+", topic_key)
+
+    candidates: Set[str] = {topic_key, snake}
+    candidates.update(parts)
+
+    # Common two-word variants like "async-runtime" -> "async_runtime".
+    if len(parts) > 1:
+        candidates.add("-".join(parts[:2]))
+        candidates.add("_".join(parts[:2]))
+
+    return {c for c in candidates if c}
+
+
+def _find_code_files(topic_key: str) -> List[Path]:
+    """Return a list of repository paths that appear to implement a given topic."""
+
+    candidates = _code_search_candidates(topic_key)
+
+    # Common locations where work is often found.
+    search_dirs = [ROOT, ROOT / "scripts", ROOT / "tests"]
+    extensions = [".py", ".pyi", ".rs"]
+
+    matches: Set[Path] = set()
+
+    # Exact file matches (fast path for straightforward topic names).
+    for base in search_dirs:
+        if not base.exists():
+            continue
+        for cand in candidates:
+            for ext in extensions:
+                p = base / f"{cand}{ext}"
+                if p.exists():
+                    matches.add(p.relative_to(ROOT))
+
+    # Fallback: scan key source trees for file names containing a candidate token.
+    # Including scripts/tests so implementation can be found even if it doesn't match
+    # the exact topic name (e.g., `consolidate_llm_context.py` for project
+    # `llm-context-consolidation`).
+    for tree in [ROOT / "scripts", ROOT / "tests", ROOT / "src", ROOT / "rust_core" / "src"]:
+        if not tree.exists():
+            continue
+        for ext in extensions:
+            for p in tree.rglob(f"*{ext}"):
+                name = p.stem.lower()
+                if any(cand.lower() in name for cand in candidates):
+                    matches.add(p.relative_to(ROOT))
+
+    return sorted(matches)
+
+
 projects = []
 
-for idx, plan in enumerate(plan_files, start=1):
-    base = plan.stem
-    m = RE_PLAN.match(base)
-    if m:
-        date = m.group("date")
-        topic = m.group("topic")
-    else:
-        date = ""
-        topic = re.sub(r"^\d{4}-\d{2}-\d{2}-", "", base)
-        topic = re.sub(r"(-plan|-implementation-plan|_plan)$", "", topic)
+# Each project lives under docs/project/prjNNN-<topic> and contains plan.md + optional brainstorm.md
+project_dirs = sorted(
+    d
+    for d in OUT_ROOT.iterdir()
+    if d.is_dir() and d.name.startswith("prj")
+)
 
-    topic_key = re.sub(r"\s+", "-", topic.strip())
-    topic_key = re.sub(r"[^a-zA-Z0-9_-]", "", topic_key)
+for prj_dir in project_dirs:
+    prj_id = prj_dir.name
+    topic_key = prj_id.split("-", 1)[1] if "-" in prj_id else prj_id
 
-    prj_id = f"prj{idx:03d}-{topic_key}"
-    prj_dir = OUT_ROOT / prj_id
-    prj_dir.mkdir(parents=True, exist_ok=True)
+    plan = prj_dir / "plan.md"
+    brainstorm = prj_dir / "brainstorm.md"
 
-    design_filename = f"{date}-{topic_key}-design.md" if date else f"{topic_key}-design.md"
-    design_path = BRAINSTORM_DIR / design_filename
-    design_exists = design_path.exists()
+    # Skip projects without a plan; they are not ready for the dashboard.
+    if not plan.exists():
+        continue
+
+    design_exists = brainstorm.exists()
 
     text = plan.read_text(encoding="utf-8")
     lines = [l.rstrip() for l in text.splitlines() if re.match(r"^[\s\-*]+\[[ xX]\]", l)]
     total = len(lines)
     done = len([l for l in lines if re.match(r"^[\s\-*]+\[\s*[xX]\s*\]", l)])
 
-    # Detect actual code presence (basic heuristic): look for matching module/file names.
-    snake = topic_key.replace("-", "_")
-    code_found = False
-    match_paths = []
-
-    src_root = ROOT / "src"
-    if src_root.exists():
-        for p in src_root.rglob(f"*{snake}*"):
-            if p.is_file() and p.suffix in {".py", ".pyi", ".rs"}:
-                code_found = True
-                match_paths.append(p.relative_to(ROOT))
-                break
-
-    rust_root = ROOT / "rust_core" / "src"
-    if not code_found and rust_root.exists():
-        for p in rust_root.rglob(f"*{snake}*.rs"):
-            code_found = True
-            match_paths.append(p.relative_to(ROOT))
-            break
+    match_paths = _find_code_files(topic_key)
+    code_found = bool(match_paths)
 
     out_file = prj_dir / f"{topic_key}.project.md"
-    out_lines = [f"# {topic_key}", "", f"**Project ID:** `{prj_id}`", "", "## Links", "", f"- Plan: `{plan.relative_to(ROOT)}`"]
+    out_lines = [
+        f"# {topic_key}",
+        "",
+        f"**Project ID:** `{prj_id}`",
+        "",
+        "## Links",
+        "",
+        f"- Plan: `plan.md`",
+    ]
 
     if design_exists:
-        out_lines.append(f"- Design: `{design_path.relative_to(ROOT)}`")
+        out_lines.append(f"- Design: `brainstorm.md`")
     else:
-        out_lines.append(f"- Design: **MISSING** (`{design_path.relative_to(ROOT)}`)")
+        out_lines.append(f"- Design: **MISSING** (`brainstorm.md`)")
 
     out_lines += ["", "## Tasks", ""]
     if total > 0:
@@ -82,58 +144,76 @@ for idx, plan in enumerate(plan_files, start=1):
 
     out_lines += ["", "## Status", "", f"{done} of {total} tasks completed"]
 
-    # Code presence detection
     out_lines += ["", "## Code detection", ""]
     if code_found:
         out_lines += ["- Code detected in:"]
         out_lines += [f"  - `{p}`" for p in match_paths]
     else:
-        out_lines += ["- No obvious implementation files found in `src/` or `rust_core/src/`."
-                      "  (This is a heuristic; adjust project topic naming if needed.)"]
+        out_lines += [
+            "- No obvious implementation files found in `src/`, `rust_core/src/`, or repository root.",
+            "  (This is a heuristic; adjust project topic naming if needed.)",
+        ]
 
     if not design_exists:
-        out_lines += ["", "## Missing design", "", f"Design file not found: `{design_path.relative_to(ROOT)}`"]
+        out_lines += [
+            "",
+            "## Missing design",
+            "",
+            "Design file not found: `brainstorm.md`",
+        ]
 
     out_file.write_text("\n".join(out_lines), encoding="utf-8")
 
-    # Detect actual code presence (basic heuristic): look for matching module/file names.
-    snake = topic_key.replace("-", "_")
-    code_found = False
-    match_paths = []
-
-    src_root = ROOT / "src"
-    if src_root.exists():
-        for p in src_root.rglob(f"*{snake}*"):
-            if p.is_file() and p.suffix in {".py", ".pyi", ".rs"}:
-                code_found = True
-                match_paths.append(p.relative_to(ROOT))
-                break
-
-    rust_root = ROOT / "rust_core" / "src"
-    if not code_found and rust_root.exists():
-        for p in rust_root.rglob(f"*{snake}*.rs"):
-            code_found = True
-            match_paths.append(p.relative_to(ROOT))
-            break
-
-    projects.append({
-        "ProjectId": prj_id,
-        "Topic": topic_key,
-        "Completed": done,
-        "Total": total,
-        "MissingDesign": not design_exists,
-        "CodeFound": code_found,
-        "CodeMatches": match_paths,
-    })
+    projects.append(
+        {
+            "ProjectId": prj_id,
+            "Topic": topic_key,
+            "Completed": done,
+            "Total": total,
+            "MissingDesign": not design_exists,
+            "CodeFound": code_found,
+            "CodeMatches": match_paths,
+        }
+    )
 
 # Build dashboard
-lines = ["# Project Dashboard", "", f"Generated: {datetime.now(timezone.utc).isoformat()}Z", "", "| Project | Completion | Code | Missing Design |", "|--------|------------|------|----------------|"]
+lines = [
+    "# Project Dashboard",
+    "",
+    f"Generated: {datetime.now(timezone.utc).isoformat()}Z",
+    "",
+    "| Project | Completion | Code | Missing Design |",
+    "|--------|------------|------|----------------|",
+]
+
+
+def _color_yes_no(value: str) -> str:
+    """Return an ANSI-colored yes/no string."""
+
+    # Use green for "Yes" and red for "No" (works in most modern terminals).
+    if value.lower() == "yes":
+        return f"\x1b[32m{value}\x1b[0m"
+    if value.lower() == "no":
+        return f"\x1b[31m{value}\x1b[0m"
+    return value
+
+
 for p in projects:
     pct = round((p["Completed"] / p["Total"] * 100) if p["Total"] else 0)
     md = "Yes" if p["MissingDesign"] else "No"
     code = "Yes" if p.get("CodeFound") else "No"
-    lines.append(f"| {p['ProjectId']} | {pct}% ({p['Completed']}/{p['Total']}) | {code} | {md} |")
+    lines.append(
+        f"| {p['ProjectId']} | {pct}% ({p['Completed']}/{p['Total']}) | {code} | {md} |"
+    )
 
-(OUT_ROOT / 'PROJECT_DASHBOARD.md').write_text("\n".join(lines), encoding="utf-8")
+(OUT_ROOT / "PROJECT_DASHBOARD.md").write_text("\n".join(lines), encoding="utf-8")
 
+# Also print a human-summary with colored yes/no on the console
 print(f"Generated {len(projects)} project folders and dashboard.")
+for p in projects:
+    pct = round((p["Completed"] / p["Total"] * 100) if p["Total"] else 0)
+    md = "Yes" if p["MissingDesign"] else "No"
+    code = "Yes" if p.get("CodeFound") else "No"
+    print(
+        f"{p['ProjectId']}: {pct}% ({p['Completed']}/{p['Total']}) | code: {_color_yes_no(code)} | missing design: {_color_yes_no(md)}"
+    )

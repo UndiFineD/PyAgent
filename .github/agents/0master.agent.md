@@ -55,6 +55,7 @@ These are the primary memory artifacts the master agent reads/updates:
 - The master agent focuses on **planning, coordination, and documentation**.
 
 ## Useful repo quick references (for planning)
+- **Code**: we prefer to use rust, then python, then javascript
 - **CI health**: `.github/workflows/` + `tests/ci/` ensure CI workflows are correct.
 - **Runtime style**: `conftest.py` includes key sys.path & legacy import protections.
 - **Rust acceleration**: `rust_core/` contains high-throughput file tools and complexity analysis.

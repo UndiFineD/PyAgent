@@ -18,9 +18,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
-import socket
 import sys
-from typing import Optional
 
 try:
     from src.tools.tool_registry import register_tool
@@ -29,6 +27,7 @@ except ImportError:  # pragma: no cover
 
 
 async def _check_host(host: str, port: int, timeout: float) -> bool:
+    """Check if we can establish a TCP connection to the specified host and port."""
     try:
         fut = asyncio.open_connection(host, port)
         reader, writer = await asyncio.wait_for(fut, timeout)
@@ -40,6 +39,7 @@ async def _check_host(host: str, port: int, timeout: float) -> bool:
 
 
 async def main(args: list[str] | None = None) -> int:
+    """Main entry point for the nettest tool."""
     parser = argparse.ArgumentParser(prog="nettest")
     parser.add_argument("host", help="Host to test")
     parser.add_argument("port", type=int, help="TCP port to connect to")

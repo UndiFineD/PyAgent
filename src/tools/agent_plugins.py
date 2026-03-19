@@ -7,7 +7,6 @@ import argparse
 import importlib.util
 import json
 from pathlib import Path
-from typing import Any
 
 try:
     from src.tools.tool_registry import register_tool

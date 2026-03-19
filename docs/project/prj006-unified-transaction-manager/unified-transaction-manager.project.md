@@ -20,3 +20,6 @@ _No checkbox tasks found in the plan file._
 - Code detected in:
   - `src\core\agent_state_manager.py`
   - `src\MemoryTransactionManager.py`
+  - `tests\test_backend_session_manager.py`
+  - `tests\test_context_manager.py`
+  - `tests\test_core_agent_state_manager.py`

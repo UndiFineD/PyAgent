@@ -4,8 +4,8 @@
 
 ## Links
 
-- Plan: `docs/project/prj001-conftest-typing-fixes/plan.md`
-- Design: `docs/project/prj001-conftest-typing-fixes/brainstorm.md`
+- Plan: `plan.md`
+- Design: `brainstorm.md`
 
 ## Tasks
 
@@ -23,3 +23,5 @@
 
 - Code detected in:
   - `conftest.py`
+  - `tests\fakeconftest.py`
+  - `tests\test_conftest.py`

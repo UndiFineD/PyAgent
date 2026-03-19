@@ -17,5 +17,21 @@ _No checkbox tasks found in the plan file._
 
 ## Code detection
 
-- No obvious implementation files found in `src/`, `rust_core/src/`, or repository root.
-  (This is a heuristic; adjust project topic naming if needed.)
+- Code detected in:
+  - `scripts\generate_project_dashboard.py`
+  - `scripts\setup_structure.py`
+  - `scripts\validate_project_implementation.py`
+  - `tests\core\test_core.py`
+  - `tests\test_core_agent_registry.py`
+  - `tests\test_core_agent_state_manager.py`
+  - `tests\test_core_helpers.py`
+  - `tests\test_core_observability.py`
+  - `tests\test_core_providers_FlmChatAdapter.py`
+  - `tests\test_core_providers_FlmProviderConfig.py`
+  - `tests\test_core_quality.py`
+  - `tests\test_core_runtime.py`
+  - `tests\test_core_task_queue.py`
+  - `tests\test_core_workflow_engine.py`
+  - `tests\test_rust_core.py`
+  - `tests\tools\test_pm_structure.py`
+  - `tests\tools\test_structure_layout.py`

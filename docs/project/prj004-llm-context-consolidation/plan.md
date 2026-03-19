@@ -12,6 +12,15 @@
 
 ---
 
+## Tasks
+
+- [x] Add `scripts/consolidate_llm_context.py` CLI tool with dry-run default and `--apply`.
+- [x] Generate deterministic `llms.txt`, `llms-architecture.txt`, and `llms-improvements.txt`.
+- [x] Discover source markdown from `docs/architecture/**/*.md`, `**/*.description.md`, and `**/*.improvements.md`.
+- [x] Add optional module docstring migration via `--migrate-docstrings`.
+- [x] Produce `consolidation_report.txt` with counts + source/output details.
+- [x] Add full test suite ensuring determinism, idempotence, and safe cleanup.
+
 ## 1) Scope and Acceptance Criteria
 
 ### In Scope
