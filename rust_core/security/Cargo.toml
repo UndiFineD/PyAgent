@@ -1,0 +1,12 @@
+[package]
+name = "rust_core_security"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+aes-gcm = "0.10"
+aead = "0.5"
+base64 = "0.21"
+rand_core = "0.6"
+anyhow = "1"
