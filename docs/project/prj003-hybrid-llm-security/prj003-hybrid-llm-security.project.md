@@ -5,16 +5,24 @@
 ## Links
 
 - Plan: plan.md
-- Design: rainstorm.md
+- Design: brainstorm.md
 
 ## Tasks
 
-- [ ] Define tasks and status
+- [x] Define hybrid LLM security goals and requirements.
+- [x] Document architecture and design decisions in `brainstorm.md`.
+- [x] Implement core security primitives in Rust (`rust_core/security`).
+- [x] Add Python tests driving the Rust security API.
+- [x] Ensure CI validates the security layer via pre-commit and Rust unit tests.
+- [x] Keep documentation up to date and in sync with implementation.
 
 ## Status
 
-0 of 0 tasks completed
+6 of 6 tasks completed
 
 ## Code detection
 
-- None detected yet.
+- Code detected in:
+  - `rust_core/src/security.rs`
+  - `rust_core/src/security/`
+  - `rust_core/tests/test_security_core.py`
