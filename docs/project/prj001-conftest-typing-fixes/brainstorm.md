@@ -1,7 +1,5 @@
-# Async Runtime Update
-> **2026-03-10:** Project migrated to Node.js-like asynchronous runtime; synchronous loops are prohibited by automated tests.
-
 # Conftest Typing Fixes Design (2026-03-08)
+> **2026-03-08:** Resolve typing issues in `conftest.py` while preserving current behavior.
 
 ## Goal
 Resolve the reported `conftest.py` typing issues while preserving runtime behavior.

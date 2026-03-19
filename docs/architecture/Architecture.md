@@ -14,7 +14,7 @@ This file is the **top-level architecture overview** for PyAgent. It exists to h
 
 ## Where to find more detail
 - Reference docs (archival deep dives): `docs/architecture/archive/`
-- Project-level plans: `docs/project/prjXXX-*`
+- Project-level plans: `docs/project/*/`
 - Agent-focused snapshot: `docs/architecture/PyAgent.md`
 
 ## Recording decisions (ADR)

@@ -1,6 +1,5 @@
-# Async Runtime Rollout
-> **2026-03-10:** All synchronous loops have been eliminated; Node.js-like async infrastructure in place.
-> See 2026-03-10-async-runtime-plan.md for details.
+# Conftest Typing Fixes
+> **2026-03-08:** Fix typing issues in `conftest.py` while preserving runtime behavior.
 
 # Conftest Typing Fixes Implementation Plan
 
@@ -30,6 +29,13 @@
 - No new diagnostics for the touched symbols in `conftest.py`.
 - Existing guard tests still pass.
 
+## Tasks
+- [x] Add/adjust typing in `conftest.py` for the reported issues.
+- [x] Add lightweight `Protocol` definitions to support typed mocking.
+- [x] Ensure `session.exitstatus` assignment is type-safe and behavior-preserving.
+- [x] Validate behavior with `pytest tests/test_conftest.py`.
+- [x] Update project documentation in `docs/project/prj001-conftest-typing-fixes/`.
+
 ---
 
 ## 2) File Map
@@ -37,8 +43,8 @@
 ### Files to Modify
 - `conftest.py`
 
-### Files to Create
-- `tests/test_conftest_typing_contract.py`
+### Files to Create / Update
+- `tests/test_conftest.py` (already includes typing contract and import-fixer regression tests)
 
 ---
 

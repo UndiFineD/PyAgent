@@ -20,5 +20,6 @@ _No checkbox tasks found in the plan file._
 - Code detected in:
   - `rust_core\src\agents\quality.rs`
   - `rust_core\src\security\crypto\crypto_tests.rs`
+  - `src\tools\code_quality.py`
   - `src\tools\nettest.py`
   - `src\tools\proxy_test.py`

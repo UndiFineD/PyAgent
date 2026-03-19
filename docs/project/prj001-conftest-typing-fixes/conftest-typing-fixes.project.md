@@ -4,16 +4,20 @@
 
 ## Links
 
-- Plan: `plan.md`
-- Design: `brainstorm.md`
+- Plan: `docs/project/prj001-conftest-typing-fixes/plan.md`
+- Design: `docs/project/prj001-conftest-typing-fixes/brainstorm.md`
 
 ## Tasks
 
-_No checkbox tasks found in the plan file._
+- [x] Add/adjust typing in `conftest.py` for the reported issues.
+- [x] Add lightweight `Protocol` definitions to support typed mocking.
+- [x] Ensure `session.exitstatus` assignment is type-safe and behavior-preserving.
+- [x] Validate behavior with `pytest tests/test_conftest.py`.
+- [x] Update project documentation in `docs/project/prj001-conftest-typing-fixes/`.
 
 ## Status
 
-0 of 0 tasks completed
+5 of 5 tasks completed
 
 ## Code detection
 
