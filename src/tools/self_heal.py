@@ -40,10 +40,7 @@ def _check_py_syntax(root: str) -> dict[str, str]:
             return path, str(e)
 
     paths = (
-        os.path.join(dirpath, fn)
-        for dirpath, _, filenames in os.walk(root)
-        for fn in filenames
-        if fn.endswith(".py")
+        os.path.join(dirpath, fn) for dirpath, _, filenames in os.walk(root) for fn in filenames if fn.endswith(".py")
     )
     issues_list = list(filter(None, map(_check_file, paths)))
     return dict(issues_list)
@@ -57,9 +54,7 @@ def detect_misconfig(root: str = ".") -> dict[str, str]:
 def main(args: list[str] | None = None) -> int:
     """Main entry point for the self_heal tool."""
     parser = argparse.ArgumentParser(prog="self_heal")
-    parser.add_argument(
-        "--root", default=".", help="Root directory to scan for issues (defaults to current directory)"
-    )
+    parser.add_argument("--root", default=".", help="Root directory to scan for issues (defaults to current directory)")
 
     parsed = parser.parse_args(args=args)
 

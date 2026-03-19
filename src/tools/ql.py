@@ -219,9 +219,9 @@ def main(args: list[str] | None = None) -> int:
     if not parsed.skip_codeql and shutil.which("codeql"):
         codeql_enabled = True
         langs = (
-            {"python" for f in changed_files if f.endswith(".py")} | 
-            {"rust" for f in changed_files if f.endswith(".rs")} | 
-            {"javascript-typescript" for f in changed_files if f.endswith(".js") or f.endswith(".ts")}
+            {"python" for f in changed_files if f.endswith(".py")}
+            | {"rust" for f in changed_files if f.endswith(".rs")}
+            | {"javascript-typescript" for f in changed_files if f.endswith(".js") or f.endswith(".ts")}
         )
         if not langs:
             codeql_log = "No supported CodeQL languages detected in changed files. Skipping CodeQL."
@@ -275,9 +275,7 @@ def main(args: list[str] | None = None) -> int:
     else:
         codeql_log = "CodeQL skipped: CLI not found or --skip-codeql specified."
 
-    report = _render_markdown_report(
-        project, parsed.base, changed_files, cq_log, codeql_log, codeql_enabled
-    )
+    report = _render_markdown_report(project, parsed.base, changed_files, cq_log, codeql_log, codeql_enabled)
 
     report_path.write_text(report, encoding="utf-8")
     print(f"Wrote 8ql report to {report_path}")

@@ -158,7 +158,6 @@ def spawn(coro: Any) -> None:
     If there is no running event loop (e.g. in synchronous tests), we fall
     back to a dedicated background loop to avoid leaking un-awaited coroutines.
     """
-
     # If we're running inside an asyncio loop, let the runtime extension
     # handle scheduling. This keeps behavior consistent with a normal task.
     try:

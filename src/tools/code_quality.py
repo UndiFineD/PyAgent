@@ -48,7 +48,7 @@ def _get_changed_files(base: str) -> List[str]:
     if proc.returncode != 0:
         return []
 
-    return [l.strip() for l in proc.stdout.splitlines() if l.strip()]
+    return [line.strip() for line in proc.stdout.splitlines() if line.strip()]
 
 
 def _select_python_files(files: Iterable[str]) -> List[str]:

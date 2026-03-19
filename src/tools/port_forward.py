@@ -26,7 +26,12 @@ except ImportError:  # pragma: no cover
     from tools.tool_registry import register_tool
 
 
-async def _handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWriter, remote_host: str, remote_port: int) -> None:
+async def _handle_client(
+    reader: asyncio.StreamReader,
+    writer: asyncio.StreamWriter,
+    remote_host: str,
+    remote_port: int,
+) -> None:
     """Handle a client connection and forward data to the remote host."""
     remote_reader, remote_writer = await asyncio.open_connection(remote_host, remote_port)
 

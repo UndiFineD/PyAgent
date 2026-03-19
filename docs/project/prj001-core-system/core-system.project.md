@@ -26,5 +26,12 @@
 
 ## Code detection
 
-- Code detected in:
-  - `rust_core\src\utils\system.rs`
+- `src/core/runtime.py`
+- `src/core/task_queue.py`
+- `src/core/agent_registry.py`
+- `src/core/memory.py`
+- `src/core/observability.py`
+- `tests/test_core_quality.py`
+- `tests/test_core_runtime.py`
+- `tests/test_core_task_queue.py`
+- `tests/test_core_observability.py`
