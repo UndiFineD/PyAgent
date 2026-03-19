@@ -21,7 +21,7 @@ from pathlib import Path
 # (The prior implementation used __import__(__name__).__path__, which resolves to the
 # top-level `src` package and breaks submodule imports like `src.tools.__main__`.)
 
-for finder, name, ispkg in pkgutil.iter_modules(__path__):
+for _finder, name, ispkg in pkgutil.iter_modules(__path__):
     if ispkg:
         continue
     # Skip modules that are not intended as tools (e.g. internal helpers)

@@ -34,7 +34,7 @@ def collect_metrics(root: str) -> dict[str, int]:
     def _counts_for_file(path: pathlib.Path) -> tuple[int, int, int]:
         """Count total, blank, and comment lines for a single file."""
         with open(path, encoding="utf-8", errors="ignore") as f:
-            lines = [l for l in f]
+            lines = [line for line in f]
         total = len(lines)
         blank = sum(1 for line in lines if not line.strip())
         comment = sum(1 for line in lines if line.strip().startswith("#"))

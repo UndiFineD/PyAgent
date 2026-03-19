@@ -197,6 +197,7 @@ def test_exercise_python_functions() -> None:
 
     # Still emit warnings in CI output, but do not fail the test if some calls fail.
     if failures or import_errors:
+
         def _format_map(m: Dict[str, str], limit: int = 10) -> str:
             items = list(m.items())
             lines = [f"  - {k}: {v}" for k, v in items[:limit]]
