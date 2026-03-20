@@ -7,6 +7,11 @@ _Git: @9git | Updated: 2026-03-20_
 ## Branch
 `prj037-tools-crdt-security` — commit `9e69aa60a7`
 
+## Legacy Branch Exception
+Historical note: this project's git summary reflects work done on shared `prj037-*` branch history, which caused a project-to-branch mismatch in the legacy workflow. This remains for factual continuity and is not a precedent.
+
+Corrective policy: one-project-one-branch enforcement is now owned by `@0master` (assignment/governance) and `@9git` (branch/scope validation and mismatch blocking).
+
 ## Commit Hash
 `N/A`
 

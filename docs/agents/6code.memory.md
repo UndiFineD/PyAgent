@@ -19,8 +19,26 @@ This should be done via `agent/runSubagent`.
 | **owner_agent** | @6code |
 | **source** | @4plan |
 | **created_at** | 2026-03-18 |
-| **updated_at** | 2026-03-18 |
+| **updated_at** | 2026-03-20 |
 | **status** | DONE |
-| **summary** | Added Checkpoint rule (MANDATORY) block and inline artifact template to all 9 *.agent.md files. Updated @1project Step 1 to list all 9 stubs. Markdown-only edits. |
+| **summary** | Documentation update: made `@0master` the explicit owner of `prjNNN` allocation and continuity, required `@1project` to consume the assigned identifier and fail closed on missing or ambiguous numbering, and mirrored the rule in master memory plus the active prj030 design/code artifacts. |
 | **handoff_target** | @7exec |
-| **artifact_paths** | .github/agents/1project.agent.md, .github/agents/2think.agent.md, .github/agents/3design.agent.md, .github/agents/4plan.agent.md, .github/agents/5test.agent.md, .github/agents/6code.agent.md, .github/agents/7exec.agent.md, .github/agents/8ql.agent.md, .github/agents/9git.agent.md |
+| **artifact_paths** | .github/agents/0master.agent.md, .github/agents/1project.agent.md, docs/agents/0master.memory.md, docs/project/prj030-agent-doc-frequency/agent-doc-frequency.design.md, docs/project/prj030-agent-doc-frequency/agent-doc-frequency.code.md |
+
+## prj030 - agent-doc-policy-tests
+
+| Field | Value |
+|---|---|
+| **task_id** | prj030-agent-doc-policy-tests |
+| **owner_agent** | @6code |
+| **source** | @5test |
+| **created_at** | 2026-03-20 |
+| **updated_at** | 2026-03-20 |
+| **status** | DONE |
+| **summary** | Added a single pytest file that guards the governing workflow docs against regressions in `prjNNN` ownership, project overview template sections, branch/scope validation rules, blanket staging prohibitions, failure disposition, and lessons learned requirements. |
+| **changed_modules** | tests/docs/test_agent_workflow_policy_docs.py; docs/project/prj030-agent-doc-frequency/agent-doc-frequency.code.md; docs/agents/6code.memory.md |
+| **verification_commands** | c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest tests/docs/test_agent_workflow_policy_docs.py -q |
+| **verification_result** | PASS — 3 passed in 1.50s |
+| **unresolved_risks** | The tests are phrase-based by design; they protect policy presence without trying to validate legacy project artifacts. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | tests/docs/test_agent_workflow_policy_docs.py, docs/project/prj030-agent-doc-frequency/agent-doc-frequency.code.md, docs/agents/6code.memory.md |

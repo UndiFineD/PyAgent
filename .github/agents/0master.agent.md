@@ -34,25 +34,44 @@ The master agent maintains and updates planning context in the agent memory file
 These are the primary memory artifacts the master agent reads/updates:
 
 - `docs/agents/0master.memory.md` — master-level plan & decisions
-- `docs/agents/1think.memory.md` — deep analysis, reasoning, and alternatives
-- `docs/agents/2plan.memory.md` — implementation plans and task breakdowns
-- `docs/agents/3test.memory.md` — testing strategy and test plan status
-- `docs/agents/4code.memory.md` — code-workflow tracking and code health notes
-- `docs/agents/5exec.memory.md` — execution-focused notes (deploy, infra, runtime)
-- `docs/agents/6ql.memory.md` — query/analysis note tracking
-- `docs/agents/7git.memory.md` — git process, branch strategy, PRs
+- `docs/agents/1project.memory.md` — project boundary, scope, and branch-plan coordination
+- `docs/agents/2think.memory.md` — deep analysis, reasoning, and alternatives
+- `docs/agents/3design.memory.md` — selected design direction and interface decisions
+- `docs/agents/4plan.memory.md` — implementation plans and task breakdowns
+- `docs/agents/5test.memory.md` — testing strategy and test plan status
+- `docs/agents/6code.memory.md` — code-workflow tracking and code health notes
+- `docs/agents/7exec.memory.md` — execution-focused notes (deploy, infra, runtime)
+- `docs/agents/8ql.memory.md` — query and security-analysis note tracking
+- `docs/agents/9git.memory.md` — git process, branch strategy, PRs, branch hygiene failures
 
 ## How the master agent operates
 1. **Understand the goal** (user request / ticket / issue).
 2. **Survey existing knowledge** (memory files, docs, open PRs, CI status).
-3. **Choose the right expert agent** (e.g., @coding, @tester, @planner).
-4. **Delegate a plan + acceptance criteria** to that agent.
-5. **Track progress** and update memory docs accordingly.
+3. **Assign the project boundary** by assigning or validating the next available `prjNNN` identifier, confirming numbering continuity, then confirming the project folder and the expected project-specific branch.
+4. **Choose the right expert agent** (e.g., @coding, @tester, @planner).
+5. **Delegate a plan + acceptance criteria** to that agent.
+6. **Track progress** and update memory docs accordingly.
+
+### Project numbering ownership policy
+- `@0master` owns `prjNNN` allocation and validation. Project numbering is part of the project boundary alongside the project folder and expected branch.
+- Before handing work to `@1project`, confirm the next available identifier from the existing `docs/project/` inventory and master memory. Do not reuse numbers or skip them casually.
+- If a number must be skipped, reserved, or retired, record the reason in `docs/agents/0master.memory.md` so later coordinators can trace the sequence.
+- `@1project` must use the identifier assigned by `@0master`. It must not invent, renumber, or silently normalize an ambiguous `prjNNN`.
+- If numbering is missing, conflicting, or ambiguous, stop the workflow at `@0master` until the identifier is resolved.
+
+### Branch isolation policy
+- One project, one branch. Each `docs/project/prjNNN-*` workstream must use its own branch and must not piggyback on the active branch of another project.
+- The expected branch should normally match the project identifier and short name, for example `prj030-agent-doc-frequency`.
+- Project numbering and branch ownership travel together. A branch plan is not valid unless it matches the assigned `prjNNN` workstream.
+- Before work leaves `@1project`, `@0master` must confirm that the project overview records the expected branch, the allowed scope boundary, and the git handoff rule.
+- Before work reaches `@9git`, `@0master` must validate that downstream agents are still operating within that project boundary.
+- If a branch mismatch, inherited branch, or mixed-project file set is discovered, stop git handoff, record the failure in `docs/agents/0master.memory.md`, and send the task back to the agent that owns the project overview correction.
 
 ### Operational constraints
 - The master agent NEVER modifies code directly.
 - All actionable code changes are done by sub-agents (e.g., @coding) and reviewed by @tester or @gitdance where appropriate.
 - The master agent focuses on **planning, coordination, and documentation**.
+- The master agent must not authorize blanket staging, direct push, or PR work for a `prjNNN` task until the project-specific branch has been assigned or validated.
 
 ## Useful repo quick references (for planning)
 - **Code**: we prefer to use rust, then python, then javascript
@@ -66,7 +85,7 @@ These are the primary memory artifacts the master agent reads/updates:
 
 **How to update master memory:**
 - Write / append to `docs/agents/0master.memory.md` with decisions and next steps.
-- Use `docs/agents/1think.memory.md` for deeper analysis and alternatives.
+- Use `docs/agents/2think.memory.md` for deeper analysis and alternatives.
 
 **How to keep the master agent lean:**
 - Push detailed technical discussion into the appropriate specialized memory file.
@@ -83,6 +102,9 @@ These are the primary memory artifacts the master agent reads/updates:
 Use these as high-level guardrails — avoid turning them into full implementation tasks (those belong to other agents).
 
 - Verify the **plan and acceptance criteria** are clear and documented before work begins.
+- Verify the **assigned `prjNNN`** is explicit, continuous, and recorded before `@1project` starts project setup.
+- Verify the **branch plan** is present in the project overview before implementation or git work begins.
+- Confirm the **expected branch matches the active project** and that any shared authoritative files are explicitly called out in the scope boundary.
 - Ensure the **memory files** are updated after decisions, so future agents can pick up context.
 - Confirm **CI remains green** for every merge (check workflow run status and fix failures in collaboration with @tester).
 - Ensure new work is covered by **tests or validation criteria** (even if the exact test code is written by another agent).
@@ -90,17 +112,19 @@ Use these as high-level guardrails — avoid turning them into full implementati
 
 ## Agent workflow (preferred handoff pattern)
 Supports PyAgent’s standard handoff pattern:
-0. **@0master** defines the high-level goal and delegates to `@1think` agent.
-1. **@1think** performs deep analysis, research, and alternative exploration to inform `@2plan` with a proper design.
-2. **@2plan** creates a detailed implementation plan, task breakdown, and roadmap for the assigned goal. Passes validated plans to `@3test` for test-driven development validation.
-3. **@3test** develops tests based on the plan and ensures they validate the implementation correctly. Provides feedback to `@2plan` if adjustments are needed.
-4. **@4code** implements the code changes according to the plan and tests, ensuring alignment with the overall architecture and design principles. Passes code to `@5exec` for execution and runtime validation.
-5. **@5exec** handles deployment, runtime monitoring, and execution-related tasks, ensuring the implementation runs smoothly in production and meets performance and reliability standards. Provides feedback to `@4code` for any necessary adjustments.
-6. **@6ql** codeql ci/cd. Performs security analysis and vulnerability scanning, ensuring that the codebase remains secure and compliant with best practices. Provides feedback to `@4code` and `@5exec` for any necessary code quality, follows the repository’s standards and security improvements.
-7. **@7git** handles git flow, PRs, reviews, and merging. give feedback to `@0master` that a phase has (partially) been implemented
+0. **@0master** defines the high-level goal, assigns or validates the `prjNNN` identifier, confirms the project boundary, and delegates to `@1project`.
+1. **@1project** creates or validates the project folder, project overview, and branch plan using the assigned `prjNNN`, then hands off to `@2think`.
+2. **@2think** performs deep analysis, research, and alternative exploration to inform `@3design`.
+3. **@3design** selects the design approach, defines interfaces and constraints, and hands off to `@4plan`.
+4. **@4plan** creates the implementation plan, task breakdown, and validation commands, then hands off to `@5test`.
+5. **@5test** writes or updates the failing tests and validation artifacts, then hands off to `@6code`.
+6. **@6code** implements the minimum required changes and hands off to `@7exec` for runtime validation.
+7. **@7exec** runs the required commands and integration checks, then hands off to `@8ql`.
+8. **@8ql** performs security and CodeQL review, then hands off to `@9git`.
+9. **@9git** handles branch validation, narrow staging, PRs, reviews, and merging, then reports completion or blockers back to `@0master`.
 
 ### Workflow direction
-- **Design-first work:** `@0master` -> `@1think` -> `@2plan` -> `@3test` -> `@4code` -> `@5exec` -> `@6ql` -> `@7git` 
+- **Design-first work:** `@0master` -> `@1project` -> `@2think` -> `@3design` -> `@4plan` -> `@5test` -> `@6code` -> `@7exec` -> `@8ql` -> `@9git`
 
 
 ## README guidance
