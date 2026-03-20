@@ -1,20 +1,45 @@
-# Prj007 Advanced_Research
+# prj007-advanced_research
 
-**Project ID:** prj007-advanced_research
+**Project ID:** `prj007-advanced_research`
+_Status: IN_PROGRESS (exec/ql/git pending)_
+_Updated: 2026-03-20_
 
 ## Links
 
-- Plan: plan.md
-- Design: rainstorm.md
+- Plan: `plan.md`
+- Brainstorm: `brainstorm.md`
+
+## Pipeline Artifacts
+| Agent | File | Status |
+|---|---|---|
+| @2think | advanced_research.think.md | DONE |
+| @3design | advanced_research.design.md | DONE |
+| @4plan | advanced_research.plan.md | DONE |
+| @5test | advanced_research.test.md | DONE |
+| @6code | advanced_research.code.md | DONE |
+| @7exec | advanced_research.exec.md | NOT_STARTED |
+| @8ql | advanced_research.ql.md | NOT_STARTED |
+| @9git | advanced_research.git.md | NOT_STARTED |
 
 ## Tasks
-
-- [ ] Define tasks and status
+- [x] `src/transport/__init__.py` skeleton
+- [x] `src/memory/__init__.py` skeleton
+- [x] `src/multimodal/__init__.py` skeleton
+- [x] `src/rl/__init__.py` skeleton
+- [x] `src/speculation/__init__.py` skeleton
+- [x] `tests/test_research_packages.py`
+- [ ] @7exec runtime validation
+- [ ] @8ql security scan
+- [ ] @9git commit and PR
 
 ## Status
-
-0 of 0 tasks completed
+6 of 9 tasks completed
 
 ## Code detection
-
-- None detected yet.
+- `rust_core/src/agents/research.rs`
+- `tests/test_research_packages.py`
+- `src/transport/__init__.py`
+- `src/memory/__init__.py`
+- `src/multimodal/__init__.py`
+- `src/rl/__init__.py`
+- `src/speculation/__init__.py`

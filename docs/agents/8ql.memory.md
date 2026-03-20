@@ -26,6 +26,21 @@ Invoke it via `agent/runSubagent` to continue the process.
 
 ---
 
+## prj007 - advanced_research
+
+| Field | Value |
+|---|---|
+| **task_id** | prj007-advanced_research |
+| **owner_agent** | @8ql |
+| **source** | @7exec |
+| **updated_at** | 2026-03-20 |
+| **status** | DONE |
+| **summary** | 0 findings across all 5 skeleton packages. Placeholder modules — no subprocess, no secrets, no IO. CLEAR for @9git. |
+| **handoff_target** | @9git |
+| **artifact_paths** | docs/project/prj007-advanced_research/advanced_research.ql.md |
+
+---
+
 ## prj006 - unified-transaction-manager
 
 | Field | Value |

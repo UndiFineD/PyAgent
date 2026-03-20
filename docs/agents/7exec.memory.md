@@ -26,6 +26,21 @@ Invoke it via **agent/runSubagent** to start security and static analysis checks
 
 ---
 
+## prj007 - advanced_research
+
+| Field | Value |
+|---|---|
+| **task_id** | prj007-advanced_research |
+| **owner_agent** | @7exec |
+| **source** | @6code |
+| **updated_at** | 2026-03-20 |
+| **status** | DONE |
+| **summary** | pip check clean. All 5 research packages import OK. test_research_packages.py: 1 passed. |
+| **handoff_target** | @8ql |
+| **artifact_paths** | docs/project/prj007-advanced_research/advanced_research.exec.md |
+
+---
+
 ## prj006 - unified-transaction-manager
 
 | Field | Value |

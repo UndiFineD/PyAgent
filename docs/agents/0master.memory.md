@@ -11,11 +11,12 @@ _Last updated: 2026-03-18_
 | Async Runtime | 2026-03-10-async-runtime-plan.md | 215+ tests passing, zero sync loops |
 | FLM / Fastflow integration | 2026-03-08-flm-plan.md | OpenAI adapter, tool-call loop complete |
 | Context Manager & Skills Registry | 2026-03-09-context_management-plan.md | Windowing + skill discovery live |
-| Advanced Research packages | advanced-research-plan.md | 5 research packages importable |
+| Advanced Research packages | prj007-advanced_research/ | 5 skeleton packages importable; code/test DONE; exec/ql/git pending |
 | Future Roadmap tooling | future-roadmap-plan.md | Vision templates, milestone generator complete |
 | Community Chat | community-collaboration-plan.md | FastAPI, MCP tools, GitHub webhooks live |
 | Agent Workflow basics | agent-workflow-plan.md | TaskState, Task, TaskQueue, WorkflowEngine, CoRT live |
 | GitHub Importer skeleton | github-import-plan.md | Importer skeleton fully implemented |
+| Unified Transaction Manager | prj006-unified-transaction-manager/ | Full pipeline DONE (75d5c3e) — 205 tests, 100% coverage |
 
 ---
 
