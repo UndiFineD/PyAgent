@@ -36,15 +36,6 @@ def _rust_crdt_binary() -> Path:
 
 def merge(left: dict, right: dict) -> dict:
     """Merge two JSON documents using the Rust CRDT prototype."""
-
-
-def validate() -> None:
-    """Validate this bridge module is loadable.
-
-    This is used by repository-level quality checks.
-    """
-    return
-
     with tempfile.TemporaryDirectory() as td:
         left_file = Path(td) / "left.json"
         right_file = Path(td) / "right.json"
@@ -67,3 +58,11 @@ def validate() -> None:
         )
 
         return json.loads(result.stdout)
+
+
+def validate() -> None:
+    """Validate this bridge module is loadable.
+
+    This is used by repository-level quality checks.
+    """
+    return

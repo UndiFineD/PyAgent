@@ -66,14 +66,6 @@ def encrypt(key_file: Path, plaintext: str) -> str:
 def decrypt(key_file: Path, ciphertext: str) -> str:
     """Decrypt the given ciphertext using the specified key file."""
     bin_path = _rust_security_binary()
-
-
-def validate() -> None:
-    """Validate this bridge module is loadable.
-
-    This is used by repository-level quality checks.
-    """
-    return
     result = subprocess.run(
         [
             str(bin_path),
@@ -88,3 +80,11 @@ def validate() -> None:
         check=True,
     )
     return result.stdout.strip()
+
+
+def validate() -> None:
+    """Validate this bridge module is loadable.
+
+    This is used by repository-level quality checks.
+    """
+    return
