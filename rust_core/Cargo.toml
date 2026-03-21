@@ -37,7 +37,7 @@ dashmap      = "6"
 zeroize      = { version = "1", features = ["derive"] }
 uuid         = { version = "1", features = ["v4"] }
 subtle       = "2"
-snow             = "0.9"
+snow             = "0.10"
 ed25519-dalek    = { version = "2", features = ["rand_core"] }
 tokio            = { version = "1", features = ["full"], optional = true }
 ciborium         = "0.2"
