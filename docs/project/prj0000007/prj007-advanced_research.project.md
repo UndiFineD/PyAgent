@@ -28,12 +28,12 @@ _Updated: 2026-03-20_
 - [x] `src/rl/__init__.py` skeleton
 - [x] `src/speculation/__init__.py` skeleton
 - [x] `tests/test_research_packages.py`
-- [ ] @7exec runtime validation
-- [ ] @8ql security scan
-- [ ] @9git commit and PR
+- [x] @7exec runtime validation
+- [x] @8ql security scan
+- [x] @9git commit and PR
 
 ## Status
-6 of 9 tasks completed
+9 of 9 tasks completed
 
 ## Code detection
 - `rust_core/src/agents/research.rs`
