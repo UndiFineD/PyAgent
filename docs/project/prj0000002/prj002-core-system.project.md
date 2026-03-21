@@ -1,6 +1,9 @@
-# Prj002 Core System
+# core-system - Project Overview
 
-**Project ID:** prj002-core-system
+_Status: DONE_
+_Owner: @9git | Updated: 2026-03-21_
+
+**Project ID:** prj0000002
 
 ## Links
 
@@ -21,7 +24,7 @@
 
 ## Status
 
-10 of 10 tasks completed
+10 of 10 tasks completed — DONE. All core modules implemented and tested on main.
 
 ## Code detection
 
