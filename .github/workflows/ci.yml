@@ -27,6 +27,6 @@ jobs:
       - name: Install dependencies
         run: pip install --prefer-binary -r requirements-ci.txt
       - name: Build Rust extension
-        run: maturin develop
+        run: maturin develop --manifest-path rust_core/Cargo.toml
       - name: Run tests
         run: pytest -q
