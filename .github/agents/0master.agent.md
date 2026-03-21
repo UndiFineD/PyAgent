@@ -116,7 +116,8 @@ These are the primary memory artifacts the master agent reads/updates:
 2. Give it a clear `name`, `description`, and `argument-hint`.
 3. Define which tools it may use (e.g., `tools: [agent/runSubagent, todo]`).
 4. Add a short section describing the agent’s scope and when it should be invoked.
-5. Update `docs/agents/0master.memory.md` (or relevant memory file) to explain why this agent exists and how it should be used.
+5. Do NOT edit files, run tests, stage, commit, push, create/update a PR, or call any sub-agent [if branch `prjNNNNNNN-<project` or EXPECTED_BRANCH doesn't match].
+6. Update `docs/agents/0master.memory.md` (or relevant memory file) to explain why this agent exists and how it should be used.
 
 ## Common coordination checkpoints
 Use these as high-level guardrails — avoid turning them into full implementation tasks (those belong to other agents).

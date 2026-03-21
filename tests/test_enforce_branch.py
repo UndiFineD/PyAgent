@@ -33,6 +33,7 @@ import enforce_branch  # noqa: E402
 
 @pytest.mark.parametrize("branch", ["main", "master", "dev", "develop"])
 def test_base_branches_allowed_no_staged(branch: str) -> None:
+    """Base branches with no staged files should be allowed."""
     with (
         patch.object(enforce_branch, "get_current_branch", return_value=branch),
         patch.object(enforce_branch, "get_staged_files", return_value=[]),
@@ -46,6 +47,7 @@ def test_base_branches_allowed_no_staged(branch: str) -> None:
     "prj0000042-crdt-security",
 ])
 def test_project_branches_pass_naming(branch: str) -> None:
+    """Project branches with valid prjNNN... prefix should be allowed."""
     with (
         patch.object(enforce_branch, "get_current_branch", return_value=branch),
         patch.object(enforce_branch, "get_staged_files", return_value=[]),
@@ -60,6 +62,7 @@ def test_project_branches_pass_naming(branch: str) -> None:
     "my-branch",
 ])
 def test_bad_branch_names_blocked(branch: str) -> None:
+    """Branches that don't match allowed patterns should be blocked."""
     with (
         patch.object(enforce_branch, "get_current_branch", return_value=branch),
         patch.object(enforce_branch, "get_staged_files", return_value=[]),
@@ -125,21 +128,26 @@ def test_ci_file_on_main_allowed() -> None:
 # ---------------------------------------------------------------------------
 
 def test_extract_project_ids_empty() -> None:
+    """No staged files should yield an empty set of project IDs."""
     assert enforce_branch.extract_project_ids([]) == set()
 
 
 def test_extract_project_ids_no_project_paths() -> None:
+    """Staged files that don't match the project path pattern should yield an empty set."""
     assert enforce_branch.extract_project_ids(["src/core/UnifiedTransactionManager.py"]) == set()
 
 
 def test_extract_project_ids_single() -> None:
+    """Staged files with one project ID should yield a set with that single ID."""
     assert enforce_branch.extract_project_ids([_PRJ6_FILE]) == {"prj0000006"}
 
 
 def test_extract_project_ids_multiple() -> None:
+    """Staged files with multiple different project IDs should yield a set with all those IDs."""
     assert enforce_branch.extract_project_ids([_PRJ6_FILE, _PRJ7_FILE]) == {"prj0000006", "prj0000007"}
 
 
 def test_extract_project_ids_windows_backslash() -> None:
+    """Windows-style backslashes in staged file paths should be handled correctly."""
     win_path = _PRJ6_FILE.replace("/", "\\")
     assert enforce_branch.extract_project_ids([win_path]) == {"prj0000006"}

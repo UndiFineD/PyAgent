@@ -38,11 +38,13 @@ _BASE_BRANCHES = {"main", "master", "dev", "develop"}
 
 
 def _run(args: list[str]) -> str:
+    """Run a git command and return its stdout output, or raise if it fails."""
     result = subprocess.run(args, capture_output=True, text=True, check=True)
     return result.stdout.strip()
 
 
 def get_current_branch() -> str:
+    """Return the name of the current git branch."""
     return _run(["git", "rev-parse", "--abbrev-ref", "HEAD"])
 
 
