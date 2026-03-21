@@ -1,8 +1,8 @@
 # prj008-agent_workflow
 
 **Project ID:** `prj008-agent_workflow`
-_Status: IN_PROGRESS (exec/ql/git pending)_
-_Updated: 2026-03-20_
+_Status: DONE_
+_Updated: 2026-03-21_
 
 ## Links
 
@@ -17,12 +17,12 @@ _Updated: 2026-03-20_
 | @4plan | agent_workflow.plan.md | DONE |
 | @5test | agent_workflow.test.md | DONE |
 | @6code | agent_workflow.code.md | DONE |
-| @7exec | agent_workflow.exec.md | NOT_STARTED |
-| @8ql | agent_workflow.ql.md | NOT_STARTED |
-| @9git | agent_workflow.git.md | NOT_STARTED |
+| @7exec | agent_workflow.exec.md | DONE |
+| @8ql | agent_workflow.ql.md | DONE |
+| @9git | agent_workflow.git.md | DONE |
 
 ## Status
-6 of 9 pipeline stages complete
+9 of 9 pipeline stages complete
 
 ## Branch Plan
 
