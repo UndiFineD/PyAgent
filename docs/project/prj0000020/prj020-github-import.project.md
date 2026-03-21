@@ -1,6 +1,9 @@
-# Prj020 Github Import
+# github-import - Project Overview
 
-**Project ID:** prj020-github-import
+_Status: DONE_
+_Owner: @9git | Updated: 2026-03-21_
+
+**Project ID:** prj0000020
 
 ## Links
 
@@ -9,11 +12,11 @@
 
 ## Tasks
 
-- [ ] Define tasks and status
+- [x] Implementation completed on main prior to branch enforcement.
 
 ## Status
 
-0 of 0 tasks completed
+DONE — GitHub importer skeleton (src/github_app.py, src/importer/).
 
 ## Code detection
 

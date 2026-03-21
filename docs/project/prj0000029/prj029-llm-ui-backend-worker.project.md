@@ -1,6 +1,9 @@
-# Prj029 Llm Ui Backend Worker
+# llm-ui-backend-worker - Project Overview
 
-**Project ID:** prj029-llm-ui-backend-worker
+_Status: DONE_
+_Owner: @9git | Updated: 2026-03-21_
+
+**Project ID:** prj0000029
 
 ## Links
 
@@ -9,11 +12,11 @@
 
 ## Tasks
 
-- [ ] Define tasks and status
+- [x] Implementation completed on main prior to branch enforcement.
 
 ## Status
 
-0 of 0 tasks completed
+DONE — FastAPI WebSocket backend worker (backend/app.py).
 
 ## Code detection
 

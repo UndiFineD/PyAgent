@@ -1,6 +1,9 @@
-# Prj001 Core System
+# core-system-v3 - Project Overview
 
-**Project ID:** prj001-core-system
+_Status: DONE_
+_Owner: @9git | Updated: 2026-03-21_
+
+**Project ID:** prj0000040
 
 ## Links
 
