@@ -1,7 +1,7 @@
 # async-runtime - Project Overview
 
-_Status: IN_PROGRESS_
-_Owner: @1project | Updated: 2026-03-20_
+_Status: DONE_
+_Owner: @9git | Updated: 2026-03-21_
 
 ## Project Identity
 **Project ID:** prj0000001
@@ -42,11 +42,11 @@ Stabilize and document the async runtime workstream so Python and Rust-backed ex
 | Tests | @5test | DONE | async-runtime.test.md |
 | Code | @6code | DONE | async-runtime.code.md |
 | Execution | @7exec | DONE | async-runtime.exec.md |
-| Security | @8ql | NOT_STARTED | async-runtime.ql.md |
-| Git | @9git | IN_PROGRESS | async-runtime.git.md |
+| Security | @8ql | DONE | async-runtime.ql.md |
+| Git | @9git | DONE | async-runtime.git.md |
 
 ## Status
-_Last updated: 2026-03-20_
-- Governance validation is green: `python -m pytest tests/docs/test_agent_workflow_policy_docs.py --tb=no -q` passed.
-- Canonical project artifacts are present and synchronized.
-- Security scan handoff remains open in `async-runtime.ql.md`.
+_Last updated: 2026-03-21_
+- DONE — All pipeline stages complete. Async runtime on main with Rust acceleration + pure-Python fallback.
+- 215+ tests passing, zero sync loops verified.
+- Security scan completed, git handoff merged.
