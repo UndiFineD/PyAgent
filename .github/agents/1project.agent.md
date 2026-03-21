@@ -42,6 +42,18 @@ The canonical files are required for every project folder. Chunked files are req
 
 ---
 
+**Branch gate (MANDATORY — before folder setup, artifact writes, or handoff):**
+
+1. Read `docs/project/<project>/<project>.project.md` when it exists.
+2. If `## Branch Plan` exists, capture the expected branch from it.
+3. Read the observed branch with `git branch --show-current`.
+4. If an expected branch exists and observed branch != expected branch, stop work immediately.
+5. On mismatch, record BLOCKED status in `<project>.project.md` and `docs/agents/1project.memory.md`,
+   then hand the task back to `@0master`.
+6. Do not create/overwrite project artifacts or hand off to `@2think` while branch validation fails.
+
+---
+
 1. **Create or validate project folder**
    - Require an explicit `prjNNN` identifier from `@0master` before creating or validating anything.
    - If the identifier is missing, conflicts with the requested folder, or is otherwise ambiguous, stop and hand the task back to `@0master` for numbering resolution.

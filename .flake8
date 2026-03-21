@@ -5,7 +5,9 @@ exclude =
     .git,
     __pycache__,
     .venv,
+    .venv_ci,
+    .agents,
     build,
     dist,
-    *.egg-info
+    *.egg-info,
     .env

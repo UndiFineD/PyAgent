@@ -33,6 +33,17 @@ def test_ci_yaml_test_job_has_install_step() -> None:
     assert "pip install" in step_text, "No install step found in ci.yml test job"
 
 
+def test_ci_yaml_does_not_run_shared_precommit_profile() -> None:
+    """The main CI workflow should leave the shared precommit profile as a local-only gate."""
+    with open(".github/workflows/ci.yml", encoding="utf-8") as fh:
+        cfg = yaml.safe_load(fh)
+    steps = cfg["jobs"]["test"].get("steps", [])
+    step_runs = [step.get("run", "") for step in steps]
+    assert not any("python scripts/ci/run_checks.py --profile precommit" in run for run in step_runs), (
+        "ci.yml should not run the local-only shared precommit profile"
+    )
+
+
 def test_ci_yaml_triggers_on_push_and_pr() -> None:
     """ci.yml must trigger on push and pull_request events."""
     with open(".github/workflows/ci.yml", encoding="utf-8") as fh:

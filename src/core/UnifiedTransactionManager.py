@@ -60,9 +60,7 @@ class UnifiedTransactionManager:
         self._transactions[tx_id] = TransactionEnvelope(tx_id=tx_id, operations=list(operations))
         return tx_id
 
-    def execute(
-        self, tx_id: str, fail_on_operation_id: str | None = None
-    ) -> list[OperationResult]:
+    def execute(self, tx_id: str, fail_on_operation_id: str | None = None) -> list[OperationResult]:
         """Execute the operations in the transaction envelope,
         optionally simulating a failure on a specific operation ID.
         """
@@ -80,11 +78,7 @@ class UnifiedTransactionManager:
             else None
         )
 
-        successful_operations = (
-            envelope.operations
-            if failure_index is None
-            else envelope.operations[:failure_index]
-        )
+        successful_operations = envelope.operations if failure_index is None else envelope.operations[:failure_index]
 
         envelope.executed_operations.extend(successful_operations)
         results = [
@@ -121,9 +115,7 @@ class UnifiedTransactionManager:
         if envelope is None:
             return False
 
-        self.rollback_log.extend(
-            [str(operation.get("id", "")) for operation in reversed(envelope.executed_operations)]
-        )
+        self.rollback_log.extend([str(operation.get("id", "")) for operation in reversed(envelope.executed_operations)])
 
         envelope.executed_operations.clear()
         return True

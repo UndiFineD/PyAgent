@@ -36,7 +36,6 @@ def _ensure_protoc_available(tmp_path: Path) -> str:
     The libp2p dependency uses prost-build which requires a `protoc` executable.
     This helper will download a vendored protoc for Windows when it is missing.
     """
-
     # If the system already has protoc, use it.
     found = shutil.which("protoc")
     if found:
@@ -49,10 +48,7 @@ def _ensure_protoc_available(tmp_path: Path) -> str:
         return str(bin_path)
 
     cache_dir.mkdir(parents=True, exist_ok=True)
-    url = (
-        "https://github.com/protocolbuffers/protobuf/releases/download/v34.0/"
-        "protoc-34.0-win64.zip"
-    )
+    url = "https://github.com/protocolbuffers/protobuf/releases/download/v34.0/protoc-34.0-win64.zip"
 
     zip_path = cache_dir / "protoc.zip"
     try:

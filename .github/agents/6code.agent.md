@@ -45,6 +45,18 @@ This agent does **not** write tests, make design decisions, or modify test files
 
 ---
 
+**Branch gate (MANDATORY — before any code edit or test command):**
+
+1. Read `docs/project/<project>/<project>.project.md`.
+2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
+3. Read the observed branch with `git branch --show-current`.
+4. If observed branch != expected branch, stop work immediately.
+5. On mismatch, record BLOCKED status in `<project>.code.md` and `docs/agents/6code.memory.md`,
+   then hand the task back to `@0master`.
+6. Do not edit code, run implementation tests, or hand off to `@7exec` while branch validation fails.
+
+---
+
 ### Step 1 — Read the task
 - Read the task from `docs/project/<project>/*.plan.md` and the failing tests written by @5test.
 

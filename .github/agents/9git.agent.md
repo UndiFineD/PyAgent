@@ -86,8 +86,11 @@ This agent primarily uses free Copilot models such as GPT-5 Mini, Grok Code Fast
 
 3. **Execute Narrow Git Operations**
 	- Stage only the validated files for the current project.
+	- After staging the validated files, run `pre-commit` before any commit, push, PR creation, or PR update action. Prefer staged-file-aware invocation so the hook run matches the exact narrowed scope that was added.
+	- Do not bypass this requirement with `--no-verify`, skipped hooks, or undocumented local exceptions for project work.
+	- If `pre-commit` fails, stop the git workflow, record the failing hook/check in the project git artifact and `docs/agents/9git.memory.md`, and hand the task back to `@0master`.
 	- Summarize the exact staged files in the git artifact.
-	- Only commit, push, or create/update a PR when both branch validation and scope validation pass and the task constraints allow those operations.
+	- Only commit, push, or create/update a PR when branch validation, scope validation, and the post-staging `pre-commit` run all pass and the task constraints allow those operations.
 
 4. **Failure Disposition And Lessons Learned**
 	- When validation fails, mark the git artifact with the blocked outcome, the observed branch, the offending scope, and the next owner.

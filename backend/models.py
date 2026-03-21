@@ -20,6 +20,7 @@ from pydantic import BaseModel, Field
 
 # ── Client → Backend ────────────────────────────────────────────────────────
 
+
 class InitMessage(BaseModel):
     """Client-to-backend message to initialise a WebSocket session."""
 

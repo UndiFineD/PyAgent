@@ -22,9 +22,10 @@ from __future__ import annotations
 
 import subprocess
 import sys
+from pathlib import Path
 
 
-def _run_script(tmp_path, args=None):
+def _run_script(tmp_path, args=None) -> Path:
     args = args or []
     cmd = [
         sys.executable,

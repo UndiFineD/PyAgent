@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Meta-test to ensure mypy is configured and detects type issues."""
+"""Meta-test to ensure full mypy command coverage is configured."""
 
 import os
 import subprocess
@@ -9,8 +9,8 @@ from pathlib import Path
 import pytest
 
 
-def test_mypy_detects_problem(tmp_path: Path) -> None:
-    """Ensure mypy flags a simple type error or skip if not installed."""
+def test_mypy_full_run_detects_problem(tmp_path: Path) -> None:
+    """Ensure full mypy run on `.` flags a deliberate type error."""
     bad = tmp_path / "bad.py"
     bad.write_text("def f() -> int:\n    return 'str'\n")
 
@@ -21,7 +21,8 @@ def test_mypy_detects_problem(tmp_path: Path) -> None:
     cfg.write_text("""[mypy]\nignore_errors = False\nstrict = True\n""")
 
     res = subprocess.run(
-        [sys.executable, "-m", "mypy", "--config-file", str(cfg), str(bad)],
+        [sys.executable, "-m", "mypy", "--config-file", str(cfg), "."],
+        cwd=str(tmp_path),
         capture_output=True,
         text=True,
         check=False,

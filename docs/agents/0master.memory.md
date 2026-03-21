@@ -31,6 +31,11 @@ _Last updated: 2026-03-20_
 - Record branch hygiene failures in `docs/agents/9git.memory.md` with: date, project, observed branch, failure type, and required fix.
 - Reflect recurring failures or policy changes here so future coordinators enforce the updated workflow earlier.
 - Shared-branch history under unrelated projects is a warning signal, not an exception path.
+- 2026-03-20: Added mandatory "Branch gate" preflight to `@2think` through `@8ql` agent definitions.
+    Downstream agents must now stop immediately on expected/observed branch mismatch,
+    mark their project artifact + memory entry as BLOCKED, and hand back to `@0master`.
+- 2026-03-20: Extended branch-gate enforcement to `@1project` and `@0master` delegation preflight.
+    Result: branch mismatch is now blocked at project setup, planning/execution, and git handoff layers.
 
 ---
 

@@ -406,6 +406,19 @@ class SessionManager:
         self.root = root
         self.star_imports = StarImportManager(root)
         self._baseline_git_status: set[str] = set()
+        # Some meta-tests intentionally exercise write-capable code paths.
+        # Ignore these known volatile artifacts in git-dirty session checks.
+        self._volatile_workspace_paths: set[str] = {"experiments.json", "test"}
+
+    def _filter_volatile_git_status(self, lines: set[str]) -> set[str]:
+        filtered: set[str] = set()
+        for line in lines:
+            path_part = line[3:].strip() if len(line) > 3 else ""
+            normalized_path = path_part.replace("\\", "/")
+            if normalized_path in self._volatile_workspace_paths:
+                continue
+            filtered.add(line)
+        return filtered
 
     def _resolve_import_fixer(self) -> Path | None:
         """Resolve the leading-import fixer script path.
@@ -449,6 +462,16 @@ class SessionManager:
             "ignore",
             message="Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater",
         )
+        warnings.filterwarnings(
+            "ignore",
+            category=SyntaxWarning,
+            module=r"docopt",
+        )
+        warnings.filterwarnings(
+            "ignore",
+            category=SyntaxWarning,
+            module=r"yarg\.package",
+        )
 
         # Snapshot current git status so only test-session-introduced changes
         # fail the run; pre-existing local edits are ignored.
@@ -459,9 +482,9 @@ class SessionManager:
                 capture_output=True,
                 text=True,
             )
-            self._baseline_git_status = {
+            self._baseline_git_status = self._filter_volatile_git_status({
                 line.strip() for line in result.stdout.splitlines() if line.strip()
-            }
+            })
 
         self.star_imports.preimport()
 
@@ -484,9 +507,9 @@ class SessionManager:
                 capture_output=True,
                 text=True,
             )
-            current_status = {
+            current_status = self._filter_volatile_git_status({
                 line.strip() for line in result.stdout.splitlines() if line.strip()
-            }
+            })
             new_changes = sorted(current_status - self._baseline_git_status)
             # if git status reports new changes compared to baseline, mark failure;
             # baseline is intended to ignore pre-existing modifications.  Previously

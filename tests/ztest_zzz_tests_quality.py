@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Meta-test to ensure all test files meet basic quality standards."""
+"""Meta-test to ensure test files meet structural quality standards."""
 # Copyright 2026 UndiFineD
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,6 @@
 # limitations under the License.
 
 import ast
-import subprocess
-import sys
 from pathlib import Path
 
 import pytest
@@ -36,16 +34,14 @@ def _has_pytest_raises(tree: ast.AST) -> bool:
 
 
 def test_all_test_files_meet_quality(pytestconfig: pytest.Config) -> None:
-    """Meta-test that checks every test_*.py file for basic quality:
+    """Meta-test that checks every test_*.py file for structural quality:
     Verbosity is controlled by pytest's -v/--verbose flag; when set the
     test prints each filename and the checks being executed.
     - contains at least one assert or pytest.raises
-    - passes ruff lint
-    - passes mypy type check
-    This helps ensure "who tests the tester" by enforcing quality on test files themselves.
+    - parses as valid Python syntax
+    Lint and type-tool execution coverage is delegated to dedicated tests.
     """
     failures: list[str] = []
-    warnings: list[str] = []
 
     repo_root = Path(__file__).resolve().parent.parent
     test_files = sorted(repo_root.glob("tests/test_*.py"))
@@ -73,50 +69,6 @@ def test_all_test_files_meet_quality(pytestconfig: pytest.Config) -> None:
             print(f"  has_assert={has_assert} has_raises={has_raises}")
         if not (has_assert or has_raises):
             failures.append(f"{f}: no assert or pytest.raises found")
-
-        # run ruff on this file (use explicit 'check' subcommand)
-        ruff_cmd = [sys.executable, "-m", "ruff", "check", str(f)]
-        if verbose:
-            print(f"  running ruff: {' '.join(ruff_cmd)}")
-        try:
-            ruff = subprocess.run(ruff_cmd, capture_output=True, text=True, check=False, timeout=60)
-        except FileNotFoundError:
-            warnings.append(f"{f}: ruff not installed or not available in PATH")
-            ruff = None
-        except subprocess.TimeoutExpired:
-            warnings.append(f"{f}: ruff timed out after 60 seconds")
-            ruff = None
-        if ruff is not None and ruff.returncode != 0:
-            # if ruff isn't installed in the venv, python -m ruff will exit with ModuleNotFoundError
-            if "No module named ruff" in (ruff.stderr or ""):
-                warnings.append(f"{f}: ruff not installed in environment: {ruff.stderr}")
-            else:
-                failures.append(f"{f}: ruff reported issues:\n{ruff.stdout}{ruff.stderr}")
-        # run mypy on this single file (ignore missing imports to reduce noise)
-        mypy_cmd = [
-            sys.executable,
-            "-m",
-            "mypy",
-            "--no-incremental",
-            "--ignore-missing-imports",
-            str(f),
-        ]
-        if verbose:
-            print(f"  running mypy: {' '.join(mypy_cmd)}")
-        try:
-            mypy = subprocess.run(mypy_cmd, capture_output=True, text=True, check=False)
-        except FileNotFoundError:
-            warnings.append(f"{f}: mypy not installed or not available in PATH")
-            mypy = None
-        if mypy is not None and mypy.returncode != 0:
-            if "No module named mypy" in (mypy.stderr or ""):
-                warnings.append(f"{f}: mypy not installed in environment: {mypy.stderr}")
-            else:
-                failures.append(f"{f}: mypy reported issues:\n{mypy.stdout}{mypy.stderr}")
-
-    # Report warnings (but don't fail the meta-test on missing dev tools)
-    if warnings:
-        pytest.skip("Warnings while running quality checks:\n" + "\n".join(warnings))
 
     if failures:
         pytest.fail("\n\n".join(failures))

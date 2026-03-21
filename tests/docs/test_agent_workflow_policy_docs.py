@@ -14,7 +14,6 @@
 
 from pathlib import Path
 
-
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -40,9 +39,7 @@ def test_0master_documents_project_numbering_ownership_and_continuity() -> None:
     assert "next available identifier" in combined
     assert "project numbering is part of the project boundary" in combined
     assert (
-        "confirming numbering continuity" in combined
-        or "continuity tracking" in combined
-        or "continuity" in combined
+        "confirming numbering continuity" in combined or "continuity tracking" in combined or "continuity" in combined
     )
 
 
@@ -61,14 +58,44 @@ def test_1project_requires_assigned_identifier_and_template_sections() -> None:
     assert "## Branch Plan" in project_agent_text
 
 
+def test_1project_enforces_branch_gate_before_handoff() -> None:
+    """The project agent must stop work on expected/observed branch mismatch."""
+    project_agent_text = _read(".github/agents/1project.agent.md")
+    project_agent = _normalize(project_agent_text)
+
+    assert "branch gate (mandatory" in project_agent
+    assert "git branch --show-current" in project_agent_text
+    assert "if an expected branch exists and observed branch != expected branch, stop work immediately" in project_agent
+    assert "record blocked status" in project_agent
+    assert "hand the task back to @0master" in project_agent
+
+
+def test_0master_enforces_delegation_preflight_branch_gate() -> None:
+    """The master agent must gate delegation when active branch mismatches project branch."""
+    master_agent_text = _read(".github/agents/0master.agent.md")
+    master_agent = _normalize(master_agent_text)
+
+    assert "delegation preflight branch gate" in master_agent
+    assert "git branch --show-current" in master_agent_text
+    assert "if observed branch != expected branch, stop delegation immediately" in master_agent
+    assert "mark the task blocked in docs/agents/0master.memory.md" in master_agent
+    assert "do not authorize downstream handoff, staging, commit, push, or pr actions" in master_agent
+
+
 def test_9git_enforces_branch_scope_and_failure_rules() -> None:
     """The git agent must validate branch/scope and forbid blanket staging guidance."""
     git_agent_text = _read(".github/agents/9git.agent.md")
     git_agent = _normalize(git_agent_text)
+    precommit_phrase = (
+        "after staging the validated files, run pre-commit before any commit, push, pr creation, or pr update action"
+    )
 
     assert "branch validation" in git_agent
     assert "scope validation" in git_agent
     assert "never use blanket staging guidance" in git_agent
+    assert precommit_phrase in git_agent
+    assert "do not bypass this requirement with --no-verify" in git_agent
+    assert "if pre-commit fails, stop the git workflow" in git_agent
     assert "if branch validation fails, do not stage, commit, push" in git_agent
     assert "hand the task back to @0master" in git_agent
     assert "git add ." in git_agent_text
@@ -81,6 +108,160 @@ def test_9git_enforces_branch_scope_and_failure_rules() -> None:
     assert "## Scope Validation" in git_agent_text
     assert "## Failure Disposition" in git_agent_text
     assert "## Lessons Learned" in git_agent_text
+
+
+def test_downstream_agents_require_branch_gate_before_work() -> None:
+    """Agents 2-8 must block work when observed branch differs from expected branch."""
+    downstream_agents = [
+        ".github/agents/2think.agent.md",
+        ".github/agents/3design.agent.md",
+        ".github/agents/4plan.agent.md",
+        ".github/agents/5test.agent.md",
+        ".github/agents/6code.agent.md",
+        ".github/agents/7exec.agent.md",
+        ".github/agents/8ql.agent.md",
+    ]
+
+    for relative_path in downstream_agents:
+        raw_text = _read(relative_path)
+        normalized = _normalize(raw_text)
+
+        assert "branch gate (mandatory" in normalized, f"{relative_path}: missing mandatory Branch gate section"
+        assert "git branch --show-current" in raw_text, f"{relative_path}: missing observed branch check command"
+        assert "if observed branch != expected branch, stop work immediately" in normalized, (
+            f"{relative_path}: missing hard stop on branch mismatch"
+        )
+        assert "hand the task back to @0master" in normalized, f"{relative_path}: missing mismatch escalation owner"
+
+
+_AGENT_BRANCH_POLICY_REQUIREMENTS: dict[str, dict[str, list[str]]] = {
+    ".github/agents/0master.agent.md": {
+        "normalized": [
+            "delegation preflight branch gate",
+            "if observed branch != expected branch, stop delegation immediately",
+            "mark the task blocked in docs/agents/0master.memory.md",
+            "do not authorize downstream handoff, staging, commit, push, or pr actions",
+        ],
+        "raw": [
+            "git branch --show-current",
+        ],
+    },
+    ".github/agents/1project.agent.md": {
+        "normalized": [
+            "branch gate (mandatory",
+            "if an expected branch exists and observed branch != expected branch, stop work immediately",
+            "record blocked status in <project>.project.md and docs/agents/1project.memory.md",
+            "do not create/overwrite project artifacts or hand off to @2think while branch validation fails",
+        ],
+        "raw": [
+            "git branch --show-current",
+        ],
+    },
+    ".github/agents/2think.agent.md": {
+        "normalized": [
+            "branch gate (mandatory",
+            "if observed branch != expected branch, stop work immediately",
+            "record blocked status in <project>.think.md and docs/agents/2think.memory.md",
+            "do not write/overwrite think artifacts or hand off to @3design while branch validation fails",
+        ],
+        "raw": ["git branch --show-current"],
+    },
+    ".github/agents/3design.agent.md": {
+        "normalized": [
+            "branch gate (mandatory",
+            "if observed branch != expected branch, stop work immediately",
+            "record blocked status in <project>.design.md and docs/agents/3design.memory.md",
+            "do not write/overwrite design artifacts or hand off to @4plan while branch validation fails",
+        ],
+        "raw": ["git branch --show-current"],
+    },
+    ".github/agents/4plan.agent.md": {
+        "normalized": [
+            "branch gate (mandatory",
+            "if observed branch != expected branch, stop work immediately",
+            "record blocked status in <project>.plan.md and docs/agents/4plan.memory.md",
+            "do not write/overwrite plan artifacts or hand off to @5test while branch validation fails",
+        ],
+        "raw": ["git branch --show-current"],
+    },
+    ".github/agents/5test.agent.md": {
+        "normalized": [
+            "branch gate (mandatory",
+            "if observed branch != expected branch, stop work immediately",
+            "record blocked status in <project>.test.md and docs/agents/5test.memory.md",
+            "do not write/overwrite test artifacts or hand off to @6code while branch validation fails",
+        ],
+        "raw": ["git branch --show-current"],
+    },
+    ".github/agents/6code.agent.md": {
+        "normalized": [
+            "branch gate (mandatory",
+            "if observed branch != expected branch, stop work immediately",
+            "record blocked status in <project>.code.md and docs/agents/6code.memory.md",
+            "do not edit code, run implementation tests, or hand off to @7exec while branch validation fails",
+        ],
+        "raw": ["git branch --show-current"],
+    },
+    ".github/agents/7exec.agent.md": {
+        "normalized": [
+            "branch gate (mandatory",
+            "if observed branch != expected branch, stop work immediately",
+            "record blocked status in <project>.exec.md and docs/agents/7exec.memory.md",
+            "do not run full validation, smoke checks, or hand off to @8ql while branch validation fails",
+        ],
+        "raw": ["git branch --show-current"],
+    },
+    ".github/agents/8ql.agent.md": {
+        "normalized": [
+            "branch gate (mandatory",
+            "if observed branch != expected branch, stop work immediately",
+            "record blocked status in <project>.ql.md and docs/agents/8ql.memory.md",
+            "do not run security scans or hand off to @9git while branch validation fails",
+        ],
+        "raw": ["git branch --show-current"],
+    },
+    ".github/agents/9git.agent.md": {
+        "normalized": [
+            "branch validation",
+            "scope validation",
+            (
+                "after staging the validated files, run pre-commit before any commit, "
+                "push, pr creation, or pr update action"
+            ),
+            "do not bypass this requirement with --no-verify",
+            "if pre-commit fails, stop the git workflow",
+            "if branch validation fails, do not stage, commit, push, open a pr, or update a pr",
+            "never use blanket staging guidance",
+        ],
+        "raw": [
+            "## Branch Plan",
+            "**Expected branch:** `<project-specific branch>`",
+            "**Observed branch:** `<active branch at validation time>`",
+            "**Project match:** PASS or FAIL",
+            "## Branch Validation",
+            "## Scope Validation",
+            "## Failure Disposition",
+            "## Lessons Learned",
+        ],
+    },
+}
+
+
+def test_all_workflow_agents_carry_exact_branch_governance_contract() -> None:
+    """Every workflow agent must carry its required branch-governance phrases and sections."""
+    for relative_path, requirements in _AGENT_BRANCH_POLICY_REQUIREMENTS.items():
+        raw_text = _read(relative_path)
+        normalized = _normalize(raw_text)
+
+        for phrase in requirements.get("normalized", []):
+            assert phrase in normalized, (
+                f"{relative_path}: missing required normalized branch-governance phrase: {phrase!r}"
+            )
+
+        for phrase in requirements.get("raw", []):
+            assert phrase in raw_text, (
+                f"{relative_path}: missing required raw branch-governance phrase/section: {phrase!r}"
+            )
 
 
 def test_legacy_git_summaries_document_branch_exception_and_corrective_ownership() -> None:
@@ -98,11 +279,7 @@ def test_legacy_git_summaries_document_branch_exception_and_corrective_ownership
 
         assert "## Legacy Branch Exception" in raw_text
         assert "legacy" in normalized
-        assert (
-            "branch mismatch" in normalized
-            or "mismatch" in normalized
-            or "shared prj037" in normalized
-        )
+        assert "branch mismatch" in normalized or "mismatch" in normalized or "shared prj037" in normalized
         assert "@0master" in normalized
         assert "@9git" in normalized
         assert (
@@ -140,8 +317,7 @@ _MODERN_REQUIRED_SECTIONS = [
 
 
 def test_git_summaries_use_modern_branch_plan_format_or_carry_legacy_exception() -> None:
-    """
-    Every *.git.md under docs/project/ must either:
+    """Every *.git.md under docs/project/ must either.
 
     A) Comply with the modern Branch Plan template (all _MODERN_REQUIRED_SECTIONS present), OR
     B) Carry an explicit ## Legacy Branch Exception section that explains the historical
@@ -166,12 +342,8 @@ def test_git_summaries_use_modern_branch_plan_format_or_carry_legacy_exception()
             # Pure-legacy layout: exception section is sufficient — validate the exception
             # section itself carries the minimum required content.
             normalized = _normalize(raw_text)
-            assert "@0master" in normalized, (
-                f"{relative}: ## Legacy Branch Exception must reference @0master"
-            )
-            assert "@9git" in normalized, (
-                f"{relative}: ## Legacy Branch Exception must reference @9git"
-            )
+            assert "@0master" in normalized, f"{relative}: ## Legacy Branch Exception must reference @0master"
+            assert "@9git" in normalized, f"{relative}: ## Legacy Branch Exception must reference @9git"
         else:
             # Modern layout required: either no legacy exception, or migration in progress
             # (has Branch Plan alongside an exception).  Either way all modern sections
@@ -197,9 +369,9 @@ def test_git_summaries_use_modern_branch_plan_format_or_carry_legacy_exception()
 # Project folder completeness
 # ---------------------------------------------------------------------------
 
+
 def test_every_project_folder_has_a_project_overview() -> None:
-    """
-    Every docs/project/prj0000000-style directory must contain at least one *.project.md file.
+    """Every docs/project/prj0000000-style directory must contain at least one *.project.md file.
 
     This enforces the @1project contract: a project folder without a project overview
     means @1project did not complete its mandatory first step, or a folder was created
@@ -208,22 +380,18 @@ def test_every_project_folder_has_a_project_overview() -> None:
     legacy folders, by adding a minimal stub with **Project ID:** populated.
     """
     project_dirs = sorted(
-        d for d in (REPO_ROOT / "docs" / "project").iterdir()
+        d
+        for d in (REPO_ROOT / "docs" / "project").iterdir()
         if d.is_dir() and d.name.startswith("prj") and d.name[3:6].isdigit()
     )
     assert project_dirs, "No prjNNN-* directories found under docs/project/"
 
-    missing = [
-        d.relative_to(REPO_ROOT).as_posix()
-        for d in project_dirs
-        if not any(d.glob("*.project.md"))
-    ]
+    missing = [d.relative_to(REPO_ROOT).as_posix() for d in project_dirs if not any(d.glob("*.project.md"))]
 
     assert not missing, (
         "The following project folders are missing a *.project.md overview file. "
         "Create the overview using the @1project template (modern format preferred) "
-        "or add a minimal stub with **Project ID:** populated:\n"
-        + "\n".join(f"  - {p}" for p in missing)
+        "or add a minimal stub with **Project ID:** populated:\n" + "\n".join(f"  - {p}" for p in missing)
     )
 
 
@@ -248,8 +416,7 @@ _LEGACY_DUPLICATE_NUMBERS: dict[str, list[str]] = {
 
 
 def test_project_folder_numbers_are_unique_or_documented_legacy_duplicates() -> None:
-    """
-    No two docs/project/ folders may share the same seven-digit prjNNN number
+    """No two docs/project/ folders may share the same seven-digit prjNNN number
     unless that duplication is explicitly listed in _LEGACY_DUPLICATE_NUMBERS.
 
     This enforces the @0master numbering policy:
@@ -262,9 +429,7 @@ def test_project_folder_numbers_are_unique_or_documented_legacy_duplicates() -> 
     from collections import defaultdict
 
     project_dirs = [
-        d.name
-        for d in (REPO_ROOT / "docs" / "project").iterdir()
-        if d.is_dir() and re.match(r"^prj\d{7}$", d.name)
+        d.name for d in (REPO_ROOT / "docs" / "project").iterdir() if d.is_dir() and re.match(r"^prj\d{7}$", d.name)
     ]
 
     # Group folder names by their seven-digit number.
@@ -363,8 +528,7 @@ _TRANSITIONAL_OVERVIEW_LAYOUT_MARKERS = [
 
 
 def test_project_overviews_use_modern_template_or_carry_legacy_exception() -> None:
-    """
-    Every *.project.md under docs/project/ must either:
+    """Every *.project.md under docs/project/ must either.
 
     A) Comply with the modern Project Identity template (all
        _MODERN_OVERVIEW_REQUIRED_SECTIONS present), OR
@@ -383,28 +547,20 @@ def test_project_overviews_use_modern_template_or_carry_legacy_exception() -> No
         has_legacy_exception = "## Legacy Project Overview Exception" in raw_text
         has_project_identity = "## Project Identity" in raw_text
         has_legacy_layout = all(marker in raw_text for marker in _LEGACY_OVERVIEW_LAYOUT_MARKERS)
-        has_legacy_layout_alt = all(
-            marker in raw_text for marker in _ALTERNATE_LEGACY_OVERVIEW_LAYOUT_MARKERS
-        )
-        has_transitional_layout = all(
-            marker in raw_text for marker in _TRANSITIONAL_OVERVIEW_LAYOUT_MARKERS
-        )
+        has_legacy_layout_alt = all(marker in raw_text for marker in _ALTERNATE_LEGACY_OVERVIEW_LAYOUT_MARKERS)
+        has_transitional_layout = all(marker in raw_text for marker in _TRANSITIONAL_OVERVIEW_LAYOUT_MARKERS)
 
         is_known_legacy = relative in _LEGACY_PROJECT_OVERVIEW_PATHS
 
         if (
-            has_legacy_exception
-            or has_legacy_layout
-            or has_legacy_layout_alt
-            or has_transitional_layout
+            has_legacy_exception or has_legacy_layout or has_legacy_layout_alt or has_transitional_layout
         ) and not has_project_identity:
             # Pure-legacy layout: exception section is sufficient — validate the exception
             # section itself carries the minimum required content.
             normalized = _normalize(raw_text)
             if has_legacy_exception:
                 assert "legacy" in normalized, (
-                    f"{relative}: ## Legacy Project Overview Exception must explain "
-                    "the historical deviation"
+                    f"{relative}: ## Legacy Project Overview Exception must explain the historical deviation"
                 )
         else:
             # Modern layout required: either no legacy exception, or migration in progress
@@ -420,12 +576,7 @@ def test_project_overviews_use_modern_template_or_carry_legacy_exception() -> No
         # Cross-check: files in the known-legacy set must still carry the exception section
         # if they have not been migrated to the modern format.
         if is_known_legacy and not has_project_identity:
-            assert (
-                has_legacy_exception
-                or has_legacy_layout
-                or has_legacy_layout_alt
-                or has_transitional_layout
-            ), (
+            assert has_legacy_exception or has_legacy_layout or has_legacy_layout_alt or has_transitional_layout, (
                 f"{relative}: known-legacy file must have a legacy exception section "
                 "or retain recognized legacy/transitional overview layout markers"
             )

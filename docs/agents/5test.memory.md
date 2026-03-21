@@ -11,6 +11,19 @@ Invoke it via `agent/runSubagent` to continue the implementation workflow.
 
 ## Task Log
 
+### task_id: prj037-flake8-config-20260320
+- lifecycle: IN_PROGRESS
+- project: prj037-tools-crdt-security
+- scope:
+	- add `tests/test_zzc_flake8_config.py`
+	- validate current flake8 command/config behavior only
+- notes:
+	- branch gate passed on `prj037-tools-crdt-security`
+	- repository state includes a checked-in `.flake8`, which overrides the task context stating none existed
+- handoff:
+	- target_agent: @6code
+	- required scope: none yet; focused test authoring in progress
+
 ### task_id: prj006-quality-gate-triage-20260320
 - lifecycle: OPEN -> IN_PROGRESS -> DONE
 - project: prj006-unified-transaction-manager
