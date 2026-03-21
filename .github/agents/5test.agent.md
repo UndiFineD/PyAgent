@@ -30,17 +30,17 @@ This agent does **not** implement production code.
 
 **Checkpoint rule (MANDATORY — applies to all project work):**
 
-1. **Start of Step 1** — ensure `docs/project/<project>/<project>.test.md` exists.
+1. **Start of Step 1** — ensure `docs/project/prj*/<project>.test.md` exists.
 	- If missing: create it using the inline `<project>.test.md` template at the bottom of this file, with `_Status: IN_PROGRESS_`.
 	- If present: overwrite the `_Status_` line to `_Status: IN_PROGRESS_`.
-2. **After each numbered step** — overwrite `docs/project/<project>/<project>.test.md` with the full current content of every template section. Never omit a section.
+2. **After each numbered step** — overwrite `docs/project/prj*/<project>.test.md` with the full current content of every template section. Never omit a section.
 3. **Before calling `runSubagent` for the next agent** — final overwrite, set `_Status: DONE_`. Use `_Status: HANDED_OFF_` if work continues in a downstream agent.
 
 ---
 
 **Branch gate (MANDATORY — before writing tests or handoff):**
 
-1. Read `docs/project/<project>/<project>.project.md`.
+1. Read `docs/project/prj*/<project>.project.md`.
 2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
 3. Read the observed branch with `git branch --show-current`.
 4. If observed branch != expected branch, stop work immediately.
@@ -51,7 +51,7 @@ This agent does **not** implement production code.
 ---
 
 ### Phase 1 — Red (write failing tests)
-1. Read the plan in `docs/project/<project>/*.plan.md`.
+1. Read the plan in `docs/project/prj*/*.plan.md`.
 2. Identify the first chunk of tasks (≈10 code files / 10 test files).
 3. Write tests that capture the acceptance criteria for each task.
 4. Verify tests fail for the correct reason (implementation missing/incorrect).

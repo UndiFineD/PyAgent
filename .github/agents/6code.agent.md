@@ -37,17 +37,17 @@ This agent does **not** write tests, make design decisions, or modify test files
 
 **Checkpoint rule (MANDATORY — applies to all project work):**
 
-1. **Start of Step 1** — ensure `docs/project/<project>/<project>.code.md` exists.
+1. **Start of Step 1** — ensure `docs/project/prj*/<project>.code.md` exists.
 	- If missing: create it using the inline `<project>.code.md` template at the bottom of this file, with `_Status: IN_PROGRESS_`.
 	- If present: overwrite the `_Status_` line to `_Status: IN_PROGRESS_`.
-2. **After each numbered step** — overwrite `docs/project/<project>/<project>.code.md` with the full current content of every template section. Never omit a section.
+2. **After each numbered step** — overwrite `docs/project/prj*/<project>.code.md` with the full current content of every template section. Never omit a section.
 3. **Before calling `runSubagent` for the next agent** — final overwrite, set `_Status: DONE_`. Use `_Status: HANDED_OFF_` if work continues in a downstream agent.
 
 ---
 
 **Branch gate (MANDATORY — before any code edit or test command):**
 
-1. Read `docs/project/<project>/<project>.project.md`.
+1. Read `docs/project/prj*/<project>.project.md`.
 2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
 3. Read the observed branch with `git branch --show-current`.
 4. If observed branch != expected branch, stop work immediately.
@@ -58,7 +58,7 @@ This agent does **not** write tests, make design decisions, or modify test files
 ---
 
 ### Step 1 — Read the task
-- Read the task from `docs/project/<project>/*.plan.md` and the failing tests written by @5test.
+- Read the task from `docs/project/prj*/*.plan.md` and the failing tests written by @5test.
 
 ### Step 2 — Survey the codebase
 - Locate existing code relevant to the task.
@@ -79,7 +79,7 @@ python -m mypy src/
 
 ### Step 5 — Validate and annotate
 - Ensure the tests pass and no new linting errors appear.
-- If issues remain, update the task notes in `docs/project/<project>/*.plan.md`.
+- If issues remain, update the task notes in `docs/project/prj*/*.plan.md`.
 
 ### Step 6 — Hand off to @7exec
 - Once tests pass, signal `@7exec` for runtime validation.

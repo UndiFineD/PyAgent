@@ -8,8 +8,8 @@ tools: [vscode/getProjectSetupInfo, vscode/installExtension, vscode/memory, vsco
 The **@1project** agent establishes and maintains project structure and documentation. It is responsible for:
 
 - Using the `prjNNN` identifier assigned by `@0master` for every project artifact and folder name.
-- Creating a project directory under `docs/project/prjNNN-name/`.
-- Writing an initial project overview file: `docs/project/prjNNN-name/<project>.project.md`.
+- Creating a project directory under `docs/project/prj*/`.
+- Writing an initial project overview file: `docs/project/prj*/<project>.project.md`.
 - Guiding the project through option exploration, design, and planning by delegating to `@2think`, `@3design`, and `@4plan`.
 
 **Project doc conventions**
@@ -20,9 +20,9 @@ The **@1project** agent establishes and maintains project structure and document
 - **Canonical think file**: `<project>.think.md` (summary entry point for options)
 - **Canonical design file**: `<project>.design.md` (summary entry point for selected design)
 - **Canonical plan file**: `<project>.plan.md` (summary entry point for implementation)
-- **Optional chunked think files**: `<project>.chunk-NN.think.md`
-- **Optional chunked design files**: `<project>.chunk-NN.design.md`
-- **Optional chunked plan files**: `<project>.chunk-NN.plan.md`
+- **Optional chunked think files**: `chunk-NNN.<project>.think.md`
+- **Optional chunked design files**: `chunk-NNN.<project>.design.md`
+- **Optional chunked plan files**: `chunk-NNN.<project>.plan.md`
 
 The canonical files are required for every project folder. Chunked files are required when the project is too large for one document.
 
@@ -34,17 +34,17 @@ The canonical files are required for every project folder. Chunked files are req
 
 **Checkpoint rule (MANDATORY — applies to all project work):**
 
-1. **Start of Step 1** — ensure `docs/project/<project>/<project>.project.md` exists.
+1. **Start of Step 1** — ensure `docs/project/prj*/<project>.project.md` exists.
    - If missing: create it using the inline `<project>.project.md` template at the bottom of this file, with `_Status: IN_PROGRESS_`.
    - If present: overwrite the `_Status_` line to `_Status: IN_PROGRESS_`.
-2. **After each numbered step** — overwrite `docs/project/<project>/<project>.project.md` with the full current content of every template section. Never omit a section.
+2. **After each numbered step** — overwrite `docs/project/prj*/<project>.project.md` with the full current content of every template section. Never omit a section.
 3. **Before calling `runSubagent` for the next agent** — final overwrite, set `_Status: DONE_`. Use `_Status: HANDED_OFF_` if work continues in a downstream agent.
 
 ---
 
 **Branch gate (MANDATORY — before folder setup, artifact writes, or handoff):**
 
-1. Read `docs/project/<project>/<project>.project.md` when it exists.
+1. Read `docs/project/prj*/<project>.project.md` when it exists.
 2. If `## Branch Plan` exists, capture the expected branch from it.
 3. Read the observed branch with `git branch --show-current`.
 4. If an expected branch exists and observed branch != expected branch, stop work immediately.
@@ -77,9 +77,9 @@ The canonical files are required for every project folder. Chunked files are req
    - Populate the overview with: assigned project ID, project name, goal, scope, milestones, stakeholders, key constraints, and the branch plan.
    - The branch plan must declare the expected branch, the scope boundary for allowed changes, and the handoff rule that `@9git` will enforce.
    - Include links to the canonical local files and, when used, chunked files.
-   - If links to external artifacts (legacy `.github/superpower/*`) are present, keep them as references, but canonical local files (`docs/project/prjNNN-name/<project>.think.md`, `docs/project/prjNNN-name/<project>.design.md`, `docs/project/prjNNN-name/<project>.plan.md`) stay authoritative.
+   - If links to external artifacts (legacy `.github/superpower/*`) are present, keep them as references, but canonical local files (`docs/project/prj*/<project>.think.md`, `docs/project/prj*/<project>.design.md`, `docs/project/prj*/<project>.plan.md`) stay authoritative.
 3. **Hand off to @2think**
-   - Ask `@2think` to explore options by creating `*.think.md` files in the project folder, where they can use `docs/project/*/brainstorm.md` as a reference but not an authoritative source.
+   - Ask `@2think` to explore options by creating `*.think.md` files in the project folder, where they can use `docs/project/prj*/brainstorm.md` as a reference but not an authoritative source.
    - Provide the project overview and any relevant context.
 
 4. **Track progress**
@@ -122,9 +122,9 @@ _Status: IN_PROGRESS_
 _Owner: @1project | Updated: <date>_
 
 ## Project Identity
-**Project ID:** <assigned `prjNNN` from @0master>
+**Project ID:** <assigned `prj*` from @0master>
 **Short name:** <kebab-case short name>
-**Project folder:** `docs/project/<project-id>-<short-name>/`
+**Project folder:** `docs/project/prj*/`
 
 ## Project Overview
 <one paragraph description>
@@ -135,7 +135,7 @@ _Owner: @1project | Updated: <date>_
 **Out of scope:** <items>
 
 ## Branch Plan
-**Expected branch:** <project-specific branch, usually matching the assigned `prjNNN-short-name`>
+**Expected branch:** <project-specific branch, usually matching the assigned `prj*-short-name`>
 **Scope boundary:** <project folder plus explicitly allowed shared authoritative files>
 **Handoff rule:** `@9git` must refuse staging, commit, push, or PR work unless the active branch matches this project and the changed files stay inside the scope boundary.
 **Failure rule:** If the project ID or branch plan is missing, inherited, conflicting, or ambiguous, return the task to `@0master` before downstream handoff.

@@ -39,17 +39,17 @@ If vulnerabilities are found, it reports them to `@6code` (fixable code issues) 
 
 **Checkpoint rule (MANDATORY — applies to all project work):**
 
-1. **Start of Step 1** — ensure `docs/project/<project>/<project>.ql.md` exists.
+1. **Start of Step 1** — ensure `docs/project/prj*/<project>.ql.md` exists.
 	- If missing: create it using the inline `<project>.ql.md` template at the bottom of this file, with `_Status: IN_PROGRESS_`.
 	- If present: overwrite the `_Status_` line to `_Status: IN_PROGRESS_`.
-2. **After each numbered step** — overwrite `docs/project/<project>/<project>.ql.md` with the full current content of every template section. Never omit a section.
+2. **After each numbered step** — overwrite `docs/project/prj*/<project>.ql.md` with the full current content of every template section. Never omit a section.
 3. **Before calling `runSubagent` for the next agent** — final overwrite, set `_Status: DONE_`. Use `_Status: HANDED_OFF_` if work continues in a downstream agent.
 
 ---
 
 **Branch gate (MANDATORY — before scans or handoff):**
 
-1. Read `docs/project/<project>/<project>.project.md`.
+1. Read `docs/project/prj*/<project>.project.md`.
 2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
 3. Read the observed branch with `git branch --show-current`.
 4. If observed branch != expected branch, stop work immediately.
@@ -75,7 +75,7 @@ python -m src.tools ql --base main
 ```
 
 By default the tool writes its report to:  
-`docs/project/<project>/<project>.8ql.md`  
+`docs/project/prj*/<project>.8ql.md`  
 
 If you need to force a specific project folder (e.g., a detached or temporary branch), use `--project <project>`.
 

@@ -31,17 +31,17 @@ This agent does **not** write tests or production code.
 
 **Checkpoint rule (MANDATORY — applies to all project work):**
 
-1. **Start of Step 1** — ensure `docs/project/<project>/<project>.plan.md` exists.
+1. **Start of Step 1** — ensure `docs/project/prj*/<project>.plan.md` exists.
   - If missing: create it using the inline `<project>.plan.md` template at the bottom of this file, with `_Status: IN_PROGRESS_`.
   - If present: overwrite the `_Status_` line to `_Status: IN_PROGRESS_`.
-2. **After each numbered step** — overwrite `docs/project/<project>/<project>.plan.md` with the full current content of every template section. Never omit a section.
+2. **After each numbered step** — overwrite `docs/project/prj*/<project>.plan.md` with the full current content of every template section. Never omit a section.
 3. **Before calling `runSubagent` for the next agent** — final overwrite, set `_Status: DONE_`. Use `_Status: HANDED_OFF_` if work continues in a downstream agent.
 
 ---
 
 **Branch gate (MANDATORY — before any artifact write or handoff):**
 
-1. Read `docs/project/<project>/<project>.project.md`.
+1. Read `docs/project/prj*/<project>.project.md`.
 2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
 3. Read the observed branch with `git branch --show-current`.
 4. If observed branch != expected branch, stop work immediately.
@@ -52,7 +52,7 @@ This agent does **not** write tests or production code.
 ---
 
 ### Step 1 — Read the design
-- Read `docs/project/<project>/*.design.md` to understand the architecture and interfaces.
+- Read `docs/project/prj*/*.design.md` to understand the architecture and interfaces.
 
 ### Step 2 — Decompose into chunks
 - Split the work into chunks of ~10 code files and ~10 test files.
@@ -67,9 +67,9 @@ This agent does **not** write tests or production code.
 
 ### Step 4 — Record the plan
 - Always create or update the canonical plan file:
-  - `docs/project/<project>/<project>.plan.md`
+  - `docs/project/prj*/<project>.plan.md`
 - For larger implementations, split into chunked plan files:
-  - `docs/project/<project>/<project>.chunk-NN.plan.md`
+  - `docs/project/prj*/chunk-NNN.<project>.plan.md`
 - The canonical plan file must summarize and link all chunked plan files.
 - Include in the canonical plan:
   - Overview
