@@ -37,3 +37,9 @@
 	- `src/MemoryTransactionManager.py`
 	- `src/core/agent_state_manager.py`
 	- `src/core/base/models/communication_models.py`
+
+## Branch Plan
+
+**Expected branch:** `prj0000006-unified-transaction-manager`
+**Scope boundary:** `docs/project/prj0000006/`, `src/core/UnifiedTransactionManager.py`, related transaction manager files.
+**Handoff rule:** `@9git` must refuse staging, commit, push, or PR unless the active branch matches the expected branch above and changed files stay within the scope boundary.

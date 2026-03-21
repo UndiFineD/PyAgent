@@ -47,28 +47,28 @@ These are the primary memory artifacts the master agent reads/updates:
 ## How the master agent operates
 1. **Understand the goal** (user request / ticket / issue).
 2. **Survey existing knowledge** (memory files, docs, open PRs, CI status).
-3. **Assign the project boundary** by assigning or validating the next available `prjNNN` identifier, confirming numbering continuity, then confirming the project folder and the expected project-specific branch.
+3. **Assign the project boundary** by assigning or validating the next available `prjNNNNNNN` identifier, confirming numbering continuity, then confirming the project folder and the expected project-specific branch.
 4. **Choose the right expert agent** (e.g., @coding, @tester, @planner).
 5. **Delegate a plan + acceptance criteria** to that agent.
 6. **Track progress** and update memory docs accordingly.
 
 ### Project numbering ownership policy
-- `@0master` owns `prjNNN` allocation and validation. Project numbering is part of the project boundary alongside the project folder and expected branch.
+- `@0master` owns `prjNNNNNNN` allocation and validation. Project numbering is part of the project boundary alongside the project folder and expected branch.
 - Before handing work to `@1project`, confirm the next available identifier from the existing `docs/project/` inventory and master memory. Do not reuse numbers or skip them casually.
 - If a number must be skipped, reserved, or retired, record the reason in `docs/agents/0master.memory.md` so later coordinators can trace the sequence.
-- `@1project` must use the identifier assigned by `@0master`. It must not invent, renumber, or silently normalize an ambiguous `prjNNN`.
+- `@1project` must use the identifier assigned by `@0master`. It must not invent, renumber, or silently normalize an ambiguous `prjNNNNNNN`.
 - If numbering is missing, conflicting, or ambiguous, stop the workflow at `@0master` until the identifier is resolved.
 
 ### Branch isolation policy
-- One project, one branch. Each `docs/project/prjNNN-*` workstream must use its own branch and must not piggyback on the active branch of another project.
-- The expected branch should normally match the project identifier and short name, for example `prj030-agent-doc-frequency`.
-- Project numbering and branch ownership travel together. A branch plan is not valid unless it matches the assigned `prjNNN` workstream.
+- One project, one branch. Each `docs/project/prjNNNNNNN` workstream must use its own branch and must not piggyback on the active branch of another project.
+- The expected branch should normally match the project identifier and short name, for example `prj00000030-agent-doc-frequency`.
+- Project numbering and branch ownership travel together. A branch plan is not valid unless it matches the assigned `prjNNNNNNN` workstream.
 - Before work leaves `@1project`, `@0master` must confirm that the project overview records the expected branch, the allowed scope boundary, and the git handoff rule.
 - Before work reaches `@9git`, `@0master` must validate that downstream agents are still operating within that project boundary.
 - If a branch mismatch, inherited branch, or mixed-project file set is discovered, stop git handoff, record the failure in `docs/agents/0master.memory.md`, and send the task back to the agent that owns the project overview correction.
 
 ### Delegation preflight branch gate
-- Before delegating any `prjNNN` task, `@0master` must read the expected branch from `docs/project/<project>/<project>.project.md` and read the observed branch with `git branch --show-current`.
+- Before delegating any `prjNNNNNNN` task, `@0master` must read the expected branch from `docs/project/prj*/<project>.project.md` and read the observed branch with `git branch --show-current`.
 - If observed branch != expected branch, stop delegation immediately and mark the task `BLOCKED` in `docs/agents/0master.memory.md`.
 - On mismatch, return ownership to `@1project` for boundary correction (or keep at `@0master` if numbering/branch assignment is unresolved).
 - Do not authorize downstream handoff, staging, commit, push, or PR actions for that project until the branch gate passes.
@@ -77,7 +77,7 @@ These are the primary memory artifacts the master agent reads/updates:
 - The master agent NEVER modifies code directly.
 - All actionable code changes are done by sub-agents (e.g., @coding) and reviewed by @tester or @gitdance where appropriate.
 - The master agent focuses on **planning, coordination, and documentation**.
-- The master agent must not authorize blanket staging, direct push, or PR work for a `prjNNN` task until the project-specific branch has been assigned or validated.
+- The master agent must not authorize blanket staging, direct push, or PR work for a `prjNNNNNNN` task until the project-specific branch has been assigned or validated.
 
 ## Useful repo quick references (for planning)
 - **Code**: we prefer to use rust, then python, then javascript
@@ -108,7 +108,7 @@ These are the primary memory artifacts the master agent reads/updates:
 Use these as high-level guardrails — avoid turning them into full implementation tasks (those belong to other agents).
 
 - Verify the **plan and acceptance criteria** are clear and documented before work begins.
-- Verify the **assigned `prjNNN`** is explicit, continuous, and recorded before `@1project` starts project setup.
+- Verify the **assigned `prjNNNNNNN`** is explicit, continuous, and recorded before `@1project` starts project setup.
 - Verify the **branch plan** is present in the project overview before implementation or git work begins.
 - Confirm the **expected branch matches the active project** and that any shared authoritative files are explicitly called out in the scope boundary.
 - Ensure the **memory files** are updated after decisions, so future agents can pick up context.
@@ -118,8 +118,8 @@ Use these as high-level guardrails — avoid turning them into full implementati
 
 ## Agent workflow (preferred handoff pattern)
 Supports PyAgent’s standard handoff pattern:
-0. **@0master** defines the high-level goal, assigns or validates the `prjNNN` identifier, confirms the project boundary, and delegates to `@1project`.
-1. **@1project** creates or validates the project folder, project overview, and branch plan using the assigned `prjNNN`, then hands off to `@2think`.
+0. **@0master** defines the high-level goal, assigns or validates the `prjNNNNNNN` identifier, confirms the project boundary, and delegates to `@1project`.
+1. **@1project** creates or validates the project folder, project overview, and branch plan using the assigned `prjNNNNNNN`, then hands off to `@2think`.
 2. **@2think** performs deep analysis, research, and alternative exploration to inform `@3design`.
 3. **@3design** selects the design approach, defines interfaces and constraints, and hands off to `@4plan`.
 4. **@4plan** creates the implementation plan, task breakdown, and validation commands, then hands off to `@5test`.

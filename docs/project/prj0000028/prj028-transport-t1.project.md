@@ -18,3 +18,9 @@
 ## Code detection
 
 - None detected yet.
+
+## Branch Plan
+
+**Expected branch:** `prj0000028-transport-t1`
+**Scope boundary:** `docs/project/prj0000028/` and `rust_core/src/transport/` files.
+**Handoff rule:** `@9git` must refuse staging, commit, push, or PR unless the active branch matches the expected branch above and changed files stay within the scope boundary.

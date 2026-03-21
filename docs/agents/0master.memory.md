@@ -26,6 +26,53 @@ _Last updated: 2026-03-20_
 - Legacy duplicate groups were resolved by assigning unique 7-digit identifiers during migration.
 - Next `prjNNN` to allocate: `prj0000043` (validate against `docs/project/` inventory before assignment).
 
+## Branch Registry (all 42 projects)
+
+| Dir | Expected Branch | Status |
+|---|---|---|
+| prj0000001 | `prj0000001-async-runtime` | pre-existing |
+| prj0000002 | `prj0000002-core-system` | assigned 2026-03-21 |
+| prj0000003 | `prj0000003-hybrid-llm-security` | assigned 2026-03-21 |
+| prj0000004 | `prj0000004-llm-context-consolidation` | assigned 2026-03-21 |
+| prj0000005 | `prj0000005-llm-swarm-architecture` | assigned 2026-03-21 |
+| prj0000006 | `prj0000006-unified-transaction-manager` | assigned 2026-03-21 |
+| prj0000007 | `prj0000007-advanced-research` | assigned 2026-03-21 |
+| prj0000008 | `prj0000008-agent-workflow` | assigned 2026-03-21 |
+| prj0000009 | `prj0000009-community-collaboration` | assigned 2026-03-21 |
+| prj0000010 | `prj0000010-context-management` | assigned 2026-03-21 |
+| prj0000011 | `prj0000011-core-project-structure` | assigned 2026-03-21 |
+| prj0000012 | `prj0000012-deployment-operations` | assigned 2026-03-21 |
+| prj0000013 | `prj0000013-dev-tools-autonomy` | assigned 2026-03-21 |
+| prj0000014 | `prj0000014-dev-tools-capabilities` | assigned 2026-03-21 |
+| prj0000015 | `prj0000015-dev-tools-implementation` | assigned 2026-03-21 |
+| prj0000016 | `prj0000016-dev-tools-structure` | assigned 2026-03-21 |
+| prj0000017 | `prj0000017-dev-tools-utilities` | assigned 2026-03-21 |
+| prj0000018 | `prj0000018-documentation-assets` | assigned 2026-03-21 |
+| prj0000019 | `prj0000019-future-roadmap` | assigned 2026-03-21 |
+| prj0000020 | `prj0000020-github-import` | assigned 2026-03-21 |
+| prj0000021 | `prj0000021-project-management-governance` | assigned 2026-03-21 |
+| prj0000022 | `prj0000022-swarm-architecture` | assigned 2026-03-21 |
+| prj0000023 | `prj0000023-testing-infrastructure` | assigned 2026-03-21 |
+| prj0000024 | `prj0000024-async-runtime` | assigned 2026-03-21 |
+| prj0000025 | `prj0000025-core-system` | assigned 2026-03-21 |
+| prj0000026 | `prj0000026-test-coverage-quality` | assigned 2026-03-21 |
+| prj0000027 | `prj0000027-encrypted-memory-blocks` | assigned 2026-03-21 |
+| prj0000028 | `prj0000028-transport-t1` | assigned 2026-03-21 |
+| prj0000029 | `prj0000029-llm-ui-backend-worker` | assigned 2026-03-21 |
+| prj0000030 | `prj0000030-agent-doc-frequency` | assigned 2026-03-21 |
+| prj0000031 | `prj0000031-streaming-website` | assigned 2026-03-21 |
+| prj0000032 | `prj0000032-agents` | assigned 2026-03-21 |
+| prj0000033 | `prj0000033-chat` | assigned 2026-03-21 |
+| prj0000034 | `prj0000034-context-manager` | assigned 2026-03-21 |
+| prj0000035 | `prj0000035-multimodal` | assigned 2026-03-21 |
+| prj0000036 | `prj0000036-plugins` | assigned 2026-03-21 |
+| prj0000037 | `prj0000037-tools` | assigned 2026-03-21 |
+| prj0000038 | `prj0000038-python-function-coverage` | assigned 2026-03-21 |
+| prj0000039 | `prj0000039-conftest-typing-fixes` | assigned 2026-03-21 |
+| prj0000040 | `prj0000040-core-system` | assigned 2026-03-21 |
+| prj0000041 | `prj0000041-flm` | assigned 2026-03-21 |
+| prj0000042 | `prj037-tools-crdt-security` | pre-existing |
+
 ## Learning Loop — Branch Hygiene
 
 - Record branch hygiene failures in `docs/agents/9git.memory.md` with: date, project, observed branch, failure type, and required fix.

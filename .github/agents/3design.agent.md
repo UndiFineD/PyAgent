@@ -31,17 +31,17 @@ This agent does **not** write implementation plans or tests.
 
 **Checkpoint rule (MANDATORY — applies to all project work):**
 
-1. **Start of Step 1** — ensure `docs/project/<project>/<project>.design.md` exists.
+1. **Start of Step 1** — ensure `docs/project/prj*/<project>.design.md` exists.
   - If missing: create it using the inline `<project>.design.md` template at the bottom of this file, with `_Status: IN_PROGRESS_`.
   - If present: overwrite the `_Status_` line to `_Status: IN_PROGRESS_`.
-2. **After each numbered step** — overwrite `docs/project/<project>/<project>.design.md` with the full current content of every template section. Never omit a section.
+2. **After each numbered step** — overwrite `docs/project/prj*/<project>.design.md` with the full current content of every template section. Never omit a section.
 3. **Before calling `runSubagent` for the next agent** — final overwrite, set `_Status: DONE_`. Use `_Status: HANDED_OFF_` if work continues in a downstream agent.
 
 ---
 
 **Branch gate (MANDATORY — before any artifact write or handoff):**
 
-1. Read `docs/project/<project>/<project>.project.md`.
+1. Read `docs/project/prj*/<project>.project.md`.
 2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
 3. Read the observed branch with `git branch --show-current`.
 4. If observed branch != expected branch, stop work immediately.
@@ -52,7 +52,7 @@ This agent does **not** write implementation plans or tests.
 ---
 
 ### Step 1 — Gather input
-- Read the recommended option in `docs/project/<project>/*.think.md`.
+- Read the recommended option in `docs/project/prj*/*.think.md`.
 - Identify key tradeoffs, constraints, and non-negotiables.
 
 ### Step 2 — Define architecture
@@ -62,9 +62,9 @@ This agent does **not** write implementation plans or tests.
 
 ### Step 3 — Document design
 - Always create or update the canonical design file:
-  - `docs/project/<project>/<project>.design.md`
+  - `docs/project/prj*/<project>.design.md`
 - For larger designs, split details into chunked design files:
-  - `docs/project/<project>/<project>.chunk-NN.design.md`
+  - `docs/project/prj*/chunk-NNN.<project>.design.md`
 - The canonical design file must summarize and link all chunked design files.
 - Include:
   - Problem statement and goals

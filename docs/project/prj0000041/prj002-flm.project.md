@@ -27,3 +27,9 @@
   - `tests/test_flm_provider_config.py`
   - `tests/test_flm_runtime_errors.py`
   - `tests/test_flm_tool_loop.py`
+
+## Branch Plan
+
+**Expected branch:** `prj0000041-flm`
+**Scope boundary:** `docs/project/prj0000041/`, `src/core/providers/Flm*.py`, related FLM adapter and provider files.
+**Handoff rule:** `@9git` must refuse staging, commit, push, or PR unless the active branch matches the expected branch above and changed files stay within the scope boundary.

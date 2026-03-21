@@ -32,17 +32,17 @@ This agent does **not** write implementation plans or code.
 
 **Checkpoint rule (MANDATORY — applies to all project work):**
 
-1. **Start of Step 1** — ensure `docs/project/<project>/<project>.think.md` exists.
+1. **Start of Step 1** — ensure `docs/project/prj*/<project>.think.md` exists.
   - If missing: create it using the inline `<project>.think.md` template at the bottom of this file, with `_Status: IN_PROGRESS_`.
   - If present: overwrite the `_Status_` line to `_Status: IN_PROGRESS_`.
-2. **After each numbered step** — overwrite `docs/project/<project>/<project>.think.md` with the full current content of every template section. Never omit a section.
+2. **After each numbered step** — overwrite `docs/project/prj*/<project>.think.md` with the full current content of every template section. Never omit a section.
 3. **Before calling `runSubagent` for the next agent** — final overwrite, set `_Status: DONE_`. Use `_Status: HANDED_OFF_` if work continues in a downstream agent.
 
 ---
 
 **Branch gate (MANDATORY — before any artifact write or handoff):**
 
-1. Read `docs/project/<project>/<project>.project.md`.
+1. Read `docs/project/prj*/<project>/<project>.project.md`.
 2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
 3. Read the observed branch with `git branch --show-current`.
 4. If observed branch != expected branch, stop work immediately.
@@ -53,14 +53,14 @@ This agent does **not** write implementation plans or code.
 ---
 
 ### Step 1 — Understand the project context
-- Read `docs/project/<project>/` overview and any existing `.think.md` or `.design.md` artifacts.
+- Read `docs/project/prj*/` overview and any existing `.think.md` or `.design.md` artifacts.
 - Confirm the project goal, constraints, and success criteria.
 
 ### Step 2 — Generate options
 - Always create or update the canonical summary file:
-  - `docs/project/<project>/<project>.think.md`
+  - `docs/project/prj*/<project>.think.md`
 - For larger explorations, split details into chunked files:
-  - `docs/project/<project>/<project>.chunk-NN.think.md`
+  - `docs/project/prj*/chunk-NNN.<project>.think.md`
 - The canonical think file must summarize and link all chunked think files.
 - Each option artifact should include:
   - Problem statement
