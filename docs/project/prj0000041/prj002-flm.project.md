@@ -1,6 +1,9 @@
-# Prj002 Flm
+# flm - Project Overview
 
-**Project ID:** prj002-flm
+_Status: DONE_
+_Owner: @9git | Updated: 2026-03-21_
+
+**Project ID:** prj0000041
 
 ## Links
 
@@ -16,7 +19,7 @@
 
 ## Status
 
-4 of 4 tasks completed
+4 of 4 tasks completed — DONE. FLM/Fastflow adapter and provider fully implemented.
 
 ## Code detection
 
