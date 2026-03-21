@@ -10,17 +10,15 @@ This is analogous to the existing `tests/test_rust_core.py` approach for rust_co
 
 from __future__ import annotations
 
+import sys
 import ast
 import asyncio
 import inspect
 from pathlib import Path
-from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple
+from typing import Any, Dict, Iterator, List, Tuple
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC_ROOT = ROOT / "src"
-
-# Ensure that `src/` is on sys.path so imports like `core.*` work when running tests.
-import sys
 
 sys.path.insert(0, str(ROOT))
 

@@ -6,7 +6,7 @@ _Owner: @1project | Updated: 2026-03-20_
 ## Project Identity
 **Project ID:** prj002-flm
 **Short name:** flm
-**Project folder:** `docs/project/prj002-flm/`
+**Project folder:** `docs\project\prj0000002`
 
 ## Project Overview
 Legacy compatibility alias for FLM project documentation paths used by tests.
@@ -18,7 +18,7 @@ Legacy compatibility alias for FLM project documentation paths used by tests.
 
 ## Branch Plan
 **Expected branch:** `prj037-tools-crdt-security`
-**Scope boundary:** `docs/project/prj002-flm/`
+**Scope boundary:** `docs\project\prj0000002`
 **Handoff rule:** Standard workflow handoff applies.
 **Failure rule:** Return to @0master on branch mismatch.
 
