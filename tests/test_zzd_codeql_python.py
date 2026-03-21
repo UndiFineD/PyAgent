@@ -20,7 +20,6 @@ Set CODEQL_REBUILD=1 to force a database rebuild even when the SARIF is fresh.
 import json
 import os
 import subprocess
-import sys
 from pathlib import Path
 
 import pytest
@@ -148,7 +147,7 @@ def test_python_no_new_security_findings() -> None:
         pytest.skip("Python SARIF not found")
 
     # Security-specific rule prefixes — quality-only rules are excluded from gating
-    _SECURITY_RULE_PREFIXES = (
+    _security_rule_prefixes = (
         "py/sql-injection",
         "py/code-injection",
         "py/path-injection",
@@ -167,7 +166,7 @@ def test_python_no_new_security_findings() -> None:
     results = sarif["runs"][0].get("results", [])
     security_findings = [
         r for r in results
-        if any(r.get("ruleId", "").startswith(p) for p in _SECURITY_RULE_PREFIXES)
+        if any(r.get("ruleId", "").startswith(p) for p in _security_rule_prefixes)
     ]
     if security_findings:
         details = "\n".join(

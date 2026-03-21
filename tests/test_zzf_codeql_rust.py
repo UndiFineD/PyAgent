@@ -140,7 +140,7 @@ def test_rust_no_security_findings() -> None:
     if not SARIF_PATH.exists():
         pytest.skip("Rust SARIF not found")
 
-    _SECURITY_RULE_PREFIXES = (
+    _security_rule_prefixes = (
         "rust/sql-injection",
         "rust/path-injection",
         "rust/command-injection",
@@ -158,7 +158,7 @@ def test_rust_no_security_findings() -> None:
     results = sarif["runs"][0].get("results", [])
     security_findings = [
         r for r in results
-        if any(r.get("ruleId", "").startswith(p) for p in _SECURITY_RULE_PREFIXES)
+        if any(r.get("ruleId", "").startswith(p) for p in _security_rule_prefixes)
     ]
     if security_findings:
         details = "\n".join(

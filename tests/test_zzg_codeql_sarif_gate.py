@@ -50,18 +50,37 @@ _SARIF_SPECS: list[_SarifSpec] = [
 
 # Rule IDs whose presence constitutes a hard security failure regardless of count.
 # These map to OWASP Top 10 / CWE high-severity categories.
-_HARD_FAIL_RULE_PREFIXES = (
-    "py/sql-injection",        "js/sql-injection",        "rust/sql-injection",
-    "py/code-injection",       "js/code-injection",
-    "py/path-injection",       "js/path-injection",       "rust/path-injection",
-    "py/command-injection",    "js/command-injection",    "rust/command-injection",
-    "py/reflective-xss",       "js/reflected-xss",        "rust/reflected-xss",
-    "py/xxe",                  "js/xxe",
-    "py/ssrf",                 "js/server-side-request-forgery",
-    "py/clear-text-logging",   "js/clear-text-logging",   "rust/clear-text-logging",
-    "py/clear-text-storage",   "js/clear-text-storage",   "rust/clear-text-storage",
-    "py/weak-crypto",          "js/weak-cryptographic-algorithm", "rust/weak-cryptographic-algorithm",
-    "py/hardcoded-credentials", "js/hardcoded-credentials", "rust/hardcoded-credentials",
+_hard_fail_rule_prefixes = (
+    "py/sql-injection",
+    "js/sql-injection",
+    "rust/sql-injection",
+    "py/code-injection",
+    "js/code-injection",
+    "py/path-injection",
+    "js/path-injection",
+    "rust/path-injection",
+    "py/command-injection",
+    "js/command-injection",
+    "rust/command-injection",
+    "py/reflective-xss",
+    "js/reflected-xss",
+    "rust/reflected-xss",
+    "py/xxe",
+    "js/xxe",
+    "py/ssrf",
+    "js/server-side-request-forgery",
+    "py/clear-text-logging",
+    "js/clear-text-logging",
+    "rust/clear-text-logging",
+    "py/clear-text-storage",
+    "js/clear-text-storage",
+    "rust/clear-text-storage",
+    "py/weak-crypto",
+    "js/weak-cryptographic-algorithm",
+    "rust/weak-cryptographic-algorithm",
+    "py/hardcoded-credentials",
+    "js/hardcoded-credentials",
+    "rust/hardcoded-credentials",
     "js/prototype-pollution",
     "js/request-forgery",
     "rust/disabled-certificate-check",
@@ -131,7 +150,7 @@ def test_no_hard_fail_security_findings() -> None:
         sarif = json.loads(spec.path.read_text(encoding="utf-8"))
         for r in sarif["runs"][0].get("results", []):
             rule_id = r.get("ruleId", "")
-            if any(rule_id.startswith(p) for p in _HARD_FAIL_RULE_PREFIXES):
+            if any(rule_id.startswith(p) for p in _hard_fail_rule_prefixes):
                 loc = r["locations"][0]["physicalLocation"]
                 uri = loc["artifactLocation"]["uri"]
                 line = loc["region"]["startLine"]
