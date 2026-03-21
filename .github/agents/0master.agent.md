@@ -67,11 +67,25 @@ These are the primary memory artifacts the master agent reads/updates:
 - Before work reaches `@9git`, `@0master` must validate that downstream agents are still operating within that project boundary.
 - If a branch mismatch, inherited branch, or mixed-project file set is discovered, stop git handoff, record the failure in `docs/agents/0master.memory.md`, and send the task back to the agent that owns the project overview correction.
 
-### Delegation preflight branch gate
-- Before delegating any `prjNNNNNNN` task, `@0master` must read the expected branch from `docs/project/prj*/<project>.project.md` and read the observed branch with `git branch --show-current`.
-- If observed branch != expected branch, stop delegation immediately and mark the task `BLOCKED` in `docs/agents/0master.memory.md`.
-- On mismatch, return ownership to `@1project` for boundary correction (or keep at `@0master` if numbering/branch assignment is unresolved).
-- Do not authorize downstream handoff, staging, commit, push, or PR actions for that project until the branch gate passes.
+### Delegation preflight branch gate (HARD STOP — no exceptions)
+
+> **THIS IS A TECHNICAL GATE, NOT A GUIDELINE.**
+> Execute the check below BEFORE any project-scoped file edit, git operation, test run,
+> or delegation to a downstream agent. If the gate fails, STOP. Do not continue.
+
+**Steps — run these in order, every single time:**
+
+1. Run `git branch --show-current` → capture as `OBSERVED_BRANCH`.
+2. Read `## Branch Plan` from `docs/project/prjNNNNNNN/<project>.project.md` → capture as `EXPECTED_BRANCH`.
+3. Compare: if `OBSERVED_BRANCH != EXPECTED_BRANCH` → **BLOCKED**:
+   - Do NOT edit files, run tests, stage, commit, push, create/update a PR, or call any sub-agent.
+   - Run `git checkout -b EXPECTED_BRANCH` (create) or `git checkout EXPECTED_BRANCH` (existing) to switch.
+   - Re-check: if the checkout succeeds and `OBSERVED_BRANCH == EXPECTED_BRANCH`, continue.
+   - If the correct branch cannot be determined, escalate to `@1project` and record `BLOCKED` in `docs/agents/0master.memory.md`.
+4. If `OBSERVED_BRANCH == "main"` and the task is project-scoped → STOP and checkout the correct branch first.
+5. Only after the observed branch matches the expected branch: proceed with the task.
+
+**Rationale:** Committing project work to `main` bypasses the PR review gate, destroys auditability, and violates the one-project-one-branch policy. The pre-commit hook (`scripts/enforce_branch.py`) is the last automated barrier — do not rely on it as the only control.
 
 ### Operational constraints
 - The master agent NEVER modifies code directly.
