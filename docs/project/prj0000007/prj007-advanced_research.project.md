@@ -43,3 +43,9 @@ _Updated: 2026-03-20_
 - `src/multimodal/__init__.py`
 - `src/rl/__init__.py`
 - `src/speculation/__init__.py`
+
+## Branch Plan
+
+**Expected branch:** `prj0000007-advanced-research`
+**Scope boundary:** `docs/project/prj0000007/`, `src/transport/`, `src/memory/`, `src/multimodal/`, `src/rl/`, `src/speculation/`, `rust_core/src/agents/research.rs`, `tests/test_research_packages.py`.
+**Handoff rule:** `@9git` must refuse staging, commit, push, or PR unless the active branch matches the expected branch above and changed files stay within the scope boundary.

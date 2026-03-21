@@ -33,3 +33,9 @@
 - `tests/test_core_runtime.py`
 - `tests/test_core_task_queue.py`
 - `tests/test_core_observability.py`
+
+## Branch Plan
+
+**Expected branch:** `prj0000040-core-system`
+**Scope boundary:** `docs/project/prj0000040/` and associated `src/core/` files.
+**Handoff rule:** `@9git` must refuse staging, commit, push, or PR unless the active branch matches the expected branch above and changed files stay within the scope boundary.

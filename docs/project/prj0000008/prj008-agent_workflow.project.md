@@ -23,3 +23,9 @@ _Updated: 2026-03-20_
 
 ## Status
 6 of 9 pipeline stages complete
+
+## Branch Plan
+
+**Expected branch:** `prj0000008-agent-workflow`
+**Scope boundary:** `docs/project/prj0000008/`, `src/core/workflow/`, `src/cort/`, `tests/` (workflow tests).
+**Handoff rule:** `@9git` must refuse staging, commit, push, or PR unless the active branch matches the expected branch above and changed files stay within the scope boundary.

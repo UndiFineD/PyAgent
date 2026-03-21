@@ -27,3 +27,9 @@
 
 - Core modules are present in `src/core/`.
 - Core tests live under `tests/test_core_*.py`.
+
+## Branch Plan
+
+**Expected branch:** `prj0000002-core-system`
+**Scope boundary:** `docs/project/prj0000002/` and associated `src/core/` modules.
+**Handoff rule:** `@9git` must refuse staging, commit, push, or PR unless the active branch matches the expected branch above and changed files stay within the scope boundary.
