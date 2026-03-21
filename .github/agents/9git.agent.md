@@ -84,6 +84,19 @@ This agent primarily uses free Copilot models such as GPT-5 Mini, Grok Code Fast
 	- Never use blanket staging guidance such as `git add .`, `git add -A`, or equivalent whole-repository staging for project work.
 	- If scope validation fails, stop the git workflow, capture the failure disposition, and hand the task back to `@0master`.
 
+2a. **Placeholder Code Gate (MANDATORY — blocks staging)**
+	Before staging any Python or Rust source files, run the placeholder scan:
+	```powershell
+	rg --type py "raise NotImplementedError|raise NotImplemented\b|#\s*(TODO|FIXME|HACK|STUB|PLACEHOLDER)" src/ tests/
+	rg --type py "^\s*\.\.\.\s*$" src/
+	```
+	If any match is found in files being staged for this project, **stop immediately**:
+	- Do NOT stage, commit, push, open a PR, or update a PR.
+	- Record the offending files and line numbers in `<project>.git.md` under `## Failure Disposition`.
+	- Append the finding to `docs/agents/9git.memory.md`.
+	- Hand the task back to `@6code` with the full list of placeholder hits.
+	Only proceed when the scan returns zero matches in the files being staged.
+
 3. **Execute Narrow Git Operations**
 	- Stage only the validated files for the current project.
 	- After staging the validated files, run `pre-commit` before any commit, push, PR creation, or PR update action. Prefer staged-file-aware invocation so the hook run matches the exact narrowed scope that was added.

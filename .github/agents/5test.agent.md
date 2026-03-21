@@ -13,6 +13,24 @@ This agent does **not** implement production code.
 
 ---
 
+## HARD RULE — Tests must verify real behavior
+
+> **THIS IS A BLOCKING REQUIREMENT. NO EXCEPTIONS.**
+
+Tests written by `@5test` must test **real, observable behavior**, not just that code exists or imports. The following test patterns are **forbidden**:
+
+- Tests that only assert `instance is not None` or `isinstance(x, MyClass)` with no logic check
+- Tests that pass against a `pass`-only or stub implementation
+- Tests whose only assertion is that no exception is raised when calling an empty function
+- "Placeholder" test functions with a comment like `# TODO: implement`
+- Tests that `assert True` unconditionally
+
+**Red-phase validation rule:** After writing tests, confirm they fail for the **right reason** — not `ImportError` or `AttributeError` (which means the module/class doesn't exist), but specifically a meaningful assertion failure or missing behavior. Document the exact failure output in the test artifact.
+
+**Green-phase validation rule:** When validating `@6code`'s implementation, if any test passes against code that is still a stub/placeholder (e.g., `return None` or `pass`), that is a test quality failure — the test must be strengthened before sign-off.
+
+---
+
 ## Scope and purpose
 
 | What @5test does                          | What @5test does NOT do                |
@@ -21,6 +39,7 @@ This agent does **not** implement production code.
 | Validates implementations (green phase)   | Change design decisions                |
 | Ensures test coverage and safety          | Skip tests or test hardening           |
 | Documents test strategy and requirements  | Run tests without tracking outcomes    |
+| Verifies real behavior, not just import   | Accept tests that pass on empty stubs  |
 
 ---
 
