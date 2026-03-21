@@ -1,6 +1,9 @@
-# Prj027 Encrypted Memory Blocks
+# encrypted-memory-blocks - Project Overview
 
-**Project ID:** prj027-encrypted-memory-blocks
+_Status: DONE_
+_Owner: @9git | Updated: 2026-03-21_
+
+**Project ID:** prj0000027
 
 ## Links
 
@@ -9,11 +12,11 @@
 
 ## Tasks
 
-- [ ] Define tasks and status
+- [x] Implementation completed on main prior to branch enforcement.
 
 ## Status
 
-0 of 0 tasks completed
+DONE — EncryptedMemoryBlock PyO3 Rust type (rust_core/src/memory.rs).
 
 ## Code detection
 
