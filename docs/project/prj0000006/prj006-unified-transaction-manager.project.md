@@ -25,11 +25,11 @@
 - [x] Create canonical test/code/exec/ql/git artifacts
 - [x] Start @5test red-phase tests for transaction lifecycle
 - [x] Start @6code implementation against failing tests
-- [ ] Complete full @7exec validation (lint/type/full suite)
+- [x] Complete full @7exec validation (lint/type/full suite)
 
 ## Status
 
-5 of 6 tasks completed
+6 of 6 tasks completed
 
 ## Code Detection
 
