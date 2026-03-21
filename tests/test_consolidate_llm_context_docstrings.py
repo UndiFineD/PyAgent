@@ -20,7 +20,7 @@ import subprocess
 import sys
 
 
-def _run_script(tmp_path, args=None):
+def _run_script(tmp_path, args=None) -> subprocess.CompletedProcess[str]:
     args = args or []
     cmd = [
         sys.executable,

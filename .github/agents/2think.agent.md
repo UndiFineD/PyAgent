@@ -40,6 +40,18 @@ This agent does **not** write implementation plans or code.
 
 ---
 
+**Branch gate (MANDATORY — before any artifact write or handoff):**
+
+1. Read `docs/project/<project>/<project>.project.md`.
+2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
+3. Read the observed branch with `git branch --show-current`.
+4. If observed branch != expected branch, stop work immediately.
+5. On mismatch, record BLOCKED status in `<project>.think.md` and `docs/agents/2think.memory.md`,
+   then hand the task back to `@0master`.
+6. Do not write/overwrite think artifacts or hand off to `@3design` while branch validation fails.
+
+---
+
 ### Step 1 — Understand the project context
 - Read `docs/project/<project>/` overview and any existing `.think.md` or `.design.md` artifacts.
 - Confirm the project goal, constraints, and success criteria.

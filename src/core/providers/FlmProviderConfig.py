@@ -20,7 +20,6 @@ FLM stands for Fastflow Language Model.
 from __future__ import annotations
 
 import os
-
 from dataclasses import dataclass
 from typing import Any, Mapping
 
@@ -109,6 +108,7 @@ class FlmProviderConfig:
         - `{prefix}_HEALTH_PATH`: default `/v1/health`
         - `{prefix}_CHAT_PATH`: default `/v1/chat/completions`
         """
+
         def _int_env(name: str, default: int) -> int:
             raw = os.getenv(name)
             if raw is None:

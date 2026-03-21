@@ -192,8 +192,7 @@ def test_exercise_python_functions() -> None:
     print(f"          failing calls: {len(failures)}")
 
     # Fail only if nothing succeeded (to avoid noise from partial failures)
-    if executed == 0 or succeeded == 0:
-        raise AssertionError("No successful function calls were executed (check logs for details)")
+    assert executed > 0 and succeeded > 0, "No successful function calls were executed (check logs for details)"
 
     # Still emit warnings in CI output, but do not fail the test if some calls fail.
     if failures or import_errors:

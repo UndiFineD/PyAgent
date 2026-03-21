@@ -1,29 +1,32 @@
-# Prj002 Flm
+# prj002-flm — Project Overview
 
+_Status: IN_PROGRESS_
+_Owner: @1project | Updated: 2026-03-20_
+
+## Project Identity
 **Project ID:** prj002-flm
+**Short name:** flm
+**Project folder:** `docs/project/prj002-flm/`
 
-## Links
+## Project Overview
+Legacy compatibility alias for FLM project documentation paths used by tests.
 
-- Plan: plan.md
-- Design: brainstorm.md
+## Goal & Scope
+**Goal:** Ensure legacy prj002 FLM doc paths resolve without changing test behavior.
+**In scope:** `brainstorm.md`, `plan.md`, and overview presence under this folder.
+**Out of scope:** Functional implementation changes.
 
-## Tasks
+## Branch Plan
+**Expected branch:** `prj037-tools-crdt-security`
+**Scope boundary:** `docs/project/prj002-flm/`
+**Handoff rule:** Standard workflow handoff applies.
+**Failure rule:** Return to @0master on branch mismatch.
 
-- [x] Define high-level goal, success criteria, and test plan.
-- [x] Document FLM design and implementation details in `brainstorm.md`.
-- [x] Ensure there is a clear list of FLM-related tasks and their completion status.
-- [x] Keep project docs and implementation in sync with current CI/testing strategy.
+## Milestones
+| # | Milestone | Agent | Status |
+|---|---|---|---|
+| M1 | Legacy alias docs restored | @1project | done |
 
 ## Status
-
-4 of 4 tasks completed
-
-## Code detection
-
-- Code detected in:
-  - `src/core/providers/FlmChatAdapter.py`
-  - `src/core/providers/FlmProviderConfig.py`
-  - `tests/test_flm_chat_adapter.py`
-  - `tests/test_flm_provider_config.py`
-  - `tests/test_flm_runtime_errors.py`
-  - `tests/test_flm_tool_loop.py`
+_Last updated: 2026-03-20_
+Active.

@@ -14,10 +14,8 @@
 """FastAPI backend worker — WebSocket + signaling endpoints."""
 from __future__ import annotations
 
-import asyncio
 import json
 import logging
-from typing import Any
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
@@ -42,11 +40,13 @@ sessions = SessionManager()
 
 @app.get("/health")
 async def health() -> dict[str, str]:
+    """Health check endpoint."""
     return {"status": "ok"}
 
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket) -> None:
+    """WebSocket endpoint for real-time communication."""
     session_id = await sessions.connect(websocket)
     logger.info("WebSocket connected: %s", session_id)
     try:

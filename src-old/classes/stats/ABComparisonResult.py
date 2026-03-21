@@ -1,9 +1,0 @@
-#!/usr/bin/env python3
-try:
-    from src.observability.stats.ab_engine import ABComparisonResult as _ABComparisonResult
-except Exception:
-    from src.observability.stats.analysis import ABComparisonResult as _ABComparisonResult
-
-ABComparisonResult = _ABComparisonResult
-
-__all__ = ["ABComparisonResult"]

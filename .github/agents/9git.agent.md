@@ -70,6 +70,33 @@ This agent primarily uses free Copilot models such as GPT-5 Mini, Grok Code Fast
 
 ---
 
+1. **Branch Validation**
+	- Read `docs/project/<project>/<project>.project.md`, `docs/project/<project>/<project>.plan.md`, and `docs/project/<project>/<project>.git.md` before attempting git operations.
+	- Confirm the project overview declares an expected branch, scope boundary, and git handoff rule.
+	- Enforce the one-project-one-branch rule. A `prjNNN` task must use its own project-specific branch and must not inherit or continue on another project's branch.
+	- Treat branch names from unrelated workstreams, such as `prj037-*` for a different project, as a validation failure rather than a precedent.
+	- If branch validation fails, do not stage, commit, push, open a PR, or update a PR. Record the failure in the project git artifact and `docs/agents/9git.memory.md`, then hand the task back to `@0master`.
+
+2. **Scope Validation**
+	- Review the changed files against the project overview scope boundary and the implementation plan.
+	- Allow only files inside the project folder plus explicitly declared shared authoritative files that are necessary for the project.
+	- Reject mixed-project file sets, unrelated inherited changes, or broad repo changes that are not named in the scope boundary.
+	- Never use blanket staging guidance such as `git add .`, `git add -A`, or equivalent whole-repository staging for project work.
+	- If scope validation fails, stop the git workflow, capture the failure disposition, and hand the task back to `@0master`.
+
+3. **Execute Narrow Git Operations**
+	- Stage only the validated files for the current project.
+	- After staging the validated files, run `pre-commit` before any commit, push, PR creation, or PR update action. Prefer staged-file-aware invocation so the hook run matches the exact narrowed scope that was added.
+	- Do not bypass this requirement with `--no-verify`, skipped hooks, or undocumented local exceptions for project work.
+	- If `pre-commit` fails, stop the git workflow, record the failing hook/check in the project git artifact and `docs/agents/9git.memory.md`, and hand the task back to `@0master`.
+	- Summarize the exact staged files in the git artifact.
+	- Only commit, push, or create/update a PR when branch validation, scope validation, and the post-staging `pre-commit` run all pass and the task constraints allow those operations.
+
+4. **Failure Disposition And Lessons Learned**
+	- When validation fails, mark the git artifact with the blocked outcome, the observed branch, the offending scope, and the next owner.
+	- Append a concise retrospective note to `docs/agents/9git.memory.md` so future agents can detect repeated branch-hygiene failures.
+	- Escalate systemic branch-planning gaps to `@0master` so the project overview or branch assignment can be corrected before retry.
+
 ---
 
 ## Artifact template: `<project>.git.md`
@@ -80,8 +107,23 @@ This agent primarily uses free Copilot models such as GPT-5 Mini, Grok Code Fast
 _Status: IN_PROGRESS_
 _Git: @9git | Updated: <date>_
 
-## Branch
-`<branch-name>`
+## Branch Plan
+**Expected branch:** `<project-specific branch>`
+**Observed branch:** `<active branch at validation time>`
+**Project match:** PASS or FAIL
+
+## Branch Validation
+| Check | Result | Notes |
+|---|---|---|
+| Expected branch recorded in project overview | | |
+| Observed branch matches project | | |
+| No inherited branch from another `prjNNN` | | |
+
+## Scope Validation
+| File or scope | Result | Notes |
+|---|---|---|
+| `<project folder>` | | |
+| `<shared authoritative file>` | | |
 
 ## Commit Hash
 `<sha>`
@@ -93,4 +135,13 @@ _Git: @9git | Updated: <date>_
 
 ## PR Link
 <URL or "N/A — direct merge">
+
+## Legacy Branch Exception
+<"None" when not applicable. If applicable, explain the historical branch mismatch rationale, state that it is legacy and not precedent, and note corrective ownership by `@0master` and `@9git`>
+
+## Failure Disposition
+<"None" when validation passes, otherwise who must fix what before git work can resume>
+
+## Lessons Learned
+<brief retrospective note or "None">
 ````

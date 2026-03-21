@@ -16,21 +16,32 @@
 import yaml
 
 
-def test_ci_yaml_has_check_job() -> None:
-    """ci.yml must define a 'check' job that runs CI checks."""
+def test_ci_yaml_has_test_job() -> None:
+    """ci.yml must define a 'test' job that runs the test suite."""
     with open(".github/workflows/ci.yml", encoding="utf-8") as fh:
         cfg = yaml.safe_load(fh)
     jobs = cfg.get("jobs", {})
-    assert "check" in jobs, "'check' job missing from ci.yml"
+    assert "test" in jobs, "'test' job missing from ci.yml"
 
 
-def test_ci_yaml_check_job_has_install_step() -> None:
-    """The check job should include a dependency installation step."""
+def test_ci_yaml_test_job_has_install_step() -> None:
+    """The test job should include a dependency installation step."""
     with open(".github/workflows/ci.yml", encoding="utf-8") as fh:
         cfg = yaml.safe_load(fh)
-    steps = cfg["jobs"]["check"].get("steps", [])
+    steps = cfg["jobs"]["test"].get("steps", [])
     step_text = " ".join([step.get("run", "") for step in steps]).lower()
-    assert "pip install" in step_text, "No install step found in ci.yml check job"
+    assert "pip install" in step_text, "No install step found in ci.yml test job"
+
+
+def test_ci_yaml_does_not_run_shared_precommit_profile() -> None:
+    """The main CI workflow should leave the shared precommit profile as a local-only gate."""
+    with open(".github/workflows/ci.yml", encoding="utf-8") as fh:
+        cfg = yaml.safe_load(fh)
+    steps = cfg["jobs"]["test"].get("steps", [])
+    step_runs = [step.get("run", "") for step in steps]
+    assert not any("python scripts/ci/run_checks.py --profile precommit" in run for run in step_runs), (
+        "ci.yml should not run the local-only shared precommit profile"
+    )
 
 
 def test_ci_yaml_triggers_on_push_and_pr() -> None:

@@ -23,3 +23,48 @@ Invoke it via **agent/runSubagent** to start security and static analysis checks
 | **summary** | Validated all 9 *.agent.md files contain Checkpoint rule + inline Artifact template. All 9 doctypes referenced in 1project. Exec log written. |
 | **handoff_target** | @8ql |
 | **artifact_paths** | docs/project/prj030-agent-doc-frequency/agent-doc-frequency.exec.md |
+
+---
+
+## prj008 - agent_workflow
+
+| Field | Value |
+|---|---|
+| **task_id** | prj008-agent_workflow |
+| **owner_agent** | @7exec |
+| **source** | @6code |
+| **updated_at** | 2026-03-20 |
+| **status** | DONE |
+| **summary** | core workflow imports OK. 9 workflow tests passed. src.cort bare import quirk pre-existing, not a blocker. |
+| **handoff_target** | @8ql |
+| **artifact_paths** | docs/project/prj008-agent_workflow/agent_workflow.exec.md |
+
+---
+
+## prj007 - advanced_research
+
+| Field | Value |
+|---|---|
+| **task_id** | prj007-advanced_research |
+| **owner_agent** | @7exec |
+| **source** | @6code |
+| **updated_at** | 2026-03-20 |
+| **status** | DONE |
+| **summary** | pip check clean. All 5 research packages import OK. test_research_packages.py: 1 passed. |
+| **handoff_target** | @8ql |
+| **artifact_paths** | docs/project/prj007-advanced_research/advanced_research.exec.md |
+
+---
+
+## prj006 - unified-transaction-manager
+
+| Field | Value |
+|---|---|
+| **task_id** | prj006-unified-transaction-manager |
+| **owner_agent** | @7exec |
+| **source** | @6code |
+| **updated_at** | 2026-03-20 |
+| **status** | DONE |
+| **summary** | Full suite 205 passed, 0 failed, 100% coverage. pip check clean. All imports OK. Baseline failures (crdt_bridge, security_bridge, ci.yml) resolved before handoff. |
+| **handoff_target** | @8ql |
+| **artifact_paths** | docs/project/prj006-unified-transaction-manager/unified-transaction-manager.exec.md |

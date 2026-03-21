@@ -38,6 +38,18 @@ This agent does **not** implement production code.
 
 ---
 
+**Branch gate (MANDATORY — before writing tests or handoff):**
+
+1. Read `docs/project/<project>/<project>.project.md`.
+2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
+3. Read the observed branch with `git branch --show-current`.
+4. If observed branch != expected branch, stop work immediately.
+5. On mismatch, record BLOCKED status in `<project>.test.md` and `docs/agents/5test.memory.md`,
+   then hand the task back to `@0master`.
+6. Do not write/overwrite test artifacts or hand off to `@6code` while branch validation fails.
+
+---
+
 ### Phase 1 — Red (write failing tests)
 1. Read the plan in `docs/project/<project>/*.plan.md`.
 2. Identify the first chunk of tasks (≈10 code files / 10 test files).

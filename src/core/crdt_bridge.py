@@ -16,16 +16,17 @@ from __future__ import annotations
 
 import json
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
 
 def _rust_crdt_binary() -> Path:
     """Ensure the rust_core/crdt binary is built and return its path."""
-
     repo_root = Path(__file__).resolve().parents[2]
     crate = repo_root / "rust_core" / "crdt"
-    binary_name = "rust_core_crdt.exe" if (Path().joinpath(".venv").exists() and __import__("sys").platform == "win32") else "rust_core_crdt"
+    is_windows = Path().joinpath(".venv").exists() and sys.platform == "win32"
+    binary_name = "rust_core_crdt.exe" if is_windows else "rust_core_crdt"
     binary = crate / "target" / "release" / binary_name
 
     if not binary.exists():
@@ -36,15 +37,6 @@ def _rust_crdt_binary() -> Path:
 
 def merge(left: dict, right: dict) -> dict:
     """Merge two JSON documents using the Rust CRDT prototype."""
-
-
-def validate() -> None:
-    """Validate this bridge module is loadable.
-
-    This is used by repository-level quality checks.
-    """
-    return
-
     with tempfile.TemporaryDirectory() as td:
         left_file = Path(td) / "left.json"
         right_file = Path(td) / "right.json"
@@ -67,3 +59,11 @@ def validate() -> None:
         )
 
         return json.loads(result.stdout)
+
+
+def validate() -> None:
+    """Validate this bridge module is loadable.
+
+    This is used by repository-level quality checks.
+    """
+    return

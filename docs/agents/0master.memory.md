@@ -1,6 +1,41 @@
 # PyAgent — Master Agent Memory
 
-_Last updated: 2026-03-18_
+_Last updated: 2026-03-20_
+
+---
+
+## Standing Policy — Branch Isolation
+
+- One `prjNNN` workstream maps to one branch. Project work must not piggyback on the active branch of another project.
+- `@0master` assigns or validates the expected branch during project kickoff and ensures `@1project` records that branch, the scope boundary, and the git handoff rule in the project overview.
+- `@9git` is expected to reject mixed-project changes, inherited branches, and broad staging guidance for project work.
+- When branch hygiene fails, `@0master` owns the correction loop: update the governing guidance, return the task to the agent that owns the project boundary, and do not normalize the failure as an accepted workflow.
+
+## Standing Policy — Project Numbering Ownership
+
+- `@0master` owns `prjNNN` allocation, validation, and continuity tracking.
+- Project numbering is part of the project boundary. A project is not fully defined until the assigned `prjNNN`, project folder, and expected branch agree.
+- `@1project` must consume the identifier assigned by `@0master`. It must not invent, renumber, or resolve ambiguity on its own.
+- Do not reuse old numbers or skip numbers casually. If a number is reserved, retired, skipped, or corrected, record the reason here before downstream handoff.
+- If numbering is missing, conflicting, or ambiguous, stop the workflow and send the task back through `@0master` before project setup continues.
+
+## Project Numbering Tracking
+
+- Latest confirmed project folder in `docs/project/`: `prj0000042`.
+- Project folder numbering migrated from 3-digit (`prj001`-`prj038`) to 7-digit (`prj0000001`-`prj0000042`).
+- Legacy duplicate groups were resolved by assigning unique 7-digit identifiers during migration.
+- Next `prjNNN` to allocate: `prj0000043` (validate against `docs/project/` inventory before assignment).
+
+## Learning Loop — Branch Hygiene
+
+- Record branch hygiene failures in `docs/agents/9git.memory.md` with: date, project, observed branch, failure type, and required fix.
+- Reflect recurring failures or policy changes here so future coordinators enforce the updated workflow earlier.
+- Shared-branch history under unrelated projects is a warning signal, not an exception path.
+- 2026-03-20: Added mandatory "Branch gate" preflight to `@2think` through `@8ql` agent definitions.
+    Downstream agents must now stop immediately on expected/observed branch mismatch,
+    mark their project artifact + memory entry as BLOCKED, and hand back to `@0master`.
+- 2026-03-20: Extended branch-gate enforcement to `@1project` and `@0master` delegation preflight.
+    Result: branch mismatch is now blocked at project setup, planning/execution, and git handoff layers.
 
 ---
 
@@ -11,11 +46,12 @@ _Last updated: 2026-03-18_
 | Async Runtime | 2026-03-10-async-runtime-plan.md | 215+ tests passing, zero sync loops |
 | FLM / Fastflow integration | 2026-03-08-flm-plan.md | OpenAI adapter, tool-call loop complete |
 | Context Manager & Skills Registry | 2026-03-09-context_management-plan.md | Windowing + skill discovery live |
-| Advanced Research packages | advanced-research-plan.md | 5 research packages importable |
+| Advanced Research packages | prj007-advanced_research/ | 5 skeleton packages importable; code/test DONE; exec/ql/git pending |
 | Future Roadmap tooling | future-roadmap-plan.md | Vision templates, milestone generator complete |
 | Community Chat | community-collaboration-plan.md | FastAPI, MCP tools, GitHub webhooks live |
 | Agent Workflow basics | agent-workflow-plan.md | TaskState, Task, TaskQueue, WorkflowEngine, CoRT live |
 | GitHub Importer skeleton | github-import-plan.md | Importer skeleton fully implemented |
+| Unified Transaction Manager | prj006-unified-transaction-manager/ | Full pipeline DONE (75d5c3e) — 205 tests, 100% coverage |
 
 ---
 

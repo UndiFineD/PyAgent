@@ -47,6 +47,18 @@ If failures are found, it reports them to `@6code` with full diagnostic output.
 
 ---
 
+**Branch gate (MANDATORY — before runtime validation commands or handoff):**
+
+1. Read `docs/project/<project>/<project>.project.md`.
+2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
+3. Read the observed branch with `git branch --show-current`.
+4. If observed branch != expected branch, stop work immediately.
+5. On mismatch, record BLOCKED status in `<project>.exec.md` and `docs/agents/7exec.memory.md`,
+   then hand the task back to `@0master`.
+6. Do not run full validation, smoke checks, or hand off to `@8ql` while branch validation fails.
+
+---
+
 **Step 1 — Read the task context**  
 Load `docs/agents/6code.memory.md` and `docs/agents/5test.memory.md`.  
 Confirm which modules were changed and which test files cover them.

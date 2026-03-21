@@ -103,3 +103,4 @@ node_modules/
 *.actual
 # Per-project CodeQL analysis databases (large binaries, not source)
 databases/
+/src-old/

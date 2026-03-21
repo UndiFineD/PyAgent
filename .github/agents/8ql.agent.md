@@ -47,6 +47,18 @@ If vulnerabilities are found, it reports them to `@6code` (fixable code issues) 
 
 ---
 
+**Branch gate (MANDATORY — before scans or handoff):**
+
+1. Read `docs/project/<project>/<project>.project.md`.
+2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
+3. Read the observed branch with `git branch --show-current`.
+4. If observed branch != expected branch, stop work immediately.
+5. On mismatch, record BLOCKED status in `<project>.ql.md` and `docs/agents/8ql.memory.md`,
+   then hand the task back to `@0master`.
+6. Do not run security scans or hand off to `@9git` while branch validation fails.
+
+---
+
 **Step 1 — Identify changed files**  
 Read `docs/agents/7exec.memory.md` and `docs/agents/6code.memory.md` to get the list of modified modules.  
 Also check:

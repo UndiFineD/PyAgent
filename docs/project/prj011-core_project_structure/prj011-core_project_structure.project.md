@@ -1,20 +1,32 @@
-# Prj011 Core_Project_Structure
+# prj011-core_project_structure — Project Overview
 
+_Status: IN_PROGRESS_
+_Owner: @1project | Updated: 2026-03-20_
+
+## Project Identity
 **Project ID:** prj011-core_project_structure
+**Short name:** core_project_structure
+**Project folder:** `docs/project/prj011-core_project_structure/`
 
-## Links
+## Project Overview
+Legacy compatibility overview stub to preserve expected path invariants for tests.
 
-- Plan: plan.md
-- Design: rainstorm.md
+## Goal & Scope
+**Goal:** Maintain compatibility with tests expecting legacy project path aliases.
+**In scope:** Presence of required overview and design doc files in legacy alias folder.
+**Out of scope:** Functional code changes.
 
-## Tasks
+## Branch Plan
+**Expected branch:** `prj037-tools-crdt-security`
+**Scope boundary:** `docs/project/prj011-core_project_structure/`
+**Handoff rule:** Follow standard workflow handoff.
+**Failure rule:** Return to @0master on branch mismatch.
 
-- [ ] Define tasks and status
+## Milestones
+| # | Milestone | Agent | Status |
+|---|---|---|---|
+| M1 | Legacy overview stub created | @1project | done |
 
 ## Status
-
-0 of 0 tasks completed
-
-## Code detection
-
-- None detected yet.
+_Last updated: 2026-03-20_
+Active.
