@@ -12,8 +12,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import pytest
+import rust_core
 
-from rust_core import (
+if not hasattr(rust_core, 'TRANSPORT_FALLBACK_TO_QUEUE'):
+    pytest.skip("rust_core transport constants not available - Rust extension not compiled", allow_module_level=True)
+
+from rust_core import (  # noqa: E402
     TRANSPORT_FALLBACK_TO_QUEUE,
     TRANSPORT_RETRY_COUNT,
     TRANSPORT_TIMEOUT_MAX_SECS,

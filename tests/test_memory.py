@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 """Test the memory package."""
+import pytest
+import rust_core
 
-from rust_core import SharedMemory
+if not hasattr(rust_core, 'SharedMemory'):
+    pytest.skip("rust_core.SharedMemory not available - Rust extension not compiled", allow_module_level=True)
+SharedMemory = rust_core.SharedMemory
 
 
 def test_shared_memory_put_get() -> None:

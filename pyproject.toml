@@ -34,7 +34,7 @@ dependencies = [
     "pandas>=2.2.0",
     "psutil>=6.1.1",
     # Keep pydantic/chromadb versions compatible on Python 3.14+.
-    "pydantic>=2.13.0",
+    "pydantic>=2.10.0",
     "chromadb>=0.5.0",
     "pyzmq>=26.2.0",
     "requests>=2.32.0",

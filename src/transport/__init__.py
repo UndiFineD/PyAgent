@@ -69,6 +69,14 @@ def _apply_local_rust_core_path() -> None:
 
 _apply_local_rust_core_path()
 
+# If rust_core was previously cached without the compiled functions (e.g., because
+# tests import rust_core before the transport module adds target/debug to sys.path),
+# evict it so the import below picks up the local build we just added.
+if "rust_core" in sys.modules and _locate_local_rust_core() is not None:
+    if not hasattr(sys.modules["rust_core"], "generate_node_identity"):
+        sys.modules.pop("rust_core", None)
+        sys.modules.pop("_rust_core", None)
+
 try:
     import rust_core  # type: ignore
 except ImportError:  # pragma: no cover

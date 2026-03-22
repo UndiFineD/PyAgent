@@ -29,6 +29,7 @@ jobs:
       - name: Validate all core modules
         run: |
           python -c "
+          import sys; sys.path.insert(0, 'src')
           from core.runtime import validate as v1; v1()
           from core.task_queue import validate as v2; v2()
           from core.agent_registry import validate as v3; v3()
