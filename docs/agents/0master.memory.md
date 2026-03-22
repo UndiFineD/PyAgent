@@ -49,7 +49,8 @@ All 42 projects have been surveyed and governance PRs created:
 - Latest confirmed project folder in `docs/project/`: `prj0000042`.
 - Project folder numbering migrated from 3-digit (`prj001`-`prj038`) to 7-digit (`prj0000001`-`prj0000042`).
 - Legacy duplicate groups were resolved by assigning unique 7-digit identifiers during migration.
-- Next `prjNNN` to allocate: `prj0000043` (validate against `docs/project/` inventory before assignment).
+- `prj0000043` allocated: `prj0000043-p2p-security-deps` — libp2p 0.49→0.56 security dep upgrade (6 Dependabot CVEs). Branch: `prj0000043-p2p-security-deps`. Committed 2026-07-16.
+- Next `prjNNN` to allocate: `prj0000044` (validate against `docs/project/` inventory before assignment).
 
 ## Branch Registry (all 42 projects)
 
@@ -97,6 +98,7 @@ All 42 projects have been surveyed and governance PRs created:
 | prj0000040 | `prj0000040-core-system` | assigned 2026-03-21 |
 | prj0000041 | `prj0000041-flm` | assigned 2026-03-21 |
 | prj0000042 | `prj037-tools-crdt-security` | pre-existing |
+| prj0000043 | `prj0000043-p2p-security-deps` | assigned 2026-07-16 |
 
 ## Learning Loop — Branch Hygiene
 
