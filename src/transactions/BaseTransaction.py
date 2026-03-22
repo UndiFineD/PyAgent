@@ -12,10 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Shim: re-exports MemoryTransaction from src.transactions package.
+"""Abstract base for all transaction managers."""
+from __future__ import annotations
+import abc
 
-Previous in-process implementation moved to src/transactions/MemoryTransactionManager.py.
-"""
-from src.transactions.MemoryTransactionManager import MemoryTransaction, validate  # noqa: F401
 
-__all__ = ["MemoryTransaction", "validate"]
+class BaseTransaction(abc.ABC):
+    """Minimal ABC for all transaction managers.
+
+    Concrete managers do NOT inherit this (Python forbids both def commit and async def commit).
+    This exists for isinstance checks and documentation only.
+    Duck-typed interface: commit(), rollback(), __enter__, __exit__, __aenter__, __aexit__
+    """
+    pass

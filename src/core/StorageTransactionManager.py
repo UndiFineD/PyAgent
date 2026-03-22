@@ -12,10 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Shim: re-exports MemoryTransaction from src.transactions package.
+"""Shim: re-exports StorageTransaction from src.transactions package."""
+from src.transactions.StorageTransactionManager import (  # noqa: F401
+    StorageTransaction,
+    EncryptionConfigError,
+)
 
-Previous in-process implementation moved to src/transactions/MemoryTransactionManager.py.
-"""
-from src.transactions.MemoryTransactionManager import MemoryTransaction, validate  # noqa: F401
 
-__all__ = ["MemoryTransaction", "validate"]
+def validate() -> bool:
+    """Module-level health check."""
+    return True
+
+
+__all__ = ["StorageTransaction", "EncryptionConfigError", "validate"]

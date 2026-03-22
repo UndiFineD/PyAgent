@@ -1,6 +1,9 @@
 # Runtime dependencies used by core application code (src/)
 # See comments for where each is imported.
 
+# cryptography: cryptographic primitives used by src/transactions/StorageTransactionManager.py
+cryptography>=42.0.0
+
 # fastapi: Web API framework used by src/github_app.py and src/chat/api.py
 fastapi==0.128.0
 
