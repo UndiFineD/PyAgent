@@ -41,8 +41,7 @@ def test_agent_config_defaults() -> None:
 
 
 def test_agent_config_custom_values() -> None:
-    """Creating an AgentConfig with custom values
-    should set those values correctly."
+    """Creating an AgentConfig with custom values should set those values correctly."""
     cfg = AgentConfig(
         name="tester",
         llm_model="llama3",

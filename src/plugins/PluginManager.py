@@ -214,13 +214,16 @@ class PluginManager:
     # Lifecycle
     # ------------------------------------------------------------------
 
+    def _teardown_one(self, name: str, plugin: "Plugin") -> None:
+        """Teardown a single plugin, logging any exception."""
+        try:
+            plugin.teardown()
+        except Exception:  # noqa: BLE001
+            logger.exception("Error during teardown of plugin %r.", name)
+
     def shutdown(self) -> None:
         """Call :meth:`~Plugin.teardown` on all registered plugins and clear registry."""
-        for name, plugin in list(self._plugins.items()):
-            try:
-                plugin.teardown()
-            except Exception:  # noqa: BLE001
-                logger.exception("Error during teardown of plugin %r.", name)
+        _ = [self._teardown_one(name, plugin) for name, plugin in list(self._plugins.items())]
         self._plugins.clear()
 
     def __len__(self) -> int:

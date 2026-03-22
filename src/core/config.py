@@ -173,8 +173,7 @@ class SwarmConfig:
         """Deserialise from a nested dictionary."""
         raw_agents: dict[str, Any] = data.pop("agents", {})
         cfg = cls(**data)
-        for name, agent_data in raw_agents.items():
-            cfg.agents[name] = AgentConfig.from_dict(agent_data)
+        cfg.agents = {name: AgentConfig.from_dict(d) for name, d in raw_agents.items()}
         return cfg
 
 
@@ -223,3 +222,9 @@ def save_config(config: SwarmConfig, path: str | os.PathLike[str]) -> None:
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(config.to_dict(), indent=2), encoding="utf-8")
+
+
+def validate() -> bool:
+    """Confirm the config module is importable and core classes are accessible."""
+    assert AgentConfig and SwarmConfig and load_config and save_config
+    return True

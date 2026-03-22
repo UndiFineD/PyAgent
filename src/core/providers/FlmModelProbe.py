@@ -25,7 +25,7 @@ from __future__ import annotations
 
 import asyncio
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Sequence
 from urllib.parse import urljoin
 
@@ -71,9 +71,12 @@ def select_model(available: Sequence[str], preferred: str | None = None) -> str 
     if preferred is not None:
         if preferred in available:
             return preferred
-        for model in available:
-            if model.startswith(preferred) or preferred in model:
-                return model
+        match = next(
+            (model for model in available if model.startswith(preferred) or preferred in model),
+            None,
+        )
+        if match is not None:
+            return match
     return available[0]
 
 
@@ -193,6 +196,12 @@ async def _http_get(url: str) -> str:
     if status_code != 200:
         raise ValueError(f"FLM /v1/models returned HTTP {status_code}")
     return body
+
+
+def validate() -> bool:
+    """Confirm the FlmModelProbe module is importable and core symbols are accessible."""
+    assert FlmModelProbeResult and probe_models and select_model
+    return True
 
 
 def _parse_models_body(body: str) -> list[str]:

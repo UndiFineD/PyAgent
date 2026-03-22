@@ -40,4 +40,3 @@ __all__ = [
 def placeholder() -> bool:
     """Legacy placeholder — kept for compatibility; always returns True."""
     return True
-

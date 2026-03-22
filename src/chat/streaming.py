@@ -83,8 +83,7 @@ def _sse_event(data: str, event: str | None = None, id: str | None = None) -> st
         lines.append(f"id: {id}")
     if event is not None:
         lines.append(f"event: {event}")
-    for line in data.splitlines():
-        lines.append(f"data: {line}")
+    lines.extend(f"data: {line}" for line in data.splitlines())
     lines.append("")  # blank line terminates the event
     lines.append("")
     return "\n".join(lines)
