@@ -41,6 +41,24 @@ class MemoryStore:
         return self._store.get(key, default)
 
 
+    def delete(self, key: str) -> bool:
+        """Delete a key; returns True if the key existed."""
+        assert self._store is not None
+        if key in self._store:
+            del self._store[key]
+            return True
+        return False
+
+    def keys(self) -> list[str]:
+        """Return all stored keys."""
+        assert self._store is not None
+        return list(self._store.keys())
+
+    def __len__(self) -> int:
+        """Return number of stored entries."""
+        return len(self._store) if self._store is not None else 0
+
+
 def validate() -> None:
     """Lightweight import-safe validation hook."""
     m = MemoryStore()
