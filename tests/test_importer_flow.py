@@ -32,4 +32,3 @@ def test_importer_flow(tmp_path: Path) -> None:
     asyncio.run(compile_architecture([info], out))
     assert out.exists()
     assert "README.md" in out.read_text()
-
