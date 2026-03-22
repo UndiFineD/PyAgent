@@ -17,6 +17,8 @@ import inspect
 from pathlib import Path
 from typing import Any, Dict, Iterator, List, Tuple
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
 SRC_ROOT = ROOT / "src"
 
@@ -139,8 +141,11 @@ def _safe_call(func: Any, args: Tuple[Any, ...]) -> Tuple[bool, str]:
         return False, f"raised {type(e).__name__}: {e}"
 
 
-def test_exercise_python_functions() -> None:
+def test_exercise_python_functions(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Try to import and call many functions across the python codebase."""
+    # Change to a temp dir so any file-writing functions (e.g. record_experiment,
+    # update_changelog) write to tmp_path instead of the workspace root.
+    monkeypatch.chdir(tmp_path)
     executed = 0
     succeeded = 0
     failures: Dict[str, str] = {}
