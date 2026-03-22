@@ -18,6 +18,7 @@ from __future__ import annotations
 import asyncio
 import threading
 from typing import Any, Optional
+from urllib.parse import urlparse
 
 
 class RemoteSyncError(RuntimeError):
@@ -84,10 +85,20 @@ class MemoryTransaction:
 
     async def set(self, key: str, value: Any, *, encrypt: bool = False) -> None:
         """Stage *value* under *key* in the pending store."""
+        if encrypt:
+            raise NotImplementedError(
+                "In-memory encryption is not yet implemented. "
+                "Do not pass encrypt=True until this is resolved."
+            )
         self._pending[key] = value
 
     async def get(self, key: str, *, decrypt: bool = False) -> Optional[Any]:
         """Return the value for *key*, checking _store first then _pending."""
+        if decrypt:
+            raise NotImplementedError(
+                "In-memory decryption is not yet implemented. "
+                "Do not pass decrypt=True until this is resolved."
+            )
         if key in self._store:
             return self._store[key]
         return self._pending.get(key)
@@ -132,6 +143,12 @@ class MemoryTransaction:
         """
         if not endpoint:
             return None
+        parsed = urlparse(endpoint)
+        if parsed.scheme not in ("https", "http"):
+            raise ValueError(
+                f"sync_remote: unsupported URL scheme {parsed.scheme!r}. "
+                "Only 'https' and 'http' are accepted."
+            )
         payload = dict(self._store)
         if dry_run:
             return payload
