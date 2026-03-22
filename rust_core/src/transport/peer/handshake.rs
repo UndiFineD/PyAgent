@@ -31,14 +31,16 @@ pub fn run_initiator<T: Transport>(
     let builder = Builder::new(NOISE_PATTERN.parse().map_err(|e| format!("{e:?}"))?);
     let mut hs = builder
         .local_private_key(static_key)
+        .map_err(|e| format!("noise builder: {e}"))?
         .remote_public_key(expected_remote_static)
+        .map_err(|e| format!("noise builder: {e}"))?
         .build_initiator()
         .map_err(|e| format!("noise builder: {e}"))?;
 
     let mut buf = vec![0u8; MAX_NOISE_MSG];
 
     // → e
-    let n = hs.write_message(&[], &mut buf).map_err(|e| e.to_string())?;
+    let n = hs.write_message(&[], &mut buf).map_err(|e: snow::Error| e.to_string())?;
     channel
         .send_raw(buf[..n].to_vec())
         .map_err(|e| format!("send e: {e}"))?;
@@ -54,7 +56,7 @@ pub fn run_initiator<T: Transport>(
         .send_raw(buf[..n].to_vec())
         .map_err(|e| format!("send se: {e}"))?;
 
-    let transport = hs.into_transport_mode().map_err(|e| e.to_string())?;
+    let transport = hs.into_transport_mode().map_err(|e: snow::Error| e.to_string())?;
     Ok(NoiseSession { transport })
 }
 
@@ -67,7 +69,9 @@ pub fn run_responder<T: Transport>(
     let builder = Builder::new(NOISE_PATTERN.parse().map_err(|e| format!("{e:?}"))?);
     let mut hs = builder
         .local_private_key(static_key)
+        .map_err(|e| format!("noise builder: {e}"))?
         .remote_public_key(expected_remote_static)
+        .map_err(|e| format!("noise builder: {e}"))?
         .build_responder()
         .map_err(|e| format!("noise builder: {e}"))?;
 
@@ -79,7 +83,7 @@ pub fn run_responder<T: Transport>(
         .map_err(|e| format!("read e: {e}"))?;
 
     // → e, ee, s, es
-    let n = hs.write_message(&[], &mut buf).map_err(|e| e.to_string())?;
+    let n = hs.write_message(&[], &mut buf).map_err(|e: snow::Error| e.to_string())?;
     channel
         .send_raw(buf[..n].to_vec())
         .map_err(|e| format!("send ee: {e}"))?;
@@ -89,7 +93,7 @@ pub fn run_responder<T: Transport>(
     hs.read_message(&msg, &mut buf)
         .map_err(|e| format!("read se: {e}"))?;
 
-    let transport = hs.into_transport_mode().map_err(|e| e.to_string())?;
+    let transport = hs.into_transport_mode().map_err(|e: snow::Error| e.to_string())?;
     Ok(NoiseSession { transport })
 }
 
