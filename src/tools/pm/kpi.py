@@ -17,10 +17,41 @@ from typing import Any, Sequence
 
 
 def compute_throughput(completed: Sequence[Any], period: Sequence[Any]) -> int:
-    # `period` parameter is reserved for future use; currently ignored
-    """Return a simple throughput metric (items per unit period).
+    """Return a simple throughput metric (items completed).
 
-    For the sake of the initial test we simply return the number of
-    completed items; later versions may divide by time or apply weighting.
+    ``period`` is reserved for future time-based weighting.
     """
     return len(completed)
+
+
+def velocity(completed_points: Sequence[float], sprints: int = 1) -> float:
+    """Return average story-points per sprint."""
+    if sprints <= 0:
+        raise ValueError("sprints must be >= 1")
+    return sum(completed_points) / sprints
+
+
+def cycle_time(start_ts: float, end_ts: float) -> float:
+    """Return elapsed seconds between start and end timestamps."""
+    if end_ts < start_ts:
+        raise ValueError("end_ts must be >= start_ts")
+    return end_ts - start_ts
+
+
+def defect_rate(bugs_found: int, total_items: int) -> float:
+    """Return defect rate as a fraction in [0, 1]."""
+    if total_items <= 0:
+        raise ValueError("total_items must be > 0")
+    return bugs_found / total_items
+
+
+def sprint_health(completed: int, planned: int) -> str:
+    """Return a human-readable health label for a sprint."""
+    if planned <= 0:
+        raise ValueError("planned must be > 0")
+    ratio = completed / planned
+    if ratio >= 0.9:
+        return "green"
+    if ratio >= 0.7:
+        return "amber"
+    return "red"

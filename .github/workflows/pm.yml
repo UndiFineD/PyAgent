@@ -1,0 +1,39 @@
+name: PM Tools CI
+
+on:
+  push:
+    paths:
+      - 'src/tools/pm/**'
+      - 'tests/tools/test_pm_*.py'
+      - 'scripts/GeneratePmTemplates.py'
+      - '.github/workflows/pm.yml'
+  pull_request:
+    paths:
+      - 'src/tools/pm/**'
+      - 'tests/tools/test_pm_*.py'
+
+jobs:
+  pm-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-asyncio
+
+      - name: Run PM unit tests
+        run: |
+          pytest tests/tools/test_pm_kpi.py tests/tools/test_pm_risk.py tests/tools/test_pm_email.py -v
+
+      - name: Generate PM templates
+        run: |
+          python scripts/GeneratePmTemplates.py --out /tmp/pm-templates
+          ls /tmp/pm-templates
