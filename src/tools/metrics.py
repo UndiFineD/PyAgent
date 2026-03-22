@@ -174,4 +174,3 @@ register_tool("metrics", main, "Compute code metrics (lines, functions, complexi
 if __name__ == "__main__":
     import sys
     sys.exit(main())
-

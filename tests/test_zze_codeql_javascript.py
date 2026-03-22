@@ -19,13 +19,27 @@ Set CODEQL_REBUILD=1 to force a database rebuild even when the SARIF is fresh.
 
 import json
 import os
+import shutil
 import subprocess
 from pathlib import Path
 
 import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-CODEQL_EXE = REPO_ROOT / "codeql" / "codeql.exe"
+
+
+def _resolve_codeql_exe() -> Path:
+    """Resolve CodeQL CLI path: CODEQL_EXE env var → PATH → repo-local fallback."""
+    from_env = os.environ.get("CODEQL_EXE")
+    if from_env:
+        return Path(from_env)
+    on_path = shutil.which("codeql")
+    if on_path:
+        return Path(on_path)
+    return REPO_ROOT / "codeql" / "codeql.exe"
+
+
+CODEQL_EXE = _resolve_codeql_exe()
 DB_PATH = REPO_ROOT / "databases" / "javascript-db"
 SARIF_PATH = REPO_ROOT / "results" / "javascript.sarif"
 SOURCE_ROOT = REPO_ROOT / "web"

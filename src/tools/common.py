@@ -13,10 +13,10 @@
 # limitations under the License.
 """Shared helper functions used by development utilities."""
 
+import asyncio
 import json
 import logging
 import os
-import time
 from pathlib import Path
 from typing import Any, Callable, TypeVar
 
@@ -61,7 +61,7 @@ def ensure_dir(path: str | os.PathLike) -> Path:
     return p
 
 
-def retry(
+async def retry(
     fn: Callable[[], T],
     *,
     max_attempts: int = 3,
@@ -79,7 +79,7 @@ def retry(
         except exceptions as exc:
             last_exc = exc
             if attempt < max_attempts - 1:
-                time.sleep(delay)
+                await asyncio.sleep(delay)
     raise last_exc  # type: ignore[misc]
 
 
@@ -95,15 +95,17 @@ def format_table(rows: list[list[Any]], headers: list[str]) -> str:
         bob    25
     """
     col_count = len(headers)
-    widths = [len(h) for h in headers]
-    str_rows: list[list[str]] = []
-    for row in rows:
-        cells = [str(row[i]) if i < len(row) else "" for i in range(col_count)]
-        str_rows.append(cells)
-        for i, cell in enumerate(cells):
-            widths[i] = max(widths[i], len(cell))
+    str_rows: list[list[str]] = [
+        [str(row[i]) if i < len(row) else "" for i in range(col_count)]
+        for row in rows
+    ]
+    widths = [
+        max([len(headers[i])] + [len(r[i]) for r in str_rows])
+        for i in range(col_count)
+    ]
 
     def _render_row(cells: list[str]) -> str:
+        """Render a single row of cells, padded to column widths."""
         return "  ".join(cell.ljust(widths[i]) for i, cell in enumerate(cells)).rstrip()
 
     header_line = _render_row(headers)

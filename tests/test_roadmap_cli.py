@@ -46,4 +46,3 @@ def test_vision_template_contains_pyagent() -> None:
     template = vision.get_template()
     assert "PyAgent" in template
     assert "Vision" in template
-

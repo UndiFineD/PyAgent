@@ -63,16 +63,11 @@ def discover_plugins(plugin_dir: str) -> list[str]:
     if not os.path.isdir(plugin_dir):
         return []
 
-    names: list[str] = []
-    for entry in os.scandir(plugin_dir):
-        if not entry.is_file():
-            continue
-        if not entry.name.endswith(".py"):
-            continue
-        if entry.name.startswith("_"):
-            continue
-        names.append(entry.name[:-3])
-
+    names: list[str] = [
+        entry.name[:-3]
+        for entry in os.scandir(plugin_dir)
+        if entry.is_file() and entry.name.endswith(".py") and not entry.name.startswith("_")
+    ]
     return sorted(names)
 
 

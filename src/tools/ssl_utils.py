@@ -137,8 +137,7 @@ def main(args: list[str] | None = None) -> int:
         if parsed.json:
             print(json.dumps(info, indent=2))
         else:
-            for k, v in info.items():
-                print(f"{k}: {v}")
+            print("\n".join(f"{k}: {v}" for k, v in info.items()))
         return 0
 
     if parsed.command == "verify":
@@ -158,4 +157,3 @@ register_tool("ssl_utils", main, "SSL/TLS certificate inspection (expiry, verify
 
 if __name__ == "__main__":
     sys.exit(main())
-
