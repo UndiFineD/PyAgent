@@ -13,7 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import pytest
-import rust_core
+try:
+    import rust_core
+except ImportError:
+    pytest.skip("rust_core not available - Rust extension not compiled", allow_module_level=True)
 
 if not hasattr(rust_core, 'TRANSPORT_FALLBACK_TO_QUEUE'):
     pytest.skip("rust_core transport constants not available - Rust extension not compiled", allow_module_level=True)
