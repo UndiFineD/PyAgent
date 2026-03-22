@@ -31,15 +31,15 @@ All 42 projects have been surveyed and governance PRs created:
 
 ## Standing Policy — Branch Isolation
 
-- One `prjNNN` workstream maps to one branch. Project work must not piggyback on the active branch of another project.
+- One `prjNNNNNNN` workstream maps to one branch. Project work must not piggyback on the active branch of another project.
 - `@0master` assigns or validates the expected branch during project kickoff and ensures `@1project` records that branch, the scope boundary, and the git handoff rule in the project overview.
 - `@9git` is expected to reject mixed-project changes, inherited branches, and broad staging guidance for project work.
 - When branch hygiene fails, `@0master` owns the correction loop: update the governing guidance, return the task to the agent that owns the project boundary, and do not normalize the failure as an accepted workflow.
 
 ## Standing Policy — Project Numbering Ownership
 
-- `@0master` owns `prjNNN` allocation, validation, and continuity tracking.
-- Project numbering is part of the project boundary. A project is not fully defined until the assigned `prjNNN`, project folder, and expected branch agree.
+- `@0master` owns `prjNNNNNNN` allocation, validation, and continuity tracking.
+- Project numbering is part of the project boundary. A project is not fully defined until the assigned `prjNNNNNNN`, project folder, and expected branch agree.
 - `@1project` must consume the identifier assigned by `@0master`. It must not invent, renumber, or resolve ambiguity on its own.
 - Do not reuse old numbers or skip numbers casually. If a number is reserved, retired, skipped, or corrected, record the reason here before downstream handoff.
 - If numbering is missing, conflicting, or ambiguous, stop the workflow and send the task back through `@0master` before project setup continues.
@@ -49,9 +49,12 @@ All 42 projects have been surveyed and governance PRs created:
 - Latest confirmed project folder in `docs/project/`: `prj0000042`.
 - Project folder numbering migrated from 3-digit (`prj001`-`prj038`) to 7-digit (`prj0000001`-`prj0000042`).
 - Legacy duplicate groups were resolved by assigning unique 7-digit identifiers during migration.
-- Next `prjNNN` to allocate: `prj0000043` (validate against `docs/project/` inventory before assignment).
+- `prj0000043` allocated 2026-03-22: `prj0000043-p2p-security-deps` — libp2p 0.49→0.56, 6 Dependabot CVEs. PR open.
+- `prj0000044` allocated 2026-03-22: `prj0000044-transaction-managers` — add missing StorageTransaction/ProcessTransaction/ContextTransaction stubs for CI. PR #136 open.
+- `prj0000045` allocated 2026-03-22: `prj0000045-transaction-managers-full` — full proper design of all four transaction managers (src/transactions/ package, BaseTransaction ABC, LLM context integration, encrypted storage, remote memory). **COMPLETE** — PR #137 open. 62/62 tests pass: 14 existing (via shims) + 48 new acceptance tests. @8ql: 2 HIGH findings fixed (M-1 false encrypt guarantee → NotImplementedError; M-2 SSRF → URL scheme validation). Next: review + merge PR #137.
+- Next `prjNNNNNNN` to allocate: `prj0000046` (validate against `docs/project/` inventory before assignment).
 
-## Branch Registry (all 42 projects)
+## Branch Registry (all 45 projects)
 
 | Dir | Expected Branch | Status |
 |---|---|---|
@@ -96,7 +99,10 @@ All 42 projects have been surveyed and governance PRs created:
 | prj0000039 | `prj0000039-conftest-typing-fixes` | assigned 2026-03-21 |
 | prj0000040 | `prj0000040-core-system` | assigned 2026-03-21 |
 | prj0000041 | `prj0000041-flm` | assigned 2026-03-21 |
-| prj0000042 | `prj037-tools-crdt-security` | pre-existing |
+| prj0000042 | `prj0000042-tools-crdt-security` | pre-existing |
+| prj0000043 | `prj0000043-p2p-security-deps` | assigned 2026-03-22 |
+| prj0000044 | `prj0000044-transaction-managers` | assigned 2026-03-22 |
+| prj0000045 | `prj0000045-transaction-managers-full` | PR #137 open — COMPLETE |
 
 ## Learning Loop — Branch Hygiene
 

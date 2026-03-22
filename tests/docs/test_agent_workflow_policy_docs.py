@@ -28,13 +28,14 @@ def _normalize(text: str) -> str:
 
 
 def test_0master_documents_project_numbering_ownership_and_continuity() -> None:
-    """The master workflow doc must keep ownership of prjNNN allocation and continuity."""
-    master_agent = _normalize(_read(".github/agents/0master.agent.md"))
+    """The master workflow doc must keep ownership of prjNNNNNNN allocation and continuity."""
+    master_agent_text = _read(".github/agents/0master.agent.md")
+    master_agent = _normalize(master_agent_text)
     master_memory = _normalize(_read("docs/agents/0master.memory.md"))
     combined = f"{master_agent} {master_memory}"
 
     assert "project numbering ownership policy" in master_agent
-    assert "@0master owns prjnnn allocation" in combined
+    assert "`@0master` owns `prjNNNNNNN` allocation" in master_agent_text
     assert "@1project must use the identifier assigned by @0master" in combined
     assert "next available identifier" in combined
     assert "project numbering is part of the project boundary" in combined
@@ -48,13 +49,13 @@ def test_1project_requires_assigned_identifier_and_template_sections() -> None:
     project_agent_text = _read(".github/agents/1project.agent.md")
     project_agent = _normalize(project_agent_text)
 
-    assert "require an explicit prjnnn identifier from @0master" in project_agent
+    assert "`prjNNNNNNN` identifier from `@0master`" in project_agent_text
     assert "must not invent, renumber, or guess it" in project_agent
     assert "if the identifier is missing" in project_agent
     assert "hand the task back to @0master" in project_agent
     assert "## Project Identity" in project_agent_text
-    assert "**Project ID:** <assigned `prjNNN` from @0master>" in project_agent_text
-    assert "**Project folder:** `docs/project/<project-id>-<short-name>/`" in project_agent_text
+    assert "**Project ID:** <assigned `prjNNNNNNN` from @0master>" in project_agent_text
+    assert "**Project folder:** `docs/project/prjNNNNNNN/`" in project_agent_text
     assert "## Branch Plan" in project_agent_text
 
 
@@ -382,9 +383,9 @@ def test_every_project_folder_has_a_project_overview() -> None:
     project_dirs = sorted(
         d
         for d in (REPO_ROOT / "docs" / "project").iterdir()
-        if d.is_dir() and d.name.startswith("prj") and d.name[3:6].isdigit()
+        if d.is_dir() and d.name.startswith("prj") and d.name[3:10].isdigit()
     )
-    assert project_dirs, "No prjNNN-* directories found under docs/project/"
+    assert project_dirs, "No prjNNNNNNN directories found under docs/project/"
 
     missing = [d.relative_to(REPO_ROOT).as_posix() for d in project_dirs if not any(d.glob("*.project.md"))]
 
@@ -416,11 +417,11 @@ _LEGACY_DUPLICATE_NUMBERS: dict[str, list[str]] = {
 
 
 def test_project_folder_numbers_are_unique_or_documented_legacy_duplicates() -> None:
-    """No two docs/project/ folders may share the same seven-digit prjNNN number
+    """No two docs/project/ folders may share the same seven-digit prjNNNNNNN number
     unless that duplication is explicitly listed in _LEGACY_DUPLICATE_NUMBERS.
 
     This enforces the @0master numbering policy:
-    - Each new prjNNN is allocated once and maps to exactly one project folder.
+    - Each new prjNNNNNNN is allocated once and maps to exactly one project folder.
     - Legacy duplicates are named and frozen; adding a new folder to a legacy group
       requires updating this test (and explaining the rationale in the dict above).
     - Any undocumented duplicate means @0master failed to assign a fresh number.
@@ -460,7 +461,7 @@ def test_project_folder_numbers_are_unique_or_documented_legacy_duplicates() -> 
         violations.append(f"prj{nnn}: {'; '.join(detail_parts)}")
 
     assert not violations, (
-        "prjNNN uniqueness violation(s) detected. "
+        "prjNNNNNNN uniqueness violation(s) detected. "
         "Either assign a new unique number via @0master, "
         "or add the duplication to _LEGACY_DUPLICATE_NUMBERS with a rationale:\n"
         + "\n".join(f"  - {v}" for v in violations)

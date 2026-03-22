@@ -96,7 +96,7 @@ def test_all_sarif_files_exist() -> None:
 
     missing = [str(s.path) for s in _SARIF_SPECS if not s.path.exists()]
     assert not missing, (
-        f"Missing SARIF files (run tests/test_zzd/e/f to generate them):\n"
+        "Missing SARIF files (run tests/test_zzd/e/f to generate them):\n"
         + "\n".join(f"  {p}" for p in missing)
     )
 

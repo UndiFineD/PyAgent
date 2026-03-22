@@ -36,7 +36,6 @@ Group B – src.transactions.StorageTransactionManager full impl (T03 required)
 
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 
 import pytest

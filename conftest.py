@@ -32,7 +32,7 @@ sys.path = [p for p in sys.path if "src-old" not in str(p).replace("\\", "/")]
 
 # Ensure the standard library "types" module is used even if a different module
 # named "types" exists in the repository (e.g. src-old/core/base/.../types.py).
-import types as _stdlib_types
+import types as _stdlib_types  # noqa: E402
 sys.modules["types"] = _stdlib_types
 
 

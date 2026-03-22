@@ -37,7 +37,7 @@ runs, proving that the runtime integration works.
 # ``Any`` was previously planned for future use but isn't needed yet
 # from typing import Any
 
-from runtime_py import sleep, spawn  # type: ignore[import-not-found]
+from runtime_py import sleep, spawn  # type: ignore[import-not-found]  # noqa: E402
 
 # shared state used solely for the unit test
 counter: int = 0

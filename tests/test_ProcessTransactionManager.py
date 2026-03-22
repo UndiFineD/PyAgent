@@ -255,7 +255,7 @@ class TestProcessTransactionFull:
         _skip_if_no_tx_process()
         from src.transactions.ProcessTransactionManager import ProcessTransaction  # noqa: PLC0415
 
-        cmd = [sys.executable, "-c", "import time; time.sleep(30)"]
+        _cmd = [sys.executable, "-c", "import time; time.sleep(30)"]  # noqa: F841
         tx = ProcessTransaction()
         await tx.start_async()
 

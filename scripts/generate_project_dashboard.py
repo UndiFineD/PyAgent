@@ -215,5 +215,5 @@ for p in projects:
     md = "Yes" if p["MissingDesign"] else "No"
     code = "Yes" if p.get("CodeFound") else "No"
     print(
-        f"{p['ProjectId']}: {pct}% ({p['Completed']}/{p['Total']}) | code: {_color_yes_no(code)} | missing design: {_color_yes_no(md)}"
+        f"{p['ProjectId']}: {pct}% ({p['Completed']}/{p['Total']}) | code: {_color_yes_no(code)} | missing design: {_color_yes_no(md)}"  # noqa: E501
     )

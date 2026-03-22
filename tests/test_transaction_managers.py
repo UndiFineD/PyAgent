@@ -16,7 +16,6 @@
 
 from __future__ import annotations
 
-import asyncio
 import sys
 from pathlib import Path
 
@@ -141,7 +140,7 @@ class TestContextTransaction:
 
     def test_basic_enter_exit(self) -> None:
         """Basic test of entering and exiting a context."""
-        with ContextTransaction("task-1") as ctx:
+        with ContextTransaction("task-1") as _:
             assert "task-1" in ContextTransaction.active_contexts()
         assert "task-1" not in ContextTransaction.active_contexts()
 
@@ -168,6 +167,6 @@ class TestContextTransaction:
     @pytest.mark.asyncio
     async def test_async_context_manager(self) -> None:
         """Test that the async context manager properly manages active contexts."""
-        async with ContextTransaction("async-task") as ctx:
+        async with ContextTransaction("async-task") as _:
             assert "async-task" in ContextTransaction.active_contexts()
         assert "async-task" not in ContextTransaction.active_contexts()

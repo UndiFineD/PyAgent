@@ -15,8 +15,6 @@
 
 import importlib
 
-import pytest
-
 
 def test_backend_package_importable():
     mod = importlib.import_module("backend")

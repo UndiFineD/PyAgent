@@ -266,7 +266,7 @@ class TestContextTransactionFull:
         )
 
         context_id = "no-leak"
-        with ContextTransaction(context_id) as outer:
+        with ContextTransaction(context_id) as _outer:  # noqa: F841
             with pytest.raises(RecursionGuardError):
                 with ContextTransaction(context_id):
                     pass  # should not reach

@@ -77,8 +77,9 @@ These are the primary memory artifacts the master agent reads/updates:
 
 1. Run `git branch --show-current` → capture as `OBSERVED_BRANCH`.
 2. Read `## Branch Plan` from `docs/project/prjNNNNNNN/<project>.project.md` → capture as `EXPECTED_BRANCH`.
-3. Compare: if `OBSERVED_BRANCH != EXPECTED_BRANCH` → **BLOCKED**:
-   - Do NOT edit files, run tests, stage, commit, push, create/update a PR, or call any sub-agent.
+3. Compare: if observed branch != expected branch, stop delegation immediately → **BLOCKED**:
+   - Do not authorize downstream handoff, staging, commit, push, or PR actions.
+   - Mark the task blocked in `docs/agents/0master.memory.md`.
    - Run `git checkout -b EXPECTED_BRANCH` (create) or `git checkout EXPECTED_BRANCH` (existing) to switch.
    - Re-check: if the checkout succeeds and `OBSERVED_BRANCH == EXPECTED_BRANCH`, continue.
    - If the correct branch cannot be determined, escalate to `@1project` and record `BLOCKED` in `docs/agents/0master.memory.md`.

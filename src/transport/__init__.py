@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#!/usr/bin/env python3
 """Transport module for PyAgent.
 
 This module is a thin Python wrapper around the Rust `rust_core` extension.
