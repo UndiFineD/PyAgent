@@ -47,4 +47,3 @@ def test_tools_package_importable() -> None:
 
     mod = importlib.import_module("src.tools")
     assert mod is not None
-

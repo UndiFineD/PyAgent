@@ -21,9 +21,13 @@ Usage:
 
 Options:
     --base-url URL     FLM base URL  [env: DV_FLM_BASE_URL,
-                       default: http://127.0.0.1:52625/v1]
+                       default: http://127.0.0.1:52625/v1/]
     --model MODEL      Model name    [env: DV_FLM_DEFAULT_MODEL,
-                       default: llama3.2:1b]
+                       default: qwen3.5:4b]
+    --timeout SECS     HTTP timeout per request  [env: DV_FLM_TIMEOUT,
+                       default: 120]
+    --max-retries N    HTTP retries on transient errors  [env: DV_FLM_MAX_RETRIES,
+                       default: 3]
     --duration SECS    How long to run  [default: 300 (5 minutes)]
     --max-tokens N     Max completion tokens per request  [default: 512]
     --prompt TEXT      Prompt text to use (repeatable, short prompts are fine)
@@ -37,7 +41,30 @@ import os
 import sys
 import time
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
+
+# ---------------------------------------------------------------------------
+# Load .env from repo root (if present) before reading any env vars.
+# Uses python-dotenv when available; silently skips if not installed.
+# ---------------------------------------------------------------------------
+_ENV_FILE = Path(__file__).resolve().parents[1] / ".env"
+if _ENV_FILE.exists():
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(_ENV_FILE, override=False)  # don't override already-set shell vars
+    except ImportError:
+        # dotenv not installed — parse manually (key=value, skip comments)
+        with _ENV_FILE.open(encoding="utf-8") as _f:
+            for _line in _f:
+                _line = _line.strip()
+                if not _line or _line.startswith("#") or "=" not in _line:
+                    continue
+                _k, _, _v = _line.partition("=")
+                _k = _k.strip()
+                _v = _v.strip().strip('"').strip("'")
+                if _k and _k not in os.environ:
+                    os.environ[_k] = _v
 
 # ---------------------------------------------------------------------------
 # Dependency guard — the openai package is required.
@@ -168,13 +195,27 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument(
         "--base-url",
-        default=os.environ.get("DV_FLM_BASE_URL", "http://127.0.0.1:52625/v1"),
+        default=os.environ.get("DV_FLM_BASE_URL", "http://127.0.0.1:52625/v1/"),
         help="FLM OpenAI-compatible base URL  [env: DV_FLM_BASE_URL]",
     )
     p.add_argument(
         "--model",
         default=os.environ.get("DV_FLM_DEFAULT_MODEL", "qwen3.5:4b"),
         help="Model name  [env: DV_FLM_DEFAULT_MODEL]",
+    )
+    p.add_argument(
+        "--timeout",
+        type=int,
+        default=int(os.environ.get("DV_FLM_TIMEOUT", "120")),
+        metavar="SECS",
+        help="HTTP request timeout in seconds  [env: DV_FLM_TIMEOUT, default: 120]",
+    )
+    p.add_argument(
+        "--max-retries",
+        type=int,
+        default=int(os.environ.get("DV_FLM_MAX_RETRIES", "3")),
+        metavar="N",
+        help="Max HTTP retries on transient errors  [env: DV_FLM_MAX_RETRIES, default: 3]",
     )
     p.add_argument(
         "--duration",
@@ -254,6 +295,7 @@ def _print_summary(stats: _Stats, wall_time: float, args: argparse.Namespace) ->
     print(f"{'─' * 64}")
     print(f"  Backend          : {args.base_url}")
     print(f"  Model            : {args.model}")
+    print(f"  Timeout          : {args.timeout}s  max_retries={args.max_retries}")
     print(f"  Duration (target): {_fmt_dur(args.duration)} ({args.duration:.0f}s)")
     print(f"  Duration (actual): {_fmt_dur(wall_time)} ({wall_time:.1f}s)")
     print(f"{'─' * 64}")
@@ -291,9 +333,10 @@ def _run_benchmark(client: Any, args: argparse.Namespace) -> _Stats:
     wall_start = time.perf_counter()
 
     print(f"\n{_BOLD}Starting FLM TPS benchmark{_RESET}")
-    print(f"  URL   : {args.base_url}")
-    print(f"  Model : {args.model}")
-    print(f"  Target: {args.duration:.0f}s  max_tokens={args.max_tokens}")
+    print(f"  URL      : {args.base_url}")
+    print(f"  Model    : {args.model}")
+    print(f"  Timeout  : {args.timeout}s  max_retries={args.max_retries}")
+    print(f"  Target   : {args.duration:.0f}s  max_tokens={args.max_tokens}")
     print()
 
     while time.perf_counter() < deadline:
@@ -347,7 +390,12 @@ def main(argv: list[str] | None = None) -> int:
 
     args = _build_parser().parse_args(argv)
 
-    client = OpenAI(base_url=args.base_url, api_key="dummy")
+    client = OpenAI(
+        base_url=args.base_url,
+        api_key="dummy",
+        timeout=args.timeout,
+        max_retries=args.max_retries,
+    )
 
     # Quick reachability check
     try:

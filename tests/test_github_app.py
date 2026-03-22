@@ -108,4 +108,3 @@ def test_webhook_unknown_event() -> None:
     body = resp.json()
     assert body["received"] is True
     assert body["event"] == "star"
-
