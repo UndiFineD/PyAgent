@@ -138,8 +138,7 @@ class BaseAgent(ABC):
     def stop(self) -> None:
         """Transition to STOPPED and cancel all pending tasks."""
         self._state = AgentLifecycle.STOPPED
-        for t in self._tasks:
-            t.cancel()
+        _ = [t.cancel() for t in self._tasks]
         self._tasks.clear()
         logger.debug("Agent %s stopped (id=%s)", self._manifest.name, self.agent_id)
 

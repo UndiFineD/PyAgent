@@ -115,8 +115,7 @@ class MultiModalProcessor:
         parts: list[dict[str, Any]] = []
         if inputs.context:
             parts.append({"type": "text", "text": inputs.context})
-        for item in inputs.items:
-            parts.append(self.process_item(item))
+        parts.extend(self.process_item(item) for item in inputs.items)
         return parts
 
     @staticmethod

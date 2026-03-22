@@ -126,9 +126,13 @@ class MultiModalInputs:
         parts: list[str] = []
         if self.context:
             parts.append(self.context)
-        for item in self.items:
-            try:
-                parts.append(item.as_text())
-            except ValueError:
-                parts.append(f"[{item.mime_type} omitted]")
+        parts.extend(_item_to_text(item) for item in self.items)
         return parts
+
+
+def _item_to_text(item: MultiModalData) -> str:
+    """Convert a single MultiModalData item to its text representation."""
+    try:
+        return item.as_text()
+    except ValueError:
+        return f"[{item.mime_type} omitted]"

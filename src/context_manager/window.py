@@ -138,7 +138,7 @@ class ContextWindow:
             metadata=metadata or {},
         )
         self._segments.append(seg)
-        self._prune()
+        await self._prune()
         return seg
 
     def snapshot(self) -> str:
@@ -161,7 +161,7 @@ class ContextWindow:
     # Internal helpers
     # ------------------------------------------------------------------
 
-    def _prune(self) -> None:
+    async def _prune(self) -> None:
         """Remove segments until token_count <= max_tokens."""
         while self.token_count > self.max_tokens and self._segments:
             # Find the lowest-priority, oldest segment to evict
