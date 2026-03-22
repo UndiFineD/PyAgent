@@ -16,6 +16,8 @@
 import json
 from pathlib import Path
 
+import pytest
+
 from src.tools.common import (
     ensure_dir,
     format_table,
@@ -26,6 +28,7 @@ from src.tools.common import (
 
 
 def test_load_config_json(tmp_path: Path) -> None:
+    """Should load JSON config files."""
     cfg = tmp_path / "config.json"
     cfg.write_text(json.dumps({"key": "value"}))
     result = load_config(str(cfg))
@@ -33,6 +36,7 @@ def test_load_config_json(tmp_path: Path) -> None:
 
 
 def test_load_config_toml(tmp_path: Path) -> None:
+    """Should load TOML config files if supported."""
     cfg = tmp_path / "config.toml"
     cfg.write_text('[section]\nname = "pyagent"\n')
     try:
@@ -44,6 +48,7 @@ def test_load_config_toml(tmp_path: Path) -> None:
 
 
 def test_ensure_dir_creates_nested(tmp_path: Path) -> None:
+    """Should create nested directories if they don't exist."""
     target = tmp_path / "a" / "b" / "c"
     result = ensure_dir(target)
     assert result.is_dir()
@@ -51,47 +56,57 @@ def test_ensure_dir_creates_nested(tmp_path: Path) -> None:
 
 
 def test_ensure_dir_idempotent(tmp_path: Path) -> None:
+    """Calling ensure_dir on an existing directory should not raise."""
     ensure_dir(tmp_path)  # already exists — should not raise
     assert tmp_path.is_dir()
 
 
-def test_retry_succeeds_on_first_attempt() -> None:
+@pytest.mark.asyncio
+async def test_retry_succeeds_on_first_attempt() -> None:
+    """Should return result if function succeeds on first attempt."""
     calls = []
 
     def fn():
         calls.append(1)
         return 42
 
-    result = retry(fn, max_attempts=3)
+    result = await retry(fn, max_attempts=3)
     assert result == 42
     assert len(calls) == 1
 
 
-def test_retry_retries_on_failure() -> None:
+@pytest.mark.asyncio
+async def test_retry_retries_on_failure() -> None:
+    """Should retry the function until it succeeds or max attempts is reached."""
     calls = []
 
     def fn():
+        """Simulate a function that fails the first two times
+        and succeeds the third time."""
         calls.append(1)
         if len(calls) < 3:
             raise ValueError("not yet")
         return "done"
 
-    result = retry(fn, max_attempts=5, delay=0.0)
+    result = await retry(fn, max_attempts=5, delay=0.0)
     assert result == "done"
     assert len(calls) == 3
 
 
-def test_retry_raises_after_max_attempts() -> None:
-    import pytest
+@pytest.mark.asyncio
+async def test_retry_raises_after_max_attempts() -> None:
+    """Should raise the last exception if all attempts fail."""
 
     def always_fail():
+        """Simulate a function that always fails."""
         raise RuntimeError("boom")
 
     with pytest.raises(RuntimeError, match="boom"):
-        retry(always_fail, max_attempts=2, delay=0.0)
+        await retry(always_fail, max_attempts=2, delay=0.0)
 
 
 def test_format_table_basic() -> None:
+    """Should format a simple table with headers."""
     output = format_table([["alice", 30], ["bob", 25]], ["Name", "Age"])
     assert "alice" in output
     assert "bob" in output
@@ -100,6 +115,7 @@ def test_format_table_basic() -> None:
 
 
 def test_format_table_alignment() -> None:
+    """Should align columns properly."""
     output = format_table([["x", "y"]], ["Col1", "Col2"])
     lines = output.splitlines()
     # header, separator, data
@@ -107,6 +123,7 @@ def test_format_table_alignment() -> None:
 
 
 def test_get_logger_returns_logger() -> None:
+    """Should return a logging.Logger instance."""
     import logging
 
     logger = get_logger("test_prj0000015")

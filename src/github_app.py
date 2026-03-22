@@ -108,4 +108,3 @@ async def webhook(
     # Unknown event — acknowledge gracefully
     _log.debug("unhandled event: %s", x_github_event)
     return {"received": True, "event": x_github_event}
-

@@ -39,15 +39,21 @@ def test_tools_main_blocks() -> None:
     """
     # Avoid importing src.tools (and its submodules) to prevent warnings about
     # partially-imported modules during runpy execution.
+    # These modules are infrastructure (not tool providers) and must not be
+    # popped from sys.modules or re-executed as __main__. Matches _SKIP in
+    # src/tools/__init__.py. Removing tool_registry would recreate _REGISTRY
+    # and break the shared registry used by all other tests.
+    _INFRA = frozenset({"tool_registry", "__main__", "common"})
+
     pkgpath = Path(__file__).resolve().parents[1] / "src" / "tools"
     for _finder, modname, ispkg in pkgutil.iter_modules([str(pkgpath)]):
-        if ispkg:
-            # skip the pm subpackage and any others
+        if ispkg or modname in _INFRA:
+            # skip subpackages and infrastructure modules
             continue
         fullname = f"src.tools.{modname}"
 
         # Ensure a clean import state to avoid runpy warnings about partially-
-        # imported modules.
+        # imported modules. Do NOT pop tool_registry (see _INFRA above).
         sys.modules.pop(fullname, None)
         sys.modules.pop("src.tools", None)
 
