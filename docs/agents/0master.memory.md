@@ -51,7 +51,7 @@ All 42 projects have been surveyed and governance PRs created:
 - Legacy duplicate groups were resolved by assigning unique 7-digit identifiers during migration.
 - `prj0000043` allocated 2026-03-22: `prj0000043-p2p-security-deps` — libp2p 0.49→0.56, 6 Dependabot CVEs. PR open.
 - `prj0000044` allocated 2026-03-22: `prj0000044-transaction-managers` — add missing StorageTransaction/ProcessTransaction/ContextTransaction stubs for CI. PR #136 open.
-- `prj0000045` allocated 2026-03-22: `prj0000045-transaction-managers-full` — full proper design of all four transaction managers (src/transactions/ package, BaseTransaction ABC, LLM context integration, encrypted storage, remote memory). **COMPLETE** — PR #137 open. 62/62 tests pass: 14 existing (via shims) + 48 new acceptance tests. @8ql: 2 HIGH findings fixed (M-1 false encrypt guarantee → NotImplementedError; M-2 SSRF → URL scheme validation). Next: review + merge PR #137.
+- `prj0000045` allocated 2026-03-22: `prj0000045-transaction-managers-full` — full proper design of all four transaction managers (src/transactions/ package, BaseTransaction ABC, LLM context integration, encrypted storage, remote memory). **MERGED** — PR #137 squash-merged to main 2026-03-22. 317 tests pass, 4 skip, 0 fail.
 - Next `prjNNNNNNN` to allocate: `prj0000046` (validate against `docs/project/` inventory before assignment).
 
 ## Branch Registry (all 45 projects)
