@@ -1,14 +1,7 @@
 use clap::Parser;
-use libp2p::core::upgrade;
 use libp2p::futures::StreamExt;
-use libp2p::identity;
-use libp2p::Transport;
-use libp2p::noise;
-use libp2p::ping::{Behaviour, Config, Event};
-use libp2p::swarm::{Swarm, SwarmEvent};
-use libp2p::tcp::{GenTcpConfig, TokioTcpTransport};
-use libp2p::yamux;
-use libp2p::Multiaddr;
+use libp2p::swarm::SwarmEvent;
+use libp2p::{noise, ping, tcp, yamux, Multiaddr, SwarmBuilder};
 use std::error::Error;
 use std::time::Duration;
 
@@ -28,22 +21,23 @@ struct Args {
 async fn main() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
 
-    let key = identity::Keypair::generate_ed25519();
-    let peer_id = key.public().to_peer_id();
+    let mut swarm = SwarmBuilder::with_new_identity()
+        .with_tokio()
+        .with_tcp(
+            tcp::Config::default(),
+            noise::Config::new,
+            yamux::Config::default,
+        )?
+        .with_behaviour(|_key| {
+            Ok(ping::Behaviour::new(
+                ping::Config::new().with_interval(Duration::from_secs(5)),
+            ))
+        })?
+        .build();
 
-    println!("Peer ID: {peer_id}");
+    println!("Peer ID: {}", swarm.local_peer_id());
 
-    let transport = TokioTcpTransport::new(GenTcpConfig::new())
-        .upgrade(upgrade::Version::V1)
-        .authenticate(noise::NoiseAuthenticated::xx(&key).unwrap())
-        .multiplex(yamux::YamuxConfig::default())
-        .boxed();
-
-    let behaviour = Behaviour::new(Config::new().with_interval(Duration::from_secs(5)));
-
-    let mut swarm = Swarm::new(transport, behaviour, peer_id);
-
-    let listen_addr = args.listen.parse()?;
+    let listen_addr: Multiaddr = args.listen.parse()?;
     swarm.listen_on(listen_addr)?;
 
     if let Some(dial_addr) = args.dial {
@@ -56,8 +50,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
             SwarmEvent::NewListenAddr { address, .. } => {
                 println!("Listening on {address}");
             }
-            SwarmEvent::Behaviour(Event { peer, result }) => {
-                println!("Ping event: {peer:?} -> {result:?}");
+            SwarmEvent::Behaviour(event) => {
+                println!("Ping event: {event:?}");
             }
             _ => {}
         }
