@@ -23,7 +23,6 @@ lists — never shell=True with user-supplied strings.
 from __future__ import annotations
 
 import argparse
-import shlex
 import shutil
 import subprocess
 import sys
@@ -35,7 +34,9 @@ except ImportError:  # pragma: no cover
     from tools.tool_registry import register_tool
 
 
-def run_ssh_command(host: str, command: str, user: str | None = None, port: int = 22) -> subprocess.CompletedProcess[str]:
+def run_ssh_command(
+    host: str, command: str, user: str | None = None, port: int = 22
+) -> subprocess.CompletedProcess[str]:
     """Run *command* on a remote *host* via the system ``ssh`` binary.
 
     Command arguments are passed as a list — no shell interpolation occurs.
@@ -113,7 +114,9 @@ def upload_file(host: str, local_path: str, remote_path: str, user: str | None =
     return result.returncode
 
 
-def upload_files(host: str, local_paths: list[str], remote_dir: str, user: str | None = None, port: int = 22) -> list[int]:
+def upload_files(
+    host: str, local_paths: list[str], remote_dir: str, user: str | None = None, port: int = 22
+) -> list[int]:
     """Upload multiple files to a remote directory.
 
     Returns a list of return codes, one per file.
@@ -169,4 +172,3 @@ register_tool("remote", main, "SSH/SCP remote operations (no shell=True)")
 
 if __name__ == "__main__":
     sys.exit(main())
-

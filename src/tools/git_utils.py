@@ -38,7 +38,9 @@ except ImportError:  # pragma: no cover
 # Internal helpers
 # ---------------------------------------------------------------------------
 
-def _run_git(args: Iterable[str], capture_output: bool = False, cwd: str | None = None) -> subprocess.CompletedProcess[str]:
+def _run_git(
+    args: Iterable[str], capture_output: bool = False, cwd: str | None = None
+) -> subprocess.CompletedProcess[str]:
     """Run a git command.  Never uses shell=True."""
     return subprocess.run(
         ["git", *args],
@@ -185,4 +187,3 @@ register_tool("9git", main, "Git helper for the @9git agent workflow")
 
 if __name__ == "__main__":
     sys.exit(main())
-
