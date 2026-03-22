@@ -55,7 +55,7 @@ class Risk:
         }
 
 
-def read_matrix(path: str) -> list[dict[str, str]]:
+async def read_matrix(path: str) -> list[dict[str, str]]:
     """Read a pipe-delimited risk table and return a list of Risk dicts.
 
     Expected header row: ``| Title | Probability | Impact | Mitigation |``

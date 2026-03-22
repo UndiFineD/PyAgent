@@ -26,7 +26,7 @@ import pytest
 # Make scripts/ importable
 sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
 
-from AgentDocFrequency import DocStats, analyse_docs, format_table  # type: ignore[import]
+from AgentDocFrequency import DocStats, analyse_docs, format_table  # type: ignore[import]  # noqa: E402
 
 
 # ─── Unit: DocStats ────────────────────────────────────────────────────────
@@ -133,7 +133,6 @@ def test_analyse_docs_full_table_output():
 
 def test_main_runs_without_error(capsys):
     """CLI main() must print a table and summary without raising."""
-    import argparse
     import sys
     import AgentDocFrequency  # type: ignore[import]
 

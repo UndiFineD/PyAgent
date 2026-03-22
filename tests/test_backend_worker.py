@@ -20,7 +20,6 @@ from __future__ import annotations
 import importlib
 import json
 
-import pytest
 from fastapi.testclient import TestClient
 
 from backend.app import app
@@ -183,4 +182,3 @@ def test_ws_invalid_json_returns_error():
         data = json.loads(ws.receive_text())
         assert data["type"] == "error"
         assert "Invalid JSON" in data["error"]
-

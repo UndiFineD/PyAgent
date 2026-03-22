@@ -13,7 +13,6 @@
 # limitations under the License.
 """Tests for AgentRegistry (prj0000022)."""
 import time
-import pytest
 from swarm.agent_registry import AgentRegistry
 
 

@@ -21,9 +21,8 @@ These fixtures provide:
 """
 from __future__ import annotations
 
-import asyncio
 from pathlib import Path
-from typing import Any, Generator
+from typing import Any
 
 import pytest
 

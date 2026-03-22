@@ -101,9 +101,7 @@ class Runtime:
 
     def pending(self) -> list[str]:
         """Return IDs of tasks that are still running."""
-        done = [tid for tid, t in self._tasks.items() if t.done()]
-        for tid in done:
-            del self._tasks[tid]
+        self._tasks = {tid: t for tid, t in self._tasks.items() if not t.done()}
         return list(self._tasks.keys())
 
 

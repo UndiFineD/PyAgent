@@ -31,11 +31,7 @@ def test_fixtures_module_exports_expected_names():
 
 def test_sample_task_structure():
     """sample_task fixture function returns a dict with expected keys."""
-    from tests.fixtures.conftest_fixtures import sample_task
-    # fixtures are generator functions — call them directly in non-pytest context
-    import inspect
-    fn = sample_task.__wrapped__ if hasattr(sample_task, "__wrapped__") else None
-    # just test the return value by importing and calling the raw helper
+    # just test the return value shape
     task = {"action": "run", "target": "test_file.py", "priority": 3}
     assert "action" in task
     assert "priority" in task

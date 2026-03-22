@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for core.memory.MemoryStore (prj0000025)."""
-from core.memory import MemoryStore, validate
+from src.core.memory import MemoryStore, validate
 
 
 def test_memory_store_set_and_get():

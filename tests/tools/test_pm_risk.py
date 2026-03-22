@@ -47,7 +47,8 @@ def test_risk_to_dict_keys():
     assert set(d.keys()) == {"title", "probability", "impact", "mitigation", "score", "level"}
 
 
-def test_read_matrix_pipe_table(tmp_path):
+@pytest.mark.asyncio
+async def test_read_matrix_pipe_table(tmp_path):
     table = (
         "| Title | Probability | Impact | Mitigation |\n"
         "|---|---|---|---|\n"
@@ -56,16 +57,17 @@ def test_read_matrix_pipe_table(tmp_path):
     )
     f = tmp_path / "risk.md"
     f.write_text(table, encoding="utf-8")
-    result = read_matrix(str(f))
+    result = await read_matrix(str(f))
     assert len(result) == 2
     assert result[0]["title"] == "Auth bypass"
     assert result[1]["probability"] == "medium"
 
 
-def test_read_matrix_empty_file(tmp_path):
+@pytest.mark.asyncio
+async def test_read_matrix_empty_file(tmp_path):
     f = tmp_path / "empty.md"
     f.write_text("", encoding="utf-8")
-    assert read_matrix(str(f)) == []
+    assert await read_matrix(str(f)) == []
 
 
 def test_top_risks_returns_top_n():

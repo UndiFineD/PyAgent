@@ -40,7 +40,6 @@ class MemoryStore:
         assert self._store is not None
         return self._store.get(key, default)
 
-
     def delete(self, key: str) -> bool:
         """Delete a key; returns True if the key existed."""
         assert self._store is not None

@@ -28,7 +28,7 @@ async def test_enqueue_and_dequeue():
 @pytest.mark.asyncio
 async def test_priority_ordering():
     sched = TaskScheduler()
-    tid_low = sched.enqueue({"a": 1}, priority=4)
+    sched.enqueue({"a": 1}, priority=4)
     tid_high = sched.enqueue({"b": 2}, priority=1)
     first = await sched.dequeue()
     assert first["id"] == tid_high
