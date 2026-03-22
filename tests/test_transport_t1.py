@@ -17,15 +17,18 @@ Tests NodeIdentity and LoopbackChannel via the Python transport API.
 """
 import pytest
 
+_TRANSPORT_AVAILABLE = False
 try:
-    from transport import LoopbackChannel, NodeIdentity
-    _TRANSPORT_AVAILABLE = True
+    import rust_core as _rc
+    if hasattr(_rc, "generate_node_identity"):
+        from transport import LoopbackChannel, NodeIdentity
+        _TRANSPORT_AVAILABLE = True
 except ImportError:
-    _TRANSPORT_AVAILABLE = False
+    pass
 
 pytestmark = pytest.mark.skipif(
     not _TRANSPORT_AVAILABLE,
-    reason="transport module not importable",
+    reason="rust_core extension not built or transport module not importable",
 )
 
 

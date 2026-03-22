@@ -29,6 +29,9 @@ from pathlib import Path
 
 import pytest
 
+if not shutil.which("cargo"):
+    pytest.skip("cargo not installed — Rust toolchain required", allow_module_level=True)
+
 
 def _ensure_protoc_available(tmp_path: Path) -> str:
     """Ensure a `protoc` binary is available for prost-build.
