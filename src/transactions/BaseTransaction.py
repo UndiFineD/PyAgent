@@ -14,14 +14,16 @@
 
 """Abstract base for all transaction managers."""
 from __future__ import annotations
+
 import abc
 
 
-class BaseTransaction(abc.ABC):
+class BaseTransaction(abc.ABC):  # noqa: B024
     """Minimal ABC for all transaction managers.
 
     Concrete managers do NOT inherit this (Python forbids both def commit and async def commit).
     This exists for isinstance checks and documentation only.
     Duck-typed interface: commit(), rollback(), __enter__, __exit__, __aenter__, __aexit__
     """
+
     pass

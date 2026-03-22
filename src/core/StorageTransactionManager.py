@@ -14,8 +14,8 @@
 
 """Shim: re-exports StorageTransaction from src.transactions package."""
 from src.transactions.StorageTransactionManager import (  # noqa: F401
-    StorageTransaction,
     EncryptionConfigError,
+    StorageTransaction,
 )
 
 

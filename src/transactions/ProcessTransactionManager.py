@@ -102,12 +102,14 @@ class ProcessTransaction:
     def __enter__(self) -> "ProcessTransaction":
         """Enter the sync context manager.
         Note that this does not auto-start the process;
-        you must call start() explicitly."""
+        you must call start() explicitly.
+        """
         return self
 
     def __exit__(self, exc_type, exc, tb) -> None:
         """Exit the sync context manager.
-        If an exception occurred, attempt to terminate the process."""
+        If an exception occurred, attempt to terminate the process.
+        """
         if exc_type is not None:
             if self._proc is not None and self._proc.poll() is None:
                 self._proc.terminate()

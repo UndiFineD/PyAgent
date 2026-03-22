@@ -39,6 +39,7 @@ class ContextTransaction:
     context_id    : str       — caller-supplied logical name for this context.
     transaction_id: uuid.UUID — unique UUID assigned automatically.
     parent_id     : Optional[uuid.UUID] — transaction_id of the outer context, or None.
+
     """
 
     def __init__(
@@ -49,7 +50,8 @@ class ContextTransaction:
         tid: Optional[uuid.UUID] = None,
     ) -> None:
         """Initialize the transaction with a context_id
-        and optional parent_id and tid."""
+        and optional parent_id and tid.
+        """
         if not context_id:
             raise ValueError("context_id must be a non-empty string")
         self.context_id: str = context_id

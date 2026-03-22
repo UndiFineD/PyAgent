@@ -68,6 +68,7 @@ def analyze_file(path: str) -> FileMetrics:
     FileMetrics
         Computed metrics.  On parse error, function/class/complexity counts
         are set to -1 and original line counts are preserved.
+
     """
     p = pathlib.Path(path)
     with open(p, encoding="utf-8", errors="ignore") as f:
@@ -117,6 +118,7 @@ def analyze_directory(root: str) -> list[FileMetrics]:
     -------
     list[FileMetrics]
         One entry per Python source file found, sorted by path.
+
     """
     py_files = sorted(pathlib.Path(root).rglob("*.py"))
     return [analyze_file(str(p)) for p in py_files]

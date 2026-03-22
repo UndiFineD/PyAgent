@@ -58,6 +58,7 @@ def check_expiry(host: str, port: int = 443, timeout: float = 5.0) -> dict[str, 
     ------
     ssl.SSLError, OSError
         On connection or TLS errors.
+
     """
     ctx = ssl.create_default_context()
     with socket.create_connection((host, port), timeout=timeout) as raw_sock:
@@ -98,6 +99,7 @@ def verify_pem_file(path: str) -> dict[str, object]:
     -------
     dict
         ``valid``: bool, ``path``: str, ``error``: str (on failure).
+
     """
     p = Path(path)
     if not p.is_file():

@@ -132,8 +132,7 @@ class StorageTransaction:
     # ------------------------------------------------------------------
 
     def __enter__(self) -> "StorageTransaction":
-        """In legacy mode, simply return self.
-        In multi-op mode, also allow nesting"""
+        """Enter sync context manager; return self (supports nesting in multi-op mode)."""
         return self
 
     def __exit__(self, exc_type, exc, tb) -> None:
@@ -162,7 +161,8 @@ class StorageTransaction:
     async def __aexit__(self, exc_type, exc, tb) -> None:
         """Exit the async context manager.
         Behaves the same as sync __exit__
-        (auto-commit on clean exit, rollback on exception)."""
+        (auto-commit on clean exit, rollback on exception).
+        """
         if exc_type is not None:
             # Rollback
             self._staged = None
@@ -243,9 +243,9 @@ class StorageTransaction:
                 "PYAGENT_STORAGE_MASTER_KEY environment variable is required for encrypted writes."
             )
         try:
+            from cryptography.fernet import Fernet
             from cryptography.hazmat.primitives import hashes
             from cryptography.hazmat.primitives.kdf.hkdf import HKDF
-            from cryptography.fernet import Fernet
         except ImportError as exc:
             raise EncryptionConfigError("cryptography package is required for encrypted writes.") from exc
 

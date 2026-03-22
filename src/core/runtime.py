@@ -26,7 +26,6 @@ import uuid
 from dataclasses import dataclass, field
 from typing import Any, Awaitable, Callable, Optional
 
-
 # ---------------------------------------------------------------------------
 # Public API Surface (mirrors Rust PyO3 export plan)
 # ---------------------------------------------------------------------------

@@ -59,6 +59,7 @@ def discover_plugins(plugin_dir: str) -> list[str]:
     -------
     list[str]
         Sorted plugin names (without the ``.py`` extension).
+
     """
     if not os.path.isdir(plugin_dir):
         return []
@@ -98,6 +99,7 @@ def load_plugin(name: str, allowed: list[str], plugin_dir: str | None = None) ->
         package-level dots (to prevent directory traversal / injection).
     ImportError
         If the module cannot be found or fails to import.
+
     """
     # Validate the name is a simple identifier — prevents traversal and injection
     if not name or os.sep in name or "/" in name or "\\" in name or name.startswith("."):
@@ -156,6 +158,7 @@ def get_plugin_attr(name: str, allowed: list[str], attr: str, plugin_dir: str | 
     ------
     AttributeError
         If the attribute does not exist on the loaded module.
+
     """
     module = load_plugin(name, allowed=allowed, plugin_dir=plugin_dir)
     if not hasattr(module, attr):

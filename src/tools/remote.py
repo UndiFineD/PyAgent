@@ -61,6 +61,7 @@ def run_ssh_command(
     ------
     FileNotFoundError
         If the ``ssh`` binary is not found on PATH.
+
     """
     ssh = shutil.which("ssh")
     if not ssh:
@@ -102,6 +103,7 @@ def upload_file(host: str, local_path: str, remote_path: str, user: str | None =
     ------
     FileNotFoundError
         If the ``scp`` binary is not found on PATH.
+
     """
     scp = shutil.which("scp")
     if not scp:

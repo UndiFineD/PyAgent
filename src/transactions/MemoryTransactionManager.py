@@ -40,6 +40,7 @@ class MemoryTransaction:
     Parameters
     ----------
     tid : optional identifier for correlating or tracing this transaction.
+
     """
 
     def __init__(self, tid: Optional[Any] = None) -> None:
@@ -121,7 +122,7 @@ class MemoryTransaction:
     # Remote sync
     # ------------------------------------------------------------------
 
-    async def sync_remote(
+    async def sync_remote(  # noqa: D417
         self,
         endpoint: str,
         *,
@@ -140,6 +141,7 @@ class MemoryTransaction:
         envelope after a successful POST (or None if endpoint is empty).
 
         Raises ``RemoteSyncError`` on network failure.
+
         """
         if not endpoint:
             return None

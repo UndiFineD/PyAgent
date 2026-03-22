@@ -44,6 +44,7 @@ def clone_repo(repo_url: str, dest: Path, *, depth: int | None = 1) -> int:
     -------
     int
         The git process exit code (0 == success).
+
     """
     dest = Path(dest)
     dest.parent.mkdir(parents=True, exist_ok=True)

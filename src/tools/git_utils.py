@@ -83,6 +83,7 @@ def create_feature_branch(name: str, base: str = "main") -> bool:
     -------
     bool
         True on success, False if git returned a non-zero exit code.
+
     """
     # Fetch latest base first (ignore errors — may be offline)
     _run_git(["fetch", "origin", base])
@@ -112,6 +113,7 @@ def update_changelog(entry: str, changelog_path: str = "CHANGELOG.md") -> None:
         Changelog text for the new entry.
     changelog_path:
         Path to the changelog file.
+
     """
     p = Path(changelog_path)
     today = datetime.date.today().isoformat()
