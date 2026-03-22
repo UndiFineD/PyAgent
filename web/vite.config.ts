@@ -19,12 +19,12 @@ export default defineConfig(({ mode }) => {
       server: {
         proxy: {
           '/ws': {
-            target: 'http://127.0.0.1:8000',
+            target: `http://${env.BACKEND_HOST || '127.0.0.1'}:${env.BACKEND_PORT || '8000'}`,
             ws: true,
             changeOrigin: true,
           },
           '/api': {
-            target: 'http://127.0.0.1:8000',
+            target: `http://${env.BACKEND_HOST || '127.0.0.1'}:${env.BACKEND_PORT || '8000'}`,
             changeOrigin: true,
           },
         },
