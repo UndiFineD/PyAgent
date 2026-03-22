@@ -147,6 +147,23 @@ strict = true  # apply full strictness to the core package
 # disallow_incomplete_defs = true
 
 
+[tool.coverage.run]
+source = ["src"]
+omit = ["src-old/*", "src/*/migrations/*", "src/**/__pycache__/*"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 30
+show_missing = true
+skip_empty = true
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+]
+
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "-ra -q --asyncio-mode=strict"
