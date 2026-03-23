@@ -114,8 +114,8 @@ def test_cpu_percent_is_in_valid_range():
 
 def test_memory_fields_correct():
     """`memory` must contain `used_mb`, `total_mb`, `percent` with correct values."""
-    total_bytes = 16 * 1024 ** 3   # 16 GiB
-    used_bytes  =  6 * 1024 ** 3   #  6 GiB
+    total_bytes = 16 * 1024 ** 3  # 16 GiB
+    used_bytes = 6 * 1024 ** 3  # 6 GiB
 
     mock = _psutil_mock(vmem=_vmem(total=total_bytes, used=used_bytes, percent=37.5))
     with patch("backend.app.psutil", create=True, new=mock):
@@ -125,8 +125,8 @@ def test_memory_fields_correct():
     mem = resp.json()["memory"]
 
     assert "total_mb" in mem
-    assert "used_mb"  in mem
-    assert "percent"  in mem
+    assert "used_mb" in mem
+    assert "percent" in mem
 
     assert mem["total_mb"] == pytest.approx(16 * 1024, rel=0.01), (
         f"total_mb mismatch: expected ~{16 * 1024} MB, got {mem['total_mb']}"
@@ -195,11 +195,11 @@ def test_disk_fields_are_non_negative_numbers():
     assert resp.status_code == 200
     disk = resp.json()["disk"]
 
-    assert "read_kbps"  in disk, "Missing 'read_kbps' in disk"
+    assert "read_kbps" in disk, "Missing 'read_kbps' in disk"
     assert "write_kbps" in disk, "Missing 'write_kbps' in disk"
-    assert isinstance(disk["read_kbps"],  (int, float)), "read_kbps must be numeric"
+    assert isinstance(disk["read_kbps"], (int, float)), "read_kbps must be numeric"
     assert isinstance(disk["write_kbps"], (int, float)), "write_kbps must be numeric"
-    assert disk["read_kbps"]  >= 0, f"read_kbps must be ≥ 0, got {disk['read_kbps']}"
+    assert disk["read_kbps"] >= 0, f"read_kbps must be ≥ 0, got {disk['read_kbps']}"
     assert disk["write_kbps"] >= 0, f"write_kbps must be ≥ 0, got {disk['write_kbps']}"
 
 
@@ -255,7 +255,7 @@ def test_first_call_returns_zero_rates():
         assert entry["rx_kbps"] == 0.0, (
             f"First-call rx_kbps should be 0.0, got {entry['rx_kbps']}"
         )
-    assert body["disk"]["read_kbps"]  == 0.0, (
+    assert body["disk"]["read_kbps"] == 0.0, (
         f"First-call disk read_kbps should be 0.0, got {body['disk']['read_kbps']}"
     )
     assert body["disk"]["write_kbps"] == 0.0, (

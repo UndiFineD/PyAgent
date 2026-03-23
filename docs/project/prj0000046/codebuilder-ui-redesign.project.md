@@ -47,3 +47,6 @@ Changes confined to:
 - [x] Backend doc endpoints added and validated (no Python linter errors)
 - [x] `start.ps1 start` auto-kills stale port holders
 - [x] `.pyagent.pids` added to `.gitignore`
+
+## Legacy Project Overview Exception
+This project overview predates the modern `## Project Identity` template introduced after prj0000046 was created and committed. It uses the pre-modern layout (## Status / ## Branch Plan / ## Scope Boundary) and does not carry a `## Project Identity` section. No corrective migration is required for this legacy file; future projects must use the modern template. Ownership: @0master (documented), @1project (template compliance going forward).

@@ -59,6 +59,7 @@ class PluginMetadata:
         Plugin author identifier.
     tags:
         Optional list of capability tags for discovery.
+
     """
 
     name: str
@@ -80,6 +81,7 @@ class Plugin(ABC):
     * :meth:`setup` is called once when registered with a :class:`PluginManager`.
     * :meth:`teardown` is called when the plugin is unregistered or the manager
       is shut down.
+
     """
 
     @property
@@ -92,10 +94,10 @@ class Plugin(ABC):
         """Return plugin metadata.  Defaults to minimal metadata from :attr:`name`."""
         return PluginMetadata(name=self.name)
 
-    def setup(self) -> None:
+    def setup(self) -> None:  # noqa: B027
         """Called once after the plugin is registered.  Override as needed."""
 
-    def teardown(self) -> None:
+    def teardown(self) -> None:  # noqa: B027
         """Called when the plugin is removed or the manager shuts down."""
 
     @abstractmethod
@@ -111,6 +113,7 @@ class Plugin(ABC):
         -------
         Any
             Plugin-defined return value.
+
         """
 
 
@@ -120,11 +123,12 @@ class PluginManager:
     Plugins are stored by name.  Registering a second plugin with the same
     name replaces the existing one (after calling its :meth:`~Plugin.teardown`).
 
-    Example
+    Example:
     -------
     >>> pm = PluginManager()
     >>> pm.register(my_plugin)
     >>> result = pm.execute("my_plugin", foo="bar")
+
     """
 
     def __init__(self) -> None:
@@ -155,6 +159,7 @@ class PluginManager:
         ------
         KeyError
             If no plugin with *name* is registered.
+
         """
         plugin = self._plugins.pop(name)
         plugin.teardown()
@@ -171,6 +176,7 @@ class PluginManager:
         ------
         KeyError
             If no plugin with *name* is registered.
+
         """
         try:
             return self._plugins[name]
@@ -207,6 +213,7 @@ class PluginManager:
         ------
         KeyError
             If no plugin with *name* is registered.
+
         """
         return self.get(name).execute(**kwargs)
 
