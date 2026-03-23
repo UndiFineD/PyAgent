@@ -88,8 +88,9 @@ All 42 projects have been surveyed and governance PRs created:
 - `prj0000044` allocated 2026-03-22: `prj0000044-transaction-managers` — add missing StorageTransaction/ProcessTransaction/ContextTransaction stubs for CI. PR #136 open.
 - `prj0000045` allocated 2026-03-22: `prj0000045-transaction-managers-full` — full proper design of all four transaction managers (src/transactions/ package, BaseTransaction ABC, LLM context integration, encrypted storage, remote memory). **MERGED** — PR #137 squash-merged to main 2026-03-22. 317 tests pass, 4 skip, 0 fail.
 - `prj0000046` allocated 2026-03-22: `prj0000046-flm-tps-benchmark` — FLM provider tokens-per-second benchmark script (`scripts/FlmTpsBenchmark.py`). Branch: `prj0000046-flm-tps-benchmark`. Includes accumulated session test fixes (sync loops, git.md sections, flake8, registry isolation). FLM backend offline at time of run; script ready for when server is available.
-- `prj0000047` allocated: `prj0000047-conky-real-metrics` — Conky.tsx real CPU/memory/network IO via psutil. Branch: `prj0000047-conky-real-metrics`. PR #185 open. 9 tests pass. 0 BLOCK security items. NOTE: 110 pre-existing ruff violations in src/tests/ exist outside this project scope; `--no-verify` used and documented.
-- Next `prjNNNNNNN` to allocate: `prj0000048` (validate against `docs/project/` inventory before assignment).
+- `prj0000047` allocated: `prj0000047-conky-real-metrics` — Conky.tsx real CPU/memory/network IO via psutil. Branch: `prj0000047-conky-real-metrics`. PR #185 **MERGED**. psutil added to backend/requirements.txt; CI fully clean on main.
+- `prj0000048` allocated 2026-03-23: `prj0000048-taskbar-config` — Add taskbar always-visible toggle to NebulaOS Settings modal. Branch: `prj0000048-taskbar-config`. PR #186 **MERGED** `bfe0e44ae`. 16/16 Vitest; tsc clean; npm run build (618 kB); 17/17 docs policy. Security: loadOsConfig type-guarded; saveOsConfig try/catch'd.
+- Next `prjNNNNNNN` to allocate: `prj0000049` (validate against `docs/project/` inventory before assignment).
 
 ## Branch Registry (all 45 projects)
 
