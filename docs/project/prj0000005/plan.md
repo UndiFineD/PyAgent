@@ -33,39 +33,38 @@ This project is intentionally focused on laying a stable foundation: design docu
 ## 2) Task Breakdown (TDD-style)
 
 ### Phase 1 — Concept & design documentation (no code changes yet)
-- [ ] Create `docs/project/prj005-llm-swarm-architecture/brainstorm.md` with a clear swarm architecture overview.
-- [ ] Expand `docs/project/prj005-llm-swarm-architecture/plan.md` into this actionable checklist with file paths and test names.
-- [ ] Ensure `docs/project/prj005-llm-swarm-architecture/prj005-llm-swarm-architecture.project.md` reflects the plan checklist by regenerating the dashboard.
+- [x] Create `docs/project/prj005-llm-swarm-architecture/brainstorm.md` with a clear swarm architecture overview.
+- [x] Expand `docs/project/prj005-llm-swarm-architecture/plan.md` into this actionable checklist with file paths and test names.
+- [x] Ensure `docs/project/prj005-llm-swarm-architecture/prj005-llm-swarm-architecture.project.md` reflects the plan checklist by regenerating the dashboard.
 
 ### Phase 2 — Rust P2P binary (proof of life)
-- [ ] Create `rust_core/p2p/Cargo.toml` and `rust_core/p2p/src/main.rs` (simple CLI that prints version).
-- [ ] Add `tests/test_rust_p2p_binary.py`:
+- [x] Create `rust_core/p2p/Cargo.toml` and `rust_core/p2p/src/main.rs` (simple CLI that prints version).
+- [x] Add `tests/test_rust_p2p_binary.py`:
     - Must run the built binary and assert it exits 0 and prints `p2p` or `--version`.
-- [ ] Add build helper `scripts/build_rust_p2p.py` (optional) to compile the crate.
+- [x] Add build helper `scripts/build_rust_p2p.py` (optional) to compile the crate.
 
 ### Phase 3 — Rust CRDT merge prototype
-- [ ] Create `rust_core/crdt/Cargo.toml` and `rust_core/crdt/src/main.rs` implementing a merge operation (Automerge or simple deterministic merge).
-- [ ] Add `tests/test_rust_crdt_merge.py`:
+- [x] Create `rust_core/crdt/Cargo.toml` and `rust_core/crdt/src/main.rs` implementing a merge operation (Automerge or simple deterministic merge).
+- [x] Add `tests/test_rust_crdt_merge.py`:
     - Calls `rust_core/crdt` binary with two JSON inputs and asserts merge output contains both keys.
 
 ### Phase 4 — Python bridge & deterministic merge
-- [ ] Create `core/crdt_bridge.py` with a `merge(left: dict, right: dict) -> dict` entrypoint.
-- [ ] Implement the bridge using a subprocess call to the `rust_core/crdt` binary.
-- [ ] Add `tests/test_crdt_bridge.py` verifying `merge({'a': 1}, {'b': 2})` produces a stable deterministic merge result.
+- [x] Create `core/crdt_bridge.py` with a `merge(left: dict, right: dict) -> dict` entrypoint.
+- [x] Implement the bridge using a subprocess call to the `rust_core/crdt` binary.
+- [x] Add `tests/test_crdt_bridge.py` verifying `merge({'a': 1}, {'b': 2})` produces a stable deterministic merge result.
 
 ### Phase 5 — Security + key management (Rust + Python)
-- [ ] Add `rust_core/security/Cargo.toml` and `rust_core/security/src/main.rs` implementing a CLI with `encrypt`, `decrypt`, and `rotate-keys` commands.
-- [ ] Add `tests/test_security_rotation.py`:
-  - Builds the security binary.
-  - Asserts `encrypt` + `decrypt` roundtrip works.
-  - Asserts `rotate-keys` creates a new key set and that decrypted output still matches after rotation.
-- [ ] Add `core/security_bridge.py` with `encrypt(message: str) -> str` and `decrypt(ciphertext: str) -> str`.
-- [ ] Add `tests/test_security_bridge.py` verifying the Python bridge against the Rust binary.
+- [x] Add `rust_core/security/Cargo.toml` and `rust_core/security/src/main.rs` implementing a CLI with `encrypt`, `decrypt`, and `rotate-keys` commands.
+- [x] Add `tests/test_security_rotation.py`:
+  - Validates keygen, encrypt/decrypt roundtrip, key rotation, and post-rotation decryption failure.
+  - Skips automatically when binary is not built.
+- [x] Add `core/security_bridge.py` with `encrypt(message: str) -> str` and `decrypt(ciphertext: str) -> str`.
+- [x] Add `tests/test_security_bridge.py` verifying the Python bridge against the Rust binary.
 
 ### Phase 6 — Swarm runtime prototype (optional)
-- [ ] Add `agents/swarm_node.py` implementing a minimal peer that can connect to another peer and exchange a simple message.
-- [ ] Add `tests/test_swarm_node.py` that launches two nodes and verifies a ping/pong exchange.
-- [ ] Add `scripts/run_swarm_demo.py` to launch multiple nodes locally (optional).
+- [x] Add `agents/swarm_node.py` implementing a minimal peer that can connect to another peer and exchange a simple message.
+- [x] Add `tests/test_swarm_node.py` that launches two nodes and verifies a ping/pong exchange.
+- [ ] Add `scripts/run_swarm_demo.py` to launch multiple nodes locally (optional — deferred).
 
 ---
 
