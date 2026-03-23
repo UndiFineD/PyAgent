@@ -7,7 +7,7 @@
 - [x] Add a new test file that detects and calls functions across `src/` (excluding tests).
 - [x] Ensure the test does not fail on harmless uncallable functions or missing imports.
 - [x] Ensure the test runs quickly enough for CI (limit number of functions tested).
-- [ ] Add documentation to `docs/tools.md` or `docs/project` explaining the purpose and how to adapt it.
+- [x] Add documentation to `docs/tools.md` or `docs/project` explaining the purpose and how to adapt it.
 
 ## Notes
 
