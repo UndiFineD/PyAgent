@@ -91,8 +91,9 @@ All 42 projects have been surveyed and governance PRs created:
 - `prj0000047` allocated: `prj0000047-conky-real-metrics` — Conky.tsx real CPU/memory/network IO via psutil. Branch: `prj0000047-conky-real-metrics`. PR #185 **MERGED**. psutil added to backend/requirements.txt; CI fully clean on main.
 - `prj0000048` allocated 2026-03-23: `prj0000048-taskbar-config` — Add taskbar always-visible toggle to NebulaOS Settings modal. Branch: `prj0000048-taskbar-config`. PR #186 **MERGED** `bfe0e44ae`. 16/16 Vitest; tsc clean; npm run build (618 kB); 17/17 docs policy. Security: loadOsConfig type-guarded; saveOsConfig try/catch'd.
 - `prj0000049` allocated 2026-03-23: `prj0000049-dependabot-security-fixes` — Resolve 6 Dependabot CVEs (1 high, 3 medium, 2 low) all in rust_core/p2p via libp2p 0.49→0.56 bump. PR #187 **MERGED** `568f8c5e1`. 7/7 security tests; cargo build clean; 619 Python tests pass. yamux 0.10.2→0.13.10, ring 0.16→0.17, idna 0.2.3→1.1.0, ed25519-dalek 1→2, curve25519-dalek 3→4, snow 0.9.3→0.9.6.
-- `prj0000050` allocated 2026-03-23: `prj0000050-install-script` — Add `.\install.ps1` developer setup script (Python venv, pip deps, maturin Rust build, npm web deps). PR #188 open. 57/57 structure tests; 656/656 full suite; security APPROVED (maturin pinned ==1.12.5).
-- Next `prjNNNNNNN` to allocate: `prj0000051` (validate against `docs/project/` inventory before assignment).
+- `prj0000050` allocated 2026-03-23: `prj0000050-install-script` — Add `.\ install.ps1` developer setup script (Python venv, pip deps, maturin Rust build, npm web deps). PR #188 **MERGED**. 57/57 structure tests; 656/656 full suite; security APPROVED (maturin pinned ==1.12.5).
+- `prj0000051` allocated 2026-03-23: `prj0000051-readme-update` — Comprehensive README.md rewrite covering PyAgent v4.0.0-VOYAGER, NebulaOS frontend (with screenshot), FastAPI backend, Rust Core, install.ps1/start.ps1, 8 architecture decisions, 51-project history table, 10 future roadmap items. 44 structural tests. 700 tests pass. PR #189 **MERGED** `b34eea378`.
+- Next `prjNNNNNNN` to allocate: `prj0000052` (validate against `docs/project/` inventory before assignment).
 
 ## Branch Registry (all 45 projects)
 
