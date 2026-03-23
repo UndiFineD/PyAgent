@@ -1,6 +1,9 @@
-# Prj034 Context Manager
+# context-manager - Project Overview
 
-**Project ID:** prj034-context-manager
+_Status: DONE_
+_Owner: @9git | Updated: 2026-03-21_
+
+**Project ID:** prj0000034
 
 ## Links
 
@@ -9,11 +12,11 @@
 
 ## Tasks
 
-- [ ] Define tasks and status
+- [x] Implementation completed on main prior to branch enforcement.
 
 ## Status
 
-0 of 0 tasks completed
+DONE -- Context manager module (src/context_manager/).
 
 ## Code detection
 

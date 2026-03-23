@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#!/usr/bin/env python3
 """Transport module for PyAgent.
 
 This module is a thin Python wrapper around the Rust `rust_core` extension.
@@ -69,6 +68,14 @@ def _apply_local_rust_core_path() -> None:
 
 
 _apply_local_rust_core_path()
+
+# If rust_core was previously cached without the compiled functions (e.g., because
+# tests import rust_core before the transport module adds target/debug to sys.path),
+# evict it so the import below picks up the local build we just added.
+if "rust_core" in sys.modules and _locate_local_rust_core() is not None:
+    if not hasattr(sys.modules["rust_core"], "generate_node_identity"):
+        sys.modules.pop("rust_core", None)
+        sys.modules.pop("_rust_core", None)
 
 try:
     import rust_core  # type: ignore
@@ -146,6 +153,71 @@ def placeholder() -> bool:
     return True
 
 
+class NodeIdentity:
+    """High-level Python wrapper for an Ed25519 node identity.
+
+    Wraps the Rust rust_core identity functions into a convenient object API.
+    """
+
+    def __init__(self) -> None:
+        _ensure_rust_core()
+        self._pub_key: bytes = rust_core.generate_node_identity()
+
+    @property
+    def public_key(self) -> bytes:
+        """Return the 32-byte Ed25519 public key for this identity."""
+        return rust_core.get_node_id()
+
+    def sign(self, message: bytes) -> bytes:
+        """Sign *message* with this identity's private key."""
+        _ensure_rust_core()
+        return rust_core.transport_sign(message)
+
+    @staticmethod
+    def verify(public_key: bytes, message: bytes, signature: bytes) -> bool:
+        """Verify *signature* over *message* using *public_key*."""
+        _ensure_rust_core()
+        return rust_core.transport_verify(public_key, message, signature)
+
+    def __repr__(self) -> str:
+        return f"NodeIdentity(pub={self.public_key.hex()[:16]}…)"
+
+
+class LoopbackChannel:
+    """In-process loopback channel for testing transport logic.
+
+    Creates a connected pair of handles and performs the Noise_XX handshake
+    automatically so callers can immediately use send/recv.
+    """
+
+    def __init__(self) -> None:
+        _ensure_rust_core()
+        self.handle_a, self.handle_b = rust_core.transport_loopback_pair()
+        rust_core.transport_handshake_initiator(self.handle_a)
+        rust_core.transport_handshake_responder(self.handle_b)
+        rust_core.transport_handshake_finalize(self.handle_a, self.handle_b)
+
+    def send(self, payload: bytes) -> None:
+        """Send *payload* from side A to side B."""
+        _ensure_rust_core()
+        rust_core.transport_send(self.handle_a, payload)
+
+    def recv(self) -> bytes:
+        """Receive from side B."""
+        _ensure_rust_core()
+        return rust_core.transport_recv(self.handle_b)
+
+    def send_b(self, payload: bytes) -> None:
+        """Send *payload* from side B to side A."""
+        _ensure_rust_core()
+        rust_core.transport_send(self.handle_b, payload)
+
+    def recv_a(self) -> bytes:
+        """Receive from side A."""
+        _ensure_rust_core()
+        return rust_core.transport_recv(self.handle_a)
+
+
 __all__ = [
     "generate_node_identity",
     "get_node_id",
@@ -158,4 +230,6 @@ __all__ = [
     "transport_handshake_responder",
     "transport_handshake_finalize",
     "placeholder",
+    "NodeIdentity",
+    "LoopbackChannel",
 ]

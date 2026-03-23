@@ -1,6 +1,9 @@
-# Prj031 Streaming Website
+# streaming-website - Project Overview
 
-**Project ID:** prj031-streaming-website
+_Status: DONE_
+_Owner: @9git | Updated: 2026-03-21_
+
+**Project ID:** prj0000031
 
 ## Links
 
@@ -9,11 +12,11 @@
 
 ## Tasks
 
-- [ ] Define tasks and status
+- [x] Implementation completed on main prior to branch enforcement.
 
 ## Status
 
-0 of 0 tasks completed
+DONE -- React/Vite streaming frontend (web/ -- apps, components, hooks).
 
 ## Code detection
 

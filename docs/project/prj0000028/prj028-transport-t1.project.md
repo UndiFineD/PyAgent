@@ -1,6 +1,9 @@
-# Prj028 Transport T1
+# transport-t1 - Project Overview
 
-**Project ID:** prj028-transport-t1
+_Status: DONE_
+_Owner: @9git | Updated: 2026-03-21_
+
+**Project ID:** prj0000028
 
 ## Links
 
@@ -9,11 +12,11 @@
 
 ## Tasks
 
-- [ ] Define tasks and status
+- [x] Implementation completed on main prior to branch enforcement.
 
 ## Status
 
-0 of 0 tasks completed
+DONE -- Transport layer T1 skeleton (src/transport/).
 
 ## Code detection
 

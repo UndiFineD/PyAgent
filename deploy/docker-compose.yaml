@@ -5,9 +5,11 @@ services:
       context: ..
       dockerfile: deploy/Dockerfile.fleet
     ports:
-      - "8000:8000"
+      - "${BACKEND_PORT:-444}:${BACKEND_PORT:-444}"
     environment:
       - NODE_TYPE=MASTER
+      - HOST=${HOST:-0.0.0.0}
+      - BACKEND_PORT=${BACKEND_PORT:-444}
 
   agent_node_0:
     build:
@@ -15,7 +17,7 @@ services:
       dockerfile: deploy/Dockerfile.fleet
     environment:
       - NODE_TYPE=WORKER
-      - MASTER_URL=http://fleet_master:8000
+      - MASTER_URL=http://fleet_master:${BACKEND_PORT:-444}
 
   agent_node_1:
     build:
@@ -23,4 +25,4 @@ services:
       dockerfile: deploy/Dockerfile.fleet
     environment:
       - NODE_TYPE=WORKER
-      - MASTER_URL=http://fleet_master:8000
+      - MASTER_URL=http://fleet_master:${BACKEND_PORT:-444}

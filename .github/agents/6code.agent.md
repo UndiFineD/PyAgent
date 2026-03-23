@@ -21,6 +21,33 @@ This agent does **not** write tests, make design decisions, or modify test files
 
 ---
 
+## HARD RULE — No placeholders, stubs, or missing code
+
+> **THIS IS A BLOCKING REQUIREMENT. NO EXCEPTIONS.**
+
+Every piece of code delivered by `@6code` must be **real, working implementation**. The following are **forbidden** in any file that is part of the deliverable:
+
+- `pass` as the sole body of any non-trivial function, method, or class
+- `raise NotImplementedError` or `raise NotImplemented`
+- `TODO`, `FIXME`, `HACK`, `STUB`, `PLACEHOLDER` in comments or strings
+- `...` (ellipsis) as a function/method body outside of type stubs (`.pyi`)
+- Empty classes with only a docstring
+- Functions that `return None` without doing anything meaningful
+- "Skeleton" or "scaffold" files with no logic
+
+**Before handing off to `@7exec`**, run this scan and resolve every hit:
+```powershell
+& c:\Dev\PyAgent\.venv\Scripts\Activate.ps1
+# Scan for forbidden patterns in changed source files
+rg --type py "raise NotImplementedError|raise NotImplemented\b|#\s*(TODO|FIXME|HACK|STUB|PLACEHOLDER)" src/ tests/
+rg --type py "^\s*\.\.\.\s*$" src/
+```
+If any match is found in production code (not test stubs in the red phase), **fix it before proceeding**. Do not hand off to `@7exec` with outstanding placeholder hits.
+
+If a feature is genuinely out of scope for this task, document it explicitly in `## Deferred Items` in `<project>.code.md` with the reason — do NOT leave silently-empty code bodies.
+
+---
+
 ## Scope and purpose
 
 | What @6code does                                        | What @6code does NOT do                          |
@@ -28,6 +55,7 @@ This agent does **not** write tests, make design decisions, or modify test files
 | Implements Python modules, classes, and functions        | Write or modify test files                       |
 | Implements Rust functions and FFI bindings               | Make architecture or design decisions            |
 | Makes failing tests pass (green phase)                   | Change tests to match broken code                |
+| Delivers real, working logic in every function           | Leave stubs, TODOs, or placeholder bodies        |
 
 ---
 

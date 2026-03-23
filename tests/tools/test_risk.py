@@ -3,14 +3,17 @@
 
 from pathlib import Path
 
+import pytest
+
 from tools.pm import risk
 
 
-def test_risk_matrix_reader_writer(tmp_path: Path) -> None:
+@pytest.mark.asyncio
+async def test_risk_matrix_reader_writer(tmp_path: Path) -> None:
     """Test that the risk matrix reader and writer functions work."""
     riskpath = tmp_path / "risk.md"
-    sample = "- Risk: test\n  Likelihood: low\n  Impact: low\n"
+    sample = "| Title | Probability | Impact | Mitigation |\n|---|---|---|---|\n| test | low | low | |\n"
     riskpath.write_text(sample)
-    matrix = risk.read_matrix(str(riskpath))
+    matrix = await risk.read_matrix(str(riskpath))
     assert isinstance(matrix, list)
-    assert matrix[0]["Risk"] == "test"
+    assert matrix[0]["title"] == "test"

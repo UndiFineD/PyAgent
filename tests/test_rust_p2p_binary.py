@@ -29,6 +29,9 @@ from pathlib import Path
 
 import pytest
 
+if not shutil.which("cargo"):
+    pytest.skip("cargo not installed — Rust toolchain required", allow_module_level=True)
+
 
 def _ensure_protoc_available(tmp_path: Path) -> str:
     """Ensure a `protoc` binary is available for prost-build.
@@ -40,6 +43,10 @@ def _ensure_protoc_available(tmp_path: Path) -> str:
     found = shutil.which("protoc")
     if found:
         return found
+
+    # Auto-download is only supported on Windows (win64 binary).
+    if sys.platform != "win32":
+        pytest.skip("protoc not installed and auto-download only supports Windows")
 
     # Otherwise, download a known-good release and extract it.
     cache_dir = tmp_path / "protoc"

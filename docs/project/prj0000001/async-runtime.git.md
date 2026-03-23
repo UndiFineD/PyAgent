@@ -1,21 +1,28 @@
 # async-runtime - Git Summary
 
-_Status: IN_PROGRESS_
-_Git: @9git | Updated: 2026-03-20_
+_Status: DONE_
+_Git: @9git | Updated: 2026-03-23_
 
 ## Branch Plan
 **Expected branch:** prj0000001-async-runtime
-**Observed branch:** prj037-tools-crdt-security
-**Project match:** FAIL
+**Observed branch:** prj0000001-async-runtime
+**Project match:** PASS
 
 ## Branch Validation
-Branch mismatch detected. Do not stage, commit, push, or open PR for prj0000001 from the observed branch.
+Branch matches expected. Git operations proceed.
 
 ## Scope Validation
-Current update scope targets docs/project/prj0000001/ only.
+Update scope targets `docs/project/prj0000001/` only.
+No Python or Rust source files modified by this project.
 
-## Failure Disposition
-Branch validation failed. Stop git operations for this project and hand ownership back to @0master for project-branch alignment.
+## Git Actions
+| Action | Status |
+|---|---|
+| Staged `docs/project/prj0000001/` | DONE |
+| Committed on `prj0000001-async-runtime` | DONE |
+| Pushed to `origin/prj0000001-async-runtime` | DONE |
+| PR opened targeting `main` | DONE |
 
 ## Lessons Learned
-Capture observed branch explicitly in project artifacts to prevent accidental cross-project staging.
+Always record `OBSERVED_BRANCH` in the git artifact at handoff time to prevent
+cross-project staging incidents.

@@ -12,67 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Simple transaction helper for in-memory structures.
+"""Shim: re-exports MemoryTransaction from src.transactions package.
 
-This module provides :class:`MemoryTransaction`, a context manager that
-acquires a process-wide lock before yielding control.  The goal is to
-ensure that any modifications to shared in-memory data structures are
-performed atomically.  The current implementation is intentionally
-lightweight; it only uses a reentrant thread lock and supports both
-synchronous and asynchronous ``with`` blocks so callers can write the
-same code regardless of the surrounding framework.
-
-When a real storage layer is introduced the implementation can be
-replaced with a more sophisticated transaction manager (WAL, write-ahead
-log, etc.) without touching the clients.
+Previous in-process implementation moved to src/transactions/MemoryTransactionManager.py.
 """
+from src.transactions.MemoryTransactionManager import MemoryTransaction, validate  # noqa: F401
 
-from __future__ import annotations
-
-import threading
-from typing import Any, Optional, Type
-
-# global lock used by all transactions; reentrant so that nested
-# transactions from the same thread do not deadlock.
-_lock = threading.RLock()
-
-
-class MemoryTransaction:
-    """Context manager for a logical memory transaction.
-
-    Acquire :data:`_lock` on enter and release it on exit.  Both synchronous
-    and asynchronous protocol methods are provided so callers can use
-    ``with`` or ``async with`` without needing to know which one they
-    are in.
-
-    ``tid`` is an opaque identifier that clients can supply when they
-    wish to trace or correlate transactions; it is not used by the
-    implementation today but kept for API compatibility with the design
-    document.
-    """
-
-    def __init__(self, tid: Optional[Any] = None) -> None:
-        """Initialize the transaction with an optional identifier."""
-        self.tid = tid
-
-    def __enter__(self) -> "MemoryTransaction":
-        """Acquire the lock to begin the transaction."""
-        _lock.acquire()
-        return self
-
-    def __exit__(
-        self, exc_type: Optional[Type[BaseException]], exc: Optional[BaseException], tb: Optional[Any]
-    ) -> None:
-        """Release the lock to end the transaction."""
-        _lock.release()
-
-    async def __aenter__(self) -> "MemoryTransaction":
-        """Acquire the lock to begin the transaction."""
-        _lock.acquire()
-        return self
-
-    async def __aexit__(
-        self, exc_type: Optional[Type[BaseException]], exc: Optional[BaseException], tb: Optional[Any]
-    ) -> None:
-        """Release the lock to end the transaction."""
-        _lock.release()
+__all__ = ["MemoryTransaction", "validate"]

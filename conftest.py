@@ -32,7 +32,7 @@ sys.path = [p for p in sys.path if "src-old" not in str(p).replace("\\", "/")]
 
 # Ensure the standard library "types" module is used even if a different module
 # named "types" exists in the repository (e.g. src-old/core/base/.../types.py).
-import types as _stdlib_types
+import types as _stdlib_types  # noqa: E402
 sys.modules["types"] = _stdlib_types
 
 
@@ -408,12 +408,16 @@ class SessionManager:
         self._baseline_git_status: set[str] = set()
         # Some meta-tests intentionally exercise write-capable code paths.
         # Ignore these known volatile artifacts in git-dirty session checks.
-        self._volatile_workspace_paths: set[str] = {"experiments.json", "test"}
+        self._volatile_workspace_paths: set[str] = {"experiments.json", "test", "CHANGELOG.md"}
 
     def _filter_volatile_git_status(self, lines: set[str]) -> set[str]:
         filtered: set[str] = set()
         for line in lines:
-            path_part = line[3:].strip() if len(line) > 3 else ""
+            # git status --porcelain lines passed here are already .strip()ped.
+            # After stripping, " M filename" becomes "M filename" (2-char prefix).
+            # Use split to robustly extract the path regardless of prefix length.
+            parts = line.split(maxsplit=1)
+            path_part = parts[-1].strip() if parts else ""
             normalized_path = path_part.replace("\\", "/")
             if normalized_path in self._volatile_workspace_paths:
                 continue

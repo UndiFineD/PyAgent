@@ -1,4 +1,16 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """Tools package.
 
 Importing this package will register all tools via `tool_registry`. Each tool module
@@ -10,25 +22,24 @@ The recommended entrypoint is `python -m src.tools` (see `__main__.py`).
 from __future__ import annotations
 
 import importlib
+import logging
 import pkgutil
 
+_log = logging.getLogger(__name__)
+
+# Modules excluded from auto-import (not tool providers themselves)
+_SKIP = frozenset({"tool_registry", "__main__", "common"})
+
 # Import all modules in this package so they can register themselves.
-# This avoids requiring users to explicitly import each tool module.
-
 # Avoid altering __path__; the import system already sets it correctly for this package.
-# (The prior implementation used __import__(__name__).__path__, which resolves to the
-# top-level `src` package and breaks submodule imports like `src.tools.__main__`.)
-
-for _finder, name, ispkg in pkgutil.iter_modules(__path__):
-    if ispkg:
+for _finder, _name, _ispkg in pkgutil.iter_modules(__path__):
+    if _ispkg:
         continue
-    # Skip modules that are not intended as tools (e.g. internal helpers)
-    # Also skip the package __main__.py as it is executed only when run as a module.
-    if name in {"tool_registry", "__main__"}:
+    if _name in _SKIP:
         continue
     try:
-        importlib.import_module(f"{__name__}.{name}")
-    except Exception:
+        importlib.import_module(f"{__name__}.{_name}")
+    except Exception as _exc:
         # If a tool fails to import, do not crash on package import.
-        # The tool may have optional dependencies, so we ignore failures here.
-        pass
+        # The tool may have optional dependencies; log at DEBUG level only.
+        _log.debug("tools: skipped %s — %s", _name, _exc)

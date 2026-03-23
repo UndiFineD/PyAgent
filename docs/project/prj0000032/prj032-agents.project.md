@@ -1,6 +1,9 @@
-# Prj032 Agents
+# agents - Project Overview
 
-**Project ID:** prj032-agents
+_Status: DONE_
+_Owner: @9git | Updated: 2026-03-21_
+
+**Project ID:** prj0000032
 
 ## Links
 
@@ -9,11 +12,11 @@
 
 ## Tasks
 
-- [ ] Define tasks and status
+- [x] Implementation completed on main prior to branch enforcement.
 
 ## Status
 
-0 of 0 tasks completed
+DONE -- Agent implementations and specializations (src/ agent classes).
 
 ## Code detection
 

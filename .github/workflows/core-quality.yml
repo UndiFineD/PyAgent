@@ -1,0 +1,42 @@
+name: Core System CI
+
+on:
+  push:
+    paths:
+      - 'src/core/**'
+      - 'tests/test_core_*.py'
+      - '.github/workflows/core-quality.yml'
+  pull_request:
+    paths:
+      - 'src/core/**'
+      - 'tests/test_core_*.py'
+
+jobs:
+  core-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest pytest-asyncio
+
+      - name: Validate all core modules
+        run: |
+          python -c "
+          import sys; sys.path.insert(0, 'src')
+          from core.runtime import validate as v1; v1()
+          from core.task_queue import validate as v2; v2()
+          from core.agent_registry import validate as v3; v3()
+          from core.memory import validate as v4; v4()
+          from core.observability import validate as v5; v5()
+          print('All core validate() hooks passed')
+          "
+
+      - name: Run core unit tests
+        run: pytest tests/test_core_runtime.py tests/test_core_task_queue.py tests/test_core_agent_registry.py tests/test_core_memory.py tests/test_core_observability.py tests/test_core_quality.py -v

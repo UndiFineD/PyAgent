@@ -12,7 +12,11 @@ from pathlib import Path
 from re import Pattern
 from typing import Any
 
-import rust_core
+import pytest
+try:
+    import rust_core
+except ImportError:
+    pytest.skip("rust_core not available - Rust extension not compiled", allow_module_level=True)
 
 # Configuration
 VERBOSE = True

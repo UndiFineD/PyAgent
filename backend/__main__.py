@@ -12,9 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Run the PyAgent backend worker with: python -m backend."""
+import os
+
 import uvicorn
 
 from .app import app
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000, log_level="info")
+    host = os.environ.get("HOST", "0.0.0.0")
+    port = int(os.environ.get("BACKEND_PORT", "444"))
+    uvicorn.run(app, host=host, port=port, log_level="info")

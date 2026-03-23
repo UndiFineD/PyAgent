@@ -24,7 +24,31 @@ Invoke it via `agent/runSubagent` to continue the implementation workflow.
 	- target_agent: @6code
 	- required scope: none yet; focused test authoring in progress
 
-### task_id: prj006-quality-gate-triage-20260320
+### task_id: prj0000045-transaction-managers-full-20260322
+- lifecycle: IN_PROGRESS -> BLOCKED -> DONE
+- project: prj0000045-transaction-managers-full
+- branch_expected: prj0000045-transaction-managers-full
+- branch_observed (final): prj0000045-transaction-managers-full ✓
+- block_resolved: @0master created branch; @5test re-invoked on correct branch
+- files_created:
+  - tests/test_MemoryTransactionManager.py (10 tests)
+  - tests/test_StorageTransactionManager.py (13 tests)
+  - tests/test_ProcessTransactionManager.py (12 tests)
+  - tests/test_ContextTransactionManager.py (13 tests)
+- red_phase_run: 48 collected | 4 passed | 1 failed | 43 skipped
+  - 4 PASS: TC-M1..M4 (existing MemoryTransaction shim)
+  - 1 FAIL: TC-M5 (AssertionError — validate() missing on shim, T10 pending) ✓ correct red
+  - 43 SKIP: all tests requiring src.core.*/src.transactions.* (modules not yet created)
+- test_transaction_managers.py: ERROR at collection (ModuleNotFoundError for src.core.StorageTransactionManager) — pre-existing, resolved by T07
+- handoff:
+  - target_agent: @6code
+  - required_tasks: T00–T10 from transaction-managers-full.plan.md
+  - key_files: src/transactions/__init__.py, src/transactions/BaseTransaction.py,
+    src/transactions/StorageTransactionManager.py, src/transactions/ProcessTransactionManager.py,
+    src/transactions/ContextTransactionManager.py, src/transactions/MemoryTransactionManager.py,
+    src/core/StorageTransactionManager.py (shim), src/core/ProcessTransactionManager.py (shim),
+    src/core/ContextTransactionManager.py (shim), src/MemoryTransactionManager.py (shim body)
+
 - lifecycle: OPEN -> IN_PROGRESS -> DONE
 - project: prj006-unified-transaction-manager
 - red/green summary:

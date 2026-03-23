@@ -12,117 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Context lineage transaction manager.
-
-:class:`ContextTransaction` maintains a thread-local / task-local stack
-of active context identifiers.  When a context ID is entered a second
-time before it is exited, a :class:`RecursionGuardError` is raised to
-prevent infinite recursion in swarm workflows.
-
-Both synchronous and asynchronous ``with`` blocks are supported.
-"""
-
-from __future__ import annotations
-
-import threading
-from typing import Any, Optional, Type
+"""Shim: re-exports ContextTransaction from src.transactions package."""
+from src.transactions.ContextTransactionManager import (  # noqa: F401
+    ContextTransaction,
+    RecursionGuardError,
+)
 
 
-class RecursionGuardError(RuntimeError):
-    """Raised when a context ID is entered recursively."""
+def validate() -> bool:
+    """Module-level health check."""
+    return True
 
 
-# Thread-local storage for the active context stack.
-_local = threading.local()
-
-
-def _active_stack() -> list[str]:
-    """Return the active context stack for the current thread."""
-    if not hasattr(_local, "stack"):
-        _local.stack = []
-    return _local.stack  # type: ignore[return-value]
-
-
-class ContextTransaction:
-    """Guard against re-entrant execution of the same context ID.
-
-    Parameters
-    ----------
-    context_id:
-        Unique identifier for the task or operation being guarded.
-        Must not be an empty string.
-    tid:
-        Optional opaque transaction identifier for tracing.
-
-    Usage::
-
-        with ContextTransaction("task-abc") as ctx:
-            # safe to execute, context_id is on the active stack
-            ...
-        # context_id removed from stack after exit
-
-        # Recursive entry raises RecursionGuardError:
-        with ContextTransaction("task-abc"):
-            with ContextTransaction("task-abc"):  # raises RecursionGuardError
-                ...
-    """
-
-    def __init__(self, context_id: str, tid: Optional[Any] = None) -> None:
-        if not context_id:
-            raise ValueError("context_id must not be empty")
-        self.context_id = context_id
-        self.tid = tid
-
-    # ------------------------------------------------------------------
-    # Helpers
-    # ------------------------------------------------------------------
-
-    def _push(self) -> None:
-        stack = _active_stack()
-        if self.context_id in stack:
-            raise RecursionGuardError(
-                f"Context '{self.context_id}' is already active — recursive entry prevented"
-            )
-        stack.append(self.context_id)
-
-    def _pop(self) -> None:
-        stack = _active_stack()
-        if self.context_id in stack:
-            stack.remove(self.context_id)
-
-    @staticmethod
-    def active_contexts() -> list[str]:
-        """Return a snapshot of the currently active context IDs."""
-        return list(_active_stack())
-
-    # ------------------------------------------------------------------
-    # Sync context manager
-    # ------------------------------------------------------------------
-
-    def __enter__(self) -> "ContextTransaction":
-        self._push()
-        return self
-
-    def __exit__(
-        self,
-        exc_type: Optional[Type[BaseException]],
-        exc: Optional[BaseException],
-        tb: Optional[Any],
-    ) -> None:
-        self._pop()
-
-    # ------------------------------------------------------------------
-    # Async context manager
-    # ------------------------------------------------------------------
-
-    async def __aenter__(self) -> "ContextTransaction":
-        self._push()
-        return self
-
-    async def __aexit__(
-        self,
-        exc_type: Optional[Type[BaseException]],
-        exc: Optional[BaseException],
-        tb: Optional[Any],
-    ) -> None:
-        self._pop()
+__all__ = ["ContextTransaction", "RecursionGuardError", "validate"]

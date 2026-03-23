@@ -14,6 +14,23 @@ This agent does **not** write tests or production code.
 
 ---
 
+## HARD RULE — Plans must specify real deliverables
+
+> **THIS IS A BLOCKING REQUIREMENT. NO EXCEPTIONS.**
+
+Every task in a plan must result in **real, working code**. The following are **not acceptable deliverables**:
+
+- A "skeleton" or "scaffold" file (i.e., a module with only `__init__.py` or class definitions with `pass` bodies)
+- A stub that satisfies an import check but has no logic
+- A function documented as "placeholder — implement later"
+- An `__init__.py` that only re-exports names without the implementation being present
+
+**Definition of "done" for any planned task:** the code must be importable, testable against meaningful assertions, and must implement the logic described in the acceptance criteria — not merely exist as a file.
+
+If a feature cannot be fully implemented in this sprint, it must **not** be included in the task list. Instead, defer it explicitly to a future project with a rationale. Partial stubs committed to the repo are technical debt and block downstream agents.
+
+---
+
 ## Scope and purpose
 
 | What @4plan does                           | What @4plan does NOT do                    |

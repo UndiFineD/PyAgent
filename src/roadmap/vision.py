@@ -15,5 +15,33 @@
 
 
 def get_template() -> str:
-    """Return a markdown template for the project vision statement."""
-    return "# Vision\n\n<describe project vision here>\n"
+    """Return a markdown template for the PyAgent vision statement."""
+    return """\
+# Vision
+
+**PyAgent** is an autonomous multi-agent swarm system designed to continuously
+improve software quality, security, and developer productivity without human
+intervention.
+
+## Core Principles
+
+1. **Autonomy** — agents discover, analyse, and fix issues without prompting.
+2. **Safety** — every change goes through a `@8ql` security gate and `@9git`
+   branch isolation before reaching `main`.
+3. **Transparency** — all decisions are recorded in `docs/agents/*.memory.md`
+   and project artifacts in `docs/project/prjNNNNNNN/`.
+4. **Composability** — agents communicate via structured task lineage
+   (`ContextTransaction`) and never bypass the registry.
+
+## Strategic Goals
+
+- Achieve 80 %+ test coverage across `src/` by end of Phase 5.
+- Rust-accelerate the top-3 hot paths (metrics, file IO, complexity analysis).
+- Ship a fully functional Fleet Load Balancer WebSocket backend.
+- Integrate CodeQL scanning into every PR via the `@8ql` agent.
+
+## Non-Goals
+
+- Replace human architecture decisions.
+- Run without a human-in-the-loop for production deployments.
+"""

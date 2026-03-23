@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate project folders and a dashboard from agent-based project plans.
 
-This generator creates/updates `docs/project/prjNNN-*/` project artifacts based on
+This generator creates/updates `docs/project/prjNNNNNNN/` project artifacts based on
 local `plan.md` and `brainstorm.md` files, and produces a central `PROJECT_DASHBOARD.md`.
 
 It improves implementation detection by searching common repo locations and
@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PROJECTS_ROOT = ROOT / "docs" / "project"
 
 # The generator now uses the agent-based project tracking system rooted in docs/project.
-# Each project folder (prjNNN-*) should contain a `plan.md` and optionally `brainstorm.md`.
+# Each project folder (prjNNNNNNN) should contain a `plan.md` and optionally `brainstorm.md`.
 OUT_ROOT = PROJECTS_ROOT
 OUT_ROOT.mkdir(parents=True, exist_ok=True)
 
@@ -92,7 +92,7 @@ def _find_code_files(topic_key: str) -> List[Path]:
 
 projects = []
 
-# Each project lives under docs/project/prjNNN-<topic> and contains plan.md + optional brainstorm.md
+# Each project lives under docs/project/prjNNNNNNN and contains plan.md + optional brainstorm.md
 project_dirs = sorted(
     d
     for d in OUT_ROOT.iterdir()
@@ -215,5 +215,5 @@ for p in projects:
     md = "Yes" if p["MissingDesign"] else "No"
     code = "Yes" if p.get("CodeFound") else "No"
     print(
-        f"{p['ProjectId']}: {pct}% ({p['Completed']}/{p['Total']}) | code: {_color_yes_no(code)} | missing design: {_color_yes_no(md)}"
+        f"{p['ProjectId']}: {pct}% ({p['Completed']}/{p['Total']}) | code: {_color_yes_no(code)} | missing design: {_color_yes_no(md)}"  # noqa: E501
     )

@@ -1,20 +1,66 @@
 # PyAgent — Master Agent Memory
 
-_Last updated: 2026-03-20_
+_Last updated: 2026-03-22_
+
+---
+
+## 2026-03-22 Session Summary — prj0000011–prj0000020 Implementation Wave COMPLETE
+
+All 10 projects (prj0000011 through prj0000020) fully implemented and merged to `main`.
+
+| Project | Branch | Code | Docs (9/9) | Status |
+|---------|--------|------|------------|--------|
+| prj0000011 | prj0000011-core-project-structure | ✅ | ✅ | MERGED |
+| prj0000012 | prj0000012-deployment-operations | ✅ | ✅ | MERGED |
+| prj0000013 | prj0000013-dev-tools-autonomy | ✅ | ✅ | MERGED |
+| prj0000014 | prj0000014-dev-tools-capabilities | ✅ | ✅ | MERGED |
+| prj0000015 | prj0000015-dev-tools-implementation | ✅ | ✅ | MERGED |
+| prj0000016 | prj0000016-dev-tools-structure | ✅ | ✅ | MERGED |
+| prj0000017 | prj0000017-dev-tools-utilities | ✅ | ✅ | MERGED |
+| prj0000018 | prj0000018-documentation-assets | ✅ | ✅ | MERGED |
+| prj0000019 | prj0000019-future-roadmap | ✅ | ✅ | MERGED |
+| prj0000020 | prj0000020-github-import | ✅ | ✅ | MERGED |
+
+**Known open gap (prj0000020):** HMAC webhook signature verification not yet implemented in `src/github_app.py`. Documented in `docs/project/prj0000020/github-import.ql.md`. Assign a follow-on sprint.
+
+---
+
+## 2026-03-21 Session Summary — Project Governance Closure Wave
+
+All 42 projects have been surveyed and governance PRs created:
+
+| PR | Branch | Projects | Status |
+|---|---|---|---|
+| #127 | prj037-tools-crdt-security | prj0000042 | open |
+| #128 | prj0000002-core-system | prj0000002 | open |
+| #129 | prj0000003-hybrid-llm-security | prj0000003 | open |
+| #130 | prj0000039-conftest-typing-fixes | prj0000039 | open |
+| #131 | prj0000041-flm | prj0000041 | open |
+| #132 | prj0000009-community-collaboration | prj009,010,019,020,024,025,027,029,040 | open |
+| #133 | prj0000011-core-project-structure | prj011-018,021-023,026,028,030-038 | open |
+| #134 | prj0000001-async-runtime | prj0000001 | open |
+| #135 | prj0000005-llm-swarm-architecture | prj0000005 | open (IN_PROGRESS: 13/16 tasks) |
+
+**Previously merged:** prj0000004 (#123), prj0000006 (#124), prj0000007 (#125), prj0000008 (#126).
+
+**prj0000005 remaining tasks:**
+- `src/swarm/swarm_node.py` — minimal peer with ping/pong
+- `tests/test_swarm_node.py`
+- `scripts/run_swarm_demo.py`
 
 ---
 
 ## Standing Policy — Branch Isolation
 
-- One `prjNNN` workstream maps to one branch. Project work must not piggyback on the active branch of another project.
+- One `prjNNNNNNN` workstream maps to one branch. Project work must not piggyback on the active branch of another project.
 - `@0master` assigns or validates the expected branch during project kickoff and ensures `@1project` records that branch, the scope boundary, and the git handoff rule in the project overview.
 - `@9git` is expected to reject mixed-project changes, inherited branches, and broad staging guidance for project work.
 - When branch hygiene fails, `@0master` owns the correction loop: update the governing guidance, return the task to the agent that owns the project boundary, and do not normalize the failure as an accepted workflow.
 
 ## Standing Policy — Project Numbering Ownership
 
-- `@0master` owns `prjNNN` allocation, validation, and continuity tracking.
-- Project numbering is part of the project boundary. A project is not fully defined until the assigned `prjNNN`, project folder, and expected branch agree.
+- `@0master` owns `prjNNNNNNN` allocation, validation, and continuity tracking.
+- Project numbering is part of the project boundary. A project is not fully defined until the assigned `prjNNNNNNN`, project folder, and expected branch agree.
 - `@1project` must consume the identifier assigned by `@0master`. It must not invent, renumber, or resolve ambiguity on its own.
 - Do not reuse old numbers or skip numbers casually. If a number is reserved, retired, skipped, or corrected, record the reason here before downstream handoff.
 - If numbering is missing, conflicting, or ambiguous, stop the workflow and send the task back through `@0master` before project setup continues.
@@ -24,9 +70,13 @@ _Last updated: 2026-03-20_
 - Latest confirmed project folder in `docs/project/`: `prj0000042`.
 - Project folder numbering migrated from 3-digit (`prj001`-`prj038`) to 7-digit (`prj0000001`-`prj0000042`).
 - Legacy duplicate groups were resolved by assigning unique 7-digit identifiers during migration.
-- Next `prjNNN` to allocate: `prj0000043` (validate against `docs/project/` inventory before assignment).
+- `prj0000043` allocated 2026-03-22: `prj0000043-p2p-security-deps` — libp2p 0.49→0.56, 6 Dependabot CVEs. PR open.
+- `prj0000044` allocated 2026-03-22: `prj0000044-transaction-managers` — add missing StorageTransaction/ProcessTransaction/ContextTransaction stubs for CI. PR #136 open.
+- `prj0000045` allocated 2026-03-22: `prj0000045-transaction-managers-full` — full proper design of all four transaction managers (src/transactions/ package, BaseTransaction ABC, LLM context integration, encrypted storage, remote memory). **MERGED** — PR #137 squash-merged to main 2026-03-22. 317 tests pass, 4 skip, 0 fail.
+- `prj0000046` allocated 2026-03-22: `prj0000046-flm-tps-benchmark` — FLM provider tokens-per-second benchmark script (`scripts/FlmTpsBenchmark.py`). Branch: `prj0000046-flm-tps-benchmark`. Includes accumulated session test fixes (sync loops, git.md sections, flake8, registry isolation). FLM backend offline at time of run; script ready for when server is available.
+- Next `prjNNNNNNN` to allocate: `prj0000047` (validate against `docs/project/` inventory before assignment).
 
-## Branch Registry (all 42 projects)
+## Branch Registry (all 45 projects)
 
 | Dir | Expected Branch | Status |
 |---|---|---|
@@ -71,7 +121,10 @@ _Last updated: 2026-03-20_
 | prj0000039 | `prj0000039-conftest-typing-fixes` | assigned 2026-03-21 |
 | prj0000040 | `prj0000040-core-system` | assigned 2026-03-21 |
 | prj0000041 | `prj0000041-flm` | assigned 2026-03-21 |
-| prj0000042 | `prj037-tools-crdt-security` | pre-existing |
+| prj0000042 | `prj0000042-tools-crdt-security` | pre-existing |
+| prj0000043 | `prj0000043-p2p-security-deps` | assigned 2026-03-22 |
+| prj0000044 | `prj0000044-transaction-managers` | assigned 2026-03-22 |
+| prj0000045 | `prj0000045-transaction-managers-full` | PR #137 open — COMPLETE |
 
 ## Learning Loop — Branch Hygiene
 

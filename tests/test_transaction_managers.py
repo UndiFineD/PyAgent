@@ -16,7 +16,6 @@
 
 from __future__ import annotations
 
-import asyncio
 import sys
 from pathlib import Path
 
@@ -34,8 +33,9 @@ from src.core.ContextTransactionManager import ContextTransaction, RecursionGuar
 
 class TestStorageTransaction:
     """Tests for StorageTransaction context manager."""
-    
+
     def test_commit_writes_file(self, tmp_path: Path) -> None:
+        """Basic commit test: staged content is written to target on commit."""
         target = tmp_path / "output.bin"
         with StorageTransaction(target) as tx:
             tx.stage(b"hello world")
@@ -43,6 +43,7 @@ class TestStorageTransaction:
         assert target.read_bytes() == b"hello world"
 
     def test_rollback_on_exception_leaves_target_untouched(self, tmp_path: Path) -> None:
+        """Rollback on exception leaves the target file untouched."""
         target = tmp_path / "safe.txt"
         target.write_bytes(b"original")
         with pytest.raises(ValueError):
@@ -59,6 +60,7 @@ class TestStorageTransaction:
         assert target.read_bytes() == b"auto-committed"
 
     def test_stage_replaces_previous_stage(self, tmp_path: Path) -> None:
+        """Staging new content replaces previously staged content until commit."""
         target = tmp_path / "multi.txt"
         with StorageTransaction(target) as tx:
             tx.stage(b"first")
@@ -68,6 +70,7 @@ class TestStorageTransaction:
 
     @pytest.mark.asyncio
     async def test_async_context_manager_commits(self, tmp_path: Path) -> None:
+        """Async context manager should commit on normal exit."""
         target = tmp_path / "async_out.txt"
         async with StorageTransaction(target) as tx:
             tx.stage(b"async content")
@@ -81,7 +84,10 @@ class TestStorageTransaction:
 
 
 class TestProcessTransaction:
+    """Tests for ProcessTransaction context manager."""
+
     def test_start_and_wait_success(self) -> None:
+        """Start a simple subprocess and wait for it to complete successfully."""
         cmd = [sys.executable, "-c", "print('ok')"]
         with ProcessTransaction(cmd) as tx:
             tx.start()
@@ -101,6 +107,7 @@ class TestProcessTransaction:
         assert tx._proc.poll() is not None
 
     def test_exception_triggers_rollback(self) -> None:
+        """An exception within the context manager should trigger rollback and terminate the process."""
         cmd = [sys.executable, "-c", "import time; time.sleep(30)"]
         proc_ref: list[ProcessTransaction] = []
         with pytest.raises(RuntimeError):
@@ -113,6 +120,9 @@ class TestProcessTransaction:
 
     @pytest.mark.asyncio
     async def test_async_start_and_wait(self) -> None:
+        """Test the async start and wait methods of ProcessTransaction.
+        The subprocess should complete successfully and return code should be 0.
+        """
         cmd = [sys.executable, "-c", "import sys; sys.exit(0)"]
         async with ProcessTransaction(cmd) as tx:
             await tx.start_async()
@@ -126,18 +136,23 @@ class TestProcessTransaction:
 
 
 class TestContextTransaction:
+    """Tests for ContextTransaction context manager."""
+
     def test_basic_enter_exit(self) -> None:
-        with ContextTransaction("task-1") as ctx:
+        """Basic test of entering and exiting a context."""
+        with ContextTransaction("task-1") as _:
             assert "task-1" in ContextTransaction.active_contexts()
         assert "task-1" not in ContextTransaction.active_contexts()
 
     def test_recursive_entry_raises(self) -> None:
+        """Entering the same context recursively should raise RecursionGuardError."""
         with ContextTransaction("task-loop"):
             with pytest.raises(RecursionGuardError):
                 with ContextTransaction("task-loop"):
                     pass
 
     def test_different_contexts_nest_fine(self) -> None:
+        """Nesting different contexts should work without issue."""
         with ContextTransaction("outer"):
             with ContextTransaction("inner"):
                 active = ContextTransaction.active_contexts()
@@ -145,11 +160,13 @@ class TestContextTransaction:
                 assert "inner" in active
 
     def test_empty_context_id_raises(self) -> None:
+        """Creating a ContextTransaction with an empty context_id should raise ValueError."""
         with pytest.raises(ValueError):
             ContextTransaction("")
 
     @pytest.mark.asyncio
     async def test_async_context_manager(self) -> None:
-        async with ContextTransaction("async-task") as ctx:
+        """Test that the async context manager properly manages active contexts."""
+        async with ContextTransaction("async-task") as _:
             assert "async-task" in ContextTransaction.active_contexts()
         assert "async-task" not in ContextTransaction.active_contexts()

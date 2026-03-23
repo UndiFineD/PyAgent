@@ -16,12 +16,16 @@
 /// These are used by higher-level transport components to establish port
 /// bindings and apply retry/timeout policies.
 #[allow(dead_code)]
-pub const UTM_DEFAULT_PORT: u16 = 4031;
+/// UTM_SYNC_PORT in .env
+pub const UTM_DEFAULT_PORT: u16 = 4010;
+/// Adjacent control channel for UTM sync
 #[allow(dead_code)]
-pub const UTM_CONTROL_PORT: u16 = 4032;
+pub const UTM_CONTROL_PORT: u16 = 4011;
 
-pub const TX_SEND_PORT: u16 = 54001;
-pub const TX_RECV_PORT: u16 = 54002;
+/// UTM_SEND_PORT in .env
+pub const TX_SEND_PORT: u16 = 4001;
+/// UTM_RECV_PORT in .env
+pub const TX_RECV_PORT: u16 = 4002;
 
 /// Maximum time to wait for a transport operation (seconds).
 pub const TRANSPORT_TIMEOUT_MAX_SECS: u64 = 30;

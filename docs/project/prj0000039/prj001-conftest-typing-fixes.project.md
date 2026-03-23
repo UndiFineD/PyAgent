@@ -1,23 +1,33 @@
-# Prj001 Conftest Typing Fixes
+# conftest-typing-fixes - Project Overview
 
-**Project ID:** prj001-conftest-typing-fixes
+_Status: DONE_
+_Owner: @9git | Updated: 2026-03-21_
+
+**Project ID:** prj0000039
 
 ## Links
 
 - Plan: plan.md
-- Design: rainstorm.md
+- Design: brainstorm.md
 
 ## Tasks
 
-- [ ] Define tasks and status
+- [x] Add/adjust typing in `conftest.py` for the reported issues.
+- [x] Add lightweight `Protocol` definitions to support typed mocking.
+- [x] Ensure `session.exitstatus` assignment is type-safe and behavior-preserving.
+- [x] Validate behavior with `pytest tests/test_conftest.py`.
+- [x] Update project documentation in `docs/project/prj0000039/`.
 
 ## Status
 
-0 of 0 tasks completed
+5 of 5 tasks completed — DONE. All typing fixes applied and validated.
 
 ## Code detection
 
-- None detected yet.
+- Code detected in:
+  - `conftest.py`
+  - `tests/fakeconftest.py`
+  - `tests/test_conftest.py`
 
 ## Branch Plan
 

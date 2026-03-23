@@ -1,6 +1,9 @@
-# Prj014 Dev_Tools_Capabilities
+# dev-tools-capabilities - Project Overview
 
-**Project ID:** prj014-dev_tools_capabilities
+_Status: DONE_
+_Owner: @9git | Updated: 2026-03-21_
+
+**Project ID:** prj0000014
 
 ## Links
 
@@ -9,11 +12,11 @@
 
 ## Tasks
 
-- [ ] Define tasks and status
+- [x] Implementation completed on main prior to branch enforcement.
 
 ## Status
 
-0 of 0 tasks completed
+DONE -- Dev tool capabilities: metrics, plugins, port_forward (src/tools/).
 
 ## Code detection
 

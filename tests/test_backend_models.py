@@ -13,8 +13,6 @@
 # limitations under the License.
 """Tests for WebSocket message schema models."""
 
-import pytest
-
 from backend.models import (
     ActionRequestMessage,
     InitMessage,

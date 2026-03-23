@@ -1,7 +1,7 @@
 # prj037-tools-crdt-security — Project Overview
 
-_Status: IN_PROGRESS_
-_Owner: @1project | Updated: 2026-03-20_
+_Status: DONE_
+_Owner: @9git | Updated: 2026-03-21_
 
 ## Project Identity
 **Project ID:** prj037-tools-crdt-security
@@ -45,10 +45,9 @@ or ambiguous, return the task to `@0master` before downstream handoff.
 | M4 | Policy tests written | @5test | done |
 | M5 | Code + policy docs implemented | @6code | done |
 | M6 | Integration validated | @7exec | done |
-| M7 | Security clean | @8ql | in progress |
-| M8 | Committed | @9git | pending |
+| M7 | Security clean | @8ql | done |
+| M8 | Committed | @9git | done |
 
 ## Status
-_Last updated: 2026-03-20_
-Active — governance hardening (branch policy, prjNNN ownership, git-summary format)
-complete.  Five policy tests passing.  Awaiting @9git narrow-stage commit.
+_Last updated: 2026-03-21_
+DONE — All milestones complete. Merged via PR #120 (prj037-tools-crdt-security → main).

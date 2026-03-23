@@ -1,6 +1,9 @@
-# Prj033 Chat
+# chat - Project Overview
 
-**Project ID:** prj033-chat
+_Status: DONE_
+_Owner: @9git | Updated: 2026-03-21_
+
+**Project ID:** prj0000033
 
 ## Links
 
@@ -9,11 +12,11 @@
 
 ## Tasks
 
-- [ ] Define tasks and status
+- [x] Implementation completed on main prior to branch enforcement.
 
 ## Status
 
-0 of 0 tasks completed
+DONE -- Chat subsystem (src/chat/, FastAPI routes, MCP tools).
 
 ## Code detection
 

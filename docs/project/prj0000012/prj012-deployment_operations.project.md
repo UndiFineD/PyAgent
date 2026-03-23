@@ -1,6 +1,9 @@
-# Prj012 Deployment_Operations
+# deployment-operations - Project Overview
 
-**Project ID:** prj012-deployment_operations
+_Status: DONE_
+_Owner: @9git | Updated: 2026-03-21_
+
+**Project ID:** prj0000012
 
 ## Links
 
@@ -9,11 +12,11 @@
 
 ## Tasks
 
-- [ ] Define tasks and status
+- [x] Implementation completed on main prior to branch enforcement.
 
 ## Status
 
-0 of 0 tasks completed
+DONE -- Docker compose, deployment scripts (deploy/).
 
 ## Code detection
 

@@ -8,8 +8,6 @@ This page tracks the most important remaining work items for the PyAgent repo.
 - Simplified CI to run only Ubuntu smoke tests.
 
 ## 🔜 Next Actions
-- [ ] Ensure every `docs/project/prjXXX-*` folder has both `brainstorm.md` and `plan.md` (no missing pairs).
-- [ ] Audit `.github/` for obsolete content (e.g., remove leftover superpower folders).
 - [ ] Verify `docs/architecture/` content matches actual implementation (async runtime, transactions, Rust bridge).
 - [ ] Add a short “getting started” snippet for contributors in `docs/onboarding.md` (env + test command).
 

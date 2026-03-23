@@ -1,6 +1,9 @@
-# Prj009 Community_Collaboration
+# community-collaboration - Project Overview
 
-**Project ID:** prj009-community_collaboration
+_Status: DONE_
+_Owner: @9git | Updated: 2026-03-21_
+
+**Project ID:** prj0000009
 
 ## Links
 
@@ -9,11 +12,11 @@
 
 ## Tasks
 
-- [ ] Define tasks and status
+- [x] Implementation completed on main prior to branch enforcement.
 
 ## Status
 
-0 of 0 tasks completed
+DONE — FastAPI chat rooms, MCP tools, GitHub webhooks (src/chat/).
 
 ## Code detection
 

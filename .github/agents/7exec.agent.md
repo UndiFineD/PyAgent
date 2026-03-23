@@ -101,7 +101,7 @@ Start-Sleep 5
 Stop-Job $job; Remove-Job $job
 ```
 
-**Step 6 — Check rust_core if changed**  
+**Step 6 — Check rust_core if changed**
 If `rust_core/` was modified by `@6code`:
 ```powershell
 Set-Location rust_core
@@ -110,7 +110,17 @@ Set-Location ..
 python -c "from rust_core import *; print('rust_core loaded OK')"
 ```
 
-**Step 7 — Record results and hand off**  
+**Step 6.5 — Placeholder scan (MANDATORY — blocks handoff)**
+Before handing off to `@8ql`, scan the changed source files for placeholder patterns:
+```powershell
+& c:\Dev\PyAgent\.venv\Scripts\Activate.ps1
+# Any hit here is a BLOCKING failure — do NOT proceed to @8ql
+rg --type py "raise NotImplementedError|raise NotImplemented\b|#\s*(TODO|FIXME|HACK|STUB|PLACEHOLDER)" src/ tests/
+rg --type py "^\s*\.\.\.\s*$" src/
+```
+If any match is found in production code (excluding intentional test red-phase stubs), **stop and return to `@6code`** with the list of offending files and line numbers. Do not hand off to `@8ql` until the scan is clean.
+
+**Step 7 — Record results and hand off**
 - **All pass:** update `docs/agents/7exec.memory.md`, then delegate to `@8ql`.
 - **Any failure:** compile the error output (test name, traceback, command used)  
   and send back to `@6code` with the full diagnostic and failure category (see table below).

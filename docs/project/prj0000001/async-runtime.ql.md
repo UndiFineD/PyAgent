@@ -1,7 +1,7 @@
 # async-runtime - Security Scan Results
 
-_Status: NOT_STARTED_
-_Scanner: @8ql | Updated: 2026-03-20_
+_Status: DONE_
+_Scanner: @8ql | Updated: 2026-03-23_
 
 ## Scan Scope
 | File | Scan type | Tool |
@@ -13,7 +13,7 @@ _Scanner: @8ql | Updated: 2026-03-20_
 ## Findings
 | ID | Severity | File | Line | Description |
 |---|---|---|---|---|
-| none | none | n/a | n/a | No findings recorded in this artifact yet |
+| none | none | n/a | n/a | No security findings — scan returned clean |
 
 ## False Positives
 | ID | Reason |
@@ -21,4 +21,7 @@ _Scanner: @8ql | Updated: 2026-03-20_
 | none | n/a |
 
 ## Cleared
-Current status: NOT_STARTED
+Scan complete. No actionable findings. The async runtime uses `asyncio` exclusively;
+no shell injection, SSRF, or unsafe deserialization vectors identified.
+`rust_core/runtime` is a cdylib (PyO3 extension), not a standalone binary — attack
+surface is limited to the Python-Rust FFI boundary, which is read-only for this module.

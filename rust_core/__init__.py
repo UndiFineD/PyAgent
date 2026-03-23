@@ -19,6 +19,7 @@ from types import ModuleType
 # import the compiled extension from the installed package by temporarily
 # removing the source directory from sys.path.
 
+
 def _import_installed_extension(name: str) -> ModuleType:
     # Running from the repo root can cause the source package to shadow the
     # installed package in site-packages. We temporarily remove both the repo
@@ -45,6 +46,7 @@ def _import_installed_extension(name: str) -> ModuleType:
         for p in reversed(removed_path):
             sys.path.insert(0, p)
         sys.modules.update(sys_modules_backup)
+
 
 try:
     # try the common name the extension is built with (rust_core.rust_core)

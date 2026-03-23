@@ -1,0 +1,36 @@
+name: Testing Infrastructure CI
+
+on:
+  push:
+    paths:
+      - 'tests/**'
+      - 'scripts/SetupTests.py'
+      - '.github/workflows/testing-infra.yml'
+  pull_request:
+    paths:
+      - 'tests/**'
+      - 'scripts/SetupTests.py'
+
+jobs:
+  test-infra:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest pytest-asyncio pytest-cov ruff
+
+      - name: Run structure tests
+        run: pytest tests/structure/ -v
+
+      - name: Verify SetupTests dry-run
+        run: python scripts/SetupTests.py --dry-run
+
+      - name: Run full test suite
+        run: pytest src/ tests/ -v --tb=short

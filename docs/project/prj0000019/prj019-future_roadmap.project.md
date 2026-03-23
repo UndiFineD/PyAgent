@@ -1,6 +1,9 @@
-# Prj019 Future_Roadmap
+# future-roadmap - Project Overview
 
-**Project ID:** prj019-future_roadmap
+_Status: DONE_
+_Owner: @9git | Updated: 2026-03-21_
+
+**Project ID:** prj0000019
 
 ## Links
 
@@ -9,11 +12,11 @@
 
 ## Tasks
 
-- [ ] Define tasks and status
+- [x] Implementation completed on main prior to branch enforcement.
 
 ## Status
 
-0 of 0 tasks completed
+DONE — Vision templates, milestone generator (src/roadmap/).
 
 ## Code detection
 
