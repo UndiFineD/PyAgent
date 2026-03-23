@@ -1,4 +1,8 @@
-# PyAgent
+#!/usr/bin/env python3
+"""Temporary script — writes the new README.md for prj0000051. Delete after use."""
+from pathlib import Path
+
+README = r"""# PyAgent
 
 ![Build](https://github.com/UndiFineD/PyAgent/actions/workflows/python-core.yml/badge.svg)
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
@@ -91,9 +95,9 @@ composing workflows — rather than through raw CLI commands.
 
 The React component tree is rooted at `web/src/App.tsx`. Each app runs inside a draggable,
 resizable window managed by the desktop shell. The taskbar persists across all window states
-and can be pinned or auto-hidden via the NebulaOS Settings modal.
+and can be pinned or auto-hidden via the NebulaOS Settings modal (added in prj0000048).
 Real-time system metrics are streamed from the FastAPI backend into Conky via the
-`/api/metrics/system` endpoint, powered by `psutil`.
+`/api/metrics/system` endpoint, which was wired to `psutil` in prj0000047.
 
 | App | Description |
 |---|---|
@@ -208,12 +212,12 @@ throughput, it can be rewritten in-place without touching any Python call-site.
    allowlist checker before execution, providing a defence-in-depth layer against
    prompt injection and tool abuse by any agent in the swarm.
 
-## Project History
+## Project History (prj0000001–prj0000051)
 
 PyAgent has been built iteratively through 51 focused projects, each following the
 full 10-agent pipeline from @0master through @9git.
 
-### Group 1 — Foundation
+### Foundation (prj0000001–prj0000010)
 
 | Project | Name | Delivered |
 |---|---|---|
@@ -228,7 +232,7 @@ full 10-agent pipeline from @0master through @9git.
 | prj0000009 | Community Collaboration | CONTRIBUTING.md, CODE_OF_CONDUCT.md, governance docs |
 | prj0000010 | Context Management | ContextTransaction, task lineage, recursion prevention |
 
-### Group 2 — Core Implementation
+### Core Implementation (prj0000011–prj0000020)
 
 | Project | Name | Delivered |
 |---|---|---|
@@ -243,7 +247,7 @@ full 10-agent pipeline from @0master through @9git.
 | prj0000019 | Future Roadmap | Research notes and long-horizon planning artifacts |
 | prj0000020 | GitHub Import | Repo cloning + per-file architecture doc generation |
 
-### Group 3 — Governance & Quality
+### Governance & Quality (prj0000021–prj0000042)
 
 | Project | Name | Delivered |
 |---|---|---|
@@ -270,7 +274,7 @@ full 10-agent pipeline from @0master through @9git.
 | prj0000041 | FLM Benchmark | FLM provider TPS benchmarking framework |
 | prj0000042 | Agent Workflow Polish | Orchestration refinements, handoff rule clarifications |
 
-### Group 4 — Recent Features
+### Recent Features (prj0000043–prj0000051)
 
 | Project | Name | Delivered |
 |---|---|---|
@@ -370,3 +374,8 @@ GitHub Actions workflows live in `.github/workflows/`:
 
 Copyright 2026 PyAgent Authors.
 Licensed under the [Apache License, Version 2.0](LICENSE).
+"""
+
+dest = Path(__file__).parent.parent / "README.md"
+dest.write_text(README.lstrip(), encoding="utf-8")
+print(f"Written {dest} ({dest.stat().st_size} bytes)")
