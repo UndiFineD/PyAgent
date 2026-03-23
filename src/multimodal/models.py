@@ -51,6 +51,7 @@ class MultiModalData:
         Arbitrary key/value metadata (e.g. width, height, duration).
     embedding:
         Optional vector embedding representation.
+
     """
 
     modality: Modality
@@ -76,6 +77,7 @@ class MultiModalData:
         ------
         ValueError
             If the content is binary and cannot be trivially decoded.
+
         """
         if isinstance(self.content, str):
             return self.content
@@ -100,6 +102,7 @@ class MultiModalInputs:
         The list of :class:`MultiModalData` items.
     context:
         Optional free-form context string prepended to the prompt.
+
     """
 
     items: list[MultiModalData] = field(default_factory=list)

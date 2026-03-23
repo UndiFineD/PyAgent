@@ -42,6 +42,7 @@ class ContextSegment:
         Unix timestamp when the segment was created (default: current time).
     metadata:
         Arbitrary key/value metadata (e.g. turn id, source agent).
+
     """
 
     text: str
@@ -78,6 +79,7 @@ class ContextWindow:
     ----------
     max_tokens:
         Maximum total (whitespace) token count across all segments.
+
     """
 
     def __init__(self, max_tokens: int) -> None:
@@ -130,6 +132,7 @@ class ContextWindow:
         -------
         ContextSegment
             The created segment.
+
         """
         seg = ContextSegment(
             text=text,

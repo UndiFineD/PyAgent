@@ -65,6 +65,7 @@ class AgentManifest:
         (e.g. ``["code_generation", "code_review"]``).
     agent_id:
         Unique identifier assigned at instantiation.
+
     """
 
     name: str
@@ -84,6 +85,7 @@ class BaseAgent(ABC):
         from the subclass name.
     max_concurrency:
         Maximum number of tasks this agent will process in parallel.
+
     """
 
     def __init__(
@@ -127,6 +129,7 @@ class BaseAgent(ABC):
         ------
         RuntimeError
             If the agent is not in the IDLE state.
+
         """
         if self._state is not AgentLifecycle.IDLE:
             raise RuntimeError(
@@ -149,6 +152,7 @@ class BaseAgent(ABC):
         ------
         RuntimeError
             If the agent is still RUNNING.
+
         """
         if self._state is AgentLifecycle.RUNNING:
             raise RuntimeError("Cannot reset a running agent; call stop() first")
@@ -172,6 +176,7 @@ class BaseAgent(ABC):
         -------
         dict[str, Any]
             Result dictionary.  At minimum should include ``"ok": True|False``.
+
         """
 
     # ------------------------------------------------------------------
@@ -188,6 +193,7 @@ class BaseAgent(ABC):
         ------
         RuntimeError
             If the agent is not in the RUNNING state.
+
         """
         if self._state is not AgentLifecycle.RUNNING:
             raise RuntimeError(

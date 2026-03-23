@@ -57,6 +57,7 @@ class AgentConfig:
         Arbitrary string tags for filtering / routing.
     extra:
         Freeform extra settings not captured by the typed fields.
+
     """
 
     name: str
@@ -120,6 +121,7 @@ class SwarmConfig:
         Root log level (``DEBUG``, ``INFO``, ``WARNING``, ``ERROR``).
     agents:
         Per-agent configurations indexed by agent name.
+
     """
 
     swarm_id: str = "default-swarm"
@@ -196,6 +198,7 @@ def load_config(path: str | os.PathLike[str]) -> SwarmConfig:
         If the file does not exist.
     ValueError:
         If the JSON cannot be parsed or config validation fails.
+
     """
     p = Path(path)
     if not p.exists():
@@ -218,6 +221,7 @@ def save_config(config: SwarmConfig, path: str | os.PathLike[str]) -> None:
         The :class:`SwarmConfig` to persist.
     path:
         Destination file path.
+
     """
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
