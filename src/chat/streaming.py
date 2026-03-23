@@ -26,7 +26,6 @@ import json
 from collections.abc import AsyncGenerator, AsyncIterator
 from typing import Any
 
-
 # ---------------------------------------------------------------------------
 # Token streaming helpers
 # ---------------------------------------------------------------------------
@@ -44,6 +43,7 @@ async def word_chunks(text: str, delay: float = 0.0) -> AsyncGenerator[str, None
         Full text to stream word-by-word.
     delay:
         Seconds to ``asyncio.sleep`` between each word (0 = no delay).
+
     """
     words = text.split()
     for i, word in enumerate(words):
@@ -77,6 +77,7 @@ def _sse_event(data: str, event: str | None = None, id: str | None = None) -> st
         Optional ``event:`` field name.
     id:
         Optional ``id:`` field value for reconnection.
+
     """
     lines: list[str] = []
     if id is not None:
@@ -108,6 +109,7 @@ async def stream_to_sse(
         SSE event name for each chunk (default ``"token"``).
     done_event:
         SSE event name for the final sentinel (default ``"done"``).
+
     """
     idx = 0
     async for chunk in stream:
@@ -132,6 +134,7 @@ class StreamingChatSession:
     ----------
     room_name:
         Identifier for the chat room this session belongs to.
+
     """
 
     def __init__(self, room_name: str) -> None:
@@ -164,6 +167,7 @@ class StreamingChatSession:
         ----------
         source:
             Async iterator of text chunks (e.g. from an LLM adapter).
+
         """
         self._chunks = []
         self._finished = False

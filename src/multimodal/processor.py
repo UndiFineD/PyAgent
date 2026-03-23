@@ -76,6 +76,7 @@ class MultiModalProcessor:
     processors:
         Optional mapping from :class:`Modality` to a custom processor.  Overrides
         defaults for any modality provided.
+
     """
 
     _DEFAULT_PROCESSORS: dict[Modality, ModalityProcessor] = {

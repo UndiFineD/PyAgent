@@ -102,6 +102,7 @@ async def probe_models(
     Returns:
         :class:`FlmModelProbeResult` describing the outcome.  The *error* field
         is set when the endpoint is unreachable or returns a non-200 status.
+
     """
     url = urljoin(base_url.rstrip("/") + "/", models_path.lstrip("/"))
     start = time.monotonic()
