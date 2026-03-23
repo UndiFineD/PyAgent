@@ -37,11 +37,14 @@ No failures. All 44 structural tests pass. Security review: APPROVED.
 
 ## Commits
 
-<!-- fill in by @9git -->
+- `1d0ebc424` — prj0000051: comprehensive README rewrite
+- `640e1d277` — prj0000051: add NebulaOS screenshot to README
 
 ## PR
 
-<!-- fill in by @9git -->
+PR #189 — `prj0000051: comprehensive README.md rewrite`  
+**Status:** MERGED → `main` (`b34eea378`)  
+URL: https://github.com/UndiFineD/PyAgent/pull/189
 
 ## Lessons Learned
 
