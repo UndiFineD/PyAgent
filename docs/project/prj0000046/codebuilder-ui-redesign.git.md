@@ -9,6 +9,13 @@ _Updated: 2026-03-23_
 **Project match:** ✅ YES
 **Branched from:** `main`
 
+## Branch Validation
+| Check | Result | Notes |
+|---|---|---|
+| Expected branch recorded in project overview | PASS | `prj0000046-codebuilder-ui-redesign` |
+| Observed branch matches project | PASS | confirmed via `git branch --show-current` |
+| No inherited branch from another `prjNNN` | PASS | none |
+
 ## Scope Validation
 
 Files staged and committed — all within project boundary:
@@ -47,6 +54,9 @@ If branch mismatch is detected:
 2. Record `BLOCKED` in `docs/agents/0master.memory.md`.
 3. Run `git checkout prj0000046-codebuilder-ui-redesign` to restore the correct context.
 4. Re-validate `git branch --show-current` before proceeding.
+
+## Lessons Learned
+No incidents; branch validation passed on first check.
 
 ## Lessons Learned
 
