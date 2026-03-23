@@ -1,6 +1,20 @@
 # PyAgent — Master Agent Memory
 
-_Last updated: 2026-03-22_
+_Last updated: 2026-03-23_
+
+---
+
+## 2026-03-23 — prj0000046 CodeBuilder UI Redesign
+
+**Branch:** `prj0000046-codebuilder-ui-redesign`
+**PR:** [#184](https://github.com/UndiFineD/PyAgent/pull/184) — open, awaiting review
+**Status:** COMPLETE — pushed, PR open
+
+**Changes:** Full rewrite of `web/apps/CodeBuilder.tsx` (10-agent pipeline, per-agent LLM selector, Logs tab, Agent Doc tab with Markdown renderer and edit/preview toggle, docs loaded from real `.github/agents/*.agent.md`). Vite plugin for agent doc serving. Backend `GET/PUT /api/agent-doc/{id}` endpoints. `start.ps1` port-free helpers. `.gitignore` addition.
+
+**Notes:** prj0000043 and prj0000044 are absent from the project inventory — gap was pre-existing, not caused by this session.
+
+---
 
 ---
 
