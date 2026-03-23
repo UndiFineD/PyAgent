@@ -16,11 +16,11 @@ _Planner: @4plan | Updated: 2026-03-22_
 | 7 | Write 9 doc artifacts | `docs/project/prj0000015/` | ✅ |
 
 ## Acceptance Criteria
-- [ ] `load_config("x.toml")` returns parsed dict on Python 3.11+; raises `RuntimeError` on older
-- [ ] `ensure_dir(path)` creates nested dirs and returns `Path`
-- [ ] `retry` with `delay=0.0` retries exactly N times then raises
-- [ ] `format_table` renders aligned columns
-- [ ] All 10 tests pass: `pytest tests/tools/test_implementation_helpers.py`
+- [x] `load_config("x.toml")` returns parsed dict on Python 3.11+; raises `RuntimeError` on older
+- [x] `ensure_dir(path)` creates nested dirs and returns `Path`
+- [x] `retry` with `delay=0.0` retries exactly N times then raises
+- [x] `format_table` renders aligned columns
+- [x] All 10 tests pass: `pytest tests/tools/test_implementation_helpers.py`
 
 ## Validation Command
 ```powershell
