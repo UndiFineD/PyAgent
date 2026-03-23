@@ -6,9 +6,12 @@ import { Editor } from './apps/Editor';
 import { Paint } from './apps/Paint';
 import { Conky } from './apps/Conky';
 import { CodeBuilder } from './apps/CodeBuilder';
-import { WindowState, AppId, Theme } from './types';
+import { WindowState, AppId, Theme, OsConfig, DEFAULT_OS_CONFIG } from './types';
 import { generateId, cn } from './utils';
-import { Menu, Monitor, Terminal, Palette, Calculator as CalcIcon, LogOut, Moon, Sun, MonitorPlay, Bot } from 'lucide-react';
+import {
+  Menu, Monitor, Terminal, Palette, Calculator as CalcIcon,
+  LogOut, Moon, Sun, MonitorPlay, Bot, Settings, X
+} from 'lucide-react';
 
 const INITIAL_WINDOWS: WindowState[] = [
   {
@@ -27,6 +30,33 @@ const INITIAL_WINDOWS: WindowState[] = [
   }
 ];
 
+function loadOsConfig(): OsConfig {
+  try {
+    const raw = localStorage.getItem('nebula-os-config');
+    if (!raw) return DEFAULT_OS_CONFIG;
+    const parsed: unknown = JSON.parse(raw);
+    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+      return DEFAULT_OS_CONFIG;
+    }
+    const data = parsed as Record<string, unknown>;
+    return {
+      taskbarAlwaysVisible: typeof data.taskbarAlwaysVisible === 'boolean'
+        ? data.taskbarAlwaysVisible
+        : DEFAULT_OS_CONFIG.taskbarAlwaysVisible,
+    };
+  } catch {
+    return DEFAULT_OS_CONFIG;
+  }
+}
+
+function saveOsConfig(cfg: OsConfig): void {
+  try {
+    localStorage.setItem('nebula-os-config', JSON.stringify(cfg));
+  } catch {
+    // QuotaExceededError or SecurityError — best-effort persistence
+  }
+}
+
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [windows, setWindows] = useState<WindowState[]>([]);
@@ -38,6 +68,8 @@ export default function App() {
   // Taskbar Auto-hide State
   const [isTaskbarVisible, setIsTaskbarVisible] = useState(true);
   const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [osConfig, setOsConfig] = useState<OsConfig>(loadOsConfig);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   // Clock
   useEffect(() => {
@@ -57,6 +89,7 @@ export default function App() {
   };
 
   const hideTaskbar = () => {
+    if (osConfig.taskbarAlwaysVisible) return; // Don't hide if pinned
     if (menuOpen) return; // Don't hide if menu is open
     hideTimeoutRef.current = setTimeout(() => {
       setIsTaskbarVisible(false);
@@ -71,6 +104,19 @@ export default function App() {
       hideTaskbar();
     }
   }, [menuOpen]);
+
+  // Persist OS config to localStorage on every change
+  useEffect(() => {
+    saveOsConfig(osConfig);
+  }, [osConfig]);
+
+  // Escape key closes settings modal
+  useEffect(() => {
+    if (!settingsOpen) return;
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setSettingsOpen(false); };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [settingsOpen]);
 
   const openApp = (appId: AppId) => {
     const id = generateId();
@@ -261,6 +307,15 @@ export default function App() {
                     </div>
 
                     <div className="h-px bg-os-border my-2" />
+
+                    <button
+                      onClick={() => { setMenuOpen(false); setSettingsOpen(true); }}
+                      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-os-bg text-left text-sm transition-colors"
+                    >
+                      <Settings size={16} className="text-os-text/70" /> Settings
+                    </button>
+
+                    <div className="h-px bg-os-border my-2" />
                     
                     <button onClick={() => setIsLoggedIn(false)} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-500/10 hover:text-red-500 text-left text-sm transition-colors">
                       <LogOut size={16} /> Logout
@@ -272,6 +327,52 @@ export default function App() {
           </div>
         </div>
       </div>
+
+      {/* Settings Modal */}
+      {settingsOpen && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm"
+          onClick={() => setSettingsOpen(false)}
+        >
+          <div
+            className="rounded-xl shadow-2xl bg-gray-900/95 border border-white/10 p-6 w-80 min-w-[280px]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-sm font-semibold text-white">Settings</h2>
+              <button
+                onClick={() => setSettingsOpen(false)}
+                className="text-gray-400 hover:text-white transition-colors"
+                aria-label="Close settings"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* Taskbar */}
+            <div className="mb-4">
+              <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-3">Taskbar</h3>
+              <label className="flex items-center justify-between cursor-pointer">
+                <span className="text-sm text-gray-200">Always show taskbar</span>
+                <button
+                  role="switch"
+                  aria-checked={osConfig.taskbarAlwaysVisible}
+                  onClick={() => setOsConfig(prev => ({ ...prev, taskbarAlwaysVisible: !prev.taskbarAlwaysVisible }))}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
+                    osConfig.taskbarAlwaysVisible ? 'bg-blue-500' : 'bg-gray-600'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      osConfig.taskbarAlwaysVisible ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+              </label>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Desktop Area */}
       <div className="absolute inset-0 z-0 overflow-hidden" onClick={() => setActiveWindowId(null)}>

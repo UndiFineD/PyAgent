@@ -27,3 +27,11 @@ export interface User {
   email: string;
   avatar: string;
 }
+
+export interface OsConfig {
+  taskbarAlwaysVisible: boolean;
+}
+
+export const DEFAULT_OS_CONFIG: OsConfig = {
+  taskbarAlwaysVisible: false,
+};
