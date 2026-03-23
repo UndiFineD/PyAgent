@@ -111,6 +111,44 @@ function Remove-PidFile {
 }
 
 # ---------------------------------------------------------------------------
+# Port helpers
+# ---------------------------------------------------------------------------
+function Get-PortPid {
+    param([int]$Port)
+    $row = netstat -ano |
+        Select-String "^\s+TCP\s+[0-9.*]+:$Port\s+[0-9.*]+:\S+\s+LISTENING\s+(\d+)" |
+        Select-Object -First 1
+    if ($row -and $row.Matches[0].Groups[1].Success) {
+        return [int]$row.Matches[0].Groups[1].Value
+    }
+    return $null
+}
+
+function Assert-PortFree {
+    param(
+        [int]$Port,
+        [string]$ServiceName
+    )
+    $occupant = Get-PortPid -Port $Port
+    if ($null -eq $occupant) { return }   # port is free — nothing to do
+
+    $proc = Get-Process -Id $occupant -ErrorAction SilentlyContinue
+    $procName = if ($proc) { $proc.ProcessName } else { "unknown" }
+
+    Write-Host "[pyagent] Port $Port is held by '$procName' (PID $occupant)." -ForegroundColor Yellow
+    Write-Host "[pyagent] Killing stale $ServiceName process (PID $occupant) ..." -ForegroundColor Yellow
+    try {
+        Stop-Process -Id $occupant -Force -ErrorAction Stop
+        Start-Sleep -Milliseconds 400   # give the OS a moment to release the socket
+        Write-Host "[pyagent] Port $Port is now free." -ForegroundColor Green
+    } catch {
+        Write-Host "[pyagent] ERROR: Could not kill PID $occupant — $_ " -ForegroundColor Red
+        Write-Host "[pyagent] Free port $Port manually, then re-run start.ps1." -ForegroundColor Red
+        exit 1
+    }
+}
+
+# ---------------------------------------------------------------------------
 # Window launcher
 # ---------------------------------------------------------------------------
 function Start-DevWindow {
@@ -214,6 +252,7 @@ function Invoke-Start {
     # 1. Standalone Rust runtime binary (optional)
     $RuntimeExe = Join-Path $Root "rust_core\runtime\target\release\runtime.exe"
     if (Test-Path $RuntimeExe) {
+        Assert-PortFree -Port ([int]$RuntimePort) -ServiceName "runtime"
         Write-Host "[pyagent] Found Rust runtime binary, starting on port $RuntimePort ..." -ForegroundColor Cyan
         $proc = Start-DevWindow -Title "runtime (port $RuntimePort)" -EnvBlock $EnvBlock `
             -Cmd "& '$RuntimeExe' --port $RuntimePort --host $Host_"
@@ -229,6 +268,7 @@ function Invoke-Start {
         Write-Host "[pyagent] Run: python -m venv .venv && .venv\Scripts\pip install -r requirements.txt" -ForegroundColor Yellow
         exit 1
     }
+    Assert-PortFree -Port ([int]$BackendPort) -ServiceName "backend"
     $proc = Start-DevWindow -Title "backend (port $BackendPort)" -EnvBlock $EnvBlock `
         -Cmd "& '$VenvPython' -m backend"
     $TrackedPids["backend"] = $proc.Id
@@ -244,6 +284,7 @@ function Invoke-Start {
                 Write-Host "[pyagent] node_modules missing — running npm install ..." -ForegroundColor Yellow
                 Push-Location $WebDir; npm install; Pop-Location
             }
+            Assert-PortFree -Port ([int]$VitePort) -ServiceName "vite"
             $proc = Start-DevWindow -Title "vite (port $VitePort)" -EnvBlock $EnvBlock `
                 -Cmd "npm run dev -- --port $VitePort --host $Host_" -Cwd $WebDir
             $TrackedPids["vite"] = $proc.Id

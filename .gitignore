@@ -1,3 +1,6 @@
+# Runtime state
+.pyagent.pids
+
 # Virtual Environment
 .venv/
 .ollama/
