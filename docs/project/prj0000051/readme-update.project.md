@@ -7,7 +7,7 @@
 **Project folder:** `docs/project/prj0000051/`  
 **Branch:** `prj0000051-readme-update`  
 **Date:** 2026-03-23  
-**Status:** In Progress  
+**Status:** MERGED — PR #189 merged to `main` (`b34eea378`)  
 
 ## Project Overview
 
