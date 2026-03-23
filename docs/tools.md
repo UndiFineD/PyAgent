@@ -72,3 +72,35 @@ The tool will automatically be discoverable by the shared CLI.
 - Add a copyright header to every new module.
 - Register via `tool_registry.register_tool()` — do not bypass the registry.
 
+---
+
+## Python Function Coverage Test (`tests/test_python_function_coverage.py`)
+
+**Purpose:** A lightweight, opportunistic test that walks `src/` and dynamically
+calls as many Python functions as possible to surface runtime errors (missing imports,
+bad defaults, immediate exceptions) without requiring specific correctness checks.
+
+**How it works:**
+1. Walks every `.py` module under `src/` (skipping test helpers and private helpers).
+2. Dynamically imports each module and discovers top-level callables.
+3. Attempts to call each function with simple default/dummy arguments.
+4. Passes as long as at least one function executes without error. Fails only if
+   *every* attempted call raises immediately — an escape hatch against false positives.
+
+**CI behaviour:**
+- Limited call count to keep total run time under a few seconds.
+- Functions that require heavyweight setup (external services, DB connections) are
+  automatically skipped when they raise on import or on first call.
+- The test carries the `@pytest.mark.slow` marker if you want to exclude it from
+  quick smoke runs.
+
+**When to adapt it:**
+- Add new exclusion patterns in the `EXCLUDED_MODULES` list at the top of the file
+  if a module causes unrecoverable side effects on import.
+- Increase `MAX_CALLS` if coverage reports show large gaps that could be closed with
+  more opportunistic calls.
+- Add per-function argument factories in `_make_args()` for functions that accept
+  domain-specific types.
+
+**Related project:** `docs/project/prj0000038/` — Python Function Coverage Test
+
