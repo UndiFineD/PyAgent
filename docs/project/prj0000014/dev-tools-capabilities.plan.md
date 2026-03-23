@@ -14,11 +14,11 @@ _Planner: @4plan | Updated: 2026-03-22_
 | 5 | Write 9 doc artifacts | @0master | `docs/project/prj0000014/*.md` |
 
 ## Acceptance Criteria
-- [ ] `remote.py` uses no `shell=True` — `subprocess.run` arg is always a `list`
-- [ ] `ssl_utils.check_expiry("google.com")` returns a dict with `days_remaining`
-- [ ] `git_utils.create_feature_branch("my-feat")` creates a branch or returns `False` if checked out
-- [ ] `pytest tests/tools/test_capabilities_modules.py` passes
-- [ ] All 9 doc artifacts present in `docs/project/prj0000014/`
+- [x] `remote.py` uses no `shell=True` — `subprocess.run` arg is always a `list`
+- [x] `ssl_utils.check_expiry("google.com")` returns a dict with `days_remaining`
+- [x] `git_utils.create_feature_branch("my-feat")` creates a branch or returns `False` if checked out
+- [x] `pytest tests/tools/test_capabilities_modules.py` passes
+- [x] All 9 doc artifacts present in `docs/project/prj0000014/`
 
 ## Validation Commands
 ```powershell
