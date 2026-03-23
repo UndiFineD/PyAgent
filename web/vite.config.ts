@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -31,7 +32,51 @@ export default defineConfig(({ mode }) => {
           },
         },
       },
-      plugins: [react()],
+      plugins: [
+        react(),
+        // ── Serve .github/agents/*.agent.md directly so the Doc tab works
+        // ── even when the FastAPI backend (port 444) is not running.
+        {
+          name: 'vite-agent-docs',
+          configureServer(server) {
+            const VALID = new Set(['0master','1project','2think','3design','4plan','5test','6code','7exec','8ql','9git']);
+            const agentsDir = path.resolve(__dirname, '../.github/agents');
+
+            server.middlewares.use('/api/agent-doc', (req, res, next) => {
+              const agentId = (req.url ?? '').replace(/^\//, '').split('?')[0];
+              if (!VALID.has(agentId)) { next(); return; }
+              const file = path.join(agentsDir, `${agentId}.agent.md`);
+
+              if (req.method === 'GET') {
+                res.setHeader('Content-Type', 'application/json');
+                const content = fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : '';
+                res.end(JSON.stringify({ content }));
+                return;
+              }
+
+              if (req.method === 'PUT') {
+                let body = '';
+                req.on('data', (chunk: Buffer) => { body += chunk.toString(); });
+                req.on('end', () => {
+                  try {
+                    const { content } = JSON.parse(body) as { content: string };
+                    fs.mkdirSync(agentsDir, { recursive: true });
+                    fs.writeFileSync(file, content, 'utf-8');
+                    res.setHeader('Content-Type', 'application/json');
+                    res.end(JSON.stringify({ status: 'ok' }));
+                  } catch {
+                    res.statusCode = 400;
+                    res.end(JSON.stringify({ error: 'Invalid body' }));
+                  }
+                });
+                return;
+              }
+
+              next();
+            });
+          },
+        },
+      ],
       resolve: {
         alias: {
           '@': path.resolve(__dirname, '.'),

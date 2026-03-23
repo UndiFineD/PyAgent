@@ -16,14 +16,34 @@ from __future__ import annotations
 
 import json
 import logging
+from pathlib import Path
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 from .session_manager import SessionManager
 from .ws_handler import handle_message
 
 logger = logging.getLogger(__name__)
+
+# Project root is two levels up from this file (backend/app.py → backend/ → project root)
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+_LOGS_DIR    = _PROJECT_ROOT / "docs" / "agents"
+_AGENTS_DIR  = _PROJECT_ROOT / ".github" / "agents"
+
+# Allowlist of valid agent IDs — prevents any path-traversal attack
+_VALID_AGENT_IDS = frozenset({
+    "0master", "1project", "2think", "3design", "4plan",
+    "5test", "6code", "7exec", "8ql", "9git",
+})
+
+
+def _log_path(agent_id: str) -> Path:
+    if agent_id not in _VALID_AGENT_IDS:
+        raise HTTPException(status_code=400, detail=f"Unknown agent_id: {agent_id!r}")
+    return _LOGS_DIR / f"{agent_id}.log.md"
+
 
 app = FastAPI(title="PyAgent Backend Worker", version="0.1.0")
 
@@ -42,6 +62,64 @@ sessions = SessionManager()
 async def health() -> dict[str, str]:
     """Health check endpoint."""
     return {"status": "ok"}
+
+
+# ── Agent log file endpoints ─────────────────────────────────────────────────
+
+class AgentLogBody(BaseModel):
+    """Request body for the agent-log write endpoint."""
+
+    content: str
+
+
+@app.get("/api/agent-log/{agent_id}")
+async def read_agent_log(agent_id: str) -> dict[str, str]:
+    """Return the current contents of docs/agents/<agent_id>.log.md."""
+    path = _log_path(agent_id)
+    if not path.exists():
+        return {"content": ""}
+    return {"content": path.read_text(encoding="utf-8")}
+
+
+@app.put("/api/agent-log/{agent_id}")
+async def write_agent_log(agent_id: str, body: AgentLogBody) -> dict[str, str]:
+    """Overwrite docs/agents/<agent_id>.log.md with the supplied content."""
+    path = _log_path(agent_id)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(body.content, encoding="utf-8")
+    logger.debug("Saved agent log: %s (%d bytes)", path.name, len(body.content))
+    return {"status": "ok", "path": str(path.relative_to(_PROJECT_ROOT))}
+
+
+# ── Agent definition file endpoints ──────────────────────────────────────────
+
+class AgentDocBody(BaseModel):
+    """Request body for the agent-doc write endpoint."""
+
+    content: str
+
+
+@app.get("/api/agent-doc/{agent_id}")
+async def read_agent_doc(agent_id: str) -> dict[str, str]:
+    """Return the contents of .github/agents/<agent_id>.agent.md."""
+    if agent_id not in _VALID_AGENT_IDS:
+        raise HTTPException(status_code=400, detail=f"Unknown agent_id: {agent_id!r}")
+    path = _AGENTS_DIR / f"{agent_id}.agent.md"
+    if not path.exists():
+        return {"content": ""}
+    return {"content": path.read_text(encoding="utf-8")}
+
+
+@app.put("/api/agent-doc/{agent_id}")
+async def write_agent_doc(agent_id: str, body: AgentDocBody) -> dict[str, str]:
+    """Overwrite .github/agents/<agent_id>.agent.md with the supplied content."""
+    if agent_id not in _VALID_AGENT_IDS:
+        raise HTTPException(status_code=400, detail=f"Unknown agent_id: {agent_id!r}")
+    path = _AGENTS_DIR / f"{agent_id}.agent.md"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(body.content, encoding="utf-8")
+    logger.debug("Saved agent doc: %s (%d bytes)", path.name, len(body.content))
+    return {"status": "ok", "path": str(path.relative_to(_PROJECT_ROOT))}
 
 
 @app.websocket("/ws")
