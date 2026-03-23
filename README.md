@@ -95,6 +95,8 @@ and can be pinned or auto-hidden via the NebulaOS Settings modal.
 Real-time system metrics are streamed from the FastAPI backend into Conky via the
 `/api/metrics/system` endpoint, powered by `psutil`.
 
+![NebulaOS Desktop](docs/assets/nebulaos-screenshot.png)
+
 | App | Description |
 |---|---|
 | **CodeBuilder** | 10-agent autonomous IDE with a per-agent LLM provider selector |
