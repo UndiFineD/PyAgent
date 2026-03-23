@@ -16,8 +16,10 @@ from __future__ import annotations
 
 import json
 import logging
+import time
 from pathlib import Path
 
+import psutil
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -27,10 +29,25 @@ from .ws_handler import handle_message
 
 logger = logging.getLogger(__name__)
 
+# ── System-metrics differential state ───────────────────────────────────────
+_prev_net: dict = {}
+_prev_net_ts: float = 0.0
+_prev_disk: tuple = (0, 0)
+_prev_disk_ts: float = 0.0
+
+_FILTERED_PREFIXES = ("lo", "loopback", "docker", "veth", "br-", "virbr", "vmnet", "vbox")
+
+
+def _filter_iface(name: str) -> bool:
+    """Return True if the interface should be INCLUDED (not filtered)."""
+    lower = name.lower()
+    return not any(lower.startswith(p) for p in _FILTERED_PREFIXES)
+
+
 # Project root is two levels up from this file (backend/app.py → backend/ → project root)
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
-_LOGS_DIR    = _PROJECT_ROOT / "docs" / "agents"
-_AGENTS_DIR  = _PROJECT_ROOT / ".github" / "agents"
+_LOGS_DIR = _PROJECT_ROOT / "docs" / "agents"
+_AGENTS_DIR = _PROJECT_ROOT / ".github" / "agents"
 
 # Allowlist of valid agent IDs — prevents any path-traversal attack
 _VALID_AGENT_IDS = frozenset({
@@ -62,6 +79,93 @@ sessions = SessionManager()
 async def health() -> dict[str, str]:
     """Health check endpoint."""
     return {"status": "ok"}
+
+
+# ── System-metrics models ────────────────────────────────────────────────────
+
+class NetworkInterface(BaseModel):
+    """Per-NIC network throughput in KB/s."""
+
+    interface: str
+    tx_kbps: float
+    rx_kbps: float
+
+
+class MemoryMetrics(BaseModel):
+    """System memory usage snapshot."""
+
+    used_mb: float
+    total_mb: float
+    percent: float
+
+
+class DiskMetrics(BaseModel):
+    """Aggregate disk I/O throughput in KB/s."""
+
+    read_kbps: float
+    write_kbps: float
+
+
+class SystemMetricsResponse(BaseModel):
+    """Full system metrics payload returned by GET /api/metrics/system."""
+
+    cpu_percent: float
+    memory: MemoryMetrics
+    network: list[NetworkInterface]
+    disk: DiskMetrics
+    sampled_at: float
+
+
+@app.get("/api/metrics/system", response_model=SystemMetricsResponse)
+async def get_system_metrics() -> SystemMetricsResponse:
+    """Return real-time CPU, memory, network IO, and disk IO metrics."""
+    global _prev_net, _prev_net_ts, _prev_disk, _prev_disk_ts
+
+    now = time.monotonic()
+    cpu = psutil.cpu_percent(interval=None)
+    vm = psutil.virtual_memory()
+    net_raw = psutil.net_io_counters(pernic=True)
+    disk_raw = psutil.disk_io_counters()
+
+    # Network delta KB/s
+    dt_net = now - _prev_net_ts if _prev_net_ts else 0.0
+    network_entries = []
+    for iface, counters in net_raw.items():
+        if not _filter_iface(iface):
+            continue
+        if dt_net > 0 and iface in _prev_net:
+            prev = _prev_net[iface]
+            tx_kbps = max(0.0, (counters.bytes_sent - prev.bytes_sent) / dt_net / 1024)
+            rx_kbps = max(0.0, (counters.bytes_recv - prev.bytes_recv) / dt_net / 1024)
+        else:
+            tx_kbps, rx_kbps = 0.0, 0.0
+        network_entries.append(
+            NetworkInterface(interface=iface, tx_kbps=round(tx_kbps, 2), rx_kbps=round(rx_kbps, 2))
+        )
+    _prev_net = net_raw
+    _prev_net_ts = now
+
+    # Disk delta KB/s
+    dt_disk = now - _prev_disk_ts if _prev_disk_ts else 0.0
+    if dt_disk > 0 and disk_raw:
+        read_kbps = max(0.0, (disk_raw.read_bytes - _prev_disk[0]) / dt_disk / 1024)
+        write_kbps = max(0.0, (disk_raw.write_bytes - _prev_disk[1]) / dt_disk / 1024)
+    else:
+        read_kbps, write_kbps = 0.0, 0.0
+    _prev_disk = (disk_raw.read_bytes if disk_raw else 0, disk_raw.write_bytes if disk_raw else 0)
+    _prev_disk_ts = now
+
+    return SystemMetricsResponse(
+        cpu_percent=round(cpu, 1),
+        memory=MemoryMetrics(
+            used_mb=round(vm.used / 1024 / 1024, 1),
+            total_mb=round(vm.total / 1024 / 1024, 1),
+            percent=round(vm.percent, 1),
+        ),
+        network=network_entries,
+        disk=DiskMetrics(read_kbps=round(read_kbps, 2), write_kbps=round(write_kbps, 2)),
+        sampled_at=time.time(),
+    )
 
 
 # ── Agent log file endpoints ─────────────────────────────────────────────────
