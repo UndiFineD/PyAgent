@@ -34,10 +34,10 @@ from rust_core import (  # noqa: E402
 
 def test_utm_transport_port_constants():
     """UTM transport port constants should match expected values."""
-    assert UTM_DEFAULT_PORT == 4031
-    assert UTM_CONTROL_PORT == 4032
-    assert TX_SEND_PORT == 54001
-    assert TX_RECV_PORT == 54002
+    assert UTM_DEFAULT_PORT == 4010   # UTM_SYNC_PORT in .env
+    assert UTM_CONTROL_PORT == 4011
+    assert TX_SEND_PORT == 4001       # UTM_SEND_PORT in .env
+    assert TX_RECV_PORT == 4002       # UTM_RECV_PORT in .env
 
 
 def test_utm_transport_policy_constants():

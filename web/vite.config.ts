@@ -17,14 +17,16 @@ export default defineConfig(({ mode }) => {
         'process.env.API_KEY' : JSON.stringify('api-key-this-is-not-used-can-be-ignored!'),
       },
       server: {
+        host: env.HOST || '0.0.0.0',
+        port: parseInt(env.VITE_PORT || '44'),
         proxy: {
           '/ws': {
-            target: `http://${env.BACKEND_HOST || '127.0.0.1'}:${env.BACKEND_PORT || '8000'}`,
+            target: `http://${env.HOST || '0.0.0.0'}:${env.BACKEND_PORT || '444'}`,
             ws: true,
             changeOrigin: true,
           },
           '/api': {
-            target: `http://${env.BACKEND_HOST || '127.0.0.1'}:${env.BACKEND_PORT || '8000'}`,
+            target: `http://${env.HOST || '0.0.0.0'}:${env.BACKEND_PORT || '444'}`,
             changeOrigin: true,
           },
         },
