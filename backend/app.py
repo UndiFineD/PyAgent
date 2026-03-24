@@ -49,6 +49,24 @@ _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 _LOGS_DIR = _PROJECT_ROOT / "docs" / "agents"
 _AGENTS_DIR = _PROJECT_ROOT / ".github" / "agents"
 
+# ── Project data ─────────────────────────────────────────────────────────────
+_PROJECTS_FILE = _PROJECT_ROOT / "data" / "projects.json"
+
+
+def _load_projects() -> list[dict]:
+    """Load data/projects.json at module startup. Returns [] on missing/corrupt file."""
+    if not _PROJECTS_FILE.exists():
+        logger.warning("data/projects.json not found at %s", _PROJECTS_FILE)
+        return []
+    try:
+        return json.loads(_PROJECTS_FILE.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError) as exc:
+        logger.warning("Failed to load data/projects.json: %s", exc)
+        return []
+
+
+_PROJECTS: list[dict] = _load_projects()
+
 # Allowlist of valid agent IDs — prevents any path-traversal attack
 _VALID_AGENT_IDS = frozenset({
     "0master", "1project", "2think", "3design", "4plan",
@@ -224,6 +242,109 @@ async def write_agent_doc(agent_id: str, body: AgentDocBody) -> dict[str, str]:
     path.write_text(body.content, encoding="utf-8")
     logger.debug("Saved agent doc: %s (%d bytes)", path.name, len(body.content))
     return {"status": "ok", "path": str(path.relative_to(_PROJECT_ROOT))}
+
+
+# ── Project models + endpoint ─────────────────────────────────────────────────
+
+from typing import Literal, Optional as _Opt  # noqa: E402
+
+_LaneLit = Literal["Ideas", "Discovery", "Design", "In Sprint", "Review", "Released", "Archived"]
+_PriorityLit = Literal["P1", "P2", "P3", "P4"]
+_BudgetLit = Literal["XS", "S", "M", "L", "XL", "unknown"]
+
+
+class ProjectModel(BaseModel):
+    """Single project entry from data/projects.json."""
+
+    id: str
+    name: str
+    lane: _LaneLit
+    summary: str
+    branch: _Opt[str] = None
+    pr: _Opt[int] = None
+    priority: _PriorityLit = "P3"
+    budget_tier: _BudgetLit = "M"
+    tags: list[str] = []
+    created: _Opt[str] = None
+    updated: _Opt[str] = None
+
+
+import re as _re  # noqa: E402
+
+_PROJECT_ID_RE = _re.compile(r"^prj\d{7}$")
+
+
+def _projects_valid() -> list[ProjectModel]:
+    """Build validated list from the in-memory _PROJECTS list."""
+    valid: list[ProjectModel] = []
+    for entry in _PROJECTS:
+        try:
+            valid.append(ProjectModel(**entry))
+        except Exception as exc:  # pydantic ValidationError
+            logger.warning("Skipping malformed project entry %s: %s", entry.get("id"), exc)
+    return valid
+
+
+def _save_projects() -> None:
+    """Persist _PROJECTS to disk atomically."""
+    tmp = _PROJECTS_FILE.with_suffix(".tmp")
+    tmp.write_text(json.dumps(_PROJECTS, indent=2, ensure_ascii=False), encoding="utf-8")
+    tmp.replace(_PROJECTS_FILE)
+
+
+@app.get("/api/projects", response_model=list[ProjectModel])
+async def get_projects(lane: _Opt[str] = None) -> list[ProjectModel]:
+    """Return all projects from data/projects.json, optionally filtered by lane."""
+    if not _PROJECTS and not _PROJECTS_FILE.exists():
+        raise HTTPException(status_code=500, detail="data/projects.json not found")
+    valid = _projects_valid()
+    if lane:
+        return [p for p in valid if p.lane == lane]
+    return valid
+
+
+class ProjectPatch(BaseModel):
+    """Fields that may be patched on an existing project."""
+
+    name: _Opt[str] = None
+    lane: _Opt[_LaneLit] = None
+    summary: _Opt[str] = None
+    branch: _Opt[str] = None
+    pr: _Opt[int] = None
+    priority: _Opt[_PriorityLit] = None
+    budget_tier: _Opt[_BudgetLit] = None
+    tags: _Opt[list[str]] = None
+    updated: _Opt[str] = None
+
+
+@app.patch("/api/projects/{project_id}", response_model=ProjectModel)
+async def patch_project(project_id: str, patch: ProjectPatch) -> ProjectModel:
+    """Update one or more fields on an existing project and persist to disk."""
+    if not _PROJECT_ID_RE.match(project_id):
+        raise HTTPException(status_code=400, detail="Invalid project_id format")
+    for i, entry in enumerate(_PROJECTS):
+        if entry.get("id") == project_id:
+            updates = {k: v for k, v in patch.model_dump().items() if v is not None}
+            _PROJECTS[i] = {**entry, **updates}
+            _save_projects()
+            return ProjectModel(**_PROJECTS[i])
+    raise HTTPException(status_code=404, detail=f"Project {project_id!r} not found")
+
+
+class ProjectCreate(ProjectModel):
+    """Full project payload required to create a new entry."""
+
+
+@app.post("/api/projects", response_model=ProjectModel, status_code=201)
+async def create_project(body: ProjectCreate) -> ProjectModel:
+    """Append a new project entry and persist to disk."""
+    if not _PROJECT_ID_RE.match(body.id):
+        raise HTTPException(status_code=400, detail="Invalid project_id format")
+    if any(e.get("id") == body.id for e in _PROJECTS):
+        raise HTTPException(status_code=409, detail=f"Project {body.id!r} already exists")
+    _PROJECTS.append(body.model_dump())
+    _save_projects()
+    return body
 
 
 @app.websocket("/ws")

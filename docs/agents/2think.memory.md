@@ -5,6 +5,39 @@ tradeoff analysis, and recommended directions.
 
 ---
 
+## prj0000052 — project-management
+_Date: 2026-03-24 | Status: DONE | Branch: prj0000052-project-management_
+
+**task_id:** prj0000052
+**Recommendation:** Option A — Minimal v1 (read-only Kanban, static JSON, no drag-and-drop)
+**Artifact:** `docs/project/prj0000052/project-management.think.md`
+**Handoff target:** @3design (on command from @0master only — DO NOT auto-handoff)
+
+Options explored:
+- A: Read-only Kanban, static `data/projects.json`, `GET /api/projects` file-read — RECOMMENDED
+- B: Editable Kanban with PATCH endpoint — breaks git-as-source-of-truth, out of scope
+- C: DB-backed Kanban (SQLite) — explicitly out of scope per project.md
+
+Research coverage:
+- 7-lane structure with PRINCE2 mapping and entry/exit criteria (Area 1)
+- React component architecture using existing NebulaOS theme (Area 2)
+- Full JSON schema + complete 62-entry project classification (Area 3)
+- FastAPI endpoint design consistent with existing app.py patterns (Area 4)
+- Minimal agent file update proposals for 0master and 1project (Area 5)
+- kanban.md markdown template with full format specification (Area 6)
+
+Key design decisions for @3design:
+- 7 lanes confirmed correct (mirrors the 10-agent pipeline segments)
+- `pr` field is integer|null (not string), for URL construction
+- Budget tier `unknown` is valid enum for Ideas lane only
+- `ProjectManager.tsx` uses existing `bg-os-bg`/`text-os-text` etc. CSS vars
+- `_PROJECTS` module-level list loaded at import time (not on first request)
+- Lane filter via `?lane=` query param on the single `/api/projects` endpoint
+
+Open questions documented in think.md for @3design to resolve.
+
+---
+
 ## prj0000047 — conky-real-metrics
 _Date: 2026-03-23 | Status: DONE | Branch: prj0000047-conky-real-metrics_
 

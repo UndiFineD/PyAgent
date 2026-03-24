@@ -33,6 +33,37 @@ where test cases are written and validated against the plan.
 
 ---
 
+## prj0000052 — project-management
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000052-project-management |
+| **owner_agent** | @4plan |
+| **source** | @3design |
+| **created_at** | 2026-03-24 |
+| **updated_at** | 2026-03-24 |
+| **status** | DONE |
+| **handoff_target** | @0master (report back — no @5test handoff per instructions) |
+| **artifact_paths** | docs/project/prj0000052/project-management.plan.md |
+| **branch** | prj0000052-project-management (verified before write) |
+
+### Tasks (single chunk)
+
+| Task | File(s) | AC | Notes |
+|---|---|---|---|
+| T1 | data/projects.json | AC-01 | 62-entry JSON array |
+| T2 | docs/project/kanban.md | AC-02 | 7-lane board, 62 rows |
+| T3 | backend/app.py | AC-05 | GET /api/projects + ProjectModel |
+| T4 | web/apps/ProjectManager.tsx | AC-03 | NebulaOS kanban app |
+| T5 | web/src/App.tsx, web/src/types.ts | AC-04 | Register projectmanager AppId |
+| T6 | .github/agents/0master.agent.md | AC-06 | kanban.md lifecycle section |
+| T7 | .github/agents/1project.agent.md | AC-06 | kanban.md lifecycle convention |
+
+### Test file
+`tests/structure/test_kanban.py` — 15 tests for AC-01 + AC-02
+
+---
+
 ## prj0000045 — transaction-managers-full
 
 | Field | Value |

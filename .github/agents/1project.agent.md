@@ -23,6 +23,11 @@ The **@1project** agent establishes and maintains project structure and document
 - **Optional chunked think files**: `chunk-NNN.<project>.think.md`
 - **Optional chunked design files**: `chunk-NNN.<project>.design.md`
 - **Optional chunked plan files**: `chunk-NNN.<project>.plan.md`
+- **Lifecycle board**: When a new project is created,
+   ensure `docs/project/kanban.md`
+  has an entry in the correct lane. New projects without started discovery go in `Ideas`;
+  projects handed off to `@2think` advance to `Discovery`. Move the row when the lane
+  changes, and always update `data/projects.json` to match.
 
 The canonical files are required for every project folder. Chunked files are required when the project is too large for one document.
 
@@ -72,6 +77,16 @@ The canonical files are required for every project folder. Chunked files are req
      - `<project>.ql.md`       — Status: NOT_STARTED when created by @1project
      - `<project>.git.md`      — Status: NOT_STARTED when created by @1project
    - If the expected branch is missing, invalid, or inherited from another project, stop and return the task to `@0master` for branch assignment before handing off downstream.
+
+1a. **Update kanban.md and data/projects.json**
+    - Move the project entry from `Ideas` to `Discovery` in `docs/project/kanban.md`.
+    - If no entry exists yet (project was not pre-registered by `@0master`), create a
+      new row in `Discovery` with the assigned `prjNNNNNNN`, name, summary, priority,
+      and `budget_tier`.
+    - Update `data/projects.json`: set `"lane": "Discovery"` for this project entry
+      (add the entry if missing).
+    - Commit both files on the project-specific branch alongside the project folder
+      creation commit.
 
 2. **Create project overview**
    - Populate the overview with: assigned project ID, project name, goal, scope, milestones, stakeholders, key constraints, and the branch plan.
