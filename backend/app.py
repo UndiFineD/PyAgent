@@ -274,10 +274,10 @@ import re as _re  # noqa: E402
 _PROJECT_ID_RE = _re.compile(r"^prj\d{7}$")
 
 
-def _projects_valid() -> list[ProjectModel]:
-    """Build validated list from the in-memory _PROJECTS list."""
+def _projects_validated(projects: list[dict]) -> list[ProjectModel]:
+    """Validate a raw project list, skipping malformed entries with a warning."""
     valid: list[ProjectModel] = []
-    for entry in _PROJECTS:
+    for entry in projects:
         try:
             valid.append(ProjectModel(**entry))
         except Exception as exc:  # pydantic ValidationError
@@ -285,19 +285,21 @@ def _projects_valid() -> list[ProjectModel]:
     return valid
 
 
-def _save_projects() -> None:
-    """Persist _PROJECTS to disk atomically."""
+def _write_projects(projects: list[dict]) -> None:
+    """Persist project list to disk atomically and refresh the in-memory cache."""
     tmp = _PROJECTS_FILE.with_suffix(".tmp")
-    tmp.write_text(json.dumps(_PROJECTS, indent=2, ensure_ascii=False), encoding="utf-8")
+    tmp.write_text(json.dumps(projects, indent=2, ensure_ascii=False), encoding="utf-8")
     tmp.replace(_PROJECTS_FILE)
+    _PROJECTS[:] = projects  # keep the cached list object in sync
 
 
 @app.get("/api/projects", response_model=list[ProjectModel])
 async def get_projects(lane: _Opt[str] = None) -> list[ProjectModel]:
-    """Return all projects from data/projects.json, optionally filtered by lane."""
-    if not _PROJECTS and not _PROJECTS_FILE.exists():
+    """Return all projects, always reading from disk so restarts are never needed."""
+    if not _PROJECTS_FILE.exists():
         raise HTTPException(status_code=500, detail="data/projects.json not found")
-    valid = _projects_valid()
+    projects = _load_projects()
+    valid = _projects_validated(projects)
     if lane:
         return [p for p in valid if p.lane == lane]
     return valid
@@ -319,15 +321,16 @@ class ProjectPatch(BaseModel):
 
 @app.patch("/api/projects/{project_id}", response_model=ProjectModel)
 async def patch_project(project_id: str, patch: ProjectPatch) -> ProjectModel:
-    """Update one or more fields on an existing project and persist to disk."""
+    """Update fields on an existing project. Always reads from disk first."""
     if not _PROJECT_ID_RE.match(project_id):
         raise HTTPException(status_code=400, detail="Invalid project_id format")
-    for i, entry in enumerate(_PROJECTS):
+    projects = _load_projects()
+    for i, entry in enumerate(projects):
         if entry.get("id") == project_id:
             updates = {k: v for k, v in patch.model_dump().items() if v is not None}
-            _PROJECTS[i] = {**entry, **updates}
-            _save_projects()
-            return ProjectModel(**_PROJECTS[i])
+            projects[i] = {**entry, **updates}
+            _write_projects(projects)
+            return ProjectModel(**projects[i])
     raise HTTPException(status_code=404, detail=f"Project {project_id!r} not found")
 
 
@@ -337,13 +340,14 @@ class ProjectCreate(ProjectModel):
 
 @app.post("/api/projects", response_model=ProjectModel, status_code=201)
 async def create_project(body: ProjectCreate) -> ProjectModel:
-    """Append a new project entry and persist to disk."""
+    """Append a new project entry. Always reads from disk first to check for duplicates."""
     if not _PROJECT_ID_RE.match(body.id):
         raise HTTPException(status_code=400, detail="Invalid project_id format")
-    if any(e.get("id") == body.id for e in _PROJECTS):
+    projects = _load_projects()
+    if any(e.get("id") == body.id for e in projects):
         raise HTTPException(status_code=409, detail=f"Project {body.id!r} already exists")
-    _PROJECTS.append(body.model_dump())
-    _save_projects()
+    projects.append(body.model_dump())
+    _write_projects(projects)
     return body
 
 
