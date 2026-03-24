@@ -43,7 +43,6 @@ Projects proposed but not yet formally scoped.
 
 | ID | Name | Summary | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|
-| prj0000053 | hmac-webhook-verification | Secure GitHub webhook payloads with HMAC-SHA256 signature validation in src/github_app.py | P4 | unknown | security, github | 2026-03-24 |
 | prj0000055 | websocket-e2e-encryption | Wire the documented E2E encryption architecture into production WebSocket transport using Noise_XX | P4 | unknown | security, websocket, rust | 2026-03-24 |
 | prj0000056 | rust-async-transport-activation | Enable async-transport feature in rust_core to activate QUIC-over-Tokio for faster inter-agent messaging | P4 | unknown | rust, transport, async | 2026-03-24 |
 | prj0000057 | agent-orchestration-graph | Visual DAG panel in NebulaOS showing live task flow and agent status across all 10 pipeline stages | P4 | unknown | ui, nebula, agents | 2026-03-24 |
@@ -89,6 +88,7 @@ PR open, awaiting merge.
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
 | prj0000054 | backend-authentication | prj0000054-backend-authentication | [#192](https://github.com/UndiFineD/PyAgent/pull/192) | P2 | M | 2026-03-24 |
+| prj0000053 | hmac-webhook-verification | prj0000053-hmac-webhook-verification | [#191](https://github.com/UndiFineD/PyAgent/pull/191) | P2 | S | 2026-03-24 |
 | prj0000052 | project-management | prj0000052-project-management | [#190](https://github.com/UndiFineD/PyAgent/pull/190) | P2 | L | 2026-03-24 |
 | prj0000043 | p2p-security-deps | prj0000043-p2p-security-deps | open | P2 | M | 2026-03-24 |
 | prj0000044 | transaction-managers-stubs | prj0000044-transaction-managers-stubs | #136 | P2 | S | 2026-03-24 |
