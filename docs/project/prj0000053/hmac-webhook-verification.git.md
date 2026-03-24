@@ -1,6 +1,6 @@
 # hmac-webhook-verification — Git Notes
 
-_Owner: @9git | Status: PENDING_
+_Owner: @9git | Status: DONE — PR #191_
 
 ## Branch
 
@@ -21,9 +21,6 @@ _Owner: @9git | Status: PENDING_
 3. `feat(prj0000053): @6code — add HMAC-SHA256 signature verification to github_app`
 4. `docs(prj0000053): close — exec + ql + git notes, kanban → Review`
 
-## PR Notes
+## PR
 
-- Target: `main`
-- Title: `feat: HMAC-SHA256 webhook signature verification (prj0000053)`
-- Reviewers: UndiFineD
-- Labels: `security`, `backend`
+**PR #191:** https://github.com/UndiFineD/PyAgent/pull/191
