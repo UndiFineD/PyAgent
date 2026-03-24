@@ -49,6 +49,24 @@ _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 _LOGS_DIR = _PROJECT_ROOT / "docs" / "agents"
 _AGENTS_DIR = _PROJECT_ROOT / ".github" / "agents"
 
+# ── Project data ─────────────────────────────────────────────────────────────
+_PROJECTS_FILE = _PROJECT_ROOT / "data" / "projects.json"
+
+
+def _load_projects() -> list[dict]:
+    """Load data/projects.json at module startup. Returns [] on missing/corrupt file."""
+    if not _PROJECTS_FILE.exists():
+        logger.warning("data/projects.json not found at %s", _PROJECTS_FILE)
+        return []
+    try:
+        return json.loads(_PROJECTS_FILE.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError) as exc:
+        logger.warning("Failed to load data/projects.json: %s", exc)
+        return []
+
+
+_PROJECTS: list[dict] = _load_projects()
+
 # Allowlist of valid agent IDs — prevents any path-traversal attack
 _VALID_AGENT_IDS = frozenset({
     "0master", "1project", "2think", "3design", "4plan",
@@ -224,6 +242,47 @@ async def write_agent_doc(agent_id: str, body: AgentDocBody) -> dict[str, str]:
     path.write_text(body.content, encoding="utf-8")
     logger.debug("Saved agent doc: %s (%d bytes)", path.name, len(body.content))
     return {"status": "ok", "path": str(path.relative_to(_PROJECT_ROOT))}
+
+
+# ── Project models + endpoint ─────────────────────────────────────────────────
+
+from typing import Literal, Optional as _Opt  # noqa: E402
+
+_LaneLit = Literal["Ideas", "Discovery", "Design", "In Sprint", "Review", "Released", "Archived"]
+_PriorityLit = Literal["P1", "P2", "P3", "P4"]
+_BudgetLit = Literal["XS", "S", "M", "L", "XL", "unknown"]
+
+
+class ProjectModel(BaseModel):
+    """Single project entry from data/projects.json."""
+
+    id: str
+    name: str
+    lane: _LaneLit
+    summary: str
+    branch: _Opt[str] = None
+    pr: _Opt[int] = None
+    priority: _PriorityLit = "P3"
+    budget_tier: _BudgetLit = "M"
+    tags: list[str] = []
+    created: _Opt[str] = None
+    updated: _Opt[str] = None
+
+
+@app.get("/api/projects", response_model=list[ProjectModel])
+async def get_projects(lane: _Opt[str] = None) -> list[ProjectModel]:
+    """Return all projects from data/projects.json, optionally filtered by lane."""
+    if not _PROJECTS and not _PROJECTS_FILE.exists():
+        raise HTTPException(status_code=500, detail="data/projects.json not found")
+    valid: list[ProjectModel] = []
+    for entry in _PROJECTS:
+        try:
+            valid.append(ProjectModel(**entry))
+        except Exception as exc:  # pydantic ValidationError
+            logger.warning("Skipping malformed project entry %s: %s", entry.get("id"), exc)
+    if lane:
+        return [p for p in valid if p.lane == lane]
+    return valid
 
 
 @app.websocket("/ws")
