@@ -4,6 +4,36 @@ _Last updated: 2026-03-24_
 
 ---
 
+## 2026-03-24 — prj0000054 Backend Authentication
+
+**Branch:** `prj0000054-backend-authentication`
+**PR:** [#192](https://github.com/UndiFineD/PyAgent/pull/192) — open, awaiting review
+**Status:** COMPLETE — 4 commits pushed, PR open, kanban→Review
+
+**Changes:**
+- `backend/auth.py` — NEW: standalone auth module (API-key + JWT HS256, DEV_MODE, hmac.compare_digest, WS close 4401)
+- `backend/app.py` — APIRouter pattern; all 8 protected endpoints require auth; `/health` exempt; WS auth via query params
+- `backend/requirements.txt` — PyJWT>=2.8.0 added
+- `tests/test_backend_auth.py` — 17 tests all passing (unit + integration)
+- `docs/project/prj0000054/` — 9 artifacts complete
+- `data/projects.json` + `docs/project/kanban.md` — prj0000054 → Review, pr=192
+
+**Env vars:** `PYAGENT_API_KEY`, `PYAGENT_JWT_SECRET` (both unset → DEV_MODE, all requests pass)
+**Lessons:** PyJWT not pre-installed (run `pip install PyJWT>=2.8.0`); project.md needs full modern template with `**Goal:**`, `**Scope boundary:**`, `**Handoff rule:**`, `**Failure rule:**` sub-fields in Branch Plan section.
+
+**Next:** prj0000053 template fix on that branch before PR #191 merges; triage Ideas lane for prj0000055+
+
+---
+
+## 2026-03-24 — prj0000053 HMAC Webhook Verification
+
+**Branch:** `prj0000053-hmac-webhook-verification`
+**PR:** [#191](https://github.com/UndiFineD/PyAgent/pull/191) — open, awaiting review
+**Status:** COMPLETE — pushed, PR open
+**Note:** project.md may be missing modern template sub-fields (`**Scope boundary:**`, `**Handoff rule:**`, `**Failure rule:**`) — fix before merging PR #191.
+
+---
+
 ## 2026-03-24 — prj0000052 Project Management
 
 **Branch:** `prj0000052-project-management`
