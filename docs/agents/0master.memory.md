@@ -1,6 +1,24 @@
 # PyAgent — Master Agent Memory
 
-_Last updated: 2026-03-23_
+_Last updated: 2026-03-24_
+
+---
+
+## 2026-03-24 — prj0000052 Project Management
+
+**Branch:** `prj0000052-project-management`
+**PR:** [#190](https://github.com/UndiFineD/PyAgent/pull/190) — open, awaiting review
+**Status:** COMPLETE — pushed, PR open, all 9 artifacts complete
+
+**Changes:**
+- `data/projects.json` — 62-entry machine-readable project registry
+- `docs/project/kanban.md` — 7-lane Kanban board (single source of truth)
+- `backend/app.py` — `GET /api/projects`, `PATCH /api/projects/{id}`, `POST /api/projects`
+- `web/apps/ProjectManager.tsx` — editable NebulaOS Kanban app: drag-drop lane transitions, edit modal, new-project creation, folder path links
+- `tests/structure/test_kanban.py` — 20 structure tests (all pass)
+- Agent files updated: `0master.agent.md` + `1project.agent.md` with lifecycle board conventions
+
+**Next:** prj0000053 (HMAC webhook verification) or triage Ideas lane
 
 ---
 
