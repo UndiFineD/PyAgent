@@ -24,13 +24,48 @@ All other event types are accepted and acknowledged with ``{"received": True}``.
 
 from __future__ import annotations
 
+import hashlib
+import hmac
+import json
 import logging
-from typing import Any
+import os
+from typing import Any, Optional
 
 from fastapi import FastAPI, Header, HTTPException, Request, status
 
 app = FastAPI(title="PyAgent GitHub App", version="1.0.0")
 _log = logging.getLogger(__name__)
+
+# ---------------------------------------------------------------------------
+# HMAC-SHA256 webhook signature verification
+# ---------------------------------------------------------------------------
+
+WEBHOOK_SECRET: str = os.getenv("GITHUB_WEBHOOK_SECRET", "")
+if not WEBHOOK_SECRET:
+    _log.warning(
+        "GITHUB_WEBHOOK_SECRET is not set — webhook signature verification is DISABLED. "
+        "Set this environment variable in production."
+    )
+
+
+def verify_github_signature(
+    secret: str,
+    body: bytes,
+    signature_header: Optional[str],
+) -> bool:
+    """Return True iff the HMAC-SHA256 signature matches the body.
+
+    Uses hmac.compare_digest for constant-time comparison, preventing
+    timing side-channel attacks.
+    Returns False if secret is empty, header is None, or header is malformed.
+    """
+    if not secret or not signature_header:
+        return False
+    if not signature_header.startswith("sha256="):
+        return False
+    received = signature_header.split("=", 1)[1]
+    computed = hmac.new(secret.encode("utf-8"), body, hashlib.sha256).hexdigest()
+    return hmac.compare_digest(computed, received)
 
 # ---------------------------------------------------------------------------
 # Event routing helpers
@@ -86,13 +121,26 @@ def health() -> dict[str, str]:
 async def webhook(
     request: Request,
     x_github_event: str = Header(default=""),
+    x_hub_signature_256: Optional[str] = Header(default=None),
 ) -> dict[str, Any]:
     """Receive and route GitHub webhook events.
 
-    GitHub sends the event type in the ``X-GitHub-Event`` header.
+    GitHub sends the event type in the ``X-GitHub-Event`` header and signs
+    the payload with ``X-Hub-Signature-256`` when a webhook secret is set.
+    If ``GITHUB_WEBHOOK_SECRET`` is configured, any request whose signature
+    is missing or incorrect is rejected with HTTP 401.
     """
+    body = await request.body()  # raw bytes — must be read before json() for HMAC
+
+    if WEBHOOK_SECRET:
+        if not verify_github_signature(WEBHOOK_SECRET, body, x_hub_signature_256):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid or missing webhook signature",
+            )
+
     try:
-        payload: dict[str, Any] = await request.json()
+        payload: dict[str, Any] = json.loads(body)
     except Exception as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
 
