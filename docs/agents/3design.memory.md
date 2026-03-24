@@ -28,6 +28,23 @@ the design intent.
 | **updated_at** | 2026-03-18 |
 | **status** | DONE |
 | **summary** | Designed checkpoint rule (Step-Gated Full Overwrite) for all 9 agent artifact files. Templates inline per agent. @1project pre-creates all 9 stubs. Checkpoint rule applies to all artifact types. Documents updated before next runSubagent call. |
+
+---
+
+## prj0000052 - project-management
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000052-project-management |
+| **owner_agent** | @3design |
+| **source** | @2think |
+| **created_at** | 2026-03-24 |
+| **updated_at** | 2026-03-24 |
+| **status** | DONE |
+| **branch** | prj0000052-project-management |
+| **artifact** | docs/project/prj0000052/project-management.design.md |
+| **selected_option** | Option A — Minimal v1 (read-only Kanban, static JSON, no drag-and-drop) |
+| **summary** | Full design for 6 deliverables: (1) docs/project/kanban.md with all 62 projects in 7 lanes; (2) data/projects.json with complete 62-entry array; (3) web/apps/ProjectManager.tsx React Kanban component; (4) backend/app.py GET /api/projects endpoint + ProjectModel; (5) 0master.agent.md + 1project.agent.md additions; (6) web/App.tsx + web/types.ts registration. Status: DONE — report back to @0master (no @4plan handoff). |
 | **handoff_target** | @4plan |
 | **artifact_paths** | docs/project/prj030-agent-doc-frequency/agent-doc-frequency.design.md |
 ---
