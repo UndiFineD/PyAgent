@@ -20,10 +20,11 @@ import time
 from pathlib import Path
 
 import psutil
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Depends, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+from .auth import require_auth, websocket_auth
 from .session_manager import SessionManager
 from .ws_handler import handle_message
 
@@ -92,6 +93,10 @@ app.add_middleware(
 
 sessions = SessionManager()
 
+# Protected router — all routes registered here require authentication.
+# /health remains on `app` directly so load-balancers never need credentials.
+_auth_router = APIRouter(dependencies=[Depends(require_auth)])
+
 
 @app.get("/health")
 async def health() -> dict[str, str]:
@@ -134,7 +139,7 @@ class SystemMetricsResponse(BaseModel):
     sampled_at: float
 
 
-@app.get("/api/metrics/system", response_model=SystemMetricsResponse)
+@_auth_router.get("/api/metrics/system", response_model=SystemMetricsResponse)
 async def get_system_metrics() -> SystemMetricsResponse:
     """Return real-time CPU, memory, network IO, and disk IO metrics."""
     global _prev_net, _prev_net_ts, _prev_disk, _prev_disk_ts
@@ -194,7 +199,7 @@ class AgentLogBody(BaseModel):
     content: str
 
 
-@app.get("/api/agent-log/{agent_id}")
+@_auth_router.get("/api/agent-log/{agent_id}")
 async def read_agent_log(agent_id: str) -> dict[str, str]:
     """Return the current contents of docs/agents/<agent_id>.log.md."""
     path = _log_path(agent_id)
@@ -203,7 +208,7 @@ async def read_agent_log(agent_id: str) -> dict[str, str]:
     return {"content": path.read_text(encoding="utf-8")}
 
 
-@app.put("/api/agent-log/{agent_id}")
+@_auth_router.put("/api/agent-log/{agent_id}")
 async def write_agent_log(agent_id: str, body: AgentLogBody) -> dict[str, str]:
     """Overwrite docs/agents/<agent_id>.log.md with the supplied content."""
     path = _log_path(agent_id)
@@ -221,7 +226,7 @@ class AgentDocBody(BaseModel):
     content: str
 
 
-@app.get("/api/agent-doc/{agent_id}")
+@_auth_router.get("/api/agent-doc/{agent_id}")
 async def read_agent_doc(agent_id: str) -> dict[str, str]:
     """Return the contents of .github/agents/<agent_id>.agent.md."""
     if agent_id not in _VALID_AGENT_IDS:
@@ -232,7 +237,7 @@ async def read_agent_doc(agent_id: str) -> dict[str, str]:
     return {"content": path.read_text(encoding="utf-8")}
 
 
-@app.put("/api/agent-doc/{agent_id}")
+@_auth_router.put("/api/agent-doc/{agent_id}")
 async def write_agent_doc(agent_id: str, body: AgentDocBody) -> dict[str, str]:
     """Overwrite .github/agents/<agent_id>.agent.md with the supplied content."""
     if agent_id not in _VALID_AGENT_IDS:
@@ -292,7 +297,7 @@ def _save_projects() -> None:
     tmp.replace(_PROJECTS_FILE)
 
 
-@app.get("/api/projects", response_model=list[ProjectModel])
+@_auth_router.get("/api/projects", response_model=list[ProjectModel])
 async def get_projects(lane: _Opt[str] = None) -> list[ProjectModel]:
     """Return all projects from data/projects.json, optionally filtered by lane."""
     if not _PROJECTS and not _PROJECTS_FILE.exists():
@@ -317,7 +322,7 @@ class ProjectPatch(BaseModel):
     updated: _Opt[str] = None
 
 
-@app.patch("/api/projects/{project_id}", response_model=ProjectModel)
+@_auth_router.patch("/api/projects/{project_id}", response_model=ProjectModel)
 async def patch_project(project_id: str, patch: ProjectPatch) -> ProjectModel:
     """Update one or more fields on an existing project and persist to disk."""
     if not _PROJECT_ID_RE.match(project_id):
@@ -335,7 +340,7 @@ class ProjectCreate(ProjectModel):
     """Full project payload required to create a new entry."""
 
 
-@app.post("/api/projects", response_model=ProjectModel, status_code=201)
+@_auth_router.post("/api/projects", response_model=ProjectModel, status_code=201)
 async def create_project(body: ProjectCreate) -> ProjectModel:
     """Append a new project entry and persist to disk."""
     if not _PROJECT_ID_RE.match(body.id):
@@ -347,11 +352,19 @@ async def create_project(body: ProjectCreate) -> ProjectModel:
     return body
 
 
+app.include_router(_auth_router)
+
+
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket) -> None:
     """WebSocket endpoint for real-time communication."""
+    await websocket.accept()
+    auth = await websocket_auth(websocket)
+    if auth is None:
+        return  # websocket_auth already closed the connection with 4401
+
     session_id = await sessions.connect(websocket)
-    logger.info("WebSocket connected: %s", session_id)
+    logger.info("WebSocket connected: %s (auth=%s)", session_id, auth.get("auth"))
     try:
         while True:
             raw = await websocket.receive_text()
