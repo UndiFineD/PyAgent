@@ -86,7 +86,6 @@ Active implementation — @4plan through @6code are working.
 | ID | Name | Summary | Branch | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
 | prj0000063 | structured-logging | JSON structured logging with correlation IDs across all backend requests | prj0000063-structured-logging | P4 | S | 2026-03-25 |
-| prj0000066 | api-versioning | Versioned API routing (/api/v1/) with explicit schema contracts and backwards-compatible evolution strategy | prj0000066-api-versioning | P3 | S | 2026-03-25 |
 
 ---
 
