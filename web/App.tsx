@@ -216,7 +216,7 @@ export default function App() {
   }
 
   return (
-    <div className="h-screen w-screen bg-os-bg text-os-text overflow-hidden relative transition-colors duration-300">
+    <div className="nebula-desktop h-screen w-screen bg-os-bg text-os-text overflow-hidden relative transition-colors duration-300">
       
       {/* Trigger Zone for Taskbar */}
       <div 
@@ -227,7 +227,7 @@ export default function App() {
       {/* Top Bar (Taskbar) */}
       <div 
         className={cn(
-          "fixed top-0 left-0 right-0 h-12 bg-os-header/90 backdrop-blur-md border-b border-os-border flex items-center justify-between px-4 z-[1000] shadow-sm transition-transform duration-500 ease-in-out",
+          "nebula-taskbar fixed top-0 left-0 right-0 h-12 bg-os-header/90 backdrop-blur-md border-b border-os-border flex items-center justify-between px-4 z-[1000] shadow-sm transition-transform duration-500 ease-in-out",
           !isTaskbarVisible && !menuOpen ? "-translate-y-full" : "translate-y-0"
         )}
         onMouseEnter={showTaskbar}
@@ -246,7 +246,7 @@ export default function App() {
                   focusWindow(w.id);
                 }}
                 className={cn(
-                  "px-3 py-1 rounded text-xs max-w-[120px] truncate transition-all",
+                  "nebula-taskbar-btn px-3 py-1 rounded text-xs max-w-[120px] truncate transition-all",
                   activeWindowId === w.id && !w.isMinimized
                     ? "bg-os-accent text-white shadow-sm"
                     : "bg-os-window hover:bg-os-border text-os-text/80"
