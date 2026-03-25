@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import logging
+import random
 import time
 from pathlib import Path
 
@@ -84,6 +85,62 @@ def _log_path(agent_id: str) -> Path:
 
 app = FastAPI(title="PyAgent Backend Worker", version="0.1.0")
 
+# ── Plugin registry ───────────────────────────────────────────────────────────
+
+PLUGIN_REGISTRY = [
+    {
+        "id": "coder-enhanced",
+        "name": "CoderAgent Enhanced",
+        "description": "Multi-pass code improvement with diff preview",
+        "author": "PyAgent Core",
+        "version": "1.0.0",
+        "tags": ["coding"],
+        "installed": False,
+    },
+    {
+        "id": "sec-scanner",
+        "name": "Security Scanner",
+        "description": "OWASP Top 10 static analysis on staged files",
+        "author": "PyAgent Security",
+        "version": "0.9.0",
+        "tags": ["security"],
+        "installed": False,
+    },
+    {
+        "id": "doc-gen",
+        "name": "DocGen",
+        "description": "Auto-generates docstrings and README updates",
+        "author": "PyAgent Docs",
+        "version": "1.1.0",
+        "tags": ["docs"],
+        "installed": True,
+    },
+    {
+        "id": "rust-bench",
+        "name": "Rust Benchmarker",
+        "description": "Run criterion benchmarks and report regressions",
+        "author": "PyAgent Rust",
+        "version": "0.5.0",
+        "tags": ["rust", "performance"],
+        "installed": False,
+    },
+    {
+        "id": "ci-monitor",
+        "name": "CI Monitor",
+        "description": "Watch GitHub Actions workflow runs and alert on failures",
+        "author": "PyAgent CI",
+        "version": "2.0.0",
+        "tags": ["ci"],
+        "installed": False,
+    },
+]
+
+
+@app.get("/api/plugins")
+async def list_plugins() -> dict:
+    """Return the static plugin registry. No authentication required."""
+    return {"plugins": PLUGIN_REGISTRY}
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://localhost:3000"],
@@ -103,6 +160,30 @@ _auth_router = APIRouter(dependencies=[Depends(require_auth)])
 async def health() -> dict[str, str]:
     """Health check endpoint."""
     return {"status": "ok"}
+
+
+@app.get("/api/metrics/flm")
+async def flm_metrics() -> dict:
+    """Return simulated FLM token throughput metrics."""
+    now = time.time()
+    # Simulate 10 data points (last 10 seconds)
+    samples = [
+        {
+            "timestamp": now - (9 - i),
+            "tokens_per_second": round(random.uniform(50, 500), 1),
+            "model": "llama3-8b",
+            "queue_depth": random.randint(0, 10),
+        }
+        for i in range(10)
+    ]
+    return {
+        "samples": samples,
+        "avg_tokens_per_second": round(
+            sum(s["tokens_per_second"] for s in samples) / len(samples), 1
+        ),
+        "peak_tokens_per_second": max(s["tokens_per_second"] for s in samples),
+        "model": "llama3-8b",
+    }
 
 
 # ── System-metrics models ────────────────────────────────────────────────────

@@ -138,7 +138,7 @@ export const Window: React.FC<WindowProps> = ({
       <div
         ref={nodeRef}
         className={cn(
-          "absolute flex flex-col bg-os-window border border-os-border shadow-2xl rounded-lg overflow-hidden transition-shadow duration-200",
+          "nebula-window absolute flex flex-col bg-os-window border border-os-border shadow-2xl rounded-lg overflow-hidden transition-shadow duration-200",
           isActive ? "shadow-os-accent/20 ring-1 ring-os-border" : "opacity-95"
         )}
         style={{
