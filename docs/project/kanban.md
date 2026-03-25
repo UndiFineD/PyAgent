@@ -56,7 +56,7 @@ Projects proposed but not yet formally scoped.
 | prj0000067 | rust-file-watcher | Rust-powered filesystem watcher integrated into rust_core for real-time project change detection | P4 | M | rust, tools | 2026-03-24 |
 | prj0000068 | agent-timeout-watchdog | Configurable per-agent execution timeout with graceful shutdown, retry budget, and dead-letter queue | P3 | M | agents, reliability | 2026-03-24 |
 | prj0000069 | ci-test-parallelization | Split pytest suite into parallel CI matrix buckets to reduce CI wall time by ~60% via sharding | P3 | S | ci, testing | 2026-03-24 |
-| prj0000070 | opentelemetry-tracing | OpenTelemetry span instrumentation across FastAPI backend, core agents, and Rust FFI bridge | P4 | M | observability, tracing | 2026-03-24 |
+
 | prj0000071 | dark-mode-accessibility | WCAG 2.1 AA accessibility audit and remediation for the NebulaOS dark theme | P4 | S | ui, accessibility | 2026-03-24 |
 | prj0000072 | websocket-reconnect-logic | Auto-reconnect with exponential backoff and jitter for frontend WebSocket drops | P3 | S | ui, websocket | 2026-03-24 |
 
@@ -87,6 +87,7 @@ Active implementation — @4plan through @6code are working.
 | ID | Name | Summary | Branch | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
 | prj0000063 | structured-logging | JSON structured logging with correlation IDs across all backend requests | prj0000063-structured-logging | P4 | S | 2026-03-25 |
+| prj0000070 | opentelemetry-tracing | OpenTelemetry span instrumentation across FastAPI backend, core agents, and Rust FFI bridge | prj0000070-opentelemetry-tracing | P4 | M | 2026-03-25 |
 
 ---
 
