@@ -87,7 +87,6 @@ Active implementation — @4plan through @6code are working.
 | ID | Name | Summary | Branch | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
 | prj0000063 | structured-logging | JSON structured logging with correlation IDs across all backend requests | prj0000063-structured-logging | P4 | S | 2026-03-25 |
-| prj0000068 | agent-timeout-watchdog | Configurable per-agent execution timeout with graceful shutdown, retry budget, dead-letter queue | prj0000068-agent-timeout-watchdog | P3 | M | 2026-03-25 |
 
 ---
 
@@ -99,6 +98,8 @@ PR open, awaiting merge.
 |---|---|---|---|---|---|---|
 | prj0000055 | websocket-e2e-encryption | prj0000055-websocket-e2e-encryption | [#193](https://github.com/UndiFineD/PyAgent/pull/193) | P2 | M | 2026-03-25 |
 | prj0000065 | agent-memory-persistence | prj0000065-agent-memory-persistence | [#203](https://github.com/UndiFineD/PyAgent/pull/203) | P3 | M | 2026-03-25 |
+| prj0000067 | rust-file-watcher | prj0000067-rust-file-watcher | [#205](https://github.com/UndiFineD/PyAgent/pull/205) | P4 | M | 2026-03-25 |
+| prj0000068 | agent-timeout-watchdog | prj0000068-agent-timeout-watchdog | [#206](https://github.com/UndiFineD/PyAgent/pull/206) | P3 | M | 2026-03-25 |
 | prj0000054 | backend-authentication | prj0000054-backend-authentication | [#192](https://github.com/UndiFineD/PyAgent/pull/192) | P2 | M | 2026-03-24 |
 | prj0000053 | hmac-webhook-verification | prj0000053-hmac-webhook-verification | [#191](https://github.com/UndiFineD/PyAgent/pull/191) | P2 | S | 2026-03-24 |
 | prj0000052 | project-management | prj0000052-project-management | [#190](https://github.com/UndiFineD/PyAgent/pull/190) | P2 | L | 2026-03-24 |
