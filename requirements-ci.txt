@@ -2,6 +2,10 @@
 # Runtime deps are declared in requirements.txt.
 -r requirements.txt
 
+# Backend deps needed by tests in tests/ (not in requirements.txt)
+PyJWT>=2.8.0
+python-json-logger>=2.0.0
+
 # Lint / typecheck
 ruff==0.15.6
 flake8==7.3.0

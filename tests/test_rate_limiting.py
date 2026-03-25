@@ -16,7 +16,6 @@ from __future__ import annotations
 
 import asyncio
 
-import pytest
 from fastapi.testclient import TestClient
 
 
@@ -35,13 +34,10 @@ def test_health_exempt_from_rate_limit(monkeypatch):
     monkeypatch.setattr(rl_mod, "_RATE_LIMIT_REQUESTS", 1)
     monkeypatch.setattr(rl_mod, "_RATE_LIMIT_WINDOW", 60.0)
 
-    from backend.app import app
-
     # Rebuild middleware with patched limits
     from backend.rate_limiter import RateLimitMiddleware
     # Use a fresh app instance for isolation
     from fastapi import FastAPI
-    from fastapi.middleware.cors import CORSMiddleware
 
     mini = FastAPI()
     mini.add_middleware(RateLimitMiddleware, rate=1, window=60.0)

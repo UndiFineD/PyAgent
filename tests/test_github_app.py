@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 """Test the github_app module."""
 
+import hashlib
+import hmac as _hmac
+import json as _json
+
 import pytest
 
 # FastAPI may fail to import due to pydantic-core version mismatch; skip entire
@@ -10,6 +14,7 @@ try:
 except SystemError as e:
     pytest.skip(f"Skipping github_app tests due to FastAPI import error: {e}", allow_module_level=True)
 
+import src.github_app as _gha
 from src.github_app import app
 
 client = TestClient(app)
@@ -113,12 +118,6 @@ def test_webhook_unknown_event() -> None:
 # ---------------------------------------------------------------------------
 # HMAC-SHA256 signature verification tests (prj0000053)
 # ---------------------------------------------------------------------------
-
-import hashlib
-import hmac as _hmac
-import json as _json
-
-import src.github_app as _gha
 
 
 def _sign(secret: str, body: bytes) -> str:
