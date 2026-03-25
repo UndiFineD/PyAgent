@@ -74,7 +74,7 @@ Active implementation — @4plan through @6code are working.
 
 | ID | Name | Summary | Branch | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
-| prj0000073 | api-documentation | Hand-crafted API reference covering all backend REST endpoints, WebSocket protocol, authentication, and error codes | prj0000073-api-documentation | P2 | M | 2026-03-25 |
+
 
 ---
 
@@ -84,6 +84,7 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000073 | api-documentation | prj0000073-api-documentation | [#210](https://github.com/UndiFineD/PyAgent/pull/210) | P2 | M | 2026-03-25 |
 | prj0000072 | websocket-reconnect-logic | prj0000072-websocket-reconnect-logic | [#209](https://github.com/UndiFineD/PyAgent/pull/209) | P3 | S | 2026-03-25 |
 | prj0000043 | p2p-security-deps | prj0000043-p2p-security-deps | open | P2 | M | 2026-03-24 |
 | prj0000044 | transaction-managers-stubs | prj0000044-transaction-managers-stubs | #136 | P2 | S | 2026-03-24 |

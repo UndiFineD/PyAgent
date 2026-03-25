@@ -1181,10 +1181,10 @@
   {
     "id": "prj0000073",
     "name": "api-documentation",
-    "lane": "In Sprint",
+    "lane": "Review",
     "summary": "Hand-crafted API reference covering all backend REST endpoints, WebSocket protocol, authentication flows, and error codes in docs/api/",
     "branch": "prj0000073-api-documentation",
-    "pr": null,
+    "pr": 210,
     "priority": "P2",
     "budget_tier": "M",
     "tags": ["docs", "api", "backend"],
