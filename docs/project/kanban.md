@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-24 | Total projects: 72_
+_Last updated: 2026-03-25 | Total projects: 72_
 
 ## How to use this board
 
@@ -43,7 +43,6 @@ Projects proposed but not yet formally scoped.
 
 | ID | Name | Summary | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|
-| prj0000055 | websocket-e2e-encryption | Wire the documented E2E encryption architecture into production WebSocket transport using Noise_XX | P4 | unknown | security, websocket, rust | 2026-03-24 |
 | prj0000056 | rust-async-transport-activation | Enable async-transport feature in rust_core to activate QUIC-over-Tokio for faster inter-agent messaging | P4 | unknown | rust, transport, async | 2026-03-24 |
 | prj0000057 | agent-orchestration-graph | Visual DAG panel in NebulaOS showing live task flow and agent status across all 10 pipeline stages | P4 | unknown | ui, nebula, agents | 2026-03-24 |
 | prj0000058 | mobile-responsive-nebula-os | Add CSS responsive breakpoints and touch-friendly interaction patterns to the NebulaOS shell | P4 | unknown | ui, nebula, mobile | 2026-03-24 |
@@ -54,7 +53,7 @@ Projects proposed but not yet formally scoped.
 | prj0000063 | structured-logging | JSON structured logging with correlation IDs and severity levels across all backend endpoints and agents | P4 | unknown | observability, logging | 2026-03-24 |
 | prj0000064 | rate-limiting-middleware | Token-bucket rate limiting middleware on all FastAPI REST endpoints with configurable per-route limits | P3 | S | security, backend | 2026-03-24 |
 | prj0000065 | agent-memory-persistence | Persist agent conversation context and task history across sessions using an embedded vector store | P3 | M | agents, memory | 2026-03-24 |
-| prj0000066 | api-versioning | Versioned API routing (/api/v1/) with explicit schema contracts and backwards-compatible evolution strategy | P3 | S | backend, api | 2026-03-24 |
+| prj0000066 | api-versioning | Versioned API routing (/v1/api/) with explicit schema contracts and backwards-compatible evolution strategy | P3 | S | backend, api | 2026-03-24 |
 | prj0000067 | rust-file-watcher | Rust-powered filesystem watcher integrated into rust_core for real-time project change detection | P4 | M | rust, tools | 2026-03-24 |
 | prj0000068 | agent-timeout-watchdog | Configurable per-agent execution timeout with graceful shutdown, retry budget, and dead-letter queue | P3 | M | agents, reliability | 2026-03-24 |
 | prj0000069 | ci-test-parallelization | Split pytest suite into parallel CI matrix buckets to reduce CI wall time by ~60% via sharding | P3 | S | ci, testing | 2026-03-24 |
@@ -88,6 +87,7 @@ Active implementation — @4plan through @6code are working.
 
 | ID | Name | Summary | Branch | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000055 | websocket-e2e-encryption | Wire X25519 ECDH + AES-256-GCM E2E encryption into WebSocket transport | prj0000055-websocket-e2e-encryption | P2 | M | 2026-03-25 |
 
 ---
 
