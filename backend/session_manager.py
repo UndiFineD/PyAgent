@@ -26,7 +26,6 @@ class SessionManager:
         self._sessions: dict[str, WebSocket] = {}
 
     async def connect(self, websocket: WebSocket) -> str:
-        await websocket.accept()
         session_id = str(uuid.uuid4())
         self._sessions[session_id] = websocket
         return session_id

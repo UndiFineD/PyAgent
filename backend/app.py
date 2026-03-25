@@ -26,6 +26,7 @@ from pydantic import BaseModel
 
 from .auth import require_auth, websocket_auth
 from .session_manager import SessionManager
+from .ws_crypto import decrypt_message, derive_shared_secret, encrypt_message, generate_keypair
 from .ws_handler import handle_message
 
 logger = logging.getLogger(__name__)
@@ -357,23 +358,64 @@ app.include_router(_auth_router)
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket) -> None:
-    """WebSocket endpoint for real-time communication."""
+    """WebSocket endpoint for real-time communication with E2E encryption.
+
+    After authentication a one-round X25519 ECDH handshake is performed:
+      1. Server sends its ephemeral public key (base64 text frame).
+      2. Client sends its ephemeral public key (base64 text frame).
+      3. Both sides independently derive the 32-byte AES-256 session key.
+    All subsequent messages are encrypted with AES-256-GCM.
+    """
+    import base64
+    from cryptography.exceptions import InvalidTag
+
     await websocket.accept()
     auth = await websocket_auth(websocket)
     if auth is None:
         return  # websocket_auth already closed the connection with 4401
 
+    # ── E2E key exchange ─────────────────────────────────────────────────────
+    server_priv, server_pub = generate_keypair()
+    await websocket.send_text(base64.b64encode(server_pub).decode())
+
+    try:
+        client_pub_b64 = await websocket.receive_text()
+        client_pub = base64.b64decode(client_pub_b64)
+    except Exception:
+        await websocket.close(code=1011)
+        return
+
+    session_key = derive_shared_secret(server_priv, client_pub)
+
+    # Wrap websocket.send_text to transparently encrypt all outgoing messages.
+    # ws_handler.py calls websocket.send_text directly, so wrapping here avoids
+    # modifying the handler or any sub-handler.
+    _original_send_text = websocket.send_text
+
+    async def _encrypted_send(text: str) -> None:
+        payload = base64.b64encode(encrypt_message(session_key, text.encode("utf-8"))).decode()
+        await _original_send_text(payload)
+
+    websocket.send_text = _encrypted_send  # type: ignore[method-assign]
+    # ─────────────────────────────────────────────────────────────────────────
+
     session_id = await sessions.connect(websocket)
-    logger.info("WebSocket connected: %s (auth=%s)", session_id, auth.get("auth"))
+    logger.info("WebSocket connected (E2E): %s (auth=%s)", session_id, auth.get("auth"))
     try:
         while True:
-            raw = await websocket.receive_text()
+            raw_b64 = await websocket.receive_text()
+            try:
+                raw = decrypt_message(session_key, base64.b64decode(raw_b64)).decode("utf-8")
+            except (InvalidTag, ValueError, Exception) as exc:
+                logger.warning("WebSocket decrypt failed for %s: %s", session_id, exc)
+                await websocket.close(code=1011)
+                sessions.disconnect(session_id)
+                return
+
             try:
                 data = json.loads(raw)
             except json.JSONDecodeError:
-                await websocket.send_text(
-                    json.dumps({"type": "error", "error": "Invalid JSON"})
-                )
+                await websocket.send_text(json.dumps({"type": "error", "error": "Invalid JSON"}))
                 continue
             await handle_message(sessions, session_id, websocket, data)
     except WebSocketDisconnect:
