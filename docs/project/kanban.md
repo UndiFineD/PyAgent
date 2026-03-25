@@ -55,6 +55,7 @@ Active options exploration — @2think is working or has completed .think.md.
 
 | ID | Name | Summary | Branch | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|---|
+| prj0000074 | workspace-meta-improvements | Move agent memory/logs to .github/agents, enforce docstrings policy, restructure docs/architecture, add SWOT+risk to kanban, expand @2think depth | prj0000074-workspace-meta-improvements | P2 | L | meta, workflow, docs | 2026-03-25 |
 
 ---
 
