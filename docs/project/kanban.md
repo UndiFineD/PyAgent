@@ -44,7 +44,6 @@ Projects proposed but not yet formally scoped.
 | ID | Name | Summary | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|
 | prj0000071 | dark-mode-accessibility | WCAG 2.1 AA accessibility audit and remediation for the NebulaOS dark theme | P4 | S | ui, accessibility | 2026-03-24 |
-| prj0000073 | api-documentation | Hand-crafted API reference covering all backend REST endpoints, WebSocket protocol, authentication, and error codes | P2 | M | docs, api, backend | 2026-03-25 |
 | prj0000074 | workspace-meta-improvements | Move agent memory/logs to .github/agents, enforce docstrings policy, restructure docs/architecture, add SWOT+risk to kanban, expand @2think depth | P2 | L | meta, workflow, docs, architecture | 2026-03-25 |
 | prj0000075 | ci-simplification | Audit all GitHub workflow YAML files; consolidate or remove in favour of comprehensive pre-commit hooks for local-first testing | P2 | S | ci, devops, workflow | 2026-03-25 |
 | prj0000076 | future-ideas-kanban | Full workspace audit to surface future improvement ideas; add SWOT-prioritised idea table to kanban.md with priority, impact, urgency, and description | P3 | M | planning, kanban, roadmap | 2026-03-25 |
@@ -57,6 +56,7 @@ Active options exploration — @2think is working or has completed .think.md.
 
 | ID | Name | Summary | Branch | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|---|
+| prj0000073 | api-documentation | Hand-crafted API reference covering all backend REST endpoints, WebSocket protocol, authentication, and error codes | prj0000073-api-documentation | P2 | M | docs, api, backend | 2026-03-25 |
 
 ---
 
@@ -180,8 +180,8 @@ Stalled, cancelled, or superseded projects.
 
 | Lane | Count |
 |---|---|
-| Ideas | 5 |
-| Discovery | 0 |
+| Ideas | 4 |
+| Discovery | 1 |
 | Design | 0 |
 | In Sprint | 0 |
 | Review | 3 |

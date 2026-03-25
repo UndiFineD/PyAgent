@@ -45,3 +45,7 @@
 | **summary** | Set up project folder docs/project/prj0000045/. Created all 9 stub files. @2think analysis complete (2think.memory.md §3.1 + §3.3, Option B binding). M1–M4 DONE for original scope. Scope extended 2026-03-22: ContextWindow added (src/context_manager/ContextWindow.py + src/context_manager/__init__.py + tests/test_ContextWindow.py). @4plan must add T15; @5test must add test_ContextWindow.py; @6code implements T00–T15. Branch `prj0000045-transaction-managers-full` confirmed active. |
 | **handoff_target** | @4plan (T15 ContextWindow addition) → @5test → @6code |
 | **artifact_paths** | docs/project/prj0000045/, src/transactions/ (to be created), src/context_manager/ContextWindow.py (to be created), src/core/ProcessTransactionManager.py (to be created), src/core/ContextTransactionManager.py (to be created) |
+
+---
+
+prj0000073 api-documentation branch prj0000073-api-documentation — project setup complete 2026-03-25
