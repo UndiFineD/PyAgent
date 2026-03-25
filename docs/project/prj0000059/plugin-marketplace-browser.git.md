@@ -36,7 +36,7 @@ No out-of-scope files modified. ✅
 
 ## Pull Request
 
-**PR:** TBD
+**PR:** [#197](https://github.com/UndiFineD/PyAgent/pull/197)
 **Title:** feat: Plugin marketplace browser in NebulaOS (prj0000059)
 **Base:** main
 **Head:** prj0000059-plugin-marketplace-browser
