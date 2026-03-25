@@ -84,7 +84,6 @@ Active implementation — @4plan through @6code are working.
 
 | ID | Name | Summary | Branch | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
-| prj0000061 | theme-system | Light mode and retro terminal theme for NebulaOS with theme selector and persisted preference | prj0000061-theme-system | P4 | unknown | 2026-03-25 |
 
 ---
 
@@ -94,6 +93,7 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000061 | theme-system | prj0000061-theme-system | [#199](https://github.com/UndiFineD/PyAgent/pull/199) | P4 | S | 2026-03-25 |
 | prj0000057 | agent-orchestration-graph | prj0000057-agent-orchestration-graph | [#195](https://github.com/UndiFineD/PyAgent/pull/195) | P2 | M | 2026-03-25 |
 | prj0000056 | rust-async-transport-activation | prj0000056-rust-async-transport-activation | [#194](https://github.com/UndiFineD/PyAgent/pull/194) | P4 | M | 2026-03-25 |
 | prj0000055 | websocket-e2e-encryption | prj0000055-websocket-e2e-encryption | [#193](https://github.com/UndiFineD/PyAgent/pull/193) | P2 | M | 2026-03-25 |
@@ -179,8 +179,8 @@ Stalled, cancelled, or superseded projects.
 | Ideas | 14 |
 | Discovery | 0 |
 | Design | 0 |
-| In Sprint | 1 |
-| Review | 8 |
+| In Sprint | 0 |
+| Review | 9 |
 | Released | 48 |
 | Archived | 1 |
 | **Total** | **72** |
