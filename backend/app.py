@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import logging
+import random
 import time
 from pathlib import Path
 
@@ -159,6 +160,30 @@ _auth_router = APIRouter(dependencies=[Depends(require_auth)])
 async def health() -> dict[str, str]:
     """Health check endpoint."""
     return {"status": "ok"}
+
+
+@app.get("/api/metrics/flm")
+async def flm_metrics() -> dict:
+    """Return simulated FLM token throughput metrics."""
+    now = time.time()
+    # Simulate 10 data points (last 10 seconds)
+    samples = [
+        {
+            "timestamp": now - (9 - i),
+            "tokens_per_second": round(random.uniform(50, 500), 1),
+            "model": "llama3-8b",
+            "queue_depth": random.randint(0, 10),
+        }
+        for i in range(10)
+    ]
+    return {
+        "samples": samples,
+        "avg_tokens_per_second": round(
+            sum(s["tokens_per_second"] for s in samples) / len(samples), 1
+        ),
+        "peak_tokens_per_second": max(s["tokens_per_second"] for s in samples),
+        "model": "llama3-8b",
+    }
 
 
 # ── System-metrics models ────────────────────────────────────────────────────

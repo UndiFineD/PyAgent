@@ -7,6 +7,7 @@ import { Paint } from './apps/Paint';
 import { Conky } from './apps/Conky';
 import { CodeBuilder } from './apps/CodeBuilder';
 import { ProjectManager } from './apps/ProjectManager';
+import { FLMDashboard } from './apps/FLMDashboard';
 import { OrchestrationGraph } from './apps/OrchestrationGraph';
 import { WindowState, AppId, Theme, OsConfig, DEFAULT_OS_CONFIG } from './types';
 import { generateId, cn } from './utils';
@@ -162,6 +163,11 @@ export default function App() {
         width = 1100;
         height = 650;
         break;
+      case 'flm-dashboard':
+        component = <FLMDashboard />;
+        title = 'FLM Dashboard';
+        width = 500;
+        height = 420;
       case 'orchestration':
         component = <OrchestrationGraph />;
         title = 'Orchestration';
@@ -307,6 +313,8 @@ export default function App() {
                     <button onClick={() => openApp('projectmanager')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-os-bg text-left text-sm transition-colors">
                       <Monitor size={16} className="text-indigo-400" /> Project Manager
                     </button>
+                    <button onClick={() => openApp('flm-dashboard')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-os-bg text-left text-sm transition-colors">
+                      <span style={{ fontSize: '16px', lineHeight: 1 }}>📊</span> FLM Dashboard
                     <button onClick={() => openApp('orchestration')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-os-bg text-left text-sm transition-colors">
                       <span className="text-base leading-none">🕸️</span> Orchestration
                     </button>

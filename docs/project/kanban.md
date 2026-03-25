@@ -46,6 +46,7 @@ Projects proposed but not yet formally scoped.
 | prj0000056 | rust-async-transport-activation | Enable async-transport feature in rust_core to activate QUIC-over-Tokio for faster inter-agent messaging | P4 | unknown | rust, transport, async | 2026-03-24 |
 | prj0000057 | agent-orchestration-graph | Visual DAG panel in NebulaOS showing live task flow and agent status across all 10 pipeline stages | P4 | unknown | ui, nebula, agents | 2026-03-24 |
 | prj0000058 | mobile-responsive-nebula-os | Add CSS responsive breakpoints and touch-friendly interaction patterns to the NebulaOS shell | P4 | unknown | ui, nebula, mobile | 2026-03-24 |
+| prj0000059 | plugin-marketplace-browser | In-NebulaOS panel for discovering, installing, and managing third-party agent plugins | P4 | unknown | ui, nebula, plugins | 2026-03-24 |
 | prj0000060 | flm-token-throughput-dashboard | Real-time tokens-per-second charts fed from FLM telemetry in NebulaOS | P4 | unknown | ui, nebula, llm, flm | 2026-03-24 |
 | prj0000061 | theme-system | Light mode and retro terminal theme for NebulaOS with theme selector and persisted preference | P4 | unknown | ui, nebula, themes | 2026-03-24 |
 | prj0000062 | live-agent-execution-in-codebuilder | Wire the 10-agent pipeline to CodeBuilder UI with streaming per-agent log output and progress indicators | P4 | unknown | ui, nebula, agents, codebuilder | 2026-03-24 |
@@ -95,6 +96,7 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000060 | flm-token-throughput-dashboard | prj0000060-flm-token-throughput-dashboard | [#198](https://github.com/UndiFineD/PyAgent/pull/198) | P4 | S | 2026-03-25 |
 | prj0000058 | mobile-responsive-nebula-os | prj0000058-mobile-responsive-nebula-os | [#196](https://github.com/UndiFineD/PyAgent/pull/196) | P4 | S | 2026-03-25 |
 | prj0000057 | agent-orchestration-graph | prj0000057-agent-orchestration-graph | [#195](https://github.com/UndiFineD/PyAgent/pull/195) | P2 | M | 2026-03-25 |
 | prj0000056 | rust-async-transport-activation | prj0000056-rust-async-transport-activation | [#194](https://github.com/UndiFineD/PyAgent/pull/194) | P4 | M | 2026-03-25 |
