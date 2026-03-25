@@ -25,6 +25,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from .auth import require_auth, websocket_auth
+from .rate_limiter import RateLimitMiddleware
 from .session_manager import SessionManager
 from .ws_crypto import decrypt_message, derive_shared_secret, encrypt_message, generate_keypair
 from .ws_handler import handle_message
@@ -91,6 +92,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_middleware(RateLimitMiddleware)
 
 sessions = SessionManager()
 
