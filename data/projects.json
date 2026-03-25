@@ -1146,7 +1146,7 @@
   {
     "id": "prj0000071",
     "name": "dark-mode-accessibility",
-    "lane": "Review",
+    "lane": "Released",
     "summary": "WCAG 2.1 AA accessibility audit and remediation for the NebulaOS dark theme: contrast ratios, keyboard nav, ARIA labels",
     "branch": "prj0000071-dark-mode-accessibility",
     "pr": 211,
@@ -1159,7 +1159,7 @@
       "a11y"
     ],
     "created": "2026-03-24",
-    "updated": "2026-03-24"
+    "updated": "2026-03-25"
   },
   {
     "id": "prj0000072",

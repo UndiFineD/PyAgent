@@ -83,7 +83,6 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
-| prj0000071 | dark-mode-accessibility | prj0000071-dark-mode-accessibility | [#211](https://github.com/UndiFineD/PyAgent/pull/211) | P4 | S | 2026-03-25 |
 | prj0000073 | api-documentation | prj0000073-api-documentation | [#210](https://github.com/UndiFineD/PyAgent/pull/210) | P2 | M | 2026-03-25 |
 | prj0000072 | websocket-reconnect-logic | prj0000072-websocket-reconnect-logic | [#209](https://github.com/UndiFineD/PyAgent/pull/209) | P3 | S | 2026-03-25 |
 | prj0000043 | p2p-security-deps | prj0000043-p2p-security-deps | open | P2 | M | 2026-03-24 |
@@ -97,6 +96,7 @@ All projects merged to main branch.
 
 | ID | Name | Summary | Branch | PR | Priority | Budget | Released |
 |---|---|---|---|---|---|---|---|
+| prj0000071 | dark-mode-accessibility | WCAG 2.1 AA remediation for NebulaOS dark theme: aria-labels, focus rings, contrast fix | merged | [#211](https://github.com/UndiFineD/PyAgent/pull/211) | P4 | S | 2026-03-25 |
 | prj0000070 | opentelemetry-tracing | Distributed tracing with OpenTelemetry SDK across all backend requests | merged | #208 | P4 | M | 2026-03-25 |
 | prj0000069 | ci-test-parallelization | Split pytest suite into parallel CI matrix buckets | merged | #207 | P3 | S | 2026-03-25 |
 | prj0000068 | agent-timeout-watchdog | Per-agent execution timeout with graceful shutdown and dead-letter queue | merged | #206 | P3 | M | 2026-03-25 |
