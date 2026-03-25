@@ -68,6 +68,26 @@ Enforcement:
 - ruff rules D100–D107 (missing docstrings), D200–D215 (formatting)
 - Run: `ruff check --select D <file>` to verify before handoff
 
+## Lint and import-sort policy
+
+Every Python file created or modified by `@6code` MUST pass the full pre-commit checks. Run
+this before handing off to `@7exec`:
+
+```powershell
+& c:\Dev\PyAgent\.venv\Scripts\Activate.ps1
+# Auto-fix import ordering and other fixable violations
+.venv\Scripts\ruff.exe check --fix <file>
+# Confirm zero remaining errors
+.venv\Scripts\ruff.exe check <file>
+```
+
+Common violations to anticipate:
+- **I001** — Import block unsorted: stdlib imports must precede third-party imports, separated
+  by a blank line. `ruff check --fix` resolves this automatically.
+- **ANN202** — Missing return type annotation on private/nested async functions.
+- **D403** — Docstring first word must be capitalized.
+- **D301** — Use `r"""` if the docstring contains backslashes.
+
 Format:
 ```python
 def my_func(x: int) -> str:

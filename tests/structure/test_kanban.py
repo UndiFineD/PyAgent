@@ -260,7 +260,7 @@ def test_kanban_required_h2s(heading: str) -> None:
 
 @_SKIP_KANBAN
 def test_kanban_total_rows() -> None:
-    r"""kanban.md must contain exactly 76 project data rows.
+    """kanban.md must contain exactly 76 project data rows.
 
     A data row is any line matching r'^\|\s*prj\d{7}'.
     """

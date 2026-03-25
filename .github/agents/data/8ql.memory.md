@@ -28,6 +28,37 @@ Invoke it via `agent/runSubagent` to continue the process.
 | **rust_unsafe** | SKIPPED (rust_core not changed) |
 | **block_items** | 0 |
 | **warn_items** | 3 × LOW/MEDIUM (info-disclosure, no rate-limit, no auth) |
+
+---
+
+## prj0000075 — ci-simplification
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000075-ci-simplification |
+| **owner_agent** | @8ql |
+| **source** | @7exec |
+| **updated_at** | 2026-03-25 |
+| **status** | DONE |
+| **branch** | prj0000075-ci-simplification ✓ |
+| **files_scanned** | `.github/workflows/security.yml`, `tests/ci/test_workflow_count.py`, `tests/structure/test_ci_yaml.py`, `docs/setup.md`, `pyproject.toml` |
+| **security_workflow_injection** | PASS — no user-controlled data in run steps; static matrix only |
+| **security_trigger** | PASS — `pull_request` used, not `pull_request_target` |
+| **security_permissions** | PASS — minimal: contents:read, security-events:write, actions:read |
+| **security_action_pinning** | LOW — version tags used for GitHub-owned actions (acceptable) |
+| **ruff_S** | PASS (0 findings) |
+| **pip_audit** | PASS — 0/253 deps with CVEs |
+| **rust_unsafe** | SKIPPED (rust_core not changed) |
+| **quality_plan_vs_delivery** | PASS — all 5 tasks delivered |
+| **quality_ac_vs_tests** | PASS — 5 ACs, 5 corresponding tests |
+| **quality_docs_vs_impl** | PASS — setup.md commands verified |
+| **quality_agent_consistency** | PASS |
+| **block_items** | 0 |
+| **lessons_written** | 3 (I001 import sort → 6code; deprecated ruff config → 6code; D203/D213 conflict → 6code) |
+| **rules_promoted** | 0 (first occurrence each; threshold is 2) |
+
+## Promotions
+_(none yet — all lessons at recurrence count 1; promote at count 2)_
 | **overall** | CLEAN → @9git |
 | **artifact_paths** | docs/project/prj0000047/conky-real-metrics.ql.md |
 

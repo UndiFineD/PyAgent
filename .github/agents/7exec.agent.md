@@ -110,7 +110,34 @@ Set-Location ..
 python -c "from rust_core import *; print('rust_core loaded OK')"
 ```
 
-**Step 6.5 — Placeholder scan (MANDATORY — blocks handoff)**
+**Step 6.5 — Pre-commit lint gate (MANDATORY — blocks handoff)**  
+Before handing off to `@8ql`, run pre-commit on **every file changed or created in this task**:
+```powershell
+& c:\Dev\PyAgent\.venv\Scripts\Activate.ps1
+# Collect changed + untracked files that belong to this project
+$changed = git diff --name-only HEAD
+$untracked = git ls-files --others --exclude-standard
+$allFiles = ($changed + $untracked) -join ' '
+# Run pre-commit on exactly those files
+pre-commit run --files $allFiles 2>&1
+```
+- If any hook **fails**, read the output. For fixable violations (marked `[*]`), run:
+  ```powershell
+  .venv\Scripts\ruff.exe check --fix <offending-file>
+  ```
+  Then re-run `pre-commit run --files <offending-file>` to confirm clean.
+- If violations cannot be auto-fixed, return them to `@6code` or `@5test` (whichever
+  authored the offending file) with the exact error lines.
+- **Do not hand off to `@8ql`** while any pre-commit hook reports `Failed`.
+
+Common fixable violations caught here:
+- **I001** — Import block unsorted (fixed by `ruff --fix`)
+- **D403** — Docstring first word not capitalized (fixed by `ruff --fix`)
+- **D301** — Missing `r` prefix on docstring with backslashes (fixed by `ruff --fix`)
+
+---
+
+**Step 6.6 — Placeholder scan (MANDATORY — blocks handoff)**
 Before handing off to `@8ql`, scan the changed source files for placeholder patterns:
 ```powershell
 & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1

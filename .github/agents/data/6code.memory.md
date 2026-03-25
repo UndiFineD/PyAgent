@@ -50,6 +50,31 @@ This should be done via `agent/runSubagent`.
 | **task_id** | prj037-tools-crdt-security |
 | **owner_agent** | @6code |
 | **source** | @5test |
+
+---
+
+## Lessons
+
+### Lesson — 2026-03-25 (prj0000075)
+**Pattern:** Import block unsorted (I001) in new Python files — `from pathlib import Path` and `import yaml` placed without a blank line separator between stdlib and third-party groups.  
+**Root cause:** `ruff check --select D` was run (docstrings only) but `ruff check --fix` covering all rules was not run before handoff to @7exec.  
+**Prevention:** Always run `.venv\Scripts\ruff.exe check --fix <file>` on every Python file created or modified before handing off. The `--fix` flag resolves I001 automatically.  
+**First seen:** prj0000075  
+**Recurrence count:** 1
+
+### Lesson — 2026-03-25 (prj0000075)
+**Pattern:** Deprecated ruff config keys — `select` and `ignore` placed directly under `[tool.ruff]` instead of `[tool.ruff.lint]`, producing deprecation warnings on every ruff invocation.  
+**Root cause:** pyproject.toml was not re-checked after ruff version upgrade; old key location silently continued to work but emitted warnings.  
+**Prevention:** When modifying `pyproject.toml`, run `.venv\Scripts\ruff.exe check --output-format concise <any-file>` and confirm no `warning:` lines appear before committing.  
+**First seen:** prj0000075  
+**Recurrence count:** 1
+
+### Lesson — 2026-03-25 (prj0000075)
+**Pattern:** Conflicting docstring rules D203/D211 and D212/D213 generate `warning: ... are incompatible` on every ruff run when both members of each pair are active.  
+**Root cause:** Rule pairs were not explicitly resolved in the `ignore` list; ruff auto-resolves but still warns.  
+**Prevention:** In `[tool.ruff.lint].ignore`, always explicitly include the losing rule of each conflicting pair: `D203` (loses to D211) and `D213` (loses to D212).  
+**First seen:** prj0000075  
+**Recurrence count:** 1
 | **created_at** | 2026-03-20 |
 | **updated_at** | 2026-03-20 |
 | **status** | DONE |

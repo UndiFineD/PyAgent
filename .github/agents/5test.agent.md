@@ -52,6 +52,27 @@ Enforcement:
 - ruff rules D100–D107 (missing docstrings), D200–D215 (formatting)
 - Run: `ruff check --select D <file>` to verify before handoff
 
+## Lint and import-sort policy
+
+Every test file created or modified by `@5test` MUST pass the full pre-commit checks. Run
+this before handing off to `@6code`:
+
+```powershell
+& c:\Dev\PyAgent\.venv\Scripts\Activate.ps1
+# Auto-fix import ordering and other fixable violations
+.venv\Scripts\ruff.exe check --fix <file>
+# Confirm zero remaining errors
+.venv\Scripts\ruff.exe check <file>
+```
+
+Common violations to anticipate:
+- **I001** — Import block unsorted: stdlib imports must precede third-party imports, separated
+  by a blank line. `ruff check --fix` resolves this automatically.
+- **ANN202** — Missing return type annotation on private/nested async functions (e.g. inner
+  `async def gen()` in tests). Add `-> AsyncGenerator[str, None]` or `-> None` as appropriate.
+- **D403** — Docstring first word must be capitalized.
+- **D301** — Use `r"""` if the docstring contains backslashes.
+
 Format:
 ```python
 def test_my_feature() -> None:

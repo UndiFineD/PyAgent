@@ -5,6 +5,13 @@ tradeoff analysis, and recommended directions.
 
 ---
 
+## prj0000075 ci-simplification — 2026-03-25
+Option selected: Keep `ci.yml` only; delete `core-quality.yml`, `pm.yml`, `quality.yml`, `testing-infra.yml` — pre-commit already covers ruff/mypy; ci.yml is the sole non-redundant workflow (Rust build gate + sharded tests)
+Artifact: docs/project/prj0000075/prj0000075.think.md
+Status: DONE — handoff to @3design
+
+---
+
 ## prj0000052 — project-management
 _Date: 2026-03-24 | Status: DONE | Branch: prj0000052-project-management_
 

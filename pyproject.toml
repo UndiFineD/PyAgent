@@ -74,12 +74,11 @@ rust = [
 cache-keys = [{ file = "requirements.txt" }]
 
 [tool.ruff]
-# ruff configuration lives here; older versions (including 0.15.x) expect
-# all lint-related keys directly in this table. hyphenated names are
-# required for compatibility.
 line-length = 120
 target-version = "py312"
 exclude = ["src-old/**", "scripts-old/**", ".agents/**", ".cleanup_archive/**", "codeql/**"]
+
+[tool.ruff.lint]
 select = [
     "E",  # pycodestyle errors
     "W",  # pycodestyle warnings
@@ -106,6 +105,8 @@ ignore = [
     "ANN201", # missing type on placeholder
     "D103", # missing docstring public function
     "ANN001", # missing type annotation for argument
+    "D203", # one-blank-line-before-class (conflicts with D211; D211 wins)
+    "D213", # multi-line-summary-second-line (conflicts with D212; D212 wins)
 ]
 
 

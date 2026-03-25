@@ -1,0 +1,64 @@
+name: Security Scanning (CodeQL)
+
+# Run CodeQL analysis on Python and JavaScript sources.
+# Uploads SARIF results to the GitHub Security tab.
+#
+# Triggers:
+#   - push / PR to main (fast feedback on every merge-ready change)
+#   - weekly schedule (catches new CVEs even without code changes)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 7 * * 1"   # Every Monday at 07:00 UTC
+
+permissions:
+  contents: read          # Checkout code
+  security-events: write  # Upload SARIF to GitHub Security tab
+  actions: read           # Required by CodeQL init on private repos
+
+jobs:
+  analyze:
+    name: CodeQL (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python, javascript]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          # +security-and-quality adds all standard CodeQL security and quality
+          # queries on top of the default set.
+          queries: +security-and-quality
+          config: |
+            queries:
+              # Custom Python security queries (eval, subprocess shell injection).
+              # CodeQL skips this pack automatically for non-Python language runs.
+              - uses: ./codeql/codeql-custom-queries-python
+            paths:
+              - src
+              - scripts
+              - web
+            paths-ignore:
+              - "**/__pycache__"
+              - "**/node_modules"
+              - "rust_core/target"
+              - "codeql"
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"

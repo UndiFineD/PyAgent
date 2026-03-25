@@ -63,3 +63,7 @@ prj0000073 api-documentation branch prj0000073-api-documentation — project set
 | **summary** | prj0000074 workspace-meta-improvements branch prj0000074-workspace-meta-improvements — project setup complete 2026-03-25 |
 | **handoff_target** | @2think |
 | **artifact_paths** | docs/project/prj0000074/prj0000074.project.md |
+
+---
+
+prj0000075 ci-simplification branch prj0000075-ci-simplification — project setup complete 2026-03-25

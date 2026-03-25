@@ -43,7 +43,6 @@ Projects proposed but not yet formally scoped.
 
 | ID | Name | Summary | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|
-| prj0000075 | ci-simplification | Audit all GitHub workflow YAML files; consolidate or remove in favour of comprehensive pre-commit hooks for local-first testing | P2 | S | ci, devops, workflow | 2026-03-25 |
 | prj0000076 | future-ideas-kanban | Full workspace audit to surface future improvement ideas; add SWOT-prioritised idea table to kanban.md with priority, impact, urgency, and description | P3 | M | planning, kanban, roadmap | 2026-03-25 |
 
 ---
@@ -72,7 +71,6 @@ Active implementation — @4plan through @6code are working.
 
 | ID | Name | Summary | Branch | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
-
 ---
 
 ## Review
@@ -81,6 +79,7 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000075 | ci-simplification | prj0000075-ci-simplification | [#213](https://github.com/UndiFineD/PyAgent/pull/213) | P2 | S | 2026-03-25 |
 | prj0000072 | websocket-reconnect-logic | prj0000072-websocket-reconnect-logic | [#209](https://github.com/UndiFineD/PyAgent/pull/209) | P3 | S | 2026-03-25 |
 | prj0000043 | p2p-security-deps | prj0000043-p2p-security-deps | open | P2 | M | 2026-03-24 |
 | prj0000044 | transaction-managers-stubs | prj0000044-transaction-managers-stubs | #136 | P2 | S | 2026-03-24 |
@@ -180,12 +179,12 @@ Stalled, cancelled, or superseded projects.
 
 | Lane | Count |
 |---|---|
-| Ideas | 4 |
+| Ideas | 1 |
 | Discovery | 0 |
 | Design | 0 |
 | In Sprint | 1 |
 | Review | 3 |
-| Released | 67 |
+| Released | 70 |
 | Archived | 1 |
 | **Total** | **76** |
 

@@ -4,6 +4,28 @@ _Last updated: 2026-03-25_
 
 ---
 
+## 2026-03-25 — prj0000075 CI Simplification
+
+**Branch:** `prj0000075-ci-simplification`
+**PR:** [#213](https://github.com/UndiFineD/PyAgent/pull/213) — open, awaiting merge
+**Status:** REVIEW — all @1project–@9git stages complete; 165 tests pass; @8ql: no blocking findings
+
+**Changes delivered:**
+- 4 redundant workflows deleted (`core-quality`, `pm`, `quality`, `testing-infra`)
+- `security.yml` created (CodeQL Python+JS, push/PR/weekly, minimal permissions)
+- pre-commit lint fixes: I001, ruff config migration to `[tool.ruff.lint]`, D203/D213 conflict
+- `docs/setup.md` — Local Testing section added
+- Agent workflow improvements: `5test` + `6code` lint policy; `7exec` pre-commit gate; `8ql` redesigned (security-only → quality+security gate with lessons-learned loop)
+- Lessons written to `6code.memory.md` + `8ql.memory.md`
+
+**Project boundary:**
+- Scope: `.github/workflows/*.yml` audit + `.pre-commit-config.yaml` expansion + `docs/` CI guidance update
+- Out of scope: Python/Rust/TS source code, test files
+- Expected branch: `prj0000075-ci-simplification`
+- Next available prj: prj0000077
+
+---
+
 ## 2026-03-25 — prj0000074 Workspace Meta Improvements
 
 **Branch:** `prj0000074-workspace-meta-improvements`
