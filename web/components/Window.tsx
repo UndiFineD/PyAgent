@@ -202,10 +202,12 @@ const WindowHeader = ({ window, isActive, onClose, onMinimize, onMaximize, isMen
                 setIsMenuOpen(!isMenuOpen); 
               }} 
               className={cn(
-                "p-0.5 rounded hover:bg-white/10 transition-colors",
+                "p-0.5 rounded hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/60",
                 isMenuOpen && "bg-white/10"
               )}
               onMouseDown={(e) => e.stopPropagation()}
+              aria-label="Window menu"
+              aria-expanded={isMenuOpen}
             >
               <Menu size={iconSize} />
             </button>
@@ -249,13 +251,13 @@ const WindowHeader = ({ window, isActive, onClose, onMinimize, onMaximize, isMen
       </div>
       
       <div className="flex items-center gap-1.5" onMouseDown={(e) => e.stopPropagation()}>
-        <button onClick={(e) => { e.stopPropagation(); onMinimize(window.id); }} className="p-0.5 hover:bg-white/10 rounded">
+        <button onClick={(e) => { e.stopPropagation(); onMinimize(window.id); }} className="p-0.5 hover:bg-white/10 rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/60" aria-label="Minimize">
           <Minus size={iconSize} />
         </button>
-        <button onClick={(e) => { e.stopPropagation(); onMaximize(window.id); }} className="p-0.5 hover:bg-white/10 rounded">
+        <button onClick={(e) => { e.stopPropagation(); onMaximize(window.id); }} className="p-0.5 hover:bg-white/10 rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/60" aria-label={window.isMaximized ? 'Restore' : 'Maximize'}>
           {window.isMaximized ? <Square size={iconSize - 2} /> : <Maximize2 size={iconSize - 2} />}
         </button>
-        <button onClick={(e) => { e.stopPropagation(); onClose(window.id); }} className="p-0.5 hover:bg-red-500 hover:text-white rounded">
+        <button onClick={(e) => { e.stopPropagation(); onClose(window.id); }} className="p-0.5 hover:bg-red-500 hover:text-white rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/60" aria-label="Close">
           <X size={iconSize} />
         </button>
       </div>

@@ -73,13 +73,17 @@ export const Paint: React.FC = () => {
         <div className="flex items-center gap-1 bg-os-window p-1 rounded-lg border border-os-border">
           <button
             onClick={() => setTool('pencil')}
-            className={cn("p-1.5 rounded hover:bg-os-bg", tool === 'pencil' && "bg-os-accent text-white")}
+            className={cn("p-1.5 rounded hover:bg-os-bg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-os-accent", tool === 'pencil' && "bg-os-accent text-white")}
+            aria-label="Pencil"
+            aria-pressed={tool === 'pencil'}
           >
             <Pencil size={16} />
           </button>
           <button
             onClick={() => setTool('eraser')}
-            className={cn("p-1.5 rounded hover:bg-os-bg", tool === 'eraser' && "bg-os-accent text-white")}
+            className={cn("p-1.5 rounded hover:bg-os-bg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-os-accent", tool === 'eraser' && "bg-os-accent text-white")}
+            aria-label="Eraser"
+            aria-pressed={tool === 'eraser'}
           >
             <Eraser size={16} />
           </button>
@@ -90,6 +94,7 @@ export const Paint: React.FC = () => {
           value={color}
           onChange={(e) => setColor(e.target.value)}
           className="w-8 h-8 rounded cursor-pointer border-0"
+          aria-label="Stroke colour"
         />
 
         <input
@@ -99,9 +104,10 @@ export const Paint: React.FC = () => {
           value={lineWidth}
           onChange={(e) => setLineWidth(parseInt(e.target.value))}
           className="w-24"
+          aria-label="Stroke width"
         />
 
-        <button onClick={clearCanvas} className="ml-auto p-1.5 text-red-400 hover:bg-red-900/20 rounded">
+        <button onClick={clearCanvas} className="ml-auto p-1.5 text-red-400 hover:bg-red-900/20 rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-400" aria-label="Clear canvas">
           <Trash2 size={16} />
         </button>
       </div>
