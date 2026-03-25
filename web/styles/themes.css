@@ -1,0 +1,44 @@
+/* Default dark theme (already the visual default) */
+:root {
+  --color-bg: #1a1a2e;
+  --color-surface: #16213e;
+  --color-border: #0f3460;
+  --color-accent: #e94560;
+  --color-text: #eaeaea;
+  --color-text-muted: #aaa;
+  --color-taskbar-bg: rgba(10, 10, 30, 0.9);
+  --color-window-bg: #1a1a2e;
+  --color-window-header: #16213e;
+  --color-btn-bg: #0f3460;
+  --color-btn-hover: #e94560;
+}
+
+/* Light theme */
+[data-theme="light"] {
+  --color-bg: #f0f4f8;
+  --color-surface: #ffffff;
+  --color-border: #cbd5e0;
+  --color-accent: #3182ce;
+  --color-text: #1a202c;
+  --color-text-muted: #718096;
+  --color-taskbar-bg: rgba(255, 255, 255, 0.95);
+  --color-window-bg: #ffffff;
+  --color-window-header: #edf2f7;
+  --color-btn-bg: #e2e8f0;
+  --color-btn-hover: #3182ce;
+}
+
+/* Retro terminal theme */
+[data-theme="retro"] {
+  --color-bg: #0a0a0a;
+  --color-surface: #0d1117;
+  --color-border: #1a3a1a;
+  --color-accent: #00ff41;
+  --color-text: #00ff41;
+  --color-text-muted: #008f11;
+  --color-taskbar-bg: rgba(0, 10, 0, 0.95);
+  --color-window-bg: #0a0a0a;
+  --color-window-header: #0d1117;
+  --color-btn-bg: #003300;
+  --color-btn-hover: #00ff41;
+}
