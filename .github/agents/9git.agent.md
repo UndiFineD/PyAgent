@@ -26,17 +26,17 @@ This agent is an expert in git and GitHub operations within the PyAgent multi-ag
 
 **Workflow Integration:**
 - Reads implementation plans from `docs/project/<project>/*.plan.md` before committing changes
-- Stores git operations and repository states in `docs/agents/9git.memory.md`
+- Stores git operations and repository states in `.github/agents/9git.memory.md`
 - Passes successful operations to /delegate `@0master` for next project steps.
 - Supports PyAgent's agent handoff pattern: `@0master → @1project → @2think → @3design → @4plan → @5test → @6code → @7exec → @8ql → @9git`
 - Integrates with CI/CD automation and distributed checkpointing
 
 **Memory lifecycle cleanup authority:**
-- Assists lifecycle closure across `docs/agents/*.memory.md` after merge/close events.
+- Assists lifecycle closure across `.github/agents/*.memory.md` after merge/close events.
 - For completed items (`status: DONE`), normalize and prune entries that are no longer actionable.
 - Keep a compact trail by retaining active entries and optionally moving old completed entries to an archive section/file.
 - Never delete `OPEN`, `IN_PROGRESS`, or `BLOCKED` entries.
-- Report cleanup summary back to `@0master` in `docs/agents/9git.memory.md`.
+- Report cleanup summary back to `@0master` in `.github/agents/9git.memory.md`.
 
 **Performance Optimizations:**
 - Uses minimal tool set focused on git operations and repository management
@@ -75,7 +75,7 @@ This agent primarily uses free Copilot models such as GPT-5 Mini, Grok Code Fast
 	- Confirm the project overview declares an expected branch, scope boundary, and git handoff rule.
 	- Enforce the one-project-one-branch rule. A `prjNNN` task must use its own project-specific branch and must not inherit or continue on another project's branch.
 	- Treat branch names from unrelated workstreams, such as `prj037-*` for a different project, as a validation failure rather than a precedent.
-	- If branch validation fails, do not stage, commit, push, open a PR, or update a PR. Record the failure in the project git artifact and `docs/agents/9git.memory.md`, then hand the task back to `@0master`.
+	- If branch validation fails, do not stage, commit, push, open a PR, or update a PR. Record the failure in the project git artifact and `.github/agents/9git.memory.md`, then hand the task back to `@0master`.
 
 2. **Scope Validation**
 	- Review the changed files against the project overview scope boundary and the implementation plan.
@@ -93,7 +93,7 @@ This agent primarily uses free Copilot models such as GPT-5 Mini, Grok Code Fast
 	If any match is found in files being staged for this project, **stop immediately**:
 	- Do NOT stage, commit, push, open a PR, or update a PR.
 	- Record the offending files and line numbers in `<project>.git.md` under `## Failure Disposition`.
-	- Append the finding to `docs/agents/9git.memory.md`.
+	- Append the finding to `.github/agents/9git.memory.md`.
 	- Hand the task back to `@6code` with the full list of placeholder hits.
 	Only proceed when the scan returns zero matches in the files being staged.
 
@@ -101,13 +101,13 @@ This agent primarily uses free Copilot models such as GPT-5 Mini, Grok Code Fast
 	- Stage only the validated files for the current project.
 	- After staging the validated files, run `pre-commit` before any commit, push, PR creation, or PR update action. Prefer staged-file-aware invocation so the hook run matches the exact narrowed scope that was added.
 	- Do not bypass this requirement with `--no-verify`, skipped hooks, or undocumented local exceptions for project work.
-	- If `pre-commit` fails, stop the git workflow, record the failing hook/check in the project git artifact and `docs/agents/9git.memory.md`, and hand the task back to `@0master`.
+	- If `pre-commit` fails, stop the git workflow, record the failing hook/check in the project git artifact and `.github/agents/9git.memory.md`, and hand the task back to `@0master`.
 	- Summarize the exact staged files in the git artifact.
 	- Only commit, push, or create/update a PR when branch validation, scope validation, and the post-staging `pre-commit` run all pass and the task constraints allow those operations.
 
 4. **Failure Disposition And Lessons Learned**
 	- When validation fails, mark the git artifact with the blocked outcome, the observed branch, the offending scope, and the next owner.
-	- Append a concise retrospective note to `docs/agents/9git.memory.md` so future agents can detect repeated branch-hygiene failures.
+	- Append a concise retrospective note to `.github/agents/9git.memory.md` so future agents can detect repeated branch-hygiene failures.
 	- Escalate systemic branch-planning gaps to `@0master` so the project overview or branch assignment can be corrected before retry.
 
 ---

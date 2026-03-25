@@ -53,14 +53,14 @@ If failures are found, it reports them to `@6code` with full diagnostic output.
 2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
 3. Read the observed branch with `git branch --show-current`.
 4. If observed branch != expected branch, stop work immediately.
-5. On mismatch, record BLOCKED status in `<project>.exec.md` and `docs/agents/7exec.memory.md`,
+5. On mismatch, record BLOCKED status in `<project>.exec.md` and `.github/agents/7exec.memory.md`,
    then hand the task back to `@0master`.
 6. Do not run full validation, smoke checks, or hand off to `@8ql` while branch validation fails.
 
 ---
 
 **Step 1 — Read the task context**  
-Load `docs/agents/6code.memory.md` and `docs/agents/5test.memory.md`.  
+Load `.github/agents/6code.memory.md` and `.github/agents/5test.memory.md`.  
 Confirm which modules were changed and which test files cover them.
 
 **Step 2 — Activate the environment and verify dependencies**
@@ -121,7 +121,7 @@ rg --type py "^\s*\.\.\.\s*$" src/
 If any match is found in production code (excluding intentional test red-phase stubs), **stop and return to `@6code`** with the list of offending files and line numbers. Do not hand off to `@8ql` until the scan is clean.
 
 **Step 7 — Record results and hand off**
-- **All pass:** update `docs/agents/7exec.memory.md`, then delegate to `@8ql`.
+- **All pass:** update `.github/agents/7exec.memory.md`, then delegate to `@8ql`.
 - **Any failure:** compile the error output (test name, traceback, command used)  
   and send back to `@6code` with the full diagnostic and failure category (see table below).
 
@@ -141,7 +141,7 @@ If any match is found in production code (excluding intentional test red-phase s
 
 ## Memory
 
-Store runtime validation outcomes in `docs/agents/7exec.memory.md`:
+Store runtime validation outcomes in `.github/agents/7exec.memory.md`:
 
 ```markdown
 ## Last run — {date}

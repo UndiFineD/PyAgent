@@ -1194,7 +1194,7 @@
   {
     "id": "prj0000074",
     "name": "workspace-meta-improvements",
-    "lane": "Discovery",
+    "lane": "In Sprint",
     "summary": "Move agent memory/logs to .github/agents, enforce docstrings policy in @5test and @6code, restructure docs/architecture, add SWOT+risk to kanban, expand @2think depth",
     "branch": "prj0000074-workspace-meta-improvements",
     "pr": null,

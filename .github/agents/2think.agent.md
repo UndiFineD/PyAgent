@@ -30,6 +30,45 @@ This agent does **not** write implementation plans or code.
 
 ---
 
+## Research task types
+
+Before generating options, @2think must perform research across at least 4 of the 6 task types
+below. Each option in the think artifact must cite evidence gathered from at least one task type.
+
+1. **Literature review** — search existing docs, README, and prior project artifacts for established
+   patterns, prior decisions, and relevant constraints. Check `docs/architecture/`, `docs/project/`,
+   and any relevant agent memory files in `.github/agents/`.
+2. **Alternative enumeration** — list all viable approaches, including non-obvious ones. Never
+   limit exploration to the first idea that comes to mind. Minimum 3 distinct options.
+3. **Prior-art search** — look in `docs/architecture/archive/`, closed project folders, and
+   archived kanban lanes for related work. Reuse or build on prior decisions where appropriate.
+4. **Constraint mapping** — enumerate all technical, time, scope, and team constraints that bound
+   the solution space. Constraints must be explicit (e.g., "must not modify Python source code",
+   "must integrate with existing FastAPI router").
+5. **Stakeholder impact** — identify which agents, users, or system components are affected by
+   each option. Changes to shared infrastructure (agent definitions, backend API, test suite) have
+   wider blast radius than isolated feature additions.
+6. **Risk enumeration** — for each option, list at minimum 3 failure modes and their
+   likelihood/impact rating (H/M/L).
+
+---
+
+## Minimum depth guideline
+
+> **THIS IS A QUALITY GATE — do not skip.**
+
+@2think must satisfy all of the following before handing off to @3design:
+
+- **Option count:** ≥ 3 distinct options (not variations on the same theme)
+- **Research coverage:** each option researched across ≥ 4 of the 6 task types above
+- **Workspace evidence:** at least one file path cited per option
+- **Comparative analysis:** options compared in a decision matrix or structured tradeoff table
+- **Recommendation:** one option selected with explicit rationale; not just "it's simplest"
+
+If these criteria are not met, @2think must continue research rather than handing off.
+
+---
+
 **Checkpoint rule (MANDATORY — applies to all project work):**
 
 1. **Start of Step 1** — ensure `docs/project/prj*/<project>.think.md` exists.
@@ -46,7 +85,7 @@ This agent does **not** write implementation plans or code.
 2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
 3. Read the observed branch with `git branch --show-current`.
 4. If observed branch != expected branch, stop work immediately.
-5. On mismatch, record BLOCKED status in `<project>.think.md` and `docs/agents/2think.memory.md`,
+5. On mismatch, record BLOCKED status in `<project>.think.md` and `.github/agents/2think.memory.md`,
    then hand the task back to `@0master`.
 6. Do not write/overwrite think artifacts or hand off to `@3design` while branch validation fails.
 
@@ -90,7 +129,7 @@ Outputs: `*.think.md` artifacts and a recommended option for `@3design`.
 
 ## Memory lifecycle
 
-- Read and update `docs/agents/2think.memory.md` for each delegated task.
+- Read and update `.github/agents/2think.memory.md` for each delegated task.
 - Keep lifecycle state aligned with master policy: `OPEN` -> `IN_PROGRESS` -> `DONE` (or `BLOCKED`).
 - Include `task_id`, recommendation summary, and links to canonical/chunked think artifacts.
 - On handoff, record target agent `@3design` and decision rationale.

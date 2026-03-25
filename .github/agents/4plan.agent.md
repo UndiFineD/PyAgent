@@ -62,7 +62,7 @@ If a feature cannot be fully implemented in this sprint, it must **not** be incl
 2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
 3. Read the observed branch with `git branch --show-current`.
 4. If observed branch != expected branch, stop work immediately.
-5. On mismatch, record BLOCKED status in `<project>.plan.md` and `docs/agents/4plan.memory.md`,
+5. On mismatch, record BLOCKED status in `<project>.plan.md` and `.github/agents/4plan.memory.md`,
    then hand the task back to `@0master`.
 6. Do not write/overwrite plan artifacts or hand off to `@5test` while branch validation fails.
 
@@ -110,7 +110,7 @@ Outputs: a task roadmap for `@5test` to write tests and for `@6code` to implemen
 
 ## Memory lifecycle
 
-- Read and update `docs/agents/4plan.memory.md` for each delegated task.
+- Read and update `.github/agents/4plan.memory.md` for each delegated task.
 - Keep lifecycle state aligned with master policy: `OPEN` -> `IN_PROGRESS` -> `DONE` (or `BLOCKED`).
 - Include `task_id`, chunk boundaries, acceptance criteria, and dependency order.
 - On handoff, record target agent `@5test` and links to canonical/chunked plan artifacts.

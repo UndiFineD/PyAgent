@@ -57,7 +57,7 @@ def _filter_iface(name: str) -> bool:
 
 # Project root is two levels up from this file (backend/app.py → backend/ → project root)
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
-_LOGS_DIR = _PROJECT_ROOT / "docs" / "agents"
+_LOGS_DIR = _PROJECT_ROOT / ".github" / "agents"
 _AGENTS_DIR = _PROJECT_ROOT / ".github" / "agents"
 
 # ── Project data ─────────────────────────────────────────────────────────────

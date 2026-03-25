@@ -59,6 +59,33 @@ If a feature is genuinely out of scope for this task, document it explicitly in 
 
 ---
 
+## Docstrings policy
+
+Every function, method, and class written or modified by `@6code` MUST include a Google-style
+docstring. This is a hard requirement — code without docstrings will not be accepted.
+
+Enforcement:
+- ruff rules D100–D107 (missing docstrings), D200–D215 (formatting)
+- Run: `ruff check --select D <file>` to verify before handoff
+
+Format:
+```python
+def my_func(x: int) -> str:
+    """One-line summary.
+
+    Args:
+        x: Description of x.
+
+    Returns:
+        Description of return value.
+    """
+```
+
+After all tests pass, update the relevant `docs/architecture/N<name>.md` section if the
+implemented change affects system architecture.
+
+---
+
 ## Operating procedure
 
 ---
@@ -79,7 +106,7 @@ If a feature is genuinely out of scope for this task, document it explicitly in 
 2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
 3. Read the observed branch with `git branch --show-current`.
 4. If observed branch != expected branch, stop work immediately.
-5. On mismatch, record BLOCKED status in `<project>.code.md` and `docs/agents/6code.memory.md`,
+5. On mismatch, record BLOCKED status in `<project>.code.md` and `.github/agents/6code.memory.md`,
    then hand the task back to `@0master`.
 6. Do not edit code, run implementation tests, or hand off to `@7exec` while branch validation fails.
 
@@ -114,7 +141,7 @@ python -m mypy src/
 
 ## Memory lifecycle
 
-- Read and update `docs/agents/6code.memory.md` for each delegated task.
+- Read and update `.github/agents/6code.memory.md` for each delegated task.
 - Keep lifecycle state aligned with master policy: `OPEN` -> `IN_PROGRESS` -> `DONE` (or `BLOCKED`).
 - Include `task_id`, changed modules/files, implementation summary, and unresolved risks.
 - On handoff, record target agent `@7exec` and verification commands executed.
