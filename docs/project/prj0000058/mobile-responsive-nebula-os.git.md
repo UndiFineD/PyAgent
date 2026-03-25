@@ -40,5 +40,5 @@ All 5 `test_responsive_nebula.py` tests: PASS ✅
 
 ## Pull Request
 
-**URL:** TBD
-**Number:** TBD
+**URL:** https://github.com/UndiFineD/PyAgent/pull/196
+**Number:** 196
