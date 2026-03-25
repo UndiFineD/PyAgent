@@ -87,18 +87,12 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
-| prj0000063 | structured-logging | prj0000063-structured-logging | [#201](https://github.com/UndiFineD/PyAgent/pull/201) | P4 | S | 2026-03-25 |
-| prj0000062 | live-agent-execution-in-codebuilder | prj0000062-live-agent-execution-in-codebuilder | [#200](https://github.com/UndiFineD/PyAgent/pull/200) | P2 | M | 2026-03-25 |
-| prj0000061 | theme-system | prj0000061-theme-system | [#199](https://github.com/UndiFineD/PyAgent/pull/199) | P4 | S | 2026-03-25 |
-| prj0000060 | flm-token-throughput-dashboard | prj0000060-flm-token-throughput-dashboard | [#198](https://github.com/UndiFineD/PyAgent/pull/198) | P4 | S | 2026-03-25 |
-| prj0000058 | mobile-responsive-nebula-os | prj0000058-mobile-responsive-nebula-os | [#196](https://github.com/UndiFineD/PyAgent/pull/196) | P4 | S | 2026-03-25 |
-| prj0000057 | agent-orchestration-graph | prj0000057-agent-orchestration-graph | [#195](https://github.com/UndiFineD/PyAgent/pull/195) | P2 | M | 2026-03-25 |
-| prj0000056 | rust-async-transport-activation | prj0000056-rust-async-transport-activation | [#194](https://github.com/UndiFineD/PyAgent/pull/194) | P4 | M | 2026-03-25 |
 | prj0000055 | websocket-e2e-encryption | prj0000055-websocket-e2e-encryption | [#193](https://github.com/UndiFineD/PyAgent/pull/193) | P2 | M | 2026-03-25 |
 | prj0000065 | agent-memory-persistence | prj0000065-agent-memory-persistence | [#203](https://github.com/UndiFineD/PyAgent/pull/203) | P3 | M | 2026-03-25 |
 | prj0000054 | backend-authentication | prj0000054-backend-authentication | [#192](https://github.com/UndiFineD/PyAgent/pull/192) | P2 | M | 2026-03-24 |
 | prj0000053 | hmac-webhook-verification | prj0000053-hmac-webhook-verification | [#191](https://github.com/UndiFineD/PyAgent/pull/191) | P2 | S | 2026-03-24 |
 | prj0000052 | project-management | prj0000052-project-management | [#190](https://github.com/UndiFineD/PyAgent/pull/190) | P2 | L | 2026-03-24 |
+| prj0000067 | rust-file-watcher | prj0000067-rust-file-watcher | [#205](https://github.com/UndiFineD/PyAgent/pull/205) | P4 | M | 2026-03-25 |
 | prj0000043 | p2p-security-deps | prj0000043-p2p-security-deps | open | P2 | M | 2026-03-24 |
 | prj0000044 | transaction-managers-stubs | prj0000044-transaction-managers-stubs | #136 | P2 | S | 2026-03-24 |
 

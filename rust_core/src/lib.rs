@@ -53,6 +53,7 @@ mod time;
 mod transport;
 mod utils;
 mod validation;
+mod watcher;
 mod workspace;
 mod infrastructure {
     pub mod services {
@@ -100,6 +101,7 @@ fn rust_core(m: &Bound<'_, PyModule>) -> PyResult<()> {
     mux::register(m)?;
     attention::register(m)?;
     workspace::register(m)?;
+    watcher::register(m)?;
     transport::register(m)?;
     scheduling::register(m)?;
     distributed::register(m)?;
