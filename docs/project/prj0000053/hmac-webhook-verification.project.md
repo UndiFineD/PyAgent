@@ -16,6 +16,16 @@ _Owner: @1project | Updated: 2026-03-24_
 **Expected branch:** `prj0000053-hmac-webhook-verification`
 **Observed branch:** `prj0000053-hmac-webhook-verification`
 **Project match:** YES
+**Scope boundary:**
+  - `docs/project/prj0000053/` — all project artifacts
+  - `src/github_app.py` — signature verification only
+  - `tests/test_github_app.py` — HMAC test cases
+  - `data/projects.json` — prj0000053 lane + branch update
+  - `docs/project/kanban.md` — lane transition
+**Handoff rule:** `@9git` must refuse staging or commit unless the active branch is
+`prj0000053-hmac-webhook-verification` and changed files stay within the scope boundary.
+**Failure rule:** If HMAC verification breaks existing webhook tests, revert the
+endpoint guard and return task to `@0master`.
 
 ## Project Overview
 
