@@ -25,9 +25,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from .auth import require_auth, websocket_auth
+from .logging_config import get_logger, setup_logging
 from .session_manager import SessionManager
 from .ws_crypto import decrypt_message, derive_shared_secret, encrypt_message, generate_keypair
 from .ws_handler import handle_message
+
+import uuid as _uuid_mod
+from starlette.middleware.base import BaseHTTPMiddleware
 
 logger = logging.getLogger(__name__)
 
@@ -84,6 +88,22 @@ def _log_path(agent_id: str) -> Path:
 
 app = FastAPI(title="PyAgent Backend Worker", version="0.1.0")
 
+_logger = setup_logging()
+_logger.info("PyAgent backend starting", extra={"correlation_id": "", "endpoint": ""})
+
+
+class CorrelationIdMiddleware(BaseHTTPMiddleware):
+    """Inject X-Correlation-ID into every response."""
+
+    async def dispatch(self, request, call_next):
+        correlation_id = request.headers.get("X-Correlation-ID", str(_uuid_mod.uuid4()))
+        response = await call_next(request)
+        response.headers["X-Correlation-ID"] = correlation_id
+        return response
+
+
+app.add_middleware(CorrelationIdMiddleware)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://localhost:3000"],
@@ -102,6 +122,7 @@ _auth_router = APIRouter(dependencies=[Depends(require_auth)])
 @app.get("/health")
 async def health() -> dict[str, str]:
     """Health check endpoint."""
+    get_logger().info("Health check", extra={"correlation_id": "health", "endpoint": "/health"})
     return {"status": "ok"}
 
 
