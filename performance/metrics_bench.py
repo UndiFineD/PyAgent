@@ -7,6 +7,7 @@ from observability.stats import metrics_engine
 
 
 def sync_bench(duration: float = 1.0) -> int:
+    """Run a tight loop for the given duration and count iterations."""
     metrics_engine.counter = 0
     end = time.time() + duration
     while time.time() < end:
@@ -15,6 +16,7 @@ def sync_bench(duration: float = 1.0) -> int:
 
 
 def async_bench(duration: float = 1.0) -> int:
+    """Start an async loop that increments a counter, then wait for the duration."""
     metrics_engine.counter = 0
 
     metrics_engine.start_async_loop()
