@@ -7,15 +7,25 @@ _Last updated: 2026-03-25_
 ## 2026-03-25 — prj0000072 WebSocket Reconnect Logic
 
 **Branch:** `prj0000072-websocket-reconnect-logic`
-**PR:** [#209](https://github.com/UndiFineD/PyAgent/pull/209) — open, awaiting merge
-**Status:** COMPLETE — all 9 workflow artifacts created, Python 835 tests pass, 0 warnings
+**PR:** [#209](https://github.com/UndiFineD/PyAgent/pull/209) — open, CI fix pushed (b3295114b), awaiting merge
+**Status:** COMPLETE — all 9 workflow artifacts present; CI shard 2/3 failure fixed
 
 **Changes:**
 - `web/hooks/useWebSocket.ts` — exponential backoff + full-jitter; `baseDelay`, `maxDelay`, `maxRetries`, `reconnectAttempts`; `reconnectDelay` deprecated as alias
 - `web/hooks/useWebSocket.test.ts` — 9 Vitest tests (exports, formula, backwards-compat)
 - `docs/project/prj0000072/` — 9 workflow artifacts: project, think, design, plan, test, code, exec, ql, git
+- `requirements-ci.txt` — added `PyJWT>=2.8.0` and `python-json-logger>=2.0.0` (were missing from top-level CI deps)
+- `tests/test_agent_memory.py` — removed unused `import json`, `Generator`
+- `tests/test_backend_auth.py` — removed unused `import time`
+- `tests/test_file_watcher.py` — removed unused `import pytest`
+- `tests/test_github_app.py` — moved mid-file imports to top (E402 flake8)
+- `tests/test_rate_limiting.py` — removed unused `pytest`, `backend.app.app`, `CORSMiddleware`
+- `tests/test_structured_logging.py` — removed unused `import pytest`
+- `tests/test_watchdog.py` — removed unused `import pytest`
 
-**Lessons:** Full agent workflow (all 9 artifacts) must be completed on the project branch before git handoff, even for single-file changes. Branch gate (`git branch --show-current` → switch to project branch) must be the first action. Skipping artifacts from the prior session required retroactive creation on the correct branch.
+**CI fix root causes:** (1) `PyJWT`/`python-json-logger` only in `backend/requirements.txt`, not in `requirements-ci.txt`; (2) flake8 `test_zzc_flake8_config` catching F401/E402 across 7 test files.
+
+**Lessons:** Full agent workflow (all 9 artifacts) must be completed on the project branch before git handoff, even for single-file changes. Branch gate (`git branch --show-current` → switch to project branch) must be the first action. Backend deps used by root `tests/` files must be present in `requirements-ci.txt`, not only in `backend/requirements.txt`.
 
 **Next available prj:** prj0000073
 
