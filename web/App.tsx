@@ -7,6 +7,7 @@ import { Paint } from './apps/Paint';
 import { Conky } from './apps/Conky';
 import { CodeBuilder } from './apps/CodeBuilder';
 import { ProjectManager } from './apps/ProjectManager';
+import { OrchestrationGraph } from './apps/OrchestrationGraph';
 import { WindowState, AppId, Theme, OsConfig, DEFAULT_OS_CONFIG } from './types';
 import { generateId, cn } from './utils';
 import {
@@ -161,6 +162,12 @@ export default function App() {
         width = 1100;
         height = 650;
         break;
+      case 'orchestration':
+        component = <OrchestrationGraph />;
+        title = 'Orchestration';
+        width = 1000;
+        height = 360;
+        break;
     }
 
     const newWindow: WindowState = {
@@ -299,6 +306,9 @@ export default function App() {
                     </button>
                     <button onClick={() => openApp('projectmanager')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-os-bg text-left text-sm transition-colors">
                       <Monitor size={16} className="text-indigo-400" /> Project Manager
+                    </button>
+                    <button onClick={() => openApp('orchestration')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-os-bg text-left text-sm transition-colors">
+                      <span className="text-base leading-none">🕸️</span> Orchestration
                     </button>
 
                     <div className="h-px bg-os-border my-2" />
