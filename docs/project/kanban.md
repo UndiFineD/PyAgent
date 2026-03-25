@@ -87,6 +87,7 @@ Active implementation — @4plan through @6code are working.
 | ID | Name | Summary | Branch | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
 | prj0000063 | structured-logging | JSON structured logging with correlation IDs across all backend requests | prj0000063-structured-logging | P4 | S | 2026-03-25 |
+| prj0000068 | agent-timeout-watchdog | Configurable per-agent execution timeout with graceful shutdown, retry budget, dead-letter queue | prj0000068-agent-timeout-watchdog | P3 | M | 2026-03-25 |
 
 ---
 
