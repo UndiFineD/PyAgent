@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import './styles/themes.css';
+import { useTheme } from './hooks/useTheme';
+import { ThemeSelector } from './components/ThemeSelector';
 import { Login } from './components/Login';
 import { Window } from './components/Window';
 import { Calculator } from './apps/Calculator';
@@ -65,7 +68,7 @@ export default function App() {
   const [windows, setWindows] = useState<WindowState[]>([]);
   const [activeWindowId, setActiveWindowId] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [theme, setTheme] = useState<Theme['id']>('dark');
+  const { theme, setTheme } = useTheme();
   const [currentTime, setCurrentTime] = useState(new Date());
   
   // Taskbar Auto-hide State
@@ -80,10 +83,7 @@ export default function App() {
     return () => clearInterval(timer);
   }, []);
 
-  // Theme Application
-  useEffect(() => {
-    document.body.className = `theme-${theme} overflow-hidden`;
-  }, [theme]);
+  // Theme Application is handled by useTheme hook (sets data-theme on documentElement)
 
   // Taskbar Logic
   const showTaskbar = () => {
@@ -275,6 +275,9 @@ export default function App() {
           <span className="text-sm font-mono opacity-80 hidden sm:block">
             {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </span>
+          
+          {/* Theme Selector */}
+          <ThemeSelector />
           
           {/* The "3 Carrot" Menu Trigger */}
           <div className="relative">
