@@ -29,6 +29,7 @@ from .memory_store import memory_store
 from .rate_limiter import RateLimitMiddleware
 from .logging_config import get_logger, setup_logging
 from .session_manager import SessionManager
+from .watchdog import watchdog
 from .ws_crypto import decrypt_message, derive_shared_secret, encrypt_message, generate_keypair
 from .ws_handler import handle_message
 
@@ -359,6 +360,12 @@ async def create_project(body: ProjectCreate) -> ProjectModel:
     _PROJECTS.append(body.model_dump())
     _save_projects()
     return body
+
+
+@_auth_router.get("/api/watchdog/status")
+async def watchdog_status() -> dict:
+    """Return the current AgentWatchdog state (DLQ size, retry counts, config)."""
+    return watchdog.status()
 
 
 app.include_router(_auth_router)
