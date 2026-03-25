@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-export type AppId = 'calculator' | 'editor' | 'paint' | 'conky' | 'settings' | 'codebuilder' | 'projectmanager';
+export type AppId = 'calculator' | 'editor' | 'paint' | 'conky' | 'settings' | 'codebuilder' | 'projectmanager' | 'flm-dashboard';
 
 export interface WindowState {
   id: string;
