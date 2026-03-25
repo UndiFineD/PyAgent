@@ -4,6 +4,41 @@ _Last updated: 2026-03-25_
 
 ---
 
+## 2026-03-25 — prj0000071 WCAG 2.1 AA Dark Mode Accessibility
+
+**Branch:** `prj0000071-dark-mode-accessibility`
+**PR:** [#211](https://github.com/UndiFineD/PyAgent/pull/211) — open, awaiting merge
+**Status:** COMPLETE — all 9 workflow artifacts created, 17 tests pass, final commit `23b55037b` pushed
+
+**Changes (6 source files):**
+- `web/components/Window.tsx` — aria-label on 4 icon-only buttons; aria-expanded on menu; focus rings (WCAG 4.1.2, 2.4.7)
+- `web/apps/Paint.tsx` — aria-label + aria-pressed on 3 buttons; aria-label on color/range inputs; focus rings (WCAG 4.1.2, 1.3.1, 2.4.7)
+- `web/apps/Editor.tsx` — restored focus ring on textarea (WCAG 2.4.7)
+- `web/App.tsx` — restored focus ring on toggle switch (WCAG 2.4.7)
+- `web/apps/ProjectManager.tsx` — role=button, tabIndex, onKeyDown, aria-expanded on interactive `<div>` (WCAG 1.3.1)
+- `web/styles/themes.css` — `--color-accent: #e94560→#f25e77` (contrast 4.14:1→5.01:1, WCAG 1.4.3)
+- `tests/web/test_a11y_checklist.py` — 17/17 tests pass
+
+**WCAG criteria resolved:** 4.1.2(A), 1.3.1(A), 2.4.7(AA), 1.4.3(AA)
+
+---
+
+## 2026-03-25 — prj0000073 API Documentation
+
+**Branch:** `prj0000073-api-documentation`
+**PR:** [#210](https://github.com/UndiFineD/PyAgent/pull/210) — open, awaiting merge
+**Status:** COMPLETE — all 9 workflow artifacts created, 8 canary tests pass
+
+**Changes:**
+- `docs/api/index.md` — overview, versioning, base URLs, auth summary
+- `docs/api/authentication.md` — API-key + JWT guide with examples
+- `docs/api/rest-endpoints.md` — full reference for all 11 REST routes
+- `docs/api/websocket.md` — WS protocol, message schema, reconnect guide
+- `docs/api/errors.md` — HTTP + WS error codes, troubleshooting
+- `tests/docs/test_api_docs_canary.py` — 8 canary tests
+
+---
+
 ## 2026-03-25 — Four new projects allocated (prj0000073–076)
 
 All four are in Discovery lane, branches created and pushed, @1project setup complete for each.
