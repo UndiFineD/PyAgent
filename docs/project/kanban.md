@@ -44,7 +44,6 @@ Projects proposed but not yet formally scoped.
 | ID | Name | Summary | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|
 | prj0000071 | dark-mode-accessibility | WCAG 2.1 AA accessibility audit and remediation for the NebulaOS dark theme | P4 | S | ui, accessibility | 2026-03-24 |
-| prj0000072 | websocket-reconnect-logic | Auto-reconnect with exponential backoff and jitter for frontend WebSocket drops | P3 | S | ui, websocket | 2026-03-24 |
 
 ---
 
@@ -72,6 +71,7 @@ Active implementation — @4plan through @6code are working.
 
 | ID | Name | Summary | Branch | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000072 | websocket-reconnect-logic | Exponential backoff + jitter for frontend WebSocket reconnect | prj0000072-websocket-reconnect-logic | P3 | S | 2026-03-25 |
 
 ---
 
@@ -176,10 +176,10 @@ Stalled, cancelled, or superseded projects.
 
 | Lane | Count |
 |---|---|
-| Ideas | 2 |
+| Ideas | 1 |
 | Discovery | 0 |
 | Design | 0 |
-| In Sprint | 0 |
+| In Sprint | 1 |
 | Review | 2 |
 | Released | 67 |
 | Archived | 1 |
