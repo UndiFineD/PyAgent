@@ -46,7 +46,6 @@ Projects proposed but not yet formally scoped.
 | prj0000058 | mobile-responsive-nebula-os | Add CSS responsive breakpoints and touch-friendly interaction patterns to the NebulaOS shell | P4 | unknown | ui, nebula, mobile | 2026-03-24 |
 | prj0000059 | plugin-marketplace-browser | In-NebulaOS panel for discovering, installing, and managing third-party agent plugins | P4 | unknown | ui, nebula, plugins | 2026-03-24 |
 | prj0000060 | flm-token-throughput-dashboard | Real-time tokens-per-second charts fed from FLM telemetry in NebulaOS | P4 | unknown | ui, nebula, llm, flm | 2026-03-24 |
-| prj0000061 | theme-system | Light mode and retro terminal theme for NebulaOS with theme selector and persisted preference | P4 | unknown | ui, nebula, themes | 2026-03-24 |
 | prj0000062 | live-agent-execution-in-codebuilder | Wire the 10-agent pipeline to CodeBuilder UI with streaming per-agent log output and progress indicators | P4 | unknown | ui, nebula, agents, codebuilder | 2026-03-24 |
 | prj0000063 | structured-logging | JSON structured logging with correlation IDs and severity levels across all backend endpoints and agents | P4 | unknown | observability, logging | 2026-03-24 |
 | prj0000064 | rate-limiting-middleware | Token-bucket rate limiting middleware on all FastAPI REST endpoints with configurable per-route limits | P3 | S | security, backend | 2026-03-24 |
@@ -85,6 +84,7 @@ Active implementation — @4plan through @6code are working.
 
 | ID | Name | Summary | Branch | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000061 | theme-system | Light mode and retro terminal theme for NebulaOS with theme selector and persisted preference | prj0000061-theme-system | P4 | unknown | 2026-03-25 |
 
 ---
 
@@ -176,11 +176,11 @@ Stalled, cancelled, or superseded projects.
 
 | Lane | Count |
 |---|---|
-| Ideas | 10 |
+| Ideas | 14 |
 | Discovery | 0 |
 | Design | 0 |
 | In Sprint | 1 |
-| Review | 2 |
+| Review | 8 |
 | Released | 48 |
 | Archived | 1 |
-| **Total** | **62** |
+| **Total** | **72** |
