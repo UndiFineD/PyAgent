@@ -368,7 +368,7 @@ export default function App() {
                   role="switch"
                   aria-checked={osConfig.taskbarAlwaysVisible}
                   onClick={() => setOsConfig(prev => ({ ...prev, taskbarAlwaysVisible: !prev.taskbarAlwaysVisible }))}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 ${
                     osConfig.taskbarAlwaysVisible ? 'bg-blue-500' : 'bg-gray-600'
                   }`}
                 >

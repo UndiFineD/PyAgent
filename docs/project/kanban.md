@@ -43,7 +43,6 @@ Projects proposed but not yet formally scoped.
 
 | ID | Name | Summary | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|
-| prj0000071 | dark-mode-accessibility | WCAG 2.1 AA accessibility audit and remediation for the NebulaOS dark theme | P4 | S | ui, accessibility | 2026-03-24 |
 | prj0000073 | api-documentation | Hand-crafted API reference covering all backend REST endpoints, WebSocket protocol, authentication, and error codes | P2 | M | docs, api, backend | 2026-03-25 |
 | prj0000074 | workspace-meta-improvements | Move agent memory/logs to .github/agents, enforce docstrings policy, restructure docs/architecture, add SWOT+risk to kanban, expand @2think depth | P2 | L | meta, workflow, docs, architecture | 2026-03-25 |
 | prj0000075 | ci-simplification | Audit all GitHub workflow YAML files; consolidate or remove in favour of comprehensive pre-commit hooks for local-first testing | P2 | S | ci, devops, workflow | 2026-03-25 |
@@ -84,6 +83,7 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000071 | dark-mode-accessibility | prj0000071-dark-mode-accessibility | — | P4 | S | 2026-03-25 |
 | prj0000072 | websocket-reconnect-logic | prj0000072-websocket-reconnect-logic | [#209](https://github.com/UndiFineD/PyAgent/pull/209) | P3 | S | 2026-03-25 |
 | prj0000043 | p2p-security-deps | prj0000043-p2p-security-deps | open | P2 | M | 2026-03-24 |
 | prj0000044 | transaction-managers-stubs | prj0000044-transaction-managers-stubs | #136 | P2 | S | 2026-03-24 |

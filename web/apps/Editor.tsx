@@ -34,7 +34,7 @@ export const Editor: React.FC = () => {
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="w-full h-full p-4 bg-os-bg text-os-text font-mono resize-none focus:outline-none"
+            className="w-full h-full p-4 bg-os-bg text-os-text font-mono resize-none focus:outline-none focus:ring-2 focus:ring-os-accent"
             spellCheck={false}
           />
         ) : (

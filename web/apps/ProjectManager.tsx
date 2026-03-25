@@ -273,8 +273,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDragStart 
   return (
     <div
       draggable
+      role="button"
+      tabIndex={0}
+      aria-expanded={expanded}
       onDragStart={e => { e.dataTransfer.effectAllowed = 'move'; onDragStart(project.id); }}
-      className="bg-os-window border border-os-border rounded-lg p-3 mb-2 cursor-grab active:cursor-grabbing hover:border-os-accent/50 transition-colors group"
+      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpanded(v => !v); } }}
+      className="bg-os-window border border-os-border rounded-lg p-3 mb-2 cursor-grab active:cursor-grabbing hover:border-os-accent/50 transition-colors group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-os-accent"
       onClick={() => setExpanded(e => !e)}
     >
       <div className="flex items-center gap-2 mb-2 flex-wrap">
