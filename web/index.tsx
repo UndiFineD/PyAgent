@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles/themes.css';
 import App from './App';
+import './styles/responsive.css';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
