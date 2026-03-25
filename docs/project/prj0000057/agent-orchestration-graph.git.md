@@ -45,5 +45,5 @@ Pre-existing failures unrelated to this project:
 ## Pull Request
 
 **PR title:** feat: Agent orchestration pipeline graph in NebulaOS (prj0000057)
-**PR number:** TBD
-**URL:** TBD
+**PR number:** #195
+**URL:** https://github.com/UndiFineD/PyAgent/pull/195
