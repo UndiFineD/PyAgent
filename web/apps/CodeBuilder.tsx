@@ -3,7 +3,7 @@ import {
   Bot, BrainCircuit, TestTube, Code2, Terminal, GitBranch,
   Play, Square, RotateCcw, Cpu, Activity,
   Lightbulb, Pencil, ShieldCheck, FolderOpen,
-  Mic, MicOff, Send, FileCode2, ChevronRight, Eye, ScrollText,
+  Mic, MicOff, Send, FileCode2, ChevronRight, Eye, ScrollText, Zap,
 } from 'lucide-react';
 import { cn } from '../utils';
 
@@ -195,6 +195,11 @@ export const CodeBuilder: React.FC = () => {
   );
   const [isListening, setIsListening] = useState(false);
 
+  // ── Pipeline execution state ────────────────────────────────────────────────
+  const [pipelineId, setPipelineId]         = useState<string | null>(null);
+  const [pipelineStages, setPipelineStages] = useState<Record<string, { status: string; log: string }>>({});
+  const [isPipelineRunning, setIsPipelineRunning] = useState(false);
+
   const chatEndRef        = useRef<HTMLDivElement>(null);
   const logsEndRef        = useRef<HTMLDivElement>(null);
   const agentLogsEndRef   = useRef<HTMLDivElement>(null);
@@ -339,7 +344,49 @@ export const CodeBuilder: React.FC = () => {
     setIsListening(true);
     addLog('[voice] Listening…');
   }, [isListening, activeAgent, addLog]);
+  // ── Pipeline execution ──────────────────────────────────────────────────
+  const handleRunPipeline = useCallback(async () => {
+    const task = inputText[activeAgent].trim() || `Run pipeline for @${activeAgent}`;
+    try {
+      setIsPipelineRunning(true);
+      addLog('[pipeline] Starting pipeline…');
+      const res = await fetch('/api/pipeline/run', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ task }),
+      });
+      if (!res.ok) {
+        addLog('[pipeline] Failed to start pipeline.');
+        setIsPipelineRunning(false);
+        return;
+      }
+      const data = await res.json() as { pipeline_id: string; status: string };
+      setPipelineId(data.pipeline_id);
+      addLog(`[pipeline] Started: ${data.pipeline_id}`);
+    } catch {
+      addLog('[pipeline] Error starting pipeline.');
+      setIsPipelineRunning(false);
+    }
+  }, [inputText, activeAgent, addLog]);
 
+  useEffect(() => {
+    if (!pipelineId || !isPipelineRunning) return;
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/pipeline/status/${pipelineId}`);
+        if (!res.ok) return;
+        const data = await res.json() as { status: string; stages: Record<string, { status: string; log: string }> };
+        setPipelineStages(data.stages ?? {});
+        if (data.status !== 'running') {
+          setIsPipelineRunning(false);
+          clearInterval(interval);
+          addLog(`[pipeline] Pipeline finished: ${data.status}`);
+        }
+      } catch { /* backend not running — silently ignore */ }
+    }, 2000);
+    return () => clearInterval(interval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pipelineId, isPipelineRunning]);
   // ── Workflow Simulation ───────────────────────────────────────────────────
   const workflowSteps = AGENTS.map(a => a.id);
 
@@ -411,7 +458,7 @@ export const CodeBuilder: React.FC = () => {
           );
         })}
 
-        {/* Start/Stop + Reset pinned to the right */}
+        {/* Start/Stop + Reset + Run Pipeline pinned to the right */}
         <div className="flex items-center gap-1.5 ml-auto pl-2 flex-shrink-0">
           <button
             onClick={() => setIsRunning(r => !r)}
@@ -424,6 +471,20 @@ export const CodeBuilder: React.FC = () => {
           >
             {isRunning ? <Square size={10} fill="currentColor" /> : <Play size={10} fill="currentColor" />}
             {isRunning ? 'Stop' : 'Run'}
+          </button>
+          <button
+            onClick={handleRunPipeline}
+            disabled={isPipelineRunning}
+            title="Run the full 10-agent pipeline"
+            className={cn(
+              'flex items-center gap-1.5 px-2.5 py-1 rounded text-[10px] transition-all border whitespace-nowrap',
+              isPipelineRunning
+                ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/50 opacity-60 cursor-not-allowed'
+                : 'bg-yellow-500/10 text-yellow-400 border-yellow-500/50 hover:bg-yellow-500/20'
+            )}
+          >
+            <Zap size={10} fill={isPipelineRunning ? 'currentColor' : 'none'} />
+            Run Pipeline
           </button>
           <button onClick={reset} className="p-1 hover:bg-slate-700 rounded text-slate-500 hover:text-slate-300 transition-colors" title="Reset">
             <RotateCcw size={12} />
@@ -682,7 +743,29 @@ export const CodeBuilder: React.FC = () => {
           )}
         </div>
       </div>
-
+      {/* ── Pipeline Status Panel ──────────────────────────────────────────── */}
+      {pipelineId && (
+        <div className="border-t border-slate-800 bg-[#0d1117] flex-shrink-0">
+          <div className="px-3 py-1 flex items-center gap-2 border-b border-slate-800">
+            <Zap size={11} className="text-yellow-400" />
+            <span className="text-[10px] text-slate-400 font-semibold">Pipeline {pipelineId.slice(0, 8)}…</span>
+            <span className={cn('text-[10px]', isPipelineRunning ? 'text-green-400 animate-pulse' : 'text-slate-500')}>
+              {isPipelineRunning ? '● running' : '■ done'}
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-1 px-3 py-2">
+            {['0master','1project','2think','3design','4plan','5test','6code','7exec','8ql','9git'].map(stage => {
+              const st = pipelineStages[stage]?.status ?? 'pending';
+              const icon = st === 'running' ? '🔵' : st === 'done' ? '✅' : st === 'error' ? '❌' : '⚪';
+              return (
+                <span key={stage} className="flex items-center gap-1 text-[10px] text-slate-400 bg-slate-800 px-2 py-0.5 rounded">
+                  {icon} @{stage}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+      )}
       {/* ── Status Bar ─────────────────────────────────────────────────────── */}
       <div className="h-6 border-t border-slate-800 bg-[#161b22] flex items-center px-3 gap-4 flex-shrink-0">
         <div className="flex items-center gap-1.5 text-[10px] text-slate-500">
