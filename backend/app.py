@@ -31,6 +31,7 @@ from .rate_limiter import RateLimitMiddleware
 from .logging_config import get_logger, setup_logging
 from .session_manager import SessionManager
 from .tracing import tracer  # noqa: F401 — initialises OTel TracerProvider on import
+from .watchdog import watchdog
 from .ws_crypto import decrypt_message, derive_shared_secret, encrypt_message, generate_keypair
 from .ws_handler import handle_message
 
