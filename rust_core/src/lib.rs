@@ -24,6 +24,7 @@ use pyo3::prelude::*;
 
 mod agents;
 mod analysis;
+mod async_transport;
 mod attention;
 mod auction;
 mod base;
@@ -73,6 +74,7 @@ fn rust_core(m: &Bound<'_, PyModule>) -> PyResult<()> {
 
     // Register each sub-module's functions/classes
     agents::register(m)?;
+    async_transport::register(m)?;
     base::register(m)?;
     stats::register(m)?;
     utils::register(m)?;
