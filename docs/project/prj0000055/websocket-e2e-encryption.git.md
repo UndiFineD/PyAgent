@@ -48,8 +48,8 @@ Pre-existing failures unrelated to this project:
 
 ## Pull Request
 
-- **PR Number:** _to be filled after push_
-- **PR URL:** _to be filled after push_
+- **PR Number:** 193
+- **PR URL:** https://github.com/UndiFineD/PyAgent/pull/193
 - **Base:** `main`
 - **Head:** `prj0000055-websocket-e2e-encryption`
 - **Title:** `feat: X25519 ECDH + AES-256-GCM WebSocket E2E encryption (prj0000055)`
