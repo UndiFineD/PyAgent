@@ -16,7 +16,10 @@ from __future__ import annotations
 
 import json
 import logging
+import random
 import time
+import uuid
+from datetime import datetime
 from pathlib import Path
 
 import psutil
@@ -124,6 +127,30 @@ async def health() -> dict[str, str]:
     """Health check endpoint."""
     get_logger().info("Health check", extra={"correlation_id": "health", "endpoint": "/health"})
     return {"status": "ok"}
+
+
+@app.get("/api/metrics/flm")
+async def flm_metrics() -> dict:
+    """Return simulated FLM token throughput metrics."""
+    now = time.time()
+    # Simulate 10 data points (last 10 seconds)
+    samples = [
+        {
+            "timestamp": now - (9 - i),
+            "tokens_per_second": round(random.uniform(50, 500), 1),
+            "model": "llama3-8b",
+            "queue_depth": random.randint(0, 10),
+        }
+        for i in range(10)
+    ]
+    return {
+        "samples": samples,
+        "avg_tokens_per_second": round(
+            sum(s["tokens_per_second"] for s in samples) / len(samples), 1
+        ),
+        "peak_tokens_per_second": max(s["tokens_per_second"] for s in samples),
+        "model": "llama3-8b",
+    }
 
 
 # ── System-metrics models ────────────────────────────────────────────────────
@@ -372,6 +399,48 @@ async def create_project(body: ProjectCreate) -> ProjectModel:
     _PROJECTS.append(body.model_dump())
     _save_projects()
     return body
+
+
+# ── Pipeline execution endpoints ─────────────────────────────────────────────
+
+_pipelines: dict = {}
+
+_PIPELINE_STAGES = [
+    "0master", "1project", "2think", "3design", "4plan",
+    "5test", "6code", "7exec", "8ql", "9git",
+]
+
+
+class PipelineRunRequest(BaseModel):
+    """Request body for POST /api/pipeline/run."""
+
+    task: str = ""
+
+
+@_auth_router.post("/api/pipeline/run")
+async def run_pipeline(body: PipelineRunRequest) -> dict:
+    """Create a new pipeline run and return its ID."""
+    pipeline_id = str(uuid.uuid4())
+    _pipelines[pipeline_id] = {
+        "id": pipeline_id,
+        "task": body.task,
+        "status": "running",
+        "created_at": datetime.utcnow().isoformat(),
+        "stages": {
+            stage: {"status": "pending", "log": ""}
+            for stage in _PIPELINE_STAGES
+        },
+    }
+    return {"pipeline_id": pipeline_id, "status": "running"}
+
+
+@_auth_router.get("/api/pipeline/status/{pipeline_id}")
+async def pipeline_status(pipeline_id: str) -> dict:
+    """Return the current status of a pipeline run."""
+    pipeline = _pipelines.get(pipeline_id)
+    if not pipeline:
+        raise HTTPException(status_code=404, detail="Pipeline not found")
+    return pipeline
 
 
 app.include_router(_auth_router)

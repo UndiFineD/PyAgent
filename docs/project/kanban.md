@@ -96,8 +96,15 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000062 | live-agent-execution-in-codebuilder | prj0000062-live-agent-execution-in-codebuilder | [#200](https://github.com/UndiFineD/PyAgent/pull/200) | P2 | M | 2026-03-25 |
+| prj0000061 | theme-system | prj0000061-theme-system | [#199](https://github.com/UndiFineD/PyAgent/pull/199) | P4 | S | 2026-03-25 |
+| prj0000060 | flm-token-throughput-dashboard | prj0000060-flm-token-throughput-dashboard | [#198](https://github.com/UndiFineD/PyAgent/pull/198) | P4 | S | 2026-03-25 |
+| prj0000058 | mobile-responsive-nebula-os | prj0000058-mobile-responsive-nebula-os | [#196](https://github.com/UndiFineD/PyAgent/pull/196) | P4 | S | 2026-03-25 |
+| prj0000057 | agent-orchestration-graph | prj0000057-agent-orchestration-graph | [#195](https://github.com/UndiFineD/PyAgent/pull/195) | P2 | M | 2026-03-25 |
+| prj0000056 | rust-async-transport-activation | prj0000056-rust-async-transport-activation | [#194](https://github.com/UndiFineD/PyAgent/pull/194) | P4 | M | 2026-03-25 |
 | prj0000055 | websocket-e2e-encryption | prj0000055-websocket-e2e-encryption | [#193](https://github.com/UndiFineD/PyAgent/pull/193) | P2 | M | 2026-03-25 |
 | prj0000054 | backend-authentication | prj0000054-backend-authentication | [#192](https://github.com/UndiFineD/PyAgent/pull/192) | P2 | M | 2026-03-24 |
+| prj0000059 | plugin-marketplace-browser | prj0000059-plugin-marketplace-browser | [#197](https://github.com/UndiFineD/PyAgent/pull/197) | P4 | S | 2026-03-25 |
 | prj0000053 | hmac-webhook-verification | prj0000053-hmac-webhook-verification | [#191](https://github.com/UndiFineD/PyAgent/pull/191) | P2 | S | 2026-03-24 |
 | prj0000052 | project-management | prj0000052-project-management | [#190](https://github.com/UndiFineD/PyAgent/pull/190) | P2 | L | 2026-03-24 |
 | prj0000043 | p2p-security-deps | prj0000043-p2p-security-deps | open | P2 | M | 2026-03-24 |
@@ -176,11 +183,11 @@ Stalled, cancelled, or superseded projects.
 
 | Lane | Count |
 |---|---|
-| Ideas | 10 |
+| Ideas | 14 |
 | Discovery | 0 |
 | Design | 0 |
-| In Sprint | 1 |
-| Review | 2 |
+| In Sprint | 0 |
+| Review | 9 |
 | Released | 48 |
 | Archived | 1 |
-| **Total** | **62** |
+| **Total** | **72** |
