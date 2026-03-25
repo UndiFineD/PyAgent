@@ -43,7 +43,6 @@ Projects proposed but not yet formally scoped.
 
 | ID | Name | Summary | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|
-| prj0000073 | api-documentation | Hand-crafted API reference covering all backend REST endpoints, WebSocket protocol, authentication, and error codes | P2 | M | docs, api, backend | 2026-03-25 |
 | prj0000074 | workspace-meta-improvements | Move agent memory/logs to .github/agents, enforce docstrings policy, restructure docs/architecture, add SWOT+risk to kanban, expand @2think depth | P2 | L | meta, workflow, docs, architecture | 2026-03-25 |
 | prj0000075 | ci-simplification | Audit all GitHub workflow YAML files; consolidate or remove in favour of comprehensive pre-commit hooks for local-first testing | P2 | S | ci, devops, workflow | 2026-03-25 |
 | prj0000076 | future-ideas-kanban | Full workspace audit to surface future improvement ideas; add SWOT-prioritised idea table to kanban.md with priority, impact, urgency, and description | P3 | M | planning, kanban, roadmap | 2026-03-25 |
@@ -75,6 +74,7 @@ Active implementation — @4plan through @6code are working.
 | ID | Name | Summary | Branch | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
 
+
 ---
 
 ## Review
@@ -84,6 +84,7 @@ PR open, awaiting merge.
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
 | prj0000071 | dark-mode-accessibility | prj0000071-dark-mode-accessibility | [#211](https://github.com/UndiFineD/PyAgent/pull/211) | P4 | S | 2026-03-25 |
+| prj0000073 | api-documentation | prj0000073-api-documentation | [#210](https://github.com/UndiFineD/PyAgent/pull/210) | P2 | M | 2026-03-25 |
 | prj0000072 | websocket-reconnect-logic | prj0000072-websocket-reconnect-logic | [#209](https://github.com/UndiFineD/PyAgent/pull/209) | P3 | S | 2026-03-25 |
 | prj0000043 | p2p-security-deps | prj0000043-p2p-security-deps | open | P2 | M | 2026-03-24 |
 | prj0000044 | transaction-managers-stubs | prj0000044-transaction-managers-stubs | #136 | P2 | S | 2026-03-24 |
@@ -180,8 +181,8 @@ Stalled, cancelled, or superseded projects.
 
 | Lane | Count |
 |---|---|
-| Ideas | 5 |
-| Discovery | 0 |
+| Ideas | 4 |
+| Discovery | 1 |
 | Design | 0 |
 | In Sprint | 0 |
 | Review | 3 |
