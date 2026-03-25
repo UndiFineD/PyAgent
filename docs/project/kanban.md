@@ -43,15 +43,6 @@ Projects proposed but not yet formally scoped.
 
 | ID | Name | Summary | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|
-| prj0000056 | rust-async-transport-activation | Enable async-transport feature in rust_core to activate QUIC-over-Tokio for faster inter-agent messaging | P4 | unknown | rust, transport, async | 2026-03-24 |
-| prj0000057 | agent-orchestration-graph | Visual DAG panel in NebulaOS showing live task flow and agent status across all 10 pipeline stages | P4 | unknown | ui, nebula, agents | 2026-03-24 |
-| prj0000058 | mobile-responsive-nebula-os | Add CSS responsive breakpoints and touch-friendly interaction patterns to the NebulaOS shell | P4 | unknown | ui, nebula, mobile | 2026-03-24 |
-| prj0000059 | plugin-marketplace-browser | In-NebulaOS panel for discovering, installing, and managing third-party agent plugins | P4 | unknown | ui, nebula, plugins | 2026-03-24 |
-| prj0000060 | flm-token-throughput-dashboard | Real-time tokens-per-second charts fed from FLM telemetry in NebulaOS | P4 | unknown | ui, nebula, llm, flm | 2026-03-24 |
-| prj0000061 | theme-system | Light mode and retro terminal theme for NebulaOS with theme selector and persisted preference | P4 | unknown | ui, nebula, themes | 2026-03-24 |
-| prj0000062 | live-agent-execution-in-codebuilder | Wire the 10-agent pipeline to CodeBuilder UI with streaming per-agent log output and progress indicators | P4 | unknown | ui, nebula, agents, codebuilder | 2026-03-24 |
-| prj0000064 | rate-limiting-middleware | Token-bucket rate limiting middleware on all FastAPI REST endpoints with configurable per-route limits | P3 | S | security, backend | 2026-03-24 |
-| prj0000065 | agent-memory-persistence | Persist agent conversation context and task history across sessions using an embedded vector store | P3 | M | agents, memory | 2026-03-24 |
 | prj0000066 | api-versioning | Versioned API routing (/v1/api/) with explicit schema contracts and backwards-compatible evolution strategy | P3 | S | backend, api | 2026-03-24 |
 | prj0000067 | rust-file-watcher | Rust-powered filesystem watcher integrated into rust_core for real-time project change detection | P4 | M | rust, tools | 2026-03-24 |
 | prj0000068 | agent-timeout-watchdog | Configurable per-agent execution timeout with graceful shutdown, retry budget, and dead-letter queue | P3 | M | agents, reliability | 2026-03-24 |
@@ -87,6 +78,7 @@ Active implementation — @4plan through @6code are working.
 | ID | Name | Summary | Branch | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
 | prj0000063 | structured-logging | JSON structured logging with correlation IDs across all backend requests | prj0000063-structured-logging | P4 | S | 2026-03-25 |
+| prj0000065 | agent-memory-persistence | Persist agent conversation context and task history across sessions using a JSON-backed MemoryStore | prj0000065-agent-memory-persistence | P3 | M | 2026-03-25 |
 
 ---
 
