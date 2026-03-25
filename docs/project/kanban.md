@@ -71,7 +71,6 @@ Active implementation — @4plan through @6code are working.
 
 | ID | Name | Summary | Branch | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
-| prj0000072 | websocket-reconnect-logic | Exponential backoff + jitter for frontend WebSocket reconnect | prj0000072-websocket-reconnect-logic | P3 | S | 2026-03-25 |
 
 ---
 
@@ -81,6 +80,7 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000072 | websocket-reconnect-logic | prj0000072-websocket-reconnect-logic | [#209](https://github.com/UndiFineD/PyAgent/pull/209) | P3 | S | 2026-03-25 |
 | prj0000043 | p2p-security-deps | prj0000043-p2p-security-deps | open | P2 | M | 2026-03-24 |
 | prj0000044 | transaction-managers-stubs | prj0000044-transaction-managers-stubs | #136 | P2 | S | 2026-03-24 |
 
@@ -179,8 +179,8 @@ Stalled, cancelled, or superseded projects.
 | Ideas | 1 |
 | Discovery | 0 |
 | Design | 0 |
-| In Sprint | 1 |
-| Review | 2 |
+| In Sprint | 0 |
+| Review | 3 |
 | Released | 67 |
 | Archived | 1 |
 | **Total** | **72** |
