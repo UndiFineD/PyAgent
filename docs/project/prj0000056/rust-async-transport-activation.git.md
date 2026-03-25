@@ -32,16 +32,16 @@ No failures. `cargo check` clean, all 9 pytest tests pass.
 
 | SHA (short) | Message | Phase |
 |---|---|---|
-| TBD | `docs(prj0000056): @1project — 9 artifacts, kanban update` | @1project |
-| TBD | `feat(prj0000056): @6code — async_transport.rs + PyO3 bindings` | @6code |
-| TBD | `test(prj0000056): @5test — async transport tests` | @5test |
-| TBD | `docs(prj0000056): close — kanban In Sprint→Review, pr=N` | @9git |
+| ff48971c1 | `docs(prj0000056): @1project — 9 artifacts, kanban update` | @1project |
+| aa96cc483 | `feat(prj0000056): @6code — async_transport.rs + PyO3 bindings` | @6code |
+| 81b121a0d | `test(prj0000056): @5test — async transport tests` | @5test |
+| TBD | `docs(prj0000056): close — pr=194` | @9git |
 
 ## Pull Request
 
-- **PR:** TBD (opened against `main`)
+- **PR:** [#194](https://github.com/UndiFineD/PyAgent/pull/194) (opened against `main`)
 - **Title:** `feat: Rust async MPSC transport + PyO3 bindings (prj0000056)`
-- **URL:** TBD
+- **URL:** https://github.com/UndiFineD/PyAgent/pull/194
 
 ## Governance
 
