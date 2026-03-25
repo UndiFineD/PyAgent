@@ -53,7 +53,7 @@ The canonical files are required for every project folder. Chunked files are req
 2. If `## Branch Plan` exists, capture the expected branch from it.
 3. Read the observed branch with `git branch --show-current`.
 4. If an expected branch exists and observed branch != expected branch, stop work immediately.
-5. On mismatch, record BLOCKED status in `<project>.project.md` and `docs/agents/1project.memory.md`,
+5. On mismatch, record BLOCKED status in `<project>.project.md` and `.github/agents/data/1project.memory.md`,
    then hand the task back to `@0master`.
 6. Do not create/overwrite project artifacts or hand off to `@2think` while branch validation fails.
 
@@ -115,7 +115,7 @@ The canonical files are required for every project folder. Chunked files are req
 
 ## Memory lifecycle
 
-- Read and update `docs/agents/1project.memory.md` for each delegated task.
+- Read and update `.github/agents/data/1project.memory.md` for each delegated task.
 - Keep lifecycle state aligned with master policy: `OPEN` -> `IN_PROGRESS` -> `DONE` (or `BLOCKED`).
 - Ensure each entry includes `task_id`, `owner_agent`, `updated_at`, and `summary`.
 - When handing off to `@2think`, record the handoff target and artifact paths.

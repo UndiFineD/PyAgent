@@ -53,14 +53,14 @@ If vulnerabilities are found, it reports them to `@6code` (fixable code issues) 
 2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
 3. Read the observed branch with `git branch --show-current`.
 4. If observed branch != expected branch, stop work immediately.
-5. On mismatch, record BLOCKED status in `<project>.ql.md` and `docs/agents/8ql.memory.md`,
+5. On mismatch, record BLOCKED status in `<project>.ql.md` and `.github/agents/data/8ql.memory.md`,
    then hand the task back to `@0master`.
 6. Do not run security scans or hand off to `@9git` while branch validation fails.
 
 ---
 
 **Step 1 — Identify changed files**  
-Read `docs/agents/7exec.memory.md` and `docs/agents/6code.memory.md` to get the list of modified modules.  
+Read `.github/agents/data/7exec.memory.md` and `.github/agents/data/6code.memory.md` to get the list of modified modules.  
 Also check:
 ```powershell
 git diff --name-only HEAD 2>&1
@@ -113,7 +113,7 @@ Set-Location ..
 | LOW / INFO  | Log in memory only                                   |
 
 **Step 7 — Record results and hand off**  
-Update `docs/agents/8ql.memory.md`.  
+Update `.github/agents/data/8ql.memory.md`.  
 - **Clean / MEDIUM or below only** → delegate to `@9git`.
 - **HIGH / CRITICAL found** → report to `@6code` (code fix) or `@0master` (supply-chain / architectural risk).
 
@@ -121,7 +121,7 @@ Update `docs/agents/8ql.memory.md`.
 
 ## Memory
 
-Store scan outcomes in `docs/agents/8ql.memory.md`:
+Store scan outcomes in `.github/agents/data/8ql.memory.md`:
 
 ```markdown
 ## Last scan — {date}

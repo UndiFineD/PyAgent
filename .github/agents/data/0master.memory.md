@@ -4,38 +4,37 @@ _Last updated: 2026-03-25_
 
 ---
 
-## 2026-03-25 — prj0000071 WCAG 2.1 AA Dark Mode Accessibility
+## 2026-03-25 — prj0000074 Workspace Meta Improvements
 
-**Branch:** `prj0000071-dark-mode-accessibility`
-**PR:** [#211](https://github.com/UndiFineD/PyAgent/pull/211) — open, awaiting merge
-**Status:** COMPLETE — all 9 workflow artifacts created, 17 tests pass, final commit `23b55037b` pushed
+**Branch:** `prj0000074-workspace-meta-improvements`
+**PR:** [#212](https://github.com/UndiFineD/PyAgent/pull/212) — open, awaiting merge
+**Status:** COMPLETE — 842 tests pass, all 9 workflow artifacts created, PR open
 
-**Changes (6 source files):**
-- `web/components/Window.tsx` — aria-label on 4 icon-only buttons; aria-expanded on menu; focus rings (WCAG 4.1.2, 2.4.7)
-- `web/apps/Paint.tsx` — aria-label + aria-pressed on 3 buttons; aria-label on color/range inputs; focus rings (WCAG 4.1.2, 1.3.1, 2.4.7)
-- `web/apps/Editor.tsx` — restored focus ring on textarea (WCAG 2.4.7)
-- `web/App.tsx` — restored focus ring on toggle switch (WCAG 2.4.7)
-- `web/apps/ProjectManager.tsx` — role=button, tabIndex, onKeyDown, aria-expanded on interactive `<div>` (WCAG 1.3.1)
-- `web/styles/themes.css` — `--color-accent: #e94560→#f25e77` (contrast 4.14:1→5.01:1, WCAG 1.4.3)
-- `tests/web/test_a11y_checklist.py` — 17/17 tests pass
+**Changes:**
+- 20 `*.memory.md` + `*.log.md` moved `docs/agents/` → `.github/agents/data/` via git mv; all references updated (agent defs, backend/app.py, tests, scripts)
+- `5test.agent.md` + `6code.agent.md` — Google-style docstrings policy + ruff `D` codes
+- `2think.agent.md` — 6 research task types + minimum depth guideline
+- `docs/architecture/` restructured: 14 old files deleted, 4 numbered files created (`0overview`–`3projects`); ≤8 limit tested
+- `docs/project/kanban.md` — Risk Register (5 rows) + SWOT Analysis appended
+- Test updates: architecture naming test (new), kanban row counts 72→76, test_docs_exist path fix
 
-**WCAG criteria resolved:** 4.1.2(A), 1.3.1(A), 2.4.7(AA), 1.4.3(AA)
+**Next available prj:** prj0000077 (prj0000075 and prj0000076 reserved in Ideas)
 
 ---
 
-## 2026-03-25 — prj0000073 API Documentation
+## 2026-03-25 — prj0000073 API Documentation (MERGED — PR #210)
 
 **Branch:** `prj0000073-api-documentation`
-**PR:** [#210](https://github.com/UndiFineD/PyAgent/pull/210) — open, awaiting merge
-**Status:** COMPLETE — all 9 workflow artifacts created, 8 canary tests pass
+**PR:** [#210](https://github.com/UndiFineD/PyAgent/pull/210) — MERGED
+**Status:** Released
 
-**Changes:**
-- `docs/api/index.md` — overview, versioning, base URLs, auth summary
-- `docs/api/authentication.md` — API-key + JWT guide with examples
-- `docs/api/rest-endpoints.md` — full reference for all 11 REST routes
-- `docs/api/websocket.md` — WS protocol, message schema, reconnect guide
-- `docs/api/errors.md` — HTTP + WS error codes, troubleshooting
-- `tests/docs/test_api_docs_canary.py` — 8 canary tests
+---
+
+## 2026-03-25 — prj0000071 Dark Mode Accessibility (MERGED — PR #211)
+
+**Branch:** `prj0000071-dark-mode-accessibility`
+**PR:** [#211](https://github.com/UndiFineD/PyAgent/pull/211) — MERGED
+**Status:** Released
 
 ---
 

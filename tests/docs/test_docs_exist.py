@@ -10,7 +10,7 @@ FILES = [
 ]
 
 DIAGRAMS = [
-    "docs/architecture/overview.md",
+    "docs/architecture/0overview.md",
 ]
 
 

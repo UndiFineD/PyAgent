@@ -43,6 +43,26 @@ Tests written by `@5test` must test **real, observable behavior**, not just that
 
 ---
 
+## Docstrings policy
+
+Every test function, helper, and fixture written or modified by `@5test` MUST include a
+Google-style docstring. This is a hard requirement — tests without docstrings will not be accepted.
+
+Enforcement:
+- ruff rules D100–D107 (missing docstrings), D200–D215 (formatting)
+- Run: `ruff check --select D <file>` to verify before handoff
+
+Format:
+```python
+def test_my_feature() -> None:
+    """One-line description of what this test verifies.
+
+    Optionally describe the test scenario or edge case being covered.
+    """
+```
+
+---
+
 ## How @5test operates
 
 ---
@@ -63,7 +83,7 @@ Tests written by `@5test` must test **real, observable behavior**, not just that
 2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
 3. Read the observed branch with `git branch --show-current`.
 4. If observed branch != expected branch, stop work immediately.
-5. On mismatch, record BLOCKED status in `<project>.test.md` and `docs/agents/5test.memory.md`,
+5. On mismatch, record BLOCKED status in `<project>.test.md` and `.github/agents/data/5test.memory.md`,
    then hand the task back to `@0master`.
 6. Do not write/overwrite test artifacts or hand off to `@6code` while branch validation fails.
 
@@ -89,7 +109,7 @@ Tests written by `@5test` must test **real, observable behavior**, not just that
 
 ## Memory lifecycle
 
-- Read and update `docs/agents/5test.memory.md` for each delegated task.
+- Read and update `.github/agents/data/5test.memory.md` for each delegated task.
 - Keep lifecycle state aligned with master policy: `OPEN` -> `IN_PROGRESS` -> `DONE` (or `BLOCKED`).
 - Include `task_id`, failing-test evidence, pass/fail summaries, and handoff notes.
 - On handoff, record target agent `@6code` (or return to `@4plan` when blocked).

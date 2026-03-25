@@ -74,7 +74,6 @@ Active implementation — @4plan through @6code are working.
 | ID | Name | Summary | Branch | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
 
-
 ---
 
 ## Review
@@ -83,7 +82,6 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
-| prj0000073 | api-documentation | prj0000073-api-documentation | [#210](https://github.com/UndiFineD/PyAgent/pull/210) | P2 | M | 2026-03-25 |
 | prj0000072 | websocket-reconnect-logic | prj0000072-websocket-reconnect-logic | [#209](https://github.com/UndiFineD/PyAgent/pull/209) | P3 | S | 2026-03-25 |
 | prj0000043 | p2p-security-deps | prj0000043-p2p-security-deps | open | P2 | M | 2026-03-24 |
 | prj0000044 | transaction-managers-stubs | prj0000044-transaction-managers-stubs | #136 | P2 | S | 2026-03-24 |
@@ -182,10 +180,43 @@ Stalled, cancelled, or superseded projects.
 | Lane | Count |
 |---|---|
 | Ideas | 4 |
-| Discovery | 1 |
+| Discovery | 0 |
 | Design | 0 |
-| In Sprint | 0 |
+| In Sprint | 1 |
 | Review | 3 |
 | Released | 67 |
 | Archived | 1 |
 | **Total** | **76** |
+
+---
+
+## Risk Register
+
+Active risks for the PyAgent project. Update on every sprint start.
+
+| ID | Risk | Likelihood | Impact | Status | Mitigation |
+|---|---|---|---|---|---|
+| RSK-001 | Agent branch mismatch causes commits on wrong branch | M | H | Mitigated | Pre-commit hook `scripts/enforce_branch.py`; branch gate in all agent definitions |
+| RSK-002 | Stale architecture docs mislead agents | H | M | Open | prj0000074: restructure docs/architecture/ to ≤8 numbered files; @6code updates on each PR |
+| RSK-003 | WCAG regressions introduced in future UI work | M | M | Mitigated | `tests/web/test_a11y_checklist.py` runs in CI |
+| RSK-004 | WebSocket reconnect loses messages during reconnect window | L | M | Mitigated | prj0000072 exponential-backoff + state recovery |
+| RSK-005 | JWT secret left at default (`dev`) in production | H | H | Open | `PYAGENT_JWT_SECRET` env var required; backend warns if unset; add CI secret-scanning rule |
+
+---
+
+## SWOT Analysis
+
+Global SWOT for the PyAgent project as of 2026-03-25.
+
+| | **Helpful** | **Harmful** |
+|---|---|---|
+| **Internal** | **Strengths** | **Weaknesses** |
+| | Multi-agent swarm with clear role separation | Agent workflow artifacts are manual; no automated quality gate |
+| | Transactional safety (rollback on failure) | Architecture docs historically bloated with stubs and generated files |
+| | Rust-accelerated hot paths via PyO3 | No ruff D-code enforcement; docstrings are inconsistent |
+| | Rich project tracking (kanban + projects.json + API) | Pre-commit hook not enforced in all CI paths |
+| **External** | **Opportunities** | **Threats** |
+| | AI tooling improving rapidly — agents can be upgraded with new models | LLM API drift may break tool call contracts |
+| | WCAG compliance creates accessible, production-ready UI for demos | Open-source forks may diverge without upstream sync policy |
+| | Rust FFI bridge enables near-native performance at Python ergonomics | Key contributor concentration risk (single-repo autonomy) |
+| | Community interest in multi-agent workflow tooling growing | Dependabot alerts require timely remediation (1 high open) |

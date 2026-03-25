@@ -85,7 +85,7 @@ def test_format_table_never_for_no_last_updated():
 # ─── Integration: analyse_docs against real repo ─────────────────────────
 
 REPO_ROOT = Path(__file__).parent.parent
-DOCS_DIR = REPO_ROOT / "docs" / "agents"
+DOCS_DIR = REPO_ROOT / ".github" / "agents" / "data"
 
 
 @pytest.mark.skipif(not DOCS_DIR.exists(), reason="docs/agents not present")

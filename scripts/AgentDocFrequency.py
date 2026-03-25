@@ -131,11 +131,12 @@ def format_table(stats: list[DocStats]) -> str:
 
 
 def main() -> None:
+    """Main entry point."""
     parser = argparse.ArgumentParser(description="Analyse agent doc update frequency.")
     parser.add_argument(
         "--docs-dir",
-        default="docs/agents",
-        help="Path to the agent docs directory (default: docs/agents).",
+        default=".github/agents/data",
+        help="Path to the agent docs directory (default: .github/agents/data).",
     )
     parser.add_argument(
         "--days-stale",

@@ -45,7 +45,7 @@ This agent does **not** write implementation plans or tests.
 2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
 3. Read the observed branch with `git branch --show-current`.
 4. If observed branch != expected branch, stop work immediately.
-5. On mismatch, record BLOCKED status in `<project>.design.md` and `docs/agents/3design.memory.md`,
+5. On mismatch, record BLOCKED status in `<project>.design.md` and `.github/agents/data/3design.memory.md`,
    then hand the task back to `@0master`.
 6. Do not write/overwrite design artifacts or hand off to `@4plan` while branch validation fails.
 
@@ -90,7 +90,7 @@ Outputs: a concrete design doc for `@4plan`.
 
 ## Memory lifecycle
 
-- Read and update `docs/agents/3design.memory.md` for each delegated task.
+- Read and update `.github/agents/data/3design.memory.md` for each delegated task.
 - Keep lifecycle state aligned with master policy: `OPEN` -> `IN_PROGRESS` -> `DONE` (or `BLOCKED`).
 - Include `task_id`, selected design path, assumptions, and interface-contract notes.
 - On handoff, record target agent `@4plan` and links to canonical/chunked design artifacts.

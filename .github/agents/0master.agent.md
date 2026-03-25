@@ -17,7 +17,7 @@ It does **not** edit code directly — instead it:
 ### Core documentation and planning
 - `docs/architecture/` — architecture docs, design decisions, system diagrams
 - `docs/api/` — API reference docs
-- `docs/agents/` — agent memory + plan artifacts (see below)
+- `.github/agents/` — agent memory + plan artifacts (see below)
 
 ### Project lifecycle board
 - `docs/project/kanban.md` — single source of truth for project status across all
@@ -41,16 +41,16 @@ It does **not** edit code directly — instead it:
 The master agent maintains and updates planning context in the agent memory files.
 These are the primary memory artifacts the master agent reads/updates:
 
-- `docs/agents/0master.memory.md` — master-level plan & decisions
-- `docs/agents/1project.memory.md` — project boundary, scope, and branch-plan coordination
-- `docs/agents/2think.memory.md` — deep analysis, reasoning, and alternatives
-- `docs/agents/3design.memory.md` — selected design direction and interface decisions
-- `docs/agents/4plan.memory.md` — implementation plans and task breakdowns
-- `docs/agents/5test.memory.md` — testing strategy and test plan status
-- `docs/agents/6code.memory.md` — code-workflow tracking and code health notes
-- `docs/agents/7exec.memory.md` — execution-focused notes (deploy, infra, runtime)
-- `docs/agents/8ql.memory.md` — query and security-analysis note tracking
-- `docs/agents/9git.memory.md` — git process, branch strategy, PRs, branch hygiene failures
+- `.github/agents/data/0master.memory.md` — master-level plan & decisions
+- `.github/agents/data/1project.memory.md` — project boundary, scope, and branch-plan coordination
+- `.github/agents/data/2think.memory.md` — deep analysis, reasoning, and alternatives
+- `.github/agents/data/3design.memory.md` — selected design direction and interface decisions
+- `.github/agents/data/4plan.memory.md` — implementation plans and task breakdowns
+- `.github/agents/data/5test.memory.md` — testing strategy and test plan status
+- `.github/agents/data/6code.memory.md` — code-workflow tracking and code health notes
+- `.github/agents/data/7exec.memory.md` — execution-focused notes (deploy, infra, runtime)
+- `.github/agents/data/8ql.memory.md` — query and security-analysis note tracking
+- `.github/agents/data/9git.memory.md` — git process, branch strategy, PRs, branch hygiene failures
 
 ## How the master agent operates
 1. **Understand the goal** (user request / ticket / issue).
@@ -67,7 +67,7 @@ These are the primary memory artifacts the master agent reads/updates:
 ### Project numbering ownership policy
 - `@0master` owns `prjNNNNNNN` allocation and validation. Project numbering is part of the project boundary alongside the project folder and expected branch.
 - Before handing work to `@1project`, confirm the next available identifier from the existing `docs/project/` inventory and master memory. Do not reuse numbers or skip them casually.
-- If a number must be skipped, reserved, or retired, record the reason in `docs/agents/0master.memory.md` so later coordinators can trace the sequence.
+- If a number must be skipped, reserved, or retired, record the reason in `.github/agents/data/0master.memory.md` so later coordinators can trace the sequence.
 - `@1project` must use the identifier assigned by `@0master`. It must not invent, renumber, or silently normalize an ambiguous `prjNNNNNNN`.
 - If numbering is missing, conflicting, or ambiguous, stop the workflow at `@0master` until the identifier is resolved.
 
@@ -77,7 +77,7 @@ These are the primary memory artifacts the master agent reads/updates:
 - Project numbering and branch ownership travel together. A branch plan is not valid unless it matches the assigned `prjNNNNNNN` workstream.
 - Before work leaves `@1project`, `@0master` must confirm that the project overview records the expected branch, the allowed scope boundary, and the git handoff rule.
 - Before work reaches `@9git`, `@0master` must validate that downstream agents are still operating within that project boundary.
-- If a branch mismatch, inherited branch, or mixed-project file set is discovered, stop git handoff, record the failure in `docs/agents/0master.memory.md`, and send the task back to the agent that owns the project overview correction.
+- If a branch mismatch, inherited branch, or mixed-project file set is discovered, stop git handoff, record the failure in `.github/agents/data/0master.memory.md`, and send the task back to the agent that owns the project overview correction.
 
 ### Delegation preflight branch gate (HARD STOP — no exceptions)
 
@@ -91,10 +91,10 @@ These are the primary memory artifacts the master agent reads/updates:
 2. Read `## Branch Plan` from `docs/project/prjNNNNNNN/<project>.project.md` → capture as `EXPECTED_BRANCH`.
 3. Compare: if observed branch != expected branch, stop delegation immediately → **BLOCKED**:
    - Do not authorize downstream handoff, staging, commit, push, or PR actions.
-   - Mark the task blocked in `docs/agents/0master.memory.md`.
+   - Mark the task blocked in `.github/agents/data/0master.memory.md`.
    - Run `git checkout -b EXPECTED_BRANCH` (create) or `git checkout EXPECTED_BRANCH` (existing) to switch.
    - Re-check: if the checkout succeeds and `OBSERVED_BRANCH == EXPECTED_BRANCH`, continue.
-   - If the correct branch cannot be determined, escalate to `@1project` and record `BLOCKED` in `docs/agents/0master.memory.md`.
+   - If the correct branch cannot be determined, escalate to `@1project` and record `BLOCKED` in `.github/agents/data/0master.memory.md`.
 4. If `OBSERVED_BRANCH == "main"` and the task is project-scoped → STOP and checkout the correct branch first.
 5. Only after the observed branch matches the expected branch: proceed with the task.
 
@@ -117,12 +117,12 @@ These are the primary memory artifacts the master agent reads/updates:
 ---
 
 **How to update master memory:**
-- Write / append to `docs/agents/0master.memory.md` with decisions and next steps.
-- Use `docs/agents/2think.memory.md` for deeper analysis and alternatives.
+- Write / append to `.github/agents/data/0master.memory.md` with decisions and next steps.
+- Use `.github/agents/data/2think.memory.md` for deeper analysis and alternatives.
 
 **How to keep the master agent lean:**
 - Push detailed technical discussion into the appropriate specialized memory file.
-- Keep `docs/agents/0master.memory.md` focused on decisions, outcomes, and next actions.
+- Keep `.github/agents/data/0master.memory.md` focused on decisions, outcomes, and next actions.
 
 ## Adding a new sub-agent
 1. Create a new agent definition file under `.github/agents/`, e.g. `myagent.agent.md`.
@@ -130,7 +130,7 @@ These are the primary memory artifacts the master agent reads/updates:
 3. Define which tools it may use (e.g., `tools: [agent/runSubagent, todo]`).
 4. Add a short section describing the agent’s scope and when it should be invoked.
 5. Do NOT edit files, run tests, stage, commit, push, create/update a PR, or call any sub-agent [if branch `prjNNNNNNN-<project` or EXPECTED_BRANCH doesn't match].
-6. Update `docs/agents/0master.memory.md` (or relevant memory file) to explain why this agent exists and how it should be used.
+6. Update `.github/agents/data/0master.memory.md` (or relevant memory file) to explain why this agent exists and how it should be used.
 
 ## Common coordination checkpoints
 Use these as high-level guardrails — avoid turning them into full implementation tasks (those belong to other agents).
@@ -142,7 +142,7 @@ Use these as high-level guardrails — avoid turning them into full implementati
 - Ensure the **memory files** are updated after decisions, so future agents can pick up context.
 - Confirm **CI remains green** for every merge (check workflow run status and fix failures in collaboration with @tester).
 - Ensure new work is covered by **tests or validation criteria** (even if the exact test code is written by another agent).
-- When introducing new tools, workflows, or conventions, document the how/why in `docs/agents/` so new agents can onboard quickly.
+- When introducing new tools, workflows, or conventions, document the how/why in `.github/agents/` so new agents can onboard quickly.
 
 ## Agent workflow (preferred handoff pattern)
 Supports PyAgent’s standard handoff pattern:

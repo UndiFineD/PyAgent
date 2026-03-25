@@ -31,7 +31,7 @@ def test_0master_documents_project_numbering_ownership_and_continuity() -> None:
     """The master workflow doc must keep ownership of prjNNNNNNN allocation and continuity."""
     master_agent_text = _read(".github/agents/0master.agent.md")
     master_agent = _normalize(master_agent_text)
-    master_memory = _normalize(_read("docs/agents/0master.memory.md"))
+    master_memory = _normalize(_read(".github/agents/data/0master.memory.md"))
     combined = f"{master_agent} {master_memory}"
 
     assert "project numbering ownership policy" in master_agent
@@ -79,7 +79,7 @@ def test_0master_enforces_delegation_preflight_branch_gate() -> None:
     assert "delegation preflight branch gate" in master_agent
     assert "git branch --show-current" in master_agent_text
     assert "if observed branch != expected branch, stop delegation immediately" in master_agent
-    assert "mark the task blocked in docs/agents/0master.memory.md" in master_agent
+    assert "mark the task blocked in .github/agents/data/0master.memory.md" in master_agent
     assert "do not authorize downstream handoff, staging, commit, push, or pr actions" in master_agent
 
 
@@ -140,7 +140,7 @@ _AGENT_BRANCH_POLICY_REQUIREMENTS: dict[str, dict[str, list[str]]] = {
         "normalized": [
             "delegation preflight branch gate",
             "if observed branch != expected branch, stop delegation immediately",
-            "mark the task blocked in docs/agents/0master.memory.md",
+            "mark the task blocked in .github/agents/data/0master.memory.md",
             "do not authorize downstream handoff, staging, commit, push, or pr actions",
         ],
         "raw": [
@@ -151,7 +151,7 @@ _AGENT_BRANCH_POLICY_REQUIREMENTS: dict[str, dict[str, list[str]]] = {
         "normalized": [
             "branch gate (mandatory",
             "if an expected branch exists and observed branch != expected branch, stop work immediately",
-            "record blocked status in <project>.project.md and docs/agents/1project.memory.md",
+            "record blocked status in <project>.project.md and .github/agents/data/1project.memory.md",
             "do not create/overwrite project artifacts or hand off to @2think while branch validation fails",
         ],
         "raw": [
@@ -162,7 +162,7 @@ _AGENT_BRANCH_POLICY_REQUIREMENTS: dict[str, dict[str, list[str]]] = {
         "normalized": [
             "branch gate (mandatory",
             "if observed branch != expected branch, stop work immediately",
-            "record blocked status in <project>.think.md and docs/agents/2think.memory.md",
+            "record blocked status in <project>.think.md and .github/agents/data/2think.memory.md",
             "do not write/overwrite think artifacts or hand off to @3design while branch validation fails",
         ],
         "raw": ["git branch --show-current"],
@@ -171,7 +171,7 @@ _AGENT_BRANCH_POLICY_REQUIREMENTS: dict[str, dict[str, list[str]]] = {
         "normalized": [
             "branch gate (mandatory",
             "if observed branch != expected branch, stop work immediately",
-            "record blocked status in <project>.design.md and docs/agents/3design.memory.md",
+            "record blocked status in <project>.design.md and .github/agents/data/3design.memory.md",
             "do not write/overwrite design artifacts or hand off to @4plan while branch validation fails",
         ],
         "raw": ["git branch --show-current"],
@@ -180,7 +180,7 @@ _AGENT_BRANCH_POLICY_REQUIREMENTS: dict[str, dict[str, list[str]]] = {
         "normalized": [
             "branch gate (mandatory",
             "if observed branch != expected branch, stop work immediately",
-            "record blocked status in <project>.plan.md and docs/agents/4plan.memory.md",
+            "record blocked status in <project>.plan.md and .github/agents/data/4plan.memory.md",
             "do not write/overwrite plan artifacts or hand off to @5test while branch validation fails",
         ],
         "raw": ["git branch --show-current"],
@@ -189,7 +189,7 @@ _AGENT_BRANCH_POLICY_REQUIREMENTS: dict[str, dict[str, list[str]]] = {
         "normalized": [
             "branch gate (mandatory",
             "if observed branch != expected branch, stop work immediately",
-            "record blocked status in <project>.test.md and docs/agents/5test.memory.md",
+            "record blocked status in <project>.test.md and .github/agents/data/5test.memory.md",
             "do not write/overwrite test artifacts or hand off to @6code while branch validation fails",
         ],
         "raw": ["git branch --show-current"],
@@ -198,7 +198,7 @@ _AGENT_BRANCH_POLICY_REQUIREMENTS: dict[str, dict[str, list[str]]] = {
         "normalized": [
             "branch gate (mandatory",
             "if observed branch != expected branch, stop work immediately",
-            "record blocked status in <project>.code.md and docs/agents/6code.memory.md",
+            "record blocked status in <project>.code.md and .github/agents/data/6code.memory.md",
             "do not edit code, run implementation tests, or hand off to @7exec while branch validation fails",
         ],
         "raw": ["git branch --show-current"],
@@ -207,7 +207,7 @@ _AGENT_BRANCH_POLICY_REQUIREMENTS: dict[str, dict[str, list[str]]] = {
         "normalized": [
             "branch gate (mandatory",
             "if observed branch != expected branch, stop work immediately",
-            "record blocked status in <project>.exec.md and docs/agents/7exec.memory.md",
+            "record blocked status in <project>.exec.md and .github/agents/data/7exec.memory.md",
             "do not run full validation, smoke checks, or hand off to @8ql while branch validation fails",
         ],
         "raw": ["git branch --show-current"],
@@ -216,7 +216,7 @@ _AGENT_BRANCH_POLICY_REQUIREMENTS: dict[str, dict[str, list[str]]] = {
         "normalized": [
             "branch gate (mandatory",
             "if observed branch != expected branch, stop work immediately",
-            "record blocked status in <project>.ql.md and docs/agents/8ql.memory.md",
+            "record blocked status in <project>.ql.md and .github/agents/data/8ql.memory.md",
             "do not run security scans or hand off to @9git while branch validation fails",
         ],
         "raw": ["git branch --show-current"],

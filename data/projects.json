@@ -1194,10 +1194,10 @@
   {
     "id": "prj0000074",
     "name": "workspace-meta-improvements",
-    "lane": "Ideas",
+    "lane": "Review",
     "summary": "Move agent memory/logs to .github/agents, enforce docstrings policy in @5test and @6code, restructure docs/architecture, add SWOT+risk to kanban, expand @2think depth",
-    "branch": null,
-    "pr": null,
+    "branch": "prj0000074-workspace-meta-improvements",
+    "pr": 212,
     "priority": "P2",
     "budget_tier": "L",
     "tags": ["meta", "workflow", "docs", "architecture"],
