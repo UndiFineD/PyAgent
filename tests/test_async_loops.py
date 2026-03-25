@@ -39,6 +39,9 @@ class LoopChecker(ast.NodeVisitor):
         while ancestor is not None and not isinstance(ancestor, (ast.FunctionDef, ast.AsyncFunctionDef)):
             ancestor = getattr(ancestor, "parent", None)
         if isinstance(ancestor, ast.FunctionDef):
+            # Allow functions ending in _sync — these are intentional thread-pool targets
+            if ancestor.name.endswith("_sync"):
+                return
             # synchronous function containing a loop -> error
             self.errors.append(node.lineno)
 

@@ -66,7 +66,7 @@ def test_filewatcher_scan_falls_back_to_python():
             f.write("hello")
         # since_ms is in the past (1 second ago)
         since_ms = (time.time() - 1) * 1000
-        result = _python_scan(tmpdir, since_ms)
+        result = asyncio.run(_python_scan(tmpdir, since_ms))
         assert fpath in result
 
 
@@ -92,7 +92,7 @@ def test_get_changes_returns_and_clears():
 
 def test_invalid_root_returns_empty():
     """_python_scan on a non-existent directory should return [] without error."""
-    result = _python_scan("/this/path/does/not/exist/ever", 0)
+    result = asyncio.run(_python_scan("/this/path/does/not/exist/ever", 0))
     assert result == []
 
 

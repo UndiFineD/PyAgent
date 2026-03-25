@@ -47,3 +47,28 @@ All 5 tests in `tests/test_pipeline_execution.py` pass. PR open → hand to revi
 ## Failure Rule
 
 Do not push if tests fail.
+
+## Project Overview
+
+Wire the 10-agent pipeline to the CodeBuilder NebulaOS app with streaming per-agent
+log output and progress indicators. Exposes `/api/pipeline/run` and
+`/api/pipeline/status/{pipeline_id}` backend endpoints.
+
+## Goal & Scope
+
+**Goal:** Enable live agent pipeline execution from the CodeBuilder UI with
+real-time per-agent progress polling.
+
+**In scope:**
+- `backend/app.py` — pipeline run + status endpoints
+- `web/apps/CodeBuilder.tsx` — Run Pipeline button and status panel
+- `tests/test_pipeline_execution.py` — 5 pipeline tests
+
+**Out of scope:** real agent execution, authentication changes, WebSocket changes.
+
+## Branch Plan
+
+**Expected branch:** `prj0000062-live-agent-execution-in-codebuilder`
+**Scope boundary:** `docs/project/prj0000062/`, `backend/app.py`, `web/apps/CodeBuilder.tsx`, `tests/test_pipeline_execution.py`
+**Handoff rule:** All 5 tests pass; merge after PR review.
+**Failure rule:** Return to @6code if tests fail.

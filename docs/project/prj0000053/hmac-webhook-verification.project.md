@@ -16,6 +16,9 @@ _Owner: @1project | Updated: 2026-03-24_
 **Expected branch:** `prj0000053-hmac-webhook-verification`
 **Observed branch:** `prj0000053-hmac-webhook-verification`
 **Project match:** YES
+**Scope boundary:** `docs/project/prj0000053/`, `src/github_app.py`, `tests/test_github_app.py`, `data/projects.json`, `docs/project/kanban.md`
+**Handoff rule:** All HMAC tests pass; merge only after PR review completes.
+**Failure rule:** Return to @6code if any HMAC test fails.
 
 ## Project Overview
 

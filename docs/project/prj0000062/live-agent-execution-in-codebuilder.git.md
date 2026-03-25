@@ -42,3 +42,8 @@ All 5 `test_pipeline_execution.py` tests: PASS ✅
 - **PR URL:** https://github.com/UndiFineD/PyAgent/pull/200
 - **Base:** main
 - **Head:** prj0000062-live-agent-execution-in-codebuilder
+
+
+## Lessons Learned
+
+No branch or scope violations. Modern template adopted at @9git handoff.

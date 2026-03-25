@@ -41,3 +41,8 @@ Pre-existing failures unrelated to this project (not blocking):
 - `test_all_sarif_files_are_fresh` — stale SARIF gate
 - `test_projects_json_entry_count` — pre-existing count mismatch
 - `test_kanban_total_rows` — pre-existing count mismatch
+
+
+## Lessons Learned
+
+No branch or scope violations. Modern template adopted at @9git handoff.

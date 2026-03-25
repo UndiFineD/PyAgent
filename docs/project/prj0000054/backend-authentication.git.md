@@ -26,3 +26,16 @@ https://github.com/UndiFineD/PyAgent/pull/192
 2. `feat(prj0000054): @6code — add backend/auth.py, APIRouter auth wiring, PyJWT dep`
 3. `test(prj0000054): @5test — add 17 API-key + JWT auth tests`
 4. `docs(prj0000054): close — exec+ql+git notes, kanban In Sprint→Review, pr=192`
+
+## Legacy Branch Exception
+
+This git summary was created before the modern Branch Plan template was adopted.
+It uses the older `## Branch` header, lacking the modern Branch Validation,
+Scope Validation, Failure Disposition, and Lessons Learned sections.
+
+**Corrective ownership:**
+- @0master: acknowledge the historical deviation and authorise legacy retention.
+- @9git: migrate to the modern template when this project next sees active work.
+
+No branch validation failures were recorded for this project; the deviation is
+purely a documentation formatting issue predating the modern workflow policy.
