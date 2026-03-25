@@ -25,9 +25,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from .auth import require_auth, websocket_auth
+from .logging_config import get_logger, setup_logging
 from .session_manager import SessionManager
 from .ws_crypto import decrypt_message, derive_shared_secret, encrypt_message, generate_keypair
 from .ws_handler import handle_message
+
+import uuid as _uuid_mod
+from starlette.middleware.base import BaseHTTPMiddleware
 
 logger = logging.getLogger(__name__)
 
@@ -102,6 +106,7 @@ _auth_router = APIRouter(dependencies=[Depends(require_auth)])
 @app.get("/health")
 async def health() -> dict[str, str]:
     """Health check endpoint."""
+    get_logger().info("Health check", extra={"correlation_id": "health", "endpoint": "/health"})
     return {"status": "ok"}
 
 
