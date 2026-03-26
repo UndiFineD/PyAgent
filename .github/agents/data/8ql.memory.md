@@ -11,6 +11,33 @@ Invoke it via `agent/runSubagent` to continue the process.
 
 ---
 
+## prj0000078 — pm-swot-risk-ui
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000078-pm-swot-risk-ui |
+| **owner_agent** | @8ql |
+| **source** | @7exec |
+| **updated_at** | 2026-03-26 |
+| **status** | DONE |
+| **branch** | prj0000078-pm-swot-risk-ui |
+| **files_scanned** | `web/apps/ProjectManager.tsx`, `web/apps/ProjectManager.test.tsx`, `web/vite-env.d.ts` |
+| **security_ruff_s** | PASS — 54 pre-existing baseline findings in src/; 0 new findings |
+| **security_ts_xss** | PASS — `<pre>` text-child rendering; no dangerouslySetInnerHTML |
+| **security_ts_path** | PASS — build-time Vite static import; no runtime path construction |
+| **security_ts_events** | PASS — useEffect with proper removeEventListener cleanup |
+| **security_ts_proto** | PASS — extractSection uses indexOf/slice with hardcoded heading literals |
+| **security_npm_deps** | PASS — web/package.json unchanged; no new packages |
+| **quality_plan** | PASS — all code deliverables confirmed in git diff |
+| **quality_ac** | PASS — all 8 ACs satisfied |
+| **quality_docs** | PASS — scope deviation (no Editor/App.tsx changes) is valid S-budget simplification |
+| **structure_tests** | PASS — 129/129 |
+| **summary** | 0 CRITICAL, 0 HIGH, 0 MEDIUM, 0 LOW. 2 INFO-level quality observations (non-blocking). All 8 ACs satisfied. 129 structure tests pass. CLEAR for @9git. |
+| **handoff_target** | @9git |
+| **artifact_paths** | docs/project/prj0000078/pm-swot-risk-ui.ql.md |
+
+---
+
 ## prj0000047 — conky-real-metrics
 
 | Field | Value |

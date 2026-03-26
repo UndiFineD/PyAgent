@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-26 | Total projects: 77_
+_Last updated: 2026-03-26 | Total projects: 78_
 
 ## How to use this board
 
@@ -52,6 +52,7 @@ Active options exploration — @2think is working or has completed .think.md.
 
 | ID | Name | Summary | Branch | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|---|
+| prj0000078 | pm-swot-risk-ui | *(moved to Review — PR #219)* | prj0000078-pm-swot-risk-ui | P3 | S | ui, swot, risk, project-manager | 2026-03-26 |
 
 ---
 
@@ -79,6 +80,7 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000078 | pm-swot-risk-ui | prj0000078-pm-swot-risk-ui | [#219](https://github.com/UndiFineD/PyAgent/pull/219) | P3 | S | 2026-03-26 |
 | prj0000072 | websocket-reconnect-logic | prj0000072-websocket-reconnect-logic | [#209](https://github.com/UndiFineD/PyAgent/pull/209) | P3 | S | 2026-03-25 |
 | prj0000043 | p2p-security-deps | prj0000043-p2p-security-deps | open | P2 | M | 2026-03-24 |
 | prj0000044 | transaction-managers-stubs | prj0000044-transaction-managers-stubs | #136 | P2 | S | 2026-03-24 |
@@ -185,10 +187,10 @@ Stalled, cancelled, or superseded projects.
 | Discovery | 0 |
 | Design | 0 |
 | In Sprint | 0 |
-| Review | 3 |
+| Review | 4 |
 | Released | 73 |
 | Archived | 1 |
-| **Total** | **77** |
+| **Total** | **78** |
 
 ---
 

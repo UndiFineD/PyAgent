@@ -5,6 +5,20 @@ integration checks, and smoke test outcomes.
 
 ---
 
+## Last run — 2026-03-26
+- Task: prj0000078 pm-swot-risk-ui
+- Tests run: Vitest 3/3 pass, pytest structure 129/129 pass
+- Import check: SKIPPED (TypeScript project; tsc --noEmit clean)
+- Smoke test: Vite build PASS (exit 0; pre-existing chunk-size warning only)
+- rust_core: SKIPPED (not modified)
+- Placeholder scan: N/A (TypeScript task)
+- Outcome: FAILED → @6code (web files not committed — see blocker below)
+- Notes: All runtime checks pass on disk, but implementation files are not committed.
+  BLOCKING — @6code must commit before @8ql handoff:
+    1. web/apps/ProjectManager.tsx (unstaged modifications: extractSection, kanbanRaw import, BarChart2)
+    2. web/apps/ProjectManager.test.tsx (untracked new file)
+    3. web/vite-env.d.ts (untracked new file)
+
 ## Last run — 2026-03-23
 - Task: prj0000047 conky-real-metrics
 - Tests run: 30 | Passed: 30 | Failed: 0

@@ -14,9 +14,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   GitBranch, ExternalLink, Search, Loader2, AlertTriangle,
-  ChevronDown, ChevronUp, Tag, Pencil, FolderOpen, Plus, X, Check,
+  ChevronDown, ChevronUp, Tag, Pencil, FolderOpen, Plus, X, Check, BarChart2,
 } from 'lucide-react';
 import { cn } from '../utils';
+import kanbanRaw from '../../docs/project/kanban.md?raw';
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -437,6 +438,15 @@ const LaneColumn: React.FC<LaneColumnProps> = ({ lane, projects, onEdit, onDragS
   );
 };
 
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+function extractSection(raw: string, heading: string): string {
+  const start = raw.indexOf(`## ${heading}`);
+  if (start === -1) return `Section "${heading}" not found.`;
+  const after = raw.indexOf('\n## ', start + 1);
+  return after === -1 ? raw.slice(start) : raw.slice(start, after);
+}
+
 // ── FilterBar ────────────────────────────────────────────────────────────────
 
 interface FilterBarProps {
@@ -445,9 +455,13 @@ interface FilterBarProps {
   searchQuery: string;
   onSearchChange: (q: string) => void;
   onNew: () => void;
+  onSwot: () => void;
+  onRisk: () => void;
 }
 
-const FilterBar: React.FC<FilterBarProps> = ({ selectedLane, onLaneChange, searchQuery, onSearchChange, onNew }) => (
+const FilterBar: React.FC<FilterBarProps> = ({
+  selectedLane, onLaneChange, searchQuery, onSearchChange, onNew, onSwot, onRisk,
+}) => (
   <div className="flex items-center gap-3 px-3 py-2 bg-os-window border-b border-os-border flex-wrap">
     <div className="flex items-center gap-1 flex-wrap">
       <button
@@ -484,6 +498,20 @@ const FilterBar: React.FC<FilterBarProps> = ({ selectedLane, onLaneChange, searc
       />
     </div>
     <button
+      onClick={onSwot}
+      className="px-2 py-1 text-xs rounded border border-blue-400 text-blue-300 hover:bg-blue-900 flex items-center gap-1"
+      title="View SWOT Analysis"
+    >
+      <BarChart2 size={12} /> SWOT
+    </button>
+    <button
+      onClick={onRisk}
+      className="px-2 py-1 text-xs rounded border border-yellow-400 text-yellow-300 hover:bg-yellow-900 flex items-center gap-1"
+      title="View Risk Register"
+    >
+      <AlertTriangle size={12} /> Risk
+    </button>
+    <button
       onClick={onNew}
       className="flex items-center gap-1 text-[10px] px-2 py-1.5 bg-os-accent text-black rounded font-semibold hover:opacity-90"
     >
@@ -501,7 +529,14 @@ export const ProjectManager: React.FC = () => {
   const [selectedLane, setSelectedLane] = useState<Lane | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [editTarget, setEditTarget] = useState<Project | 'new' | null>(null);
+  const [sectionModal, setSectionModal] = useState<null | 'swot' | 'risk'>(null);
   const dragId = useRef<string | null>(null);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setSectionModal(null); };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
 
   const reload = () => {
     setLoading(true);
@@ -583,6 +618,8 @@ export const ProjectManager: React.FC = () => {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         onNew={() => setEditTarget('new')}
+        onSwot={() => setSectionModal('swot')}
+        onRisk={() => setSectionModal('risk')}
       />
       <div className="flex-1 overflow-x-auto overflow-y-hidden p-3">
         <div className="flex gap-3 h-full">
@@ -605,6 +642,35 @@ export const ProjectManager: React.FC = () => {
           onSave={applyUpdate}
           onClose={() => setEditTarget(null)}
         />
+      )}
+
+      {sectionModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+          onClick={() => setSectionModal(null)}
+        >
+          <div
+            className="bg-gray-900 border border-gray-700 rounded-lg shadow-xl max-w-3xl w-full max-h-[80vh] flex flex-col"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700">
+              <h2 className="text-sm font-semibold text-white">
+                {sectionModal === 'swot' ? 'SWOT Analysis' : 'Risk Register'}
+              </h2>
+              <button
+                onClick={() => setSectionModal(null)}
+                className="text-gray-400 hover:text-white text-xs"
+              >
+                ✕ Close
+              </button>
+            </div>
+            <pre className="flex-1 overflow-auto p-4 text-xs text-gray-300 whitespace-pre-wrap font-mono">
+              {sectionModal === 'swot'
+                ? extractSection(kanbanRaw, 'SWOT Analysis')
+                : extractSection(kanbanRaw, 'Risk Register')}
+            </pre>
+          </div>
+        </div>
       )}
     </div>
   );
