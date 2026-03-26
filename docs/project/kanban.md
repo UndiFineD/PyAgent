@@ -43,6 +43,7 @@ Projects proposed but not yet formally scoped.
 
 | ID | Name | Summary | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|
+| prj0000078 | pm-swot-risk-ui | Add SWOT Analysis and Risk Register navigation buttons to the Project Manager toolbar, opening kanban.md in the Editor app at the relevant sections | P3 | S | ui, swot, risk, project-manager | 2026-03-26 |
 
 ---
 
@@ -181,14 +182,14 @@ Stalled, cancelled, or superseded projects.
 
 | Lane | Count |
 |---|---|
-| Ideas | 0 |
+| Ideas | 1 |
 | Discovery | 0 |
 | Design | 0 |
 | In Sprint | 0 |
 | Review | 3 |
 | Released | 73 |
 | Archived | 1 |
-| **Total** | **77** |
+| **Total** | **78** |
 
 ---
 

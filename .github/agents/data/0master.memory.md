@@ -4,6 +4,23 @@ _Last updated: 2026-03-26_
 
 ---
 
+## 2026-03-26 — prj0000078 pm-swot-risk-ui — IDEAS 💡 (delegating to @1project)
+
+**Branch (expected):** `prj0000078-pm-swot-risk-ui`
+**Status:** ALLOCATED → delegating to @1project
+**Priority:** P3 | **Budget:** S
+
+**Goal:** Add SWOT Analysis and Risk Register navigation buttons to the `FilterBar` in `web/apps/ProjectManager.tsx`. Buttons open `docs/project/kanban.md` in the Editor app scrolled to the `## SWOT Analysis` and `## Risk Register` sections.
+
+**Scope boundary:**
+- In scope: `web/apps/ProjectManager.tsx` FilterBar toolbar buttons; potentially a thin helper/prop in `web/` app shell if needed to open Editor
+- Out of scope: backend changes, new API routes, modifying kanban.md content
+- Expected branch: `prj0000078-pm-swot-risk-ui`
+
+**Next:** @1project creates `docs/project/prj0000078/` with project overview + branch plan → @4plan → @6code → @9git
+
+---
+
 ## 2026-03-26 — prj0000076 future-ideas-kanban — RELEASED ✅ PR #218
 
 **Branch:** `prj0000076-future-ideas-kanban`
