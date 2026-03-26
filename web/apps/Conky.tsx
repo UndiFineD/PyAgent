@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, AreaChart, Area, ResponsiveContainer } from 'recharts';
 import { Cpu, HardDrive, Wifi, Activity, AlertTriangle } from 'lucide-react';
+import type { AppMeta } from '../types';
+
+export const appMeta: AppMeta = { id: 'conky', title: 'System Monitor', category: 'System' };
 
 interface NetworkInterface {
   interface: string;

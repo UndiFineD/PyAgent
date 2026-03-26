@@ -1,6 +1,17 @@
 import { ReactNode } from 'react';
 
-export type AppId = 'calculator' | 'editor' | 'paint' | 'conky' | 'settings' | 'codebuilder' | 'projectmanager';
+/** Unique kebab-case app identifier. Add new apps to AppRegistry.ts — no change needed here. */
+export type AppId = string;
+
+/** Minimal metadata every app must export as `appMeta`. */
+export interface AppMeta {
+  /** Kebab-case identifier — must match the key in APP_REGISTRY */
+  id: string;
+  /** Human-readable title shown in the window title bar and menu */
+  title: string;
+  /** Menu category used to group entries in the hamburger menu */
+  category: string;
+}
 
 export interface WindowState {
   id: string;

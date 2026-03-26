@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Code, Eye } from 'lucide-react';
 import { cn } from '../utils';
+import type { AppMeta } from '../types';
+
+export const appMeta: AppMeta = { id: 'editor', title: 'Text Editor', category: 'Utilities' };
 
 export const Editor: React.FC = () => {
   const [content, setContent] = useState('# Welcome to NebulaOS\n\nStart typing...');

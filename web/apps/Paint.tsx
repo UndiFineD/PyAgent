@@ -1,6 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Eraser, Pencil, Trash2 } from 'lucide-react';
 import { cn } from '../utils';
+import type { AppMeta } from '../types';
+
+export const appMeta: AppMeta = { id: 'paint', title: 'Paint Studio', category: 'Utilities' };
 
 export const Paint: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);

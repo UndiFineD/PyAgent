@@ -1,35 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Login } from './components/Login';
 import { Window } from './components/Window';
-import { Calculator } from './apps/Calculator';
-import { Editor } from './apps/Editor';
-import { Paint } from './apps/Paint';
-import { Conky } from './apps/Conky';
-import { CodeBuilder } from './apps/CodeBuilder';
-import { ProjectManager } from './apps/ProjectManager';
+import { APP_REGISTRY, CATEGORY_ORDER } from './apps/AppRegistry';
 import { WindowState, AppId, Theme, OsConfig, DEFAULT_OS_CONFIG } from './types';
 import { generateId, cn } from './utils';
-import {
-  Menu, Monitor, Terminal, Palette, Calculator as CalcIcon,
-  LogOut, Moon, Sun, MonitorPlay, Bot, Settings, X
-} from 'lucide-react';
+import { Menu, LogOut, Moon, Sun, MonitorPlay, Settings, X } from 'lucide-react';
 
-const INITIAL_WINDOWS: WindowState[] = [
-  {
-    id: 'welcome-note',
-    appId: 'editor',
-    title: 'Welcome.md',
-    component: <Editor />,
-    x: 100,
-    y: 100,
-    width: 600,
-    height: 400,
-    zIndex: 1,
-    isMinimized: false,
-    isMaximized: false,
-    hasMenu: true,
-  }
-];
+const _editorEntry = APP_REGISTRY['editor'];
+const INITIAL_WINDOWS: WindowState[] = _editorEntry
+  ? [{
+      id: 'welcome-note',
+      appId: 'editor',
+      title: 'Welcome.md',
+      component: React.createElement(_editorEntry.Component),
+      x: 100,
+      y: 100,
+      width: _editorEntry.width,
+      height: _editorEntry.height,
+      zIndex: 1,
+      isMinimized: false,
+      isMaximized: false,
+      hasMenu: _editorEntry.hasMenu,
+    }]
+  : [];
 
 function loadOsConfig(): OsConfig {
   try {
@@ -120,66 +113,25 @@ export default function App() {
   }, [settingsOpen]);
 
   const openApp = (appId: AppId) => {
-    const id = generateId();
-    let component;
-    let title = 'Application';
-    let width = 600;
-    let height = 400;
-
-    switch (appId) {
-      case 'calculator':
-        component = <Calculator />;
-        title = 'Calculator';
-        width = 320;
-        height = 450;
-        break;
-      case 'editor':
-        component = <Editor />;
-        title = 'Text Editor';
-        break;
-      case 'paint':
-        component = <Paint />;
-        title = 'Paint Studio';
-        width = 800;
-        height = 600;
-        break;
-      case 'conky':
-        component = <Conky />;
-        title = 'System Monitor';
-        width = 300;
-        height = 500;
-        break;
-      case 'codebuilder':
-        component = <CodeBuilder />;
-        title = 'AgentFlow Builder';
-        width = 900;
-        height = 600;
-        break;
-      case 'projectmanager':
-        component = <ProjectManager />;
-        title = 'Project Manager';
-        width = 1100;
-        height = 650;
-        break;
-    }
-
+    const entry = APP_REGISTRY[appId];
+    if (!entry) return;
+    const wid = generateId();
     const newWindow: WindowState = {
-      id,
+      id: wid,
       appId,
-      title,
-      component,
+      title: entry.title,
+      component: React.createElement(entry.Component),
       x: 50 + (windows.length * 30),
       y: 50 + (windows.length * 30),
-      width,
-      height,
+      width: entry.width,
+      height: entry.height,
       zIndex: windows.length + 1,
       isMinimized: false,
       isMaximized: false,
-      hasMenu: ['editor', 'paint', 'codebuilder'].includes(appId),
+      hasMenu: entry.hasMenu,
     };
-
     setWindows([...windows, newWindow]);
-    setActiveWindowId(id);
+    setActiveWindowId(wid);
     setMenuOpen(false);
   };
 
@@ -281,25 +233,20 @@ export default function App() {
                 <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
                 <div className="absolute right-0 top-full mt-2 w-64 bg-os-window border border-os-border rounded-xl shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
                   <div className="p-2 space-y-1">
-                    <div className="px-3 py-2 text-xs font-semibold text-os-text/50 uppercase tracking-wider">Applications</div>
-                    <button onClick={() => openApp('codebuilder')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-os-bg text-left text-sm transition-colors">
-                      <Bot size={16} className="text-purple-400" /> AgentFlow Builder
-                    </button>
-                    <button onClick={() => openApp('editor')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-os-bg text-left text-sm transition-colors">
-                      <Terminal size={16} className="text-blue-400" /> Text Editor
-                    </button>
-                    <button onClick={() => openApp('calculator')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-os-bg text-left text-sm transition-colors">
-                      <CalcIcon size={16} className="text-orange-400" /> Calculator
-                    </button>
-                    <button onClick={() => openApp('paint')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-os-bg text-left text-sm transition-colors">
-                      <Palette size={16} className="text-pink-400" /> Paint Studio
-                    </button>
-                    <button onClick={() => openApp('conky')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-os-bg text-left text-sm transition-colors">
-                      <Monitor size={16} className="text-green-400" /> System Monitor
-                    </button>
-                    <button onClick={() => openApp('projectmanager')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-os-bg text-left text-sm transition-colors">
-                      <Monitor size={16} className="text-indigo-400" /> Project Manager
-                    </button>
+                    {CATEGORY_ORDER.map(cat => {
+                      const apps = Object.values(APP_REGISTRY).filter(a => a.category === cat);
+                      if (apps.length === 0) return null;
+                      return (
+                        <React.Fragment key={cat}>
+                          <div className="px-3 py-2 text-xs font-semibold text-os-text/50 uppercase tracking-wider">{cat}</div>
+                          {apps.map(entry => (
+                            <button key={entry.id} onClick={() => openApp(entry.id)} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-os-bg text-left text-sm transition-colors">
+                              <entry.Icon size={16} className={entry.iconColor} /> {entry.title}
+                            </button>
+                          ))}
+                        </React.Fragment>
+                      );
+                    })}
 
                     <div className="h-px bg-os-border my-2" />
                     

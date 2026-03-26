@@ -19,6 +19,9 @@ import {
 import { cn } from '../utils';
 import kanbanRaw from '../../docs/project/kanban.md?raw';
 import nextProjectRaw from '../../data/nextproject.md?raw';
+import type { AppMeta } from '../types';
+
+export const appMeta: AppMeta = { id: 'projectmanager', title: 'Project Manager', category: 'AI Agents' };
 
 // ── Types ────────────────────────────────────────────────────────────────────
 

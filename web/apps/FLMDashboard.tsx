@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import type { AppMeta } from '../types';
+
+export const appMeta: AppMeta = { id: 'flmdashboard', title: 'FLM Dashboard', category: 'System' };
 
 interface FLMSample {
   timestamp: number;

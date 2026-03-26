@@ -36,3 +36,9 @@ python-json-logger>=3.0
 
 # PyYAML: YAML config parsing used by src/skills_registry/__init__.py
 PyYAML==6.0.3
+
+# asyncpg: async PostgreSQL driver used by src/core/memory/AutoMemCore.py and BenchmarkRunner.py
+asyncpg>=0.29.0
+
+# pgvector: PostgreSQL vector type support for asyncpg used by src/core/memory/AutoMemCore.py
+pgvector>=0.3.0

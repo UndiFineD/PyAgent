@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import type { AppMeta } from '../types';
+
+export const appMeta: AppMeta = { id: 'pluginmarketplace', title: 'Plugin Marketplace', category: 'System' };
 
 interface Plugin {
   id: string;

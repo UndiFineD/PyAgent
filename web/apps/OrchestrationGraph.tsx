@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import type { AppMeta } from '../types';
+
+export const appMeta: AppMeta = { id: 'orchestrationgraph', title: 'Orchestration Graph', category: 'AI Agents' };
 
 // ── Types ────────────────────────────────────────────────────────────────────
 

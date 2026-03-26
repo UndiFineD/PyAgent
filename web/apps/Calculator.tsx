@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { cn } from '../utils';
+import type { AppMeta } from '../types';
+
+export const appMeta: AppMeta = { id: 'calculator', title: 'Calculator', category: 'Utilities' };
 
 export const Calculator: React.FC = () => {
   const [display, setDisplay] = useState('0');

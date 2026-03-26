@@ -6,6 +6,9 @@ import {
   Mic, MicOff, Send, FileCode2, ChevronRight, Eye, ScrollText,
 } from 'lucide-react';
 import { cn } from '../utils';
+import type { AppMeta } from '../types';
+
+export const appMeta: AppMeta = { id: 'codebuilder', title: 'AgentFlow Builder', category: 'AI Agents' };
 
 // ── Types ───────────────────────────────────────────────────────────────────
 type AgentId = '0master' | '1project' | '2think' | '3design' | '4plan' | '5test' | '6code' | '7exec' | '8ql' | '9git';

@@ -8,6 +8,9 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Bot, User, Send, StopCircle, Loader2, Trash2 } from 'lucide-react';
 import { useWebSocket, WsMessage } from '../hooks/useWebSocket';
 import { cn } from '../utils';
+import type { AppMeta } from '../types';
+
+export const appMeta: AppMeta = { id: 'agentchat', title: 'Agent Chat', category: 'AI Agents' };
 
 interface Message {
   id: string;
