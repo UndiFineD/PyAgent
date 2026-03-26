@@ -52,7 +52,6 @@ Active options exploration — @2think is working or has completed .think.md.
 
 | ID | Name | Summary | Branch | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|---|
-| prj0000076 | future-ideas-kanban | Full workspace audit to surface future improvement ideas; add SWOT-prioritised idea table to kanban.md with priority, impact, urgency, and description | prj0000076-future-ideas-kanban | P3 | M | planning, kanban, roadmap | 2026-03-26 |
 
 ---
 
@@ -80,7 +79,7 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
-
+| prj0000076 | future-ideas-kanban | prj0000076-future-ideas-kanban | [#218](https://github.com/UndiFineD/PyAgent/pull/218) | P3 | M | 2026-03-26 |
 | prj0000072 | websocket-reconnect-logic | prj0000072-websocket-reconnect-logic | [#209](https://github.com/UndiFineD/PyAgent/pull/209) | P3 | S | 2026-03-25 |
 | prj0000043 | p2p-security-deps | prj0000043-p2p-security-deps | open | P2 | M | 2026-03-24 |
 | prj0000044 | transaction-managers-stubs | prj0000044-transaction-managers-stubs | #136 | P2 | S | 2026-03-24 |
