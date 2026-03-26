@@ -1,7 +1,7 @@
 # cort-reasoning-pipeline — Project Overview
 
 _Status: COMPLETE_
-_Owner: @7exec → @8ql | Updated: 2026-03-26_
+_Owner: @8ql → @9git | Updated: 2026-03-26_
 _Test Status: GREEN — 33/33 tests passing, 97% coverage_
 
 ## Project Identity
@@ -115,7 +115,7 @@ chain from the final round becomes the agent's response.
 | M5 | Tests written | @5test | DONE |
 | M6 | Code implemented | @6code | DONE |
 | M7 | Integration validated | @7exec | DONE |
-| M8 | Security clean | @8ql | |
+| M8 | Security clean | @8ql | DONE |
 | M9 | Committed | @9git | |
 
 ## Acceptance Criteria

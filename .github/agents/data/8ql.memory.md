@@ -11,6 +11,32 @@ Invoke it via `agent/runSubagent` to continue the process.
 
 ---
 
+## Last scan — 2026-03-26 (prj0000080)
+- Task: cort-reasoning-pipeline
+- Files scanned: `src/core/reasoning/` (4 files) + `tests/unit/test_Cort*.py` + `test_EvaluationEngine.py` (3 files)
+- Security — CodeQL: SKIPPED (CLI not invoked; ruff-S used as substitute)
+- Security — ruff S rules: PASS (0 findings)
+- Security — ruff full config: PASS (0 findings)
+- Security — pip-audit new findings: 0 (baseline clean)
+- Security — Rust unsafe check: SKIPPED (rust_core/ not changed)
+- Security — Workflow injection: N/A (no .github/workflows/ changes)
+- Quality — Plan vs delivery: PASS — all 7 required source artifacts present in git diff
+- Quality — AC vs test coverage: PASS — 9/9 ACs met (AC-2 name deviation is non-blocking)
+- Quality — Docs vs implementation: PASS — all key components confirmed present
+- Quality — Agent file consistency: PASS
+- Lessons written: 0 (no new recurring patterns)
+- Rules promoted: 0
+- Advisory: PROMPT_INJECT_V1 — LlmCallable has no guardrails; V2 scope (non-blocking)
+- Advisory: QG-1 — ContextTransaction absent; self._active flag used; functionally equivalent
+- Overall: CLEAN → @9git
+
+## Promotions
+_(none yet)_
+
+
+
+---
+
 ## prj0000078 — pm-swot-risk-ui
 
 | Field | Value |
