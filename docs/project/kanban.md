@@ -60,7 +60,7 @@ Active options exploration — @2think is working or has completed .think.md.
 
 | ID | Name | Summary | Branch | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|---|
-| prj0000080 | cort-reasoning-pipeline | Chain-of-Recursive-Thoughts: multi-round recursive reasoning pipeline with dynamic evaluation engine and temperature-variant alternative generation | prj0000080-cort-reasoning-pipeline | P2 | M | reasoning, ai, core | 2026-03-26 |
+
 
 ---
 
@@ -88,6 +88,7 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000080 | cort-reasoning-pipeline | prj0000080-cort-reasoning-pipeline | [#221](https://github.com/UndiFineD/PyAgent/pull/221) | P2 | M | 2026-03-26 |
 | prj0000079 | automem-hybrid-search | prj0000079-automem-hybrid-search | [#220](https://github.com/UndiFineD/PyAgent/pull/220) | P2 | L | 2026-03-26 |
 | prj0000072 | websocket-reconnect-logic | prj0000072-websocket-reconnect-logic | [#209](https://github.com/UndiFineD/PyAgent/pull/209) | P3 | S | 2026-03-25 |
 | prj0000043 | p2p-security-deps | prj0000043-p2p-security-deps | open | P2 | M | 2026-03-24 |
@@ -196,7 +197,7 @@ Stalled, cancelled, or superseded projects.
 | Discovery | 0 |
 | Design | 0 |
 | In Sprint | 0 |
-| Review | 3 |
+| Review | 5 |
 | Released | 74 |
 | Archived | 1 |
 | **Total** | **78** |
