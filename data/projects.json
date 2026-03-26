@@ -106,7 +106,7 @@
   {
     "id": "prj0000080",
     "name": "cort-reasoning-pipeline",
-    "lane": "Review",
+    "lane": "Released",
     "summary": "Chain-of-Recursive-Thoughts: multi-round recursive reasoning pipeline with dynamic evaluation engine and temperature-variant alternative generation",
     "branch": "prj0000080-cort-reasoning-pipeline",
     "pr": "#221",
@@ -119,7 +119,6 @@
   {
     "id": "prj0000079",
     "name": "automem-hybrid-search",
-<<<<<<< prj0000080-cort-reasoning-pipeline
     "lane": "Review",
     "summary": "AutoMem 9-component hybrid memory search (Vector+Graph+Temporal+Lexical+HNSW+AGE+LTREE+BRIN+Hash) on PostgreSQL; NebulaOS benchmark dashboard; app auto-discovery registry",
     "branch": "prj0000079-automem-hybrid-search",
@@ -127,15 +126,6 @@
     "priority": "P2",
     "budget_tier": "L",
     "tags": ["memory", "search", "postgresql"],
-=======
-    "lane": "Discovery",
-    "summary": "AutoMem 9-component hybrid memory search (Vector+Graph+Temporal+Lexical+HNSW+AGE+LTREE+BRIN+Hash); PostgreSQL-first with full benchmark dashboard",
-    "branch": "prj0000079-automem-hybrid-search",
-    "pr": null,
-    "priority": "P2",
-    "budget_tier": "L",
-    "tags": ["memory", "search", "PostgreSQL"],
->>>>>>> main
     "created": "2026-03-26",
     "updated": "2026-03-27"
   },
