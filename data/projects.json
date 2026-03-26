@@ -106,9 +106,9 @@
   {
     "id": "prj0000080",
     "name": "cort-reasoning-pipeline",
-    "lane": "Ideas",
-    "summary": "Chain-of-Recursive-Thoughts: multi-round recursive reasoning with dynamic evaluation engine and temperature-variant alternative generation",
-    "branch": null,
+    "lane": "Discovery",
+    "summary": "Chain-of-Recursive-Thoughts: multi-round recursive reasoning pipeline with dynamic evaluation engine and temperature-variant alternative generation",
+    "branch": "prj0000080-cort-reasoning-pipeline",
     "pr": null,
     "priority": "P2",
     "budget_tier": "M",
