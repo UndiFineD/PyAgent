@@ -5,7 +5,79 @@ integration checks, and smoke test outcomes.
 
 ---
 
-## Last run — 2026-03-26
+## Last run — 2026-03-26 (re-run 3) ✅ PASSED → @8ql
+- Task: prj0000082 agent-execution-sandbox
+- Tests run: 32 (sandbox — all 5 files) + 129 (structure) + full suite | Passed: 967 | Failed: 4
+- Import check: PASS (`from src.core.sandbox import ... → Import OK`)
+- Coverage: **100%** on src/core/sandbox/ ✅ (was 86.67% in run 2 — FIXED)
+- Ruff: PASS on src/core/sandbox/ + 4 new test files (All checks passed!)
+- mypy: PASS (Success: no issues found in 5 source files)
+- Smoke test: SKIPPED (no CLI entry point)
+- rust_core: SKIPPED (not modified)
+- Placeholder scan: PASS (no stubs found)
+- Pre-commit: PASS (no Python in diff; test files ruff-clean directly)
+- Outcome: PASSED → @8ql
+- task_id: prj0000082
+- handoff_target: @8ql
+
+---
+
+## Last run — 2026-03-26 (re-run 2)
+- Task: prj0000082 agent-execution-sandbox
+- Tests run: 19 (sandbox) + 129 (structure) + 964 passed in full suite | Passed: 964 | Failed: 4
+- Import check: PASS (`from src.core.sandbox import ... → Import OK`)
+- Coverage: 86.67% on src/core/sandbox/ ❌ (threshold: ≥ 90%; was 95% in run 1 — REGRESSION)
+- Ruff: PASS on src/core/sandbox/ (All checks passed!)
+- mypy: PASS (Success: no issues found in 5 source files)
+- Smoke test: SKIPPED (no CLI entry point)
+- rust_core: SKIPPED (not modified)
+- Placeholder scan: PASS (no stubs found)
+- Outcome: BLOCKED → @6code (1 new coverage regression)
+- task_id: prj0000082
+- handoff_target: @6code
+
+### Blocking failure (NEW — coverage regression after run 1 fixes):
+1. Coverage 86.67% < 90% — `validate()` functions added to fix run-1 blocker #3 are not covered
+   - SandboxConfig.py: lines 76–77 uncovered
+   - SandboxMixin.py: lines 73–74 uncovered
+   - SandboxViolationError.py: lines 52–53 uncovered
+   - SandboxedStorageTransaction.py: lines 124, 137, 155, 165–166 uncovered
+   - Fix: add `validate()` call tests in per-module test files
+
+### Advisory (pre-existing test worsened but not a new test failure):
+- `test_flake8_repo_config_has_no_repo_issues` — already failing; new test files added 3 more F401:
+   - `tests/test_SandboxMixin.py:23` F401 `pathlib.Path` — unused
+   - `tests/test_SandboxMixin.py:37` F401 `pytest` — unused
+   - `tests/test_SandboxViolationError.py:23` F401 `pytest` — unused
+
+### Pre-existing failures (not caused by this PR — unchanged):
+- `test_project_overviews_use_modern_template_or_carry_legacy_exception` (prj0000079)
+- `test_memory_validate` (prj0000079 — missing `validate` attribute)
+- `test_flake8_repo_config_has_no_repo_issues` (pre-existing, worsened — see advisory)
+- `test_all_sarif_files_are_fresh` (environmental — SARIF 33h+ old)
+
+---
+
+## Previous run — 2026-03-26 (run 1)
+- Task: prj0000082 agent-execution-sandbox
+- Tests run: 18 (sandbox) + 129 (structure) + 816 passed in full suite | Passed: 816 | Failed: 8
+- Import check: PASS
+- Coverage: 95.12% on src/core/sandbox/ ✅
+- Ruff: PASS | mypy: PASS | Placeholder scan: PASS
+- Outcome: BLOCKED → @6code (4 new failures)
+- task_id: prj0000082
+
+### Blocking failures (run 1 — all fixed by @6code):
+1. `test_no_sync_loops` — `SandboxedStorageTransaction.py:88` sync for-loop
+2. `test_each_core_has_test_file` — 4 modules lacked per-file test files
+3. `test_validate_function_exists` — 4 modules lacked `validate()` function
+4. `test_git_summaries_...` — `prj0000082.git.md` missing `## Branch Plan` section
+- `test_flake8_repo_config_has_no_repo_issues` (AutoMemCore.py, BenchmarkRunner.py, CortCore.py, ql.py)
+- `test_all_sarif_files_are_fresh` (environmental — SARIF 32.6h old)
+
+---
+
+## Previous run — 2026-03-26
 - Task: prj0000081 mcp-server-ecosystem
 - Tests run: 927+33 (excluding pre-existing collection error) | Passed: 960 | Failed: 8
 - Import check: PASS (McpRegistry, McpClient, McpSandbox, McpServerConfig, McpToolAdapter all import OK)
