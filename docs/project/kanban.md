@@ -223,3 +223,72 @@ Global SWOT for the PyAgent project as of 2026-03-25.
 | | WCAG compliance creates accessible, production-ready UI for demos | Open-source forks may diverge without upstream sync policy |
 | | Rust FFI bridge enables near-native performance at Python ergonomics | Key contributor concentration risk (single-repo autonomy) |
 | | Community interest in multi-agent workflow tooling growing | Dependabot alerts require timely remediation (1 high open) |
+## Future Ideas
+
+Ideas surfaced by the @2think workspace audit (prj0000076, 2026-03-26).
+38 total ideas across 9 areas. P1/P2 include SWOT classification.
+These are not active projects — they are candidates for future sprints.
+
+| ID | Area | Name | Priority | Impact | Urgency | SWOT | Description |
+|---|---|---|---|---|---|---|---|
+| idea-001 | 8 – Data/Deploy | private-key-in-repo | P1 | H | H | T | `rust_core/2026-03-11-keys.priv` is a private cryptographic key committed to the repository. Any clone leaks the secret; rotate immediately and add a pre-commit secret-scan hook. |
+| idea-002 | 8 – Data/Deploy | missing-compose-dockerfile | P1 | H | H | W | `deploy/compose.yaml` references `src/infrastructure/docker/Dockerfile` which does not exist. This makes the primary compose target fully broken on clean checkout. |
+| idea-003 | 1 – Python agents | mypy-strict-enforcement | P1 | H | H | W | `mypy.ini` sets `strict = False` and `ignore_errors = True`, rendering all type annotations decorative. Progressive mypy strictness should be enabled starting with the `src/core/` package. |
+| idea-004 | 7 – CI | quality-workflow-branch-trigger | P2 | H | H | W | `quality.yml` only triggers on `prj0000026-*` branch pattern (an archived project) plus `main`. All PRs to any `prj*` branch skip the quality gate entirely. |
+| idea-005 | 7 – CI | rust-ci-workflow | P2 | H | H | W | No GitHub Actions workflow runs `cargo clippy`, `cargo test`, or `cargo audit` for `rust_core/`. Rust regressions are only caught indirectly through Python FFI tests. |
+| idea-006 | 7 – CI | codeql-ci-integration | P2 | H | H | O | A `codeql/` directory containing custom Python and Rust queries exists but is never executed in CI. Wiring it into a CodeQL workflow would activate static security analysis for free. |
+| idea-007 | 7 – CI | security-scanning-ci | P2 | H | H | T | No `pip-audit`, `safety`, or Dependabot/Renovate integration exists. `pip_audit_results.json` is committed manually (stale). Automated vuln scanning should run on every push to `main`. |
+| idea-008 | 5 – Tests | coverage-minimum-enforcement | P2 | H | H | W | `quality.yml` passes `--cov-fail-under=1`, which is effectively no threshold. Setting a meaningful baseline (≥70%) and iteratively raising it would prevent coverage regressions. |
+| idea-009 | 9 – Dependencies | requirements-ci-deduplication | P2 | M | H | W | `pytest-xdist>=3.6` appears twice in `requirements-ci.txt`. Duplicate lines indicate the file is not mechanically validated; add a structure test to catch this. |
+| idea-010 | 8 – Data/Deploy | docker-compose-consolidation | P2 | M | H | W | Two independent Docker Compose files exist (`deploy/compose.yaml` and `deploy/docker-compose.yaml`) with different service topologies. Consolidate into one parameterised file. |
+| idea-011 | 1 – Python agents | stub-module-elimination | P2 | H | M | W | At least 6 modules (`src/rl/`, `src/speculation/`, `src/cort/`, `src/runtime_py/`, `src/runtime/`, `src/memory/`) contain only an empty `__init__.py`. These should be implemented or removed. |
+| idea-012 | 7 – CI | dependabot-renovate | P2 | M | M | O | No automated dependency update bot (Dependabot or Renovate) is configured. Adding `.github/dependabot.yml` would auto-raise PRs for Python, npm, and Rust dependency bumps. |
+| idea-013 | 3 – Backend | backend-health-check-endpoint | P2 | M | H | W | No `/health`, `/readyz`, or `/livez` endpoint is visible in `backend/app.py`. Container orchestrators require a health endpoint to manage service availability. |
+| idea-014 | 9 – Dependencies | pyproject-requirements-sync | P2 | M | M | W | `pyproject.toml` and `requirements.txt` pin different versions for several packages. Two divergent install paths create "works on my machine" failures. |
+| idea-015 | 1 – Python agents | specialized-agent-library | P3 | H | M | O | `src/agents/` contains only `BaseAgent.py`. The `docs/AGENTS.md` catalogue lists many specialized agents that have no Python-side implementation — only `.agent.md` definitions consumed by Copilot. |
+| idea-016 | 1 – Python agents | mixin-architecture-base | P3 | H | M | W | `copilot-instructions.md` mandates a mixin architecture in `src/core/base/mixins/`, but that directory does not exist. `src/core/base/__init__.py` is a near-empty placeholder. |
+| idea-017 | 2 – Rust core | rust-criterion-benchmarks | P3 | H | M | O | `performance/metrics_bench.py` benchmarks Rust through Python. No Rust-side `criterion` benchmarks exist, making it impossible to detect performance regressions at the Rust layer. |
+| idea-018 | 2 – Rust core | rust-sub-crate-unification | P3 | M | M | W | `rust_core/crdt/`, `rust_core/p2p/`, and `rust_core/security/` are standalone Cargo crates with separate `Cargo.lock` files. Consider a Cargo workspace to unify the dependency graph. |
+| idea-019 | 2 – Rust core | crdt-python-ffi-bindings | P3 | H | M | O | The CRDT sub-crate (`rust_core/crdt/`) builds a standalone binary but exposes no PyO3 bindings. `src/core/crdt_bridge.py` implies FFI was planned but not completed. |
+| idea-020 | 2 – Rust core | amd-npu-feature-documentation | P3 | M | L | O | `Cargo.toml` includes an `amd_npu` feature flag but no documentation, test, or CI coverage exists for it. Documenting activation steps would make this a usable capability. |
+| idea-021 | 3 – Backend | openapi-spec-generation | P3 | H | M | O | FastAPI auto-generates an OpenAPI spec at runtime but no `openapi.json` is committed or built in CI. `docs/api/index.md` is a mkdocstrings placeholder never rendered, making the API undiscoverable. |
+| idea-022 | 3 – Backend | jwt-refresh-token-support | P3 | M | M | O | `backend/auth.py` supports API key + single JWT but no refresh token or session rotation. Long-lived sessions with non-expiring JWTs are a security risk for a multi-agent system. |
+| idea-023 | 4 – Frontend | tailwind-config-missing | P3 | M | H | W | The web app uses `tailwind-merge` and `clsx` but has no `tailwind.config.ts`. Without a config, JIT purge paths are undefined and design tokens cannot be centrally managed. |
+| idea-024 | 4 – Frontend | frontend-e2e-tests | P3 | H | M | W | The frontend has only 2 Vitest unit tests covering ~2% of 10 app windows and 6 components. No Playwright or Cypress E2E suite exists. |
+| idea-025 | 4 – Frontend | global-state-management | P3 | H | M | O | Each of the 10 app windows manages its own local state. No Zustand/Redux store exists for cross-window coordination (shared WebSocket session, unified notifications). |
+| idea-026 | 4 – Frontend | frontend-url-routing | P3 | M | L | O | Navigation between app windows is purely DOM/event driven with no URL routing. Adding React Router would enable deep-linking, browser history, and shareable window states. |
+| idea-027 | 5 – Tests | windows-ci-matrix | P3 | H | M | W | All 5 CI workflows run exclusively on `ubuntu-latest`. Since the primary developer OS is Windows and the app distributes a `.pyd` Rust extension, a Windows runner is needed in CI. |
+| idea-028 | 5 – Tests | property-based-test-expansion | P3 | M | M | O | `hypothesis` is a declared CI dependency but coverage of edge cases in transaction managers, CRDT, and crypto modules is minimal. Systematic property-based tests would raise confidence. |
+| idea-029 | 5 – Tests | backend-integration-test-suite | P3 | H | M | W | `tests/integration/` contains only one file. The backend's WebSocket, auth, rate limiter, and session management have no multi-component integration tests. |
+| idea-030 | 6 – Docs | adr-backfill | P3 | M | M | O | Only an ADR template exists. Major architectural decisions (transaction manager, Rust FFI, P2P CRDT, E2E encryption, maturin build) are undocumented in ADR format. |
+| idea-031 | 6 – Docs | automated-api-docs-ci | P3 | M | M | W | `docs/api/index.md` contains only a mkdocstrings placeholder. MkDocs is in `requirements-ci.txt` but no CI job runs `mkdocs build`, so the published API reference is never built. |
+| idea-032 | 6 – Docs | changelog-automation | P3 | M | L | O | `CHANGELOG.md` is edited manually. Configuring `release-please` or `conventional-changelog` tied to the `feat`/`fix` commit convention would automate release notes. |
+| idea-033 | 7 – CI | pre-commit-ruff-version-drift | P3 | M | M | W | `.pre-commit-config.yaml` pins ruff at `v0.15.5` while `requirements-ci.txt` pins `ruff==0.15.6`. The local pre-commit hook uses a different lint binary than CI. |
+| idea-034 | 8 – Data/Deploy | projects-json-schema-validation | P3 | M | M | W | `data/projects.json` is the source of truth for 76 projects but has no JSON Schema. Malformed entries can silently corrupt the Kanban board; a schema test in CI would prevent this. |
+| idea-035 | 9 – Dependencies | torch-optional-dependency-split | P3 | M | M | W | `torch>=2.5.0` is listed in `pyproject.toml` main dependencies but absent from `requirements.txt`. Torch is ~2GB and should be an optional `[ai]` extra to avoid forcing the download. |
+| idea-036 | 1 – Python agents | rl-module-implementation | P4 | H | L | O | `src/rl/` stub was planned as a reinforcement-learning module for agent self-optimization. Implementing even a basic reward-shaping layer would support autonomous quality improvement cycles. |
+| idea-037 | 6 – Docs | docs-work-folder-cleanup | P4 | L | L | W | `docs/work/` contains 10+ stale working documents that are no longer current. These should be archived to `docs/archive/` or deleted. |
+| idea-038 | 9 – Dependencies | chromadb-optional-extra | P4 | M | L | W | `chromadb>=0.5.0` is listed in `pyproject.toml` main dependencies but not in `requirements.txt`. ChromaDB pulls in heavy ML dependencies and should be an optional `[vector]` extra. |
+
+### Future Ideas — Quick Reference
+
+| Priority | Count | IDs |
+|---|---|---|
+| P1 – Critical / blocking | 3 | idea-001, idea-002, idea-003 |
+| P2 – High value | 11 | idea-004 – idea-014 |
+| P3 – Moderate | 21 | idea-015 – idea-035 |
+| P4 – Nice to have | 3 | idea-036 – idea-038 |
+| **Total** | **38** | |
+
+| Area | Count |
+|---|---|
+| 1 – Python agents & tools | 5 |
+| 2 – Rust core | 4 |
+| 3 – FastAPI backend | 3 |
+| 4 – React/Vite frontend | 4 |
+| 5 – Test suite | 4 |
+| 6 – Documentation | 4 |
+| 7 – CI / agent definitions | 5 |
+| 8 – Data models & deploy | 4 |
+| 9 – Dependency hygiene | 5 |
+| **Total** | **38** |
