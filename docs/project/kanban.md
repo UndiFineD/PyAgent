@@ -71,7 +71,7 @@ Active implementation — @4plan through @6code are working.
 
 | ID | Name | Summary | Branch | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
-| prj0000077 | ci-backend-deps | Add missing backend runtime deps (psutil, PyJWT, python-json-logger) to requirements.txt; fix 0master.log.md test content | prj0000077-ci-backend-deps | P1 | XS | 2026-03-26 |
+
 ---
 
 ## Review
@@ -93,6 +93,7 @@ All projects merged to main branch.
 
 | ID | Name | Summary | Branch | PR | Priority | Budget | Released |
 |---|---|---|---|---|---|---|---|
+| prj0000077 | ci-backend-deps | Add psutil, PyJWT, python-json-logger to requirements.txt; fix CodeQL QL query; fix kanban test counts | merged | [#216](https://github.com/UndiFineD/PyAgent/pull/216) [#217](https://github.com/UndiFineD/PyAgent/pull/217) | P1 | XS | 2026-03-26 |
 | prj0000075 | ci-simplification | Delete 4 redundant workflows; expand CI to 10 shards; add security.yml CodeQL; fix yamux, picomatch, CodeQL, flake8 | merged | [#215](https://github.com/UndiFineD/PyAgent/pull/215) | P2 | S | 2026-03-26 |
 | prj0000074 | workspace-meta-improvements | Moved agent memory/logs to .github/agents/data/, enforced docstrings policy, restructured docs/architecture, added SWOT+risk to kanban, expanded @2think depth | merged | [#212](https://github.com/UndiFineD/PyAgent/pull/212) | P2 | L | 2026-03-25 |
 | prj0000073 | api-documentation | Hand-crafted API reference covering all backend REST endpoints, WebSocket protocol, authentication flows, and error codes in docs/api/ | merged | [#210](https://github.com/UndiFineD/PyAgent/pull/210) | P2 | M | 2026-03-25 |

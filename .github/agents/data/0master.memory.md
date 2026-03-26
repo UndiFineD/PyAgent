@@ -4,6 +4,25 @@ _Last updated: 2026-03-26_
 
 ---
 
+## 2026-03-26 — prj0000077 ci-backend-deps — RELEASED ✅
+
+**PRs:** [#216](https://github.com/UndiFineD/PyAgent/pull/216) (main fix) + [#217](https://github.com/UndiFineD/PyAgent/pull/217) (hotfix shard 1)
+**Status:** MERGED — all 10 CI shards + CodeQL green
+
+**Root cause:** Three backend runtime deps missing from `requirements.txt` caused `ModuleNotFoundError` at pytest collection time (shards 5,7,8,9,10 exit code 2). CodeQL QL query had dual `select` + nonexistent `getKey()` method. Race condition: kanban test count fix was pushed after PR #216 merged → required hotfix PR #217.
+
+**Fixes delivered:**
+- `requirements.txt`: `psutil>=5.9`, `PyJWT>=2.8`, `python-json-logger>=3.0`
+- `codeql/codeql-custom-queries-python/example.ql`: single `eval()` detection query
+- `.github/agents/data/0master.log.md`: restored proper markdown content
+- `tests/structure/test_kanban.py`: counts updated 76→77 (PR #217)
+
+**Lesson:** Always verify PR merge timing before pushing dependent commits. If CI starts and a merge is imminent, confirm inclusion before pushing a follow-up commit.
+
+**Next available prj:** prj0000078
+
+---
+
 ## 2026-03-26 — prj0000075 security/CI follow-up (commit 6191188cc)
 
 **Branch:** `prj0000075-ci-simplification` | **PR:** #213 (open)

@@ -1250,10 +1250,10 @@
   {
     "id": "prj0000077",
     "name": "ci-backend-deps",
-    "lane": "In Sprint",
+    "lane": "Released",
     "summary": "Add missing backend runtime dependencies (psutil, PyJWT, python-json-logger) to requirements.txt; fix 0master.log.md test content",
     "branch": "prj0000077-ci-backend-deps",
-    "pr": null,
+    "pr": 216,
     "priority": "P1",
     "budget_tier": "XS",
     "tags": [
