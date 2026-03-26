@@ -2,7 +2,31 @@
 
 _Last updated: 2026-03-26_
 
-**Next available prj:** see `data/nextproject.md`
+**Next available prj:** prj0000089
+
+---
+
+## 2026-03-26 — prj0000080 cort-reasoning-pipeline — REVIEW 🔎 PR #221
+
+**Branch:** `prj0000080-cort-reasoning-pipeline`
+**PR:** [#221](https://github.com/UndiFineD/PyAgent/pull/221) — open, awaiting review
+**Status:** REVIEW — full pipeline complete (@1project→@2think→@3design→@4plan→@5test→@6code→@7exec→@8ql→@9git)
+**Priority:** P2 | **Budget:** M
+
+**Deliverable:** Chain-of-Recursive-Thoughts reasoning pipeline: N-round recursive self-critique with M alternative chains per round (temperature-variant via `asyncio.gather`), pure-heuristic `EvaluationEngine` (Correctness 0.5 / Completeness 0.3 / Reasoning-depth 0.2), usable as `CortMixin` or standalone `CortAgent`. 33/33 tests, 97.4% coverage, ruff clean, OWASP clear.
+
+**Key components:** `src/core/reasoning/{CortCore,CortAgent,EvaluationEngine,__init__}.py`
+
+---
+
+## 2026-03-26 — prj0000079 automem-hybrid-search — REVIEW 🔎 PR #220
+
+**Branch:** `prj0000079-automem-hybrid-search`
+**PR:** [#220](https://github.com/UndiFineD/PyAgent/pull/220) — open, awaiting review
+**Status:** REVIEW — @1project→@6code→@9git complete; awaiting merge
+**Priority:** P2 | **Budget:** L
+
+**Deliverable:** 9-component AutoMem hybrid memory search (Vector+Graph+Temporal+Lexical) on PostgreSQL (pgvector HNSW + Apache AGE + tsvector); BenchmarkRunner; NebulaOS `AutoMemBenchmark.tsx` dashboard; full AppRegistry auto-discovery system (11 apps, 3 categories); asyncpg + pgvector added to requirements.txt.
 
 ---
 
