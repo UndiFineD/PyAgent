@@ -1233,9 +1233,9 @@
   {
     "id": "prj0000076",
     "name": "future-ideas-kanban",
-    "lane": "Ideas",
+    "lane": "Discovery",
     "summary": "Full workspace audit to surface future improvement ideas; add SWOT-prioritised idea table to kanban.md with priority, impact, urgency, and description",
-    "branch": null,
+    "branch": "prj0000076-future-ideas-kanban",
     "pr": null,
     "priority": "P3",
     "budget_tier": "M",
@@ -1245,7 +1245,7 @@
       "roadmap"
     ],
     "created": "2026-03-25",
-    "updated": "2026-03-25"
+    "updated": "2026-03-26"
   },
   {
     "id": "prj0000077",

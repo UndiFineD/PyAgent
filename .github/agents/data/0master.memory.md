@@ -4,6 +4,29 @@ _Last updated: 2026-03-26_
 
 ---
 
+## 2026-03-26 — prj0000076 future-ideas-kanban — IN DISCOVERY
+
+**Branch:** `prj0000076-future-ideas-kanban`
+**Status:** DELEGATED → @1project (creating folder + project overview)
+**Priority:** P3 | **Budget:** M
+
+**Goal:** Full workspace audit to surface future improvement ideas; add a SWOT-prioritised idea table to `kanban.md` with priority, impact, urgency, and description columns.
+
+**Acceptance criteria:**
+- `docs/project/prj0000076/prj0000076.project.md` exists with branch plan
+- `docs/project/prj0000076/prj0000076.think.md` populated with improvement ideas from workspace audit
+- `kanban.md` gains a new `## Future Ideas` section (or equivalent) with SWOT-ranked rows
+- All structure tests pass (shard 1 stays green)
+
+**Scope boundary:**
+- In scope: `docs/project/kanban.md`, `data/projects.json`, new prj0000076 folder, workspace audit for ideas
+- Out of scope: implementing any of the surfaced ideas (those become future prj IDs)
+- Expected branch: `prj0000076-future-ideas-kanban`
+
+**Next:** @2think produces `.think.md` with audit findings → @3design → @4plan → @5test → @6code → @7exec → @8ql → @9git
+
+---
+
 ## 2026-03-26 — prj0000077 ci-backend-deps — RELEASED ✅
 
 **PRs:** [#216](https://github.com/UndiFineD/PyAgent/pull/216) (main fix) + [#217](https://github.com/UndiFineD/PyAgent/pull/217) (hotfix shard 1)
