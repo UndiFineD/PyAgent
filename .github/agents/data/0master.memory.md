@@ -6,15 +6,18 @@ _Last updated: 2026-03-26_
 
 ---
 
-## 2026-03-26 — prj0000081 mcp-server-ecosystem — DISCOVERY 🔍
+## 2026-03-26 — prj0000081 mcp-server-ecosystem — REVIEW 🔎 PR #223
 
 **Branch:** `prj0000081-mcp-server-ecosystem`
-**Status:** DISCOVERY — lane transition committed; delegated to @1project for folder + overview
+**PR:** [#223](https://github.com/UndiFineD/PyAgent/pull/223) — open, awaiting human review and merge
+**Status:** REVIEW — full pipeline complete (@1project→@2think→@3design→@4plan→@5test→@6code→@7exec→@8ql→@9git); PR submitted 2026-03-26
 **Priority:** P3 | **Budget:** L | **Tags:** tools, mcp, ecosystem
 
-**Goal:** MCP server hot-load registry with security sandboxing; enables agents to dynamically connect to 500+ community MCP servers.
+**Deliverable:** MCP server ecosystem: `McpClient` (JSON-RPC stdio), `McpRegistry` (hot-load lifecycle), `McpSandbox` (hardened subprocess — allowlist env, list-args, SHA-256 pin), `McpToolAdapter` (LLM tool bridge). 33/33 tests, 89.4% coverage, ruff clean, @8ql gate passed.
 
-**Scope boundary:** `src/tools/mcp/` or new `src/mcp/` package; `@1project` must confirm folder choice in project overview.
+**Pre-existing regression:** `test_no_sync_loops` → `EvaluationEngine.py:268` (prj0000080 regression, not introduced by this PR).
+
+**Next:** prj0000082 — agent-execution-sandbox (Ideas). @0master to authorise Discovery transition.
 
 ---
 
