@@ -15,7 +15,9 @@ _Last updated: 2026-03-26_
 
 **Deliverable:** Two toolbar buttons ("SWOT" + "Risk") added to `FilterBar` in `web/apps/ProjectManager.tsx`. Clicking each opens a modal showing the corresponding section from `kanban.md` (Vite `?raw` build-time import). No backend changes.
 
-**Next available prj:** prj0000079 — also written to `data/nextproject.md` (read by Project Manager UI)
+**Next available prj:** prj0000089 — also written to `data/nextproject.md`
+
+**prj0000079–prj0000088 allocated 2026-03-26** — 10 Ideas from `docs/architecture/archive` review: automem-hybrid-search, cort-reasoning-pipeline, mcp-server-ecosystem, agent-execution-sandbox, llm-circuit-breaker, immutable-audit-trail, shadow-mode-replay, universal-agent-shell, n8n-workflow-bridge, ai-fuzzing-security (read by Project Manager UI)
 
 ---
 

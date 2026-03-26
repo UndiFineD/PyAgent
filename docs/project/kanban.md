@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-26 | Total projects: 78_
+_Last updated: 2026-03-26 | Total projects: 88_
 
 ## How to use this board
 
@@ -43,6 +43,16 @@ Projects proposed but not yet formally scoped.
 
 | ID | Name | Summary | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|
+| prj0000079 | automem-hybrid-search | AutoMem 9-component hybrid memory search (Vector+Graph+Temporal+Lexical) with FalkorDB & Qdrant; 90%+ LoCoMo benchmark target | P2 | L | memory, search, rust | 2026-03-26 |
+| prj0000080 | cort-reasoning-pipeline | Chain-of-Recursive-Thoughts: multi-round recursive reasoning with dynamic evaluation engine and temperature-variant alternative generation | P2 | M | reasoning, ai, core | 2026-03-26 |
+| prj0000081 | mcp-server-ecosystem | MCP server hot-load registry with security sandboxing; enables agents to dynamically connect to 500+ community MCP servers | P3 | L | tools, mcp, ecosystem | 2026-03-26 |
+| prj0000082 | agent-execution-sandbox | SandboxMixin: restrict each agent's file and network access to approved path sets; integrated with StateTransaction validation | P2 | S | security, sandbox, core | 2026-03-26 |
+| prj0000083 | llm-circuit-breaker | Per-provider LLM request circuit breaker with configurable failure thresholds, exponential backoff, and fallback model routing | P3 | S | resilience, llm, infrastructure | 2026-03-26 |
+| prj0000084 | immutable-audit-trail | Append-only hashchain audit log for all BFT-approved and security-critical operations; tamper-evident with cryptographic chaining | P2 | M | security, audit, compliance | 2026-03-26 |
+| prj0000085 | shadow-mode-replay | Shadow execution mode (side-effect-free parallel agent runs) + deterministic session replay from structured logs for debug | P3 | M | testing, debug, observability | 2026-03-26 |
+| prj0000086 | universal-agent-shell | UniversalAgent shell: dynamically load CoderCore/SecurityCore/etc. by intent; consolidate 50+ specialized agent classes | P2 | XL | architecture, agents, refactor | 2026-03-26 |
+| prj0000087 | n8n-workflow-bridge | Bi-directional n8n integration: agents trigger automation chains via n8n API and act as intelligent decision nodes in workflows | P3 | M | automation, integration, n8n | 2026-03-26 |
+| prj0000088 | ai-fuzzing-security | Brainstorm AI fuzzing engine: learning-based path discovery, multi-cycle security testing, local Ollama model integration | P3 | M | security, testing, ai | 2026-03-26 |
 
 ---
 

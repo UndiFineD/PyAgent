@@ -1,5 +1,135 @@
 [
   {
+    "id": "prj0000088",
+    "name": "ai-fuzzing-security",
+    "lane": "Ideas",
+    "summary": "Brainstorm AI fuzzing engine: learning-based path discovery, multi-cycle security testing, local Ollama model integration",
+    "branch": null,
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": ["security", "testing", "ai"],
+    "created": "2026-03-26",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000087",
+    "name": "n8n-workflow-bridge",
+    "lane": "Ideas",
+    "summary": "Bi-directional n8n integration: agents trigger automation chains via n8n API and act as intelligent decision nodes in workflows",
+    "branch": null,
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": ["automation", "integration", "n8n"],
+    "created": "2026-03-26",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000086",
+    "name": "universal-agent-shell",
+    "lane": "Ideas",
+    "summary": "UniversalAgent shell: dynamically load CoderCore/SecurityCore/etc. by intent; consolidate 50+ specialized agent classes",
+    "branch": null,
+    "pr": null,
+    "priority": "P2",
+    "budget_tier": "XL",
+    "tags": ["architecture", "agents", "refactor"],
+    "created": "2026-03-26",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000085",
+    "name": "shadow-mode-replay",
+    "lane": "Ideas",
+    "summary": "Shadow execution mode (side-effect-free parallel agent runs) + deterministic session replay from structured logs for debug",
+    "branch": null,
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": ["testing", "debug", "observability"],
+    "created": "2026-03-26",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000084",
+    "name": "immutable-audit-trail",
+    "lane": "Ideas",
+    "summary": "Append-only hashchain audit log for all BFT-approved and security-critical operations; tamper-evident with cryptographic chaining",
+    "branch": null,
+    "pr": null,
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": ["security", "audit", "compliance"],
+    "created": "2026-03-26",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000083",
+    "name": "llm-circuit-breaker",
+    "lane": "Ideas",
+    "summary": "Per-provider LLM request circuit breaker with configurable failure thresholds, exponential backoff, and fallback model routing",
+    "branch": null,
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": ["resilience", "llm", "infrastructure"],
+    "created": "2026-03-26",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000082",
+    "name": "agent-execution-sandbox",
+    "lane": "Ideas",
+    "summary": "SandboxMixin: restrict each agent's file and network access to approved path sets; integrated with StateTransaction validation",
+    "branch": null,
+    "pr": null,
+    "priority": "P2",
+    "budget_tier": "S",
+    "tags": ["security", "sandbox", "core"],
+    "created": "2026-03-26",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000081",
+    "name": "mcp-server-ecosystem",
+    "lane": "Ideas",
+    "summary": "MCP server hot-load registry with security sandboxing; enables agents to dynamically connect to 500+ community MCP servers",
+    "branch": null,
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "L",
+    "tags": ["tools", "mcp", "ecosystem"],
+    "created": "2026-03-26",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000080",
+    "name": "cort-reasoning-pipeline",
+    "lane": "Ideas",
+    "summary": "Chain-of-Recursive-Thoughts: multi-round recursive reasoning with dynamic evaluation engine and temperature-variant alternative generation",
+    "branch": null,
+    "pr": null,
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": ["reasoning", "ai", "core"],
+    "created": "2026-03-26",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000079",
+    "name": "automem-hybrid-search",
+    "lane": "Ideas",
+    "summary": "AutoMem 9-component hybrid memory search (Vector+Graph+Temporal+Lexical) with FalkorDB & Qdrant; 90%+ LoCoMo benchmark target",
+    "branch": null,
+    "pr": null,
+    "priority": "P2",
+    "budget_tier": "L",
+    "tags": ["memory", "search", "rust"],
+    "created": "2026-03-26",
+    "updated": "2026-03-26"
+  },
+  {
     "id": "prj0000001",
     "name": "async-runtime",
     "lane": "Released",
@@ -674,7 +804,7 @@
   {
     "id": "prj0000043",
     "name": "p2p-security-deps",
-    "lane": "Review",
+    "lane": "Released",
     "summary": "Upgrade libp2p 0.49 to 0.56 to remediate 6 Dependabot CVEs in P2P stack",
     "branch": "prj0000043-p2p-security-deps",
     "pr": null,
@@ -686,12 +816,12 @@
       "rust"
     ],
     "created": "2026-03-10",
-    "updated": "2026-03-24"
+    "updated": "2026-03-26"
   },
   {
     "id": "prj0000044",
     "name": "transaction-managers-stubs",
-    "lane": "Review",
+    "lane": "Released",
     "summary": "CI stubs for missing transaction manager modules to unblock test suite",
     "branch": "prj0000044-transaction-managers-stubs",
     "pr": 136,
@@ -703,7 +833,7 @@
       "ci"
     ],
     "created": "2026-03-10",
-    "updated": "2026-03-24"
+    "updated": "2026-03-26"
   },
   {
     "id": "prj0000045",
@@ -1164,7 +1294,7 @@
   {
     "id": "prj0000072",
     "name": "websocket-reconnect-logic",
-    "lane": "Review",
+    "lane": "Released",
     "summary": "Auto-reconnect with exponential backoff and jitter for frontend WebSocket drops, with connection state indicator in NebulaOS",
     "branch": "prj0000072-websocket-reconnect-logic",
     "pr": 209,
@@ -1176,7 +1306,7 @@
       "reliability"
     ],
     "created": "2026-03-24",
-    "updated": "2026-03-25"
+    "updated": "2026-03-26"
   },
   {
     "id": "prj0000073",
@@ -1267,7 +1397,7 @@
   {
     "id": "prj0000078",
     "name": "pm-swot-risk-ui",
-    "lane": "Released",
+    "lane": "Review",
     "summary": "Add SWOT Analysis and Risk Register navigation buttons to the Project Manager toolbar, opening kanban.md in the Editor app at the relevant sections",
     "branch": "prj0000078-pm-swot-risk-ui",
     "pr": 219,
