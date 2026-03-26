@@ -20,7 +20,7 @@ from pathlib import Path
 
 def generate_entry() -> str:
     """Produce a changelog entry from git history since last tag."""
-    lines = subprocess.check_output([
+    lines = subprocess.check_output([  # noqa: S603 S607
         "git",
         "log",
         "--oneline",

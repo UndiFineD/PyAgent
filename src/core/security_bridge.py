@@ -26,7 +26,7 @@ def _rust_security_binary() -> Path:
     binary = crate / "target" / "release" / binary_name
 
     if not binary.exists():
-        subprocess.run(["cargo", "build", "--release"], cwd=crate, check=True)
+        subprocess.run(["cargo", "build", "--release"], cwd=crate, check=True)  # noqa: S603 S607
 
     return binary
 
@@ -34,19 +34,19 @@ def _rust_security_binary() -> Path:
 def generate_key(path: Path) -> None:
     """Generate a new encryption key and save it to the specified file."""
     bin_path = _rust_security_binary()
-    subprocess.run([str(bin_path), "keygen", "--key-file", str(path)], check=True)
+    subprocess.run([str(bin_path), "keygen", "--key-file", str(path)], check=True)  # noqa: S603
 
 
 def rotate_keys(path: Path) -> None:
     """Rotate the encryption keys and update the specified key file."""
     bin_path = _rust_security_binary()
-    subprocess.run([str(bin_path), "rotate", "--key-file", str(path)], check=True)
+    subprocess.run([str(bin_path), "rotate", "--key-file", str(path)], check=True)  # noqa: S603
 
 
 def encrypt(key_file: Path, plaintext: str) -> str:
     """Encrypt the given plaintext using the specified key file."""
     bin_path = _rust_security_binary()
-    result = subprocess.run(
+    result = subprocess.run(  # noqa: S603
         [
             str(bin_path),
             "encrypt",
@@ -65,7 +65,7 @@ def encrypt(key_file: Path, plaintext: str) -> str:
 def decrypt(key_file: Path, ciphertext: str) -> str:
     """Decrypt the given ciphertext using the specified key file."""
     bin_path = _rust_security_binary()
-    result = subprocess.run(
+    result = subprocess.run(  # noqa: S603
         [
             str(bin_path),
             "decrypt",

@@ -46,8 +46,8 @@ class DocStats:
 def _git_log_count(path: Path, repo_root: Path) -> int:
     """Return the number of commits that touched *path*."""
     try:
-        result = subprocess.run(
-            ["git", "log", "--oneline", "--follow", "--", str(path.relative_to(repo_root))],
+        result = subprocess.run(  # noqa: S603
+            ["git", "log", "--oneline", "--follow", "--", str(path.relative_to(repo_root))],  # noqa: S607
             cwd=str(repo_root),
             capture_output=True,
             text=True,
@@ -62,8 +62,8 @@ def _git_log_count(path: Path, repo_root: Path) -> int:
 def _git_last_modified(path: Path, repo_root: Path) -> datetime | None:
     """Return the UTC datetime of the most recent commit that touched *path*."""
     try:
-        result = subprocess.run(
-            ["git", "log", "-1", "--format=%cI", "--follow", "--", str(path.relative_to(repo_root))],
+        result = subprocess.run(  # noqa: S603
+            ["git", "log", "-1", "--format=%cI", "--follow", "--", str(path.relative_to(repo_root))],  # noqa: S607
             cwd=str(repo_root),
             capture_output=True,
             text=True,

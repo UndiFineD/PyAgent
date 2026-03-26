@@ -53,7 +53,7 @@ def clone_repo(repo_url: str, dest: Path, *, depth: int | None = 1) -> int:
     if depth is not None:
         cmd += ["--depth", str(depth)]
     cmd += [repo_url, str(dest)]
-    result = subprocess.run(cmd, capture_output=True, text=True)
+    result = subprocess.run(cmd, capture_output=True, text=True)  # noqa: S603
     return result.returncode
 
 

@@ -30,7 +30,7 @@ def _rust_crdt_binary() -> Path:
     binary = crate / "target" / "release" / binary_name
 
     if not binary.exists():
-        subprocess.run(["cargo", "build", "--release"], cwd=crate, check=True)
+        subprocess.run(["cargo", "build", "--release"], cwd=crate, check=True)  # noqa: S603 S607
 
     return binary
 
@@ -44,7 +44,7 @@ def merge(left: dict, right: dict) -> dict:
         right_file.write_text(json.dumps(right))
 
         binary = _rust_crdt_binary()
-        result = subprocess.run(
+        result = subprocess.run(  # noqa: S603
             [
                 str(binary),
                 "merge",

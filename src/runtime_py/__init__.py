@@ -169,7 +169,7 @@ def spawn(coro: Any) -> None:
         try:
             _get_extension().spawn_task(coro)  # type: ignore
             return
-        except Exception:
+        except Exception:  # noqa: S110
             # If the extension fails, fall through to the background loop.
             pass
 
@@ -195,7 +195,7 @@ def spawn(coro: Any) -> None:
         # If scheduling fails, close the coroutine to avoid warnings.
         try:
             wrapped.close()  # type: ignore[attr-defined]
-        except Exception:
+        except Exception:  # noqa: S110
             pass
         return
 
@@ -203,7 +203,7 @@ def spawn(coro: Any) -> None:
     if future.cancelled():
         try:
             wrapped.close()  # type: ignore[attr-defined]
-        except Exception:
+        except Exception:  # noqa: S110
             pass
 
 

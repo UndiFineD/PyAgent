@@ -157,7 +157,7 @@ def _parse_error_log(log_path: Path, project_root: Path) -> dict[Path, set[int]]
             if not p.is_absolute():
                 p = project_root / p
             p = p.resolve()
-        except Exception:
+        except Exception:  # noqa: S112
             continue
         lineno = int(m.group(2))
         entries.setdefault(p, set()).add(lineno)

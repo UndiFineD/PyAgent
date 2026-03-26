@@ -35,6 +35,6 @@ class SkillsRegistry:
                 data = yaml.safe_load(path.read_text())
                 if isinstance(data, dict) and "name" in data:
                     names.append(data["name"])
-            except Exception:
+            except Exception:  # noqa: S112
                 continue
         return names

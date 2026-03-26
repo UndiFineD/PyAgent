@@ -39,7 +39,7 @@ _BASE_BRANCHES = {"main", "master", "dev", "develop"}
 
 def _run(args: list[str]) -> str:
     """Run a git command and return its stdout output, or raise if it fails."""
-    result = subprocess.run(args, capture_output=True, text=True, check=True)
+    result = subprocess.run(args, capture_output=True, text=True, check=True)  # noqa: S603
     return result.stdout.strip()
 
 

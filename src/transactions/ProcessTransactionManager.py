@@ -50,7 +50,7 @@ class ProcessTransaction:
 
     def start(self) -> None:
         """Start the subprocess with stdout and stderr captured via PIPE."""
-        self._proc = subprocess.Popen(
+        self._proc = subprocess.Popen(  # noqa: S603
             self._cmd,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -92,7 +92,7 @@ class ProcessTransaction:
                 try:
                     self._async_proc.kill()
                     await self._async_proc.wait()
-                except Exception:
+                except Exception:  # noqa: S110
                     pass
 
     # ------------------------------------------------------------------
@@ -144,7 +144,7 @@ class ProcessTransaction:
                     try:
                         self._async_proc.kill()
                         await self._async_proc.wait()
-                    except Exception:
+                    except Exception:  # noqa: S110
                         pass
 
     # ------------------------------------------------------------------

@@ -45,7 +45,7 @@ def main(args: list[str] | None = None) -> int:
         if parsed.config:
             cmd.extend(["-c", parsed.config])
 
-        proc = subprocess.run(cmd, capture_output=True, text=True)
+        proc = subprocess.run(cmd, capture_output=True, text=True)  # noqa: S603
         print(proc.stdout, end="")
         print(proc.stderr, end="", file=sys.stderr)
         return proc.returncode

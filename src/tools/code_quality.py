@@ -27,7 +27,7 @@ from .tool_registry import register_tool
 
 def _run_cmd(cmd: list[str], capture: bool = False) -> int:
     """Run a command and optionally capture its output."""
-    proc = subprocess.run(cmd, check=False, capture_output=capture, text=True)
+    proc = subprocess.run(cmd, check=False, capture_output=capture, text=True)  # noqa: S603
     if proc.stdout and capture:
         print(proc.stdout, end="")
     if proc.stderr and capture:
@@ -39,7 +39,7 @@ def _get_changed_files(base: str) -> List[str]:
     """Return a list of changed files relative to `base` branch."""
     # Use git_utils 'changed' command for consistency.
     # It prints one file per line.
-    proc = subprocess.run(
+    proc = subprocess.run(  # noqa: S603
         [sys.executable, "-m", "src.tools", "git-utils", "changed", "--base", base],
         capture_output=True,
         text=True,

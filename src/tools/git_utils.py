@@ -42,8 +42,8 @@ def _run_git(
     args: Iterable[str], capture_output: bool = False, cwd: str | None = None
 ) -> subprocess.CompletedProcess[str]:
     """Run a git command.  Never uses shell=True."""
-    return subprocess.run(
-        ["git", *args],
+    return subprocess.run(  # noqa: S603
+        ["git", *args],  # noqa: S607
         check=False,
         capture_output=capture_output,
         text=True,

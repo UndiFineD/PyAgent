@@ -27,7 +27,7 @@ def compile_diagrams() -> None:
     for path in diagram_dir.glob("*.mmd"):
         out = path.with_suffix(".svg")
         # assume `mmdc` (Mermaid CLI) is installed
-        subprocess.run(["mmdc", "-i", str(path), "-o", str(out)], check=True)
+        subprocess.run(["mmdc", "-i", str(path), "-o", str(out)], check=True)  # noqa: S603 S607
         print(f"compiled {path} -> {out}")
 
 

@@ -104,7 +104,7 @@ CODEQL_TEST_FILES = [
 def run_command(cmd: list[str], env: dict[str, str] | None = None) -> None:
     """Run a command with optional environment variables, printing it first."""
     print(f"\n>>> Running: {' '.join(cmd)}\n")
-    subprocess.run(cmd, check=True, env=env)
+    subprocess.run(cmd, check=True, env=env)  # noqa: S603
 
 
 def run_ruff() -> None:

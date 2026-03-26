@@ -44,7 +44,7 @@ async def _handle_client(
                     break
                 dst.write(data)
                 await dst.drain()
-        except Exception:
+        except Exception:  # noqa: S110
             pass
         finally:
             dst.close()

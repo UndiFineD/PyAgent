@@ -40,7 +40,7 @@ from src.tools.tool_registry import register_tool
 
 def _run_cmd(cmd: list[str], capture: bool = False) -> Tuple[int, str, str]:
     """Run a command in a subprocess and optionally capture its output."""
-    proc = subprocess.run(cmd, check=False, capture_output=capture, text=True)
+    proc = subprocess.run(cmd, check=False, capture_output=capture, text=True)  # noqa: S603
     out = proc.stdout or ""
     err = proc.stderr or ""
     if capture:
@@ -53,7 +53,7 @@ def _run_cmd(cmd: list[str], capture: bool = False) -> Tuple[int, str, str]:
 
 def _get_merge_base(base: str) -> Optional[str]:
     """Get the merge base commit hash for the current HEAD and the given base branch."""
-    proc = subprocess.run(["git", "merge-base", "HEAD", base], capture_output=True, text=True)
+    proc = subprocess.run(["git", "merge-base", "HEAD", base], capture_output=True, text=True)  # noqa: S603 S607
     if proc.returncode != 0:
         return None
     return proc.stdout.strip()
@@ -64,8 +64,8 @@ def _get_changed_files(base: str) -> List[str]:
     merge_base = _get_merge_base(base)
     if not merge_base:
         return []
-    proc = subprocess.run(
-        ["git", "diff", "--name-only", merge_base, "HEAD"],
+    proc = subprocess.run(  # noqa: S603
+        ["git", "diff", "--name-only", merge_base, "HEAD"],  # noqa: S607
         capture_output=True,
         text=True,
     )
@@ -86,7 +86,7 @@ def _guess_project_name(branch: str) -> str:
 
 def _get_current_branch() -> str:
     """Get the current Git branch name."""
-    proc = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True, text=True)
+    proc = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True, text=True)  # noqa: S603 S607
     if proc.returncode != 0:
         return ""  # best effort
     return proc.stdout.strip()

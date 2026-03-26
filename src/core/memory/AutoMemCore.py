@@ -312,7 +312,7 @@ class AutoMemCore:
                         """,
                         {"child_id": str(mem_id), "parent_id": str(parent_id)},
                     )
-            except Exception:  # noqa: BLE001
+            except Exception:  # noqa: BLE001 S110
                 # AGE may not be installed in all environments; degrade gracefully
                 pass
 

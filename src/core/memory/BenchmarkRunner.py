@@ -77,9 +77,9 @@ WORD_POOL = [
 ]
 
 def _random_content(length: int = 120) -> str:
-    words = random.choices(WORD_POOL, k=length // 6)
+    words = random.choices(WORD_POOL, k=length // 6)  # noqa: S311
     return " ".join(words) + " " + "".join(
-        random.choices(string.ascii_lowercase, k=10)
+        random.choices(string.ascii_lowercase, k=10)  # noqa: S311
     )
 
 def _random_embedding(dim: int = 1536) -> list[float]:
@@ -92,7 +92,7 @@ def _random_keywords(n: int = 4) -> list[str]:
     return random.sample(WORD_POOL, min(n, len(WORD_POOL)))
 
 def _random_importance() -> float:
-    return round(random.random(), 4)
+    return round(random.random(), 4)  # noqa: S311
 
 
 # ---------------------------------------------------------------------------
@@ -158,7 +158,7 @@ class BenchmarkRunner:
                     f"[{','.join(str(x) for x in _random_embedding(self._dim))}]",
                     _random_keywords(),
                     _random_importance(),
-                    round(random.random(), 4),
+                    round(random.random(), 4),  # noqa: S311
                 )
                 inserted_ids.append(row["id"])
             elapsed_ms = (time.perf_counter() - t0) * 1000
@@ -278,7 +278,7 @@ class BenchmarkRunner:
     # ------------------------------------------------------------------
 
     async def _bench_search_gin_tsv(self) -> None:
-        term = random.choice(WORD_POOL)
+        term = random.choice(WORD_POOL)  # noqa: S311
         async with self._pool.acquire() as conn:
             t0 = time.perf_counter()
             rows = await conn.fetch(
@@ -305,7 +305,7 @@ class BenchmarkRunner:
     # ------------------------------------------------------------------
 
     async def _bench_search_gin_keywords(self) -> None:
-        kw = random.choice(WORD_POOL)
+        kw = random.choice(WORD_POOL)  # noqa: S311
         async with self._pool.acquire() as conn:
             t0 = time.perf_counter()
             rows = await conn.fetch(
@@ -355,7 +355,7 @@ class BenchmarkRunner:
     # ------------------------------------------------------------------
 
     async def _bench_search_seqscan(self) -> None:
-        term = random.choice(WORD_POOL)
+        term = random.choice(WORD_POOL)  # noqa: S311
         async with self._pool.acquire() as conn:
             await conn.execute("SET enable_seqscan = on; SET enable_indexscan = off;")
             t0 = time.perf_counter()

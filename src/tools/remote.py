@@ -75,7 +75,7 @@ def run_ssh_command(
     # command itself is passed as a single token; the remote shell interprets it
     cmd.append(command)
 
-    return subprocess.run(cmd, capture_output=True, text=True)
+    return subprocess.run(cmd, capture_output=True, text=True)  # noqa: S603
 
 
 def upload_file(host: str, local_path: str, remote_path: str, user: str | None = None, port: int = 22) -> int:
@@ -112,7 +112,7 @@ def upload_file(host: str, local_path: str, remote_path: str, user: str | None =
     destination = f"{user}@{host}:{remote_path}" if user else f"{host}:{remote_path}"
     # All args are explicit list items — no shell=True
     cmd = [scp, "-P", str(port), local_path, destination]
-    result = subprocess.run(cmd, capture_output=True, text=True)
+    result = subprocess.run(cmd, capture_output=True, text=True)  # noqa: S603
     return result.returncode
 
 
