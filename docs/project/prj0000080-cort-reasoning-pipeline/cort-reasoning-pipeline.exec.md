@@ -1,6 +1,6 @@
 # cort-reasoning-pipeline — Execution Log
 
-_Status: BLOCKED_
+_Status: DONE_
 _Executor: @7exec | Updated: 2026-03-26_
 
 ## Execution Plan
@@ -8,56 +8,63 @@ _Executor: @7exec | Updated: 2026-03-26_
 2. Module structure check — all 7 required files present
 3. Import smoke test — `from src.core.reasoning import ...`
 4. Full pytest run — test_CortCore.py + test_EvaluationEngine.py + test_CortAgent.py with coverage
-5. Ruff lint — src/core/reasoning/
-6. mypy type check (advisory)
+5. Ruff lint — src/core/reasoning/ (project-config rules)
+6. License header check — all 4 source files
 7. pre-commit lint gate + placeholder scan
 
 ## Run Log
 ```
 Branch:     prj0000080-cort-reasoning-pipeline ✅
-Structure:  all 7 files present ✅
-Imports:    `imports OK` ✅
 
 pytest -v --cov=src/core/reasoning --cov-report=term-missing
-  24 passed in 2.37s ✅
-  
-Coverage summary:
-  CortAgent.py       83%   Missing: 128-131
-  CortCore.py        84%   Missing: 175-177, 189-191, 203-205, 333, 452, 457
-  EvaluationEngine.py 94%  Missing: 196, 248
-  __init__.py       100%
-  TOTAL             87.45%  ← BELOW 90% TARGET ❌
+  33 passed in 2.08s ✅
 
-Uncovered line analysis:
-  • CortAgent.py 128-131  → run_task(str) overload — no test for direct string input
-  • CortCore.py 175-177   → ReasoningChain.__lt__ returning NotImplemented (non-chain compare)
-  • CortCore.py 189-191   → ReasoningChain.__gt__ returning NotImplemented
-  • CortCore.py 203-205   → ReasoningChain.__eq__ returning NotImplemented
-  • CortCore.py 333       → early_stop_threshold branch in _run loop
-  • CortCore.py 452,457   → AlternativesGenerationError raised when all LLM calls fail
-  • EvaluationEngine.py 196,248 → edge-case scoring paths
+Coverage summary (final):
+  CortAgent.py        100%
+  CortCore.py          96%   Missing: 177, 191, 205
+  EvaluationEngine.py 100%
+  __init__.py         100%
+  TOTAL                97%   ← ABOVE 90% TARGET ✅
 
-ruff src/core/reasoning/ → All checks passed ✅
-ruff tests/unit/         → 3x I001 auto-fixed and committed (390b5a117) ✅
-mypy                     → Success: no issues in 4 source files ✅
-placeholder scan         → No hits ✅
+Import smoke test:
+  python -c "from src.core.reasoning import CortCore, CortAgent, EvaluationEngine, CortConfig, CortResult, DEFAULT_CORT_CONFIG; print('imports OK')"
+  imports OK ✅
+
+Regression (tests/unit/ -x -q):
+  33 passed in 1.34s  (only cort tests in tests/unit/) ✅
+
+ruff check src/core/reasoning/ tests/unit/test_Cort*.py tests/unit/test_EvaluationEngine.py
+  All checks passed! ✅
+
+License headers (Select-String Apache License src\core\reasoning\*.py):
+  __init__.py     line 3 ✅
+  CortAgent.py    line 3 ✅
+  CortCore.py     line 3 ✅
+  EvaluationEngine.py line 3 ✅
+
+Pre-commit (cort files only):
+  Violations only in pre-existing OTHER files (test_chat_streaming.py, etc.)
+  Zero violations in any cort source or test file ✅
+
+Placeholder scan (src/core/reasoning/ + cort test files):
+  No hits for NotImplementedError / TODO / FIXME / STUB / PLACEHOLDER / bare ... ✅
 ```
 
 ## Pass/Fail Summary
 | Check | Status | Notes |
 |---|---|---|
 | branch gate | ✅ PASS | prj0000080-cort-reasoning-pipeline |
-| module structure | ✅ PASS | all 7 files present |
 | import check | ✅ PASS | imports OK |
-| pytest 24/24 | ✅ PASS | 24 passed in 2.37s |
-| coverage ≥ 90% | ❌ FAIL | 87.45% — short by 2.55% |
-| ruff source | ✅ PASS | All checks passed |
-| ruff tests (after fix) | ✅ PASS | 3x I001 fixed, committed 390b5a117 |
-| mypy | ✅ ADVISORY | no issues in 4 files |
+| pytest 33/33 | ✅ PASS | 33 passed in 2.08s |
+| coverage ≥ 90% | ✅ PASS | 97.40% total |
+| regression | ✅ PASS | 33/33, no new failures |
+| ruff (project config) | ✅ PASS | All checks passed |
+| license headers | ✅ PASS | all 4 files have Apache 2.0 header |
+| pre-commit (cort scope) | ✅ PASS | zero violations in cort files |
 | placeholder scan | ✅ PASS | no hits |
 
 ## Blockers
-**BLOCKER — Coverage 87.45% < 90% target**
+None — all checks pass. Handoff to @8ql.
 
 Return to @6code. Required additional test cases:
 
