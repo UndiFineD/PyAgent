@@ -6,6 +6,24 @@ integration checks, and smoke test outcomes.
 ---
 
 ## Last run — 2026-03-26
+- Task: prj0000080 cort-reasoning-pipeline
+- Tests run: 24 | Passed: 24 | Failed: 0
+- Import check: PASS (`from src.core.reasoning import CortCore, CortAgent, EvaluationEngine, CortConfig, CortResult, DEFAULT_CORT_CONFIG` → `imports OK`)
+- Coverage: 87.45% on src/core/reasoning — BELOW 90% target ❌
+  - CortAgent.py 83%: lines 128-131 (run_task str path)
+  - CortCore.py 84%: lines 175-177/189-191/203-205 (NotImplemented returns), 333 (early_stop_threshold), 452/457 (AlternativesGenerationError)
+  - EvaluationEngine.py 94%: lines 196, 248 (edge-case scoring)
+- Ruff: PASS on src/ (after I001 auto-fix in tests/ committed at 390b5a117)
+- mypy: PASS advisory (no issues in 4 source files)
+- Smoke test: SKIPPED (no CLI entry point)
+- rust_core: SKIPPED (not modified)
+- Placeholder scan: PASS (no stubs)
+- Outcome: BLOCKED → @6code (coverage 87.45% < 90%)
+- Notes: Need ~5 additional test cases to reach 90%:
+  CortAgent.run_task(str), ReasoningChain NotImplemented comparisons,
+  early_stop_threshold branch, AlternativesGenerationError path, EvaluationEngine edge cases
+
+
 - Task: prj0000078 pm-swot-risk-ui
 - Tests run: Vitest 3/3 pass, pytest structure 129/129 pass
 - Import check: SKIPPED (TypeScript project; tsc --noEmit clean)
