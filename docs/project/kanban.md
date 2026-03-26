@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-26 | Total projects: 88 | prj0000081 → Released_
+_Last updated: 2026-03-26 | Total projects: 88 | prj0000082 → Discovery_
 
 ## How to use this board
 
@@ -43,7 +43,6 @@ Projects proposed but not yet formally scoped.
 
 | ID | Name | Summary | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|
-| prj0000082 | agent-execution-sandbox | SandboxMixin: restrict each agent's file and network access to approved path sets; integrated with StateTransaction validation | P2 | S | security, sandbox, core | 2026-03-26 |
 | prj0000083 | llm-circuit-breaker | Per-provider LLM request circuit breaker with configurable failure thresholds, exponential backoff, and fallback model routing | P3 | S | resilience, llm, infrastructure | 2026-03-26 |
 | prj0000084 | immutable-audit-trail | Append-only hashchain audit log for all BFT-approved and security-critical operations; tamper-evident with cryptographic chaining | P2 | M | security, audit, compliance | 2026-03-26 |
 | prj0000085 | shadow-mode-replay | Shadow execution mode (side-effect-free parallel agent runs) + deterministic session replay from structured logs for debug | P3 | M | testing, debug, observability | 2026-03-26 |
@@ -59,6 +58,7 @@ Active options exploration — @2think is working or has completed .think.md.
 
 | ID | Name | Summary | Branch | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|---|
+| prj0000082 | agent-execution-sandbox | SandboxMixin: restrict each agent's file and network access to approved path sets; integrated with StateTransaction validation | prj0000082-agent-execution-sandbox | P2 | S | security, sandbox, core | 2026-03-26 |
 
 
 
@@ -195,7 +195,7 @@ Stalled, cancelled, or superseded projects.
 
 | Lane | Count |
 |---|---|
-| Ideas | 7 |
+| Ideas | 6 |
 | Discovery | 1 |
 | Design | 0 |
 | In Sprint | 0 |

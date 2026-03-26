@@ -6,11 +6,11 @@ _Last updated: 2026-03-26_
 
 ---
 
-## 2026-03-26 — prj0000081 mcp-server-ecosystem — RELEASED ✅ PR #223
+## 2026-03-26 — prj0000081 mcp-server-ecosystem — REVIEW 🔎 PR #223
 
 **Branch:** `prj0000081-mcp-server-ecosystem`
-**PR:** [#223](https://github.com/UndiFineD/PyAgent/pull/223) — **merged 2026-03-26**
-**Status:** RELEASED — full pipeline complete (@1project→@2think→@3design→@4plan→@5test→@6code→@7exec→@8ql→@9git)
+**PR:** [#223](https://github.com/UndiFineD/PyAgent/pull/223) — open, awaiting human review and merge
+**Status:** REVIEW — full pipeline complete (@1project→@2think→@3design→@4plan→@5test→@6code→@7exec→@8ql→@9git); PR submitted 2026-03-26
 **Priority:** P3 | **Budget:** L | **Tags:** tools, mcp, ecosystem
 
 **Deliverable:** MCP server ecosystem: `McpClient` (JSON-RPC stdio), `McpRegistry` (hot-load lifecycle), `McpSandbox` (hardened subprocess — allowlist env, list-args, SHA-256 pin), `McpToolAdapter` (LLM tool bridge). 33/33 tests, 89.4% coverage, ruff clean, @8ql gate passed.

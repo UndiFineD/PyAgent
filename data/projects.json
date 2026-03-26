@@ -80,9 +80,9 @@
   {
     "id": "prj0000082",
     "name": "agent-execution-sandbox",
-    "lane": "Ideas",
+    "lane": "Discovery",
     "summary": "SandboxMixin: restrict each agent's file and network access to approved path sets; integrated with StateTransaction validation",
-    "branch": null,
+    "branch": "prj0000082-agent-execution-sandbox",
     "pr": null,
     "priority": "P2",
     "budget_tier": "S",
