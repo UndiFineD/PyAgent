@@ -110,7 +110,7 @@ chain from the final round becomes the agent's response.
 | M1 | Project setup | @1project | DONE |
 | M2 | Options explored | @2think | DONE |
 | M3 | Design confirmed | @3design | COMPLETE |
-| M4 | Plan finalized | @4plan | |
+| M4 | Plan finalized | @4plan | COMPLETE |
 | M5 | Tests written | @5test | |
 | M6 | Code implemented | @6code | |
 | M7 | Integration validated | @7exec | |
@@ -133,4 +133,9 @@ _Last updated: 2026-03-26_
 Design complete (`prj0000080.design.md`). Architecture: Option A (Fixed N rounds,
 Fixed M alternatives) + E2 heuristic EvaluationEngine with E3 interface contract.
 `CortCore`, `CortAgent` / `CortMixin`, `EvaluationEngine`, all data models, and
-error types fully specified. Ready for handoff to `@4plan`.
+error types fully specified.
+
+Plan complete (`prj0000080.plan.md`). 4-sprint TDD breakdown: S1 data models + test
+stubs (T1–T4), S2 EvaluationEngine (T5–T6), S3 CortCore loop (T7–T10), S4
+CortAgent + CortMixin (T11–T13). 13 tasks across 7 source files + 3 test files.
+Ready for handoff to `@5test`.
