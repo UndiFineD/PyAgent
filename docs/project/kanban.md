@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-26 | Total projects: 88 | prj0000082 → Discovery_
+_Last updated: 2026-03-26 | Total projects: 88 | prj0000082 → Review_
 
 ## How to use this board
 
@@ -58,7 +58,6 @@ Active options exploration — @2think is working or has completed .think.md.
 
 | ID | Name | Summary | Branch | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|---|
-| prj0000082 | agent-execution-sandbox | SandboxMixin: restrict each agent's file and network access to approved path sets; integrated with StateTransaction validation | prj0000082-agent-execution-sandbox | P2 | S | security, sandbox, core | 2026-03-26 |
 
 
 
@@ -88,6 +87,7 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000082 | agent-execution-sandbox | prj0000082-agent-execution-sandbox | [#224](https://github.com/UndiFineD/PyAgent/pull/224) | P2 | S | 2026-03-26 |
 
 
 ---
