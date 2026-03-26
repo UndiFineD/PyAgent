@@ -1267,10 +1267,10 @@
   {
     "id": "prj0000078",
     "name": "pm-swot-risk-ui",
-    "lane": "Discovery",
+    "lane": "Review",
     "summary": "Add SWOT Analysis and Risk Register navigation buttons to the Project Manager toolbar, opening kanban.md in the Editor app at the relevant sections",
     "branch": "prj0000078-pm-swot-risk-ui",
-    "pr": null,
+    "pr": 219,
     "priority": "P3",
     "budget_tier": "S",
     "tags": [

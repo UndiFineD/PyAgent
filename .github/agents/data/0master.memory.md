@@ -4,20 +4,18 @@ _Last updated: 2026-03-26_
 
 ---
 
-## 2026-03-26 — prj0000078 pm-swot-risk-ui — IDEAS 💡 (delegating to @1project)
+## 2026-03-26 — prj0000078 pm-swot-risk-ui — REVIEW 🔍 PR #219
 
-**Branch (expected):** `prj0000078-pm-swot-risk-ui`
-**Status:** ALLOCATED → delegating to @1project
+**Branch:** `prj0000078-pm-swot-risk-ui`  
+**PR:** [#219](https://github.com/UndiFineD/PyAgent/pull/219) — open, awaiting merge  
+**Status:** REVIEW — full agent workflow complete (@1project→@4plan→@6code→@7exec→@8ql→@9git)  
 **Priority:** P3 | **Budget:** S
 
-**Goal:** Add SWOT Analysis and Risk Register navigation buttons to the `FilterBar` in `web/apps/ProjectManager.tsx`. Buttons open `docs/project/kanban.md` in the Editor app scrolled to the `## SWOT Analysis` and `## Risk Register` sections.
+**Deliverable:** Two toolbar buttons ("SWOT" + "Risk") added to `FilterBar` in `web/apps/ProjectManager.tsx`. Clicking each opens a modal showing the corresponding section from `kanban.md` (loaded via Vite `?raw` build-time import). No backend changes.
 
-**Scope boundary:**
-- In scope: `web/apps/ProjectManager.tsx` FilterBar toolbar buttons; potentially a thin helper/prop in `web/` app shell if needed to open Editor
-- Out of scope: backend changes, new API routes, modifying kanban.md content
-- Expected branch: `prj0000078-pm-swot-risk-ui`
+**Quality gate:** @8ql PASS — no security findings, all 8 AC met, 129 structure tests pass.
 
-**Next:** @1project creates `docs/project/prj0000078/` with project overview + branch plan → @4plan → @6code → @9git
+**Next available prj:** prj0000079
 
 ---
 
