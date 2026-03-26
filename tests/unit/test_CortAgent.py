@@ -145,3 +145,24 @@ async def test_cort_agent_reentrant_raises() -> None:
         "CortRecursionError must be raised when reason_with_cort is called re-entrantly "
         "on the same CortAgent instance"
     )
+
+
+# ---------------------------------------------------------------------------
+# TC-CA-06  CortAgent.run() accepts a non-dict string prompt (lines 128-131)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_cort_agent_run_task_string_input() -> None:
+    """CortAgent.run() with a plain string (non-dict) exercises the else-branch of the abstract run() interface."""
+    llm_mock = AsyncMock(return_value="gravity pulls objects together")
+    agent = CortAgent(
+        agent_id="run-string-agent",
+        llm=llm_mock,
+        config=CortConfig(n_rounds=1, m_alternatives=1),
+    )
+    # Call the BaseAgent abstract `run()` method directly with a non-dict string.
+    # This exercises the `else str(task)` branch and lines 128-131 of CortAgent.py.
+    result = await agent.run("explain gravity")
+    assert result["ok"] is True
+    assert isinstance(result["result"], CortResult)

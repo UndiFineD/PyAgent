@@ -196,3 +196,53 @@ def test_select_best_tie_breaks_by_depth() -> None:
     assert best is chain_first, (
         "On equal score, select_best must return the chain with the lower alternative_idx"
     )
+
+
+# ---------------------------------------------------------------------------
+# TC-EE-09  Completeness returns 1.0 when prompt has no keywords ≥ 4 chars
+# ---------------------------------------------------------------------------
+
+
+def test_completeness_empty_prompt_keywords() -> None:
+    """_score_completeness returns 1.0 when the prompt contains no words of 4+ characters."""
+    engine = EvaluationEngine()
+    # "do" (2 chars) and "it" (2 chars) are both below the 4-char threshold.
+    score = engine._score_completeness(
+        "some detailed answer covering the topic comprehensively",
+        "do it",
+    )
+    assert score == 1.0, (
+        f"Expected 1.0 for empty keyword set but got {score}"
+    )
+
+
+# ---------------------------------------------------------------------------
+# TC-EE-10  Reasoning depth caps at 1.0 when all connectives present with structure
+# ---------------------------------------------------------------------------
+
+
+def test_reasoning_depth_caps_at_one() -> None:
+    """_score_reasoning_depth returns exactly 1.0 when all connectives are present alongside a numbered list."""
+    engine = EvaluationEngine()
+    # Contains all 8 logical connectives (base_score already 1.0) AND a numbered list.
+    # The structure bonus path (min(1.0, 1.0 + 0.2)) must cap at 1.0.
+    fully_saturated_text = (
+        "1. therefore because however thus hence moreover furthermore consequently\n"
+        "2. the analysis demonstrates the result is valid and complete"
+    )
+    score = engine._score_reasoning_depth(fully_saturated_text)
+    assert score == 1.0, (
+        f"Expected capped score of 1.0 but got {score}"
+    )
+
+
+# ---------------------------------------------------------------------------
+# TC-EE-11  select_best raises ValueError on empty chain list
+# ---------------------------------------------------------------------------
+
+
+def test_select_best_raises_value_error_on_empty_list() -> None:
+    """EvaluationEngine.select_best raises ValueError when given an empty list."""
+    engine = EvaluationEngine()
+    with pytest.raises(ValueError, match="non-empty"):
+        engine.select_best([])

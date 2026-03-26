@@ -32,6 +32,7 @@ from src.core.reasoning import (
     EvaluationEngine,
 )
 from src.core.reasoning.CortCore import (
+    AlternativesGenerationError,
     CortLimitExceeded,
     CortRecursionError,
     CortRound,
@@ -247,3 +248,106 @@ def test_cort_limit_exceeded() -> None:
     """CortConfig(n_rounds=4, m_alternatives=4) raises CortLimitExceeded because 4×4=16>15."""
     with pytest.raises(CortLimitExceeded):
         CortConfig(n_rounds=4, m_alternatives=4)
+
+
+# ---------------------------------------------------------------------------
+# TC-CC-12  ReasoningChain.__lt__ returns NotImplemented for non-chain operand
+# ---------------------------------------------------------------------------
+
+
+def test_reasoning_chain_lt_notimplemented() -> None:
+    """ReasoningChain.__lt__ returns NotImplemented when the operand is not a ReasoningChain."""
+    chain = ReasoningChain(
+        text="test chain",
+        score=5.0,
+        round_n=0,
+        temperature=0.7,
+        alternative_idx=0,
+    )
+    result = chain.__lt__("not_a_chain")
+    assert result is NotImplemented
+
+
+# ---------------------------------------------------------------------------
+# TC-CC-13  ReasoningChain.__gt__ returns NotImplemented for non-chain operand
+# ---------------------------------------------------------------------------
+
+
+def test_reasoning_chain_gt_notimplemented() -> None:
+    """ReasoningChain.__gt__ returns NotImplemented when the operand is not a ReasoningChain."""
+    chain = ReasoningChain(
+        text="test chain",
+        score=5.0,
+        round_n=0,
+        temperature=0.7,
+        alternative_idx=0,
+    )
+    result = chain.__gt__(42)
+    assert result is NotImplemented
+
+
+# ---------------------------------------------------------------------------
+# TC-CC-14  ReasoningChain.__eq__ returns NotImplemented for non-chain operand
+# ---------------------------------------------------------------------------
+
+
+def test_reasoning_chain_eq_notimplemented() -> None:
+    """ReasoningChain.__eq__ returns NotImplemented when the operand is not a ReasoningChain."""
+    chain = ReasoningChain(
+        text="test chain",
+        score=5.0,
+        round_n=0,
+        temperature=0.7,
+        alternative_idx=0,
+    )
+    result = chain.__eq__(None)
+    assert result is NotImplemented
+
+
+# ---------------------------------------------------------------------------
+# TC-CC-15  Early-stop threshold halts the loop after the first passing round
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_cort_core_early_stop_skips_remaining_rounds() -> None:
+    """With early_stop_threshold=0.99, CortCore stops after the first round whose winner scores ≥ 0.99."""
+    # Response with all 8 known connectives → depth=1.0; no contradiction markers → correctness=1.0
+    # Prompt "ab" has no words ≥ 4 chars → completeness=1.0.  Total = 0.5+0.3+0.2 = 1.0 ≥ 0.99.
+    high_score_response = (
+        "therefore because however thus hence moreover furthermore consequently "
+        "the conclusion is definitive"
+    )
+    llm_mock = AsyncMock(return_value=high_score_response)
+    evaluator = EvaluationEngine()
+    cfg = CortConfig(n_rounds=3, m_alternatives=2, early_stop_threshold=0.99)
+    core = CortCore(llm=llm_mock, evaluator=evaluator, config=cfg)
+
+    result = await core.run("ab")
+
+    assert len(result.all_rounds) == 1, (
+        f"Expected early stop after round 0 but got {len(result.all_rounds)} rounds"
+    )
+
+
+# ---------------------------------------------------------------------------
+# TC-CC-16  AlternativesGenerationError raised when all LLM calls fail
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_all_alternatives_fail_raises_alternatives_generation_error() -> None:
+    """When all LLM calls fail in a round, CortCore.run propagates AlternativesGenerationError."""
+
+    async def failing_llm(
+        prompt: str, *, temperature: float, max_tokens: int
+    ) -> str:
+        """Always raise to simulate a total API outage."""
+        raise RuntimeError("API error")
+
+    evaluator = EvaluationEngine()
+    cfg = CortConfig(n_rounds=1, m_alternatives=2)
+    core = CortCore(llm=failing_llm, evaluator=evaluator, config=cfg)
+
+    with pytest.raises(AlternativesGenerationError):
+        await core.run("test prompt")
