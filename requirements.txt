@@ -25,5 +25,14 @@ prometheus-client==0.23.1
 # pydantic: data validation models used by src/swarm/message_model.py and src/chat/api.py
 pydantic==2.12.5
 
+# psutil: system metrics used by backend/app.py
+psutil>=5.9
+
+# PyJWT: JWT authentication used by backend/auth.py
+PyJWT>=2.8
+
+# python-json-logger: JSON structured logging used by backend/logging_config.py
+python-json-logger>=3.0
+
 # PyYAML: YAML config parsing used by src/skills_registry/__init__.py
 PyYAML==6.0.3

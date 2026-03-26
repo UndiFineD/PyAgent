@@ -1216,10 +1216,10 @@
   {
     "id": "prj0000075",
     "name": "ci-simplification",
-    "lane": "Review",
+    "lane": "Released",
     "summary": "Delete 4 redundant workflows (core-quality, pm, quality, testing-infra); keep ci.yml unchanged; add security.yml for CodeQL scanning of Python and JavaScript",
     "branch": "prj0000075-ci-simplification",
-    "pr": 213,
+    "pr": 215,
     "priority": "P2",
     "budget_tier": "S",
     "tags": [
@@ -1228,7 +1228,7 @@
       "workflow"
     ],
     "created": "2026-03-25",
-    "updated": "2026-03-25"
+    "updated": "2026-03-26"
   },
   {
     "id": "prj0000076",
@@ -1246,5 +1246,22 @@
     ],
     "created": "2026-03-25",
     "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000077",
+    "name": "ci-backend-deps",
+    "lane": "In Sprint",
+    "summary": "Add missing backend runtime dependencies (psutil, PyJWT, python-json-logger) to requirements.txt; fix 0master.log.md test content",
+    "branch": "prj0000077-ci-backend-deps",
+    "pr": null,
+    "priority": "P1",
+    "budget_tier": "XS",
+    "tags": [
+      "ci",
+      "dependencies",
+      "backend"
+    ],
+    "created": "2026-03-26",
+    "updated": "2026-03-26"
   }
 ]
