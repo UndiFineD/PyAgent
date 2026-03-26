@@ -1,0 +1,20 @@
+[package]
+name = "libp2p-yamux"
+version = "0.47.0"
+edition = "2021"
+rust-version = "1.83.0"
+description = "Yamux multiplexing protocol for libp2p (patched: yamux013-only, yamux012 removed)"
+license = "MIT"
+# Local security patch: removes the transitive yamux 0.12.x dependency (GHSA-4r2r-cf2h-4wgq).
+# Config::default() already used yamux013 in the upstream; this patch drops the 012 compat layer.
+
+[lib]
+name = "libp2p_yamux"
+path = "src/lib.rs"
+
+[dependencies]
+futures = "0.3.30"
+libp2p-core = "0.43.0"
+thiserror = "2"
+tracing = "0.1.41"
+yamux = "0.13.3"

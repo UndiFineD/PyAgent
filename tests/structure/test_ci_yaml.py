@@ -29,4 +29,3 @@ def test_setup_md_has_local_testing_section() -> None:
         "docs/setup.md must contain a '## Local Testing' section that documents "
         "how to run pre-commit and pytest locally (prj0000075 AC-05)"
     )
-

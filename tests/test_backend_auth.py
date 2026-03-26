@@ -14,8 +14,6 @@
 """Tests for backend.auth — API-key and JWT authentication (prj0000054)."""
 from __future__ import annotations
 
-import time
-
 import jwt
 import pytest
 

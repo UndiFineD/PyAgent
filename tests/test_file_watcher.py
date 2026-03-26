@@ -19,8 +19,6 @@ import tempfile
 import time
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 import src.tools.FileWatcher as fw_module
 from src.tools.FileWatcher import FileWatcher, _python_scan
 

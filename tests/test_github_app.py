@@ -114,11 +114,11 @@ def test_webhook_unknown_event() -> None:
 # HMAC-SHA256 signature verification tests (prj0000053)
 # ---------------------------------------------------------------------------
 
-import hashlib
-import hmac as _hmac
-import json as _json
+import hashlib  # noqa: E402
+import hmac as _hmac  # noqa: E402
+import json as _json  # noqa: E402
 
-import src.github_app as _gha
+import src.github_app as _gha  # noqa: E402
 
 
 def _sign(secret: str, body: bytes) -> str:

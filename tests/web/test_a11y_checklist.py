@@ -130,5 +130,5 @@ def test_accent_colour_passes_aa_contrast() -> None:
     """--color-accent must be #f25e77 (≥ 4.5:1 contrast against --color-bg #1a1a2e)."""
     content = _read("styles/themes.css")
     assert "--color-accent: #f25e77" in content, (
-        f"--color-accent must be #f25e77 for WCAG AA contrast; found something else"
+        "--color-accent must be #f25e77 for WCAG AA contrast; found something else"
     )

@@ -11,12 +11,12 @@ on:
 
 jobs:
   test:
-    name: Run tests (shard ${{ matrix.shard }}/3)
+    name: Run tests (shard ${{ matrix.shard }}/10)
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -34,15 +34,22 @@ jobs:
         run: maturin develop --manifest-path rust_core/Cargo.toml
       - name: Run tests (shard ${{ matrix.shard }})
         run: |
-          if [ "${{ matrix.shard }}" = "1" ]; then
-            pytest tests/ci/ tests/structure/ tests/docs/ -n 2 -q
-          elif [ "${{ matrix.shard }}" = "2" ]; then
-            pytest tests/ --ignore=tests/ci --ignore=tests/structure --ignore=tests/docs \
-                         --ignore=tests/core --ignore=tests/security --ignore=tests/integration \
-                         --ignore=tests/agents --ignore=tests/observability --ignore=tests/runtime \
-                         --ignore=tests/tools --ignore=tests/fixtures \
-                         -n 2 -q
-          else
-            pytest tests/core/ tests/security/ tests/integration/ tests/agents/ \
-                   tests/observability/ tests/runtime/ tests/tools/ -n 2 -q
-          fi
+          shard=${{ matrix.shard }}
+          case "$shard" in
+            1) pytest tests/ci/ tests/structure/ -q ;;
+            2) pytest tests/docs/ tests/web/ -q ;;
+            3) pytest tests/tools/ -q ;;
+            4) pytest tests/core/ tests/agents/ tests/runtime/ \
+                      tests/security/ tests/integration/ tests/observability/ -q ;;
+            *)
+              # Shards 5-10: evenly split tests/test_*.py (root-level) across 6 groups
+              offset=$(( shard - 5 ))
+              mapfile -t all_tests < <(find tests -maxdepth 1 -name "test_*.py" | sort)
+              total=${#all_tests[@]}
+              groups=6
+              size=$(( (total + groups - 1) / groups ))
+              start=$(( offset * size ))
+              slice=("${all_tests[@]:$start:$size}")
+              [ ${#slice[@]} -gt 0 ] && pytest "${slice[@]}" -q
+              ;;
+          esac

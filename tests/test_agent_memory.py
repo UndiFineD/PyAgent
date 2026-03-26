@@ -17,8 +17,6 @@ prj0000065 — agent-memory-persistence.
 """
 from __future__ import annotations
 
-import json
-from typing import Generator
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest

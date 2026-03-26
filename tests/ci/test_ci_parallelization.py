@@ -14,8 +14,6 @@
 
 """Tests that validate the CI parallelization workflow structure (prj0000069)."""
 
-import re
-
 
 def _load_ci_yml() -> dict:
     import yaml
@@ -46,8 +44,8 @@ def test_ci_workflow_has_matrix():
 def test_ci_matrix_has_three_shards():
     data = _load_ci_yml()
     shards = data["jobs"]["test"]["strategy"]["matrix"]["shard"]
-    assert len(shards) == 3, f"Expected 3 shards, got {len(shards)}"
-    assert sorted(shards) == [1, 2, 3]
+    assert len(shards) == 10, f"Expected 10 shards, got {len(shards)}"
+    assert sorted(shards) == list(range(1, 11))
 
 
 # ---------------------------------------------------------------------------
@@ -66,4 +64,7 @@ def test_requirements_ci_has_xdist():
 def test_ci_uses_parallel_flag():
     with open(".github/workflows/ci.yml", encoding="utf-8") as f:
         raw = f.read()
-    assert re.search(r"-n\s+\d+", raw), "ci.yml must use -n <N> for pytest-xdist parallelism"
+    # Shards 1-4 run specific subdirectories; shards 5-10 dynamically split root tests.
+    # Parallelism comes from running 10 jobs simultaneously via the matrix strategy
+    # rather than -n workers within a single job.
+    assert "shard" in raw, "ci.yml must use a matrix shard strategy for parallelism"

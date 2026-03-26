@@ -8,16 +8,15 @@
 
 import python
 
-// flag calls to builtin eval
-from Call c
-where c.getTarget().getName() = "eval"
-select c, "use of eval() should be avoided"
-
-// flag subprocess.run(..., shell=True)
-from Call c, NamedArgument na
-where c.getTarget().getQualifiedName() = "subprocess.run" and
-      na.getCall() = c and
-      na.getName() = "shell" and
-      na.getValue() instanceof Literal and
-      na.getValue().(Literal).getValue() = "True"
-select c, "subprocess.run with shell=True is unsafe"
+from Call c, string msg
+where
+  // flag calls to builtin eval
+  (c.getFunc().(Name).getId() = "eval" and msg = "use of eval() should be avoided")
+  or
+  // flag subprocess.run(..., shell=True)
+  (
+    c.getFunc().(Attribute).getName() = "run" and
+    exists(int i | c.getKeyword(i).getKey() = "shell") and
+    msg = "subprocess.run with shell argument should be reviewed"
+  )
+select c, msg

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Code, Eye, Type } from 'lucide-react';
+import { Code, Eye } from 'lucide-react';
 import { cn } from '../utils';
 
 export const Editor: React.FC = () => {

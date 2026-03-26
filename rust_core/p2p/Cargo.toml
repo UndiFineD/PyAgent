@@ -7,3 +7,9 @@ edition = "2021"
 libp2p = { version = "0.56", features = ["tokio", "tcp", "dns", "identify", "ping", "mdns", "noise", "yamux"] }
 tokio = { version = "1", features = ["full"] }
 clap = { version = "4", features = ["derive"] }
+
+# Security patch: replace libp2p-yamux with a local fork that removes the transitive yamux 0.12.x
+# dependency (GHSA-4r2r-cf2h-4wgq — remote panic via malformed Data frame with SYN set).
+# The upstream Config::default() already uses yamux 0.13.x; this fork drops the 0.12 compat layer.
+[patch.crates-io]
+libp2p-yamux = { path = "libp2p-yamux" }

@@ -1,6 +1,21 @@
 # PyAgent — Master Agent Memory
 
-_Last updated: 2026-03-25_
+_Last updated: 2026-03-26_
+
+---
+
+## 2026-03-26 — prj0000075 security/CI follow-up (commit 6191188cc)
+
+**Branch:** `prj0000075-ci-simplification` | **PR:** #213 (open)
+**Status:** PUSHED — CI re-run in progress. All local tests pass (142 CI+structure tests, flake8 clean).
+
+**Fixes delivered in this session:**
+- **Dependabot #49 (GHSA-4r2r-cf2h-4wgq, yamux 0.12.1):** Local fork `rust_core/p2p/libp2p-yamux/` removes yamux 0.12.x compat layer entirely. `Cargo.lock` now only contains yamux 0.13.10.
+- **Dependabot #52 (picomatch method-injection):** `npm update picomatch` → 4.0.4 in `web/package-lock.json`; `npm audit` reports 0 vulnerabilities.
+- **CodeQL alert #12:** Removed unused `Type` import from `web/apps/Editor.tsx`
+- **CodeQL alert #13:** Removed unused `beforeEach`/`afterEach` imports from `web/hooks/useWebSocket.test.ts`
+- **CodeQL Python job failure:** Fixed dual `from...select` blocks in `codeql/codeql-custom-queries-python/example.ql` — QL only allows one select per file; combined into single query using `or` with string message variable.
+- **CI shard 2/3 failure:** Fixed `tests/structure/test_ci_yaml.py` W391 (our file) + pre-existing flake8 issues in 9 other test files (F401, W605, E402, F541).
 
 ---
 
