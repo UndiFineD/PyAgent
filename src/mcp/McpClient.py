@@ -121,7 +121,7 @@ class McpClient:
         self._reader_task = asyncio.create_task(self._read_loop(), name="mcp-reader")
         request_id = self._next_id
         self._next_id += 1
-        fut: asyncio.Future[Any] = asyncio.get_event_loop().create_future()
+        fut: asyncio.Future[Any] = asyncio.get_running_loop().create_future()
         self._pending[request_id] = fut
         payload = (
             '{"jsonrpc":"2.0","id":'

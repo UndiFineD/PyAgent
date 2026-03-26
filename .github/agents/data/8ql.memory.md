@@ -28,6 +28,24 @@ Invoke it via `agent/runSubagent` to continue the process.
 - Rules promoted: 0
 - Advisory: PROMPT_INJECT_V1 — LlmCallable has no guardrails; V2 scope (non-blocking)
 - Advisory: QG-1 — ContextTransaction absent; self._active flag used; functionally equivalent
+
+## Last scan — 2026-03-26 (prj0000081)
+- Task: mcp-server-ecosystem
+- Files scanned: `src/mcp/` (7 files) + `src/tools/tool_registry.py` + `mcp_servers.yml`
+- Security — ruff S rules: PASS (0 findings)
+- Security — pip-audit new findings: 0 (baseline clean)
+- Security — Rust unsafe check: SKIPPED (rust_core/ not changed)
+- Security — Workflow injection: N/A (no .github/workflows/ changes)
+- Security — Hardcoded secrets: PASS (no secret values in mcp_servers.yml)
+- Quality — Plan vs delivery: PASS
+- Quality — AC vs test coverage: PASS (33/33 tests, 89.4% coverage)
+- Quality — Docs vs implementation: PASS
+- Quality — Agent file consistency: PASS
+- Findings: 1 HIGH (QL-01: get_event_loop in McpClient.py:124) — FIXED before handoff
+- Findings: 1 LOW (QL-02: _response_cache unbounded growth under adversarial flooding) — documented only
+- Lessons written: 1 (get_event_loop pattern → 6code.memory.md)
+- Rules promoted: 0 (recurrence count 1; threshold 2 not yet reached)
+- Overall: CLEAN → @9git
 - Overall: CLEAN → @9git
 
 ## Promotions

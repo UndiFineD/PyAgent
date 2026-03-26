@@ -85,3 +85,14 @@ This should be done via `agent/runSubagent`.
 | **unresolved_risks** | Remaining lint debt is still dominated by `src-old/tools/*` and other legacy paths; broad cleanup required before repo-wide flake8 gate can pass. |
 | **handoff_target** | @7exec |
 | **artifact_paths** | src-old/observability/structured_logger.py, src-old/observability/stats/metrics_engine.py, src-old/observability/stats/observability_core.py, src-old/observability/tracing/OpenTelemetryTracer.py, src-old/observability/telemetry/UsageMessage.py, src-old/tools/run_full_pipeline.py, src-old/tools/security/fuzzing.py, docs/project/prj037-tools-crdt-security/prj037-tools-crdt-security.code.md, docs/agents/6code.memory.md |
+
+---
+
+## Lessons
+
+### Lesson — 2026-03-26 (prj0000081)
+**Pattern:** `asyncio.get_event_loop()` used in an `async` method instead of `asyncio.get_running_loop()`.
+**Root cause:** Inconsistent copy-paste between `initialize()` and `_rpc_call()`; `_rpc_call()` was written correctly but `initialize()` retained the deprecated form.
+**Prevention:** After writing any `async def` that creates a Future, grep the file for `get_event_loop` and replace with `get_running_loop`. The `get_event_loop()` API emits DeprecationWarning in Python 3.10+ when called from a coroutine context.
+**First seen:** prj0000081
+**Recurrence count:** 1
