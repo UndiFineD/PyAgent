@@ -32,6 +32,22 @@
 
 ---
 
+## prj0000076 - future-ideas-kanban
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000076-future-ideas-kanban |
+| **owner_agent** | @1project |
+| **source** | @0master |
+| **created_at** | 2026-03-25 |
+| **updated_at** | 2026-03-25 |
+| **status** | HANDED_OFF |
+| **summary** | prj0000076 future-ideas-kanban branch prj0000076-future-ideas-kanban — project setup complete 2026-03-25 |
+| **handoff_target** | @2think |
+| **artifact_paths** | docs/project/prj0000076/prj0000076.project.md, docs/project/kanban.md |
+
+---
+
 ## prj0000045 - transaction-managers-full
 
 | Field | Value |

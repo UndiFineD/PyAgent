@@ -140,3 +140,49 @@ where test cases are written and validated against the plan.
 - No `vite.config.ts` changes required
 - OFFLINE badge: `text-red-500/50 text-[9px]`; stays on last values when offline
 
+
+---
+
+## prj0000076 — future-ideas-kanban
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000076-future-ideas-kanban |
+| **owner_agent** | @4plan |
+| **source** | @2think (design SKIPPED) |
+| **created_at** | 2026-03-26 |
+| **updated_at** | 2026-03-26 |
+| **status** | DONE |
+| **handoff_target** | @9git |
+| **artifact_paths** | docs/project/prj0000076/prj0000076.plan.md, docs/project/kanban.md |
+| **branch** | prj0000076-future-ideas-kanban (validated ✅) |
+| **commit** | d8ea03326 |
+
+### Summary
+Documentation-only project. No source code, tests, or CI changes. @4plan wrote the
+`## Future Ideas` section directly into `docs/project/kanban.md` (38 ideas, 9 areas,
+P1–P4 priorities, SWOT classification for P1/P2). All agents M2/M4/M5/M6/M7 SKIPPED.
+Ready for @9git handoff.
+
+---
+
+## prj0000076 — future-ideas-kanban
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000076-future-ideas-kanban |
+| **owner_agent** | @4plan |
+| **source** | @2think (design SKIPPED) |
+| **created_at** | 2026-03-26 |
+| **updated_at** | 2026-03-26 |
+| **status** | DONE |
+| **handoff_target** | @9git |
+| **artifact_paths** | docs/project/prj0000076/prj0000076.plan.md, docs/project/kanban.md |
+| **branch** | prj0000076-future-ideas-kanban (validated ✅) |
+| **commit** | d8ea03326 |
+
+### Summary
+Documentation-only project. No source code, tests, or CI changes. @4plan wrote the
+`## Future Ideas` section directly into `docs/project/kanban.md` (38 ideas, 9 areas,
+P1–P4 priorities, SWOT classification for P1/P2). All agents M2/M4/M5/M6/M7 SKIPPED.
+Ready for @9git handoff.
