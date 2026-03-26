@@ -196,11 +196,11 @@ Stalled, cancelled, or superseded projects.
 | Lane | Count |
 |---|---|
 | Ideas | 6 |
-| Discovery | 1 |
+| Discovery | 0 |
 | Design | 0 |
 | In Sprint | 0 |
-| Review | 0 |
-| Released | 79 |
+| Review | 1 |
+| Released | 80 |
 | Archived | 1 |
 | **Total** | **88** |
 
