@@ -20,8 +20,6 @@ This file satisfies the test_each_core_has_test_file convention.
 
 from __future__ import annotations
 
-import pytest
-
 from src.core.sandbox.SandboxViolationError import SandboxViolationError, validate
 
 

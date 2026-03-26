@@ -20,8 +20,6 @@ This file satisfies the test_each_core_has_test_file convention.
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from src.core.sandbox.SandboxConfig import SandboxConfig
 from src.core.sandbox.SandboxMixin import SandboxMixin, validate
 from src.core.sandbox.SandboxViolationError import SandboxViolationError
@@ -34,7 +32,6 @@ def test_sandbox_mixin_validate() -> None:
 
 def test_sandbox_mixin_sandbox_tx_returns_transaction() -> None:
     """sandbox_tx() must return a SandboxedStorageTransaction bound to the config."""
-    import pytest
 
     class Agent(SandboxMixin):
         """Minimal agent for mixin unit test."""
