@@ -4,11 +4,11 @@ _Last updated: 2026-03-26_
 
 ---
 
-## 2026-03-26 — prj0000076 future-ideas-kanban — REVIEW ⏳ PR #218
+## 2026-03-26 — prj0000076 future-ideas-kanban — RELEASED ✅ PR #218
 
 **Branch:** `prj0000076-future-ideas-kanban`
-**PR:** [#218](https://github.com/UndiFineD/PyAgent/pull/218) — open, awaiting merge
-**Status:** REVIEW — @1project→@2think→@4plan→@9git complete; @3design/@5test/@6code/@7exec/@8ql SKIPPED (doc-only)
+**PR:** [#218](https://github.com/UndiFineD/PyAgent/pull/218) — **merged 2026-03-26**
+**Status:** RELEASED — @1project→@2think→@4plan→@9git complete; @3design/@5test/@6code/@7exec/@8ql SKIPPED (doc-only)
 **Priority:** P3 | **Budget:** M
 
 **Deliverable:** 38 improvement ideas written to `## Future Ideas` section in `docs/project/kanban.md`.

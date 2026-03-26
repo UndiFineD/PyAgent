@@ -79,7 +79,6 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
-| prj0000076 | future-ideas-kanban | prj0000076-future-ideas-kanban | [#218](https://github.com/UndiFineD/PyAgent/pull/218) | P3 | M | 2026-03-26 |
 | prj0000072 | websocket-reconnect-logic | prj0000072-websocket-reconnect-logic | [#209](https://github.com/UndiFineD/PyAgent/pull/209) | P3 | S | 2026-03-25 |
 | prj0000043 | p2p-security-deps | prj0000043-p2p-security-deps | open | P2 | M | 2026-03-24 |
 | prj0000044 | transaction-managers-stubs | prj0000044-transaction-managers-stubs | #136 | P2 | S | 2026-03-24 |
@@ -92,6 +91,7 @@ All projects merged to main branch.
 
 | ID | Name | Summary | Branch | PR | Priority | Budget | Released |
 |---|---|---|---|---|---|---|---|
+| prj0000076 | future-ideas-kanban | Full workspace audit: 38 SWOT-prioritised future ideas added to kanban.md across 9 areas | merged | [#218](https://github.com/UndiFineD/PyAgent/pull/218) | P3 | M | 2026-03-26 |
 | prj0000077 | ci-backend-deps | Add psutil, PyJWT, python-json-logger to requirements.txt; fix CodeQL QL query; fix kanban test counts | merged | [#216](https://github.com/UndiFineD/PyAgent/pull/216) [#217](https://github.com/UndiFineD/PyAgent/pull/217) | P1 | XS | 2026-03-26 |
 | prj0000075 | ci-simplification | Delete 4 redundant workflows; expand CI to 10 shards; add security.yml CodeQL; fix yamux, picomatch, CodeQL, flake8 | merged | [#215](https://github.com/UndiFineD/PyAgent/pull/215) | P2 | S | 2026-03-26 |
 | prj0000074 | workspace-meta-improvements | Moved agent memory/logs to .github/agents/data/, enforced docstrings policy, restructured docs/architecture, added SWOT+risk to kanban, expanded @2think depth | merged | [#212](https://github.com/UndiFineD/PyAgent/pull/212) | P2 | L | 2026-03-25 |
@@ -181,14 +181,14 @@ Stalled, cancelled, or superseded projects.
 
 | Lane | Count |
 |---|---|
-| Ideas | 1 |
+| Ideas | 0 |
 | Discovery | 0 |
 | Design | 0 |
-| In Sprint | 1 |
+| In Sprint | 0 |
 | Review | 3 |
-| Released | 70 |
+| Released | 73 |
 | Archived | 1 |
-| **Total** | **76** |
+| **Total** | **77** |
 
 ---
 
