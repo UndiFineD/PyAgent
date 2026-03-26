@@ -52,4 +52,4 @@ def validate() -> None:
     This function should be import-safe and avoid heavy runtime behaviour.
     """
     # Basic smoke checks
-    assert isinstance(ExampleCore().do_work({}), dict)
+    assert isinstance(ExampleCore().do_work({}), dict)  # noqa: S101

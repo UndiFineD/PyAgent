@@ -24,4 +24,4 @@ def validate() -> None:
     q = TaskQueue()
     eng = WorkflowEngine(q)
     # ensure attributes exist
-    assert eng.queue is q
+    assert eng.queue is q  # noqa: S101

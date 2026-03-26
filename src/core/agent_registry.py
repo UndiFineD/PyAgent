@@ -32,12 +32,12 @@ class AgentRegistry:
 
     def register(self, name: str, obj: Any) -> None:
         """Register an object under a given name."""
-        assert self._registry is not None
+        assert self._registry is not None  # noqa: S101
         self._registry[name] = obj
 
     def get(self, name: str) -> Optional[Any]:
         """Retrieve a registered object by name, or None if not found."""
-        assert self._registry is not None
+        assert self._registry is not None  # noqa: S101
         return self._registry.get(name)
 
 
@@ -45,4 +45,4 @@ def validate() -> None:
     """Lightweight import-safe validation hook."""
     r = AgentRegistry()
     r.register("test-agent", object())
-    assert r.get("test-agent") is not None
+    assert r.get("test-agent") is not None  # noqa: S101

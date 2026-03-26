@@ -34,16 +34,16 @@ class TaskQueue:
 
     async def put(self, item: Any) -> None:
         """Put an item into the queue."""
-        assert self._queue is not None
+        assert self._queue is not None  # noqa: S101
         await self._queue.put(item)
 
     async def get(self) -> Any:
         """Get an item from the queue."""
-        assert self._queue is not None
+        assert self._queue is not None  # noqa: S101
         return await self._queue.get()
 
 
 def validate() -> None:
     """Lightweight import-safe validation hook."""
     q = TaskQueue()
-    assert hasattr(q, "put") and hasattr(q, "get")
+    assert hasattr(q, "put") and hasattr(q, "get")  # noqa: S101

@@ -101,7 +101,7 @@ class FlmChatAdapter:
         # Pylance occasionally thinks the factory might return ``None``; guard
         # against that with a runtime assertion so the return type is provably
         # ``_ClientProtocol`` on all code paths.
-        assert client is not None, "client factory returned None"
+        assert client is not None, "client factory returned None"  # noqa: S101
         return client
 
     def check_endpoint_available(self) -> None:

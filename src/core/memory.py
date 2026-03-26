@@ -32,17 +32,17 @@ class MemoryStore:
 
     def set(self, key: str, value: Any) -> None:
         """Set a value in the memory store."""
-        assert self._store is not None
+        assert self._store is not None  # noqa: S101
         self._store[key] = value
 
     def get(self, key: str, default: Any = None) -> Any:
         """Get a value from the memory store, or default if not found."""
-        assert self._store is not None
+        assert self._store is not None  # noqa: S101
         return self._store.get(key, default)
 
     def delete(self, key: str) -> bool:
         """Delete a key; returns True if the key existed."""
-        assert self._store is not None
+        assert self._store is not None  # noqa: S101
         if key in self._store:
             del self._store[key]
             return True
@@ -50,7 +50,7 @@ class MemoryStore:
 
     def keys(self) -> list[str]:
         """Return all stored keys."""
-        assert self._store is not None
+        assert self._store is not None  # noqa: S101
         return list(self._store.keys())
 
     def __len__(self) -> int:
@@ -62,4 +62,4 @@ def validate() -> None:
     """Lightweight import-safe validation hook."""
     m = MemoryStore()
     m.set("k", 123)
-    assert m.get("k") == 123
+    assert m.get("k") == 123  # noqa: S101

@@ -49,7 +49,7 @@ WEIGHT_LEXICAL:   float = 0.10   # tsvector / tsquery rank
 WEIGHT_IMPORTANCE: float = 0.05  # stored importance value 0–1
 WEIGHT_CONFIDENCE: float = 0.05  # stored confidence value 0–1
 
-assert abs(
+assert abs(  # noqa: S101
     WEIGHT_VECTOR + WEIGHT_GRAPH + WEIGHT_TEMPORAL
     + WEIGHT_KEYWORD + WEIGHT_LEXICAL
     + WEIGHT_IMPORTANCE + WEIGHT_CONFIDENCE - 1.0

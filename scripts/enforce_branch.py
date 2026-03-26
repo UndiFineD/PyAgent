@@ -103,7 +103,7 @@ def main() -> int:
             )
             return 1
         # On a project branch — ensure it is the right project.
-        assert branch_prj_match is not None  # guaranteed by rule-1 gate above
+        assert branch_prj_match is not None  # guaranteed by rule-1 gate above  # noqa: S101
         branch_id = branch_prj_match.group(1)
         if branch_id != expected_id:
             print(

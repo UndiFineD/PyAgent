@@ -201,7 +201,7 @@ async def _http_get(url: str) -> str:
 
 def validate() -> bool:
     """Confirm the FlmModelProbe module is importable and core symbols are accessible."""
-    assert FlmModelProbeResult and probe_models and select_model
+    assert FlmModelProbeResult and probe_models and select_model  # noqa: S101
     return True
 
 

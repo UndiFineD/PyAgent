@@ -58,7 +58,7 @@ class ProcessTransaction:
 
     def wait(self) -> int:
         """Wait for the subprocess to finish; capture stdout/stderr; return returncode."""
-        assert self._proc is not None, "start() must be called before wait()"
+        assert self._proc is not None, "start() must be called before wait()"  # noqa: S101
         self.stdout, self.stderr = self._proc.communicate()
         return self._proc.returncode
 
@@ -173,7 +173,7 @@ class ProcessTransaction:
     async def wait_async(self, timeout: float = 30.0) -> int:
         """Wait for the asyncio subprocess; capture output; return returncode."""
         import asyncio
-        assert self._async_proc is not None, "start_async() must be called before wait_async()"
+        assert self._async_proc is not None, "start_async() must be called before wait_async()"  # noqa: S101
         self.stdout, self.stderr = await asyncio.wait_for(
             self._async_proc.communicate(), timeout=timeout
         )

@@ -107,8 +107,8 @@ class Runtime:
 def validate() -> None:
     """Lightweight import-safe validation hook."""
     r = Runtime()
-    assert callable(getattr(r, "start", None)), "Runtime.start not callable"
-    assert callable(getattr(r, "submit", None)), "Runtime.submit not callable"
-    assert callable(spawn_task), "spawn_task not callable"
-    assert callable(set_timeout), "set_timeout not callable"
-    assert callable(create_queue), "create_queue not callable"
+    assert callable(getattr(r, "start", None)), "Runtime.start not callable"  # noqa: S101
+    assert callable(getattr(r, "submit", None)), "Runtime.submit not callable"  # noqa: S101
+    assert callable(spawn_task), "spawn_task not callable"  # noqa: S101
+    assert callable(set_timeout), "set_timeout not callable"  # noqa: S101
+    assert callable(create_queue), "create_queue not callable"  # noqa: S101

@@ -30,6 +30,6 @@ def validate() -> None:
         t = Task(id="x")
         await q.enqueue(t)
         got = await q.dequeue()
-        assert got is t
+        assert got is t  # noqa: S101
 
     asyncio.run(_run())

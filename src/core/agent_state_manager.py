@@ -20,4 +20,4 @@ from __future__ import annotations
 def validate() -> None:
     """Smoke check for import and basic functionality."""
     # the module currently has no logic; importing is enough
-    assert True
+    assert True  # noqa: S101

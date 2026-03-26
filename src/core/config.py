@@ -230,5 +230,5 @@ def save_config(config: SwarmConfig, path: str | os.PathLike[str]) -> None:
 
 def validate() -> bool:
     """Confirm the config module is importable and core classes are accessible."""
-    assert AgentConfig and SwarmConfig and load_config and save_config
+    assert AgentConfig and SwarmConfig and load_config and save_config  # noqa: S101
     return True
