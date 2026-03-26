@@ -119,13 +119,13 @@
   {
     "id": "prj0000079",
     "name": "automem-hybrid-search",
-    "lane": "Ideas",
-    "summary": "AutoMem 9-component hybrid memory search (Vector+Graph+Temporal+Lexical) on PostgreSQL (pgvector HNSW + Apache AGE + tsvector); 90%+ LoCoMo benchmark target",
-    "branch": null,
-    "pr": null,
+    "lane": "Review",
+    "summary": "AutoMem 9-component hybrid memory search (Vector+Graph+Temporal+Lexical+HNSW+AGE+LTREE+BRIN+Hash) on PostgreSQL; NebulaOS benchmark dashboard; app auto-discovery registry",
+    "branch": "prj0000079-automem-hybrid-search",
+    "pr": "#220",
     "priority": "P2",
     "budget_tier": "L",
-    "tags": ["memory", "search", "rust"],
+    "tags": ["memory", "search", "postgresql"],
     "created": "2026-03-26",
     "updated": "2026-03-26"
   },

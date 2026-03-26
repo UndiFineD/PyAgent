@@ -43,7 +43,6 @@ Projects proposed but not yet formally scoped.
 
 | ID | Name | Summary | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|
-| prj0000079 | automem-hybrid-search | AutoMem 9-component hybrid memory search (Vector+Graph+Temporal+Lexical) on PostgreSQL (pgvector HNSW + Apache AGE + tsvector); 90%+ LoCoMo benchmark target | P2 | L | memory, search, rust | 2026-03-26 |
 | prj0000080 | cort-reasoning-pipeline | Chain-of-Recursive-Thoughts: multi-round recursive reasoning with dynamic evaluation engine and temperature-variant alternative generation | P2 | M | reasoning, ai, core | 2026-03-26 |
 | prj0000081 | mcp-server-ecosystem | MCP server hot-load registry with security sandboxing; enables agents to dynamically connect to 500+ community MCP servers | P3 | L | tools, mcp, ecosystem | 2026-03-26 |
 | prj0000082 | agent-execution-sandbox | SandboxMixin: restrict each agent's file and network access to approved path sets; integrated with StateTransaction validation | P2 | S | security, sandbox, core | 2026-03-26 |
@@ -89,6 +88,7 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000079 | automem-hybrid-search | prj0000079-automem-hybrid-search | [#220](https://github.com/UndiFineD/PyAgent/pull/220) | P2 | L | 2026-03-26 |
 | prj0000072 | websocket-reconnect-logic | prj0000072-websocket-reconnect-logic | [#209](https://github.com/UndiFineD/PyAgent/pull/209) | P3 | S | 2026-03-25 |
 | prj0000043 | p2p-security-deps | prj0000043-p2p-security-deps | open | P2 | M | 2026-03-24 |
 | prj0000044 | transaction-managers-stubs | prj0000044-transaction-managers-stubs | #136 | P2 | S | 2026-03-24 |
