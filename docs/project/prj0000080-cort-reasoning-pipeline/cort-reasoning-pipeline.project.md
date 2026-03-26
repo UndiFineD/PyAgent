@@ -109,7 +109,7 @@ chain from the final round becomes the agent's response.
 |---|---|---|---|
 | M1 | Project setup | @1project | DONE |
 | M2 | Options explored | @2think | DONE |
-| M3 | Design confirmed | @3design | |
+| M3 | Design confirmed | @3design | COMPLETE |
 | M4 | Plan finalized | @4plan | |
 | M5 | Tests written | @5test | |
 | M6 | Code implemented | @6code | |
@@ -130,6 +130,7 @@ chain from the final round becomes the agent's response.
 
 ## Status
 _Last updated: 2026-03-26_
-Options exploration complete (`prj0000080.think.md`). Recommendation: Option A (Fixed
-N rounds, Fixed M alternatives) + E2 heuristic EvaluationEngine with E3 interface
-contract. Ready for handoff to `@3design` for architecture design.
+Design complete (`prj0000080.design.md`). Architecture: Option A (Fixed N rounds,
+Fixed M alternatives) + E2 heuristic EvaluationEngine with E3 interface contract.
+`CortCore`, `CortAgent` / `CortMixin`, `EvaluationEngine`, all data models, and
+error types fully specified. Ready for handoff to `@4plan`.
