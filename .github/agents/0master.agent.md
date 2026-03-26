@@ -20,6 +20,7 @@ It does **not** edit code directly — instead it:
 - `.github/agents/` — agent memory + plan artifacts (see below)
 
 ### Project lifecycle board
+**Next available prj:** see `data/nextproject.md`
 - `docs/project/kanban.md` — single source of truth for project status across all
   lifecycle lanes (Ideas → Discovery → Design → In Sprint → Review → Released → Archived).
   - Read this before allocating a new `prjNNNNNNN` to confirm the next available ID.

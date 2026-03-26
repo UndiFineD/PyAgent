@@ -80,3 +80,46 @@ def run_tool(name: str, args: list[str] | None = None) -> int:
     if inspect.isawaitable(result):
         return asyncio.run(result)
     return result
+
+
+def deregister_tool(name: str) -> None:
+    """Remove a tool from the registry by exact name.
+
+    Uses a copy-on-write dict swap so that any in-flight references to the old
+    registry snapshot remain valid until their next read barrier.
+
+    Args:
+        name: Exact registered name of the tool to remove.
+            No-op if the tool is not currently registered.
+
+    """
+    global _REGISTRY
+    _REGISTRY = {k: v for k, v in _REGISTRY.items() if k != name}
+
+
+async def async_run_tool(name: str, args: list[str] | None = None) -> int:
+    """Await a tool's main coroutine or call it synchronously.
+
+    Unlike :func:`run_tool`, this function is itself a coroutine so it must be
+    awaited inside an existing event loop.  It never calls
+    ``asyncio.run()`` internally.
+
+    Args:
+        name: Exact registered name of the tool to invoke.
+        args: CLI-style argument list forwarded to the tool's ``main``
+            callable.  Defaults to ``None`` (tool receives no arguments).
+
+    Returns:
+        The integer return value produced by the tool's ``main`` callable.
+
+    Raises:
+        KeyError: If *name* is not present in the registry.
+
+    """
+    spec = _REGISTRY.get(name)
+    if spec is None:
+        raise KeyError(f"Tool '{name}' not registered")
+    result = spec.main(args)
+    if asyncio.iscoroutine(result):
+        return await result
+    return result  # type: ignore[return-value]

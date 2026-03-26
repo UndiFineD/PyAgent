@@ -109,6 +109,11 @@ ignore = [
     "D213", # multi-line-summary-second-line (conflicts with D212; D212 wins)
 ]
 
+[tool.ruff.lint.per-file-ignores]
+# Exception class names are defined by the MCP architecture contract and
+# the test-file imports; they cannot be renamed to add an "Error" suffix.
+"src/mcp/exceptions.py" = ["N818"]
+
 
 [tool.mypy]
 python_version = "3.12"

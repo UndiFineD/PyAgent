@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-26 | Total projects: 88_
+_Last updated: 2026-03-26 | Total projects: 88 | prj0000081 → Review_
 
 ## How to use this board
 
@@ -43,7 +43,6 @@ Projects proposed but not yet formally scoped.
 
 | ID | Name | Summary | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|
-| prj0000081 | mcp-server-ecosystem | MCP server hot-load registry with security sandboxing; enables agents to dynamically connect to 500+ community MCP servers | P3 | L | tools, mcp, ecosystem | 2026-03-26 |
 | prj0000082 | agent-execution-sandbox | SandboxMixin: restrict each agent's file and network access to approved path sets; integrated with StateTransaction validation | P2 | S | security, sandbox, core | 2026-03-26 |
 | prj0000083 | llm-circuit-breaker | Per-provider LLM request circuit breaker with configurable failure thresholds, exponential backoff, and fallback model routing | P3 | S | resilience, llm, infrastructure | 2026-03-26 |
 | prj0000084 | immutable-audit-trail | Append-only hashchain audit log for all BFT-approved and security-critical operations; tamper-evident with cryptographic chaining | P2 | M | security, audit, compliance | 2026-03-26 |
@@ -60,6 +59,7 @@ Active options exploration — @2think is working or has completed .think.md.
 
 | ID | Name | Summary | Branch | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|---|
+
 
 
 ---
@@ -88,6 +88,7 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000081 | mcp-server-ecosystem | prj0000081-mcp-server-ecosystem | [#223](https://github.com/UndiFineD/PyAgent/pull/223) | P3 | L | 2026-03-26 |
 
 
 ---
@@ -194,8 +195,8 @@ Stalled, cancelled, or superseded projects.
 
 | Lane | Count |
 |---|---|
-| Ideas | 8 |
-| Discovery | 0 |
+| Ideas | 7 |
+| Discovery | 1 |
 | Design | 0 |
 | In Sprint | 0 |
 | Review | 0 |

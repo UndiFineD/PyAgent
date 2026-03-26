@@ -1,0 +1,27 @@
+# MCP server definitions for PyAgent.
+#
+# All entries use enabled: false by default so no subprocess is spawned
+# unless the operator explicitly enables a server.
+#
+# Fields are documented in src/mcp/McpServerConfig.py.
+
+mcp_servers:
+  - name: filesystem
+    command: ["npx", "-y", "@modelcontextprotocol/server-filesystem", "/workspace"]
+    allowed_paths: ["/workspace"]
+    allowed_hosts: []
+    timeout_seconds: 10.0
+    restart_policy: on-failure
+    sha256_pin: null
+    secret_refs: []
+    enabled: false
+
+  - name: fetch
+    command: ["uvx", "mcp-server-fetch"]
+    allowed_paths: []
+    allowed_hosts: ["*"]
+    timeout_seconds: 30.0
+    restart_policy: on-failure
+    sha256_pin: null
+    secret_refs: []
+    enabled: false

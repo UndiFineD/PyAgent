@@ -6,7 +6,23 @@ integration checks, and smoke test outcomes.
 ---
 
 ## Last run — 2026-03-26
-- Task: prj0000080 cort-reasoning-pipeline
+- Task: prj0000081 mcp-server-ecosystem
+- Tests run: 927+33 (excluding pre-existing collection error) | Passed: 960 | Failed: 8
+- Import check: PASS (McpRegistry, McpClient, McpSandbox, McpServerConfig, McpToolAdapter all import OK)
+- Coverage: 89.40% on src/mcp/ — ALL modules ≥70% ✅
+  - McpClient.py 87%, McpRegistry.py 92%, McpSandbox.py 92%, McpServerConfig.py 76%, McpToolAdapter.py 98%, exceptions.py 100%
+- Ruff: PASS on src/mcp/ (auto-fixed I001 import sort in McpRegistry.py)
+- Smoke test: SKIPPED (no CLI entry point)
+- rust_core: SKIPPED (not modified)
+- Placeholder scan: PASS (no stubs in src/mcp/)
+- Outcome: BLOCKED → @6code (test_no_sync_loops FAILED — McpSandbox.py lines 89, 201)
+- Notes:
+  - McpSandbox._build_env() line 89 and validate_path() line 201 use sync `for` loops
+  - Project async-quality gate detects these as violations
+  - All other 7 non-MCP failures are pre-existing (SARIF staleness, core/memory broken imports, policy docs)
+  - Commit: 8b9fd6094
+
+
 - Tests run: 24 | Passed: 24 | Failed: 0
 - Import check: PASS (`from src.core.reasoning import CortCore, CortAgent, EvaluationEngine, CortConfig, CortResult, DEFAULT_CORT_CONFIG` → `imports OK`)
 - Coverage: 87.45% on src/core/reasoning — BELOW 90% target ❌

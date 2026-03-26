@@ -93,10 +93,10 @@
   {
     "id": "prj0000081",
     "name": "mcp-server-ecosystem",
-    "lane": "Ideas",
+    "lane": "Review",
     "summary": "MCP server hot-load registry with security sandboxing; enables agents to dynamically connect to 500+ community MCP servers",
-    "branch": null,
-    "pr": null,
+    "branch": "prj0000081-mcp-server-ecosystem",
+    "pr": "#223",
     "priority": "P3",
     "budget_tier": "L",
     "tags": ["tools", "mcp", "ecosystem"],
