@@ -9,6 +9,27 @@ Once security scans and CodeQL analysis are complete,
 the next agent in the workflow is **@9git**. 
 Invoke it via `agent/runSubagent` to continue the process.
 
+## Last scan — 2026-03-27 (prj0000084 rerun after fix/rerun commits)
+- Task: prj0000084-immutable-audit-trail
+- status: DONE
+- task_id: prj0000084-immutable-audit-trail
+- Files scanned: `src/core/audit/` (7 files) + audit test suite (7 files including `tests/test_AuditExceptions.py`) + project docs (`project/design/plan/test/code/exec/ql`)
+- Security — CodeQL: SKIPPED (CLI not invoked in this rerun; `ruff --select S` executed on changed scope)
+- Security — ruff S rules: PASS (0 findings)
+- Security — mypy strict: PASS (0 findings)
+- Security — ruff target scope: PASS
+- Security — pip-audit new findings: 0 (`pip_audit_results.json` baseline: `Deps with vulns: 0`)
+- Security — Rust unsafe check: SKIPPED (`rust_core/` not modified)
+- Security — Workflow injection: PASS (no `.github/workflows/*.yml` changes)
+- Quality — Plan vs delivery: PASS
+- Quality — AC vs test coverage: PASS (latest @7exec result: 99.36% >= 90)
+- Quality — Docs vs implementation: PASS (`tests/test_AuditExceptions.py` now present and aligned across plan/test/code/exec)
+- Quality — Agent file consistency: PASS
+- Lessons written: 0 (no new recurring pattern)
+- Rules promoted: 0
+- Overall: CLEAN -> @9git
+- handoff_target: @9git
+
 ---
 
 ## Last scan - 2026-03-27 (prj0000085 shadow-mode-replay)
@@ -117,6 +138,24 @@ Invoke it via `agent/runSubagent` to continue the process.
 
 ## Promotions
 _(none yet)_
+
+## Last scan — 2026-03-27 (prj0000084)
+- Task: prj0000084-immutable-audit-trail
+- Files scanned: `src/core/audit/` (7 files) + audit test suite (6 files) + project docs (`project/design/plan/test/code/exec/ql`)
+- Security — CodeQL: SKIPPED (CLI not invoked in this run; `ruff --select S` executed)
+- Security — ruff S rules: PASS (0 findings)
+- Security — mypy strict: PASS (0 findings)
+- Security — ruff full target scope: PASS
+- Security — pip-audit new findings: 0 (committed baseline in `pip_audit_results.json` reports 0 vulnerable dependencies)
+- Security — Rust unsafe check: SKIPPED (`rust_core/` not modified)
+- Security — Workflow injection: N/A (no workflow file changes)
+- Quality — Plan vs delivery: PASS (core audit files + planned artifacts present)
+- Quality — AC vs test coverage: FAIL (83.07% < required 90%)
+- Quality — Docs vs implementation: FAIL (plan references missing `tests/test_AuditExceptions.py`; exec PASS label inconsistent with coverage threshold)
+- Quality — Agent file consistency: PASS (no recurrence promotion triggered)
+- Lessons written: 2 (coverage gate miss, missing test-file reference -> `5test.memory.md`)
+- Rules promoted: 0
+- Overall: BLOCKED -> @5test
 
 
 

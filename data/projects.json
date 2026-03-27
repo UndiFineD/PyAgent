@@ -54,15 +54,15 @@
   {
     "id": "prj0000084",
     "name": "immutable-audit-trail",
-    "lane": "Ideas",
+    "lane": "Discovery",
     "summary": "Append-only hashchain audit log for all BFT-approved and security-critical operations; tamper-evident with cryptographic chaining",
-    "branch": null,
+    "branch": "prj0000084-immutable-audit-trail",
     "pr": null,
     "priority": "P2",
     "budget_tier": "M",
     "tags": ["security", "audit", "compliance"],
     "created": "2026-03-26",
-    "updated": "2026-03-26"
+    "updated": "2026-03-27"
   },
   {
     "id": "prj0000083",

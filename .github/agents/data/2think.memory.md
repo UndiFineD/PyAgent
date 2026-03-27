@@ -5,6 +5,21 @@ tradeoff analysis, and recommended directions.
 
 ---
 
+## prj0000084 - immutable-audit-trail
+_Date: 2026-03-27 | Status: DONE | Branch: prj0000084-immutable-audit-trail_
+
+**task_id:** prj0000084
+**Recommendation:** Option A - Minimal hash-chain file audit in `src/core/audit/` using stdlib-only components.
+**Artifact:** `docs/project/prj0000084-immutable-audit-trail/prj0000084-immutable-audit-trail.think.md`
+**Handoff target:** @3design
+
+Decision rationale summary:
+- Smallest testable increment with lowest regression risk.
+- Meets scope preference (`src/core/audit/`) and dependency constraint (stdlib only).
+- Enables immediate tamper-evidence verification while deferring heavier architecture changes.
+
+---
+
 ## prj0000075 ci-simplification — 2026-03-25
 Option selected: Keep `ci.yml` only; delete `core-quality.yml`, `pm.yml`, `quality.yml`, `testing-infra.yml` — pre-commit already covers ruff/mypy; ci.yml is the sole non-redundant workflow (Rust build gate + sharded tests)
 Artifact: docs/project/prj0000075/prj0000075.think.md
