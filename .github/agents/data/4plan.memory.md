@@ -166,37 +166,40 @@ Ready for @9git handoff.
 
 ---
 
-## prj0000084 — immutable-audit-trail
+## prj0000085 — shadow-mode-replay
 
 | Field | Value |
 |---|---|
-| **task_id** | prj0000084-immutable-audit-trail |
+| **task_id** | prj0000085-shadow-mode-replay |
 | **owner_agent** | @4plan |
 | **source** | @3design |
 | **created_at** | 2026-03-27 |
 | **updated_at** | 2026-03-27 |
 | **status** | DONE |
-| **handoff_target** | @9git (user-requested direct commit) |
-| **artifact_paths** | docs/project/prj0000084-immutable-audit-trail/prj0000084-immutable-audit-trail.plan.md |
-| **branch** | prj0000084-immutable-audit-trail (validated) |
+| **handoff_target** | @5test |
+| **artifact_paths** | docs/project/prj0000085-shadow-mode-replay/prj0000085-shadow-mode-replay.plan.md |
+| **branch** | prj0000085-shadow-mode-replay (validated ✅) |
 
-### Chunk 1 (single planning chunk)
+### Chunk C1
 
-| Task | File(s) | Type | Acceptance |
-|---|---|---|---|
-| T1 | src/core/audit/exceptions.py | PLAN | Exception hierarchy contract captured |
-| T2 | src/core/audit/AuditVerificationResult.py | PLAN | Verification model contract captured |
-| T3 | src/core/audit/AuditEvent.py | PLAN | Deterministic canonical model contract captured |
-| T4 | src/core/audit/AuditHasher.py | PLAN | Deterministic hashing contract captured |
-| T5 | src/core/audit/AuditTrailCore.py | PLAN | Append/read/verify contracts mapped to tests |
-| T6 | src/core/audit/AuditTrailMixin.py | PLAN | Host adapter behavior mapped to tests |
-| T7 | src/core/audit/__init__.py | PLAN | Package export surface order defined |
-| T8 | tests/test_AuditEvent.py, tests/test_AuditHasher.py, tests/test_AuditTrailCore.py, tests/test_AuditTrailMixin.py, tests/test_AuditExceptions.py, tests/test_audit_trail.py | PLAN | 18 tests split by unit/integration/negative with AC coverage map |
+| Task | Files | Acceptance |
+|---|---|---|
+| T1 | src/core/replay/exceptions.py, src/core/replay/ReplayTypes.py, src/core/replay/__init__.py | Replay error taxonomy + result types importable |
+| T2 | src/core/replay/ReplayEnvelope.py, src/core/replay/__init__.py | Deterministic envelope validation/checksum logic |
+| T3 | src/core/replay/ReplayStore.py, src/core/replay/__init__.py | Ordered append/load, range, dedup, corruption handling |
+| T4 | src/core/replay/ShadowExecutionCore.py, src/core/replay/ReplayTypes.py | No-side-effect execution and rollback behavior |
+| T5 | src/core/replay/ReplayOrchestrator.py, src/core/replay/ReplayTypes.py | Sequence checks and divergence handling modes |
+| T6 | src/core/replay/ReplayMixin.py, src/core/base/base_agent.py, src/core/base/agent_state_manager.py | Mixin emission/delegation plus agent boot wiring |
+| T7 | docs/project/prj0000085-shadow-mode-replay/prj0000085-shadow-mode-replay.plan.md | Full validation command set and AC traceability closure |
 
-### Notes
-- Plan status finalized as DONE in canonical artifact.
-- Includes explicit module implementation order, test-file mapping, 18-case TDD matrix,
-  validation commands, and AC coverage map.
+### AC and test mapping summary
+
+- AC-01: RT-01..RT-04
+- AC-02: RT-05..RT-09
+- AC-03: RT-10..RT-12
+- AC-04: RT-13..RT-15
+- AC-05: RT-16..RT-17
+- AC-06: RT-18 plus validation command gate
 
 ---
 

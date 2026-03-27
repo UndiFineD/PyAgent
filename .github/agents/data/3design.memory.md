@@ -89,19 +89,18 @@ the design intent.
 
 ---
 
-## prj0000084 - immutable-audit-trail
+## prj0000085 - shadow-mode-replay
 
 | Field | Value |
 |---|---|
-| **task_id** | prj0000084-immutable-audit-trail |
+| **task_id** | prj0000085-shadow-mode-replay |
 | **owner_agent** | @3design |
 | **source** | @2think |
 | **created_at** | 2026-03-27 |
 | **updated_at** | 2026-03-27 |
 | **status** | DONE |
-| **branch_gate** | PASS - `prj0000084-immutable-audit-trail` |
-| **selected_option** | Option A - Minimal stdlib hashchain module in `src/core/audit/` |
-| **key_decisions** | Package-only v1 design; 7 proposed files; deterministic canonical JSON + SHA-256 chain; append-only JSONL model; explicit exception hierarchy; integration via optional mixin without required edits to existing modules. |
-| **interface_contracts** | `AuditEvent`, `AuditHasher`, `AuditTrailCore`, `AuditTrailMixin`, `AuditVerificationResult`, and `exceptions.py` signatures captured in canonical design artifact. |
+| **branch_gate** | PASS - `prj0000085-shadow-mode-replay` |
+| **selected_option** | Option B - ReplayEnvelope event model + thin orchestrator |
+| **summary** | Completed design with implementable module layout under `src/core/replay/` and explicit API contracts, deterministic data flow, and 18-test scope for shadow execution and replay. |
 | **handoff_target** | @4plan |
-| **artifact_paths** | docs/project/prj0000084-immutable-audit-trail/prj0000084-immutable-audit-trail.design.md |
+| **artifact_paths** | docs/project/prj0000085-shadow-mode-replay/prj0000085-shadow-mode-replay.design.md |

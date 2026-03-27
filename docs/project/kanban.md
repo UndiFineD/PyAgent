@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-27 | Total projects: 88 | prj0000084 → Discovery_
+_Last updated: 2026-03-27 | Total projects: 88 | prj0000085 → Review (auth-blocked)_
 
 ## How to use this board
 
@@ -44,6 +44,7 @@ Projects proposed but not yet formally scoped.
 | ID | Name | Summary | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|
 
+| prj0000084 | immutable-audit-trail | Append-only hashchain audit log for all BFT-approved and security-critical operations; tamper-evident with cryptographic chaining | P2 | M | security, audit, compliance | 2026-03-26 |
 | prj0000085 | shadow-mode-replay | Shadow execution mode (side-effect-free parallel agent runs) + deterministic session replay from structured logs for debug | P3 | M | testing, debug, observability | 2026-03-26 |
 | prj0000086 | universal-agent-shell | UniversalAgent shell: dynamically load CoderCore/SecurityCore/etc. by intent; consolidate 50+ specialized agent classes | P2 | XL | architecture, agents, refactor | 2026-03-26 |
 | prj0000087 | n8n-workflow-bridge | Bi-directional n8n integration: agents trigger automation chains via n8n API and act as intelligent decision nodes in workflows | P3 | M | automation, integration, n8n | 2026-03-26 |
@@ -89,6 +90,7 @@ PR open, awaiting merge.
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
 | prj0000083 | llm-circuit-breaker | prj0000083-llm-circuit-breaker | [#225](https://github.com/UndiFineD/PyAgent/pull/225) | P3 | S | 2026-03-27 |
+| prj0000085 | shadow-mode-replay | prj0000085-shadow-mode-replay | auth blocked (use compare URL) | P3 | M | 2026-03-27 |
 
 
 ---
@@ -198,10 +200,10 @@ Stalled, cancelled, or superseded projects.
 | Lane | Count |
 |---|---|
 | Ideas | 4 |
-| Discovery | 2 |
+| Discovery | 0 |
 | Design | 0 |
 | In Sprint | 0 |
-| Review | 1 |
+| Review | 2 |
 | Released | 81 |
 | Archived | 1 |
 | **Total** | **88** |

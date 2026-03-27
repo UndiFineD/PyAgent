@@ -41,15 +41,15 @@
   {
     "id": "prj0000085",
     "name": "shadow-mode-replay",
-    "lane": "Ideas",
+    "lane": "Review",
     "summary": "Shadow execution mode (side-effect-free parallel agent runs) + deterministic session replay from structured logs for debug",
-    "branch": null,
+    "branch": "prj0000085-shadow-mode-replay",
     "pr": null,
     "priority": "P3",
     "budget_tier": "M",
     "tags": ["testing", "debug", "observability"],
     "created": "2026-03-26",
-    "updated": "2026-03-26"
+    "updated": "2026-03-27"
   },
   {
     "id": "prj0000084",
