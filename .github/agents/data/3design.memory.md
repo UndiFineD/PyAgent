@@ -86,3 +86,23 @@ the design intent.
 | **vite_config_change** | None required |
 | **handoff_target** | @4plan |
 | **artifact_paths** | docs/project/prj0000047/conky-real-metrics.design.md |
+
+---
+
+## prj0000086 - universal-agent-shell
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000086-universal-agent-shell |
+| **owner_agent** | @3design |
+| **source** | @2think |
+| **created_at** | 2026-03-27 |
+| **updated_at** | 2026-03-27 |
+| **status** | DONE |
+| **branch_gate** | PASS — `prj0000086-universal-agent-shell` |
+| **selected_option** | Option B — Universal Shell Facade with Controlled Legacy Fallback |
+| **design_path** | Minimal facade module under `src/core/universal/` with `UniversalIntentRouter.py`, `UniversalCoreRegistry.py`, `UniversalAgentShell.py`, `exceptions.py`, `__init__.py` |
+| **interface_contracts** | `TaskEnvelope`, `RoutingDecision`, `DispatchResult`, async `CoreHandler.execute(envelope)`, one-shot fallback policy |
+| **assumptions** | Allowlist-gated core routing, single fallback attempt, deterministic normalization, constructor-injected dependencies |
+| **handoff_target** | @4plan |
+| **artifact_paths** | docs/project/prj0000086-universal-agent-shell/universal-agent-shell.design.md |
