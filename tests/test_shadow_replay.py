@@ -572,3 +572,259 @@ async def test_rt_18_end_to_end_replay_produces_deterministic_hash() -> None:
 
     assert isinstance(result["output_hash"], str)
     assert len(result["output_hash"]) == 64
+
+
+@pytest.mark.asyncio
+async def test_rt_19_envelope_rejects_invalid_schema_and_payload_types() -> None:
+    """RT-19: Envelope rejects unsupported schema and invalid payload types."""
+    replay_envelope_cls = _require_symbol("ReplayEnvelope", "ReplayEnvelope")
+    replay_schema_error_cls = _require_symbol("exceptions", "ReplaySchemaError")
+
+    bad_schema = _replay_envelope_payload()
+    bad_schema["schema_version"] = "2.0"
+    with pytest.raises(replay_schema_error_cls):
+        replay_envelope_cls.from_dict(bad_schema)
+
+    bad_input_payload = _replay_envelope_payload()
+    bad_input_payload["input_payload"] = ["not", "a", "dict"]
+    with pytest.raises(replay_schema_error_cls):
+        replay_envelope_cls.from_dict(bad_input_payload)
+
+    bad_output_payload = _replay_envelope_payload()
+    bad_output_payload["output_payload"] = ["not", "a", "dict"]
+    with pytest.raises(replay_schema_error_cls):
+        replay_envelope_cls.from_dict(bad_output_payload)
+
+    bad_side_effect_intents = _replay_envelope_payload()
+    bad_side_effect_intents["side_effect_intents"] = {"kind": "process"}
+    with pytest.raises(replay_schema_error_cls):
+        replay_envelope_cls.from_dict(bad_side_effect_intents)
+
+
+@pytest.mark.asyncio
+async def test_rt_20_envelope_rejects_non_positive_sequence_and_logical_clock() -> None:
+    """RT-20: Envelope validation rejects non-positive sequence and logical clock values."""
+    replay_envelope_cls = _require_symbol("ReplayEnvelope", "ReplayEnvelope")
+    replay_schema_error_cls = _require_symbol("exceptions", "ReplaySchemaError")
+
+    zero_sequence = _replay_envelope_payload(sequence_no=0, logical_clock=1)
+    with pytest.raises(replay_schema_error_cls):
+        replay_envelope_cls.from_dict(zero_sequence)
+
+    zero_clock = _replay_envelope_payload(sequence_no=1, logical_clock=0)
+    with pytest.raises(replay_schema_error_cls):
+        replay_envelope_cls.from_dict(zero_clock)
+
+
+@pytest.mark.asyncio
+async def test_rt_21_envelope_allows_sha256_checksum_mismatch_for_side_effect_envelopes() -> None:
+    """RT-21: Side-effect envelopes may carry non-canonical but SHA256-shaped checksums."""
+    replay_envelope_cls = _require_symbol("ReplayEnvelope", "ReplayEnvelope")
+
+    payload = _replay_envelope_payload(session_id="s-checksum-intent", sequence_no=1)
+    payload["side_effect_intents"] = [{"kind": "process", "action": "spawn"}]
+    payload["checksum"] = "a" * 64
+
+    envelope = replay_envelope_cls.from_dict(payload)
+    assert envelope.checksum == "a" * 64
+
+
+@pytest.mark.asyncio
+async def test_rt_22_envelope_sha256_shape_helper_rejects_non_hex() -> None:
+    """RT-22: SHA256 helper returns False for invalid-hex checksum strings."""
+    replay_envelope_cls = _require_symbol("ReplayEnvelope", "ReplayEnvelope")
+    assert replay_envelope_cls._is_sha256("g" * 64) is False
+
+
+@pytest.mark.asyncio
+async def test_rt_23_store_handles_invalid_bounds_and_missing_delete(tmp_path: Any) -> None:
+    """RT-23: Store returns empty range for invalid bounds and no-op delete for missing sessions."""
+    replay_store_cls = _require_symbol("ReplayStore", "ReplayStore")
+    store = replay_store_cls(root_path=tmp_path)
+
+    empty_subset = await store.load_range("s-missing", 5, 1)
+    assert empty_subset == []
+
+    await store.delete_session("s-missing")
+    assert await store.session_exists("s-missing") is False
+
+
+@pytest.mark.asyncio
+async def test_rt_24_store_validate_rejects_file_root(tmp_path: Any) -> None:
+    """RT-24: Store validate rejects non-directory roots."""
+    replay_store_cls = _require_symbol("ReplayStore", "ReplayStore")
+    replay_corruption_error_cls = _require_symbol("exceptions", "ReplayCorruptionError")
+
+    root_file = tmp_path / "root-file"
+    root_file.write_text("not-a-directory", encoding="utf-8")
+    store = replay_store_cls(root_path=tmp_path / "store-root")
+    store._root_path = root_file
+    with pytest.raises(replay_corruption_error_cls):
+        await store.load_session("s-any")
+
+
+@pytest.mark.asyncio
+async def test_rt_25_mixin_validate_and_missing_orchestrator_errors() -> None:
+    """RT-25: ReplayMixin reports invalid orchestrator contract and missing orchestration setup."""
+    replay_mixin_cls = _require_symbol("ReplayMixin", "ReplayMixin")
+    replay_configuration_error_cls = _require_symbol("exceptions", "ReplayConfigurationError")
+
+    class _BadOrchestrator:
+        """Missing replay_session contract method."""
+
+    class _HostBad(replay_mixin_cls):
+        """Host wired with invalid orchestrator dependency."""
+
+        def __init__(self) -> None:
+            """Initialize invalid replay orchestrator dependency."""
+            self._replay_store = None
+            self._replay_orchestrator = _BadOrchestrator()
+
+    with pytest.raises(replay_configuration_error_cls):
+        _HostBad().validate()
+
+    class _HostMissing(replay_mixin_cls):
+        """Host wired without orchestrator for delegation path test."""
+
+        def __init__(self) -> None:
+            """Initialize replay dependencies with no orchestrator."""
+            self._replay_store = None
+            self._replay_orchestrator = None
+
+    with pytest.raises(replay_configuration_error_cls):
+        await _HostMissing().replay_session("s-missing-orchestrator")
+
+
+@pytest.mark.asyncio
+async def test_rt_26_mixin_emission_appends_to_store_when_available() -> None:
+    """RT-26: ReplayMixin append path persists emitted envelope when store supports append."""
+    replay_mixin_cls = _require_symbol("ReplayMixin", "ReplayMixin")
+
+    class _Store:
+        """Record appended envelopes for assertion."""
+
+        def __init__(self) -> None:
+            """Initialize append recorder."""
+            self.envelopes: list[Any] = []
+
+        async def append_envelope(self, envelope: Any) -> None:
+            """Record appended envelope."""
+            self.envelopes.append(envelope)
+
+    class _Host(replay_mixin_cls):
+        """Host wired with append-capable store and no orchestrator requirement."""
+
+        def __init__(self) -> None:
+            """Initialize replay dependencies for append-path testing."""
+            self._replay_store = _Store()
+            self._replay_orchestrator = None
+            self.context_id = "ctx-store"
+            self.transaction_id = "tx-store"
+
+    host = _Host()
+    envelope = await host.emit_replay_envelope(
+        event_type="tool_call",
+        input_payload={"a": 1},
+        output_payload={"b": 2},
+        side_effect_intents=[],
+    )
+
+    assert len(host._replay_store.envelopes) == 1
+    assert host._replay_store.envelopes[0] == envelope
+
+
+@pytest.mark.asyncio
+async def test_rt_27_orchestrator_empty_stream_and_dependency_validation() -> None:
+    """RT-27: Orchestrator validates dependencies and handles empty replay streams."""
+    replay_orchestrator_cls = _require_symbol("ReplayOrchestrator", "ReplayOrchestrator")
+    replay_configuration_error_cls = _require_symbol("exceptions", "ReplayConfigurationError")
+
+    class _NoStoreMethod:
+        """Missing load_session dependency contract."""
+
+    class _NoShadowMethod:
+        """Missing execute_envelope dependency contract."""
+
+    missing_store_dependency = replay_orchestrator_cls(
+        store=_NoStoreMethod(),
+        shadow_core=type("_Core", (), {"execute_envelope": object()})(),
+    )
+    with pytest.raises(replay_configuration_error_cls):
+        missing_store_dependency.validate()
+
+    missing_shadow_dependency = replay_orchestrator_cls(
+        store=type("_Store", (), {"load_session": object()})(),
+        shadow_core=_NoShadowMethod(),
+    )
+    with pytest.raises(replay_configuration_error_cls):
+        missing_shadow_dependency.validate()
+
+    class _Store:
+        """Return an empty session stream."""
+
+        async def load_session(self, _session_id: str) -> list[Any]:
+            """Return no envelopes for the requested session."""
+            return []
+
+    class _ShadowCore:
+        """Provide execute_envelope contract without execution usage."""
+
+        async def execute_envelope(self, _envelope: Any, *, deterministic_seed: int | None = None) -> Any:
+            """Provide contract method; should not be called for empty streams."""
+            return type("ReplayStepResult", (), {"success": True})()
+
+    summary = await replay_orchestrator_cls(store=_Store(), shadow_core=_ShadowCore()).replay_session("s-empty")
+    assert summary.total_steps == 0
+    assert summary.executed_steps == 0
+    assert summary.success is True
+
+
+@pytest.mark.asyncio
+async def test_rt_28_shadow_core_network_toggle_and_policy_rollback(monkeypatch: pytest.MonkeyPatch) -> None:
+    """RT-28: Shadow core allows network intents when configured and rolls back on policy exceptions."""
+    shadow_execution_core_cls = _require_symbol("ShadowExecutionCore", "ShadowExecutionCore")
+    shadow_policy_violation_cls = _require_symbol("exceptions", "ShadowPolicyViolation")
+
+    core_allow_network, _txs_allow_network = _make_shadow_core_and_txs()
+    core_allow_network._block_network = False
+
+    payload = _replay_envelope_payload(session_id="s-net", sequence_no=1)
+    payload["side_effect_intents"] = [{"kind": "network", "action": "send"}]
+    replay_envelope_cls = _require_symbol("ReplayEnvelope", "ReplayEnvelope")
+    envelope_network = replay_envelope_cls.from_dict(payload)
+    result = await core_allow_network.execute_envelope(envelope_network)
+    assert result.success is True
+
+    core_rollback, txs_rollback = _make_shadow_core_and_txs()
+    envelope = _build_envelope(sequence_no=1, session_id="s-policy-rollback")
+
+    async def _policy_error(_envelope: Any) -> dict[str, Any]:
+        """Raise policy violation in execution path to trigger rollback branch."""
+        raise shadow_policy_violation_cls("blocked")
+
+    monkeypatch.setattr(core_rollback, "_execute_tool_intent", _policy_error)
+    with pytest.raises(shadow_policy_violation_cls):
+        await core_rollback.execute_envelope(envelope)
+
+    assert all(tx.rolled_back for tx in txs_rollback)
+
+    invalid_core = shadow_execution_core_cls(
+        memory_tx_factory=123,
+        storage_tx_factory=lambda: object(),
+        process_tx_factory=lambda: object(),
+        context_tx_factory=lambda: object(),
+    )
+    replay_configuration_error_cls = _require_symbol("exceptions", "ReplayConfigurationError")
+    with pytest.raises(replay_configuration_error_cls):
+        invalid_core.validate()
+
+
+@pytest.mark.asyncio
+async def test_rt_29_shadow_core_rollback_ignores_transactions_without_rollback() -> None:
+    """RT-29: Shadow rollback helper skips transactions that do not expose rollback()."""
+    core, _txs = _make_shadow_core_and_txs()
+
+    class _NoRollback:
+        """Transaction-like object without rollback support."""
+
+    await core._rollback_all([_NoRollback()])
