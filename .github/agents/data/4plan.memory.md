@@ -166,6 +166,36 @@ Ready for @9git handoff.
 
 ---
 
+## prj0000086 — universal-agent-shell
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000086-universal-agent-shell |
+| **owner_agent** | @4plan |
+| **source** | @3design |
+| **created_at** | 2026-03-27 |
+| **updated_at** | 2026-03-27 |
+| **status** | DONE |
+| **handoff_target** | @5test |
+| **artifact_paths** | docs/project/prj0000086-universal-agent-shell/universal-agent-shell.plan.md |
+| **branch** | prj0000086-universal-agent-shell (validated ✅) |
+
+### Chunk 001 Summary
+
+| Item | Value |
+|---|---|
+| Code files planned | 5 |
+| Test files planned | 3 |
+| Tests mapped | 18 |
+| AC count | 10 |
+
+### Notes
+- Canonical plan updated to `_Status: DONE_` with deterministic TDD implementation order.
+- AC matrix completed and mapped to `TEST-01` through `TEST-18`.
+- Validation command set includes targeted `pytest`, `mypy`, and `ruff` checks for universal facade scope.
+
+---
+
 ## prj0000076 — future-ideas-kanban
 
 | Field | Value |
