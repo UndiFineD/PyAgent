@@ -22,6 +22,7 @@ and pull request coordination notes.
 - 2026-03-20 — User requested blanket `add -A, commit, push, PR, pull` while working tree had 6,932 changes (120 outside `src-old/`) and missing `prj037` plan artifact; workflow was halted and handed back for scope/plan correction.
 - 2026-03-26 — prj0000076: `run-precommit-checks` hook uses `pass_filenames: false`, making it a repo-wide Python check that always runs regardless of `--files` filter. This hook was already failing on the branch before @9git changes (confirmed by stash test). ruff+mypy both returned Skipped for JSON/MD tracking files. Pre-existing failure should be tracked as a separate remediation project assigned to @0master.
 - 2026-03-27 — prj0000085: branch push succeeded and compare URL was produced, but `gh pr create` failed with HTTP 401 (bad credentials), and scoped git artifact commit was blocked because repo-wide pre-commit checks failed on existing test violations unrelated to the staged file.
+- 2026-03-27 — prj0000087: branch/scope validation passed and scoped staging excluded unrelated untracked CodeQL files, but both `pre-commit run` and `pre-commit run --files` failed on existing repo-wide `ruff check src tests` violations. Git workflow stopped before commit/push/PR per gate policy and handed back to `@0master`.
 
 ## Auto-handoff
 
