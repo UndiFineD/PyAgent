@@ -24,6 +24,8 @@ import asyncio
 from typing import Any, Awaitable, Callable
 
 import pytest
+
+import src.core.resilience as resilience_pkg
 from src.core.resilience import (  # type: ignore[import]
     AllCircuitsOpenError,
     CircuitBreakerConfig,
@@ -34,6 +36,12 @@ from src.core.resilience import (  # type: ignore[import]
     CircuitOpenError,
     CircuitState,
 )
+from src.core.resilience.CircuitBreakerConfig import validate as validate_config
+from src.core.resilience.CircuitBreakerCore import validate as validate_core
+from src.core.resilience.CircuitBreakerMixin import validate as validate_mixin
+from src.core.resilience.CircuitBreakerRegistry import validate as validate_registry
+from src.core.resilience.CircuitBreakerState import validate as validate_state
+from src.core.resilience.exceptions import validate as validate_exceptions
 
 
 class _Agent(CircuitBreakerMixin):
@@ -177,6 +185,31 @@ def test_core_record_success_increments_counters() -> None:
     assert state.state == CircuitState.CLOSED
 
 
+def test_core_should_allow_denies_open_before_recovery(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Verify OPEN state denies calls until recovery timeout has elapsed."""
+    core = CircuitBreakerCore()
+    config = CircuitBreakerConfig(provider_key="p", recovery_timeout=30.0)
+    state = CircuitBreakerState(provider_key="p", state=CircuitState.OPEN, last_failure_time=10.0)
+
+    monkeypatch.setattr("src.core.resilience.CircuitBreakerCore.time.monotonic", lambda: 20.0)
+
+    allowed = core.should_allow(state, config)
+
+    assert allowed is False
+    assert state.state == CircuitState.OPEN
+
+
+def test_core_check_state_returns_existing_non_open_state() -> None:
+    """Verify check_state keeps CLOSED state unchanged when not OPEN."""
+    core = CircuitBreakerCore()
+    config = CircuitBreakerConfig(provider_key="p")
+    state = CircuitBreakerState(provider_key="p", state=CircuitState.CLOSED)
+
+    current = core.check_state(state, config)
+
+    assert current == CircuitState.CLOSED
+
+
 # ===========================================================================
 # Unit tests — CircuitBreakerRegistry (R1-R4)
 # ===========================================================================
@@ -241,6 +274,30 @@ async def test_registry_record_and_allow_delegate_to_core() -> None:
     allowed = await registry.should_allow("p", config)
 
     assert allowed is False
+
+
+@pytest.mark.asyncio
+async def test_registry_state_creation_and_config_resolution_paths() -> None:
+    """Verify registry methods create missing states and resolve default and cached configs."""
+    registry = CircuitBreakerRegistry()
+
+    await registry.record_success("s")
+    await registry.record_failure("f")
+    await registry.reset("r")
+
+    assert "s" in registry._states
+    assert "f" in registry._states
+    assert "r" in registry._states
+
+    primary_cfg = CircuitBreakerConfig(provider_key="primary", fallback_providers=["missing-fb"])
+    chosen = await registry.get_fallback("primary", primary_cfg)
+    assert chosen == "missing-fb"
+    assert "missing-fb" in registry._states
+
+    seeded_cfg = CircuitBreakerConfig(provider_key="seeded", failure_threshold=2)
+    await registry.get_or_create("seeded", seeded_cfg)
+    await registry.should_allow("seeded")
+    assert registry._configs["seeded"].failure_threshold == 2
 
 
 # ===========================================================================
@@ -405,3 +462,18 @@ async def test_integration_concurrent_half_open_only_one_probe_passes() -> None:
 
     assert sum(1 for value in results if value) == 1
     assert sum(1 for value in results if not value) == 9
+
+
+def test_module_validate_helpers_and_exception_attributes() -> None:
+    """Verify package helper validation hooks and exception payload attributes."""
+    assert resilience_pkg.validate() is True
+    assert validate_config() is True
+    assert validate_core() is True
+    assert validate_mixin() is True
+    assert validate_registry() is True
+    assert validate_state() is True
+    assert validate_exceptions() is True
+
+    err = CircuitOpenError("provider-a", CircuitState.OPEN)
+    assert err.provider_key == "provider-a"
+    assert err.state == CircuitState.OPEN

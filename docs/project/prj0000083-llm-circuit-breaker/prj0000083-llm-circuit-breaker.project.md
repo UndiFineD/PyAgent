@@ -14,7 +14,7 @@ _Owner: @1project | Updated: 2026-03-26_
 ## Summary
 
 Per-provider LLM request circuit breaker with configurable failure thresholds,
-exponential backoff, and fallback model routing. The circuit breaker wraps every
+fallback model routing, and lightweight stdlib counters. The circuit breaker wraps every
 outbound LLM call and tracks success / failure rates per provider (e.g. OpenAI,
 Anthropic, local vLLM). When a provider exceeds its failure threshold the circuit
 opens, redirecting subsequent requests to a configured fallback provider until the
@@ -26,17 +26,18 @@ provider recovers (half-open probe, then close if successful).
 - `CircuitBreakerState` enum (CLOSED, OPEN, HALF_OPEN)
 - `ProviderCircuitBreaker` — per-provider state machine with configurable thresholds
 - `CircuitBreakerRegistry` — manages one breaker instance per provider key
-- Exponential backoff with jitter for retry scheduling
 - Fallback model routing (ordered list of alternatives)
 - Integration hook into the existing `BaseAgent` / `LLMClient` call path
-- Prometheus counter/gauge metrics for circuit state transitions
+- Stdlib counters on state objects: `total_calls`, `total_failures`, `total_successes`
 - Unit tests for all state transitions and fallback routing
 
 **Out of scope:**
-- UI / dashboard for circuit state (observability via Prometheus only)
+- UI / dashboard for circuit state
 - Persistent circuit state across process restarts (in-memory only for now)
 - Rate-limiting (separate concern, existing `RateLimiter` handles it)
 - Changes to `backend/` WebSocket layer
+- Exponential backoff / retry-delay scheduling
+- Prometheus metrics export
 
 ## Acceptance Criteria
 
@@ -47,8 +48,8 @@ provider recovers (half-open probe, then close if successful).
 | AC3 | After `recovery_timeout` seconds (default 30) the circuit transitions to HALF_OPEN and allows exactly one probe request. |
 | AC4 | A successful probe closes the circuit; a failed probe resets the OPEN timer and remains OPEN. |
 | AC5 | Fallback routing: when the primary provider's circuit is OPEN, `CircuitBreakerRegistry.route_call()` transparently retries with the next fallback provider whose circuit is CLOSED. |
-| AC6 | Exponential backoff with jitter is applied to retries before reaching the fallback provider, with configurable `base_delay`, `max_delay`, and `jitter_factor`. |
-| AC7 | Prometheus metrics exported: `llm_circuit_state` (gauge per provider), `llm_circuit_transitions_total` (counter), `llm_requests_routed_total` (counter with `provider` and `outcome` labels). |
+| AC6 | If the primary provider and all configured fallbacks are unavailable, `AllCircuitsOpenError` is raised with ordered `tried_keys` including primary and each fallback key. |
+| AC7 | In-memory stdlib counters are maintained per provider state: `total_calls`, `total_failures`, and `total_successes`; no external metrics dependency is required. |
 | AC8 | `pytest tests/structure -q` passes (no structural regressions). |
 | AC9 | `pytest tests/ -q` passes with ≥ 90 % coverage on the new module. |
 
@@ -95,7 +96,6 @@ or ambiguous, return the task to `@0master` before downstream handoff.
 | `src/core/base/base_agent.py` | Integration point — LLM call path to be wrapped |
 | `src/core/base/mixins/` | May add a `CircuitBreakerMixin` here |
 | `backend/logging_config.py` | Structured logging for state transitions |
-| `src/` (Prometheus client) | `prometheus_client` already in `requirements.txt` |
 | `tests/conftest.py` | Shared fixtures |
 
 ## Risk Notes
@@ -106,8 +106,8 @@ or ambiguous, return the task to `@0master` before downstream handoff.
   avoid wall-clock drift bugs.
 - **Existing call path coupling:** Wrapping `BaseAgent` without breaking existing tests
   requires careful injection rather than monkey-patching.
-- **Metric cardinality:** Provider keys used as label values must be bounded to avoid
-  Prometheus cardinality explosion — validate against an allowlist.
+- **Counter interpretation:** In-memory counters are process-local and reset on restart,
+  so they are intended for local resilience decisions and testability, not fleet telemetry.
 
 ## Status
 _Last updated: 2026-03-26_
