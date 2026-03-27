@@ -1,5 +1,18 @@
 [
   {
+    "id": "prj0000089",
+    "name": "agent-learning-loop",
+    "lane": "Discovery",
+    "summary": "Implement agent-improvement recommendations across .github/agents/*.agent.md and supporting project docs to reduce recurring mistakes",
+    "branch": "prj0000089-agent-learning-loop",
+    "pr": null,
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": ["agents", "quality", "process"],
+    "created": "2026-03-27",
+    "updated": "2026-03-27"
+  },
+  {
     "id": "prj0000088",
     "name": "ai-fuzzing-security",
     "lane": "Released",

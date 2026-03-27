@@ -107,6 +107,18 @@ These are the primary memory artifacts the master agent reads/updates:
 - The master agent focuses on **planning, coordination, and documentation**.
 - The master agent must not authorize blanket staging, direct push, or PR work for a `prjNNNNNNN` task until the project-specific branch has been assigned or validated.
 
+## Learning loop rules
+
+- Standard lesson schema (required in memory entries): Pattern, Root cause, Prevention, First seen, Seen in, Recurrence count, Promotion status.
+- Recurrence threshold policy: promote a lesson to a hard rule when Recurrence count >= 2.
+- Review cadence: every 5 completed projects, review top recurring blockers and update rules/memory.
+- Hard rule: run a pre-delegation scorecard before any downstream handoff.
+  - Branch correctness: 0-3
+  - Scope boundary clarity: 0-3
+  - Artifact completeness: 0-3
+  - Acceptance-criteria readiness: 0-3
+  - Pass threshold: total >= 10 and no category < 2. If the threshold fails, delegation is blocked.
+
 ## Useful repo quick references (for planning)
 - **Code**: we prefer to use rust, then python, then javascript
 - **CI health**: `.github/workflows/` + `tests/ci/` ensure CI workflows are correct.

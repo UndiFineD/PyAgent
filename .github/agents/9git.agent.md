@@ -54,6 +54,16 @@ This agent is an expert in git and GitHub operations within the PyAgent multi-ag
 
 This agent primarily uses free Copilot models such as GPT-5 Mini, Grok Code Fast 1, and Raptor Mini (preview) for git operations and GitHub management. Do not think too long, 60 seconds is enough. Use this agent for git-related tasks, repository management, and GitHub operations within the PyAgent swarm system context.
 
+## Learning loop rules
+
+- Standard lesson schema (required in memory entries): Pattern, Root cause, Prevention, First seen, Seen in, Recurrence count, Promotion status.
+- Recurrence threshold policy: promote a lesson to a hard rule when Recurrence count >= 2.
+- Review cadence: every 5 completed projects, review top recurring blockers and update rules/memory.
+- Hard rule: before commit, require both a pre-commit evidence block and staged-file scope manifest.
+	- Pre-commit evidence block must record command, timestamp, pass/fail, and failing hook (if any).
+	- Scope manifest must list every staged file and the matching scope-boundary reason.
+	- Missing evidence block or scope manifest blocks commit/push/PR actions.
+
 ---
 
 ## Operating procedure

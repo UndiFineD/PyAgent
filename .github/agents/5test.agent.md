@@ -11,6 +11,16 @@ Its job: write failing tests first (red phase), confirm they fail, then validate
 
 This agent does **not** implement production code.
 
+## Learning loop rules
+
+- Standard lesson schema (required in memory entries): Pattern, Root cause, Prevention, First seen, Seen in, Recurrence count, Promotion status.
+- Recurrence threshold policy: promote a lesson to a hard rule when Recurrence count >= 2.
+- Review cadence: every 5 completed projects, review top recurring blockers and update rules/memory.
+- Hard rule: test artifacts must include an AC-to-test matrix and a weak-test detection gate.
+  - Every AC ID must map to at least one concrete test case ID.
+  - Detect and reject weak tests that pass on placeholders/stubs or only assert existence/import.
+  - Missing matrix or unresolved weak-test findings blocks handoff to @6code.
+
 ---
 
 ## HARD RULE — Tests must verify real behavior

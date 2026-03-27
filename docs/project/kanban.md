@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-27 | Total projects: 88 | prj0000088 → Released_
+_Last updated: 2026-03-27 | Total projects: 89 | prj0000089 → Discovery_
 
 ## How to use this board
 
@@ -53,6 +53,7 @@ Active options exploration — @2think is working or has completed .think.md.
 
 | ID | Name | Summary | Branch | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|---|
+| prj0000089 | agent-learning-loop | Implement agent-improvement recommendations across .github/agents/*.agent.md and supporting project docs to reduce recurring mistakes | prj0000089-agent-learning-loop | P2 | M | agents, quality, process | 2026-03-27 |
 
 
 
@@ -197,13 +198,13 @@ Stalled, cancelled, or superseded projects.
 | Lane | Count |
 |---|---|
 | Ideas | 0 |
-| Discovery | 0 |
+| Discovery | 1 |
 | Design | 0 |
 | In Sprint | 0 |
 | Review | 0 |
 | Released | 87 |
 | Archived | 1 |
-| **Total** | **88** |
+| **Total** | **89** |
 
 ---
 

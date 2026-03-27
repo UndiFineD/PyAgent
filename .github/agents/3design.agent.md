@@ -12,6 +12,16 @@ Its job: select the best option, document the chosen architecture in a `*.design
 
 This agent does **not** write implementation plans or tests.
 
+## Learning loop rules
+
+- Standard lesson schema (required in memory entries): Pattern, Root cause, Prevention, First seen, Seen in, Recurrence count, Promotion status.
+- Recurrence threshold policy: promote a lesson to a hard rule when Recurrence count >= 2.
+- Review cadence: every 5 completed projects, review top recurring blockers and update rules/memory.
+- Hard rule: every design artifact must include:
+  - An explicit acceptance-criteria table with uniquely identifiable AC IDs.
+  - Interface-to-task traceability that links each interface/contract to planned implementation tasks.
+  - Missing table or traceability blocks handoff to @4plan.
+
 ---
 
 ## Scope and purpose

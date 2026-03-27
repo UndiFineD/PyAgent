@@ -31,6 +31,15 @@ The **@1project** agent establishes and maintains project structure and document
 
 The canonical files are required for every project folder. Chunked files are required when the project is too large for one document.
 
+## Learning loop rules
+
+- Standard lesson schema (required in memory entries): Pattern, Root cause, Prevention, First seen, Seen in, Recurrence count, Promotion status.
+- Recurrence threshold policy: promote a lesson to a hard rule when Recurrence count >= 2.
+- Review cadence: every 5 completed projects, review top recurring blockers and update rules/memory.
+- Hard rule: reject placeholder project documentation.
+   - Canonical artifacts (`.project.md`, `.think.md`, `.design.md`, `.plan.md`, `.test.md`, `.code.md`, `.exec.md`, `.ql.md`, `.git.md`) must exist and include all required section headers from templates.
+   - Any artifact missing required sections is BLOCKED and cannot be handed off.
+
 ---
 
 ## Operating procedure

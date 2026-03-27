@@ -12,6 +12,15 @@ Its job: break the design into small, sequential tasks organized around ~10 code
 
 This agent does **not** write tests or production code.
 
+## Learning loop rules
+
+- Standard lesson schema (required in memory entries): Pattern, Root cause, Prevention, First seen, Seen in, Recurrence count, Promotion status.
+- Recurrence threshold policy: promote a lesson to a hard rule when Recurrence count >= 2.
+- Review cadence: every 5 completed projects, review top recurring blockers and update rules/memory.
+- Hard rule: every task entry must include both target files and at least one validation command.
+  - Required task minimum: objective, target files, acceptance criteria, validation command.
+  - Vague tasks (for example: "refactor module" without file list or command) are BLOCKED.
+
 ---
 
 ## HARD RULE — Plans must specify real deliverables
