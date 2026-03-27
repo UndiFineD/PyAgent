@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-27 | Total projects: 88 | prj0000088 → Review (auth-blocked)_
+_Last updated: 2026-03-27 | Total projects: 88 | prj0000088 → Released_
 
 ## How to use this board
 
@@ -44,8 +44,6 @@ Projects proposed but not yet formally scoped.
 | ID | Name | Summary | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|
 
-| prj0000085 | shadow-mode-replay | Shadow execution mode (side-effect-free parallel agent runs) + deterministic session replay from structured logs for debug | P3 | M | testing, debug, observability | 2026-03-26 |
-| prj0000087 | n8n-workflow-bridge | Bi-directional n8n integration: agents trigger automation chains via n8n API and act as intelligent decision nodes in workflows | P3 | M | automation, integration, n8n | 2026-03-26 |
 
 ---
 
@@ -55,7 +53,6 @@ Active options exploration — @2think is working or has completed .think.md.
 
 | ID | Name | Summary | Branch | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|---|
-| prj0000084 | immutable-audit-trail | Append-only hashchain audit log for all BFT-approved and security-critical operations; tamper-evident with cryptographic chaining | prj0000084-immutable-audit-trail | P2 | M | security, audit, compliance | 2026-03-27 |
 
 
 
@@ -85,9 +82,6 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
-| prj0000083 | llm-circuit-breaker | prj0000083-llm-circuit-breaker | [#225](https://github.com/UndiFineD/PyAgent/pull/225) | P3 | S | 2026-03-27 |
-| prj0000086 | universal-agent-shell | prj0000086-universal-agent-shell | auth blocked (use compare URL) | P2 | XL | 2026-03-27 |
-| prj0000088 | ai-fuzzing-security | prj0000088-ai-fuzzing-security | auth blocked (use compare URL) | P3 | M | 2026-03-27 |
 
 
 ---
@@ -98,6 +92,12 @@ All projects merged to main branch.
 
 | ID | Name | Summary | Branch | PR | Priority | Budget | Released |
 |---|---|---|---|---|---|---|---|
+| prj0000088 | ai-fuzzing-security | Deterministic local fuzzing core with guarded mutation strategies, corpus scheduling, and safety policy; 99.06% cov | merged | [#230](https://github.com/UndiFineD/PyAgent/pull/230) | P3 | M | 2026-03-27 |
+| prj0000087 | n8n-workflow-bridge | Bi-directional n8n bridge core with config, event adaptation, HTTP client, and mixin orchestration; 99.11% cov | merged | [#229](https://github.com/UndiFineD/PyAgent/pull/229) | P3 | M | 2026-03-27 |
+| prj0000086 | universal-agent-shell | Universal shell facade v1 for intent routing, core registry, and shell orchestration; 96.26% cov | merged | [#228](https://github.com/UndiFineD/PyAgent/pull/228) | P2 | XL | 2026-03-27 |
+| prj0000085 | shadow-mode-replay | Shadow execution + deterministic replay core with envelope/store/orchestrator and mixin integration; 98.34% cov | merged | [#227](https://github.com/UndiFineD/PyAgent/pull/227) | P3 | M | 2026-03-27 |
+| prj0000084 | immutable-audit-trail | Append-only hashchain audit core with deterministic hashing, verification, and mixin integration; 99.36% cov | merged | [#226](https://github.com/UndiFineD/PyAgent/pull/226) | P2 | M | 2026-03-27 |
+| prj0000083 | llm-circuit-breaker | Per-provider circuit breaker core with fallback routing and resilient call guardrails; 96.35% cov | merged | [#225](https://github.com/UndiFineD/PyAgent/pull/225) | P3 | S | 2026-03-27 |
 | prj0000082 | agent-execution-sandbox | SandboxMixin + SandboxedStorageTransaction: path/network allowlist enforcement for agents; 32 tests 100% cov | merged | [#224](https://github.com/UndiFineD/PyAgent/pull/224) | P2 | S | 2026-03-26 |
 | prj0000081 | mcp-server-ecosystem | MCP server hot-load registry with security sandboxing; McpClient JSON-RPC stdio, McpRegistry lifecycle, McpSandbox hardened spawn, McpToolAdapter; 33/33 tests 89.4% cov | merged | [#223](https://github.com/UndiFineD/PyAgent/pull/223) | P3 | L | 2026-03-26 |
 | prj0000080 | cort-reasoning-pipeline | Chain-of-Recursive-Thoughts: N-round recursive self-critique with M temperature-variant alternatives; pure-heuristic EvaluationEngine; 33/33 tests 97.4% cov | merged | [#221](https://github.com/UndiFineD/PyAgent/pull/221) | P2 | M | 2026-03-26 |
@@ -196,12 +196,12 @@ Stalled, cancelled, or superseded projects.
 
 | Lane | Count |
 |---|---|
-| Ideas | 2 |
-| Discovery | 1 |
+| Ideas | 0 |
+| Discovery | 0 |
 | Design | 0 |
 | In Sprint | 0 |
-| Review | 3 |
-| Released | 81 |
+| Review | 0 |
+| Released | 87 |
 | Archived | 1 |
 | **Total** | **88** |
 
