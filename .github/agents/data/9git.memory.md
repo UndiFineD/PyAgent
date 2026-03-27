@@ -22,6 +22,7 @@ and pull request coordination notes.
 - 2026-03-20 — User requested blanket `add -A, commit, push, PR, pull` while working tree had 6,932 changes (120 outside `src-old/`) and missing `prj037` plan artifact; workflow was halted and handed back for scope/plan correction.
 - 2026-03-26 — prj0000076: `run-precommit-checks` hook uses `pass_filenames: false`, making it a repo-wide Python check that always runs regardless of `--files` filter. This hook was already failing on the branch before @9git changes (confirmed by stash test). ruff+mypy both returned Skipped for JSON/MD tracking files. Pre-existing failure should be tracked as a separate remediation project assigned to @0master.
 - 2026-03-27 — prj0000086: handoff staging scope was valid (`docs/project/prj0000086-universal-agent-shell/universal-agent-shell.git.md` only), but mandatory post-staging `pre-commit` failed on unrelated repository-wide violations, so commit/push/PR actions were blocked and returned to @0master.
+- 2026-03-27 — prj0000088: scope validation passed (`docs/project/kanban.md` + `docs/project/prj0000088-ai-fuzzing-security/prj0000088-ai-fuzzing-security.git.md`) and unrelated untracked CodeQL examples were excluded; handoff still blocked because `run-precommit-checks` failed on existing repo-wide Ruff docstring issues in `src/core/memory/AutoMemCore.py`, so no commit/push/PR was performed and task was returned to @0master.
 
 ## Auto-handoff
 
