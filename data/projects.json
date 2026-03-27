@@ -67,15 +67,15 @@
   {
     "id": "prj0000083",
     "name": "llm-circuit-breaker",
-    "lane": "Discovery",
+    "lane": "Review",
     "summary": "Per-provider LLM request circuit breaker with configurable failure thresholds, exponential backoff, and fallback model routing",
     "branch": "prj0000083-llm-circuit-breaker",
-    "pr": null,
+    "pr": "#225",
     "priority": "P3",
     "budget_tier": "S",
     "tags": ["resilience", "llm", "infrastructure"],
     "created": "2026-03-26",
-    "updated": "2026-03-26"
+    "updated": "2026-03-27"
   },
   {
     "id": "prj0000082",
