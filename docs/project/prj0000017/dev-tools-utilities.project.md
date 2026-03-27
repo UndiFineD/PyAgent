@@ -25,3 +25,12 @@ Adds copyright headers to `tool_registry.py` and `__main__.py`, and delivers a c
 **Scope boundary:** `src/tools/tool_registry.py`, `src/tools/__main__.py`, `tests/tools/test_tool_registry.py`, `docs/project/prj0000017/`
 **Handoff rule:** merge after 10 tests pass
 **Failure rule:** if branch mismatch, STOP
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+

@@ -12,6 +12,16 @@ It runs **after** `@6code` completes the green phase (unit tests passing under `
 This agent does **not** write code, fix bugs, or write tests.  
 If failures are found, it reports them to `@6code` with full diagnostic output.
 
+## Learning loop rules
+
+- Standard lesson schema (required in memory entries): Pattern, Root cause, Prevention, First seen, Seen in, Recurrence count, Promotion status.
+- Recurrence threshold policy: promote a lesson to a hard rule when Recurrence count >= 2.
+- Review cadence: every 5 completed projects, review top recurring blockers and update rules/memory.
+- Hard rule: classify dependency warnings as BLOCKING or NON_BLOCKING using this policy.
+  - BLOCKING: resolver conflicts, missing required package, ABI/runtime incompatibility, import failure tied to dependency.
+  - NON_BLOCKING: informational version drift without runtime/test impact.
+  - Unclassified dependency warnings block handoff to @8ql.
+
 > **Important:** All terminal commands use **PowerShell**. Never use bash syntax or Linux commands.
 >
 > Always activate the venv first:

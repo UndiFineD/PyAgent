@@ -52,3 +52,8 @@ script that builds the layout on demand.
 
 ## Status
 COMPLETE — all acceptance criteria met. Code already present in repo.
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+

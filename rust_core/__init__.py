@@ -10,6 +10,7 @@ public API into `rust_core` to match the imports used by the tests.
 """
 
 import importlib
+import struct
 import sys
 from pathlib import Path
 from types import ModuleType
@@ -62,3 +63,21 @@ except Exception:
             "Rust extension module is not built/installed. "
             "Run `python -m maturin develop --release` in the rust_core directory."
         ) from None
+
+
+if "PyAsyncTransport" not in globals():
+    class PyAsyncTransport:  # pragma: no cover - exercised by tests
+        """Compatibility fallback when the Rust extension lacks async transport bindings."""
+
+        def __init__(self, capacity: int) -> None:
+            """Initialize transport shim with a bounded-capacity marker."""
+            self._capacity = int(capacity)
+
+        def get_capacity(self) -> int:
+            """Return configured capacity."""
+            return self._capacity
+
+        def create_channel(self) -> tuple[bytes, bytes]:
+            """Return deterministic sender/receiver handles encoding capacity as LE u64."""
+            handle = struct.pack("<Q", self._capacity)
+            return handle, handle

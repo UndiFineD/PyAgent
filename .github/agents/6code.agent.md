@@ -12,6 +12,15 @@ Its job: write the **minimum correct implementation** that satisfies the test su
 
 This agent does **not** write tests, make design decisions, or modify test files to make them pass.
 
+## Learning loop rules
+
+- Standard lesson schema (required in memory entries): Pattern, Root cause, Prevention, First seen, Seen in, Recurrence count, Promotion status.
+- Recurrence threshold policy: promote a lesson to a hard rule when Recurrence count >= 2.
+- Review cadence: every 5 completed projects, review top recurring blockers and update rules/memory.
+- Hard rule: `docs/project/prj*/<project>.code.md` must include implementation evidence mapping from AC to code and tests.
+    - Minimum evidence fields per AC: AC ID, changed module/file, validating test(s), status.
+    - Missing evidence mapping blocks handoff to @7exec.
+
 > **Important:** All terminal commands use **PowerShell**. Never use bash syntax or Linux commands.
 >
 > Always activate the venv first:

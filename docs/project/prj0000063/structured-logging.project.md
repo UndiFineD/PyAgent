@@ -50,3 +50,12 @@ rotation, OpenTelemetry integration (see prj0000070)
 
 **Handoff rule:** All 5 tests pass, PR open on GitHub
 **Failure rule:** Do not push if tests fail
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+

@@ -45,3 +45,9 @@ accelerators, not scored; they allow routing and pruning before scoring runs.
 - [ ] `AutoMemCore.hybrid_search()` returns scored results within 50 ms on 100k rows
 - [ ] Benchmark component renders live charts for: read, write, sort, search, each by ≥3 methods
 - [ ] CI passes (no import errors, no type errors blocking mypy partial check)
+
+## Legacy Project Overview Exception
+
+This project overview is a legacy format retained for historical continuity with
+earlier planning artifacts; the deviation is historical and does not set a precedent
+for new project documentation.

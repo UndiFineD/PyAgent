@@ -26,3 +26,12 @@ Enhances the `src/roadmap/` package with a real argparse CLI (`main(argv)`), an 
 **Scope boundary:** `src/roadmap/cli.py`, `src/roadmap/vision.py`, `tests/test_roadmap_cli.py`, `docs/project/prj0000019/`
 **Handoff rule:** merge after 5 roadmap tests pass
 **Failure rule:** if branch mismatch, STOP
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+

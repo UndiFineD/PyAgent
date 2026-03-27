@@ -72,3 +72,12 @@ real-time per-agent progress polling.
 **Scope boundary:** `docs/project/prj0000062/`, `backend/app.py`, `web/apps/CodeBuilder.tsx`, `tests/test_pipeline_execution.py`
 **Handoff rule:** All 5 tests pass; merge after PR review.
 **Failure rule:** Return to @6code if tests fail.
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+

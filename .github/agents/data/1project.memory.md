@@ -130,3 +130,19 @@ prj0000075 ci-simplification branch prj0000075-ci-simplification — project set
 | **handoff_target** | @2think |
 | **artifact_paths** | docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.project.md, docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.think.md, docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.design.md, docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.plan.md, docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.test.md, docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.code.md, docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.exec.md, docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.ql.md, docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.git.md |
 
+---
+
+## prj0000089 - agent-learning-loop
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000089-agent-learning-loop |
+| **owner_agent** | @1project |
+| **source** | @0master |
+| **created_at** | 2026-03-27 |
+| **updated_at** | 2026-03-27 |
+| **status** | HANDED_OFF |
+| **summary** | Project boundary initialized on branch prj0000089-agent-learning-loop. Created canonical project overview plus think/design/plan and downstream lifecycle stubs. Registered project in Discovery lane and project registry; advanced nextproject to prj0000090. Ready for @2think options exploration focused on reducing recurring agent mistakes via .github/agents guidance and process docs. |
+| **handoff_target** | @2think |
+| **artifact_paths** | docs/project/prj0000089-agent-learning-loop/agent-learning-loop.project.md, docs/project/prj0000089-agent-learning-loop/agent-learning-loop.think.md, docs/project/prj0000089-agent-learning-loop/agent-learning-loop.design.md, docs/project/prj0000089-agent-learning-loop/agent-learning-loop.plan.md, docs/project/prj0000089-agent-learning-loop/agent-learning-loop.test.md, docs/project/prj0000089-agent-learning-loop/agent-learning-loop.code.md, docs/project/prj0000089-agent-learning-loop/agent-learning-loop.exec.md, docs/project/prj0000089-agent-learning-loop/agent-learning-loop.ql.md, docs/project/prj0000089-agent-learning-loop/agent-learning-loop.git.md, docs/project/kanban.md, data/projects.json, data/nextproject.md |
+

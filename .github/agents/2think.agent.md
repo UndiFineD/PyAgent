@@ -67,6 +67,16 @@ below. Each option in the think artifact must cite evidence gathered from at lea
 
 If these criteria are not met, @2think must continue research rather than handing off.
 
+## Learning loop rules
+
+- Standard lesson schema (required in memory entries): Pattern, Root cause, Prevention, First seen, Seen in, Recurrence count, Promotion status.
+- Recurrence threshold policy: promote a lesson to a hard rule when Recurrence count >= 2.
+- Review cadence: every 5 completed projects, review top recurring blockers and update rules/memory.
+- Hard rule: each recommendation must cite historical prior art and include risk-to-testability mapping.
+   - Prior-art references must include at least 2 concrete repository paths.
+   - Each listed risk must map to a proposed testability strategy (test type or validation signal).
+   - Missing references or mappings blocks handoff to @3design.
+
 ---
 
 **Checkpoint rule (MANDATORY — applies to all project work):**

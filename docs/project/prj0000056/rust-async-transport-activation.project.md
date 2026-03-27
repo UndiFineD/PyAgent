@@ -61,3 +61,12 @@ enabling async inter-agent message passing with backpressure support.
 `Cargo.toml` and `async_transport.rs` uses `#[cfg(feature = "async-transport")]`.
 Do not push broken code.
 
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+

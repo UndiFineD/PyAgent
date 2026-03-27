@@ -35,3 +35,12 @@ production telemetry pipelines.
 `src/tools/` and `tests/tools/` on `main`.
 **Handoff rule:** `@9git` stages `docs/project/prj0000013/` only.
 **Failure rule:** If CI fails, fix before merging; do not skip tests.
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+

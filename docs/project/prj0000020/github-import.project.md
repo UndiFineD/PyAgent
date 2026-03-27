@@ -45,3 +45,7 @@ _No checkbox tasks found in the plan file._
   - `tests\test_import_config.py`
   - `tests\test_importer_config.py`
   - `tests\test_importer_flow.py`
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+

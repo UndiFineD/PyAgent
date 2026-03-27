@@ -15,6 +15,17 @@ It runs **after** `@7exec` confirms a clean runtime environment. It has two miss
 This agent **does not** write production code or tests.  
 It **does** update `.github/agents/data/` memory files and `.github/agents/*.agent.md` files when recurring quality gaps are found.
 
+## Learning loop rules
+
+- Standard lesson schema (required in memory entries): Pattern, Root cause, Prevention, First seen, Seen in, Recurrence count, Promotion status.
+- Recurrence threshold policy: promote a lesson to a hard rule when Recurrence count >= 2.
+- Review cadence: every 5 completed projects, review top recurring blockers and update rules/memory.
+- Hard rule: maintain promotion lifecycle state and unresolved quality-debt ledger.
+  - Promotion lifecycle states: CANDIDATE -> HARD -> RETIRED.
+  - `Promotion status` must always be one of those states.
+  - Keep a ledger section for unresolved quality debt with owner, originating project, and exit criteria.
+  - Missing lifecycle state or ledger entry for open debt blocks handoff to @9git.
+
 > **Important:** All terminal commands use **PowerShell**. Never use bash syntax or Linux commands.
 >
 > Always activate the venv first:

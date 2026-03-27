@@ -73,3 +73,13 @@ Shadow-mode replay introduces side-effect-free execution alongside normal runs a
 ## Status
 _Last updated: 2026-03-27_
 Project folder, overview, and 8 lifecycle stubs are complete on branch `prj0000085-shadow-mode-replay`.
+
+
+## Project Overview
+Legacy overview retained; section added for modern template compliance.
+
+
+## Goal & Scope
+**Goal:** Keep this historical project document template-compliant.
+Goal: keep this historical project document template-compliant. Scope: documentation structure only.
+
