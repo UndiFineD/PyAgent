@@ -11,6 +11,46 @@ This should be done via `agent/runSubagent`.
 
 ---
 
+## prj0000084 - immutable-audit-trail
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000084-immutable-audit-trail |
+| **owner_agent** | @6code |
+| **source** | @5test |
+| **created_at** | 2026-03-27 |
+| **updated_at** | 2026-03-27 |
+| **status** | DONE |
+| **summary** | Resolved @8ql blocker set: increased `src/core/audit` coverage from 82.11% to 99.36% via targeted branch tests in `tests/test_audit_trail.py`, added `tests/test_AuditExceptions.py`, and aligned `plan/test/code/exec` docs with threshold policy wording. |
+| **changed_modules** | tests/test_audit_trail.py; tests/test_AuditExceptions.py; docs/project/prj0000084-immutable-audit-trail/prj0000084-immutable-audit-trail.test.md; docs/project/prj0000084-immutable-audit-trail/prj0000084-immutable-audit-trail.exec.md; docs/project/prj0000084-immutable-audit-trail/prj0000084-immutable-audit-trail.code.md; .github/agents/data/6code.memory.md |
+| **verification_commands** | pytest tests/test_audit_trail.py -q --tb=short; pytest tests/test_AuditEvent.py tests/test_AuditHasher.py tests/test_AuditTrailCore.py tests/test_AuditTrailMixin.py tests/test_AuditVerificationResult.py tests/test_AuditExceptions.py -q --tb=short; pytest tests/test_audit_trail.py --cov=src/core/audit --cov-report=term-missing --cov-fail-under=90 -q; python -m pytest tests/structure -q --tb=short; python -m mypy src/core/audit --strict; python -m ruff check src/core/audit tests/test_audit_trail.py tests/test_AuditEvent.py tests/test_AuditHasher.py tests/test_AuditTrailCore.py tests/test_AuditTrailMixin.py tests/test_AuditVerificationResult.py tests/test_AuditExceptions.py |
+| **verification_result** | PASS — audit integration (41), module suite (12), coverage gate (99.36% >= 90%), structure (129), mypy strict, and ruff checks all green. |
+| **unresolved_risks** | None identified for the implemented module scope. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | tests/test_audit_trail.py, tests/test_AuditExceptions.py, docs/project/prj0000084-immutable-audit-trail/prj0000084-immutable-audit-trail.test.md, docs/project/prj0000084-immutable-audit-trail/prj0000084-immutable-audit-trail.exec.md, docs/project/prj0000084-immutable-audit-trail/prj0000084-immutable-audit-trail.code.md, .github/agents/data/6code.memory.md |
+
+---
+
+## prj0000083 - llm-circuit-breaker
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000083-llm-circuit-breaker |
+| **owner_agent** | @6code |
+| **source** | @5test |
+| **created_at** | 2026-03-27 |
+| **updated_at** | 2026-03-27 |
+| **status** | DONE |
+| **summary** | Implemented full `src/core/resilience` package (config/state/core/registry/mixin/exceptions + package exports) with async-safe registry locking and fallback routing behavior to satisfy red-phase contract tests. |
+| **changed_modules** | src/core/resilience/__init__.py; src/core/resilience/exceptions.py; src/core/resilience/CircuitBreakerConfig.py; src/core/resilience/CircuitBreakerState.py; src/core/resilience/CircuitBreakerCore.py; src/core/resilience/CircuitBreakerRegistry.py; src/core/resilience/CircuitBreakerMixin.py; docs/project/prj0000083-llm-circuit-breaker/prj0000083-llm-circuit-breaker.code.md |
+| **verification_commands** | pytest tests/test_circuit_breaker.py -q --tb=short; pytest tests/test_CircuitBreakerConfig.py tests/test_CircuitBreakerCore.py tests/test_CircuitBreakerRegistry.py tests/test_CircuitBreakerMixin.py -q --tb=short; python -m pytest tests/structure -q --tb=short; python -m mypy src/core/resilience --strict; python -m ruff check src/core/resilience tests/test_circuit_breaker.py tests/test_CircuitBreakerConfig.py tests/test_CircuitBreakerCore.py tests/test_CircuitBreakerRegistry.py tests/test_CircuitBreakerMixin.py |
+| **verification_result** | Primary suites and structure tests PASS (20 + 8 + 129); mypy strict PASS; ruff reports 2 pre-existing I001 issues in test files outside implementation scope. |
+| **unresolved_risks** | Lint gate including tests is not fully green due test import-order issues in `tests/test_CircuitBreakerRegistry.py` and `tests/test_CircuitBreakerMixin.py`. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | src/core/resilience/__init__.py, src/core/resilience/exceptions.py, src/core/resilience/CircuitBreakerConfig.py, src/core/resilience/CircuitBreakerState.py, src/core/resilience/CircuitBreakerCore.py, src/core/resilience/CircuitBreakerRegistry.py, src/core/resilience/CircuitBreakerMixin.py, docs/project/prj0000083-llm-circuit-breaker/prj0000083-llm-circuit-breaker.code.md |
+
+---
+
 ## prj030 - agent-doc-frequency
 
 | Field | Value |

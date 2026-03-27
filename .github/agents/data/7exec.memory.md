@@ -5,6 +5,42 @@ integration checks, and smoke test outcomes.
 
 ---
 
+## Last run — 2026-03-27 (prj0000084 rerun after 3f7e57d5a) ✅ PASSED
+- Task: prj0000084-immutable-audit-trail
+- Tests run: 41 + 12 + 129 + 41 | Passed: 223 | Failed: 0
+- Import check: PASS (`src.core.audit.*` imports OK)
+- Coverage: **99.36%** on `src/core/audit` (threshold >=90)
+- Ruff: PASS on `src/core/audit` + audit tests
+- mypy: PASS (`src/core/audit --strict`)
+- pip check: WARN (environment has missing optional packages; unchanged)
+- Smoke test: SKIPPED (no CLI/API entrypoint touched)
+- rust_core: SKIPPED (not modified)
+- Placeholder scan: PASS (audit scope)
+- Outcome: PASSED (requested rerun validation set)
+- task_id: prj0000084-immutable-audit-trail
+- handoff_target: @8ql
+
+---
+
+## Last run — 2026-03-27 (prj0000084) ❌ BLOCKED
+- Task: prj0000084-immutable-audit-trail
+- Tests run: 18 + 10 + 129 | Passed: 157 | Failed: 0
+- Import check: PASS (`src.core.audit.*` imports OK)
+- Coverage: **82.11%** on `src/core/audit` (from `tests/test_audit_trail.py` run)
+- Ruff: PASS on `src/core/audit` + project test set
+- mypy: PASS (`src/core/audit --strict`)
+- pip check: FAIL (environment has missing packages; noted only)
+- Smoke test: SKIPPED (no CLI/API entrypoint touched in this task)
+- rust_core: SKIPPED (not modified)
+- Placeholder scan: PASS (no stubs found)
+- Pre-commit: FAIL (hook runs repo-wide `ruff check src tests`; unrelated pre-existing failures)
+- Outcome: BLOCKED → @6code
+- task_id: prj0000084-immutable-audit-trail
+- handoff_target: @6code
+- Notes: Requested six validation commands all passed; mandatory pre-commit gate blocks @8ql handoff.
+
+---
+
 ## Last run — 2026-03-26 (re-run 3) ✅ PASSED → @8ql
 - Task: prj0000082 agent-execution-sandbox
 - Tests run: 32 (sandbox — all 5 files) + 129 (structure) + full suite | Passed: 967 | Failed: 4

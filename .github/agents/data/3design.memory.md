@@ -86,3 +86,22 @@ the design intent.
 | **vite_config_change** | None required |
 | **handoff_target** | @4plan |
 | **artifact_paths** | docs/project/prj0000047/conky-real-metrics.design.md |
+
+---
+
+## prj0000084 - immutable-audit-trail
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000084-immutable-audit-trail |
+| **owner_agent** | @3design |
+| **source** | @2think |
+| **created_at** | 2026-03-27 |
+| **updated_at** | 2026-03-27 |
+| **status** | DONE |
+| **branch_gate** | PASS - `prj0000084-immutable-audit-trail` |
+| **selected_option** | Option A - Minimal stdlib hashchain module in `src/core/audit/` |
+| **key_decisions** | Package-only v1 design; 7 proposed files; deterministic canonical JSON + SHA-256 chain; append-only JSONL model; explicit exception hierarchy; integration via optional mixin without required edits to existing modules. |
+| **interface_contracts** | `AuditEvent`, `AuditHasher`, `AuditTrailCore`, `AuditTrailMixin`, `AuditVerificationResult`, and `exceptions.py` signatures captured in canonical design artifact. |
+| **handoff_target** | @4plan |
+| **artifact_paths** | docs/project/prj0000084-immutable-audit-trail/prj0000084-immutable-audit-trail.design.md |
