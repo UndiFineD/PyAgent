@@ -41,7 +41,7 @@
   {
     "id": "prj0000085",
     "name": "shadow-mode-replay",
-    "lane": "Discovery",
+    "lane": "Review",
     "summary": "Shadow execution mode (side-effect-free parallel agent runs) + deterministic session replay from structured logs for debug",
     "branch": "prj0000085-shadow-mode-replay",
     "pr": null,
