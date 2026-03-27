@@ -11,6 +11,30 @@ Invoke it via `agent/runSubagent` to continue the implementation workflow.
 
 ## Task Log
 
+### task_id: prj0000087-n8n-workflow-bridge-20260327
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- project: prj0000087-n8n-workflow-bridge
+- branch_expected: prj0000087-n8n-workflow-bridge
+- branch_observed: prj0000087-n8n-workflow-bridge ✓
+- scope:
+	- create `tests/test_n8n_bridge.py`
+	- create `tests/test_N8nBridgeConfig.py`
+	- create `tests/test_N8nEventAdapter.py`
+	- create `tests/test_N8nHttpClient.py`
+	- create `tests/test_N8nBridgeCore.py`
+	- create `tests/test_N8nBridgeMixin.py`
+	- run red target and structure checks
+	- update `docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.test.md`
+- red_phase_results:
+	- `pytest -q tests/test_n8n_bridge.py --tb=short` => 20 failed in 1.35s
+		- failure mode: assertion-style `Failed:` messages for missing `src.core.n8nbridge.*`
+		- collection quality: tests collected and executed (no import-time collection crash)
+	- `pytest -q tests/structure --tb=short` => 1 failed, 128 passed
+		- failure mode: existing `tests/structure/test_kanban.py::test_kanban_total_rows` mismatch (expected 88, found 91)
+- handoff:
+	- target_agent: @6code
+	- required_scope: implement `src/core/n8nbridge/*` contracts to satisfy red-phase tests
+
 ### task_id: prj0000084-immutable-audit-trail-20260327
 - lifecycle: OPEN -> IN_PROGRESS -> DONE
 - project: prj0000084-immutable-audit-trail
