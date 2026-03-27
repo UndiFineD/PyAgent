@@ -68,3 +68,31 @@ Invoke it via `agent/runSubagent` to continue the implementation workflow.
 	- target_agent: @7exec
 	- required scope: continue repository-level execution tracking with residual unrelated baseline failures
 	- do_not_touch: prj006-related fixes are complete and validated
+
+### task_id: prj0000085-shadow-mode-replay-20260327
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- project: prj0000085-shadow-mode-replay
+- branch_expected: prj0000085-shadow-mode-replay
+- branch_observed (final): prj0000085-shadow-mode-replay ✓
+- files_created:
+	- tests/test_shadow_replay.py (18 core red tests: RT-01..RT-18)
+	- tests/test_ReplayEnvelope.py
+	- tests/test_ReplayStore.py
+	- tests/test_ShadowExecutionCore.py
+	- tests/test_ReplayOrchestrator.py
+	- tests/test_ReplayMixin.py
+- lint_validation:
+	- `.venv\\Scripts\\ruff.exe check --fix` on all six new test files: PASS
+	- `.venv\\Scripts\\ruff.exe check` on all six new test files: PASS
+- red_phase_run:
+	- target suite command:
+		- `python -m pytest -q tests/test_shadow_replay.py tests/test_ReplayEnvelope.py tests/test_ReplayStore.py tests/test_ShadowExecutionCore.py tests/test_ReplayOrchestrator.py tests/test_ReplayMixin.py`
+	- target result: 23 failed in 2.61s (expected red)
+	- failure reason: explicit behavior failures due missing modules under `src.core.replay.*`
+	- structure suite command:
+		- `python -m pytest -q tests/structure --tb=short`
+	- structure result: 129 passed in 2.78s
+- handoff:
+	- target_agent: @6code
+	- required_tasks: T1-T7 from prj0000085-shadow-mode-replay.plan.md
+	- key_failure_signal: all replay contracts still unimplemented in `src/core/replay/`
