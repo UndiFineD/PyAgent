@@ -166,6 +166,40 @@ Ready for @9git handoff.
 
 ---
 
+## prj0000084 — immutable-audit-trail
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000084-immutable-audit-trail |
+| **owner_agent** | @4plan |
+| **source** | @3design |
+| **created_at** | 2026-03-27 |
+| **updated_at** | 2026-03-27 |
+| **status** | DONE |
+| **handoff_target** | @9git (user-requested direct commit) |
+| **artifact_paths** | docs/project/prj0000084-immutable-audit-trail/prj0000084-immutable-audit-trail.plan.md |
+| **branch** | prj0000084-immutable-audit-trail (validated) |
+
+### Chunk 1 (single planning chunk)
+
+| Task | File(s) | Type | Acceptance |
+|---|---|---|---|
+| T1 | src/core/audit/exceptions.py | PLAN | Exception hierarchy contract captured |
+| T2 | src/core/audit/AuditVerificationResult.py | PLAN | Verification model contract captured |
+| T3 | src/core/audit/AuditEvent.py | PLAN | Deterministic canonical model contract captured |
+| T4 | src/core/audit/AuditHasher.py | PLAN | Deterministic hashing contract captured |
+| T5 | src/core/audit/AuditTrailCore.py | PLAN | Append/read/verify contracts mapped to tests |
+| T6 | src/core/audit/AuditTrailMixin.py | PLAN | Host adapter behavior mapped to tests |
+| T7 | src/core/audit/__init__.py | PLAN | Package export surface order defined |
+| T8 | tests/test_AuditEvent.py, tests/test_AuditHasher.py, tests/test_AuditTrailCore.py, tests/test_AuditTrailMixin.py, tests/test_AuditExceptions.py, tests/test_audit_trail.py | PLAN | 18 tests split by unit/integration/negative with AC coverage map |
+
+### Notes
+- Plan status finalized as DONE in canonical artifact.
+- Includes explicit module implementation order, test-file mapping, 18-case TDD matrix,
+  validation commands, and AC coverage map.
+
+---
+
 ## prj0000076 — future-ideas-kanban
 
 | Field | Value |
