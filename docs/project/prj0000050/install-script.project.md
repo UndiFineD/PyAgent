@@ -38,3 +38,12 @@ Developer setup automation for PyAgent on Windows. Provides `install.ps1` at the
 ## Lessons Learned
 
 (to be filled by @9git after completion)
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+

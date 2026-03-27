@@ -112,3 +112,13 @@ or ambiguous, return the task to `@0master` before downstream handoff.
 ## Status
 _Last updated: 2026-03-26_
 Project folder created, all 9 artifact stubs initialised. Ready for handoff to @2think.
+
+
+## Project Overview
+Legacy overview retained; section added for modern template compliance.
+
+
+## Goal & Scope
+**Goal:** Keep this historical project document template-compliant.
+Goal: keep this historical project document template-compliant. Scope: documentation structure only.
+

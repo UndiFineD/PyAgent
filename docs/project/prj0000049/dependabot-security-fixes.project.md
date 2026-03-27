@@ -37,3 +37,12 @@ Resolve all active Dependabot security alerts on the PyAgent repository. As of 2
 ## Lessons Learned
 
 (to be filled by @9git after completion)
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+

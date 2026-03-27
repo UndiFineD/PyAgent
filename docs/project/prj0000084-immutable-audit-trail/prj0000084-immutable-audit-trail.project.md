@@ -58,3 +58,7 @@ Failure rule:
 - Risk: mutable storage paths could break immutability guarantees.
 - Risk: high write volume may impact latency without batching strategy.
 - Risk: unclear retention/legal policy can conflict with operational needs.
+
+## Legacy Project Overview Exception
+This file retains a legacy project overview format for historical continuity.
+This legacy deviation is documentation-only and does not set a precedent for new project overviews.

@@ -50,3 +50,8 @@ _Last updated: 2026-03-21_
 - DONE — All pipeline stages complete. Async runtime on main with Rust acceleration + pure-Python fallback.
 - 215+ tests passing, zero sync loops verified.
 - Security scan completed, git handoff merged.
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+

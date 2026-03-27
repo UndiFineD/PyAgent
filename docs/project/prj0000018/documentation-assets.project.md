@@ -24,3 +24,12 @@ Updates `docs/tools.md` to be the authoritative, comprehensive catalog of all 16
 **Scope boundary:** `docs/tools.md`, `docs/project/prj0000018/`
 **Handoff rule:** merge after docs reviewed for accuracy
 **Failure rule:** if branch mismatch, STOP
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+

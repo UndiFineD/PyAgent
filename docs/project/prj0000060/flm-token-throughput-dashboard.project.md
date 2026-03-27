@@ -48,3 +48,12 @@ tokens-per-second telemetry; the frontend charts it with a pure SVG bar chart
   - `docs/project/kanban.md` — lane row update
 **Handoff rule:** All 5 tests pass, PR open → hand to reviewer
 **Failure rule:** If tests fail, stop and report. Do not push broken code.
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+

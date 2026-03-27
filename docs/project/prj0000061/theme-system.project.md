@@ -53,3 +53,12 @@ detection, per-component theme overrides, dark-mode accessibility audit
   - `docs/project/kanban.md` — lane row update
 **Handoff rule:** Tests pass, PR open → hand to @9git reviewer
 **Failure rule:** Do not push if tests fail
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+

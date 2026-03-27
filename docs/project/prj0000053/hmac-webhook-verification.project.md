@@ -58,3 +58,12 @@ by PyAgent.
    (backward-compatible dev mode).
 6. All existing tests continue to pass.
 7. New test coverage ≥ 6 cases for HMAC logic.
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+

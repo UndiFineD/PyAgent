@@ -77,3 +77,12 @@ ambiguous, return the task to `@0master` before downstream handoff.
 6. Dev-mode (no secrets configured): all requests pass through with logged warning.
 7. All existing tests continue to pass.
 8. ≥ 10 new auth test cases covering both credential types, WebSocket, and dev-mode.
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+

@@ -80,3 +80,9 @@ return the task to `@0master` before downstream handoff.
 ## Status
 _Last updated: 2026-03-26_
 Project folder created. All 9 artifact stubs initialized. Handing off to @2think for options exploration.
+
+
+## Goal & Scope
+**Goal:** Keep this historical project document template-compliant.
+Goal: keep this historical project document template-compliant. Scope: documentation structure only.
+

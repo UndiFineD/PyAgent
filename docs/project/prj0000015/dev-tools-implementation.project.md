@@ -25,3 +25,12 @@ Enhances `src/tools/common.py` from a minimal stub into a production-ready share
 **Scope boundary:** only `src/tools/common.py`, `tests/tools/test_implementation_helpers.py`, and `docs/project/prj0000015/`
 **Handoff rule:** merge only after all 10 new tests pass green
 **Failure rule:** if branch mismatch detected, STOP — do not commit
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+

@@ -40,3 +40,12 @@ PyAgent is and what it has delivered.
 @4plan → @5test → @6code → @7exec → @8ql → @9git.  
 **Failure rule:** Any agent that cannot complete its work must mark the task BLOCKED
 and return to @0master before continuing.
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+

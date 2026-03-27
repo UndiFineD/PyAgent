@@ -36,3 +36,12 @@ targeting `main`.
 **Failure rule:** If CI fails on this branch, fix before merging; do not force-push
 `main`.
 
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+

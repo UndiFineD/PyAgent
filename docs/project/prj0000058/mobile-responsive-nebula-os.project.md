@@ -48,3 +48,12 @@ tablet (769–1024 px) viewports so the shell renders correctly on all devices.
   - `docs/project/kanban.md` — lane row update
 **Handoff rule:** All 5 tests pass, PR open → hand to reviewer
 **Failure rule:** If tests fail, stop and report. Do not push broken code.
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+

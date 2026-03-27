@@ -41,3 +41,12 @@ live network infrastructure changes.
 `tests/tools/test_capabilities_modules.py`.
 **Handoff rule:** `@9git` stages `docs/project/prj0000014/` and code files, opens PR to `main`.
 **Failure rule:** All `tests/tools/` must pass before merge; do not skip tests.
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+

@@ -25,3 +25,12 @@ Hardens the `src/tools/` package layout and verifies its structural invariants v
 **Scope boundary:** `src/tools/__init__.py`, `tests/structure/test_dev_tools_dirs.py`, `docs/project/prj0000016/`
 **Handoff rule:** merge only after 4 structure tests pass
 **Failure rule:** if branch mismatch, STOP
+
+
+## Milestones
+Legacy milestone details are not specified in this historical document.
+
+
+## Status
+Legacy status details are not specified in this historical document.
+
