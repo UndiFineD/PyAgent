@@ -15,15 +15,15 @@
   {
     "id": "prj0000087",
     "name": "n8n-workflow-bridge",
-    "lane": "Ideas",
+    "lane": "Discovery",
     "summary": "Bi-directional n8n integration: agents trigger automation chains via n8n API and act as intelligent decision nodes in workflows",
-    "branch": null,
+    "branch": "prj0000087-n8n-workflow-bridge",
     "pr": null,
     "priority": "P3",
     "budget_tier": "M",
     "tags": ["automation", "integration", "n8n"],
     "created": "2026-03-26",
-    "updated": "2026-03-26"
+    "updated": "2026-03-27"
   },
   {
     "id": "prj0000086",
