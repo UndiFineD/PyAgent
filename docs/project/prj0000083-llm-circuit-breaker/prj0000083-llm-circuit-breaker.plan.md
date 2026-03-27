@@ -1,7 +1,7 @@
 # prj0000083 — llm-circuit-breaker — Implementation Plan
 
 _Status: DONE_
-_Planner: @4plan | Updated: 2026-03-26_
+_Planner: @4plan | Updated: 2026-03-27_
 
 ## Overview
 
@@ -80,41 +80,41 @@ test runs:
 
 | ID | Test name | Given | When | Then |
 |----|-----------|-------|------|------|
-| U1 | `test_core_initial_state_closed` | A fresh `CircuitBreakerState(provider_key="p")` | Inspect `.state` | Is `CircuitState.CLOSED` |
-| U2 | `test_core_record_failure_increments_consecutive` | CLOSED state, config with `failure_threshold=5` | `core.record_failure(state, config)` called once | `state.consecutive_failures == 1`; state remains CLOSED |
-| U3 | `test_core_opens_after_failure_threshold` | CLOSED state, `failure_threshold=3` | `record_failure` called 3 times | `state.state == CircuitState.OPEN` |
-| U4 | `test_core_half_open_after_recovery_timeout` | OPEN state, `last_failure_time = time.monotonic() - 60`, `recovery_timeout=30` | `core.should_allow(state, config)` | Returns `True`; state promoted to `HALF_OPEN`; `probe_in_flight=True` |
-| U5 | `test_core_probe_success_transitions_to_closed` | HALF_OPEN state, `probe_in_flight=True` | `core.record_success(state)` | `state.state == CLOSED`; `consecutive_failures == 0`; `probe_in_flight == False` |
-| U6 | `test_core_probe_failure_resets_to_open` | HALF_OPEN state, `probe_in_flight=True` | `core.record_failure(state, config)` | `state.state == OPEN`; `probe_in_flight == False`; `last_failure_time` updated |
-| U7 | `test_core_half_open_probe_exclusivity` | HALF_OPEN state, `probe_in_flight=True` | `core.should_allow(state, config)` called a second time | Returns `False` (probe slot already taken) |
-| U8 | `test_core_reset_forces_closed` | OPEN state with 10 consecutive failures | `core.reset(state)` | `state.state == CLOSED`; `consecutive_failures == 0`; `probe_in_flight == False` |
-| U9 | `test_core_record_success_increments_counters` | Any state | `core.record_success(state)` called | `state.total_successes` incremented; `state.total_calls` unchanged by success alone |
+| U1 | `test_core_initial_state_closed` | A fresh `CircuitBreakerState(provider_key="p")` with all defaults | Inspect `.state`, `.consecutive_failures`, `.probe_in_flight` | `state == CLOSED`; `consecutive_failures == 0`; `probe_in_flight == False` |
+| U2 | `test_core_record_failure_increments_consecutive` | CLOSED state, config with `failure_threshold=5` | `core.record_failure(state, config)` called once | `state.consecutive_failures == 1`; `state.total_failures == 1`; state remains `CLOSED` |
+| U3 | `test_core_opens_after_failure_threshold` | CLOSED state, `failure_threshold=3` | `record_failure(state, config)` called exactly 3 times | `state.state == CircuitState.OPEN`; `consecutive_failures == 3`; `last_failure_time > 0` |
+| U4 | `test_core_half_open_after_recovery_timeout` | OPEN state, `last_failure_time = time.monotonic() - 60`, `recovery_timeout=30` | `core.should_allow(state, config)` | Returns `True`; state promoted to `HALF_OPEN`; `probe_in_flight == True` |
+| U5 | `test_core_probe_success_transitions_to_closed` | `HALF_OPEN` state, `probe_in_flight=True` | `core.record_success(state)` | `state.state == CLOSED`; `consecutive_failures == 0`; `probe_in_flight == False`; `total_successes == 1` |
+| U6 | `test_core_probe_failure_resets_to_open` | `HALF_OPEN` state, `probe_in_flight=True`, `failure_threshold=5` | `core.record_failure(state, config)` | `state.state == OPEN`; `probe_in_flight == False`; `last_failure_time` refreshed to `≈ time.monotonic()` |
+| U7 | `test_core_half_open_probe_exclusivity` | `HALF_OPEN` state, `probe_in_flight=True` (probe already in flight) | `core.should_allow(state, config)` called a second time | Returns `False`; `probe_in_flight` still `True`; state unchanged |
+| U8 | `test_core_reset_forces_closed` | OPEN state, `consecutive_failures=10`, `probe_in_flight=False` | `core.reset(state)` | `state.state == CLOSED`; `consecutive_failures == 0`; `probe_in_flight == False` |
+| U9 | `test_core_record_success_increments_counters` | CLOSED state, `total_successes=0` | `core.record_success(state)` called once | `state.total_successes == 1`; `consecutive_failures` remains `0`; state remains `CLOSED` |
 
 ### Unit Tests — CircuitBreakerRegistry (R1–R4)
 
 | ID | Test name | Given | When | Then |
 |----|-----------|-------|------|------|
-| R1 | `test_registry_get_or_create_same_key_returns_same_object` | Empty registry | `get_or_create("k", config)` called twice with same key | Both calls return the identical `CircuitBreakerState` object (`is` check) |
-| R2 | `test_registry_get_fallback_returns_first_closed_provider` | Config with `fallback_providers=["a","b"]`; state for "a" is OPEN, state for "b" is CLOSED | `registry.get_fallback("primary")` | Returns `"b"` |
-| R3 | `test_registry_get_fallback_returns_none_when_all_open` | Config with `fallback_providers=["a"]`; state for "a" is OPEN | `registry.get_fallback("primary")` | Returns `None` |
-| R4 | `test_registry_record_and_allow_delegate_to_core` | Freshly seeded registry for key "p" | `await registry.record_failure("p")` called `failure_threshold` times | `await registry.should_allow("p")` returns `False` |
+| R1 | `test_registry_get_or_create_same_key_returns_same_object` | Empty async registry | `await get_or_create("k", config)` called twice with same key | Both awaits return the **identical** `CircuitBreakerState` object (`is` identity check passes) |
+| R2 | `test_registry_get_fallback_returns_first_closed_provider` | Config with `fallback_providers=["a","b"]`; state for `"a"` is `OPEN`, state for `"b"` is `CLOSED`; both registered | `await registry.get_fallback("primary")` | Returns `"b"`; skips `"a"` because it is OPEN |
+| R3 | `test_registry_get_fallback_returns_none_when_all_open` | Config with `fallback_providers=["a"]`; state for `"a"` is `OPEN`; registered | `await registry.get_fallback("primary")` | Returns `None`; no CLOSED fallback available |
+| R4 | `test_registry_record_and_allow_delegate_to_core` | Freshly seeded registry for key `"p"`, `failure_threshold=3` | `await registry.record_failure("p")` called 3 times, then `await registry.should_allow("p")` | `should_allow` returns `False`; state for `"p"` is `OPEN` |
 
 ### Unit Tests — CircuitBreakerMixin (M1–M5)
 
 | ID | Test name | Given | When | Then |
 |----|-----------|-------|------|------|
-| M1 | `test_mixin_cb_call_returns_coro_result_on_success` | Mixin agent with registry; circuit CLOSED for "p" | `await agent.cb_call("p", coro_returning_42)` | Returns `42`; `registry.record_success("p")` was called |
-| M2 | `test_mixin_cb_call_records_failure_and_reraises` | Mixin agent; circuit CLOSED for "p" | `await agent.cb_call("p", coro_raising_RuntimeError)` | `RuntimeError` re-raised; `registry.record_failure("p")` was called |
-| M3 | `test_mixin_cb_call_open_circuit_raises_circuit_open_error_without_calling_coro` | Mixin agent; circuit OPEN for "p" (no fallbacks) | `await agent.cb_call("p", mock_coro)` | `CircuitOpenError` raised; `mock_coro` was never awaited |
-| M4 | `test_mixin_cb_call_routes_to_fallback_when_primary_open` | Mixin agent; "primary" OPEN, "fallback" CLOSED | `await agent.cb_call("primary", coro)` | Coro is awaited under `"fallback"` context; success recorded on `"fallback"` |
-| M5 | `test_mixin_cb_call_raises_all_circuits_open_when_exhausted` | Mixin agent; "primary" OPEN, all fallbacks OPEN | `await agent.cb_call("primary", coro)` | `AllCircuitsOpenError` raised; `tried_keys` contains primary + all fallback keys |
+| M1 | `test_mixin_cb_call_returns_coro_result_on_success` | Mixin agent with registry; circuit `CLOSED` for `"p"` | `await agent.cb_call("p", async_lambda_returning_42)` | Returns `42`; `registry.record_success("p")` called exactly once |
+| M2 | `test_mixin_cb_call_records_failure_and_reraises` | Mixin agent; circuit `CLOSED` for `"p"` | `await agent.cb_call("p", coro_raising_RuntimeError)` | `RuntimeError` propagated to caller; `registry.record_failure("p")` called exactly once |
+| M3 | `test_mixin_cb_call_open_circuit_raises_circuit_open_error_without_calling_coro` | Mixin agent; circuit `OPEN` for `"p"` (no fallbacks configured) | `await agent.cb_call("p", mock_coro)` | `CircuitOpenError` raised; `mock_coro` coroutine **never awaited** |
+| M4 | `test_mixin_cb_call_routes_to_fallback_when_primary_open` | Mixin agent; `"primary"` `OPEN`, `"fallback"` `CLOSED`; fallback list `["fallback"]` | `await agent.cb_call("primary", coro)` | Coro is awaited under `"fallback"` context; `registry.record_success("fallback")` called; no `CircuitOpenError` raised |
+| M5 | `test_mixin_cb_call_raises_all_circuits_open_when_exhausted` | Mixin agent; `"primary"` `OPEN`; all fallbacks `OPEN` | `await agent.cb_call("primary", coro)` | `AllCircuitsOpenError` raised; `error.tried_keys` contains `primary` + all fallback key names |
 
 ### Integration Tests (I1–I2)
 
 | ID | Test name | Given | When | Then |
 |----|-----------|-------|------|------|
-| I1 | `test_integration_open_then_half_open_then_closed_full_cycle` | Registry with `failure_threshold=3`, `recovery_timeout=0.05` (50 ms) | Record 3 failures → assert OPEN; sleep 0.06 s; call `should_allow` → assert HALF_OPEN; record success | Final state is CLOSED; `total_failures == 3`; `total_successes == 1` |
-| I2 | `test_integration_concurrent_half_open_only_one_probe_passes` | Registry in HALF_OPEN state at test start | 10 concurrent `asyncio.Task`s each call `registry.should_allow(key)` under the same lock | Exactly 1 task received `True`; 9 tasks received `False` |
+| I1 | `test_integration_open_then_half_open_then_closed_full_cycle` | Registry with `failure_threshold=3`, `recovery_timeout=0.05` (50 ms) | ① Record 3 failures → assert `OPEN`; ② `asyncio.sleep(0.06)`; ③ call `should_allow` → assert `HALF_OPEN`; ④ `record_success` | Final state is `CLOSED`; `total_failures == 3`; `total_successes == 1`; full state cycle verified |
+| I2 | `test_integration_concurrent_half_open_only_one_probe_passes` | Registry key in `HALF_OPEN` state (`probe_in_flight=False`) at test start | 10 concurrent `asyncio.Task`s each call `await registry.should_allow(key)` under shared lock | Exactly **1** task received `True`; 9 tasks received `False`; no race condition or deadlock |
 
 ---
 
@@ -122,15 +122,15 @@ test runs:
 
 | AC | Criterion (summary) | Test IDs |
 |----|--------------------|---------:|
-| AC1 | Circuit opens after `failure_threshold` consecutive failures | U3, I1 |
-| AC2 | OPEN circuit raises `CircuitOpenError` without outbound call | M3 |
+| AC1 | Circuit opens after `failure_threshold` consecutive failures within `window_seconds` | U3, R4, I1 |
+| AC2 | OPEN circuit raises `CircuitOpenError` without making an outbound call | M3 |
 | AC3 | After `recovery_timeout` → HALF_OPEN; exactly one probe allowed | U4, U7, I1, I2 |
 | AC4 | Successful probe closes; failed probe resets OPEN timer | U5, U6, I1 |
 | AC5 | Fallback routing when primary is OPEN | R2, M4 |
 | AC6 | `AllCircuitsOpenError` when all fallbacks also OPEN | R3, M5 |
-| AC7 | *(Prometheus metrics — deferred; no test coverage required in this sprint)* | — |
-| AC8 | `pytest tests/structure -q` passes | T9 |
-| AC9 | ≥ 90 % coverage on `src/core/resilience/` | T8 |
+| AC7 | Prometheus metrics exported (deferred — no test coverage required this sprint) | — |
+| AC8 | `pytest tests/structure -q` passes with no structural regressions | T9 |
+| AC9 | ≥ 90 % branch coverage on `src/core/resilience/` | T8 |
 
 ---
 
