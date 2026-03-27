@@ -11,6 +11,46 @@ This should be done via `agent/runSubagent`.
 
 ---
 
+## prj0000084 - immutable-audit-trail
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000084-immutable-audit-trail |
+| **owner_agent** | @6code |
+| **source** | @5test |
+| **created_at** | 2026-03-27 |
+| **updated_at** | 2026-03-27 |
+| **status** | DONE |
+| **summary** | Implemented full stdlib-only `src/core/audit` package (event/hasher/core/mixin/result/exceptions + package exports) for immutable JSONL hash-chain append and verification workflows. |
+| **changed_modules** | src/core/audit/__init__.py; src/core/audit/AuditEvent.py; src/core/audit/AuditHasher.py; src/core/audit/AuditTrailCore.py; src/core/audit/AuditTrailMixin.py; src/core/audit/AuditVerificationResult.py; src/core/audit/exceptions.py; docs/project/prj0000084-immutable-audit-trail/prj0000084-immutable-audit-trail.code.md |
+| **verification_commands** | pytest tests/test_audit_trail.py -q --tb=short; pytest tests/test_AuditEvent.py tests/test_AuditHasher.py tests/test_AuditTrailCore.py tests/test_AuditTrailMixin.py tests/test_AuditVerificationResult.py -q --tb=short; python -m pytest tests/structure -q --tb=short; python -m mypy src/core/audit --strict; python -m ruff check src/core/audit tests/test_audit_trail.py tests/test_AuditEvent.py tests/test_AuditHasher.py tests/test_AuditTrailCore.py tests/test_AuditTrailMixin.py tests/test_AuditVerificationResult.py |
+| **verification_result** | PASS — audit integration (18), module suite (10), structure (129), mypy strict, and ruff checks are all green. |
+| **unresolved_risks** | None identified for the implemented module scope. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | src/core/audit/__init__.py, src/core/audit/AuditEvent.py, src/core/audit/AuditHasher.py, src/core/audit/AuditTrailCore.py, src/core/audit/AuditTrailMixin.py, src/core/audit/AuditVerificationResult.py, src/core/audit/exceptions.py, docs/project/prj0000084-immutable-audit-trail/prj0000084-immutable-audit-trail.code.md |
+
+---
+
+## prj0000083 - llm-circuit-breaker
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000083-llm-circuit-breaker |
+| **owner_agent** | @6code |
+| **source** | @5test |
+| **created_at** | 2026-03-27 |
+| **updated_at** | 2026-03-27 |
+| **status** | DONE |
+| **summary** | Implemented full `src/core/resilience` package (config/state/core/registry/mixin/exceptions + package exports) with async-safe registry locking and fallback routing behavior to satisfy red-phase contract tests. |
+| **changed_modules** | src/core/resilience/__init__.py; src/core/resilience/exceptions.py; src/core/resilience/CircuitBreakerConfig.py; src/core/resilience/CircuitBreakerState.py; src/core/resilience/CircuitBreakerCore.py; src/core/resilience/CircuitBreakerRegistry.py; src/core/resilience/CircuitBreakerMixin.py; docs/project/prj0000083-llm-circuit-breaker/prj0000083-llm-circuit-breaker.code.md |
+| **verification_commands** | pytest tests/test_circuit_breaker.py -q --tb=short; pytest tests/test_CircuitBreakerConfig.py tests/test_CircuitBreakerCore.py tests/test_CircuitBreakerRegistry.py tests/test_CircuitBreakerMixin.py -q --tb=short; python -m pytest tests/structure -q --tb=short; python -m mypy src/core/resilience --strict; python -m ruff check src/core/resilience tests/test_circuit_breaker.py tests/test_CircuitBreakerConfig.py tests/test_CircuitBreakerCore.py tests/test_CircuitBreakerRegistry.py tests/test_CircuitBreakerMixin.py |
+| **verification_result** | Primary suites and structure tests PASS (20 + 8 + 129); mypy strict PASS; ruff reports 2 pre-existing I001 issues in test files outside implementation scope. |
+| **unresolved_risks** | Lint gate including tests is not fully green due test import-order issues in `tests/test_CircuitBreakerRegistry.py` and `tests/test_CircuitBreakerMixin.py`. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | src/core/resilience/__init__.py, src/core/resilience/exceptions.py, src/core/resilience/CircuitBreakerConfig.py, src/core/resilience/CircuitBreakerState.py, src/core/resilience/CircuitBreakerCore.py, src/core/resilience/CircuitBreakerRegistry.py, src/core/resilience/CircuitBreakerMixin.py, docs/project/prj0000083-llm-circuit-breaker/prj0000083-llm-circuit-breaker.code.md |
+
+---
+
 ## prj030 - agent-doc-frequency
 
 | Field | Value |
