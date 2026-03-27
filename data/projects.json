@@ -28,15 +28,15 @@
   {
     "id": "prj0000086",
     "name": "universal-agent-shell",
-    "lane": "Ideas",
+    "lane": "Discovery",
     "summary": "UniversalAgent shell: dynamically load CoderCore/SecurityCore/etc. by intent; consolidate 50+ specialized agent classes",
-    "branch": null,
+    "branch": "prj0000086-universal-agent-shell",
     "pr": null,
     "priority": "P2",
     "budget_tier": "XL",
     "tags": ["architecture", "agents", "refactor"],
     "created": "2026-03-26",
-    "updated": "2026-03-26"
+    "updated": "2026-03-27"
   },
   {
     "id": "prj0000085",
