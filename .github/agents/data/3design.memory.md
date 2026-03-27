@@ -104,3 +104,21 @@ the design intent.
 | **summary** | Completed design with implementable module layout under `src/core/replay/` and explicit API contracts, deterministic data flow, and 18-test scope for shadow execution and replay. |
 | **handoff_target** | @4plan |
 | **artifact_paths** | docs/project/prj0000085-shadow-mode-replay/prj0000085-shadow-mode-replay.design.md |
+
+---
+
+## prj0000087 - n8n-workflow-bridge
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000087-n8n-workflow-bridge |
+| **owner_agent** | @3design |
+| **source** | @2think |
+| **created_at** | 2026-03-27 |
+| **updated_at** | 2026-03-27 |
+| **status** | DONE |
+| **branch_gate** | PASS - `prj0000087-n8n-workflow-bridge` |
+| **selected_option** | Option B - Stdlib-only HTTP integration layer + event adapter |
+| **summary** | Drafted full design with module layout under `src/core/n8nbridge/`, canonical event contracts, bridge APIs, error taxonomy, and 18-test target scope. |
+| **handoff_target** | @4plan |
+| **artifact_paths** | docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.design.md |
