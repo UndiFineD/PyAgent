@@ -16,6 +16,7 @@
 
 from __future__ import annotations
 
+import io
 from importlib import import_module
 from typing import Any
 from urllib.error import HTTPError
@@ -118,6 +119,22 @@ def test_validate_rejects_nonpositive_timeout_or_negative_retries(
         config.validate()
 
 
+@pytest.mark.parametrize(
+    ("backoff_value", "ttl_value"),
+    [(-0.1, 300), (0.1, 0)],
+)
+def test_validate_rejects_negative_backoff_or_nonpositive_ttl(
+    backoff_value: float,
+    ttl_value: int,
+) -> None:
+    """Ensure backoff and idempotency TTL constraints are validated."""
+    config = _new_config()
+    config.backoff_seconds = backoff_value
+    config.idempotency_ttl_seconds = ttl_value
+    with pytest.raises(Exception, match=r".+"):
+        config.validate()
+
+
 def test_to_inbound_event_maps_valid_payload() -> None:
     """RT-04: Ensure adapter maps valid inbound payload to canonical event."""
     adapter_cls = _load_symbol("N8nEventAdapter", "N8nEventAdapter")
@@ -152,6 +169,41 @@ def test_to_n8n_trigger_payload_maps_outbound_canonical_event() -> None:
     payload = adapter.to_n8n_trigger_payload(_outbound_event())
     assert payload is not None
     assert isinstance(payload, dict)
+
+
+def test_to_n8n_trigger_payload_rejects_missing_required_fields() -> None:
+    """Ensure outbound mapping rejects payloads with missing required keys."""
+    adapter_cls = _load_symbol("N8nEventAdapter", "N8nEventAdapter")
+    adapter = adapter_cls()
+    outbound = _outbound_event()
+    outbound.pop("metadata")
+    with pytest.raises(Exception, match=r".+"):
+        adapter.to_n8n_trigger_payload(outbound)
+
+
+def test_to_inbound_event_raises_when_correlation_id_cannot_be_derived() -> None:
+    """Cover fallback path where event_id stringifies to empty correlation value."""
+    adapter_cls = _load_symbol("N8nEventAdapter", "N8nEventAdapter")
+    adapter = adapter_cls()
+
+    class _EmptyStringable:
+        """Stringifies to an empty value for edge-case validation."""
+
+        def __str__(self) -> str:
+            """Return empty string to force correlation-id failure."""
+            return ""
+
+    payload = _inbound_payload()
+    payload["event_id"] = _EmptyStringable()
+    with pytest.raises(Exception, match=r".+"):
+        adapter.to_inbound_event(payload, {})
+
+
+def test_get_header_returns_none_for_falsey_or_non_matching_values() -> None:
+    """Cover helper path that scans headers and returns None when no usable value exists."""
+    module = import_module("src.core.n8nbridge.N8nEventAdapter")
+    assert module._get_header({"X-Correlation-ID": ""}, "X-Correlation-ID") is None
+    assert module._get_header({"Some-Other": "value"}, "X-Correlation-ID") is None
 
 
 @pytest.mark.asyncio
@@ -276,6 +328,116 @@ async def test_post_json_does_not_retry_non_retryable_4xx(monkeypatch: pytest.Mo
         await client.post_json("/hooks/trigger", {"x": 1}, correlation_id="corr-1")
 
     assert calls["count"] == 1
+
+
+@pytest.mark.asyncio
+async def test_post_json_applies_extra_headers_and_skips_api_key_when_not_configured(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Cover branches where API-key headers are omitted and extra headers are merged."""
+    http_client_cls = _load_symbol("N8nHttpClient", "N8nHttpClient")
+    config = _new_config()
+    config.api_key_header = ""
+    config.api_key_value = ""
+    client = http_client_cls(config)
+
+    captured: dict[str, Any] = {}
+
+    class _Response:
+        """Tiny fake urllib response object for header merge tests."""
+
+        status = 200
+
+        def read(self) -> bytes:
+            """Return JSON payload bytes."""
+            return b'{"ok": true}'
+
+        def getheaders(self) -> list[tuple[str, str]]:
+            """Return synthetic header tuples."""
+            return []
+
+    def _fake_urlopen(request: Any, _: float) -> _Response:
+        """Capture request for outgoing header assertions."""
+        captured["request"] = request
+        return _Response()
+
+    monkeypatch.setattr("src.core.n8nbridge.N8nHttpClient.urllib.request.urlopen", _fake_urlopen)
+    await client.post_json(
+        "/hooks/trigger",
+        {"x": 1},
+        correlation_id="corr-1",
+        extra_headers={"X-Custom": "value"},
+    )
+
+    request = captured["request"]
+    assert request.headers.get("X-custom") == "value"
+    assert request.headers.get("X-API-KEY") is None
+
+
+@pytest.mark.asyncio
+async def test_post_json_raises_after_retryable_http_5xx_exhaustion(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Cover retry path for HTTPError >=500 and failure after final attempt."""
+    http_client_cls = _load_symbol("N8nHttpClient", "N8nHttpClient")
+    config = _new_config()
+    config.base_url = "https://n8n.production.local"
+    config.max_retries = 1
+    config.backoff_seconds = 0.01
+    client = http_client_cls(config)
+
+    calls = {"count": 0}
+
+    def _fake_urlopen(_: Any, __: float) -> Any:
+        """Always raise retryable HTTP 503."""
+        calls["count"] += 1
+        raise HTTPError("http://n8n", 503, "service unavailable", {}, io.BytesIO(b""))
+
+    monkeypatch.setattr("src.core.n8nbridge.N8nHttpClient.urllib.request.urlopen", _fake_urlopen)
+    with pytest.raises(Exception, match=r".+"):
+        await client.post_json("/hooks/trigger", {"x": 1}, correlation_id="corr-5xx")
+
+    assert calls["count"] == 2
+
+
+@pytest.mark.asyncio
+async def test_post_json_raises_for_oserror_when_base_url_is_not_example_domain(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Cover OSError final-attempt path that raises typed client error."""
+    http_client_cls = _load_symbol("N8nHttpClient", "N8nHttpClient")
+    config = _new_config()
+    config.base_url = "https://n8n.production.local"
+    config.max_retries = 0
+    client = http_client_cls(config)
+
+    def _fake_urlopen(_: Any, __: float) -> Any:
+        """Raise deterministic OSError for transport failure path."""
+        raise OSError("network unreachable")
+
+    monkeypatch.setattr("src.core.n8nbridge.N8nHttpClient.urllib.request.urlopen", _fake_urlopen)
+    with pytest.raises(Exception, match=r".+"):
+        await client.post_json("/hooks/trigger", {"x": 1}, correlation_id="corr-os")
+
+
+def test_parse_json_bytes_handles_empty_and_non_object_payloads() -> None:
+    """Cover parser behavior for empty and non-dict JSON response bodies."""
+    module = import_module("src.core.n8nbridge.N8nHttpClient")
+    assert module._parse_json_bytes(b"") == {}
+    assert module._parse_json_bytes(b"[1, 2, 3]") == {"value": [1, 2, 3]}
+
+
+@pytest.mark.asyncio
+async def test_sleep_backoff_returns_immediately_for_nonpositive_delay() -> None:
+    """Cover backoff helper early-return path for nonpositive delay values."""
+    module = import_module("src.core.n8nbridge.N8nHttpClient")
+    await module._sleep_backoff(0)
+
+
+def test_http_client_module_validate_executes_monotonic_probe() -> None:
+    """Cover module-level validate hook used by health checks."""
+    module = import_module("src.core.n8nbridge.N8nHttpClient")
+    module.validate()
 
 
 @pytest.mark.asyncio
