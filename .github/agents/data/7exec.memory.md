@@ -5,6 +5,28 @@ integration checks, and smoke test outcomes.
 
 ---
 
+## Last run — 2026-03-27 ❌ BLOCKED -> @6code
+- Task: prj0000087 n8n-workflow-bridge
+- Status: BLOCKED
+- Lifecycle: IN_PROGRESS -> BLOCKED
+- Tests run: 20 + 10 + 129 + 20 | Passed: 178 | Failed: 1 (structure) + 1 (coverage gate)
+- Import check: PASS (covered by successful n8n bridge test collection/execution)
+- Coverage: 85.78% on src/core/n8nbridge ❌ (threshold: 90%)
+- Ruff: PASS (requested n8n bridge scope)
+- mypy: PASS (strict on src/core/n8nbridge)
+- Smoke test: SKIPPED (not requested)
+- rust_core: SKIPPED (not modified)
+- Pre-commit: SKIPPED (blocked before @8ql handoff)
+- Placeholder scan: SKIPPED (blocked before @8ql handoff)
+- Outcome: BLOCKED -> @6code
+- task_id: prj0000087-n8n-workflow-bridge
+- handoff_target: @6code
+- Notes:
+  - Coverage gate command failed: `pytest tests/test_n8n_bridge.py --cov=src/core/n8nbridge --cov-report=term-missing --cov-fail-under=90 -q`
+  - Structure gate failed: `tests/structure/test_kanban.py::test_kanban_total_rows` expected 88 rows, found 91
+
+---
+
 ## Last run — 2026-03-27 ❌ BLOCKED → @6code
 - Task: prj0000085 shadow-mode-replay
 - Status: BLOCKED
