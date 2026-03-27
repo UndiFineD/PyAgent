@@ -114,3 +114,19 @@ prj0000075 ci-simplification branch prj0000075-ci-simplification — project set
 | **handoff_target** | @2think |
 | **artifact_paths** | docs/project/prj0000085-shadow-mode-replay/prj0000085-shadow-mode-replay.project.md, docs/project/prj0000085-shadow-mode-replay/prj0000085-shadow-mode-replay.think.md, docs/project/prj0000085-shadow-mode-replay/prj0000085-shadow-mode-replay.design.md, docs/project/prj0000085-shadow-mode-replay/prj0000085-shadow-mode-replay.plan.md, docs/project/prj0000085-shadow-mode-replay/prj0000085-shadow-mode-replay.test.md, docs/project/prj0000085-shadow-mode-replay/prj0000085-shadow-mode-replay.code.md, docs/project/prj0000085-shadow-mode-replay/prj0000085-shadow-mode-replay.exec.md, docs/project/prj0000085-shadow-mode-replay/prj0000085-shadow-mode-replay.ql.md, docs/project/prj0000085-shadow-mode-replay/prj0000085-shadow-mode-replay.git.md |
 
+---
+
+## prj0000087 - n8n-workflow-bridge
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000087-n8n-workflow-bridge |
+| **owner_agent** | @1project |
+| **source** | @0master |
+| **created_at** | 2026-03-27 |
+| **updated_at** | 2026-03-27 |
+| **status** | DONE |
+| **summary** | prj0000087 n8n-workflow-bridge branch prj0000087-n8n-workflow-bridge - project folder created with overview and 8 lifecycle stubs; branch gate validated; structure tests run. |
+| **handoff_target** | @2think |
+| **artifact_paths** | docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.project.md, docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.think.md, docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.design.md, docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.plan.md, docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.test.md, docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.code.md, docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.exec.md, docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.ql.md, docs/project/prj0000087-n8n-workflow-bridge/n8n-workflow-bridge.git.md |
+
