@@ -5,6 +5,21 @@ tradeoff analysis, and recommended directions.
 
 ---
 
+## prj0000088 - ai-fuzzing-security
+_Date: 2026-03-27 | Branch: prj0000088-ai-fuzzing-security_
+
+task_id: prj0000088
+Lifecycle: OPEN -> IN_PROGRESS -> DONE
+Artifact: docs/project/prj0000088-ai-fuzzing-security/prj0000088-ai-fuzzing-security.think.md
+Recommendation: Option A - Deterministic Local Mutation Engine (Rule-Based, No Model Runtime)
+Handoff target: @3design
+Rationale summary:
+- Aligns directly to minimal v1 scope with local deterministic mutation strategies.
+- Enforces no-external-call guardrails with bounded execution and explicit allowlists.
+- Minimizes blast radius while preserving a clean extension seam for optional local-model mutators in later phases.
+
+---
+
 ## prj0000086 - universal-agent-shell
 _Date: 2026-03-27 | Branch: prj0000086-universal-agent-shell_
 
