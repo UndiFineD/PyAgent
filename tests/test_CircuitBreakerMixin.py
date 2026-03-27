@@ -21,6 +21,7 @@ This file satisfies the test_each_core_has_test_file convention.
 from __future__ import annotations
 
 import pytest
+
 from src.core.resilience.CircuitBreakerConfig import CircuitBreakerConfig  # type: ignore[import]
 from src.core.resilience.CircuitBreakerMixin import CircuitBreakerMixin, validate  # type: ignore[import]
 from src.core.resilience.CircuitBreakerRegistry import CircuitBreakerRegistry  # type: ignore[import]
