@@ -2,15 +2,15 @@
   {
     "id": "prj0000088",
     "name": "ai-fuzzing-security",
-    "lane": "Ideas",
+    "lane": "Review",
     "summary": "Brainstorm AI fuzzing engine: learning-based path discovery, multi-cycle security testing, local Ollama model integration",
-    "branch": null,
+    "branch": "prj0000088-ai-fuzzing-security",
     "pr": null,
     "priority": "P3",
     "budget_tier": "M",
     "tags": ["security", "testing", "ai"],
     "created": "2026-03-26",
-    "updated": "2026-03-26"
+    "updated": "2026-03-27"
   },
   {
     "id": "prj0000087",

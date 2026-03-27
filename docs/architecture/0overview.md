@@ -17,6 +17,7 @@ contributors quickly understand the high-level system structure and where to loo
 | Path | Purpose |
 |---|---|
 | `src/` | Python agent orchestration, inference, and core logic |
+| `src/core/fuzzing/` | Deterministic local fuzzing core (policy, corpus, mutator, case scheduling) |
 | `rust_core/` | High-throughput Rust kernels (diff/patch, metrics, parsing) via PyO3 |
 | `backend/` | FastAPI WebSocket + REST backend worker |
 | `web/` | Vite/React NebulaOS frontend |

@@ -5,16 +5,49 @@ integration checks, and smoke test outcomes.
 
 ---
 
-## Last run — 2026-03-27 ❌ BLOCKED -> @6code
-- Task: prj0000087 n8n-workflow-bridge
-- Status: BLOCKED
-- Lifecycle: IN_PROGRESS -> BLOCKED
-- Tests run: 20 + 10 + 129 + 20 | Passed: 178 | Failed: 1 (structure) + 1 (coverage gate)
-- Import check: PASS (covered by successful n8n bridge test collection/execution)
-- Coverage: 85.78% on src/core/n8nbridge ❌ (threshold: 90%)
-- Ruff: PASS (requested n8n bridge scope)
-- mypy: PASS (strict on src/core/n8nbridge)
-- Smoke test: SKIPPED (not requested)
+## Last run — 2026-03-27 ✅ PASSED → @8ql
+- Task: prj0000088 ai-fuzzing-security (rerun after fix SHA 24dce253)
+- Status: IN_PROGRESS -> DONE
+- Tests run: 38 + 6 + 38 + 129 + 129 | Passed: 340 | Failed: 0
+- Import check: PASS (all `src/core/fuzzing` modules import OK)
+- Coverage: PASS (99.06% on `src/core/fuzzing`, threshold 90%)
+- Ruff: PASS (All checks passed)
+- mypy: PASS (Success: no issues found in 8 source files)
+- Smoke test: SKIPPED (not requested; no CLI/API startup command in provided validation set)
+- rust_core: SKIPPED (not modified)
+- Outcome: PASSED -> @8ql
+- task_id: prj0000088-ai-fuzzing-security
+- handoff_target: @8ql
+- Notes: Structure suite now passes (`tests/structure` 129/129) including extra rerun requested by user.
+
+---
+
+## Last run — 2026-03-27 ❌ BLOCKED → @6code
+- Task: prj0000088 ai-fuzzing-security fuzzing core execution validation
+- Status: IN_PROGRESS -> BLOCKED
+- Tests run: 18 + 6 + 18 + 129 | Passed: 170 | Failed: 1
+- Import check: PASS (covered by successful fuzzing test collection/execution)
+- Coverage: FAIL (76.18% on `src/core/fuzzing`, threshold 90%)
+- Ruff: PASS (All checks passed)
+- mypy: PASS (Success: no issues found in 8 source files)
+- Smoke test: SKIPPED (not requested; no CLI/API startup command in provided validation set)
+- rust_core: SKIPPED (not modified)
+- Outcome: BLOCKED -> @6code
+- task_id: prj0000088-ai-fuzzing-security
+- handoff_target: @6code
+- Notes: Structure suite failed at `tests/structure/test_kanban.py::test_kanban_total_rows` with expected 88 rows and observed 90.
+
+---
+
+## Last run — 2026-03-27 ✅ PASSED → @8ql
+- Task: prj0000086 universal-agent-shell facade (rerun after fix commit cb60a7dce)
+- Status: IN_PROGRESS -> DONE
+- Tests run: 12 + 18 + 129 + 12 | Passed: 171 | Failed: 0
+- Import check: PASS (all `src/core/universal` modules import OK)
+- Coverage: PASS (96.26% on `src/core/universal`, threshold 90%)
+- Ruff: PASS (All checks passed)
+- mypy: PASS (Success: no issues found in 5 source files)
+- Smoke test: SKIPPED (no CLI/API entrypoint touched in this scope)
 - rust_core: SKIPPED (not modified)
 - Pre-commit: SKIPPED (blocked before @8ql handoff)
 - Placeholder scan: SKIPPED (blocked before @8ql handoff)

@@ -177,3 +177,32 @@ Invoke it via `agent/runSubagent` to continue the implementation workflow.
 	- target_agent: @6code
 	- required_tasks: T1-T7 from prj0000085-shadow-mode-replay.plan.md
 	- key_failure_signal: all replay contracts still unimplemented in `src/core/replay/`
+
+### task_id: prj0000088-ai-fuzzing-security-20260327
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- project: prj0000088-ai-fuzzing-security
+- branch_expected: prj0000088-ai-fuzzing-security
+- branch_observed: prj0000088-ai-fuzzing-security ✓
+- files_created:
+	- tests/test_fuzzing_core.py (18 mapped red tests: TEST-01..TEST-18)
+	- tests/test_FuzzCase.py
+	- tests/test_FuzzMutator.py
+	- tests/test_FuzzCorpus.py
+	- tests/test_FuzzEngineCore.py
+	- tests/test_FuzzSafetyPolicy.py
+	- tests/test_FuzzResult.py
+- lint_validation:
+	- `.venv\\Scripts\\ruff.exe check --fix` on all seven new test files: PASS
+	- `.venv\\Scripts\\ruff.exe check` on all seven new test files: PASS
+- red_phase_run:
+	- target suite command:
+		- `python -m pytest -q tests/test_fuzzing_core.py tests/test_FuzzCase.py tests/test_FuzzMutator.py tests/test_FuzzCorpus.py tests/test_FuzzEngineCore.py tests/test_FuzzSafetyPolicy.py tests/test_FuzzResult.py --tb=short`
+	- target result: 24 failed in 3.37s (expected red)
+	- failure reason: explicit behavior failures indicating missing `src.core.fuzzing.*` modules
+	- structure command:
+		- `python -m pytest -q tests/structure --tb=short`
+	- structure result: 1 failed, 128 passed in 2.47s
+	- structure failure: `tests/structure/test_kanban.py::test_kanban_total_rows` (expected 88 rows, found 90)
+- handoff:
+	- target_agent: @6code
+	- required_scope: implement `src/core/fuzzing/*` modules and package exports to satisfy red-phase contracts
