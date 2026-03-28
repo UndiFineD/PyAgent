@@ -5,6 +5,55 @@ integration checks, and smoke test outcomes.
 
 ---
 
+## Last run - 2026-03-28 BLOCKED -> @6code
+- Task: prj0000094 idea-003-mypy-strict-enforcement (post-blocker-fix revalidation)
+- Status: IN_PROGRESS -> DONE
+- task_id: prj0000094-idea-003-mypy-strict-enforcement
+- handoff_target: @6code
+- Branch gate: PASS (expected = observed = prj0000094-idea-003-mypy-strict-enforcement)
+- Tests run: 2 bundles | Passed: 56 | Failed: 0
+- Import check: PASS (4/4 changed transaction modules import cleanly)
+- Smoke test: SKIPPED (no CLI/API entry point changes in this scoped rerun)
+- rust_core: SKIPPED (not modified)
+- Dependency warnings: NONE (classified NON_BLOCKING)
+- Placeholder scan: PASS (no matches in changed transaction modules)
+- Outcome: BLOCKED_FOR_8QL
+- Notes:
+  - `python -m mypy --config-file mypy-strict-lane.ini` passed (`Success: no issues found in 10 source files`).
+  - `python -m pytest -q tests/test_ContextTransactionManager.py tests/test_StorageTransactionManager.py tests/test_ProcessTransactionManager.py tests/test_MemoryTransactionManager.py` passed (`48 passed`).
+  - strict-lane plan bundle also passed (`8 passed`).
+  - Mandatory `pre-commit run --files <scoped files>` returned non-zero due unrelated `tests/*` lint/type findings, so @7exec policy blocks @8ql handoff.
+
+### Lesson - Scoped pre-commit overflow (2026-03-28)
+- Pattern: Scoped `pre-commit run --files` still reports failures from unrelated repository test files.
+- Root cause: Hook chain executes broad checks that are not effectively constrained to scoped file inputs.
+- Prevention: Introduce a project-scoped pre-commit profile or runbook-approved override for @7exec handoff gating when unrelated hooks dominate output.
+- First seen: 2026-03-28
+- Seen in: prj0000090-private-key-remediation; prj0000094-idea-003-mypy-strict-enforcement
+- Recurrence count: 3
+- Promotion status: PROMOTED_HARD_RULE
+
+---
+
+## Last run - 2026-03-28 BLOCKED -> @6code
+- Task: prj0000094 idea-003-mypy-strict-enforcement (Wave 1 execution validation)
+- Status: OPEN -> IN_PROGRESS -> DONE
+- task_id: prj0000094-idea-003-mypy-strict-enforcement
+- handoff_target: @6code
+- Branch gate: PASS (expected = observed = prj0000094-idea-003-mypy-strict-enforcement)
+- Tests run: 1 targeted strict-lane bundle | Passed: 8 | Failed: 0
+- Import check: SKIPPED (implementation scope is config/docs; no changed Python module imports required)
+- Smoke test: SKIPPED (no CLI/API entry point touched in this wave)
+- rust_core: SKIPPED (not modified)
+- Dependency warnings: NONE (classified NON_BLOCKING)
+- Outcome: BLOCKED_FOR_PROMOTION
+- Notes:
+  - `python -m pytest -q tests/structure/test_mypy_strict_lane_config.py tests/structure/test_ci_yaml.py tests/zzz/test_zzc_mypy_strict_lane_smoke.py` passed (`8 passed in 1.26s`).
+  - `python -m mypy --config-file mypy-strict-lane.ini` failed with 21 errors across `src/transactions/*` files.
+  - Failure classified as out-of-scope debt relative to Wave 1 config expansion; strict-lane promotion remains blocked until debt is addressed or explicitly waived.
+
+---
+
 ## Last run - 2026-03-28 PASSED -> @9git
 - Task: prj0000093 projectmanager-ideas-autosync (follow-up revalidation)
 - Status: IN_PROGRESS -> DONE

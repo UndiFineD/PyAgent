@@ -11,6 +11,37 @@ Invoke it via `agent/runSubagent` to continue the implementation workflow.
 
 ## Task Log
 
+### task_id: prj0000094-idea-003-mypy-strict-enforcement-20260328
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- project: prj0000094-idea-003-mypy-strict-enforcement
+- branch_expected: prj0000094-idea-003-mypy-strict-enforcement
+- branch_observed: prj0000094-idea-003-mypy-strict-enforcement ✓
+- scope:
+	- execute T1 baseline verification command from plan
+	- update Wave 1 strict-lane allowlist expectation in `tests/structure/test_mypy_strict_lane_config.py`
+	- verify red-phase failure for missing Wave 1 implementation delta
+	- update project test artifact with command evidence, AC-to-test mapping, and weak-test gate
+- lint_validation:
+	- `.venv\Scripts\ruff.exe check --fix tests/structure/test_mypy_strict_lane_config.py`: PASS
+	- `.venv\Scripts\ruff.exe check tests/structure/test_mypy_strict_lane_config.py`: PASS
+	- `.venv\Scripts\ruff.exe check --select D tests/structure/test_mypy_strict_lane_config.py`: PASS
+- baseline_results:
+	- `python -m pytest -q tests/structure/test_mypy_strict_lane_config.py tests/structure/test_ci_yaml.py tests/zzz/test_zzc_mypy_strict_lane_smoke.py`
+		- result: 8 passed in 3.89s
+- red_phase_results:
+	- `python -m pytest -q tests/structure/test_mypy_strict_lane_config.py tests/structure/test_ci_yaml.py tests/zzz/test_zzc_mypy_strict_lane_smoke.py --tb=short`
+		- result: 1 failed, 7 passed in 5.68s (expected red)
+		- failure mode: assertion-level allowlist contract mismatch (Wave 1 expected 10, config still 6)
+		- collection quality: no ImportError/AttributeError blockers
+- quality_gate:
+	- AC-to-test matrix present in project test artifact: PASS
+	- weak-test detection gate executed and documented: PASS
+- handoff:
+	- target_agent: @6code
+	- required_scope:
+		- implement T3 by expanding `mypy-strict-lane.ini` `[mypy] files` with Wave 1 candidates
+		- keep CI strict-lane blocking semantics and smoke behavior contracts unchanged
+
 ### task_id: prj0000093-projectmanager-ideas-autosync-20260328
 - lifecycle: OPEN -> IN_PROGRESS -> DONE
 - project: prj0000093-projectmanager-ideas-autosync

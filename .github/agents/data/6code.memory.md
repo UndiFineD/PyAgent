@@ -9,6 +9,42 @@ Once code implementation is complete and tests are passing,
 the next agent to invoke is **@7exec**. 
 This should be done via `agent/runSubagent`.
 
+## prj0000094 - idea-003-mypy-strict-enforcement (Wave 1 green)
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000094-idea-003-mypy-strict-enforcement |
+| **owner_agent** | @6code |
+| **source** | @5test red-phase handoff |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | DONE |
+| **summary** | Implemented minimal Wave 1 strict-lane allowlist expansion by updating `mypy-strict-lane.ini` from 6 to 10 locked entries; preserved existing CI strict-lane blocking and smoke contracts without unrelated edits. |
+| **changed_modules** | mypy-strict-lane.ini; docs/project/prj0000094-idea-003-mypy-strict-enforcement/prj0000094-idea-003-mypy-strict-enforcement.code.md; .github/agents/data/6code.memory.md |
+| **verification_commands** | python -m pytest -q tests/structure/test_mypy_strict_lane_config.py; python -m pytest -q tests/structure/test_ci_yaml.py; python -m pytest -q tests/zzz/test_zzc_mypy_strict_lane_smoke.py; python -m mypy --config-file mypy-strict-lane.ini |
+| **verification_result** | PASS for targeted T3-T5 tests (`2 passed`, `5 passed`, `1 passed`). Strict-lane mypy command still reports pre-existing errors in `src/transactions/*` (outside this scoped config-only change). |
+| **unresolved_risks** | Repository strict-lane mypy debt exists outside Wave 1 allowlist/config request scope. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | mypy-strict-lane.ini, docs/project/prj0000094-idea-003-mypy-strict-enforcement/prj0000094-idea-003-mypy-strict-enforcement.code.md, .github/agents/data/6code.memory.md |
+
+## prj0000094 - idea-003-mypy-strict-enforcement (@7exec/@8ql strict-lane blocker follow-up)
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000094-idea-003-mypy-strict-enforcement |
+| **owner_agent** | @6code |
+| **source** | @7exec/@8ql blocker handoff |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | DONE |
+| **summary** | Cleared strict-lane mypy failures in `src/transactions/*` with minimal typing-only edits (context-manager signatures, token/process optional typing, returncode narrowing, concrete dict generics) while preserving runtime behavior and keeping scope limited to the blocker. |
+| **changed_modules** | src/transactions/ContextTransactionManager.py; src/transactions/StorageTransactionManager.py; src/transactions/ProcessTransactionManager.py; src/transactions/MemoryTransactionManager.py; docs/project/prj0000094-idea-003-mypy-strict-enforcement/prj0000094-idea-003-mypy-strict-enforcement.code.md; .github/agents/data/6code.memory.md |
+| **verification_commands** | python -m mypy --config-file mypy-strict-lane.ini; python -m pytest -q tests/test_ContextTransactionManager.py tests/test_StorageTransactionManager.py tests/test_ProcessTransactionManager.py tests/test_MemoryTransactionManager.py; rg --type py "raise NotImplementedError\|raise NotImplemented\\b\|#\\s*(TODO\|FIXME\|HACK\|STUB\|PLACEHOLDER)" src/transactions/ContextTransactionManager.py src/transactions/StorageTransactionManager.py src/transactions/ProcessTransactionManager.py src/transactions/MemoryTransactionManager.py |
+| **verification_result** | PASS — strict-lane mypy green (`Success: no issues found in 10 source files`); focused transaction regression suite green (`48 passed`); placeholder scan clean for changed transaction files. |
+| **unresolved_risks** | None identified in scoped blocker remediation. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | src/transactions/ContextTransactionManager.py, src/transactions/StorageTransactionManager.py, src/transactions/ProcessTransactionManager.py, src/transactions/MemoryTransactionManager.py, docs/project/prj0000094-idea-003-mypy-strict-enforcement/prj0000094-idea-003-mypy-strict-enforcement.code.md, .github/agents/data/6code.memory.md |
+
 ## prj0000093 - projectmanager-ideas-autosync
 
 | Field | Value |

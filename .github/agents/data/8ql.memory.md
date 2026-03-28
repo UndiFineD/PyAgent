@@ -9,6 +9,57 @@ Once security scans and CodeQL analysis are complete,
 the next agent in the workflow is **@9git**. 
 Invoke it via `agent/runSubagent` to continue the process.
 
+## Last scan - 2026-03-28 (prj0000094 reassessment after blocker fix)
+- Task: prj0000094-idea-003-mypy-strict-enforcement
+- Lifecycle: OPEN -> IN_PROGRESS -> DONE
+- status: DONE
+- task_id: prj0000094-idea-003-mypy-strict-enforcement
+- Branch gate: PASS (expected = observed = `prj0000094-idea-003-mypy-strict-enforcement`)
+- Files scanned: `src/transactions/*TransactionManager.py`, `mypy-strict-lane.ini`, strict-lane test files, and project artifacts under `docs/project/prj0000094-idea-003-mypy-strict-enforcement/`
+- Security - CodeQL: SKIPPED (CLI/database flow not invoked in this scoped reassessment)
+- Security - ruff S rules: PASS WITH INFO/LOW (pytest `S101`; static-command `S603` in smoke test only)
+- Security - pip-audit new findings: 0 (`pip_audit_results.json` baseline reports `Deps with vulns: 0`)
+- Security - Rust unsafe check: SKIPPED (`rust_core/` not modified)
+- Security - Workflow injection: PASS (no workflow-file changes in current diff)
+- Quality - Plan vs delivery: PASS WITH NOTES (non-blocking artifact status/checklist sync drift)
+- Quality - AC vs test coverage: PASS (`python -m mypy --config-file mypy-strict-lane.ini` green; transaction regression suite 48/48)
+- Quality - Docs vs implementation: PASS WITH NOTES (test/plan metadata needs sync)
+- Quality - Agent file consistency: PASS
+- Lessons written: 0 (existing lesson retained as CANDIDATE)
+- Rules promoted: 0
+- Outcome: CLEAN -> @9git
+- handoff_target: @9git
+
+## Last scan - 2026-03-28 (prj0000094)
+- Task: prj0000094-idea-003-mypy-strict-enforcement
+- Lifecycle: OPEN -> IN_PROGRESS -> BLOCKED
+- status: BLOCKED
+- task_id: prj0000094-idea-003-mypy-strict-enforcement
+- Branch gate: PASS (expected = observed = `prj0000094-idea-003-mypy-strict-enforcement`)
+- Files scanned: `mypy-strict-lane.ini`, `tests/structure/test_mypy_strict_lane_config.py`, `tests/structure/test_ci_yaml.py`, `tests/zzz/test_zzc_mypy_strict_lane_smoke.py`, `.github/workflows/ci.yml`, project artifacts under `docs/project/prj0000094-idea-003-mypy-strict-enforcement/`
+- Security - CodeQL: SKIPPED (CLI/database flow not invoked; scoped checks executed)
+- Security - ruff S rules: PASS WITH INFO/LOW (pytest `S101` patterns + one static-command `S603` in smoke test)
+- Security - pip-audit new findings: 0 (`pip_audit_results.json` baseline reports `Deps with vulns: 0`)
+- Security - Rust unsafe check: SKIPPED (`rust_core/` not modified)
+- Security - Workflow injection: PASS (`permissions` explicit, no `pull_request_target`, no unsafe user-controlled interpolation in `run:`)
+- Quality - Plan vs delivery: PASS WITH NOTES (implementation delivered; plan/test status fields need sync)
+- Quality - AC vs test coverage: CONDITIONAL (targeted strict-lane tests pass; strict-lane mypy promotion command fails)
+- Quality - Docs vs implementation: PASS WITH NOTES (artifact status/checklist drift)
+- Quality - Agent file consistency: PASS
+- Lessons written: 1
+- Rules promoted: 0
+- Outcome: BLOCKED -> @6code
+- handoff_target: @6code
+
+### Lesson - 2026-03-28 (prj0000094)
+- Pattern: Wave allowlist expansion can expose transitive strict-lane typing errors outside directly edited files.
+- Root cause: Newly allowlisted core modules pull in `src/transactions/*` dependencies with pre-existing typing debt.
+- Prevention: Before declaring wave completion, run strict-lane mypy as a pre-merge gate and either include dependency remediation in scope or predefine rollback candidate trimming.
+- First seen: prj0000094
+- Seen in: prj0000094-idea-003-mypy-strict-enforcement
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
 ## Last scan - 2026-03-28 (prj0000093 final quick pass)
 - Task: prj0000093-projectmanager-ideas-autosync
 - Lifecycle: OPEN -> IN_PROGRESS -> DONE
@@ -32,6 +83,13 @@ Invoke it via `agent/runSubagent` to continue the process.
 - handoff_target: @9git
 
 ## Unresolved Quality-Debt Ledger
+- Debt ID: QD-prj0000094-001
+- Status: DONE
+- Owner: @6code (implementation) with @4plan (scope/rollback decision)
+- Originating project: prj0000094-idea-003-mypy-strict-enforcement
+- Description: Strict-lane promotion blocker on `src/transactions/*` was remediated by typing-only fixes and reassessed clean.
+- Exit criteria: met on 2026-03-28 (`python -m mypy --config-file mypy-strict-lane.ini` -> success; transaction regression suite green).
+
 - Debt ID: QD-prj0000093-001
 - Status: OPEN
 - Owner: @6code (or @3design if contract documentation is updated instead)
