@@ -228,3 +228,46 @@ def test_malformed_idea_file_does_not_crash_endpoint() -> None:
     assert isinstance(payload, list)
     returned_ids = {str(item["idea_id"]).lower() for item in payload}
     assert "idea999998" not in returned_ids
+
+
+def test_patch_idea_updates_title_summary_and_mapping() -> None:
+    """PATCH /api/ideas/{idea_id} updates markdown-backed fields."""
+    temp_idea = _IDEAS_DIR / "idea999997-patch-red-test.md"
+    temp_idea.write_text(
+        "\n".join(
+            [
+                "# Temporary patch idea",
+                "",
+                "## Idea Summary",
+                "Initial summary.",
+                "",
+                "Planned project mapping: none yet",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    try:
+        response = _CLIENT.patch(
+            "/api/ideas/idea999997",
+            json={
+                "title": "Updated patch idea title",
+                "summary": "Updated summary line",
+                "mapped_project_ids": ["prj0000094"],
+            },
+        )
+        assert response.status_code == 200
+        payload = response.json()
+        assert payload["idea_id"] == "idea999997"
+        assert payload["title"] == "Updated patch idea title"
+        assert payload["summary"] == "Updated summary line"
+        assert payload["mapped_project_ids"] == ["prj0000094"]
+
+        updated_text = temp_idea.read_text(encoding="utf-8")
+        assert "# Updated patch idea title" in updated_text
+        assert "## Idea Summary" in updated_text
+        assert "Updated summary line" in updated_text
+        assert "Planned project mapping: prj0000094" in updated_text
+    finally:
+        temp_idea.unlink(missing_ok=True)

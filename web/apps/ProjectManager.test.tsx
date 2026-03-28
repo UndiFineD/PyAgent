@@ -74,6 +74,7 @@ describe('ProjectManager ideas panel', () => {
               idea_id: 'idea000093',
               rank: 93,
               title: 'Auto Sync Ideas',
+              summary: 'Automatically keep ideas and project lanes in sync.',
               source_path: 'docs/project/ideas/idea000093-auto-sync.md',
               mapped_project_ids: ['prj0000093'],
             },
@@ -93,6 +94,10 @@ describe('ProjectManager ideas panel', () => {
     expect(screen.queryByText('Auto Sync Ideas')).not.toBeNull();
     expect(screen.queryByText('idea000093')).not.toBeNull();
     expect(screen.queryByText('docs/project/ideas/idea000093-auto-sync.md')).not.toBeNull();
+    expect(screen.queryByRole('button', { name: 'Edit' })).not.toBeNull();
+    expect(screen.queryAllByRole('button', { name: 'SWOT' }).length).toBeGreaterThan(1);
+    expect(screen.queryAllByRole('button', { name: 'Risk' }).length).toBeGreaterThan(1);
+    expect(screen.queryByRole('button', { name: 'To Discovery' })).not.toBeNull();
 
     const fetchCalls = (globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls.map(
       ([input]) => String(input),
@@ -139,7 +144,7 @@ describe('ProjectManager ideas panel', () => {
     });
 
     expect(screen.queryByText('Active Ideas Queue')).not.toBeNull();
-    expect(screen.queryByText('No active ideas in queue.')).not.toBeNull();
+    expect(screen.queryByText('no active ideas')).not.toBeNull();
   });
 
   it('keeps project board usable when ideas fetch fails', async () => {

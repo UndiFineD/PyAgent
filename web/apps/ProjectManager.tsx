@@ -14,7 +14,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   GitBranch, ExternalLink, Search, Loader2, AlertTriangle,
-  ChevronDown, ChevronUp, Tag, Pencil, FolderOpen, Plus, X, Check, BarChart2,
+  ChevronDown, ChevronUp, Tag, Pencil, FolderOpen, Plus, X, Check, BarChart2, Copy,
 } from 'lucide-react';
 import { cn } from '../utils';
 import kanbanRaw from '../../docs/project/kanban.md?raw';
@@ -47,13 +47,24 @@ interface Idea {
   idea_id: string;
   rank: number | null;
   title: string;
+  summary: string;
   source_path: string;
   mapped_project_ids: string[];
+}
+
+type InsightMode = 'swot' | 'risk';
+
+interface AgentFlowInboxItem {
+  agentId: '0master';
+  text: string;
+  createdAt: string;
 }
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
 const LANES: Lane[] = ['Ideas', 'Discovery', 'Design', 'In Sprint', 'Review', 'Released', 'Archived'];
+const FLOW_LANES: Lane[] = ['Discovery', 'Design', 'In Sprint'];
+const BOARD_LANES: Lane[] = ['Review', 'Released', 'Archived'];
 const PRIORITIES: Priority[] = ['P1', 'P2', 'P3', 'P4'];
 const BUDGET_TIERS: BudgetTier[] = ['XS', 'S', 'M', 'L', 'XL', 'unknown'];
 
@@ -99,6 +110,146 @@ async function apiCreate(project: Project): Promise<Project> {
   if (!r.ok) throw new Error(`POST: HTTP ${r.status}`);
   return r.json();
 }
+
+async function apiPatchIdea(
+  ideaId: string,
+  patch: { title?: string; summary?: string; mapped_project_ids?: string[] },
+): Promise<Idea> {
+  const r = await fetch(`/api/ideas/${ideaId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(patch),
+  });
+  if (!r.ok) throw new Error(`PATCH idea ${ideaId}: HTTP ${r.status}`);
+  return r.json();
+}
+
+async function apiRunPipeline(task: string): Promise<{ pipeline_id: string; status: string }> {
+  const r = await fetch('/api/pipeline/run', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ task }),
+  });
+  if (!r.ok) throw new Error(`POST pipeline/run: HTTP ${r.status}`);
+  return r.json();
+}
+
+async function appendAgentLog(agentId: string, linesToAppend: string[]): Promise<void> {
+  const readResp = await fetch(`/api/agent-log/${agentId}`);
+  const previous = readResp.ok ? ((await readResp.json()) as { content?: string }).content ?? '' : '';
+  const next = [previous.trimEnd(), ...linesToAppend].filter(Boolean).join('\n');
+  await fetch(`/api/agent-log/${agentId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content: `${next}\n` }),
+  });
+}
+
+function enqueueAgentflowInbox(item: AgentFlowInboxItem): void {
+  const key = 'pyagent.agentflow.inbox';
+  const raw = localStorage.getItem(key);
+  let queue: AgentFlowInboxItem[] = [];
+  if (raw) {
+    try {
+      queue = JSON.parse(raw) as AgentFlowInboxItem[];
+    } catch {
+      queue = [];
+    }
+  }
+  queue.push(item);
+  localStorage.setItem(key, JSON.stringify(queue));
+}
+
+interface IdeaEditModalProps {
+  idea: Idea;
+  onSave: (idea: Idea) => void;
+  onClose: () => void;
+}
+
+const IdeaEditModal: React.FC<IdeaEditModalProps> = ({ idea, onSave, onClose }) => {
+  const [title, setTitle] = useState(idea.title);
+  const [summary, setSummary] = useState(idea.summary);
+  const [mappedProjects, setMappedProjects] = useState(idea.mapped_project_ids.join(', '));
+  const [saving, setSaving] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  const save = async () => {
+    setSaving(true);
+    setErr(null);
+    try {
+      const mapped = mappedProjects
+        .split(',')
+        .map(token => token.trim().toLowerCase())
+        .filter(Boolean);
+      const updated = await apiPatchIdea(idea.idea_id, {
+        title: title.trim(),
+        summary: summary.trim(),
+        mapped_project_ids: mapped,
+      });
+      onSave(updated);
+    } catch (e) {
+      setErr(String((e as Error).message));
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+      <div className="bg-os-window border border-os-border rounded-xl shadow-2xl w-[560px] max-h-[90vh] overflow-y-auto p-5">
+        <div className="flex items-center justify-between mb-4">
+          <span className="font-semibold text-sm text-os-text">Edit {idea.idea_id}</span>
+          <button onClick={onClose} className="text-os-text/40 hover:text-os-text"><X size={14} /></button>
+        </div>
+
+        <div className="space-y-3">
+          <div>
+            <div className="text-[10px] text-os-text/50 mb-0.5">Title</div>
+            <input
+              className="w-full bg-os-bg border border-os-border rounded px-2 py-1 text-xs text-os-text outline-none focus:border-os-accent"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <div className="text-[10px] text-os-text/50 mb-0.5">Summary</div>
+            <textarea
+              className="w-full h-20 bg-os-bg border border-os-border rounded px-2 py-1 text-xs text-os-text outline-none focus:border-os-accent resize-none"
+              value={summary}
+              onChange={e => setSummary(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <div className="text-[10px] text-os-text/50 mb-0.5">Mapped projects (comma-separated)</div>
+            <input
+              className="w-full bg-os-bg border border-os-border rounded px-2 py-1 text-xs text-os-text outline-none focus:border-os-accent font-mono"
+              value={mappedProjects}
+              onChange={e => setMappedProjects(e.target.value)}
+              placeholder="prj0000001, prj0000002"
+            />
+          </div>
+        </div>
+
+        {err && <div className="mt-3 text-[10px] text-red-400 font-mono">{err}</div>}
+
+        <div className="flex justify-end gap-2 mt-4">
+          <button onClick={onClose} className="text-xs px-3 py-1.5 border border-os-border rounded text-os-text/60 hover:text-os-text">
+            Cancel
+          </button>
+          <button
+            onClick={save}
+            disabled={saving}
+            className="text-xs px-3 py-1.5 bg-os-accent text-black rounded font-semibold hover:opacity-90 disabled:opacity-50 flex items-center gap-1"
+          >
+            {saving ? <Loader2 size={11} className="animate-spin" /> : <Check size={11} />}
+            Save Idea
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // ── EditModal ─────────────────────────────────────────────────────────────────
 
@@ -451,6 +602,179 @@ const LaneColumn: React.FC<LaneColumnProps> = ({ lane, projects, onEdit, onDragS
   );
 };
 
+interface FlowColumnProps {
+  projectsByLane: Record<Lane, Project[]>;
+  onEdit: (p: Project) => void;
+  onDragStart: (id: string) => void;
+  onDrop: (lane: Lane) => void;
+}
+
+const FlowColumn: React.FC<FlowColumnProps> = ({ projectsByLane, onEdit, onDragStart, onDrop }) => {
+  const [over, setOver] = useState(false);
+  const total = FLOW_LANES.reduce((sum, lane) => sum + projectsByLane[lane].length, 0);
+
+  return (
+    <div
+      className={cn(
+        'min-w-[280px] w-72 flex flex-col shrink-0 rounded-lg transition-colors',
+        over && 'ring-2 ring-os-accent/60 bg-os-accent/5',
+      )}
+      onDragOver={e => { e.preventDefault(); setOver(true); }}
+      onDragLeave={() => setOver(false)}
+      onDrop={e => {
+        e.preventDefault();
+        setOver(false);
+        // Dropping on the combined flow moves work to the first lane in the sequence.
+        onDrop('Discovery');
+      }}
+    >
+      <div
+        className="flex items-center justify-between px-3 py-2 rounded-t-lg mb-2 text-black"
+        style={{ backgroundColor: '#a78bfa' }}
+      >
+        <span className="text-xs font-bold uppercase tracking-wide">Flow (Discovery to Design to In Sprint)</span>
+        <span className="text-xs font-mono bg-black/20 rounded-full px-2 py-0.5">{total}</span>
+      </div>
+      <div className="flex-1 overflow-y-auto min-h-[60px] max-h-[calc(100vh-240px)] px-2 pb-2 space-y-2">
+        {total === 0 && (
+          <div className={cn(
+            'text-[10px] text-os-text/30 text-center py-6 italic border-2 border-dashed rounded-lg',
+            over ? 'border-os-accent/40' : 'border-os-border/30'
+          )}>
+            drop here
+          </div>
+        )}
+
+        {FLOW_LANES.map(lane => (
+          <div key={lane} className="border border-os-border/60 rounded-md bg-os-bg/25">
+            <div
+              className="flex items-center justify-between px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-black rounded-t-md"
+              style={{ backgroundColor: LANE_COLORS[lane] }}
+            >
+              <span>{lane}</span>
+              <span className="font-mono bg-black/20 rounded-full px-1.5 py-0.5">{projectsByLane[lane].length}</span>
+            </div>
+            <div className="p-1">
+              {projectsByLane[lane].length === 0
+                ? <div className="text-[10px] text-os-text/30 italic text-center py-2">empty</div>
+                : projectsByLane[lane].map(p => (
+                  <ProjectCard key={p.id} project={p} onEdit={onEdit} onDragStart={onDragStart} />
+                ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+interface IdeasColumnProps {
+  ideas: Idea[];
+  ideasLoading: boolean;
+  ideasError: string | null;
+  promotingIdeaId: string | null;
+  onEditIdea: (idea: Idea) => void;
+  onOpenInsightForIdea: (mode: InsightMode, ideaId: string) => void;
+  onPromoteIdea: (idea: Idea) => void;
+}
+
+const IdeasColumn: React.FC<IdeasColumnProps> = ({
+  ideas,
+  ideasLoading,
+  ideasError,
+  promotingIdeaId,
+  onEditIdea,
+  onOpenInsightForIdea,
+  onPromoteIdea,
+}) => (
+  <div className="min-w-[240px] w-64 flex flex-col shrink-0 rounded-lg transition-colors">
+    <div
+      className="flex items-center justify-between px-3 py-2 rounded-t-lg mb-2 text-black"
+      style={{ backgroundColor: LANE_COLORS.Ideas }}
+    >
+      <span className="text-xs font-bold uppercase tracking-wide">Active Ideas Queue</span>
+      <span className="text-xs font-mono bg-black/20 rounded-full px-2 py-0.5">{ideas.length} ideas</span>
+    </div>
+    <div className="flex-1 overflow-y-auto min-h-[60px] max-h-[calc(100vh-240px)] p-2 space-y-2">
+      {ideasLoading && (
+        <div className="flex items-center gap-1.5 text-xs text-os-text/60 px-1 py-2">
+          <Loader2 size={12} className="animate-spin text-os-accent" />
+          <span>Loading ideas…</span>
+        </div>
+      )}
+      {!ideasLoading && ideasError && (
+        <div className="text-[10px] rounded border border-amber-400/40 bg-amber-500/10 text-amber-200 px-2 py-1.5">
+          Ideas unavailable: {ideasError}
+        </div>
+      )}
+      {!ideasLoading && !ideasError && ideas.length === 0 && (
+        <div className={cn(
+          'text-[10px] text-os-text/30 text-center py-6 italic border-2 border-dashed rounded-lg mx-1',
+          'border-os-border/30'
+        )}>
+          no active ideas
+        </div>
+      )}
+      {!ideasLoading && !ideasError && ideas.map(idea => (
+        <div key={idea.idea_id} className="border border-os-border rounded-md px-2 py-1.5 bg-os-bg/40">
+          <div className="flex items-center gap-1.5 mb-1">
+            <span className="text-[10px] font-mono text-os-text/50 bg-os-window border border-os-border rounded px-1">
+              #{idea.rank ?? '-'}
+            </span>
+            <span className="text-xs font-semibold leading-tight text-os-text truncate" title={idea.title}>
+              {idea.title}
+            </span>
+          </div>
+          <div className="text-[10px] font-mono text-os-text/45 mb-1.5">{idea.idea_id}</div>
+          <div className="text-[10px] text-os-text/60 mb-1.5 line-clamp-2">{idea.summary}</div>
+          <div className="text-[10px] text-os-text/50 font-mono truncate" title={idea.source_path}>
+            {idea.source_path}
+          </div>
+          {idea.mapped_project_ids.length > 0 && (
+            <div className="mt-1.5 flex flex-wrap gap-1">
+              {idea.mapped_project_ids.slice(0, 3).map(projectId => (
+                <span
+                  key={projectId}
+                  className="text-[10px] font-mono px-1 py-0.5 rounded border border-os-border bg-os-window text-os-text/55"
+                >
+                  {projectId}
+                </span>
+              ))}
+            </div>
+          )}
+          <div className="mt-2.5 grid grid-cols-2 gap-1.5">
+            <button
+              onClick={() => onEditIdea(idea)}
+              className="text-[10px] px-1.5 py-1 rounded border border-os-border text-os-text/70 hover:text-os-text hover:border-os-accent"
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => onOpenInsightForIdea('swot', idea.idea_id)}
+              className="text-[10px] px-1.5 py-1 rounded border border-blue-400/60 text-blue-200 hover:bg-blue-500/15"
+            >
+              SWOT
+            </button>
+            <button
+              onClick={() => onOpenInsightForIdea('risk', idea.idea_id)}
+              className="text-[10px] px-1.5 py-1 rounded border border-yellow-400/60 text-yellow-200 hover:bg-yellow-500/15"
+            >
+              Risk
+            </button>
+            <button
+              onClick={() => onPromoteIdea(idea)}
+              disabled={promotingIdeaId === idea.idea_id}
+              className="text-[10px] px-1.5 py-1 rounded border border-purple-400/70 text-purple-200 hover:bg-purple-500/15 disabled:opacity-50"
+            >
+              {promotingIdeaId === idea.idea_id ? 'Starting…' : 'To Discovery'}
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 function extractSection(raw: string, heading: string): string {
@@ -459,6 +783,279 @@ function extractSection(raw: string, heading: string): string {
   const after = raw.indexOf('\n## ', start + 1);
   return after === -1 ? raw.slice(start) : raw.slice(start, after);
 }
+
+function parseMarkdownTable(section: string): { headers: string[]; rows: string[][] } {
+  const lines = section
+    .split('\n')
+    .map(line => line.trim())
+    .filter(line => line.startsWith('|'));
+
+  if (lines.length < 2) return { headers: [], rows: [] };
+
+  const splitRow = (line: string) => line
+    .split('|')
+    .map(cell => cell.trim())
+    .filter((_, i, arr) => i > 0 && i < arr.length - 1);
+
+  const headers = splitRow(lines[0]);
+  const rows = lines
+    .slice(2)
+    .map(splitRow)
+    .filter(row => row.length > 0);
+
+  return { headers, rows };
+}
+
+interface RiskEntry {
+  id: string;
+  risk: string;
+  likelihood: string;
+  impact: string;
+  status: string;
+  mitigation: string;
+}
+
+function parseRiskRegister(raw: string): RiskEntry[] {
+  const section = extractSection(raw, 'Risk Register');
+  const { rows } = parseMarkdownTable(section);
+  return rows
+    .filter(row => row.length >= 6)
+    .map(row => ({
+      id: row[0],
+      risk: row[1],
+      likelihood: row[2],
+      impact: row[3],
+      status: row[4],
+      mitigation: row[5],
+    }));
+}
+
+interface SwotData {
+  strengths: string[];
+  weaknesses: string[];
+  opportunities: string[];
+  threats: string[];
+}
+
+function parseSwot(raw: string): SwotData {
+  const section = extractSection(raw, 'SWOT Analysis');
+  const { rows } = parseMarkdownTable(section);
+  const result: SwotData = { strengths: [], weaknesses: [], opportunities: [], threats: [] };
+
+  let helpfulBucket: 'strengths' | 'opportunities' = 'strengths';
+  let harmfulBucket: 'weaknesses' | 'threats' = 'weaknesses';
+
+  for (const row of rows) {
+    const helpful = row[1] ?? '';
+    const harmful = row[2] ?? '';
+
+    if (helpful.includes('**Strengths**')) helpfulBucket = 'strengths';
+    if (helpful.includes('**Opportunities**')) helpfulBucket = 'opportunities';
+    if (harmful.includes('**Weaknesses**')) harmfulBucket = 'weaknesses';
+    if (harmful.includes('**Threats**')) harmfulBucket = 'threats';
+
+    const cleanedHelpful = helpful.replace(/\*\*/g, '').trim();
+    const cleanedHarmful = harmful.replace(/\*\*/g, '').trim();
+
+    if (cleanedHelpful && !['Strengths', 'Opportunities'].includes(cleanedHelpful)) {
+      result[helpfulBucket].push(cleanedHelpful);
+    }
+    if (cleanedHarmful && !['Weaknesses', 'Threats'].includes(cleanedHarmful)) {
+      result[harmfulBucket].push(cleanedHarmful);
+    }
+  }
+
+  return result;
+}
+
+async function copyTextToClipboard(text: string): Promise<void> {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';
+  textArea.style.opacity = '0';
+  document.body.appendChild(textArea);
+  textArea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textArea);
+}
+
+interface InsightsModalProps {
+  mode: 'swot' | 'risk';
+  ideas: Idea[];
+  initialIdeaId?: string | null;
+  onClose: () => void;
+}
+
+const InsightsModal: React.FC<InsightsModalProps> = ({ mode, ideas, initialIdeaId, onClose }) => {
+  const risks = parseRiskRegister(kanbanRaw);
+  const swot = parseSwot(kanbanRaw);
+  const [selectedIdeaId, setSelectedIdeaId] = useState<string>(initialIdeaId ?? ideas[0]?.idea_id ?? '');
+  const [copyNotice, setCopyNotice] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (initialIdeaId) setSelectedIdeaId(initialIdeaId);
+  }, [initialIdeaId]);
+
+  const selectedIdea = ideas.find(i => i.idea_id === selectedIdeaId) ?? null;
+
+  const setNotice = (message: string) => {
+    setCopyNotice(message);
+    window.setTimeout(() => setCopyNotice(null), 2200);
+  };
+
+  const copyWithNotice = async (text: string, message: string) => {
+    await copyTextToClipboard(text);
+    setNotice(message);
+  };
+
+  const likelihoodStyle = (value: string) => {
+    if (value === 'H') return 'bg-red-500/20 text-red-200 border-red-400/50';
+    if (value === 'M') return 'bg-amber-500/20 text-amber-200 border-amber-400/50';
+    return 'bg-emerald-500/20 text-emerald-200 border-emerald-400/50';
+  };
+
+  const statusStyle = (value: string) => {
+    if (value.toLowerCase() === 'open') return 'bg-red-500/20 text-red-200 border-red-400/50';
+    return 'bg-emerald-500/20 text-emerald-200 border-emerald-400/50';
+  };
+
+  const swotQuadrants = [
+    { key: 'strengths', title: 'Strengths', color: '#22c55e', items: swot.strengths },
+    { key: 'weaknesses', title: 'Weaknesses', color: '#ef4444', items: swot.weaknesses },
+    { key: 'opportunities', title: 'Opportunities', color: '#3b82f6', items: swot.opportunities },
+    { key: 'threats', title: 'Threats', color: '#f59e0b', items: swot.threats },
+  ] as const;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65" onClick={onClose}>
+      <div
+        className="bg-gray-950 border border-gray-700 rounded-xl shadow-2xl max-w-6xl w-[96vw] max-h-[86vh] flex flex-col"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700">
+          <div>
+            <h2 className="text-sm font-semibold text-white">
+              {mode === 'swot' ? 'SWOT Workspace' : 'Risk Workspace'}
+            </h2>
+            <p className="text-[11px] text-gray-400">Visual view with quick copy templates from active ideas.</p>
+          </div>
+          <button onClick={onClose} className="text-gray-400 hover:text-white text-xs">Close</button>
+        </div>
+
+        <div className="px-4 py-3 border-b border-gray-800 grid grid-cols-1 md:grid-cols-4 gap-2">
+          <div className="md:col-span-2">
+            <label className="text-[10px] uppercase tracking-wide text-gray-400">Idea quick pick</label>
+            <select
+              className="mt-1 w-full bg-gray-900 border border-gray-700 rounded px-2 py-1.5 text-xs text-gray-100"
+              value={selectedIdeaId}
+              onChange={e => setSelectedIdeaId(e.target.value)}
+            >
+              <option value="">Select active idea...</option>
+              {ideas.map(idea => (
+                <option key={idea.idea_id} value={idea.idea_id}>{idea.idea_id} - {idea.title}</option>
+              ))}
+            </select>
+          </div>
+          <div className="md:col-span-2 flex items-end gap-2 flex-wrap">
+            <button
+              disabled={!selectedIdea}
+              onClick={() => selectedIdea && copyWithNotice(
+                `| | ${selectedIdea.title} (${selectedIdea.idea_id}) | |`,
+                'Copied SWOT helpful-side row',
+              )}
+              className="text-[11px] px-2.5 py-1.5 rounded border border-blue-400/60 text-blue-200 hover:bg-blue-500/15 disabled:opacity-40 flex items-center gap-1"
+            >
+              <Copy size={12} /> Copy SWOT (Helpful)
+            </button>
+            <button
+              disabled={!selectedIdea}
+              onClick={() => selectedIdea && copyWithNotice(
+                `| | | ${selectedIdea.title} (${selectedIdea.idea_id}) |`,
+                'Copied SWOT harmful-side row',
+              )}
+              className="text-[11px] px-2.5 py-1.5 rounded border border-amber-400/60 text-amber-200 hover:bg-amber-500/15 disabled:opacity-40 flex items-center gap-1"
+            >
+              <Copy size={12} /> Copy SWOT (Harmful)
+            </button>
+            <button
+              disabled={!selectedIdea}
+              onClick={() => selectedIdea && copyWithNotice(
+                `| RSK-NEW | ${selectedIdea.title} (${selectedIdea.idea_id}) | M | M | Open | Define mitigation and owner |`,
+                'Copied risk row template',
+              )}
+              className="text-[11px] px-2.5 py-1.5 rounded border border-red-400/60 text-red-200 hover:bg-red-500/15 disabled:opacity-40 flex items-center gap-1"
+            >
+              <Copy size={12} /> Copy Risk Row
+            </button>
+          </div>
+        </div>
+
+        {copyNotice && (
+          <div className="mx-4 mt-2 text-[11px] rounded border border-emerald-400/50 bg-emerald-500/10 text-emerald-200 px-2 py-1">
+            {copyNotice}
+          </div>
+        )}
+
+        <div className="flex-1 overflow-auto p-4">
+          {mode === 'swot' ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {swotQuadrants.map(quadrant => (
+                <div key={quadrant.key} className="border border-gray-700 rounded-lg bg-gray-900/60">
+                  <div className="px-3 py-2 border-b border-gray-700 flex items-center justify-between">
+                    <span className="text-xs font-semibold" style={{ color: quadrant.color }}>{quadrant.title}</span>
+                    <span className="text-[10px] font-mono text-gray-400">{quadrant.items.length}</span>
+                  </div>
+                  <div className="p-3 space-y-2">
+                    {quadrant.items.length === 0 && <div className="text-[11px] text-gray-500 italic">No entries</div>}
+                    {quadrant.items.map((item, idx) => (
+                      <div key={`${quadrant.key}-${idx}`} className="text-xs text-gray-200 border border-gray-700 rounded px-2 py-1.5 bg-gray-950/70">
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
+              {risks.map(risk => (
+                <div key={risk.id} className="border border-gray-700 rounded-lg bg-gray-900/60 p-3">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-xs font-mono text-gray-300">{risk.id}</span>
+                    <span className={cn('text-[10px] px-2 py-0.5 rounded border', statusStyle(risk.status))}>{risk.status}</span>
+                  </div>
+                  <div className="text-xs text-gray-100 mb-2 leading-relaxed">{risk.risk}</div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className={cn('text-[10px] px-2 py-0.5 rounded border', likelihoodStyle(risk.likelihood))}>
+                      Likelihood {risk.likelihood}
+                    </span>
+                    <span className={cn('text-[10px] px-2 py-0.5 rounded border', likelihoodStyle(risk.impact))}>
+                      Impact {risk.impact}
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-gray-300 mb-2">{risk.mitigation}</div>
+                  <button
+                    onClick={() => copyWithNotice(
+                      `| ${risk.id} | ${risk.risk} | ${risk.likelihood} | ${risk.impact} | ${risk.status} | ${risk.mitigation} |`,
+                      `Copied ${risk.id}`,
+                    )}
+                    className="text-[11px] px-2 py-1 rounded border border-gray-600 text-gray-200 hover:bg-gray-800 inline-flex items-center gap-1"
+                  >
+                    <Copy size={11} /> Copy row
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // ── FilterBar ────────────────────────────────────────────────────────────────
 
@@ -545,11 +1142,19 @@ export const ProjectManager: React.FC = () => {
   const [selectedLane, setSelectedLane] = useState<Lane | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [editTarget, setEditTarget] = useState<Project | 'new' | null>(null);
+  const [editIdeaTarget, setEditIdeaTarget] = useState<Idea | null>(null);
   const [sectionModal, setSectionModal] = useState<null | 'swot' | 'risk'>(null);
+  const [insightIdeaId, setInsightIdeaId] = useState<string | null>(null);
+  const [promotingIdeaId, setPromotingIdeaId] = useState<string | null>(null);
   const dragId = useRef<string | null>(null);
 
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setSectionModal(null); };
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSectionModal(null);
+        setEditIdeaTarget(null);
+      }
+    };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
   }, []);
@@ -587,6 +1192,12 @@ export const ProjectManager: React.FC = () => {
   useEffect(() => {
     reload();
     reloadIdeas();
+    const interval = window.setInterval(() => {
+      reload();
+      reloadIdeas();
+    }, 30000);
+
+    return () => window.clearInterval(interval);
   }, []);
 
   // Apply a saved project back into local state without a full reload
@@ -598,7 +1209,82 @@ export const ProjectManager: React.FC = () => {
       next[idx] = saved;
       return next;
     });
+    reloadIdeas();
     setEditTarget(null);
+  };
+
+  const applyIdeaUpdate = (saved: Idea) => {
+    setIdeas(prev => prev.map(idea => (idea.idea_id === saved.idea_id ? saved : idea)));
+    setEditIdeaTarget(null);
+  };
+
+  const openInsightFromIdea = (mode: InsightMode, ideaId: string) => {
+    setInsightIdeaId(ideaId);
+    setSectionModal(mode);
+  };
+
+  const triggerAgentflowForIdea = async (idea: Idea, projectId: string): Promise<void> => {
+    const prompt = [
+      `Start project workflow for ${projectId} from idea ${idea.idea_id}.`,
+      `Idea title: ${idea.title}`,
+      `Idea summary: ${idea.summary}`,
+      `Idea source: ${idea.source_path}`,
+      `Required flow: @0master -> @1project -> @2think -> @3design -> @4plan -> @5test -> @6code -> @7exec -> @8ql -> @9git.`,
+    ].join('\n');
+
+    enqueueAgentflowInbox({
+      agentId: '0master',
+      text: prompt,
+      createdAt: new Date().toISOString(),
+    });
+
+    const pipeline = await apiRunPipeline(prompt);
+    await appendAgentLog('0master', [
+      `[${new Date().toLocaleTimeString()}] User: ${prompt}`,
+      `[${new Date().toLocaleTimeString()}] Agentflow run started: ${pipeline.pipeline_id}`,
+      `[${new Date().toLocaleTimeString()}] @0master (via FLM (default)): Received — processing your request…`,
+    ]);
+  };
+
+  const promoteIdeaToDiscovery = async (idea: Idea) => {
+    setPromotingIdeaId(idea.idea_id);
+    try {
+      let targetProjectId = idea.mapped_project_ids[0] ?? null;
+
+      if (targetProjectId) {
+        await apiPatch(targetProjectId, { lane: 'Discovery' });
+      } else {
+        const createdProject = await apiCreate({
+          id: NEXT_PROJECT_ID,
+          name: idea.title,
+          lane: 'Discovery',
+          summary: idea.summary,
+          branch: null,
+          pr: null,
+          priority: 'P3',
+          budget_tier: 'S',
+          tags: ['idea', idea.idea_id],
+          created: TODAY,
+          updated: TODAY,
+        });
+        targetProjectId = createdProject.id;
+        const updatedIdea = await apiPatchIdea(idea.idea_id, {
+          mapped_project_ids: [createdProject.id],
+        });
+        setIdeas(prev => prev.map(current => (current.idea_id === updatedIdea.idea_id ? updatedIdea : current)));
+      }
+
+      if (targetProjectId) {
+        await triggerAgentflowForIdea(idea, targetProjectId);
+      }
+      reload();
+      reloadIdeas();
+    } catch (e) {
+      const message = String((e as Error).message);
+      setIdeasError(message);
+    } finally {
+      setPromotingIdeaId(null);
+    }
   };
 
   // Drag-and-drop: drop onto a lane column
@@ -612,6 +1298,7 @@ export const ProjectManager: React.FC = () => {
     setProjects(ps => ps.map(p => p.id === id ? { ...p, lane: targetLane, updated: TODAY } : p));
     try {
       await apiPatch(id, { lane: targetLane });
+      reloadIdeas();
     } catch {
       // Rollback on failure
       setProjects(ps => ps.map(p => p.id === id ? { ...p, lane: project.lane } : p));
@@ -663,71 +1350,34 @@ export const ProjectManager: React.FC = () => {
         onRisk={() => setSectionModal('risk')}
       />
       <div className="flex-1 p-3 min-h-0">
-        <div className="flex gap-3 h-full min-h-0">
-          <div className="flex-1 overflow-x-auto overflow-y-hidden">
-            <div className="flex gap-3 h-full">
-              {LANES.map(lane => (
-                <LaneColumn
-                  key={lane}
-                  lane={lane}
-                  projects={byLane[lane]}
-                  onEdit={p => setEditTarget(p)}
-                  onDragStart={id => { dragId.current = id; }}
-                  onDrop={handleDrop}
-                />
-              ))}
-            </div>
+        <div className="flex-1 overflow-x-auto overflow-y-hidden">
+          <div className="flex gap-3 h-full">
+            <IdeasColumn
+              ideas={ideas}
+              ideasLoading={ideasLoading}
+              ideasError={ideasError}
+              promotingIdeaId={promotingIdeaId}
+              onEditIdea={setEditIdeaTarget}
+              onOpenInsightForIdea={openInsightFromIdea}
+              onPromoteIdea={promoteIdeaToDiscovery}
+            />
+            <FlowColumn
+              projectsByLane={byLane}
+              onEdit={p => setEditTarget(p)}
+              onDragStart={id => { dragId.current = id; }}
+              onDrop={handleDrop}
+            />
+            {BOARD_LANES.map(lane => (
+              <LaneColumn
+                key={lane}
+                lane={lane}
+                projects={byLane[lane]}
+                onEdit={p => setEditTarget(p)}
+                onDragStart={id => { dragId.current = id; }}
+                onDrop={handleDrop}
+              />
+            ))}
           </div>
-          <aside className="w-80 shrink-0 bg-os-window border border-os-border rounded-lg flex flex-col min-h-0">
-            <div className="px-3 py-2 border-b border-os-border flex items-center justify-between">
-              <span className="text-xs font-semibold">Active Ideas Queue</span>
-              <span className="text-[10px] text-os-text/50 font-mono">{ideas.length} ideas</span>
-            </div>
-            <div className="flex-1 overflow-y-auto p-2 space-y-2">
-              {ideasLoading && (
-                <div className="flex items-center gap-1.5 text-xs text-os-text/60 px-1 py-2">
-                  <Loader2 size={12} className="animate-spin text-os-accent" />
-                  <span>Loading ideas…</span>
-                </div>
-              )}
-              {!ideasLoading && ideasError && (
-                <div className="text-[10px] rounded border border-amber-400/40 bg-amber-500/10 text-amber-200 px-2 py-1.5">
-                  Ideas unavailable: {ideasError}
-                </div>
-              )}
-              {!ideasLoading && !ideasError && ideas.length === 0 && (
-                <div className="text-[10px] text-os-text/40 italic px-1 py-2">No active ideas in queue.</div>
-              )}
-              {!ideasLoading && !ideasError && ideas.map(idea => (
-                <div key={idea.idea_id} className="border border-os-border rounded-md px-2 py-1.5 bg-os-bg/40">
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <span className="text-[10px] font-mono text-os-text/50 bg-os-window border border-os-border rounded px-1">
-                      #{idea.rank ?? '-'}
-                    </span>
-                    <span className="text-xs font-semibold leading-tight text-os-text truncate" title={idea.title}>
-                      {idea.title}
-                    </span>
-                  </div>
-                  <div className="text-[10px] font-mono text-os-text/45 mb-1.5">{idea.idea_id}</div>
-                  <div className="text-[10px] text-os-text/50 font-mono truncate" title={idea.source_path}>
-                    {idea.source_path}
-                  </div>
-                  {idea.mapped_project_ids.length > 0 && (
-                    <div className="mt-1.5 flex flex-wrap gap-1">
-                      {idea.mapped_project_ids.slice(0, 3).map(projectId => (
-                        <span
-                          key={projectId}
-                          className="text-[10px] font-mono px-1 py-0.5 rounded border border-os-border bg-os-window text-os-text/55"
-                        >
-                          {projectId}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </aside>
         </div>
       </div>
 
@@ -739,33 +1389,24 @@ export const ProjectManager: React.FC = () => {
         />
       )}
 
+      {editIdeaTarget !== null && (
+        <IdeaEditModal
+          idea={editIdeaTarget}
+          onSave={applyIdeaUpdate}
+          onClose={() => setEditIdeaTarget(null)}
+        />
+      )}
+
       {sectionModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
-          onClick={() => setSectionModal(null)}
-        >
-          <div
-            className="bg-gray-900 border border-gray-700 rounded-lg shadow-xl max-w-3xl w-full max-h-[80vh] flex flex-col"
-            onClick={e => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700">
-              <h2 className="text-sm font-semibold text-white">
-                {sectionModal === 'swot' ? 'SWOT Analysis' : 'Risk Register'}
-              </h2>
-              <button
-                onClick={() => setSectionModal(null)}
-                className="text-gray-400 hover:text-white text-xs"
-              >
-                ✕ Close
-              </button>
-            </div>
-            <pre className="flex-1 overflow-auto p-4 text-xs text-gray-300 whitespace-pre-wrap font-mono">
-              {sectionModal === 'swot'
-                ? extractSection(kanbanRaw, 'SWOT Analysis')
-                : extractSection(kanbanRaw, 'Risk Register')}
-            </pre>
-          </div>
-        </div>
+        <InsightsModal
+          mode={sectionModal}
+          ideas={ideas}
+          initialIdeaId={insightIdeaId}
+          onClose={() => {
+            setSectionModal(null);
+            setInsightIdeaId(null);
+          }}
+        />
       )}
     </div>
   );

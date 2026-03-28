@@ -21,6 +21,12 @@ interface ChatMessage {
   ts: string;
 }
 
+interface AgentflowInboxItem {
+  agentId: AgentId;
+  text: string;
+  createdAt?: string;
+}
+
 // ── LLM Providers ─────────────────────────────────────────────────────────────
 const LLM_PROVIDERS: { id: LlmId; label: string }[] = [
   { id: 'flm',      label: 'FLM (default)' },
@@ -313,6 +319,40 @@ export const CodeBuilder: React.FC = () => {
       addAgentLog(agentId, `Agent responded via ${llmLabel}.`);
     }, 600);
   }, [inputText, addMessage, addAgentLog, agentLlm]);
+
+  // ── Inbound context from other apps (e.g., ProjectManager) ───────────────
+  useEffect(() => {
+    const key = 'pyagent.agentflow.inbox';
+    const raw = localStorage.getItem(key);
+    if (!raw) return;
+
+    let queue: AgentflowInboxItem[] = [];
+    try {
+      queue = JSON.parse(raw) as AgentflowInboxItem[];
+    } catch {
+      localStorage.removeItem(key);
+      return;
+    }
+
+    if (!Array.isArray(queue) || queue.length === 0) {
+      localStorage.removeItem(key);
+      return;
+    }
+
+    queue.forEach(item => {
+      if (!AGENTS.some(agent => agent.id === item.agentId)) return;
+      const currentLlmId = agentLlm[item.agentId] ?? 'flm';
+      const llmLabel = LLM_PROVIDERS.find(l => l.id === currentLlmId)?.label ?? currentLlmId;
+      const agentName = AGENTS.find(agent => agent.id === item.agentId)?.name ?? item.agentId;
+
+      addMessage(item.agentId, 'user', item.text);
+      addAgentLog(item.agentId, `User: ${item.text}`);
+      addMessage(item.agentId, 'agent', `${agentName} (via ${llmLabel}): Received — processing your request…`);
+      addAgentLog(item.agentId, `Agent responded via ${llmLabel}.`);
+    });
+
+    localStorage.removeItem(key);
+  }, [addAgentLog, addMessage, agentLlm]);
 
   // ── Voice Input ───────────────────────────────────────────────────────────
   const toggleVoice = useCallback(() => {

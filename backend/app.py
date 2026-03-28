@@ -658,6 +658,72 @@ def _load_ideas(mode: str) -> list[IdeaModel]:
     return ideas
 
 
+def _idea_path_from_id(idea_id: str) -> _Opt[Path]:
+    """Resolve a markdown path for a canonical idea ID.
+
+    Args:
+        idea_id: Canonical identifier like ``idea000123``.
+
+    Returns:
+        _Opt[Path]: Matched idea file path, or None if not found.
+
+    """
+    normalized = idea_id.strip().lower()
+    if not _re.fullmatch(r"idea\d{6}", normalized):
+        return None
+
+    matches = sorted(_IDEAS_FILE_ROOT.glob(f"{normalized}*.md"))
+    if not matches:
+        return None
+    return matches[0]
+
+
+def _replace_first_heading(lines: list[str], title: str) -> list[str]:
+    """Replace first markdown heading with *title*.
+
+    Falls back to prepending a new H1 heading when none exists.
+    """
+    for i, line in enumerate(lines):
+        if line.strip().startswith("#"):
+            lines[i] = f"# {title.strip()}"
+            return lines
+    return [f"# {title.strip()}", "", *lines]
+
+
+def _replace_idea_summary(lines: list[str], summary: str) -> list[str]:
+    """Replace or append the ``## Idea Summary`` value line."""
+    normalized = summary.strip()
+    for i, line in enumerate(lines):
+        if line.strip().lower() == "## idea summary":
+            j = i + 1
+            while j < len(lines) and not lines[j].strip():
+                j += 1
+            if j < len(lines) and not lines[j].strip().startswith("#"):
+                lines[j] = normalized
+            else:
+                lines.insert(i + 1, normalized)
+            return lines
+
+    suffix = ["", "## Idea Summary", normalized]
+    return [*lines, *suffix]
+
+
+def _replace_mapping_line(lines: list[str], mapped_project_ids: list[str]) -> list[str]:
+    """Replace or append the planned project mapping line."""
+    value = ", ".join(mapped_project_ids) if mapped_project_ids else "none yet"
+    replacement = f"Planned project mapping: {value}"
+
+    for i, line in enumerate(lines):
+        if _IDEA_MAPPING_LINE_RE.match(line.strip()):
+            lines[i] = replacement
+            return lines
+
+    if lines and lines[-1].strip() != "":
+        lines.append("")
+    lines.append(replacement)
+    return lines
+
+
 def _priority_sort_rank(idea: IdeaModel) -> int:
     """Return a numeric sort rank for idea priority.
 
@@ -778,6 +844,70 @@ async def get_ideas(
         )
 
     return ideas
+
+
+class IdeaPatch(BaseModel):
+    """Editable fields for one idea markdown file."""
+
+    title: _Opt[str] = None
+    summary: _Opt[str] = None
+    mapped_project_ids: _Opt[list[str]] = None
+
+
+@_auth_router.patch("/ideas/{idea_id}", response_model=IdeaModel)
+async def patch_idea(idea_id: str, patch: IdeaPatch) -> IdeaModel:
+    """Patch one idea markdown document and return the parsed idea row."""
+    path = _idea_path_from_id(idea_id)
+    if path is None:
+        raise HTTPException(status_code=404, detail=f"Idea {idea_id!r} not found")
+
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError as exc:
+        raise HTTPException(status_code=500, detail=f"Failed to read idea file: {exc}") from exc
+
+    lines = text.splitlines()
+
+    if patch.title is not None:
+        title = patch.title.strip()
+        if not title:
+            raise HTTPException(status_code=400, detail="title cannot be empty")
+        lines = _replace_first_heading(lines, title)
+
+    if patch.summary is not None:
+        summary = patch.summary.strip()
+        if not summary:
+            raise HTTPException(status_code=400, detail="summary cannot be empty")
+        lines = _replace_idea_summary(lines, summary)
+
+    if patch.mapped_project_ids is not None:
+        normalized_ids: list[str] = []
+        seen: set[str] = set()
+        for raw_project_id in patch.mapped_project_ids:
+            project_id = raw_project_id.strip().lower()
+            if not project_id:
+                continue
+            if not _PROJECT_ID_RE.match(project_id):
+                raise HTTPException(status_code=400, detail=f"Invalid project id: {project_id!r}")
+            if project_id in seen:
+                continue
+            seen.add(project_id)
+            normalized_ids.append(project_id)
+        lines = _replace_mapping_line(lines, normalized_ids)
+
+    new_text = "\n".join(lines)
+    if text.endswith("\n"):
+        new_text += "\n"
+
+    try:
+        path.write_text(new_text, encoding="utf-8")
+    except OSError as exc:
+        raise HTTPException(status_code=500, detail=f"Failed to save idea file: {exc}") from exc
+
+    parsed = _parse_idea_file(path, _load_project_lane_map(), mode="active_or_released")
+    if parsed is None:
+        raise HTTPException(status_code=500, detail="Idea parse failed after update")
+    return parsed
 
 
 class ProjectPatch(BaseModel):
