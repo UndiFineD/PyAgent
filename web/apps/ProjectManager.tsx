@@ -451,6 +451,73 @@ const LaneColumn: React.FC<LaneColumnProps> = ({ lane, projects, onEdit, onDragS
   );
 };
 
+interface IdeasColumnProps {
+  ideas: Idea[];
+  ideasLoading: boolean;
+  ideasError: string | null;
+}
+
+const IdeasColumn: React.FC<IdeasColumnProps> = ({ ideas, ideasLoading, ideasError }) => (
+  <div className="min-w-[240px] w-64 flex flex-col shrink-0 rounded-lg transition-colors">
+    <div
+      className="flex items-center justify-between px-3 py-2 rounded-t-lg mb-2 text-black"
+      style={{ backgroundColor: LANE_COLORS.Ideas }}
+    >
+      <span className="text-xs font-bold uppercase tracking-wide">Active Ideas Queue</span>
+      <span className="text-xs font-mono bg-black/20 rounded-full px-2 py-0.5">{ideas.length} ideas</span>
+    </div>
+    <div className="flex-1 overflow-y-auto min-h-[60px] max-h-[calc(100vh-240px)] p-2 space-y-2">
+      {ideasLoading && (
+        <div className="flex items-center gap-1.5 text-xs text-os-text/60 px-1 py-2">
+          <Loader2 size={12} className="animate-spin text-os-accent" />
+          <span>Loading ideas…</span>
+        </div>
+      )}
+      {!ideasLoading && ideasError && (
+        <div className="text-[10px] rounded border border-amber-400/40 bg-amber-500/10 text-amber-200 px-2 py-1.5">
+          Ideas unavailable: {ideasError}
+        </div>
+      )}
+      {!ideasLoading && !ideasError && ideas.length === 0 && (
+        <div className={cn(
+          'text-[10px] text-os-text/30 text-center py-6 italic border-2 border-dashed rounded-lg mx-1',
+          'border-os-border/30'
+        )}>
+          no active ideas
+        </div>
+      )}
+      {!ideasLoading && !ideasError && ideas.map(idea => (
+        <div key={idea.idea_id} className="border border-os-border rounded-md px-2 py-1.5 bg-os-bg/40">
+          <div className="flex items-center gap-1.5 mb-1">
+            <span className="text-[10px] font-mono text-os-text/50 bg-os-window border border-os-border rounded px-1">
+              #{idea.rank ?? '-'}
+            </span>
+            <span className="text-xs font-semibold leading-tight text-os-text truncate" title={idea.title}>
+              {idea.title}
+            </span>
+          </div>
+          <div className="text-[10px] font-mono text-os-text/45 mb-1.5">{idea.idea_id}</div>
+          <div className="text-[10px] text-os-text/50 font-mono truncate" title={idea.source_path}>
+            {idea.source_path}
+          </div>
+          {idea.mapped_project_ids.length > 0 && (
+            <div className="mt-1.5 flex flex-wrap gap-1">
+              {idea.mapped_project_ids.slice(0, 3).map(projectId => (
+                <span
+                  key={projectId}
+                  className="text-[10px] font-mono px-1 py-0.5 rounded border border-os-border bg-os-window text-os-text/55"
+                >
+                  {projectId}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 function extractSection(raw: string, heading: string): string {
@@ -587,6 +654,12 @@ export const ProjectManager: React.FC = () => {
   useEffect(() => {
     reload();
     reloadIdeas();
+    const interval = window.setInterval(() => {
+      reload();
+      reloadIdeas();
+    }, 30000);
+
+    return () => window.clearInterval(interval);
   }, []);
 
   // Apply a saved project back into local state without a full reload
@@ -598,6 +671,7 @@ export const ProjectManager: React.FC = () => {
       next[idx] = saved;
       return next;
     });
+    reloadIdeas();
     setEditTarget(null);
   };
 
@@ -612,6 +686,7 @@ export const ProjectManager: React.FC = () => {
     setProjects(ps => ps.map(p => p.id === id ? { ...p, lane: targetLane, updated: TODAY } : p));
     try {
       await apiPatch(id, { lane: targetLane });
+      reloadIdeas();
     } catch {
       // Rollback on failure
       setProjects(ps => ps.map(p => p.id === id ? { ...p, lane: project.lane } : p));
@@ -663,71 +738,20 @@ export const ProjectManager: React.FC = () => {
         onRisk={() => setSectionModal('risk')}
       />
       <div className="flex-1 p-3 min-h-0">
-        <div className="flex gap-3 h-full min-h-0">
-          <div className="flex-1 overflow-x-auto overflow-y-hidden">
-            <div className="flex gap-3 h-full">
-              {LANES.map(lane => (
-                <LaneColumn
-                  key={lane}
-                  lane={lane}
-                  projects={byLane[lane]}
-                  onEdit={p => setEditTarget(p)}
-                  onDragStart={id => { dragId.current = id; }}
-                  onDrop={handleDrop}
-                />
-              ))}
-            </div>
+        <div className="flex-1 overflow-x-auto overflow-y-hidden">
+          <div className="flex gap-3 h-full">
+            <IdeasColumn ideas={ideas} ideasLoading={ideasLoading} ideasError={ideasError} />
+            {LANES.filter(lane => lane !== 'Ideas').map(lane => (
+              <LaneColumn
+                key={lane}
+                lane={lane}
+                projects={byLane[lane]}
+                onEdit={p => setEditTarget(p)}
+                onDragStart={id => { dragId.current = id; }}
+                onDrop={handleDrop}
+              />
+            ))}
           </div>
-          <aside className="w-80 shrink-0 bg-os-window border border-os-border rounded-lg flex flex-col min-h-0">
-            <div className="px-3 py-2 border-b border-os-border flex items-center justify-between">
-              <span className="text-xs font-semibold">Active Ideas Queue</span>
-              <span className="text-[10px] text-os-text/50 font-mono">{ideas.length} ideas</span>
-            </div>
-            <div className="flex-1 overflow-y-auto p-2 space-y-2">
-              {ideasLoading && (
-                <div className="flex items-center gap-1.5 text-xs text-os-text/60 px-1 py-2">
-                  <Loader2 size={12} className="animate-spin text-os-accent" />
-                  <span>Loading ideas…</span>
-                </div>
-              )}
-              {!ideasLoading && ideasError && (
-                <div className="text-[10px] rounded border border-amber-400/40 bg-amber-500/10 text-amber-200 px-2 py-1.5">
-                  Ideas unavailable: {ideasError}
-                </div>
-              )}
-              {!ideasLoading && !ideasError && ideas.length === 0 && (
-                <div className="text-[10px] text-os-text/40 italic px-1 py-2">No active ideas in queue.</div>
-              )}
-              {!ideasLoading && !ideasError && ideas.map(idea => (
-                <div key={idea.idea_id} className="border border-os-border rounded-md px-2 py-1.5 bg-os-bg/40">
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <span className="text-[10px] font-mono text-os-text/50 bg-os-window border border-os-border rounded px-1">
-                      #{idea.rank ?? '-'}
-                    </span>
-                    <span className="text-xs font-semibold leading-tight text-os-text truncate" title={idea.title}>
-                      {idea.title}
-                    </span>
-                  </div>
-                  <div className="text-[10px] font-mono text-os-text/45 mb-1.5">{idea.idea_id}</div>
-                  <div className="text-[10px] text-os-text/50 font-mono truncate" title={idea.source_path}>
-                    {idea.source_path}
-                  </div>
-                  {idea.mapped_project_ids.length > 0 && (
-                    <div className="mt-1.5 flex flex-wrap gap-1">
-                      {idea.mapped_project_ids.slice(0, 3).map(projectId => (
-                        <span
-                          key={projectId}
-                          className="text-[10px] font-mono px-1 py-0.5 rounded border border-os-border bg-os-window text-os-text/55"
-                        >
-                          {projectId}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </aside>
         </div>
       </div>
 

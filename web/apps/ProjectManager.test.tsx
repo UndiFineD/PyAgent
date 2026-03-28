@@ -139,7 +139,7 @@ describe('ProjectManager ideas panel', () => {
     });
 
     expect(screen.queryByText('Active Ideas Queue')).not.toBeNull();
-    expect(screen.queryByText('No active ideas in queue.')).not.toBeNull();
+    expect(screen.queryByText('no active ideas')).not.toBeNull();
   });
 
   it('keeps project board usable when ideas fetch fails', async () => {
