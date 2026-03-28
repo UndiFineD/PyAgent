@@ -16,9 +16,16 @@
 from __future__ import annotations
 
 import asyncio
+import base64
+import json
+import os
+from pathlib import Path
 import threading
+from types import TracebackType
 from typing import Any, Optional
 from urllib.parse import urlparse
+
+from src.core import security_bridge
 
 
 class RemoteSyncError(RuntimeError):
@@ -48,8 +55,50 @@ class MemoryTransaction:
         self.tid = tid
         self._rlock: threading.RLock = threading.RLock()
         self._alock: Optional[asyncio.Lock] = None
-        self._store: dict = {}
-        self._pending: dict = {}
+        self._store: dict[str, Any] = {}
+        self._pending: dict[str, Any] = {}
+
+    def _memory_key_file(self) -> str:
+        """Return key-file path used by in-memory encryption/decryption."""
+        key_file = os.environ.get("PYAGENT_MEMORY_KEY_FILE")
+        if not key_file:
+            raise ValueError(
+                "PYAGENT_MEMORY_KEY_FILE is required when encrypt/decrypt is enabled for MemoryTransaction."
+            )
+        return key_file
+
+    @staticmethod
+    def _pack_value(value: Any) -> str:
+        """Serialize supported Python values into an encrypted payload string."""
+        if isinstance(value, bytes):
+            payload = {
+                "type": "bytes",
+                "value": base64.b64encode(value).decode("ascii"),
+            }
+            return json.dumps(payload)
+
+        payload = {
+            "type": "json",
+            "value": value,
+        }
+        try:
+            return json.dumps(payload)
+        except TypeError as exc:
+            raise TypeError(
+                "MemoryTransaction encryption supports JSON-serializable values and bytes."
+            ) from exc
+
+    @staticmethod
+    def _unpack_value(payload_text: str) -> Any:
+        """Deserialize encrypted payload string back to the original Python value."""
+        payload = json.loads(payload_text)
+        payload_type = payload.get("type")
+        if payload_type == "bytes":
+            encoded = payload.get("value", "")
+            return base64.b64decode(encoded)
+        if payload_type == "json":
+            return payload.get("value")
+        raise ValueError(f"Unsupported encrypted payload type: {payload_type!r}")
 
     # ------------------------------------------------------------------
     # Sync context manager (thread-safe via RLock)
@@ -60,7 +109,12 @@ class MemoryTransaction:
         self._rlock.acquire()
         return self
 
-    def __exit__(self, exc_type, exc, tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
         """Exit the sync context manager."""
         self._rlock.release()
 
@@ -75,7 +129,12 @@ class MemoryTransaction:
         await self._alock.acquire()
         return self
 
-    async def __aexit__(self, exc_type, exc, tb) -> None:
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
         """Exit the async context manager, releasing the lock if it exists."""
         if self._alock is not None:
             self._alock.release()
@@ -87,22 +146,28 @@ class MemoryTransaction:
     async def set(self, key: str, value: Any, *, encrypt: bool = False) -> None:
         """Stage *value* under *key* in the pending store."""
         if encrypt:
-            raise NotImplementedError(
-                "In-memory encryption is not yet implemented. "
-                "Do not pass encrypt=True until this is resolved."
-            )
+            key_file = self._memory_key_file()
+            ciphertext = security_bridge.encrypt(Path(key_file), self._pack_value(value))
+            self._pending[key] = {"__enc__": ciphertext}
+            return
         self._pending[key] = value
 
     async def get(self, key: str, *, decrypt: bool = False) -> Optional[Any]:
         """Return the value for *key*, checking _store first then _pending."""
-        if decrypt:
-            raise NotImplementedError(
-                "In-memory decryption is not yet implemented. "
-                "Do not pass decrypt=True until this is resolved."
-            )
         if key in self._store:
-            return self._store[key]
-        return self._pending.get(key)
+            value = self._store[key]
+        else:
+            value = self._pending.get(key)
+
+        if not decrypt or value is None:
+            return value
+
+        if isinstance(value, dict) and "__enc__" in value:
+            key_file = self._memory_key_file()
+            plaintext = security_bridge.decrypt(Path(key_file), str(value["__enc__"]))
+            return self._unpack_value(plaintext)
+
+        return value
 
     async def delete(self, key: str) -> None:
         """Remove *key* from both pending and committed stores."""
@@ -128,7 +193,7 @@ class MemoryTransaction:
         *,
         encrypted: bool = True,
         dry_run: bool = False,
-    ) -> Optional[dict]:
+    ) -> Optional[dict[str, Any]]:
         """Sync the committed store to a remote endpoint.
 
         Parameters
@@ -161,8 +226,7 @@ class MemoryTransaction:
             import logging
             logging.warning("httpx not available — skipping remote sync")
             return None
-        import os
-        headers: dict = {}
+        headers: dict[str, str] = {}
         token = os.environ.get("PYAGENT_MEMORY_SYNC_TOKEN")
         if token:
             headers["Authorization"] = f"Bearer {token}"

@@ -1540,7 +1540,7 @@
   {
     "id": "prj0000094",
     "name": "idea-003 - mypy-strict-enforcement",
-    "lane": "Discovery",
+    "lane": "Review",
     "summary": "This idea focuses on mypy strict enforcement in area 1 – Python agents. The current signal indicates priority P1, impact H, and urgency H. The SWOT tag is W (Weakness in current implementation).",
     "branch": null,
     "pr": null,

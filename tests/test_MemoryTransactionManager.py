@@ -34,6 +34,8 @@ Group B – src.transactions.MemoryTransactionManager (T06 required, NOT EXISTS)
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
 # ---------------------------------------------------------------------------
@@ -184,3 +186,42 @@ class TestMemoryTransactionUpgraded:
         assert isinstance(payload, dict), f"Expected dict payload from dry_run, got {type(payload)}"
         # payload must contain the committed store entry
         assert "k" in payload, "dry_run payload must include committed store keys"
+
+    # TC-M11
+    @pytest.mark.asyncio
+    async def test_encrypt_decrypt_roundtrip_with_real_security_bridge(
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """encrypt=True/decrypt=True must round-trip using the Rust security bridge."""
+        _skip_if_no_tx_memory()
+        from src.core import security_bridge  # noqa: PLC0415
+        from src.transactions.MemoryTransactionManager import MemoryTransaction as MTx  # noqa: PLC0415
+
+        key_file = tmp_path / "memory_key.b64"
+        security_bridge.generate_key(key_file)
+        monkeypatch.setenv("PYAGENT_MEMORY_KEY_FILE", str(key_file))
+
+        tx = MTx()
+        source = {"k": "v", "n": 7}
+        await tx.set("secure", source, encrypt=True)
+        raw = await tx.get("secure")
+        assert isinstance(raw, dict)
+        assert "__enc__" in raw
+
+        decrypted = await tx.get("secure", decrypt=True)
+        assert decrypted == source
+
+    # TC-M12
+    @pytest.mark.asyncio
+    async def test_encrypt_without_key_file_env_raises_value_error(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """encrypt=True must fail fast when PYAGENT_MEMORY_KEY_FILE is not configured."""
+        _skip_if_no_tx_memory()
+        from src.transactions.MemoryTransactionManager import MemoryTransaction as MTx  # noqa: PLC0415
+
+        monkeypatch.delenv("PYAGENT_MEMORY_KEY_FILE", raising=False)
+
+        tx = MTx()
+        with pytest.raises(ValueError, match="PYAGENT_MEMORY_KEY_FILE"):
+            await tx.set("secure", "value", encrypt=True)

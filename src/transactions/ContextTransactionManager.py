@@ -21,7 +21,9 @@ from __future__ import annotations
 
 import uuid
 from contextvars import ContextVar
-from typing import List, Optional, Set
+from contextvars import Token
+from types import TracebackType
+from typing import Any, List, Optional, Set
 
 _active_var: ContextVar[Optional[Set[str]]] = ContextVar("_active_ctx", default=None)
 _stack_var: ContextVar[Optional[List["ContextTransaction"]]] = ContextVar("_context_stack", default=None)
@@ -57,8 +59,8 @@ class ContextTransaction:
         self.context_id: str = context_id
         self.transaction_id: uuid.UUID = tid if isinstance(tid, uuid.UUID) else uuid.uuid4()
         self.parent_id: Optional[uuid.UUID] = parent_id
-        self._active_token = None
-        self._stack_token = None
+        self._active_token: Optional[Token[Optional[Set[str]]]] = None
+        self._stack_token: Optional[Token[Optional[List["ContextTransaction"]]]] = None
 
     # ------------------------------------------------------------------
     # Internal helpers
@@ -100,7 +102,12 @@ class ContextTransaction:
         self._stack_token = _stack_var.set(new_stack)
         return self
 
-    def __exit__(self, exc_type, exc, tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
         """Exit the sync context manager, restoring ContextVar state."""
         # Restore ContextVar state to what it was before __enter__
         if self._active_token is not None:
@@ -118,7 +125,12 @@ class ContextTransaction:
         """Enter the async context manager."""
         return self.__enter__()
 
-    async def __aexit__(self, exc_type, exc, tb) -> None:
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
         """Exit the async context manager."""
         self.__exit__(exc_type, exc, tb)
 
@@ -150,7 +162,7 @@ class ContextTransaction:
     async def rollback(self) -> None:
         """No-op for ContextTransaction."""
 
-    async def hand_to_llm(self, context_window) -> None:
+    async def hand_to_llm(self, context_window: Any) -> None:
         """Push a lineage summary into *context_window* for LLM consumption."""
         summary = (
             f"[ContextTransaction] id={self.transaction_id} "

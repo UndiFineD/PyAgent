@@ -12,6 +12,10 @@ EXPECTED_ALLOWLIST = [
     "src/core/resilience/CircuitBreakerState.py",
     "src/core/resilience/exceptions.py",
     "src/core/universal/exceptions.py",
+    "src/core/fuzzing/exceptions.py",
+    "src/core/n8nbridge/exceptions.py",
+    "src/core/replay/exceptions.py",
+    "src/core/sandbox/SandboxViolationError.py",
 ]
 
 
@@ -70,7 +74,7 @@ def test_mypy_strict_lane_required_options() -> None:
 
 
 def test_mypy_strict_lane_allowlist_locked() -> None:
-    """Require strict-lane config to match the locked phase-1 allowlist exactly.
+    """Require strict-lane config to match the locked Wave 1 allowlist exactly.
 
     Returns:
         None.
@@ -82,5 +86,5 @@ def test_mypy_strict_lane_allowlist_locked() -> None:
     actual_allowlist = _normalize_files_value(parser.get("mypy", "files"))
     assert actual_allowlist == EXPECTED_ALLOWLIST, (
         "Strict-lane allowlist drift detected. The [mypy] files value must exactly match "
-        "the locked phase-1 6-file list."
+        "the locked Wave 1 10-file list."
     )

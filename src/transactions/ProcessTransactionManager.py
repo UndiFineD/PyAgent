@@ -16,7 +16,12 @@
 from __future__ import annotations
 
 import subprocess
-from typing import List, Optional, Tuple
+from collections.abc import Coroutine
+from types import TracebackType
+from typing import TYPE_CHECKING, Any, List, Optional, Tuple
+
+if TYPE_CHECKING:
+    import asyncio
 
 
 class ProcessTransaction:
@@ -40,7 +45,7 @@ class ProcessTransaction:
         """Initialize with optional command to run (can also be passed to run())."""
         self._cmd: List[str] = cmd or []
         self._proc: Optional[subprocess.Popen] = None  # type: ignore[type-arg]
-        self._async_proc = None  # asyncio.subprocess.Process
+        self._async_proc: Optional["asyncio.subprocess.Process"] = None
         self.stdout: Optional[bytes] = None
         self.stderr: Optional[bytes] = None
 
@@ -66,7 +71,7 @@ class ProcessTransaction:
     # Rollback (dual sync/async)
     # ------------------------------------------------------------------
 
-    def rollback(self):
+    def rollback(self) -> Coroutine[None, None, None]:
         """Terminate running processes.
 
         Sync portion (always executed): terminates the sync Popen if running.
@@ -106,7 +111,12 @@ class ProcessTransaction:
         """
         return self
 
-    def __exit__(self, exc_type, exc, tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
         """Exit the sync context manager.
         If an exception occurred, attempt to terminate the process.
         """
@@ -126,7 +136,12 @@ class ProcessTransaction:
         """Enter the async context manager."""
         return self
 
-    async def __aexit__(self, exc_type, exc, tb) -> None:
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
         """Exit the async context manager."""
         if exc_type is not None:
             if self._proc is not None and self._proc.poll() is None:
@@ -177,10 +192,13 @@ class ProcessTransaction:
         self.stdout, self.stderr = await asyncio.wait_for(
             self._async_proc.communicate(), timeout=timeout
         )
-        return self._async_proc.returncode
+        returncode = self._async_proc.returncode
+        if returncode is None:
+            raise RuntimeError("Async process did not produce a returncode after communicate().")
+        return returncode
 
     async def run(
-        self, cmd: List[str], *, cwd=None, timeout: float = 30.0
+        self, cmd: List[str], *, cwd: Any = None, timeout: float = 30.0
     ) -> Tuple[int, str, str]:
         """Convenience: start an async subprocess, wait, return (rc, stdout, stderr)."""
         import asyncio
@@ -192,7 +210,10 @@ class ProcessTransaction:
         )
         self._async_proc = proc
         stdout_b, stderr_b = await asyncio.wait_for(proc.communicate(), timeout=timeout)
-        return proc.returncode, stdout_b.decode(errors="replace"), stderr_b.decode(errors="replace")
+        returncode = proc.returncode
+        if returncode is None:
+            raise RuntimeError("Process did not produce a returncode after communicate().")
+        return returncode, stdout_b.decode(errors="replace"), stderr_b.decode(errors="replace")
 
 
 def validate() -> bool:

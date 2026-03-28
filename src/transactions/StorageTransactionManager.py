@@ -23,7 +23,9 @@ from __future__ import annotations
 import base64
 import os
 import tempfile
+from collections.abc import Coroutine
 from pathlib import Path
+from types import TracebackType
 from typing import List, Optional, Tuple
 
 
@@ -111,7 +113,7 @@ class StorageTransaction:
             raise
         self._committed = True
 
-    def rollback(self):
+    def rollback(self) -> Coroutine[None, None, None]:
         """Discard staged content and remove any tmp file.
 
         Safe to call in both sync and async contexts — returns an awaitable
@@ -135,7 +137,12 @@ class StorageTransaction:
         """Enter sync context manager; return self (supports nesting in multi-op mode)."""
         return self
 
-    def __exit__(self, exc_type, exc, tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
         """Exit the sync context manager."""
         if exc_type is not None:
             # Rollback: discard staged content and any tmp file
@@ -158,7 +165,12 @@ class StorageTransaction:
         """Enter the async context manager."""
         return self
 
-    async def __aexit__(self, exc_type, exc, tb) -> None:
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
         """Exit the async context manager.
         Behaves the same as sync __exit__
         (auto-commit on clean exit, rollback on exception).
