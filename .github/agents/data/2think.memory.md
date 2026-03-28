@@ -20,6 +20,30 @@ Rationale summary:
 
 ---
 
+## prj0000091 - missing-compose-dockerfile
+_Date: 2026-03-28 | Branch: prj0000091-missing-compose-dockerfile_
+
+task_id: prj0000091
+Lifecycle: OPEN -> IN_PROGRESS -> DONE
+Artifact: docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.think.md
+Recommendation: Option C - Normalize deploy docker layout with minimal blast radius
+Handoff target: @3design
+Rationale summary:
+- Root cause confirmed: `deploy/compose.yaml` points to non-existent `src/infrastructure/docker/Dockerfile`.
+- Option C gives clean-checkout reliability while preserving deploy-domain file organization.
+- Avoids introducing a new cross-domain `src/infrastructure` tree solely to satisfy one compose reference.
+
+Lesson schema:
+- Pattern: For broken deployment paths, prefer deploy-domain normalization over ad hoc cross-tree file creation.
+- Root cause: Compose referenced a path with no repository-backed ownership or validation guard.
+- Prevention: Add deterministic compose-path existence validation and keep build artifacts co-located under deploy/.
+- First seen: 2026-03-28.
+- Seen in: prj0000091-missing-compose-dockerfile.
+- Recurrence count: 1.
+- Promotion status: monitor (promote to hard rule at recurrence >= 2).
+
+---
+
 ## prj0000090 - private-key-remediation
 _Date: 2026-03-28 | Branch: prj0000090-private-key-remediation_
 

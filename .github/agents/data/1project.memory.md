@@ -162,3 +162,19 @@ prj0000075 ci-simplification branch prj0000075-ci-simplification — project set
 | **handoff_target** | @2think |
 | **artifact_paths** | docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.project.md, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.think.md, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.design.md, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.plan.md, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.test.md, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.code.md, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.exec.md, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.ql.md, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.git.md, docs/project/kanban.md, data/projects.json, data/nextproject.md |
 
+---
+
+## prj0000091 - missing-compose-dockerfile
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000091-missing-compose-dockerfile |
+| **owner_agent** | @1project |
+| **source** | @0master |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | HANDED_OFF |
+| **summary** | Project boundary initialized on expected branch prj0000091-missing-compose-dockerfile from idea000002-missing-compose-dockerfile. Created canonical overview plus think/design/plan and downstream lifecycle stubs; registered project in Discovery lane and advanced nextproject to prj0000092. |
+| **handoff_target** | @2think |
+| **artifact_paths** | docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.project.md, docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.think.md, docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.design.md, docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.plan.md, docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.test.md, docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.code.md, docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.exec.md, docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.ql.md, docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.git.md, docs/project/kanban.md, data/projects.json, data/nextproject.md |
+

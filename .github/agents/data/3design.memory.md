@@ -153,3 +153,31 @@ the design intent.
 | **Seen in** | prj0000090-private-key-remediation |
 | **Recurrence count** | 1 |
 | **Promotion status** | Candidate |
+
+---
+
+## prj0000091 - missing-compose-dockerfile
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000091-missing-compose-dockerfile |
+| **owner_agent** | @3design |
+| **source** | @2think |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | DONE |
+| **lifecycle** | OPEN -> IN_PROGRESS -> DONE |
+| **branch_gate** | PASS - `prj0000091-missing-compose-dockerfile` |
+| **selected_option** | Option C - normalize deploy Docker layout with minimal blast radius |
+| **design_path** | Keep compose canonical in `deploy/compose.yaml`; set `build.dockerfile` to `deploy/Dockerfile.pyagent`; add deterministic compose Dockerfile path guard test |
+| **interface_contracts** | IFC-01 Compose Build Contract; IFC-02 Dockerfile Contract; IFC-03 Regression Guard Contract |
+| **assumptions** | `deploy/compose.yaml` remains project-scope canonical compose file; full compose consolidation deferred |
+| **handoff_target** | @4plan |
+| **artifact_paths** | docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.design.md |
+| **Pattern** | For missing deploy file references, co-locate runtime artifacts under deploy domain and enforce static path guards |
+| **Root cause** | Compose referenced a non-existent Dockerfile path (`src/infrastructure/docker/Dockerfile`) |
+| **Prevention** | Add deterministic test that parses compose build dockerfile entries and asserts path existence |
+| **First seen** | 2026-03-28 |
+| **Seen in** | prj0000091-missing-compose-dockerfile |
+| **Recurrence count** | 1 |
+| **Promotion status** | Candidate |

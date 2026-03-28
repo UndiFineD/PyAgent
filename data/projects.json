@@ -1,5 +1,18 @@
 [
   {
+    "id": "prj0000091",
+    "name": "missing-compose-dockerfile",
+    "lane": "In Sprint",
+    "summary": "Fix deploy compose reference to non-existent Dockerfile and restore clean-checkout compose viability",
+    "branch": "prj0000091-missing-compose-dockerfile",
+    "pr": null,
+    "priority": "P1",
+    "budget_tier": "S",
+    "tags": ["deploy", "compose", "docker"],
+    "created": "2026-03-28",
+    "updated": "2026-03-28"
+  },
+  {
     "id": "prj0000090",
     "name": "private-key-remediation",
     "lane": "In Sprint",

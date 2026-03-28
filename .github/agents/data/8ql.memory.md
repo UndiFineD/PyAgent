@@ -9,6 +9,32 @@ Once security scans and CodeQL analysis are complete,
 the next agent in the workflow is **@9git**. 
 Invoke it via `agent/runSubagent` to continue the process.
 
+## Last scan - 2026-03-28 (prj0000091)
+- Task: prj0000091-missing-compose-dockerfile
+- Lifecycle: OPEN -> IN_PROGRESS -> DONE
+- status: DONE
+- task_id: prj0000091-missing-compose-dockerfile
+- Branch gate: PASS (expected = observed = `prj0000091-missing-compose-dockerfile`)
+- Files scanned: `deploy/compose.yaml`, `deploy/Dockerfile.pyagent`, `tests/deploy/test_compose_dockerfile_paths.py`, `docs/project/prj0000091-missing-compose-dockerfile/*`
+- Security - CodeQL: SKIPPED (CLI/database flow not invoked; required scoped checks executed)
+- Security - ruff S rules: PASS for project scope (repository-wide `src/` run reported pre-existing unrelated findings)
+- Security - pip-audit new findings: 0 (`pip_audit_results.json` baseline reports `Deps with vulns: 0`)
+- Security - Rust unsafe check: SKIPPED (`rust_core/` not modified)
+- Security - Workflow injection: PASS (no `.github/workflows/*.yml` changes in this project diff)
+- Quality - Plan vs delivery: PASS
+- Quality - AC vs test coverage: PASS (`python -m pytest -q tests/deploy/test_compose_dockerfile_paths.py` -> `2 passed`)
+- Quality - Docs vs implementation: PASS (project artifacts complete and aligned)
+- Quality - Agent file consistency: PASS
+- Findings: 1 MEDIUM (`deploy/Dockerfile.pyagent` non-root user hardening gap), 1 LOW (`ollama:latest` mutable tag)
+- Lessons written: 0
+- Rules promoted: 0
+- Unresolved quality debt: 0 blocking items
+- Outcome: CLEAN -> @9git
+- handoff_target: @9git
+
+## Unresolved Quality-Debt Ledger
+- None open for `prj0000091-missing-compose-dockerfile`.
+
 ## Last scan — 2026-03-27 (prj0000088 post-rerun)
 - Task: prj0000088-ai-fuzzing-security
 - status: DONE

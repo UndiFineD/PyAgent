@@ -258,15 +258,60 @@ Ready for @9git handoff.
 
 | Item | Value |
 |---|---|
-| Code files planned | 5 |
-| Test files planned | 3 |
-| Tests mapped | 18 |
-| AC count | 10 |
+
+---
+
+## prj0000091 - missing-compose-dockerfile
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000091-missing-compose-dockerfile |
+| **owner_agent** | @4plan |
+| **source** | @3design |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | HANDED_OFF |
+| **handoff_target** | @5test |
+| **artifact_paths** | docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.plan.md |
+| **branch** | prj0000091-missing-compose-dockerfile (validated PASS before artifact write) |
+
+### Chunk 001 Summary
+
+| Item | Value |
+|---|---|
+| Code files planned | 2 |
+| Test files planned | 1 |
+| Task IDs | T1-T5 |
+| Scope | compose Dockerfile path fix + deploy Dockerfile addition + regression guard tests |
+
+### Dependency Order
+1. T1 -> T2 -> T3 -> T4 -> T5
+2. TDD gate: @6code implementation begins only after @5test adds failing tests for T1-T3 contracts.
+
+### Acceptance Coverage
+| Task | Acceptance IDs |
+|---|---|
+| T1 | AC-001, AC-002 |
+| T2 | AC-003 |
+| T3 | AC-004 |
+| T4 | AC-005 |
+| T5 | AC-006 |
+
+### Lesson Entry
+
+| Field | Value |
+|---|---|
+| Pattern | Small deploy path fixes benefit from a static-path regression test before optional docker build smoke. |
+| Root cause | Missing Dockerfile path escaped earlier because compose config validity was not asserted in tests. |
+| Prevention | Require deterministic compose `build.dockerfile` existence checks in targeted deploy tests for each compose service. |
+| First seen | 2026-03-28 |
+| Seen in | prj0000091-missing-compose-dockerfile |
+| Recurrence count | 1 |
+| Promotion status | CANDIDATE |
 
 ### Notes
 - Canonical plan updated to `_Status: DONE_` with deterministic TDD implementation order.
-- AC matrix completed and mapped to `TEST-01` through `TEST-18`.
-- Validation command set includes targeted `pytest`, `mypy`, and `ruff` checks for universal facade scope.
+- Validation commands include targeted pytest and compose checks for this deploy-scope project.
 
 ---
 

@@ -11,6 +11,32 @@ Invoke it via `agent/runSubagent` to continue the implementation workflow.
 
 ## Task Log
 
+### task_id: prj0000091-missing-compose-dockerfile-20260328
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- project: prj0000091-missing-compose-dockerfile
+- branch_expected: prj0000091-missing-compose-dockerfile
+- branch_observed: prj0000091-missing-compose-dockerfile ✓
+- scope:
+	- create RED contract tests in `tests/deploy/test_compose_dockerfile_paths.py`
+	- validate compose pyagent Dockerfile path contract and referenced path existence
+	- run targeted pytest and record red evidence in project test artifact
+	- update project overview milestone/status for @6code handoff
+- lint_validation:
+	- `.venv\Scripts\ruff.exe check --fix tests/deploy/test_compose_dockerfile_paths.py`: PASS
+	- `.venv\Scripts\ruff.exe check tests/deploy/test_compose_dockerfile_paths.py`: PASS
+	- `.venv\Scripts\ruff.exe check --select D tests/deploy/test_compose_dockerfile_paths.py`: PASS
+- red_phase_results:
+	- `python -m pytest -q tests/deploy/test_compose_dockerfile_paths.py --tb=short`
+		- result: 2 failed in 3.19s (expected red)
+		- failure mode: assertion-style contract mismatch (`dockerfile` value) and missing resolved Dockerfile path
+		- red quality: no import-time/collection blockers
+- quality_gate:
+	- AC-to-test matrix present in project test artifact: PASS
+	- weak-test detection gate executed and documented: PASS
+- handoff:
+	- target_agent: @6code
+	- required_scope: update `deploy/compose.yaml` dockerfile path to `deploy/Dockerfile.pyagent` and add the referenced file
+
 ### task_id: prj0000090-private-key-remediation-20260328
 - lifecycle: OPEN -> IN_PROGRESS -> DONE
 - project: prj0000090-private-key-remediation

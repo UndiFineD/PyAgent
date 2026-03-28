@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-28 | Total projects: 90 | prj0000090 -> In Sprint (@6code chunk 001 complete)_
+_Last updated: 2026-03-28 | Total projects: 91 | prj0000091 -> In Sprint (@5test queued)_
 
 ## How to use this board
 
@@ -58,6 +58,7 @@ Active options exploration — @2think is working or has completed .think.md.
 |---|---|---|---|---|---|---|---|
 
 
+
 ---
 
 ## Design
@@ -75,6 +76,7 @@ Active implementation — @4plan through @6code are working.
 
 | ID | Name | Summary | Branch | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000091 | missing-compose-dockerfile | Fix deploy compose reference to non-existent Dockerfile and restore clean-checkout compose viability | prj0000091-missing-compose-dockerfile | P1 | S | 2026-03-28 |
 | prj0000090 | private-key-remediation | Remediate committed private key exposure, rotate compromised credentials, and add secret-scan guardrails in commit/CI workflows | prj0000090-private-key-remediation | P1 | M | 2026-03-28 |
 
 ---
@@ -203,11 +205,11 @@ Stalled, cancelled, or superseded projects.
 | Ideas | 0 |
 | Discovery | 0 |
 | Design | 0 |
-| In Sprint | 1 |
+| In Sprint | 2 |
 | Review | 0 |
 | Released | 88 |
 | Archived | 1 |
-| **Total** | **90** |
+| **Total** | **91** |
 
 ---
 

@@ -5,6 +5,35 @@ integration checks, and smoke test outcomes.
 
 ---
 
+## Last run - 2026-03-28 PARTIAL_PASS -> @8ql
+- Task: prj0000091 missing-compose-dockerfile
+- Status: IN_PROGRESS -> DONE
+- task_id: prj0000091-missing-compose-dockerfile
+- handoff_target: @8ql
+- Branch gate: PASS (expected = observed = prj0000091-missing-compose-dockerfile)
+- Tests run: 1 targeted suite | Passed: 2 | Failed: 0
+- Import check: SKIPPED (not required by project validation command set)
+- Smoke test: SKIPPED (not required by project validation command set)
+- rust_core: SKIPPED (not modified)
+- Compose config: PASS
+- Compose build: PARTIAL / ENV_LIMITATION (context transfer canceled at ~1.58 GB)
+- Dependency warnings: NONE (classified NON_BLOCKING)
+- Outcome: READY_FOR_8QL (with environment limitation note)
+- Notes:
+  - Command evidence confirms `deploy/compose.yaml` resolves `deploy/Dockerfile.pyagent` and target `cpu-runtime` under compose model.
+  - Build-path correctness is validated up to Dockerfile load and build startup; full image completion is blocked by runtime cancellation during large context transfer.
+
+### Lesson - Large Docker Context Cancellation During Exec Validation
+- Pattern: Compose build validation can terminate with context-canceled when the repository sends very large build context in constrained runtime sessions.
+- Root cause: Build context transfer size is large (~1.58 GB), causing cancellation before full image completion.
+- Prevention: Keep Docker build context minimal via .dockerignore and/or run full image build on a runner with sufficient runtime budget.
+- First seen: 2026-03-28
+- Seen in: prj0000091-missing-compose-dockerfile
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
+---
+
 ## Last run — 2026-03-28 ❌ BLOCKED -> @6code
 - Task: prj0000090 private-key-remediation (rerun after @6code loop-policy fix)
 - Status: IN_PROGRESS -> BLOCKED

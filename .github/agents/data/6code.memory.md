@@ -99,6 +99,24 @@ Seen in: prj0000090-private-key-remediation
 Recurrence count: 1
 Promotion status: candidate
 
+## prj0000091 - missing-compose-dockerfile
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000091-missing-compose-dockerfile |
+| **owner_agent** | @6code |
+| **source** | @5test |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | DONE |
+| **summary** | Implemented minimal compose path remediation by updating `deploy/compose.yaml` to reference `deploy/Dockerfile.pyagent` and adding `deploy/Dockerfile.pyagent` with a `cpu-runtime` stage compatible with compose target selection. |
+| **changed_modules** | deploy/compose.yaml; deploy/Dockerfile.pyagent; docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.code.md; docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.project.md; .github/agents/data/6code.memory.md |
+| **verification_commands** | c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/deploy/test_compose_dockerfile_paths.py --tb=short; c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/deploy/test_compose_dockerfile_paths.py -k compose_reference_contract --tb=short; docker compose -f deploy/compose.yaml config |
+| **verification_result** | PASS — targeted compose Dockerfile contract tests green (`2 passed`) and compose config render successful (warnings only for unset optional env vars). |
+| **unresolved_risks** | None identified in scoped implementation. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | deploy/compose.yaml, deploy/Dockerfile.pyagent, docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.code.md, docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.project.md, .github/agents/data/6code.memory.md |
+
 ## prj0000088 - ai-fuzzing-security
 
 | Field | Value |

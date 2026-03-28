@@ -2,7 +2,7 @@ services:
   pyagent:
     build:
       context: ..
-      dockerfile: src/infrastructure/docker/Dockerfile
+      dockerfile: deploy/Dockerfile.pyagent
       target: ${PYAGENT_TARGET:-cpu-runtime}
     volumes:
       - ../data:/app/data
