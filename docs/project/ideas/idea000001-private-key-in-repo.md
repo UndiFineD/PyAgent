@@ -1,6 +1,11 @@
 # idea-001 - private-key-in-repo
 
-Planned project mapping: None yet
+Planned project mapping: prj0000090 (Released via #233 #234)
+
+## Implementation status
+- Status: Implemented
+- Implemented project: docs/project/prj0000090-private-key-remediation/
+- Release PRs: #233, #234
 
 ## Idea summary
 This idea focuses on private key in repo in area 8 – Data/Deploy. The current signal indicates priority P1, impact H, and urgency H. The SWOT tag is T (Threat or risk exposure requiring mitigation).

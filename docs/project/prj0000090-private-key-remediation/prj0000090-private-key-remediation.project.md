@@ -1,7 +1,7 @@
 # private-key-remediation - Project Overview
 
-_Status: HANDED_OFF_
-_Owner: @1project | Updated: 2026-03-28_
+_Status: RELEASED_
+_Owner: @9git | Updated: 2026-03-28_
 
 ## Project Identity
 **Project ID:** prj0000090
@@ -55,9 +55,9 @@ return task to @0master before downstream handoff.
 | M3 | Plan finalized | @4plan | DONE |
 | M4 | Tests written | @5test | DONE |
 | M5 | Code implemented | @6code | DONE |
-| M6 | Integration validated | @7exec | BLOCKED |
-| M7 | Security clean | @8ql | NOT_STARTED |
-| M8 | Committed | @9git | NOT_STARTED |
+| M6 | Integration validated | @7exec | DONE |
+| M7 | Security clean | @8ql | DONE |
+| M8 | Committed | @9git | DONE |
 
 ## Artifacts
 - Canonical options: docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.think.md
@@ -76,4 +76,4 @@ return task to @0master before downstream handoff.
 
 ## Status
 _Last updated: 2026-03-28_
-@7exec validation is BLOCKED pending remediation of: full-suite structure gate (`tests/structure/test_architecture_naming.py::test_no_md_files_exceed_eight`), `pip check` missing required transitive dependencies, and `rust_core/cargo test` `STATUS_DLL_NOT_FOUND` runtime issue.
+Project prj0000090 is complete and released. Implementation landed through PRs #233 and #234, and the project is now tracked in the Released lane in kanban and projects registry.
