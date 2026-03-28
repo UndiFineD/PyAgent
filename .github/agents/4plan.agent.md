@@ -158,3 +158,10 @@ python -m mypy <module>
 python -m ruff check <module>
 ```
 ````
+
+## ADR recording policy
+
+- When work introduces or changes architecture decisions, create or update an ADR under docs/architecture/adr/.
+- ADRs must start from docs/architecture/adr/0001-architecture-decision-record-template.md.
+- Link ADR updates from relevant project artifacts (design, plan, and git handoff records).
+- 3design is accountable for ADR draft quality; 8ql verifies risk/consequence coverage; 9git ensures ADR files are included in narrow staging when required.

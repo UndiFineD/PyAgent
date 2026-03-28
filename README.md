@@ -210,6 +210,40 @@ throughput, it can be rewritten in-place without touching any Python call-site.
    allowlist checker before execution, providing a defence-in-depth layer against
    prompt injection and tool abuse by any agent in the swarm.
 
+## Architecture Docs Map
+
+PyAgent architecture is documented as a layered set of focused documents under
+`docs/architecture/`.
+
+| Doc | Focus |
+|---|---|
+| `docs/architecture/0overview.md` | Top-level architecture overview and navigation |
+| `docs/architecture/1agents.md` | Agent system model, roster, and responsibilities |
+| `docs/architecture/2workflow.md` | End-to-end lifecycle handoff workflow |
+| `docs/architecture/3projects.md` | Project portfolio model and lifecycle governance |
+| `docs/architecture/4runtime-transactions.md` | Runtime execution model and transaction boundaries |
+| `docs/architecture/5data-state.md` | Data domains, state consistency, and memory rules |
+| `docs/architecture/6interfaces-api.md` | Backend/API and integration interface contracts |
+| `docs/architecture/7security-governance.md` | Security controls, quality gates, and policy enforcement |
+| `docs/architecture/8testing-quality.md` | Test strategy, quality gates, and CI validation order |
+| `docs/architecture/9operations-observability.md` | Operational signals, diagnostics, and reliability loop |
+| `docs/architecture/10adr-practice.md` | ADR lifecycle, ownership, and update discipline |
+
+## ADR Workflow
+
+Architecture decisions are tracked in `docs/architecture/adr/` and must start from
+`docs/architecture/adr/0001-architecture-decision-record-template.md`.
+
+Whenever a project changes architecture boundaries, runtime semantics, API contracts,
+or security posture:
+
+1. Create or update an ADR.
+2. Link the ADR in project design/plan/git artifacts.
+3. Ensure consequences, validation criteria, and rollback expectations are explicit.
+
+Agent definitions in `.github/agents/` enforce this workflow across design (`@3design`),
+security review (`@8ql`), and git handoff (`@9git`).
+
 ## Project History
 
 PyAgent has been built iteratively through 89 focused projects, each following the

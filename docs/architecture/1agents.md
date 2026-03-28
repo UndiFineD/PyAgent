@@ -49,6 +49,14 @@ All agent memory and log files live in `.github/agents/`:
 | `src/inference/` | LLM connectors, tool loops, streaming |
 | `rust_core/` | Rust performance libraries |
 
+## Related architecture documents
+
+- Runtime and transactions: `docs/architecture/4runtime-transactions.md`
+- Data and state: `docs/architecture/5data-state.md`
+- Interfaces and APIs: `docs/architecture/6interfaces-api.md`
+- Security and governance: `docs/architecture/7security-governance.md`
+- ADR lifecycle: `docs/architecture/10adr-practice.md`
+
 ## Quick setup (local)
 
 ```powershell

@@ -47,3 +47,12 @@ GET /api/projects?lane=Xxx → filter by lane
 PATCH /api/projects/{id}   → update a project record
 POST /api/projects         → create a new project
 ```
+
+## Architecture decision linkage
+
+For projects that introduce architecture-impacting changes:
+
+- Add or update ADRs under `docs/architecture/adr/` using
+  `docs/architecture/adr/0001-architecture-decision-record-template.md`.
+- Link the ADR from relevant project artifacts (`*.design.md`, `*.plan.md`, and `*.git.md`).
+- Keep project acceptance criteria aligned with ADR consequences.

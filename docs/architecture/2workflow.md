@@ -22,6 +22,8 @@ workflow pipeline.
 - **Input:** think.md recommendation
 - **Output:** `<project>.design.md` with interface contracts, naming conventions, and binding decisions
 - **Key rule:** all design decisions must include explicit rationale
+- **ADR checkpoint:** if architecture-impacting decisions are made, draft or update an ADR from
+  `docs/architecture/adr/0001-architecture-decision-record-template.md`
 
 ### Plan (`@4plan`)
 - **Input:** design.md
@@ -48,11 +50,14 @@ workflow pipeline.
 - **Input:** implemented code
 - **Output:** security review; confirms no OWASP Top-10 violations
 - **Key rule:** any finding blocks handoff to @9git
+- **ADR checkpoint:** verify security-impacting ADR consequences and references are accurate
 
 ### Git (`@9git`)
 - **Input:** ql-cleared code on project branch
 - **Output:** narrow-staged commit, push, PR opened; kanban updated
 - **Key rule:** branch must match project's expected branch before any staging
+- **ADR checkpoint:** include ADR updates in narrow staging when project scope includes architectural
+  decisions
 
 ---
 
@@ -69,3 +74,9 @@ workflow pipeline.
 - Commits are narrow (only files in project scope)
 - PR targets `main`; squash merge is preferred
 - `scripts/enforce_branch.py` is the pre-commit hook
+
+## Related architecture documents
+
+- Testing and quality gates: `docs/architecture/8testing-quality.md`
+- Operations and observability: `docs/architecture/9operations-observability.md`
+- ADR lifecycle: `docs/architecture/10adr-practice.md`

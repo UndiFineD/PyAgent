@@ -39,6 +39,13 @@ contributors quickly understand the high-level system structure and where to loo
 - Agent system: `docs/architecture/1agents.md`
 - Agent workflow phases: `docs/architecture/2workflow.md`
 - Project portfolio: `docs/architecture/3projects.md`
+- Runtime and transaction model: `docs/architecture/4runtime-transactions.md`
+- Data and state model: `docs/architecture/5data-state.md`
+- Interface and API contracts: `docs/architecture/6interfaces-api.md`
+- Security and governance controls: `docs/architecture/7security-governance.md`
+- Testing and quality gates: `docs/architecture/8testing-quality.md`
+- Operations and observability: `docs/architecture/9operations-observability.md`
+- ADR lifecycle and authoring: `docs/architecture/10adr-practice.md`
 - Architecture Decision Records: `docs/architecture/adr/`
 - Deep-dive archives: `docs/architecture/archive/`
 
@@ -46,3 +53,4 @@ contributors quickly understand the high-level system structure and where to loo
 
 When making a new architecture decision, create or update an ADR in `docs/architecture/adr/`.
 A template is available at `docs/architecture/adr/0001-architecture-decision-record-template.md`.
+Follow the ADR lifecycle guidance in `docs/architecture/10adr-practice.md`.
