@@ -1,6 +1,6 @@
 # idea-003 - mypy-strict-enforcement
 
-Planned project mapping: None yet
+Planned project mapping: prj0000094
 
 ## Idea summary
 This idea focuses on mypy strict enforcement in area 1 – Python agents. The current signal indicates priority P1, impact H, and urgency H. The SWOT tag is W (Weakness in current implementation).

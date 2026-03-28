@@ -113,7 +113,7 @@ async function apiCreate(project: Project): Promise<Project> {
 
 async function apiPatchIdea(
   ideaId: string,
-  patch: { title?: string; summary?: string; mapped_project_ids?: string[] },
+  patch: { title?: string; summary?: string; mapped_project_ids?: string[]; ensure_swot_risk_data?: boolean },
 ): Promise<Idea> {
   const r = await fetch(`/api/ideas/${ideaId}`, {
     method: 'PATCH',
@@ -673,6 +673,7 @@ interface IdeasColumnProps {
   ideasLoading: boolean;
   ideasError: string | null;
   promotingIdeaId: string | null;
+  onDragStartIdea: (ideaId: string) => void;
   onEditIdea: (idea: Idea) => void;
   onOpenInsightForIdea: (mode: InsightMode, ideaId: string) => void;
   onPromoteIdea: (idea: Idea) => void;
@@ -683,6 +684,7 @@ const IdeasColumn: React.FC<IdeasColumnProps> = ({
   ideasLoading,
   ideasError,
   promotingIdeaId,
+  onDragStartIdea,
   onEditIdea,
   onOpenInsightForIdea,
   onPromoteIdea,
@@ -716,7 +718,15 @@ const IdeasColumn: React.FC<IdeasColumnProps> = ({
         </div>
       )}
       {!ideasLoading && !ideasError && ideas.map(idea => (
-        <div key={idea.idea_id} className="border border-os-border rounded-md px-2 py-1.5 bg-os-bg/40">
+        <div
+          key={idea.idea_id}
+          draggable
+          onDragStart={e => {
+            e.dataTransfer.effectAllowed = 'move';
+            onDragStartIdea(idea.idea_id);
+          }}
+          className="border border-os-border rounded-md px-2 py-1.5 bg-os-bg/40 cursor-grab active:cursor-grabbing"
+        >
           <div className="flex items-center gap-1.5 mb-1">
             <span className="text-[10px] font-mono text-os-text/50 bg-os-window border border-os-border rounded px-1">
               #{idea.rank ?? '-'}
@@ -1146,7 +1156,8 @@ export const ProjectManager: React.FC = () => {
   const [sectionModal, setSectionModal] = useState<null | 'swot' | 'risk'>(null);
   const [insightIdeaId, setInsightIdeaId] = useState<string | null>(null);
   const [promotingIdeaId, setPromotingIdeaId] = useState<string | null>(null);
-  const dragId = useRef<string | null>(null);
+  const dragProjectId = useRef<string | null>(null);
+  const dragIdeaId = useRef<string | null>(null);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -1251,6 +1262,9 @@ export const ProjectManager: React.FC = () => {
     try {
       let targetProjectId = idea.mapped_project_ids[0] ?? null;
 
+      // Ensure baseline SWOT/Risk data exists whenever an idea is promoted via PM actions.
+      await apiPatchIdea(idea.idea_id, { ensure_swot_risk_data: true });
+
       if (targetProjectId) {
         await apiPatch(targetProjectId, { lane: 'Discovery' });
       } else {
@@ -1289,9 +1303,21 @@ export const ProjectManager: React.FC = () => {
 
   // Drag-and-drop: drop onto a lane column
   const handleDrop = async (targetLane: Lane) => {
-    const id = dragId.current;
+    const ideaId = dragIdeaId.current;
+    if (ideaId) {
+      dragIdeaId.current = null;
+      if (targetLane === 'Discovery') {
+        const idea = ideas.find(item => item.idea_id === ideaId);
+        if (idea) {
+          await promoteIdeaToDiscovery(idea);
+        }
+      }
+      return;
+    }
+
+    const id = dragProjectId.current;
     if (!id) return;
-    dragId.current = null;
+    dragProjectId.current = null;
     const project = projects.find(p => p.id === id);
     if (!project || project.lane === targetLane) return;
     // Optimistic update
@@ -1357,6 +1383,10 @@ export const ProjectManager: React.FC = () => {
               ideasLoading={ideasLoading}
               ideasError={ideasError}
               promotingIdeaId={promotingIdeaId}
+              onDragStartIdea={ideaId => {
+                dragIdeaId.current = ideaId;
+                dragProjectId.current = null;
+              }}
               onEditIdea={setEditIdeaTarget}
               onOpenInsightForIdea={openInsightFromIdea}
               onPromoteIdea={promoteIdeaToDiscovery}
@@ -1364,7 +1394,10 @@ export const ProjectManager: React.FC = () => {
             <FlowColumn
               projectsByLane={byLane}
               onEdit={p => setEditTarget(p)}
-              onDragStart={id => { dragId.current = id; }}
+              onDragStart={id => {
+                dragProjectId.current = id;
+                dragIdeaId.current = null;
+              }}
               onDrop={handleDrop}
             />
             {BOARD_LANES.map(lane => (
@@ -1373,7 +1406,10 @@ export const ProjectManager: React.FC = () => {
                 lane={lane}
                 projects={byLane[lane]}
                 onEdit={p => setEditTarget(p)}
-                onDragStart={id => { dragId.current = id; }}
+                onDragStart={id => {
+                  dragProjectId.current = id;
+                  dragIdeaId.current = null;
+                }}
                 onDrop={handleDrop}
               />
             ))}

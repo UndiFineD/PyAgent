@@ -411,6 +411,7 @@ _PROJECT_ID_RE = _re.compile(r"^prj\d{7}$")
 _IDEA_STEM_RE = _re.compile(r"^(idea(?P<rank>\d{6}))(?:-(?P<slug>.+))?$", _re.IGNORECASE)
 _IDEA_PROJECT_ID_RE = _re.compile(r"prj\d{7}", _re.IGNORECASE)
 _IDEA_MAPPING_LINE_RE = _re.compile(r"^Planned project mapping:\s*(.+)$", _re.IGNORECASE)
+_PROJECT_STAGE_DIR_RE = _re.compile(r"^(prj\d{7})-", _re.IGNORECASE)
 
 _IDEAS_FILE_ROOT = _PROJECT_ROOT / "docs" / "project" / "ideas"
 
@@ -724,6 +725,29 @@ def _replace_mapping_line(lines: list[str], mapped_project_ids: list[str]) -> li
     return lines
 
 
+def _ensure_section_content(lines: list[str], heading: str, default_content: str) -> list[str]:
+    """Ensure a markdown section exists and contains at least one content line."""
+    target = heading.strip().lower()
+    for i, line in enumerate(lines):
+        if line.strip().lower() != target:
+            continue
+
+        j = i + 1
+        while j < len(lines) and not lines[j].strip():
+            j += 1
+
+        if j < len(lines) and not lines[j].strip().startswith("#"):
+            return lines
+
+        lines.insert(i + 1, default_content)
+        return lines
+
+    if lines and lines[-1].strip() != "":
+        lines.append("")
+    lines.extend([heading, default_content])
+    return lines
+
+
 def _priority_sort_rank(idea: IdeaModel) -> int:
     """Return a numeric sort rank for idea priority.
 
@@ -760,6 +784,124 @@ def _projects_valid() -> list[ProjectModel]:
     return valid
 
 
+_LANE_RANK: dict[str, int] = {
+    "ideas": 0,
+    "discovery": 1,
+    "design": 2,
+    "in sprint": 3,
+    "review": 4,
+    "released": 5,
+    "archived": 6,
+}
+
+
+def _canonical_lane_name(lane: str) -> str:
+    """Normalize lane casing for persisted project records."""
+    normalized = lane.strip().lower()
+    mapping = {
+        "ideas": "Ideas",
+        "discovery": "Discovery",
+        "design": "Design",
+        "in sprint": "In Sprint",
+        "review": "Review",
+        "released": "Released",
+        "archived": "Archived",
+    }
+    return mapping.get(normalized, lane)
+
+
+def _build_stage_hint_map() -> dict[str, str]:
+    """Infer minimum lane progression from project artifact files.
+
+    Mapping rules:
+      - ``*.design.md`` => at least ``Design``
+      - ``*.test.md``   => at least ``In Sprint``
+            - ``*.exec.md`` or ``*.ql.md`` => at least ``Review``
+
+    Returns:
+        dict[str, str]: Project ID to inferred lane.
+
+    """
+    project_docs_root = _PROJECT_ROOT / "docs" / "project"
+    hints: dict[str, str] = {}
+    if not project_docs_root.exists():
+        return hints
+
+    for stage_dir in project_docs_root.iterdir():
+        if not stage_dir.is_dir():
+            continue
+        match = _PROJECT_STAGE_DIR_RE.match(stage_dir.name)
+        if match is None:
+            continue
+
+        project_id = match.group(1).lower()
+        inferred_lane: str | None = None
+
+        has_design = any(stage_dir.glob("*.design.md"))
+        has_test = any(stage_dir.glob("*.test.md"))
+        has_review = any(stage_dir.glob("*.exec.md")) or any(stage_dir.glob("*.ql.md"))
+
+        if has_review:
+            inferred_lane = "Review"
+        elif has_test:
+            inferred_lane = "In Sprint"
+        elif has_design:
+            inferred_lane = "Design"
+
+        if inferred_lane is None:
+            continue
+
+        existing = hints.get(project_id)
+        if existing is None:
+            hints[project_id] = inferred_lane
+            continue
+
+        if _LANE_RANK[inferred_lane.lower()] > _LANE_RANK[existing.lower()]:
+            hints[project_id] = inferred_lane
+
+    return hints
+
+
+def _sync_project_lanes_from_stage_artifacts() -> bool:
+    """Auto-advance project lanes using agent stage artifacts.
+
+    Returns:
+        bool: True if any project lane changed.
+
+    """
+    hints = _build_stage_hint_map()
+    if not hints:
+        return False
+
+    changed = False
+    for i, entry in enumerate(_PROJECTS):
+        project_id = str(entry.get("id", "")).lower().strip()
+        if not project_id:
+            continue
+
+        hinted_lane = hints.get(project_id)
+        if hinted_lane is None:
+            continue
+
+        current_lane = str(entry.get("lane", "Ideas")).strip()
+        current_rank = _LANE_RANK.get(current_lane.lower(), 0)
+        hinted_rank = _LANE_RANK.get(hinted_lane.lower(), 0)
+
+        if hinted_rank <= current_rank:
+            continue
+
+        _PROJECTS[i] = {
+            **entry,
+            "lane": _canonical_lane_name(hinted_lane),
+            "updated": datetime.now(timezone.utc).date().isoformat(),
+        }
+        changed = True
+
+    if changed:
+        _save_projects()
+    return changed
+
+
 def _save_projects() -> None:
     """Persist _PROJECTS to disk atomically."""
     tmp = _PROJECTS_FILE.with_suffix(".tmp")
@@ -772,6 +914,10 @@ async def get_projects(lane: _Opt[str] = None) -> list[ProjectModel]:
     """Return all projects from data/projects.json, optionally filtered by lane."""
     if not _PROJECTS and not _PROJECTS_FILE.exists():
         raise HTTPException(status_code=500, detail="data/projects.json not found")
+
+    # Keep project lane progression in sync with generated stage artifacts.
+    _sync_project_lanes_from_stage_artifacts()
+
     valid = _projects_valid()
     if lane:
         return [p for p in valid if p.lane == lane]
@@ -852,6 +998,7 @@ class IdeaPatch(BaseModel):
     title: _Opt[str] = None
     summary: _Opt[str] = None
     mapped_project_ids: _Opt[list[str]] = None
+    ensure_swot_risk_data: bool = False
 
 
 @_auth_router.patch("/ideas/{idea_id}", response_model=IdeaModel)
@@ -894,6 +1041,12 @@ async def patch_idea(idea_id: str, patch: IdeaPatch) -> IdeaModel:
             seen.add(project_id)
             normalized_ids.append(project_id)
         lines = _replace_mapping_line(lines, normalized_ids)
+
+    if patch.ensure_swot_risk_data:
+        default_swot = "Strength: pending analysis; Weakness: pending analysis; Opportunity: pending analysis; Threat: pending analysis."
+        default_risk = "Risk: pending analysis; Likelihood: M; Impact: M; Mitigation: define owner and controls."
+        lines = _ensure_section_content(lines, "## SWOT Data", default_swot)
+        lines = _ensure_section_content(lines, "## Risk Data", default_risk)
 
     new_text = "\n".join(lines)
     if text.endswith("\n"):

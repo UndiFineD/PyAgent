@@ -271,3 +271,39 @@ def test_patch_idea_updates_title_summary_and_mapping() -> None:
         assert "Planned project mapping: prj0000094" in updated_text
     finally:
         temp_idea.unlink(missing_ok=True)
+
+
+def test_patch_idea_ensures_swot_and_risk_sections() -> None:
+    """PATCH can enrich an idea with SWOT/Risk data sections when requested."""
+    temp_idea = _IDEAS_DIR / "idea999996-enrich-red-test.md"
+    temp_idea.write_text(
+        "\n".join(
+            [
+                "# Temporary enrich idea",
+                "",
+                "## Idea Summary",
+                "Summary before enrichment.",
+                "",
+                "Planned project mapping: none yet",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    try:
+        response = _CLIENT.patch(
+            "/api/ideas/idea999996",
+            json={"ensure_swot_risk_data": True},
+        )
+        assert response.status_code == 200
+        payload = response.json()
+        assert payload["idea_id"] == "idea999996"
+
+        updated_text = temp_idea.read_text(encoding="utf-8")
+        assert "## SWOT Data" in updated_text
+        assert "Strength: pending analysis" in updated_text
+        assert "## Risk Data" in updated_text
+        assert "Risk: pending analysis" in updated_text
+    finally:
+        temp_idea.unlink(missing_ok=True)

@@ -2,13 +2,17 @@
   {
     "id": "prj0000093",
     "name": "projectmanager-ideas-autosync",
-    "lane": "Discovery",
+    "lane": "Review",
     "summary": "Project Manager automatically ingests docs/project/ideas and filters out ideas already implemented as projects",
     "branch": "prj0000093-projectmanager-ideas-autosync",
     "pr": null,
     "priority": "P2",
     "budget_tier": "M",
-    "tags": ["project-manager", "ideas", "autosync"],
+    "tags": [
+      "project-manager",
+      "ideas",
+      "autosync"
+    ],
     "created": "2026-03-28",
     "updated": "2026-03-28"
   },
@@ -21,7 +25,11 @@
     "pr": "#237",
     "priority": "P1",
     "budget_tier": "M",
-    "tags": ["typing", "mypy", "quality-gate"],
+    "tags": [
+      "typing",
+      "mypy",
+      "quality-gate"
+    ],
     "created": "2026-03-28",
     "updated": "2026-03-28"
   },
@@ -34,7 +42,11 @@
     "pr": "#235 #236",
     "priority": "P1",
     "budget_tier": "S",
-    "tags": ["deploy", "compose", "docker"],
+    "tags": [
+      "deploy",
+      "compose",
+      "docker"
+    ],
     "created": "2026-03-28",
     "updated": "2026-03-28"
   },
@@ -47,7 +59,11 @@
     "pr": "#233 #234",
     "priority": "P1",
     "budget_tier": "M",
-    "tags": ["security", "secrets", "governance"],
+    "tags": [
+      "security",
+      "secrets",
+      "governance"
+    ],
     "created": "2026-03-28",
     "updated": "2026-03-28"
   },
@@ -60,7 +76,11 @@
     "pr": "#231",
     "priority": "P2",
     "budget_tier": "M",
-    "tags": ["agents", "quality", "process"],
+    "tags": [
+      "agents",
+      "quality",
+      "process"
+    ],
     "created": "2026-03-27",
     "updated": "2026-03-27"
   },
@@ -73,7 +93,11 @@
     "pr": "#230",
     "priority": "P3",
     "budget_tier": "M",
-    "tags": ["security", "testing", "ai"],
+    "tags": [
+      "security",
+      "testing",
+      "ai"
+    ],
     "created": "2026-03-26",
     "updated": "2026-03-27"
   },
@@ -86,7 +110,11 @@
     "pr": "#229",
     "priority": "P3",
     "budget_tier": "M",
-    "tags": ["automation", "integration", "n8n"],
+    "tags": [
+      "automation",
+      "integration",
+      "n8n"
+    ],
     "created": "2026-03-26",
     "updated": "2026-03-27"
   },
@@ -99,7 +127,11 @@
     "pr": "#228",
     "priority": "P2",
     "budget_tier": "XL",
-    "tags": ["architecture", "agents", "refactor"],
+    "tags": [
+      "architecture",
+      "agents",
+      "refactor"
+    ],
     "created": "2026-03-26",
     "updated": "2026-03-27"
   },
@@ -112,7 +144,11 @@
     "pr": "#227",
     "priority": "P3",
     "budget_tier": "M",
-    "tags": ["testing", "debug", "observability"],
+    "tags": [
+      "testing",
+      "debug",
+      "observability"
+    ],
     "created": "2026-03-26",
     "updated": "2026-03-27"
   },
@@ -125,7 +161,11 @@
     "pr": "#226",
     "priority": "P2",
     "budget_tier": "M",
-    "tags": ["security", "audit", "compliance"],
+    "tags": [
+      "security",
+      "audit",
+      "compliance"
+    ],
     "created": "2026-03-26",
     "updated": "2026-03-27"
   },
@@ -138,7 +178,11 @@
     "pr": "#225",
     "priority": "P3",
     "budget_tier": "S",
-    "tags": ["resilience", "llm", "infrastructure"],
+    "tags": [
+      "resilience",
+      "llm",
+      "infrastructure"
+    ],
     "created": "2026-03-26",
     "updated": "2026-03-27"
   },
@@ -151,7 +195,11 @@
     "pr": "#224",
     "priority": "P2",
     "budget_tier": "S",
-    "tags": ["security", "sandbox", "core"],
+    "tags": [
+      "security",
+      "sandbox",
+      "core"
+    ],
     "created": "2026-03-26",
     "updated": "2026-03-26"
   },
@@ -164,7 +212,11 @@
     "pr": "#223",
     "priority": "P3",
     "budget_tier": "L",
-    "tags": ["tools", "mcp", "ecosystem"],
+    "tags": [
+      "tools",
+      "mcp",
+      "ecosystem"
+    ],
     "created": "2026-03-26",
     "updated": "2026-03-26"
   },
@@ -177,7 +229,11 @@
     "pr": "#221",
     "priority": "P2",
     "budget_tier": "M",
-    "tags": ["reasoning", "ai", "core"],
+    "tags": [
+      "reasoning",
+      "ai",
+      "core"
+    ],
     "created": "2026-03-26",
     "updated": "2026-03-26"
   },
@@ -190,7 +246,11 @@
     "pr": "#220",
     "priority": "P2",
     "budget_tier": "L",
-    "tags": ["memory", "search", "postgresql"],
+    "tags": [
+      "memory",
+      "search",
+      "postgresql"
+    ],
     "created": "2026-03-26",
     "updated": "2026-03-27"
   },
@@ -1476,5 +1536,21 @@
     ],
     "created": "2026-03-26",
     "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000094",
+    "name": "idea-003 - mypy-strict-enforcement",
+    "lane": "Discovery",
+    "summary": "This idea focuses on mypy strict enforcement in area 1 – Python agents. The current signal indicates priority P1, impact H, and urgency H. The SWOT tag is W (Weakness in current implementation).",
+    "branch": null,
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "idea",
+      "idea000003"
+    ],
+    "created": "2026-03-28",
+    "updated": "2026-03-28"
   }
 ]
