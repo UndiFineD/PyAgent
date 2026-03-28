@@ -146,3 +146,19 @@ prj0000075 ci-simplification branch prj0000075-ci-simplification — project set
 | **handoff_target** | @2think |
 | **artifact_paths** | docs/project/prj0000089-agent-learning-loop/agent-learning-loop.project.md, docs/project/prj0000089-agent-learning-loop/agent-learning-loop.think.md, docs/project/prj0000089-agent-learning-loop/agent-learning-loop.design.md, docs/project/prj0000089-agent-learning-loop/agent-learning-loop.plan.md, docs/project/prj0000089-agent-learning-loop/agent-learning-loop.test.md, docs/project/prj0000089-agent-learning-loop/agent-learning-loop.code.md, docs/project/prj0000089-agent-learning-loop/agent-learning-loop.exec.md, docs/project/prj0000089-agent-learning-loop/agent-learning-loop.ql.md, docs/project/prj0000089-agent-learning-loop/agent-learning-loop.git.md, docs/project/kanban.md, data/projects.json, data/nextproject.md |
 
+---
+
+## prj0000090 - private-key-remediation
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000090-private-key-remediation |
+| **owner_agent** | @1project |
+| **source** | @0master |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | HANDED_OFF |
+| **summary** | Project boundary initialized on expected branch prj0000090-private-key-remediation from idea000001-private-key-in-repo. Created canonical overview plus think/design/plan and downstream lifecycle stubs; registered project in Discovery lane and advanced nextproject to prj0000091. |
+| **handoff_target** | @2think |
+| **artifact_paths** | docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.project.md, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.think.md, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.design.md, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.plan.md, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.test.md, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.code.md, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.exec.md, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.ql.md, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.git.md, docs/project/kanban.md, data/projects.json, data/nextproject.md |
+

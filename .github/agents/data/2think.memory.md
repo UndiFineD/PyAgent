@@ -20,6 +20,30 @@ Rationale summary:
 
 ---
 
+## prj0000090 - private-key-remediation
+_Date: 2026-03-28 | Branch: prj0000090-private-key-remediation_
+
+task_id: prj0000090
+Lifecycle: OPEN -> IN_PROGRESS -> DONE
+Artifact: docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.think.md
+Recommendation: Option C - Phased containment first, then scheduled history rewrite
+Handoff target: @3design
+Rationale summary:
+- Security-first day-0 containment: immediate key rotation/revocation plus active-tree key removal.
+- Durable hygiene: mandatory local/CI secret scanning and all-refs verification after history rewrite.
+- Lower coordination risk than big-bang rewrite while still converging to full-history remediation.
+
+Lesson schema:
+- Pattern: For committed-secret incidents, prefer phased containment plus scheduled full-history cleanup.
+- Root cause: Secret present in repository without dedicated secret-scanning gates.
+- Prevention: Merge-blocking CI secret scan, local pre-commit secret scan, and periodic history verification.
+- First seen: 2026-03-28.
+- Seen in: prj0000090-private-key-remediation.
+- Recurrence count: 1.
+- Promotion status: monitor (promote to hard rule at recurrence >= 2).
+
+---
+
 ## prj0000086 - universal-agent-shell
 _Date: 2026-03-27 | Branch: prj0000086-universal-agent-shell_
 

@@ -126,3 +126,30 @@ the design intent.
 | **assumptions** | Local-only targets, allowlist enforcement, no external network paths, seed-based deterministic scheduling |
 | **handoff_target** | @4plan |
 | **artifact_paths** | docs/project/prj0000088-ai-fuzzing-security/prj0000088-ai-fuzzing-security.design.md |
+
+---
+
+## prj0000090 - private-key-remediation
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000090-private-key-remediation |
+| **owner_agent** | @3design |
+| **source** | @2think |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | HANDED_OFF |
+| **branch_gate** | PASS - `prj0000090-private-key-remediation` |
+| **selected_option** | Option C - phased containment + scheduled history rewrite |
+| **design_path** | Secret-remediation control plane with phase gates: containment, verification, rewrite, stabilization |
+| **interface_contracts** | `SecretScanService`, `RotationCheckpointService`, `SecretGuardrailPolicy`, `HistoryRewriteCoordinator` |
+| **adr** | docs/architecture/adr/0002-secret-remediation-control-plane.md |
+| **handoff_target** | @4plan |
+| **artifact_paths** | docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.design.md |
+| **Pattern** | For exposed secrets, prefer phased fail-closed remediation control plane over ad-hoc cleanup |
+| **Root cause** | Secret material can be removed from active tree while remaining in history without explicit rewrite gate |
+| **Prevention** | Enforce rotation checkpoint gate + mandatory CI secret scan + post-rewrite zero-match verification |
+| **First seen** | 2026-03-28 |
+| **Seen in** | prj0000090-private-key-remediation |
+| **Recurrence count** | 1 |
+| **Promotion status** | Candidate |

@@ -5,6 +5,114 @@ integration checks, and smoke test outcomes.
 
 ---
 
+## Last run — 2026-03-28 ❌ BLOCKED -> @6code
+- Task: prj0000090 private-key-remediation (rerun after @6code loop-policy fix)
+- Status: IN_PROGRESS -> BLOCKED
+- task_id: prj0000090-private-key-remediation
+- handoff_target: @6code
+- Branch gate: PASS (expected = observed = `prj0000090-private-key-remediation`)
+- Tests run: fail-fast full suite + full-suite progression rerun + targeted structure + targeted chunk001 security suite | Passed: 1255 | Failed: 0 | Skipped: 9
+- Import check: PASS (`src.security*` and `src.security.models*` imports OK)
+- Smoke test: PASS (`python scripts/security/run_secret_scan.py --help`)
+- rust_core: FAIL on `cargo test` (`STATUS_DLL_NOT_FOUND` 0xc0000135), PASS on `from rust_core import *`
+- Placeholder scan: PASS (no placeholder patterns in `src/security`, `tests/security`, `scripts/security`)
+- Dependency warnings: NONE (classified NON_BLOCKING)
+- Pre-commit (scoped): FAIL (`SCOPED_FILES=9`, `EXIT=1`; hook surfaced unrelated repository `tests/*` lint findings)
+- Outcome: BLOCKED -> @6code
+- Notes:
+  - Prior async-loop blocker is resolved: fail-fast full suite now passes (`1234 passed, 9 skipped`).
+  - Targeted progression checks are green: structure gate (`3 passed`) and chunk001 security suite (`18 passed`).
+  - Handoff remains blocked per mandatory pre-commit gate policy while hook exit is non-zero.
+
+### Lesson — Scoped Pre-commit Gate Still Not Isolated
+- Pattern: `pre-commit run --files <scoped project files>` can still fail due hook behavior that evaluates unrelated repository files.
+- Root cause: Repository hook configuration executes broad `ruff check src tests` logic during pre-commit, ignoring effective per-file isolation for this gate.
+- Prevention: For @6code handoff readiness, ensure hooks used by mandatory gate can pass on scoped inputs (or provide an approved project-scoped hook strategy) before returning to @7exec.
+- First seen: 2026-03-28
+- Seen in: prj0000090-private-key-remediation
+- Recurrence count: 2
+- Promotion status: PROMOTED_HARD_RULE
+
+### Lesson — rust_core Host Runtime Failure
+- Pattern: `cargo test` for `rust_core` can fail with Windows host-runtime loader errors while Python import still succeeds.
+- Root cause: External runtime/host dependency constraints (`0xc0000135`, occasional `0xc0000022`) outside repository source correctness.
+- Prevention: Treat this as environment exception only after confirming Python `rust_core` import path and recording explicit blocker ownership.
+- First seen: 2026-03-28
+- Seen in: prj0000090-private-key-remediation
+- Recurrence count: 3
+- Promotion status: PROMOTED_HARD_RULE
+
+---
+
+## Last run — 2026-03-28 ❌ BLOCKED -> @6code
+- Task: prj0000090 private-key-remediation (final @7exec rerun)
+- Status: OPEN -> IN_PROGRESS -> BLOCKED
+- task_id: prj0000090-private-key-remediation
+- handoff_target: @6code
+- Branch gate: PASS (expected = observed = `prj0000090-private-key-remediation`)
+- Tests run: fail-fast full suite + targeted structure + targeted chunk001 security suite | Passed: 404 | Failed: 1
+- Import check: PASS (`src.security*` and `src.security.models*` imports OK)
+- Smoke test: PASS (`python scripts/security/run_secret_scan.py --help`)
+- rust_core: FAIL on `cargo test` (`STATUS_DLL_NOT_FOUND` 0xc0000135), PASS on `from rust_core import *`
+- Placeholder scan: PASS (no placeholder patterns in changed project areas)
+- Dependency warnings: NONE (classified NON_BLOCKING)
+- Outcome: BLOCKED -> @6code
+- Notes:
+  - Project progression checks pass: `tests/structure/test_kanban.py` targeted checks + `test_no_md_files_exceed_eight` are green.
+  - New blocker in this run: `tests/test_async_loops.py::test_no_sync_loops` reports synchronous loop usage in `src/security/secret_guardrail_policy.py` line 65.
+  - rust_core failure remains a host-runtime environment exception and should stay tracked with platform owner.
+
+### Lesson — Async Loop Gate Regression
+- Pattern: Security module changes can pass feature tests while still failing global async-loop policy checks.
+- Root cause: Sync loop construct in `src/security/secret_guardrail_policy.py` violates repository async policy gate.
+- Prevention: Include `tests/test_async_loops.py::test_no_sync_loops` in @6code pre-handoff validation for security module changes.
+- First seen: 2026-03-28
+- Seen in: prj0000090-private-key-remediation
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
+### Lesson — rust_core Host Runtime Failure
+- Pattern: `cargo test` for `rust_core` can fail with Windows host-runtime loader errors while Python import still succeeds.
+- Root cause: External runtime/host dependency constraints (`0xc0000135`, occasional `0xc0000022`) outside repository source correctness.
+- Prevention: Treat this as environment exception only after confirming Python `rust_core` import path and recording explicit blocker ownership.
+- First seen: 2026-03-28
+- Seen in: prj0000090-private-key-remediation
+- Recurrence count: 2
+- Promotion status: PROMOTED_HARD_RULE
+
+---
+
+## Last run — 2026-03-28 ❌ BLOCKED -> @6code
+- Task: prj0000090 private-key-remediation (rerun after @6code unblock pass)
+- Status: IN_PROGRESS -> BLOCKED
+- task_id: prj0000090-private-key-remediation
+- handoff_target: @6code
+- Branch gate: PASS (expected = observed = `prj0000090-private-key-remediation`)
+- Tests run: full suite fail-fast + architecture gate + chunk001 security suite | Passed: 177 | Failed: 1
+- Import check: PASS (`src.security*` and `src.security.models*` imports OK)
+- Smoke test: PASS (`python scripts/security/run_secret_scan.py --help`)
+- rust_core: FAIL on `cargo test` (`STATUS_DLL_NOT_FOUND` 0xc0000135), PASS on `from rust_core import *`
+- Dependency warnings: NONE (classified NON_BLOCKING)
+- Outcome: BLOCKED -> @6code
+- Notes:
+  - Prior blockers now clear: `python -m pip check` passes and
+    `tests/structure/test_architecture_naming.py::test_no_md_files_exceed_eight` passes.
+  - New full-suite blocker:
+    `tests/structure/test_kanban.py::test_projects_json_entry_count`
+    expected 89 entries in `data/projects.json`, observed 90.
+  - rust_core failure remains an environment exception and should be tracked with platform owner.
+
+### Lesson — Full-Suite Structure Count Drift
+- Pattern: Fail-fast full suite can reveal structure-count drift even after targeted blocker tests pass.
+- Root cause: Registry/count assertions in structure tests changed independently from focused rerun targets.
+- Prevention: Always include one fail-fast full-suite run in reruns, even when targeted blocker tests are green.
+- First seen: 2026-03-28
+- Seen in: prj0000090-private-key-remediation
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
+---
+
 ## Last run — 2026-03-27 ✅ PASSED → @8ql
 - Task: prj0000088 ai-fuzzing-security (rerun after fix SHA 24dce253)
 - Status: IN_PROGRESS -> DONE
@@ -21,6 +129,33 @@ integration checks, and smoke test outcomes.
 - Notes: Structure suite now passes (`tests/structure` 129/129) including extra rerun requested by user.
 
 ---
+
+## Last run — 2026-03-28 ❌ BLOCKED -> @6code
+- Task: prj0000090 private-key-remediation (chunk 001 execution validation)
+- Status: IN_PROGRESS -> BLOCKED
+- task_id: prj0000090-private-key-remediation
+- handoff_target: @6code
+- Branch gate: PASS (expected = observed = `prj0000090-private-key-remediation`)
+- Tests run: full suite fail-fast + chunk001 security suite | Passed: 18 | Failed: 1 (full-suite gate)
+- Import check: PASS (`src.security*` modules import OK)
+- Smoke test: PASS (`python scripts/security/run_secret_scan.py --help`)
+- rust_core: FAIL on `cargo test` (`STATUS_DLL_NOT_FOUND`), PASS on `from rust_core import *`
+- Dependency warnings: BLOCKING (`pip check` missing required transitive deps)
+- Outcome: BLOCKED -> @6code
+- Notes:
+  - Full-suite blocker: `tests/structure/test_architecture_naming.py::test_no_md_files_exceed_eight`
+    reports 11 top-level markdown files under `docs/architecture/` vs max 8.
+  - Project git artifact was normalized to modern branch-plan schema during execution.
+
+### Lesson — Dependency Warning Classification
+- Pattern: `pip check` reports missing required transitive dependencies in the active env.
+- Root cause: Environment drift left tooling packages partially installed without required deps.
+- Prevention: Include dependency integrity gate in environment bootstrap and preflight scripts.
+- First seen: 2026-03-28
+- Seen in: prj0000090-private-key-remediation
+- Recurrence count: 1
+- Promotion status: CANDIDATE (not promoted)
+
 
 ## Last run — 2026-03-27 ❌ BLOCKED → @6code
 - Task: prj0000088 ai-fuzzing-security fuzzing core execution validation

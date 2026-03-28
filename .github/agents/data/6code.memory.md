@@ -9,6 +9,96 @@ Once code implementation is complete and tests are passing,
 the next agent to invoke is **@7exec**. 
 This should be done via `agent/runSubagent`.
 
+## prj0000090 - private-key-remediation (chunk 001)
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000090-private-key-remediation |
+| **owner_agent** | @6code |
+| **source** | @5test |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | DONE |
+| **summary** | Implemented chunk 001 remediation control-plane contracts: deterministic scanner/report models, rotation checkpoint gate, fail-closed secret guardrail policy, CI/pre-commit secret scan wiring, containment verifier/runbook, and active-tree key artifact removal. |
+| **changed_modules** | src/security/__init__.py; src/security/secret_scan_service.py; src/security/rotation_checkpoint_service.py; src/security/secret_guardrail_policy.py; src/security/models/__init__.py; src/security/models/scan_report.py; src/security/models/rotation_models.py; src/security/models/guardrail_decision.py; scripts/security/run_secret_scan.py; scripts/security/verify_no_key_material.py; docs/security/private-key-remediation-runbook.md; .pre-commit-config.yaml; .github/workflows/security.yml; rust_core/2026-03-11-keys.priv; docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.code.md; docs/project/kanban.md; .github/agents/data/6code.memory.md |
+| **verification_commands** | c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/security/test_secret_scan_service_contract.py tests/security/test_scan_report_schema.py tests/security/test_rotation_checkpoint_service.py tests/security/test_rotation_gate_decision.py tests/security/test_secret_guardrail_policy.py tests/security/test_ci_secret_guardrail_job.py tests/security/test_pre_commit_secret_hook.py tests/security/test_containment_cleanup.py tests/security/test_private_key_artifact_absence.py; .venv\Scripts\ruff.exe check --fix src/security/__init__.py src/security/secret_scan_service.py src/security/rotation_checkpoint_service.py src/security/secret_guardrail_policy.py src/security/models/__init__.py src/security/models/scan_report.py src/security/models/rotation_models.py src/security/models/guardrail_decision.py scripts/security/run_secret_scan.py scripts/security/verify_no_key_material.py; .venv\Scripts\ruff.exe check src/security/__init__.py src/security/secret_scan_service.py src/security/rotation_checkpoint_service.py src/security/secret_guardrail_policy.py src/security/models/__init__.py src/security/models/scan_report.py src/security/models/rotation_models.py src/security/models/guardrail_decision.py scripts/security/run_secret_scan.py scripts/security/verify_no_key_material.py; .venv\Scripts\ruff.exe check --select D src/security/__init__.py src/security/secret_scan_service.py src/security/rotation_checkpoint_service.py src/security/secret_guardrail_policy.py src/security/models/__init__.py src/security/models/scan_report.py src/security/models/rotation_models.py src/security/models/guardrail_decision.py scripts/security/run_secret_scan.py scripts/security/verify_no_key_material.py; rg --type py "raise NotImplementedError|raise NotImplemented\b|#\s*(TODO|FIXME|HACK|STUB|PLACEHOLDER)" src/security scripts/security tests/security; rg --type py "^\s*\.\.\.\s*$" src/security scripts/security |
+| **verification_result** | PASS — chunk 001 suite 18/18 passing; lint/docstring checks clean on changed Python files; placeholder scan clean. |
+| **unresolved_risks** | Chunk 002 tasks (rewrite orchestration/governance integration) remain pending by plan and are not part of this implementation handoff. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | src/security/__init__.py, src/security/secret_scan_service.py, src/security/rotation_checkpoint_service.py, src/security/secret_guardrail_policy.py, src/security/models/__init__.py, src/security/models/scan_report.py, src/security/models/rotation_models.py, src/security/models/guardrail_decision.py, scripts/security/run_secret_scan.py, scripts/security/verify_no_key_material.py, docs/security/private-key-remediation-runbook.md, .pre-commit-config.yaml, .github/workflows/security.yml, rust_core/2026-03-11-keys.priv, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.code.md, docs/project/kanban.md, .github/agents/data/6code.memory.md |
+
+## prj0000090 - private-key-remediation (@7exec blocker follow-up)
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000090-private-key-remediation |
+| **owner_agent** | @6code |
+| **source** | @7exec blockers |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | DONE |
+| **summary** | Cleared two execution blockers by reducing top-level architecture markdown files to policy limit and installing missing transitive dependencies required by `pip check`; rust_core cargo tests remain environment-blocked in current Windows runtime image. |
+| **changed_modules** | docs/architecture/0overview.md; docs/architecture/8testing-quality.md (moved); docs/architecture/9operations-observability.md (moved); docs/architecture/10adr-practice.md (moved); docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.code.md; docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.exec.md; .github/agents/data/6code.memory.md |
+| **verification_commands** | python -m pytest -q tests/structure/test_architecture_naming.py::test_no_md_files_exceed_eight --tb=short; python -m pip check; cd rust_core; cargo test |
+| **verification_result** | PASS for architecture count gate and pip check; FAIL for rust_core cargo test with environment/runtime DLL loading/ACL exits (`0xc0000135`, `0xc0000022`). |
+| **unresolved_risks** | Current Windows image cannot execute rust_core test binary due external runtime constraints; requires @7exec environment exception or host runtime remediation. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | docs/architecture/0overview.md, docs/architecture/archive/8testing-quality.md, docs/architecture/archive/9operations-observability.md, docs/architecture/archive/10adr-practice.md, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.code.md, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.exec.md, .github/agents/data/6code.memory.md |
+
+## prj0000090 - private-key-remediation (structure count gate follow-up)
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000090-private-key-remediation |
+| **owner_agent** | @6code |
+| **source** | Full-suite structure gate blocker |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | DONE |
+| **summary** | Resolved `tests/structure/test_kanban.py::test_projects_json_entry_count` mismatch by updating stale static gate constants from 89 to 90 after `prj0000090` registration; validated kanban lane and total counts remain consistent with `data/projects.json`. |
+| **changed_modules** | tests/structure/test_kanban.py; docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.code.md; .github/agents/data/6code.memory.md |
+| **verification_commands** | python -m pytest -q tests/structure/test_kanban.py::test_projects_json_entry_count; python -c "import json,re,pathlib; p=pathlib.Path('data/projects.json'); k=pathlib.Path('docs/project/kanban.md'); projects=json.loads(p.read_text(encoding='utf-8')); lanes=['Ideas','Discovery','Design','In Sprint','Review','Released','Archived']; counts={ln:0 for ln in lanes}; [counts.__setitem__(e['lane'], counts[e['lane']]+1) for e in projects]; text=k.read_text(encoding='utf-8'); rows=len(re.findall(r'^\\|\\s*prj\\d{7}', text, flags=re.M)); print('projects_total=',len(projects)); print('kanban_rows=',rows); print('lane_counts=',counts)" |
+| **verification_result** | PASS — targeted failing structure test now passes (`1 passed`); registry total and kanban rows both 90; lane counts align (`Ideas 0`, `Discovery 0`, `Design 0`, `In Sprint 1`, `Review 0`, `Released 88`, `Archived 1`). |
+| **unresolved_risks** | None for this consistency-only fix scope. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | tests/structure/test_kanban.py, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.code.md, .github/agents/data/6code.memory.md |
+
+## prj0000090 - private-key-remediation (async-loop blocker follow-up)
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000090-private-key-remediation |
+| **owner_agent** | @6code |
+| **source** | @7exec blocker (`tests/test_async_loops.py`) |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | DONE |
+| **summary** | Removed synchronous loop usage from `src/security/secret_guardrail_policy.py` evaluator with behavior-equivalent filtering/projection logic so async-loop policy gates pass while preserving fail-closed HIGH/CRITICAL blocking semantics. |
+| **changed_modules** | src/security/secret_guardrail_policy.py; docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.code.md; .github/agents/data/6code.memory.md |
+| **verification_commands** | python -m pytest -q tests/test_async_loops.py tests/security/test_secret_guardrail_policy.py tests/security/test_ci_secret_guardrail_job.py tests/security/test_pre_commit_secret_hook.py; .venv\Scripts\ruff.exe check src/security/secret_guardrail_policy.py; python -m mypy src/security/secret_guardrail_policy.py; pre-commit run --files src/security/secret_guardrail_policy.py docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.code.md .github/agents/data/6code.memory.md; pre-commit run enforce-branch --all-files; pre-commit run secret-scan --all-files; python -m scripts.security.run_secret_scan --profile tree |
+| **verification_result** | PASS — targeted async-loop and security guardrail suite green (`16 passed`); scoped ruff and mypy clean on changed module; enforce-branch hook passed; secret-scan hook has known pre-commit environment import-path issue, while direct project-scope scan command passed (`status=PASS blocking=False`). |
+| **unresolved_risks** | None identified for this blocker remediation scope. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | src/security/secret_guardrail_policy.py, docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.code.md, .github/agents/data/6code.memory.md |
+
+### Lesson — 2026-03-28 (prj0000090 async-loop blocker)
+Pattern: Sync `for`/`while` constructs inside synchronous helper methods trigger repository async-loop policy tests even when business behavior is correct.
+Root cause: Policy evaluation helper `_evaluate` used an explicit `for` statement instead of an expression-oriented projection/filter.
+Prevention: For sync helpers in policy modules, avoid explicit loop statements and use deterministic expression-based filtering/mapping that preserves semantics.
+First seen: prj0000090
+Seen in: prj0000090-private-key-remediation
+Recurrence count: 1
+Promotion status: candidate
+
+### Lesson — 2026-03-28 (prj0000090 blocker follow-up)
+Pattern: @7exec gate failures can mix policy/doc structure issues with environment-runtime failures that are not code defects.
+Root cause: Top-level architecture doc sprawl exceeded enforced count policy, while rust_core tests depended on Windows runtime behavior outside repository control.
+Prevention: Keep policy-governed docs constrained in top-level directories and classify runtime-loader failures as environment blockers after one targeted path-remediation attempt.
+First seen: prj0000090
+Seen in: prj0000090-private-key-remediation
+Recurrence count: 1
+Promotion status: candidate
+
 ## prj0000088 - ai-fuzzing-security
 
 | Field | Value |

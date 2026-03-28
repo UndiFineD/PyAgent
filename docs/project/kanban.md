@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-27 | Total projects: 89 | prj0000089 → Released_
+_Last updated: 2026-03-28 | Total projects: 90 | prj0000090 -> In Sprint (@6code chunk 001 complete)_
 
 ## How to use this board
 
@@ -41,6 +41,9 @@ work on an existing project.
 
 Projects proposed but not yet formally scoped.
 
+Use the ordered implementation queue in the Future Ideas section to decide which idea
+is promoted next into a `prjNNNNNNN` placeholder in this lane.
+
 | ID | Name | Summary | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|
 
@@ -53,8 +56,6 @@ Active options exploration — @2think is working or has completed .think.md.
 
 | ID | Name | Summary | Branch | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|---|
-
-
 
 
 ---
@@ -74,6 +75,7 @@ Active implementation — @4plan through @6code are working.
 
 | ID | Name | Summary | Branch | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000090 | private-key-remediation | Remediate committed private key exposure, rotate compromised credentials, and add secret-scan guardrails in commit/CI workflows | prj0000090-private-key-remediation | P1 | M | 2026-03-28 |
 
 ---
 
@@ -201,11 +203,11 @@ Stalled, cancelled, or superseded projects.
 | Ideas | 0 |
 | Discovery | 0 |
 | Design | 0 |
-| In Sprint | 0 |
+| In Sprint | 1 |
 | Review | 0 |
 | Released | 88 |
 | Archived | 1 |
-| **Total** | **89** |
+| **Total** | **90** |
 
 ---
 
@@ -241,70 +243,97 @@ Global SWOT for the PyAgent project as of 2026-03-25.
 | | Community interest in multi-agent workflow tooling growing | Dependabot alerts require timely remediation (1 high open) |
 ## Future Ideas
 
-Ideas surfaced by the @2think workspace audit (prj0000076, 2026-03-26).
-38 total ideas across 9 areas. P1/P2 include SWOT classification.
-These are not active projects — they are candidates for future sprints.
+Implementation queue sourced from docs/project/ideas/, ordered by importance for execution planning.
+Promote ideas from this queue into the Ideas lane as prjNNNNNNN placeholders before Discovery handoff.
 
-| ID | Area | Name | Priority | Impact | Urgency | SWOT | Description |
-|---|---|---|---|---|---|---|---|
-| idea-001 | 8 – Data/Deploy | private-key-in-repo | P1 | H | H | T | `rust_core/2026-03-11-keys.priv` is a private cryptographic key committed to the repository. Any clone leaks the secret; rotate immediately and add a pre-commit secret-scan hook. |
-| idea-002 | 8 – Data/Deploy | missing-compose-dockerfile | P1 | H | H | W | `deploy/compose.yaml` references `src/infrastructure/docker/Dockerfile` which does not exist. This makes the primary compose target fully broken on clean checkout. |
-| idea-003 | 1 – Python agents | mypy-strict-enforcement | P1 | H | H | W | `mypy.ini` sets `strict = False` and `ignore_errors = True`, rendering all type annotations decorative. Progressive mypy strictness should be enabled starting with the `src/core/` package. |
-| idea-004 | 7 – CI | quality-workflow-branch-trigger | P2 | H | H | W | `quality.yml` only triggers on `prj0000026-*` branch pattern (an archived project) plus `main`. All PRs to any `prj*` branch skip the quality gate entirely. |
-| idea-005 | 7 – CI | rust-ci-workflow | P2 | H | H | W | No GitHub Actions workflow runs `cargo clippy`, `cargo test`, or `cargo audit` for `rust_core/`. Rust regressions are only caught indirectly through Python FFI tests. |
-| idea-006 | 7 – CI | codeql-ci-integration | P2 | H | H | O | A `codeql/` directory containing custom Python and Rust queries exists but is never executed in CI. Wiring it into a CodeQL workflow would activate static security analysis for free. |
-| idea-007 | 7 – CI | security-scanning-ci | P2 | H | H | T | No `pip-audit`, `safety`, or Dependabot/Renovate integration exists. `pip_audit_results.json` is committed manually (stale). Automated vuln scanning should run on every push to `main`. |
-| idea-008 | 5 – Tests | coverage-minimum-enforcement | P2 | H | H | W | `quality.yml` passes `--cov-fail-under=1`, which is effectively no threshold. Setting a meaningful baseline (≥70%) and iteratively raising it would prevent coverage regressions. |
-| idea-009 | 9 – Dependencies | requirements-ci-deduplication | P2 | M | H | W | `pytest-xdist>=3.6` appears twice in `requirements-ci.txt`. Duplicate lines indicate the file is not mechanically validated; add a structure test to catch this. |
-| idea-010 | 8 – Data/Deploy | docker-compose-consolidation | P2 | M | H | W | Two independent Docker Compose files exist (`deploy/compose.yaml` and `deploy/docker-compose.yaml`) with different service topologies. Consolidate into one parameterised file. |
-| idea-011 | 1 – Python agents | stub-module-elimination | P2 | H | M | W | At least 6 modules (`src/rl/`, `src/speculation/`, `src/cort/`, `src/runtime_py/`, `src/runtime/`, `src/memory/`) contain only an empty `__init__.py`. These should be implemented or removed. |
-| idea-012 | 7 – CI | dependabot-renovate | P2 | M | M | O | No automated dependency update bot (Dependabot or Renovate) is configured. Adding `.github/dependabot.yml` would auto-raise PRs for Python, npm, and Rust dependency bumps. |
-| idea-013 | 3 – Backend | backend-health-check-endpoint | P2 | M | H | W | No `/health`, `/readyz`, or `/livez` endpoint is visible in `backend/app.py`. Container orchestrators require a health endpoint to manage service availability. |
-| idea-014 | 9 – Dependencies | pyproject-requirements-sync | P2 | M | M | W | `pyproject.toml` and `requirements.txt` pin different versions for several packages. Two divergent install paths create "works on my machine" failures. |
-| idea-015 | 1 – Python agents | specialized-agent-library | P3 | H | M | O | `src/agents/` contains only `BaseAgent.py`. The `docs/AGENTS.md` catalogue lists many specialized agents that have no Python-side implementation — only `.agent.md` definitions consumed by Copilot. |
-| idea-016 | 1 – Python agents | mixin-architecture-base | P3 | H | M | W | `copilot-instructions.md` mandates a mixin architecture in `src/core/base/mixins/`, but that directory does not exist. `src/core/base/__init__.py` is a near-empty placeholder. |
-| idea-017 | 2 – Rust core | rust-criterion-benchmarks | P3 | H | M | O | `performance/metrics_bench.py` benchmarks Rust through Python. No Rust-side `criterion` benchmarks exist, making it impossible to detect performance regressions at the Rust layer. |
-| idea-018 | 2 – Rust core | rust-sub-crate-unification | P3 | M | M | W | `rust_core/crdt/`, `rust_core/p2p/`, and `rust_core/security/` are standalone Cargo crates with separate `Cargo.lock` files. Consider a Cargo workspace to unify the dependency graph. |
-| idea-019 | 2 – Rust core | crdt-python-ffi-bindings | P3 | H | M | O | The CRDT sub-crate (`rust_core/crdt/`) builds a standalone binary but exposes no PyO3 bindings. `src/core/crdt_bridge.py` implies FFI was planned but not completed. |
-| idea-020 | 2 – Rust core | amd-npu-feature-documentation | P3 | M | L | O | `Cargo.toml` includes an `amd_npu` feature flag but no documentation, test, or CI coverage exists for it. Documenting activation steps would make this a usable capability. |
-| idea-021 | 3 – Backend | openapi-spec-generation | P3 | H | M | O | FastAPI auto-generates an OpenAPI spec at runtime but no `openapi.json` is committed or built in CI. `docs/api/index.md` is a mkdocstrings placeholder never rendered, making the API undiscoverable. |
-| idea-022 | 3 – Backend | jwt-refresh-token-support | P3 | M | M | O | `backend/auth.py` supports API key + single JWT but no refresh token or session rotation. Long-lived sessions with non-expiring JWTs are a security risk for a multi-agent system. |
-| idea-023 | 4 – Frontend | tailwind-config-missing | P3 | M | H | W | The web app uses `tailwind-merge` and `clsx` but has no `tailwind.config.ts`. Without a config, JIT purge paths are undefined and design tokens cannot be centrally managed. |
-| idea-024 | 4 – Frontend | frontend-e2e-tests | P3 | H | M | W | The frontend has only 2 Vitest unit tests covering ~2% of 10 app windows and 6 components. No Playwright or Cypress E2E suite exists. |
-| idea-025 | 4 – Frontend | global-state-management | P3 | H | M | O | Each of the 10 app windows manages its own local state. No Zustand/Redux store exists for cross-window coordination (shared WebSocket session, unified notifications). |
-| idea-026 | 4 – Frontend | frontend-url-routing | P3 | M | L | O | Navigation between app windows is purely DOM/event driven with no URL routing. Adding React Router would enable deep-linking, browser history, and shareable window states. |
-| idea-027 | 5 – Tests | windows-ci-matrix | P3 | H | M | W | All 5 CI workflows run exclusively on `ubuntu-latest`. Since the primary developer OS is Windows and the app distributes a `.pyd` Rust extension, a Windows runner is needed in CI. |
-| idea-028 | 5 – Tests | property-based-test-expansion | P3 | M | M | O | `hypothesis` is a declared CI dependency but coverage of edge cases in transaction managers, CRDT, and crypto modules is minimal. Systematic property-based tests would raise confidence. |
-| idea-029 | 5 – Tests | backend-integration-test-suite | P3 | H | M | W | `tests/integration/` contains only one file. The backend's WebSocket, auth, rate limiter, and session management have no multi-component integration tests. |
-| idea-030 | 6 – Docs | adr-backfill | P3 | M | M | O | Only an ADR template exists. Major architectural decisions (transaction manager, Rust FFI, P2P CRDT, E2E encryption, maturin build) are undocumented in ADR format. |
-| idea-031 | 6 – Docs | automated-api-docs-ci | P3 | M | M | W | `docs/api/index.md` contains only a mkdocstrings placeholder. MkDocs is in `requirements-ci.txt` but no CI job runs `mkdocs build`, so the published API reference is never built. |
-| idea-032 | 6 – Docs | changelog-automation | P3 | M | L | O | `CHANGELOG.md` is edited manually. Configuring `release-please` or `conventional-changelog` tied to the `feat`/`fix` commit convention would automate release notes. |
-| idea-033 | 7 – CI | pre-commit-ruff-version-drift | P3 | M | M | W | `.pre-commit-config.yaml` pins ruff at `v0.15.5` while `requirements-ci.txt` pins `ruff==0.15.6`. The local pre-commit hook uses a different lint binary than CI. |
-| idea-034 | 8 – Data/Deploy | projects-json-schema-validation | P3 | M | M | W | `data/projects.json` is the source of truth for 76 projects but has no JSON Schema. Malformed entries can silently corrupt the Kanban board; a schema test in CI would prevent this. |
-| idea-035 | 9 – Dependencies | torch-optional-dependency-split | P3 | M | M | W | `torch>=2.5.0` is listed in `pyproject.toml` main dependencies but absent from `requirements.txt`. Torch is ~2GB and should be an optional `[ai]` extra to avoid forcing the download. |
-| idea-036 | 1 – Python agents | rl-module-implementation | P4 | H | L | O | `src/rl/` stub was planned as a reinforcement-learning module for agent self-optimization. Implementing even a basic reward-shaping layer would support autonomous quality improvement cycles. |
-| idea-037 | 6 – Docs | docs-work-folder-cleanup | P4 | L | L | W | `docs/work/` contains 10+ stale working documents that are no longer current. These should be archived to `docs/archive/` or deleted. |
-| idea-038 | 9 – Dependencies | chromadb-optional-extra | P4 | M | L | W | `chromadb>=0.5.0` is listed in `pyproject.toml` main dependencies but not in `requirements.txt`. ChromaDB pulls in heavy ML dependencies and should be an optional `[vector]` extra. |
+Total idea files ordered: 78
 
-### Future Ideas — Quick Reference
+| Rank | Idea | Importance | Source file |
+|---|---|---|---|
+| 1 | idea-001 - private-key-in-repo | Critical | docs/project/ideas/idea000001-private-key-in-repo.md |
+| 2 | idea-002 - missing-compose-dockerfile | Critical | docs/project/ideas/idea000002-missing-compose-dockerfile.md |
+| 3 | idea-003 - mypy-strict-enforcement | Critical | docs/project/ideas/idea000003-mypy-strict-enforcement.md |
+| 4 | idea-004 - quality-workflow-branch-trigger | Critical | docs/project/ideas/idea000004-quality-workflow-branch-trigger.md |
+| 5 | idea-005 - rust-ci-workflow | Critical | docs/project/ideas/idea000005-rust-ci-workflow.md |
+| 6 | idea-006 - codeql-ci-integration | Critical | docs/project/ideas/idea000006-codeql-ci-integration.md |
+| 7 | idea-007 - security-scanning-ci | Critical | docs/project/ideas/idea000007-security-scanning-ci.md |
+| 8 | idea-009 - requirements-ci-deduplication | Critical | docs/project/ideas/idea000009-requirements-ci-deduplication.md |
+| 9 | idea-013 - backend-health-check-endpoint | Critical | docs/project/ideas/idea000013-backend-health-check-endpoint.md |
+| 10 | idea-008 - coverage-minimum-enforcement | High | docs/project/ideas/idea000008-coverage-minimum-enforcement.md |
+| 11 | idea-010 - docker-compose-consolidation | High | docs/project/ideas/idea000010-docker-compose-consolidation.md |
+| 12 | idea-011 - stub-module-elimination | High | docs/project/ideas/idea000011-stub-module-elimination.md |
+| 13 | idea-012 - dependabot-renovate | High | docs/project/ideas/idea000012-dependabot-renovate.md |
+| 14 | idea-014 - pyproject-requirements-sync | High | docs/project/ideas/idea000014-pyproject-requirements-sync.md |
+| 15 | idea-015 - specialized-agent-library | High | docs/project/ideas/idea000015-specialized-agent-library.md |
+| 16 | idea-027 - windows-ci-matrix | High | docs/project/ideas/idea000027-windows-ci-matrix.md |
+| 17 | idea-031 - automated-api-docs-ci | High | docs/project/ideas/idea000031-automated-api-docs-ci.md |
+| 18 | idea-051 - loop-analysis-ci-gate | High | docs/project/ideas/idea000051-loop-analysis-ci-gate.md |
+| 19 | idea-055 - e2e-encryption | High | docs/project/ideas/idea000055-e2e-encryption.md |
+| 20 | idea-058 - improvement-audit-plan | High | docs/project/ideas/idea000058-improvement-audit-plan.md |
+| 21 | idea-060 - onboarding | High | docs/project/ideas/idea000060-onboarding.md |
+| 22 | idea-066 - setup | High | docs/project/ideas/idea000066-setup.md |
+| 23 | idea-068 - test-quality | High | docs/project/ideas/idea000068-test-quality.md |
+| 24 | idea-070 - transaction-manager-architecture | High | docs/project/ideas/idea000070-transaction-manager-architecture.md |
+| 25 | idea-071 - v4-release-status | High | docs/project/ideas/idea000071-v4-release-status.md |
+| 26 | idea-078 - installation-docs | High | docs/project/ideas/idea000078-installation-docs.md |
+| 27 | idea-016 - mixin-architecture-base | Medium | docs/project/ideas/idea000016-mixin-architecture-base.md |
+| 28 | idea-017 - rust-criterion-benchmarks | Medium | docs/project/ideas/idea000017-rust-criterion-benchmarks.md |
+| 29 | idea-018 - rust-sub-crate-unification | Medium | docs/project/ideas/idea000018-rust-sub-crate-unification.md |
+| 30 | idea-019 - crdt-python-ffi-bindings | Medium | docs/project/ideas/idea000019-crdt-python-ffi-bindings.md |
+| 31 | idea-020 - amd-npu-feature-documentation | Medium | docs/project/ideas/idea000020-amd-npu-feature-documentation.md |
+| 32 | idea-021 - openapi-spec-generation | Medium | docs/project/ideas/idea000021-openapi-spec-generation.md |
+| 33 | idea-022 - jwt-refresh-token-support | Medium | docs/project/ideas/idea000022-jwt-refresh-token-support.md |
+| 34 | idea-023 - tailwind-config-missing | Medium | docs/project/ideas/idea000023-tailwind-config-missing.md |
+| 35 | idea-024 - frontend-e2e-tests | Medium | docs/project/ideas/idea000024-frontend-e2e-tests.md |
+| 36 | idea-025 - global-state-management | Medium | docs/project/ideas/idea000025-global-state-management.md |
+| 37 | idea-026 - frontend-url-routing | Medium | docs/project/ideas/idea000026-frontend-url-routing.md |
+| 38 | idea-028 - property-based-test-expansion | Medium | docs/project/ideas/idea000028-property-based-test-expansion.md |
+| 39 | idea-029 - backend-integration-test-suite | Medium | docs/project/ideas/idea000029-backend-integration-test-suite.md |
+| 40 | idea-030 - adr-backfill | Medium | docs/project/ideas/idea000030-adr-backfill.md |
+| 41 | idea-032 - changelog-automation | Medium | docs/project/ideas/idea000032-changelog-automation.md |
+| 42 | idea-033 - pre-commit-ruff-version-drift | Medium | docs/project/ideas/idea000033-pre-commit-ruff-version-drift.md |
+| 43 | idea-034 - projects-json-schema-validation | Medium | docs/project/ideas/idea000034-projects-json-schema-validation.md |
+| 44 | idea-035 - torch-optional-dependency-split | Medium | docs/project/ideas/idea000035-torch-optional-dependency-split.md |
+| 45 | idea-039 - p2p-swarm-consensus-completion | Medium | docs/project/ideas/idea000039-p2p-swarm-consensus-completion.md |
+| 46 | idea-040 - resource-synergy-cross-node-scheduling | Medium | docs/project/ideas/idea000040-resource-synergy-cross-node-scheduling.md |
+| 47 | idea-041 - kv-v2-cache-rollout | Medium | docs/project/ideas/idea000041-kv-v2-cache-rollout.md |
+| 48 | idea-042 - semantic-cache-invalidation-engine | Medium | docs/project/ideas/idea000042-semantic-cache-invalidation-engine.md |
+| 49 | idea-043 - neural-context-pruning-heuristics | Medium | docs/project/ideas/idea000043-neural-context-pruning-heuristics.md |
+| 50 | idea-044 - zero-downtime-resharding-protocol | Medium | docs/project/ideas/idea000044-zero-downtime-resharding-protocol.md |
+| 51 | idea-045 - governance-safety-hub-implementation | Medium | docs/project/ideas/idea000045-governance-safety-hub-implementation.md |
+| 52 | idea-046 - distributed-checkpointing-recovery | Medium | docs/project/ideas/idea000046-distributed-checkpointing-recovery.md |
+| 53 | idea-047 - neural-scam-phishing-detection | Medium | docs/project/ideas/idea000047-neural-scam-phishing-detection.md |
+| 54 | idea-048 - global-trace-synthesis-dashboard | Medium | docs/project/ideas/idea000048-global-trace-synthesis-dashboard.md |
+| 55 | idea-049 - ucp-agentic-commerce-adapter | Medium | docs/project/ideas/idea000049-ucp-agentic-commerce-adapter.md |
+| 56 | idea-050 - inference-speculative-decoding-runtime | Medium | docs/project/ideas/idea000050-inference-speculative-decoding-runtime.md |
+| 57 | idea-052 - auto-fix | Medium | docs/project/ideas/idea000052-auto-fix.md |
+| 58 | idea-053 - comparison-vllm-old | Medium | docs/project/ideas/idea000053-comparison-vllm-old.md |
+| 59 | idea-054 - core-design-guide | Medium | docs/project/ideas/idea000054-core-design-guide.md |
+| 60 | idea-056 - e2e-implementation-summary | Medium | docs/project/ideas/idea000056-e2e-implementation-summary.md |
+| 61 | idea-057 - fleet-auto-doc | Medium | docs/project/ideas/idea000057-fleet-auto-doc.md |
+| 62 | idea-061 - phase41-vllm-patterns | Medium | docs/project/ideas/idea000061-phase41-vllm-patterns.md |
+| 63 | idea-062 - progress-dashboard | Medium | docs/project/ideas/idea000062-progress-dashboard.md |
+| 64 | idea-063 - release-notes-template | Medium | docs/project/ideas/idea000063-release-notes-template.md |
+| 65 | idea-065 - rust-ready | Medium | docs/project/ideas/idea000065-rust-ready.md |
+| 66 | idea-067 - streaming-website | Medium | docs/project/ideas/idea000067-streaming-website.md |
+| 67 | idea-069 - tools | Medium | docs/project/ideas/idea000069-tools.md |
+| 68 | idea-073 - standards-docs | Medium | docs/project/ideas/idea000073-standards-docs.md |
+| 69 | idea-076 - performance-docs | Medium | docs/project/ideas/idea000076-performance-docs.md |
+| 70 | idea-036 - rl-module-implementation | Low | docs/project/ideas/idea000036-rl-module-implementation.md |
+| 71 | idea-037 - docs-work-folder-cleanup | Low | docs/project/ideas/idea000037-docs-work-folder-cleanup.md |
+| 72 | idea-038 - chromadb-optional-extra | Low | docs/project/ideas/idea000038-chromadb-optional-extra.md |
+| 73 | idea-059 - improvement-research | Low | docs/project/ideas/idea000059-improvement-research.md |
+| 74 | idea-064 - research-notes | Low | docs/project/ideas/idea000064-research-notes.md |
+| 75 | idea-072 - work-docs | Low | docs/project/ideas/idea000072-work-docs.md |
+| 76 | idea-074 - research-docs | Low | docs/project/ideas/idea000074-research-docs.md |
+| 77 | idea-075 - prompt-docs | Low | docs/project/ideas/idea000075-prompt-docs.md |
+| 78 | idea-077 - key-docs | Low | docs/project/ideas/idea000077-key-docs.md |
 
-| Priority | Count | IDs |
-|---|---|---|
-| P1 – Critical / blocking | 3 | idea-001, idea-002, idea-003 |
-| P2 – High value | 11 | idea-004 – idea-014 |
-| P3 – Moderate | 21 | idea-015 – idea-035 |
-| P4 – Nice to have | 3 | idea-036 – idea-038 |
-| **Total** | **38** | |
+### Priority distribution
 
-| Area | Count |
+| Importance | Count |
 |---|---|
-| 1 – Python agents & tools | 5 |
-| 2 – Rust core | 4 |
-| 3 – FastAPI backend | 3 |
-| 4 – React/Vite frontend | 4 |
-| 5 – Test suite | 4 |
-| 6 – Documentation | 4 |
-| 7 – CI / agent definitions | 5 |
-| 8 – Data models & deploy | 4 |
-| 9 – Dependency hygiene | 5 |
-| **Total** | **38** |
+| Critical | 9 |
+| High | 17 |
+| Medium | 43 |
+| Low | 9 |

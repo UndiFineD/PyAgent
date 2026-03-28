@@ -11,6 +11,40 @@ Invoke it via `agent/runSubagent` to continue the implementation workflow.
 
 ## Task Log
 
+### task_id: prj0000090-private-key-remediation-20260328
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- project: prj0000090-private-key-remediation
+- branch_expected: prj0000090-private-key-remediation
+- branch_observed: prj0000090-private-key-remediation ✓
+- scope:
+	- create chunk 001 red tests in `tests/security/` for T1, T3, T5, T7
+	- create scan fixtures in `tests/security/fixtures/`
+	- run chunk 001 red-phase pytest commands from plan
+	- update `docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.test.md`
+- lint_validation:
+	- `.venv\\Scripts\\ruff.exe check --fix` on new tests: PASS (auto-fixes applied)
+	- `.venv\\Scripts\\ruff.exe check` on new tests: PASS
+	- `.venv\\Scripts\\ruff.exe check --select D` on new tests: PASS
+- red_phase_results:
+	- `python -m pytest -q tests/security/test_secret_scan_service_contract.py tests/security/test_scan_report_schema.py`
+		- result: 5 failed in 4.86s (expected red)
+		- failure mode: assertion-style missing contract modules under `src.security.*`
+	- `python -m pytest -q tests/security/test_rotation_checkpoint_service.py tests/security/test_rotation_gate_decision.py`
+		- result: 3 failed in 4.32s (expected red)
+		- failure mode: assertion-style missing `src.security.rotation_checkpoint_service`
+	- `python -m pytest -q tests/security/test_secret_guardrail_policy.py tests/security/test_ci_secret_guardrail_job.py tests/security/test_pre_commit_secret_hook.py`
+		- result: 7 failed in 2.15s (expected red)
+		- failure mode: assertion-style missing policy module + concrete config assertion failures in workflow/pre-commit
+	- `python -m pytest -q tests/security/test_containment_cleanup.py tests/security/test_private_key_artifact_absence.py`
+		- result: 3 failed in 1.49s (expected red)
+		- failure mode: missing runbook/verifier files + private key artifact still present
+- quality_gate:
+	- AC-to-test matrix present in project test artifact: PASS
+	- weak-test detection gate executed and documented: PASS
+- handoff:
+	- target_agent: @6code
+	- required_scope: implement chunk 001 production/config/docs artifacts to satisfy red tests
+
 ### task_id: prj0000087-n8n-workflow-bridge-20260327
 - lifecycle: OPEN -> IN_PROGRESS -> DONE
 - project: prj0000087-n8n-workflow-bridge
@@ -134,6 +168,24 @@ Invoke it via `agent/runSubagent` to continue the implementation workflow.
 	- required scope: continue repository-level execution tracking with residual unrelated baseline failures
 
 ## Lessons
+
+### Lesson - 2026-03-28 (prj0000090)
+- Pattern: Red-phase tests can appear weak if they fail only on missing imports during collection.
+- Root cause: Contract suites that import future modules directly trigger collection-time `ImportError` and mask expected behavior assertions.
+- Prevention: Use assertion-style symbol loaders (`pytest.fail(..., pytrace=False)`) so failures remain explicit contract failures in executed tests.
+- First seen: prj0000090-private-key-remediation
+- Seen in: prj0000090-private-key-remediation
+- Recurrence count: 1
+- Promotion status: monitor
+
+### Lesson - 2026-03-28 (prj0000090)
+- Pattern: Chunk handoff quality degrades without a mandatory AC-to-test matrix and weak-test gate record.
+- Root cause: Test artifacts often summarize failures but do not prove AC coverage or test-strength checks.
+- Prevention: Always include AC mapping table and explicit weak-test detection section before @6code handoff.
+- First seen: prj0000090-private-key-remediation
+- Seen in: prj0000090-private-key-remediation
+- Recurrence count: 1
+- Promotion status: monitor
 
 ### Lesson — 2026-03-27 (prj0000084)
 **Pattern:** Coverage gate for a new module failed target (`src/core/audit` at 83.07% vs required >=90%).

@@ -1,5 +1,18 @@
 [
   {
+    "id": "prj0000090",
+    "name": "private-key-remediation",
+    "lane": "In Sprint",
+    "summary": "Remediate committed private key exposure, rotate compromised credentials, and add secret-scan guardrails in commit/CI workflows",
+    "branch": "prj0000090-private-key-remediation",
+    "pr": null,
+    "priority": "P1",
+    "budget_tier": "M",
+    "tags": ["security", "secrets", "governance"],
+    "created": "2026-03-28",
+    "updated": "2026-03-28"
+  },
+  {
     "id": "prj0000089",
     "name": "agent-learning-loop",
     "lane": "Released",

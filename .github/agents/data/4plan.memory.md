@@ -166,6 +166,46 @@ Ready for @9git handoff.
 
 ---
 
+## prj0000090 - private-key-remediation
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000090-private-key-remediation |
+| **owner_agent** | @4plan |
+| **source** | @3design |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | DONE |
+| **handoff_target** | @5test |
+| **artifact_paths** | docs/project/prj0000090-private-key-remediation/prj0000090-private-key-remediation.plan.md |
+| **branch** | prj0000090-private-key-remediation (validated PASS before artifact write) |
+
+### Chunk Plan Summary
+
+| Chunk | Code files planned | Test files planned | Task IDs |
+|---|---:|---:|---|
+| Chunk 001 - Guardrails + Rotation Gate | 8 | 8 | T1-T8 |
+| Chunk 002 - Rewrite + Governance Completion | 8 | 7 | T9-T16 |
+
+### Dependency Order
+1. Chunk 001: T1 -> T2 -> T3 -> T4 -> T5 -> T6 -> T7 -> T8
+2. Chunk 002: T9 -> T10 -> T11 -> T12 -> T13 -> T14 -> T15 -> T16
+3. TDD gate: @6code implementation tasks must wait for @5test failing tests in paired order.
+
+### Lesson Entry
+
+| Field | Value |
+|---|---|
+| Pattern | Secret-remediation plans need explicit rollback gates per phase, not only end-state checks. |
+| Root cause | Prior plans often captured verification commands but omitted operational rollback triggers for rewrite workflows. |
+| Prevention | Add mandatory checkpoint table with required signal + rollback action for containment, rotation gate, rewrite, and stabilization. |
+| First seen | 2026-03-28 |
+| Seen in | prj0000090-private-key-remediation |
+| Recurrence count | 1 |
+| Promotion status | CANDIDATE |
+
+---
+
 ## prj0000088 — ai-fuzzing-security
 
 | Field | Value |

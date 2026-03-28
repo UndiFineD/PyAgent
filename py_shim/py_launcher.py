@@ -1,4 +1,9 @@
-import sys, os, subprocess
+#!/usr/bin/env python
+"""A simple Python launcher that mimics the behavior of the Windows Launcher (py.exe) for testing purposes."""
+import sys
+import os
+import subprocess
+
 
 args = sys.argv[1:]
 filtered = []

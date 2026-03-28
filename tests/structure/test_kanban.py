@@ -24,8 +24,9 @@ phase.  Acceptance criteria: AC-01 (projects.json) and AC-02 (kanban.md).
 
 import json
 import re
-import pytest
 from pathlib import Path
+
+import pytest
 
 REPO_ROOT = Path(__file__).parent.parent.parent
 _PROJECTS_PATH = REPO_ROOT / "data" / "projects.json"
@@ -57,9 +58,7 @@ except FileNotFoundError:
 _PROJECTS_MISSING = not _PROJECTS_PATH.exists()
 
 _KANBAN_MISSING = (
-    not _KANBAN_PATH.exists()
-    or not _kanban_lines
-    or _kanban_lines[0].strip() != "# PyAgent Project Kanban Board"
+    not _KANBAN_PATH.exists() or not _kanban_lines or _kanban_lines[0].strip() != "# PyAgent Project Kanban Board"
 )
 
 _SKIP_PROJECTS = pytest.mark.skipif(
@@ -76,13 +75,27 @@ _SKIP_KANBAN = pytest.mark.skipif(
 # ---------------------------------------------------------------------------
 
 REQUIRED_FIELDS = {
-    "id", "name", "lane", "summary", "branch", "pr",
-    "priority", "budget_tier", "tags", "created", "updated",
+    "id",
+    "name",
+    "lane",
+    "summary",
+    "branch",
+    "pr",
+    "priority",
+    "budget_tier",
+    "tags",
+    "created",
+    "updated",
 }
 
 VALID_LANES = {
-    "Ideas", "Discovery", "Design",
-    "In Sprint", "Review", "Released", "Archived",
+    "Ideas",
+    "Discovery",
+    "Design",
+    "In Sprint",
+    "Review",
+    "Released",
+    "Archived",
 }
 
 VALID_PRIORITIES = {"P1", "P2", "P3", "P4"}
@@ -113,33 +126,24 @@ def test_projects_json_exists() -> None:
     No skip guard — this test is the TDD red gate for T1 and intentionally
     fails until @6code creates the file.
     """
-    assert _PROJECTS_PATH.exists(), (
-        f"data/projects.json not found at {_PROJECTS_PATH}. "
-        "Run @6code to implement T1."
-    )
+    assert _PROJECTS_PATH.exists(), f"data/projects.json not found at {_PROJECTS_PATH}. Run @6code to implement T1."
 
 
 @_SKIP_PROJECTS
 def test_projects_json_valid() -> None:
     """data/projects.json must parse as a valid JSON array without error."""
-    assert _projects_data is not None, (
-        "data/projects.json failed to parse as valid JSON"
-    )
-    assert isinstance(_projects_data, list), (
-        f"Expected a JSON array at top level, got {type(_projects_data).__name__}"
-    )
+    assert _projects_data is not None, "data/projects.json failed to parse as valid JSON"
+    assert isinstance(_projects_data, list), f"Expected a JSON array at top level, got {type(_projects_data).__name__}"
 
 
 @_SKIP_PROJECTS
 def test_projects_json_entry_count() -> None:
-    """data/projects.json must contain exactly 89 entries.
+    """data/projects.json must contain exactly 90 entries.
 
-    Breakdown: prj0000001–prj0000089 (89 unique entries; duplicates removed).
+    Breakdown: prj0000001–prj0000090 (90 unique entries; duplicates removed).
     """
     assert _projects_data is not None
-    assert len(_projects_data) == 89, (
-        f"Expected 89 project entries, got {len(_projects_data)}"
-    )
+    assert len(_projects_data) == 90, f"Expected 90 project entries, got {len(_projects_data)}"
 
 
 @_SKIP_PROJECTS
@@ -154,13 +158,8 @@ def test_projects_json_required_fields() -> None:
     for entry in _projects_data:
         missing = REQUIRED_FIELDS - set(entry.keys())
         if missing:
-            failures.append(
-                f"  {entry.get('id', '<unknown>')!r}: missing {sorted(missing)}"
-            )
-    assert not failures, (
-        f"{len(failures)} entries have missing required fields:\n"
-        + "\n".join(failures)
-    )
+            failures.append(f"  {entry.get('id', '<unknown>')!r}: missing {sorted(missing)}")
+    assert not failures, f"{len(failures)} entries have missing required fields:\n" + "\n".join(failures)
 
 
 @_SKIP_PROJECTS
@@ -171,12 +170,9 @@ def test_projects_json_lane_values() -> None:
     for entry in _projects_data:
         lane = entry.get("lane")
         if lane not in VALID_LANES:
-            invalid.append(
-                f"  {entry.get('id', '<unknown>')!r}: lane={lane!r}"
-            )
+            invalid.append(f"  {entry.get('id', '<unknown>')!r}: lane={lane!r}")
     assert not invalid, (
-        f"{len(invalid)} entries have invalid lane values "
-        f"(valid: {sorted(VALID_LANES)}):\n" + "\n".join(invalid)
+        f"{len(invalid)} entries have invalid lane values (valid: {sorted(VALID_LANES)}):\n" + "\n".join(invalid)
     )
 
 
@@ -188,9 +184,7 @@ def test_projects_json_priority_values() -> None:
     for entry in _projects_data:
         priority = entry.get("priority")
         if priority not in VALID_PRIORITIES:
-            invalid.append(
-                f"  {entry.get('id', '<unknown>')!r}: priority={priority!r}"
-            )
+            invalid.append(f"  {entry.get('id', '<unknown>')!r}: priority={priority!r}")
     assert not invalid, (
         f"{len(invalid)} entries have invalid priority values "
         f"(valid: {sorted(VALID_PRIORITIES)}):\n" + "\n".join(invalid)
@@ -205,9 +199,7 @@ def test_projects_json_budget_tier_values() -> None:
     for entry in _projects_data:
         budget_tier = entry.get("budget_tier")
         if budget_tier not in VALID_BUDGET_TIERS:
-            invalid.append(
-                f"  {entry.get('id', '<unknown>')!r}: budget_tier={budget_tier!r}"
-            )
+            invalid.append(f"  {entry.get('id', '<unknown>')!r}: budget_tier={budget_tier!r}")
     assert not invalid, (
         f"{len(invalid)} entries have invalid budget_tier values "
         f"(valid: {sorted(VALID_BUDGET_TIERS)}):\n" + "\n".join(invalid)
@@ -236,14 +228,10 @@ def test_kanban_exists() -> None:
     No skip guard — this test is the TDD red gate for T2 and intentionally
     fails until @6code creates the file.
     """
-    assert _KANBAN_PATH.exists(), (
-        f"docs/project/kanban.md not found at {_KANBAN_PATH}. "
-        "Run @6code to implement T2."
-    )
+    assert _KANBAN_PATH.exists(), f"docs/project/kanban.md not found at {_KANBAN_PATH}. Run @6code to implement T2."
     assert _kanban_lines, "docs/project/kanban.md is empty"
     assert _kanban_lines[0].strip() == "# PyAgent Project Kanban Board", (
-        f"Expected first line '# PyAgent Project Kanban Board', "
-        f"got: {_kanban_lines[0]!r}"
+        f"Expected first line '# PyAgent Project Kanban Board', got: {_kanban_lines[0]!r}"
     )
 
 
@@ -253,30 +241,25 @@ def test_kanban_required_h2s(heading: str) -> None:
     """kanban.md must contain all 7 lane H2 headings and ## Summary Metrics."""
     headings_in_file = {line.strip() for line in _kanban_lines if line.startswith("## ")}
     assert heading in headings_in_file, (
-        f"Required heading {heading!r} not found in kanban.md. "
-        f"Present H2s: {sorted(headings_in_file)}"
+        f"Required heading {heading!r} not found in kanban.md. Present H2s: {sorted(headings_in_file)}"
     )
 
 
 @_SKIP_KANBAN
 def test_kanban_total_rows() -> None:
-    r"""kanban.md must contain exactly 89 project data rows.
+    r"""kanban.md must contain exactly 90 project data rows.
 
     A data row is any line matching r'^\|\s*prj\d{7}'.
     """
     pattern = re.compile(r"^\|\s*prj\d{7}")
     data_rows = [line for line in _kanban_lines if pattern.match(line)]
-    assert len(data_rows) == 89, (
-        f"Expected 89 project rows in kanban.md, found {len(data_rows)}"
-    )
+    assert len(data_rows) == 90, f"Expected 90 project rows in kanban.md, found {len(data_rows)}"
 
 
 @_SKIP_KANBAN
 def test_kanban_prj0000052_present() -> None:
     """'prj0000052' must appear somewhere in the kanban.md content."""
-    assert "prj0000052" in _kanban_content, (
-        "Project ID 'prj0000052' not found in docs/project/kanban.md"
-    )
+    assert "prj0000052" in _kanban_content, "Project ID 'prj0000052' not found in docs/project/kanban.md"
 
 
 @_SKIP_KANBAN
@@ -286,7 +269,4 @@ def test_kanban_no_todo_fixme() -> None:
     for i, line in enumerate(_kanban_lines, start=1):
         upper = line.upper()
         for marker in markers:
-            assert marker not in upper, (
-                f"Forbidden placeholder {marker!r} found in kanban.md "
-                f"at line {i}: {line!r}"
-            )
+            assert marker not in upper, f"Forbidden placeholder {marker!r} found in kanban.md at line {i}: {line!r}"

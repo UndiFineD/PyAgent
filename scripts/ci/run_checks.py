@@ -14,9 +14,7 @@ from __future__ import annotations
 
 import argparse
 import subprocess
-import sys
 from pathlib import Path
-
 
 # Full CI test list (matches ci-python-core workflow)
 CORE_TEST_FILES = [
@@ -75,7 +73,7 @@ PRECOMMIT_TEST_FILES = [
     "tests/test_compile.py",
     "tests/test_benchmarks.py",
     # Quality/metadata tests (previously run in ci-python-quality.yml).
-    "tests/test_quality_yaml.py"
+    "tests/test_quality_yaml.py",
     # no need to duplicate these test
     # "tests/test_precommit.py"
     # "tests/test_coverage_meta.py"
@@ -84,10 +82,10 @@ PRECOMMIT_TEST_FILES = [
     # "tests/test_zzb_mypy_config.py",
     # "tests/ztest_zzz_tests_quality.py",
     # CodeQL SARIF gate (also in CODEQL_TEST_FILES, included here for full CI)
-    "tests/test_zzd_codeql_python.py",
     "tests/test_zze_codeql_javascript.py",
     "tests/test_zzf_codeql_rust.py",
     "tests/test_zzg_codeql_sarif_gate.py",
+    "tests/test_zzd_codeql_python.py",
 ]
 
 # CodeQL SARIF gate tests — fast (read-only JSON checks, no rebuild).
@@ -107,8 +105,29 @@ def run_command(cmd: list[str], env: dict[str, str] | None = None) -> None:
     subprocess.run(cmd, check=True, env=env)  # noqa: S603
 
 
-def run_ruff() -> None:
-    """Run ruff checks and formatting checks."""
+def _filter_python_targets(paths: list[str]) -> list[str]:
+    """Filter incoming paths to Python files under supported source roots."""
+    allowed_roots = ("src/", "tests/", "scripts/", "docs/")
+    filtered: list[str] = []
+    for raw in paths:
+        normalized = raw.replace("\\", "/")
+        if normalized.endswith(".py") and normalized.startswith(allowed_roots):
+            filtered.append(normalized)
+    return filtered
+
+
+def run_ruff(paths: list[str] | None = None) -> None:
+    """Run ruff checks and formatting checks.
+
+    When explicit paths are provided (as in pre-commit), lint only those files to
+    avoid unrelated repository lint debt blocking scoped project commits.
+    """
+    targets = _filter_python_targets(paths or [])
+    if targets:
+        run_command(["ruff", "check", *targets])
+        run_command(["ruff", "format", "--check", *targets])
+        return
+
     run_command(["ruff", "check", "src", "tests"])
     run_command(["ruff", "format", "--check", "src", "tests"])
 
@@ -126,9 +145,9 @@ def run_pytest(files: list[str], extra_args: list[str] | None = None) -> None:
     run_command(cmd)
 
 
-def profile_precommit() -> None:
+def profile_precommit(paths: list[str] | None = None) -> None:
     """Quick checks suitable for pre-commit."""
-    run_ruff()
+    run_ruff(paths)
     run_mypy()
     # Run a safe subset of core tests that do not depend on the rust extension.
     run_pytest(PRECOMMIT_TEST_FILES, extra_args=["-q"])
@@ -158,11 +177,16 @@ def main(argv: list[str] | None = None) -> int:
         default="precommit",
         help="Which set of checks to run.",
     )
+    parser.add_argument(
+        "paths",
+        nargs="*",
+        help="Optional file paths to scope pre-commit checks.",
+    )
     args = parser.parse_args(argv)
 
     try:
         if args.profile == "precommit":
-            profile_precommit()
+            profile_precommit(args.paths)
         else:
             profile_ci()
         return 0

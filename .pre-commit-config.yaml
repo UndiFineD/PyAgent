@@ -17,9 +17,15 @@ repos:
         entry: python scripts/enforce_branch.py
         language: python
         stages: [pre-commit]
+      - id: secret-scan
+        name: Run secret scan guardrail
+        entry: python scripts/security/run_secret_scan.py --profile tree
+        language: python
+        stages: [pre-commit]
+        pass_filenames: false
       - id: run-precommit-checks
         name: Run pre-commit shared checks
         entry: python scripts/ci/run_checks.py --profile precommit
         language: python
         stages: [pre-commit]
-        pass_filenames: false
+        pass_filenames: true
