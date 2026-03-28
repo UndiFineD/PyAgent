@@ -26,22 +26,24 @@ from multimodal.processor import (
     TextProcessor,
 )
 
-
 # ---------------------------------------------------------------------------
 # Package importability
 # ---------------------------------------------------------------------------
 
+
 def test_multimodal_package_import() -> None:
     """Test that the multimodal package can be imported."""
     assert hasattr(multimodal, "__name__")
-    assert multimodal.placeholder() is True
+    assert multimodal.validate() is True
 
 
 # ---------------------------------------------------------------------------
 # Modality enum
 # ---------------------------------------------------------------------------
 
+
 def test_modality_values() -> None:
+    """Test that all Modality enum values are present."""
     assert Modality.TEXT
     assert Modality.IMAGE
     assert Modality.AUDIO
@@ -53,7 +55,9 @@ def test_modality_values() -> None:
 # MultiModalData
 # ---------------------------------------------------------------------------
 
+
 def test_text_data_is_text() -> None:
+    """Test that text data is correctly identified as text."""
     d = MultiModalData(modality=Modality.TEXT, content="hello", mime_type="text/plain")
     assert d.is_text
     assert not d.is_binary
@@ -61,18 +65,21 @@ def test_text_data_is_text() -> None:
 
 
 def test_binary_data_is_binary() -> None:
+    """Test that binary data is correctly identified as binary."""
     d = MultiModalData(modality=Modality.IMAGE, content=b"\x89PNG", mime_type="image/png")
     assert d.is_binary
     assert not d.is_text
 
 
 def test_as_text_raises_for_non_utf8_binary() -> None:
+    """Test that as_text raises an error for non-UTF-8 binary data."""
     d = MultiModalData(modality=Modality.IMAGE, content=b"\xff\xfe", mime_type="image/png")
     with pytest.raises(ValueError, match="Cannot decode"):
         d.as_text()
 
 
 def test_metadata_stored() -> None:
+    """Test that metadata is stored and accessible."""
     d = MultiModalData(
         modality=Modality.IMAGE,
         content=b"data",
@@ -84,6 +91,7 @@ def test_metadata_stored() -> None:
 
 
 def test_embedding_stored() -> None:
+    """Test that embedding data is stored and accessible."""
     d = MultiModalData(modality=Modality.TEXT, content="hi", embedding=[0.1, 0.2, 0.3])
     assert d.embedding == [0.1, 0.2, 0.3]
 
@@ -92,7 +100,9 @@ def test_embedding_stored() -> None:
 # MultiModalInputs
 # ---------------------------------------------------------------------------
 
+
 def test_add_and_text_items() -> None:
+    """Test that items can be added and retrieved by modality."""
     mi = MultiModalInputs()
     mi.add(MultiModalData(Modality.TEXT, "hello"))
     mi.add(MultiModalData(Modality.IMAGE, b"\x00\x01\x02", mime_type="image/png"))
@@ -101,6 +111,7 @@ def test_add_and_text_items() -> None:
 
 
 def test_to_prompt_parts_with_context() -> None:
+    """Test that prompt parts include context when provided."""
     mi = MultiModalInputs(context="system context")
     mi.add(MultiModalData(Modality.TEXT, "user message"))
     parts = mi.to_prompt_parts()
@@ -109,6 +120,7 @@ def test_to_prompt_parts_with_context() -> None:
 
 
 def test_to_prompt_parts_binary_placeholder() -> None:
+    """Test that binary data is represented as a placeholder in prompt parts."""
     mi = MultiModalInputs()
     mi.add(MultiModalData(Modality.IMAGE, b"\xff\xfe", mime_type="image/jpeg"))
     parts = mi.to_prompt_parts()
@@ -116,6 +128,7 @@ def test_to_prompt_parts_binary_placeholder() -> None:
 
 
 def test_empty_inputs_no_context() -> None:
+    """Test that empty inputs with no context produce an empty prompt parts list."""
     mi = MultiModalInputs()
     assert mi.to_prompt_parts() == []
 
@@ -124,7 +137,9 @@ def test_empty_inputs_no_context() -> None:
 # Processor tests
 # ---------------------------------------------------------------------------
 
+
 def test_text_processor() -> None:
+    """Test that the text processor correctly processes text data."""
     proc = TextProcessor()
     d = MultiModalData(Modality.TEXT, "hi there")
     result = proc.process(d)
@@ -133,6 +148,7 @@ def test_text_processor() -> None:
 
 
 def test_image_processor_bytes() -> None:
+    """Test that the image processor correctly processes binary image data."""
     proc = ImageProcessor()
     d = MultiModalData(Modality.IMAGE, b"\x00\x01", mime_type="image/png")
     result = proc.process(d)
@@ -141,6 +157,7 @@ def test_image_processor_bytes() -> None:
 
 
 def test_image_processor_url_passthrough() -> None:
+    """Test that the image processor passes through URL content unchanged."""
     proc = ImageProcessor()
     d = MultiModalData(Modality.IMAGE, "https://example.com/img.png", mime_type="image/png")
     result = proc.process(d)
@@ -148,6 +165,7 @@ def test_image_processor_url_passthrough() -> None:
 
 
 def test_audio_processor() -> None:
+    """Test that the audio processor correctly processes audio data."""
     proc = AudioProcessor()
     d = MultiModalData(Modality.AUDIO, b"\x01\x02\x03", mime_type="audio/mp3")
     result = proc.process(d)
@@ -157,6 +175,7 @@ def test_audio_processor() -> None:
 
 
 def test_multimodal_processor_full_pipeline() -> None:
+    """Test that the multimodal processor correctly processes a full pipeline of inputs."""
     proc = MultiModalProcessor()
     mi = MultiModalInputs(context="context string")
     mi.add(MultiModalData(Modality.TEXT, "text part"))
@@ -164,12 +183,13 @@ def test_multimodal_processor_full_pipeline() -> None:
 
     parts = proc.process(mi)
     types = [p["type"] for p in parts]
-    assert types[0] == "text"   # context
-    assert types[1] == "text"   # text item
+    assert types[0] == "text"  # context
+    assert types[1] == "text"  # text item
     assert types[2] == "image_url"  # image item
 
 
 def test_multimodal_processor_unsupported_modality() -> None:
+    """Test that the multimodal processor handles unsupported modalities gracefully."""
     proc = MultiModalProcessor()
     d = MultiModalData(Modality.VIDEO, b"\x00", mime_type="video/mp4")
     result = proc.process_item(d)
@@ -178,8 +198,13 @@ def test_multimodal_processor_unsupported_modality() -> None:
 
 
 def test_multimodal_processor_register_custom() -> None:
+    """Test that a custom processor can be registered and used."""
+
     class UpperTextProcessor:
+        """A custom text processor that converts text to uppercase."""
+
         def process(self, data: MultiModalData) -> dict:
+            """Process the data and return it in uppercase."""
             return {"type": "text", "text": data.as_text().upper()}
 
     proc = MultiModalProcessor()
@@ -190,4 +215,5 @@ def test_multimodal_processor_register_custom() -> None:
 
 
 def test_validate_returns_true() -> None:
+    """Test that the validate method returns True."""
     assert MultiModalProcessor.validate() is True

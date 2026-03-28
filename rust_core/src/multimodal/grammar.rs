@@ -138,9 +138,39 @@ pub fn compile_ebnf_rust(grammar_str: &str) -> Vec<(String, String)> {
     rules
 }
 
-/// Get valid next tokens based on grammar state (Stub)
+/// Get valid next tokens based on grammar state.
 #[pyfunction]
-pub fn grammar_next_tokens_rust(_state: Vec<u8>, _vocab: Vec<String>) -> Vec<usize> {
-    // Would constrain sampling
-    Vec::new() // Allow all
+pub fn grammar_next_tokens_rust(state: Vec<u8>, vocab: Vec<String>) -> Vec<usize> {
+    if vocab.is_empty() {
+        return Vec::new();
+    }
+
+    // Interpret state as a UTF-8 prefix. If decoding fails, do not constrain.
+    let Ok(prefix) = String::from_utf8(state) else {
+        return (0..vocab.len()).collect();
+    };
+
+    if prefix.is_empty() {
+        return (0..vocab.len()).collect();
+    }
+
+    let mut matches: Vec<usize> = vocab
+        .iter()
+        .enumerate()
+        .filter_map(|(index, token)| {
+            if token.starts_with(&prefix) || prefix.starts_with(token) {
+                Some(index)
+            } else {
+                None
+            }
+        })
+        .collect();
+
+    // Keep deterministic output order and avoid over-constraining to empty.
+    if matches.is_empty() {
+        (0..vocab.len()).collect()
+    } else {
+        matches.sort_unstable();
+        matches
+    }
 }

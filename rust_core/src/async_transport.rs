@@ -17,10 +17,13 @@
 //! Tokio bounded mpsc channel and provides async send/recv with backpressure.
 //!
 //! The `PyAsyncTransport` PyO3 class is always compiled and exposes capacity
-//! introspection and placeholder channel handles to Python without requiring
+//! introspection and structured channel handles to Python without requiring
 //! a Tokio runtime.
 
 use pyo3::prelude::*;
+use std::sync::atomic::{AtomicU64, Ordering};
+
+static CHANNEL_ID_COUNTER: AtomicU64 = AtomicU64::new(1);
 
 // ---------------------------------------------------------------------------
 // Feature-gated async transport (requires "async-transport" feature / tokio)
@@ -83,7 +86,7 @@ pub mod inner {
 ///
 /// This class exposes:
 /// - the configured channel capacity
-/// - placeholder send/recv handle bytes (real async bridging is a Phase-3 task)
+/// - structured send/recv handle bytes with channel metadata
 ///
 /// It does **not** depend on tokio and is always compiled even when the
 /// `async-transport` Cargo feature is disabled.
@@ -105,14 +108,25 @@ impl PyAsyncTransport {
         self.capacity
     }
 
-    /// Return placeholder send and receive channel handles.
+    fn build_handle(&self, channel_id: u64, direction: u8) -> Vec<u8> {
+        let mut out = Vec::with_capacity(17);
+        out.extend_from_slice(&(self.capacity as u64).to_le_bytes());
+        out.extend_from_slice(&channel_id.to_le_bytes());
+        out.push(direction);
+        out
+    }
+
+    /// Return send and receive channel handles.
     ///
-    /// Each handle is a `bytes` value containing the capacity encoded as a
-    /// little-endian u64. Real async bridging (passing a live Tokio sender
-    /// into Python) requires a shared runtime and is planned for Phase 3.
+    /// Each handle encodes:
+    /// - bytes 0..8: capacity as little-endian u64 (backward compatible)
+    /// - bytes 8..16: channel id as little-endian u64
+    /// - byte 16: direction marker (`b'S'` or `b'R'`)
     pub fn create_channel(&self) -> (Vec<u8>, Vec<u8>) {
-        let cap_bytes = (self.capacity as u64).to_le_bytes().to_vec();
-        (cap_bytes.clone(), cap_bytes)
+        let channel_id = CHANNEL_ID_COUNTER.fetch_add(1, Ordering::Relaxed);
+        let send = self.build_handle(channel_id, b'S');
+        let recv = self.build_handle(channel_id, b'R');
+        (send, recv)
     }
 }
 

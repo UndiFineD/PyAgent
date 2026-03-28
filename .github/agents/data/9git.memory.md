@@ -27,6 +27,14 @@ and pull request coordination notes.
 - 2026-03-28 — prj0000092: branch and scope validation passed on `prj0000092-mypy-strict-enforcement`; narrow staging included project artifacts, strict-lane config/CI/tests, src/core compatibility fix, registry/kanban/nextproject updates, and agent-memory files, while `pip_audit_results.json` and `docs/project/PROJECT_DASHBOARD.md` were explicitly excluded as out-of-scope.
 - 2026-03-28 — prj0000092 follow-up: local commit and push succeeded, but `gh` PR creation was blocked by `HTTP 401: Bad credentials`; preserve pushed-branch PR URL in project git artifact and hand off for authenticated PR creation.
 - 2026-03-28 — prj0000093: branch/scope validation passed and narrow staging correctly excluded `docs/project/PROJECT_DASHBOARD.md` and `pip_audit_results.json`, but mandatory post-staging `pre-commit` failed on repository-wide `ruff check src tests` baseline debt (141 violations outside staged scope); commit/push/PR was blocked and returned to @0master.
+- 2026-03-28 — prj0000095: branch validation passed and straightforward Ruff auto-fixes were applied to changed files, but mandatory `run-precommit-checks` remained blocked by environment-level dependency drift during pytest collection.
+	Pattern: Pre-commit blocked by Python dependency mismatch outside narrowed staging scope.
+	Root cause: Interpreter environment used by hook resolved `pydantic` with incompatible `pydantic-core` (`2.43.0` vs required `2.41.5`).
+	Prevention: Pin and repair Python dependency pair in the environment used by hooks before invoking `@9git` handoff.
+	First seen: 2026-03-28.
+	Seen in: `prj0000095-source-stub-remediation`.
+	Recurrence count: 1.
+	Promotion status: Candidate (not promoted; threshold is >=2).
 
 ## Auto-handoff
 

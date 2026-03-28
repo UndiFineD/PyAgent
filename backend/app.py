@@ -21,14 +21,16 @@ import time
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
 import psutil
-from fastapi import APIRouter, Depends, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from .auth import require_auth, websocket_auth
+from .automem_benchmark_store import automem_benchmark_store
 from .memory_store import memory_store
 from .rate_limiter import RateLimitMiddleware
 from .logging_config import get_logger, setup_logging
@@ -270,6 +272,20 @@ class SystemMetricsResponse(BaseModel):
     sampled_at: float
 
 
+class AutoMemBenchmarkRunRequest(BaseModel):
+    """Request body for running AutoMem benchmark jobs."""
+
+    row_counts: list[int] | None = None
+    backends: list[str] | None = None
+    bootstrap_schema: bool = False
+
+
+class AutoMemKvWriteRequest(BaseModel):
+    """Request body for writing one AutoMem KV value."""
+
+    value: Any
+
+
 @_auth_router.get("/metrics/system", response_model=SystemMetricsResponse)
 async def get_system_metrics() -> SystemMetricsResponse:
     """Return real-time CPU, memory, network IO, and disk IO metrics."""
@@ -320,6 +336,96 @@ async def get_system_metrics() -> SystemMetricsResponse:
         disk=DiskMetrics(read_kbps=round(read_kbps, 2), write_kbps=round(write_kbps, 2)),
         sampled_at=time.time(),
     )
+
+
+@app.get("/api/automem/benchmark/latest")
+@app.get("/api/v1/automem/benchmark/latest")
+async def automem_benchmark_latest() -> dict[str, Any]:
+    """Return the latest persisted AutoMem benchmark report."""
+    try:
+        report = await automem_benchmark_store.latest_report()
+    except (RuntimeError, ImportError, ValueError, OSError) as exc:
+        raise HTTPException(status_code=503, detail=f"Benchmark store unavailable: {exc}") from exc
+
+    if report is None:
+        raise HTTPException(status_code=404, detail="No benchmark report available")
+    return report
+
+
+@app.post("/api/automem/benchmark/run")
+@app.post("/api/v1/automem/benchmark/run")
+async def automem_benchmark_run(body: AutoMemBenchmarkRunRequest) -> dict[str, Any]:
+    """Execute and persist an AutoMem benchmark run in PostgreSQL."""
+    try:
+        return await automem_benchmark_store.run_benchmark(
+            body.row_counts,
+            backends=body.backends,
+            bootstrap_schema=body.bootstrap_schema,
+        )
+    except (RuntimeError, ImportError, ValueError, OSError) as exc:
+        raise HTTPException(status_code=503, detail=f"Benchmark run failed: {exc}") from exc
+
+
+@app.get("/api/automem/benchmark/runs")
+@app.get("/api/v1/automem/benchmark/runs")
+async def automem_benchmark_runs(
+    limit: int = Query(default=20, ge=1, le=200),
+) -> list[dict[str, Any]]:
+    """Return recent persisted benchmark runs, newest first."""
+    try:
+        return await automem_benchmark_store.list_runs(limit=limit)
+    except (RuntimeError, ImportError, ValueError, OSError) as exc:
+        raise HTTPException(status_code=503, detail=f"Benchmark list failed: {exc}") from exc
+
+
+@app.get("/api/automem/benchmark/runs/{run_id}")
+@app.get("/api/v1/automem/benchmark/runs/{run_id}")
+async def automem_benchmark_run_by_id(run_id: str) -> dict[str, Any]:
+    """Return one persisted benchmark run by id."""
+    try:
+        report = await automem_benchmark_store.get_run(run_id)
+    except (RuntimeError, ImportError, ValueError, OSError) as exc:
+        raise HTTPException(status_code=503, detail=f"Benchmark read failed: {exc}") from exc
+
+    if report is None:
+        raise HTTPException(status_code=404, detail=f"Benchmark run not found: {run_id}")
+    return report
+
+
+@app.get("/api/automem/kv/{key}")
+@app.get("/api/v1/automem/kv/{key}")
+async def automem_kv_get(key: str) -> dict[str, Any]:
+    """Read one JSON value from AutoMem KV storage."""
+    try:
+        value = await automem_benchmark_store.kv_get(key)
+    except (RuntimeError, ImportError, ValueError, OSError) as exc:
+        raise HTTPException(status_code=503, detail=f"KV read failed: {exc}") from exc
+
+    if value is None:
+        raise HTTPException(status_code=404, detail=f"KV key not found: {key}")
+    return {"key": key, "value": value}
+
+
+@app.put("/api/automem/kv/{key}")
+@app.put("/api/v1/automem/kv/{key}")
+async def automem_kv_set(key: str, body: AutoMemKvWriteRequest) -> dict[str, Any]:
+    """Write one JSON value to AutoMem KV storage."""
+    try:
+        value = await automem_benchmark_store.kv_set(key, body.value)
+    except (RuntimeError, ImportError, ValueError, OSError) as exc:
+        raise HTTPException(status_code=503, detail=f"KV write failed: {exc}") from exc
+    return {"key": key, "value": value}
+
+
+@app.delete("/api/automem/kv/{key}")
+@app.delete("/api/v1/automem/kv/{key}")
+async def automem_kv_delete(key: str) -> dict[str, Any]:
+    """Delete one AutoMem KV entry."""
+    try:
+        deleted = await automem_benchmark_store.kv_delete(key)
+    except (RuntimeError, ImportError, ValueError, OSError) as exc:
+        raise HTTPException(status_code=503, detail=f"KV delete failed: {exc}") from exc
+    return {"key": key, "deleted": deleted}
 
 
 # ── Agent log file endpoints ─────────────────────────────────────────────────

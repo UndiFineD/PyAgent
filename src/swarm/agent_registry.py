@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Registry to manage agent registrations and heartbeats."""
-# Copyright [year] [owner]
+# Copyright 2026 PyAgent Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -52,9 +52,17 @@ class AgentRegistry:
         last = cast(float, self._agents[agent_id]["last_seen"])
         return (time.time() - last) < self.heartbeat_interval
 
-    # metrics implementation stub, to be used later
     def metrics(self) -> str:
         """Return a string in Prometheus text format with metrics about the agents."""
-        # simple prometheus text output showing number of agents
-        lines = [f"agent_registered_total {len(self._agents)}"]
+        now = time.time()
+        healthy_agents = sum(
+            1 for info in self._agents.values() if (now - float(info.get("last_seen", 0.0))) < self.heartbeat_interval
+        )
+
+        lines = [
+            f"agent_registered_total {len(self._agents)}",
+            f"agent_healthy_total {healthy_agents}",
+            f"agent_unhealthy_total {len(self._agents) - healthy_agents}",
+            f"agent_heartbeat_interval_seconds {self.heartbeat_interval}",
+        ]
         return "\n".join(lines)

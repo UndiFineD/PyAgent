@@ -65,9 +65,7 @@ pub fn cudagraph_key_hash_rust(
 }
 
 /// Generate warmup batch sizes for CUDA graph capture
-/// Returns list of (batch_size, seq_len) tuples?
-/// Test asserts: all(isinstance(s, tuple) for s in sizes)
-/// Test call: (32, 512, 1, 8) -> maybe (min, max, step, bucket_step)?
+/// Returns list of (batch_size, seq_len_bucket) tuples.
 #[pyfunction]
 pub fn warmup_sizes_rust(
     min_batch: usize,
@@ -75,11 +73,25 @@ pub fn warmup_sizes_rust(
     step: usize,
     bucket_step: usize,
 ) -> Vec<(usize, usize)> {
-    let mut sizes = Vec::new();
-    for b in (min_batch..=max_batch).step_by(step) {
-        // Just mocking the tuple return as expected by test, maybe (batch, bucket)
-        sizes.push((b, bucket_step));
+    if min_batch == 0 || max_batch == 0 || min_batch > max_batch {
+        return vec![];
     }
+
+    let safe_step = step.max(1);
+    let safe_bucket_step = bucket_step.max(1);
+    let mut sizes = Vec::new();
+
+    for batch in (min_batch..=max_batch).step_by(safe_step) {
+        // Use the nearest upper bucket boundary for stable graph capture sizing.
+        let bucket = batch.div_ceil(safe_bucket_step) * safe_bucket_step;
+        sizes.push((batch, bucket));
+    }
+
+    if sizes.last().map(|(batch, _)| *batch != max_batch).unwrap_or(true) {
+        let bucket = max_batch.div_ceil(safe_bucket_step) * safe_bucket_step;
+        sizes.push((max_batch, bucket));
+    }
+
     sizes
 }
 
@@ -205,15 +217,22 @@ pub fn mrope_section_indices_rust(
     lengths: Option<Vec<usize>>,
     padding: Option<usize>,
 ) -> (Vec<i64>, Vec<i64>, Vec<i64>) {
-    let _ = dim;
-    let _ = padding;
-    let _ = lengths;
+    let default_sections = (dim / 3).max(1);
+    let inferred_temporal = lengths
+        .as_ref()
+        .map(|items| items.iter().sum::<usize>())
+        .unwrap_or(default_sections);
 
-    // Generate indices for each dimension
-    // Simple mock implementation matching test expectations for shape/values
-    let temp_len = temporal_sections.unwrap_or(0);
-    let h_len = height_sections.unwrap_or(0);
-    let w_len = width_sections.unwrap_or(0);
+    let pad = padding.unwrap_or(0);
+    let temp_len = temporal_sections
+        .unwrap_or(inferred_temporal)
+        .saturating_sub(pad);
+    let h_len = height_sections
+        .unwrap_or(default_sections)
+        .saturating_sub(pad);
+    let w_len = width_sections
+        .unwrap_or(default_sections)
+        .saturating_sub(pad);
 
     let t_idxs: Vec<i64> = (0..temp_len).map(|i| i as i64).collect();
     let h_idxs: Vec<i64> = (0..h_len).map(|i| i as i64).collect();

@@ -90,7 +90,45 @@ class FlmChatAdapter:
 
     @staticmethod
     def validate() -> None:
-        """Stub method used by unit tests to ensure the class is importable."""
+        """Validate adapter construction and factory wiring.
+
+        Raises:
+            FlmRuntimeError: If adapter construction or client factory wiring fails.
+
+        """
+        config = FlmProviderConfig.from_mapping(
+            {
+                "base_url": "http://localhost/",
+                "default_model": "dummy",
+                "timeout": 5,
+                "max_retries": 1,
+                "health_path": "/health",
+                "chat_path": "/chat",
+            }
+        )
+
+        class _DummyModels:
+            def list(self) -> Any:
+                return type("_Listing", (), {"data": []})()
+
+        class _DummyCompletions:
+            def create(self, **kwargs: Any) -> Any:
+                return type("_Response", (), {"choices": []})()
+
+        class _DummyChat:
+            completions = _DummyCompletions()
+
+        class _DummyClient:
+            chat = _DummyChat()
+            models = _DummyModels()
+
+        def _factory(*, base_url: str, api_key: str) -> _ClientProtocol:
+            if not base_url or not api_key:
+                raise FlmRuntimeError("Invalid FLM client factory inputs")
+            return _DummyClient()
+
+        adapter = FlmChatAdapter(config=config, client_factory=_factory)
+        _ = adapter._create_client()
 
     def _create_client(self) -> _ClientProtocol:
         """Create a new FLM client instance using the provided factory and configuration."""

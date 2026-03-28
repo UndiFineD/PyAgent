@@ -49,7 +49,7 @@ mod tests {
 
 #[pyfunction]
 fn spawn_task(py_coro: Py<PyAny>) -> PyResult<()> {
-    // temporary implementation: schedule on Python's asyncio event loop
+    // Schedule coroutine execution on Python's active asyncio event loop.
     Python::with_gil(|py| {
         let asyncio = py.import("asyncio")?;
         // simply create a Python task; the coroutine object is consumed by asyncio

@@ -12,10 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Base package placeholder for core components."""
+"""Core base package exports and validation helpers."""
 
 
-def validate() -> None:
-    """Minimal validation for base package."""
-    # nothing much to exercise; the import of this module itself is sufficient
-    pass
+def validate() -> bool:
+    """Validate base package import wiring.
+
+    Returns:
+        True when this module is imported from the expected package path.
+
+    """
+    return __name__ == "src.core.base"

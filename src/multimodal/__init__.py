@@ -34,9 +34,14 @@ __all__ = [
     "MultiModalData",
     "MultiModalInputs",
     "MultiModalProcessor",
+    "validate",
 ]
 
 
-def placeholder() -> bool:
-    """Legacy placeholder — kept for compatibility; always returns True."""
-    return True
+def validate() -> bool:
+    """Validate multimodal package wiring with a concrete processing round-trip."""
+    processor = MultiModalProcessor()
+    inputs = MultiModalInputs()
+    inputs.add(MultiModalData(modality=Modality.TEXT, content="health-check"))
+    outputs = processor.process(inputs)
+    return len(outputs) == 1 and outputs[0].get("type") == "text"

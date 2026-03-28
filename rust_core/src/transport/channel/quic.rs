@@ -13,18 +13,37 @@
 
 #![allow(dead_code)]
 
-//! QUIC transport scaffolding for future T-2 work.
+//! QUIC transport capability helpers.
 
 use pyo3::prelude::*;
+use std::collections::HashMap;
 
-/// Placeholder function to ensure the module is linked and can be extended.
+/// Return whether QUIC support is compiled into this build.
 #[pyfunction]
 pub fn transport_quic_supported() -> PyResult<bool> {
     Ok(cfg!(feature = "async-transport"))
 }
 
+/// Return runtime metadata for QUIC transport capability checks.
+#[pyfunction]
+pub fn transport_quic_info() -> PyResult<HashMap<String, String>> {
+    let mut info = HashMap::new();
+    info.insert("transport".to_string(), "quic".to_string());
+    info.insert(
+        "feature_enabled".to_string(),
+        if cfg!(feature = "async-transport") {
+            "true".to_string()
+        } else {
+            "false".to_string()
+        },
+    );
+    info.insert("alpn".to_string(), "h3,hq-29".to_string());
+    Ok(info)
+}
+
 /// Register the module's functions with Python.
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(transport_quic_supported, m)?)?;
+    m.add_function(wrap_pyfunction!(transport_quic_info, m)?)?;
     Ok(())
 }

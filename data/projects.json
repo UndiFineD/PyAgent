@@ -1,5 +1,23 @@
 [
   {
+    "id": "prj0000095",
+    "name": "source-stub-remediation",
+    "lane": "Review",
+    "summary": "Scan source code for stubs, temporary code, and mock implementations, then replace with real implementations using rust_core-first and Python fallback",
+    "branch": "prj0000095-source-stub-remediation",
+    "pr": null,
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "remediation",
+      "stubs",
+      "rust-core",
+      "python-fallback"
+    ],
+    "created": "2026-03-28",
+    "updated": "2026-03-28"
+  },
+  {
     "id": "prj0000093",
     "name": "projectmanager-ideas-autosync",
     "lane": "Review",

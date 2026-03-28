@@ -13,11 +13,14 @@ export const appMeta: AppMeta = { id: 'autobenchmark', title: 'AutoMem Benchmark
 // ---------------------------------------------------------------------------
 
 interface OperationResult {
+  backend:      'postgres' | 'memory' | string;
   operation:     'write' | 'read' | 'sort' | 'search';
   method:        string;
   rows:          number;
   latency_ms:    number;
   rows_returned: number;
+  status?:       'ok' | 'fallback' | 'unavailable' | string;
+  metadata?:     Record<string, unknown>;
 }
 
 interface BenchmarkReport {
@@ -26,6 +29,7 @@ interface BenchmarkReport {
   results:      OperationResult[];
   errors:       string[];
   completed_at: string | null;
+  backends?:    string[];
 }
 
 // ---------------------------------------------------------------------------
@@ -70,34 +74,48 @@ function fmtLabel(method: string): string {
   return METHOD_LABEL[method] ?? method;
 }
 
+function backendLabel(backend: string): string {
+  return backend.toLowerCase() === 'postgres' ? 'Postgres' : 'Memory';
+}
+
+function seriesKey(result: OperationResult): string {
+  return `${result.backend}::${result.method}`;
+}
+
+function splitSeriesKey(key: string): { backend: string; method: string } {
+  const [backend, method] = key.split('::');
+  return { backend: backend ?? 'unknown', method: method ?? key };
+}
+
+function fmtSeriesLabel(key: string): string {
+  const { backend, method } = splitSeriesKey(key);
+  return `${backendLabel(backend)} · ${fmtLabel(method)}`;
+}
+
+function seriesColor(key: string): string {
+  const { backend, method } = splitSeriesKey(key);
+  const base = methodColor(method);
+  if (backend.toLowerCase() === 'postgres') return base;
+  return `${base}99`;
+}
+
 // ---------------------------------------------------------------------------
 // Derived data helpers
 // ---------------------------------------------------------------------------
-
-/** Group results by (operation, method) keeping latest latency per row tier. */
-function groupByMethod(results: OperationResult[]): Map<string, OperationResult[]> {
-  const map = new Map<string, OperationResult[]>();
-  for (const r of results) {
-    const key = `${r.operation}::${r.method}`;
-    if (!map.has(key)) map.set(key, []);
-    map.get(key)!.push(r);
-  }
-  return map;
-}
 
 /** Build data for a line chart: x = rows, y = latency_ms, one series per method. */
 function latencyLineData(
   results: OperationResult[],
   operationFilter: string,
-): { rows: number; [method: string]: number }[] {
+): { rows: number; [series: string]: number }[] {
   const filtered = results.filter(r => r.operation === operationFilter);
   const rowTiers = [...new Set(filtered.map(r => r.rows))].sort((a, b) => a - b);
-  const methods  = [...new Set(filtered.map(r => r.method))];
+  const series  = [...new Set(filtered.map(r => seriesKey(r)))];
   return rowTiers.map(rows => {
     const point: { rows: number; [k: string]: number } = { rows };
-    for (const m of methods) {
-      const entry = filtered.find(r => r.rows === rows && r.method === m);
-      if (entry) point[m] = entry.latency_ms;
+    for (const key of series) {
+      const entry = filtered.find(r => r.rows === rows && seriesKey(r) === key);
+      if (entry) point[key] = entry.latency_ms;
     }
     return point;
   });
@@ -107,23 +125,40 @@ function latencyLineData(
 function latencyBarData(
   results: OperationResult[],
   operationFilter: string,
-): { method: string; label: string; latency_ms: number }[] {
+): { method: string; backend: string; series: string; label: string; latency_ms: number }[] {
   const filtered = results.filter(r => r.operation === operationFilter);
   const maxRows  = Math.max(...filtered.map(r => r.rows), 0);
-  const byMethod = new Map<string, number>();
+  const bySeries = new Map<string, { method: string; backend: string; latency_ms: number }>();
   for (const r of filtered) {
-    if (r.rows === maxRows) byMethod.set(r.method, r.latency_ms);
+    if (r.rows === maxRows) {
+      const key = seriesKey(r);
+      bySeries.set(key, {
+        method: r.method,
+        backend: r.backend,
+        latency_ms: r.latency_ms,
+      });
+    }
   }
-  return [...byMethod.entries()].map(([method, latency_ms]) => ({
-    method,
-    label: fmtLabel(method),
-    latency_ms,
+  return [...bySeries.entries()].map(([series, info]) => ({
+    method: info.method,
+    backend: info.backend,
+    series,
+    label: `${backendLabel(info.backend)} · ${fmtLabel(info.method)}`,
+    latency_ms: info.latency_ms,
   }));
 }
 
 /** Build scatter data: all results mapped to {rows, latency_ms, method}. */
-function scatterData(results: OperationResult[]): { rows: number; latency_ms: number; method: string }[] {
-  return results.map(r => ({ rows: r.rows, latency_ms: r.latency_ms, method: r.method }));
+function scatterData(
+  results: OperationResult[],
+): { rows: number; latency_ms: number; method: string; backend: string; series: string }[] {
+  return results.map(r => ({
+    rows: r.rows,
+    latency_ms: r.latency_ms,
+    method: r.method,
+    backend: r.backend,
+    series: seriesKey(r),
+  }));
 }
 
 // ---------------------------------------------------------------------------
@@ -151,7 +186,7 @@ function CustomTooltipContent({ active, payload, label }: any) {
       <p style={{ color: '#94a3b8', marginBottom: 4 }}>rows: {label?.toLocaleString()}</p>
       {payload.map((p: any) => (
         <p key={p.dataKey} style={{ color: p.color, margin: '2px 0' }}>
-          {fmtLabel(p.dataKey)}: <strong>{p.value} ms</strong>
+          {fmtSeriesLabel(p.dataKey)}: <strong>{p.value} ms</strong>
         </p>
       ))}
     </div>
@@ -178,9 +213,8 @@ export function AutoMemBenchmark() {
       const data: BenchmarkReport = await res.json();
       setReport(data);
       setError(null);
-    } catch (err) {
-      // If backend not available, use demo data
-      setReport(demoReport());
+    } catch {
+      setError('Unable to load benchmark data from backend.');
     }
   }, []);
 
@@ -199,7 +233,7 @@ export function AutoMemBenchmark() {
       const res = await fetch('/api/automem/benchmark/run', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ row_counts: [100, 500, 1000] }),
+        body: JSON.stringify({ row_counts: [100, 500, 1000], backends: ['postgres', 'memory'] }),
       });
       clearInterval(ticker);
       setProgress(100);
@@ -208,8 +242,7 @@ export function AutoMemBenchmark() {
       setReport(data);
     } catch {
       clearInterval(ticker);
-      // fallback to demo data when backend not connected
-      setReport(demoReport());
+      setError('Benchmark run failed. Verify backend connection and try again.');
     } finally {
       setRunning(false);
       setTimeout(() => setProgress(0), 800);
@@ -239,10 +272,10 @@ export function AutoMemBenchmark() {
   const searchBarData  = latencyBarData(results, 'search');
   const scatter        = scatterData(results);
 
-  const allMethodsOnWrite  = [...new Set(results.filter(r => r.operation === 'write' ).map(r => r.method))];
-  const allMethodsOnRead   = [...new Set(results.filter(r => r.operation === 'read'  ).map(r => r.method))];
-  const allMethodsOnSort   = [...new Set(results.filter(r => r.operation === 'sort'  ).map(r => r.method))];
-  const allMethodsOnSearch = [...new Set(results.filter(r => r.operation === 'search').map(r => r.method))];
+  const allSeriesOnWrite  = [...new Set(results.filter(r => r.operation === 'write' ).map(seriesKey))];
+  const allSeriesOnRead   = [...new Set(results.filter(r => r.operation === 'read'  ).map(seriesKey))];
+  const allSeriesOnSort   = [...new Set(results.filter(r => r.operation === 'sort'  ).map(seriesKey))];
+  const statusNotes = results.filter(r => (r.status && r.status !== 'ok') || (r.metadata && Object.keys(r.metadata).length > 0));
 
   // ---- Render ----
   return (
@@ -340,9 +373,9 @@ export function AutoMemBenchmark() {
             <XAxis dataKey="rows" stroke="#64748b" tickFormatter={v => v.toLocaleString()} label={{ value: 'Rows', position: 'insideBottom', offset: -5, fill: '#64748b', fontSize: 11 }} />
             <YAxis stroke="#64748b" label={{ value: 'ms / row', angle: -90, position: 'insideLeft', fill: '#64748b', fontSize: 11 }} />
             <Tooltip content={<CustomTooltipContent />} />
-            <Legend formatter={v => <span style={{ color: methodColor(v), fontSize: 11 }}>{fmtLabel(v)}</span>} />
-            {allMethodsOnWrite.map(m => (
-              <Line key={m} type="monotone" dataKey={m} stroke={methodColor(m)} dot={false} strokeWidth={2} />
+            <Legend formatter={v => <span style={{ color: seriesColor(String(v)), fontSize: 11 }}>{fmtSeriesLabel(String(v))}</span>} />
+            {allSeriesOnWrite.map(s => (
+              <Line key={s} type="monotone" dataKey={s} stroke={seriesColor(s)} dot={false} strokeWidth={2} />
             ))}
           </LineChart>
         </ResponsiveContainer>
@@ -356,9 +389,9 @@ export function AutoMemBenchmark() {
             <XAxis dataKey="rows" stroke="#64748b" tickFormatter={v => v.toLocaleString()} />
             <YAxis stroke="#64748b" />
             <Tooltip content={<CustomTooltipContent />} />
-            <Legend formatter={v => <span style={{ color: methodColor(v), fontSize: 11 }}>{fmtLabel(v)}</span>} />
-            {allMethodsOnRead.map(m => (
-              <Line key={m} type="monotone" dataKey={m} stroke={methodColor(m)} dot={false} strokeWidth={2} />
+            <Legend formatter={v => <span style={{ color: seriesColor(String(v)), fontSize: 11 }}>{fmtSeriesLabel(String(v))}</span>} />
+            {allSeriesOnRead.map(s => (
+              <Line key={s} type="monotone" dataKey={s} stroke={seriesColor(s)} dot={false} strokeWidth={2} />
             ))}
           </LineChart>
         </ResponsiveContainer>
@@ -372,9 +405,9 @@ export function AutoMemBenchmark() {
             <XAxis dataKey="rows" stroke="#64748b" tickFormatter={v => v.toLocaleString()} />
             <YAxis stroke="#64748b" />
             <Tooltip content={<CustomTooltipContent />} />
-            <Legend formatter={v => <span style={{ color: methodColor(v), fontSize: 11 }}>{fmtLabel(v)}</span>} />
-            {allMethodsOnSort.map(m => (
-              <Line key={m} type="monotone" dataKey={m} stroke={methodColor(m)} dot={false} strokeWidth={2} />
+            <Legend formatter={v => <span style={{ color: seriesColor(String(v)), fontSize: 11 }}>{fmtSeriesLabel(String(v))}</span>} />
+            {allSeriesOnSort.map(s => (
+              <Line key={s} type="monotone" dataKey={s} stroke={seriesColor(s)} dot={false} strokeWidth={2} />
             ))}
           </LineChart>
         </ResponsiveContainer>
@@ -391,7 +424,7 @@ export function AutoMemBenchmark() {
             <ReferenceLine x={10} stroke="#ef4444" strokeDasharray="4 2" label={{ value: '10ms', fill: '#ef4444', fontSize: 10 }} />
             <Bar dataKey="latency_ms" radius={[0, 4, 4, 0]}>
               {searchBarData.map((entry) => (
-                <Cell key={entry.method} fill={methodColor(entry.method)} />
+                <Cell key={entry.series} fill={seriesColor(entry.series)} />
               ))}
             </Bar>
           </BarChart>
@@ -406,21 +439,51 @@ export function AutoMemBenchmark() {
             <XAxis dataKey="rows" name="Rows" stroke="#64748b" tickFormatter={v => v.toLocaleString()} label={{ value: 'Rows in table', position: 'insideBottom', offset: -5, fill: '#64748b', fontSize: 11 }} />
             <YAxis dataKey="latency_ms" name="Latency (ms)" stroke="#64748b" label={{ value: 'ms', angle: -90, position: 'insideLeft', fill: '#64748b', fontSize: 11 }} />
             <Tooltip cursor={{ strokeDasharray: '3 3' }} contentStyle={{ background: '#1e293b', border: '1px solid #334155', fontSize: 12 }} formatter={(value: number, name: string, props: any) => {
-              const m = props?.payload?.method ?? '';
-              return [`${value} ms`, fmtLabel(m) || name];
+              const key = props?.payload?.series ?? '';
+              return [`${value} ms`, fmtSeriesLabel(key) || name];
             }} />
-            {[...new Set(scatter.map(d => d.method))].map(method => (
+            {[...new Set(scatter.map(d => d.series))].map(key => (
               <Scatter
-                key={method}
-                name={fmtLabel(method)}
-                data={scatter.filter(d => d.method === method)}
-                fill={methodColor(method)}
+                key={key}
+                name={fmtSeriesLabel(key)}
+                data={scatter.filter(d => d.series === key)}
+                fill={seriesColor(key)}
               />
             ))}
-            <Legend formatter={v => <span style={{ color: methodColor(v), fontSize: 11 }}>{fmtLabel(v)}</span>} />
+            <Legend formatter={v => <span style={{ color: seriesColor(String(v)), fontSize: 11 }}>{fmtSeriesLabel(String(v))}</span>} />
           </ScatterChart>
         </ResponsiveContainer>
       </Section>
+
+      {statusNotes.length > 0 && (
+        <Section title="⑦ Backend notes — fallback/unavailable markers">
+          <div style={{ display: 'grid', gap: 8 }}>
+            {statusNotes.map((entry, idx) => (
+              <div
+                key={`${entry.backend}-${entry.operation}-${entry.method}-${entry.rows}-${idx}`}
+                style={{
+                  border: '1px solid #334155',
+                  background: '#1e293b',
+                  borderRadius: 6,
+                  padding: '8px 10px',
+                  fontSize: 12,
+                  color: '#cbd5e1',
+                }}
+              >
+                <strong>{backendLabel(entry.backend)} · {fmtLabel(entry.method)}</strong>
+                <span style={{ marginLeft: 8, color: '#94a3b8' }}>
+                  status: {entry.status ?? 'ok'}
+                </span>
+                {entry.metadata && Object.keys(entry.metadata).length > 0 && (
+                  <div style={{ marginTop: 4, color: '#a5b4fc' }}>
+                    {JSON.stringify(entry.metadata)}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </Section>
+      )}
 
       {/* ⑥ Index type summary table */}
       <Section title="⑥ Index Reference Table">
@@ -482,48 +545,5 @@ const INDEX_TABLE = [
   { name: 'idx_mem_hash_agent',         type: 'Hash',    cols: 'agent_id',                  purpose: 'Equality-only fast agent lookup' },
   { name: 'idx_mem_hash_session',       type: 'Hash',    cols: 'session_id',                purpose: 'Equality-only session lookup' },
 ];
-
-// ---------------------------------------------------------------------------
-// DEMO DATA  — used when backend is not connected
-// ---------------------------------------------------------------------------
-
-function demoReport(): BenchmarkReport {
-  const methods = {
-    write:  ['btree_insert'],
-    read:   ['btree_pk', 'hash_agent_id'],
-    sort:   ['btree_importance_desc', 'btree_created_desc', 'btree_access_count'],
-    search: ['hnsw_vector', 'gin_fulltext', 'gin_keywords', 'brin_timestamp', 'full_seqscan', 'ltree_subtree'],
-  };
-  const tiers = [100, 500, 1000, 5000];
-  const BASE: Record<string, number> = {
-    btree_insert: 0.8, btree_pk: 0.05, hash_agent_id: 0.03,
-    btree_importance_desc: 1.2, btree_created_desc: 1.1, btree_access_count: 1.3,
-    hnsw_vector: 2.4, gin_fulltext: 1.8, gin_keywords: 1.2,
-    brin_timestamp: 0.6, full_seqscan: 45, ltree_subtree: 0.9,
-  };
-  const results: OperationResult[] = [];
-  for (const [op, ms] of Object.entries(methods)) {
-    for (const method of ms) {
-      for (const rows of tiers) {
-        const base = BASE[method] ?? 1;
-        const factor = Math.log10(rows) / Math.log10(100);
-        results.push({
-          operation: op as OperationResult['operation'],
-          method,
-          rows,
-          latency_ms: +(base * factor * (0.85 + Math.random() * 0.3)).toFixed(3),
-          rows_returned: 10,
-        });
-      }
-    }
-  }
-  return {
-    run_id: 'demo',
-    total_rows: 5000,
-    results,
-    errors: [],
-    completed_at: new Date().toISOString(),
-  };
-}
 
 export default AutoMemBenchmark;

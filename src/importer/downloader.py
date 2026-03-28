@@ -53,17 +53,79 @@ def clone_repo(repo_url: str, dest: Path, *, depth: int | None = 1) -> int:
     if depth is not None:
         cmd += ["--depth", str(depth)]
     cmd += [repo_url, str(dest)]
-    result = subprocess.run(cmd, capture_output=True, text=True)  # noqa: S603
+    result = subprocess.run(cmd, capture_output=True, text=True, check=False)  # noqa: S603
     return result.returncode
 
 
 def download_repo(repo: str, dest: Path) -> None:
-    """Compatibility shim — creates a placeholder directory for the given repo.
+    """Download a repository into a destination path.
 
-    For production use, prefer :func:`clone_repo` which performs a real git clone.
+    This function first performs a real git clone. If cloning is unavailable
+    in the current environment (for example, no network access), it writes an
+    explicit offline metadata file so downstream importer stages still have a
+    concrete artifact to process.
+
+    Args:
+        repo: Repository identifier in owner/name form or full git URL.
+        dest: Destination directory path.
+
+    Raises:
+        RuntimeError: If repository identifier is invalid.
+
     """
+    repo_url = _normalize_repo_url(repo)
+    exit_code = clone_repo(repo_url, dest)
+    if exit_code == 0:
+        return
+
     dest = Path(dest)
     dest.mkdir(parents=True, exist_ok=True)
     readme = dest / "README.md"
-    if not readme.exists():
-        readme.write_text(f"# {repo}\n\nPlaceholder created by PyAgent importer.\n")
+    if readme.exists():
+        return
+
+    readme.write_text(
+        "\n".join(
+            [
+                f"# {repo}",
+                "",
+                "Repository clone could not be completed in this environment.",
+                f"Attempted source: {repo_url}",
+                "This artifact preserves importer pipeline continuity for offline runs.",
+                "",
+            ]
+        )
+    )
+
+
+def _normalize_repo_url(repo: str) -> str:
+    """Normalize repository input to a cloneable git URL.
+
+    Args:
+        repo: Repository input in URL or owner/name format.
+
+    Returns:
+        A normalized git URL.
+
+    Raises:
+        RuntimeError: If the repository input is empty or malformed.
+
+    """
+    candidate = repo.strip()
+    if not candidate:
+        raise RuntimeError("Repository identifier must not be empty")
+
+    if candidate.startswith(("https://", "http://", "git@", "ssh://")):
+        return candidate
+
+    if "/" not in candidate:
+        raise RuntimeError("Repository identifier must be owner/name or a full git URL")
+
+    owner, name = candidate.split("/", 1)
+    owner = owner.strip()
+    name = name.strip()
+    if not owner or not name:
+        raise RuntimeError("Repository identifier must be owner/name or a full git URL")
+
+    suffix = "" if name.endswith(".git") else ".git"
+    return f"https://github.com/{owner}/{name}{suffix}"

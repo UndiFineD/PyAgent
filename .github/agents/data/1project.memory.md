@@ -210,3 +210,19 @@ prj0000075 ci-simplification branch prj0000075-ci-simplification — project set
 | **handoff_target** | @2think |
 | **artifact_paths** | docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.project.md, docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.think.md, docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.design.md, docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.plan.md, docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.test.md, docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.code.md, docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.exec.md, docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.ql.md, docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.git.md, docs/project/kanban.md, data/projects.json, data/nextproject.md |
 
+---
+
+## prj0000095 - source-stub-remediation
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000095-source-stub-remediation |
+| **owner_agent** | @1project |
+| **source** | @0master |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | DONE |
+| **summary** | Project governance wrap-up completed on branch prj0000095-source-stub-remediation: kanban moved from Discovery to Review, project overview refreshed to implementation-complete handoff state, and git summary marked READY_FOR_9GIT with scoped change notes. |
+| **handoff_target** | @9git |
+| **artifact_paths** | docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.project.md, docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.think.md, docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.design.md, docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.plan.md, docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.test.md, docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.code.md, docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.exec.md, docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.ql.md, docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.git.md, docs/project/kanban.md, data/projects.json, data/nextproject.md |
+

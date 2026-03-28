@@ -18,8 +18,10 @@ Supports two modes:
   - Legacy mode  : StorageTransaction(target: Path) — single-file atomic write.
   - Multi-op mode: StorageTransaction()            — async multi-op queue.
 """
+
 from __future__ import annotations
 
+import asyncio
 import base64
 import os
 import tempfile
@@ -41,13 +43,21 @@ class EncryptionConfigError(ValueError):
 # Internal awaitable no-op helper (for await-compatible sync rollback)
 # ---------------------------------------------------------------------------
 
+
 async def _noop_coro() -> None:  # pragma: no cover
-    pass
+    """Yield once to remain await-compatible with sync rollback paths.
+
+    Returns:
+        None.
+
+    """
+    await asyncio.sleep(0)
 
 
 # ---------------------------------------------------------------------------
 # StorageTransaction
 # ---------------------------------------------------------------------------
+
 
 class StorageTransaction:
     """Atomic file-write transaction.

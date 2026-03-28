@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-28 | Total projects: 94 | prj0000094 added to Discovery_
+_Last updated: 2026-03-28 | Total projects: 95 | prj0000095 moved to Review (Discovery: 2, Review: 1)_
 
 ## How to use this board
 
@@ -87,6 +87,7 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000095 | source-stub-remediation | prj0000095-source-stub-remediation | pending | P2 | M | 2026-03-28 |
 
 
 ---
@@ -209,10 +210,10 @@ Stalled, cancelled, or superseded projects.
 | Discovery | 2 |
 | Design | 0 |
 | In Sprint | 0 |
-| Review | 0 |
+| Review | 1 |
 | Released | 91 |
 | Archived | 1 |
-| **Total** | **94** |
+| **Total** | **95** |
 
 ---
 

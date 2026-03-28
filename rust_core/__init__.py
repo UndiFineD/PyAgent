@@ -1,4 +1,16 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """Python wrapper package for the Rust-based `rust_core` extension.
 
 This package exists purely to avoid the namespace collision between the Rust
@@ -12,6 +24,7 @@ public API into `rust_core` to match the imports used by the tests.
 import importlib
 import struct
 import sys
+from itertools import count
 from pathlib import Path
 from types import ModuleType
 
@@ -28,10 +41,10 @@ def _import_installed_extension(name: str) -> ModuleType:
     # cached imports, so we import the installed package.
     repo_root = str(Path(__file__).resolve().parents[1])
     to_remove_path = [repo_root, ""]
-    removed_path = []
+    removed_path: list[str] = []
 
     # Remove potential cached modules to avoid importing the source package.
-    sys_modules_backup = {}
+    sys_modules_backup: dict[str, ModuleType] = {}
     for mod in ("rust_core", "rust_core.rust_core", "_rust_core"):
         if mod in sys.modules:
             sys_modules_backup[mod] = sys.modules.pop(mod)
@@ -53,12 +66,12 @@ try:
     # try the common name the extension is built with (rust_core.rust_core)
     ext = _import_installed_extension("rust_core.rust_core")
     globals().update({k: v for k, v in vars(ext).items() if not k.startswith("__")})
-except Exception:
+except ImportError:
     try:
         # fallback to older convention (_rust_core)
         ext = _import_installed_extension("_rust_core")
         globals().update({k: v for k, v in vars(ext).items() if not k.startswith("__")})
-    except Exception:
+    except ImportError:
         raise ImportError(
             "Rust extension module is not built/installed. "
             "Run `python -m maturin develop --release` in the rust_core directory."
@@ -66,6 +79,8 @@ except Exception:
 
 
 if "PyAsyncTransport" not in globals():
+    _CHANNEL_COUNTER = count(start=1)
+
     class PyAsyncTransport:  # pragma: no cover - exercised by tests
         """Compatibility fallback when the Rust extension lacks async transport bindings."""
 
@@ -77,7 +92,17 @@ if "PyAsyncTransport" not in globals():
             """Return configured capacity."""
             return self._capacity
 
+        def _build_handle(self, channel_id: int, direction: bytes) -> bytes:
+            return (
+                struct.pack("<Q", self._capacity)
+                + struct.pack("<Q", int(channel_id))
+                + direction
+            )
+
         def create_channel(self) -> tuple[bytes, bytes]:
-            """Return deterministic sender/receiver handles encoding capacity as LE u64."""
-            handle = struct.pack("<Q", self._capacity)
-            return handle, handle
+            """Return sender/receiver handles with capacity, channel id, and direction."""
+            channel_id = next(_CHANNEL_COUNTER)
+            return (
+                self._build_handle(channel_id, b"S"),
+                self._build_handle(channel_id, b"R"),
+            )

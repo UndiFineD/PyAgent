@@ -27,12 +27,14 @@ from typing import Any, Optional
 # ---------------------------------------------------------------------------
 try:
     import asyncpg  # type: ignore[import]
+
     _HAS_ASYNCPG = True
 except ImportError:
     _HAS_ASYNCPG = False
 
 try:
     from pgvector.asyncpg import register_vector  # type: ignore[import]
+
     _HAS_PGVECTOR = True
 except ImportError:
     _HAS_PGVECTOR = False
@@ -41,19 +43,27 @@ except ImportError:
 # ---------------------------------------------------------------------------
 # SCORING WEIGHTS  (must sum to 1.0)
 # ---------------------------------------------------------------------------
-WEIGHT_VECTOR:    float = 0.25   # pgvector cosine similarity
-WEIGHT_GRAPH:     float = 0.25   # Apache AGE graph neighbourhood depth
-WEIGHT_TEMPORAL:  float = 0.15   # exponential decay since last access
-WEIGHT_KEYWORD:   float = 0.15   # exact keyword intersection ratio
-WEIGHT_LEXICAL:   float = 0.10   # tsvector / tsquery rank
+WEIGHT_VECTOR: float = 0.25  # pgvector cosine similarity
+WEIGHT_GRAPH: float = 0.25  # Apache AGE graph neighbourhood depth
+WEIGHT_TEMPORAL: float = 0.15  # exponential decay since last access
+WEIGHT_KEYWORD: float = 0.15  # exact keyword intersection ratio
+WEIGHT_LEXICAL: float = 0.10  # tsvector / tsquery rank
 WEIGHT_IMPORTANCE: float = 0.05  # stored importance value 0–1
 WEIGHT_CONFIDENCE: float = 0.05  # stored confidence value 0–1
 
-assert abs(  # noqa: S101
-    WEIGHT_VECTOR + WEIGHT_GRAPH + WEIGHT_TEMPORAL
-    + WEIGHT_KEYWORD + WEIGHT_LEXICAL
-    + WEIGHT_IMPORTANCE + WEIGHT_CONFIDENCE - 1.0
-) < 1e-9, "Scoring weights must sum to 1.0"
+assert (
+    abs(  # noqa: S101
+        WEIGHT_VECTOR
+        + WEIGHT_GRAPH
+        + WEIGHT_TEMPORAL
+        + WEIGHT_KEYWORD
+        + WEIGHT_LEXICAL
+        + WEIGHT_IMPORTANCE
+        + WEIGHT_CONFIDENCE
+        - 1.0
+    )
+    < 1e-9
+), "Scoring weights must sum to 1.0"
 
 # Temporal decay constant  — half-life ≈ 69 hours  (k = ln(2)/half_life_h)
 DECAY_K: float = 0.01
@@ -63,51 +73,52 @@ DECAY_K: float = 0.01
 # DATA MODELS
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class Memory:
     """A single memory row — mirrors the `memories` table."""
 
-    id:            uuid.UUID
-    agent_id:      str
-    content:       str
-    keywords:      list[str]     = field(default_factory=list)
-    tags:          list[str]     = field(default_factory=list)
-    metadata:      dict[str, Any] = field(default_factory=dict)
-    importance:    float         = 0.5
-    confidence:    float         = 1.0
-    decay_score:   float         = 1.0
-    access_count:  int           = 0
-    embedding:     Optional[list[float]] = None
-    parent_id:     Optional[uuid.UUID]   = None
-    session_id:    Optional[uuid.UUID]   = None
-    path:          Optional[str]         = None      # LTREE text form
-    created_at:    Optional[datetime]    = None
-    last_accessed: Optional[datetime]    = None
+    id: uuid.UUID
+    agent_id: str
+    content: str
+    keywords: list[str] = field(default_factory=list)
+    tags: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
+    importance: float = 0.5
+    confidence: float = 1.0
+    decay_score: float = 1.0
+    access_count: int = 0
+    embedding: Optional[list[float]] = None
+    parent_id: Optional[uuid.UUID] = None
+    session_id: Optional[uuid.UUID] = None
+    path: Optional[str] = None  # LTREE text form
+    created_at: Optional[datetime] = None
+    last_accessed: Optional[datetime] = None
 
 
 @dataclass
 class MemoryResult:
     """A scored memory returned from hybrid_search."""
 
-    memory:          Memory
-    vector_score:    float = 0.0
-    graph_score:     float = 0.0
-    temporal_score:  float = 0.0
-    keyword_score:   float = 0.0
-    lexical_score:   float = 0.0
-    final_score:     float = 0.0
+    memory: Memory
+    vector_score: float = 0.0
+    graph_score: float = 0.0
+    temporal_score: float = 0.0
+    keyword_score: float = 0.0
+    lexical_score: float = 0.0
+    final_score: float = 0.0
 
     @property
     def breakdown(self) -> dict[str, float]:
         return {
-            "vector":     round(self.vector_score,   4),
-            "graph":      round(self.graph_score,    4),
-            "temporal":   round(self.temporal_score, 4),
-            "keyword":    round(self.keyword_score,  4),
-            "lexical":    round(self.lexical_score,  4),
+            "vector": round(self.vector_score, 4),
+            "graph": round(self.graph_score, 4),
+            "temporal": round(self.temporal_score, 4),
+            "keyword": round(self.keyword_score, 4),
+            "lexical": round(self.lexical_score, 4),
             "importance": round(self.memory.importance, 4),
             "confidence": round(self.memory.confidence, 4),
-            "final":      round(self.final_score,    4),
+            "final": round(self.final_score, 4),
         }
 
 
@@ -115,9 +126,11 @@ class MemoryResult:
 # SCORE HELPERS
 # ---------------------------------------------------------------------------
 
+
 def _temporal_score(last_accessed: Optional[datetime]) -> float:
-    """Exponential decay: 1.0 at t=0, approaches 0 as time grows.
-    s = exp(-k * hours_since_access)
+    """Exponential decay from recency.
+
+    s = exp(-k * hours_since_access).
     """
     if last_accessed is None:
         return 0.5
@@ -139,14 +152,12 @@ def _keyword_score(query_keywords: list[str], memory_keywords: list[str]) -> flo
 
 
 def _cosine_distance_to_score(distance: float) -> float:
-    """pgvector cosine distance ∈ [0, 2]; convert to score ∈ [0, 1]."""
-
+    """Pgvector cosine distance ∈ [0, 2]; convert to score ∈ [0, 1]."""
     return max(0.0, 1.0 - distance / 2.0)
 
 
 def _graph_hops_to_score(hops: int) -> float:
-    """Fewer graph hops → higher score.  0 hops = 1.0, 1 hop = 0.75, …"""
-
+    """Fewer graph hops yield higher score."""
     if hops < 0:
         return 0.0
     return 1.0 / (1.0 + hops)
@@ -155,6 +166,7 @@ def _graph_hops_to_score(hops: int) -> float:
 # ---------------------------------------------------------------------------
 # AUTOMEM CORE
 # ---------------------------------------------------------------------------
+
 
 class AutoMemCore:
     """9-component hybrid memory search backed by PostgreSQL.
@@ -172,15 +184,17 @@ class AutoMemCore:
     """
 
     def __init__(self, dsn: str, embedding_dim: int = 1536) -> None:
-        """
+        """Initialize AutoMemCore settings.
+
         Args:
-            dsn: asyncpg DSN, e.g.
-                'postgresql://user:pass@localhost/automem'
-            embedding_dim: dimension of the embedding vectors (must match schema)
+        dsn: asyncpg DSN, e.g.
+            'postgresql://user:pass@localhost/automem'
+        embedding_dim: dimension of the embedding vectors (must match schema)
+
         """
         self._dsn = dsn
         self._dim = embedding_dim
-        self._pool: Any = None   # asyncpg.Pool
+        self._pool: Any = None  # asyncpg.Pool
 
     # ------------------------------------------------------------------
     # Pool lifecycle
@@ -201,7 +215,7 @@ class AutoMemCore:
         """Register pgvector type codec for every new connection."""
         if _HAS_PGVECTOR:
             await register_vector(conn)
-        await conn.execute("SET search_path = ag_catalog, \"$user\", public;")
+        await conn.execute('SET search_path = ag_catalog, "$user", public;')
 
     async def close(self) -> None:
         """Close the connection pool gracefully."""
@@ -222,17 +236,17 @@ class AutoMemCore:
 
     async def store(
         self,
-        agent_id:   str,
-        content:    str,
-        embedding:  list[float],
+        agent_id: str,
+        content: str,
+        embedding: list[float],
         *,
-        keywords:   Optional[list[str]]     = None,
-        tags:       Optional[list[str]]     = None,
-        metadata:   Optional[dict[str, Any]] = None,
+        keywords: Optional[list[str]] = None,
+        tags: Optional[list[str]] = None,
+        metadata: Optional[dict[str, Any]] = None,
         importance: float = 0.5,
         confidence: float = 1.0,
-        parent_id:  Optional[uuid.UUID]     = None,
-        session_id: Optional[uuid.UUID]     = None,
+        parent_id: Optional[uuid.UUID] = None,
+        session_id: Optional[uuid.UUID] = None,
     ) -> uuid.UUID:
         """Persist a new memory; returns the generated UUID.
 
@@ -280,9 +294,7 @@ class AutoMemCore:
             # Materialise LTREE path: parent_path.mem_id  (or root.mem_id)
             parent_path = "root"
             if parent_id:
-                parent_row = await conn.fetchrow(
-                    "SELECT path FROM memories WHERE id = $1", parent_id
-                )
+                parent_row = await conn.fetchrow("SELECT path FROM memories WHERE id = $1", parent_id)
                 if parent_row and parent_row["path"]:
                     parent_path = str(parent_row["path"])
 
@@ -291,7 +303,8 @@ class AutoMemCore:
             new_path = f"{parent_path}.{safe_id}"
             await conn.execute(
                 "UPDATE memories SET path = $1::ltree WHERE id = $2",
-                new_path, mem_id,
+                new_path,
+                mem_id,
             )
 
             # Create graph vertex in Apache AGE
@@ -316,9 +329,21 @@ class AutoMemCore:
                         """,
                         {"child_id": str(mem_id), "parent_id": str(parent_id)},
                     )
-            except Exception:  # noqa: BLE001 S110
-                # AGE may not be installed in all environments; degrade gracefully
-                pass
+            except Exception as exc:  # noqa: BLE001
+                # AGE may not be installed in all environments; persist fallback state.
+                await conn.execute(
+                    """
+                    UPDATE memories
+                    SET metadata = COALESCE(metadata, '{}'::jsonb)
+                        || jsonb_build_object(
+                            'graph_sync', false,
+                            'graph_sync_error', $1
+                        )
+                    WHERE id = $2
+                    """,
+                    str(exc)[:256],
+                    mem_id,
+                )
 
         return mem_id
 
@@ -353,13 +378,13 @@ class AutoMemCore:
 
     async def hybrid_search(
         self,
-        agent_id:        str,
-        query:           str,
+        agent_id: str,
+        query: str,
         query_embedding: list[float],
         *,
-        query_keywords:  Optional[list[str]] = None,
-        top_k:           int = 10,
-        enable_graph:    bool = True,
+        query_keywords: Optional[list[str]] = None,
+        top_k: int = 10,
+        enable_graph: bool = True,
     ) -> list[MemoryResult]:
         """Run hybrid search and return top_k MemoryResult objects, sorted by
         final_score descending.
@@ -390,9 +415,7 @@ class AutoMemCore:
         # Build graph neighbourhood depths (Apache AGE) — best-effort
         graph_depths: dict[str, int] = {}
         if enable_graph and self._pool:
-            graph_depths = await self._graph_depths(
-                agent_id, [str(r["id"]) for r in rows]
-            )
+            graph_depths = await self._graph_depths(agent_id, [str(r["id"]) for r in rows])
 
         results: list[MemoryResult] = []
         for row in rows:
@@ -427,31 +450,33 @@ class AutoMemCore:
 
             # ⑤ Lexical / full-text score  (tsv_rank from 0..1 already)
             lex_score = float(row["tsv_rank"] or 0.0)
-            lex_score = min(1.0, lex_score)   # clamp
+            lex_score = min(1.0, lex_score)  # clamp
 
             # ⑥ Importance   ⑦ Confidence (raw stored values already 0–1)
             imp = mem.importance
             conf = mem.confidence
 
             final = (
-                WEIGHT_VECTOR    * vec_score
-                + WEIGHT_GRAPH   * g_score
+                WEIGHT_VECTOR * vec_score
+                + WEIGHT_GRAPH * g_score
                 + WEIGHT_TEMPORAL * t_score
-                + WEIGHT_KEYWORD  * kw_score
-                + WEIGHT_LEXICAL  * lex_score
+                + WEIGHT_KEYWORD * kw_score
+                + WEIGHT_LEXICAL * lex_score
                 + WEIGHT_IMPORTANCE * imp
                 + WEIGHT_CONFIDENCE * conf
             )
 
-            results.append(MemoryResult(
-                memory=mem,
-                vector_score=vec_score,
-                graph_score=g_score,
-                temporal_score=t_score,
-                keyword_score=kw_score,
-                lexical_score=lex_score,
-                final_score=final,
-            ))
+            results.append(
+                MemoryResult(
+                    memory=mem,
+                    vector_score=vec_score,
+                    graph_score=g_score,
+                    temporal_score=t_score,
+                    keyword_score=kw_score,
+                    lexical_score=lex_score,
+                    final_score=final,
+                )
+            )
 
         results.sort(key=lambda r: r.final_score, reverse=True)
         return results[:top_k]
@@ -460,9 +485,7 @@ class AutoMemCore:
     # Graph neighbourhood query (Apache AGE)
     # ------------------------------------------------------------------
 
-    async def _graph_depths(
-        self, agent_id: str, mem_ids: list[str]
-    ) -> dict[str, int]:
+    async def _graph_depths(self, agent_id: str, mem_ids: list[str]) -> dict[str, int]:
         """Return {memory_id: hop_distance} from the agent's most recently
         accessed nodes.  Returns {} if AGE is unavailable.
         """
@@ -492,16 +515,12 @@ class AutoMemCore:
     # Tree traversal  (LTREE  — component ⑧)
     # ------------------------------------------------------------------
 
-    async def get_subtree(
-        self, root_id: uuid.UUID, max_depth: int = 3
-    ) -> list[Memory]:
+    async def get_subtree(self, root_id: uuid.UUID, max_depth: int = 3) -> list[Memory]:
         """Return all descendant memories up to max_depth levels deep."""
         if self._pool is None:
             raise RuntimeError("Call connect() first")
         async with self._pool.acquire() as conn:
-            root = await conn.fetchrow(
-                "SELECT path FROM memories WHERE id = $1", root_id
-            )
+            root = await conn.fetchrow("SELECT path FROM memories WHERE id = $1", root_id)
             if root is None or root["path"] is None:
                 return []
             root_path = str(root["path"])
@@ -526,8 +545,9 @@ class AutoMemCore:
     # ------------------------------------------------------------------
 
     async def top_by_frecency(self, agent_id: str, n: int = 20) -> list[Memory]:
-        """Return top-N memories by combined recency + frequency score.
-        frecency = log(1 + access_count) * temporal_score
+        """Return top-N memories by combined recency and frequency.
+
+        frecency = log(1 + access_count) * temporal_score.
         """
         if self._pool is None:
             raise RuntimeError("Call connect() first")
@@ -544,7 +564,8 @@ class AutoMemCore:
                 ORDER BY frecency DESC
                 LIMIT $2
                 """,
-                agent_id, n,
+                agent_id,
+                n,
             )
             return [self._row_to_memory(r) for r in rows]
 
@@ -557,9 +578,7 @@ class AutoMemCore:
         if self._pool is None:
             raise RuntimeError("Call connect() first")
         async with self._pool.acquire() as conn:
-            result = await conn.execute(
-                "DELETE FROM memories WHERE id = $1", memory_id
-            )
+            result = await conn.execute("DELETE FROM memories WHERE id = $1", memory_id)
             return result.endswith("1")
 
     # ------------------------------------------------------------------

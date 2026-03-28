@@ -1,6 +1,24 @@
 use pyo3::prelude::*;
 use std::collections::{HashMap, HashSet};
 
+fn erf_approx(x: f64) -> f64 {
+    // Abramowitz and Stegun 7.1.26 approximation.
+    let sign = if x < 0.0 { -1.0 } else { 1.0 };
+    let ax = x.abs();
+    let t = 1.0 / (1.0 + 0.3275911 * ax);
+    let y = 1.0
+        - (((((1.061_405_429 * t - 1.453_152_027) * t + 1.421_413_741) * t - 0.284_496_736)
+            * t
+            + 0.254_829_592)
+            * t
+            * (-ax * ax).exp());
+    sign * y
+}
+
+fn normal_cdf(x: f64) -> f64 {
+    0.5 * (1.0 + erf_approx(x / std::f64::consts::SQRT_2))
+}
+
 /// Evaluate a math formula with variables using a minimal hand-written parser.
 /// This is a safe, dependency-free Rust core for FormulaEngineCore parity.
 #[pyfunction]
@@ -180,10 +198,12 @@ pub fn round_down_rust(n: i64, multiple: i64) -> PyResult<i64> {
     Ok((n / multiple) * multiple)
 }
 
-/// Atomic counter add operation (placeholder for actual atomic).
+/// Counter addition with overflow-safe semantics.
 #[pyfunction]
 pub fn atomic_counter_add_rust(current: i64, delta: i64) -> PyResult<i64> {
-    Ok(current + delta)
+    current
+        .checked_add(delta)
+        .ok_or_else(|| pyo3::exceptions::PyOverflowError::new_err("counter addition overflow"))
 }
 
 /// Batch ceiling division for multiple values.
@@ -246,8 +266,9 @@ pub fn calculate_statistical_significance(
         0.0
     };
 
-    // P-value approximation
-    let p_value = if t_stat.abs() > 1.96 { 0.05 } else { 0.5 }; // Dummy
+    // Two-sided p-value approximation using a normal CDF fallback.
+    let p_value = 2.0 * (1.0 - normal_cdf(t_stat.abs()));
+    let p_value = p_value.clamp(0.0, 1.0);
 
     let mut results = HashMap::new();
     results.insert("t_statistic".to_string(), t_stat);

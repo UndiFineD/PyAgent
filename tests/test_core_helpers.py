@@ -95,12 +95,12 @@ def test_scaffold_import_and_example() -> None:
     assert out["status"] == "ok"
 
 
-def test_basic_placeholder_modules() -> None:
-    """Import a handful of trivial placeholder modules to bump coverage."""
+def test_basic_runtime_modules_validate() -> None:
+    """Import lightweight runtime modules and verify their validate hooks."""
     memory = importlib.import_module("src.memory")
     multimodal = importlib.import_module("src.multimodal")
     rl = importlib.import_module("src.rl")
 
-    assert memory.placeholder()
-    assert multimodal.placeholder()
-    assert rl.placeholder()
+    assert memory.validate()
+    assert multimodal.validate()
+    assert rl.validate()

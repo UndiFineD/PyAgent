@@ -1,4 +1,6 @@
 use pyo3::prelude::*;
+use rustfft::num_complex::Complex;
+use rustfft::FftPlanner;
 use std::f32::consts::PI;
 
 // =============================================================================
@@ -97,8 +99,7 @@ pub fn audio_mix_tracks_rust(tracks: Vec<Vec<f32>>, weights: Vec<f32>) -> Vec<f3
     mixed
 }
 
-/// Calculate Mel Spectrogram features (Placeholder/Stub for heavy computation)
-/// In a real system, this would use rustfft.
+/// Calculate Mel spectrogram features using windowed FFT and mel filterbanks.
 #[pyfunction]
 #[pyo3(signature = (samples, _sample_rate, n_mels = 80, n_fft = 400, hop_length = 160))]
 pub fn calculate_mel_features_rust(
@@ -182,35 +183,24 @@ pub fn calculate_mel_features_rust(
         filterbank.push(weights);
     }
 
-    let mut windowed = vec![0.0f32; n_fft];
+    let mut fft_buffer = vec![Complex::new(0.0f32, 0.0f32); n_fft];
     let mut power_spectrum = vec![0.0f32; n_freq_bins];
     let fft_norm = 1.0 / n_fft as f32;
+    let mut planner = FftPlanner::<f32>::new();
+    let fft = planner.plan_fft_forward(n_fft);
 
     for frame_idx in 0..num_frames {
         let start = frame_idx * hop_length;
         for i in 0..n_fft {
-            windowed[i] = samples[start + i] * hann_window[i];
+            let sample = samples[start + i] * hann_window[i];
+            fft_buffer[i] = Complex::new(sample, 0.0);
         }
 
+        fft.process(&mut fft_buffer);
+
         for (k, ps) in power_spectrum.iter_mut().enumerate().take(n_freq_bins) {
-            let omega = 2.0 * PI * k as f32 / n_fft as f32;
-            let cos_w = omega.cos();
-            let sin_w = omega.sin();
-
-            let mut c = 1.0f32;
-            let mut s = 0.0f32;
-            let mut re = 0.0f32;
-            let mut im = 0.0f32;
-
-            for &x in &windowed {
-                re += x * c;
-                im -= x * s;
-                let next_c = c * cos_w - s * sin_w;
-                s = s * cos_w + c * sin_w;
-                c = next_c;
-            }
-
-            *ps = (re * re + im * im) * fft_norm;
+            let bin = fft_buffer[k];
+            *ps = (bin.re * bin.re + bin.im * bin.im) * fft_norm;
         }
 
         let mut frame = vec![0.0f32; n_mels];

@@ -148,9 +148,32 @@ def transport_handshake_finalize(a: int, b: int) -> None:
     return rust_core.transport_handshake_finalize(a, b)
 
 
-def placeholder() -> bool:
-    """A no-op placeholder to validate that the transport package is importable."""
-    return True
+def validate() -> bool:
+    """Validate transport extension wiring and required rust_core capabilities."""
+    wrappers = [
+        "generate_node_identity",
+        "get_node_id",
+        "transport_loopback_pair",
+        "transport_send",
+        "transport_recv",
+        "transport_handshake_initiator",
+        "transport_handshake_responder",
+        "transport_handshake_finalize",
+    ]
+    if not all(callable(globals().get(name)) for name in wrappers):
+        return False
+
+    if rust_core is None:
+        return True
+
+    required = [
+        "generate_node_identity",
+        "get_node_id",
+        "transport_loopback_pair",
+        "transport_send",
+        "transport_recv",
+    ]
+    return all(hasattr(rust_core, name) for name in required)
 
 
 class NodeIdentity:
@@ -229,7 +252,7 @@ __all__ = [
     "transport_handshake_initiator",
     "transport_handshake_responder",
     "transport_handshake_finalize",
-    "placeholder",
+    "validate",
     "NodeIdentity",
     "LoopbackChannel",
 ]

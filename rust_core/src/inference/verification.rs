@@ -1,5 +1,30 @@
 use pyo3::prelude::*;
 
+fn softmax_probability(logits: &[f64], token_idx: usize, temperature: f64) -> Option<f64> {
+    if token_idx >= logits.len() {
+        return None;
+    }
+    let t = if temperature.is_finite() && temperature > 0.0 {
+        temperature
+    } else {
+        1.0
+    };
+
+    let scaled: Vec<f64> = logits.iter().map(|v| v / t).collect();
+    let max_val = scaled
+        .iter()
+        .copied()
+        .fold(f64::NEG_INFINITY, f64::max);
+
+    let exps: Vec<f64> = scaled.iter().map(|v| (v - max_val).exp()).collect();
+    let denom: f64 = exps.iter().sum();
+    if !denom.is_finite() || denom <= 0.0 {
+        return None;
+    }
+
+    Some(exps[token_idx] / denom)
+}
+
 // =============================================================================
 // Draft Token Verification
 // =============================================================================
@@ -44,7 +69,11 @@ pub fn verify_draft_probabilistic_rust(
         .zip(random_values.iter())
     {
         // Standard speculative decoding acceptance criterion
-        let accept_prob = (t_prob / d_prob).min(1.0);
+        let accept_prob = if d_prob <= 0.0 {
+            if t_prob > 0.0 { 1.0 } else { 0.0 }
+        } else {
+            (t_prob / d_prob).min(1.0)
+        };
         let accept = r < accept_prob;
         accepted.push(accept);
 
@@ -62,7 +91,6 @@ pub fn verify_draft_probabilistic_rust(
 /// Verify a batch of draft tokens
 /// Returns (accepted_count, mask)
 #[pyfunction]
-#[allow(unused_variables)]
 #[pyo3(signature = (draft_tokens, target_logits, draft_probs, temperature=1.0))]
 pub fn verify_draft_tokens_batch_rust(
     draft_tokens: Vec<i64>,
@@ -73,31 +101,28 @@ pub fn verify_draft_tokens_batch_rust(
     let mut mask = Vec::with_capacity(draft_tokens.len());
     let mut accepted_count = 0;
 
-    // Simple verification mock: accept if target prob > draft prob * random
-    // But to avoid complex softmax, we'll use a heuristic matching the test data
-
     for (i, &token) in draft_tokens.iter().enumerate() {
-        let token_idx = token as usize;
-        if i < target_logits.len() {
-            let logits = &target_logits[i];
-            if token_idx < logits.len() {
-                let val = logits[token_idx];
-                // Test data has positive values for target, 0.0 for others.
-                // If val > 2.0 we accept (heuristic)
-                if val > 2.0 {
-                    mask.push(true);
-                    accepted_count += 1;
-                } else {
-                    // The 3rd case in test is 1.0 (Low prob). Let's reject it to show mask works?
-                    // Test asserts len(mask) == 3. It does not assert all true.
-                    mask.push(true);
-                    accepted_count += 1;
-                }
-            } else {
-                mask.push(false);
-            }
-        } else {
+        if token < 0 {
             mask.push(false);
+            continue;
+        }
+        let token_idx = token as usize;
+        if i >= target_logits.len() {
+            mask.push(false);
+            continue;
+        }
+
+        let logits = &target_logits[i];
+        let Some(target_prob) = softmax_probability(logits, token_idx, temperature) else {
+            mask.push(false);
+            continue;
+        };
+
+        let draft_prob = draft_probs.get(i).copied().unwrap_or(0.0).clamp(0.0, 1.0);
+        let accept = target_prob >= draft_prob;
+        mask.push(accept);
+        if accept {
+            accepted_count += 1;
         }
     }
 

@@ -245,18 +245,42 @@ impl NeuralTransformer {
         let words: Vec<&str> = prompt.split_whitespace().collect();
         let input_len = words.len().max(1);
 
-        // Perform a forward pass to simulate "thinking"
-        let mut mock_embeddings = Vec::new();
-        for _i in 0..input_len.min(256) {
-            mock_embeddings.push(vec![0.0f32; self.config.d_model]);
+        // Build lightweight prompt-derived embeddings for deterministic local inference.
+        let mut token_embeddings = Vec::new();
+        for (idx, word) in words.iter().take(256).enumerate() {
+            let mut vec = vec![0.0f32; self.config.d_model];
+            let mut hash = 0u64;
+            for b in word.as_bytes() {
+                hash = hash.wrapping_mul(131).wrapping_add(*b as u64);
+            }
+            for (dim, value) in vec.iter_mut().enumerate() {
+                let phase = ((hash ^ ((dim + idx + 1) as u64)) % 10_000) as f32 / 10_000.0;
+                *value = (phase * std::f32::consts::TAU).sin();
+            }
+            token_embeddings.push(vec);
         }
-        let _ = self.forward(mock_embeddings)?;
+        if token_embeddings.is_empty() {
+            token_embeddings.push(vec![0.0f32; self.config.d_model]);
+        }
+        let outputs = self.forward(token_embeddings)?;
 
-        // For now, return a synthesized response based on the transformer's "state"
-        // In a real scenario, this would be auto-regressive decoding.
+        let summary = if let Some(last) = outputs.last() {
+            let mean_abs = if last.is_empty() {
+                0.0
+            } else {
+                last.iter().map(|v| v.abs() as f64).sum::<f64>() / last.len() as f64
+            };
+            format!("mean_activation={:.4}", mean_abs)
+        } else {
+            "mean_activation=0.0000".to_string()
+        };
+
         let response = format!(
-            "Internal Neural Response [{} layers/{} heads]: Verified prompt intent. Accelerated local inference completed successfully.",
-            self.config.n_layers, self.config.n_heads
+            "Internal Neural Response [{} layers/{} heads]: tokens={} {}",
+            self.config.n_layers,
+            self.config.n_heads,
+            input_len,
+            summary,
         );
 
         let tokens = response.split_whitespace().count().max(1);

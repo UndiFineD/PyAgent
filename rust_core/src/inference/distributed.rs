@@ -3,8 +3,8 @@ use std::collections::HashMap;
 
 type UintMatrix = Vec<Vec<usize>>;
 
-/// Mock All-Reduce sum for testing distributed logic
-/// Returns reduced values (summed across "ranks")
+/// All-Reduce sum implementation over local and peer vectors.
+/// Returns element-wise reduced values.
 #[pyfunction]
 pub fn all_reduce_sum_rust(local: Vec<f64>, others: Vec<Vec<f64>>) -> Vec<f64> {
     let mut sum = local.clone();
@@ -51,6 +51,12 @@ pub fn compute_balanced_packing_rust(
     num_packs: usize,
     strategy: Option<String>,
 ) -> PyResult<(UintMatrix, UintMatrix)> {
+    if num_packs == 0 {
+        return Err(PyErr::new::<pyo3::exceptions::PyValueError, _>(
+            "num_packs must be greater than zero",
+        ));
+    }
+
     let mut batch_pack_indices = Vec::new();
     let mut batch_ranks = Vec::new();
 
@@ -160,33 +166,59 @@ pub fn kv_connector_score_rust(
         .map(|b| {
             let mut score = 100.0;
 
-            // Mock scoring logic based on backend name and params
-            if b.contains("Nixl") {
-                score += 50.0;
-            }
-            if b.contains("Mooncake") {
-                score += 40.0;
-            }
-            if b.contains("P2p") {
-                score += 30.0;
+            let backend = b.to_ascii_lowercase();
+
+            let supports_local = backend.contains("shm")
+                || backend.contains("ipc")
+                || backend.contains("p2p");
+            let supports_rdma = backend.contains("rdma")
+                || backend.contains("verbs")
+                || backend.contains("p2p");
+
+            if is_local {
+                if supports_local {
+                    score += 55.0;
+                } else {
+                    score -= 25.0;
+                }
             }
 
-            if is_local && b.contains("Shm") {
-                score += 100.0;
+            if has_rdma {
+                if supports_rdma {
+                    score += 35.0;
+                } else {
+                    score -= 20.0;
+                }
             }
-            if has_rdma && (b.contains("RDMA") || b.contains("P2p")) {
+
+            let estimated_latency = if supports_local {
+                0.6
+            } else if supports_rdma {
+                1.2
+            } else {
+                4.5
+            };
+
+            if estimated_latency > latency_budget_ms {
+                let over_budget = (estimated_latency / latency_budget_ms.max(0.1)).min(10.0);
+                score /= over_budget;
+            }
+
+            if transfer_size_bytes >= 1_000_000_000 {
+                score *= 0.85;
+            } else if transfer_size_bytes >= 128_000_000 {
+                score *= 0.93;
+            }
+
+            if backend.contains("nixl") {
                 score += 20.0;
             }
-
-            let estimated_latency = if b.contains("Nixl") { 1.0 } else { 5.0 };
-            if estimated_latency > latency_budget_ms {
-                score *= 0.1;
+            if backend.contains("mooncake") {
+                score += 16.0;
             }
 
-            // Size penalty?
-            if transfer_size_bytes > 1_000_000_000 {
-                // 1GB
-                score *= 0.9;
+            if score.is_sign_negative() {
+                score = 0.0;
             }
 
             (b.clone(), score)

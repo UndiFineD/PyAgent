@@ -12,6 +12,7 @@
 // limitations under the License.
 
 use pyo3::prelude::*;
+use pyo3::exceptions::PyValueError;
 use std::collections::HashMap;
 
 #[pyfunction]
@@ -45,12 +46,29 @@ pub fn wave_sync_check_rust(ready_flags: Vec<bool>) -> PyResult<bool> {
 #[pyfunction]
 pub fn load_balance_select_rust(ranks: Vec<usize>, loads: Vec<f64>) -> PyResult<usize> {
     // Phase 55: P2C selection logic in Rust
-    if ranks.len() < 2 {
+    if ranks.is_empty() {
+        return Err(PyValueError::new_err("ranks must not be empty"));
+    }
+    if ranks.len() != loads.len() {
+        return Err(PyValueError::new_err(
+            "ranks and loads must have the same length",
+        ));
+    }
+    if ranks.len() == 1 {
         return Ok(ranks[0]);
     }
-    // Simple mock P2C for now
-    let c1 = 0;
-    let c2 = 1;
+
+    // Deterministic two-choice candidate selection based on rank distribution.
+    let len = ranks.len();
+    let seed = ranks
+        .iter()
+        .fold(0usize, |acc, rank| acc.wrapping_mul(31).wrapping_add(*rank));
+    let c1 = seed % len;
+    let mut c2 = (seed / len).wrapping_add(1) % len;
+    if c1 == c2 {
+        c2 = (c1 + 1) % len;
+    }
+
     if loads[c1] < loads[c2] {
         Ok(ranks[c1])
     } else {

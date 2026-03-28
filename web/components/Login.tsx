@@ -3,18 +3,19 @@ import { Lock, Github, Chrome } from 'lucide-react';
 import { cn } from '../utils';
 
 interface LoginProps {
-  onLogin: () => void;
+  onLogin: () => void | Promise<void>;
 }
 
 export const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setIsLoading(true);
-    // Simulate OAuth delay
-    setTimeout(() => {
-      onLogin();
-    }, 1500);
+    try {
+      await Promise.resolve(onLogin());
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

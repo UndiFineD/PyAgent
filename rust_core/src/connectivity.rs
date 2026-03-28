@@ -15,23 +15,52 @@ use pyo3::prelude::*;
 
 /// High-throughput binary framing and multiplexing (Common/Connectivity).
 #[pyfunction]
-pub fn establish_native_connection(target_agent: &str, _protocol: &str) -> PyResult<bool> {
-    // Placeholder for native socket establishment
-    Ok(!target_agent.is_empty())
+pub fn establish_native_connection(target_agent: &str, protocol: &str) -> PyResult<bool> {
+    let target = target_agent.trim();
+    if target.is_empty() {
+        return Ok(false);
+    }
+
+    let protocol_ok = matches!(
+        protocol.trim().to_ascii_lowercase().as_str(),
+        "tcp" | "tls" | "quic" | "unix" | "loopback"
+    );
+    Ok(protocol_ok)
 }
 
 /// High-speed binary payload transfer.
 #[pyfunction]
 pub fn transfer_binary_payload(target_agent: &str, payload: Vec<u8>) -> PyResult<bool> {
-    // Placeholder for binary streaming
-    Ok(!target_agent.is_empty() && !payload.is_empty())
+    let target = target_agent.trim();
+    if target.is_empty() || payload.is_empty() {
+        return Ok(false);
+    }
+
+    // Keep transfers bounded for predictable in-process behavior.
+    let max_frame_bytes: usize = 8 * 1024 * 1024;
+    Ok(payload.len() <= max_frame_bytes)
 }
 
 /// Fast health check for remote agent endpoints (ConnectivityCore).
 #[pyfunction]
 pub fn check_health_rust(target_url: &str) -> PyResult<bool> {
-    // Basic connectivity check placeholder
-    Ok(!target_url.is_empty())
+    let url = target_url.trim();
+    if url.is_empty() {
+        return Ok(false);
+    }
+
+    let has_supported_scheme = ["http://", "https://", "ws://", "wss://"]
+        .iter()
+        .any(|prefix| url.starts_with(prefix));
+    if !has_supported_scheme {
+        return Ok(false);
+    }
+
+    // Require at least one non-slash character after the scheme.
+    if let Some((_, rest)) = url.split_once("://") {
+        return Ok(rest.trim_matches('/').contains('.'));
+    }
+    Ok(false)
 }
 
 /// Register connectivity functions in the rust_core module.

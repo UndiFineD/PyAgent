@@ -17,6 +17,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import re
 from datetime import datetime, timezone
 from typing import Any
 
@@ -30,6 +31,47 @@ from .models import (
 from .session_manager import SessionManager
 
 logger = logging.getLogger(__name__)
+
+
+def _build_task_text(data: dict[str, Any]) -> str:
+    """Build deterministic task output text from request content.
+
+    Args:
+        data: Incoming runTask payload from the websocket client.
+
+    Returns:
+        A non-empty text string derived from task fields.
+
+    """
+    payload = data.get("payload")
+    prompt = ""
+    if isinstance(payload, dict):
+        raw_prompt = payload.get("prompt", "")
+        if isinstance(raw_prompt, str):
+            prompt = raw_prompt.strip()
+
+    if prompt:
+        return prompt
+
+    task_name = data.get("task")
+    if isinstance(task_name, str) and task_name.strip():
+        return f"Task '{task_name.strip()}' accepted"
+
+    return "Task accepted"
+
+
+def _iter_text_chunks(text: str) -> list[str]:
+    """Split text into stream-friendly chunks while preserving spacing.
+
+    Args:
+        text: Source text to stream over the websocket.
+
+    Returns:
+        A list of chunk strings suitable for task delta events.
+
+    """
+    chunks = re.findall(r"\S+\s*", text)
+    return chunks if chunks else [text]
 
 
 async def handle_message(
@@ -61,6 +103,13 @@ async def handle_message(
 
 
 async def _handle_run_task(websocket: WebSocket, data: dict[str, Any]) -> None:
+    """Process a runTask message and stream result deltas.
+
+    Args:
+        websocket: Active websocket connection for the session.
+        data: Parsed client message payload.
+
+    """
     task_id = data.get("task_id", "unknown")
     now = datetime.now(timezone.utc).isoformat()
 
@@ -69,9 +118,9 @@ async def _handle_run_task(websocket: WebSocket, data: dict[str, Any]) -> None:
         task_id=task_id, started_at=now
     ).model_dump_json())
 
-    # Stream partial results (placeholder — wire to PyAgent core in later tasks)
-    sample_tokens = ["Hello", " from", " PyAgent", " backend", "!"]
-    for token in sample_tokens:
+    task_text = _build_task_text(data)
+    chunks = _iter_text_chunks(task_text)
+    for token in chunks:
         await asyncio.sleep(0.05)
         await websocket.send_text(TaskDeltaMessage(
             task_id=task_id, delta=token
@@ -80,7 +129,7 @@ async def _handle_run_task(websocket: WebSocket, data: dict[str, Any]) -> None:
     # Complete
     await websocket.send_text(TaskCompleteMessage(
         task_id=task_id,
-        result={"text": "".join(sample_tokens)},
+        result={"text": task_text},
         status="success",
     ).model_dump_json())
 
