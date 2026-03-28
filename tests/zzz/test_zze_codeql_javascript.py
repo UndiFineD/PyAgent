@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""CodeQL meta-test: validates Rust database is fresh and analysis is clean.
+"""CodeQL meta-test: validates JavaScript database is fresh and analysis is clean.
 
 Set CODEQL_SKIP=1 to bypass entirely.
 Set CODEQL_REBUILD=1 to force a database rebuild even when the SARIF is fresh.
@@ -25,7 +25,7 @@ from pathlib import Path
 
 import pytest
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 def _resolve_codeql_exe() -> Path:
@@ -40,9 +40,9 @@ def _resolve_codeql_exe() -> Path:
 
 
 CODEQL_EXE = _resolve_codeql_exe()
-DB_PATH = REPO_ROOT / "databases" / "rust-db"
-SARIF_PATH = REPO_ROOT / "results" / "rust.sarif"
-SOURCE_ROOT = REPO_ROOT / "rust_core"
+DB_PATH = REPO_ROOT / "databases" / "javascript-db"
+SARIF_PATH = REPO_ROOT / "results" / "javascript.sarif"
+SOURCE_ROOT = REPO_ROOT / "web"
 MAX_SARIF_AGE_HOURS = 24
 
 
@@ -62,7 +62,7 @@ def _rebuild_db() -> None:
         [
             str(CODEQL_EXE),
             "database", "create", str(DB_PATH),
-            "--language=rust",
+            "--language=javascript",
             f"--source-root={SOURCE_ROOT}",
             "--overwrite",
         ],
@@ -78,11 +78,10 @@ def _run_analysis() -> None:
         [
             str(CODEQL_EXE),
             "database", "analyze", str(DB_PATH),
-            "codeql/rust-queries:codeql-suites/rust-security-and-quality.qls",
+            "codeql/javascript-queries:codeql-suites/javascript-security-and-quality.qls",
             "--format=sarif-latest",
             f"--output={SARIF_PATH}",
             "--threads=2",
-            "--ram=4096",
         ],
         check=True,
         capture_output=True,
@@ -91,8 +90,8 @@ def _run_analysis() -> None:
     )
 
 
-def test_rust_sarif_is_fresh_or_rebuilt() -> None:
-    """Rust SARIF must exist and be < 24h old, or be rebuilt now."""
+def test_javascript_sarif_is_fresh_or_rebuilt() -> None:
+    """JavaScript SARIF must exist and be < 24h old, or be rebuilt now."""
     if os.environ.get("CODEQL_SKIP"):
         pytest.skip("CODEQL_SKIP is set")
     if not _codeql_available():
@@ -105,67 +104,70 @@ def test_rust_sarif_is_fresh_or_rebuilt() -> None:
         reason = "CODEQL_REBUILD set" if force_rebuild else (
             "SARIF missing" if age is None else f"SARIF is {age:.1f}h old (>{MAX_SARIF_AGE_HOURS}h)"
         )
-        print(f"\nRebuilding Rust CodeQL database: {reason}")
+        print(f"\nRebuilding JavaScript CodeQL database: {reason}")
         try:
             _rebuild_db()
             _run_analysis()
         except subprocess.CalledProcessError as exc:
-            pytest.fail(f"CodeQL Rust build/analysis failed:\n{exc.stderr}")
+            pytest.fail(f"CodeQL JavaScript build/analysis failed:\n{exc.stderr}")
 
-    assert SARIF_PATH.exists(), "Rust SARIF was not produced"
+    assert SARIF_PATH.exists(), "JavaScript SARIF was not produced"
     age_after = _sarif_age_hours()
     assert age_after is not None and age_after <= MAX_SARIF_AGE_HOURS, (
-        f"Rust SARIF is {age_after:.1f}h old — run with CODEQL_REBUILD=1 to refresh"
+        f"JavaScript SARIF is {age_after:.1f}h old — run with CODEQL_REBUILD=1 to refresh"
     )
 
 
-def test_rust_sarif_execution_succeeded() -> None:
-    """The Rust analysis run must have completed without errors."""
+def test_javascript_sarif_execution_succeeded() -> None:
+    """The JavaScript analysis run must have completed without errors."""
     if os.environ.get("CODEQL_SKIP"):
         pytest.skip("CODEQL_SKIP is set")
     if not SARIF_PATH.exists():
-        pytest.skip("Rust SARIF not found")
+        pytest.skip("JavaScript SARIF not found")
 
     sarif = json.loads(SARIF_PATH.read_text(encoding="utf-8"))
     run = sarif["runs"][0]
     invocations = run.get("invocations", [])
-    assert invocations, "No invocation metadata in Rust SARIF"
+    assert invocations, "No invocation metadata in JavaScript SARIF"
     assert invocations[0].get("executionSuccessful") is True, (
-        "Rust CodeQL analysis did not complete successfully"
+        "JavaScript CodeQL analysis did not complete successfully"
     )
 
 
-def test_rust_sarif_scanned_files() -> None:
-    """Rust SARIF must reference at least one artifact."""
+def test_javascript_sarif_scanned_files() -> None:
+    """JavaScript SARIF must reference at least one artifact."""
     if os.environ.get("CODEQL_SKIP"):
         pytest.skip("CODEQL_SKIP is set")
     if not SARIF_PATH.exists():
-        pytest.skip("Rust SARIF not found")
+        pytest.skip("JavaScript SARIF not found")
 
     sarif = json.loads(SARIF_PATH.read_text(encoding="utf-8"))
     artifacts = sarif["runs"][0].get("artifacts", [])
-    assert len(artifacts) > 0, "Rust SARIF contains no scanned artifacts"
+    assert len(artifacts) > 0, "JavaScript SARIF contains no scanned artifacts"
 
 
-def test_rust_no_security_findings() -> None:
-    """No security findings of any kind in Rust (higher bar than other langs)."""
+def test_javascript_no_new_security_findings() -> None:
+    """No HIGH/CRITICAL security findings in JavaScript."""
     if os.environ.get("CODEQL_SKIP"):
         pytest.skip("CODEQL_SKIP is set")
     if not SARIF_PATH.exists():
-        pytest.skip("Rust SARIF not found")
+        pytest.skip("JavaScript SARIF not found")
 
     _security_rule_prefixes = (
-        "rust/sql-injection",
-        "rust/path-injection",
-        "rust/command-injection",
-        "rust/reflected-xss",
-        "rust/clear-text-logging",
-        "rust/clear-text-storage",
-        "rust/weak-cryptographic-algorithm",
-        "rust/hardcoded-credentials",
-        "rust/use-of-http",
-        "rust/cleartext-transmission",
-        "rust/disabled-certificate-check",
+        "js/sql-injection",
+        "js/code-injection",
+        "js/path-injection",
+        "js/command-injection",
+        "js/reflected-xss",
+        "js/stored-xss",
+        "js/xxe",
+        "js/server-side-request-forgery",
+        "js/clear-text-logging",
+        "js/clear-text-storage",
+        "js/weak-cryptographic-algorithm",
+        "js/hardcoded-credentials",
+        "js/prototype-pollution",
+        "js/request-forgery",
     )
 
     sarif = json.loads(SARIF_PATH.read_text(encoding="utf-8"))
@@ -180,4 +182,4 @@ def test_rust_no_security_findings() -> None:
             f":{r['locations'][0]['physicalLocation']['region']['startLine']}"
             for r in security_findings
         )
-        pytest.fail(f"Rust security findings detected:\n{details}")
+        pytest.fail(f"JavaScript security findings detected:\n{details}")

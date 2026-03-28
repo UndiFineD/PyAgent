@@ -29,7 +29,7 @@ from typing import NamedTuple
 
 import pytest
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parents[2]
 RESULTS_DIR = REPO_ROOT / "results"
 MAX_SARIF_AGE_HOURS = 24
 
@@ -96,7 +96,7 @@ def test_all_sarif_files_exist() -> None:
 
     missing = [str(s.path) for s in _SARIF_SPECS if not s.path.exists()]
     assert not missing, (
-        "Missing SARIF files (run tests/test_zzd/e/f to generate them):\n"
+        "Missing SARIF files (run tests/zzz/test_zzd/e/f to generate them):\n"
         + "\n".join(f"  {p}" for p in missing)
     )
 

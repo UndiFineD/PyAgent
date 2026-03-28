@@ -10,7 +10,7 @@ import pytest
 
 def test_flake8_repo_config_has_no_repo_issues() -> None:
     """Ensure the checked-in flake8 config is usable on project-owned files."""
-    repo_root = Path(__file__).resolve().parents[1]
+    repo_root = Path(__file__).resolve().parents[2]
     repo_config = repo_root / ".flake8"
     assert repo_config.exists(), "Expected a repo-level .flake8 file"
 
@@ -29,7 +29,7 @@ def test_flake8_repo_config_has_no_repo_issues() -> None:
         assert expected_setting in config_text, f"Missing expected flake8 setting: {expected_setting}"
 
     smoke_targets = [
-        str(repo_root / "tests" / "test_zzc_flake8_config.py"),
+        str(repo_root / "tests" / "zzz" / "test_zzc_flake8_config.py"),
     ]
 
     res = subprocess.run(

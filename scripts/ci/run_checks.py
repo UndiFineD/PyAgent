@@ -78,24 +78,24 @@ PRECOMMIT_TEST_FILES = [
     # "tests/test_precommit.py"
     # "tests/test_coverage_meta.py"
     # no need to duplicate these test
-    # "tests/test_zza_lint_config.py",
-    # "tests/test_zzb_mypy_config.py",
-    # "tests/ztest_zzz_tests_quality.py",
+    # "tests/zzz/test_zza_lint_config.py",
+    # "tests/zzz/test_zzb_mypy_config.py",
+    # "tests/zzz/ztest_zzz_tests_quality.py",
     # CodeQL SARIF gate (also in CODEQL_TEST_FILES, included here for full CI)
-    "tests/test_zze_codeql_javascript.py",
-    "tests/test_zzf_codeql_rust.py",
-    "tests/test_zzg_codeql_sarif_gate.py",
-    "tests/test_zzd_codeql_python.py",
+    "tests/zzz/test_zze_codeql_javascript.py",
+    "tests/zzz/test_zzf_codeql_rust.py",
+    "tests/zzz/test_zzg_codeql_sarif_gate.py",
+    "tests/zzz/test_zzd_codeql_python.py",
 ]
 
 # CodeQL SARIF gate tests — fast (read-only JSON checks, no rebuild).
 # The per-language rebuild tests (zzd/e/f) are listed here but skip automatically
 # when SARIF is fresh; they only rebuild when SARIF is missing or >24h old.
 CODEQL_TEST_FILES = [
-    "tests/test_zzd_codeql_python.py",
-    "tests/test_zze_codeql_javascript.py",
-    "tests/test_zzf_codeql_rust.py",
-    "tests/test_zzg_codeql_sarif_gate.py",
+    "tests/zzz/test_zzd_codeql_python.py",
+    "tests/zzz/test_zze_codeql_javascript.py",
+    "tests/zzz/test_zzf_codeql_rust.py",
+    "tests/zzz/test_zzg_codeql_sarif_gate.py",
 ]
 
 

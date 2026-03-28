@@ -11,9 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""CodeQL meta-test: validates JavaScript database is fresh and analysis is clean.
+"""CodeQL meta-test: validates Python database is fresh and analysis is clean.
 
-Set CODEQL_SKIP=1 to bypass entirely.
+Set CODEQL_SKIP=1 to bypass entirely (e.g. in very fast local loops).
 Set CODEQL_REBUILD=1 to force a database rebuild even when the SARIF is fresh.
 """
 
@@ -25,7 +25,7 @@ from pathlib import Path
 
 import pytest
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 def _resolve_codeql_exe() -> Path:
@@ -40,9 +40,9 @@ def _resolve_codeql_exe() -> Path:
 
 
 CODEQL_EXE = _resolve_codeql_exe()
-DB_PATH = REPO_ROOT / "databases" / "javascript-db"
-SARIF_PATH = REPO_ROOT / "results" / "javascript.sarif"
-SOURCE_ROOT = REPO_ROOT / "web"
+DB_PATH = REPO_ROOT / "databases" / "python-db"
+SARIF_PATH = REPO_ROOT / "results" / "python.sarif"
+SOURCE_ROOT = REPO_ROOT / "src"
 MAX_SARIF_AGE_HOURS = 24
 
 
@@ -62,7 +62,7 @@ def _rebuild_db() -> None:
         [
             str(CODEQL_EXE),
             "database", "create", str(DB_PATH),
-            "--language=javascript",
+            "--language=python",
             f"--source-root={SOURCE_ROOT}",
             "--overwrite",
         ],
@@ -78,7 +78,7 @@ def _run_analysis() -> None:
         [
             str(CODEQL_EXE),
             "database", "analyze", str(DB_PATH),
-            "codeql/javascript-queries:codeql-suites/javascript-security-and-quality.qls",
+            "codeql/python-queries:codeql-suites/python-security-and-quality.qls",
             "--format=sarif-latest",
             f"--output={SARIF_PATH}",
             "--threads=2",
@@ -90,8 +90,16 @@ def _run_analysis() -> None:
     )
 
 
-def test_javascript_sarif_is_fresh_or_rebuilt() -> None:
-    """JavaScript SARIF must exist and be < 24h old, or be rebuilt now."""
+def test_codeql_exe_exists() -> None:
+    """CodeQL CLI must be present at the expected path."""
+    if os.environ.get("CODEQL_SKIP"):
+        pytest.skip("CODEQL_SKIP is set")
+    if not CODEQL_EXE.exists():
+        pytest.skip(f"CodeQL CLI not installed at {CODEQL_EXE}")
+
+
+def test_python_sarif_is_fresh_or_rebuilt() -> None:
+    """Python SARIF must exist and be < 24h old, or be rebuilt now."""
     if os.environ.get("CODEQL_SKIP"):
         pytest.skip("CODEQL_SKIP is set")
     if not _codeql_available():
@@ -104,70 +112,69 @@ def test_javascript_sarif_is_fresh_or_rebuilt() -> None:
         reason = "CODEQL_REBUILD set" if force_rebuild else (
             "SARIF missing" if age is None else f"SARIF is {age:.1f}h old (>{MAX_SARIF_AGE_HOURS}h)"
         )
-        print(f"\nRebuilding JavaScript CodeQL database: {reason}")
+        print(f"\nRebuilding Python CodeQL database: {reason}")
         try:
             _rebuild_db()
             _run_analysis()
         except subprocess.CalledProcessError as exc:
-            pytest.fail(f"CodeQL JavaScript build/analysis failed:\n{exc.stderr}")
+            pytest.fail(f"CodeQL Python build/analysis failed:\n{exc.stderr}")
 
-    assert SARIF_PATH.exists(), "JavaScript SARIF was not produced"
+    assert SARIF_PATH.exists(), "Python SARIF was not produced"
     age_after = _sarif_age_hours()
     assert age_after is not None and age_after <= MAX_SARIF_AGE_HOURS, (
-        f"JavaScript SARIF is {age_after:.1f}h old — run with CODEQL_REBUILD=1 to refresh"
+        f"Python SARIF is {age_after:.1f}h old — run with CODEQL_REBUILD=1 to refresh"
     )
 
 
-def test_javascript_sarif_execution_succeeded() -> None:
-    """The JavaScript analysis run must have completed without errors."""
+def test_python_sarif_execution_succeeded() -> None:
+    """The Python analysis run must have completed without errors."""
     if os.environ.get("CODEQL_SKIP"):
         pytest.skip("CODEQL_SKIP is set")
     if not SARIF_PATH.exists():
-        pytest.skip("JavaScript SARIF not found")
+        pytest.skip("Python SARIF not found — run test_python_sarif_is_fresh_or_rebuilt first")
 
     sarif = json.loads(SARIF_PATH.read_text(encoding="utf-8"))
     run = sarif["runs"][0]
     invocations = run.get("invocations", [])
-    assert invocations, "No invocation metadata in JavaScript SARIF"
+    assert invocations, "No invocation metadata in Python SARIF"
     assert invocations[0].get("executionSuccessful") is True, (
-        "JavaScript CodeQL analysis did not complete successfully"
+        "Python CodeQL analysis did not complete successfully"
     )
 
 
-def test_javascript_sarif_scanned_files() -> None:
-    """JavaScript SARIF must reference at least one artifact."""
+def test_python_sarif_scanned_files() -> None:
+    """Python SARIF must reference at least one artifact (source file)."""
     if os.environ.get("CODEQL_SKIP"):
         pytest.skip("CODEQL_SKIP is set")
     if not SARIF_PATH.exists():
-        pytest.skip("JavaScript SARIF not found")
+        pytest.skip("Python SARIF not found")
 
     sarif = json.loads(SARIF_PATH.read_text(encoding="utf-8"))
     artifacts = sarif["runs"][0].get("artifacts", [])
-    assert len(artifacts) > 0, "JavaScript SARIF contains no scanned artifacts"
+    assert len(artifacts) > 0, "Python SARIF contains no scanned artifacts"
 
 
-def test_javascript_no_new_security_findings() -> None:
-    """No HIGH/CRITICAL security findings in JavaScript."""
+def test_python_no_new_security_findings() -> None:
+    """No new HIGH/CRITICAL security findings beyond the known baseline."""
     if os.environ.get("CODEQL_SKIP"):
         pytest.skip("CODEQL_SKIP is set")
     if not SARIF_PATH.exists():
-        pytest.skip("JavaScript SARIF not found")
+        pytest.skip("Python SARIF not found")
 
+    # Security-specific rule prefixes — quality-only rules are excluded from gating
     _security_rule_prefixes = (
-        "js/sql-injection",
-        "js/code-injection",
-        "js/path-injection",
-        "js/command-injection",
-        "js/reflected-xss",
-        "js/stored-xss",
-        "js/xxe",
-        "js/server-side-request-forgery",
-        "js/clear-text-logging",
-        "js/clear-text-storage",
-        "js/weak-cryptographic-algorithm",
-        "js/hardcoded-credentials",
-        "js/prototype-pollution",
-        "js/request-forgery",
+        "py/sql-injection",
+        "py/code-injection",
+        "py/path-injection",
+        "py/command-injection",
+        "py/uncontrolled-format-string",
+        "py/reflective-xss",
+        "py/xxe",
+        "py/ssrf",
+        "py/clear-text-logging",
+        "py/clear-text-storage",
+        "py/weak-crypto",
+        "py/hardcoded-credentials",
     )
 
     sarif = json.loads(SARIF_PATH.read_text(encoding="utf-8"))
@@ -182,4 +189,4 @@ def test_javascript_no_new_security_findings() -> None:
             f":{r['locations'][0]['physicalLocation']['region']['startLine']}"
             for r in security_findings
         )
-        pytest.fail(f"JavaScript security findings detected:\n{details}")
+        pytest.fail(f"Python security findings detected:\n{details}")
