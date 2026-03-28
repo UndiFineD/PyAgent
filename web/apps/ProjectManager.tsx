@@ -54,6 +54,8 @@ interface Idea {
 // ── Constants ────────────────────────────────────────────────────────────────
 
 const LANES: Lane[] = ['Ideas', 'Discovery', 'Design', 'In Sprint', 'Review', 'Released', 'Archived'];
+const FLOW_LANES: Lane[] = ['Discovery', 'Design', 'In Sprint'];
+const BOARD_LANES: Lane[] = ['Review', 'Released', 'Archived'];
 const PRIORITIES: Priority[] = ['P1', 'P2', 'P3', 'P4'];
 const BUDGET_TIERS: BudgetTier[] = ['XS', 'S', 'M', 'L', 'XL', 'unknown'];
 
@@ -451,6 +453,72 @@ const LaneColumn: React.FC<LaneColumnProps> = ({ lane, projects, onEdit, onDragS
   );
 };
 
+interface FlowColumnProps {
+  projectsByLane: Record<Lane, Project[]>;
+  onEdit: (p: Project) => void;
+  onDragStart: (id: string) => void;
+  onDrop: (lane: Lane) => void;
+}
+
+const FlowColumn: React.FC<FlowColumnProps> = ({ projectsByLane, onEdit, onDragStart, onDrop }) => {
+  const [over, setOver] = useState(false);
+  const total = FLOW_LANES.reduce((sum, lane) => sum + projectsByLane[lane].length, 0);
+
+  return (
+    <div
+      className={cn(
+        'min-w-[280px] w-72 flex flex-col shrink-0 rounded-lg transition-colors',
+        over && 'ring-2 ring-os-accent/60 bg-os-accent/5',
+      )}
+      onDragOver={e => { e.preventDefault(); setOver(true); }}
+      onDragLeave={() => setOver(false)}
+      onDrop={e => {
+        e.preventDefault();
+        setOver(false);
+        // Dropping on the combined flow moves work to the first lane in the sequence.
+        onDrop('Discovery');
+      }}
+    >
+      <div
+        className="flex items-center justify-between px-3 py-2 rounded-t-lg mb-2 text-black"
+        style={{ backgroundColor: '#a78bfa' }}
+      >
+        <span className="text-xs font-bold uppercase tracking-wide">Flow (Discovery to Design to In Sprint)</span>
+        <span className="text-xs font-mono bg-black/20 rounded-full px-2 py-0.5">{total}</span>
+      </div>
+      <div className="flex-1 overflow-y-auto min-h-[60px] max-h-[calc(100vh-240px)] px-2 pb-2 space-y-2">
+        {total === 0 && (
+          <div className={cn(
+            'text-[10px] text-os-text/30 text-center py-6 italic border-2 border-dashed rounded-lg',
+            over ? 'border-os-accent/40' : 'border-os-border/30'
+          )}>
+            drop here
+          </div>
+        )}
+
+        {FLOW_LANES.map(lane => (
+          <div key={lane} className="border border-os-border/60 rounded-md bg-os-bg/25">
+            <div
+              className="flex items-center justify-between px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-black rounded-t-md"
+              style={{ backgroundColor: LANE_COLORS[lane] }}
+            >
+              <span>{lane}</span>
+              <span className="font-mono bg-black/20 rounded-full px-1.5 py-0.5">{projectsByLane[lane].length}</span>
+            </div>
+            <div className="p-1">
+              {projectsByLane[lane].length === 0
+                ? <div className="text-[10px] text-os-text/30 italic text-center py-2">empty</div>
+                : projectsByLane[lane].map(p => (
+                  <ProjectCard key={p.id} project={p} onEdit={onEdit} onDragStart={onDragStart} />
+                ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 interface IdeasColumnProps {
   ideas: Idea[];
   ideasLoading: boolean;
@@ -741,7 +809,13 @@ export const ProjectManager: React.FC = () => {
         <div className="flex-1 overflow-x-auto overflow-y-hidden">
           <div className="flex gap-3 h-full">
             <IdeasColumn ideas={ideas} ideasLoading={ideasLoading} ideasError={ideasError} />
-            {LANES.filter(lane => lane !== 'Ideas').map(lane => (
+            <FlowColumn
+              projectsByLane={byLane}
+              onEdit={p => setEditTarget(p)}
+              onDragStart={id => { dragId.current = id; }}
+              onDrop={handleDrop}
+            />
+            {BOARD_LANES.map(lane => (
               <LaneColumn
                 key={lane}
                 lane={lane}
