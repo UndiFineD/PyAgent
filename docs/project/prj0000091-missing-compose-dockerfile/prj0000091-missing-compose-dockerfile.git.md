@@ -1,6 +1,6 @@
 # prj0000091-missing-compose-dockerfile - Git Summary
 
-_Status: BLOCKED_
+_Status: DONE_
 _Git: @9git | Updated: 2026-03-28_
 
 ## Branch Plan
@@ -32,6 +32,7 @@ _Git: @9git | Updated: 2026-03-28_
 | Command | Timestamp | Result | Failing hook/check |
 |---|---|---|---|
 | `pre-commit run --files $(git diff --cached --name-only)` | `2026-03-28 09:54:45 +00:00` | FAIL | Repository-wide lint checks (Ruff) failed on pre-existing files under `tests/` outside the staged scope. |
+| `python -m pre_commit run --files docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.git.md docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.project.md` | `2026-03-28 09:57:55 +00:00` | FAIL | `ruff check src tests` reported repository baseline violations outside staged files. |
 
 ## Staged-file Scope Manifest
 | File | Scope-boundary reason |
@@ -60,8 +61,14 @@ _Git: @9git | Updated: 2026-03-28_
 | `docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.think.md` | Project artifact under project folder scope. |
 | `tests/deploy/test_compose_dockerfile_paths.py` | Explicitly in project scope. |
 
+## Reconciliation Attempt Scope Manifest
+| File | Scope-boundary reason |
+|---|---|
+| `docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.git.md` | Project artifact reconciliation under project folder scope. |
+| `docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.project.md` | Project artifact reconciliation under project folder scope. |
+
 ## Commit Hash
-`N/A - blocked by pre-commit`
+`8f4cb82b3`
 
 ## Files Changed
 | File | Change |
@@ -91,13 +98,19 @@ _Git: @9git | Updated: 2026-03-28_
 | `tests/deploy/test_compose_dockerfile_paths.py` | added |
 
 ## PR Link
-N/A - commit blocked; no PR action taken
+N/A - local commit complete, PR not opened yet
 
 ## Legacy Branch Exception
 None
 
 ## Failure Disposition
-Blocked at mandatory post-staging pre-commit gate. Repo-wide lint errors in pre-existing `tests/` files outside this project's staged scope prevent commit under policy.
+Artifact reconciliation follow-up commit blocked at mandatory post-staging `pre-commit` gate because configured hooks run repository-wide (`ruff check src tests`) and fail on pre-existing baseline issues outside this project scope.
 
 ## Lessons Learned
 Mandatory dashboard refresh can introduce out-of-scope generated files; validate and stage only scope-approved paths. Also expect repo-wide hooks to block scoped commits when baseline lint debt exists.
+
+## Local Commit State
+- Terminal state: COMMITTED_LOCAL
+- Latest project commit: `8f4cb82b3` (`chore(deploy): fix compose dockerfile reference`)
+- PR status: not opened
+- Artifact reconciliation commit: BLOCKED_PRECOMMIT (no additional commit hash)

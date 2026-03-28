@@ -1,7 +1,7 @@
 # missing-compose-dockerfile - Project Overview
 
-_Status: BLOCKED_PRECOMMIT_GATE_
-_Owner: @2think | Updated: 2026-03-28_
+_Status: COMMITTED_LOCAL_
+_Owner: @9git | Updated: 2026-03-28_
 
 ## Project Identity
 **Project ID:** prj0000091
@@ -56,7 +56,7 @@ Initialize the next queued idea as a governed project workstream to fix the brok
 | M5 | Code implemented | @6code | DONE |
 | M6 | Integration validated | @7exec | DONE |
 | M7 | Security clean | @8ql | DONE |
-| M8 | Committed | @9git | BLOCKED |
+| M8 | Committed | @9git | DONE |
 
 ## Artifacts
 - Canonical options: docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.think.md
@@ -77,4 +77,4 @@ Initialize the next queued idea as a governed project workstream to fix the brok
 _Last updated: 2026-03-28_
 @8ql quality/security gate completed. Branch validation passed, scoped acceptance tests passed (`2 passed`), workflow-injection review was not applicable (no workflow file changes), and dependency baseline reported zero CVEs. Non-blocking advisories were recorded for container hardening (`deploy/Dockerfile.pyagent` runtime user not set to non-root) and mutable image tagging (`ollama:latest`).
 
-@9git branch and scope validation passed, but mandatory post-staging `pre-commit` failed on existing repository-wide lint debt in `tests/` files outside this project scope. Commit is blocked until the pre-commit baseline is remediated or governance overrides this gate.
+@9git completed local commit reconciliation. Project change commit recorded as `8f4cb82b3` (`chore(deploy): fix compose dockerfile reference`). Project is now in terminal pre-PR state (`COMMITTED_LOCAL`); pull request has not been opened yet.
