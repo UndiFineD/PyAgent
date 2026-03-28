@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-28 | Total projects: 92 | prj0000092 -> Discovery (@2think queued)_
+_Last updated: 2026-03-28 | Total projects: 93 | prj0000093 added to Discovery_
 
 ## How to use this board
 
@@ -56,8 +56,7 @@ Active options exploration — @2think is working or has completed .think.md.
 
 | ID | Name | Summary | Branch | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|---|
-| prj0000092 | mypy-strict-enforcement | Progressive mypy strictness enforcement starting in src/core with deterministic guardrails and phased rollout governance | prj0000092-mypy-strict-enforcement | P1 | M | typing,mypy,quality-gate | 2026-03-28 |
-
+| prj0000093 | projectmanager-ideas-autosync | Project Manager auto-ingests docs/project/ideas and excludes implemented ideas | prj0000093-projectmanager-ideas-autosync | P2 | M | project-manager, ideas, autosync | 2026-03-28 |
 
 
 ---
@@ -77,8 +76,7 @@ Active implementation — @4plan through @6code are working.
 
 | ID | Name | Summary | Branch | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
-| prj0000091 | missing-compose-dockerfile | Fix deploy compose reference to non-existent Dockerfile and restore clean-checkout compose viability | prj0000091-missing-compose-dockerfile | P1 | S | 2026-03-28 |
-| prj0000090 | private-key-remediation | Remediate committed private key exposure, rotate compromised credentials, and add secret-scan guardrails in commit/CI workflows | prj0000090-private-key-remediation | P1 | M | 2026-03-28 |
+
 
 ---
 
@@ -98,6 +96,9 @@ All projects merged to main branch.
 
 | ID | Name | Summary | Branch | PR | Priority | Budget | Released |
 |---|---|---|---|---|---|---|---|
+| prj0000092 | mypy-strict-enforcement | Progressive mypy strictness enforcement starting in src/core with deterministic guardrails and phased rollout governance | merged | [#237](https://github.com/UndiFineD/PyAgent/pull/237) | P1 | M | 2026-03-28 |
+| prj0000091 | missing-compose-dockerfile | Fix deploy compose reference to non-existent Dockerfile and restore clean-checkout compose viability | merged | [#235](https://github.com/UndiFineD/PyAgent/pull/235) [#236](https://github.com/UndiFineD/PyAgent/pull/236) | P1 | S | 2026-03-28 |
+| prj0000090 | private-key-remediation | Remediate committed private key exposure, rotate compromised credentials, and add secret-scan guardrails in commit/CI workflows | merged | [#233](https://github.com/UndiFineD/PyAgent/pull/233) [#234](https://github.com/UndiFineD/PyAgent/pull/234) | P1 | M | 2026-03-28 |
 | prj0000089 | agent-learning-loop | Agent learning-loop governance rollout across all role definitions plus quality-gate test remediations; pytest maxfail run stabilized | merged | [#231](https://github.com/UndiFineD/PyAgent/pull/231) | P2 | M | 2026-03-27 |
 | prj0000088 | ai-fuzzing-security | Deterministic local fuzzing core with guarded mutation strategies, corpus scheduling, and safety policy; 99.06% cov | merged | [#230](https://github.com/UndiFineD/PyAgent/pull/230) | P3 | M | 2026-03-27 |
 | prj0000087 | n8n-workflow-bridge | Bi-directional n8n bridge core with config, event adaptation, HTTP client, and mixin orchestration; 99.11% cov | merged | [#229](https://github.com/UndiFineD/PyAgent/pull/229) | P3 | M | 2026-03-27 |
@@ -206,11 +207,11 @@ Stalled, cancelled, or superseded projects.
 | Ideas | 0 |
 | Discovery | 1 |
 | Design | 0 |
-| In Sprint | 2 |
+| In Sprint | 0 |
 | Review | 0 |
-| Released | 88 |
+| Released | 91 |
 | Archived | 1 |
-| **Total** | **92** |
+| **Total** | **93** |
 
 ---
 

@@ -408,6 +408,279 @@ class ProjectModel(BaseModel):
 import re as _re  # noqa: E402
 
 _PROJECT_ID_RE = _re.compile(r"^prj\d{7}$")
+_IDEA_STEM_RE = _re.compile(r"^(idea(?P<rank>\d{6}))(?:-(?P<slug>.+))?$", _re.IGNORECASE)
+_IDEA_PROJECT_ID_RE = _re.compile(r"prj\d{7}", _re.IGNORECASE)
+_IDEA_MAPPING_LINE_RE = _re.compile(r"^Planned project mapping:\s*(.+)$", _re.IGNORECASE)
+
+_IDEAS_FILE_ROOT = _PROJECT_ROOT / "docs" / "project" / "ideas"
+
+
+class IdeaModel(BaseModel):
+    """Single parsed idea row returned by GET /api/ideas.
+
+    Attributes:
+        idea_id: Canonical idea identifier from filename.
+        rank: Numeric rank parsed from filename.
+        title: Human-readable title derived from heading or filename.
+        summary: Summary text derived from markdown content.
+        source_path: Workspace-relative source markdown path.
+        mapped_project_id: First mapped project ID, if any.
+        mapped_project_ids: All mapped project IDs in first-seen order.
+        implemented_project_ids: Mapped IDs currently in implemented lanes.
+        implemented: True when any mapped ID is implemented for selected mode.
+
+    """
+
+    idea_id: str
+    rank: _Opt[int] = None
+    title: str
+    summary: str
+    source_path: str
+    mapped_project_id: _Opt[str] = None
+    mapped_project_ids: list[str] = []
+    implemented_project_ids: list[str] = []
+    implemented: bool = False
+
+
+def _load_project_lane_map() -> dict[str, str]:
+    """Load project lanes keyed by lower-case project ID.
+
+    Returns:
+        dict[str, str]: Project ID to lane mapping. Empty when the file is unavailable or malformed.
+
+    """
+    if not _PROJECTS_FILE.exists():
+        return {}
+
+    try:
+        projects = json.loads(_PROJECTS_FILE.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+    lane_map: dict[str, str] = {}
+    for item in projects:
+        project_id = str(item.get("id", "")).lower().strip()
+        if not project_id:
+            continue
+        lane_map[project_id] = str(item.get("lane", "")).strip()
+    return lane_map
+
+
+def _implemented_lanes_for_mode(mode: str) -> set[str]:
+    """Resolve implemented lane set for the supplied mode.
+
+    Args:
+        mode: Implemented mode query value.
+
+    Returns:
+        set[str]: Normalized lane names treated as implemented.
+
+    """
+    normalized = mode.strip().lower()
+    if normalized == "released_only":
+        return {"released"}
+    return {"discovery", "design", "in sprint", "review", "released"}
+
+
+def _implemented_selector(implemented: str) -> str:
+    """Normalize implemented query to include/exclude/only selector.
+
+    Args:
+        implemented: Raw implemented query string.
+
+    Returns:
+        str: One of ``include``, ``exclude``, or ``only``.
+
+    """
+    value = implemented.strip().lower()
+    if value in {"include", "all"}:
+        return "include"
+    if value in {"only", "true", "1", "yes"}:
+        return "only"
+    if value in {"exclude", "false", "0", "no", ""}:
+        return "exclude"
+    return "exclude"
+
+
+def _extract_mapped_project_ids(text: str) -> list[str]:
+    """Extract mapped project IDs from markdown text.
+
+    Args:
+        text: Full markdown content for one idea file.
+
+    Returns:
+        list[str]: Unique project IDs in first-seen order.
+
+    """
+    mapping_value = ""
+    for raw_line in text.splitlines():
+        match = _IDEA_MAPPING_LINE_RE.match(raw_line.strip())
+        if match is not None:
+            mapping_value = match.group(1).strip()
+            break
+
+    if not mapping_value or mapping_value.lower() == "none yet":
+        return []
+
+    unique: list[str] = []
+    seen: set[str] = set()
+    for token in _IDEA_PROJECT_ID_RE.findall(mapping_value):
+        project_id = token.lower()
+        if project_id in seen:
+            continue
+        seen.add(project_id)
+        unique.append(project_id)
+    return unique
+
+
+def _extract_title_summary(text: str, default_title: str) -> tuple[str, str]:
+    """Extract title and summary with safe fallbacks.
+
+    Args:
+        text: Full markdown content.
+        default_title: Fallback title from filename slug.
+
+    Returns:
+        tuple[str, str]: Resolved title and summary strings.
+
+    """
+    lines = text.splitlines()
+    title = default_title
+    summary = ""
+
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("#"):
+            heading = stripped.lstrip("#").strip()
+            if heading:
+                title = heading
+                break
+
+    for index, line in enumerate(lines):
+        if line.strip().lower() == "## idea summary":
+            for candidate in lines[index + 1 :]:
+                candidate_stripped = candidate.strip()
+                if not candidate_stripped:
+                    continue
+                if candidate_stripped.startswith("#"):
+                    break
+                summary = candidate_stripped
+                break
+            if summary:
+                break
+
+    if not summary:
+        for line in lines:
+            stripped = line.strip()
+            if not stripped:
+                continue
+            if stripped.startswith("#"):
+                continue
+            if _IDEA_MAPPING_LINE_RE.match(stripped):
+                continue
+            summary = stripped
+            break
+
+    if not summary:
+        summary = title
+
+    return title, summary
+
+
+def _parse_idea_file(path: Path, lane_map: dict[str, str], mode: str) -> _Opt[IdeaModel]:
+    """Parse one idea markdown file into an API record.
+
+    Args:
+        path: Idea markdown path.
+        lane_map: Project lane map keyed by project ID.
+        mode: Implemented mode query value.
+
+    Returns:
+        _Opt[IdeaModel]: Parsed idea record, or None when parsing fails.
+
+    """
+    stem_match = _IDEA_STEM_RE.match(path.stem)
+    if stem_match is None:
+        return None
+
+    idea_id = stem_match.group(1).lower()
+    rank_text = stem_match.group("rank")
+    slug = stem_match.group("slug") or idea_id
+    default_title = slug.replace("-", " ").strip() or idea_id
+
+    try:
+        text = path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError) as exc:
+        logger.warning("Skipping malformed idea file %s: %s", path, exc)
+        return None
+
+    mapped_project_ids = _extract_mapped_project_ids(text)
+    implemented_lanes = _implemented_lanes_for_mode(mode)
+    implemented_project_ids = [
+        project_id
+        for project_id in mapped_project_ids
+        if lane_map.get(project_id, "").lower() in implemented_lanes
+    ]
+    title, summary = _extract_title_summary(text, default_title)
+
+    return IdeaModel(
+        idea_id=idea_id,
+        rank=int(rank_text),
+        title=title,
+        summary=summary,
+        source_path=path.relative_to(_PROJECT_ROOT).as_posix(),
+        mapped_project_id=mapped_project_ids[0] if mapped_project_ids else None,
+        mapped_project_ids=mapped_project_ids,
+        implemented_project_ids=implemented_project_ids,
+        implemented=bool(implemented_project_ids),
+    )
+
+
+def _load_ideas(mode: str) -> list[IdeaModel]:
+    """Load all parseable ideas from docs/project/ideas.
+
+    Args:
+        mode: Implemented mode query value.
+
+    Returns:
+        list[IdeaModel]: Parsed idea records.
+
+    """
+    if not _IDEAS_FILE_ROOT.exists():
+        return []
+
+    lane_map = _load_project_lane_map()
+    ideas: list[IdeaModel] = []
+    for path in sorted(_IDEAS_FILE_ROOT.glob("idea*.md")):
+        parsed = _parse_idea_file(path, lane_map, mode)
+        if parsed is not None:
+            ideas.append(parsed)
+    return ideas
+
+
+def _priority_sort_rank(idea: IdeaModel) -> int:
+    """Return a numeric sort rank for idea priority.
+
+    Priority buckets are resolved from title and summary text with support for
+    both textual levels and P1-P4 shorthand.
+
+    Args:
+        idea: Parsed idea row.
+
+    Returns:
+        int: Priority rank where lower is higher priority.
+
+    """
+    haystack = f"{idea.title} {idea.summary}".lower()
+    if "critical" in haystack or _re.search(r"\bp1\b", haystack):
+        return 0
+    if "high" in haystack or _re.search(r"\bp2\b", haystack):
+        return 1
+    if "medium" in haystack or _re.search(r"\bp3\b", haystack):
+        return 2
+    if "low" in haystack or _re.search(r"\bp4\b", haystack):
+        return 3
+    return 4
 
 
 def _projects_valid() -> list[ProjectModel]:
@@ -437,6 +710,74 @@ async def get_projects(lane: _Opt[str] = None) -> list[ProjectModel]:
     if lane:
         return [p for p in valid if p.lane == lane]
     return valid
+
+
+@_auth_router.get("/ideas", response_model=list[IdeaModel])
+async def get_ideas(
+    implemented: str = "false",
+    implemented_mode: str = "active_or_released",
+    q: str = "",
+    sort: str = "rank",
+    order: str = "asc",
+) -> list[IdeaModel]:
+    """Return idea records parsed from docs/project/ideas.
+
+    Args:
+        implemented: Filter selector (supports false/true and exclude/include/only).
+        implemented_mode: Implemented lane mode (active_or_released or released_only).
+        q: Optional case-insensitive substring match over idea_id, title, summary, and source_path.
+        sort: Sort field; rank is the default.
+        order: Sort order; asc is the default.
+
+    Returns:
+        list[IdeaModel]: Filtered and sorted idea rows.
+
+    """
+    mode = implemented_mode.strip().lower() or "active_or_released"
+    ideas = _load_ideas(mode=mode)
+
+    selector = _implemented_selector(implemented)
+    if selector == "exclude":
+        ideas = [idea for idea in ideas if not idea.implemented]
+    elif selector == "only":
+        ideas = [idea for idea in ideas if idea.implemented]
+
+    needle = q.strip().lower()
+    if needle:
+        ideas = [
+            idea for idea in ideas
+            if needle in idea.idea_id.lower()
+            or needle in idea.title.lower()
+            or needle in idea.summary.lower()
+            or needle in idea.source_path.lower()
+        ]
+
+    normalized_sort = sort.strip().lower()
+    normalized_order = order.strip().lower()
+    if normalized_sort == "idea_id":
+        ideas = sorted(ideas, key=lambda item: item.idea_id, reverse=(normalized_order == "desc"))
+    elif normalized_sort == "priority":
+        ideas = sorted(
+            ideas,
+            key=lambda item: (
+                _priority_sort_rank(item),
+                item.rank if item.rank is not None else 10_000_000,
+                item.idea_id,
+            ),
+            reverse=(normalized_order == "desc"),
+        )
+    else:
+        desc = normalized_order == "desc"
+        ideas = sorted(
+            ideas,
+            key=lambda item: (
+                -(item.rank if item.rank is not None else 10_000_000) if desc
+                else (item.rank if item.rank is not None else 10_000_000),
+                item.idea_id,
+            ),
+        )
+
+    return ideas
 
 
 class ProjectPatch(BaseModel):
