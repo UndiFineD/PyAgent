@@ -205,6 +205,36 @@ Lesson schema:
 
 ---
 
+## prj0000093 - projectmanager-ideas-autosync
+_Date: 2026-03-28 | Branch: prj0000093-projectmanager-ideas-autosync_
+
+task_id: prj0000093
+Lifecycle: OPEN -> IN_PROGRESS -> DONE
+Artifact: docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.think.md
+Recommendation: Option A - Backend authoritative exclusion API + frontend consumption
+Handoff target: @3design
+Rationale summary:
+- Minimal-risk additive architecture: backend owns implemented-exclusion semantics and frontend consumes a stable API.
+- Default implemented definition selected as active-or-released lanes (Discovery/Design/In Sprint/Review/Released), excluding Archived.
+- Avoids frontend logic duplication and avoids process-heavy generated registry workflows.
+
+Prior-art references used:
+- docs/project/prj0000052/project-management.think.md
+- docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.think.md
+- docs/project/kanban.md
+- data/projects.json
+
+Lesson schema:
+- Pattern: For governance-derived filtering logic in Project Manager, centralize semantics in backend APIs and keep frontend as consumer.
+- Root cause: Exclusion behavior and "implemented" semantics were implicit across markdown metadata and lane registry, causing ambiguity.
+- Prevention: Define explicit backend contract with lane-based default semantics and contract tests for parser/lane matrix behavior.
+- First seen: 2026-03-28.
+- Seen in: prj0000093-projectmanager-ideas-autosync.
+- Recurrence count: 1.
+- Promotion status: monitor (promote to hard rule at recurrence >= 2).
+
+---
+
 # @1think Design Brief — Phase 1: Foundation & Infrastructure
 _Date: 2026-03-16_
 _Analyst: @1think | Feeds: @2plan_

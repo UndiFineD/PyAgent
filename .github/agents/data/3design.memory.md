@@ -209,3 +209,31 @@ the design intent.
 | **Seen in** | prj0000092-mypy-strict-enforcement |
 | **Recurrence count** | 1 |
 | **Promotion status** | Candidate |
+
+---
+
+## prj0000093 - projectmanager-ideas-autosync
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000093-projectmanager-ideas-autosync |
+| **owner_agent** | @3design |
+| **source** | @2think |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | DONE |
+| **lifecycle** | OPEN -> IN_PROGRESS -> DONE |
+| **branch_gate** | PASS - `prj0000093-projectmanager-ideas-autosync` |
+| **selected_option** | Option A - backend-authoritative ideas API consumed by frontend |
+| **design_path** | Additive `GET /api/ideas` contract with backend-implemented filtering/sorting; `ProjectManager.tsx` consumes unimplemented ideas feed in read-only panel |
+| **interface_contracts** | IFC-01 Ideas endpoint contract; IFC-02 idea-to-project mapping strategy; IFC-03 frontend integration contract; IFC-04 backend/frontend test contracts |
+| **assumptions** | Idea mapping is sourced from `Planned project mapping:` line and project IDs use `prj\d{7}`; default implemented mode is active_or_released |
+| **handoff_target** | @4plan |
+| **artifact_paths** | docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.design.md |
+| **Pattern** | For governance data shown in UI, centralize exclusion/filter semantics in backend and make frontend a consumer |
+| **Root cause** | Ideas existed only as markdown with no API contract, causing no deterministic implementation-status filtering |
+| **Prevention** | Define explicit endpoint parameters + stable sorting + parser tests and UI failure isolation tests |
+| **First seen** | 2026-03-28 |
+| **Seen in** | prj0000093-projectmanager-ideas-autosync |
+| **Recurrence count** | 1 |
+| **Promotion status** | Candidate |

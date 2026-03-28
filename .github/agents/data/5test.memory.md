@@ -11,6 +11,46 @@ Invoke it via `agent/runSubagent` to continue the implementation workflow.
 
 ## Task Log
 
+### task_id: prj0000093-projectmanager-ideas-autosync-20260328
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- project: prj0000093-projectmanager-ideas-autosync
+- branch_expected: prj0000093-projectmanager-ideas-autosync
+- branch_observed: prj0000093-projectmanager-ideas-autosync ✓
+- scope:
+	- add backend RED tests in `tests/test_api_ideas.py`
+	- cover `/api/ideas` corpus load, implemented filters, mode semantics, stable sort, malformed-file resilience
+	- run lint/docstring gates and targeted pytest evidence capture
+	- update project artifact for M4 completion and @6code handoff
+- lint_validation:
+	- `.venv\Scripts\ruff.exe check --fix tests/test_api_ideas.py`: PASS (6 fixed)
+	- `.venv\Scripts\ruff.exe check tests/test_api_ideas.py`: PASS
+	- `.venv\Scripts\ruff.exe check --select D tests/test_api_ideas.py`: PASS
+- red_phase_results:
+	- `python -m pytest -q tests/test_api_ideas.py --tb=short`
+		- result: 5 failed in 15.17s (expected red)
+		- failure mode: assertion-level contract gap (`/api/ideas` missing -> HTTP 404 vs expected 200)
+		- collection quality: full collection/execution succeeded; no ImportError/AttributeError blockers
+- quality_gate:
+	- AC-to-test matrix present in project test artifact: PASS
+	- weak-test detection gate executed and documented: PASS
+- handoff:
+	- target_agent: @6code
+	- required_scope:
+		- implement authenticated `GET /api/ideas` in `backend/app.py`
+		- ingest ideas from `docs/project/ideas`
+		- enforce `implemented` + `implemented_mode` filtering
+		- support stable `rank` sorting with `idea_id` tie-break
+		- skip malformed idea files without endpoint failure
+
+### Lesson - 2026-03-28 (prj0000093)
+- Pattern: Frontend ACs (empty ideas state and local ideas filter behavior) were documented in plan/design but not represented in the final test file despite passing integration tests.
+- Root cause: Test scope converged on happy-path render + failure-isolation assertions and did not re-check full AC matrix at final handoff.
+- Prevention: Add explicit AC-to-test closure step before marking DONE, including UI empty-state and any documented filter/interactivity assertions.
+- First seen: prj0000093
+- Seen in: prj0000093-projectmanager-ideas-autosync
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
 ### task_id: prj0000092-mypy-strict-enforcement-20260328
 - lifecycle: OPEN -> IN_PROGRESS -> DONE
 - project: prj0000092-mypy-strict-enforcement

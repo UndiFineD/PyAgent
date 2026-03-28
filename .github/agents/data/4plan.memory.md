@@ -17,6 +17,61 @@ where test cases are written and validated against the plan.
 
 ---
 
+## prj0000093 - projectmanager-ideas-autosync
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000093-projectmanager-ideas-autosync |
+| **owner_agent** | @4plan |
+| **source** | @3design |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | DONE |
+| **handoff_target** | @5test |
+| **artifact_paths** | docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.plan.md, docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.project.md |
+| **branch** | prj0000093-projectmanager-ideas-autosync (validated PASS before artifact writes) |
+
+### Chunk 001 Summary
+
+| Item | Value |
+|---|---|
+| Code files planned | 3-5 |
+| Test files planned | 3-5 |
+| Task IDs | T1-T7 |
+| Scope | `/api/ideas` backend contract, idea parsing/mapping helpers, ProjectManager Active Ideas panel, backend/frontend TDD coverage, milestone/doc updates |
+
+### Acceptance Coverage
+
+| Task | Acceptance IDs |
+|---|---|
+| T1 | AC-04 |
+| T2 | AC-02, AC-03, AC-04 |
+| T3 | AC-01, AC-07 |
+| T4 | AC-02, AC-03, AC-04, AC-07 |
+| T5 | AC-05, AC-06 |
+| T6 | AC-05, AC-06 |
+| T7 | AC-08 |
+
+### Dependency Order
+1. T1 -> T2 -> T3
+2. T4 defines TDD gate before @6code implementation for backend contract tasks.
+3. T5 -> T6
+4. T7 closes milestone/status and records handoff readiness.
+
+### Lesson Entry
+
+| Field | Value |
+|---|---|
+| Pattern | Planning quality improves when every task embeds objective, concrete file list, acceptance, and executable validation command. |
+| Root cause | Prior shallow plans with generic task labels created ambiguity for @5test/@6code handoff and delayed execution sequencing. |
+| Prevention | Enforce hard-task schema (objective + files + acceptance + command) and explicit dependency chain in canonical plan before status transition. |
+| First seen | 2026-03-28 |
+| Seen in | prj0000093-projectmanager-ideas-autosync |
+| Recurrence count | 1 |
+| Promotion status | CANDIDATE |
+
+---
+
 ## prj030 - agent-doc-frequency
 
 | Field | Value |

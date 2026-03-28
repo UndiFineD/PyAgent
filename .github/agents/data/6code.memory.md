@@ -9,6 +9,69 @@ Once code implementation is complete and tests are passing,
 the next agent to invoke is **@7exec**. 
 This should be done via `agent/runSubagent`.
 
+## prj0000093 - projectmanager-ideas-autosync
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000093-projectmanager-ideas-autosync |
+| **owner_agent** | @6code |
+| **source** | @5test |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | DONE |
+| **summary** | Added backend ideas ingestion endpoint (`/api/ideas` via shared auth router) with robust markdown parsing, planned mapping extraction, implemented-lane filtering modes, deterministic rank sort with idea_id tie-break, and malformed-file skip behavior. |
+| **changed_modules** | backend/app.py; docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.code.md; docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.project.md; .github/agents/data/6code.memory.md |
+| **verification_commands** | c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_api_ideas.py; rg --type py "raise NotImplementedError|raise NotImplemented\b|#\s*(TODO|FIXME|HACK|STUB|PLACEHOLDER)" backend tests; rg --type py "^\s*\.\.\.\s*$" backend |
+| **verification_result** | PASS — targeted backend RED suite now green (`5 passed in 2.80s`) and placeholder scans clean in changed scope. |
+| **unresolved_risks** | Frontend ideas panel integration acceptance (AC-05/AC-06) is not part of this minimal backend GREEN request and remains for subsequent scope. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | backend/app.py, docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.code.md, docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.project.md, .github/agents/data/6code.memory.md |
+
+## prj0000093 - projectmanager-ideas-autosync (frontend integration follow-up)
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000093-projectmanager-ideas-autosync |
+| **owner_agent** | @6code |
+| **source** | User incremental frontend request |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | DONE |
+| **summary** | Integrated Project Manager frontend with `GET /api/ideas` default behavior (implemented ideas excluded by API default), added Active Ideas Queue panel (rank/title/idea_id/source path), and isolated ideas-fetch failures so project board stays usable. |
+| **changed_modules** | web/apps/ProjectManager.tsx; web/apps/ProjectManager.test.tsx; docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.code.md; .github/agents/data/6code.memory.md |
+| **verification_commands** | npm --prefix web test -- apps/ProjectManager.test.tsx; npm --prefix web run build |
+| **verification_result** | PASS — `apps/ProjectManager.test.tsx` 5/5 tests green including new ideas panel tests; Vite production build succeeded. |
+| **unresolved_risks** | None identified in scoped frontend integration. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | web/apps/ProjectManager.tsx, web/apps/ProjectManager.test.tsx, docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.code.md, .github/agents/data/6code.memory.md |
+
+### Lesson - 2026-03-28 (prj0000093)
+- Pattern: Design/plan endpoint-query contract drifted from shipped backend/frontend behavior (`q` and `sort=priority` missing; frontend fetch omitted explicit documented query parameters).
+- Root cause: Implementation optimized for minimal working path and relied on defaults without re-validating full IFC/plan contract matrix.
+- Prevention: Before handoff to @7exec, run a contract checklist against design IFC and plan task query/sort requirements, then either implement parity or explicitly update artifacts to match shipped behavior.
+- First seen: prj0000093
+- Seen in: prj0000093-projectmanager-ideas-autosync
+- Recurrence count: 2
+- Promotion status: PROMOTED_TO_HARD_RULE
+
+## prj0000093 - projectmanager-ideas-autosync (quality-gap follow-up)
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000093-projectmanager-ideas-autosync |
+| **owner_agent** | @6code |
+| **source** | @8ql non-blocking quality gaps |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | DONE |
+| **summary** | Implemented backend `q` filtering and `sort=priority` for `/api/ideas`, updated frontend ideas fetch to explicit API contract params, and added ideas-panel empty-state test coverage. |
+| **changed_modules** | backend/app.py; web/apps/ProjectManager.tsx; web/apps/ProjectManager.test.tsx; docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.code.md; .github/agents/data/6code.memory.md |
+| **verification_commands** | python -m pytest -q tests/test_api_ideas.py; npm --prefix web test -- apps/ProjectManager.test.tsx |
+| **verification_result** | PASS — backend ideas suite 5/5 and frontend ProjectManager suite 6/6 green with new empty-state and explicit-query contract assertions. |
+| **unresolved_risks** | None identified in scoped non-blocking quality-gap remediation. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | backend/app.py, web/apps/ProjectManager.tsx, web/apps/ProjectManager.test.tsx, docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.code.md, .github/agents/data/6code.memory.md |
+
 ## prj0000092 - mypy-strict-enforcement
 
 | Field | Value |

@@ -9,6 +9,66 @@ Once security scans and CodeQL analysis are complete,
 the next agent in the workflow is **@9git**. 
 Invoke it via `agent/runSubagent` to continue the process.
 
+## Last scan - 2026-03-28 (prj0000093 final quick pass)
+- Task: prj0000093-projectmanager-ideas-autosync
+- Lifecycle: OPEN -> IN_PROGRESS -> DONE
+- status: DONE
+- task_id: prj0000093-projectmanager-ideas-autosync
+- Branch gate: PASS (expected = observed = `prj0000093-projectmanager-ideas-autosync`)
+- Files scanned: `backend/app.py`, `web/apps/ProjectManager.tsx`, `web/apps/ProjectManager.test.tsx`, `tests/test_api_ideas.py`, `docs/project/prj0000093-projectmanager-ideas-autosync/projectmanager-ideas-autosync.ql.md`
+- Security - CodeQL: SKIPPED (quick-pass scope; targeted security lint executed)
+- Security - ruff S rules: PASS WITH LOW (2x S311 in `backend/app.py` lines 165/167; simulated FLM metrics path)
+- Security - pip-audit new findings: 0 (no new advisories introduced in this scoped pass)
+- Security - Rust unsafe check: SKIPPED (`rust_core/` not modified)
+- Security - Workflow injection: PASS (no `.github/workflows/*.yml` changes in this scope)
+- Quality - Plan vs delivery: PASS
+- Quality - AC vs test coverage: PASS (targeted backend/frontend suites green)
+- Quality - Docs vs implementation: PASS WITH GAPS (non-blocking design/frontend sort default mismatch; design schema field drift)
+- Quality - Agent file consistency: PASS
+- Lessons written: 0 (no new recurring pattern beyond existing entries)
+- Rules promoted: 0
+- Unresolved quality debt: 1 OPEN (non-blocking docs alignment)
+- Outcome: CLEAN -> @9git
+- handoff_target: @9git
+
+## Unresolved Quality-Debt Ledger
+- Debt ID: QD-prj0000093-001
+- Status: OPEN
+- Owner: @6code (or @3design if contract documentation is updated instead)
+- Originating project: prj0000093-projectmanager-ideas-autosync
+- Description: Frontend ideas fetch defaults (`sort=rank&order=asc`) and current `IdeaModel` schema differ from IFC-03/IFC-01 text that still documents `sort=priority&order=desc` and `priority/impact/urgency` response fields.
+- Exit criteria: align code and docs to one canonical contract (either update design artifact or adjust implementation), then rerun scoped @7exec + @8ql checks.
+
+## Last scan - 2026-03-28 (prj0000093)
+- Task: prj0000093-projectmanager-ideas-autosync
+- Lifecycle: OPEN -> IN_PROGRESS -> DONE
+- status: DONE
+- task_id: prj0000093-projectmanager-ideas-autosync
+- Branch gate: PASS (expected = observed = `prj0000093-projectmanager-ideas-autosync`)
+- Files scanned: `backend/app.py`, `tests/test_api_ideas.py`, `web/apps/ProjectManager.tsx`, `web/apps/ProjectManager.test.tsx`, `docs/project/prj0000093-projectmanager-ideas-autosync/*`
+- Security - CodeQL: SKIPPED (CLI/database flow not invoked; scoped controls executed)
+- Security - ruff S rules: PASS WITH LOW (1 LOW: S311 in `backend/app.py` lines 165/167; outside `/api/ideas` path)
+- Security - pip-audit new findings: 0 (`pip_audit_results.json` baseline reports `Deps with vulns: 0`)
+- Security - Rust unsafe check: SKIPPED (`rust_core/` not modified)
+- Security - Workflow injection: PASS (no `.github/workflows/*.yml` changes in scope)
+- Quality - Plan vs delivery: PASS
+- Quality - AC vs test coverage: PASS WITH GAPS (frontend AC coverage gaps for empty/filter behavior)
+- Quality - Docs vs implementation: PASS WITH GAPS (`/api/ideas` query/sort contract drift versus design/plan)
+- Quality - Agent file consistency: PASS
+- Lessons written: 2 (`6code.memory.md`, `5test.memory.md`)
+- Rules promoted: 0
+- Unresolved quality debt: 1 OPEN (non-blocking)
+- Outcome: CLEAN -> @9git
+- handoff_target: @9git
+
+## Unresolved Quality-Debt Ledger
+- Debt ID: QD-prj0000093-001
+- Status: OPEN
+- Owner: @6code (with @5test for AC coverage closure)
+- Originating project: prj0000093-projectmanager-ideas-autosync
+- Description: Design/plan query contract (`implemented=exclude&implemented_mode=active_or_released&sort=priority&order=desc` + `q` support) is not fully represented in current `/api/ideas` implementation/frontend invocation and associated frontend test coverage.
+- Exit criteria: align backend/frontend to documented contract (or update docs/contracts), add missing frontend AC tests, then rerun scoped @7exec validation and @8ql gate.
+
 ## Last scan - 2026-03-28 (prj0000092)
 - Task: prj0000092-mypy-strict-enforcement
 - Lifecycle: OPEN -> IN_PROGRESS -> DONE

@@ -5,6 +5,54 @@ integration checks, and smoke test outcomes.
 
 ---
 
+## Last run - 2026-03-28 PASSED -> @9git
+- Task: prj0000093 projectmanager-ideas-autosync (follow-up revalidation)
+- Status: IN_PROGRESS -> DONE
+- task_id: prj0000093-projectmanager-ideas-autosync
+- handoff_target: @9git
+- Branch gate: PASS (expected = observed = prj0000093-projectmanager-ideas-autosync)
+- Tests run: 1 backend command + 1 frontend test command + 1 frontend build command
+- Import check: SKIPPED (not required by requested command set)
+- Smoke test: SKIPPED (not required by requested command set)
+- rust_core: SKIPPED (not modified)
+- Dependency warnings: NONE (classified NON_BLOCKING)
+- Outcome: READY_FOR_9GIT
+- Notes:
+  - `python -m pytest -q tests/test_api_ideas.py` passed (`5 passed in 4.46s`).
+  - `npm --prefix web test -- apps/ProjectManager.test.tsx` passed (`6 passed`).
+  - `npm --prefix web run build` passed; chunk-size warning observed (non-blocking).
+
+---
+
+## Last run - 2026-03-28 PASSED -> @8ql
+- Task: prj0000093 projectmanager-ideas-autosync
+- Status: OPEN -> IN_PROGRESS -> DONE
+- task_id: prj0000093-projectmanager-ideas-autosync
+- handoff_target: @8ql
+- Branch gate: PASS (expected = observed = prj0000093-projectmanager-ideas-autosync)
+- Tests run: 2 backend commands + 1 frontend test command + 1 frontend build command
+- Import check: SKIPPED (not required by requested command set)
+- Smoke test: SKIPPED (not required by requested command set)
+- rust_core: SKIPPED (not modified)
+- Dependency warnings: NONE (classified NON_BLOCKING)
+- Outcome: READY_FOR_8QL
+- Notes:
+  - `python -m pytest -q tests/test_api_ideas.py` passed (`5 passed`).
+  - `python -m pytest -q tests/test_api_versioning.py -k ideas` completed with `6 deselected` and no failures.
+  - `npm --prefix web test -- apps/ProjectManager.test.tsx` passed (`5 passed`).
+  - `npm --prefix web run build` passed; Vite chunk-size warning observed (non-blocking).
+
+### Lesson - Ideas-Filtered Test Selection Gap (2026-03-28)
+- Pattern: Filtered pytest selection (`-k ideas`) can return only deselected tests while still exiting successfully.
+- Root cause: No test names in the target file matched the requested selection expression.
+- Prevention: Keep one unfiltered companion command or assert minimum selected-test count when filtered commands are used for execution gates.
+- First seen: 2026-03-28
+- Seen in: prj0000093-projectmanager-ideas-autosync
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
+---
+
 ## Last run - 2026-03-28 PASSED -> @8ql
 - Task: prj0000092 mypy-strict-enforcement
 - Status: OPEN -> IN_PROGRESS -> DONE
