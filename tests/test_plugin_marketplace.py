@@ -24,29 +24,34 @@ from backend.app import app
 client = TestClient(app)
 
 
+def _get_plugins(client_ip: str):
+    """Fetch /api/plugins using a test-specific forwarded IP to avoid cross-test rate-limit coupling."""
+    return client.get("/api/plugins", headers={"x-forwarded-for": client_ip})
+
+
 def test_plugins_endpoint_returns_200():
     """GET /api/plugins returns HTTP 200."""
-    response = client.get("/api/plugins")
+    response = _get_plugins("plugins-test-1")
     assert response.status_code == 200
 
 
 def test_plugins_response_has_plugins_key():
     """Response body contains a 'plugins' key."""
-    response = client.get("/api/plugins")
+    response = _get_plugins("plugins-test-2")
     data = response.json()
     assert "plugins" in data
 
 
 def test_plugins_registry_is_non_empty():
     """Plugin registry has at least one entry."""
-    response = client.get("/api/plugins")
+    response = _get_plugins("plugins-test-3")
     plugins = response.json()["plugins"]
     assert len(plugins) > 0
 
 
 def test_plugin_has_required_fields():
     """Each plugin entry contains all required fields."""
-    response = client.get("/api/plugins")
+    response = _get_plugins("plugins-test-4")
     plugins = response.json()["plugins"]
     required = {"id", "name", "description", "author", "version", "tags", "installed"}
     for plugin in plugins:
@@ -56,5 +61,5 @@ def test_plugin_has_required_fields():
 
 def test_plugins_without_auth_returns_200():
     """Endpoint is accessible without an Authorization header (public route)."""
-    response = client.get("/api/plugins")
+    response = _get_plugins("plugins-test-5")
     assert response.status_code == 200
