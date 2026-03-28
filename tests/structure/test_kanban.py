@@ -31,6 +31,7 @@ import pytest
 REPO_ROOT = Path(__file__).parent.parent.parent
 _PROJECTS_PATH = REPO_ROOT / "data" / "projects.json"
 _KANBAN_PATH = REPO_ROOT / "docs" / "project" / "kanban.md"
+_NEXTPROJECT_PATH = REPO_ROOT / "data" / "nextproject.md"
 
 # ---------------------------------------------------------------------------
 # Load files at module import time (same pattern as test_readme.py)
@@ -47,6 +48,23 @@ try:
 except FileNotFoundError:
     _kanban_content = ""
     _kanban_lines = []
+
+try:
+    _nextproject_raw = _NEXTPROJECT_PATH.read_text(encoding="utf-8").strip()
+except FileNotFoundError:
+    _nextproject_raw = ""
+
+
+def _expected_project_count() -> int | None:
+    """Return expected project count inferred from data/nextproject.md.
+
+    If nextproject marker is `prj0000092`, expected count is 91.
+    Returns None when the marker is missing or malformed.
+    """
+    match = re.fullmatch(r"prj(\d{7})", _nextproject_raw)
+    if not match:
+        return None
+    return int(match.group(1)) - 1
 
 # ---------------------------------------------------------------------------
 # Sentinels
@@ -138,12 +156,14 @@ def test_projects_json_valid() -> None:
 
 @_SKIP_PROJECTS
 def test_projects_json_entry_count() -> None:
-    """data/projects.json must contain exactly 90 entries.
+    """data/projects.json entry count must align with nextproject marker.
 
-    Breakdown: prj0000001–prj0000090 (90 unique entries; duplicates removed).
+    Expected count is derived from data/nextproject.md as marker_id - 1.
     """
     assert _projects_data is not None
-    assert len(_projects_data) == 90, f"Expected 90 project entries, got {len(_projects_data)}"
+    expected = _expected_project_count()
+    assert expected is not None, "Could not derive expected project count from data/nextproject.md"
+    assert len(_projects_data) == expected, f"Expected {expected} project entries, got {len(_projects_data)}"
 
 
 @_SKIP_PROJECTS
@@ -247,13 +267,15 @@ def test_kanban_required_h2s(heading: str) -> None:
 
 @_SKIP_KANBAN
 def test_kanban_total_rows() -> None:
-    r"""kanban.md must contain exactly 90 project data rows.
+    r"""kanban.md project row count must align with nextproject marker.
 
     A data row is any line matching r'^\|\s*prj\d{7}'.
     """
     pattern = re.compile(r"^\|\s*prj\d{7}")
     data_rows = [line for line in _kanban_lines if pattern.match(line)]
-    assert len(data_rows) == 90, f"Expected 90 project rows in kanban.md, found {len(data_rows)}"
+    expected = _expected_project_count()
+    assert expected is not None, "Could not derive expected project count from data/nextproject.md"
+    assert len(data_rows) == expected, f"Expected {expected} project rows in kanban.md, found {len(data_rows)}"
 
 
 @_SKIP_KANBAN
