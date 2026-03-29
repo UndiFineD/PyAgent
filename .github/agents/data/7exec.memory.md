@@ -6,6 +6,60 @@ integration checks, and smoke test outcomes.
 ---
 
 ## Last run - 2026-03-28 BLOCKED -> @6code
+- Task: prj0000096 coverage-minimum-enforcement (post-git.md-policy-fix revalidation)
+- Status: IN_PROGRESS -> BLOCKED
+- task_id: prj0000096-coverage-minimum-enforcement
+- handoff_target: @6code
+- Branch gate: PASS (expected = observed = prj0000096-coverage-minimum-enforcement)
+- Tests run:
+  - Full fail-fast: `python -m pytest -v --maxfail=1` -> FAILED (`1 failed, 1251 passed, 9 skipped`)
+  - Targeted Idea 8: `python -m pytest -v tests/test_coverage_config.py tests/structure/test_ci_yaml.py tests/ci/test_workflow_count.py` -> PASSED (`20 passed`)
+- Import check: SKIPPED (no changed runtime Python modules in this slice)
+- Smoke test: SKIPPED (no CLI/API entrypoint changes in scope)
+- rust_core: SKIPPED (not modified)
+- Ruff: PASS (`tests/test_coverage_config.py`, `tests/structure/test_ci_yaml.py`, `tests/ci/test_workflow_count.py`)
+- Dependency warnings: NONE (classified NON_BLOCKING)
+- Outcome: BLOCKED_FOR_PROMOTION
+- Notes:
+  - First failure moved from docs policy to SARIF freshness gate:
+    - `tests/zzz/test_zzg_codeql_sarif_gate.py::test_all_sarif_files_are_fresh`
+    - `AssertionError: Stale SARIF files detected — run with CODEQL_REBUILD=1 to refresh`
+  - Idea 8 enforcement behavior remains validated by targeted test suite and lint checks.
+
+### Lesson - 2026-03-29 (prj0000096 @8ql classification)
+- Pattern: SARIF freshness gate can stay stale even when test rerun is executed with `CODEQL_REBUILD=1`.
+- Root cause: Local/runtime execution path did not regenerate SARIF artifacts before freshness assertion, leaving file mtimes older than 24h.
+- Prevention: Add an explicit SARIF refresh step (or documented runner prerequisite) before freshness tests in execution handoff.
+- First seen: 2026-03-29
+- Seen in: prj0000096-coverage-minimum-enforcement
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
+---
+
+## Last run - 2026-03-28 BLOCKED -> @6code
+- Task: prj0000096 coverage-minimum-enforcement (Idea 8 first-slice execution validation)
+- Status: OPEN -> IN_PROGRESS -> BLOCKED
+- task_id: prj0000096-coverage-minimum-enforcement
+- handoff_target: @6code
+- Branch gate: PASS (expected = observed = prj0000096-coverage-minimum-enforcement)
+- Tests run:
+  - Full fail-fast: `python -m pytest -v --maxfail=1` -> FAILED (`1 failed, 37 passed`, stopped)
+  - Targeted Idea 8: `python -m pytest -v tests/test_coverage_config.py tests/structure/test_ci_yaml.py tests/ci/test_workflow_count.py` -> PASSED (`20 passed`)
+- Import check: SKIPPED (no changed runtime Python modules in this slice)
+- Smoke test: SKIPPED (no CLI/API entrypoint changes in scope)
+- rust_core: SKIPPED (not modified)
+- Ruff: PASS (`tests/test_coverage_config.py`, `tests/structure/test_ci_yaml.py`, `tests/ci/test_workflow_count.py`)
+- Dependency warnings: NONE (classified NON_BLOCKING)
+- Outcome: BLOCKED_FOR_PROMOTION
+- Notes:
+  - First failure: `tests/docs/test_agent_workflow_policy_docs.py::test_git_summaries_use_modern_branch_plan_format_or_carry_legacy_exception`
+  - Assertion cites missing `## Branch Plan` section in `docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.git.md`.
+  - Idea 8 enforcement behavior is validated by targeted test suite and lint checks.
+
+---
+
+## Last run - 2026-03-28 BLOCKED -> @6code
 - Task: prj0000094 idea-003-mypy-strict-enforcement (post-blocker-fix revalidation)
 - Status: IN_PROGRESS -> DONE
 - task_id: prj0000094-idea-003-mypy-strict-enforcement

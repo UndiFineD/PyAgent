@@ -11,6 +11,37 @@ Invoke it via `agent/runSubagent` to continue the implementation workflow.
 
 ## Task Log
 
+### task_id: prj0000096-coverage-minimum-enforcement-20260328
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- project: prj0000096-coverage-minimum-enforcement
+- branch_expected: prj0000096-coverage-minimum-enforcement
+- branch_observed: prj0000096-coverage-minimum-enforcement ✓
+- scope:
+	- strengthen `tests/test_coverage_config.py` to enforce stage-1 `fail_under >= 40`
+	- extend `tests/structure/test_ci_yaml.py` to require explicit blocking coverage-gate path
+	- preserve workflow inventory constraints via `tests/ci/test_workflow_count.py`
+	- update project test artifact with AC-to-test matrix and weak-test detection gate
+- lint_validation:
+	- `.venv\Scripts\ruff.exe check --fix tests/test_coverage_config.py tests/structure/test_ci_yaml.py`: PASS (1 fixed)
+	- `.venv\Scripts\ruff.exe check tests/test_coverage_config.py tests/structure/test_ci_yaml.py`: PASS
+	- `.venv\Scripts\ruff.exe check --select D tests/test_coverage_config.py tests/structure/test_ci_yaml.py`: PASS
+- red_phase_results:
+	- `c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_coverage_config.py tests/structure/test_ci_yaml.py tests/ci/test_workflow_count.py --tb=short`
+		- result: 3 failed, 17 passed in 2.64s (expected red)
+		- failure mode: assertion-level contract gaps only
+			- `assert 30 >= 40` for stage-1 threshold test
+			- `assert []` for missing CI coverage gate step and dependent blocking check
+		- collection quality: no ImportError/AttributeError blockers
+- quality_gate:
+	- AC-to-test matrix present in project test artifact: PASS
+	- weak-test detection gate executed and documented: PASS
+- handoff:
+	- target_agent: @6code
+	- required_scope:
+		- set `[tool.coverage.report].fail_under` to 40 or higher in `pyproject.toml`
+		- add blocking coverage gate path in `.github/workflows/ci.yml` `jobs.test.steps`
+		- keep workflow-count constraints green (no new workflow files)
+
 ### task_id: prj0000094-idea-003-mypy-strict-enforcement-20260328
 - lifecycle: OPEN -> IN_PROGRESS -> DONE
 - project: prj0000094-idea-003-mypy-strict-enforcement
@@ -295,6 +326,15 @@ Invoke it via `agent/runSubagent` to continue the implementation workflow.
 	- required scope: continue repository-level execution tracking with residual unrelated baseline failures
 
 ## Lessons
+
+### Lesson - 2026-03-28 (prj0000096)
+- Pattern: Coverage-policy tests are stronger when they parse `pyproject.toml` and assert numeric thresholds instead of string presence.
+- Root cause: Presence-only checks can stay green while enforcement remains ineffective (`fail_under` too low or unused in CI).
+- Prevention: Require a numeric stage assertion (`>= 40`) plus CI gate-path checks that reject soft-fail operators.
+- First seen: 2026-03-28
+- Seen in: prj0000096-coverage-minimum-enforcement
+- Recurrence count: 1
+- Promotion status: CANDIDATE
 
 ### Lesson - 2026-03-28 (prj0000090)
 - Pattern: Red-phase tests can appear weak if they fail only on missing imports during collection.

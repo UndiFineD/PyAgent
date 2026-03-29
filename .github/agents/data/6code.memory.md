@@ -9,6 +9,42 @@ Once code implementation is complete and tests are passing,
 the next agent to invoke is **@7exec**. 
 This should be done via `agent/runSubagent`.
 
+### Lesson - 2026-03-29 (prj0000096 @8ql follow-up)
+- Pattern: CI threshold values hardcoded in workflow commands drift from canonical config policy values.
+- Root cause: Coverage gate step used `--cov-fail-under=40` directly instead of reading policy from `[tool.coverage.report].fail_under` in `pyproject.toml`.
+- Prevention: Keep a single threshold source-of-truth and implement workflow parsing/read-through from config, then validate parity in structure tests.
+- First seen: 2026-03-29
+- Seen in: prj0000096-coverage-minimum-enforcement
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
+## prj0000096 - coverage-minimum-enforcement (first-slice green)
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000096-coverage-minimum-enforcement |
+| **owner_agent** | @6code |
+| **source** | @5test red-phase handoff |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | DONE |
+| **summary** | Implemented first-slice coverage enforcement by raising `[tool.coverage.report].fail_under` to 40 and adding a blocking coverage-gate path in existing `.github/workflows/ci.yml` `jobs.test.steps` without adding new workflow files. |
+| **changed_modules** | pyproject.toml; .github/workflows/ci.yml; docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.code.md; docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.test.md; .github/agents/data/6code.memory.md |
+| **verification_commands** | c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_coverage_config.py tests/structure/test_ci_yaml.py tests/ci/test_workflow_count.py --tb=short |
+| **verification_result** | PASS — targeted first-slice suite green (`20 passed in 4.01s`). |
+| **unresolved_risks** | Coverage gate currently validates dedicated governance test path in CI; broader ratchet stages and repository-wide coverage-runtime optimization remain out of current scope. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | pyproject.toml, .github/workflows/ci.yml, docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.code.md, docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.test.md, .github/agents/data/6code.memory.md |
+
+### Lesson - 2026-03-28 (prj0000096 first-slice)
+- Pattern: CI coverage governance is stabilized fastest when threshold and gate-path presence/blocking checks are enforced together.
+- Root cause: Existing threshold in config was not sufficient because CI had no explicit coverage-gate path.
+- Prevention: Keep threshold in one config key and enforce a dedicated blocking gate step contract via structure tests.
+- First seen: 2026-03-28
+- Seen in: prj0000096-coverage-minimum-enforcement
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
 ## prj0000095 - source-stub-remediation (AutoMem dual-backend benchmark fix)
 
 | Field | Value |

@@ -226,3 +226,35 @@ prj0000075 ci-simplification branch prj0000075-ci-simplification — project set
 | **handoff_target** | @9git |
 | **artifact_paths** | docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.project.md, docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.think.md, docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.design.md, docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.plan.md, docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.test.md, docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.code.md, docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.exec.md, docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.ql.md, docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.git.md, docs/project/kanban.md, data/projects.json, data/nextproject.md |
 
+---
+
+## prj0000096 - coverage-minimum-enforcement
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000096-coverage-minimum-enforcement |
+| **owner_agent** | @1project |
+| **source** | @0master |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | HANDED_OFF |
+| **summary** | Project boundary initialized on expected branch prj0000096-coverage-minimum-enforcement from idea000008-coverage-minimum-enforcement. Created canonical overview plus think/design/plan and downstream lifecycle stubs; registered project in Discovery lane and advanced nextproject to prj0000097. |
+| **handoff_target** | @2think |
+| **artifact_paths** | docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.project.md, docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.think.md, docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.design.md, docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.plan.md, docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.test.md, docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.code.md, docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.exec.md, docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.ql.md, docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.git.md, docs/project/kanban.md, data/projects.json, data/nextproject.md |
+
+---
+
+## prj0000096 - coverage-minimum-enforcement (wrap-up)
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000096-wrapup-review-ready |
+| **owner_agent** | @1project |
+| **source** | @0master |
+| **created_at** | 2026-03-29 |
+| **updated_at** | 2026-03-29 |
+| **status** | DONE |
+| **summary** | Normalized lifecycle artifacts to review-ready state after successful full validation (`1254 passed, 10 skipped`), moved kanban lane to Review, and marked git handoff artifact READY_FOR_9GIT. |
+| **handoff_target** | @9git |
+| **artifact_paths** | docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.project.md, docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.exec.md, docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.ql.md, docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.git.md, docs/project/kanban.md |
+

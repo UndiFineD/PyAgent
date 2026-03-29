@@ -1,6 +1,6 @@
 # idea-008 - coverage-minimum-enforcement
 
-Planned project mapping: None yet
+Planned project mapping: prj0000096
 
 ## Idea summary
 This idea focuses on coverage minimum enforcement in area 5 – Tests. The current signal indicates priority P2, impact H, and urgency H. The SWOT tag is W (Weakness in current implementation).

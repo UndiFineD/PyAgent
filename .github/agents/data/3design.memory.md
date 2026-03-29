@@ -237,3 +237,31 @@ the design intent.
 | **Seen in** | prj0000093-projectmanager-ideas-autosync |
 | **Recurrence count** | 1 |
 | **Promotion status** | Candidate |
+
+---
+
+## prj0000096 - coverage-minimum-enforcement
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000096-coverage-minimum-enforcement |
+| **owner_agent** | @3design |
+| **source** | @2think |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | DONE |
+| **lifecycle** | OPEN -> IN_PROGRESS -> DONE |
+| **branch_gate** | PASS - `prj0000096-coverage-minimum-enforcement` |
+| **selected_option** | Option B - staged ratchet to target baseline |
+| **design_path** | Staged CI coverage ratchet with single source-of-truth threshold and blocking gate in existing workflow |
+| **interface_contracts** | IFC-01 CI Coverage Gate, IFC-02 Threshold Source-of-Truth, IFC-03 Structure Guard, IFC-04 Workflow-Count Compatibility |
+| **assumptions** | First slice stage is 40; no new workflow files; ratchet promotions require explicit evidence in project test artifact |
+| **handoff_target** | @4plan |
+| **artifact_paths** | docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.design.md |
+| **Pattern** | Enforce quality gates by ratcheting from a low-risk baseline using a single authoritative threshold key |
+| **Root cause** | Coverage threshold existed in config but was not wired into blocking CI path |
+| **Prevention** | Keep threshold in one config location and guard CI contract with structure tests against soft-fail drift |
+| **First seen** | 2026-03-28 |
+| **Seen in** | prj0000096-coverage-minimum-enforcement |
+| **Recurrence count** | 1 |
+| **Promotion status** | Candidate |

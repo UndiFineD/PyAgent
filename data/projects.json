@@ -1,5 +1,23 @@
 [
   {
+    "id": "prj0000096",
+    "name": "coverage-minimum-enforcement",
+    "lane": "Review",
+    "summary": "Enforce meaningful baseline coverage threshold in CI and prevent regression from effectively disabled coverage gate",
+    "branch": "prj0000096-coverage-minimum-enforcement",
+    "pr": null,
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "coverage",
+      "ci",
+      "tests",
+      "quality-gate"
+    ],
+    "created": "2026-03-28",
+    "updated": "2026-03-29"
+  },
+  {
     "id": "prj0000095",
     "name": "source-stub-remediation",
     "lane": "Review",
