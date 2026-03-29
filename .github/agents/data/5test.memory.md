@@ -11,6 +11,46 @@ Invoke it via `agent/runSubagent` to continue the implementation workflow.
 
 ## Task Log
 
+### task_id: prj0000098-backend-health-check-endpoint-20260329
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- project: prj0000098-backend-health-check-endpoint
+- branch_expected: prj0000098-backend-health-check-endpoint
+- branch_observed: prj0000098-backend-health-check-endpoint ✓
+- scope:
+	- implement red-phase tests for probe contract, auth bypass, and rate-limit behavior for `/health`, `/livez`, `/readyz`
+	- keep edits restricted to backend health endpoint test surfaces and project test artifacts
+	- capture pytest evidence and update project artifact + handoff memory
+- files_updated:
+	- `tests/test_api_versioning.py`
+	- `tests/test_backend_auth.py`
+	- `tests/test_rate_limiting.py`
+	- `docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.test.md`
+	- `.github/agents/data/5test.memory.md`
+- lint_validation:
+	- `.venv\Scripts\ruff.exe check --fix tests/test_api_versioning.py tests/test_backend_auth.py tests/test_rate_limiting.py`: PASS
+	- `.venv\Scripts\ruff.exe check tests/test_api_versioning.py tests/test_backend_auth.py tests/test_rate_limiting.py`: PASS
+	- `.venv\Scripts\ruff.exe check --select D tests/test_api_versioning.py tests/test_backend_auth.py tests/test_rate_limiting.py`: PASS
+- validation_results:
+	- `python -m pytest -q tests/test_github_app.py tests/test_api_versioning.py --tb=short`
+		- result: 23 passed, 1 warning
+	- `python -m pytest -q tests/test_backend_auth.py --tb=short`
+		- result: 19 passed, 1 warning
+	- `python -m pytest -q tests/test_rate_limiting.py --tb=short`
+		- result: 6 passed, 1 warning
+- red_phase_status:
+	- red failures not reproducible in scoped suites because target behavior is already implemented in codebase
+	- code evidence:
+		- `backend/app.py`: defines `/health`, `/livez`, `/readyz`
+		- `backend/rate_limiter.py`: `_EXEMPT_PATHS` includes `/health`, `/livez`, `/readyz`
+	- collection quality: no ImportError/AttributeError blockers in targeted runs
+- quality_gate:
+	- AC-to-test matrix present in project test artifact: PASS
+	- weak-test detection gate executed and documented: PASS
+- handoff:
+	- target_agent: @6code
+	- readiness: READY
+	- note: implementation already satisfies current AC set on this branch; coordinate with @4plan if strict red-first evidence remains mandatory
+
 ### task_id: prj0000097-stub-module-elimination-20260329
 - lifecycle: OPEN -> IN_PROGRESS -> DONE
 - project: prj0000097-stub-module-elimination

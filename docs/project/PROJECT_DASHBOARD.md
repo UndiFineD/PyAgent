@@ -1,6 +1,6 @@
 # Project Dashboard
 
-Generated: 2026-03-28T23:11:34.972268+00:00Z
+Generated: 2026-03-29T10:13:09.733720+00:00Z
 
 | Project | Completion | Code | Missing Design |
 |--------|------------|------|----------------|
@@ -96,3 +96,6 @@ Generated: 2026-03-28T23:11:34.972268+00:00Z
 | prj0000093-projectmanager-ideas-autosync | 0% (0/0) | Yes | No |
 | prj0000094-idea-003-mypy-strict-enforcement | 0% (0/0) | Yes | No |
 | prj0000095-source-stub-remediation | 0% (0/0) | No | No |
+| prj0000096-coverage-minimum-enforcement | 0% (0/0) | Yes | No |
+| prj0000097-stub-module-elimination | 0% (0/0) | Yes | No |
+| prj0000098-backend-health-check-endpoint | 0% (0/0) | Yes | No |

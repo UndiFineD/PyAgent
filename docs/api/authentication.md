@@ -13,7 +13,7 @@ available for local testing.
 Pass the key in the `X-API-Key` request header:
 
 ```http
-GET /api/v1/projects HTTP/1.1
+GET /v1/api/projects HTTP/1.1
 Host: localhost:8000
 X-API-Key: your-api-key
 ```
@@ -27,7 +27,7 @@ The API key value is configured via the `PYAGENT_API_KEY` environment variable o
 Pass a signed JWT (HS256) in the `Authorization` header:
 
 ```http
-GET /api/v1/projects HTTP/1.1
+GET /v1/api/projects HTTP/1.1
 Host: localhost:8000
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
@@ -93,3 +93,4 @@ WARNING: DEV_MODE active — all authentication is bypassed
 2. Use HTTPS / WSS in any environment that is not loop-back localhost.
 3. Do not pass credentials in URL query params in production logs — use header-based auth for REST.
 4. Use short-lived JWTs with an `exp` claim for automated agent calls.
+

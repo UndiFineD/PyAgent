@@ -9,6 +9,75 @@ Once security scans and CodeQL analysis are complete,
 the next agent in the workflow is **@9git**. 
 Invoke it via `agent/runSubagent` to continue the process.
 
+## Last scan - 2026-03-29 (prj0000098 rerun after blocker fixes)
+- Task: prj0000098-backend-health-check-endpoint
+- Lifecycle: IN_PROGRESS -> DONE
+- status: DONE
+- task_id: prj0000098-backend-health-check-endpoint
+- Branch gate: PASS (expected = observed = `prj0000098-backend-health-check-endpoint`)
+- Files scanned: project-scoped backend probe/test/docs files plus branch delta support files listed in `prj0000098-backend-health-check-endpoint.ql.md`
+- Security - CodeQL: SKIPPED (no project-scoped CodeQL DB invocation in this rerun)
+- Security - ruff S rules: PASS WITH NOTES (12 pre-existing repo findings; no project-scoped HIGH/CRITICAL)
+- Security - pip-audit new findings: 0 (`Deps with vulns: 0` from committed baseline parse)
+- Security - Rust unsafe check: SKIPPED (`rust_core/` unchanged)
+- Security - Workflow injection: PASS (no changed `.github/workflows/*.yml` files)
+- Quality - Plan vs delivery: PASS
+- Quality - AC vs test coverage: PASS (policy blocker test and readiness degraded-path tests pass)
+- Quality - Docs vs implementation: PASS WITH NON-BLOCKING NOTE (design wording drift only)
+- Quality - Agent file consistency: PASS
+- Lessons written: 1 (rerun evidence capture pattern)
+- Rules promoted: 0
+- Outcome: CLEAN -> @9git
+- handoff_target: @9git
+
+### Lesson - 2026-03-29 (prj0000098 rerun)
+- Pattern: Blocker-remediation reruns are safest when they include direct single-test proof for the exact failing policy test before full handoff.
+- Root cause: Prior blocker confidence relied on downstream notes before direct rerun in @8ql.
+- Prevention: Always execute and record the exact previously failing test selector in the @8ql rerun evidence block.
+- First seen: 2026-03-29
+- Seen in: prj0000098-backend-health-check-endpoint
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
+## Last scan - 2026-03-29 (prj0000098)
+- Task: prj0000098-backend-health-check-endpoint
+- Lifecycle: OPEN -> IN_PROGRESS -> BLOCKED
+- status: BLOCKED
+- task_id: prj0000098-backend-health-check-endpoint
+- Branch gate: PASS (expected = observed = `prj0000098-backend-health-check-endpoint`)
+- Files scanned: `backend/app.py`, `backend/rate_limiter.py`, `tests/test_api_versioning.py`, `tests/test_backend_auth.py`, `tests/test_rate_limiting.py`, `docs/project/prj0000098-backend-health-check-endpoint/*`, and branch-modified supporting docs/modules from current working tree
+- Security - CodeQL: SKIPPED (no project-scoped CodeQL database invocation in this gate run)
+- Security - ruff S rules: PASS WITH LOW (`backend/app.py` S311 on simulated metrics path; no HIGH/CRITICAL findings)
+- Security - pip-audit new findings: 0 (`pip_audit_results.json` reports `Deps with vulns: 0`; `pip-audit` CLI available)
+- Security - Rust unsafe check: SKIPPED (`rust_core/` not modified in this project scope)
+- Security - Workflow injection: PASS (no changed `.github/workflows/*.yml` in current branch delta)
+- Quality - Plan vs delivery: FAIL (scope/control drift and unresolved project git-summary policy block)
+- Quality - AC vs test coverage: FAIL (design AC-004 readiness-degraded path not implemented/tested)
+- Quality - Docs vs implementation: FAIL (`prj0000098-backend-health-check-endpoint.git.md` missing required `## Branch Plan` section)
+- Quality - Agent file consistency: FAIL (project git-summary artifact does not meet current workflow policy format)
+- Lessons written: 2 (`8ql.memory.md`)
+- Rules promoted: 0
+- Outcome: BLOCKED -> @6code (with @4plan/@5test alignment)
+- handoff_target: @6code
+
+### Lesson - 2026-03-29 (prj0000098)
+- Pattern: New project `*.git.md` artifacts can be created without modern Branch Plan sections, causing policy-gate failures in execution and quality stages.
+- Root cause: Downstream artifact updates did not migrate the git summary template to the required modern branch-plan format.
+- Prevention: Before @7exec and @8ql handoff, enforce a docs-policy lint checkpoint for `docs/project/<project>/*.git.md` requiring `## Branch Plan` or explicit legacy exception.
+- First seen: 2026-03-29
+- Seen in: prj0000098-backend-health-check-endpoint
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
+### Lesson - 2026-03-29 (prj0000098)
+- Pattern: Design acceptance tables can diverge from plan/test/code artifacts when contract-level requirements are added in design but not propagated.
+- Root cause: AC updates in design (`/readyz` degraded 503 path) were not reflected in plan tasks, tests, or implementation evidence.
+- Prevention: Require an AC sync pass at @4plan closeout that diffs design AC rows against plan/test/code artifacts before handoff to @5test.
+- First seen: 2026-03-29
+- Seen in: prj0000098-backend-health-check-endpoint
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
 ## Last scan - 2026-03-29 (prj0000097)
 - Task: prj0000097-stub-module-elimination
 - Lifecycle: OPEN -> IN_PROGRESS -> DONE
@@ -40,6 +109,27 @@ Invoke it via `agent/runSubagent` to continue the process.
 - Promotion status: CANDIDATE
 
 ## Unresolved Quality-Debt Ledger
+- Debt ID: QD-prj0000098-001
+- Status: DONE
+- Owner: @6code (with @9git artifact ownership)
+- Originating project: prj0000098-backend-health-check-endpoint
+- Description: `docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.git.md` lacks required modern `## Branch Plan` section, blocking policy test and quality gate.
+- Exit criteria: Met on 2026-03-29 rerun (`test_git_summaries_use_modern_branch_plan_format_or_carry_legacy_exception` passed).
+
+- Debt ID: QD-prj0000098-002
+- Status: DONE
+- Owner: @4plan (contract alignment) with @5test/@6code implementation follow-through
+- Originating project: prj0000098-backend-health-check-endpoint
+- Description: Design AC-004 (`/readyz` 503 degraded contract) is not represented in current plan tasks, tests, or code behavior.
+- Exit criteria: Met on 2026-03-29 rerun (readiness degraded-path tests passed for `/v1/readyz` and `/readyz`).
+
+- Debt ID: QD-prj0000098-003
+- Status: DONE
+- Owner: @6code (or @0master if scope split/rebranch required)
+- Originating project: prj0000098-backend-health-check-endpoint
+- Description: Branch contains non-project-scope file edits beyond the design AC-007 boundary (backend health endpoint + health tests).
+- Exit criteria: Met on 2026-03-29 rerun (governing artifacts updated to include canonical `/v1/...` alignment scope and validated at branch gate).
+
 - Debt ID: QD-prj0000097-001
 - Status: OPEN
 - Owner: @1project (or @6code if delegated)

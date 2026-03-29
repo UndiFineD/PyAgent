@@ -118,7 +118,7 @@ def base_config() -> FlmProviderConfig:
         default_model="m1",
         timeout=1,
         max_retries=0,
-        health_path="/health",
+        health_path="/v1/health",
         chat_path="/chat",
     )
 

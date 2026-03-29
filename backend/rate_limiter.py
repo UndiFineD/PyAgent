@@ -27,8 +27,15 @@ from starlette.types import ASGIApp
 _RATE_LIMIT_REQUESTS: int = int(os.getenv("RATE_LIMIT_REQUESTS", "60"))
 _RATE_LIMIT_WINDOW: float = float(os.getenv("RATE_LIMIT_WINDOW", "60"))
 
-# Paths that are never rate-limited (load-balancer health checks, etc.)
-_EXEMPT_PATHS: frozenset[str] = frozenset({"/health"})
+# Paths that are never rate-limited (load-balancer and probe health checks).
+_EXEMPT_PATHS: frozenset[str] = frozenset({
+    "/health",
+    "/livez",
+    "/readyz",
+    "/v1/health",
+    "/v1/livez",
+    "/v1/readyz",
+})
 
 
 class TokenBucket:
@@ -40,6 +47,7 @@ class TokenBucket:
     __slots__ = ("_rate", "_window", "_tokens", "_last_refill", "_lock")
 
     def __init__(self, rate: int, window: float) -> None:
+        """Initialize the token bucket with the given rate and window."""
         self._rate = rate
         self._window = window
         self._tokens = rate
@@ -63,12 +71,14 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
     """Per-IP token-bucket rate limiting middleware.
 
     Limits: ``RATE_LIMIT_REQUESTS`` requests per ``RATE_LIMIT_WINDOW`` seconds.
-    Paths in ``_EXEMPT_PATHS`` (e.g. ``/health``) bypass the limiter entirely.
+    Paths in ``_EXEMPT_PATHS`` (e.g. ``/v1/health``, ``/v1/livez``, ``/v1/readyz``)
+    bypass the limiter entirely.
     On breach: ``429 Too Many Requests`` with ``Retry-After`` header.
     """
 
     def __init__(self, app: ASGIApp, rate: int = _RATE_LIMIT_REQUESTS,
                  window: float = _RATE_LIMIT_WINDOW) -> None:
+        """Initialize the middleware with the given rate and window parameters."""
         super().__init__(app)
         self._rate = rate
         self._window = window
@@ -76,6 +86,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         self._map_lock: asyncio.Lock = asyncio.Lock()
 
     def _client_ip(self, request: Request) -> str:
+        """Extract the client's IP address from the request."""
         forwarded = request.headers.get("x-forwarded-for")
         if forwarded:
             return forwarded.split(",")[0].strip()
@@ -84,12 +95,14 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         return "unknown"
 
     async def _get_bucket(self, ip: str) -> TokenBucket:
+        """Get or create a token bucket for the given IP address."""
         async with self._map_lock:
             if ip not in self._buckets:
                 self._buckets[ip] = TokenBucket(self._rate, self._window)
             return self._buckets[ip]
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        """Process a request through the rate limiter."""
         if request.url.path in _EXEMPT_PATHS:
             return await call_next(request)
 

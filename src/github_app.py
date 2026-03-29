@@ -67,6 +67,7 @@ def verify_github_signature(
     computed = hmac.new(secret.encode("utf-8"), body, hashlib.sha256).hexdigest()
     return hmac.compare_digest(computed, received)
 
+
 # ---------------------------------------------------------------------------
 # Event routing helpers
 # ---------------------------------------------------------------------------
@@ -111,6 +112,7 @@ _HANDLERS = {
 # ---------------------------------------------------------------------------
 
 
+@app.get("/v1/health")
 @app.get("/health")
 def health() -> dict[str, str]:
     """Health check endpoint."""

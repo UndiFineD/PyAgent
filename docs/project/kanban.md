@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-29 | Total projects: 97 | prj0000097 moved to Released (Discovery: 2, Review: 1, Released: 93)_
+_Last updated: 2026-03-29 | Total projects: 98 | prj0000098 added to Discovery (Discovery: 3, Review: 1, Released: 93)_
 
 ## How to use this board
 
@@ -56,6 +56,7 @@ Active options exploration — @2think is working or has completed .think.md.
 
 | ID | Name | Summary | Branch | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|---|
+| prj0000098 | backend-health-check-endpoint | Initialize project from idea000013 to design and deliver backend health-check endpoint governance and implementation planning | prj0000098-backend-health-check-endpoint | P2 | M | backend, health, readiness, liveness | 2026-03-29 |
 | prj0000094 | idea-003 - mypy-strict-enforcement | This idea focuses on mypy strict enforcement in area 1 – Python agents. The current signal indicates priority P1, impact H, and urgency H. The SWOT tag is W (Weakness in current implementation). | — | P3 | S | idea, idea000003 | 2026-03-28 |
 | prj0000093 | projectmanager-ideas-autosync | Project Manager auto-ingests docs/project/ideas and excludes implemented ideas | prj0000093-projectmanager-ideas-autosync | P2 | M | project-manager, ideas, autosync | 2026-03-28 |
 
@@ -209,13 +210,13 @@ Stalled, cancelled, or superseded projects.
 | Lane | Count |
 |---|---|
 | Ideas | 0 |
-| Discovery | 2 |
+| Discovery | 3 |
 | Design | 0 |
 | In Sprint | 0 |
 | Review | 1 |
 | Released | 93 |
 | Archived | 1 |
-| **Total** | **97** |
+| **Total** | **98** |
 
 ---
 

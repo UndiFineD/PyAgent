@@ -34,6 +34,36 @@ Lesson schema:
 
 ---
 
+## prj0000098 - backend-health-check-endpoint
+_Date: 2026-03-29 | Branch: prj0000098-backend-health-check-endpoint_
+
+task_id: prj0000098
+Lifecycle: OPEN -> IN_PROGRESS -> DONE
+Artifact: docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.think.md
+Recommendation: Option A - Additive probe endpoints (`/health` unchanged, add `/readyz` + `/livez`) with focused contract tests.
+Handoff target: @3design
+Rationale summary:
+- Discovery confirmed idea drift: `GET /health` already exists and is intentionally unauthenticated/exempt from rate limiting.
+- Primary gap is missing readiness/liveness split, not missing health endpoint.
+- Minimal additive endpoints provide fastest safe path with deterministic tests and low blast radius.
+
+Prior-art references used:
+- docs/project/prj0000054/backend-authentication.design.md
+- docs/project/prj0000064/rate-limiting-middleware.design.md
+- tests/test_backend_worker.py
+- tests/test_rate_limiting.py
+
+Lesson schema:
+- Pattern: Re-validate idea assumptions against current source before selecting architecture options.
+- Root cause: Idea metadata lagged repository state (`/health` present; only `/readyz` and `/livez` missing).
+- Prevention: Add mandatory assumption-diff checkpoint (`idea claims` vs `current code/tests`) at start of @2think.
+- First seen: 2026-03-29.
+- Seen in: prj0000097-stub-module-elimination; prj0000098-backend-health-check-endpoint.
+- Recurrence count: 2.
+- Promotion status: promoted to hard rule.
+
+---
+
 ## prj0000088 - ai-fuzzing-security
 _Date: 2026-03-27 | Branch: prj0000088-ai-fuzzing-security_
 

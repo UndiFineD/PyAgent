@@ -93,7 +93,7 @@ The React component tree is rooted at `web/src/App.tsx`. Each app runs inside a 
 resizable window managed by the desktop shell. The taskbar persists across all window states
 and can be pinned or auto-hidden via the NebulaOS Settings modal.
 Real-time system metrics are streamed from the FastAPI backend into Conky via the
-`/api/metrics/system` endpoint, powered by `psutil`.
+`/v1/api/metrics/system` endpoint, powered by `psutil`.
 
 ![NebulaOS Desktop](docs/assets/nebulaos-screenshot.png)
 
@@ -104,7 +104,7 @@ Real-time system metrics are streamed from the FastAPI backend into Conky via th
 |   | an Agent Docs tab with live Markdown editing, and a streaming Logs pane |
 | **AgentChat** | Real-time streaming WebSocket chat with token-by-token rendering |
 | **Conky** | Live system metrics dashboard: CPU, memory, disk, and network I/O |
-|   | powered by `psutil` via the backend `/api/metrics/system` endpoint |
+|   | powered by `psutil` via the backend `/v1/api/metrics/system` endpoint |
 | **Calculator** | Standard four-function calculator |
 | **Editor** | Plain-text and code editor |
 | **Paint** | Simple canvas drawing app |
@@ -118,18 +118,20 @@ worker handling streaming agent sessions independently.
 
 | Method | Path | Description |
 |---|---|---|
-| GET | `/health` | Liveness check — returns `{"status": "ok"}` |
-| GET | `/api/agent-doc/{id}` | Fetch an agent definition markdown file |
-| PUT | `/api/agent-doc/{id}` | Update an agent definition file |
-| GET | `/api/metrics/system` | Live CPU / memory / network I/O (Conky feed) |
+| GET | `/v1/health` | Liveness check — returns `{"status": "ok"}` |
+| GET | `/v1/api/agent-doc/{id}` | Fetch an agent definition markdown file |
+| PUT | `/v1/api/agent-doc/{id}` | Update an agent definition file |
+| GET | `/v1/api/metrics/system` | Live CPU / memory / network I/O (Conky feed) |
 | WS | `/ws` | Bidirectional agent chat and task streaming |
+
+Legacy aliases `/health`, `/api/*`, and `/api/v1/*` are maintained for compatibility and marked as deprecated.
 
 ```powershell
 # Start the backend
 uvicorn backend.app:app --reload
 
 # Health check
-Invoke-RestMethod http://localhost:8000/health
+Invoke-RestMethod http://localhost:8000/v1/health
 ```
 
 The WebSocket endpoint (`/ws`) carries four message types: `task_start`, `log_line`,

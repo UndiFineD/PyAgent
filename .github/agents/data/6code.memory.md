@@ -9,6 +9,58 @@ Once code implementation is complete and tests are passing,
 the next agent to invoke is **@7exec**. 
 This should be done via `agent/runSubagent`.
 
+## prj0000098 - backend-health-check-endpoint
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000098-backend-health-check-endpoint |
+| **owner_agent** | @6code |
+| **source** | User direct @6code blocker-remediation request from @7exec/@8ql findings |
+| **created_at** | 2026-03-29 |
+| **updated_at** | 2026-03-29 |
+| **status** | DONE |
+| **summary** | Resolved blockers by adding deterministic degraded readiness handling for `/v1/readyz` and `/readyz` (503 + explicit reason), adding degraded-path tests, adding required modern `## Branch Plan` to prj0000098 `.git.md`, and aligning project/design/plan scope docs to include canonical `/v1/...` repo pass updates in README/docs/api/providers/github_app. |
+| **changed_modules** | backend/app.py; tests/test_api_versioning.py; docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.project.md; docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.design.md; docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.plan.md; docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.git.md; docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.code.md; .github/agents/data/6code.memory.md |
+| **verification_commands** | c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -v tests/test_api_versioning.py tests/test_backend_auth.py tests/test_rate_limiting.py tests/test_backend_worker.py tests/test_structured_logging.py tests/test_github_app.py tests/test_providers_flm.py tests/structure/test_readme.py::test_backend_endpoints |
+| **verification_result** | PASS (`85 passed in 6.12s`). |
+| **unresolved_risks** | None identified for blocker scope; full-policy rerun delegated to @7exec/@8ql. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | backend/app.py, tests/test_api_versioning.py, docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.project.md, docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.design.md, docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.plan.md, docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.git.md, docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.code.md, .github/agents/data/6code.memory.md |
+
+### Lesson - 2026-03-29 (prj0000098 blocker follow-up)
+- Pattern: FastAPI route return annotations that union dict payload with `JSONResponse` can fail response-model generation during import-time route registration.
+- Root cause: `dict[str, Any] | JSONResponse` annotation is not a valid Pydantic response model type in this app setup.
+- Prevention: Keep handler annotation as dict payload type and return `JSONResponse` only at runtime for status overrides.
+- First seen: 2026-03-29
+- Seen in: prj0000098-backend-health-check-endpoint
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000098-backend-health-check-endpoint |
+| **owner_agent** | @6code |
+| **source** | User direct @6code implementation request using prj0000098 plan/test artifacts |
+| **created_at** | 2026-03-29 |
+| **updated_at** | 2026-03-29 |
+| **status** | DONE |
+| **summary** | Implemented backend probe endpoints `/livez` and `/readyz` with fixed contracts, kept `/health` unchanged, expanded rate-limit probe exemptions (`/health`, `/livez`, `/readyz`), and updated scoped backend tests to green for probe contract, no-auth accessibility, and limiter bypass behavior. |
+| **changed_modules** | backend/app.py; backend/rate_limiter.py; tests/test_api_versioning.py; tests/test_backend_auth.py; tests/test_rate_limiting.py; docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.code.md; .github/agents/data/6code.memory.md |
+| **verification_commands** | c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_api_versioning.py tests/test_backend_auth.py tests/test_rate_limiting.py; c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_github_app.py tests/test_api_versioning.py tests/test_backend_auth.py tests/test_rate_limiting.py; c:/Dev/PyAgent/.venv/Scripts/python.exe -m ruff check backend/rate_limiter.py tests/test_api_versioning.py tests/test_backend_auth.py tests/test_rate_limiting.py; c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q; rg --type py "raise NotImplementedError|raise NotImplemented\b|#\s*(TODO|FIXME|HACK|STUB|PLACEHOLDER)" backend/app.py backend/rate_limiter.py tests/test_api_versioning.py tests/test_backend_auth.py tests/test_rate_limiting.py; rg --type py "^\s*\.\.\.\s*$" backend/app.py backend/rate_limiter.py |
+| **verification_result** | PASS for scoped validations (`33 passed`, `52 passed`, scoped ruff clean, placeholder scans clean). Full-suite pytest has 1 unrelated docs-policy failure in `docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.git.md` missing `## Branch Plan`. |
+| **unresolved_risks** | @7exec full-suite runs will remain red until prj0000098 `.git.md` policy-format requirement is fixed by the owning workflow. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | backend/app.py, backend/rate_limiter.py, tests/test_api_versioning.py, tests/test_backend_auth.py, tests/test_rate_limiting.py, docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.code.md, .github/agents/data/6code.memory.md |
+
+### Lesson - 2026-03-29 (prj0000098)
+- Pattern: Full-repo validation can fail on project governance doc-policy checks unrelated to the current backend code slice.
+- Root cause: prj0000098 git artifact template is not yet migrated to required modern Branch Plan sections.
+- Prevention: Before running broad full-suite pytest for backend-only slices, pre-check active project artifact policy tests and record expected non-scope failures explicitly in handoff evidence.
+- First seen: 2026-03-29
+- Seen in: prj0000098-backend-health-check-endpoint
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
 ## prj0000097 - stub-module-elimination (Slice 1)
 
 | Field | Value |

@@ -15,6 +15,7 @@
 
 prj0000029 — LLM UI Backend Worker.
 """
+
 from __future__ import annotations
 
 import base64
@@ -56,6 +57,7 @@ def test_backend_app_importable():
 
 
 # ─── Model tests ──────────────────────────────────────────────────────────
+
 
 def test_init_message_schema():
     msg = InitMessage(type="init", session_id="abc", client_info={"v": 1})
@@ -108,13 +110,17 @@ def test_speech_transcript_is_final_default():
 
 def test_signal_message_schema():
     msg = SignalMessage(
-        type="signal", session_id="s1", peer_id="p1",
-        signal_type="offer", payload={"sdp": "v=0"},
+        type="signal",
+        session_id="s1",
+        peer_id="p1",
+        signal_type="offer",
+        payload={"sdp": "v=0"},
     )
     assert msg.signal_type == "offer"
 
 
 # ─── SessionManager tests ─────────────────────────────────────────────────
+
 
 def test_session_manager_initially_empty():
     sm = SessionManager()
@@ -137,14 +143,15 @@ client = TestClient(app)
 
 
 def test_health_endpoint():
-    response = client.get("/health")
+    response = client.get("/v1/health")
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
 
 
 # ─── WebSocket E2E helpers ────────────────────────────────────────────────
 
-def _ws_handshake(ws):  # type: ignore[no-untyped-def]
+
+def _ws_handshake(ws) -> bytes:  # type: ignore[no-untyped-def]
     """Perform X25519 ECDH key exchange and return the session_key."""
     server_pub = base64.b64decode(ws.receive_text())
     client_priv, client_pub = generate_keypair()
@@ -165,6 +172,7 @@ def _ws_recv(ws, session_key: bytes) -> dict:  # type: ignore[no-untyped-def]
 
 
 # ─── WebSocket tests ──────────────────────────────────────────────────────
+
 
 def test_ws_init_ack():
     with client.websocket_connect("/ws") as ws:

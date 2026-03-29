@@ -1,7 +1,8 @@
 # REST Endpoints
 
-All endpoints are available at both `/api/<path>` (legacy) and `/api/v1/<path>` (current).
-Prefer `/api/v1/`. See [Authentication](authentication.md) for auth details and
+All endpoints are available at `/v1/api/<path>` (current) and legacy aliases
+(`/api/<path>`, `/api/v1/<path>`).
+Prefer `/v1/api/`. See [Authentication](authentication.md) for auth details and
 [Errors](errors.md) for error shapes.
 
 Protected endpoints require either an `X-API-Key` header or an `Authorization: Bearer <token>` header.
@@ -10,9 +11,11 @@ Protected endpoints require either an `X-API-Key` header or an `Authorization: B
 
 ## Health
 
-### `GET /health`
+### `GET /v1/health`
 
 Liveness probe. No authentication required.
+
+Legacy alias: `GET /health` (deprecated).
 
 **Response 200**
 
@@ -24,7 +27,7 @@ Liveness probe. No authentication required.
 
 ## Metrics
 
-### `GET /api/v1/metrics/flm`
+### `GET /v1/api/metrics/flm`
 
 Return simulated FLM (fast language model) token throughput metrics. No authentication required.
 
@@ -46,7 +49,7 @@ Return simulated FLM (fast language model) token throughput metrics. No authenti
 
 ---
 
-### `GET /api/v1/metrics/system`
+### `GET /v1/api/metrics/system`
 
 Return real-time CPU, memory, network IO, and disk IO metrics. **Auth required.**
 
@@ -92,7 +95,7 @@ Return real-time CPU, memory, network IO, and disk IO metrics. **Auth required.*
 
 ## Plugins
 
-### `GET /api/v1/plugins`
+### `GET /v1/api/plugins`
 
 Return the static plugin registry. No authentication required.
 
@@ -117,7 +120,7 @@ Return the static plugin registry. No authentication required.
 Valid `agent_id` values: `0master`, `1project`, `2think`, `3design`, `4plan`, `5test`, `6code`, `7exec`,
 `8ql`, `9git`.
 
-### `GET /api/v1/agent-log/{agent_id}`
+### `GET /v1/api/agent-log/{agent_id}`
 
 Read the agent's log file (`docs/agents/<agent_id>.log.md`). **Auth required.**
 
@@ -137,7 +140,7 @@ Returns `{"content": ""}` when the log file does not exist.
 
 ---
 
-### `PUT /api/v1/agent-log/{agent_id}`
+### `PUT /v1/api/agent-log/{agent_id}`
 
 Overwrite the agent's log file. **Auth required.**
 
@@ -155,7 +158,7 @@ Overwrite the agent's log file. **Auth required.**
 
 ---
 
-### `GET /api/v1/agent-doc/{agent_id}`
+### `GET /v1/api/agent-doc/{agent_id}`
 
 Read the agent's definition file (`.github/agents/<agent_id>.agent.md`). **Auth required.**
 
@@ -170,7 +173,7 @@ Returns **400** for an unrecognised agent ID.
 
 ---
 
-### `PUT /api/v1/agent-doc/{agent_id}`
+### `PUT /v1/api/agent-doc/{agent_id}`
 
 Overwrite the agent's definition file. **Auth required.**
 
@@ -190,7 +193,7 @@ Returns **400** for an unrecognised agent ID.
 
 ---
 
-### `GET /api/v1/agent-memory/{agent_id}`
+### `GET /v1/api/agent-memory/{agent_id}`
 
 Return stored memory entries for an agent, newest-first. **Auth required.**
 
@@ -217,7 +220,7 @@ Returns **400** for an invalid agent ID.
 
 ---
 
-### `POST /api/v1/agent-memory/{agent_id}`
+### `POST /v1/api/agent-memory/{agent_id}`
 
 Append a memory entry. **Auth required.**
 
@@ -241,7 +244,7 @@ Append a memory entry. **Auth required.**
 
 ---
 
-### `DELETE /api/v1/agent-memory/{agent_id}`
+### `DELETE /v1/api/agent-memory/{agent_id}`
 
 Clear all memory entries for an agent. **Auth required.**
 
@@ -251,7 +254,7 @@ Clear all memory entries for an agent. **Auth required.**
 
 ## Projects
 
-### `GET /api/v1/projects`
+### `GET /v1/api/projects`
 
 List all projects from `data/projects.json`. **Auth required.**
 
@@ -301,7 +304,7 @@ List all projects from `data/projects.json`. **Auth required.**
 
 ---
 
-### `POST /api/v1/projects`
+### `POST /v1/api/projects`
 
 Create a new project entry. **Auth required.**
 
@@ -326,7 +329,7 @@ Returns **409** if a project with the same `id` already exists.
 
 ---
 
-### `PATCH /api/v1/projects/{project_id}`
+### `PATCH /v1/api/projects/{project_id}`
 
 Update one or more fields on an existing project. **Auth required.**
 
@@ -357,7 +360,7 @@ Returns **404** if no project with that ID exists.
 
 ## Watchdog
 
-### `GET /api/v1/watchdog/status`
+### `GET /v1/api/watchdog/status`
 
 Return the current `AgentWatchdog` state. **Auth required.**
 
@@ -376,7 +379,7 @@ Return the current `AgentWatchdog` state. **Auth required.**
 
 ## Pipeline
 
-### `POST /api/v1/pipeline/run`
+### `POST /v1/api/pipeline/run`
 
 Create a new pipeline run. **Auth required.**
 
@@ -401,7 +404,7 @@ Create a new pipeline run. **Auth required.**
 
 ---
 
-### `GET /api/v1/pipeline/status/{pipeline_id}`
+### `GET /v1/api/pipeline/status/{pipeline_id}`
 
 Return the current status of a pipeline run. **Auth required.**
 
@@ -435,3 +438,4 @@ Return the current status of a pipeline run. **Auth required.**
 ```
 
 Returns **404** if the pipeline ID is unknown.
+

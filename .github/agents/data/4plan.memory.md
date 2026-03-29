@@ -17,6 +17,61 @@ where test cases are written and validated against the plan.
 
 ---
 
+## prj0000098 - backend-health-check-endpoint
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000098-backend-health-check-endpoint |
+| **owner_agent** | @4plan |
+| **source** | @3design (using @2think recommendation because design artifact is placeholder) |
+| **created_at** | 2026-03-29 |
+| **updated_at** | 2026-03-29 |
+| **status** | DONE |
+| **lifecycle** | OPEN -> IN_PROGRESS -> DONE |
+| **handoff_target** | @5test |
+| **artifact_paths** | docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.plan.md |
+| **branch** | prj0000098-backend-health-check-endpoint (validated PASS before artifact writes) |
+
+### Slice 1 Summary
+
+| Item | Value |
+|---|---|
+| Scope | `/health`, `/livez`, `/readyz` backend endpoint and related tests only |
+| Out of scope guard | No startup state machine, no dependency probes, no frontend changes |
+| Task IDs | T1-T6 |
+| Test-first sequence | T1-T3 (@5test red) before T4-T6 (@6code green) |
+
+### Acceptance Coverage
+
+| Task | Acceptance IDs |
+|---|---|
+| T1 | AC-001, AC-002, AC-003 |
+| T2 | AC-004 |
+| T3 | AC-005 |
+| T4 | AC-001, AC-002, AC-003, AC-004 |
+| T5 | AC-005 |
+| T6 | AC-001, AC-002, AC-003, AC-004, AC-005 |
+
+### Dependency Order
+1. T1 -> T2 -> T3
+2. T4 depends on T1-T3
+3. T5 depends on T3 and can run with T4
+4. T6 depends on T4-T5
+
+### Lesson Entry
+
+| Field | Value |
+|---|---|
+| Pattern | Endpoint-slice plans are handoff-safe when red tasks and green tasks are split explicitly by agent with per-task validation commands. |
+| Root cause | Prior health endpoint requests risked ambiguous execution ownership between @5test and @6code when tasks were not phase-labeled. |
+| Prevention | Require every slice task to name owner phase (@5test red or @6code green), file list, and command-level pass criteria. |
+| First seen | 2026-03-29 |
+| Seen in | prj0000098-backend-health-check-endpoint |
+| Recurrence count | 1 |
+| Promotion status | CANDIDATE |
+
+---
+
 ## prj0000097 - stub-module-elimination
 
 | Field | Value |

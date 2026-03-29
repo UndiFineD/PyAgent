@@ -7,7 +7,7 @@ Manages WebSocket sessions between the NebulaOS browser frontend and the PyAgent
 
 | File | Purpose |
 |------|---------|
-| `app.py` | FastAPI application — `/health` endpoint + `/ws` WebSocket endpoint |
+| `app.py` | FastAPI application — `/v1/health` endpoint + `/ws` WebSocket endpoint |
 | `session_manager.py` | Tracks active WebSocket connections keyed by UUID |
 | `ws_handler.py` | Dispatches incoming messages to typed handlers; streams AI output |
 | `models.py` | Pydantic schemas for all 10 client↔backend message types |
@@ -17,8 +17,12 @@ Manages WebSocket sessions between the NebulaOS browser frontend and the PyAgent
 
 | Endpoint | Protocol | Description |
 |----------|----------|-------------|
-| `GET /health` | HTTP | Liveness probe — returns `{"status": "ok"}` |
+| `GET /v1/health` | HTTP | Liveness probe — returns `{"status": "ok"}` |
 | `ws://127.0.0.1:8000/ws` | WebSocket | Bidirectional streaming channel |
+
+Legacy compatibility:
+- Unversioned probe paths (`/health`, `/livez`, `/readyz`) are kept as deprecated aliases.
+- Legacy `/api/*` and `/api/v1/*` remain available as compatibility aliases for `/v1/api/*`.
 
 ## Message Protocol
 
@@ -53,7 +57,7 @@ python -m backend
 # Listening on http://127.0.0.1:8000
 ```
 
-The Vite dev server proxies `/ws` and `/api` to `http://127.0.0.1:8000` automatically 
+The Vite dev server proxies `/ws` and `/v1/api` to `http://127.0.0.1:8000` automatically 
 — start both processes and open the NebulaOS frontend at `http://localhost:5173`.
 
 ## Tests

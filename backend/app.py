@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import random
 import time
 import uuid
@@ -26,6 +27,7 @@ from typing import Any
 import psutil
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -124,20 +126,23 @@ app.add_middleware(RateLimitMiddleware)
 class VersionHeaderMiddleware(BaseHTTPMiddleware):
     """Inject API version headers.
 
-    * ``X-API-Version: 1``   — added on all ``/api/v1/`` responses.
+    * ``X-API-Version: 1``   — added on all ``/v1/api/`` responses.
     * ``Deprecation: true``  — added on bare ``/api/`` responses that have a v1 counterpart.
     """
 
     async def dispatch(self, request, call_next):  # type: ignore[override]
         response = await call_next(request)
         path = request.url.path
-        if path.startswith("/api/v1/"):
+        if path.startswith("/v1/api/"):
             response.headers["X-API-Version"] = "1"
-        elif path.startswith("/api/") and not path.startswith("/api/v1/"):
+        elif path.startswith("/api/"):
             response.headers["Deprecation"] = "true"
             response.headers["Link"] = (
-                f'<{path.replace("/api/", "/api/v1/", 1)}>; rel="successor-version"'
+                f'<{path.replace("/api/", "/v1/api/", 1)}>; rel="successor-version"'
             )
+        elif path in {"/health", "/livez", "/readyz"}:
+            response.headers["Deprecation"] = "true"
+            response.headers["Link"] = f'</v1{path}>; rel="successor-version"'
         return response
 
 
@@ -146,15 +151,46 @@ app.add_middleware(VersionHeaderMiddleware)
 sessions = SessionManager()
 
 # Protected router — all routes registered here require authentication.
-# /health remains on `app` directly so load-balancers never need credentials.
+# Probe endpoints are exposed on both canonical /v1/* and legacy unversioned paths.
 _auth_router = APIRouter(dependencies=[Depends(require_auth)])
 
 
+@app.get("/v1/health")
 @app.get("/health")
 async def health() -> dict[str, str]:
     """Health check endpoint."""
-    get_logger().info("Health check", extra={"correlation_id": "health", "endpoint": "/health"})
+    get_logger().info("Health check", extra={"correlation_id": "health", "endpoint": "/v1/health"})
     return {"status": "ok"}
+
+
+@app.get("/v1/livez")
+@app.get("/livez")
+async def livez() -> dict[str, str]:
+    """Liveness probe endpoint."""
+    get_logger().info("Liveness check", extra={"correlation_id": "livez", "endpoint": "/v1/livez"})
+    return {"status": "alive"}
+
+
+@app.get("/v1/readyz")
+@app.get("/readyz")
+async def readyz() -> dict[str, Any]:
+    """Readiness probe endpoint."""
+    get_logger().info("Readiness check", extra={"correlation_id": "readyz", "endpoint": "/v1/readyz"})
+    state_reason = getattr(app.state, "readyz_degraded_reason", None)
+    if isinstance(state_reason, str) and state_reason.strip():
+        return JSONResponse(
+            status_code=503,
+            content={"status": "degraded", "ready": False, "reason": state_reason.strip()},
+        )
+
+    force_degraded = os.getenv("PYAGENT_READYZ_FORCE_DEGRADED", "").strip().lower()
+    if force_degraded in {"1", "true", "yes", "on"}:
+        return JSONResponse(
+            status_code=503,
+            content={"status": "degraded", "ready": False, "reason": "forced_degraded_env"},
+        )
+
+    return {"status": "ready"}
 
 
 @app.get("/api/metrics/flm")
@@ -340,6 +376,7 @@ async def get_system_metrics() -> SystemMetricsResponse:
 
 @app.get("/api/automem/benchmark/latest")
 @app.get("/api/v1/automem/benchmark/latest")
+@app.get("/v1/api/automem/benchmark/latest")
 async def automem_benchmark_latest() -> dict[str, Any]:
     """Return the latest persisted AutoMem benchmark report."""
     try:
@@ -354,6 +391,7 @@ async def automem_benchmark_latest() -> dict[str, Any]:
 
 @app.post("/api/automem/benchmark/run")
 @app.post("/api/v1/automem/benchmark/run")
+@app.post("/v1/api/automem/benchmark/run")
 async def automem_benchmark_run(body: AutoMemBenchmarkRunRequest) -> dict[str, Any]:
     """Execute and persist an AutoMem benchmark run in PostgreSQL."""
     try:
@@ -368,6 +406,7 @@ async def automem_benchmark_run(body: AutoMemBenchmarkRunRequest) -> dict[str, A
 
 @app.get("/api/automem/benchmark/runs")
 @app.get("/api/v1/automem/benchmark/runs")
+@app.get("/v1/api/automem/benchmark/runs")
 async def automem_benchmark_runs(
     limit: int = Query(default=20, ge=1, le=200),
 ) -> list[dict[str, Any]]:
@@ -380,6 +419,7 @@ async def automem_benchmark_runs(
 
 @app.get("/api/automem/benchmark/runs/{run_id}")
 @app.get("/api/v1/automem/benchmark/runs/{run_id}")
+@app.get("/v1/api/automem/benchmark/runs/{run_id}")
 async def automem_benchmark_run_by_id(run_id: str) -> dict[str, Any]:
     """Return one persisted benchmark run by id."""
     try:
@@ -394,6 +434,7 @@ async def automem_benchmark_run_by_id(run_id: str) -> dict[str, Any]:
 
 @app.get("/api/automem/kv/{key}")
 @app.get("/api/v1/automem/kv/{key}")
+@app.get("/v1/api/automem/kv/{key}")
 async def automem_kv_get(key: str) -> dict[str, Any]:
     """Read one JSON value from AutoMem KV storage."""
     try:
@@ -408,6 +449,7 @@ async def automem_kv_get(key: str) -> dict[str, Any]:
 
 @app.put("/api/automem/kv/{key}")
 @app.put("/api/v1/automem/kv/{key}")
+@app.put("/v1/api/automem/kv/{key}")
 async def automem_kv_set(key: str, body: AutoMemKvWriteRequest) -> dict[str, Any]:
     """Write one JSON value to AutoMem KV storage."""
     try:
@@ -419,6 +461,7 @@ async def automem_kv_set(key: str, body: AutoMemKvWriteRequest) -> dict[str, Any
 
 @app.delete("/api/automem/kv/{key}")
 @app.delete("/api/v1/automem/kv/{key}")
+@app.delete("/v1/api/automem/kv/{key}")
 async def automem_kv_delete(key: str) -> dict[str, Any]:
     """Delete one AutoMem KV entry."""
     try:
@@ -1311,6 +1354,7 @@ async def clear_agent_memory(agent_id: str) -> None:
 
 app.include_router(_auth_router, prefix="/api")
 app.include_router(_auth_router, prefix="/api/v1")
+app.include_router(_auth_router, prefix="/v1/api")
 
 
 @app.websocket("/ws")

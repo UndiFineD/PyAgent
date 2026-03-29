@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for token-bucket rate limiting middleware (prj0000064)."""
+
 from __future__ import annotations
 
 import asyncio
@@ -27,43 +28,52 @@ def test_rate_limiter_module_imports():
     assert callable(TokenBucket)
 
 
-def test_health_exempt_from_rate_limit(monkeypatch):
-    """GET /health always returns 200 even when rate limit is 1 request/window."""
+def test_probe_paths_exempt_from_rate_limit(monkeypatch):
+    """Probe endpoints remain 200 even when rate is 1 request per window."""
     import backend.rate_limiter as rl_mod
 
     monkeypatch.setattr(rl_mod, "_RATE_LIMIT_REQUESTS", 1)
     monkeypatch.setattr(rl_mod, "_RATE_LIMIT_WINDOW", 60.0)
 
-    from backend.app import app  # noqa: F401
+    # Use a fresh app instance for isolation
+    from fastapi import FastAPI
 
     # Rebuild middleware with patched limits
     from backend.rate_limiter import RateLimitMiddleware
-    # Use a fresh app instance for isolation
-    from fastapi import FastAPI
 
     mini = FastAPI()
     mini.add_middleware(RateLimitMiddleware, rate=1, window=60.0)
 
-    @mini.get("/health")
-    async def _health():
+    @mini.get("/v1/health")
+    async def _health() -> dict[str, str]:
         return {"status": "ok"}
 
+    @mini.get("/v1/livez")
+    async def _livez() -> dict[str, str]:
+        return {"status": "alive"}
+
+    @mini.get("/v1/readyz")
+    async def _readyz() -> dict[str, str]:
+        return {"status": "ready"}
+
     client = TestClient(mini, raise_server_exceptions=False)
-    for _ in range(5):
-        resp = client.get("/health")
-        assert resp.status_code == 200
+    for path in ("/v1/health", "/v1/livez", "/v1/readyz"):
+        for _ in range(5):
+            resp = client.get(path)
+            assert resp.status_code == 200
 
 
 def test_allowed_under_limit():
     """First request to a rate-limited endpoint returns 200."""
-    from backend.rate_limiter import RateLimitMiddleware
     from fastapi import FastAPI
+
+    from backend.rate_limiter import RateLimitMiddleware
 
     mini = FastAPI()
     mini.add_middleware(RateLimitMiddleware, rate=5, window=60.0)
 
     @mini.get("/api/test")
-    async def _test():
+    async def _test() -> dict[str, bool]:
         return {"ok": True}
 
     client = TestClient(mini, raise_server_exceptions=False)
@@ -73,14 +83,15 @@ def test_allowed_under_limit():
 
 def test_rate_limit_triggers_429():
     """After N requests the (N+1)th request from the same IP returns 429."""
-    from backend.rate_limiter import RateLimitMiddleware
     from fastapi import FastAPI
+
+    from backend.rate_limiter import RateLimitMiddleware
 
     mini = FastAPI()
     mini.add_middleware(RateLimitMiddleware, rate=3, window=60.0)
 
     @mini.get("/api/data")
-    async def _data():
+    async def _data() -> dict[str, bool]:
         return {"data": True}
 
     client = TestClient(mini, raise_server_exceptions=False)
@@ -95,18 +106,19 @@ def test_rate_limit_triggers_429():
 
 def test_retry_after_header_present():
     """A 429 response must include the Retry-After header."""
-    from backend.rate_limiter import RateLimitMiddleware
     from fastapi import FastAPI
+
+    from backend.rate_limiter import RateLimitMiddleware
 
     mini = FastAPI()
     mini.add_middleware(RateLimitMiddleware, rate=1, window=30.0)
 
     @mini.get("/api/limited")
-    async def _limited():
+    async def _limited() -> dict[str, bool]:
         return {"ok": True}
 
     client = TestClient(mini, raise_server_exceptions=False)
-    client.get("/api/limited")   # consume the only token
+    client.get("/api/limited")  # consume the only token
     resp = client.get("/api/limited")  # this must be 429
     assert resp.status_code == 429
     assert "retry-after" in {k.lower() for k in resp.headers}
@@ -119,7 +131,7 @@ def test_token_bucket_allows_then_blocks():
 
     bucket = TokenBucket(rate=2, window=60.0)
 
-    async def _run():
+    async def _run() -> None:
         assert await bucket.consume() is True
         assert await bucket.consume() is True
         assert await bucket.consume() is False

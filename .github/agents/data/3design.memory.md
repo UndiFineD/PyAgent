@@ -293,3 +293,31 @@ the design intent.
 | **Seen in** | prj0000097-stub-module-elimination |
 | **Recurrence count** | 1 |
 | **Promotion status** | Candidate |
+
+---
+
+## prj0000098 - backend-health-check-endpoint
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000098-backend-health-check-endpoint |
+| **owner_agent** | @3design |
+| **source** | @2think |
+| **created_at** | 2026-03-29 |
+| **updated_at** | 2026-03-29 |
+| **status** | DONE |
+| **lifecycle** | OPEN -> IN_PROGRESS -> DONE |
+| **branch_gate** | PASS - `prj0000098-backend-health-check-endpoint` |
+| **selected_option** | Option A - additive probe endpoints in backend/app.py (minimal-first) |
+| **design_path** | Keep existing /health unchanged; add /livez and /readyz contracts; keep scope to backend/app.py + health-check tests |
+| **interface_contracts** | IFC-HC-001 (/health), IFC-HC-002 (/livez), IFC-HC-003 (/readyz) including status codes, payloads, and non-auth/non-rate-limit expectations |
+| **assumptions** | No broad backend refactor; no external dependency probe in first-slice readiness check; probe endpoints remain unversioned |
+| **handoff_target** | @4plan |
+| **artifact_paths** | docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.design.md |
+| **Pattern** | Add health semantics via minimal additive endpoints while preserving existing probe compatibility |
+| **Root cause** | Only /health existed, so liveness and readiness semantics were conflated and operational contracts were incomplete |
+| **Prevention** | Define explicit per-endpoint contracts (status/payload/auth/rate-limit) and enforce via focused regression tests |
+| **First seen** | 2026-03-29 |
+| **Seen in** | prj0000098-backend-health-check-endpoint |
+| **Recurrence count** | 1 |
+| **Promotion status** | Candidate |

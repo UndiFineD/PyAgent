@@ -102,7 +102,7 @@ class FlmChatAdapter:
                 "default_model": "dummy",
                 "timeout": 5,
                 "max_retries": 1,
-                "health_path": "/health",
+                "health_path": "/v1/health",
                 "chat_path": "/chat",
             }
         )

@@ -16,8 +16,8 @@ client = TestClient(app)
 
 
 def test_health_endpoint() -> None:
-    """GET /health should return 200 with status ok."""
-    resp = client.get("/health")
+    """GET /v1/health should return 200 with status ok."""
+    resp = client.get("/v1/health")
     assert resp.status_code == 200
     assert resp.json()["status"] == "ok"
 

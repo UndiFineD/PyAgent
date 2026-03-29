@@ -1,5 +1,23 @@
 [
   {
+    "id": "prj0000098",
+    "name": "backend-health-check-endpoint",
+    "lane": "Review",
+    "summary": "Initialize project from idea000013 to define backend health endpoint design and delivery plan",
+    "branch": "prj0000098-backend-health-check-endpoint",
+    "pr": null,
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "backend",
+      "health",
+      "readiness",
+      "liveness"
+    ],
+    "created": "2026-03-29",
+    "updated": "2026-03-29"
+  },
+  {
     "id": "prj0000097",
     "name": "stub-module-elimination",
     "lane": "Released",
@@ -40,7 +58,7 @@
     "lane": "Review",
     "summary": "Scan source code for stubs, temporary code, and mock implementations, then replace with real implementations using rust_core-first and Python fallback",
     "branch": "prj0000095-source-stub-remediation",
-    "pr": null,
+    "pr": 241,
     "priority": "P2",
     "budget_tier": "M",
     "tags": [
@@ -58,7 +76,7 @@
     "lane": "Review",
     "summary": "Project Manager automatically ingests docs/project/ideas and filters out ideas already implemented as projects",
     "branch": "prj0000093-projectmanager-ideas-autosync",
-    "pr": null,
+    "pr": 239,
     "priority": "P2",
     "budget_tier": "M",
     "tags": [

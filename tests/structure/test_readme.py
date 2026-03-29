@@ -20,8 +20,9 @@ present with the correct H1 marker.
 """
 
 import re
-import pytest
 from pathlib import Path
+
+import pytest
 
 REPO_ROOT = Path(__file__).parent.parent.parent
 _README_PATH = REPO_ROOT / "README.md"
@@ -40,11 +41,7 @@ except FileNotFoundError:
     _content = ""
     _lines = []
 
-_FILE_MISSING = (
-    not _README_PATH.exists()
-    or not _lines
-    or _lines[0].strip() != "# PyAgent"
-)
+_FILE_MISSING = not _README_PATH.exists() or not _lines or _lines[0].strip() != "# PyAgent"
 
 _SKIP_CONTENT = pytest.mark.skipif(_FILE_MISSING, reason="README not yet written (awaiting @6code)")
 
@@ -52,6 +49,7 @@ _SKIP_CONTENT = pytest.mark.skipif(_FILE_MISSING, reason="README not yet written
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def _section_lines(heading_prefix: str) -> list:
     """Return body lines of the first H2 section whose text starts with heading_prefix."""
@@ -72,6 +70,7 @@ def _section_lines(heading_prefix: str) -> list:
 # 1. File existence — FAILS before README is written/updated
 # ---------------------------------------------------------------------------
 
+
 def test_readme_exists() -> None:
     """README.md must exist at the repo root and open with the required H1.
 
@@ -80,22 +79,19 @@ def test_readme_exists() -> None:
     """
     assert _README_PATH.exists(), "README.md not found at repo root"
     assert _lines, "README.md is empty"
-    assert _lines[0].strip() == "# PyAgent", (
-        f"Expected first line '# PyAgent', got: {_lines[0]!r}"
-    )
+    assert _lines[0].strip() == "# PyAgent", f"Expected first line '# PyAgent', got: {_lines[0]!r}"
 
 
 # ---------------------------------------------------------------------------
 # 2. H1 title (content test — skips until README is updated)
 # ---------------------------------------------------------------------------
 
+
 @_SKIP_CONTENT
 def test_readme_h1() -> None:
     """First non-empty line must be exactly '# PyAgent'."""
     first_non_empty = next((ln for ln in _lines if ln.strip()), "")
-    assert first_non_empty.strip() == "# PyAgent", (
-        f"Expected '# PyAgent', got: {first_non_empty!r}"
-    )
+    assert first_non_empty.strip() == "# PyAgent", f"Expected '# PyAgent', got: {first_non_empty!r}"
 
 
 # ---------------------------------------------------------------------------
@@ -122,14 +118,13 @@ def test_required_h2_headings(heading: str) -> None:
     """Each required H2 heading must appear in the document."""
     # Use startswith on lines to avoid partial matches inside code blocks.
     headings_in_doc = [ln for ln in _lines if ln.startswith("## ")]
-    assert any(h.startswith(heading) for h in headings_in_doc), (
-        f"H2 heading not found: {heading!r}"
-    )
+    assert any(h.startswith(heading) for h in headings_in_doc), f"H2 heading not found: {heading!r}"
 
 
 # ---------------------------------------------------------------------------
 # 4. ## What is PyAgent? — single flowing paragraph
 # ---------------------------------------------------------------------------
+
 
 @_SKIP_CONTENT
 def test_what_is_single_paragraph() -> None:
@@ -145,20 +140,15 @@ def test_what_is_single_paragraph() -> None:
         stripped = line.strip()
         if not stripped:
             continue
-        assert not re.match(r"^[-*]\s", stripped), (
-            f"Bullet found in '## What is PyAgent?': {line!r}"
-        )
-        assert not stripped.startswith("###"), (
-            f"Subheading found in '## What is PyAgent?': {line!r}"
-        )
-        assert not re.match(r"^\d+\.\s", stripped), (
-            f"Numbered list item found in '## What is PyAgent?': {line!r}"
-        )
+        assert not re.match(r"^[-*]\s", stripped), f"Bullet found in '## What is PyAgent?': {line!r}"
+        assert not stripped.startswith("###"), f"Subheading found in '## What is PyAgent?': {line!r}"
+        assert not re.match(r"^\d+\.\s", stripped), f"Numbered list item found in '## What is PyAgent?': {line!r}"
 
 
 # ---------------------------------------------------------------------------
 # 5. Key numbers present
 # ---------------------------------------------------------------------------
+
 
 @_SKIP_CONTENT
 @pytest.mark.parametrize("token", ["666", "51", "41%", "317", "v4.0.0", "VOYAGER"])
@@ -171,6 +161,7 @@ def test_key_numbers_present(token: str) -> None:
 # 6. install.ps1 flag variants documented
 # ---------------------------------------------------------------------------
 
+
 @_SKIP_CONTENT
 @pytest.mark.parametrize("flag", ["-SkipRust", "-SkipWeb", "-SkipDev", "-CI", "-Force"])
 def test_install_flags_documented(flag: str) -> None:
@@ -181,6 +172,7 @@ def test_install_flags_documented(flag: str) -> None:
 # ---------------------------------------------------------------------------
 # 7. start.ps1 sub-commands documented
 # ---------------------------------------------------------------------------
+
 
 @_SKIP_CONTENT
 @pytest.mark.parametrize("cmd", ["start", "stop", "restart", "status"])
@@ -193,46 +185,40 @@ def test_start_commands_documented(cmd: str) -> None:
 # 8. Project History — exactly 51 prj0000 entries
 # ---------------------------------------------------------------------------
 
+
 @_SKIP_CONTENT
 def test_project_history_count() -> None:
     """There must be exactly 51 'prj0000' entries across the document."""
     matches = re.findall(r"prj0000\d{3}", _content)
     count = len(matches)
-    assert count == 51, (
-        f"Expected 51 'prj0000NNN' entries, found {count}"
-    )
+    assert count == 51, f"Expected 51 'prj0000NNN' entries, found {count}"
 
 
 # ---------------------------------------------------------------------------
 # 9. Future Roadmap — exactly 10 numbered items
 # ---------------------------------------------------------------------------
 
+
 @_SKIP_CONTENT
 def test_future_roadmap_count() -> None:
     """## Future Roadmap section must contain exactly 10 numbered items."""
     body = _section_lines("## Future Roadmap")
     items = [ln for ln in body if re.match(r"^\d+\.\s", ln.strip())]
-    assert len(items) == 10, (
-        f"Expected 10 numbered items under '## Future Roadmap', found {len(items)}"
-    )
+    assert len(items) == 10, f"Expected 10 numbered items under '## Future Roadmap', found {len(items)}"
 
 
 # ---------------------------------------------------------------------------
 # 10. No TODO / FIXME / TBD
 # ---------------------------------------------------------------------------
 
+
 @_SKIP_CONTENT
 def test_no_todo_fixme() -> None:
     """README must not contain TODO, FIXME, or TBD (case-insensitive)."""
     pattern = re.compile(r"\b(TODO|FIXME|TBD)\b", re.IGNORECASE)
-    violations = [
-        (i + 1, ln)
-        for i, ln in enumerate(_lines)
-        if pattern.search(ln)
-    ]
-    assert not violations, (
-        "Found TODO/FIXME/TBD stubs:\n"
-        + "\n".join(f"  L{lineno}: {ln}" for lineno, ln in violations)
+    violations = [(i + 1, ln) for i, ln in enumerate(_lines) if pattern.search(ln)]
+    assert not violations, "Found TODO/FIXME/TBD stubs:\n" + "\n".join(
+        f"  L{lineno}: {ln}" for lineno, ln in violations
     )
 
 
@@ -240,23 +226,20 @@ def test_no_todo_fixme() -> None:
 # 11. No ```bash fences — all shell code must use ```powershell
 # ---------------------------------------------------------------------------
 
+
 @_SKIP_CONTENT
 def test_powershell_fences() -> None:
     """Shell code fences must use '```powershell', not '```bash' or plain '```'."""
-    violations = [
-        (i + 1, ln)
-        for i, ln in enumerate(_lines)
-        if re.match(r"^```bash\b", ln.strip())
-    ]
-    assert not violations, (
-        "Found ```bash fences (must be ```powershell):\n"
-        + "\n".join(f"  L{lineno}: {ln}" for lineno, ln in violations)
+    violations = [(i + 1, ln) for i, ln in enumerate(_lines) if re.match(r"^```bash\b", ln.strip())]
+    assert not violations, "Found ```bash fences (must be ```powershell):\n" + "\n".join(
+        f"  L{lineno}: {ln}" for lineno, ln in violations
     )
 
 
 # ---------------------------------------------------------------------------
 # 12. Architecture Decisions — numbered list 1–8
 # ---------------------------------------------------------------------------
+
 
 @_SKIP_CONTENT
 def test_architecture_decisions_numbered() -> None:
@@ -265,14 +248,13 @@ def test_architecture_decisions_numbered() -> None:
     for expected_num in range(1, 9):
         prefix = f"{expected_num}."
         found = any(ln.strip().startswith(prefix) for ln in body)
-        assert found, (
-            f"Numbered item '{prefix}' not found in '## Architecture Decisions'"
-        )
+        assert found, f"Numbered item '{prefix}' not found in '## Architecture Decisions'"
 
 
 # ---------------------------------------------------------------------------
 # 13. Rust technology keywords
 # ---------------------------------------------------------------------------
+
 
 @_SKIP_CONTENT
 @pytest.mark.parametrize("keyword", ["Tokio", "PyO3", "maturin"])
@@ -285,6 +267,7 @@ def test_rust_keywords(keyword: str) -> None:
 # 14. NebulaOS app names
 # ---------------------------------------------------------------------------
 
+
 @_SKIP_CONTENT
 @pytest.mark.parametrize("app", ["CodeBuilder", "AgentChat", "Conky"])
 def test_nebula_apps(app: str) -> None:
@@ -296,8 +279,9 @@ def test_nebula_apps(app: str) -> None:
 # 15. Backend REST endpoints
 # ---------------------------------------------------------------------------
 
+
 @_SKIP_CONTENT
-@pytest.mark.parametrize("endpoint", ["/health", "/ws"])
+@pytest.mark.parametrize("endpoint", ["/v1/health", "/ws"])
 def test_backend_endpoints(endpoint: str) -> None:
     """Backend API endpoints must appear in the document."""
     assert endpoint in _content, f"Backend endpoint not found in README: {endpoint!r}"
@@ -306,6 +290,7 @@ def test_backend_endpoints(endpoint: str) -> None:
 # ---------------------------------------------------------------------------
 # 16. install.ps1 mentioned
 # ---------------------------------------------------------------------------
+
 
 @_SKIP_CONTENT
 def test_install_ps1_mentioned() -> None:
@@ -317,6 +302,7 @@ def test_install_ps1_mentioned() -> None:
 # 17. start.ps1 mentioned
 # ---------------------------------------------------------------------------
 
+
 @_SKIP_CONTENT
 def test_start_ps1_mentioned() -> None:
     """'start.ps1' must appear in the document."""
@@ -327,19 +313,11 @@ def test_start_ps1_mentioned() -> None:
 # 18. Line length — soft check (warn-only via xfail)
 # ---------------------------------------------------------------------------
 
+
 @_SKIP_CONTENT
 def test_line_length() -> None:
     """No prose line should exceed 120 characters (soft check — marks xfail on violation)."""
-    long_lines = [
-        (i + 1, len(ln), ln)
-        for i, ln in enumerate(_lines)
-        if len(ln) > 120
-    ]
+    long_lines = [(i + 1, len(ln), ln) for i, ln in enumerate(_lines) if len(ln) > 120]
     if long_lines:
-        summary = "\n".join(
-            f"  L{lineno} ({length} chars): {ln[:80]}…"
-            for lineno, length, ln in long_lines[:10]
-        )
-        pytest.xfail(
-            f"{len(long_lines)} line(s) exceed 120 chars (soft limit):\n{summary}"
-        )
+        summary = "\n".join(f"  L{lineno} ({length} chars): {ln[:80]}…" for lineno, length, ln in long_lines[:10])
+        pytest.xfail(f"{len(long_lines)} line(s) exceed 120 chars (soft limit):\n{summary}")

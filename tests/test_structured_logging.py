@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for structured JSON logging (prj0000063)."""
+
 from __future__ import annotations
 
 import logging
@@ -51,19 +52,17 @@ def test_logger_has_json_handler():
     lg = setup_logging()
     stream_handlers = [h for h in lg.handlers if isinstance(h, logging.StreamHandler)]
     assert stream_handlers, "Expected at least one StreamHandler"
-    json_formatters = [
-        h for h in stream_handlers if isinstance(h.formatter, JsonFormatter)
-    ]
+    json_formatters = [h for h in stream_handlers if isinstance(h.formatter, JsonFormatter)]
     assert json_formatters, "Expected at least one handler with JsonFormatter"
 
 
 def test_correlation_id_middleware_adds_header():
-    """GET /health response must include the X-Correlation-ID header."""
+    """GET /v1/health response must include the X-Correlation-ID header."""
     from fastapi.testclient import TestClient
 
     from backend.app import app
 
     client = TestClient(app, raise_server_exceptions=False)
-    response = client.get("/health")
+    response = client.get("/v1/health")
     assert response.status_code == 200
     assert "x-correlation-id" in {k.lower() for k in response.headers}

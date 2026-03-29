@@ -5,6 +5,64 @@ integration checks, and smoke test outcomes.
 
 ---
 
+## Last run - 2026-03-29 BLOCKED -> @6code
+- Task: prj0000098 backend-health-check-endpoint (revalidation after blocker fixes)
+- Status: OPEN -> IN_PROGRESS -> BLOCKED
+- task_id: prj0000098-backend-health-check-endpoint
+- handoff_target: @6code
+- Branch gate: PASS (expected = observed = prj0000098-backend-health-check-endpoint)
+- Tests run:
+  - Required full fail-fast: `python -m pytest -v --maxfail=1` (attempt 1) -> INTERRUPTED (`KeyboardInterrupt`, `328 passed in 13.57s`)
+  - Required full fail-fast: `python -m pytest -v --maxfail=1` (attempt 2) -> INTERRUPTED (`KeyboardInterrupt`, `55 passed in 6.62s`)
+- Import check: SKIPPED (not requested by this rerun request)
+- Smoke test: SKIPPED (not requested by this rerun request)
+- rust_core: SKIPPED (not modified in this scope)
+- Dependency warnings: NONE (classified NON_BLOCKING)
+- Outcome: BLOCKED_FOR_8QL
+- Notes:
+  - Branch-plan gate is clean, but required full-suite command did not complete normally in either run.
+  - No deterministic assertion failure captured in this rerun because both runs ended via interruption.
+
+### Lesson - 2026-03-29 (prj0000098 interrupted validation rerun)
+- Pattern: Full-suite validation can remain inconclusive when repeated KeyboardInterrupt events terminate pytest before normal completion.
+- Root cause: Runtime execution was interrupted externally before fail-fast suite reached a natural pass/fail stop.
+- Prevention: For @7exec gate commands, run in a stable session and avoid manual interruption until pytest exits with a normal result.
+- First seen: 2026-03-29
+- Seen in: prj0000098-backend-health-check-endpoint
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
+---
+
+## Last run - 2026-03-29 BLOCKED -> @6code
+- Task: prj0000098 backend-health-check-endpoint (execution validation)
+- Status: OPEN -> IN_PROGRESS -> HANDED_OFF
+- task_id: prj0000098-backend-health-check-endpoint
+- handoff_target: @6code
+- Branch gate: PASS (expected = observed = prj0000098-backend-health-check-endpoint)
+- Tests run:
+  - Full fail-fast: `python -m pytest -v --maxfail=1` -> FAILED (`1 failed, 37 passed`, stop-on-first-failure)
+  - Targeted suite: `python -m pytest tests/test_api_versioning.py tests/test_backend_auth.py tests/test_rate_limiting.py tests/test_backend_worker.py tests/test_structured_logging.py tests/test_github_app.py tests/test_providers_flm.py tests/structure/test_readme.py::test_backend_endpoints` -> PASSED (`83 passed in 6.18s`)
+- Import check: SKIPPED (not required by requested validation set)
+- Smoke test: SKIPPED (not required by requested validation set)
+- rust_core: SKIPPED (not modified in this scope)
+- Dependency warnings: NONE (classified NON_BLOCKING)
+- Outcome: BLOCKED_FOR_8QL
+- Notes:
+  - Full-suite first failure is policy-format only:
+    - `tests/docs/test_agent_workflow_policy_docs.py::test_git_summaries_use_modern_branch_plan_format_or_carry_legacy_exception`
+    - `docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.git.md` missing `## Branch Plan`.
+  - Requested backend-focused targeted suite is fully green.
+
+### Lesson - 2026-03-29 (prj0000098 policy-format blocker)
+- Pattern: Full-suite execution can be blocked by project artifact governance format drift even when backend runtime tests pass.
+- Root cause: `*.git.md` artifact for the active project did not include required modern Branch Plan section.
+- Prevention: Before final @7exec full-suite gate, validate active project `.git.md` against policy-doc tests for required modern sections or explicit legacy exception.
+- First seen: 2026-03-29
+- Seen in: prj0000098-backend-health-check-endpoint
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
 ## Last run - 2026-03-29 PASSED -> @8ql
 - Task: prj0000097 stub-module-elimination (execution validation)
 - Status: OPEN -> IN_PROGRESS -> DONE
