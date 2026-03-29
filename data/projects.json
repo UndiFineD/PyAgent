@@ -1,5 +1,23 @@
 [
   {
+    "id": "prj0000100",
+    "name": "repo-cleanup-docs-code",
+    "lane": "Discovery",
+    "summary": "Review and cleanup non-dot files, refresh documentation, perform code cleanup, and add code-structure index plus allowed-websites search policy governance",
+    "branch": "prj0000100-repo-cleanup-docs-code",
+    "pr": null,
+    "priority": "P2",
+    "budget_tier": "L",
+    "tags": [
+      "cleanup",
+      "docs",
+      "code-index",
+      "search-policy"
+    ],
+    "created": "2026-03-29",
+    "updated": "2026-03-29"
+  },
+  {
     "id": "prj0000095",
     "name": "source-stub-remediation",
     "lane": "Review",

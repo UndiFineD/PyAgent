@@ -11,6 +11,38 @@ Invoke it via `agent/runSubagent` to continue the implementation workflow.
 
 ## Task Log
 
+### task_id: prj0000100-repo-cleanup-docs-code-20260329-governance-tests
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- project: prj0000100-repo-cleanup-docs-code
+- branch_expected: prj0000100-repo-cleanup-docs-code
+- branch_observed: prj0000100-repo-cleanup-docs-code ✓
+- scope:
+	- add deterministic governance tests for canonical allowlist location/content requirements
+	- add deterministic governance tests for codestructure schema and integer `line` column
+	- add deterministic governance tests for local-search-first and canonical allowlist path references in Copilot instructions
+	- run targeted lint and targeted pytest only for new test files
+	- update project test artifact and milestone M4 status
+- files_updated:
+	- `tests/docs/test_allowed_websites_governance.py`
+	- `tests/docs/test_codestructure_governance.py`
+	- `tests/docs/test_copilot_instructions_governance.py`
+	- `docs/project/prj0000100-repo-cleanup-docs-code/prj0000100-repo-cleanup-docs-code.test.md`
+	- `docs/project/prj0000100-repo-cleanup-docs-code/prj0000100-repo-cleanup-docs-code.project.md`
+	- `.github/agents/data/5test.memory.md`
+- lint_validation:
+	- `.venv\Scripts\ruff.exe check --fix tests/docs/test_allowed_websites_governance.py tests/docs/test_codestructure_governance.py tests/docs/test_copilot_instructions_governance.py`: PASS (5 fixed)
+	- `.venv\Scripts\ruff.exe check tests/docs/test_allowed_websites_governance.py tests/docs/test_codestructure_governance.py tests/docs/test_copilot_instructions_governance.py`: PASS
+- validation_results:
+	- `python -m pytest -v tests/docs/test_allowed_websites_governance.py tests/docs/test_codestructure_governance.py tests/docs/test_copilot_instructions_governance.py`
+		- result: 6 passed in 5.15s
+		- collection quality: no ImportError/AttributeError blockers
+- quality_gate:
+	- AC-to-test matrix present in project test artifact: PASS
+	- weak-test detection gate executed and documented: PASS
+- handoff:
+	- target_agent: @6code
+	- readiness: READY
+
 ### task_id: prj0000099-stub-module-elimination-20260329-focused-validation
 - lifecycle: OPEN -> IN_PROGRESS -> DONE
 - project: prj0000099-stub-module-elimination

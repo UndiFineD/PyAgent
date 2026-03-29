@@ -258,6 +258,34 @@ the design intent.
 | **assumptions** | First slice stage is 40; no new workflow files; ratchet promotions require explicit evidence in project test artifact |
 | **handoff_target** | @4plan |
 | **artifact_paths** | docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.design.md |
+
+---
+
+## prj0000100 - repo-cleanup-docs-code
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000100-repo-cleanup-docs-code |
+| **owner_agent** | @3design |
+| **source** | @2think |
+| **created_at** | 2026-03-29 |
+| **updated_at** | 2026-03-29 |
+| **status** | DONE |
+| **lifecycle** | OPEN -> IN_PROGRESS -> DONE |
+| **branch_gate** | PASS - `prj0000100-repo-cleanup-docs-code` |
+| **selected_option** | Option B - Governance-First Incremental Cleanup |
+| **design_path** | Canonical governance-first cleanup design with explicit contracts for code structure index, local-search-first policy, and internet allowlist gate |
+| **interface_contracts** | IFC-01 Code Structure Index Contract; IFC-02 Local Search First Contract; IFC-03 Internet Search Gate Contract |
+| **assumptions** | Branch remains project branch; cleanup is wave-scoped and non-destructive; policy artifacts are canonical authorities |
+| **handoff_target** | @4plan |
+| **artifact_paths** | docs/project/prj0000100-repo-cleanup-docs-code/prj0000100-repo-cleanup-docs-code.design.md |
+| **Pattern** | For broad cleanup work, lock governance contracts first and execute incremental waves with explicit containment gates |
+| **Root cause** | Policy drift and discoverability gaps occur when governance artifacts are updated late or inconsistently |
+| **Prevention** | Enforce contract-first wave exits: code index delta checks, local-first evidence, and fail-closed allowlist gate |
+| **First seen** | 2026-03-29 |
+| **Seen in** | prj0000100-repo-cleanup-docs-code |
+| **Recurrence count** | 1 |
+| **Promotion status** | Candidate |
 | **Pattern** | Enforce quality gates by ratcheting from a low-risk baseline using one authoritative threshold key |
 | **Root cause** | Coverage threshold existed in config but was not wired into blocking CI path |
 | **Prevention** | Keep threshold in one config location and guard CI contract with structure tests |

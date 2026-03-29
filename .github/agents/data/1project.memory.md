@@ -260,6 +260,22 @@ prj0000075 ci-simplification branch prj0000075-ci-simplification — project set
 
 ---
 
+## prj0000100 - repo-cleanup-docs-code
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000100-repo-cleanup-docs-code |
+| **owner_agent** | @1project |
+| **source** | @0master |
+| **created_at** | 2026-03-29 |
+| **updated_at** | 2026-03-29 |
+| **status** | DONE |
+| **summary** | Project boundary initialized on expected branch prj0000100-repo-cleanup-docs-code. Created canonical lifecycle artifacts, added Discovery tracking entry, advanced nextproject marker, and added governance files for code structure indexing and allowed-websites policy. |
+| **handoff_target** | @2think |
+| **artifact_paths** | docs/project/prj0000100-repo-cleanup-docs-code/prj0000100-repo-cleanup-docs-code.project.md, docs/project/prj0000100-repo-cleanup-docs-code/prj0000100-repo-cleanup-docs-code.think.md, docs/project/prj0000100-repo-cleanup-docs-code/prj0000100-repo-cleanup-docs-code.design.md, docs/project/prj0000100-repo-cleanup-docs-code/prj0000100-repo-cleanup-docs-code.plan.md, docs/project/prj0000100-repo-cleanup-docs-code/prj0000100-repo-cleanup-docs-code.test.md, docs/project/prj0000100-repo-cleanup-docs-code/prj0000100-repo-cleanup-docs-code.code.md, docs/project/prj0000100-repo-cleanup-docs-code/prj0000100-repo-cleanup-docs-code.exec.md, docs/project/prj0000100-repo-cleanup-docs-code/prj0000100-repo-cleanup-docs-code.ql.md, docs/project/prj0000100-repo-cleanup-docs-code/prj0000100-repo-cleanup-docs-code.git.md, docs/project/kanban.md, data/projects.json, data/nextproject.md, .github/agents/data/codestructure.md, .github/agents/data/allowed_websites.md |    
+
+---
+
 ## prj0000099 - stub-module-elimination
 
 | Field | Value |
