@@ -5,6 +5,35 @@ tradeoff analysis, and recommended directions.
 
 ---
 
+## prj0000100 - repo-cleanup-docs-code
+_Date: 2026-03-29 | Branch: prj0000100-repo-cleanup-docs-code_
+
+task_id: prj0000100
+Lifecycle: OPEN -> IN_PROGRESS -> DONE
+Artifact: docs/project/prj0000100-repo-cleanup-docs-code/prj0000100-repo-cleanup-docs-code.think.md
+Recommendation: Option B - Governance-first incremental cleanup with wave-based artifact synchronization
+Handoff target: @3design
+Rationale summary:
+- Root cause is governance drift and discoverability gaps, not only raw cleanup volume.
+- Option B scored highest in weighted matrix (460) across risk, effort, impact, governance fit, and maintainability.
+- Recommendation preserves scope discipline while operationalizing required governance artifacts (`codestructure.md` and `allowed_websites.md`) from the first wave.
+
+Prior-art references used:
+- docs/project/prj0000074/prj0000074.think.md
+- docs/project/prj0000092-mypy-strict-enforcement/prj0000092-mypy-strict-enforcement.think.md
+- docs/project/prj0000052/project-management.think.md
+
+Lesson schema:
+- Pattern: Governance-first sequencing reduces cleanup rework and improves discoverability for multi-surface repo hygiene projects.
+- Root cause: Cleanup efforts drift when policy artifacts are treated as end-of-project documentation rather than continuous operational checkpoints.
+- Prevention: Require per-wave closure signals proving governance artifact sync and scope-boundary checks before progressing.
+- First seen: 2026-03-29.
+- Seen in: prj0000100-repo-cleanup-docs-code.
+- Recurrence count: 1.
+- Promotion status: monitor (promote to hard rule at recurrence >= 2).
+
+---
+
 ## prj0000099 - stub-module-elimination
 _Date: 2026-03-29 | Branch: prj0000099-stub-module-elimination_
 

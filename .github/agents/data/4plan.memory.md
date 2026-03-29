@@ -418,6 +418,64 @@ where test cases are written and validated against the plan.
 
 ### Summary
 Documentation-only project. No source code, tests, or CI changes. @4plan wrote the
+
+---
+
+## prj0000100 - repo-cleanup-docs-code
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000100-repo-cleanup-docs-code |
+| **owner_agent** | @4plan |
+| **source** | @3design |
+| **created_at** | 2026-03-29 |
+| **updated_at** | 2026-03-29 |
+| **status** | DONE |
+| **lifecycle** | OPEN -> IN_PROGRESS -> DONE |
+| **handoff_target** | @5test |
+| **artifact_paths** | docs/project/prj0000100-repo-cleanup-docs-code/prj0000100-repo-cleanup-docs-code.plan.md, docs/project/prj0000100-repo-cleanup-docs-code/prj0000100-repo-cleanup-docs-code.project.md |
+| **branch** | prj0000100-repo-cleanup-docs-code (validated PASS before artifact writes) |
+
+### Chunk Boundaries
+
+| Chunk | Scope | Planned File Volume |
+|---|---|---|
+| C1 | Governance protocol lock (codestructure + allowed websites + guidance) | ~4-8 code/docs, ~2-4 tests |
+| C2 | Docs cleanup + lifecycle tracking sync | ~8-12 code/docs, ~4-6 tests |
+| C3 | Bounded code cleanup wave | ~8-12 code files, ~6-10 tests |
+| C4 | Closure evidence + handoff | ~2-4 docs, ~1-2 tests |
+
+### Acceptance Coverage
+
+| Task | Acceptance IDs |
+|---|---|
+| T1 | AC-03, AC-04, AC-05 |
+| T2 | AC-03 |
+| T3 | AC-04, AC-05 |
+| T4 | AC-01, AC-02 |
+| T5 | AC-01, AC-02 |
+| T6 | AC-01 |
+| T7 | AC-01, AC-05 |
+| T8 | AC-01, AC-02, AC-03, AC-04, AC-05 |
+
+### Dependency Order
+1. T1 -> T2 -> T3
+2. T4 || T5 after T1-T3
+3. T6 after T1-T3 and in bounded batches
+4. T7 after each cleanup batch
+5. T8 finalizes closure and handoff packet
+
+### Lesson Entry
+
+| Field | Value |
+|---|---|
+| Pattern | Governance-first cleanup plans remain executable when policy contracts, docs waves, and code waves are split into phased tasks with explicit file scope and command-level checks. |
+| Root cause | Placeholder planning artifacts and missing AC mapping create handoff ambiguity and weak verification coverage for cleanup-heavy projects. |
+| Prevention | Enforce hard task schema (objective, target files, acceptance criteria, validation command) plus AC traceability matrix in the canonical plan. |
+| First seen | 2026-03-29 |
+| Seen in | prj0000100-repo-cleanup-docs-code |
+| Recurrence count | 1 |
+| Promotion status | CANDIDATE |
 `## Future Ideas` section directly into `docs/project/kanban.md` (38 ideas, 9 areas,
 P1–P4 priorities, SWOT classification for P1/P2). All agents M2/M4/M5/M6/M7 SKIPPED.
 Ready for @9git handoff.

@@ -47,6 +47,8 @@ Every Python file should have the following header once:
 - **Testing**: Run comprehensive tests using `pytest src/`. Use fixtures from `tests/conftest.py` for agent sandboxing.
 - **CLI Interaction**: Entry point is `src/interface/ui/cli/pyagent_cli.py`.
 - **API/Web**: Entry point is `src/interface/ui/web/py_agent_web.py` (Fleet Load Balancer).
+- **Search priority**: Use local code search first for repository work. Prefer `rg` and `search_subagent` before any internet lookup.
+- **Internet policy**: Internet fetch/search is only allowed for domains listed in `.github/agents/data/allowed_websites.md`.
 
 ## Core Components for Reference
 - `src/core/base/base_agent.py`: Principal agent interface.
