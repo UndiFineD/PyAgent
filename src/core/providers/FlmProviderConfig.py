@@ -145,7 +145,7 @@ class FlmProviderConfig:
                 "default_model": "mymodel",
                 "timeout": 5,
                 "max_retries": 1,
-                "health_path": "/health",
+                "health_path": "/v1/health",
                 "chat_path": "/chat",
             }
         )
@@ -162,7 +162,7 @@ def validate() -> None:
             "default_model": "mymodel",
             "timeout": 5,
             "max_retries": 1,
-            "health_path": "/health",
+            "health_path": "/v1/health",
             "chat_path": "/chat",
         }
     )

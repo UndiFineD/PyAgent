@@ -45,9 +45,12 @@ _No checkbox tasks found in the plan file._
   - `tests\docs\test_docs_exist.py`
   - `tests\fakeconftest.py`
   - `tests\fixtures\conftest_fixtures.py`
+  - `tests\guards\test_rl_speculation_import_scope.py`
   - `tests\integration\test_context_and_skills.py`
   - `tests\observability\test_legacy_engine.py`
   - `tests\observability\test_metrics_engine.py`
+  - `tests\rl\test_discounted_return.py`
+  - `tests\rl\test_rl_deprecation.py`
   - `tests\runtime\test_event_bus.py`
   - `tests\runtime\test_http_server.py`
   - `tests\runtime\test_queue.py`
@@ -66,6 +69,8 @@ _No checkbox tasks found in the plan file._
   - `tests\security\test_scan_report_schema.py`
   - `tests\security\test_secret_guardrail_policy.py`
   - `tests\security\test_secret_scan_service_contract.py`
+  - `tests\speculation\test_select_candidate.py`
+  - `tests\speculation\test_speculation_deprecation.py`
   - `tests\structure\test_architecture_naming.py`
   - `tests\structure\test_base_dirs.py`
   - `tests\structure\test_ci_yaml.py`
