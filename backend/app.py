@@ -14,17 +14,21 @@
 """FastAPI backend worker — WebSocket + signaling endpoints."""
 from __future__ import annotations
 
+import base64
 import json
 import logging
 import os
 import random
+import re
 import time
 import uuid
 from datetime import date, datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
+from typing import Optional as _Opt
 
 import psutil
+from cryptography.exceptions import InvalidTag
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -33,9 +37,9 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from .auth import require_auth, websocket_auth
 from .automem_benchmark_store import automem_benchmark_store
+from .logging_config import get_logger, setup_logging
 from .memory_store import memory_store
 from .rate_limiter import RateLimitMiddleware
-from .logging_config import get_logger, setup_logging
 from .session_manager import SessionManager
 from .tracing import tracer  # noqa: F401 — initialises OTel TracerProvider on import
 from .watchdog import watchdog
@@ -51,12 +55,61 @@ _prev_disk: tuple = (0, 0)
 _prev_disk_ts: float = 0.0
 
 _FILTERED_PREFIXES = ("lo", "loopback", "docker", "veth", "br-", "virbr", "vmnet", "vbox")
+_READYZ_REASON_FALLBACK = "degraded_reason_sanitized"
+_READYZ_REASON_MAX_LEN = 64
+_READYZ_REASON_PATTERN = re.compile(r"^[a-z0-9_]{1,64}$")
+_READYZ_UNSAFE_MARKERS = (
+    "token",
+    "secret",
+    "password",
+    "passwd",
+    "api_key",
+    "apikey",
+    "authorization",
+    "bearer",
+    "traceback",
+    "exception",
+    "/",
+    "\\",
+    "=",
+)
 
 
 def _filter_iface(name: str) -> bool:
     """Return True if the interface should be INCLUDED (not filtered)."""
     lower = name.lower()
     return not any(lower.startswith(p) for p in _FILTERED_PREFIXES)
+
+
+def _normalize_readyz_reason(reason: str | None) -> str:
+    """Normalize readiness reason into a safe machine-readable identifier.
+
+    The returned value always matches ``^[a-z0-9_]{1,64}$``. Inputs that appear
+    unsafe or cannot be normalized into that bounded format are replaced with a
+    stable fallback reason.
+    """
+    if not isinstance(reason, str):
+        return _READYZ_REASON_FALLBACK
+
+    raw = reason.strip()
+    if not raw:
+        return _READYZ_REASON_FALLBACK
+
+    lowered = raw.lower()
+    if any(marker in lowered for marker in _READYZ_UNSAFE_MARKERS):
+        return _READYZ_REASON_FALLBACK
+
+    normalized = re.sub(r"[\s\-]+", "_", lowered)
+    normalized = re.sub(r"_+", "_", normalized)
+    normalized = normalized.strip("_")
+
+    if len(normalized) > _READYZ_REASON_MAX_LEN:
+        return _READYZ_REASON_FALLBACK
+
+    if not _READYZ_REASON_PATTERN.fullmatch(normalized):
+        return _READYZ_REASON_FALLBACK
+
+    return normalized
 
 
 # Project root is two levels up from this file (backend/app.py → backend/ → project root)
@@ -214,14 +267,23 @@ async def readyz() -> dict[str, Any]:
     if isinstance(state_reason, str) and state_reason.strip():
         return JSONResponse(
             status_code=503,
-            content={"status": "degraded", "ready": False, "reason": state_reason.strip()},
+            content={
+                "status": "degraded",
+                "ready": False,
+                "reason": _normalize_readyz_reason(state_reason),
+            },
         )
 
     force_degraded = os.getenv("PYAGENT_READYZ_FORCE_DEGRADED", "").strip().lower()
     if force_degraded in {"1", "true", "yes", "on"}:
+        env_reason = os.getenv("PYAGENT_READYZ_DEGRADED_REASON")
+        if isinstance(env_reason, str) and env_reason.strip():
+            normalized_reason = _normalize_readyz_reason(env_reason)
+        else:
+            normalized_reason = "forced_degraded_env"
         return JSONResponse(
             status_code=503,
-            content={"status": "degraded", "ready": False, "reason": "forced_degraded_env"},
+            content={"status": "degraded", "ready": False, "reason": normalized_reason},
         )
 
     return {"status": "ready"}
@@ -565,8 +627,6 @@ async def write_agent_doc(agent_id: str, body: AgentDocBody) -> dict[str, str]:
 
 # ── Project models + endpoint ─────────────────────────────────────────────────
 
-from typing import Literal, Optional as _Opt  # noqa: E402
-
 _LaneLit = Literal["Ideas", "Discovery", "Design", "In Sprint", "Review", "Released", "Archived"]
 _PriorityLit = Literal["P1", "P2", "P3", "P4"]
 _BudgetLit = Literal["XS", "S", "M", "L", "XL", "unknown"]
@@ -587,14 +647,12 @@ class ProjectModel(BaseModel):
     created: _Opt[str] = None
     updated: _Opt[str] = None
 
-
-import re as _re  # noqa: E402
-
-_PROJECT_ID_RE = _re.compile(r"^prj\d{7}$")
-_IDEA_STEM_RE = _re.compile(r"^(idea(?P<rank>\d{6}))(?:-(?P<slug>.+))?$", _re.IGNORECASE)
-_IDEA_PROJECT_ID_RE = _re.compile(r"prj\d{7}", _re.IGNORECASE)
-_IDEA_MAPPING_LINE_RE = _re.compile(r"^Planned project mapping:\s*(.+)$", _re.IGNORECASE)
-_PROJECT_STAGE_DIR_RE = _re.compile(r"^(prj\d{7})-", _re.IGNORECASE)
+_re = re
+_PROJECT_ID_RE = re.compile(r"^prj\d{7}$")
+_IDEA_STEM_RE = re.compile(r"^(idea(?P<rank>\d{6}))(?:-(?P<slug>.+))?$", re.IGNORECASE)
+_IDEA_PROJECT_ID_RE = re.compile(r"prj\d{7}", re.IGNORECASE)
+_IDEA_MAPPING_LINE_RE = re.compile(r"^Planned project mapping:\s*(.+)$", re.IGNORECASE)
+_PROJECT_STAGE_DIR_RE = re.compile(r"^(prj\d{7})-", re.IGNORECASE)
 
 _IDEAS_FILE_ROOT = _PROJECT_ROOT / "docs" / "project" / "ideas"
 
@@ -1226,7 +1284,10 @@ async def patch_idea(idea_id: str, patch: IdeaPatch) -> IdeaModel:
         lines = _replace_mapping_line(lines, normalized_ids)
 
     if patch.ensure_swot_risk_data:
-        default_swot = "Strength: pending analysis; Weakness: pending analysis; Opportunity: pending analysis; Threat: pending analysis."
+        default_swot = (
+            "Strength: pending analysis; Weakness: pending analysis; "
+            "Opportunity: pending analysis; Threat: pending analysis."
+        )
         default_risk = "Risk: pending analysis; Likelihood: M; Impact: M; Mitigation: define owner and controls."
         lines = _ensure_section_content(lines, "## SWOT Data", default_swot)
         lines = _ensure_section_content(lines, "## Risk Data", default_risk)
@@ -1401,9 +1462,6 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
       3. Both sides independently derive the 32-byte AES-256 session key.
     All subsequent messages are encrypted with AES-256-GCM.
     """
-    import base64
-    from cryptography.exceptions import InvalidTag
-
     await websocket.accept()
     auth = await websocket_auth(websocket)
     if auth is None:

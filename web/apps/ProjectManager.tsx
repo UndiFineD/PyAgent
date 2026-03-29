@@ -895,6 +895,103 @@ function parseSwot(raw: string): SwotData {
   return result;
 }
 
+function normalizeSearchText(value: string): string {
+  return value.toLowerCase().trim();
+}
+
+function matchesIdeaContext(text: string, idea: Idea): boolean {
+  const haystack = normalizeSearchText(text);
+  const ideaId = normalizeSearchText(idea.idea_id);
+  const ideaTitle = normalizeSearchText(idea.title);
+  return haystack.includes(ideaId) || (ideaTitle.length > 0 && haystack.includes(ideaTitle));
+}
+
+function getIdeaSwotContext(idea: Idea, swot: SwotData): SwotData {
+  const pickBucket = (items: string[]): string[] => {
+    const matched = items.filter(item => matchesIdeaContext(item, idea));
+    if (matched.length > 0) return matched.slice(0, 2);
+    return [];
+  };
+
+  return {
+    strengths: pickBucket(swot.strengths),
+    weaknesses: pickBucket(swot.weaknesses),
+    opportunities: pickBucket(swot.opportunities),
+    threats: pickBucket(swot.threats),
+  };
+}
+
+function getIdeaRiskContext(idea: Idea, risks: RiskEntry[]): RiskEntry[] {
+  const direct = risks.filter(entry => matchesIdeaContext(entry.risk, idea));
+  return direct.slice(0, 2);
+}
+
+async function getLatestKanbanRegistersSource(): Promise<string> {
+  const candidatePaths = [
+    '/docs/project/kanban.md',
+    '/api/docs/project/kanban.md',
+  ];
+
+  for (const path of candidatePaths) {
+    try {
+      const response = await fetchApi(path, {
+        headers: { Accept: 'text/plain; charset=utf-8' },
+      });
+      if (!response.ok) continue;
+      const content = await response.text();
+      if (content.includes('## SWOT Analysis') || content.includes('## Risk Register')) {
+        return content;
+      }
+    } catch {
+      // Ignore and continue trying additional sources.
+    }
+  }
+
+  return kanbanRaw;
+}
+
+function formatSwotContextMarkdown(swot: SwotData): string {
+  const toLine = (items: string[]) => (items.length > 0 ? items.map(item => `- ${item}`).join('\n') : '- (none found)');
+  return [
+    'Strengths:',
+    toLine(swot.strengths),
+    'Weaknesses:',
+    toLine(swot.weaknesses),
+    'Opportunities:',
+    toLine(swot.opportunities),
+    'Threats:',
+    toLine(swot.threats),
+  ].join('\n');
+}
+
+function formatRiskContextMarkdown(risks: RiskEntry[]): string {
+  if (risks.length === 0) return '- (none found)';
+  return risks
+    .map(risk => `- ${risk.id} | status=${risk.status} | L=${risk.likelihood} I=${risk.impact} | ${risk.risk} | mitigation: ${risk.mitigation}`)
+    .join('\n');
+}
+
+function buildProjectDefinitionChecklistMarkdown(): string {
+  return [
+    '- [ ] Vision',
+    '- [ ] Goals',
+    '- [ ] Scope',
+    '- [ ] Requirements',
+    '- [ ] Resources',
+    '- [ ] Timeline and milestones',
+    '- [ ] Work breakdown structure (WBS)',
+    '- [ ] Methodology and process',
+    '- [ ] Execution plan',
+    '- [ ] Risk management',
+    '- [ ] Communication plan',
+    '- [ ] Quality plan',
+    '- [ ] Documentation plan',
+    '- [ ] Delivery and deployment plan',
+    '- [ ] Evaluation and closure',
+    '- [ ] Failure, rollback, and lessons learned',
+  ].join('\n');
+}
+
 async function copyTextToClipboard(text: string): Promise<void> {
   if (navigator.clipboard?.writeText) {
     await navigator.clipboard.writeText(text);
@@ -1252,11 +1349,40 @@ export const ProjectManager: React.FC = () => {
   };
 
   const triggerAgentflowForIdea = async (idea: Idea, projectId: string): Promise<void> => {
+    const registerSource = await getLatestKanbanRegistersSource();
+    const swot = parseSwot(registerSource);
+    const risks = parseRiskRegister(registerSource);
+    const ideaSwot = getIdeaSwotContext(idea, swot);
+    const ideaRisks = getIdeaRiskContext(idea, risks);
+
     const prompt = [
-      `Start project workflow for ${projectId} from idea ${idea.idea_id}.`,
-      `Idea title: ${idea.title}`,
-      `Idea summary: ${idea.summary}`,
-      `Idea source: ${idea.source_path}`,
+      `Start project workflow for ${projectId} from idea reference ${idea.idea_id}.`,
+      '',
+      'Idea context',
+      `- idea_id: ${idea.idea_id}`,
+      `- title: ${idea.title}`,
+      `- summary: ${idea.summary}`,
+      `- source: ${idea.source_path}`,
+      '',
+      'SWOT context',
+      formatSwotContextMarkdown(ideaSwot),
+      '',
+      'Risk context',
+      formatRiskContextMarkdown(ideaRisks),
+      '',
+      '@0master responsibilities',
+      '- Validate the promotion intent for the specific idea_id and project_id.',
+      '- Open and coordinate the full agentflow in strict sequence, then monitor handoffs.',
+      '- Ensure governance checks and unblock or escalate blockers quickly.',
+      '',
+      '@1project responsibilities',
+      '- Convert the idea context into a concrete project definition artifact for the project folder.',
+      '- Fill all checklist elements and map them to actionable work items.',
+      '- Include explicit failure handling, rollback criteria, and lessons-learned capture points.',
+      '',
+      'Project definition template',
+      buildProjectDefinitionChecklistMarkdown(),
+      '',
       `Required flow: @0master -> @1project -> @2think -> @3design -> @4plan -> @5test -> @6code -> @7exec -> @8ql -> @9git.`,
     ].join('\n');
 

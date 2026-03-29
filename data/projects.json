@@ -1658,5 +1658,22 @@
     ],
     "created": "2026-03-29",
     "updated": "2026-03-29"
+  },
+  {
+    "id": "prj0000101",
+    "name": "pending-definition",
+    "lane": "Discovery",
+    "summary": "Define and refresh prj0000101 from idea000013-backend-health-check-endpoint under Discovery workflow gates before implementation.",
+    "branch": "prj0000101-pending-definition",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "governance",
+      "init",
+      "idea000013"
+    ],
+    "created": "2026-03-29",
+    "updated": "2026-03-29"
   }
 ]
