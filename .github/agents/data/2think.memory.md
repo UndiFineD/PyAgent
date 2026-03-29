@@ -235,6 +235,36 @@ Lesson schema:
 
 ---
 
+## prj0000096 - coverage-minimum-enforcement
+_Date: 2026-03-28 | Branch: prj0000096-coverage-minimum-enforcement_
+
+task_id: prj0000096
+Lifecycle: OPEN -> IN_PROGRESS -> DONE
+Artifact: docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.think.md
+Recommendation: Option B - Staged Ratchet to Target Baseline
+Handoff target: @3design
+Rationale summary:
+- Root cause is enforcement drift: legacy non-enforcing threshold history plus current CI path without active coverage gate.
+- Staged ratchet balances immediate non-regression enforcement with controlled rollout risk.
+- Recommendation is anchored to prior-art governance patterns from strict-lane projects and deterministic quality-gate architecture.
+
+Prior-art references used:
+- docs/project/prj0000094-idea-003-mypy-strict-enforcement/prj0000094-idea-003-mypy-strict-enforcement.think.md
+- docs/project/prj0000092-mypy-strict-enforcement/prj0000092-mypy-strict-enforcement.think.md
+- docs/project/prj0000075/prj0000075.think.md
+- docs/architecture/archive/8testing-quality.md
+
+Lesson schema:
+- Pattern: For quality gates with low current enforcement fidelity, prefer staged ratchet rollout over immediate high-threshold cutover.
+- Root cause: Configuration may exist without blocking CI integration, creating false confidence in policy enforcement.
+- Prevention: Bind threshold source-of-truth to a blocking CI command and enforce anti-softening checks in structure tests.
+- First seen: 2026-03-28.
+- Seen in: prj0000096-coverage-minimum-enforcement.
+- Recurrence count: 1.
+- Promotion status: monitor (promote to hard rule at recurrence >= 2).
+
+---
+
 # @1think Design Brief — Phase 1: Foundation & Infrastructure
 _Date: 2026-03-16_
 _Analyst: @1think | Feeds: @2plan_

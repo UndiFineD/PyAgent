@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-28 | Total projects: 95 | prj0000095 moved to Review (Discovery: 2, Review: 1)_
+_Last updated: 2026-03-29 | Total projects: 96 | prj0000096 moved to Review (Discovery: 2, Review: 2)_
 
 ## How to use this board
 
@@ -87,6 +87,7 @@ PR open, awaiting merge.
 
 | ID | Name | Branch | PR | Priority | Budget | Updated |
 |---|---|---|---|---|---|---|
+| prj0000096 | coverage-minimum-enforcement | prj0000096-coverage-minimum-enforcement | pending | P2 | M | 2026-03-29 |
 | prj0000095 | source-stub-remediation | prj0000095-source-stub-remediation | pending | P2 | M | 2026-03-28 |
 
 
@@ -207,13 +208,13 @@ Stalled, cancelled, or superseded projects.
 | Lane | Count |
 |---|---|
 | Ideas | 0 |
-| Discovery | 2 |
+| Discovery | 3 |
 | Design | 0 |
 | In Sprint | 0 |
 | Review | 1 |
 | Released | 91 |
 | Archived | 1 |
-| **Total** | **95** |
+| **Total** | **96** |
 
 ---
 

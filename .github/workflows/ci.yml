@@ -55,3 +55,8 @@ jobs:
               [ ${#slice[@]} -gt 0 ] && pytest "${slice[@]}" -q
               ;;
           esac
+      - name: Coverage gate (stage 1)
+        if: matrix.shard == 1
+        run: |
+          pytest tests/test_coverage_config.py tests/structure/test_ci_yaml.py tests/ci/test_workflow_count.py \
+            --cov=tests --cov-report=term-missing --cov-fail-under=40 -q

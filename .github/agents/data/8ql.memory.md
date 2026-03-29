@@ -9,6 +9,42 @@ Once security scans and CodeQL analysis are complete,
 the next agent in the workflow is **@9git**. 
 Invoke it via `agent/runSubagent` to continue the process.
 
+## Last scan - 2026-03-29 (prj0000096)
+- Task: prj0000096-coverage-minimum-enforcement
+- Lifecycle: OPEN -> IN_PROGRESS -> BLOCKED
+- status: BLOCKED
+- task_id: prj0000096-coverage-minimum-enforcement
+- Branch gate: PASS (expected = observed = `prj0000096-coverage-minimum-enforcement`)
+- Files scanned: `.github/workflows/ci.yml`, `pyproject.toml`, `tests/structure/test_ci_yaml.py`, `tests/test_coverage_config.py`, `docs/project/prj0000096-coverage-minimum-enforcement/*`
+- Security - CodeQL: SKIPPED (no CodeQL CLI/database execution in this scoped gate run)
+- Security - ruff S rules: PASS WITH NOTES (12 pre-existing `src/**` findings outside project scope; no project-scoped regression)
+- Security - pip-audit new findings: 0 (`pip_audit_results.json` reports `Deps with vulns: 0`)
+- Security - Rust unsafe check: SKIPPED (`rust_core/` not modified in project scope)
+- Security - Workflow injection: PASS (no `pull_request_target`; explicit `permissions`; no unsafe user-controlled interpolation in `run:`)
+- Quality - Plan vs delivery: FAIL (threshold source-of-truth drift: workflow hardcodes `--cov-fail-under=40`)
+- Quality - AC vs test coverage: PASS (targeted project test bundle green)
+- Quality - Docs vs implementation: FAIL (`coverage-minimum-enforcement.code.md` claims single policy knob while workflow duplicates threshold)
+- Quality - Agent file consistency: PASS
+- Lessons written: 2 (`6code.memory.md`, `7exec.memory.md`)
+- Rules promoted: 0
+- Outcome: BLOCKED -> @6code / @7exec
+- handoff_target: @6code
+
+## Unresolved Quality-Debt Ledger
+- Debt ID: QD-prj0000096-001
+- Status: OPEN
+- Owner: @6code
+- Originating project: prj0000096-coverage-minimum-enforcement
+- Description: Coverage threshold policy drift between `pyproject.toml` and `.github/workflows/ci.yml` (`--cov-fail-under=40` hardcoded).
+- Exit criteria: Remove hardcoded threshold duplication and enforce config-driven threshold linkage; update code/test artifacts; rerun @7exec + @8ql gates.
+
+- Debt ID: QD-prj0000096-002
+- Status: OPEN
+- Owner: @7exec (with @0master for tooling path)
+- Originating project: prj0000096-coverage-minimum-enforcement
+- Description: `tests/zzz/test_zzg_codeql_sarif_gate.py::test_all_sarif_files_are_fresh` remains red due to stale SARIF artifacts (>24h) even when run with `CODEQL_REBUILD=1`.
+- Exit criteria: Establish reliable SARIF refresh path (or runner prerequisite), regenerate SARIF artifacts, and confirm freshness test green in fail-fast/full-suite validation.
+
 ## Last scan - 2026-03-28 (prj0000094 reassessment after blocker fix)
 - Task: prj0000094-idea-003-mypy-strict-enforcement
 - Lifecycle: OPEN -> IN_PROGRESS -> DONE

@@ -159,7 +159,8 @@ omit = ["src-old/*", "src/*/migrations/*", "src/**/__pycache__/*"]
 branch = true
 
 [tool.coverage.report]
-fail_under = 30
+# Stage-1 ratchet baseline for prj0000096. Future slices may raise this floor.
+fail_under = 40
 show_missing = true
 skip_empty = true
 exclude_lines = [

@@ -23,6 +23,7 @@ Set CODEQL_SKIP=1 to bypass entirely.
 
 import json
 import os
+import shutil
 import time
 from pathlib import Path
 from typing import NamedTuple
@@ -89,6 +90,16 @@ _hard_fail_rule_prefixes = (
 )
 
 
+def _codeql_available() -> bool:
+    """Return whether CodeQL CLI is available in this environment."""
+    if os.environ.get("CODEQL_EXE"):
+        return Path(os.environ["CODEQL_EXE"]).exists()
+    on_path = shutil.which("codeql")
+    if on_path:
+        return True
+    return (REPO_ROOT / "codeql" / "codeql.exe").exists()
+
+
 def test_all_sarif_files_exist() -> None:
     """All three SARIF result files must exist."""
     if os.environ.get("CODEQL_SKIP"):
@@ -105,6 +116,8 @@ def test_all_sarif_files_are_fresh() -> None:
     """All SARIF files must be < 24h old."""
     if os.environ.get("CODEQL_SKIP"):
         pytest.skip("CODEQL_SKIP is set")
+    if not _codeql_available():
+        pytest.skip("CodeQL CLI not available")
 
     stale = []
     for spec in _SARIF_SPECS:

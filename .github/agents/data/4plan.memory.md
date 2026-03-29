@@ -272,6 +272,60 @@ Documentation-only project. No source code, tests, or CI changes. @4plan wrote t
 P1–P4 priorities, SWOT classification for P1/P2). All agents M2/M4/M5/M6/M7 SKIPPED.
 Ready for @9git handoff.
 
+---
+
+## prj0000096 - coverage-minimum-enforcement
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000096-coverage-minimum-enforcement |
+| **owner_agent** | @4plan |
+| **source** | @3design |
+| **created_at** | 2026-03-28 |
+| **updated_at** | 2026-03-28 |
+| **status** | HANDED_OFF |
+| **handoff_target** | @5test |
+| **artifact_paths** | docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.plan.md, docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.project.md |
+| **branch** | prj0000096-coverage-minimum-enforcement (validated PASS before artifact write) |
+
+### Chunk 001 Summary
+
+| Item | Value |
+|---|---|
+| Code/config/docs files planned | 3-4 |
+| Test files planned | 2 |
+| Task IDs | T1-T5 |
+| Scope | Stage-1 coverage minimum enforcement (40) with blocking CI gate, TDD guardrails, and rollout evidence format |
+
+### Acceptance Coverage
+
+| Task | Acceptance IDs |
+|---|---|
+| T1 | AC-001, AC-004 |
+| T2 | AC-002, AC-003 |
+| T3 | AC-001, AC-004, AC-005 |
+| T4 | AC-002, AC-003 |
+| T5 | AC-003, AC-006 |
+
+### Dependency Order
+1. T1 -> T2
+2. T1/T2 complete in @5test before @6code implementation starts.
+3. T3 -> T4 -> T5
+
+### Lesson Entry
+
+| Field | Value |
+|---|---|
+| Pattern | First-slice planning is most executable when each task explicitly carries exact files, acceptance checks, and one PowerShell validation command. |
+| Root cause | Placeholder plans without per-task file/command detail create ambiguous @5test/@6code boundaries and inconsistent TDD sequencing. |
+| Prevention | Enforce the hard-task schema in canonical plan output and reject tasks lacking file targets or executable validation commands. |
+| First seen | 2026-03-28 |
+| Seen in | prj0000093-projectmanager-ideas-autosync; prj0000096-coverage-minimum-enforcement |
+| Recurrence count | 2 |
+| Promotion status | PROMOTED_TO_HARD_RULE |
+
+---
+
 ## prj0000090 - private-key-remediation
 
 | Field | Value |
