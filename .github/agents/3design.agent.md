@@ -61,7 +61,7 @@ This agent does **not** write implementation plans or tests.
 2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
 3. Read the observed branch with `git branch --show-current`.
 4. If observed branch != expected branch, stop work immediately.
-5. On mismatch, record BLOCKED status in `<project>.design.md` and `.github/agents/data/3design.memory.md`,
+5. On mismatch, record BLOCKED status in `<project>.design.md` and `.github/agents/data/current.3design.memory.md`,
    then hand the task back to `@0master`.
 6. Do not write/overwrite design artifacts or hand off to `@4plan` while branch validation fails.
 
@@ -106,7 +106,7 @@ Outputs: a concrete design doc for `@4plan`.
 
 ## Memory lifecycle
 
-- Read and update `.github/agents/data/3design.memory.md` for each delegated task.
+- Read and update `.github/agents/data/current.3design.memory.md` for each delegated task.
 - Keep lifecycle state aligned with master policy: `OPEN` -> `IN_PROGRESS` -> `DONE` (or `BLOCKED`).
 - Include `task_id`, selected design path, assumptions, and interface-contract notes.
 - On handoff, record target agent `@4plan` and links to canonical/chunked design artifacts.
@@ -145,3 +145,21 @@ _Designer: @3design | Updated: <date>_
 - ADRs must start from docs/architecture/adr/0001-architecture-decision-record-template.md.
 - Link ADR updates from relevant project artifacts (design, plan, and git handoff records).
 - 3design is accountable for ADR draft quality; 8ql verifies risk/consequence coverage; 9git ensures ADR files are included in narrow staging when required.
+
+## Operational Data and Knowledge Inputs
+- At the beginning of each task, read .github/agents/tools/3design.tools.md to prioritize available tools for this role.
+- At the beginning of each task, read .github/agents/skills/3design.skills.md to select applicable skills from .agents/skills.
+- At the beginning of each task, read .github/agents/governance/shared-governance-checklist.md and apply the role-specific items before handoff.
+- For fast repository lookup, use .github/agents/data/codestructure.md and the split index files it references.
+
+- For docs/project/kanban.md + data/projects.json lifecycle changes, run python scripts/project_registry_governance.py set-lane --id <prjNNNNNNN> --lane <lane> and then python scripts/project_registry_governance.py validate.
+- For docs/architecture and docs/architecture/adr updates, run python scripts/architecture_governance.py validate (and python scripts/architecture_governance.py create --title <title> when a new ADR is required).
+- For project artifact updates under docs/project/prjNNNNNNN/, run python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py before handoff.
+
+## Memory and Daily Log Contract
+- Record ongoing task notes in .github/agents/data/current.3design.memory.md.
+- At the start of a new project: append .github/agents/data/current.3design.memory.md to .github/agents/data/history.3design.memory.md in chronological order (oldest -> newest), then clear the ## Entries section in current.
+- Record interaction logs as pairs of Human Prompt and agent responses in .github/agents/data/<YYYY-MM-DD>.3design.log.md (date = today).
+
+
+

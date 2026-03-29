@@ -21,6 +21,7 @@ _No checkbox tasks found in the plan file._
   - `rust_core\src\agents\coder.rs`
   - `rust_core\src\stats\profiling.rs`
   - `src\tools\code_quality.py`
+  - `tests\docs\test_codestructure_governance.py`
   - `tests\zzz\test_zzd_codeql_python.py`
   - `tests\zzz\test_zze_codeql_javascript.py`
   - `tests\zzz\test_zzf_codeql_rust.py`

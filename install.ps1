@@ -26,6 +26,12 @@
 .PARAMETER Force
     Force recreation of .venv even if it already exists.
 
+.PARAMETER SkipOptionalTooling
+    Skip optional developer tooling checks/installs (rg, fd, ast-grep, jq, yq, semgrep, tokei, delta, hyperfine, just, uv).
+
+.PARAMETER InstallPostgresServer
+    Attempt optional PostgreSQL server install (non-fatal). Client checks always run in optional tooling phase.
+
 .EXAMPLE
     .\install.ps1
     Full installation.
@@ -44,7 +50,9 @@ param(
     [switch]$SkipWeb,
     [switch]$SkipDev,
     [switch]$CI,
-    [switch]$Force
+    [switch]$Force,
+    [switch]$SkipOptionalTooling,
+    [switch]$InstallPostgresServer
 )
 
 $ErrorActionPreference = 'Stop'
@@ -59,6 +67,104 @@ $script:Summary  = [ordered]@{}
 function Write-Status {
     param([string]$Icon, [string]$Message, [string]$Color = 'White')
     Write-Host "  [$Icon] $Message" -ForegroundColor $Color
+}
+
+
+function Test-CommandAvailable {
+    param([Parameter(Mandatory = $true)][string]$CommandName)
+    return [bool](Get-Command $CommandName -ErrorAction SilentlyContinue)
+}
+
+
+function Install-WingetPackage {
+    param(
+        [Parameter(Mandatory = $true)][string]$PackageId,
+        [Parameter(Mandatory = $true)][string]$DisplayName
+    )
+
+    if (-not (Test-CommandAvailable -CommandName 'winget')) {
+        Write-Status '⚠' "winget not available; cannot install optional package $DisplayName ($PackageId)" 'Yellow'
+        return $false
+    }
+
+    if ($CI) {
+        Write-Status '⚠' "CI mode: check-only for $DisplayName (installation skipped)" 'Yellow'
+        return $false
+    }
+
+    try {
+        & winget install --id $PackageId --accept-package-agreements --accept-source-agreements --silent --disable-interactivity --exact
+        if ($LASTEXITCODE -eq 0) {
+            Write-Status '✓' "$DisplayName installed via winget ($PackageId)" 'Green'
+            return $true
+        }
+        Write-Status '⚠' "$DisplayName install exited with code $LASTEXITCODE (non-fatal)" 'Yellow'
+        return $false
+    } catch {
+        Write-Status '⚠' "Failed to install $DisplayName ($PackageId): $_" 'Yellow'
+        return $false
+    }
+}
+
+
+function Ensure-OptionalTooling {
+    if ($SkipOptionalTooling) {
+        Write-Status '⚠' "Optional tooling phase skipped (-SkipOptionalTooling)" 'Yellow'
+        $script:Summary['Optional tooling'] = "skipped (-SkipOptionalTooling)"
+        return
+    }
+
+    Write-Host "`nOptional developer tooling..." -ForegroundColor Cyan
+
+    $tools = @(
+        @{ Name = 'ripgrep'; Command = 'rg'; PackageId = 'BurntSushi.ripgrep.MSVC' },
+        @{ Name = 'fd'; Command = 'fd'; PackageId = 'sharkdp.fd' },
+        @{ Name = 'ast-grep'; Command = 'ast-grep'; PackageId = 'ast-grep.ast-grep' },
+        @{ Name = 'jq'; Command = 'jq'; PackageId = 'jqlang.jq' },
+        @{ Name = 'yq'; Command = 'yq'; PackageId = 'MikeFarah.yq' },
+        @{ Name = 'semgrep'; Command = 'semgrep'; PackageId = 'Semgrep.Semgrep' },
+        @{ Name = 'tokei'; Command = 'tokei'; PackageId = 'XAMPPRocky.tokei' },
+        @{ Name = 'delta (difft alternative)'; Command = 'delta'; PackageId = 'dandavison.delta' },
+        @{ Name = 'hyperfine'; Command = 'hyperfine'; PackageId = 'sharkdp.hyperfine' },
+        @{ Name = 'just'; Command = 'just'; PackageId = 'Casey.Just' },
+        @{ Name = 'uv'; Command = 'uv'; PackageId = 'Astral-sh.uv' }
+    )
+
+    $installed = 0
+    $already = 0
+    $missing = 0
+
+    foreach ($tool in $tools) {
+        if (Test-CommandAvailable -CommandName $tool.Command) {
+            Write-Status '✓' "$($tool.Name) found ($($tool.Command))" 'Green'
+            $already++
+            continue
+        }
+
+        Write-Status '⚠' "$($tool.Name) missing ($($tool.Command))" 'Yellow'
+        if (Install-WingetPackage -PackageId $tool.PackageId -DisplayName $tool.Name) {
+            $installed++
+        } else {
+            $missing++
+        }
+    }
+
+    # PostgreSQL tooling (client first, optional server install path)
+    if (Test-CommandAvailable -CommandName 'psql') {
+        Write-Status '✓' "PostgreSQL client found (psql)" 'Green'
+    } else {
+        Write-Status '⚠' "PostgreSQL client (psql) not found" 'Yellow'
+        [void](Install-WingetPackage -PackageId 'PostgreSQL.PostgreSQL' -DisplayName 'PostgreSQL client/server bundle')
+    }
+
+    if ($InstallPostgresServer) {
+        Write-Status '…' "Optional PostgreSQL server install requested" 'Cyan'
+        [void](Install-WingetPackage -PackageId 'PostgreSQL.PostgreSQL' -DisplayName 'PostgreSQL server')
+    } else {
+        Write-Status '⚠' "PostgreSQL server install skipped (use -InstallPostgresServer to opt in)" 'Yellow'
+    }
+
+    $script:Summary['Optional tooling'] = "found=$already installed=$installed missing=$missing"
 }
 
 # ── Phase 1: Prerequisites ────────────────────────────────────────────────────
@@ -280,6 +386,7 @@ Write-Host "  $(Get-Date -Format 'yyyy-MM-dd HH:mm')" -ForegroundColor Gray
 Test-Prerequisites
 Initialize-Venv
 Install-Python
+Ensure-OptionalTooling
 Build-Rust
 Install-Scaffold
 Install-Node

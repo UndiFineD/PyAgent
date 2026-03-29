@@ -15,7 +15,7 @@
 
 from __future__ import annotations
 
-import asyncio
+# import asyncio
 import math
 import uuid
 from dataclasses import dataclass, field
@@ -224,10 +224,12 @@ class AutoMemCore:
             self._pool = None
 
     async def __aenter__(self) -> "AutoMemCore":
+        """Enter the async context manager."""
         await self.connect()
         return self
 
     async def __aexit__(self, *_: Any) -> None:
+        """Exit the async context manager."""
         await self.close()
 
     # ------------------------------------------------------------------

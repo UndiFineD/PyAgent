@@ -20,7 +20,7 @@ import os
 import random
 import time
 import uuid
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -90,9 +90,42 @@ _VALID_AGENT_IDS = frozenset({
 
 
 def _log_path(agent_id: str) -> Path:
+    """Return today's canonical log file path for an agent."""
+    if agent_id not in _VALID_AGENT_IDS:
+        raise HTTPException(status_code=400, detail=f"Unknown agent_id: {agent_id!r}")
+    today = date.today().isoformat()
+    return _LOGS_DIR / f"{today}.{agent_id}.log.md"
+
+
+def _legacy_log_path(agent_id: str) -> Path:
+    """Return the legacy non-dated log file path for fallback reads."""
     if agent_id not in _VALID_AGENT_IDS:
         raise HTTPException(status_code=400, detail=f"Unknown agent_id: {agent_id!r}")
     return _LOGS_DIR / f"{agent_id}.log.md"
+
+
+def _resolve_log_read_path(agent_id: str) -> Path:
+    """Resolve the best-effort read path.
+
+    Resolution order:
+    1. Today's dated file.
+    2. Latest available dated file for the agent.
+    3. Legacy non-dated file.
+    """
+    today_path = _log_path(agent_id)
+    if today_path.exists():
+        return today_path
+
+    dated_pattern = f"????-??-??.{agent_id}.log.md"
+    dated_candidates = sorted(_LOGS_DIR.glob(dated_pattern), reverse=True)
+    if dated_candidates:
+        return dated_candidates[0]
+
+    legacy_path = _legacy_log_path(agent_id)
+    if legacy_path.exists():
+        return legacy_path
+
+    return today_path
 
 
 app = FastAPI(title="PyAgent Backend Worker", version="0.1.0")
@@ -131,6 +164,7 @@ class VersionHeaderMiddleware(BaseHTTPMiddleware):
     """
 
     async def dispatch(self, request, call_next):  # type: ignore[override]
+        """Inject API version headers into the response."""
         response = await call_next(request)
         path = request.url.path
         if path.startswith("/v1/api/"):
@@ -481,8 +515,8 @@ class AgentLogBody(BaseModel):
 
 @_auth_router.get("/agent-log/{agent_id}")
 async def read_agent_log(agent_id: str) -> dict[str, str]:
-    """Return the current contents of docs/agents/<agent_id>.log.md."""
-    path = _log_path(agent_id)
+    """Return the current contents of the resolved agent log file."""
+    path = _resolve_log_read_path(agent_id)
     if not path.exists():
         return {"content": ""}
     return {"content": path.read_text(encoding="utf-8")}
@@ -490,7 +524,7 @@ async def read_agent_log(agent_id: str) -> dict[str, str]:
 
 @_auth_router.put("/agent-log/{agent_id}")
 async def write_agent_log(agent_id: str, body: AgentLogBody) -> dict[str, str]:
-    """Overwrite docs/agents/<agent_id>.log.md with the supplied content."""
+    """Overwrite today's dated agent log file with the supplied content."""
     path = _log_path(agent_id)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(body.content, encoding="utf-8")

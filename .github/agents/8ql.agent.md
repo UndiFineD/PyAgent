@@ -78,7 +78,7 @@ It **does** update `.github/agents/data/` memory files and `.github/agents/*.age
 2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
 3. Read the observed branch with `git branch --show-current`.
 4. If observed branch != expected branch, stop work immediately.
-5. On mismatch, record BLOCKED status in `<project>.ql.md` and `.github/agents/data/8ql.memory.md`,
+5. On mismatch, record BLOCKED status in `<project>.ql.md` and `.github/agents/data/current.8ql.memory.md`,
    then hand the task back to `@0master`.
 6. Do not run security scans or hand off to `@9git` while branch validation fails.
 
@@ -87,7 +87,7 @@ It **does** update `.github/agents/data/` memory files and `.github/agents/*.age
 ## Part A — Security Scanning
 
 **Step 1 — Identify changed files**
-Read `.github/agents/data/7exec.memory.md` and `.github/agents/data/6code.memory.md` to get the
+Read `.github/agents/data/current.7exec.memory.md` and `.github/agents/data/current.6code.memory.md` to get the
 list of modified modules. Also run:
 ```powershell
 git diff --name-only HEAD 2>&1
@@ -221,7 +221,7 @@ For each finding, open `.github/agents/data/<N><agent>.memory.md` and:
 
 When `Recurrence count` reaches **2**, add a concrete hard rule to the responsible
 `.github/agents/<N><agent>.agent.md` file in the most relevant section.
-Record the promotion in `.github/agents/data/8ql.memory.md` under `## Promotions`.
+Record the promotion in `.github/agents/data/current.8ql.memory.md` under `## Promotions`.
 
 > @8ql is the **only** agent that may edit `.github/agents/*.agent.md` files.
 
@@ -243,9 +243,15 @@ Record the promotion in `.github/agents/data/8ql.memory.md` under `## Promotions
 | Lesson written / rule promoted | No block; continue to @9git |
 
 **Step 15 — Record results and hand off**
-Update `.github/agents/data/8ql.memory.md` with full scan outcome.
+Update `.github/agents/data/current.8ql.memory.md` with full scan outcome.
 - **All gates pass / MEDIUM-or-below only** → delegate to `@9git`.
 - **HIGH / CRITICAL** → return to `@6code` or `@0master`.
+
+**Step 15.1 — Exact failing-selector rerun evidence (MANDATORY on blocker remediation)**
+When `@7exec` or a prior `@8ql` pass reported a specific failing test selector:
+1. Re-run that exact selector first and capture output.
+2. Record selector, command, and pass/fail in `<project>.ql.md`.
+3. Do not mark remediation complete without this direct proof, even if broader suites pass.
 
 ### Baseline pre-commit blocker protocol (MANDATORY)
 
@@ -253,7 +259,7 @@ When `@9git` reports commit/push blocked by mandatory `run-precommit-checks` bec
 repo-wide `ruff check src tests` fails on baseline issues outside the active project scope:
 
 1. Classify this as `BASELINE_QUALITY_DEBT` (not a project-scope security finding).
-2. Record blocker evidence in `<project>.ql.md` and `.github/agents/data/8ql.memory.md` with:
+2. Record blocker evidence in `<project>.ql.md` and `.github/agents/data/current.8ql.memory.md` with:
   - failing hook/check name,
   - one representative failing file outside scope,
   - impact on handoff.
@@ -269,7 +275,7 @@ repo-wide `ruff check src tests` fails on baseline issues outside the active pro
 
 ## Memory
 
-Store scan outcomes in `.github/agents/data/8ql.memory.md`:
+Store scan outcomes in `.github/agents/data/current.8ql.memory.md`:
 
 ```markdown
 ## Last scan — {date}
@@ -360,3 +366,21 @@ _Status: IN_PROGRESS_
 - ADRs must start from docs/architecture/adr/0001-architecture-decision-record-template.md.
 - Link ADR updates from relevant project artifacts (design, plan, and git handoff records).
 - 3design is accountable for ADR draft quality; 8ql verifies risk/consequence coverage; 9git ensures ADR files are included in narrow staging when required.
+
+## Operational Data and Knowledge Inputs
+- At the beginning of each task, read .github/agents/tools/8ql.tools.md to prioritize available tools for this role.
+- At the beginning of each task, read .github/agents/skills/8ql.skills.md to select applicable skills from .agents/skills.
+- At the beginning of each task, read .github/agents/governance/shared-governance-checklist.md and apply the role-specific items before handoff.
+- For fast repository lookup, use .github/agents/data/codestructure.md and the split index files it references.
+
+- For docs/project/kanban.md + data/projects.json lifecycle changes, run python scripts/project_registry_governance.py set-lane --id <prjNNNNNNN> --lane <lane> and then python scripts/project_registry_governance.py validate.
+- For docs/architecture and docs/architecture/adr updates, run python scripts/architecture_governance.py validate (and python scripts/architecture_governance.py create --title <title> when a new ADR is required).
+- For project artifact updates under docs/project/prjNNNNNNN/, run python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py before handoff.
+
+## Memory and Daily Log Contract
+- Record ongoing task notes in .github/agents/data/current.8ql.memory.md.
+- At the start of a new project: append .github/agents/data/current.8ql.memory.md to .github/agents/data/history.8ql.memory.md in chronological order (oldest -> newest), then clear the ## Entries section in current.
+- Record interaction logs as pairs of Human Prompt and agent responses in .github/agents/data/<YYYY-MM-DD>.8ql.log.md (date = today).
+
+
+

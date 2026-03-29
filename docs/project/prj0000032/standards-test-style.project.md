@@ -39,8 +39,11 @@
   - `tests\core\test_core.py`
   - `tests\deploy\test_compose_dockerfile_paths.py`
   - `tests\docs\test_agent_workflow_policy_docs.py`
+  - `tests\docs\test_allowed_websites_governance.py`
   - `tests\docs\test_api_docs_exist.py`
   - `tests\docs\test_changelog.py`
+  - `tests\docs\test_codestructure_governance.py`
+  - `tests\docs\test_copilot_instructions_governance.py`
   - `tests\docs\test_diagrams_compile.py`
   - `tests\docs\test_docs_exist.py`
   - `tests\fakeconftest.py`
