@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-29 | Total projects: 100 | Auto-synced by project_registry_governance.py (Discovery: 0, Review: 4, Released: 95)_
+_Last updated: 2026-03-29 | Total projects: 101 | Auto-synced by project_registry_governance.py (Discovery: 1, Review: 4, Released: 95)_
 
 ## How to use this board
 
@@ -58,6 +58,7 @@ Active options exploration — @2think is working or has completed .think.md.
 |---|---|---|---|---|---|---|---|
 
 
+| prj0000101 | pending-definition | Initialize project workspace and governance artifacts for pending-definition discovery handoff. | prj0000101-pending-definition | P3 | S | governance, init | 2026-03-29 |
 ---
 
 ## Design
@@ -212,13 +213,13 @@ Stalled, cancelled, or superseded projects.
 | Lane | Count |
 |---|---|
 | Ideas | 0 |
-| Discovery | 0 |
+| Discovery | 1 |
 | Design | 0 |
 | In Sprint | 0 |
 | Review | 4 |
 | Released | 95 |
 | Archived | 1 |
-| **Total** | **100** |
+| **Total** | **101** |
 
 ---
 

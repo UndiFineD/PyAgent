@@ -1658,5 +1658,21 @@
     ],
     "created": "2026-03-29",
     "updated": "2026-03-29"
+  },
+  {
+    "id": "prj0000101",
+    "name": "pending-definition",
+    "lane": "Discovery",
+    "summary": "Initialize project workspace and governance artifacts for pending-definition discovery handoff.",
+    "branch": "prj0000101-pending-definition",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "governance",
+      "init"
+    ],
+    "created": "2026-03-29",
+    "updated": "2026-03-29"
   }
 ]
