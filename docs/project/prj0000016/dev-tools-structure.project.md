@@ -21,6 +21,7 @@ _No checkbox tasks found in the plan file._
   - `rust_core\src\inference\tools.rs`
   - `scripts\setup_structure.py`
   - `src\chat\mcp_tools.py`
+  - `tests\docs\test_codestructure_governance.py`
   - `tests\structure\test_dev_tools_dirs.py`
   - `tests\test_structured_logging.py`
   - `tests\test_tools_sanity.py`

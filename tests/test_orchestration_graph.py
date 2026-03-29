@@ -19,25 +19,24 @@ prj0000057 — agent-orchestration-graph
 from __future__ import annotations
 
 import uuid
-from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
 
-from backend.app import app
+from backend.app import _log_path, app
 
 client = TestClient(app)
 
 # Unique test content to avoid cross-test pollution
 _TEST_CONTENT = f"test-prj0000057-{uuid.uuid4().hex[:8]}"
 
-# Path to the agent log file written by the PUT endpoint (moved in prj0000074)
-_LOG_FILE = Path(__file__).resolve().parents[1] / ".github" / "agents" / "data" / "0master.log.md"
+# Path to the dated agent log file written by the PUT endpoint.
+_LOG_FILE = _log_path("0master")
 
 
 @pytest.fixture(autouse=True)
 def _restore_agent_log():
-    """Save and restore .github/agents/data/0master.log.md to prevent workspace mutation."""
+    """Save and restore today's 0master log file to prevent workspace mutation."""
     existed = _LOG_FILE.exists()
     original = _LOG_FILE.read_text(encoding="utf-8") if existed else None
     yield

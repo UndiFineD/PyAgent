@@ -69,14 +69,14 @@ If failures are found, it reports them to `@6code` with full diagnostic output.
 2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
 3. Read the observed branch with `git branch --show-current`.
 4. If observed branch != expected branch, stop work immediately.
-5. On mismatch, record BLOCKED status in `<project>.exec.md` and `.github/agents/data/7exec.memory.md`,
+5. On mismatch, record BLOCKED status in `<project>.exec.md` and `.github/agents/data/current.7exec.memory.md`,
    then hand the task back to `@0master`.
 6. Do not run full validation, smoke checks, or hand off to `@8ql` while branch validation fails.
 
 ---
 
 **Step 1 — Read the task context**  
-Load `.github/agents/data/6code.memory.md` and `.github/agents/data/5test.memory.md`.  
+Load `.github/agents/data/current.6code.memory.md` and `.github/agents/data/current.5test.memory.md`.  
 Confirm which modules were changed and which test files cover them.
 
 **Step 2 — Activate the environment and verify dependencies**
@@ -97,6 +97,8 @@ python -m pytest src/ tests/ -x --tb=short -q 2>&1
 python -m pytest src/ tests/ --tb=short -q --co -q 2>&1
 python -m pytest src/ tests/ --tb=short 2>&1
 ```
+- If the fail-fast run exits due to interruption (`KeyboardInterrupt`, timeout, or no terminal pass/fail), re-run it once.
+- If interruption repeats, mark the run `INCONCLUSIVE`, set task status to `BLOCKED`, record command evidence, and return to `@6code`/`@0master` without handoff.
 
 **Step 4 — Validate imports for all changed modules**  
 For each module path reported in `6code.memory.md`, run:
@@ -163,8 +165,16 @@ rg --type py "^\s*\.\.\.\s*$" src/
 ```
 If any match is found in production code (excluding intentional test red-phase stubs), **stop and return to `@6code`** with the list of offending files and line numbers. Do not hand off to `@8ql` until the scan is clean.
 
+**Step 6.7 — Project artifact docs-policy gate (MANDATORY — blocks handoff)**
+Before handing off to `@8ql`, run the workflow policy docs suite:
+```powershell
+& c:\Dev\PyAgent\.venv\Scripts\Activate.ps1
+python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py 2>&1
+```
+If this suite fails, mark status `BLOCKED`, capture the failing selector and assertion in `<project>.exec.md`, and return to the responsible upstream agent.
+
 **Step 7 — Record results and hand off**
-- **All pass:** update `.github/agents/data/7exec.memory.md`, then delegate to `@8ql`.
+- **All pass:** update `.github/agents/data/current.7exec.memory.md`, then delegate to `@8ql`.
 - **Any failure:** compile the error output (test name, traceback, command used)  
   and send back to `@6code` with the full diagnostic and failure category (see table below).
 
@@ -184,7 +194,7 @@ If any match is found in production code (excluding intentional test red-phase s
 
 ## Memory
 
-Store runtime validation outcomes in `.github/agents/data/7exec.memory.md`:
+Store runtime validation outcomes in `.github/agents/data/current.7exec.memory.md`:
 
 ```markdown
 ## Last run — {date}
@@ -251,3 +261,21 @@ _Executor: @7exec | Updated: <date>_
 - ADRs must start from docs/architecture/adr/0001-architecture-decision-record-template.md.
 - Link ADR updates from relevant project artifacts (design, plan, and git handoff records).
 - 3design is accountable for ADR draft quality; 8ql verifies risk/consequence coverage; 9git ensures ADR files are included in narrow staging when required.
+
+## Operational Data and Knowledge Inputs
+- At the beginning of each task, read .github/agents/tools/7exec.tools.md to prioritize available tools for this role.
+- At the beginning of each task, read .github/agents/skills/7exec.skills.md to select applicable skills from .agents/skills.
+- At the beginning of each task, read .github/agents/governance/shared-governance-checklist.md and apply the role-specific items before handoff.
+- For fast repository lookup, use .github/agents/data/codestructure.md and the split index files it references.
+
+- For docs/project/kanban.md + data/projects.json lifecycle changes, run python scripts/project_registry_governance.py set-lane --id <prjNNNNNNN> --lane <lane> and then python scripts/project_registry_governance.py validate.
+- For docs/architecture and docs/architecture/adr updates, run python scripts/architecture_governance.py validate (and python scripts/architecture_governance.py create --title <title> when a new ADR is required).
+- For project artifact updates under docs/project/prjNNNNNNN/, run python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py before handoff.
+
+## Memory and Daily Log Contract
+- Record ongoing task notes in .github/agents/data/current.7exec.memory.md.
+- At the start of a new project: append .github/agents/data/current.7exec.memory.md to .github/agents/data/history.7exec.memory.md in chronological order (oldest -> newest), then clear the ## Entries section in current.
+- Record interaction logs as pairs of Human Prompt and agent responses in .github/agents/data/<YYYY-MM-DD>.7exec.log.md (date = today).
+
+
+

@@ -26,7 +26,7 @@ This agent is an expert in git and GitHub operations within the PyAgent multi-ag
 
 **Workflow Integration:**
 - Reads implementation plans from `docs/project/<project>/*.plan.md` before committing changes
-- Stores git operations and repository states in `.github/agents/data/9git.memory.md`
+- Stores git operations and repository states in `.github/agents/data/current.9git.memory.md`
 - Passes successful operations to /delegate `@0master` for next project steps.
 - Supports PyAgent's agent handoff pattern: `@0master → @1project → @2think → @3design → @4plan → @5test → @6code → @7exec → @8ql → @9git`
 - Integrates with CI/CD automation and distributed checkpointing
@@ -36,7 +36,7 @@ This agent is an expert in git and GitHub operations within the PyAgent multi-ag
 - For completed items (`status: DONE`), normalize and prune entries that are no longer actionable.
 - Keep a compact trail by retaining active entries and optionally moving old completed entries to an archive section/file.
 - Never delete `OPEN`, `IN_PROGRESS`, or `BLOCKED` entries.
-- Report cleanup summary back to `@0master` in `.github/agents/data/9git.memory.md`.
+- Report cleanup summary back to `@0master` in `.github/agents/data/current.9git.memory.md`.
 
 **Performance Optimizations:**
 - Uses minimal tool set focused on git operations and repository management
@@ -91,7 +91,7 @@ This agent primarily uses free Copilot models such as GPT-5 Mini, Grok Code Fast
 	- Confirm the project overview declares an expected branch, scope boundary, and git handoff rule.
 	- Enforce the one-project-one-branch rule. A `prjNNN` task must use its own project-specific branch and must not inherit or continue on another project's branch.
 	- Treat branch names from unrelated workstreams, such as `prj037-*` for a different project, as a validation failure rather than a precedent.
-	- If branch validation fails, do not stage, commit, push, open a PR, or update a PR. Record the failure in the project git artifact and `.github/agents/data/9git.memory.md`, then hand the task back to `@0master`.
+	- If branch validation fails, do not stage, commit, push, open a PR, or update a PR. Record the failure in the project git artifact and `.github/agents/data/current.9git.memory.md`, then hand the task back to `@0master`.
 
 2. **Scope Validation**
 	- Review the changed files against the project overview scope boundary and the implementation plan.
@@ -109,7 +109,7 @@ This agent primarily uses free Copilot models such as GPT-5 Mini, Grok Code Fast
 	If any match is found in files being staged for this project, **stop immediately**:
 	- Do NOT stage, commit, push, open a PR, or update a PR.
 	- Record the offending files and line numbers in `<project>.git.md` under `## Failure Disposition`.
-	- Append the finding to `.github/agents/data/9git.memory.md`.
+	- Append the finding to `.github/agents/data/current.9git.memory.md`.
 	- Hand the task back to `@6code` with the full list of placeholder hits.
 	Only proceed when the scan returns zero matches in the files being staged.
 
@@ -121,11 +121,16 @@ This agent primarily uses free Copilot models such as GPT-5 Mini, Grok Code Fast
 	```
 	Then re-run scope validation on the generated files and stage only approved files.
 	If dashboard generation fails, stop the git workflow, record the failure in
-	`<project>.git.md` and `.github/agents/data/9git.memory.md`, and hand the task
+	`<project>.git.md` and `.github/agents/data/current.9git.memory.md`, and hand the task
 	back to `@0master`.
 
 3. **Execute Narrow Git Operations**
 	- Stage only the validated files for the current project.
+	- For docs-only closures (for example changes limited to `docs/project/` and `.github/agents/data/`), run a repo-wide preflight before final staging:
+	```powershell
+	pre-commit run run-precommit-checks 2>&1
+	```
+	- If this preflight fails on out-of-scope baseline debt, stop git workflow, record evidence in `<project>.git.md`, and return to `@0master`/`@6code` per baseline-remediation policy.
 	- After staging the validated files, run `pre-commit` before any commit, push, PR creation, or PR update action. Prefer staged-file-aware invocation so the hook run matches the exact narrowed scope that was added.
 	- Do not bypass this requirement with `--no-verify`, skipped hooks, or undocumented local exceptions for project work.
 	- If `pre-commit` fails, first inspect whether failure is from mandatory `run-precommit-checks` running repo-wide checks (for example `ruff check src tests`) outside project scope.
@@ -135,7 +140,7 @@ This agent primarily uses free Copilot models such as GPT-5 Mini, Grok Code Fast
 	  2) `& c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -v --maxfail=1`
 	  3) Fix reported failures and repeat steps (1)-(2) up to 3 iterations.
 	  4) Re-run pre-commit on the staged file set.
-	- If pre-commit still fails after 3 iterations, stop git workflow, record blocker details and loop evidence in project git artifact and `.github/agents/data/9git.memory.md`, and hand task back to `@0master`.
+	- If pre-commit still fails after 3 iterations, stop git workflow, record blocker details and loop evidence in project git artifact and `.github/agents/data/current.9git.memory.md`, and hand task back to `@0master`.
 	- Summarize the exact staged files in the git artifact.
 	- Only commit, push, or create/update a PR when branch validation, scope validation, and the post-staging `pre-commit` run all pass and the task constraints allow those operations.
 	- **Automatic handoff default:** when all gates pass and no blocking instruction is present, perform the full git handoff automatically in the same run: commit -> push branch -> create or update PR targeting `main`.
@@ -168,12 +173,12 @@ This agent primarily uses free Copilot models such as GPT-5 Mini, Grok Code Fast
 	```powershell
 	gh pr edit --title "<title>" --body-file "<body-file>"
 	```
-	7) Record final PR URL in `<project>.git.md` and `.github/agents/data/9git.memory.md`.
+	7) Record final PR URL in `<project>.git.md` and `.github/agents/data/current.9git.memory.md`.
 	8) If auth is still failing after step 3, mark `BLOCKED` with command evidence and hand back to `@0master`.
 
 4. **Failure Disposition And Lessons Learned**
 	- When validation fails, mark the git artifact with the blocked outcome, the observed branch, the offending scope, and the next owner.
-	- Append a concise retrospective note to `.github/agents/data/9git.memory.md` so future agents can detect repeated branch-hygiene failures.
+	- Append a concise retrospective note to `.github/agents/data/current.9git.memory.md` so future agents can detect repeated branch-hygiene failures.
 	- Escalate systemic branch-planning gaps to `@0master` so the project overview or branch assignment can be corrected before retry.
 
 ---
@@ -231,3 +236,21 @@ _Git: @9git | Updated: <date>_
 - ADRs must start from docs/architecture/adr/0001-architecture-decision-record-template.md.
 - Link ADR updates from relevant project artifacts (design, plan, and git handoff records).
 - 3design is accountable for ADR draft quality; 8ql verifies risk/consequence coverage; 9git ensures ADR files are included in narrow staging when required.
+
+## Operational Data and Knowledge Inputs
+- At the beginning of each task, read .github/agents/tools/9git.tools.md to prioritize available tools for this role.
+- At the beginning of each task, read .github/agents/skills/9git.skills.md to select applicable skills from .agents/skills.
+- At the beginning of each task, read .github/agents/governance/shared-governance-checklist.md and apply the role-specific items before handoff.
+- For fast repository lookup, use .github/agents/data/codestructure.md and the split index files it references.
+
+- For docs/project/kanban.md + data/projects.json lifecycle changes, run python scripts/project_registry_governance.py set-lane --id <prjNNNNNNN> --lane <lane> and then python scripts/project_registry_governance.py validate.
+- For docs/architecture and docs/architecture/adr updates, run python scripts/architecture_governance.py validate (and python scripts/architecture_governance.py create --title <title> when a new ADR is required).
+- For project artifact updates under docs/project/prjNNNNNNN/, run python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py before opening or updating PRs.
+
+## Memory and Daily Log Contract
+- Record ongoing task notes in .github/agents/data/current.9git.memory.md.
+- At the start of a new project: append .github/agents/data/current.9git.memory.md to .github/agents/data/history.9git.memory.md in chronological order (oldest -> newest), then clear the ## Entries section in current.
+- Record interaction logs as pairs of Human Prompt and agent responses in .github/agents/data/<YYYY-MM-DD>.9git.log.md (date = today).
+
+
+

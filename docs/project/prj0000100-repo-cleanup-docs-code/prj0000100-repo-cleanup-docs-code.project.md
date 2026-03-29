@@ -1,6 +1,6 @@
 # prj0000100-repo-cleanup-docs-code - Project Overview
 
-_Status: DISCOVERY_
+_Status: REVIEW_
 _Owner: @1project | Updated: 2026-03-29_
 
 ## Project Identity
@@ -46,7 +46,7 @@ Repository-wide cleanup initiative focused on reviewing and improving non-dot fi
 | M5 | Code implemented | @6code | DONE |
 | M6 | Integration validated | @7exec | DONE |
 | M7 | Security clean | @8ql | DONE |
-| M8 | Committed | @9git | NOT_STARTED |
+| M8 | Committed | @9git | DONE |
 
 ## Status
 _Last updated: 2026-03-29_

@@ -30,6 +30,7 @@ _No checkbox tasks found in the plan file._
   - `src\core\resilience\CircuitBreakerCore.py`
   - `src\core\universal\UniversalCoreRegistry.py`
   - `tests\core\test_core.py`
+  - `tests\docs\test_codestructure_governance.py`
   - `tests\test_api_projects_lane_sync.py`
   - `tests\test_AuditTrailCore.py`
   - `tests\test_AutoMemCore.py`

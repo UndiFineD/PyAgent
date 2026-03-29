@@ -2,10 +2,10 @@
   {
     "id": "prj0000100",
     "name": "repo-cleanup-docs-code",
-    "lane": "Discovery",
+    "lane": "Review",
     "summary": "Review and cleanup non-dot files, refresh documentation, perform code cleanup, and add code-structure index plus allowed-websites search policy governance",
     "branch": "prj0000100-repo-cleanup-docs-code",
-    "pr": null,
+    "pr": "#247",
     "priority": "P2",
     "budget_tier": "L",
     "tags": [
@@ -102,7 +102,7 @@
       "autosync"
     ],
     "created": "2026-03-28",
-    "updated": "2026-03-28"
+    "updated": "2026-03-29"
   },
   {
     "id": "prj0000092",
@@ -1639,7 +1639,7 @@
       "idea000003"
     ],
     "created": "2026-03-28",
-    "updated": "2026-03-28"
+    "updated": "2026-03-29"
   },
   {
     "id": "prj0000099",
