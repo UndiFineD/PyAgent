@@ -247,6 +247,24 @@ Update `.github/agents/data/8ql.memory.md` with full scan outcome.
 - **All gates pass / MEDIUM-or-below only** → delegate to `@9git`.
 - **HIGH / CRITICAL** → return to `@6code` or `@0master`.
 
+### Baseline pre-commit blocker protocol (MANDATORY)
+
+When `@9git` reports commit/push blocked by mandatory `run-precommit-checks` because
+repo-wide `ruff check src tests` fails on baseline issues outside the active project scope:
+
+1. Classify this as `BASELINE_QUALITY_DEBT` (not a project-scope security finding).
+2. Record blocker evidence in `<project>.ql.md` and `.github/agents/data/8ql.memory.md` with:
+  - failing hook/check name,
+  - one representative failing file outside scope,
+  - impact on handoff.
+3. Hand back to `@6code` with a remediation loop:
+  - run `.venv\Scripts\ruff.exe check src tests --fix`,
+  - run `python -m pytest -v --maxfail=1` and fix failing tests,
+  - repeat until pytest is green,
+  - re-run pre-commit on staged files.
+4. If remediation completes and no HIGH/CRITICAL security findings exist, clear handoff to `@9git`.
+5. If remediation cannot complete after 3 loops, keep status `BLOCKED` and escalate to `@0master`.
+
 ---
 
 ## Memory

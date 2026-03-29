@@ -32,9 +32,7 @@ pytestmark = pytest.mark.skipif(
 
 
 def _run(args: list[str], **kwargs) -> subprocess.CompletedProcess:
-    return subprocess.run(
-        [str(SECURITY_BIN), *args], capture_output=True, text=True, check=True, **kwargs
-    )
+    return subprocess.run([str(SECURITY_BIN), *args], capture_output=True, text=True, check=True, **kwargs)
 
 
 def test_security_binary_keygen(tmp_path: Path) -> None:

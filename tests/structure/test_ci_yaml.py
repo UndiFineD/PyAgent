@@ -151,6 +151,4 @@ def test_ci_coverage_gate_path_is_blocking() -> None:
             "Coverage gate step must not use soft-fail operator '|| true'."
         )
         assert "set +e" not in run_cmd, "Coverage gate step must not disable fail-fast semantics with 'set +e'."
-        assert not step.get("continue-on-error", False), (
-            "Coverage gate step must not set continue-on-error."
-        )
+        assert not step.get("continue-on-error", False), "Coverage gate step must not set continue-on-error."

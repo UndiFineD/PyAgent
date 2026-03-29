@@ -15,6 +15,7 @@
 
 prj0000057 — agent-orchestration-graph
 """
+
 from __future__ import annotations
 
 import uuid

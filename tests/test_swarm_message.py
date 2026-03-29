@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for swarm message model (prj0000022)."""
+
 import pytest
+
 from swarm.message_model import Message, validate_message
 
 
@@ -35,6 +37,7 @@ def test_validate_message_accepts_valid():
 
 def test_validate_message_rejects_missing_field():
     from pydantic import ValidationError
+
     bad = _valid()
     del bad["checksum"]
     with pytest.raises(ValidationError):

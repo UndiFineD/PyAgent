@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Unit tests for backend/ws_crypto.py — X25519 ECDH + AES-256-GCM primitives."""
+
 from __future__ import annotations
 
 import pytest
@@ -88,6 +89,7 @@ def test_nonce_prepended_to_ciphertext() -> None:
     # Verify we can decrypt using the first 12 bytes as the nonce manually
     nonce = result[:12]
     from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
     aesgcm = AESGCM(key)
     recovered = aesgcm.decrypt(nonce, result[12:], None)
     assert recovered == plaintext, "Manually extracted nonce must allow correct decryption"

@@ -13,6 +13,7 @@ from re import Pattern
 from typing import Any
 
 import pytest
+
 try:
     import rust_core
 except ImportError:

@@ -66,6 +66,7 @@ def _expected_project_count() -> int | None:
         return None
     return int(match.group(1)) - 1
 
+
 # ---------------------------------------------------------------------------
 # Sentinels
 # _PROJECTS_MISSING — True while data/projects.json does not yet exist

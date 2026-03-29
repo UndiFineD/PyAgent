@@ -46,6 +46,7 @@ import pytest
 try:
     from src.core.ProcessTransactionManager import ProcessTransaction as _CoreProcessTx
     from src.core.ProcessTransactionManager import validate as _core_process_validate
+
     _HAS_CORE_PROCESS = True
 except ImportError:
     _CoreProcessTx = None  # type: ignore[assignment,misc]
@@ -69,6 +70,7 @@ def _skip_if_no_tx_process() -> None:
 # Group A — src.core.ProcessTransactionManager shim
 # ---------------------------------------------------------------------------
 
+
 class TestProcessTransactionShim:
     """Tests against the shim at src.core.ProcessTransactionManager (T08)."""
 
@@ -77,6 +79,7 @@ class TestProcessTransactionShim:
         """src.core.ProcessTransactionManager must export ProcessTransaction."""
         _skip_if_no_core_process()
         from src.core.ProcessTransactionManager import ProcessTransaction  # noqa: PLC0415
+
         assert ProcessTransaction is not None
         assert callable(ProcessTransaction)
 
@@ -85,6 +88,7 @@ class TestProcessTransactionShim:
         """Shim module must expose validate() → True."""
         _skip_if_no_core_process()
         from src.core.ProcessTransactionManager import validate  # noqa: PLC0415
+
         assert callable(validate)
         assert validate() is True
 
@@ -93,6 +97,7 @@ class TestProcessTransactionShim:
         """start() must assign _proc as a Popen instance (stdout captured via PIPE)."""
         _skip_if_no_core_process()
         import subprocess  # noqa: PLC0415
+
         from src.core.ProcessTransactionManager import ProcessTransaction  # noqa: PLC0415
 
         cmd = [sys.executable, "-c", "import time; time.sleep(30)"]
@@ -122,9 +127,7 @@ class TestProcessTransactionShim:
         assert isinstance(rc, int), f"wait() must return int, got {type(rc)}"
         assert rc == 0, f"Echo process must exit with 0, got {rc}"
         assert tx.stdout is not None, "tx.stdout must be set to bytes after wait()"
-        assert b"captured" in tx.stdout, (
-            f"tx.stdout must contain printed output, got {tx.stdout!r}"
-        )
+        assert b"captured" in tx.stdout, f"tx.stdout must contain printed output, got {tx.stdout!r}"
 
     # TC-P5
     def test_rollback_terminates_running_process(self) -> None:
@@ -139,9 +142,7 @@ class TestProcessTransactionShim:
         assert tx._proc is not None, "_proc must exist"
         assert tx._proc.poll() is None, "Process must be running before rollback"
         tx.rollback()
-        assert tx._proc.poll() is not None, (
-            "_proc must be terminated after rollback (poll() returns non-None)"
-        )
+        assert tx._proc.poll() is not None, "_proc must be terminated after rollback (poll() returns non-None)"
 
     # TC-P6
     def test_exception_in_context_triggers_rollback(self) -> None:
@@ -160,9 +161,7 @@ class TestProcessTransactionShim:
 
         held = proc_holder[0]
         assert held._proc is not None, "_proc must have been assigned"
-        assert held._proc.poll() is not None, (
-            "Process must be dead after context-manager exception triggered rollback"
-        )
+        assert held._proc.poll() is not None, "Process must be dead after context-manager exception triggered rollback"
 
     # TC-P7
     @pytest.mark.asyncio
@@ -183,6 +182,7 @@ class TestProcessTransactionShim:
 # Group B — src.transactions.ProcessTransactionManager full implementation
 # ---------------------------------------------------------------------------
 
+
 class TestProcessTransactionFull:
     """Tests against the full src.transactions.ProcessTransactionManager (T04)."""
 
@@ -190,8 +190,10 @@ class TestProcessTransactionFull:
     def test_package_import_and_validate(self) -> None:
         """src.transactions.ProcessTransactionManager must export ProcessTransaction + validate()."""
         _skip_if_no_tx_process()
-        from src.transactions.ProcessTransactionManager import ProcessTransaction  # noqa: PLC0415
-        from src.transactions.ProcessTransactionManager import validate  # noqa: PLC0415
+        from src.transactions.ProcessTransactionManager import (
+            ProcessTransaction,  # noqa: PLC0415
+            validate,  # noqa: PLC0415
+        )
 
         assert ProcessTransaction is not None
         assert callable(validate)
@@ -244,9 +246,7 @@ class TestProcessTransactionFull:
         rc, stdout, _ = await tx.run(cmd)
 
         assert rc == 0
-        assert "hello-stdout-capture" in stdout, (
-            f"stdout must contain printed text, got {stdout!r}"
-        )
+        assert "hello-stdout-capture" in stdout, f"stdout must contain printed text, got {stdout!r}"
 
     # TC-P12
     @pytest.mark.asyncio
@@ -262,6 +262,4 @@ class TestProcessTransactionFull:
         assert tx._async_proc is not None, "_async_proc must be set after start_async()"
         assert tx._async_proc.returncode is None, "Process must still be running"
         await tx.rollback()
-        assert tx._async_proc.returncode is not None, (
-            "_async_proc must be terminated after async rollback"
-        )
+        assert tx._async_proc.returncode is not None, "_async_proc must be terminated after async rollback"

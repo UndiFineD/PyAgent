@@ -23,7 +23,6 @@ import pytest
 
 from src.core.config import AgentConfig, SwarmConfig, load_config, save_config
 
-
 # ---------------------------------------------------------------------------
 # AgentConfig — construction and validation
 # ---------------------------------------------------------------------------
@@ -191,9 +190,7 @@ def test_swarm_config_from_dict() -> None:
         "max_concurrency": 2,
         "heartbeat_interval": 10.0,
         "log_level": "WARNING",
-        "agents": {
-            "bot": {"name": "bot", "llm_model": "gpt4", "max_tokens": 1000}
-        },
+        "agents": {"bot": {"name": "bot", "llm_model": "gpt4", "max_tokens": 1000}},
     }
     cfg = SwarmConfig.from_dict(data)
     assert cfg.swarm_id == "s1"

@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for backend.tracing — OpenTelemetry span instrumentation."""
+
 from __future__ import annotations
 
 from opentelemetry.sdk.trace import TracerProvider
@@ -52,6 +53,7 @@ def test_tracer_instrumentation_scope():
 
 def test_tracing_module_singleton_exists():
     from backend import tracing
+
     assert hasattr(tracing, "tracer")
     assert hasattr(tracing, "setup_tracing")
     assert hasattr(tracing, "_TRACER_NAME")

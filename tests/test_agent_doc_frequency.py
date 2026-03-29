@@ -15,6 +15,7 @@
 
 prj0000030 — agent doc frequency.
 """
+
 from __future__ import annotations
 
 import sys
@@ -28,8 +29,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
 
 from AgentDocFrequency import DocStats, analyse_docs, format_table  # type: ignore[import]  # noqa: E402
 
-
 # ─── Unit: DocStats ────────────────────────────────────────────────────────
+
 
 def test_docstats_defaults():
     """DocStats must default to 0 commits, None last_updated, 1.0 staleness."""
@@ -49,6 +50,7 @@ def test_docstats_fields_assignable():
 
 
 # ─── Unit: format_table ───────────────────────────────────────────────────
+
 
 def test_format_table_contains_header():
     """format_table must include a Markdown pipe header."""
@@ -131,9 +133,11 @@ def test_analyse_docs_full_table_output():
 
 # ─── CLI smoke test ───────────────────────────────────────────────────────
 
+
 def test_main_runs_without_error(capsys):
     """CLI main() must print a table and summary without raising."""
     import sys
+
     import AgentDocFrequency  # type: ignore[import]
 
     old_argv = sys.argv

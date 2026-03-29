@@ -17,6 +17,7 @@ prj0000047 — conky-real-metrics.
 TDD red phase: these tests are written BEFORE the endpoint exists and
 must fail with HTTP 404 until @6code implements the endpoint.
 """
+
 from __future__ import annotations
 
 import time
@@ -35,9 +36,10 @@ _CLIENT = TestClient(app)
 
 # ─── psutil stub factories ───────────────────────────────────────────────────
 
+
 def _vmem(
-    total: int = 8 * 1024 ** 3,
-    used: int = 4 * 1024 ** 3,
+    total: int = 8 * 1024**3,
+    used: int = 4 * 1024**3,
     percent: float = 50.0,
 ) -> MagicMock:
     m = MagicMock()
@@ -84,10 +86,7 @@ def test_endpoint_returns_200():
     with patch("backend.app.psutil", create=True, new=_psutil_mock()):
         resp = _CLIENT.get("/api/metrics/system")
 
-    assert resp.status_code == 200, (
-        f"Expected HTTP 200 but got {resp.status_code}. "
-        "Endpoint not yet implemented (T3)."
-    )
+    assert resp.status_code == 200, f"Expected HTTP 200 but got {resp.status_code}. Endpoint not yet implemented (T3)."
 
 
 def test_response_has_correct_shape():
@@ -114,8 +113,8 @@ def test_cpu_percent_is_in_valid_range():
 
 def test_memory_fields_correct():
     """`memory` must contain `used_mb`, `total_mb`, `percent` with correct values."""
-    total_bytes = 16 * 1024 ** 3  # 16 GiB
-    used_bytes = 6 * 1024 ** 3  # 6 GiB
+    total_bytes = 16 * 1024**3  # 16 GiB
+    used_bytes = 6 * 1024**3  # 6 GiB
 
     mock = _psutil_mock(vmem=_vmem(total=total_bytes, used=used_bytes, percent=37.5))
     with patch("backend.app.psutil", create=True, new=mock):
@@ -159,12 +158,12 @@ def test_network_entries_have_required_fields():
 def test_loopback_and_virtual_interfaces_excluded():
     """Loopback and virtual interfaces must not appear in `network`."""
     net = {
-        "lo":                          _net_counter(),   # Unix loopback
-        "Loopback Pseudo-Interface 1": _net_counter(),   # Windows loopback
-        "docker0":                     _net_counter(),   # docker bridge
-        "veth4a2b":                    _net_counter(),   # veth pair
-        "br-dead1234":                 _net_counter(),   # docker bridge br-*
-        "eth0":                        _net_counter(),   # physical — should survive
+        "lo": _net_counter(),  # Unix loopback
+        "Loopback Pseudo-Interface 1": _net_counter(),  # Windows loopback
+        "docker0": _net_counter(),  # docker bridge
+        "veth4a2b": _net_counter(),  # veth pair
+        "br-dead1234": _net_counter(),  # docker bridge br-*
+        "eth0": _net_counter(),  # physical — should survive
     }
     mock = _psutil_mock(net=net)
 
@@ -178,9 +177,7 @@ def test_loopback_and_virtual_interfaces_excluded():
     assert "docker0" not in names, "'docker0' must be filtered out"
     assert "veth4a2b" not in names, "'veth*' must be filtered out"
     assert "br-dead1234" not in names, "'br-*' must be filtered out"
-    assert not any(n.lower().startswith("loopback") for n in names), (
-        "Loopback-named interfaces must be filtered out"
-    )
+    assert not any(n.lower().startswith("loopback") for n in names), "Loopback-named interfaces must be filtered out"
 
 
 def test_disk_fields_are_non_negative_numbers():
@@ -218,8 +215,7 @@ def test_sampled_at_is_positive_and_recent():
     assert isinstance(sampled_at, (int, float)), f"sampled_at must be numeric: {sampled_at!r}"
     assert sampled_at > 0, "sampled_at must be a positive epoch timestamp"
     assert before - 1 <= sampled_at <= after + 1, (
-        f"sampled_at {sampled_at:.3f} not in expected window "
-        f"[{before:.3f}, {after:.3f}]"
+        f"sampled_at {sampled_at:.3f} not in expected window [{before:.3f}, {after:.3f}]"
     )
 
 
@@ -227,9 +223,9 @@ def test_first_call_returns_zero_rates():
     """On the first call (no prior sample), all KB/s fields must be 0.0."""
     # Reset differential state — setattr is safe even if attributes don't exist yet
     for attr, initial in [
-        ("_prev_net",     {}),
-        ("_prev_net_ts",  0.0),
-        ("_prev_disk",    (0, 0)),
+        ("_prev_net", {}),
+        ("_prev_net_ts", 0.0),
+        ("_prev_disk", (0, 0)),
         ("_prev_disk_ts", 0.0),
     ]:
         setattr(_app_module, attr, initial)
@@ -243,21 +239,13 @@ def test_first_call_returns_zero_rates():
     with patch("backend.app.psutil", create=True, new=mock):
         resp = _CLIENT.get("/api/metrics/system")
 
-    assert resp.status_code == 200, (
-        f"Expected 200, got {resp.status_code} — endpoint not yet implemented."
-    )
+    assert resp.status_code == 200, f"Expected 200, got {resp.status_code} — endpoint not yet implemented."
     body = resp.json()
 
     for entry in body["network"]:
-        assert entry["tx_kbps"] == 0.0, (
-            f"First-call tx_kbps should be 0.0, got {entry['tx_kbps']}"
-        )
-        assert entry["rx_kbps"] == 0.0, (
-            f"First-call rx_kbps should be 0.0, got {entry['rx_kbps']}"
-        )
-    assert body["disk"]["read_kbps"] == 0.0, (
-        f"First-call disk read_kbps should be 0.0, got {body['disk']['read_kbps']}"
-    )
+        assert entry["tx_kbps"] == 0.0, f"First-call tx_kbps should be 0.0, got {entry['tx_kbps']}"
+        assert entry["rx_kbps"] == 0.0, f"First-call rx_kbps should be 0.0, got {entry['rx_kbps']}"
+    assert body["disk"]["read_kbps"] == 0.0, f"First-call disk read_kbps should be 0.0, got {body['disk']['read_kbps']}"
     assert body["disk"]["write_kbps"] == 0.0, (
         f"First-call disk write_kbps should be 0.0, got {body['disk']['write_kbps']}"
     )

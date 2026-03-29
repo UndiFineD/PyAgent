@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Canary tests for prj0000073 — verify that all API docs files exist, are non-empty,
-and contain required structural sections."""
+and contain required structural sections.
+"""
 
 import os
 

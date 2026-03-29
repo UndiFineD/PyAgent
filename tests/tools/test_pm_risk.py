@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for tools.pm.risk module (prj0000021)."""
+
 import pytest
+
 from tools.pm.risk import Risk, read_matrix, top_risks
 
 

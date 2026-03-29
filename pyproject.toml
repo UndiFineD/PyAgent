@@ -113,6 +113,17 @@ ignore = [
 # Exception class names are defined by the MCP architecture contract and
 # the test-file imports; they cannot be renamed to add an "Error" suffix.
 "src/mcp/exceptions.py" = ["N818"]
+"tests/**/*.py" = [
+    "ANN002", # allow untyped *args in tests
+    "ANN003", # allow untyped **kwargs in tests
+    "ANN202", # allow missing private helper return annotations in tests
+    "B017",   # allow broad exception assertions in legacy tests
+    "D301",   # allow non-raw docstrings with escapes in tests
+    "D400",   # allow relaxed first-line punctuation in tests
+    "D415",   # allow relaxed terminal punctuation in tests
+    "N806",   # allow legacy constants inside test functions
+    "N813",   # allow legacy import alias casing in tests
+]
 
 
 [tool.mypy]

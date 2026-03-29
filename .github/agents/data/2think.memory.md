@@ -5,6 +5,34 @@ tradeoff analysis, and recommended directions.
 
 ---
 
+## prj0000099 - stub-module-elimination
+_Date: 2026-03-29 | Branch: prj0000099-stub-module-elimination_
+
+task_id: prj0000099
+Lifecycle: OPEN -> IN_PROGRESS -> DONE
+Artifact: docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.think.md
+Recommendation: Option B - Minimal-change closure with validation artifacts (no additional code changes needed for current objective)
+Handoff target: @3design
+Rationale summary:
+- Target packages already expose real implementations/exports and are not empty init stubs.
+- Focused package tests passed (5/5), validating current objective state.
+- Extra refactor would add scope and regression risk without improving objective fulfillment.
+
+Prior-art references used:
+- docs/project/prj0000097-stub-module-elimination/prj0000097-stub-module-elimination.think.md
+- docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.plan.md
+
+Lesson schema:
+- Pattern: Revalidate elimination objective against current package implementation state before proposing refactors.
+- Root cause: Project intent lagged repository evolution from stubs to implemented package surfaces.
+- Prevention: Require package evidence + focused test evidence gate before proposing any additional elimination code changes.
+- First seen: 2026-03-29.
+- Seen in: prj0000099-stub-module-elimination.
+- Recurrence count: 1.
+- Promotion status: monitor (promote to hard rule at recurrence >= 2).
+
+---
+
 ## prj0000097 - stub-module-elimination
 _Date: 2026-03-29 | Branch: prj0000097-stub-module-elimination_
 

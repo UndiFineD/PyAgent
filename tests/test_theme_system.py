@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Validation tests for prj0000061: CSS custom-property theme system."""
+
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).parent.parent

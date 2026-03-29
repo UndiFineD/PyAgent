@@ -12,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests verifying the testing infrastructure fixtures module loads correctly (prj0000023)."""
+
 from __future__ import annotations
 
 import importlib
 
 
 def test_fixtures_module_importable():
-    """fixtures module must be importable without errors."""
+    """Fixtures module must be importable without errors."""
     mod = importlib.import_module("tests.fixtures.conftest_fixtures")
     assert mod is not None
 
@@ -39,6 +40,7 @@ def test_sample_task_structure():
 
 def test_sample_message_structure():
     from swarm.message_model import validate_message
+
     msg = {
         "id": "test-uuid",
         "timestamp": "2026-01-01T00:00:00Z",

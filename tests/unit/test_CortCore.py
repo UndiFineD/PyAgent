@@ -184,9 +184,7 @@ async def test_cort_core_temperature_schedule() -> None:
     """LLM is called with increasing temperatures for each alternative within a round."""
     call_temps: list[float] = []
 
-    async def recording_llm(
-        prompt: str, *, temperature: float, max_tokens: int
-    ) -> str:
+    async def recording_llm(prompt: str, *, temperature: float, max_tokens: int) -> str:
         """Record the temperature parameter and return a stub response."""
         call_temps.append(temperature)
         return "answer"
@@ -200,8 +198,7 @@ async def test_cort_core_temperature_schedule() -> None:
     assert len(call_temps) == 3
     for i in range(len(call_temps) - 1):
         assert call_temps[i + 1] >= call_temps[i], (
-            f"Temperature must not decrease: temps[{i}]={call_temps[i]} "
-            f"> temps[{i + 1}]={call_temps[i + 1]}"
+            f"Temperature must not decrease: temps[{i}]={call_temps[i]} > temps[{i + 1}]={call_temps[i + 1]}"
         )
 
 
@@ -218,9 +215,7 @@ async def test_cort_recursion_guard() -> None:
     core: CortCore | None = None
     nested_raised: list[bool] = [False]
 
-    async def reentrant_llm(
-        prompt: str, *, temperature: float, max_tokens: int
-    ) -> str:
+    async def reentrant_llm(prompt: str, *, temperature: float, max_tokens: int) -> str:
         """Attempt a nested core.run() call to trigger the recursion guard."""
         try:
             assert core is not None  # noqa: S101
@@ -234,9 +229,7 @@ async def test_cort_recursion_guard() -> None:
     core = CortCore(llm=reentrant_llm, evaluator=evaluator, config=cfg)
     await core.run("outer prompt")
 
-    assert nested_raised[0], (
-        "CortRecursionError must be raised when CortCore.run is called re-entrantly"
-    )
+    assert nested_raised[0], "CortRecursionError must be raised when CortCore.run is called re-entrantly"
 
 
 # ---------------------------------------------------------------------------
@@ -315,8 +308,7 @@ async def test_cort_core_early_stop_skips_remaining_rounds() -> None:
     # Response with all 8 known connectives → depth=1.0; no contradiction markers → correctness=1.0
     # Prompt "ab" has no words ≥ 4 chars → completeness=1.0.  Total = 0.5+0.3+0.2 = 1.0 ≥ 0.99.
     high_score_response = (
-        "therefore because however thus hence moreover furthermore consequently "
-        "the conclusion is definitive"
+        "therefore because however thus hence moreover furthermore consequently the conclusion is definitive"
     )
     llm_mock = AsyncMock(return_value=high_score_response)
     evaluator = EvaluationEngine()
@@ -325,9 +317,7 @@ async def test_cort_core_early_stop_skips_remaining_rounds() -> None:
 
     result = await core.run("ab")
 
-    assert len(result.all_rounds) == 1, (
-        f"Expected early stop after round 0 but got {len(result.all_rounds)} rounds"
-    )
+    assert len(result.all_rounds) == 1, f"Expected early stop after round 0 but got {len(result.all_rounds)} rounds"
 
 
 # ---------------------------------------------------------------------------
@@ -339,9 +329,7 @@ async def test_cort_core_early_stop_skips_remaining_rounds() -> None:
 async def test_all_alternatives_fail_raises_alternatives_generation_error() -> None:
     """When all LLM calls fail in a round, CortCore.run propagates AlternativesGenerationError."""
 
-    async def failing_llm(
-        prompt: str, *, temperature: float, max_tokens: int
-    ) -> str:
+    async def failing_llm(prompt: str, *, temperature: float, max_tokens: int) -> str:
         """Always raise to simulate a total API outage."""
         raise RuntimeError("API error")
 

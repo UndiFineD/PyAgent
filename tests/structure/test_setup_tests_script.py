@@ -12,9 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for the SetupTests scaffold script (prj0000023)."""
+
 from __future__ import annotations
 
 from pathlib import Path
+
 from scripts.SetupTests import create_test_structure
 
 

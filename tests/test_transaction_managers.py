@@ -21,10 +21,9 @@ from pathlib import Path
 
 import pytest
 
-from src.core.StorageTransactionManager import StorageTransaction
-from src.core.ProcessTransactionManager import ProcessTransaction
 from src.core.ContextTransactionManager import ContextTransaction, RecursionGuardError
-
+from src.core.ProcessTransactionManager import ProcessTransaction
+from src.core.StorageTransactionManager import StorageTransaction
 
 # ---------------------------------------------------------------------------
 # StorageTransaction tests

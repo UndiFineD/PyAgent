@@ -14,13 +14,16 @@
 
 """Coverage tests for core exception modules."""
 
-from src.core.audit.exceptions import AuditTrailError, validate as audit_validate
+from src.core.audit.exceptions import AuditTrailError
+from src.core.audit.exceptions import validate as audit_validate
 from src.core.fuzzing.exceptions import FuzzingError
 from src.core.n8nbridge.exceptions import N8nBridgeError
 from src.core.replay.exceptions import ReplayError
-from src.core.resilience.exceptions import CircuitOpenError, validate as resilience_validate
 from src.core.resilience.CircuitBreakerState import CircuitState
-from src.core.universal.exceptions import UniversalShellError, validate as universal_validate
+from src.core.resilience.exceptions import CircuitOpenError
+from src.core.resilience.exceptions import validate as resilience_validate
+from src.core.universal.exceptions import UniversalShellError
+from src.core.universal.exceptions import validate as universal_validate
 
 
 def test_exception_modules_are_importable() -> None:

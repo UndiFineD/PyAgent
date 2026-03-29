@@ -22,19 +22,17 @@ from unittest.mock import MagicMock, patch
 import src.tools.FileWatcher as fw_module
 from src.tools.FileWatcher import FileWatcher, _python_scan
 
-
 # ---------------------------------------------------------------------------
 # Test 1 — Rust path: scan_changed_files is called when _HAS_RUST is True
 # ---------------------------------------------------------------------------
+
 
 def test_filewatcher_scan_uses_rust_when_available():
     """When _HAS_RUST is True, _poll uses rust_core.scan_changed_files."""
     fake_rust = MagicMock()
     fake_rust.scan_changed_files.return_value = json.dumps(["/some/file.py"])
 
-    with patch.object(fw_module, "_HAS_RUST", True), \
-         patch.object(fw_module, "_rust_core", fake_rust):
-
+    with patch.object(fw_module, "_HAS_RUST", True), patch.object(fw_module, "_rust_core", fake_rust):
         watcher = FileWatcher("/tmp", interval_s=100)
 
         async def run():
@@ -55,6 +53,7 @@ def test_filewatcher_scan_uses_rust_when_available():
 # Test 2 — Python fallback: _python_scan returns modified files
 # ---------------------------------------------------------------------------
 
+
 def test_filewatcher_scan_falls_back_to_python():
     """_python_scan should return files modified after since_ms."""
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -72,6 +71,7 @@ def test_filewatcher_scan_falls_back_to_python():
 # Test 3 — get_changes returns accumulated entries and clears the set
 # ---------------------------------------------------------------------------
 
+
 def test_get_changes_returns_and_clears():
     """get_changes() returns pending paths then clears the set."""
     watcher = FileWatcher("/tmp", interval_s=100)
@@ -88,6 +88,7 @@ def test_get_changes_returns_and_clears():
 # Test 4 — _python_scan on non-existent root returns empty list (no crash)
 # ---------------------------------------------------------------------------
 
+
 def test_invalid_root_returns_empty():
     """_python_scan on a non-existent directory should return [] without error."""
     result = asyncio.run(_python_scan("/this/path/does/not/exist/ever", 0))
@@ -97,6 +98,7 @@ def test_invalid_root_returns_empty():
 # ---------------------------------------------------------------------------
 # Test 5 — start/stop lifecycle: task is created and then cancelled
 # ---------------------------------------------------------------------------
+
 
 def test_start_stop_lifecycle():
     """start() creates an asyncio Task; stop() cancels it."""

@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for TaskScheduler (prj0000022)."""
+
 import pytest
+
 from swarm.task_scheduler import TaskScheduler
 
 

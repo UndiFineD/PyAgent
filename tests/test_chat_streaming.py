@@ -27,7 +27,6 @@ from chat.streaming import (
     word_chunks,
 )
 
-
 # ---------------------------------------------------------------------------
 # word_chunks
 # ---------------------------------------------------------------------------
@@ -113,7 +112,7 @@ async def test_stream_to_sse_emits_token_events() -> None:
         assert "event: token" in ev
         body = [line for line in ev.splitlines() if line.startswith("data:")]
         assert body, "no data: line found"
-        payload = json.loads(body[0][len("data: "):])
+        payload = json.loads(body[0][len("data: ") :])
         assert "token" in payload
 
 

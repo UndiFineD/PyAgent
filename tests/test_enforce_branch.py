@@ -26,10 +26,10 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
 
 import enforce_branch  # noqa: E402
 
-
 # ---------------------------------------------------------------------------
 # Branch naming — Rule 1
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.parametrize("branch", ["main", "master", "dev", "develop"])
 def test_base_branches_allowed_no_staged(branch: str) -> None:
@@ -41,11 +41,14 @@ def test_base_branches_allowed_no_staged(branch: str) -> None:
         assert enforce_branch.main() == 0
 
 
-@pytest.mark.parametrize("branch", [
-    "prj001-core-system",          # 3-digit legacy
-    "prj0000006-unified-tx",       # 7-digit current
-    "prj0000042-crdt-security",
-])
+@pytest.mark.parametrize(
+    "branch",
+    [
+        "prj001-core-system",  # 3-digit legacy
+        "prj0000006-unified-tx",  # 7-digit current
+        "prj0000042-crdt-security",
+    ],
+)
 def test_project_branches_pass_naming(branch: str) -> None:
     """Project branches with valid prjNNN... prefix should be allowed."""
     with (
@@ -55,12 +58,15 @@ def test_project_branches_pass_naming(branch: str) -> None:
         assert enforce_branch.main() == 0
 
 
-@pytest.mark.parametrize("branch", [
-    "feature/some-feature",
-    "bugfix-something",
-    "prj-no-id",
-    "my-branch",
-])
+@pytest.mark.parametrize(
+    "branch",
+    [
+        "feature/some-feature",
+        "bugfix-something",
+        "prj-no-id",
+        "my-branch",
+    ],
+)
 def test_bad_branch_names_blocked(branch: str) -> None:
     """Branches that don't match allowed patterns should be blocked."""
     with (
@@ -126,6 +132,7 @@ def test_ci_file_on_main_allowed() -> None:
 # ---------------------------------------------------------------------------
 # extract_project_ids helper
 # ---------------------------------------------------------------------------
+
 
 def test_extract_project_ids_empty() -> None:
     """No staged files should yield an empty set of project IDs."""

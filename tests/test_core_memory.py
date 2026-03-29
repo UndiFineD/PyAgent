@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for core.memory.MemoryStore (prj0000025)."""
+
 from src.core.memory import MemoryStore, validate
 
 

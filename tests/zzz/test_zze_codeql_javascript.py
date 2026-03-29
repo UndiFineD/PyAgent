@@ -54,6 +54,7 @@ def _sarif_age_hours() -> float | None:
     if not SARIF_PATH.exists():
         return None
     import time
+
     return (time.time() - SARIF_PATH.stat().st_mtime) / 3600
 
 
@@ -61,7 +62,9 @@ def _rebuild_db() -> None:
     subprocess.run(
         [
             str(CODEQL_EXE),
-            "database", "create", str(DB_PATH),
+            "database",
+            "create",
+            str(DB_PATH),
             "--language=javascript",
             f"--source-root={SOURCE_ROOT}",
             "--overwrite",
@@ -77,7 +80,9 @@ def _run_analysis() -> None:
     subprocess.run(
         [
             str(CODEQL_EXE),
-            "database", "analyze", str(DB_PATH),
+            "database",
+            "analyze",
+            str(DB_PATH),
             "codeql/javascript-queries:codeql-suites/javascript-security-and-quality.qls",
             "--format=sarif-latest",
             f"--output={SARIF_PATH}",
@@ -101,8 +106,10 @@ def test_javascript_sarif_is_fresh_or_rebuilt() -> None:
     age = _sarif_age_hours()
 
     if force_rebuild or age is None or age > MAX_SARIF_AGE_HOURS:
-        reason = "CODEQL_REBUILD set" if force_rebuild else (
-            "SARIF missing" if age is None else f"SARIF is {age:.1f}h old (>{MAX_SARIF_AGE_HOURS}h)"
+        reason = (
+            "CODEQL_REBUILD set"
+            if force_rebuild
+            else ("SARIF missing" if age is None else f"SARIF is {age:.1f}h old (>{MAX_SARIF_AGE_HOURS}h)")
         )
         print(f"\nRebuilding JavaScript CodeQL database: {reason}")
         try:
@@ -129,9 +136,7 @@ def test_javascript_sarif_execution_succeeded() -> None:
     run = sarif["runs"][0]
     invocations = run.get("invocations", [])
     assert invocations, "No invocation metadata in JavaScript SARIF"
-    assert invocations[0].get("executionSuccessful") is True, (
-        "JavaScript CodeQL analysis did not complete successfully"
-    )
+    assert invocations[0].get("executionSuccessful") is True, "JavaScript CodeQL analysis did not complete successfully"
 
 
 def test_javascript_sarif_scanned_files() -> None:
@@ -172,10 +177,7 @@ def test_javascript_no_new_security_findings() -> None:
 
     sarif = json.loads(SARIF_PATH.read_text(encoding="utf-8"))
     results = sarif["runs"][0].get("results", [])
-    security_findings = [
-        r for r in results
-        if any(r.get("ruleId", "").startswith(p) for p in _security_rule_prefixes)
-    ]
+    security_findings = [r for r in results if any(r.get("ruleId", "").startswith(p) for p in _security_rule_prefixes)]
     if security_findings:
         details = "\n".join(
             f"  {r['ruleId']} @ {r['locations'][0]['physicalLocation']['artifactLocation']['uri']}"

@@ -17,6 +17,44 @@ where test cases are written and validated against the plan.
 
 ---
 
+## prj0000099 - stub-module-elimination
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000099-stub-module-elimination |
+| **owner_agent** | @4plan |
+| **source** | @3design |
+| **created_at** | 2026-03-29 |
+| **updated_at** | 2026-03-29 |
+| **status** | IN_PROGRESS |
+| **lifecycle** | OPEN -> IN_PROGRESS |
+| **handoff_target** | @9git |
+| **artifact_paths** | docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.plan.md, docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.code.md, docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.test.md, docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.exec.md, docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.ql.md, docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.git.md |
+| **branch** | prj0000099-stub-module-elimination (validated PASS before artifact writes) |
+
+### Actionable Tasks
+
+| Task | Objective | Validation command |
+|---|---|---|
+| T1 | Verify non-empty package APIs for target packages | `python -c "from pathlib import Path; fs=['src/rl/__init__.py','src/speculation/__init__.py','src/cort/__init__.py','src/runtime_py/__init__.py','src/runtime/__init__.py','src/memory/__init__.py']; bad=[f for f in fs if not any(l.strip() and not l.strip().startswith('#') for l in Path(f).read_text(encoding='utf-8').splitlines())]; print('PASS' if not bad else 'FAIL:' + ','.join(bad)); raise SystemExit(1 if bad else 0)"` |
+| T2 | Run focused tests for targeted package surfaces | `python -m pytest -q tests/test_rl_package.py tests/test_speculation_package.py tests/test_cort.py tests/test_memory_package.py tests/test_runtime.py` |
+| T3 | Record code/test/exec/ql artifacts with execution evidence | `rg -n "_Status:|Validation Results|Run Log|Findings|Cleared" docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.code.md docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.test.md docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.exec.md docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.ql.md` |
+| T4 | Update milestones and complete @9git handoff packet | `rg -n "Milestone|M8|@9git|_Status:" docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.project.md docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.plan.md docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.git.md` |
+
+### Lesson Entry
+
+| Field | Value |
+|---|---|
+| Pattern | Validation-first closure plans stay executable when each closure task includes explicit file scope and command-level proof. |
+| Root cause | Placeholder plan content without concrete targets/commands blocked deterministic handoff. |
+| Prevention | Enforce task schema: objective, target files, acceptance, and validation command per task. |
+| First seen | 2026-03-28 |
+| Seen in | prj0000093-projectmanager-ideas-autosync; prj0000099-stub-module-elimination |
+| Recurrence count | 2 |
+| Promotion status | PROMOTED_TO_HARD_RULE |
+
+---
+
 ## prj0000098 - backend-health-check-endpoint
 
 | Field | Value |

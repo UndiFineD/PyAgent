@@ -321,3 +321,31 @@ the design intent.
 | **Seen in** | prj0000098-backend-health-check-endpoint |
 | **Recurrence count** | 1 |
 | **Promotion status** | Candidate |
+
+---
+
+## prj0000099 - stub-module-elimination
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000099-stub-module-elimination |
+| **owner_agent** | @3design |
+| **source** | User reality update |
+| **created_at** | 2026-03-29 |
+| **updated_at** | 2026-03-29 |
+| **status** | DONE |
+| **lifecycle** | OPEN -> IN_PROGRESS -> DONE |
+| **branch_gate** | PASS - `prj0000099-stub-module-elimination` |
+| **selected_option** | Validation-First Closure |
+| **design_path** | No default functional code changes; close via evidence gates for package API non-emptiness and focused tests green |
+| **interface_contracts** | IFC-VAL-01 (API evidence), IFC-VAL-02 (focused tests), IFC-VAL-03 (conditional minimal remediation) |
+| **assumptions** | Target stubs are already eliminated; remediation is only triggered by failed evidence checks |
+| **handoff_target** | @4plan |
+| **artifact_paths** | docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.design.md |
+| **Pattern** | When implementation already satisfies intent, close with validation-first evidence gates instead of adding churn |
+| **Root cause** | Project artifacts lagged behind repository reality after prior elimination work completed |
+| **Prevention** | Re-baseline design to present-state evidence checks before scheduling new implementation tasks |
+| **First seen** | 2026-03-29 |
+| **Seen in** | prj0000099-stub-module-elimination |
+| **Recurrence count** | 1 |
+| **Promotion status** | Candidate |

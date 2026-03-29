@@ -16,12 +16,14 @@
 All tests skip gracefully when rust_core has not been compiled so the CI
 suite never fails on environments that build Python-only.
 """
+
 import struct
 
 import pytest
 
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -33,6 +35,7 @@ pytestmark = pytest.mark.skipif(not HAS_RUST, reason="rust_core not compiled")
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _make_transport(capacity: int = 64):
     """Instantiate a PyAsyncTransport with the given capacity."""
     return rust_core.PyAsyncTransport(capacity)
@@ -41,6 +44,7 @@ def _make_transport(capacity: int = 64):
 # ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------
+
 
 def test_module_importable():
     """rust_core module should be importable (guarded by pytestmark)."""

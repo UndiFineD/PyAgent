@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for the async runtime module — prj0000024."""
+
 import asyncio
+
 import pytest
 
 # ---------------------------------------------------------------------------
@@ -23,6 +25,7 @@ import pytest
 def test_core_runtime_module_importable():
     """core.runtime must be importable and expose the async API."""
     from src.core import runtime as r
+
     assert hasattr(r, "Runtime")
     assert hasattr(r, "spawn_task")
     assert hasattr(r, "set_timeout")
@@ -32,6 +35,7 @@ def test_core_runtime_module_importable():
 
 def test_validate_passes():
     from src.core.runtime import validate
+
     validate()  # must not raise
 
 
@@ -39,9 +43,11 @@ def test_validate_passes():
 # spawn_task
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_spawn_task_runs_coro():
     from src.core.runtime import spawn_task
+
     result: list[int] = []
 
     async def work() -> None:
@@ -56,9 +62,11 @@ async def test_spawn_task_runs_coro():
 # set_timeout
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_set_timeout_fires():
     from src.core.runtime import set_timeout
+
     result: list[str] = []
 
     async def work() -> None:
@@ -73,8 +81,10 @@ async def test_set_timeout_fires():
 # create_queue
 # ---------------------------------------------------------------------------
 
+
 def test_create_queue_unbounded():
     from src.core.runtime import create_queue
+
     q = create_queue(0)
     assert isinstance(q, asyncio.Queue)
 
@@ -82,6 +92,7 @@ def test_create_queue_unbounded():
 @pytest.mark.asyncio
 async def test_queue_put_get():
     from src.core.runtime import create_queue
+
     q = create_queue()
     await q.put("hello")
     val = await q.get()
@@ -92,9 +103,11 @@ async def test_queue_put_get():
 # Runtime class
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_runtime_start():
     from src.core.runtime import Runtime
+
     rt = Runtime()
     await rt.start()
 
@@ -102,6 +115,7 @@ async def test_runtime_start():
 @pytest.mark.asyncio
 async def test_runtime_submit_and_pending():
     from src.core.runtime import Runtime
+
     rt = Runtime()
     ran: list[int] = []
 
@@ -119,6 +133,7 @@ async def test_runtime_submit_and_pending():
 @pytest.mark.asyncio
 async def test_runtime_cancel():
     from src.core.runtime import Runtime
+
     rt = Runtime()
 
     async def long_task() -> None:
@@ -133,9 +148,11 @@ async def test_runtime_cancel():
 # Legacy stub — keeps old test passing for other CI consumers
 # ---------------------------------------------------------------------------
 
+
 def test_runtime_stubs_present():
     """core.runtime exposes the expected stub functions."""
     from src.core import runtime
+
     assert hasattr(runtime, "spawn_task")
     assert hasattr(runtime, "set_timeout")
     assert hasattr(runtime, "create_queue")

@@ -44,6 +44,7 @@ def test_load_config_toml(tmp_path: Path) -> None:
         assert result["section"]["name"] == "pyagent"
     except RuntimeError:
         import pytest
+
         pytest.skip("TOML support unavailable (no tomllib/tomli)")
 
 
@@ -82,7 +83,8 @@ async def test_retry_retries_on_failure() -> None:
 
     def fn():
         """Simulate a function that fails the first two times
-        and succeeds the third time."""
+        and succeeds the third time.
+        """
         calls.append(1)
         if len(calls) < 3:
             raise ValueError("not yet")

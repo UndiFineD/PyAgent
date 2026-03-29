@@ -10,10 +10,10 @@ This is analogous to the existing `tests/test_rust_core.py` approach for rust_co
 
 from __future__ import annotations
 
-import sys
 import ast
 import asyncio
 import inspect
+import sys
 from pathlib import Path
 from typing import Any, Dict, Iterator, List, Tuple
 

@@ -9,6 +9,33 @@ Once code implementation is complete and tests are passing,
 the next agent to invoke is **@7exec**. 
 This should be done via `agent/runSubagent`.
 
+## prj0000099 - stub-module-elimination (validation-first closure)
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000099-stub-module-elimination |
+| **owner_agent** | @6code |
+| **source** | User direct @6code documentation-closure request |
+| **created_at** | 2026-03-29 |
+| **updated_at** | 2026-03-29 |
+| **status** | DONE |
+| **summary** | Closed via validation-first, no-code-change path: target package APIs confirmed non-empty and focused package regressions passed; updated code artifact evidence map and status. |
+| **changed_modules** | docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.code.md; .github/agents/data/6code.memory.md |
+| **verification_commands** | python -c "from pathlib import Path; fs=['src/rl/__init__.py','src/speculation/__init__.py','src/cort/__init__.py','src/runtime_py/__init__.py','src/runtime/__init__.py','src/memory/__init__.py']; bad=[f for f in fs if not any(l.strip() and not l.strip().startswith('#') for l in Path(f).read_text(encoding='utf-8').splitlines())]; print('PASS' if not bad else 'FAIL:' + ','.join(bad)); raise SystemExit(1 if bad else 0)"; python -m pytest -q tests/test_rl_package.py tests/test_speculation_package.py tests/test_cort.py tests/test_memory_package.py tests/test_runtime.py |
+| **verification_result** | PASS (`PASS`; `5 passed in 1.77s`). |
+| **unresolved_risks** | None identified for this closure scope. |
+| **handoff_target** | @7exec |
+| **artifact_paths** | docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.code.md, .github/agents/data/6code.memory.md |
+
+### Lesson - 2026-03-29 (prj0000099)
+- Pattern: Validation-first closure can complete implementation phase without touching source when acceptance checks are already satisfied.
+- Root cause: Prior slices already removed stub behavior and exposed non-empty package APIs.
+- Prevention: Run AC-focused API-surface and regression checks before proposing any additional code edits for closure-only requests.
+- First seen: 2026-03-29
+- Seen in: prj0000099-stub-module-elimination
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
 ## prj0000098 - backend-health-check-endpoint
 
 | Field | Value |

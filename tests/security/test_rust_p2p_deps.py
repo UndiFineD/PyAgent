@@ -11,8 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-tests/security/test_rust_p2p_deps.py
+"""tests/security/test_rust_p2p_deps.py
 
 Security regression tests for prj0000049 (dependabot-security-fixes).
 
@@ -27,9 +26,11 @@ Pre-fix state (EXPECTED FAILURES):
 Post-fix state (EXPECTED PASSES):
   - All vulnerable versions replaced via libp2p 0.56 upgrade
 """
+
 import re
-import pytest
 from pathlib import Path
+
+import pytest
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -43,12 +44,12 @@ CARGO_TOML = P2P_DIR / "Cargo.toml"
 # Vulnerable (package, version) pairs — CVEs from Dependabot alert prj0000049
 # ---------------------------------------------------------------------------
 VULNERABLE_VERSIONS = [
-    ("yamux", "0.10.2"),        # GHSA-4jwc-w2hc-78qv — DoS via memory exhaustion
-    ("ring", "0.16.20"),        # GHSA-48mm-762m-2xpm — RSA primitive exposure
-    ("idna", "0.2.3"),          # GHSA-crh6-fp67-6883 — Unicode spoofing
+    ("yamux", "0.10.2"),  # GHSA-4jwc-w2hc-78qv — DoS via memory exhaustion
+    ("ring", "0.16.20"),  # GHSA-48mm-762m-2xpm — RSA primitive exposure
+    ("idna", "0.2.3"),  # GHSA-crh6-fp67-6883 — Unicode spoofing
     ("ed25519-dalek", "1.0.1"),  # GHSA-3f4c-fmq5-gfq7 — Weak signature check
     ("curve25519-dalek", "3.2.1"),  # GHSA-x62c-6mxr-74fh — Timing side-channel
-    ("snow", "0.9.3"),          # GHSA-qg5g-gv98-5ffh — Memory safety in Noise
+    ("snow", "0.9.3"),  # GHSA-qg5g-gv98-5ffh — Memory safety in Noise
 ]
 
 
@@ -66,6 +67,7 @@ def _parse_lock_packages(lock_text: str) -> list[tuple[str, str]]:
 # ---------------------------------------------------------------------------
 # Cargo.lock tests — will FAIL before fix, PASS after fix
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture(scope="module")
 def cargo_lock_packages():
@@ -94,6 +96,7 @@ def test_vulnerable_version_not_in_cargo_lock(cargo_lock_packages, pkg, vuln_ver
 # Cargo.toml test — will FAIL before fix, PASS after fix
 # ---------------------------------------------------------------------------
 
+
 def test_libp2p_version_is_056_in_cargo_toml():
     """Assert Cargo.toml declares libp2p version 0.56 (not the vulnerable 0.49).
 
@@ -105,8 +108,8 @@ def test_libp2p_version_is_056_in_cargo_toml():
     # Must contain the safe version
     assert '"0.56"' in content, (
         f'Cargo.toml must declare libp2p version "0.56". '
-        f'Currently contains: {_extract_libp2p_version(content)!r}. '
-        f'See docs/project/prj0000049/dependabot-security-fixes.design.md'
+        f"Currently contains: {_extract_libp2p_version(content)!r}. "
+        f"See docs/project/prj0000049/dependabot-security-fixes.design.md"
     )
 
     # Must NOT contain the vulnerable version

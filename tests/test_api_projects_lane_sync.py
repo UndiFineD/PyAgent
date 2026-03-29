@@ -12,13 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Lane sync tests for /api/projects stage artifact progression."""
+
 from __future__ import annotations
 
 import shutil
 from pathlib import Path
 
-import backend.app as app_mod
 from fastapi.testclient import TestClient
+
+import backend.app as app_mod
 
 
 def test_projects_auto_advance_to_in_sprint_from_stage_artifacts(monkeypatch) -> None:

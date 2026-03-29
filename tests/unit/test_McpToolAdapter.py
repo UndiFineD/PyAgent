@@ -65,9 +65,7 @@ def _make_mock_client(tools: list[McpToolDefinition]) -> AsyncMock:
     """
     client = AsyncMock(spec=McpClient)
     client.list_tools = AsyncMock(return_value=tools)
-    client.call_tool = AsyncMock(
-        return_value=McpToolResult(content=[{"type": "text", "text": "ok"}], is_error=False)
-    )
+    client.call_tool = AsyncMock(return_value=McpToolResult(content=[{"type": "text", "text": "ok"}], is_error=False))
     return client
 
 
@@ -202,14 +200,13 @@ def test_tool_schema_conversion_maps_types() -> None:
 
     namespaced_name, async_main, description = McpToolAdapter.tool_definition_to_spec("fs", defn)
 
-    assert namespaced_name == "mcp::fs::complex_tool", (
-        f"Expected 'mcp::fs::complex_tool', got '{namespaced_name}'"
-    )
+    assert namespaced_name == "mcp::fs::complex_tool", f"Expected 'mcp::fs::complex_tool', got '{namespaced_name}'"
     assert "complex_tool" in description or "fs" in description, (
         f"Description should reference tool or server name; got: '{description}'"
     )
     # async_main must be an async callable.
     import asyncio
+
     assert asyncio.iscoroutinefunction(async_main), (
         "tool_definition_to_spec must return an async callable as async_main"
     )

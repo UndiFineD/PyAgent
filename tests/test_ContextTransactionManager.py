@@ -48,6 +48,7 @@ try:
     from src.core.ContextTransactionManager import ContextTransaction as _CoreContextTx
     from src.core.ContextTransactionManager import RecursionGuardError as _CoreRecursionGuardError
     from src.core.ContextTransactionManager import validate as _core_context_validate
+
     _HAS_CORE_CONTEXT = True
 except ImportError:
     _CoreContextTx = None  # type: ignore[assignment,misc]
@@ -72,6 +73,7 @@ def _skip_if_no_tx_context() -> None:
 # Group A — src.core.ContextTransactionManager shim
 # ---------------------------------------------------------------------------
 
+
 class TestContextTransactionShim:
     """Tests against the shim at src.core.ContextTransactionManager (T09)."""
 
@@ -83,6 +85,7 @@ class TestContextTransactionShim:
             ContextTransaction,
             RecursionGuardError,
         )
+
         assert ContextTransaction is not None
         assert callable(ContextTransaction)
         assert issubclass(RecursionGuardError, Exception)
@@ -92,6 +95,7 @@ class TestContextTransactionShim:
         """Shim module must expose validate() → True."""
         _skip_if_no_core_context()
         from src.core.ContextTransactionManager import validate  # noqa: PLC0415
+
         assert callable(validate)
         assert validate() is True
 
@@ -108,9 +112,7 @@ class TestContextTransactionShim:
         assert isinstance(tx1.transaction_id, uuid.UUID), (
             f"transaction_id must be uuid.UUID, got {type(tx1.transaction_id)}"
         )
-        assert tx1.transaction_id != tx2.transaction_id, (
-            "Each ContextTransaction must have a unique transaction_id"
-        )
+        assert tx1.transaction_id != tx2.transaction_id, "Each ContextTransaction must have a unique transaction_id"
 
     # TC-C4
     def test_nested_context_has_parent_id_linked_to_outer(self) -> None:
@@ -124,8 +126,7 @@ class TestContextTransactionShim:
             try:
                 assert hasattr(inner, "parent_id"), "parent_id attribute must exist"
                 assert inner.parent_id == outer.transaction_id, (
-                    f"inner.parent_id {inner.parent_id!r} must equal "
-                    f"outer.transaction_id {outer.transaction_id!r}"
+                    f"inner.parent_id {inner.parent_id!r} must equal outer.transaction_id {outer.transaction_id!r}"
                 )
             finally:
                 inner.__exit__(None, None, None)
@@ -184,17 +185,13 @@ class TestContextTransactionShim:
                 "current() must return the only active context when no nesting"
             )
             with ContextTransaction("inner-current") as inner:
-                assert ContextTransaction.current() is inner, (
-                    "current() must return innermost context when nested"
-                )
-            assert ContextTransaction.current() is outer, (
-                "current() must revert to outer after inner exits"
-            )
+                assert ContextTransaction.current() is inner, "current() must return innermost context when nested"
+            assert ContextTransaction.current() is outer, "current() must revert to outer after inner exits"
 
     # TC-C9
     @pytest.mark.asyncio
     async def test_async_context_manager_enters_and_exits(self) -> None:
-        """async with ContextTransaction must track context_id in active_contexts."""
+        """Async with ContextTransaction must track context_id in active_contexts."""
         _skip_if_no_core_context()
         from src.core.ContextTransactionManager import ContextTransaction  # noqa: PLC0415
 
@@ -214,6 +211,7 @@ class TestContextTransactionShim:
 # Group B — src.transactions.ContextTransactionManager full implementation
 # ---------------------------------------------------------------------------
 
+
 class TestContextTransactionFull:
     """Tests against the full src.transactions.ContextTransactionManager (T05)."""
 
@@ -221,8 +219,10 @@ class TestContextTransactionFull:
     def test_package_import_and_validate(self) -> None:
         """src.transactions.ContextTransactionManager must export ContextTransaction + validate()."""
         _skip_if_no_tx_context()
-        from src.transactions.ContextTransactionManager import ContextTransaction  # noqa: PLC0415
-        from src.transactions.ContextTransactionManager import validate  # noqa: PLC0415
+        from src.transactions.ContextTransactionManager import (
+            ContextTransaction,  # noqa: PLC0415
+            validate,  # noqa: PLC0415
+        )
 
         assert ContextTransaction is not None
         assert callable(validate)
@@ -235,9 +235,7 @@ class TestContextTransactionFull:
         from src.transactions.ContextTransactionManager import ContextTransaction  # noqa: PLC0415
 
         with ContextTransaction("outer-lineage") as outer:
-            assert outer.parent_id is None, (
-                f"Top-level context must have parent_id=None, got {outer.parent_id!r}"
-            )
+            assert outer.parent_id is None, f"Top-level context must have parent_id=None, got {outer.parent_id!r}"
             with ContextTransaction("inner-lineage") as inner:
                 assert inner.parent_id == outer.transaction_id, (
                     "inner.parent_id must equal outer.transaction_id for proper lineage"
@@ -251,14 +249,13 @@ class TestContextTransactionFull:
 
         # Ensure no leftover state from other tests; call current() in isolation
         result = ContextTransaction.current()
-        assert result is None, (
-            f"current() must return None when no context is active, got {result!r}"
-        )
+        assert result is None, f"current() must return None when no context is active, got {result!r}"
 
     # TC-C13
     def test_recursion_guard_leaves_no_state_leak_after_error(self) -> None:
         """After RecursionGuardError, the context ID must still appear in active_contexts
-        (the outer context is still active) but re-entry must still be guarded."""
+        (the outer context is still active) but re-entry must still be guarded.
+        """
         _skip_if_no_tx_context()
         from src.transactions.ContextTransactionManager import (  # noqa: PLC0415
             ContextTransaction,
@@ -273,9 +270,7 @@ class TestContextTransactionFull:
 
             # Outer context must still be active (no state leak)
             active = ContextTransaction.active_contexts()
-            assert context_id in active, (
-                "Outer context must remain in active_contexts after RecursionGuardError"
-            )
+            assert context_id in active, "Outer context must remain in active_contexts after RecursionGuardError"
             # And the recursion guard must still fire on a second attempt
             with pytest.raises(RecursionGuardError):
                 with ContextTransaction(context_id):

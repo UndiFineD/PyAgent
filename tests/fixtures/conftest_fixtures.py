@@ -19,6 +19,7 @@ These fixtures provide:
 - sample_message: a minimal swarm Message dict
 - async_client: a simple async HTTP test client scaffold
 """
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -26,10 +27,10 @@ from typing import Any
 
 import pytest
 
-
 # ---------------------------------------------------------------------------
 # Directory fixtures
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture()
 def tmp_agent_dir(tmp_path: Path) -> Path:
@@ -51,6 +52,7 @@ def tmp_project_dir(tmp_path: Path) -> Path:
 # ---------------------------------------------------------------------------
 # Data fixtures
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture()
 def sample_task() -> dict[str, Any]:

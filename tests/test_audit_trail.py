@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Red-phase integration and contract tests for immutable audit trail (prj0000084)."""
+
 from __future__ import annotations
 
 import json
@@ -548,7 +549,7 @@ def test_iter_records_skips_blank_lines(tmp_path: Path) -> None:
     """iter_records ignores empty/whitespace lines in JSONL files."""
     core = _make_core(tmp_path)
     path = _audit_file_for(core)
-    path.write_text("\n{\"event_hash\":\"a\"}\n\n", encoding="utf-8")
+    path.write_text('\n{"event_hash":"a"}\n\n', encoding="utf-8")
     records = core.iter_records()
     assert len(records) == 1
 

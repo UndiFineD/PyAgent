@@ -43,6 +43,14 @@ and pull request coordination notes.
 	Seen in: `prj0000095-source-stub-remediation`.
 	Recurrence count: 1.
 	Promotion status: Candidate (not promoted; threshold is >=2).
+- 2026-03-29 — prj0000099: branch/scope validation passed and narrow staging was prepared for project closure, but mandatory post-staging `pre-commit` failed in `run-precommit-checks` due repository-wide Ruff findings in `tests/` outside staged scope; commit/push/PR were blocked and handoff returned to `@0master`.
+	Pattern: Project-scoped handoff blocked by repository-wide hook baseline debt.
+	Root cause: `run-precommit-checks` executes `ruff check src tests` without staged-file scoping.
+	Prevention: Reduce baseline Ruff debt or split hook policy so project-scoped docs handoffs are not blocked by unrelated violations.
+	First seen: 2026-03-28.
+	Seen in: `prj0000093-projectmanager-ideas-autosync`, `prj0000099-stub-module-elimination`.
+	Recurrence count: 2.
+	Promotion status: Promoted to hard rule (run/verify repo-wide hook health before starting @9git handoff for docs-only closures).
 
 ## Auto-handoff
 

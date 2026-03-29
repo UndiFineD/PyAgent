@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for tools.pm.email module (prj0000021)."""
+
 import pytest
+
 from tools.pm.email import render
 
 

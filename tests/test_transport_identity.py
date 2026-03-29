@@ -21,6 +21,7 @@ import pytest
 
 try:
     import rust_core as rc  # type: ignore
+
     if not hasattr(rc, "generate_node_identity"):
         # Fallback: load locally built extension from target/debug
         _build = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "rust_core", "target", "debug"))

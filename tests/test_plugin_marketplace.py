@@ -15,6 +15,7 @@
 
 prj0000059 — plugin-marketplace-browser.
 """
+
 from __future__ import annotations
 
 from fastapi.testclient import TestClient

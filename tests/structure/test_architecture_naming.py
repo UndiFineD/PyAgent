@@ -44,45 +44,33 @@ def test_no_md_files_exceed_eight() -> None:
     """At most 8 top-level .md files are allowed in docs/architecture/."""
     files = _top_level_md_files()
     names = [f.name for f in files]
-    assert len(files) <= 8, (
-        f"Expected ≤ 8 top-level .md files in docs/architecture/, "
-        f"found {len(files)}: {names}"
-    )
+    assert len(files) <= 8, f"Expected ≤ 8 top-level .md files in docs/architecture/, found {len(files)}: {names}"
 
 
 def test_all_md_files_have_numbered_names() -> None:
     """Every top-level .md file in docs/architecture/ must start with a digit."""
     bad = [f.name for f in _top_level_md_files() if not _NUMBERED_RE.match(f.name)]
     assert not bad, (
-        "The following docs/architecture/ files do not match the "
-        f"numbered naming convention (^\\d.*\\.md$): {bad}"
+        f"The following docs/architecture/ files do not match the numbered naming convention (^\\d.*\\.md$): {bad}"
     )
 
 
 def test_no_todolist_md() -> None:
     """todolist.md must not exist in docs/architecture/."""
-    assert not (ARCH_DIR / "todolist.md").exists(), (
-        "docs/architecture/todolist.md must be removed (stale file)"
-    )
+    assert not (ARCH_DIR / "todolist.md").exists(), "docs/architecture/todolist.md must be removed (stale file)"
 
 
 def test_no_generated_md() -> None:
     """No *.generated.md file may exist in docs/architecture/."""
     generated = [f.name for f in _top_level_md_files() if ".generated." in f.name]
-    assert not generated, (
-        f"Generated artefacts must not be checked in: {generated}"
-    )
+    assert not generated, f"Generated artefacts must not be checked in: {generated}"
 
 
 def test_0overview_exists() -> None:
     """docs/architecture/0overview.md must exist (top-level overview)."""
-    assert (ARCH_DIR / "0overview.md").exists(), (
-        "docs/architecture/0overview.md is missing — run restructure"
-    )
+    assert (ARCH_DIR / "0overview.md").exists(), "docs/architecture/0overview.md is missing — run restructure"
 
 
 def test_1agents_exists() -> None:
     """docs/architecture/1agents.md must exist (agent system reference)."""
-    assert (ARCH_DIR / "1agents.md").exists(), (
-        "docs/architecture/1agents.md is missing — run restructure"
-    )
+    assert (ARCH_DIR / "1agents.md").exists(), "docs/architecture/1agents.md is missing — run restructure"

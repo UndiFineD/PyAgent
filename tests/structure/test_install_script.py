@@ -17,8 +17,9 @@ Reads install.ps1 as text and asserts required elements are present.
 Does NOT execute the script.
 """
 
-import pytest
 from pathlib import Path
+
+import pytest
 
 REPO_ROOT = Path(__file__).parent.parent.parent
 _SCRIPT_PATH = REPO_ROOT / "install.ps1"
@@ -37,6 +38,7 @@ _FILE_MISSING = content == ""
 # 1. File existence
 # ---------------------------------------------------------------------------
 
+
 def test_install_script_exists() -> None:
     """install.ps1 must exist at the repository root."""
     assert _SCRIPT_PATH.exists()
@@ -46,6 +48,7 @@ def test_install_script_exists() -> None:
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _require_file(func):
     """Decorator: skip the test when install.ps1 does not yet exist."""
     return pytest.mark.skipif(_FILE_MISSING, reason="install.ps1 not yet created")(func)
@@ -54,6 +57,7 @@ def _require_file(func):
 # ---------------------------------------------------------------------------
 # 2. Param block — CmdletBinding + param keyword
 # ---------------------------------------------------------------------------
+
 
 @_require_file
 def test_has_cmdletbinding() -> None:
@@ -101,6 +105,7 @@ def test_has_force_param() -> None:
 # 3. Get-Help comment block (.SYNOPSIS / .DESCRIPTION)
 # ---------------------------------------------------------------------------
 
+
 @_require_file
 def test_has_synopsis() -> None:
     """Script must contain a .SYNOPSIS comment for Get-Help."""
@@ -116,6 +121,7 @@ def test_has_description() -> None:
 # ---------------------------------------------------------------------------
 # 4. Required functions
 # ---------------------------------------------------------------------------
+
 
 @_require_file
 def test_has_write_status_function() -> None:
@@ -169,6 +175,7 @@ def test_has_show_summary_function() -> None:
 # 5. References to all three requirements files
 # ---------------------------------------------------------------------------
 
+
 @_require_file
 def test_references_requirements_txt() -> None:
     """Script must reference requirements.txt."""
@@ -191,6 +198,7 @@ def test_references_requirements_ci() -> None:
 # 6. Venv creation and activation
 # ---------------------------------------------------------------------------
 
+
 @_require_file
 def test_has_venv_creation() -> None:
     """Script must contain 'python -m venv' to create the virtual environment."""
@@ -206,6 +214,7 @@ def test_has_venv_activate() -> None:
 # ---------------------------------------------------------------------------
 # 7. Rust build via maturin
 # ---------------------------------------------------------------------------
+
 
 @_require_file
 def test_has_maturin() -> None:
@@ -229,6 +238,7 @@ def test_has_rust_core_manifest() -> None:
 # 8. Frontend npm install
 # ---------------------------------------------------------------------------
 
+
 @_require_file
 def test_has_npm_install() -> None:
     """Script must contain 'npm install' for frontend dependency installation."""
@@ -238,6 +248,7 @@ def test_has_npm_install() -> None:
 # ---------------------------------------------------------------------------
 # 9. Summary output
 # ---------------------------------------------------------------------------
+
 
 @_require_file
 def test_has_summary_complete_message() -> None:
@@ -249,6 +260,7 @@ def test_has_summary_complete_message() -> None:
 # 10. Python version check ≥ 3.12
 # ---------------------------------------------------------------------------
 
+
 @_require_file
 def test_has_python_version_check() -> None:
     """Script must enforce Python ≥ 3.12 (hardcoded or via variable)."""
@@ -258,6 +270,7 @@ def test_has_python_version_check() -> None:
 # ---------------------------------------------------------------------------
 # 11. OS guard (Windows-only)
 # ---------------------------------------------------------------------------
+
 
 @_require_file
 def test_has_os_guard() -> None:
@@ -269,6 +282,7 @@ def test_has_os_guard() -> None:
 # 12. ErrorActionPreference
 # ---------------------------------------------------------------------------
 
+
 @_require_file
 def test_has_error_action_preference() -> None:
     """Script must set $ErrorActionPreference = 'Stop' for strict error handling."""
@@ -278,6 +292,7 @@ def test_has_error_action_preference() -> None:
 # ---------------------------------------------------------------------------
 # 13. Requires directive
 # ---------------------------------------------------------------------------
+
 
 @_require_file
 def test_has_requires_version() -> None:

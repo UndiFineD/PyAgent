@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Tests for UTM transport policy constants."""
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,12 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import pytest
+
 try:
     import rust_core
 except ImportError:
     pytest.skip("rust_core not available - Rust extension not compiled", allow_module_level=True)
 
-if not hasattr(rust_core, 'TRANSPORT_FALLBACK_TO_QUEUE'):
+if not hasattr(rust_core, "TRANSPORT_FALLBACK_TO_QUEUE"):
     pytest.skip("rust_core transport constants not available - Rust extension not compiled", allow_module_level=True)
 
 from rust_core import (  # noqa: E402
@@ -34,10 +36,10 @@ from rust_core import (  # noqa: E402
 
 def test_utm_transport_port_constants():
     """UTM transport port constants should match expected values."""
-    assert UTM_DEFAULT_PORT == 4010   # UTM_SYNC_PORT in .env
+    assert UTM_DEFAULT_PORT == 4010  # UTM_SYNC_PORT in .env
     assert UTM_CONTROL_PORT == 4011
-    assert TX_SEND_PORT == 4001       # UTM_SEND_PORT in .env
-    assert TX_RECV_PORT == 4002       # UTM_RECV_PORT in .env
+    assert TX_SEND_PORT == 4001  # UTM_SEND_PORT in .env
+    assert TX_RECV_PORT == 4002  # UTM_RECV_PORT in .env
 
 
 def test_utm_transport_policy_constants():

@@ -19,26 +19,26 @@ from typing import Any
 
 
 class MemoryStore:
-	"""In-memory key/value store used by unit tests."""
+    """In-memory key/value store used by unit tests."""
 
-	def __init__(self) -> None:
-		"""Initialize an empty store."""
-		self._data: dict[str, Any] = {}
+    def __init__(self) -> None:
+        """Initialize an empty store."""
+        self._data: dict[str, Any] = {}
 
-	def set(self, key: str, value: Any) -> None:
-		"""Store a value for the provided key."""
-		self._data[key] = value
+    def set(self, key: str, value: Any) -> None:
+        """Store a value for the provided key."""
+        self._data[key] = value
 
-	def get(self, key: str, default: Any | None = None) -> Any:
-		"""Return the value for key, or default when missing."""
-		return self._data.get(key, default)
+    def get(self, key: str, default: Any | None = None) -> Any:
+        """Return the value for key, or default when missing."""
+        return self._data.get(key, default)
 
 
 def validate() -> None:
-	"""Validate the package configuration.
+    """Validate the package configuration.
 
-	This minimal implementation intentionally performs no checks.
-	"""
+    This minimal implementation intentionally performs no checks.
+    """
 
 
 __all__ = ["MemoryStore", "validate"]

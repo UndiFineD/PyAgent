@@ -41,7 +41,6 @@ import pytest
 # ---------------------------------------------------------------------------
 # Group A — existing src.MemoryTransactionManager shim
 # ---------------------------------------------------------------------------
-
 from src.MemoryTransactionManager import MemoryTransaction  # must work NOW
 
 
@@ -78,7 +77,7 @@ class TestMemoryTransactionShim:
     # TC-M4
     @pytest.mark.asyncio
     async def test_async_context_manager_completes(self) -> None:
-        """async with MemoryTransaction() must enter and exit without raising."""
+        """Async with MemoryTransaction() must enter and exit without raising."""
         entered = False
         async with MemoryTransaction() as tx:
             entered = True
@@ -104,6 +103,7 @@ class TestMemoryTransactionShim:
 # ---------------------------------------------------------------------------
 # Group B — src.transactions.MemoryTransactionManager (T06 required)
 # ---------------------------------------------------------------------------
+
 
 def _skip_if_no_tx_memory() -> None:
     """Skip the calling test if src.transactions.MemoryTransactionManager is absent."""

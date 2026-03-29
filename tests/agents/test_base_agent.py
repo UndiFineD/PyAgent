@@ -22,10 +22,10 @@ import pytest
 
 from src.agents.BaseAgent import AgentLifecycle, AgentManifest, BaseAgent
 
-
 # ---------------------------------------------------------------------------
 # Minimal concrete agent for testing
 # ---------------------------------------------------------------------------
+
 
 class EchoAgent(BaseAgent):
     """A minimal concrete agent that echoes its task back as result."""
@@ -37,6 +37,7 @@ class EchoAgent(BaseAgent):
 # ---------------------------------------------------------------------------
 # Manifest tests
 # ---------------------------------------------------------------------------
+
 
 def test_manifest_defaults() -> None:
     m = AgentManifest(name="TestAgent")
@@ -60,6 +61,7 @@ def test_manifest_custom_fields() -> None:
 # ---------------------------------------------------------------------------
 # Lifecycle tests
 # ---------------------------------------------------------------------------
+
 
 def test_initial_state_is_idle() -> None:
     agent = EchoAgent()
@@ -105,6 +107,7 @@ def test_reset_raises_if_running() -> None:
 # Async dispatch tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_dispatch_echoes_payload() -> None:
     agent = EchoAgent()
@@ -148,6 +151,7 @@ async def test_dispatch_respects_max_concurrency() -> None:
 # BaseAgent.validate
 # ---------------------------------------------------------------------------
 
+
 def test_validate_returns_true() -> None:
     assert BaseAgent.validate() is True
 
@@ -155,6 +159,7 @@ def test_validate_returns_true() -> None:
 # ---------------------------------------------------------------------------
 # Repr
 # ---------------------------------------------------------------------------
+
 
 def test_repr_contains_name() -> None:
     agent = EchoAgent(AgentManifest(name="EchoAgent"))

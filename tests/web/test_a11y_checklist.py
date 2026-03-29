@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Static source-level WCAG 2.1 AA accessibility checklist for the NebulaOS dark theme.
-prj0000071 — dark-mode-accessibility"""
+prj0000071 — dark-mode-accessibility
+"""
 
 import pathlib
 
@@ -24,6 +25,7 @@ def _read(path: str) -> str:
 
 
 # ── Window.tsx ──────────────────────────────────────────────────────────────
+
 
 def test_window_minimize_has_aria_label() -> None:
     """Minimize button must have an accessible name."""
@@ -55,6 +57,7 @@ def test_window_controls_have_focus_visible_ring() -> None:
 
 # ── Paint.tsx ────────────────────────────────────────────────────────────────
 
+
 def test_paint_pencil_has_aria_label() -> None:
     """Pencil tool button must have an accessible name."""
     assert 'aria-label="Pencil"' in _read("apps/Paint.tsx")
@@ -82,6 +85,7 @@ def test_paint_range_input_has_aria_label() -> None:
 
 # ── Editor.tsx ───────────────────────────────────────────────────────────────
 
+
 def test_editor_textarea_has_focus_ring() -> None:
     """Editor textarea must not suppress focus ring without a replacement."""
     content = _read("apps/Editor.tsx")
@@ -89,6 +93,7 @@ def test_editor_textarea_has_focus_ring() -> None:
 
 
 # ── App.tsx ───────────────────────────────────────────────────────────────────
+
 
 def test_app_toggle_has_focus_ring() -> None:
     """Taskbar toggle switch must have a visible focus ring."""
@@ -98,6 +103,7 @@ def test_app_toggle_has_focus_ring() -> None:
 
 
 # ── ProjectManager.tsx ────────────────────────────────────────────────────────
+
 
 def test_project_card_has_role_button() -> None:
     """Project card must declare its interactive role for assistive technology."""
@@ -125,6 +131,7 @@ def test_project_card_has_aria_expanded() -> None:
 
 
 # ── themes.css ────────────────────────────────────────────────────────────────
+
 
 def test_accent_colour_passes_aa_contrast() -> None:
     """--color-accent must be #f25e77 (≥ 4.5:1 contrast against --color-bg #1a1a2e)."""

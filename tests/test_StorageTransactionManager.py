@@ -47,6 +47,7 @@ import pytest
 try:
     from src.core.StorageTransactionManager import StorageTransaction as _CoreStorageTx
     from src.core.StorageTransactionManager import validate as _core_storage_validate
+
     _HAS_CORE_STORAGE = True
 except ImportError:
     _CoreStorageTx = None  # type: ignore[assignment,misc]
@@ -70,6 +71,7 @@ def _skip_if_no_tx_storage() -> None:
 # Group A — src.core.StorageTransactionManager shim
 # ---------------------------------------------------------------------------
 
+
 class TestStorageTransactionShim:
     """Tests against the shim at src.core.StorageTransactionManager (T07)."""
 
@@ -78,6 +80,7 @@ class TestStorageTransactionShim:
         """src.core.StorageTransactionManager must export StorageTransaction."""
         _skip_if_no_core_storage()
         from src.core.StorageTransactionManager import StorageTransaction  # noqa: PLC0415
+
         assert StorageTransaction is not None
         assert callable(StorageTransaction)
 
@@ -86,6 +89,7 @@ class TestStorageTransactionShim:
         """Shim module must expose validate() → True."""
         _skip_if_no_core_storage()
         from src.core.StorageTransactionManager import validate  # noqa: PLC0415
+
         assert callable(validate)
         assert validate() is True
 
@@ -117,9 +121,7 @@ class TestStorageTransactionShim:
                 tx.stage(b"corrupted-overwrite")
                 raise RuntimeError("simulated abort")
 
-        assert target.read_bytes() == original, (
-            "Rollback must not overwrite the original file on exception"
-        )
+        assert target.read_bytes() == original, "Rollback must not overwrite the original file on exception"
 
     # TC-S5
     def test_double_commit_raises(self, tmp_path: Path) -> None:
@@ -150,7 +152,7 @@ class TestStorageTransactionShim:
     # TC-S7
     @pytest.mark.asyncio
     async def test_async_context_manager_commits(self, tmp_path: Path) -> None:
-        """async with StorageTransaction should commit cleanly on normal exit."""
+        """Async with StorageTransaction should commit cleanly on normal exit."""
         _skip_if_no_core_storage()
         from src.core.StorageTransactionManager import StorageTransaction  # noqa: PLC0415
 
@@ -166,6 +168,7 @@ class TestStorageTransactionShim:
 # Group B — src.transactions.StorageTransactionManager full implementation
 # ---------------------------------------------------------------------------
 
+
 class TestStorageTransactionFull:
     """Tests against the full src.transactions.StorageTransactionManager (T03)."""
 
@@ -173,8 +176,10 @@ class TestStorageTransactionFull:
     def test_package_import_and_validate(self) -> None:
         """src.transactions.StorageTransactionManager must export StorageTransaction + validate()."""
         _skip_if_no_tx_storage()
-        from src.transactions.StorageTransactionManager import StorageTransaction  # noqa: PLC0415
-        from src.transactions.StorageTransactionManager import validate  # noqa: PLC0415
+        from src.transactions.StorageTransactionManager import (
+            StorageTransaction,  # noqa: PLC0415
+            validate,  # noqa: PLC0415
+        )
 
         assert StorageTransaction is not None
         assert callable(validate)
@@ -208,9 +213,7 @@ class TestStorageTransactionFull:
         await tx.rollback()
         await tx.__aexit__(None, None, None)
 
-        assert not target.exists(), (
-            "After rollback the target must not exist (tmp file removed, no commit)"
-        )
+        assert not target.exists(), "After rollback the target must not exist (tmp file removed, no commit)"
 
     # TC-S11
     @pytest.mark.asyncio
@@ -244,17 +247,15 @@ class TestStorageTransactionFull:
 
     # TC-S13
     @pytest.mark.asyncio
-    async def test_encryption_raises_without_master_key(
-        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    async def test_encryption_raises_without_master_key(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
         """write() with user_id set must raise EncryptionConfigError when env key absent."""
         _skip_if_no_tx_storage()
         monkeypatch.delenv("PYAGENT_STORAGE_MASTER_KEY", raising=False)
 
         try:
             from src.transactions.StorageTransactionManager import (  # noqa: PLC0415
-                StorageTransaction,
                 EncryptionConfigError,
+                StorageTransaction,
             )
         except ImportError:
             pytest.skip("EncryptionConfigError not yet defined in transactions package")

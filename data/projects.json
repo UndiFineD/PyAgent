@@ -1,11 +1,29 @@
 [
   {
+    "id": "prj0000095",
+    "name": "source-stub-remediation",
+    "lane": "Review",
+    "summary": "Scan source code for stubs, temporary code, and mock implementations, then replace with real implementations using rust_core-first and Python fallback",
+    "branch": "prj0000095-source-stub-remediation",
+    "pr": null,
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "remediation",
+      "stubs",
+      "rust-core",
+      "python-fallback"
+    ],
+    "created": "2026-03-28",
+    "updated": "2026-03-28"
+  },
+  {
     "id": "prj0000098",
     "name": "backend-health-check-endpoint",
-    "lane": "Review",
-    "summary": "Initialize project from idea000013 to define backend health endpoint design and delivery plan",
-    "branch": "prj0000098-backend-health-check-endpoint",
-    "pr": null,
+    "lane": "Released",
+    "summary": "Initialize project from idea000013 to design and deliver backend health-check endpoint governance and implementation planning",
+    "branch": "merged",
+    "pr": "#244",
     "priority": "P2",
     "budget_tier": "M",
     "tags": [
@@ -27,9 +45,9 @@
     "priority": "P2",
     "budget_tier": "M",
     "tags": [
-      "stub",
-      "module",
-      "remediation"
+      "remediation",
+      "stubs",
+      "python-agents"
     ],
     "created": "2026-03-29",
     "updated": "2026-03-29"
@@ -46,29 +64,10 @@
     "tags": [
       "coverage",
       "ci",
-      "tests",
       "quality-gate"
     ],
-    "created": "2026-03-28",
+    "created": "2026-03-29",
     "updated": "2026-03-29"
-  },
-  {
-    "id": "prj0000095",
-    "name": "source-stub-remediation",
-    "lane": "Review",
-    "summary": "Scan source code for stubs, temporary code, and mock implementations, then replace with real implementations using rust_core-first and Python fallback",
-    "branch": "prj0000095-source-stub-remediation",
-    "pr": 241,
-    "priority": "P2",
-    "budget_tier": "M",
-    "tags": [
-      "remediation",
-      "stubs",
-      "rust-core",
-      "python-fallback"
-    ],
-    "created": "2026-03-28",
-    "updated": "2026-03-28"
   },
   {
     "id": "prj0000093",
@@ -76,7 +75,7 @@
     "lane": "Review",
     "summary": "Project Manager automatically ingests docs/project/ideas and filters out ideas already implemented as projects",
     "branch": "prj0000093-projectmanager-ideas-autosync",
-    "pr": 239,
+    "pr": null,
     "priority": "P2",
     "budget_tier": "M",
     "tags": [
@@ -1623,5 +1622,23 @@
     ],
     "created": "2026-03-28",
     "updated": "2026-03-28"
+  },
+  {
+    "id": "prj0000099",
+    "name": "stub-module-elimination",
+    "lane": "Review",
+    "summary": "This idea focuses on stub module elimination in area 1 – Python agents. The current signal indicates priority P2, impact H, and urgency M. The SWOT tag is W (Weakness in current implementation). Lifecycle M1-M7 DONE; READY_FOR_GIT pending @9git commit/PR handoff.",
+    "branch": "prj0000099-stub-module-elimination",
+    "pr": null,
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "stubs",
+      "module-elimination",
+      "idea000011",
+      "ready-for-git"
+    ],
+    "created": "2026-03-29",
+    "updated": "2026-03-29"
   }
 ]

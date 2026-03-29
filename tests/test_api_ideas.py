@@ -15,6 +15,7 @@
 
 prj0000093 - projectmanager-ideas-autosync.
 """
+
 from __future__ import annotations
 
 import json
@@ -100,11 +101,7 @@ def _project_lane_map() -> dict[str, str]:
 
     """
     projects = json.loads(_PROJECTS_PATH.read_text(encoding="utf-8"))
-    return {
-        str(item.get("id", "")).lower(): str(item.get("lane", ""))
-        for item in projects
-        if item.get("id")
-    }
+    return {str(item.get("id", "")).lower(): str(item.get("lane", "")) for item in projects if item.get("id")}
 
 
 def _expected_ids_for_implemented_exclude(mode: str) -> set[str]:

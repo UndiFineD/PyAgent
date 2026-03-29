@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for AgentRegistry (prj0000022)."""
+
 import time
+
 from swarm.agent_registry import AgentRegistry
 
 

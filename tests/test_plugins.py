@@ -19,10 +19,10 @@ import pytest
 
 from plugins.PluginManager import Plugin, PluginManager, PluginMetadata
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 class EchoPlugin(Plugin):
     """Plugin that echoes kwargs back as a dict."""
@@ -63,6 +63,7 @@ class AddPlugin(Plugin):
 # PluginMetadata
 # ---------------------------------------------------------------------------
 
+
 def test_plugin_metadata_defaults() -> None:
     m = PluginMetadata(name="test_plugin")
     assert m.name == "test_plugin"
@@ -82,6 +83,7 @@ def test_plugin_metadata_custom() -> None:
 # Plugin base
 # ---------------------------------------------------------------------------
 
+
 def test_plugin_default_metadata() -> None:
     p = EchoPlugin()
     assert p.metadata.name == "echo"
@@ -98,6 +100,7 @@ def test_add_plugin_default_metadata() -> None:
 # ---------------------------------------------------------------------------
 # PluginManager — registration
 # ---------------------------------------------------------------------------
+
 
 def test_register_and_has() -> None:
     pm = PluginManager()
@@ -117,7 +120,7 @@ def test_register_replaces_plugin_calls_teardown() -> None:
     EchoPlugin.teardown_called = False
     pm = PluginManager()
     pm.register(EchoPlugin())
-    pm.register(EchoPlugin())   # second time — should teardown old first
+    pm.register(EchoPlugin())  # second time — should teardown old first
     assert EchoPlugin.teardown_called
 
 
@@ -139,6 +142,7 @@ def test_unregister_unknown_raises() -> None:
 # ---------------------------------------------------------------------------
 # PluginManager — discovery
 # ---------------------------------------------------------------------------
+
 
 def test_list_plugins_sorted() -> None:
     pm = PluginManager()
@@ -173,6 +177,7 @@ def test_get_unknown_raises() -> None:
 # PluginManager — execution
 # ---------------------------------------------------------------------------
 
+
 def test_execute_echo() -> None:
     pm = PluginManager()
     pm.register(EchoPlugin())
@@ -195,6 +200,7 @@ def test_execute_unknown_raises() -> None:
 # ---------------------------------------------------------------------------
 # PluginManager — lifecycle
 # ---------------------------------------------------------------------------
+
 
 def test_shutdown_calls_teardown_all() -> None:
     EchoPlugin.teardown_called = False

@@ -57,6 +57,7 @@ def loaded_registry() -> McpRegistry:
     reg = McpRegistry()
     with patch("yaml.safe_load", return_value=[_SERVER_DICT]), patch("builtins.open"):
         import asyncio as _asyncio
+
         _asyncio.get_event_loop().run_until_complete(reg.load_config("mcp_servers.yml"))
     return reg
 
@@ -167,9 +168,7 @@ async def test_disable_drains_inflight_before_terminate(registry: McpRegistry) -
         # Yield to let disable() reach the drain wait point.
         await asyncio.sleep(0)
 
-        assert "terminate" not in terminate_order, (
-            "McpSandbox.terminate() was called before in-flight drain completed"
-        )
+        assert "terminate" not in terminate_order, "McpSandbox.terminate() was called before in-flight drain completed"
 
         # Simulate all in-flight calls completing.
         registry._in_flight_counts["test-server"] = 0  # type: ignore[index]
@@ -269,9 +268,7 @@ async def test_enable_already_enabled_is_idempotent(registry: McpRegistry) -> No
         except McpServerAlreadyEnabled:
             pass  # valid — raising is also acceptable idempotency
 
-    assert spawn_call_count == 1, (
-        f"McpSandbox.spawn() called {spawn_call_count} times; expected exactly 1"
-    )
+    assert spawn_call_count == 1, f"McpSandbox.spawn() called {spawn_call_count} times; expected exactly 1"
 
 
 # ---------------------------------------------------------------------------
@@ -296,9 +293,7 @@ async def test_list_servers_returns_snapshot(registry: McpRegistry) -> None:
     first_snapshot.clear()
 
     second_snapshot = registry.list_servers()
-    assert len(second_snapshot) == 1, (
-        "Registry internal state was modified by mutating the list_servers() return value"
-    )
+    assert len(second_snapshot) == 1, "Registry internal state was modified by mutating the list_servers() return value"
 
 
 # ---------------------------------------------------------------------------

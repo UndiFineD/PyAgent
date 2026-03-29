@@ -19,10 +19,10 @@ from fastapi.testclient import TestClient
 from backend.app import app
 from backend.watchdog import AgentWatchdog
 
-
 # ---------------------------------------------------------------------------
 # Test 1 — Successful task returns {"status": "ok"}
 # ---------------------------------------------------------------------------
+
 
 def test_run_success():
     async def good_coro():
@@ -39,6 +39,7 @@ def test_run_success():
 # Test 2 — Timeout increments retry count
 # ---------------------------------------------------------------------------
 
+
 def test_run_timeout_increments_retry():
     async def slow_coro():
         await asyncio.sleep(10)
@@ -53,6 +54,7 @@ def test_run_timeout_increments_retry():
 # ---------------------------------------------------------------------------
 # Test 3 — Exhausting retries sends task to DLQ
 # ---------------------------------------------------------------------------
+
 
 def test_run_dead_letter_after_retries():
     async def slow_coro():
@@ -79,6 +81,7 @@ def test_run_dead_letter_after_retries():
 # Test 4 — status() dict has required keys
 # ---------------------------------------------------------------------------
 
+
 def test_status_returns_correct_shape():
     wd = AgentWatchdog(timeout_s=15.0, max_retries=2)
     s = wd.status()
@@ -93,6 +96,7 @@ def test_status_returns_correct_shape():
 # ---------------------------------------------------------------------------
 # Test 5 — DLQ entry has agent_id and timestamp
 # ---------------------------------------------------------------------------
+
 
 def test_dlq_contains_correct_entry():
     async def slow_coro():
@@ -117,6 +121,7 @@ def test_dlq_contains_correct_entry():
 # ---------------------------------------------------------------------------
 # Test 6 — GET /api/watchdog/status endpoint
 # ---------------------------------------------------------------------------
+
 
 def test_watchdog_status_endpoint():
     client = TestClient(app)

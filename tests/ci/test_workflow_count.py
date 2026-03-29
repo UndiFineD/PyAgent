@@ -39,6 +39,7 @@ def _load_security_yml() -> dict:
 # T1-a: Exactly 2 workflow files
 # ---------------------------------------------------------------------------
 
+
 def test_exactly_two_workflow_files() -> None:
     """Only ci.yml and security.yml must exist in .github/workflows/."""
     yml_files = sorted(f.name for f in _WORKFLOWS_DIR.glob("*.yml"))
@@ -52,6 +53,7 @@ def test_exactly_two_workflow_files() -> None:
 # T1-b: security.yml is valid YAML with jobs.analyze
 # ---------------------------------------------------------------------------
 
+
 def test_security_yml_exists_and_has_analyze_job() -> None:
     """security.yml must exist and contain a jobs.analyze entry."""
     assert _SECURITY_YML.exists(), "security.yml does not exist"
@@ -63,6 +65,7 @@ def test_security_yml_exists_and_has_analyze_job() -> None:
 # ---------------------------------------------------------------------------
 # T1-c: security.yml declares security-events: write
 # ---------------------------------------------------------------------------
+
 
 def test_security_yml_has_security_events_write_permission() -> None:
     """security.yml must declare security-events: write for SARIF upload."""
@@ -77,6 +80,7 @@ def test_security_yml_has_security_events_write_permission() -> None:
 # ---------------------------------------------------------------------------
 # T1-d: security.yml uses all three codeql-action steps
 # ---------------------------------------------------------------------------
+
 
 def test_security_yml_uses_codeql_action_steps() -> None:
     """security.yml must use codeql-action init, autobuild, and analyze steps."""
@@ -99,26 +103,24 @@ def test_security_yml_uses_codeql_action_steps() -> None:
 # T1-e: security.yml triggers include schedule
 # ---------------------------------------------------------------------------
 
+
 def test_security_yml_has_schedule_trigger() -> None:
     """security.yml must include a scheduled trigger for regular background scans."""
     data = _load_security_yml()
     on_block = data.get("on", data.get(True, {}))  # YAML 'on' parses as True in some versions
     # Accept either 'on' key (string) or boolean True (PyYAML quirk)
     if isinstance(on_block, dict):
-        assert "schedule" in on_block, (
-            "security.yml must have a 'schedule' trigger for weekly background CodeQL scans"
-        )
+        assert "schedule" in on_block, "security.yml must have a 'schedule' trigger for weekly background CodeQL scans"
     else:
         # Try direct key lookup
         triggers = data.get("on") or data.get(True)
-        assert triggers is not None and "schedule" in triggers, (
-            "security.yml must have a 'schedule' trigger"
-        )
+        assert triggers is not None and "schedule" in triggers, "security.yml must have a 'schedule' trigger"
 
 
 # ---------------------------------------------------------------------------
 # T1-f: security.yml wires in custom Python query pack
 # ---------------------------------------------------------------------------
+
 
 def test_security_yml_references_custom_python_queries() -> None:
     """security.yml config must reference the local codeql-custom-queries-python pack."""

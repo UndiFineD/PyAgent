@@ -15,6 +15,7 @@
 
 prj0000065 — agent-memory-persistence.
 """
+
 from __future__ import annotations
 
 from unittest.mock import AsyncMock, MagicMock, patch
@@ -38,13 +39,15 @@ def _make_store_with_entries(entries: list[dict]) -> MagicMock:
     """Return a mock MemoryStore whose read() returns *entries*."""
     mock = MagicMock(spec=MemoryStore)
     mock.read = AsyncMock(return_value=entries)
-    mock.append = AsyncMock(side_effect=lambda agent_id, entry: {
-        "id": "mock-id",
-        "role": entry["role"],
-        "content": entry["content"],
-        "session_id": entry.get("session_id"),
-        "timestamp": "2026-01-01T00:00:00+00:00",
-    })
+    mock.append = AsyncMock(
+        side_effect=lambda agent_id, entry: {
+            "id": "mock-id",
+            "role": entry["role"],
+            "content": entry["content"],
+            "session_id": entry.get("session_id"),
+            "timestamp": "2026-01-01T00:00:00+00:00",
+        }
+    )
     mock.clear = AsyncMock(return_value=None)
     return mock
 
@@ -57,13 +60,15 @@ def _make_store_with_entries(entries: list[dict]) -> MagicMock:
 def test_append_creates_entry():
     """POST returns 201 with id and timestamp."""
     with patch("backend.app.memory_store") as mock_store:
-        mock_store.append = AsyncMock(return_value={
-            "id": "abc-123",
-            "role": "user",
-            "content": "Hello agent",
-            "session_id": None,
-            "timestamp": "2026-01-01T00:00:00+00:00",
-        })
+        mock_store.append = AsyncMock(
+            return_value={
+                "id": "abc-123",
+                "role": "user",
+                "content": "Hello agent",
+                "session_id": None,
+                "timestamp": "2026-01-01T00:00:00+00:00",
+            }
+        )
         resp = client.post(
             f"/api/agent-memory/{_AGENT}",
             json={"role": "user", "content": "Hello agent"},
@@ -79,10 +84,14 @@ def test_append_creates_entry():
 def test_read_returns_entries():
     """GET /api/agent-memory/{agent_id} returns a list of entries."""
     sample = [
-        {"id": "z", "role": "assistant", "content": "Hi there", "session_id": None,
-         "timestamp": "2026-01-01T00:00:01+00:00"},
-        {"id": "y", "role": "user", "content": "Hello", "session_id": None,
-         "timestamp": "2026-01-01T00:00:00+00:00"},
+        {
+            "id": "z",
+            "role": "assistant",
+            "content": "Hi there",
+            "session_id": None,
+            "timestamp": "2026-01-01T00:00:01+00:00",
+        },
+        {"id": "y", "role": "user", "content": "Hello", "session_id": None, "timestamp": "2026-01-01T00:00:00+00:00"},
     ]
     with patch("backend.app.memory_store") as mock_store:
         mock_store.read = AsyncMock(return_value=sample)
@@ -97,8 +106,13 @@ def test_read_returns_entries():
 def test_read_limit_param():
     """GET ?limit=1 returns only 1 entry."""
     sample = [
-        {"id": "z", "role": "assistant", "content": "Hi there", "session_id": None,
-         "timestamp": "2026-01-01T00:00:01+00:00"},
+        {
+            "id": "z",
+            "role": "assistant",
+            "content": "Hi there",
+            "session_id": None,
+            "timestamp": "2026-01-01T00:00:01+00:00",
+        },
     ]
     with patch("backend.app.memory_store") as mock_store:
         mock_store.read = AsyncMock(return_value=sample)
@@ -120,6 +134,7 @@ def test_clear_removes_entries():
 def test_unauthenticated_get_rejected():
     """Endpoints require authentication when credentials are configured."""
     import backend.auth as _auth
+
     original_dev = _auth.DEV_MODE
     try:
         # Simulate production mode: enable auth enforcement

@@ -122,10 +122,7 @@ def _jsonrpc_error(req_id: int, code: int = -32603, message: str = "Internal err
         A newline-terminated UTF-8 encoded JSON-RPC error bytes object.
 
     """
-    return (
-        json.dumps({"jsonrpc": "2.0", "id": req_id, "error": {"code": code, "message": message}}).encode()
-        + b"\n"
-    )
+    return json.dumps({"jsonrpc": "2.0", "id": req_id, "error": {"code": code, "message": message}}).encode() + b"\n"
 
 
 _CAPABILITIES_RESPONSE = _jsonrpc_response(
@@ -161,9 +158,7 @@ async def test_initialize_sends_initialize_request() -> None:
     await client.initialize()
 
     assert process.stdin.write.called, "No data was written to process stdin"
-    all_written: bytes = b"".join(
-        c.args[0] for c in process.stdin.write.call_args_list if c.args
-    )
+    all_written: bytes = b"".join(c.args[0] for c in process.stdin.write.call_args_list if c.args)
     # Find the initialize message among all writes.
     messages = [json.loads(line) for line in all_written.strip().split(b"\n") if line.strip()]
     initialize_msgs = [m for m in messages if m.get("method") == "initialize"]
@@ -361,9 +356,7 @@ async def test_close_cancels_reader_task_first() -> None:
     assert "stdin_close" in order, "process.stdin.close() was never called during close()"
     task_idx = order.index("task_cancel")
     stdin_idx = order.index("stdin_close")
-    assert task_idx < stdin_idx, (
-        f"Reader task must be cancelled before stdin close; got order {order}"
-    )
+    assert task_idx < stdin_idx, f"Reader task must be cancelled before stdin close; got order {order}"
 
 
 # ---------------------------------------------------------------------------
@@ -427,6 +420,4 @@ async def test_correlation_id_matches_response() -> None:
 
     result = await call_task
     assert isinstance(result, McpToolResult)
-    assert result.content[0]["text"] == "pong", (
-        f"Response content mismatch: {result.content}"
-    )
+    assert result.content[0]["text"] == "pong", f"Response content mismatch: {result.content}"

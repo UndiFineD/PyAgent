@@ -260,6 +260,22 @@ prj0000075 ci-simplification branch prj0000075-ci-simplification — project set
 
 ---
 
+## prj0000099 - stub-module-elimination
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000099-stub-module-elimination |
+| **owner_agent** | @1project |
+| **source** | @0master |
+| **created_at** | 2026-03-29 |
+| **updated_at** | 2026-03-29 |
+| **status** | DONE |
+| **summary** | Allocated and synchronized prj0000099 from idea000011 on expected branch prj0000099-stub-module-elimination; initialized canonical project artifacts and aligned kanban/projects registries plus nextproject pointer. |
+| **handoff_target** | @2think |
+| **artifact_paths** | docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.project.md, docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.think.md, docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.design.md, docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.plan.md, docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.test.md, docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.code.md, docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.exec.md, docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.ql.md, docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.git.md, docs/project/kanban.md, data/projects.json, data/nextproject.md |
+
+---
+
 ## prj0000097 - stub-module-elimination
 
 | Field | Value |
@@ -289,4 +305,20 @@ prj0000075 ci-simplification branch prj0000075-ci-simplification — project set
 | **summary** | Lifecycle synchronization completed for prj0000098 on branch prj0000098-backend-health-check-endpoint: execution artifact moved from BLOCKED to DONE with full-suite evidence (1278 passed, 10 skipped, 3 warnings in 209.43s), project milestone table updated to M1-M7 DONE and M8 READY_FOR_GIT, and top-level project status aligned for git handoff after @8ql DONE/CLEAR. |
 | **handoff_target** | @9git |
 | **artifact_paths** | docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.project.md, docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.exec.md, docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.ql.md, .github/agents/data/1project.memory.md |
+
+---
+
+## prj0000099 - stub-module-elimination (lifecycle sync)
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000099-lifecycle-sync-ready-for-git |
+| **owner_agent** | @1project |
+| **source** | user request |
+| **created_at** | 2026-03-29 |
+| **updated_at** | 2026-03-29 |
+| **status** | DONE |
+| **summary** | Synchronized lifecycle state for prj0000099: M1-M7 set to DONE, M8 set READY_FOR_GIT, project overview status set READY_FOR_GIT, and lane kept in Discovery with explicit pre-@9git readiness note because no PR is open yet. |
+| **handoff_target** | @9git |
+| **artifact_paths** | docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.project.md, docs/project/kanban.md, data/projects.json, .github/agents/data/1project.memory.md |
 

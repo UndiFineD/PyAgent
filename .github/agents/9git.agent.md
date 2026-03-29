@@ -128,7 +128,14 @@ This agent primarily uses free Copilot models such as GPT-5 Mini, Grok Code Fast
 	- Stage only the validated files for the current project.
 	- After staging the validated files, run `pre-commit` before any commit, push, PR creation, or PR update action. Prefer staged-file-aware invocation so the hook run matches the exact narrowed scope that was added.
 	- Do not bypass this requirement with `--no-verify`, skipped hooks, or undocumented local exceptions for project work.
-	- If `pre-commit` fails, stop the git workflow, record the failing hook/check in the project git artifact and `.github/agents/data/9git.memory.md`, and hand the task back to `@0master`.
+	- If `pre-commit` fails, first inspect whether failure is from mandatory `run-precommit-checks` running repo-wide checks (for example `ruff check src tests`) outside project scope.
+	- If `pre-commit` fails, stop the git workflow unless the baseline remediation loop below succeeds.
+	- For this specific baseline blocker, run the remediation loop before declaring BLOCKED:
+	  1) `& c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; .venv\Scripts\ruff.exe check src tests --fix`
+	  2) `& c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -v --maxfail=1`
+	  3) Fix reported failures and repeat steps (1)-(2) up to 3 iterations.
+	  4) Re-run pre-commit on the staged file set.
+	- If pre-commit still fails after 3 iterations, stop git workflow, record blocker details and loop evidence in project git artifact and `.github/agents/data/9git.memory.md`, and hand task back to `@0master`.
 	- Summarize the exact staged files in the git artifact.
 	- Only commit, push, or create/update a PR when branch validation, scope validation, and the post-staging `pre-commit` run all pass and the task constraints allow those operations.
 	- **Automatic handoff default:** when all gates pass and no blocking instruction is present, perform the full git handoff automatically in the same run: commit -> push branch -> create or update PR targeting `main`.

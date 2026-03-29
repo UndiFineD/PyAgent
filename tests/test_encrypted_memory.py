@@ -15,10 +15,12 @@
 
 prj0000027 — encrypted memory blocks.
 """
+
 import pytest
 
 try:
     from rust_core import MemoryBlockRegistry  # type: ignore[import]
+
     _RUST_AVAILABLE = True
 except ImportError:
     _RUST_AVAILABLE = False
@@ -43,7 +45,7 @@ def test_create_block_returns_uuid_string(registry):
 
 
 def test_put_returns_slab_index(registry):
-    """put must return the slab index (0 for the first slab)."""
+    """Put must return the slab index (0 for the first slab)."""
     block_id = registry.create_block()
     idx = registry.put(block_id, b"hello world")
     assert idx == 0
@@ -88,7 +90,7 @@ def test_slab_count(registry):
 
 
 def test_purge_wipes_slabs(registry):
-    """purge must remove all slabs from a block."""
+    """Purge must remove all slabs from a block."""
     block_id = registry.create_block()
     registry.put(block_id, b"sensitive")
     registry.put(block_id, b"data")
@@ -128,7 +130,7 @@ def test_separate_registries_cannot_share_blocks():
 
 
 def test_get_invalid_slab_index_raises(registry):
-    """get must raise when the slab index is out of bounds."""
+    """Get must raise when the slab index is out of bounds."""
     block_id = registry.create_block()
     registry.put(block_id, b"only one slab")
     with pytest.raises(Exception):

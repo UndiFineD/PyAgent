@@ -92,9 +92,7 @@ def test_exception_hierarchy_matches_design_contract() -> None:
     ]
 
     for error_type in leaf_errors:
-        assert issubclass(error_type, root_error), (
-            f"{error_type.__name__} must inherit UniversalShellError"
-        )
+        assert issubclass(error_type, root_error), f"{error_type.__name__} must inherit UniversalShellError"
 
 
 def test_task_envelope_and_dispatch_result_have_required_fields() -> None:

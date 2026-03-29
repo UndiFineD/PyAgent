@@ -106,9 +106,8 @@ def test_all_sarif_files_exist() -> None:
         pytest.skip("CODEQL_SKIP is set")
 
     missing = [str(s.path) for s in _SARIF_SPECS if not s.path.exists()]
-    assert not missing, (
-        "Missing SARIF files (run tests/zzz/test_zzd/e/f to generate them):\n"
-        + "\n".join(f"  {p}" for p in missing)
+    assert not missing, "Missing SARIF files (run tests/zzz/test_zzd/e/f to generate them):\n" + "\n".join(
+        f"  {p}" for p in missing
     )
 
 
@@ -128,9 +127,8 @@ def test_all_sarif_files_are_fresh() -> None:
         if age > MAX_SARIF_AGE_HOURS:
             stale.append(f"{spec.lang}: {age:.1f}h old (>{MAX_SARIF_AGE_HOURS}h)")
 
-    assert not stale, (
-        "Stale SARIF files detected — run with CODEQL_REBUILD=1 to refresh:\n"
-        + "\n".join(f"  {s}" for s in stale)
+    assert not stale, "Stale SARIF files detected — run with CODEQL_REBUILD=1 to refresh:\n" + "\n".join(
+        f"  {s}" for s in stale
     )
 
 
@@ -169,9 +167,7 @@ def test_no_hard_fail_security_findings() -> None:
                 line = loc["region"]["startLine"]
                 all_security.append(f"  [{spec.lang}] {rule_id} @ {uri}:{line}")
 
-    assert not all_security, (
-        "Security findings require immediate remediation:\n" + "\n".join(all_security)
-    )
+    assert not all_security, "Security findings require immediate remediation:\n" + "\n".join(all_security)
 
 
 def test_finding_count_within_baseline() -> None:
@@ -186,9 +182,7 @@ def test_finding_count_within_baseline() -> None:
         sarif = json.loads(spec.path.read_text(encoding="utf-8"))
         count = len(sarif["runs"][0].get("results", []))
         if count > spec.max_total_findings:
-            regressions.append(
-                f"  {spec.lang}: {count} findings > baseline {spec.max_total_findings}"
-            )
+            regressions.append(f"  {spec.lang}: {count} findings > baseline {spec.max_total_findings}")
 
     assert not regressions, (
         "Finding count regressions detected (update max_total_findings in test_zzg if intentional):\n"

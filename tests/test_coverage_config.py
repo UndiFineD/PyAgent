@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests that verify pytest-cov / coverage configuration is present."""
+
 import subprocess
 import sys
 import tomllib
@@ -86,9 +87,7 @@ def test_coverage_report_fail_under_stage1_minimum() -> None:
     pyproject = _load_pyproject_toml()
     fail_under = pyproject.get("tool", {}).get("coverage", {}).get("report", {}).get("fail_under")
     assert isinstance(fail_under, int), "[tool.coverage.report].fail_under must be an integer"
-    assert fail_under >= 40, (
-        "Stage-1 coverage ratchet requires [tool.coverage.report].fail_under >= 40"
-    )
+    assert fail_under >= 40, "Stage-1 coverage ratchet requires [tool.coverage.report].fail_under >= 40"
 
 
 def test_pytest_cov_importable() -> None:
@@ -100,7 +99,9 @@ def test_pytest_cov_importable() -> None:
     """
     result = subprocess.run(
         [sys.executable, "-c", "import pytest_cov; print(pytest_cov.__version__)"],
-        capture_output=True, text=True, timeout=10
+        capture_output=True,
+        text=True,
+        timeout=10,
     )
     assert result.returncode == 0, f"pytest-cov not importable: {result.stderr}"
 

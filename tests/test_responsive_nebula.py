@@ -15,6 +15,7 @@
 
 Each test validates file content — no running server required.
 """
+
 from pathlib import Path
 
 WEB_DIR = Path(__file__).parent.parent / "web"
@@ -33,8 +34,7 @@ def test_web_contains_css_with_responsive_media_queries():
     """Test 1: web/ has a CSS file with @media responsive queries."""
     css_file = _find_responsive_css()
     assert css_file is not None, (
-        "No CSS file with @media queries found under web/. "
-        "Expected web/styles/responsive.css or similar."
+        "No CSS file with @media queries found under web/. Expected web/styles/responsive.css or similar."
     )
     content = css_file.read_text(encoding="utf-8")
     assert "@media" in content
@@ -45,9 +45,7 @@ def test_responsive_css_has_mobile_max_width_768():
     css_file = _find_responsive_css()
     assert css_file is not None, "No responsive CSS file found."
     content = css_file.read_text(encoding="utf-8")
-    assert "768px" in content, (
-        "Expected a max-width: 768px mobile breakpoint in the responsive CSS."
-    )
+    assert "768px" in content, "Expected a max-width: 768px mobile breakpoint in the responsive CSS."
     assert "max-width" in content
 
 
@@ -57,9 +55,7 @@ def test_responsive_css_has_tablet_breakpoint():
     assert css_file is not None, "No responsive CSS file found."
     content = css_file.read_text(encoding="utf-8")
     has_tablet = "1024px" in content or "769px" in content
-    assert has_tablet, (
-        "Expected a tablet breakpoint (769px or 1024px) in the responsive CSS."
-    )
+    assert has_tablet, "Expected a tablet breakpoint (769px or 1024px) in the responsive CSS."
 
 
 def test_app_tsx_imports_or_references_responsive_styles():

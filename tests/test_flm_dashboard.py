@@ -15,6 +15,7 @@
 
 prj0000060 — flm-token-throughput-dashboard.
 """
+
 from __future__ import annotations
 
 from fastapi.testclient import TestClient

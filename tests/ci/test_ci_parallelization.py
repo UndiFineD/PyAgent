@@ -17,6 +17,7 @@
 
 def _load_ci_yml() -> dict:
     import yaml
+
     with open(".github/workflows/ci.yml", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
@@ -30,6 +31,7 @@ def _load_requirements_ci() -> str:
 # Test 1 — ci.yml has matrix under jobs.test.strategy
 # ---------------------------------------------------------------------------
 
+
 def test_ci_workflow_has_matrix():
     data = _load_ci_yml()
     test_job = data["jobs"]["test"]
@@ -40,6 +42,7 @@ def test_ci_workflow_has_matrix():
 # ---------------------------------------------------------------------------
 # Test 2 — matrix.shard has exactly 3 values
 # ---------------------------------------------------------------------------
+
 
 def test_ci_matrix_has_three_shards():
     data = _load_ci_yml()
@@ -52,6 +55,7 @@ def test_ci_matrix_has_three_shards():
 # Test 3 — requirements-ci.txt contains pytest-xdist
 # ---------------------------------------------------------------------------
 
+
 def test_requirements_ci_has_xdist():
     content = _load_requirements_ci()
     assert "pytest-xdist" in content, "requirements-ci.txt must list pytest-xdist"
@@ -60,6 +64,7 @@ def test_requirements_ci_has_xdist():
 # ---------------------------------------------------------------------------
 # Test 4 — at least one run step in ci.yml uses the -n flag (xdist workers)
 # ---------------------------------------------------------------------------
+
 
 def test_ci_uses_parallel_flag():
     with open(".github/workflows/ci.yml", encoding="utf-8") as f:

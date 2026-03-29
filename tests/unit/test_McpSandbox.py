@@ -91,9 +91,7 @@ def test_build_env_inherits_allowed_vars() -> None:
     assert "PATH" in env, f"Sanitised env is missing PATH; got keys: {list(env.keys())}"
     # PATH must point to (or include) the binary's directory.
     binary_dir = str(Path("/usr/bin/node").parent)
-    assert binary_dir in env["PATH"], (
-        f"Expected binary dir '{binary_dir}' in PATH '{env['PATH']}'"
-    )
+    assert binary_dir in env["PATH"], f"Expected binary dir '{binary_dir}' in PATH '{env['PATH']}'"
 
 
 # ---------------------------------------------------------------------------
@@ -119,9 +117,7 @@ def test_build_env_strips_disallowed_vars() -> None:
         env, _masked = sandbox.build_env(config)
 
     assert "HOME" not in env, f"HOME must be stripped from sandbox env; found: {env.get('HOME')}"
-    assert "AWS_SECRET_ACCESS_KEY" not in env, (
-        "AWS_SECRET_ACCESS_KEY must be stripped from sandbox env"
-    )
+    assert "AWS_SECRET_ACCESS_KEY" not in env, "AWS_SECRET_ACCESS_KEY must be stripped from sandbox env"
     assert "AWS_ACCESS_KEY_ID" not in env, "AWS_ACCESS_KEY_ID must be stripped from sandbox env"
 
 
@@ -172,9 +168,7 @@ def test_validate_path_allows_declared_paths(tmp_path: Path) -> None:
 
     # Must not raise and must return a truthy value.
     result = sandbox.validate_path(str(test_file), config)
-    assert result is not False, (
-        f"validate_path should allow '{test_file}' under allowed dir '{allowed_dir}'"
-    )
+    assert result is not False, f"validate_path should allow '{test_file}' under allowed dir '{allowed_dir}'"
 
 
 # ---------------------------------------------------------------------------
@@ -254,12 +248,8 @@ async def test_spawn_uses_sanitised_env() -> None:
         with patch("asyncio.create_subprocess_exec", side_effect=fake_create_subprocess_exec):
             await sandbox.spawn(config)
 
-    assert "SECRET_NOT_DECLARED" not in captured_env, (
-        "Undeclared host env var must not be forwarded to subprocess"
-    )
-    assert "DECLARED_VAR" in captured_env, (
-        "Declared env_var must be present in subprocess env"
-    )
+    assert "SECRET_NOT_DECLARED" not in captured_env, "Undeclared host env var must not be forwarded to subprocess"
+    assert "DECLARED_VAR" in captured_env, "Declared env_var must be present in subprocess env"
 
 
 # ---------------------------------------------------------------------------

@@ -15,11 +15,12 @@
 
 prj0000062 — live-agent-execution-in-codebuilder
 """
+
 from __future__ import annotations
 
-import backend.auth as _auth
 from fastapi.testclient import TestClient
 
+import backend.auth as _auth
 from backend.app import app
 
 # Force dev mode so no auth headers are needed in tests.
@@ -28,8 +29,16 @@ _auth.DEV_MODE = True
 client = TestClient(app)
 
 PIPELINE_STAGES = [
-    "0master", "1project", "2think", "3design", "4plan",
-    "5test", "6code", "7exec", "8ql", "9git",
+    "0master",
+    "1project",
+    "2think",
+    "3design",
+    "4plan",
+    "5test",
+    "6code",
+    "7exec",
+    "8ql",
+    "9git",
 ]
 
 

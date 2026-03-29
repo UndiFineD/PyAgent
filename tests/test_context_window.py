@@ -20,7 +20,6 @@ import pytest
 
 from context_manager.window import ContextSegment, ContextWindow
 
-
 # ---------------------------------------------------------------------------
 # ContextSegment
 # ---------------------------------------------------------------------------
@@ -112,9 +111,9 @@ async def test_window_to_dict() -> None:
 async def test_window_prunes_oldest_when_over_budget() -> None:
     """Equal priority → prune oldest first."""
     win = ContextWindow(max_tokens=4)
-    await win.push("one two", priority=1)    # 2 tokens
+    await win.push("one two", priority=1)  # 2 tokens
     await win.push("three four", priority=1)  # 2 tokens — total = 4, OK
-    await win.push("five six", priority=1)    # 2 tokens — total = 6, must prune
+    await win.push("five six", priority=1)  # 2 tokens — total = 6, must prune
 
     # Should have pruned "one two" (oldest)
     remaining = [s.text for s in win.segments]
@@ -127,8 +126,8 @@ async def test_window_prunes_low_priority_first() -> None:
     """Lower priority segments are pruned before older high-priority ones."""
     win = ContextWindow(max_tokens=4)
     await win.push("system context", priority=10)  # 2 tokens, high pri
-    await win.push("user message", priority=1)     # 2 tokens, low pri — total = 4
-    await win.push("new data", priority=5)          # 2 tokens — total = 6, must prune
+    await win.push("user message", priority=1)  # 2 tokens, low pri — total = 4
+    await win.push("new data", priority=5)  # 2 tokens — total = 6, must prune
 
     remaining_texts = [s.text for s in win.segments]
     # Low-priority "user message" should be pruned, not the high-priority system context

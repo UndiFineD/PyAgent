@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for SwarmMemory and SwarmNode (prj0000022)."""
+
 import pytest
+
 from swarm.memory_store import SwarmMemory
 from swarm.swarm_node import SwarmNode
 
@@ -73,7 +75,7 @@ async def test_swarm_node_ping():
 @pytest.mark.asyncio
 async def test_swarm_node_pong_on_ping():
     node = SwarmNode("node-B")
-    ping = (await SwarmNode("node-A").ping("node-B"))
+    ping = await SwarmNode("node-A").ping("node-B")
     reply = await node.receive(ping)
     assert reply is not None
     assert reply["type"] == "pong"

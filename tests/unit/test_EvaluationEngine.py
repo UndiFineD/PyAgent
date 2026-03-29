@@ -45,14 +45,10 @@ def test_rubric_score_weighted_total() -> None:
 def test_rubric_score_weights() -> None:
     """Each axis contribution to weighted_total matches its expected weight coefficient."""
     score_c = RubricScore(correctness=10.0, completeness=0.0, reasoning_depth=0.0)
-    assert abs(score_c.weighted_total - 5.0) < 1e-6, (
-        f"Correctness weight should be 0.5; got {score_c.weighted_total}"
-    )
+    assert abs(score_c.weighted_total - 5.0) < 1e-6, f"Correctness weight should be 0.5; got {score_c.weighted_total}"
 
     score_p = RubricScore(correctness=0.0, completeness=10.0, reasoning_depth=0.0)
-    assert abs(score_p.weighted_total - 3.0) < 1e-6, (
-        f"Completeness weight should be 0.3; got {score_p.weighted_total}"
-    )
+    assert abs(score_p.weighted_total - 3.0) < 1e-6, f"Completeness weight should be 0.3; got {score_p.weighted_total}"
 
     score_r = RubricScore(correctness=0.0, completeness=0.0, reasoning_depth=10.0)
     assert abs(score_r.weighted_total - 2.0) < 1e-6, (
@@ -73,14 +69,12 @@ def test_correctness_penalizes_contradictions() -> None:
         "since 987 AD and hosts the national government."
     )
     contradicting_text = (
-        "Actually, that's wrong. I was wrong earlier. Wait, let me reconsider. "
-        "Actually no, that is not correct at all."
+        "Actually, that's wrong. I was wrong earlier. Wait, let me reconsider. Actually no, that is not correct at all."
     )
     clean_score = engine._score_correctness(clean_text)
     bad_score = engine._score_correctness(contradicting_text)
     assert clean_score > bad_score, (
-        f"Clean text ({clean_score:.3f}) must score higher correctness "
-        f"than self-correcting text ({bad_score:.3f})"
+        f"Clean text ({clean_score:.3f}) must score higher correctness than self-correcting text ({bad_score:.3f})"
     )
 
 
@@ -93,17 +87,12 @@ def test_completeness_rewards_keyword_recall() -> None:
     """Text containing all prompt keywords scores higher completeness than text with none."""
     engine = EvaluationEngine()
     prompt = "explain machine learning algorithms neural networks"
-    text_with_keywords = (
-        "Machine learning algorithms use neural networks for pattern recognition."
-    )
-    text_without_keywords = (
-        "This generic response does not touch on the subject at all and stays vague."
-    )
+    text_with_keywords = "Machine learning algorithms use neural networks for pattern recognition."
+    text_without_keywords = "This generic response does not touch on the subject at all and stays vague."
     score_with = engine._score_completeness(text_with_keywords, prompt)
     score_without = engine._score_completeness(text_without_keywords, prompt)
     assert score_with > score_without, (
-        f"Keyword-rich text ({score_with:.3f}) must outscore keyword-absent text "
-        f"({score_without:.3f})"
+        f"Keyword-rich text ({score_with:.3f}) must outscore keyword-absent text ({score_without:.3f})"
     )
 
 
@@ -124,8 +113,7 @@ def test_reasoning_depth_rewards_connectives() -> None:
     deep_score = engine._score_reasoning_depth(deep_reasoning)
     shallow_score = engine._score_reasoning_depth(shallow_text)
     assert deep_score > shallow_score, (
-        f"Connective-rich text ({deep_score:.3f}) must outscore flat text "
-        f"({shallow_score:.3f})"
+        f"Connective-rich text ({deep_score:.3f}) must outscore flat text ({shallow_score:.3f})"
     )
 
 
@@ -138,19 +126,13 @@ def test_reasoning_depth_rewards_structure() -> None:
     """A numbered list scores higher reasoning depth than equivalent unstructured prose."""
     engine = EvaluationEngine()
     structured_text = (
-        "1. First, initialise the weights.\n"
-        "2. Second, compute the forward pass.\n"
-        "3. Third, backpropagate the gradient."
+        "1. First, initialise the weights.\n2. Second, compute the forward pass.\n3. Third, backpropagate the gradient."
     )
-    unstructured_text = (
-        "Initialise the weights then compute the forward pass "
-        "then backpropagate the gradient."
-    )
+    unstructured_text = "Initialise the weights then compute the forward pass then backpropagate the gradient."
     structured_score = engine._score_reasoning_depth(structured_text)
     unstructured_score = engine._score_reasoning_depth(unstructured_text)
     assert structured_score > unstructured_score, (
-        f"Structured text ({structured_score:.3f}) must outscore "
-        f"unstructured text ({unstructured_score:.3f})"
+        f"Structured text ({structured_score:.3f}) must outscore unstructured text ({unstructured_score:.3f})"
     )
 
 
@@ -162,19 +144,11 @@ def test_reasoning_depth_rewards_structure() -> None:
 def test_select_best_returns_highest_score() -> None:
     """EvaluationEngine.select_best returns the ReasoningChain with the highest score."""
     engine = EvaluationEngine()
-    chain_low = ReasoningChain(
-        text="low quality", score=2.0, round_n=0, temperature=0.7, alternative_idx=0
-    )
-    chain_high = ReasoningChain(
-        text="high quality", score=9.0, round_n=0, temperature=0.85, alternative_idx=1
-    )
-    chain_mid = ReasoningChain(
-        text="medium quality", score=5.0, round_n=0, temperature=1.0, alternative_idx=2
-    )
+    chain_low = ReasoningChain(text="low quality", score=2.0, round_n=0, temperature=0.7, alternative_idx=0)
+    chain_high = ReasoningChain(text="high quality", score=9.0, round_n=0, temperature=0.85, alternative_idx=1)
+    chain_mid = ReasoningChain(text="medium quality", score=5.0, round_n=0, temperature=1.0, alternative_idx=2)
     best = engine.select_best([chain_low, chain_high, chain_mid])
-    assert best is chain_high, (
-        f"Expected chain_high (score=9.0) but got score={best.score}"
-    )
+    assert best is chain_high, f"Expected chain_high (score=9.0) but got score={best.score}"
 
 
 # ---------------------------------------------------------------------------
@@ -193,9 +167,7 @@ def test_select_best_tie_breaks_by_depth() -> None:
     )
     # Deliberately pass chain_second first to confirm ordering is not list-order dependent
     best = engine.select_best([chain_second, chain_first])
-    assert best is chain_first, (
-        "On equal score, select_best must return the chain with the lower alternative_idx"
-    )
+    assert best is chain_first, "On equal score, select_best must return the chain with the lower alternative_idx"
 
 
 # ---------------------------------------------------------------------------
@@ -211,9 +183,7 @@ def test_completeness_empty_prompt_keywords() -> None:
         "some detailed answer covering the topic comprehensively",
         "do it",
     )
-    assert score == 1.0, (
-        f"Expected 1.0 for empty keyword set but got {score}"
-    )
+    assert score == 1.0, f"Expected 1.0 for empty keyword set but got {score}"
 
 
 # ---------------------------------------------------------------------------
@@ -231,9 +201,7 @@ def test_reasoning_depth_caps_at_one() -> None:
         "2. the analysis demonstrates the result is valid and complete"
     )
     score = engine._score_reasoning_depth(fully_saturated_text)
-    assert score == 1.0, (
-        f"Expected capped score of 1.0 but got {score}"
-    )
+    assert score == 1.0, f"Expected capped score of 1.0 but got {score}"
 
 
 # ---------------------------------------------------------------------------

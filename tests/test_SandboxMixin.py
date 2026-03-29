@@ -54,9 +54,7 @@ def test_sandbox_mixin_validate_host_raises_on_blocked_host() -> None:
 
         def __init__(self) -> None:
             """Initialize with empty host allowlist."""
-            self._sandbox_config = SandboxConfig.from_strings(
-                paths=[], hosts=["trusted.example.com"]
-            )
+            self._sandbox_config = SandboxConfig.from_strings(paths=[], hosts=["trusted.example.com"])
 
     agent = Agent()
     with pytest.raises(SandboxViolationError):

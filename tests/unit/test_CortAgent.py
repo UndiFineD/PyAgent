@@ -90,9 +90,7 @@ def test_cort_mixin_injects_into_base_agent() -> None:
         """Test class combining cort mixin with the stub base."""
 
     method = getattr(AgentWithCort, "reason_with_cort", None)
-    assert callable(method), (
-        "CortMixin must inject 'reason_with_cort' as a callable method"
-    )
+    assert callable(method), "CortMixin must inject 'reason_with_cort' as a callable method"
 
 
 # ---------------------------------------------------------------------------
@@ -120,9 +118,7 @@ async def test_cort_agent_reentrant_raises() -> None:
     nested_raised: list[bool] = [False]
     agent: CortAgent | None = None
 
-    async def reentrant_llm(
-        prompt: str, *, temperature: float, max_tokens: int
-    ) -> str:
+    async def reentrant_llm(prompt: str, *, temperature: float, max_tokens: int) -> str:
         """Attempt a nested reason_with_cort call to trigger the recursion guard."""
         nonlocal agent
         try:
@@ -142,8 +138,7 @@ async def test_cort_agent_reentrant_raises() -> None:
     await agent.run_task("outer prompt")
 
     assert nested_raised[0], (
-        "CortRecursionError must be raised when reason_with_cort is called re-entrantly "
-        "on the same CortAgent instance"
+        "CortRecursionError must be raised when reason_with_cort is called re-entrantly on the same CortAgent instance"
     )
 
 

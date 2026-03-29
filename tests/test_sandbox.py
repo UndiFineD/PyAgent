@@ -130,9 +130,7 @@ def test_validate_host_allowed_passes(tmp_path: Path) -> None:
 
         def __init__(self) -> None:
             """Initialize with a config that whitelists trusted.example.com."""
-            self._sandbox_config = SandboxConfig.from_strings(
-                [str(tmp_path)], ["trusted.example.com"]
-            )
+            self._sandbox_config = SandboxConfig.from_strings([str(tmp_path)], ["trusted.example.com"])
 
     agent = _Agent()
     # Should not raise — host is in the allowlist
@@ -150,9 +148,7 @@ def test_validate_host_forbidden_raises(tmp_path: Path) -> None:
 
         def __init__(self) -> None:
             """Initialize with a config that only allows trusted.example.com."""
-            self._sandbox_config = SandboxConfig.from_strings(
-                [str(tmp_path)], ["trusted.example.com"]
-            )
+            self._sandbox_config = SandboxConfig.from_strings([str(tmp_path)], ["trusted.example.com"])
 
     agent = _Agent()
     with pytest.raises(SandboxViolationError) as exc_info:
@@ -171,9 +167,7 @@ def test_validate_host_allow_all_hosts_bypasses(tmp_path: Path) -> None:
 
         def __init__(self) -> None:
             """Initialize with allow_all_hosts=True (empty allowlist)."""
-            self._sandbox_config = SandboxConfig.from_strings(
-                [str(tmp_path)], [], allow_all_hosts=True
-            )
+            self._sandbox_config = SandboxConfig.from_strings([str(tmp_path)], [], allow_all_hosts=True)
 
     agent = _Agent()
     # Neither of these should raise when allow_all_hosts is True

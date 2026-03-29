@@ -15,13 +15,16 @@
 
 Tests NodeIdentity and LoopbackChannel via the Python transport API.
 """
+
 import pytest
 
 _TRANSPORT_AVAILABLE = False
 try:
     import rust_core as _rc
+
     if hasattr(_rc, "generate_node_identity"):
         from transport import LoopbackChannel, NodeIdentity
+
         _TRANSPORT_AVAILABLE = True
 except ImportError:
     pass
@@ -33,6 +36,7 @@ pytestmark = pytest.mark.skipif(
 
 
 # ─── NodeIdentity ─────────────────────────────────────────────────────────
+
 
 def test_node_identity_public_key_is_32_bytes():
     """NodeIdentity.public_key must be 32 bytes (Ed25519 verifying key)."""
@@ -72,6 +76,7 @@ def test_node_identity_repr():
 
 
 # ─── LoopbackChannel ──────────────────────────────────────────────────────
+
 
 def test_loopback_channel_send_recv():
     """LoopbackChannel.send/recv must deliver a plaintext message end-to-end."""

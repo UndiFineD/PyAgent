@@ -6,7 +6,6 @@ import pathlib
 
 import pytest
 
-
 KNOWN_SYNC_LOOP_PATHS: set[str] = {
     "src/core/audit/AuditEvent.py",
     "src/core/audit/AuditTrailCore.py",

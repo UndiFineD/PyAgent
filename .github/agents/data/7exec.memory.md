@@ -5,6 +5,62 @@ integration checks, and smoke test outcomes.
 
 ---
 
+## Last run - 2026-03-29 PASSED -> @8ql
+- Task: prj0000099 stub-module-elimination (post git-artifact fix rerun)
+- Status: OPEN -> IN_PROGRESS -> DONE
+- task_id: prj0000099-stub-module-elimination
+- handoff_target: @8ql
+- Branch gate: PASS (expected = observed = prj0000099-stub-module-elimination)
+- Tests run:
+  - Focused package suite: `python -m pytest -q tests/test_rl_package.py tests/test_speculation_package.py tests/test_cort.py tests/test_memory_package.py tests/test_runtime.py` -> PASSED (`5 passed in 1.70s`)
+  - Docs policy smoke: `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py::test_git_summaries_use_modern_branch_plan_format_or_carry_legacy_exception` -> PASSED (`1 passed in 0.74s`)
+- Import check: SKIPPED (not part of requested focused rerun commands)
+- Smoke test: PASS (requested docs policy smoke check)
+- rust_core: SKIPPED (not modified in this scope)
+- Dependency warnings: NONE (classified NON_BLOCKING)
+- Outcome: READY_FOR_8QL
+- Notes:
+  - Previous blocker is resolved; `prj0000099-stub-module-elimination.git.md` now passes modern Branch Plan policy validation.
+
+### Lesson - 2026-03-29 (prj0000099 rerun after artifact fix)
+- Pattern: Immediate focused rerun after governance artifact repair confirms closure without re-expanding test scope.
+- Root cause: Prior docs-policy failure was isolated to project git artifact format drift.
+- Prevention: Re-run branch gate + focused pytest + docs policy smoke in sequence after artifact-only fixes.
+- First seen: 2026-03-29
+- Seen in: prj0000099-stub-module-elimination
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
+## Last run - 2026-03-29 BLOCKED -> @6code
+- Task: prj0000099 stub-module-elimination (validation-first closure)
+- Status: OPEN -> IN_PROGRESS -> BLOCKED
+- task_id: prj0000099-stub-module-elimination
+- handoff_target: @6code
+- Branch gate: PASS (expected = observed = prj0000099-stub-module-elimination)
+- Tests run:
+  - Focused package suite: `python -m pytest -q tests/test_rl_package.py tests/test_speculation_package.py tests/test_cort.py tests/test_memory_package.py tests/test_runtime.py` -> PASSED (`5 passed in 2.24s`)
+  - Docs policy smoke: `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py::test_git_summaries_use_modern_branch_plan_format_or_carry_legacy_exception` -> FAILED (`1 failed in 0.94s`)
+- Import check: SKIPPED (not part of requested focused closure commands)
+- Smoke test: FAIL (docs policy smoke requested and executed)
+- rust_core: SKIPPED (not modified in this scope)
+- Dependency warnings: NONE (classified NON_BLOCKING)
+- Outcome: BLOCKED_FOR_8QL
+- Notes:
+  - Blocking assertion:
+    - `docs/project/prj0000099-stub-module-elimination/prj0000099-stub-module-elimination.git.md` missing required modern section `## Branch Plan`.
+  - Focused implementation validation remains green; blocker is project artifact policy format only.
+
+### Lesson - 2026-03-29 (prj0000099 docs-policy blocker)
+- Pattern: Validation-first closure can still fail at @7exec due to documentation policy gates in project `*.git.md` artifacts.
+- Root cause: Active project git summary omitted required modern `## Branch Plan` section.
+- Prevention: Add/update `## Branch Plan` (or explicit `## Legacy Branch Exception` where allowed) before running docs-policy smoke at @7exec.
+- First seen: 2026-03-29
+- Seen in: prj0000099-stub-module-elimination
+- Recurrence count: 2
+- Promotion status: PROMOTED_HARD_RULE
+
+---
+
 ## Last run - 2026-03-29 BLOCKED -> @6code
 - Task: prj0000098 backend-health-check-endpoint (revalidation after blocker fixes)
 - Status: OPEN -> IN_PROGRESS -> BLOCKED
