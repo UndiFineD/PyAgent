@@ -47,8 +47,8 @@
 
 ### Entry 2026-03-31 - prj0000107 specialized agent library @5test artifact completion
 - task_id: prj0000107-idea000015-specialized-agent-library
-- status: IN_PROGRESS
-- lifecycle_transition: OPEN -> IN_PROGRESS
+- status: DONE
+- lifecycle_transition: OPEN -> IN_PROGRESS -> DONE
 - branch_gate:
 	- expected: prj0000107-idea000015-specialized-agent-library
 	- observed: prj0000107-idea000015-specialized-agent-library
@@ -68,10 +68,10 @@
 	- PASS: branch validation
 	- PASS: AC-to-test matrix completeness
 	- PASS: weak-test gate policy definition
-	- PENDING: docs policy validation command execution
-	- PENDING: narrow commit and push
+	- PASS: docs policy validation command execution (12 passed)
+	- PASS: narrow commit and push (36b706274)
 - handoff_notes:
-	- @6code readiness: READY_FOR_IMPLEMENTATION_CONTRACTS after docs validation + commit/push closure
+	- @6code readiness: READY_FOR_IMPLEMENTATION_CONTRACTS
 
 #### Lesson
 - Pattern: Deterministic selector ordering plus explicit forbidden red signatures prevents false red evidence and weak contract handoff.
