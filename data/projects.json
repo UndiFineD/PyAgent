@@ -1662,7 +1662,7 @@
   {
     "id": "prj0000101",
     "name": "idea-013 - backend-health-check-endpoint",
-    "lane": "Review",
+    "lane": "Discovery",
     "summary": "This idea focuses on backend health check endpoint in area 3 – Backend. The current signal indicates priority P2, impact M, and urgency H. The SWOT tag is W (Weakness in current implementation).",
     "branch": null,
     "pr": null,
@@ -1678,10 +1678,10 @@
   {
     "id": "prj0000102",
     "name": "idea-014 - pyproject-requirements-sync",
-    "lane": "Review",
+    "lane": "Released",
     "summary": "This idea focuses on pyproject requirements sync in area 9 – Dependencies. The current signal indicates priority P2, impact M, and urgency M. The SWOT tag is W (Weakness in current implementation).",
-    "branch": null,
-    "pr": null,
+    "branch": "merged",
+    "pr": "#251 #252",
     "priority": "P3",
     "budget_tier": "S",
     "tags": [
@@ -1689,6 +1689,6 @@
       "idea000014"
     ],
     "created": "2026-03-29",
-    "updated": "2026-03-29"
+    "updated": "2026-03-30"
   }
 ]
