@@ -33,6 +33,9 @@
   - `src\tools\proxy_test.py`
   - `tests\agents\test_agents.py`
   - `tests\agents\test_base_agent.py`
+  - `tests\backend\test_health_probes_access_control.py`
+  - `tests\backend\test_health_probes_contract.py`
+  - `tests\backend\test_health_probes_security.py`
   - `tests\ci\test_ci_parallelization.py`
   - `tests\ci\test_ci_workflow.py`
   - `tests\ci\test_workflow_count.py`
@@ -41,6 +44,7 @@
   - `tests\docs\test_agent_workflow_policy_docs.py`
   - `tests\docs\test_allowed_websites_governance.py`
   - `tests\docs\test_api_docs_exist.py`
+  - `tests\docs\test_architecture_adr_governance.py`
   - `tests\docs\test_changelog.py`
   - `tests\docs\test_codestructure_governance.py`
   - `tests\docs\test_copilot_instructions_governance.py`
@@ -80,6 +84,7 @@
   - `tests\structure\test_config_files.py`
   - `tests\structure\test_coverage_option.py`
   - `tests\structure\test_data_script.py`
+  - `tests\structure\test_dependency_drift_ci.py`
   - `tests\structure\test_deployment_dirs.py`
   - `tests\structure\test_design_doc.py`
   - `tests\structure\test_dev_tools_dirs.py`

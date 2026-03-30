@@ -30,6 +30,7 @@
   - `src\chat\mcp_tools.py`
   - `src\core\crdt_bridge.py`
   - `src\core\security_bridge.py`
+  - `tests\backend\test_health_probes_security.py`
   - `tests\structure\test_dev_tools_dirs.py`
   - `tests\test_crdt_bridge.py`
   - `tests\test_rust_crdt_merge.py`

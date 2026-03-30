@@ -1,6 +1,6 @@
 # idea-013 - backend-health-check-endpoint
 
-Planned project mapping: None yet
+Planned project mapping: prj0000101
 
 ## Idea summary
 This idea focuses on backend health check endpoint in area 3 – Backend. The current signal indicates priority P2, impact M, and urgency H. The SWOT tag is W (Weakness in current implementation).
@@ -41,3 +41,9 @@ If you leave this area unresolved, it can create compounding risk in build stabi
 ## Source references
 - docs\project\kanban.md
 - docs\project\prj0000076\prj0000076.think.md
+
+## SWOT Data
+Strength: pending analysis; Weakness: pending analysis; Opportunity: pending analysis; Threat: pending analysis.
+
+## Risk Data
+Risk: pending analysis; Likelihood: M; Impact: M; Mitigation: define owner and controls.

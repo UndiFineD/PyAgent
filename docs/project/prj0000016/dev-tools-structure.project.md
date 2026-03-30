@@ -19,6 +19,7 @@ _No checkbox tasks found in the plan file._
 
 - Code detected in:
   - `rust_core\src\inference\tools.rs`
+  - `scripts\codestructure_governance.py`
   - `scripts\setup_structure.py`
   - `src\chat\mcp_tools.py`
   - `tests\docs\test_codestructure_governance.py`
