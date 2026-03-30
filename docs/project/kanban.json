@@ -156,6 +156,23 @@
   ],
   "projects": [
     {
+      "id": "prj0000107",
+      "name": "idea000015-specialized-agent-library",
+      "lane": "Discovery",
+      "summary": "Initialize workflow artifacts for idea000015 specialized agent library and hand off to @2think discovery.",
+      "branch": "prj0000107-idea000015-specialized-agent-library",
+      "pr": null,
+      "priority": "P2",
+      "budget_tier": "M",
+      "tags": [
+        "idea",
+        "idea000015",
+        "specialized-agent-library"
+      ],
+      "created": "2026-03-30",
+      "updated": "2026-03-30"
+    },
+    {
       "id": "prj0000106",
       "name": "idea000080-smart-prompt-routing-system",
       "lane": "Released",
