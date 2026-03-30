@@ -9,6 +9,36 @@
 ## Entries
 
 ## Last run - 2026-03-30
+- task_id: prj0000106-idea000080-smart-prompt-routing-system
+- Task: Runtime validation for smart prompt routing implementation after @6code handoff
+- Branch gate: PASS (expected=prj0000106-idea000080-smart-prompt-routing-system, observed=prj0000106-idea000080-smart-prompt-routing-system)
+- Dependency gate: PASS (`python -m pip check` -> no broken requirements), classification: NON_BLOCKING
+- Project selector gate: PASS (`python -m pytest -q tests/core/routing` -> 11 passed)
+- Full runtime fail-fast gate: FAIL (`python -m pytest src/ tests/ -x --tb=short -q` -> 1 failed, 492 passed)
+- Failing selector: `tests/test_async_loops.py::test_no_sync_loops`
+- Failure detail: synchronous loop detected in `src/core/routing/classifier_schema.py` line 42
+- Import check: PASS (15/15 changed routing modules)
+- Placeholder scan: PASS (no matches in `src/core/routing` and `tests/core/routing`)
+- Docs policy gate: PASS (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 12 passed)
+- Pre-commit gate: FAIL (`pre-commit run --files ...` -> shared `run-precommit-checks` failures)
+- Shared failing selectors under pre-commit:
+	- `tests/test_core_quality.py::test_each_core_has_test_file`
+	- `tests/test_core_quality.py::test_validate_function_exists`
+	- `tests/test_async_loops.py::test_no_sync_loops`
+- Outcome: BLOCKED -> @6code
+- Next handoff target: @6code
+- Notes: Runtime run is conclusive (no interruption); security handoff to @8ql is blocked pending @6code fix.
+
+### Lesson
+- Pattern: New routing modules can satisfy AC selectors while still violating repository-wide async-loop governance tests.
+- Root cause: `classifier_schema.py` introduced a synchronous loop pattern detected by `tests/test_async_loops.py`.
+- Prevention: Before @7exec handoff requests for routing/core changes, run `python -m pytest -q tests/test_async_loops.py::test_no_sync_loops` in @6code validation.
+- First seen: 2026-03-30
+- Seen in: prj0000106-idea000080-smart-prompt-routing-system
+- Recurrence count: 1
+- Promotion status: Candidate
+
+## Last run - 2026-03-30
 - task_id: prj0000105-idea000016-mixin-architecture-base
 - Task: Final @7exec rerun after latest core-quality blocker fixes
 - Branch gate: PASS (prj0000105-idea000016-mixin-architecture-base)
