@@ -121,8 +121,7 @@ def render_requirements_content(dependencies: list[str]) -> str:
 
     """
     normalized_items = [
-        (canonicalize_name(Requirement(dep).name), _normalize_dependency(dep), dep)
-        for dep in dependencies
+        (canonicalize_name(Requirement(dep).name), _normalize_dependency(dep), dep) for dep in dependencies
     ]
     package_names = [item[0] for item in normalized_items]
     duplicate_name = next(
@@ -132,9 +131,7 @@ def render_requirements_content(dependencies: list[str]) -> str:
     if duplicate_name is not None:
         first_index = package_names.index(duplicate_name)
         second_index = next(
-            index
-            for index, name in enumerate(package_names)
-            if name == duplicate_name and index != first_index
+            index for index, name in enumerate(package_names) if name == duplicate_name and index != first_index
         )
         previous_dep = normalized_items[first_index][2]
         duplicate_dep = normalized_items[second_index][2]
@@ -180,16 +177,11 @@ def _validate_dependency_policy(dependencies: list[str]) -> list[str]:
                     f"Critical package '{package_name}' must have a version specifier",
                 ]
 
-            disallowed_operators = [
-                spec.operator for spec in requirement.specifier if spec.operator not in allowed_ops
-            ]
+            disallowed_operators = [spec.operator for spec in requirement.specifier if spec.operator not in allowed_ops]
             if disallowed_operators:
                 allowed = ", ".join(allowed_ops)
                 return [
-                    (
-                        f"Critical package '{package_name}' has disallowed operator "
-                        f"'{operator}' (allowed: {allowed})"
-                    )
+                    (f"Critical package '{package_name}' has disallowed operator '{operator}' (allowed: {allowed})")
                     for operator in disallowed_operators
                 ]
 

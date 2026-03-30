@@ -12,63 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""SandboxMixin — mixin providing sandboxed I/O factory and host validation."""
+"""Compatibility shim for legacy sandbox mixin import path."""
 
 from __future__ import annotations
 
+from src.core.base.mixins.sandbox_mixin import SandboxMixin
 from src.core.sandbox.SandboxConfig import SandboxConfig
-from src.core.sandbox.SandboxedStorageTransaction import SandboxedStorageTransaction
 from src.core.sandbox.SandboxViolationError import SandboxViolationError
 
-
-class SandboxMixin:
-    """Mixin that equips an agent class with sandbox-enforced I/O helpers.
-
-    Expects the consuming class to set ``self._sandbox_config`` to a
-    ``SandboxConfig`` instance before calling any mixin method.
-
-    Usage::
-
-        class MyAgent(SandboxMixin):
-            def __init__(self, allowed_dir: Path) -> None:
-                self._sandbox_config = SandboxConfig.from_strings([str(allowed_dir)], [])
-    """
-
-    _sandbox_config: SandboxConfig
-
-    def sandbox_tx(self) -> SandboxedStorageTransaction:
-        """Return a new SandboxedStorageTransaction bound to this agent's sandbox config.
-
-        Returns:
-            A fresh SandboxedStorageTransaction instance ready for queuing operations.
-
-        """
-        return SandboxedStorageTransaction(sandbox=self._sandbox_config)
-
-    def _validate_host(self, host: str) -> None:
-        """Raise SandboxViolationError when *host* is not in the allowed_hosts list.
-
-        A no-op when allow_all_hosts is True.
-
-        Args:
-            host: Hostname or IP string to validate against the allowlist.
-
-        Raises:
-            SandboxViolationError: When host is not in allowed_hosts and allow_all_hosts is False.
-
-        """
-        if self._sandbox_config.allow_all_hosts:
-            return
-        if host not in self._sandbox_config.allowed_hosts:
-            raise SandboxViolationError(resource=host, reason="host not in allowed_hosts")
+__shim_target__ = "src.core.base.mixins.sandbox_mixin.SandboxMixin"
+__shim_removal_wave__ = "W4"
 
 
 def validate() -> bool:
-    """Validate that the SandboxMixin module is correctly configured.
+    """Validate that the sandbox compatibility shim is correctly configured.
 
     Returns:
-        True when the module can be imported and the mixin class is accessible.
+        True when this shim and canonical target are importable.
 
     """
     assert SandboxMixin is not None
     return True
+
+
+__all__ = ["SandboxMixin", "SandboxConfig", "SandboxViolationError", "validate"]

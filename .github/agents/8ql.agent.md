@@ -20,6 +20,7 @@ It **does** update `.github/agents/data/` memory files and `.github/agents/*.age
 - Standard lesson schema (required in memory entries): Pattern, Root cause, Prevention, First seen, Seen in, Recurrence count, Promotion status.
 - Recurrence threshold policy: promote a lesson to a hard rule when Recurrence count >= 2.
 - Review cadence: every 5 completed projects, review top recurring blockers and update rules/memory.
+- Hard rule: when dependency CVE findings differ from committed `pip_audit_results.json` and are outside active project scope, classify as baseline quality debt (MEDIUM unless escalated by policy), keep it non-blocking for @9git unless HIGH/CRITICAL, and record owner + exit criteria in the unresolved quality-debt ledger.
 - Hard rule: maintain promotion lifecycle state and unresolved quality-debt ledger.
   - Promotion lifecycle states: CANDIDATE -> HARD -> RETIRED.
   - `Promotion status` must always be one of those states.

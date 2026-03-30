@@ -7,6 +7,33 @@
 - rollover: At new project start, append this file's entries to history.3design.memory.md in chronological order, then clear Entries.
 
 ## Entries
+- task_id: prj0000105-idea000016-mixin-architecture-base
+	state: DONE
+	selected_design_path: Option B (incremental migration with compatibility shims)
+	assumptions:
+		- Canonical base mixin namespace is introduced before broad host adoption.
+		- Legacy shims are explicitly time-boxed to migration waves W1-W3.
+		- @4plan will keep decomposition to roughly 10 code files and 10 test files as requested by workflow.
+	interface_contract_notes:
+		- IFACE-MX-001 canonical export determinism under src/core/base/mixins/.
+		- IFACE-MX-002 host protocol requirements and validation hook contract.
+		- IFACE-MX-003 legacy compatibility shim contract with deprecation signaling.
+		- IFACE-MX-004 behavioral parity contract old vs canonical import paths.
+		- IFACE-MX-005 shim expiry fail-closed governance gate.
+		- IFACE-MX-006 migration observability event contract.
+	handoff:
+		target_agent: @4plan
+		canonical_artifact: docs/project/prj0000105-idea000016-mixin-architecture-base/idea000016-mixin-architecture-base.design.md
+		chunked_artifacts: none
+	lesson:
+		Pattern: Explicit AC IDs plus interface-to-task traceability in design artifacts reduces @4plan ambiguity and rework.
+		Root cause: Prior workflow stalls happen when architecture contracts exist without executable decomposition mapping.
+		Prevention: Always include AC table and IFACE-to-task mapping block before @4plan handoff.
+		First seen: 2026-03-30
+		Seen in: prj0000104-idea000014-processing; prj0000105-idea000016-mixin-architecture-base
+		Recurrence count: 2
+		Promotion status: Promoted to hard rule
+
 - task_id: prj0000104-idea000014-processing
 	state: DONE
 	selected_design_path: Option A (`pyproject.toml` canonical + deterministic generated `requirements.txt`)

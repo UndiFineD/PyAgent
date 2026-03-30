@@ -12,111 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Host mixin helpers for optional audit-trail event emission."""
+"""Compatibility shim for legacy audit mixin import path."""
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from src.core.base.mixins.audit_mixin import AuditMixin as AuditTrailMixin
 
-from src.core.audit.exceptions import AuditTrailError
-
-if TYPE_CHECKING:
-    from src.core.audit.AuditTrailCore import AuditTrailCore
-
-
-class AuditTrailMixin:
-    """Provide optional convenience wrappers around :class:`AuditTrailCore`."""
-
-    def _get_audit_trail_core(self) -> AuditTrailCore | None:
-        """Return the configured audit-trail core for this host.
-
-        Returns:
-            Configured :class:`AuditTrailCore` instance or ``None`` when disabled.
-
-        """
-        return None
-
-    def audit_emit_event(
-        self,
-        *,
-        event_type: str,
-        action: str,
-        payload: dict[str, object],
-        actor_id: str | None = None,
-        target: str | None = None,
-        tx_id: str | None = None,
-        context_id: str | None = None,
-        correlation_id: str | None = None,
-    ) -> str | None:
-        """Emit an audit event when a core is configured.
-
-        Args:
-            event_type: Domain event category.
-            action: Action performed.
-            payload: JSON-like payload dictionary.
-            actor_id: Optional actor identifier.
-            target: Optional target identifier.
-            tx_id: Optional transaction identifier.
-            context_id: Optional context identifier.
-            correlation_id: Optional correlation identifier.
-
-        Returns:
-            Event hash on success, or ``None`` when no core is configured.
-
-        """
-        core = self._get_audit_trail_core()
-        if core is None:
-            return None
-
-        try:
-            return core.append_event_dict(
-                event_type=event_type,
-                action=action,
-                payload=payload,
-                actor_id=actor_id,
-                target=target,
-                tx_id=tx_id,
-                context_id=context_id,
-                correlation_id=correlation_id,
-            )
-        except AuditTrailError:
-            return None
-
-    def audit_emit_success(self, action: str, payload: dict[str, object]) -> str | None:
-        """Emit a success-classified audit event.
-
-        Args:
-            action: Success action label.
-            payload: Event payload.
-
-        Returns:
-            Event hash on success, else ``None``.
-
-        """
-        return self.audit_emit_event(event_type="audit.success", action=action, payload=payload)
-
-    def audit_emit_failure(self, action: str, payload: dict[str, object]) -> str | None:
-        """Emit a failure-classified audit event.
-
-        Args:
-            action: Failure action label.
-            payload: Event payload.
-
-        Returns:
-            Event hash on success, else ``None``.
-
-        """
-        return self.audit_emit_event(event_type="audit.failure", action=action, payload=payload)
+__shim_target__ = "src.core.base.mixins.audit_mixin.AuditMixin"
+__shim_removal_wave__ = "W4"
 
 
 def validate() -> bool:
-    """Return whether module contracts are loadable.
+    """Return whether compatibility shim contracts are loadable.
 
     Returns:
-        Always ``True`` when the module can be imported.
+        True when this shim and canonical target are importable.
 
     """
-    return True
+    return AuditTrailMixin is not None
 
 
 __all__ = ["AuditTrailMixin", "validate"]

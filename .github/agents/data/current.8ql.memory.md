@@ -8,6 +8,78 @@
 
 ## Entries
 
+## Last scan - 2026-03-30
+- task_id: prj0000105-idea000016-mixin-architecture-base
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- branch: prj0000105-idea000016-mixin-architecture-base (validated)
+- files scanned: src/core/base/mixins/*; src/core/audit/AuditTrailMixin.py; src/core/sandbox/SandboxMixin.py; src/core/replay/ReplayMixin.py; src/tools/dependency_audit.py; tests/core/base/mixins/*; tests/test_core_base_mixins_*; docs/project/prj0000105-idea000016-mixin-architecture-base/*; docs/project/kanban.json; docs/project/kanban.md; docs/architecture/adr/0003-base-mixin-canonical-namespace-and-shim-policy.md
+- security/quality checks run:
+	- git branch --show-current
+	- git diff --name-only HEAD
+	- git ls-files --others --exclude-standard
+	- python -m pytest -q tests/core/base/mixins/test_mixin_behavior_parity.py tests/core/base/mixins/test_import_smoke.py tests/core/base/mixins/test_shim_expiry_gate.py tests/core/base/mixins/test_migration_events.py
+	- python scripts/project_registry_governance.py validate
+	- python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
+	- .venv\Scripts\ruff.exe check --select S --output-format concise -- <changed .py files>
+	- python -m pytest -q tests/core/base/mixins tests/test_core_quality.py::test_each_core_has_test_file tests/test_core_quality.py::test_validate_function_exists
+	- python scripts/architecture_governance.py validate
+	- pip-audit -f json -o .github/agents/data/pip_audit_current_8ql.json
+	- python -c <pip baseline vs current delta parser>
+- findings:
+	- PASS: exact prior failing selector bundle rerun first -> 13 passed
+	- PASS: registry governance -> VALIDATION_OK
+	- PASS: docs policy -> 12 passed
+	- PASS: aggregate mixin + core-quality selectors -> 27 passed
+	- INFO: Ruff S scan found S101 in src/core/sandbox/SandboxMixin.py only
+	- MEDIUM: CVE baseline drift persists (requests/cryptography/pygments), tracked as unresolved baseline quality debt QD-8QL-0001
+- handoff target: @9git
+- overall: CLEAN (no HIGH/CRITICAL security findings; all project quality gates pass)
+
+## Last scan - 2026-03-30
+- task_id: prj0000105-idea000016-mixin-architecture-base
+- lifecycle: OPEN -> IN_PROGRESS -> BLOCKED
+- branch: prj0000105-idea000016-mixin-architecture-base (validated)
+- files scanned: src/core/base/mixins/*; src/core/audit/AuditTrailMixin.py; src/core/sandbox/SandboxMixin.py; src/core/replay/ReplayMixin.py; src/tools/dependency_audit.py; tests/core/base/mixins/*; tests/test_core_base_mixins_*; docs/project/kanban.json; docs/project/kanban.md; docs/project/prj0000105-idea000016-mixin-architecture-base/*; docs/architecture/adr/0003-base-mixin-canonical-namespace-and-shim-policy.md
+- security/quality checks run:
+	- git branch --show-current
+	- git diff --name-only HEAD
+	- git ls-files --others --exclude-standard
+	- git diff --name-only origin/main...HEAD
+	- .venv\Scripts\ruff.exe check src/core/base/mixins src/core/audit/AuditTrailMixin.py src/core/sandbox/SandboxMixin.py src/core/replay/ReplayMixin.py src/tools/dependency_audit.py tests/core/base/mixins tests/test_core_base_mixins_audit_mixin.py tests/test_core_base_mixins_base_behavior_mixin.py tests/test_core_base_mixins_replay_mixin.py tests/test_core_base_mixins_sandbox_mixin.py --select S --output-format concise
+	- python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
+	- python scripts/project_registry_governance.py validate
+	- python scripts/architecture_governance.py validate
+	- python -m pytest -q tests/core/base/mixins
+	- python -m pytest -q tests/core/base/mixins/test_mixin_behavior_parity.py tests/core/base/mixins/test_import_smoke.py tests/core/base/mixins/test_shim_expiry_gate.py tests/core/base/mixins/test_migration_events.py
+	- python -c <plan-target file existence audit>
+	- python -c <pip_audit_results.json parser>
+- findings:
+	- BLOCKER: project registry governance failure (`Lane mismatch for prj0000105: json='Review', kanban='Discovery'`)
+	- BLOCKER: missing T007-T011 planned deliverables (8 files absent)
+	- BLOCKER: AC-MX-004/005/006/007 selector evidence missing (test files absent)
+	- INFO: Ruff S101 findings only (2 production-scope asserts, remainder in tests); no HIGH/CRITICAL security issue
+	- INFO: pip-audit baseline shows 0 vulnerable dependencies
+- handoff target: @6code
+- overall: BLOCKED (quality/delivery blockers; security clean for HIGH/CRITICAL)
+
+### Lesson
+- Pattern: Registry lane drift between `docs/project/kanban.json` and `docs/project/kanban.md` can survive until governance validation is run at @8ql.
+- Root cause: Registry updates in one representation were not mirrored in the other.
+- Prevention: Require paired lane update plus immediate `python scripts/project_registry_governance.py validate` before @7exec handoff.
+- First seen: prj0000105-idea000016-mixin-architecture-base
+- Seen in: prj0000105-idea000016-mixin-architecture-base
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
+### Lesson
+- Pattern: Chunked implementation scopes create closure ambiguity when undelivered plan tasks are not listed in `## Deferred Items`.
+- Root cause: `code.md` reported DONE for Chunk A but did not explicitly defer T007-T011.
+- Prevention: When partial plan execution is intentional, mandate explicit deferred-task table with AC impact and next owner before @8ql handoff.
+- First seen: prj0000105-idea000016-mixin-architecture-base
+- Seen in: prj0000105-idea000016-mixin-architecture-base
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
 ## Last scan - 2026-03-29
 - task_id: prj0000101-pending-definition
 - lifecycle: IN_PROGRESS -> DONE
@@ -60,14 +132,17 @@
 ### Lesson
 - Pattern: CVE baseline drift can emerge as non-project-specific debt and still requires explicit owner and closure criteria.
 - Root cause: committed baseline lagged current environment audit state.
-- Prevention: track unresolved quality debt ledger entry with owner, source project, and exit criteria before @9git handoff.
+- Prevention: Always run `pip-audit -f json -o .github/agents/data/pip_audit_current_8ql.json` and classify findings as baseline debt when drift is outside active project scope; require explicit ledger owner and exit criteria before @9git handoff.
 - First seen: prj0000104-idea000014-processing
-- Seen in: prj0000104-idea000014-processing
-- Recurrence count: 1
-- Promotion status: CANDIDATE
+- Seen in: prj0000104-idea000014-processing, prj0000105-idea000016-mixin-architecture-base
+- Recurrence count: 2
+- Promotion status: HARD
 
 ## Promotions
-- none in this scan
+## Promotion - 2026-03-30
+- Lesson: CVE baseline drift can emerge as non-project-specific debt and still requires explicit owner and closure criteria.
+- Promoted to: .github/agents/8ql.agent.md § Learning loop rules
+- Trigger project: prj0000105
 
 ## Unresolved Quality Debt Ledger
 - QD-8QL-0001 | owner=@6code | origin=prj0000104-idea000014-processing | status=OPEN | exit=upgrade or accept risk for CVE-2026-25645, CVE-2026-34073, CVE-2026-4539 and refresh committed baseline
