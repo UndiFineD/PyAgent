@@ -72,7 +72,7 @@ _Git: @9git | Updated: 2026-03-30_
 | `tests/test_core_base_mixins_*.py` | added |
 
 ## PR Link
-PENDING
+https://github.com/UndiFineD/PyAgent/pull/258
 
 ## Legacy Branch Exception
 None
