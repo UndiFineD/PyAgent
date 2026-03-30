@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-29 | Total projects: 101 | Auto-synced by project_registry_governance.py (Discovery: 1, Review: 4, Released: 95)_
+_Last updated: 2026-03-29 | Total projects: 102 | Auto-synced by project_registry_governance.py (Discovery: 1, Review: 4, Released: 96)_
 
 ## How to use this board
 
@@ -58,7 +58,7 @@ Active options exploration — @2think is working or has completed .think.md.
 |---|---|---|---|---|---|---|---|
 
 
-| prj0000101 | pending-definition | Define and refresh prj0000101 from idea000013-backend-health-check-endpoint under Discovery workflow gates before implementation. | prj0000101-pending-definition | P3 | S | governance, init, idea000013 | 2026-03-29 |
+| prj0000102 | pyproject-requirements-sync | Align dependency pins between pyproject.toml and requirements manifests with governance-backed validation to prevent drift. | prj0000102-pyproject-requirements-sync | P2 | M | dependencies, packaging, idea000014 | 2026-03-29 |
 ---
 
 ## Design
@@ -196,6 +196,7 @@ All projects merged to main branch.
 | prj0000001 | async-runtime | Tokio-backed async helpers and PyO3 bindings for non-blocking agent ops | merged | — | P3 | M | 2026-01-01 |
 
 | prj0000098 | backend-health-check-endpoint | Initialize project from idea000013 to design and deliver backend health-check endpoint governance and implementation planning | merged | [#244](https://github.com/UndiFineD/PyAgent/pull/244) | P2 | M | 2026-03-29 |
+| prj0000101 | idea-013 - backend-health-check-endpoint | This idea focuses on backend health check endpoint in area 3 – Backend. The current signal indicates priority P2, impact M, and urgency H. The SWOT tag is W (Weakness in current implementation). | — | pending | P3 | S | 2026-03-29 |
 ---
 
 ## Archived
@@ -217,9 +218,9 @@ Stalled, cancelled, or superseded projects.
 | Design | 0 |
 | In Sprint | 0 |
 | Review | 4 |
-| Released | 95 |
+| Released | 96 |
 | Archived | 1 |
-| **Total** | **101** |
+| **Total** | **102** |
 
 ---
 

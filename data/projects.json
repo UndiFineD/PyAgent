@@ -102,7 +102,7 @@
       "autosync"
     ],
     "created": "2026-03-28",
-    "updated": "2026-03-29"
+    "updated": "2026-03-28"
   },
   {
     "id": "prj0000092",
@@ -1639,7 +1639,7 @@
       "idea000003"
     ],
     "created": "2026-03-28",
-    "updated": "2026-03-29"
+    "updated": "2026-03-28"
   },
   {
     "id": "prj0000099",
@@ -1661,17 +1661,32 @@
   },
   {
     "id": "prj0000101",
-    "name": "pending-definition",
-    "lane": "Discovery",
-    "summary": "Define and refresh prj0000101 from idea000013-backend-health-check-endpoint under Discovery workflow gates before implementation.",
-    "branch": "prj0000101-pending-definition",
+    "name": "idea-013 - backend-health-check-endpoint",
+    "lane": "Review",
+    "summary": "This idea focuses on backend health check endpoint in area 3 – Backend. The current signal indicates priority P2, impact M, and urgency H. The SWOT tag is W (Weakness in current implementation).",
+    "branch": null,
     "pr": null,
     "priority": "P3",
     "budget_tier": "S",
     "tags": [
-      "governance",
-      "init",
+      "idea",
       "idea000013"
+    ],
+    "created": "2026-03-29",
+    "updated": "2026-03-29"
+  },
+  {
+    "id": "prj0000102",
+    "name": "idea-014 - pyproject-requirements-sync",
+    "lane": "Review",
+    "summary": "This idea focuses on pyproject requirements sync in area 9 – Dependencies. The current signal indicates priority P2, impact M, and urgency M. The SWOT tag is W (Weakness in current implementation).",
+    "branch": null,
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "idea",
+      "idea000014"
     ],
     "created": "2026-03-29",
     "updated": "2026-03-29"
