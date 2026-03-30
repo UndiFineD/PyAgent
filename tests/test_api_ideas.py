@@ -29,7 +29,7 @@ from backend.app import app
 _CLIENT = TestClient(app, raise_server_exceptions=False)
 _ROOT = Path(__file__).resolve().parents[1]
 _IDEAS_DIR = _ROOT / "docs" / "project" / "ideas"
-_PROJECTS_PATH = _ROOT / "data" / "projects.json"
+_PROJECTS_PATH = _ROOT / "docs" / "project" / "kanban.json"
 _PLANNED_MAPPING_PATTERN = re.compile(r"^Planned project mapping:\s*(.+)$", re.IGNORECASE)
 _PROJECT_ID_PATTERN = re.compile(r"prj\d{7}", re.IGNORECASE)
 _IDEA_ID_PATTERN = re.compile(r"(idea\d{6})", re.IGNORECASE)
@@ -100,7 +100,14 @@ def _project_lane_map() -> dict[str, str]:
         dict[str, str]: Mapping of project ID to lane value.
 
     """
-    projects = json.loads(_PROJECTS_PATH.read_text(encoding="utf-8"))
+    raw = json.loads(_PROJECTS_PATH.read_text(encoding="utf-8"))
+    if isinstance(raw, list):
+        projects = [item for item in raw if isinstance(item, dict)]
+    elif isinstance(raw, dict) and isinstance(raw.get("projects"), list):
+        projects = [item for item in raw["projects"] if isinstance(item, dict)]
+    else:
+        projects = []
+
     return {str(item.get("id", "")).lower(): str(item.get("lane", "")) for item in projects if item.get("id")}
 
 

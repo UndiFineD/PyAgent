@@ -118,19 +118,56 @@ _LOGS_DIR = _PROJECT_ROOT / ".github" / "agents" / "data"
 _AGENTS_DIR = _PROJECT_ROOT / ".github" / "agents"
 
 # ── Project data ─────────────────────────────────────────────────────────────
-_PROJECTS_FILE = _PROJECT_ROOT / "data" / "projects.json"
+_PROJECTS_FILE = _PROJECT_ROOT / "docs" / "project" / "kanban.json"
+_PROJECTS_ENVELOPE: dict[str, Any] | None = None
+
+
+def _extract_projects_collection(raw: Any) -> list[dict[str, Any]]:
+    """Normalize project payload into a list of project dictionaries.
+
+    Args:
+        raw: Parsed JSON value from the project source file.
+
+    Returns:
+        list[dict[str, Any]]: Project list from either an envelope or legacy array.
+
+    """
+    if isinstance(raw, list):
+        return [item for item in raw if isinstance(item, dict)]
+    if isinstance(raw, dict):
+        projects = raw.get("projects", [])
+        if isinstance(projects, list):
+            return [item for item in projects if isinstance(item, dict)]
+    return []
 
 
 def _load_projects() -> list[dict]:
-    """Load data/projects.json at module startup. Returns [] on missing/corrupt file."""
+    """Load docs/project/kanban.json at module startup.
+
+    Returns:
+        list[dict]: Project entries loaded from the active kanban JSON source.
+
+    """
+    global _PROJECTS_ENVELOPE
+
     if not _PROJECTS_FILE.exists():
-        logger.warning("data/projects.json not found at %s", _PROJECTS_FILE)
+        logger.warning("docs/project/kanban.json not found at %s", _PROJECTS_FILE)
+        _PROJECTS_ENVELOPE = None
         return []
+
     try:
-        return json.loads(_PROJECTS_FILE.read_text(encoding="utf-8"))
+        raw = json.loads(_PROJECTS_FILE.read_text(encoding="utf-8"))
     except (json.JSONDecodeError, OSError) as exc:
-        logger.warning("Failed to load data/projects.json: %s", exc)
+        logger.warning("Failed to load docs/project/kanban.json: %s", exc)
+        _PROJECTS_ENVELOPE = None
         return []
+
+    if isinstance(raw, dict):
+        _PROJECTS_ENVELOPE = raw
+    else:
+        _PROJECTS_ENVELOPE = None
+
+    return _extract_projects_collection(raw)
 
 
 _PROJECTS: list[dict] = _load_projects()
@@ -633,7 +670,7 @@ _BudgetLit = Literal["XS", "S", "M", "L", "XL", "unknown"]
 
 
 class ProjectModel(BaseModel):
-    """Single project entry from data/projects.json."""
+    """Single project entry from docs/project/kanban.json projects."""
 
     id: str
     name: str
@@ -695,9 +732,11 @@ def _load_project_lane_map() -> dict[str, str]:
         return {}
 
     try:
-        projects = json.loads(_PROJECTS_FILE.read_text(encoding="utf-8"))
+        raw = json.loads(_PROJECTS_FILE.read_text(encoding="utf-8"))
     except (json.JSONDecodeError, OSError):
         return {}
+
+    projects = _extract_projects_collection(raw)
 
     lane_map: dict[str, str] = {}
     for item in projects:
@@ -1144,17 +1183,23 @@ def _sync_project_lanes_from_stage_artifacts() -> bool:
 
 
 def _save_projects() -> None:
-    """Persist _PROJECTS to disk atomically."""
+    """Persist project updates to docs/project/kanban.json atomically."""
+    payload: Any
+    if isinstance(_PROJECTS_ENVELOPE, dict):
+        payload = {**_PROJECTS_ENVELOPE, "projects": _PROJECTS}
+    else:
+        payload = _PROJECTS
+
     tmp = _PROJECTS_FILE.with_suffix(".tmp")
-    tmp.write_text(json.dumps(_PROJECTS, indent=2, ensure_ascii=False), encoding="utf-8")
+    tmp.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
     tmp.replace(_PROJECTS_FILE)
 
 
 @_auth_router.get("/projects", response_model=list[ProjectModel])
 async def get_projects(lane: _Opt[str] = None) -> list[ProjectModel]:
-    """Return all projects from data/projects.json, optionally filtered by lane."""
+    """Return all projects from docs/project/kanban.json, optionally filtered by lane."""
     if not _PROJECTS and not _PROJECTS_FILE.exists():
-        raise HTTPException(status_code=500, detail="data/projects.json not found")
+        raise HTTPException(status_code=500, detail="docs/project/kanban.json not found")
 
     # Keep project lane progression in sync with generated stage artifacts.
     _sync_project_lanes_from_stage_artifacts()

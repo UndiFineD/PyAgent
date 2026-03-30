@@ -17,9 +17,15 @@ import {
   ChevronDown, ChevronUp, Tag, Pencil, FolderOpen, Plus, X, Check, BarChart2, Copy,
 } from 'lucide-react';
 import { cn } from '../utils';
-import kanbanRaw from '../../docs/project/kanban.md?raw';
+import kanbanJson from '../../docs/project/kanban.json';
 import nextProjectRaw from '../../data/nextproject.md?raw';
 import type { AppMeta } from '../types';
+
+const importedIdeaMarkdownFiles = import.meta.glob('../../docs/project/ideas/idea*.md', {
+  eager: true,
+  query: '?raw',
+  import: 'default',
+}) as Record<string, string>;
 
 export const appMeta: AppMeta = { id: 'projectmanager', title: 'Project Manager', category: 'AI Agents' };
 
@@ -99,8 +105,9 @@ async function fetchApi(path: string, init?: RequestInit): Promise<Response> {
   const primary = await fetch(path, init).catch(() => null);
   if (primary?.ok) return primary;
 
-  // In some local setups (e.g., static serving without Vite proxy), /api routes can 404.
-  const shouldTryFallback = primary === null || primary.status === 404;
+  // In some local setups (e.g., static serving without Vite proxy), /api routes can fail
+  // with 404 (no route) or 502/503/504 (proxy target down) before fallback is needed.
+  const shouldTryFallback = primary === null || [404, 502, 503, 504].includes(primary.status);
   if (!shouldTryFallback) return primary;
 
   return fetch(toFallbackUrl(path), init);
@@ -804,35 +811,6 @@ const IdeasColumn: React.FC<IdeasColumnProps> = ({
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-function extractSection(raw: string, heading: string): string {
-  const start = raw.indexOf(`## ${heading}`);
-  if (start === -1) return `Section "${heading}" not found.`;
-  const after = raw.indexOf('\n## ', start + 1);
-  return after === -1 ? raw.slice(start) : raw.slice(start, after);
-}
-
-function parseMarkdownTable(section: string): { headers: string[]; rows: string[][] } {
-  const lines = section
-    .split('\n')
-    .map(line => line.trim())
-    .filter(line => line.startsWith('|'));
-
-  if (lines.length < 2) return { headers: [], rows: [] };
-
-  const splitRow = (line: string) => line
-    .split('|')
-    .map(cell => cell.trim())
-    .filter((_, i, arr) => i > 0 && i < arr.length - 1);
-
-  const headers = splitRow(lines[0]);
-  const rows = lines
-    .slice(2)
-    .map(splitRow)
-    .filter(row => row.length > 0);
-
-  return { headers, rows };
-}
-
 interface RiskEntry {
   id: string;
   risk: string;
@@ -842,21 +820,6 @@ interface RiskEntry {
   mitigation: string;
 }
 
-function parseRiskRegister(raw: string): RiskEntry[] {
-  const section = extractSection(raw, 'Risk Register');
-  const { rows } = parseMarkdownTable(section);
-  return rows
-    .filter(row => row.length >= 6)
-    .map(row => ({
-      id: row[0],
-      risk: row[1],
-      likelihood: row[2],
-      impact: row[3],
-      status: row[4],
-      mitigation: row[5],
-    }));
-}
-
 interface SwotData {
   strengths: string[];
   weaknesses: string[];
@@ -864,39 +827,155 @@ interface SwotData {
   threats: string[];
 }
 
-function parseSwot(raw: string): SwotData {
-  const section = extractSection(raw, 'SWOT Analysis');
-  const { rows } = parseMarkdownTable(section);
-  const result: SwotData = { strengths: [], weaknesses: [], opportunities: [], threats: [] };
+interface KanbanEnvelope {
+  projects?: Project[];
+  swot?: {
+    strengths?: string[];
+    weaknesses?: string[];
+    opportunities?: string[];
+    threats?: string[];
+  };
+  risk_register?: RiskEntry[];
+}
 
-  let helpfulBucket: 'strengths' | 'opportunities' = 'strengths';
-  let harmfulBucket: 'weaknesses' | 'threats' = 'weaknesses';
+const importedKanbanJson: KanbanEnvelope = kanbanJson as KanbanEnvelope;
 
-  for (const row of rows) {
-    const helpful = row[1] ?? '';
-    const harmful = row[2] ?? '';
+function getLocalProjectSnapshot(): Project[] {
+  if (!Array.isArray(importedKanbanJson.projects)) return [];
+  return importedKanbanJson.projects as Project[];
+}
 
-    if (helpful.includes('**Strengths**')) helpfulBucket = 'strengths';
-    if (helpful.includes('**Opportunities**')) helpfulBucket = 'opportunities';
-    if (harmful.includes('**Weaknesses**')) harmfulBucket = 'weaknesses';
-    if (harmful.includes('**Threats**')) harmfulBucket = 'threats';
+function parseRiskRegister(raw: unknown): RiskEntry[] {
+  if (!Array.isArray(raw)) return [];
 
-    const cleanedHelpful = helpful.replace(/\*\*/g, '').trim();
-    const cleanedHarmful = harmful.replace(/\*\*/g, '').trim();
+  return raw
+    .filter(item => item && typeof item === 'object')
+    .map(item => item as Partial<RiskEntry>)
+    .map(item => ({
+      id: String(item.id ?? ''),
+      risk: String(item.risk ?? ''),
+      likelihood: String(item.likelihood ?? ''),
+      impact: String(item.impact ?? ''),
+      status: String(item.status ?? ''),
+      mitigation: String(item.mitigation ?? ''),
+    }))
+    .filter(item => item.id.length > 0 && item.risk.length > 0);
+}
 
-    if (cleanedHelpful && !['Strengths', 'Opportunities'].includes(cleanedHelpful)) {
-      result[helpfulBucket].push(cleanedHelpful);
-    }
-    if (cleanedHarmful && !['Weaknesses', 'Threats'].includes(cleanedHarmful)) {
-      result[harmfulBucket].push(cleanedHarmful);
-    }
+function parseSwot(raw: unknown): SwotData {
+  const swot = (raw && typeof raw === 'object' ? raw as KanbanEnvelope['swot'] : undefined) ?? {};
+  return {
+    strengths: Array.isArray(swot.strengths) ? swot.strengths.map(String) : [],
+    weaknesses: Array.isArray(swot.weaknesses) ? swot.weaknesses.map(String) : [],
+    opportunities: Array.isArray(swot.opportunities) ? swot.opportunities.map(String) : [],
+    threats: Array.isArray(swot.threats) ? swot.threats.map(String) : [],
+  };
+}
+
+function toTitleCase(text: string): string {
+  return text
+    .split(' ')
+    .filter(Boolean)
+    .map(token => token.charAt(0).toUpperCase() + token.slice(1))
+    .join(' ');
+}
+
+function buildSlugTitle(stem: string): string {
+  const compactIdea = stem.match(/^(idea)(\d+)$/i);
+  if (compactIdea) {
+    return `Idea ${compactIdea[2]}`;
   }
+  const readable = stem.replace(/[_-]+/g, ' ').trim();
+  if (readable.length === 0) return 'Untitled Idea';
+  return toTitleCase(readable);
+}
 
-  return result;
+function firstMeaningfulNonHeadingLine(lines: string[]): string | null {
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed.length === 0) continue;
+    if (/^#+\s+/.test(trimmed)) continue;
+    if (/^```/.test(trimmed)) continue;
+    return trimmed;
+  }
+  return null;
+}
+
+function extractIdeaSummary(lines: string[]): string {
+  const summaryHeaderIndex = lines.findIndex(line => /^##\s+idea summary\b/i.test(line.trim()));
+  if (summaryHeaderIndex >= 0) {
+    const summaryLines: string[] = [];
+    for (let i = summaryHeaderIndex + 1; i < lines.length; i += 1) {
+      const current = lines[i].trim();
+      if (/^##\s+/.test(current)) break;
+      summaryLines.push(lines[i]);
+    }
+    const sectionSummary = firstMeaningfulNonHeadingLine(summaryLines);
+    if (sectionSummary) return sectionSummary;
+  }
+  return firstMeaningfulNonHeadingLine(lines) ?? '';
+}
+
+function parseLocalIdeaFile(path: string, markdown: string): Idea | null {
+  const filename = path.split('/').pop();
+  if (!filename) return null;
+  const stem = filename.replace(/\.md$/i, '');
+  if (!/^idea\d+/i.test(stem)) return null;
+
+  const ideaId = stem.toLowerCase();
+  const rankMatch = stem.match(/idea(\d+)/i);
+  const rank = rankMatch ? Number.parseInt(rankMatch[1], 10) : null;
+  const lines = markdown.split(/\r?\n/);
+  const headingLine = lines.find(line => /^#\s+/.test(line.trim()));
+  const title = headingLine ? headingLine.replace(/^#\s+/, '').trim() : buildSlugTitle(stem);
+  const summary = extractIdeaSummary(lines);
+
+  const mappedProjectIds = Array.from(
+    new Set(
+      lines
+        .filter(line => /planned project mapping\s*:/i.test(line))
+        .flatMap(line => line.match(/prj\d{8}/gi) ?? [])
+        .map(value => value.toLowerCase()),
+    ),
+  );
+
+  return {
+    idea_id: ideaId,
+    rank,
+    title,
+    summary,
+    source_path: `docs/project/ideas/${filename}`,
+    mapped_project_ids: mappedProjectIds,
+  };
+}
+
+function getLocalIdeasSnapshot(): Idea[] {
+  return Object.entries(importedIdeaMarkdownFiles)
+    .map(([path, markdown]) => parseLocalIdeaFile(path, markdown))
+    .filter((idea): idea is Idea => idea !== null)
+    .sort((a, b) => {
+      const aRank = a.rank;
+      const bRank = b.rank;
+      if (aRank === null && bRank === null) return 0;
+      if (aRank === null) return 1;
+      if (bRank === null) return -1;
+      return aRank - bRank;
+    });
 }
 
 function normalizeSearchText(value: string): string {
   return value.toLowerCase().trim();
+}
+
+function isIdeasBackendUnavailable(message: string): boolean {
+  const normalized = message.toLowerCase();
+  return (
+    normalized.includes('failed to fetch')
+    || normalized.includes('networkerror')
+    || normalized.includes('http 502')
+    || normalized.includes('http 503')
+    || normalized.includes('http 504')
+  );
 }
 
 function matchesIdeaContext(text: string, idea: Idea): boolean {
@@ -926,28 +1005,28 @@ function getIdeaRiskContext(idea: Idea, risks: RiskEntry[]): RiskEntry[] {
   return direct.slice(0, 2);
 }
 
-async function getLatestKanbanRegistersSource(): Promise<string> {
+async function getLatestKanbanRegistersSource(): Promise<KanbanEnvelope> {
   const candidatePaths = [
-    '/docs/project/kanban.md',
-    '/api/docs/project/kanban.md',
+    '/docs/project/kanban.json',
+    '/api/docs/project/kanban.json',
   ];
 
   for (const path of candidatePaths) {
     try {
       const response = await fetchApi(path, {
-        headers: { Accept: 'text/plain; charset=utf-8' },
+        headers: { Accept: 'application/json' },
       });
       if (!response.ok) continue;
-      const content = await response.text();
-      if (content.includes('## SWOT Analysis') || content.includes('## Risk Register')) {
-        return content;
+      const content = await response.json();
+      if (content && typeof content === 'object') {
+        return content as KanbanEnvelope;
       }
     } catch {
       // Ignore and continue trying additional sources.
     }
   }
 
-  return kanbanRaw;
+  return importedKanbanJson;
 }
 
 function formatSwotContextMarkdown(swot: SwotData): string {
@@ -1015,8 +1094,8 @@ interface InsightsModalProps {
 }
 
 const InsightsModal: React.FC<InsightsModalProps> = ({ mode, ideas, initialIdeaId, onClose }) => {
-  const risks = parseRiskRegister(kanbanRaw);
-  const swot = parseSwot(kanbanRaw);
+  const risks = parseRiskRegister(importedKanbanJson.risk_register);
+  const swot = parseSwot(importedKanbanJson.swot);
   const [selectedIdeaId, setSelectedIdeaId] = useState<string>(initialIdeaId ?? ideas[0]?.idea_id ?? '');
   const [copyNotice, setCopyNotice] = useState<string | null>(null);
 
@@ -1286,10 +1365,25 @@ export const ProjectManager: React.FC = () => {
 
   const reload = () => {
     setLoading(true);
+    setError(null);
     fetchApi('/api/projects')
       .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
-      .then((data: Project[]) => { setProjects(data); setLoading(false); })
-      .catch(err => { setError(String(err.message)); setLoading(false); });
+      .then((data: Project[]) => {
+        setProjects(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        const localProjects = getLocalProjectSnapshot();
+        if (localProjects.length > 0) {
+          // Keep the board usable in read mode when backend API is temporarily unavailable.
+          setProjects(localProjects);
+          setLoading(false);
+          setError(null);
+          return;
+        }
+        setError(String(err.message));
+        setLoading(false);
+      });
   };
 
   const reloadIdeas = () => {
@@ -1308,7 +1402,16 @@ export const ProjectManager: React.FC = () => {
         setIdeasLoading(false);
       })
       .catch(err => {
-        setIdeasError(String(err.message));
+        const message = String((err as Error).message ?? err);
+        if (isIdeasBackendUnavailable(message)) {
+          // Keep Ideas usable when API/proxy/backend is transiently offline.
+          const localIdeas = getLocalIdeasSnapshot();
+          setIdeasError(null);
+          setIdeas(localIdeas);
+          setIdeasLoading(false);
+          return;
+        }
+        setIdeasError(message);
         setIdeas([]);
         setIdeasLoading(false);
       });
@@ -1350,8 +1453,8 @@ export const ProjectManager: React.FC = () => {
 
   const triggerAgentflowForIdea = async (idea: Idea, projectId: string): Promise<void> => {
     const registerSource = await getLatestKanbanRegistersSource();
-    const swot = parseSwot(registerSource);
-    const risks = parseRiskRegister(registerSource);
+    const swot = parseSwot(registerSource.swot);
+    const risks = parseRiskRegister(registerSource.risk_register);
     const ideaSwot = getIdeaSwotContext(idea, swot);
     const ideaRisks = getIdeaRiskContext(idea, risks);
 
