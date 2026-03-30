@@ -1883,10 +1883,10 @@
     {
       "id": "prj0000105",
       "name": "idea-016 - mixin-architecture-base",
-      "lane": "Review",
+      "lane": "Released",
       "summary": "This idea focuses on mixin architecture base in area 1 – Python agents. The current signal indicates priority P3, impact H, and urgency M. The SWOT tag is W (Weakness in current implementation).",
-      "branch": null,
-      "pr": null,
+      "branch": "merged",
+      "pr": "#258",
       "priority": "P3",
       "budget_tier": "S",
       "tags": [

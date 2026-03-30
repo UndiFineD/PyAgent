@@ -133,3 +133,16 @@
 	- Narrow closure commit: `7fc4994bc` (`docs(git): close prj0000102 git handoff`).
 	- Pushed branch update to origin and PR #251 reflects latest commits.
 
+## 2026-03-30 — prj0000105 post-merge release registry synchronization
+
+- Trigger: user confirmed PR #258 merged and requested continuation.
+- Actions completed:
+	- Transitioned `prj0000105` to `Released` using registry governance tooling.
+	- Corrected released metadata to canonical merged values (`branch: merged`, `pr: #258`) in board artifacts.
+	- Revalidated project registry/kanban consistency.
+- Validation evidence:
+	- `python scripts/project_registry_governance.py set-lane --id prj0000105 --lane Released` -> updated.
+	- `python scripts/project_registry_governance.py validate` -> `VALIDATION_OK` (`projects=105`, `kanban_rows=105`).
+- Outcome:
+	- Post-merge governance state for prj0000105 is synchronized and ready for next project continuation (`prj0000106`).
+
