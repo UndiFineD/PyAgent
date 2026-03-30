@@ -77,6 +77,14 @@ _No checkbox tasks found in the plan file._
   - `src\core\replay\ShadowExecutionCore.py`
   - `src\core\resilience\__init__.py`
   - `src\core\resilience\CircuitBreakerMixin.py`
+  - `src\core\routing\__init__.py`
+  - `src\core\routing\guardrail_policy_engine.py`
+  - `src\core\routing\policy_versioning.py`
+  - `src\core\routing\prompt_routing_facade.py`
+  - `src\core\routing\routing_fallback_policy.py`
+  - `src\core\routing\routing_models.py`
+  - `src\core\routing\routing_policy_loader.py`
+  - `src\core\routing\routing_telemetry_emitter.py`
   - `src\core\sandbox\__init__.py`
   - `src\core\sandbox\SandboxMixin.py`
   - `src\core\scaffold\__init__.py`
@@ -119,6 +127,8 @@ _No checkbox tasks found in the plan file._
   - `tests\core\__init__.py`
   - `tests\core\base\mixins\test_host_validation_in_mixins.py`
   - `tests\core\base\mixins\test_mixin_behavior_parity.py`
+  - `tests\core\routing\test_prompt_routing_facade.py`
+  - `tests\core\routing\test_routing_telemetry_emitter.py`
   - `tests\deps\test_generate_requirements_deterministic.py`
   - `tests\deps\test_install_compatibility_contract.py`
   - `tests\docs\test_agent_workflow_policy_docs.py`
@@ -150,6 +160,17 @@ _No checkbox tasks found in the plan file._
   - `tests\test_core_base_mixins_replay_mixin.py`
   - `tests\test_core_base_mixins_sandbox_mixin.py`
   - `tests\test_core_base_mixins_shim_registry.py`
+  - `tests\test_core_routing_classifier_schema.py`
+  - `tests\test_core_routing_confidence_calibration.py`
+  - `tests\test_core_routing_fallback_reason_taxonomy.py`
+  - `tests\test_core_routing_guardrail_policy_engine.py`
+  - `tests\test_core_routing_policy_versioning.py`
+  - `tests\test_core_routing_prompt_semantic_classifier.py`
+  - `tests\test_core_routing_request_normalizer.py`
+  - `tests\test_core_routing_routing_fallback_policy.py`
+  - `tests\test_core_routing_routing_models.py`
+  - `tests\test_core_routing_routing_policy_loader.py`
+  - `tests\test_core_routing_shadow_mode_router.py`
   - `tests\test_core_workflow_engine.py`
   - `tests\test_FuzzEngineCore.py`
   - `tests\test_fuzzing_core.py`

@@ -22,5 +22,6 @@ _No checkbox tasks found in the plan file._
   - `src\core\base\mixins\host_contract.py`
   - `tests\core\base\mixins\test_host_contract.py`
   - `tests\core\base\mixins\test_host_validation_in_mixins.py`
+  - `tests\core\routing\test_fail_closed_fallback_contract.py`
   - `tests\deploy\test_compose_dockerfile_paths.py`
   - `tests\test_responsive_nebula.py`

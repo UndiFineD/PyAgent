@@ -26,6 +26,7 @@ It **does** update `.github/agents/data/` memory files and `.github/agents/*.age
   - `Promotion status` must always be one of those states.
   - Keep a ledger section for unresolved quality debt with owner, originating project, and exit criteria.
   - Missing lifecycle state or ledger entry for open debt blocks handoff to @9git.
+- Hard rule: when project lifecycle lane changes occur, require paired updates in `data/projects.json` and `docs/project/kanban.md` and run `python scripts/project_registry_governance.py validate` before declaring @8ql closure.
 
 ## Policy references (mandatory)
 

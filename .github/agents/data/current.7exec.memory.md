@@ -9,6 +9,88 @@
 ## Entries
 
 ## Last run - 2026-03-30
+- task_id: prj0000106-idea000080-smart-prompt-routing-system
+- Task: Final @7exec rerun after @6code remediation including conftest selector
+- Branch gate: PASS (expected=prj0000106-idea000080-smart-prompt-routing-system, observed=prj0000106-idea000080-smart-prompt-routing-system)
+- Dependency gate: PASS (`python -m pip check` -> no broken requirements), classification: NON_BLOCKING
+- Exact prior failing selectors first: PASS (`python -m pytest -q tests/test_async_loops.py::test_no_sync_loops tests/test_core_quality.py::test_each_core_has_test_file tests/test_core_quality.py::test_validate_function_exists tests/test_conftest.py::test_session_finish_sets_exitstatus_when_git_dirty` -> 4 passed)
+- Project routing gate: PASS (`python -m pytest -q tests/core/routing` -> 11 passed)
+- Full runtime fail-fast gate: PASS (`python -m pytest src/ tests/ -x --tb=short -q` -> 1385 passed, 10 skipped, 3 warnings)
+- Import check: PASS (15/15 routing modules)
+- Placeholder scan (scoped): PASS (no matches in `src/core/routing` and `tests/core/routing`)
+- Docs policy gate: PASS (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 12 passed)
+- Pre-commit gate: PASS (`pre-commit run --files <routing modules/tests + @7exec artifacts>`)
+- Outcome: READY -> @8ql
+- Next handoff target: @8ql
+- Notes: All required sequence gates completed in requested order with conclusive pass outcomes.
+
+### Lesson
+- Pattern: Including the exact previously failing conftest selector in the first selector gate provides direct closure evidence before full-suite runtime.
+- Root cause: Earlier rerun omitted this selector and prior full-suite runs surfaced conftest-related integration breakage.
+- Prevention: Keep the exact-selector gate list synchronized with the most recent blocker report and require conftest regressions to be included when present.
+- First seen: 2026-03-30
+- Seen in: prj0000106-idea000080-smart-prompt-routing-system
+- Recurrence count: 1
+- Promotion status: Candidate
+
+## Last run - 2026-03-30
+- task_id: prj0000106-idea000080-smart-prompt-routing-system
+- Task: Conclusive @7exec rerun after @6code remediation for async-loop/core-quality blockers
+- Branch gate: PASS (expected=prj0000106-idea000080-smart-prompt-routing-system, observed=prj0000106-idea000080-smart-prompt-routing-system)
+- Dependency gate: PASS (`python -m pip check` -> no broken requirements), classification: NON_BLOCKING
+- Exact prior failing selectors first: PASS (`python -m pytest -q tests/test_async_loops.py::test_no_sync_loops tests/test_core_quality.py::test_each_core_has_test_file tests/test_core_quality.py::test_validate_function_exists` -> 3 passed)
+- Project routing gate: PASS (`python -m pytest -q tests/core/routing` -> 11 passed)
+- Full runtime fail-fast gate: FAIL (`python -m pytest src/ tests/ -x --tb=short -q` -> 1 failed, 652 passed)
+- Failing selector: `tests/test_conftest.py::test_session_finish_sets_exitstatus_when_git_dirty`
+- Failure detail: `AttributeError: module 'conftest' has no attribute 'SessionManager'`
+- Import check: PASS (15/15 routing modules)
+- Placeholder scan: FAIL (`src/multimodal/processor.py:36`, `src/tools/tool_registry.py:23`, `src/tools/FileWatcher.py:59`)
+- Docs policy gate: PASS (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 12 passed)
+- Pre-commit gate: PASS after formatter remediation (`src/core/routing/confidence_calibration.py` formatted; full task-files rerun passed)
+- Outcome: BLOCKED -> @6code
+- Next handoff target: @6code
+- Notes: All requested gates were conclusive; prior targeted blockers are resolved, but runtime and placeholder gates block @8ql handoff.
+
+### Lesson
+- Pattern: Clearing prior failing selectors does not guarantee full-suite readiness; unrelated integration tests can still fail in shared infrastructure modules.
+- Root cause: `tests/test_conftest.py` fails on missing `SessionManager` attribute in `conftest` during full runtime gate.
+- Prevention: After targeted blocker fixes, run the full fail-fast gate immediately before requesting @7exec completion to catch cross-cutting regressions early.
+- First seen: 2026-03-30
+- Seen in: prj0000106-idea000080-smart-prompt-routing-system
+- Recurrence count: 1
+- Promotion status: Candidate
+
+## Last run - 2026-03-30
+- task_id: prj0000106-idea000080-smart-prompt-routing-system
+- Task: Runtime validation for smart prompt routing implementation after @6code handoff
+- Branch gate: PASS (expected=prj0000106-idea000080-smart-prompt-routing-system, observed=prj0000106-idea000080-smart-prompt-routing-system)
+- Dependency gate: PASS (`python -m pip check` -> no broken requirements), classification: NON_BLOCKING
+- Project selector gate: PASS (`python -m pytest -q tests/core/routing` -> 11 passed)
+- Full runtime fail-fast gate: FAIL (`python -m pytest src/ tests/ -x --tb=short -q` -> 1 failed, 492 passed)
+- Failing selector: `tests/test_async_loops.py::test_no_sync_loops`
+- Failure detail: synchronous loop detected in `src/core/routing/classifier_schema.py` line 42
+- Import check: PASS (15/15 changed routing modules)
+- Placeholder scan: PASS (no matches in `src/core/routing` and `tests/core/routing`)
+- Docs policy gate: PASS (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 12 passed)
+- Pre-commit gate: FAIL (`pre-commit run --files ...` -> shared `run-precommit-checks` failures)
+- Shared failing selectors under pre-commit:
+	- `tests/test_core_quality.py::test_each_core_has_test_file`
+	- `tests/test_core_quality.py::test_validate_function_exists`
+	- `tests/test_async_loops.py::test_no_sync_loops`
+- Outcome: BLOCKED -> @6code
+- Next handoff target: @6code
+- Notes: Runtime run is conclusive (no interruption); security handoff to @8ql is blocked pending @6code fix.
+
+### Lesson
+- Pattern: New routing modules can satisfy AC selectors while still violating repository-wide async-loop governance tests.
+- Root cause: `classifier_schema.py` introduced a synchronous loop pattern detected by `tests/test_async_loops.py`.
+- Prevention: Before @7exec handoff requests for routing/core changes, run `python -m pytest -q tests/test_async_loops.py::test_no_sync_loops` in @6code validation.
+- First seen: 2026-03-30
+- Seen in: prj0000106-idea000080-smart-prompt-routing-system
+- Recurrence count: 1
+- Promotion status: Candidate
+
+## Last run - 2026-03-30
 - task_id: prj0000105-idea000016-mixin-architecture-base
 - Task: Final @7exec rerun after latest core-quality blocker fixes
 - Branch gate: PASS (prj0000105-idea000016-mixin-architecture-base)

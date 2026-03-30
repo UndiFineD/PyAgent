@@ -56,3 +56,29 @@
 - Recurrence count: 2
 - Promotion status: HARD
 
+## 2026-03-30 - prj0000106-idea000080-smart-prompt-routing-system
+- task_id: prj0000106-idea000080-smart-prompt-routing-system
+- status: DONE
+- branch_expected: prj0000106-idea000080-smart-prompt-routing-system
+- branch_observed: prj0000106-idea000080-smart-prompt-routing-system
+- branch_validation: PASS
+- scope_validation: PASS
+- notes:
+	- Governance lane reconciliation executed with canonical tooling; prj0000106 moved to Review for PR handoff.
+	- Baseline lane mismatch for prj0000104 was also reconciled to restore registry/kanban validation consistency.
+	- Mandatory dashboard refresh gate executed and broad out-of-scope changes remained unstaged.
+	- Placeholder gate for staged Python scope passed after targeted verification.
+	- Mandatory pre-commit gate passed on exact staged manifest (40 files).
+	- Commit created: 58cfd2e5c27bc551cf7f1a8266beedc9a98e71d7.
+	- Branch pushed and tracking set on origin/prj0000106-idea000080-smart-prompt-routing-system.
+	- PR created: https://github.com/UndiFineD/PyAgent/pull/259.
+
+### Lesson
+- Pattern: Mandatory dashboard generation frequently introduces unrelated documentation diffs during project-scoped git handoff.
+- Root cause: scripts/generate_project_dashboard.py rewrites summary files for many projects outside current scope.
+- Prevention: Run dashboard gate before staging and enforce explicit allowlist staging for project boundary files only.
+- First seen: 2026-03-30
+- Seen in: prj0000104-idea000014-processing; prj0000105-idea000016-mixin-architecture-base; prj0000106-idea000080-smart-prompt-routing-system
+- Recurrence count: 3
+- Promotion status: HARD
+

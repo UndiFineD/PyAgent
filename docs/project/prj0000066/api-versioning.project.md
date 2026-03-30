@@ -19,9 +19,11 @@ _No checkbox tasks found in the plan file._
 
 - Code detected in:
   - `src\chat\api.py`
+  - `src\core\routing\policy_versioning.py`
   - `tests\docs\test_api_docs_exist.py`
   - `tests\test_api_ideas.py`
   - `tests\test_api_projects_lane_sync.py`
   - `tests\test_api_versioning.py`
   - `tests\test_chat_api.py`
+  - `tests\test_core_routing_policy_versioning.py`
   - `tests\test_registry_api.py`

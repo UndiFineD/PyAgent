@@ -49,6 +49,13 @@
   - `tests\core\base\mixins\test_mixin_behavior_parity.py`
   - `tests\core\base\mixins\test_shim_deprecation_policy.py`
   - `tests\core\base\mixins\test_shim_expiry_gate.py`
+  - `tests\core\routing\test_fail_closed_fallback_contract.py`
+  - `tests\core\routing\test_guardrail_precedence_contract.py`
+  - `tests\core\routing\test_prompt_routing_facade.py`
+  - `tests\core\routing\test_routing_telemetry_emitter.py`
+  - `tests\core\routing\test_shadow_active_parity.py`
+  - `tests\core\routing\test_tie_break_fallback.py`
+  - `tests\core\routing\test_tie_break_resolver.py`
   - `tests\core\test_core.py`
   - `tests\deploy\test_compose_dockerfile_paths.py`
   - `tests\deps\test_dependency_parity_gate.py`
@@ -174,6 +181,17 @@
   - `tests\test_core_providers_FlmModelProbe.py`
   - `tests\test_core_providers_FlmProviderConfig.py`
   - `tests\test_core_quality.py`
+  - `tests\test_core_routing_classifier_schema.py`
+  - `tests\test_core_routing_confidence_calibration.py`
+  - `tests\test_core_routing_fallback_reason_taxonomy.py`
+  - `tests\test_core_routing_guardrail_policy_engine.py`
+  - `tests\test_core_routing_policy_versioning.py`
+  - `tests\test_core_routing_prompt_semantic_classifier.py`
+  - `tests\test_core_routing_request_normalizer.py`
+  - `tests\test_core_routing_routing_fallback_policy.py`
+  - `tests\test_core_routing_routing_models.py`
+  - `tests\test_core_routing_routing_policy_loader.py`
+  - `tests\test_core_routing_shadow_mode_router.py`
   - `tests\test_core_runtime.py`
   - `tests\test_core_task_queue.py`
   - `tests\test_core_workflow_engine.py`

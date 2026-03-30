@@ -54,6 +54,17 @@ _No checkbox tasks found in the plan file._
   - `tests\test_core_providers_FlmModelProbe.py`
   - `tests\test_core_providers_FlmProviderConfig.py`
   - `tests\test_core_quality.py`
+  - `tests\test_core_routing_classifier_schema.py`
+  - `tests\test_core_routing_confidence_calibration.py`
+  - `tests\test_core_routing_fallback_reason_taxonomy.py`
+  - `tests\test_core_routing_guardrail_policy_engine.py`
+  - `tests\test_core_routing_policy_versioning.py`
+  - `tests\test_core_routing_prompt_semantic_classifier.py`
+  - `tests\test_core_routing_request_normalizer.py`
+  - `tests\test_core_routing_routing_fallback_policy.py`
+  - `tests\test_core_routing_routing_models.py`
+  - `tests\test_core_routing_routing_policy_loader.py`
+  - `tests\test_core_routing_shadow_mode_router.py`
   - `tests\test_core_runtime.py`
   - `tests\test_core_task_queue.py`
   - `tests\test_core_workflow_engine.py`

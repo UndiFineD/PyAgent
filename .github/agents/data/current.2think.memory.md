@@ -52,3 +52,25 @@
 - Recurrence count: 2
 - Promotion status: PROMOTED_TO_HARD_RULE
 
+### 2026-03-30 - prj0000106-idea000080-smart-prompt-routing-system
+- task_id: prj0000106-idea000080-smart-prompt-routing-system
+- status: DONE
+- target_agent: @3design
+- canonical_artifact: docs/project/prj0000106-idea000080-smart-prompt-routing-system/idea000080-smart-prompt-routing-system.think.md
+- recommendation_summary: Select Option B (hybrid routing with deterministic guardrails, semantic classifier, and bounded LLM tie-break) for best accuracy/safety balance within project boundaries.
+- prior_art_refs:
+	- docs/project/prj0000086-universal-agent-shell/universal-agent-shell.design.md
+	- docs/project/prj0000083-llm-circuit-breaker/prj0000083-llm-circuit-breaker.think.md
+	- docs/project/prj0000080-cort-reasoning-pipeline/prj0000080.think.md
+- branch_gate_evidence: `git branch --show-current` -> `prj0000106-idea000080-smart-prompt-routing-system`
+- rationale_for_handoff: Completed 3-option analysis with SWOT, security/risk-to-testability mapping, constraints tie-in, decision matrix, and explicit @3design questions.
+
+#### Lesson
+- Pattern: Smart-routing designs should combine deterministic guardrails with selective adaptive classification instead of pure static rules or full decoupled mediator architecture at v1.
+- Root cause: Rule-only systems under-handle ambiguity; fully decoupled mediator systems add excessive operational risk early.
+- Prevention: Require guardrail precedence contracts, confidence-threshold governance, and shadow-mode route validation before activation.
+- First seen: 2026-03-30
+- Seen in: prj0000106-idea000080-smart-prompt-routing-system
+- Recurrence count: 1
+- Promotion status: MONITOR
+

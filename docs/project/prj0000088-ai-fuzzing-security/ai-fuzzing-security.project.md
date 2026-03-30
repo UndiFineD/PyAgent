@@ -22,12 +22,15 @@ _No checkbox tasks found in the plan file._
   - `rust_core\src\security.rs`
   - `src\core\audit\AuditTrailCore.py`
   - `src\core\audit\AuditTrailMixin.py`
+  - `src\core\routing\guardrail_policy_engine.py`
   - `src\core\security_bridge.py`
   - `src\security\models\guardrail_decision.py`
   - `src\security\secret_guardrail_policy.py`
   - `src\tools\__main__.py`
   - `src\tools\pm\email.py`
   - `tests\backend\test_health_probes_security.py`
+  - `tests\core\routing\test_fail_closed_fallback_contract.py`
+  - `tests\core\routing\test_guardrail_precedence_contract.py`
   - `tests\deps\test_pyproject_parse_failure.py`
   - `tests\security\test_ci_secret_guardrail_job.py`
   - `tests\security\test_containment_cleanup.py`
@@ -35,6 +38,7 @@ _No checkbox tasks found in the plan file._
   - `tests\test_audit_trail.py`
   - `tests\test_AuditTrailCore.py`
   - `tests\test_AuditTrailMixin.py`
+  - `tests\test_core_routing_guardrail_policy_engine.py`
   - `tests\test_fuzzing_core.py`
   - `tests\test_security_bridge.py`
   - `tests\test_security_rotation.py`

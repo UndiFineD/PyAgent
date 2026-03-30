@@ -68,3 +68,34 @@
 | Recurrence count | 1 |
 | Promotion status | CANDIDATE |
 
+## prj0000106 - idea000080-smart-prompt-routing-system
+
+| Field | Value |
+|---|---|
+| task_id | prj0000106-idea000080-smart-prompt-routing-system |
+| owner_agent | @4plan |
+| source | @3design |
+| created_at | 2026-03-30 |
+| updated_at | 2026-03-30 |
+| status | DONE |
+| lifecycle | OPEN -> IN_PROGRESS -> DONE |
+| chunk_boundaries | Two chunks: Chunk A guardrail-first routing core (T-SPR-001..T-SPR-013), Chunk B ambiguity/fallback/telemetry (T-SPR-014..T-SPR-021) |
+| acceptance_criteria_scope | AC-SPR-001..AC-SPR-008 fully mapped to executable tasks and validation commands |
+| dependency_order | @5test red -> @6code green -> @7exec runtime -> @8ql quality/security -> @9git handoff |
+| handoff_target | @5test |
+| artifact_paths | docs/project/prj0000106-idea000080-smart-prompt-routing-system/idea000080-smart-prompt-routing-system.plan.md |
+| branch | prj0000106-idea000080-smart-prompt-routing-system (validated PASS before artifact writes) |
+| validation_evidence | python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 12 passed in 1.59s |
+
+### Lesson Entry
+
+| Field | Value |
+|---|---|
+| Pattern | AC-to-task mapping quality improves when each task embeds explicit owner handoff and executable command selectors. |
+| Root cause | Placeholder plans without command-level selectors create ambiguity between @5test and @6code ownership boundaries. |
+| Prevention | Require per-task owner sequencing in plan phases and include deterministic command selectors per AC mapping. |
+| First seen | 2026-03-30 |
+| Seen in | prj0000106-idea000080-smart-prompt-routing-system |
+| Recurrence count | 1 |
+| Promotion status | CANDIDATE |
+

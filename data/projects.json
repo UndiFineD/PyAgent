@@ -1,0 +1,1760 @@
+[
+  {
+    "id": "prj0000106",
+    "name": "idea000080-smart-prompt-routing-system",
+    "lane": "Discovery",
+    "summary": "Initialize workflow artifacts for idea000080 smart prompt routing system and hand off to @2think discovery.",
+    "branch": "prj0000106-idea000080-smart-prompt-routing-system",
+    "pr": null,
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "idea",
+      "idea000080",
+      "smart-prompt-routing-system"
+    ],
+    "created": "2026-03-30",
+    "updated": "2026-03-30"
+  },
+  {
+    "id": "prj0000100",
+    "name": "repo-cleanup-docs-code",
+    "lane": "Review",
+    "summary": "Review and cleanup non-dot files, refresh documentation, perform code cleanup, and add code-structure index plus allowed-websites search policy governance",
+    "branch": "prj0000100-repo-cleanup-docs-code",
+    "pr": "#247",
+    "priority": "P2",
+    "budget_tier": "L",
+    "tags": [
+      "cleanup",
+      "docs",
+      "code-index",
+      "search-policy"
+    ],
+    "created": "2026-03-29",
+    "updated": "2026-03-29"
+  },
+  {
+    "id": "prj0000104",
+    "name": "idea000014-processing",
+    "lane": "Discovery",
+    "summary": "Initialize workflow artifacts for idea000014 pyproject-requirements-sync and hand off to @2think discovery.",
+    "branch": "prj0000104-idea000014-processing",
+    "pr": null,
+    "priority": "P2",
+    "budget_tier": "S",
+    "tags": [
+      "idea",
+      "idea000014",
+      "processing"
+    ],
+    "created": "2026-03-30",
+    "updated": "2026-03-30"
+  },
+  {
+    "id": "prj0000103",
+    "name": "pending-definition",
+    "lane": "Ideas",
+    "summary": "Allocated project ID pending formal project definition and branch assignment.",
+    "branch": "pending",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "unknown",
+    "tags": [
+      "placeholder",
+      "project-id-allocation"
+    ],
+    "created": "2026-03-30",
+    "updated": "2026-03-30"
+  },
+  {
+    "id": "prj0000095",
+    "name": "source-stub-remediation",
+    "lane": "Review",
+    "summary": "Scan source code for stubs, temporary code, and mock implementations, then replace with real implementations using rust_core-first and Python fallback",
+    "branch": "prj0000095-source-stub-remediation",
+    "pr": null,
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "remediation",
+      "stubs",
+      "rust-core",
+      "python-fallback"
+    ],
+    "created": "2026-03-28",
+    "updated": "2026-03-28"
+  },
+  {
+    "id": "prj0000098",
+    "name": "backend-health-check-endpoint",
+    "lane": "Released",
+    "summary": "Initialize project from idea000013 to design and deliver backend health-check endpoint governance and implementation planning",
+    "branch": "merged",
+    "pr": "#244",
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "backend",
+      "health",
+      "readiness",
+      "liveness"
+    ],
+    "created": "2026-03-29",
+    "updated": "2026-03-29"
+  },
+  {
+    "id": "prj0000097",
+    "name": "stub-module-elimination",
+    "lane": "Released",
+    "summary": "Plan and execute elimination of stub modules and placeholders",
+    "branch": "merged",
+    "pr": "#243",
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "remediation",
+      "stubs",
+      "python-agents"
+    ],
+    "created": "2026-03-29",
+    "updated": "2026-03-29"
+  },
+  {
+    "id": "prj0000096",
+    "name": "coverage-minimum-enforcement",
+    "lane": "Released",
+    "summary": "Enforce meaningful baseline coverage threshold in CI and prevent regression from effectively disabled coverage gate",
+    "branch": "merged",
+    "pr": "#242",
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "coverage",
+      "ci",
+      "quality-gate"
+    ],
+    "created": "2026-03-29",
+    "updated": "2026-03-29"
+  },
+  {
+    "id": "prj0000093",
+    "name": "projectmanager-ideas-autosync",
+    "lane": "Review",
+    "summary": "Project Manager automatically ingests docs/project/ideas and filters out ideas already implemented as projects",
+    "branch": "prj0000093-projectmanager-ideas-autosync",
+    "pr": null,
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "project-manager",
+      "ideas",
+      "autosync"
+    ],
+    "created": "2026-03-28",
+    "updated": "2026-03-28"
+  },
+  {
+    "id": "prj0000092",
+    "name": "mypy-strict-enforcement",
+    "lane": "Released",
+    "summary": "Progressive mypy strictness enforcement starting in src/core with deterministic guardrails and phased rollout governance",
+    "branch": "merged",
+    "pr": "#237",
+    "priority": "P1",
+    "budget_tier": "M",
+    "tags": [
+      "typing",
+      "mypy",
+      "quality-gate"
+    ],
+    "created": "2026-03-28",
+    "updated": "2026-03-28"
+  },
+  {
+    "id": "prj0000091",
+    "name": "missing-compose-dockerfile",
+    "lane": "Released",
+    "summary": "Fix deploy compose reference to non-existent Dockerfile and restore clean-checkout compose viability",
+    "branch": "merged",
+    "pr": "#235 #236",
+    "priority": "P1",
+    "budget_tier": "S",
+    "tags": [
+      "deploy",
+      "compose",
+      "docker"
+    ],
+    "created": "2026-03-28",
+    "updated": "2026-03-28"
+  },
+  {
+    "id": "prj0000090",
+    "name": "private-key-remediation",
+    "lane": "Released",
+    "summary": "Remediate committed private key exposure, rotate compromised credentials, and add secret-scan guardrails in commit/CI workflows",
+    "branch": "merged",
+    "pr": "#233 #234",
+    "priority": "P1",
+    "budget_tier": "M",
+    "tags": [
+      "security",
+      "secrets",
+      "governance"
+    ],
+    "created": "2026-03-28",
+    "updated": "2026-03-28"
+  },
+  {
+    "id": "prj0000089",
+    "name": "agent-learning-loop",
+    "lane": "Released",
+    "summary": "Implement agent-improvement recommendations across .github/agents/*.agent.md and supporting project docs to reduce recurring mistakes",
+    "branch": "merged",
+    "pr": "#231",
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "agents",
+      "quality",
+      "process"
+    ],
+    "created": "2026-03-27",
+    "updated": "2026-03-27"
+  },
+  {
+    "id": "prj0000088",
+    "name": "ai-fuzzing-security",
+    "lane": "Released",
+    "summary": "Brainstorm AI fuzzing engine: learning-based path discovery, multi-cycle security testing, local Ollama model integration",
+    "branch": "merged",
+    "pr": "#230",
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "security",
+      "testing",
+      "ai"
+    ],
+    "created": "2026-03-26",
+    "updated": "2026-03-27"
+  },
+  {
+    "id": "prj0000087",
+    "name": "n8n-workflow-bridge",
+    "lane": "Released",
+    "summary": "Bi-directional n8n integration: agents trigger automation chains via n8n API and act as intelligent decision nodes in workflows",
+    "branch": "merged",
+    "pr": "#229",
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "automation",
+      "integration",
+      "n8n"
+    ],
+    "created": "2026-03-26",
+    "updated": "2026-03-27"
+  },
+  {
+    "id": "prj0000086",
+    "name": "universal-agent-shell",
+    "lane": "Released",
+    "summary": "UniversalAgent shell: dynamically load CoderCore/SecurityCore/etc. by intent; consolidate 50+ specialized agent classes",
+    "branch": "merged",
+    "pr": "#228",
+    "priority": "P2",
+    "budget_tier": "XL",
+    "tags": [
+      "architecture",
+      "agents",
+      "refactor"
+    ],
+    "created": "2026-03-26",
+    "updated": "2026-03-27"
+  },
+  {
+    "id": "prj0000085",
+    "name": "shadow-mode-replay",
+    "lane": "Released",
+    "summary": "Shadow execution mode (side-effect-free parallel agent runs) + deterministic session replay from structured logs for debug",
+    "branch": "merged",
+    "pr": "#227",
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "testing",
+      "debug",
+      "observability"
+    ],
+    "created": "2026-03-26",
+    "updated": "2026-03-27"
+  },
+  {
+    "id": "prj0000084",
+    "name": "immutable-audit-trail",
+    "lane": "Released",
+    "summary": "Append-only hashchain audit log for all BFT-approved and security-critical operations; tamper-evident with cryptographic chaining",
+    "branch": "merged",
+    "pr": "#226",
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "security",
+      "audit",
+      "compliance"
+    ],
+    "created": "2026-03-26",
+    "updated": "2026-03-27"
+  },
+  {
+    "id": "prj0000083",
+    "name": "llm-circuit-breaker",
+    "lane": "Released",
+    "summary": "Per-provider LLM request circuit breaker with configurable failure thresholds, exponential backoff, and fallback model routing",
+    "branch": "merged",
+    "pr": "#225",
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "resilience",
+      "llm",
+      "infrastructure"
+    ],
+    "created": "2026-03-26",
+    "updated": "2026-03-27"
+  },
+  {
+    "id": "prj0000082",
+    "name": "agent-execution-sandbox",
+    "lane": "Released",
+    "summary": "SandboxMixin: restrict each agent's file and network access to approved path sets; integrated with StateTransaction validation",
+    "branch": "merged",
+    "pr": "#224",
+    "priority": "P2",
+    "budget_tier": "S",
+    "tags": [
+      "security",
+      "sandbox",
+      "core"
+    ],
+    "created": "2026-03-26",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000081",
+    "name": "mcp-server-ecosystem",
+    "lane": "Released",
+    "summary": "MCP server hot-load registry with security sandboxing; enables agents to dynamically connect to 500+ community MCP servers",
+    "branch": "prj0000081-mcp-server-ecosystem",
+    "pr": "#223",
+    "priority": "P3",
+    "budget_tier": "L",
+    "tags": [
+      "tools",
+      "mcp",
+      "ecosystem"
+    ],
+    "created": "2026-03-26",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000080",
+    "name": "cort-reasoning-pipeline",
+    "lane": "Released",
+    "summary": "Chain-of-Recursive-Thoughts: multi-round recursive reasoning pipeline with dynamic evaluation engine and temperature-variant alternative generation",
+    "branch": "prj0000080-cort-reasoning-pipeline",
+    "pr": "#221",
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "reasoning",
+      "ai",
+      "core"
+    ],
+    "created": "2026-03-26",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000079",
+    "name": "automem-hybrid-search",
+    "lane": "Released",
+    "summary": "AutoMem 9-component hybrid memory search (Vector+Graph+Temporal+Lexical+HNSW+AGE+LTREE+BRIN+Hash) on PostgreSQL; NebulaOS benchmark dashboard; app auto-discovery registry",
+    "branch": "prj0000079-automem-hybrid-search",
+    "pr": "#220",
+    "priority": "P2",
+    "budget_tier": "L",
+    "tags": [
+      "memory",
+      "search",
+      "postgresql"
+    ],
+    "created": "2026-03-26",
+    "updated": "2026-03-27"
+  },
+  {
+    "id": "prj0000001",
+    "name": "async-runtime",
+    "lane": "Released",
+    "summary": "Tokio-backed async helpers and PyO3 bindings for non-blocking agent ops",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "core",
+      "async",
+      "rust"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000002",
+    "name": "core-system",
+    "lane": "Released",
+    "summary": "Core runtime modules: task_queue, agent_registry, memory, observability scaffold",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "core"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000003",
+    "name": "hybrid-llm-security",
+    "lane": "Released",
+    "summary": "Hybrid LLM security core: Rust encryption, transactions, key rotation",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "security",
+      "llm",
+      "rust"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000004",
+    "name": "llm-context-consolidation",
+    "lane": "Released",
+    "summary": "Unified LLM context window management and ContextManager implementation",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "llm",
+      "context"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000005",
+    "name": "llm-swarm-architecture",
+    "lane": "Released",
+    "summary": "Multi-agent swarm coordination: AgentRegistry, TaskScheduler, SwarmMemory",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "swarm",
+      "architecture"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000006",
+    "name": "unified-transaction-manager",
+    "lane": "Released",
+    "summary": "MemoryTransaction, StorageTransaction, ProcessTransaction, ContextTransaction managers",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "core",
+      "transactions"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000007",
+    "name": "advanced-research",
+    "lane": "Released",
+    "summary": "Research notes, long-horizon planning artifacts, and literature review",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "docs",
+      "research"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000008",
+    "name": "agent-workflow",
+    "lane": "Released",
+    "summary": "Task state machine, WorkflowEngine, and agent handoff protocol",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "core",
+      "workflow"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000009",
+    "name": "community-collaboration",
+    "lane": "Released",
+    "summary": "Community contribution guidelines, issue templates, and team governance docs",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "docs",
+      "community"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000010",
+    "name": "context-management",
+    "lane": "Released",
+    "summary": "ContextManager windowing, SkillsRegistry, and integration smoke tests",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "core",
+      "context"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000011",
+    "name": "core-project-structure",
+    "lane": "Released",
+    "summary": "Canonical src/ layout, __init__.py ordering, and import path standardization",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "core",
+      "structure"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000012",
+    "name": "deployment-operations",
+    "lane": "Released",
+    "summary": "Docker compose, Dockerfile, and provisioning scripts for production deploy",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "deploy",
+      "ops"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000013",
+    "name": "dev-tools-autonomy",
+    "lane": "Released",
+    "summary": "Autonomous dev tooling: dependency audit, self-healing scripts",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "tools",
+      "autonomy"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000014",
+    "name": "dev-tools-capabilities",
+    "lane": "Released",
+    "summary": "Expanded dev tool capabilities: static analysis, complexity metrics",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "tools"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000015",
+    "name": "dev-tools-implementation",
+    "lane": "Released",
+    "summary": "Full implementation of code improvement pipeline tools",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "tools"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000016",
+    "name": "dev-tools-structure",
+    "lane": "Released",
+    "summary": "File layout and modular structure for src/tools/ package",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "tools",
+      "structure"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000017",
+    "name": "dev-tools-utilities",
+    "lane": "Released",
+    "summary": "Shared utilities for dev tools: path helpers, config loaders, formatters",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "tools",
+      "utils"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000018",
+    "name": "documentation-assets",
+    "lane": "Released",
+    "summary": "MkDocs config, Mermaid/PlantUML diagram assets, and doc build scripts",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "docs"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000019",
+    "name": "future-roadmap",
+    "lane": "Released",
+    "summary": "Research notes and long-horizon planning artifacts for roadmap items",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "docs",
+      "planning"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000020",
+    "name": "github-import",
+    "lane": "Released",
+    "summary": "GitHub import system: webhook handler, repo sync, and PR ingestion",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "github",
+      "import"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000021",
+    "name": "project-management-governance",
+    "lane": "Released",
+    "summary": "PRINCE2/agile hybrid governance model, project doc conventions, and audit trail",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "governance",
+      "docs"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000022",
+    "name": "external-repos-tracking",
+    "lane": "Released",
+    "summary": "External repository tracking list and dependency provenance notes",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "docs",
+      "tracking"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000023",
+    "name": "naming-standards",
+    "lane": "Released",
+    "summary": "PascalCase module naming convention, file-rename tracker, and migration guide",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "standards",
+      "naming"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000024",
+    "name": "code-of-conduct",
+    "lane": "Released",
+    "summary": "Contributor Code of Conduct (Contributor Covenant v2.1)",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "XS",
+    "tags": [
+      "docs",
+      "community"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000025",
+    "name": "contributing-guide",
+    "lane": "Released",
+    "summary": "CONTRIBUTING.md with PR workflow, DCO, and branch naming instructions",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "docs",
+      "community"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000026",
+    "name": "architecture-adr-template",
+    "lane": "Released",
+    "summary": "Architecture Decision Record template and initial ADR for async runtime",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "docs",
+      "architecture"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000027",
+    "name": "onboarding-docs",
+    "lane": "Released",
+    "summary": "Developer onboarding guide: environment setup, first PR walkthrough",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "docs",
+      "onboarding"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000028",
+    "name": "api-reference",
+    "lane": "Released",
+    "summary": "Auto-generated and hand-curated API reference docs for backend and core",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "docs",
+      "api"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000029",
+    "name": "performance-docs",
+    "lane": "Released",
+    "summary": "Performance benchmarking methodology, baseline results, and optimization notes",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "docs",
+      "performance"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000030",
+    "name": "standards-code-style",
+    "lane": "Released",
+    "summary": "Python/Rust/TS style guide: max-line 120, PascalCase modules, flake8 config",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "XS",
+    "tags": [
+      "standards",
+      "style"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000031",
+    "name": "standards-commit-style",
+    "lane": "Released",
+    "summary": "Conventional commits standard, commit message template, and pre-commit hook",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "XS",
+    "tags": [
+      "standards",
+      "git"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000032",
+    "name": "standards-test-style",
+    "lane": "Released",
+    "summary": "pytest conventions, fixture patterns, test coverage targets, and naming rules",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "XS",
+    "tags": [
+      "standards",
+      "testing"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000033",
+    "name": "standards-security",
+    "lane": "Released",
+    "summary": "OWASP alignment, input validation policy, allowlist patterns, and SBOM process",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "standards",
+      "security"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000034",
+    "name": "standards-docs",
+    "lane": "Released",
+    "summary": "Documentation standards: structure, markdown lint rules, header requirements",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "XS",
+    "tags": [
+      "standards",
+      "docs"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000035",
+    "name": "standards-ci",
+    "lane": "Released",
+    "summary": "CI workflow design standards: job naming, matrix strategy, artifact retention",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "standards",
+      "ci"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000036",
+    "name": "standards-release",
+    "lane": "Released",
+    "summary": "Release process: semver policy, changelog format, tagging convention",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "XS",
+    "tags": [
+      "standards",
+      "release"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000037",
+    "name": "tools-crdt-security",
+    "lane": "Released",
+    "summary": "CRDT security tooling: P2P security deps, libp2p integration, encryption layer",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "security",
+      "crdt",
+      "rust"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000038",
+    "name": "project-management-v1",
+    "lane": "Released",
+    "summary": "Initial project management tooling: folder structure, stub generator, registry",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "governance",
+      "tools"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000039",
+    "name": "conftest-typing-fixes",
+    "lane": "Released",
+    "summary": "Fix conftest.py type annotations to unblock full test suite execution",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "testing",
+      "types"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000040",
+    "name": "flm-integration",
+    "lane": "Released",
+    "summary": "FLM (Fastflow Language Model) OpenAI-compatible chat adapter and tool-call loop",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "llm",
+      "flm"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000041",
+    "name": "flm-benchmark",
+    "lane": "Released",
+    "summary": "FLM benchmark harness: latency, throughput, and accuracy scoring",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "llm",
+      "benchmark",
+      "flm"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000042",
+    "name": "agent-workflow-polish",
+    "lane": "Released",
+    "summary": "Agent workflow refinements: error handling improvements and state logging",
+    "branch": "merged",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "core",
+      "workflow"
+    ],
+    "created": "2026-01-01",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000043",
+    "name": "p2p-security-deps",
+    "lane": "Released",
+    "summary": "Upgrade libp2p 0.49 to 0.56 to remediate 6 Dependabot CVEs in P2P stack",
+    "branch": "prj0000043-p2p-security-deps",
+    "pr": null,
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "security",
+      "crdt",
+      "rust"
+    ],
+    "created": "2026-03-10",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000044",
+    "name": "transaction-managers-stubs",
+    "lane": "Released",
+    "summary": "CI stubs for missing transaction manager modules to unblock test suite",
+    "branch": "prj0000044-transaction-managers-stubs",
+    "pr": 136,
+    "priority": "P2",
+    "budget_tier": "S",
+    "tags": [
+      "core",
+      "transactions",
+      "ci"
+    ],
+    "created": "2026-03-10",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000045",
+    "name": "transaction-managers-full",
+    "lane": "Released",
+    "summary": "Full implementation of all four transaction managers (Memory, Storage, Process, Context)",
+    "branch": "merged",
+    "pr": 137,
+    "priority": "P2",
+    "budget_tier": "L",
+    "tags": [
+      "core",
+      "transactions"
+    ],
+    "created": "2026-03-10",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000046",
+    "name": "flm-tps-benchmark",
+    "lane": "Archived",
+    "summary": "Per-provider tokens-per-second metrics harness for FLM endpoint evaluation",
+    "branch": "prj0000046-flm-tps-benchmark",
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "llm",
+      "benchmark",
+      "flm"
+    ],
+    "created": "2026-03-10",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000047",
+    "name": "conky-real-metrics",
+    "lane": "Released",
+    "summary": "Wire NebulaOS Conky panel to live /api/metrics/system endpoint with charts",
+    "branch": "merged",
+    "pr": 185,
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "ui",
+      "nebula",
+      "metrics"
+    ],
+    "created": "2026-03-15",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000048",
+    "name": "taskbar-config",
+    "lane": "Released",
+    "summary": "Taskbar always-visible toggle in NebulaOS settings modal with localStorage persistence",
+    "branch": "merged",
+    "pr": 186,
+    "priority": "P2",
+    "budget_tier": "S",
+    "tags": [
+      "ui",
+      "nebula"
+    ],
+    "created": "2026-03-15",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000049",
+    "name": "dependabot-security-fixes",
+    "lane": "Released",
+    "summary": "Apply Dependabot-flagged security fixes across Python and JS dependencies",
+    "branch": "merged",
+    "pr": 187,
+    "priority": "P2",
+    "budget_tier": "S",
+    "tags": [
+      "security",
+      "ci"
+    ],
+    "created": "2026-03-18",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000050",
+    "name": "install-script",
+    "lane": "Released",
+    "summary": "Cross-platform install.ps1 environment bootstrap for dev onboarding",
+    "branch": "merged",
+    "pr": 188,
+    "priority": "P2",
+    "budget_tier": "S",
+    "tags": [
+      "tools",
+      "onboarding"
+    ],
+    "created": "2026-03-20",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000051",
+    "name": "readme-update",
+    "lane": "Released",
+    "summary": "Comprehensive README rewrite with NebulaOS screenshot, full component overview, and Future Roadmap",
+    "branch": "merged",
+    "pr": 189,
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "docs"
+    ],
+    "created": "2026-03-22",
+    "updated": "2026-03-24"
+  },
+  {
+    "id": "prj0000052",
+    "name": "project-management",
+    "lane": "Released",
+    "summary": "Kanban lifecycle board, data/projects.json, ProjectManager NebulaOS app, and /api/projects endpoint",
+    "branch": "prj0000052-project-management",
+    "pr": 190,
+    "priority": "P2",
+    "budget_tier": "L",
+    "tags": [
+      "governance",
+      "ui",
+      "nebula",
+      "backend"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000053",
+    "name": "hmac-webhook-verification",
+    "lane": "Released",
+    "summary": "Secure GitHub webhook payloads with HMAC-SHA256 signature validation in src/github_app.py",
+    "branch": "prj0000053-hmac-webhook-verification",
+    "pr": 191,
+    "priority": "P2",
+    "budget_tier": "S",
+    "tags": [
+      "security",
+      "github"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000054",
+    "name": "backend-authentication",
+    "lane": "Released",
+    "summary": "Add API-key or JWT authentication to all REST and WebSocket endpoints",
+    "branch": "prj0000054-backend-authentication",
+    "pr": 192,
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "security",
+      "backend"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000055",
+    "name": "websocket-e2e-encryption",
+    "lane": "Released",
+    "summary": "Wire X25519 ECDH key exchange and AES-256-GCM message encryption into the WebSocket transport for per-session forward secrecy",
+    "branch": "prj0000055-websocket-e2e-encryption",
+    "pr": 193,
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "security",
+      "websocket",
+      "encryption"
+    ],
+    "created": "2026-03-25",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000056",
+    "name": "rust-async-transport-activation",
+    "lane": "Released",
+    "summary": "Enable async-transport feature in rust_core to activate QUIC-over-Tokio for faster inter-agent messaging",
+    "branch": null,
+    "pr": 194,
+    "priority": "P4",
+    "budget_tier": "unknown",
+    "tags": [
+      "rust",
+      "transport",
+      "async"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000057",
+    "name": "agent-orchestration-graph",
+    "lane": "Released",
+    "summary": "Visual DAG panel in NebulaOS showing live task flow and agent status across all 10 pipeline stages",
+    "branch": null,
+    "pr": 195,
+    "priority": "P4",
+    "budget_tier": "unknown",
+    "tags": [
+      "ui",
+      "nebula",
+      "agents"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000058",
+    "name": "mobile-responsive-nebula-os",
+    "lane": "Released",
+    "summary": "Add CSS responsive breakpoints and touch-friendly interaction patterns to the NebulaOS shell",
+    "branch": null,
+    "pr": 196,
+    "priority": "P4",
+    "budget_tier": "unknown",
+    "tags": [
+      "ui",
+      "nebula",
+      "mobile"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000059",
+    "name": "plugin-marketplace-browser",
+    "lane": "Released",
+    "summary": "In-NebulaOS panel for discovering, installing, and managing third-party agent plugins",
+    "branch": null,
+    "pr": 197,
+    "priority": "P4",
+    "budget_tier": "unknown",
+    "tags": [
+      "ui",
+      "nebula",
+      "plugins"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000060",
+    "name": "flm-token-throughput-dashboard",
+    "lane": "Released",
+    "summary": "Real-time tokens-per-second charts fed from FLM telemetry in NebulaOS",
+    "branch": null,
+    "pr": 198,
+    "priority": "P4",
+    "budget_tier": "unknown",
+    "tags": [
+      "ui",
+      "nebula",
+      "llm",
+      "flm"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000061",
+    "name": "theme-system",
+    "lane": "Released",
+    "summary": "Light mode and retro terminal theme for NebulaOS with theme selector and persisted preference",
+    "branch": null,
+    "pr": 199,
+    "priority": "P4",
+    "budget_tier": "unknown",
+    "tags": [
+      "ui",
+      "nebula",
+      "themes"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000062",
+    "name": "live-agent-execution-in-codebuilder",
+    "lane": "Released",
+    "summary": "Wire the 10-agent pipeline to CodeBuilder UI with streaming per-agent log output and progress indicators",
+    "branch": null,
+    "pr": 200,
+    "priority": "P4",
+    "budget_tier": "unknown",
+    "tags": [
+      "ui",
+      "nebula",
+      "agents",
+      "codebuilder"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000063",
+    "name": "structured-logging",
+    "lane": "Released",
+    "summary": "JSON structured logging with correlation IDs and severity levels across all backend endpoints and agents",
+    "branch": "prj0000063-structured-logging",
+    "pr": 201,
+    "priority": "P4",
+    "budget_tier": "S",
+    "tags": [
+      "observability",
+      "logging",
+      "backend"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000064",
+    "name": "rate-limiting-middleware",
+    "lane": "Released",
+    "summary": "Token-bucket rate limiting middleware on all FastAPI REST endpoints with configurable per-route limits",
+    "branch": null,
+    "pr": 202,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "security",
+      "backend",
+      "performance"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000065",
+    "name": "agent-memory-persistence",
+    "lane": "Released",
+    "summary": "Persist agent conversation context and task history across sessions using a JSON file-backed MemoryStore",
+    "branch": "prj0000065-agent-memory-persistence",
+    "pr": 203,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "agents",
+      "memory",
+      "storage"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000066",
+    "name": "api-versioning",
+    "lane": "Released",
+    "summary": "Versioned API routing (/api/v1/) with explicit schema contracts and backwards-compatible evolution strategy",
+    "branch": null,
+    "pr": 204,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "backend",
+      "api",
+      "versioning"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000067",
+    "name": "rust-file-watcher",
+    "lane": "Released",
+    "summary": "Rust-powered filesystem watcher integrated into rust_core for real-time project change detection and hot-reload triggers",
+    "branch": "prj0000067-rust-file-watcher",
+    "pr": 205,
+    "priority": "P4",
+    "budget_tier": "M",
+    "tags": [
+      "rust",
+      "tools",
+      "filesystem"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000068",
+    "name": "agent-timeout-watchdog",
+    "lane": "Released",
+    "summary": "Configurable per-agent execution timeout with graceful shutdown, retry budget, and dead-letter queue for timed-out tasks",
+    "branch": "prj0000068-agent-timeout-watchdog",
+    "pr": 206,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "agents",
+      "reliability",
+      "watchdog"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000069",
+    "name": "ci-test-parallelization",
+    "lane": "Released",
+    "summary": "Split pytest suite into parallel CI matrix buckets to reduce CI wall time by ~60% via sharding",
+    "branch": "prj0000069-ci-test-parallelization",
+    "pr": 207,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "ci",
+      "testing",
+      "performance"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000070",
+    "name": "opentelemetry-tracing",
+    "lane": "Released",
+    "summary": "OpenTelemetry span instrumentation across FastAPI backend, core agents, and Rust FFI bridge for distributed tracing",
+    "branch": "prj0000070-opentelemetry-tracing",
+    "pr": 208,
+    "priority": "P4",
+    "budget_tier": "M",
+    "tags": [
+      "observability",
+      "tracing",
+      "backend",
+      "rust"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000071",
+    "name": "dark-mode-accessibility",
+    "lane": "Released",
+    "summary": "WCAG 2.1 AA accessibility audit and remediation for the NebulaOS dark theme: contrast ratios, keyboard nav, ARIA labels",
+    "branch": "prj0000071-dark-mode-accessibility",
+    "pr": 211,
+    "priority": "P4",
+    "budget_tier": "S",
+    "tags": [
+      "ui",
+      "nebula",
+      "accessibility",
+      "a11y"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000072",
+    "name": "websocket-reconnect-logic",
+    "lane": "Released",
+    "summary": "Auto-reconnect with exponential backoff and jitter for frontend WebSocket drops, with connection state indicator in NebulaOS",
+    "branch": "prj0000072-websocket-reconnect-logic",
+    "pr": 209,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "ui",
+      "websocket",
+      "reliability"
+    ],
+    "created": "2026-03-24",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000073",
+    "name": "api-documentation",
+    "lane": "Released",
+    "summary": "Hand-crafted API reference covering all backend REST endpoints, WebSocket protocol, authentication flows, and error codes in docs/api/",
+    "branch": "prj0000073-api-documentation",
+    "pr": 210,
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "docs",
+      "api",
+      "backend"
+    ],
+    "created": "2026-03-25",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000074",
+    "name": "workspace-meta-improvements",
+    "lane": "Released",
+    "summary": "Move agent memory/logs to .github/agents, enforce docstrings policy in @5test and @6code, restructure docs/architecture, add SWOT+risk to kanban, expand @2think depth",
+    "branch": "prj0000074-workspace-meta-improvements",
+    "pr": 212,
+    "priority": "P2",
+    "budget_tier": "L",
+    "tags": [
+      "meta",
+      "workflow",
+      "docs",
+      "architecture"
+    ],
+    "created": "2026-03-25",
+    "updated": "2026-03-25"
+  },
+  {
+    "id": "prj0000075",
+    "name": "ci-simplification",
+    "lane": "Released",
+    "summary": "Delete 4 redundant workflows (core-quality, pm, quality, testing-infra); keep ci.yml unchanged; add security.yml for CodeQL scanning of Python and JavaScript",
+    "branch": "prj0000075-ci-simplification",
+    "pr": 215,
+    "priority": "P2",
+    "budget_tier": "S",
+    "tags": [
+      "ci",
+      "devops",
+      "workflow"
+    ],
+    "created": "2026-03-25",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000076",
+    "name": "future-ideas-kanban",
+    "lane": "Released",
+    "summary": "Full workspace audit to surface future improvement ideas; add SWOT-prioritised idea table to kanban.md with priority, impact, urgency, and description",
+    "branch": "prj0000076-future-ideas-kanban",
+    "pr": 218,
+    "priority": "P3",
+    "budget_tier": "M",
+    "tags": [
+      "planning",
+      "kanban",
+      "roadmap"
+    ],
+    "created": "2026-03-25",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000077",
+    "name": "ci-backend-deps",
+    "lane": "Released",
+    "summary": "Add missing backend runtime dependencies (psutil, PyJWT, python-json-logger) to requirements.txt; fix 0master.log.md test content",
+    "branch": "prj0000077-ci-backend-deps",
+    "pr": 216,
+    "priority": "P1",
+    "budget_tier": "XS",
+    "tags": [
+      "ci",
+      "dependencies",
+      "backend"
+    ],
+    "created": "2026-03-26",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000078",
+    "name": "pm-swot-risk-ui",
+    "lane": "Released",
+    "summary": "Add SWOT Analysis and Risk Register navigation buttons to the Project Manager toolbar, opening kanban.md in the Editor app at the relevant sections",
+    "branch": "prj0000078-pm-swot-risk-ui",
+    "pr": 219,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "ui",
+      "swot",
+      "risk",
+      "project-manager"
+    ],
+    "created": "2026-03-26",
+    "updated": "2026-03-26"
+  },
+  {
+    "id": "prj0000094",
+    "name": "idea-003 - mypy-strict-enforcement",
+    "lane": "Review",
+    "summary": "This idea focuses on mypy strict enforcement in area 1 – Python agents. The current signal indicates priority P1, impact H, and urgency H. The SWOT tag is W (Weakness in current implementation).",
+    "branch": null,
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "idea",
+      "idea000003"
+    ],
+    "created": "2026-03-28",
+    "updated": "2026-03-28"
+  },
+  {
+    "id": "prj0000099",
+    "name": "stub-module-elimination",
+    "lane": "Released",
+    "summary": "Validation-first closure for stub-module-elimination with lifecycle artifacts completed and baseline pre-commit remediation integrated into @8ql/@9git handoff policy.",
+    "branch": "merged",
+    "pr": "#245",
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "stubs",
+      "module-elimination",
+      "idea000011",
+      "policy-hardening"
+    ],
+    "created": "2026-03-29",
+    "updated": "2026-03-29"
+  },
+  {
+    "id": "prj0000101",
+    "name": "idea-013 - backend-health-check-endpoint",
+    "lane": "Review",
+    "summary": "This idea focuses on backend health check endpoint in area 3 – Backend. The current signal indicates priority P2, impact M, and urgency H. The SWOT tag is W (Weakness in current implementation).",
+    "branch": null,
+    "pr": null,
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "idea",
+      "idea000013"
+    ],
+    "created": "2026-03-29",
+    "updated": "2026-03-30"
+  },
+  {
+    "id": "prj0000102",
+    "name": "idea-014 - pyproject-requirements-sync",
+    "lane": "Released",
+    "summary": "This idea focuses on pyproject requirements sync in area 9 – Dependencies. The current signal indicates priority P2, impact M, and urgency M. The SWOT tag is W (Weakness in current implementation).",
+    "branch": "merged",
+    "pr": "#251 #252",
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "idea",
+      "idea000014"
+    ],
+    "created": "2026-03-29",
+    "updated": "2026-03-30"
+  },
+  {
+    "id": "prj0000105",
+    "name": "idea-016 - mixin-architecture-base",
+    "lane": "Released",
+    "summary": "This idea focuses on mixin architecture base in area 1 – Python agents. The current signal indicates priority P3, impact H, and urgency M. The SWOT tag is W (Weakness in current implementation).",
+    "branch": "merged",
+    "pr": "#258",
+    "priority": "P3",
+    "budget_tier": "S",
+    "tags": [
+      "idea",
+      "idea000016"
+    ],
+    "created": "2026-03-30",
+    "updated": "2026-03-30"
+  }
+]

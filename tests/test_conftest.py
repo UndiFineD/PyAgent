@@ -17,12 +17,35 @@ all without changing runtime behaviour, and the current version is clean
 
 from __future__ import annotations
 
+import importlib.util
 from pathlib import Path
+from types import ModuleType
 from unittest.mock import Mock, patch
 
 import pytest
 
-import conftest as repo_conftest
+
+def _load_repo_root_conftest() -> ModuleType:
+    """Load the repository-root conftest module by file path.
+
+    Returns:
+        Loaded module object for the repository root conftest.
+
+    Raises:
+        RuntimeError: If the module spec cannot be created or loaded.
+
+    """
+    root_conftest_path = Path(__file__).resolve().parents[1] / "conftest.py"
+    spec = importlib.util.spec_from_file_location("repo_root_conftest", root_conftest_path)
+    if spec is None or spec.loader is None:
+        msg = f"Unable to load repository root conftest from {root_conftest_path}"
+        raise RuntimeError(msg)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+repo_conftest = _load_repo_root_conftest()
 
 
 def test_session_finish_sets_exitstatus_when_git_dirty(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
