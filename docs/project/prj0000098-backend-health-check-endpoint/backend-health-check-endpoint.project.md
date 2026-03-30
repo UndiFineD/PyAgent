@@ -19,6 +19,7 @@ _No checkbox tasks found in the plan file._
 
 - Code detected in:
   - `scripts\ci\run_checks.py`
+  - `scripts\deps\check_dependency_parity.py`
   - `src\security\rotation_checkpoint_service.py`
   - `tests\backend\test_health_probes_access_control.py`
   - `tests\backend\test_health_probes_contract.py`

@@ -21,12 +21,12 @@ It does **not** edit code directly — instead it:
 
 ### Project lifecycle board
 **Next available prj:** see `data/nextproject.md`
-- `docs/project/kanban.md` — single source of truth for project status across all
+- `docs/project/kanban.json` — canonical machine-readable source of truth for project status across all
   lifecycle lanes (Ideas → Discovery → Design → In Sprint → Review → Released → Archived).
   - Read this before allocating a new `prjNNNNNNN` to confirm the next available ID.
   - Update this after any lane transition.
-  - The board is also queryable via `GET /api/projects` in the backend.
-- `data/projects.json` — machine-readable project registry (mirrors kanban.md); updated in sync.
+  - The registry is queryable via `GET /api/projects` in the backend.
+- `docs/project/kanban.md` — synchronized human-readable board generated/maintained in sync with `kanban.json`.
 
 ### Code + implementation areas
 - `src/` — Python core, agents, tools, runtime
@@ -57,10 +57,10 @@ These are the primary memory artifacts the master agent reads/updates:
 1. **Understand the goal** (user request / ticket / issue).
 2. **Survey existing knowledge** (memory files, docs, open PRs, CI status).
 3. **Assign the project boundary** by assigning or validating the next available `prjNNNNNNN` identifier, confirming numbering continuity, then confirming the project folder and the expected project-specific branch.
-3a. **Update kanban.md** after allocating a project ID: add the new project to the
-    `Ideas` or `Discovery` lane in `docs/project/kanban.md` and commit the change (or
-    include it in the first commit on the project branch). Update `data/projects.json`
-    to match.
+3a. **Update kanban.json** after allocating a project ID: add the new project to the
+  `Ideas` or `Discovery` lane in `docs/project/kanban.json` and commit the change (or
+  include it in the first commit on the project branch). Keep `docs/project/kanban.md`
+  synchronized via `scripts/project_registry_governance.py`.
 4. **Choose the right expert agent** (e.g., @coding, @tester, @planner).
 5. **Delegate a plan + acceptance criteria** to that agent.
 6. **Track progress** and update memory docs accordingly.
@@ -202,7 +202,7 @@ The repo `README.md` is the primary on-ramp for new contributors. Keep it up to 
 - At the beginning of each task, read .github/agents/governance/shared-governance-checklist.md and apply the role-specific items before delegation.
 - For fast repository lookup, use .github/agents/data/codestructure.md and the split index files it references.
 
-- For docs/project/kanban.md + data/projects.json lifecycle changes, run python scripts/project_registry_governance.py set-lane --id <prjNNNNNNN> --lane <lane> and then python scripts/project_registry_governance.py validate.
+- For docs/project/kanban.json lifecycle changes (and synchronized docs/project/kanban.md updates), run python scripts/project_registry_governance.py set-lane --id <prjNNNNNNN> --lane <lane> and then python scripts/project_registry_governance.py validate.
 - For docs/architecture and docs/architecture/adr updates, run python scripts/architecture_governance.py validate (and python scripts/architecture_governance.py create --title <title> when a new ADR is required).
 - For project artifact updates under docs/project/prjNNNNNNN/, run python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py before delegation.
 

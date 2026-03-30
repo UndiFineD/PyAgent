@@ -41,6 +41,11 @@ _No checkbox tasks found in the plan file._
   - `tests\ci\test_workflow_count.py`
   - `tests\core\test_core.py`
   - `tests\deploy\test_compose_dockerfile_paths.py`
+  - `tests\deps\test_dependency_parity_gate.py`
+  - `tests\deps\test_generate_requirements_deterministic.py`
+  - `tests\deps\test_install_compatibility_contract.py`
+  - `tests\deps\test_manual_requirements_edit_detected.py`
+  - `tests\deps\test_pyproject_parse_failure.py`
   - `tests\docs\test_agent_workflow_policy_docs.py`
   - `tests\docs\test_allowed_websites_governance.py`
   - `tests\docs\test_api_docs_exist.py`

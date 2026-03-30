@@ -24,4 +24,5 @@
   - `scripts\generate_project_dashboard.py`
   - `scripts\project_registry_governance.py`
   - `scripts\validate_project_implementation.py`
+  - `tests\deps\test_pyproject_parse_failure.py`
   - `tests\test_api_projects_lane_sync.py`

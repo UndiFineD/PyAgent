@@ -28,6 +28,7 @@ _No checkbox tasks found in the plan file._
   - `src\tools\__main__.py`
   - `src\tools\pm\email.py`
   - `tests\backend\test_health_probes_security.py`
+  - `tests\deps\test_pyproject_parse_failure.py`
   - `tests\security\test_ci_secret_guardrail_job.py`
   - `tests\security\test_containment_cleanup.py`
   - `tests\security\test_secret_guardrail_policy.py`

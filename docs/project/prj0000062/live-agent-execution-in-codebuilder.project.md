@@ -112,6 +112,8 @@ _No checkbox tasks found in the plan file._
   - `tests\agents\test_agents.py`
   - `tests\agents\test_base_agent.py`
   - `tests\core\__init__.py`
+  - `tests\deps\test_generate_requirements_deterministic.py`
+  - `tests\deps\test_install_compatibility_contract.py`
   - `tests\docs\test_agent_workflow_policy_docs.py`
   - `tests\docs\test_copilot_instructions_governance.py`
   - `tests\fixtures\__init__.py`

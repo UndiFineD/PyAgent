@@ -19,6 +19,7 @@ _No checkbox tasks found in the plan file._
 
 - Code detected in:
   - `rust_core\src\transport\channel\quic.rs`
+  - `scripts\deps\generate_requirements.py`
   - `scripts\GeneratePmTemplates.py`
   - `src\core\resilience\CircuitBreakerConfig.py`
   - `src\core\resilience\CircuitBreakerCore.py`
@@ -26,6 +27,8 @@ _No checkbox tasks found in the plan file._
   - `src\core\resilience\CircuitBreakerRegistry.py`
   - `src\core\resilience\CircuitBreakerState.py`
   - `src\tools\pm\risk.py`
+  - `tests\deps\test_generate_requirements_deterministic.py`
+  - `tests\deps\test_manual_requirements_edit_detected.py`
   - `tests\test_circuit_breaker.py`
   - `tests\test_CircuitBreakerConfig.py`
   - `tests\test_CircuitBreakerCore.py`

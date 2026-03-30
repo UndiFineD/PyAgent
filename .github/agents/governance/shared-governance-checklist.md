@@ -9,7 +9,7 @@ docs-policy, and handoff quality gates.
 - Never use blanket staging for project work.
 - Validate docs policy when project artifacts under docs/project/prjNNNNNNN/ are changed:
   - python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
-- Validate registry/kanban consistency when docs/project/kanban.md or data/projects.json changes:
+- Validate registry/kanban consistency when docs/project/kanban.json (and synchronized docs/project/kanban.md) changes:
   - python scripts/project_registry_governance.py validate
 - Validate ADR governance when docs/architecture or docs/architecture/adr changes:
   - python scripts/architecture_governance.py validate
