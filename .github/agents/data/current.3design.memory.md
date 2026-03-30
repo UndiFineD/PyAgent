@@ -7,6 +7,34 @@
 - rollover: At new project start, append this file's entries to history.3design.memory.md in chronological order, then clear Entries.
 
 ## Entries
+- task_id: prj0000106-idea000080-smart-prompt-routing-system
+	state: DONE
+	selected_design_path: Option B (hybrid guardrails + semantic classifier + bounded deterministic tie-break)
+	assumptions:
+		- Deterministic guardrails retain absolute precedence over classifier/tie-break outcomes.
+		- Route decisions are promoted from shadow to active mode only after parity and latency gates pass.
+		- Existing deterministic path remains available as operational fallback.
+	interface_contract_notes:
+		- IFACE-SPR-001 routing facade contract for total decision coverage.
+		- IFACE-SPR-002 guardrail precedence invariant.
+		- IFACE-SPR-003 classifier confidence + schema contract.
+		- IFACE-SPR-004 deterministic tie-break + timeout contract.
+		- IFACE-SPR-005 fail-closed fallback contract.
+		- IFACE-SPR-006 redacted provenance telemetry contract.
+	handoff:
+		target_agent: @4plan
+		canonical_artifact: docs/project/prj0000106-idea000080-smart-prompt-routing-system/idea000080-smart-prompt-routing-system.design.md
+		chunked_artifacts: none
+		adr_artifact: docs/architecture/adr/0004-smart-prompt-routing-hybrid-guardrails.md
+	lesson:
+		Pattern: Hybrid decision systems need explicit guardrail precedence and deterministic tie-break rules to stay testable.
+		Root cause: Ambiguous prompt routing without staged control boundaries causes nondeterministic behavior and weak safety guarantees.
+		Prevention: Enforce stage-order invariants, fixed tie-break determinism, and fail-closed fallback with provenance checks.
+		First seen: 2026-03-30
+		Seen in: prj0000106-idea000080-smart-prompt-routing-system
+		Recurrence count: 1
+		Promotion status: Candidate
+
 - task_id: prj0000105-idea000016-mixin-architecture-base
 	state: DONE
 	selected_design_path: Option B (incremental migration with compatibility shims)
