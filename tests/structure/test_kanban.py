@@ -11,15 +11,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Structural tests for data/projects.json and docs/project/kanban.md.
+"""Structural tests for docs/project/kanban.json and docs/project/kanban.md.
 
 Validates prj0000052 project-management deliverables: the machine-readable
-project registry (T1) and the 7-lane Kanban board (T2).
+project registry in kanban.json (T1) and the 7-lane Kanban board (T2).
 
 Tests are TDD-style (red phase): written before the files exist.
 Content-dependent tests skip gracefully until the files are present and
 contain the expected marker.  Only the two existence tests fail in the red
-phase.  Acceptance criteria: AC-01 (projects.json) and AC-02 (kanban.md).
+phase.  Acceptance criteria: AC-01 (kanban.json projects) and AC-02 (kanban.md).
 """
 
 import json
@@ -29,7 +29,7 @@ from pathlib import Path
 import pytest
 
 REPO_ROOT = Path(__file__).parent.parent.parent
-_PROJECTS_PATH = REPO_ROOT / "data" / "projects.json"
+_PROJECTS_PATH = REPO_ROOT / "docs" / "project" / "kanban.json"
 _KANBAN_PATH = REPO_ROOT / "docs" / "project" / "kanban.md"
 _NEXTPROJECT_PATH = REPO_ROOT / "data" / "nextproject.md"
 
@@ -38,7 +38,13 @@ _NEXTPROJECT_PATH = REPO_ROOT / "data" / "nextproject.md"
 # ---------------------------------------------------------------------------
 
 try:
-    _projects_data = json.loads(_PROJECTS_PATH.read_text(encoding="utf-8"))
+    _projects_raw = json.loads(_PROJECTS_PATH.read_text(encoding="utf-8"))
+    if isinstance(_projects_raw, list):
+        _projects_data = _projects_raw
+    elif isinstance(_projects_raw, dict) and isinstance(_projects_raw.get("projects"), list):
+        _projects_data = _projects_raw["projects"]
+    else:
+        _projects_data = None
 except (FileNotFoundError, json.JSONDecodeError):
     _projects_data = None
 
@@ -69,7 +75,7 @@ def _expected_project_count() -> int | None:
 
 # ---------------------------------------------------------------------------
 # Sentinels
-# _PROJECTS_MISSING — True while data/projects.json does not yet exist
+# _PROJECTS_MISSING — True while docs/project/kanban.json does not yet exist
 # _KANBAN_MISSING   — True while kanban.md does not exist or lacks the
 #                     canonical H1 "# PyAgent Project Kanban Board"
 # ---------------------------------------------------------------------------
@@ -82,7 +88,7 @@ _KANBAN_MISSING = (
 
 _SKIP_PROJECTS = pytest.mark.skipif(
     _PROJECTS_MISSING,
-    reason="data/projects.json not yet created (awaiting @6code)",
+    reason="docs/project/kanban.json not yet created (awaiting @6code)",
 )
 _SKIP_KANBAN = pytest.mark.skipif(
     _KANBAN_MISSING,
@@ -135,29 +141,29 @@ KANBAN_REQUIRED_H2S = [
 
 
 # ===========================================================================
-# FILE 1:  data/projects.json
+# FILE 1: docs/project/kanban.json (projects array)
 # ===========================================================================
 
 
 def test_projects_json_exists() -> None:
-    """data/projects.json must exist at the repo root.
+    """docs/project/kanban.json must exist at the repo root.
 
     No skip guard — this test is the TDD red gate for T1 and intentionally
     fails until @6code creates the file.
     """
-    assert _PROJECTS_PATH.exists(), f"data/projects.json not found at {_PROJECTS_PATH}. Run @6code to implement T1."
+    assert _PROJECTS_PATH.exists(), f"docs/project/kanban.json not found at {_PROJECTS_PATH}. Run @6code to implement T1."
 
 
 @_SKIP_PROJECTS
 def test_projects_json_valid() -> None:
-    """data/projects.json must parse as a valid JSON array without error."""
-    assert _projects_data is not None, "data/projects.json failed to parse as valid JSON"
+    """kanban.json must expose a valid project list (array or envelope.projects)."""
+    assert _projects_data is not None, "docs/project/kanban.json failed to expose a valid projects list"
     assert isinstance(_projects_data, list), f"Expected a JSON array at top level, got {type(_projects_data).__name__}"
 
 
 @_SKIP_PROJECTS
 def test_projects_json_entry_count() -> None:
-    """data/projects.json entry count must align with nextproject marker.
+    """kanban.json project entry count must align with nextproject marker.
 
     Expected count is derived from data/nextproject.md as marker_id - 1.
     """
@@ -169,7 +175,7 @@ def test_projects_json_entry_count() -> None:
 
 @_SKIP_PROJECTS
 def test_projects_json_required_fields() -> None:
-    """Every entry in data/projects.json must have all 11 required fields.
+    """Every project entry in kanban.json must have all 11 required fields.
 
     Required: id, name, lane, summary, branch, pr, priority, budget_tier,
               tags, created, updated.
@@ -185,7 +191,7 @@ def test_projects_json_required_fields() -> None:
 
 @_SKIP_PROJECTS
 def test_projects_json_lane_values() -> None:
-    """All 'lane' values in data/projects.json must be one of the 7 valid lanes."""
+    """All 'lane' values in kanban.json projects must be one of the 7 valid lanes."""
     assert _projects_data is not None
     invalid: list[str] = []
     for entry in _projects_data:
@@ -199,7 +205,7 @@ def test_projects_json_lane_values() -> None:
 
 @_SKIP_PROJECTS
 def test_projects_json_priority_values() -> None:
-    """All 'priority' values in data/projects.json must be P1, P2, P3, or P4."""
+    """All 'priority' values in kanban.json projects must be P1, P2, P3, or P4."""
     assert _projects_data is not None
     invalid: list[str] = []
     for entry in _projects_data:
@@ -229,11 +235,11 @@ def test_projects_json_budget_tier_values() -> None:
 
 @_SKIP_PROJECTS
 def test_projects_json_prj0000052_present() -> None:
-    """data/projects.json must contain an entry with id == 'prj0000052'."""
+    """kanban.json projects must contain an entry with id == 'prj0000052'."""
     assert _projects_data is not None
     ids = {entry.get("id") for entry in _projects_data}
     assert "prj0000052" in ids, (
-        "No entry with id 'prj0000052' found in data/projects.json. "
+        "No entry with id 'prj0000052' found in docs/project/kanban.json projects. "
         "This project (project-management) must register itself."
     )
 

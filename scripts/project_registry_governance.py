@@ -30,7 +30,7 @@ def _repo_root() -> Path:
 
 
 def _projects_path(root: Path) -> Path:
-    return root / "data" / "projects.json"
+    return root / "docs" / "project" / "kanban.json"
 
 
 def _kanban_path(root: Path) -> Path:
@@ -38,11 +38,29 @@ def _kanban_path(root: Path) -> Path:
 
 
 def _read_projects(path: Path) -> list[dict[str, Any]]:
-    return json.loads(path.read_text(encoding="utf-8"))
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    if isinstance(raw, list):
+        return [item for item in raw if isinstance(item, dict)]
+    if isinstance(raw, dict):
+        projects = raw.get("projects", [])
+        if isinstance(projects, list):
+            return [item for item in projects if isinstance(item, dict)]
+    return []
 
 
 def _write_projects(path: Path, projects: list[dict[str, Any]]) -> None:
-    path.write_text(json.dumps(projects, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    existing_raw: Any
+    try:
+        existing_raw = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        existing_raw = {}
+
+    if isinstance(existing_raw, dict):
+        payload: Any = {**existing_raw, "projects": projects}
+    else:
+        payload = projects
+
+    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def _table_cells(row: str) -> list[str]:
@@ -250,7 +268,7 @@ def validate() -> int:
     # JSON basic checks
     ids = [p.get("id") for p in projects]
     if len(ids) != len(set(ids)):
-        issues.append("Duplicate project IDs found in data/projects.json")
+        issues.append("Duplicate project IDs found in docs/project/kanban.json projects list")
 
     project_ids = {i for i in ids if isinstance(i, str)}
     lane_by_id = {p.get("id"): p.get("lane") for p in projects if isinstance(p.get("id"), str)}
@@ -315,12 +333,12 @@ def set_lane(project_id: str, lane: str, branch: str | None, pr: str | None) -> 
 
 
 def _build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Govern docs/project/kanban.md and data/projects.json updates.")
+    parser = argparse.ArgumentParser(description="Govern docs/project/kanban.md and docs/project/kanban.json updates.")
     sub = parser.add_subparsers(dest="cmd", required=True)
 
-    sub.add_parser("validate", help="Validate consistency between projects.json and kanban lanes.")
+    sub.add_parser("validate", help="Validate consistency between kanban.json projects and kanban lanes.")
 
-    set_lane_parser = sub.add_parser("set-lane", help="Update a project lane and sync both projects.json + kanban.")
+    set_lane_parser = sub.add_parser("set-lane", help="Update a project lane and sync both kanban.json + kanban.md.")
     set_lane_parser.add_argument("--id", required=True, help="Project ID (e.g., prj0000100)")
     set_lane_parser.add_argument("--lane", required=True, choices=LANES)
     set_lane_parser.add_argument("--branch", required=False, default=None)

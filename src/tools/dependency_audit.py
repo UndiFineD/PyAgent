@@ -72,13 +72,10 @@ def _load_pyproject_dependencies(pyproject_path: Path) -> list[str]:
         raise ValueError("[project.dependencies] is missing")
     if not isinstance(raw_dependencies, list):
         raise ValueError("[project.dependencies] must be a list")
+    if not all(isinstance(item, str) for item in raw_dependencies):
+        raise ValueError("[project.dependencies] entries must be strings")
 
-    dependencies: list[str] = []
-    for item in raw_dependencies:
-        if not isinstance(item, str):
-            raise ValueError("[project.dependencies] entries must be strings")
-        dependencies.append(item.strip())
-    return dependencies
+    return [item.strip() for item in raw_dependencies]
 
 
 def _normalize_dependency(dep: str) -> str:
@@ -123,25 +120,33 @@ def render_requirements_content(dependencies: list[str]) -> str:
         InvalidRequirement: When any dependency string is malformed.
 
     """
-    normalized_pairs: list[tuple[str, str]] = []
-    seen: dict[str, str] = {}
+    normalized_items = [
+        (canonicalize_name(Requirement(dep).name), _normalize_dependency(dep), dep)
+        for dep in dependencies
+    ]
+    package_names = [item[0] for item in normalized_items]
+    duplicate_name = next(
+        (name for index, name in enumerate(package_names) if name in package_names[:index]),
+        None,
+    )
+    if duplicate_name is not None:
+        first_index = package_names.index(duplicate_name)
+        second_index = next(
+            index
+            for index, name in enumerate(package_names)
+            if name == duplicate_name and index != first_index
+        )
+        previous_dep = normalized_items[first_index][2]
+        duplicate_dep = normalized_items[second_index][2]
+        raise ValueError(
+            f"Duplicate dependency '{duplicate_name}' found: '{previous_dep}' and '{duplicate_dep}'",
+        )
 
-    for dep in dependencies:
-        requirement = Requirement(dep)
-        normalized = _normalize_dependency(dep)
-        package_name = canonicalize_name(requirement.name)
-
-        if package_name in seen:
-            previous = seen[package_name]
-            raise ValueError(
-                f"Duplicate dependency '{package_name}' found: '{previous}' and '{dep}'",
-            )
-
-        seen[package_name] = dep
-        normalized_pairs.append((package_name, normalized))
-
-    normalized_pairs.sort(key=lambda item: (item[0], item[1]))
-    lines = [pair[1] for pair in normalized_pairs]
+    sorted_normalized = sorted(
+        ((item[0], item[1]) for item in normalized_items),
+        key=lambda item: (item[0], item[1]),
+    )
+    lines = [pair[1] for pair in sorted_normalized]
     return "\n".join(lines) + "\n"
 
 
@@ -155,39 +160,43 @@ def _validate_dependency_policy(dependencies: list[str]) -> list[str]:
         A list of policy violation messages.
 
     """
-    violations: list[str] = []
     seen_names: set[str] = set()
 
-    for dep in dependencies:
+    def _validate_single_dependency(dep: str) -> list[str]:
         try:
             requirement = Requirement(dep)
         except InvalidRequirement as exc:
-            violations.append(f"Malformed dependency '{dep}': {exc}")
-            continue
+            return [f"Malformed dependency '{dep}': {exc}"]
 
         package_name = canonicalize_name(requirement.name)
         if package_name in seen_names:
-            violations.append(f"Duplicate dependency '{package_name}'")
-            continue
+            return [f"Duplicate dependency '{package_name}'"]
         seen_names.add(package_name)
 
         if package_name in CRITICAL_PACKAGE_POLICY:
             allowed_ops = CRITICAL_PACKAGE_POLICY[package_name]
             if not requirement.specifier:
-                violations.append(
+                return [
                     f"Critical package '{package_name}' must have a version specifier",
-                )
-                continue
+                ]
 
-            for spec in requirement.specifier:
-                if spec.operator not in allowed_ops:
-                    allowed = ", ".join(allowed_ops)
-                    violations.append(
+            disallowed_operators = [
+                spec.operator for spec in requirement.specifier if spec.operator not in allowed_ops
+            ]
+            if disallowed_operators:
+                allowed = ", ".join(allowed_ops)
+                return [
+                    (
                         f"Critical package '{package_name}' has disallowed operator "
-                        f"'{spec.operator}' (allowed: {allowed})",
+                        f"'{operator}' (allowed: {allowed})"
                     )
+                    for operator in disallowed_operators
+                ]
 
-    return violations
+        return []
+
+    violation_groups = [_validate_single_dependency(dep) for dep in dependencies]
+    return [violation for group in violation_groups for violation in group]
 
 
 def _requirements_drift_issues(project_root: Path, expected_content: str) -> list[str]:

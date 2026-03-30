@@ -22,7 +22,7 @@ RE_PLAN = re.compile(
 
 ROOT = Path(__file__).resolve().parents[1]
 PROJECTS_ROOT = ROOT / "docs" / "project"
-PROJECTS_REGISTRY = ROOT / "data" / "projects.json"
+PROJECTS_REGISTRY = ROOT / "docs" / "project" / "kanban.json"
 RE_PROJECT_DIR = re.compile(r"^prj\d{7}(?:-.+)?$")
 
 # The generator now uses the agent-based project tracking system rooted in docs/project.
@@ -40,7 +40,7 @@ def _normalize_topic_key(topic: str) -> str:
 
 
 def _load_registry_topics() -> dict[str, str]:
-    """Load optional project topics from data/projects.json keyed by project id."""
+    """Load optional project topics from docs/project/kanban.json keyed by project id."""
 
     if not PROJECTS_REGISTRY.exists():
         return {}
@@ -51,12 +51,15 @@ def _load_registry_topics() -> dict[str, str]:
         return {}
 
     topics: dict[str, str] = {}
-    if not isinstance(raw, list):
+    projects: list[dict]
+    if isinstance(raw, list):
+        projects = [item for item in raw if isinstance(item, dict)]
+    elif isinstance(raw, dict) and isinstance(raw.get("projects"), list):
+        projects = [item for item in raw["projects"] if isinstance(item, dict)]
+    else:
         return topics
 
-    for item in raw:
-        if not isinstance(item, dict):
-            continue
+    for item in projects:
         project_id = str(item.get("id", "")).strip()
         topic = str(item.get("name", "")).strip()
         if project_id and topic:

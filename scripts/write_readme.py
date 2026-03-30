@@ -14,7 +14,7 @@
 """Regenerate dynamic README statistics from the project registry.
 
 This script keeps high-churn numeric references in README.md in sync with
-`data/projects.json` while preserving all other manual README content.
+`docs/project/kanban.json` while preserving all other manual README content.
 """
 
 from __future__ import annotations
@@ -26,7 +26,13 @@ from pathlib import Path
 
 
 def _load_project_counts(projects_path: Path) -> tuple[int, int]:
-   projects = json.loads(projects_path.read_text(encoding="utf-8"))
+   raw = json.loads(projects_path.read_text(encoding="utf-8"))
+   if isinstance(raw, list):
+      projects = [item for item in raw if isinstance(item, dict)]
+   elif isinstance(raw, dict) and isinstance(raw.get("projects"), list):
+      projects = [item for item in raw["projects"] if isinstance(item, dict)]
+   else:
+      projects = []
    total = len(projects)
    released = sum(1 for item in projects if str(item.get("lane", "")).lower() == "released")
    return total, released
@@ -48,7 +54,7 @@ def _update_readme_counts(content: str, total_projects: int, released_projects: 
 
 def _parse_args() -> argparse.Namespace:
    parser = argparse.ArgumentParser(
-      description="Update dynamic project counters in README.md from data/projects.json.",
+      description="Update dynamic project counters in README.md from docs/project/kanban.json.",
    )
    parser.add_argument(
       "--readme",
@@ -59,8 +65,8 @@ def _parse_args() -> argparse.Namespace:
    parser.add_argument(
       "--projects",
       type=Path,
-      default=Path("data/projects.json"),
-      help="Path to project registry JSON (default: data/projects.json).",
+      default=Path("docs/project/kanban.json"),
+      help="Path to project registry JSON (default: docs/project/kanban.json).",
    )
    parser.add_argument(
       "--check",
