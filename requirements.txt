@@ -1,44 +1,26 @@
-# Runtime dependencies used by core application code (src/)
-# See comments for where each is imported.
-
-# cryptography: cryptographic primitives used by src/transactions/StorageTransactionManager.py
-cryptography>=42.0.0
-
-# fastapi: Web API framework used by src/github_app.py and src/chat/api.py
-fastapi==0.128.0
-
-# httpx: HTTP client used by src/chat/mcp_tools.py
-httpx==0.28.1
-
-# openai: OpenAI SDK used by src/core/providers/FlmChatAdapter.py
-openai==2.14.0
-
-# opentelemetry-api: OTel API for distributed tracing
-opentelemetry-api>=1.20
-
-# opentelemetry-sdk: OTel SDK used by backend/tracing.py
-opentelemetry-sdk>=1.20
-
-# prometheus-client: metrics instrumentation used by src/chat/api.py
-prometheus-client==0.23.1
-
-# pydantic: data validation models used by src/swarm/message_model.py and src/chat/api.py
-pydantic==2.12.5
-
-# psutil: system metrics used by backend/app.py
-psutil>=5.9
-
-# PyJWT: JWT authentication used by backend/auth.py
-PyJWT>=2.8
-
-# python-json-logger: JSON structured logging used by backend/logging_config.py
-python-json-logger>=3.0
-
-# PyYAML: YAML config parsing used by src/skills_registry/__init__.py
-PyYAML==6.0.3
-
-# asyncpg: async PostgreSQL driver used by src/core/memory/AutoMemCore.py and BenchmarkRunner.py
-asyncpg>=0.29.0
-
-# pgvector: PostgreSQL vector type support for asyncpg used by src/core/memory/AutoMemCore.py
-pgvector>=0.3.0
+aiofiles>=25.1.0
+aiohttp>=3.13.3
+anthropic>=0.71.0
+censys>=2.2.0
+chromadb>=0.5.0
+cryptography>=46.0.5
+dnslib>=0.9.23
+fastapi>=0.128.0
+httpx>=0.28.1
+loguru>=0.7.3
+numpy>=1.26.0
+openai>=1.60.0
+pandas>=2.2.0
+psutil>=6.1.1
+pydantic>=2.10.0
+pyzmq>=26.2.0
+requests>=2.32.0
+rich>=13.9.4
+scikit-learn>=1.6.0
+scipy>=1.15.0
+sqlalchemy>=2.0.0
+tenacity>=9.0.0
+tiktoken>=0.8.0
+torch>=2.5.0
+tqdm>=4.67.0
+websockets>=14.0.0

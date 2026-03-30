@@ -14,7 +14,6 @@ from __future__ import annotations
 
 import argparse
 import subprocess
-from pathlib import Path
 
 # Full CI test list (matches ci-python-core workflow)
 CORE_TEST_FILES = [
@@ -137,6 +136,11 @@ def run_mypy() -> None:
     run_command(["mypy", "--ignore-missing-imports", "src/core/base/"])
 
 
+def run_dependency_sync_gate() -> None:
+    """Run dependency parity/policy gate for pyproject/requirements sync."""
+    run_command(["python", "-m", "src.tools.dependency_audit", "--root", ".", "--check"])
+
+
 def run_pytest(files: list[str], extra_args: list[str] | None = None) -> None:
     """Run pytest on the given list of test files with optional extra arguments."""
     cmd = ["python", "-m", "pytest", "-q", "--no-cov"] + files
@@ -147,6 +151,7 @@ def run_pytest(files: list[str], extra_args: list[str] | None = None) -> None:
 
 def profile_precommit(paths: list[str] | None = None) -> None:
     """Quick checks suitable for pre-commit."""
+    run_dependency_sync_gate()
     run_ruff(paths)
     run_mypy()
     # Run a safe subset of core tests that do not depend on the rust extension.
@@ -162,6 +167,7 @@ def profile_ci() -> None:
     This is not intended to run on every local commit but provides a shared
     entrypoint for GitHub Actions to keep workflows consistent.
     """
+    run_dependency_sync_gate()
     run_ruff()
     run_mypy()
     # Run the same core-suite as in ci-python-core.yml
