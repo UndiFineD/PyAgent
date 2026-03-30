@@ -47,3 +47,36 @@ class RoutingTelemetryEmitter:
             "tenant_id": request.tenant_id,
             "context_summary": redacted_summary,
         }
+
+
+def validate() -> bool:
+    """Validate telemetry payload includes expected redacted fields.
+
+    Returns:
+        True when payload retains provenance and redacts context secrets.
+
+    """
+    payload = RoutingTelemetryEmitter().emit(
+        request=PromptRoutingRequest(
+            request_id="validate-telemetry",
+            tenant_id="tenant",
+            intent_hint=None,
+            risk_class="low",
+            tool_requirement=None,
+            latency_budget_ms=50,
+            cost_budget_class="standard",
+            context_summary="contains secret token",
+        ),
+        record=RouteDecisionRecord(
+            request_id="validate-telemetry",
+            final_route="core",
+            decision_stage="classifier",
+            guardrail_hit=False,
+            classifier_confidence=0.9,
+            tie_break_used=False,
+            fallback_reason=None,
+            policy_version="spr-v1",
+            correlation_id="corr-validate",
+        ),
+    )
+    return payload.get("context_summary") == "contains [REDACTED] token"

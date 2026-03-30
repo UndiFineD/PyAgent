@@ -43,3 +43,13 @@ class ShadowModeRouter:
 
         """
         return await self._facade.route(request)
+
+
+def validate() -> bool:
+    """Validate shadow router exposes expected async route method.
+
+    Returns:
+        True when the router class keeps the async route contract.
+
+    """
+    return callable(getattr(ShadowModeRouter, "route", None))

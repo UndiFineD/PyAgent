@@ -53,3 +53,25 @@ class PromptSemanticClassifier:
             confidence=0.50,
             feature_tags=["intent:ambiguous"],
         )
+
+
+def validate() -> bool:
+    """Validate classifier deterministic output envelope.
+
+    Returns:
+        True when classifier returns bounded confidence and candidates.
+
+    """
+    result = PromptSemanticClassifier().classify(
+        PromptRoutingRequest(
+            request_id="validate-classifier",
+            tenant_id="tenant",
+            intent_hint="analyze code",
+            risk_class="low",
+            tool_requirement=None,
+            latency_budget_ms=50,
+            cost_budget_class="standard",
+            context_summary="validate",
+        )
+    )
+    return bool(result.candidate_routes) and 0.0 <= result.confidence <= 1.0

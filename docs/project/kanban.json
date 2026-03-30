@@ -158,7 +158,7 @@
     {
       "id": "prj0000106",
       "name": "idea000080-smart-prompt-routing-system",
-      "lane": "Discovery",
+      "lane": "Review",
       "summary": "Initialize workflow artifacts for idea000080 smart prompt routing system and hand off to @2think discovery.",
       "branch": "prj0000106-idea000080-smart-prompt-routing-system",
       "pr": null,
@@ -193,7 +193,7 @@
     {
       "id": "prj0000104",
       "name": "idea000014-processing",
-      "lane": "Discovery",
+      "lane": "Review",
       "summary": "Initialize workflow artifacts for idea000014 pyproject-requirements-sync and hand off to @2think discovery.",
       "branch": "prj0000104-idea000014-processing",
       "pr": null,

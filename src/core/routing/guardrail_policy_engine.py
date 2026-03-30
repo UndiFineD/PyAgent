@@ -52,3 +52,25 @@ class GuardrailPolicyEngine:
             )
 
         return GuardrailOutcome(is_resolved=False)
+
+
+def validate() -> bool:
+    """Validate deterministic guardrail resolution behavior.
+
+    Returns:
+        True when high-risk requests are resolved to safe_default.
+
+    """
+    outcome = GuardrailPolicyEngine().evaluate(
+        PromptRoutingRequest(
+            request_id="validate-guardrail",
+            tenant_id="tenant",
+            intent_hint=None,
+            risk_class="high",
+            tool_requirement=None,
+            latency_budget_ms=50,
+            cost_budget_class="standard",
+            context_summary="validate",
+        )
+    )
+    return outcome.is_resolved and outcome.route == "safe_default"

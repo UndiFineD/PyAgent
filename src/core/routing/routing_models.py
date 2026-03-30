@@ -121,3 +121,42 @@ class RouteDecisionRecord:
     fallback_reason: str | None
     policy_version: str
     correlation_id: str
+
+
+def validate() -> bool:
+    """Validate routing data model construction.
+
+    Returns:
+        True when canonical model instances can be created with expected values.
+
+    """
+    request = PromptRoutingRequest(
+        request_id="validate-models",
+        tenant_id="tenant",
+        intent_hint=None,
+        risk_class="low",
+        tool_requirement=None,
+        latency_budget_ms=50,
+        cost_budget_class="standard",
+        context_summary="validate",
+    )
+    candidate = RouteCandidate(route="core", score=0.9)
+    result = ClassifierResult(candidate_routes=[candidate], confidence=0.9)
+    outcome = GuardrailOutcome(is_resolved=False)
+    record = RouteDecisionRecord(
+        request_id=request.request_id,
+        final_route="core",
+        decision_stage="classifier",
+        guardrail_hit=False,
+        classifier_confidence=result.confidence,
+        tie_break_used=False,
+        fallback_reason=None,
+        policy_version="spr-v1",
+        correlation_id="corr-validate",
+    )
+    return (
+        request.tenant_id == "tenant"
+        and result.candidate_routes[0].route == "core"
+        and not outcome.is_resolved
+        and record.final_route == "core"
+    )

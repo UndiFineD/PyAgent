@@ -29,3 +29,13 @@ def resolve_policy_version(policy: dict[str, object]) -> str:
     """
     value = policy.get("policy_version", "spr-v1")
     return str(value)
+
+
+def validate() -> bool:
+    """Validate policy version resolution behavior.
+
+    Returns:
+        True when policy version is resolved to a non-empty string.
+
+    """
+    return resolve_policy_version({"policy_version": "spr-v1"}) == "spr-v1"

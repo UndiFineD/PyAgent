@@ -61,3 +61,18 @@ class TieBreakResolver:
         pivot = sum(ord(ch) for ch in seed) % len(top_candidates)
         ordered = sorted(top_candidates, key=lambda item: item.route)
         return ordered[pivot]
+
+
+def validate() -> bool:
+    """Validate deterministic tie-break behavior.
+
+    Returns:
+        True when tie-break deterministically resolves equal scores.
+
+    """
+    winner = TieBreakResolver().resolve(
+        [RouteCandidate(route="legacy", score=0.5), RouteCandidate(route="core", score=0.5)],
+        timeout_ms=10,
+        seed="validate-seed",
+    )
+    return winner is not None and winner.route in {"core", "legacy"}

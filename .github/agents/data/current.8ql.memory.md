@@ -9,6 +9,40 @@
 ## Entries
 
 ## Last scan - 2026-03-30
+- task_id: prj0000106-idea000080-smart-prompt-routing-system
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- branch: prj0000106-idea000080-smart-prompt-routing-system (validated)
+- files scanned: src/core/routing/*; tests/core/routing/*; tests/test_core_routing_*; tests/test_conftest.py; docs/project/prj0000106-idea000080-smart-prompt-routing-system/*; docs/project/kanban.json
+- security/quality checks run:
+	- git branch --show-current
+	- git diff --name-only HEAD
+	- git ls-files --others --exclude-standard
+	- git diff --name-only HEAD -- .github/workflows/*.yml
+	- .venv\Scripts\ruff.exe check src/ --select S --output-format concise
+	- .venv\Scripts\ruff.exe check src/core/routing tests/core/routing tests/test_core_routing_classifier_schema.py tests/test_core_routing_confidence_calibration.py tests/test_core_routing_fallback_reason_taxonomy.py tests/test_core_routing_guardrail_policy_engine.py tests/test_core_routing_policy_versioning.py tests/test_core_routing_prompt_semantic_classifier.py tests/test_core_routing_request_normalizer.py tests/test_core_routing_routing_fallback_policy.py tests/test_core_routing_routing_models.py tests/test_core_routing_routing_policy_loader.py tests/test_core_routing_shadow_mode_router.py --select S --output-format concise
+	- pip-audit -f json -o .github/agents/data/pip_audit_current_8ql.json
+	- python -c <pip baseline vs current CVE delta parser>
+	- python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
+	- python scripts/project_registry_governance.py validate
+	- python scripts/architecture_governance.py validate
+- findings:
+	- PASS: branch gate, workflow-change gate, docs policy gate, architecture governance gate
+	- PASS: scoped routing security posture shows test-only S101 findings; no HIGH/CRITICAL issues
+	- MEDIUM: project registry governance lane mismatch for prj0000106 (`json='Review'`, `kanban='Discovery'`)
+	- MEDIUM: baseline CVE drift outside active routing scope (requests/cryptography/pygments)
+- handoff target: @9git
+- overall: CLEAN (no HIGH/CRITICAL security blockers; quality debts tracked in unresolved ledger)
+
+### Lesson
+- Pattern: Registry lane mismatch between `data/projects.json` and `docs/project/kanban.md` can recur even after prior remediation if lane updates are not validated at project close.
+- Root cause: Lifecycle lane transition was not synchronized across both registry sources before @8ql gate.
+- Prevention: Require a mandatory paired lane update and immediate `python scripts/project_registry_governance.py validate` during project lifecycle transitions before @7exec/@8ql handoff.
+- First seen: prj0000105-idea000016-mixin-architecture-base
+- Seen in: prj0000105-idea000016-mixin-architecture-base, prj0000106-idea000080-smart-prompt-routing-system
+- Recurrence count: 2
+- Promotion status: HARD
+
+## Last scan - 2026-03-30
 - task_id: prj0000105-idea000016-mixin-architecture-base
 - lifecycle: OPEN -> IN_PROGRESS -> DONE
 - branch: prj0000105-idea000016-mixin-architecture-base (validated)
@@ -140,10 +174,16 @@
 
 ## Promotions
 ## Promotion - 2026-03-30
+- Lesson: Registry lane mismatch between `data/projects.json` and `docs/project/kanban.md` must be prevented with paired updates and immediate validation.
+- Promoted to: .github/agents/8ql.agent.md § Learning loop rules
+- Trigger project: prj0000106
+
+## Promotion - 2026-03-30
 - Lesson: CVE baseline drift can emerge as non-project-specific debt and still requires explicit owner and closure criteria.
 - Promoted to: .github/agents/8ql.agent.md § Learning loop rules
 - Trigger project: prj0000105
 
 ## Unresolved Quality Debt Ledger
 - QD-8QL-0001 | owner=@6code | origin=prj0000104-idea000014-processing | status=OPEN | exit=upgrade or accept risk for CVE-2026-25645, CVE-2026-34073, CVE-2026-4539 and refresh committed baseline
+- QD-8QL-0004 | owner=@1project | origin=prj0000106-idea000080-smart-prompt-routing-system | status=OPEN | exit=synchronize lane state for prj0000106 in data/projects.json and docs/project/kanban.md, then rerun project_registry_governance.py validate to VALIDATION_OK
 

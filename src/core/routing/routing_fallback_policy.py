@@ -63,3 +63,28 @@ class RoutingFallbackPolicy:
             policy_version=policy_version,
             correlation_id=correlation_id,
         )
+
+
+def validate() -> bool:
+    """Validate fallback policy fail-closed behavior.
+
+    Returns:
+        True when policy returns a safe fallback route.
+
+    """
+    record = RoutingFallbackPolicy().apply(
+        reason=None,
+        request=PromptRoutingRequest(
+            request_id="validate-fallback",
+            tenant_id="tenant",
+            intent_hint=None,
+            risk_class="low",
+            tool_requirement=None,
+            latency_budget_ms=50,
+            cost_budget_class="standard",
+            context_summary="validate",
+        ),
+        policy_version="spr-v1",
+        correlation_id="corr-validate",
+    )
+    return record.final_route == "safe_default" and record.decision_stage == "fallback"

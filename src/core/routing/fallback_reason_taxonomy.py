@@ -49,3 +49,17 @@ def normalize_fallback_reason(reason: str | None) -> str:
     if normalized in _ALLOWED:
         return normalized
     return UNKNOWN_FAILURE
+
+
+def validate() -> bool:
+    """Validate fallback reason normalization behavior.
+
+    Returns:
+        True when normalization maps values into the allowed taxonomy.
+
+    """
+    return (
+        normalize_fallback_reason(SCHEMA_VALIDATION_FAILED) == SCHEMA_VALIDATION_FAILED
+        and normalize_fallback_reason("not-a-reason") == UNKNOWN_FAILURE
+        and normalize_fallback_reason(None) == UNKNOWN_FAILURE
+    )

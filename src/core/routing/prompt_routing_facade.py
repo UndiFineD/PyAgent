@@ -17,6 +17,7 @@
 from __future__ import annotations
 
 import uuid
+from inspect import iscoroutinefunction
 
 from src.core.routing.classifier_schema import ClassifierSchemaError, validate_classifier_result
 from src.core.routing.confidence_calibration import calibrate_confidence
@@ -168,3 +169,13 @@ class PromptRoutingFacade:
                 policy_version=policy_version,
                 correlation_id=correlation_id,
             )
+
+
+def validate() -> bool:
+    """Validate facade public async routing contract.
+
+    Returns:
+        True when the facade exposes an async route coroutine.
+
+    """
+    return iscoroutinefunction(PromptRoutingFacade.route)

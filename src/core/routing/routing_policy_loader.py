@@ -30,3 +30,19 @@ def load_policy(policy: dict[str, object] | None = None) -> dict[str, object]:
     if policy is None:
         return {"policy_version": "spr-v1", "confidence_threshold": 0.75}
     return dict(policy)
+
+
+def validate() -> bool:
+    """Validate policy loader defaults and copy behavior.
+
+    Returns:
+        True when defaults exist and provided policy is loaded.
+
+    """
+    defaults = load_policy()
+    loaded = load_policy({"policy_version": "spr-v2", "confidence_threshold": 0.8})
+    return (
+        defaults.get("policy_version") == "spr-v1"
+        and defaults.get("confidence_threshold") == 0.75
+        and loaded.get("policy_version") == "spr-v2"
+    )

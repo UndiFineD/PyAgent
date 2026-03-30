@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-30 | Total projects: 106 | Auto-synced by project_registry_governance.py (Discovery: 2, Review: 5, Released: 97)_
+_Last updated: 2026-03-30 | Total projects: 106 | Auto-synced by project_registry_governance.py (Discovery: 0, Review: 7, Released: 97)_
 
 ## How to use this board
 
@@ -57,10 +57,8 @@ Active options exploration — @2think is working or has completed .think.md.
 
 | ID | Name | Summary | Branch | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|---|
-| prj0000104 | idea000014-processing | Initialize workflow artifacts for idea000014 pyproject-requirements-sync and hand off to @2think discovery. | prj0000104-idea000014-processing | P2 | S | idea, idea000014, processing | 2026-03-30 |
 
 
-| prj0000106 | idea000080-smart-prompt-routing-system | Initialize workflow artifacts for idea000080 smart prompt routing system and hand off to @2think discovery. | prj0000106-idea000080-smart-prompt-routing-system | P2 | M | idea, idea000080, smart-prompt-routing-system | 2026-03-30 |
 ---
 
 ## Design
@@ -95,6 +93,8 @@ PR open, awaiting merge.
 | prj0000094 | idea-003 - mypy-strict-enforcement | — | pending | P3 | S | 2026-03-29 |
 | prj0000093 | projectmanager-ideas-autosync | prj0000093-projectmanager-ideas-autosync | pending | P2 | M | 2026-03-29 |
 | prj0000101 | idea-013 - backend-health-check-endpoint | — | pending | P3 | S | 2026-03-30 |
+| prj0000106 | idea000080-smart-prompt-routing-system | prj0000106-idea000080-smart-prompt-routing-system | pending | P2 | M | 2026-03-30 |
+| prj0000104 | idea000014-processing | prj0000104-idea000014-processing | pending | P2 | S | 2026-03-30 |
 ---
 
 ## Released
@@ -218,10 +218,10 @@ Stalled, cancelled, or superseded projects.
 | Lane | Count |
 |---|---|
 | Ideas | 1 |
-| Discovery | 2 |
+| Discovery | 0 |
 | Design | 0 |
 | In Sprint | 0 |
-| Review | 5 |
+| Review | 7 |
 | Released | 97 |
 | Archived | 1 |
 | **Total** | **106** |

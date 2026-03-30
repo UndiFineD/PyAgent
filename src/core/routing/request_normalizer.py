@@ -42,3 +42,29 @@ def normalize_request(request: PromptRoutingRequest) -> PromptRoutingRequest:
         cost_budget_class=request.cost_budget_class.strip().lower(),
         context_summary=bounded_summary,
     )
+
+
+def validate() -> bool:
+    """Validate deterministic request normalization behavior.
+
+    Returns:
+        True when normalization trims and bounds request fields.
+
+    """
+    normalized = normalize_request(
+        PromptRoutingRequest(
+            request_id="validate-normalizer",
+            tenant_id="tenant",
+            intent_hint="  intent  ",
+            risk_class=" HIGH ",
+            tool_requirement=None,
+            latency_budget_ms=100,
+            cost_budget_class=" STANDARD ",
+            context_summary="x" * 400,
+        )
+    )
+    return (
+        normalized.risk_class == "high"
+        and normalized.cost_budget_class == "standard"
+        and len(normalized.context_summary) == 256
+    )

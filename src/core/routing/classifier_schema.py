@@ -16,7 +16,7 @@
 
 from __future__ import annotations
 
-from src.core.routing.routing_models import ClassifierResult
+from src.core.routing.routing_models import ClassifierResult, RouteCandidate
 
 
 class ClassifierSchemaError(ValueError):
@@ -38,11 +38,29 @@ def validate_classifier_result(result: ClassifierResult) -> None:
     if result.confidence < 0.0 or result.confidence > 1.0:
         raise ClassifierSchemaError("confidence must be in [0.0, 1.0]")
 
-    last_score = float("inf")
-    for candidate in result.candidate_routes:
-        route = candidate.route.strip()
-        if route == "":
-            raise ClassifierSchemaError("candidate route must be non-empty")
-        if candidate.score > last_score:
-            raise ClassifierSchemaError("candidate_routes must be ordered by descending score")
-        last_score = candidate.score
+    routes = [candidate.route.strip() for candidate in result.candidate_routes]
+    if any(route == "" for route in routes):
+        raise ClassifierSchemaError("candidate route must be non-empty")
+
+    scores = [candidate.score for candidate in result.candidate_routes]
+    if any(curr > prev for prev, curr in zip(scores, scores[1:], strict=False)):
+        raise ClassifierSchemaError("candidate_routes must be ordered by descending score")
+
+
+def validate() -> bool:
+    """Validate module invariants for classifier schema checks.
+
+    Returns:
+        True when schema validation accepts valid deterministic payloads.
+
+    """
+    validate_classifier_result(
+        ClassifierResult(
+            candidate_routes=[
+                RouteCandidate(route="core", score=0.9),
+                RouteCandidate(route="legacy", score=0.1),
+            ],
+            confidence=0.5,
+        )
+    )
+    return True

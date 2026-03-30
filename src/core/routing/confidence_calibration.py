@@ -32,3 +32,13 @@ def calibrate_confidence(raw_confidence: float) -> float:
     if raw_confidence > 1.0:
         return 1.0
     return raw_confidence
+
+
+def validate() -> bool:
+    """Validate confidence calibration boundaries.
+
+    Returns:
+        True when calibration clamps values to expected bounds.
+
+    """
+    return calibrate_confidence(-0.1) == 0.0 and calibrate_confidence(1.1) == 1.0 and calibrate_confidence(0.5) == 0.5
