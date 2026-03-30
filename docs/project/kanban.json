@@ -156,6 +156,23 @@
   ],
   "projects": [
     {
+      "id": "prj0000106",
+      "name": "idea000080-smart-prompt-routing-system",
+      "lane": "Discovery",
+      "summary": "Initialize workflow artifacts for idea000080 smart prompt routing system and hand off to @2think discovery.",
+      "branch": "prj0000106-idea000080-smart-prompt-routing-system",
+      "pr": null,
+      "priority": "P2",
+      "budget_tier": "M",
+      "tags": [
+        "idea",
+        "idea000080",
+        "smart-prompt-routing-system"
+      ],
+      "created": "2026-03-30",
+      "updated": "2026-03-30"
+    },
+    {
       "id": "prj0000100",
       "name": "repo-cleanup-docs-code",
       "lane": "Review",
