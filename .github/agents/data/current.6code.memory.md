@@ -174,6 +174,59 @@
 - Recurrence count: 1
 - Promotion status: Candidate
 
+## 2026-03-30 — prj0000106 smart prompt routing implementation
+- task_id: prj0000106-idea000080-smart-prompt-routing-system
+- lifecycle: DONE
+- branch: prj0000106-idea000080-smart-prompt-routing-system (validated)
+- changed files:
+	- src/core/routing/__init__.py
+	- src/core/routing/routing_models.py
+	- src/core/routing/request_normalizer.py
+	- src/core/routing/routing_policy_loader.py
+	- src/core/routing/policy_versioning.py
+	- src/core/routing/guardrail_policy_engine.py
+	- src/core/routing/prompt_semantic_classifier.py
+	- src/core/routing/classifier_schema.py
+	- src/core/routing/confidence_calibration.py
+	- src/core/routing/tie_break_resolver.py
+	- src/core/routing/fallback_reason_taxonomy.py
+	- src/core/routing/routing_fallback_policy.py
+	- src/core/routing/routing_telemetry_emitter.py
+	- src/core/routing/shadow_mode_router.py
+	- src/core/routing/prompt_routing_facade.py
+	- tests/core/routing/test_guardrail_precedence_contract.py
+	- tests/core/routing/test_prompt_routing_facade.py
+	- tests/core/routing/test_tie_break_resolver.py
+	- tests/core/routing/test_fail_closed_fallback_contract.py
+	- tests/core/routing/test_tie_break_fallback.py
+	- tests/core/routing/test_shadow_active_parity.py
+	- tests/core/routing/test_routing_telemetry_emitter.py
+	- docs/project/prj0000106-idea000080-smart-prompt-routing-system/idea000080-smart-prompt-routing-system.code.md
+- implementation summary:
+	- Implemented a minimal hybrid routing package with deterministic guardrail precedence and async facade orchestration.
+	- Added classifier schema checks, confidence calibration, deterministic tie-break with timeout behavior, and fail-closed fallback taxonomy.
+	- Added shadow/active parity wrapper and redacted provenance telemetry emitter.
+	- Added AC-focused tests for precedence, threshold behavior, tie-break determinism/fallback, fail-closed behavior, parity, and telemetry redaction.
+- verification commands:
+	- python -m pytest -q tests/core/routing/test_prompt_routing_facade.py tests/core/routing/test_fail_closed_fallback_contract.py tests/core/routing/test_guardrail_precedence_contract.py tests/core/routing/test_tie_break_resolver.py tests/core/routing/test_tie_break_fallback.py tests/core/routing/test_shadow_active_parity.py tests/core/routing/test_routing_telemetry_emitter.py
+	- .venv\Scripts\ruff.exe check --fix src/core/routing tests/core/routing
+	- .venv\Scripts\ruff.exe check src/core/routing tests/core/routing
+	- .venv\Scripts\ruff.exe check --select D src/core/routing tests/core/routing
+	- python -m mypy src/core/routing
+	- python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
+- unresolved risks:
+	- None observed in scoped routing implementation and verification.
+- handoff target: @7exec
+
+### Lesson
+- Pattern: AC-driven routing work is fastest and safest when a small standalone package is added with deterministic defaults and explicit fallback taxonomy.
+- Root cause: Planned file paths did not exist, so extending unrelated modules would have increased blast radius and slowed validation.
+- Prevention: On lifecycle continuation tasks, run an initial file-existence inventory and create an isolated package when planned paths are absent.
+- First seen: 2026-03-30
+- Seen in: prj0000106-idea000080-smart-prompt-routing-system
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ## 2026-03-30 — prj0000105 Chunk A green implementation
 - task_id: prj0000105-idea000016-mixin-architecture-base
 - lifecycle: DONE
