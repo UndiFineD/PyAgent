@@ -28,5 +28,6 @@
 - Code detected in:
   - `rust_core\src\security.rs`
   - `src\core\security_bridge.py`
+  - `tests\backend\test_health_probes_security.py`
   - `tests\test_security_bridge.py`
   - `tests\test_security_rotation.py`

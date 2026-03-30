@@ -29,6 +29,7 @@
 
 - Code detected in:
   - `rust_core\src\agents\coder.rs`
+  - `scripts\codestructure_governance.py`
   - `src\tools\code_quality.py`
   - `tests\docs\test_codestructure_governance.py`
   - `tests\zzz\test_zzd_codeql_python.py`

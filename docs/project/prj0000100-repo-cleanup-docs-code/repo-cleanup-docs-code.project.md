@@ -19,6 +19,7 @@ _No checkbox tasks found in the plan file._
 
 - Code detected in:
   - `rust_core\src\agents\coder.rs`
+  - `scripts\codestructure_governance.py`
   - `src\security\models\scan_report.py`
   - `src\tools\code_quality.py`
   - `tests\docs\test_agent_workflow_policy_docs.py`

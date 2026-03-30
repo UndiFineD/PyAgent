@@ -18,7 +18,9 @@ _No checkbox tasks found in the plan file._
 ## Code detection
 
 - Code detected in:
+  - `scripts\codestructure_governance.py`
   - `scripts\generate_project_dashboard.py`
+  - `scripts\project_registry_governance.py`
   - `scripts\setup_structure.py`
   - `scripts\validate_project_implementation.py`
   - `src\core\audit\AuditTrailCore.py`

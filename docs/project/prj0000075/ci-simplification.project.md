@@ -30,6 +30,7 @@ _No checkbox tasks found in the plan file._
   - `tests\security\test_ci_secret_guardrail_job.py`
   - `tests\security\test_rotation_gate_decision.py`
   - `tests\structure\test_ci_yaml.py`
+  - `tests\structure\test_dependency_drift_ci.py`
   - `tests\test_circuit_breaker.py`
   - `tests\test_CircuitBreakerConfig.py`
   - `tests\test_CircuitBreakerCore.py`

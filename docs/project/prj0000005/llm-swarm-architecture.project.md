@@ -35,9 +35,11 @@
 ## Code detection
 
 - Code detected in:
+  - `scripts\architecture_governance.py`
   - `scripts\consolidate_llm_context.py`
   - `scripts\generate_llms_architecture.py`
   - `src\swarm\swarm_node.py`
+  - `tests\docs\test_architecture_adr_governance.py`
   - `tests\structure\test_architecture_naming.py`
   - `tests\test_consolidate_llm_context_cleanup_report.py`
   - `tests\test_consolidate_llm_context_cli.py`

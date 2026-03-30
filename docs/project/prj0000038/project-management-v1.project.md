@@ -22,5 +22,6 @@
 
 - Code detected in:
   - `scripts\generate_project_dashboard.py`
+  - `scripts\project_registry_governance.py`
   - `scripts\validate_project_implementation.py`
   - `tests\test_api_projects_lane_sync.py`
