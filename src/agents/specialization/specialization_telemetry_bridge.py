@@ -81,11 +81,7 @@ class SpecializationTelemetryBridge:
         """
         lower = key.lower()
         return (
-            "secret" in lower
-            or "token" in lower
-            or "password" in lower
-            or "prompt" in lower
-            or "tool_input" in lower
+            "secret" in lower or "token" in lower or "password" in lower or "prompt" in lower or "tool_input" in lower
         )
 
 
