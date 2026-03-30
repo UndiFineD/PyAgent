@@ -59,6 +59,16 @@ Command produced no output
 ## Deferred Items
 none
 
+## Post-Merge CI Hotfix (Shard 10)
+- Added missing runtime dependencies for test import paths:
+	- `python-json-logger` (for `from pythonjsonlogger.json import JsonFormatter`)
+	- `PyJWT` (for `import jwt`)
+- Regenerated `requirements.txt` using canonical sync mechanism:
+	- `python -m src.tools.dependency_audit --generate --root .`
+- Validation evidence:
+	- `python -m pytest -q tests/test_structured_logging.py tests/test_watchdog.py` -> `11 passed`
+	- `python -m pytest -q tests/tools/test_dependency_audit.py tests/structure/test_dependency_drift_ci.py` -> `7 passed`
+
 ## AC Evidence Mapping
 | AC ID | Changed File(s) | Validating Test(s) | Status |
 |---|---|---|---|
