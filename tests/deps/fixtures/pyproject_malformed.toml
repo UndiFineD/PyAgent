@@ -1,0 +1,5 @@
+[project
+name = "deps-fixture"
+version = "0.1.0"
+dependencies = [
+  "requests>=2.31.0",

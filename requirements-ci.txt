@@ -1,5 +1,6 @@
 # CI requirements include runtime deps + test/dev tooling.
 # Runtime deps are declared in requirements.txt.
+# requirements.txt is generated from pyproject.toml.
 -r requirements.txt
 
 # Lint / typecheck
