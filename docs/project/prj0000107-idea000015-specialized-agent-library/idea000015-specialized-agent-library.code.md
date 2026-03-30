@@ -13,6 +13,10 @@ Implemented scope:
 
 No unrelated refactors performed.
 
+Blocker remediation (2026-03-31):
+1. Patched `src/agents/specialization/specialization_telemetry_bridge.py` to remove synchronous loop constructs from `_redact` and satisfy `tests/test_async_loops.py::test_no_sync_loops`.
+2. Re-ran exact failing selector first, then targeted specialization telemetry selectors.
+
 ## Modules Changed
 | Module | Change | Lines |
 |---|---|---|
@@ -28,6 +32,7 @@ No unrelated refactors performed.
 | src/agents/specialization/specialized_core_binding.py | add | +85/-0 |
 | src/agents/specialization/adapter_fallback_policy.py | add | +76/-0 |
 | src/agents/specialization/specialization_telemetry_bridge.py | add | +93/-0 |
+| src/agents/specialization/specialization_telemetry_bridge.py | update | +14/-8 |
 | src/agents/specialization/runtime_feature_flags.py | add | +47/-0 |
 | src/agents/specialization/__init__.py | add | +47/-0 |
 | src/core/universal/UniversalAgentShell.py | update | +65/-2 |
@@ -58,6 +63,8 @@ c:/Dev/PyAgent/.venv/Scripts/ruff.exe check src/agents/specialization tests/agen
 c:/Dev/PyAgent/.venv/Scripts/ruff.exe check --select D src/agents/specialization tests/agents/specialization tests/core/universal/test_universal_agent_shell_specialization_flag.py src/core/universal/UniversalAgentShell.py -> All checks passed
 c:/Dev/PyAgent/.venv/Scripts/python.exe -m mypy src/agents/specialization src/core/universal/UniversalAgentShell.py -> Success: no issues found in 15 source files
 c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 12 passed
+python -m pytest -q tests/test_async_loops.py::test_no_sync_loops -> 1 passed
+python -m pytest -q tests/agents/specialization/test_specialization_telemetry_bridge.py tests/agents/specialization/test_telemetry_redaction.py -> 2 passed
 ```
 
 ## AC Evidence Mapping

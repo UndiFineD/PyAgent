@@ -67,14 +67,26 @@ class SpecializationTelemetryBridge:
             Redacted metadata payload.
 
         """
-        blocked_markers = ("secret", "token", "password", "prompt", "tool_input")
-        redacted: dict[str, Any] = {}
-        for key, value in metadata.items():
-            lower = key.lower()
-            if any(marker in lower for marker in blocked_markers):
-                continue
-            redacted[key] = value
-        return redacted
+        return dict(filter(lambda item: not self._is_blocked_key(item[0]), metadata.items()))
+
+    def _is_blocked_key(self, key: str) -> bool:
+        """Return whether a metadata key should be filtered from telemetry.
+
+        Args:
+            key: Metadata key name.
+
+        Returns:
+            True when key includes a secret-bearing marker.
+
+        """
+        lower = key.lower()
+        return (
+            "secret" in lower
+            or "token" in lower
+            or "password" in lower
+            or "prompt" in lower
+            or "tool_input" in lower
+        )
 
 
 def validate() -> bool:
