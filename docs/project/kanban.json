@@ -1846,6 +1846,23 @@
       ],
       "created": "2026-03-29",
       "updated": "2026-03-30"
+    },
+    {
+      "id": "prj0000104",
+      "name": "idea000014-processing",
+      "lane": "Discovery",
+      "summary": "Initialize workflow artifacts for idea000014 pyproject-requirements-sync and hand off to @2think discovery.",
+      "branch": "prj0000104-idea000014-processing",
+      "pr": null,
+      "priority": "P2",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000014",
+        "processing"
+      ],
+      "created": "2026-03-30",
+      "updated": "2026-03-30"
     }
   ]
 }

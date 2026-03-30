@@ -290,6 +290,13 @@ function Install-Python {
             & python -m pip install --prefer-binary -r requirements-ci.txt --quiet
             Write-Status '✓' "requirements-ci.txt installed" 'Green'
             $script:Summary['Dev tools'] = "requirements-ci.txt ✓"
+
+            Write-Status '…' "Running dependency parity preflight" 'Cyan'
+            & python scripts/deps/check_dependency_parity.py --check
+            if ($LASTEXITCODE -ne 0) {
+                throw "Dependency parity preflight failed. Regenerate requirements first."
+            }
+            Write-Status '✓' "Dependency parity preflight passed" 'Green'
         } else {
             Write-Status '⚠' "Dev tools skipped (-SkipDev)" 'Yellow'
             $script:Summary['Dev tools'] = "skipped (-SkipDev)"

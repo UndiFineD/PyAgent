@@ -151,7 +151,9 @@ def test_projects_json_exists() -> None:
     No skip guard — this test is the TDD red gate for T1 and intentionally
     fails until @6code creates the file.
     """
-    assert _PROJECTS_PATH.exists(), f"docs/project/kanban.json not found at {_PROJECTS_PATH}. Run @6code to implement T1."
+    assert _PROJECTS_PATH.exists(), (
+        f"docs/project/kanban.json not found at {_PROJECTS_PATH}. Run @6code to implement T1."
+    )
 
 
 @_SKIP_PROJECTS
