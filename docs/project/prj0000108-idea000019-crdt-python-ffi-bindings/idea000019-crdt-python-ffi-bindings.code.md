@@ -12,6 +12,9 @@ feature-flag routing, observability redaction, parity behavior, and no-temp-file
 
 Scope remained narrow to Python bridge + tests for @7exec handoff.
 
+Post-handoff blocker remediation for @7exec was completed with a minimal scoped patch in
+`src/core/crdt_bridge.py` to remove a synchronous loop pattern and satisfy formatting checks.
+
 ## Modules Changed
 | Module | Change | Lines |
 |---|---|---|
@@ -68,6 +71,13 @@ Quality checks:
 - `ruff check --select D src/core/crdt_bridge.py`: all checks passed
 - `python -m mypy src/core/crdt_bridge.py`: success, no issues
 - Placeholder scans (`rg ...` and `rg ^\s*\.\.\.\s*$`) over touched files: no matches
+
+@7exec blocker remediation checks:
+- `python -m pytest -q tests/test_async_loops.py::test_no_sync_loops`: 1 passed
+- `python -m ruff format src/core/crdt_bridge.py`: 1 file reformatted
+- `python -m ruff format --check src/core/crdt_bridge.py`: 1 file already formatted
+- `pre-commit run run-precommit-checks --files src/core/crdt_bridge.py`: Passed
+- `python -m ruff check src/core/crdt_bridge.py`: All checks passed
 ```
 
 ## Deferred Items

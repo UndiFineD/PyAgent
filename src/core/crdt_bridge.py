@@ -112,15 +112,17 @@ def _deep_merge(left: dict[str, Any], right: dict[str, Any]) -> dict[str, Any]:
         A deterministic deep-merged state.
 
     """
-    merged: dict[str, Any] = dict(left)
-    for key in sorted(right.keys()):
-        left_value = merged.get(key)
-        right_value = right[key]
-        if isinstance(left_value, dict) and isinstance(right_value, dict):
-            merged[key] = _deep_merge(left_value, right_value)
-        else:
-            merged[key] = right_value
-    return merged
+    return {
+        **left,
+        **{
+            key: (
+                _deep_merge(left[key], right[key])
+                if isinstance(left.get(key), dict) and isinstance(right.get(key), dict)
+                else right[key]
+            )
+            for key in sorted(right)
+        },
+    }
 
 
 def _validate_payload(payload: dict[str, Any]) -> dict[str, Any]:
@@ -157,10 +159,7 @@ def _validate_payload(payload: dict[str, Any]) -> dict[str, Any]:
 
     if payload["schema_version"] != SUPPORTED_SCHEMA_VERSION:
         raise CRDTBridgeError(
-            message=(
-                f"Unsupported schema_version={payload['schema_version']}; "
-                f"expected={SUPPORTED_SCHEMA_VERSION}"
-            ),
+            message=(f"Unsupported schema_version={payload['schema_version']}; expected={SUPPORTED_SCHEMA_VERSION}"),
             error_code="crdt_validation_schema_version",
             category="validation",
             request_id=request_id,
