@@ -3,10 +3,32 @@
 ## Metadata
 - agent: @2think
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-03-30
+- updated_at: 2026-03-31
 - rollover: At new project start, append this file's entries to history.2think.memory.md in chronological order, then clear Entries.
 
 ## Entries
+
+### 2026-03-31 - prj0000108-idea000019-crdt-python-ffi-bindings
+- task_id: prj0000108-idea000019-crdt-python-ffi-bindings
+- status: DONE
+- target_agent: @3design
+- canonical_artifact: docs/project/prj0000108-idea000019-crdt-python-ffi-bindings/idea000019-crdt-python-ffi-bindings.think.md
+- recommendation_summary: Select Option B (integrate CRDT APIs into existing `rust_core` PyO3 module) to deliver true Python FFI with best reuse of maturin/PyO3 pipeline and lower long-term operational risk than subprocess bridging.
+- prior_art_refs:
+	- docs/project/prj0000056/rust-async-transport-activation.think.md
+	- docs/project/prj0000067/rust-file-watcher.think.md
+	- docs/project/prj0000095-source-stub-remediation/prj0000095-source-stub-remediation.think.md
+- branch_gate_evidence: `git branch --show-current` -> `prj0000108-idea000019-crdt-python-ffi-bindings`
+- rationale_for_handoff: Completed 3-option exploration with repository and approved external evidence, SWOT and security risk-to-testability mapping per option, decision matrix, and explicit @3design open questions.
+
+#### Lesson
+- Pattern: When a Rust capability already has a proven repository PyO3+maturin delivery path, extending that path is usually lower risk than introducing parallel packaging or retaining subprocess bridges.
+- Root cause: CRDT functionality exists as a standalone CLI crate while Python integration expectations require in-process FFI contracts.
+- Prevention: Require early decision on extension topology (existing module vs separate package) with parity tests against current subprocess behavior.
+- First seen: 2026-03-31
+- Seen in: prj0000108-idea000019-crdt-python-ffi-bindings
+- Recurrence count: 1
+- Promotion status: MONITOR
 
 ### 2026-03-30 - prj0000105-idea000016-mixin-architecture-base
 - task_id: prj0000105-idea000016-mixin-architecture-base
