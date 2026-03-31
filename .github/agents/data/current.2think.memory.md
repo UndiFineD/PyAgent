@@ -118,3 +118,25 @@
 - Recurrence count: 1
 - Promotion status: MONITOR
 
+### 2026-03-31 - prj0000109-idea000002-missing-compose-dockerfile
+- task_id: prj0000109-idea000002-missing-compose-dockerfile
+- status: DONE
+- target_agent: @3design
+- canonical_artifact: docs/project/prj0000109-idea000002-missing-compose-dockerfile/idea000002-missing-compose-dockerfile.think.md
+- recommendation_summary: Select Option B (incremental hardening around the existing deploy-local Dockerfile fix) to preserve reliability while keeping scope bounded and deferring compose-topology consolidation to idea000010.
+- prior_art_refs:
+	- docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.think.md
+	- docs/project/prj0000091-missing-compose-dockerfile/prj0000091-missing-compose-dockerfile.design.md
+	- docs/project/ideas/idea000010-docker-compose-consolidation.md
+- branch_gate_evidence: `git branch --show-current` -> `prj0000109-idea000002-missing-compose-dockerfile`
+- rationale_for_handoff: Completed 3-option analysis with repository + approved external evidence, per-option SWOT, risk-to-testability mapping, decision matrix, acceptance criteria mapping, and bounded recommendation.
+
+#### Lesson
+- Pattern: When a backlog defect is already fixed by prior work, the next-phase option should prefer governance hardening and explicit non-goal boundaries over re-implementing the same technical change.
+- Root cause: Idea registry signal lagged behind repository state, creating risk of duplicate or scope-creep remediation.
+- Prevention: Require early current-state verification against deploy and test contracts before proposing implementation-heavy options.
+- First seen: 2026-03-28
+- Seen in: prj0000091-missing-compose-dockerfile; prj0000109-idea000002-missing-compose-dockerfile
+- Recurrence count: 2
+- Promotion status: PROMOTED_TO_HARD_RULE
+
