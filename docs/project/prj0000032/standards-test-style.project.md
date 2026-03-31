@@ -209,6 +209,15 @@
   - `tests\test_coverage_config.py`
   - `tests\test_coverage_meta.py`
   - `tests\test_crdt_bridge.py`
+  - `tests\test_crdt_error_mapping.py`
+  - `tests\test_crdt_ffi_contract.py`
+  - `tests\test_crdt_ffi_feature_flag.py`
+  - `tests\test_crdt_ffi_observability.py`
+  - `tests\test_crdt_ffi_parity.py`
+  - `tests\test_crdt_ffi_performance.py`
+  - `tests\test_crdt_ffi_validation.py`
+  - `tests\test_crdt_merge_determinism.py`
+  - `tests\test_crdt_payload_codec.py`
   - `tests\test_describe.py`
   - `tests\test_downloader.py`
   - `tests\test_dryrun_lists_moves.py`

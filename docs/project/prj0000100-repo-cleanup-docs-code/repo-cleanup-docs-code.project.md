@@ -30,6 +30,7 @@ _No checkbox tasks found in the plan file._
   - `tests\security\test_scan_report_schema.py`
   - `tests\test_consolidate_llm_context_cleanup_report.py`
   - `tests\test_consolidate_llm_context_docstrings.py`
+  - `tests\test_crdt_payload_codec.py`
   - `tests\test_flm_provider_docs.py`
   - `tests\test_repo_layout_scaffold.py`
   - `tests\tools\test_tools_docs.py`
