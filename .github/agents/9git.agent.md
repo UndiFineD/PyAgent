@@ -96,6 +96,7 @@ This agent primarily uses free Copilot models such as GPT-5 Mini, Grok Code Fast
 2. **Scope Validation**
 	- Review the changed files against the project overview scope boundary and the implementation plan.
 	- Allow only files inside the project folder plus explicitly declared shared authoritative files that are necessary for the project.
+	- For release-closure work on idea-backed projects, require the corresponding idea file move from `docs/project/ideas/ideaNNNNNN-*.md` to `docs/project/ideas/archive/ideaNNNNNN-*.md` in the same closure change set.
 	- Reject mixed-project file sets, unrelated inherited changes, or broad repo changes that are not named in the scope boundary.
 	- Never use blanket staging guidance such as `git add .`, `git add -A`, or equivalent whole-repository staging for project work.
 	- If scope validation fails, stop the git workflow, capture the failure disposition, and hand the task back to `@0master`.
@@ -126,6 +127,7 @@ This agent primarily uses free Copilot models such as GPT-5 Mini, Grok Code Fast
 
 3. **Execute Narrow Git Operations**
 	- Stage only the validated files for the current project.
+	- When the project lane is transitioned to `Released` and the project has an `ideaNNNNNN` tag, include the corresponding idea-file archive move in the staged closure set unless the file is already archived.
 	- For docs-only closures (for example changes limited to `docs/project/` and `.github/agents/data/`), run a repo-wide preflight before final staging:
 	```powershell
 	pre-commit run run-precommit-checks 2>&1

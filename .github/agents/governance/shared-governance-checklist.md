@@ -7,6 +7,8 @@ docs-policy, and handoff quality gates.
 - Confirm project boundary first: prj id, expected branch, and allowed scope files.
 - Never proceed on main for project-scoped work.
 - Never use blanket staging for project work.
+- When closing a project to `Released` and the project has an `ideaNNNNNN` tag, move the matching idea file from `docs/project/ideas/` to `docs/project/ideas/archive/` in the same closure workflow.
+- Use `docs/project/kanban.json` as the canonical source to determine release state and idea tags for archival decisions.
 - Validate docs policy when project artifacts under docs/project/prjNNNNNNN/ are changed:
   - python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
 - Validate registry/kanban consistency when docs/project/kanban.json or data/projects.json changes:
@@ -20,7 +22,7 @@ docs-policy, and handoff quality gates.
 - Do not mark DONE on interrupted or inconclusive full-suite runs.
 
 ## Role-Specific Focus
-- 0master: enforce pre-delegation scorecard and branch gate before downstream handoff.
+- 0master: enforce pre-delegation scorecard and branch gate before downstream handoff, and require idea-file archival as part of post-merge release closure.
 - 1project: ensure project artifacts include Branch Plan, Branch Validation, Scope Validation, and Failure Disposition.
 - 2think: keep analysis in-scope and tie options to project boundary constraints.
 - 3design: ensure interface and ADR impact are explicit and testable.
@@ -29,4 +31,4 @@ docs-policy, and handoff quality gates.
 - 6code: apply minimal scoped edits and avoid placeholder or drift changes.
 - 7exec: runtime validation must finish with normal pass/fail outcomes; interrupted runs are blocked.
 - 8ql: security/quality closure requires exact blocker-remediation evidence.
-- 9git: branch/scope validation, narrow staging, post-staging pre-commit, then authenticated gh PR flow.
+- 9git: branch/scope validation, narrow staging, post-staging pre-commit, authenticated gh PR flow, and include required idea-file archive moves in release-closure commits.
