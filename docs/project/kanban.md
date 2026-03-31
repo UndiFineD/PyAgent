@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-30 | Total projects: 107 | Auto-synced by project_registry_governance.py (Discovery: 1, Review: 6, Released: 98)_
+_Last updated: 2026-03-31 | Total projects: 107 | Auto-synced by project_registry_governance.py (Discovery: 0, Review: 7, Released: 98)_
 
 ## How to use this board
 
@@ -59,7 +59,6 @@ Active options exploration — @2think is working or has completed .think.md.
 |---|---|---|---|---|---|---|---|
 
 
-| prj0000107 | idea000015-specialized-agent-library | Initialize workflow artifacts for idea000015 specialized agent library and hand off to @2think discovery. | prj0000107-idea000015-specialized-agent-library | P2 | M | idea, idea000015, specialized-agent-library | 2026-03-30 |
 ---
 
 ## Design
@@ -95,6 +94,7 @@ PR open, awaiting merge.
 | prj0000093 | projectmanager-ideas-autosync | prj0000093-projectmanager-ideas-autosync | pending | P2 | M | 2026-03-29 |
 | prj0000101 | idea-013 - backend-health-check-endpoint | — | pending | P3 | S | 2026-03-30 |
 | prj0000104 | idea000014-processing | prj0000104-idea000014-processing | pending | P2 | S | 2026-03-30 |
+| prj0000107 | idea000015-specialized-agent-library | prj0000107-idea000015-specialized-agent-library | pending | P2 | M | 2026-03-31 |
 ---
 
 ## Released
@@ -219,10 +219,10 @@ Stalled, cancelled, or superseded projects.
 | Lane | Count |
 |---|---|
 | Ideas | 1 |
-| Discovery | 1 |
+| Discovery | 0 |
 | Design | 0 |
 | In Sprint | 0 |
-| Review | 6 |
+| Review | 7 |
 | Released | 98 |
 | Archived | 1 |
 | **Total** | **107** |

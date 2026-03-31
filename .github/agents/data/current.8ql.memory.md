@@ -8,6 +8,39 @@
 
 ## Entries
 
+## Last scan - 2026-03-31
+- task_id: prj0000107-idea000015-specialized-agent-library
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- branch: prj0000107-idea000015-specialized-agent-library (validated)
+- files scanned: docs/project/kanban.json; docs/project/kanban.md; .github/agents/0master.agent.md; .github/agents/1project.agent.md; .github/agents/2think.agent.md; .github/agents/3design.agent.md; .github/agents/4plan.agent.md; .github/agents/5test.agent.md; .github/agents/6code.agent.md; .github/agents/7exec.agent.md; .github/agents/8ql.agent.md; .github/agents/9git.agent.md; .github/agents/governance/shared-governance-checklist.md; docs/project/prj0000107-idea000015-specialized-agent-library/idea000015-specialized-agent-library.ql.md
+- security/quality checks run:
+	- git branch --show-current
+	- git diff --name-only HEAD
+	- git ls-files --others --exclude-standard
+	- git diff --name-only origin/main...HEAD
+	- rg -n "kanban\\.md" .github/agents/0master.agent.md .github/agents/1project.agent.md .github/agents/2think.agent.md .github/agents/3design.agent.md .github/agents/4plan.agent.md .github/agents/5test.agent.md .github/agents/6code.agent.md .github/agents/7exec.agent.md .github/agents/8ql.agent.md .github/agents/9git.agent.md .github/agents/governance/shared-governance-checklist.md
+	- .venv\Scripts\ruff.exe check --select S --output-format concise -- <HEAD .py files>
+	- python scripts/project_registry_governance.py validate
+	- python scripts/project_registry_governance.py set-lane --id prj0000107 --lane Review
+	- python scripts/project_registry_governance.py validate
+	- python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
+	- pip-audit -f json -o .github/agents/data/pip_audit_current_8ql.json
+	- python -c <pip baseline vs current CVE delta parser>
+- findings:
+	- PASS: branch gate and scope inventory capture
+	- PASS: requested agent/governance files contain no `kanban.md` references
+	- PASS: docs policy gate (12 passed)
+	- PASS: registry governance after lane sync remediation (`set-lane` then `VALIDATION_OK`)
+	- MEDIUM: baseline CVE drift persists outside active docs/governance scope (requests/cryptography/pygments)
+- unresolved quality debt:
+	- id: QD-8QL-0005
+	- owner: @6code
+	- originating project: prj0000107-idea000015-specialized-agent-library
+	- status: OPEN
+	- exit criteria: update or risk-accept requests/cryptography/pygments CVEs and refresh committed pip_audit_results.json baseline
+- handoff target: @9git
+- overall: CLEAN (no HIGH/CRITICAL security blockers; quality debt recorded)
+
 ## Last scan - 2026-03-30
 - task_id: prj0000106-idea000080-smart-prompt-routing-system
 - lifecycle: OPEN -> IN_PROGRESS -> DONE
@@ -38,8 +71,8 @@
 - Root cause: Lifecycle lane transition was not synchronized across both registry sources before @8ql gate.
 - Prevention: Require a mandatory paired lane update and immediate `python scripts/project_registry_governance.py validate` during project lifecycle transitions before @7exec/@8ql handoff.
 - First seen: prj0000105-idea000016-mixin-architecture-base
-- Seen in: prj0000105-idea000016-mixin-architecture-base, prj0000106-idea000080-smart-prompt-routing-system
-- Recurrence count: 2
+- Seen in: prj0000105-idea000016-mixin-architecture-base, prj0000106-idea000080-smart-prompt-routing-system, prj0000107-idea000015-specialized-agent-library
+- Recurrence count: 3
 - Promotion status: HARD
 
 ## Last scan - 2026-03-30
@@ -168,8 +201,8 @@
 - Root cause: committed baseline lagged current environment audit state.
 - Prevention: Always run `pip-audit -f json -o .github/agents/data/pip_audit_current_8ql.json` and classify findings as baseline debt when drift is outside active project scope; require explicit ledger owner and exit criteria before @9git handoff.
 - First seen: prj0000104-idea000014-processing
-- Seen in: prj0000104-idea000014-processing, prj0000105-idea000016-mixin-architecture-base
-- Recurrence count: 2
+- Seen in: prj0000104-idea000014-processing, prj0000105-idea000016-mixin-architecture-base, prj0000107-idea000015-specialized-agent-library
+- Recurrence count: 3
 - Promotion status: HARD
 
 ## Promotions
@@ -186,4 +219,5 @@
 ## Unresolved Quality Debt Ledger
 - QD-8QL-0001 | owner=@6code | origin=prj0000104-idea000014-processing | status=OPEN | exit=upgrade or accept risk for CVE-2026-25645, CVE-2026-34073, CVE-2026-4539 and refresh committed baseline
 - QD-8QL-0004 | owner=@1project | origin=prj0000106-idea000080-smart-prompt-routing-system | status=OPEN | exit=synchronize lane state for prj0000106 in data/projects.json and docs/project/kanban.md, then rerun project_registry_governance.py validate to VALIDATION_OK
+- QD-8QL-0005 | owner=@6code | origin=prj0000107-idea000015-specialized-agent-library | status=OPEN | exit=upgrade or accept risk for CVE-2026-25645, CVE-2026-34073, CVE-2026-4539 and refresh committed baseline
 

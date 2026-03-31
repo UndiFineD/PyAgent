@@ -158,7 +158,7 @@
     {
       "id": "prj0000107",
       "name": "idea000015-specialized-agent-library",
-      "lane": "Discovery",
+      "lane": "Review",
       "summary": "Initialize workflow artifacts for idea000015 specialized agent library and hand off to @2think discovery.",
       "branch": "prj0000107-idea000015-specialized-agent-library",
       "pr": null,
@@ -170,7 +170,7 @@
         "specialized-agent-library"
       ],
       "created": "2026-03-30",
-      "updated": "2026-03-30"
+      "updated": "2026-03-31"
     },
     {
       "id": "prj0000106",
