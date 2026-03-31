@@ -3,7 +3,7 @@
 ## Metadata
 - agent: @1project
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-03-30
+- updated_at: 2026-03-31
 - rollover: At new project start, append this file's entries to history.1project.memory.md in chronological order, then clear Entries.
 
 ## Entries
@@ -31,4 +31,10 @@
 	updated_at: 2026-03-30
 	state: DONE
 	summary: Initialized docs/project/prj0000107-idea000015-specialized-agent-library canonical artifacts with branch/scope/failure sections, registered Discovery lane in kanban.json and kanban.md, synchronized data/projects.json, validated governance and docs policy tests, and advanced data/nextproject.md to prj0000108 on branch prj0000107-idea000015-specialized-agent-library.
+
+- task_id: prj0000108
+	owner_agent: @1project
+	updated_at: 2026-03-31
+	state: DONE
+	summary: Initialized docs/project/prj0000108-idea000019-crdt-python-ffi-bindings canonical artifacts with branch/validation sections, registered Discovery state in kanban.json/kanban.md/data/projects.json, advanced data/nextproject.md to prj0000109, and passed project registry + docs policy validations on branch prj0000108-idea000019-crdt-python-ffi-bindings.
 

@@ -23,6 +23,7 @@ _No checkbox tasks found in the plan file._
   - `scripts\codestructure_governance.py`
   - `src\tools\code_quality.py`
   - `tests\docs\test_codestructure_governance.py`
+  - `tests\test_crdt_payload_codec.py`
   - `tests\zzz\test_zzd_codeql_python.py`
   - `tests\zzz\test_zze_codeql_javascript.py`
   - `tests\zzz\test_zzf_codeql_rust.py`

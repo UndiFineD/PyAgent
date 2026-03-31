@@ -181,6 +181,8 @@ _No checkbox tasks found in the plan file._
   - `tests\test_core_routing_routing_policy_loader.py`
   - `tests\test_core_routing_shadow_mode_router.py`
   - `tests\test_core_workflow_engine.py`
+  - `tests\test_crdt_error_mapping.py`
+  - `tests\test_crdt_merge_determinism.py`
   - `tests\test_FuzzEngineCore.py`
   - `tests\test_fuzzing_core.py`
   - `tests\test_innovation_tracker.py`

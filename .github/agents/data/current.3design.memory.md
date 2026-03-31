@@ -7,6 +7,34 @@
 - rollover: At new project start, append this file's entries to history.3design.memory.md in chronological order, then clear Entries.
 
 ## Entries
+- task_id: prj0000108-idea000019-crdt-python-ffi-bindings
+	state: DONE
+	selected_design_path: Option B (integrate CRDT FFI into existing rust_core PyO3 module with migration fallback gate)
+	assumptions:
+		- Existing rust_core PyO3/maturin path remains the canonical extension delivery channel.
+		- Python merge facade in src/core/crdt_bridge.py remains contract-stable through migration.
+		- Subprocess path is temporary fallback only and removed after parity/performance gates pass.
+	interface_contract_notes:
+		- IFACE-CRDT-001 stable Python merge facade and routing gate contract.
+		- IFACE-CRDT-002 PyO3 boundary validation and typed response contract.
+		- IFACE-CRDT-003 canonical payload codec round-trip equivalence contract.
+		- IFACE-CRDT-004 deterministic CRDT merge engine contract.
+		- IFACE-CRDT-005 Rust-to-Python error taxonomy mapping contract.
+		- IFACE-CRDT-006 redacted observability contract for parity/latency outcomes.
+	handoff:
+		target_agent: @4plan
+		canonical_artifact: docs/project/prj0000108-idea000019-crdt-python-ffi-bindings/idea000019-crdt-python-ffi-bindings.design.md
+		chunked_artifacts: none
+		adr_artifact: docs/architecture/adr/0006-crdt-python-ffi-in-rust-core.md
+	lesson:
+		Pattern: FFI migration designs stay implementable when boundary contracts and parity rollback gates are defined before planning.
+		Root cause: CRDT subprocess integrations accumulate latency and reliability risk when boundary contracts are implicit.
+		Prevention: Lock Python facade, PyO3 boundary, codec, error taxonomy, and parity gates with AC IDs prior to @4plan handoff.
+		First seen: 2026-03-31
+		Seen in: prj0000108-idea000019-crdt-python-ffi-bindings
+		Recurrence count: 1
+		Promotion status: Candidate
+
 - task_id: prj0000107-idea000015-specialized-agent-library
 	state: DONE
 	selected_design_path: Option B (hybrid specialization manifests + runtime adapters over universal shell)

@@ -33,6 +33,15 @@
   - `tests\backend\test_health_probes_security.py`
   - `tests\structure\test_dev_tools_dirs.py`
   - `tests\test_crdt_bridge.py`
+  - `tests\test_crdt_error_mapping.py`
+  - `tests\test_crdt_ffi_contract.py`
+  - `tests\test_crdt_ffi_feature_flag.py`
+  - `tests\test_crdt_ffi_observability.py`
+  - `tests\test_crdt_ffi_parity.py`
+  - `tests\test_crdt_ffi_performance.py`
+  - `tests\test_crdt_ffi_validation.py`
+  - `tests\test_crdt_merge_determinism.py`
+  - `tests\test_crdt_payload_codec.py`
   - `tests\test_rust_crdt_merge.py`
   - `tests\test_security_bridge.py`
   - `tests\test_security_rotation.py`

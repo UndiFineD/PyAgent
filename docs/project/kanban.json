@@ -160,8 +160,8 @@
       "name": "idea000015-specialized-agent-library",
       "lane": "Released",
       "summary": "Initialize workflow artifacts for idea000015 specialized agent library and hand off to @2think discovery.",
-      "branch": "merged",
-      "pr": "#260",
+      "branch": "prj0000107-idea000015-specialized-agent-library",
+      "pr": null,
       "priority": "P2",
       "budget_tier": "M",
       "tags": [
@@ -1929,6 +1929,23 @@
       ],
       "created": "2026-03-30",
       "updated": "2026-03-30"
+    },
+    {
+      "id": "prj0000108",
+      "name": "idea000019-crdt-python-ffi-bindings",
+      "lane": "In Sprint",
+      "summary": "Initialize workflow artifacts for idea000019 crdt-python-ffi-bindings and hand off to @2think discovery.",
+      "branch": "prj0000108-idea000019-crdt-python-ffi-bindings",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000019",
+        "crdt-python-ffi-bindings"
+      ],
+      "created": "2026-03-31",
+      "updated": "2026-03-31"
     }
   ]
 }

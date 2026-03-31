@@ -9,6 +9,70 @@
 ## Entries
 
 ## Last run - 2026-03-31 (post-remediation rerun)
+- task_id: prj0000108-idea000019-crdt-python-ffi-bindings
+- Task: Rerun @7exec validation after remediation commit 4ef8ecd3c
+- Branch gate: PASS (expected=prj0000108-idea000019-crdt-python-ffi-bindings, observed=prj0000108-idea000019-crdt-python-ffi-bindings)
+- Dependency gate: PASS (`python -m pip check` -> no broken requirements), classification: NON_BLOCKING
+- Exact prior failing selector first: PASS (`python -m pytest -q tests/test_async_loops.py::test_no_sync_loops` -> 1 passed in 1.63s)
+- Full runtime fail-fast gate: PASS (`python -m pytest src/ tests/ -x --tb=short -q` -> 1422 passed, 10 skipped, 3 warnings)
+- Conclusive follow-up gates:
+	- PASS collect-only (`python -m pytest src/ tests/ --tb=short -q --co -q`)
+	- PASS full non-fail-fast (`python -m pytest src/ tests/ --tb=short` -> 1422 passed, 10 skipped, 3 warnings)
+- Import check: PASS (`src.core.crdt_bridge` imported)
+- Placeholder scan (target source): PASS (no NotImplemented/TODO/FIXME/HACK/STUB/PLACEHOLDER or bare ellipsis matches in `src/core/crdt_bridge.py`)
+- Docs policy gate: PASS (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 12 passed)
+- Pre-commit gate: PASS (`pre-commit run --files docs/project/prj0000108-idea000019-crdt-python-ffi-bindings/idea000019-crdt-python-ffi-bindings.exec.md .github/agents/data/current.7exec.memory.md .github/agents/data/2026-03-31.7exec.log.md`)
+- Outcome: READY -> @8ql
+- Next handoff target: @8ql
+- Notes: Pre-existing `docs/project/kanban.json` drift remained untouched by scope rule.
+
+### Lesson
+- Pattern: Running the exact previously failing selector before broad gates gives deterministic blocker-closure evidence and faster triage.
+- Root cause: Prior @7exec run for prj0000108 was blocked on `tests/test_async_loops.py::test_no_sync_loops`; rerun needed proof of closure before costly full-suite gates.
+- Prevention: Keep mandatory rerun sequence fixed: exact prior failing selector -> dependency gate -> fail-fast full suite -> full non-fail-fast/docs/pre-commit gates.
+- First seen: 2026-03-31
+- Seen in: prj0000107-idea000015-specialized-agent-library; prj0000108-idea000019-crdt-python-ffi-bindings
+- Recurrence count: 2
+- Promotion status: Promoted to hard rule
+
+## Last run - 2026-03-31
+- task_id: prj0000108-idea000019-crdt-python-ffi-bindings
+- Task: Runtime validation for CRDT Python FFI bindings after @6code implementation
+- Branch gate: PASS (expected=prj0000108-idea000019-crdt-python-ffi-bindings, observed=prj0000108-idea000019-crdt-python-ffi-bindings)
+- Dependency gate: PASS (`python -m pip check` -> no broken requirements), classification: NON_BLOCKING
+- Exact selector reruns first: PASS
+	- `python -m pytest -q tests/test_crdt_ffi_contract.py -k schema` -> 2 passed
+	- `python -m pytest -q tests/test_crdt_bridge.py -k "ffi and envelope"` -> 2 passed, 1 deselected
+	- `python -m pytest -q tests/test_crdt_ffi_validation.py -k shape` -> 2 passed
+	- `python -m pytest -q tests/test_crdt_payload_codec.py -k round_trip` -> 1 passed
+	- `python -m pytest -q tests/test_crdt_merge_determinism.py` -> 1 passed
+	- `python -m pytest -q tests/test_crdt_error_mapping.py` -> 2 passed
+	- `python -m pytest -q tests/test_crdt_ffi_observability.py` -> 2 passed
+	- `python -m pytest -q tests/test_crdt_ffi_feature_flag.py` -> 2 passed
+	- `python -m pytest -q tests/test_crdt_ffi_parity.py` -> 1 passed
+	- `python -m pytest -q tests/test_crdt_ffi_performance.py` -> 2 passed
+- Full runtime fail-fast gate: FAIL (`python -m pytest src/ tests/ -x --tb=short -q` -> 1 failed, 512 passed)
+- Failing selector: `tests/test_async_loops.py::test_no_sync_loops`
+- Failure detail: synchronous loop detected in `src/core/crdt_bridge.py` line 116
+- Import check: PASS (`python -c "import src.core.crdt_bridge; print('OK src.core.crdt_bridge')"`)
+- Placeholder scan: PASS (no NotImplemented/TODO/FIXME/HACK/STUB/PLACEHOLDER or ellipsis matches in CRDT scope)
+- Docs policy gate: PASS (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 12 passed)
+- Pre-commit gate: FAIL (`pre-commit run --files docs/project/prj0000108-idea000019-crdt-python-ffi-bindings/idea000019-crdt-python-ffi-bindings.exec.md .github/agents/data/current.7exec.memory.md .github/agents/data/2026-03-31.7exec.log.md`)
+- Pre-commit failure detail: `run-precommit-checks` -> `ruff format --check src tests` reports `src/core/crdt_bridge.py` would be reformatted
+- Outcome: BLOCKED -> @6code
+- Next handoff target: @6code
+- Notes: Results are conclusive (no interruption/inconclusive marks); @8ql handoff blocked pending @6code remediation.
+
+### Lesson
+- Pattern: Repository-wide async-loop governance can fail on newly added core modules even when all project selectors are green.
+- Root cause: `src/core/crdt_bridge.py` contains a synchronous loop at line 116 detected by `tests/test_async_loops.py::test_no_sync_loops`; shared pre-commit checks also fail due formatter drift on the same file.
+- Prevention: For `src/core/**` changes in @6code, run `python -m pytest -q tests/test_async_loops.py::test_no_sync_loops` and `ruff format --check src/core/<changed>.py` before requesting @7exec handoff.
+- First seen: 2026-03-30
+- Seen in: prj0000106-idea000080-smart-prompt-routing-system; prj0000107-idea000015-specialized-agent-library; prj0000108-idea000019-crdt-python-ffi-bindings
+- Recurrence count: 3
+- Promotion status: Promoted to hard rule
+
+## Last run - 2026-03-31 (post-remediation rerun)
 - task_id: prj0000107-idea000015-specialized-agent-library
 - Task: Rerun @7exec validation after blocker remediation commit 614238c54
 - Branch gate: PASS (expected=prj0000107-idea000015-specialized-agent-library, observed=prj0000107-idea000015-specialized-agent-library)

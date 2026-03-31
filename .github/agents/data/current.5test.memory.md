@@ -81,3 +81,42 @@
 - Seen in: prj0000107-idea000015-specialized-agent-library
 - Recurrence count: 1
 - Promotion status: Candidate
+
+### Entry 2026-03-31 - prj0000108 CRDT Python FFI bindings @5test artifact completion
+- task_id: prj0000108-idea000019-crdt-python-ffi-bindings
+- status: DONE
+- lifecycle_transition: OPEN -> IN_PROGRESS -> DONE
+- branch_gate:
+	- expected: prj0000108-idea000019-crdt-python-ffi-bindings
+	- observed: prj0000108-idea000019-crdt-python-ffi-bindings
+	- result: PASS
+- scope:
+	- docs/project/prj0000108-idea000019-crdt-python-ffi-bindings/idea000019-crdt-python-ffi-bindings.test.md
+	- .github/agents/data/current.5test.memory.md
+	- .github/agents/data/2026-03-31.5test.log.md
+- evidence:
+	- finalized @5test artifact with deterministic selector order S1..S10 for AC-CRDT-001..AC-CRDT-008 plus NFR performance gate
+	- added explicit expected failing contracts per selector and forbidden weak-failure signatures
+	- added complete AC-to-test matrix with concrete case IDs TC-CRDT-001..TC-CRDT-015
+	- defined blocking weak-test detection gate tied to handoff status
+	- executed docs policy validation command successfully (12 passed)
+- failing_test_evidence:
+	- selectors and expected red signatures defined deterministically; runtime red execution deferred to implementation cycle
+- pass_fail_summary:
+	- PASS: branch validation
+	- PASS: deterministic red selector and contract definition
+	- PASS: AC-to-test matrix completeness
+	- PASS: weak-test gate definition and blocking policy
+	- PASS: docs policy validation command execution (12 passed)
+	- PENDING: commit/push evidence capture
+- handoff_notes:
+	- @6code readiness: READY_FOR_IMPLEMENTATION_CONTRACTS
+
+#### Lesson
+- Pattern: Deterministic selector ordering and explicit failure-shape contracts are required to avoid weak red evidence in interface migration projects.
+- Root cause: Without explicit failure-shape constraints, red phase can pass with import/existence checks that do not verify CRDT semantics.
+- Prevention: Every @5test artifact must include AC-to-test mapping, ordered selectors, expected behavioral failure contracts, and forbidden weak signatures.
+- First seen: 2026-03-31
+- Seen in: prj0000107-idea000015-specialized-agent-library; prj0000108-idea000019-crdt-python-ffi-bindings
+- Recurrence count: 2
+- Promotion status: Promoted to hard rule

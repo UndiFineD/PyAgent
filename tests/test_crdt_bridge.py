@@ -19,6 +19,10 @@ The bridge is a thin Python wrapper over the Rust crdt merge binary.
 
 from __future__ import annotations
 
+from typing import Any
+
+import pytest
+
 from src.core import crdt_bridge
 
 
@@ -27,3 +31,33 @@ def test_crdt_bridge_merge_deterministic():
     merged = crdt_bridge.merge({"a": 1}, {"b": 2})
     assert merged["a"] == 1
     assert merged["b"] == 2
+
+
+def test_bridge_ffi_envelope_path_when_enabled(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Verify that enabled FFI path emits an envelope with path=ffi."""
+
+    def _fake_ffi(payload: dict[str, Any]) -> dict[str, Any]:
+        return {"v": payload["lhs_state"]["v"] + payload["rhs_state"]["v"]}
+
+    monkeypatch.setenv("CRDT_FFI_ENABLED", "1")
+    monkeypatch.setattr(crdt_bridge, "_ffi_available", lambda: True)
+    monkeypatch.setattr(crdt_bridge, "_ffi_merge", _fake_ffi)
+
+    payload = crdt_bridge.make_request({"v": 1}, {"v": 2}, request_id="req-ffi")
+    response = crdt_bridge.merge(payload)
+
+    assert response["path"] == "ffi"
+    assert response["request_id"] == "req-ffi"
+    assert response["merged_state"] == {"v": 3}
+
+
+def test_bridge_ffi_envelope_path_when_disabled(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Verify that disabled FFI path emits an envelope with path=fallback."""
+    monkeypatch.setenv("CRDT_FFI_ENABLED", "0")
+
+    payload = crdt_bridge.make_request({"x": 1}, {"y": 2}, request_id="req-fallback")
+    response = crdt_bridge.merge(payload)
+
+    assert response["path"] == "fallback"
+    assert response["request_id"] == "req-fallback"
+    assert response["merged_state"] == {"x": 1, "y": 2}
