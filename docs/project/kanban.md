@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-31 | Total projects: 108 | Auto-synced by project_registry_governance.py (Discovery: 0, Review: 6, Released: 100)_
+_Last updated: 2026-03-31 | Total projects: 109 | Auto-synced by project_registry_governance.py (Discovery: 1, Review: 6, Released: 100)_
 
 ## How to use this board
 
@@ -59,6 +59,7 @@ Active options exploration — @2think is working or has completed .think.md.
 |---|---|---|---|---|---|---|---|
 
 
+| prj0000109 | idea000002-missing-compose-dockerfile | Initialize workflow artifacts for idea000002 missing-compose-dockerfile and hand off to @2think discovery. | prj0000109-idea000002-missing-compose-dockerfile | P1 | S | idea, idea000002, missing-compose-dockerfile | 2026-03-31 |
 ---
 
 ## Design
@@ -220,13 +221,13 @@ Stalled, cancelled, or superseded projects.
 | Lane | Count |
 |---|---|
 | Ideas | 1 |
-| Discovery | 0 |
+| Discovery | 1 |
 | Design | 0 |
 | In Sprint | 0 |
 | Review | 6 |
 | Released | 100 |
 | Archived | 1 |
-| **Total** | **108** |
+| **Total** | **109** |
 
 ---
 
