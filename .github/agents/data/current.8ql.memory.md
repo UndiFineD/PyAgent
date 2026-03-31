@@ -9,6 +9,33 @@
 ## Entries
 
 ## Last scan - 2026-03-31
+- task_id: prj0000109-idea000002-missing-compose-dockerfile
+- lifecycle: OPEN -> IN_PROGRESS -> BLOCKED
+- branch: prj0000109-idea000002-missing-compose-dockerfile (validated)
+- files scanned: deploy/compose.yaml; deploy/docker-compose.yaml; deploy/Dockerfile.pyagent; deploy/Dockerfile.fleet; tests/deploy/test_compose_dockerfile_paths.py; tests/deploy/test_compose_context_contract.py; tests/deploy/test_compose_dockerfile_regression_matrix.py; tests/deploy/test_compose_file_selection.py; tests/deploy/test_compose_non_goal_guardrails.py; tests/deploy/test_compose_scope_boundary_markers.py; tests/docs/test_agent_workflow_policy_docs.py; docs/project/prj0000109-idea000002-missing-compose-dockerfile/idea000002-missing-compose-dockerfile.ql.md; docs/project/kanban.json
+- security/quality checks run:
+	- git branch --show-current
+	- git diff --name-only HEAD
+	- git ls-files --others --exclude-standard
+	- git diff --name-only HEAD -- .github/workflows/*.yml
+	- python -m pytest -q tests/deploy/test_compose_dockerfile_paths.py tests/deploy/test_compose_context_contract.py tests/deploy/test_compose_dockerfile_regression_matrix.py tests/deploy/test_compose_file_selection.py tests/deploy/test_compose_non_goal_guardrails.py tests/deploy/test_compose_scope_boundary_markers.py
+	- python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
+	- .venv\Scripts\ruff.exe check --select S --output-format concise -- tests/deploy/test_compose_dockerfile_paths.py tests/deploy/test_compose_context_contract.py tests/deploy/test_compose_dockerfile_regression_matrix.py tests/deploy/test_compose_file_selection.py tests/deploy/test_compose_non_goal_guardrails.py tests/deploy/test_compose_scope_boundary_markers.py tests/docs/test_agent_workflow_policy_docs.py
+	- .venv\Scripts\ruff.exe format --check tests/deploy/test_compose_scope_boundary_markers.py tests/docs/test_agent_workflow_policy_docs.py
+	- python scripts/project_registry_governance.py validate
+	- pip-audit -f json -o .github/agents/data/pip_audit_current_8ql.json
+	- python -c <pip baseline vs current CVE delta parser>
+- findings:
+	- PASS: branch gate matches expected project branch
+	- PASS: targeted deploy gate (19 passed) and docs policy gate (15 passed)
+	- PASS: exact formatter blocker recheck is green (`2 files already formatted`)
+	- INFO: scoped Ruff S findings are test-only S101 asserts (non-blocking)
+	- MEDIUM: baseline CVE drift vs committed `pip_audit_results.json` persists (requests/cryptography/pygments)
+	- BLOCKER: `project_registry_governance.py validate` fails for prj0000109 lane mismatch (`json='Review'`, `kanban='Discovery'`) and pre-existing `docs/project/kanban.json` drift is out-of-scope per user constraint
+- handoff target: @1project
+- overall: BLOCKED (quality governance blocker; no HIGH/CRITICAL security findings)
+
+## Last scan - 2026-03-31
 - task_id: prj0000108-idea000019-crdt-python-ffi-bindings
 - lifecycle: OPEN -> IN_PROGRESS -> DONE
 - branch: prj0000108-idea000019-crdt-python-ffi-bindings (validated)
@@ -120,8 +147,8 @@
 - Root cause: Lifecycle lane transition was not synchronized across both registry sources before @8ql gate.
 - Prevention: Require a mandatory paired lane update and immediate `python scripts/project_registry_governance.py validate` during project lifecycle transitions before @7exec/@8ql handoff.
 - First seen: prj0000105-idea000016-mixin-architecture-base
-- Seen in: prj0000105-idea000016-mixin-architecture-base, prj0000106-idea000080-smart-prompt-routing-system, prj0000107-idea000015-specialized-agent-library, prj0000108-idea000019-crdt-python-ffi-bindings
-- Recurrence count: 4
+- Seen in: prj0000105-idea000016-mixin-architecture-base, prj0000106-idea000080-smart-prompt-routing-system, prj0000107-idea000015-specialized-agent-library, prj0000108-idea000019-crdt-python-ffi-bindings, prj0000109-idea000002-missing-compose-dockerfile
+- Recurrence count: 5
 - Promotion status: HARD
 
 ## Last scan - 2026-03-30
@@ -270,4 +297,5 @@
 - QD-8QL-0004 | owner=@1project | origin=prj0000106-idea000080-smart-prompt-routing-system | status=OPEN | exit=synchronize lane state for prj0000106 in data/projects.json and docs/project/kanban.md, then rerun project_registry_governance.py validate to VALIDATION_OK
 - QD-8QL-0005 | owner=@6code | origin=prj0000107-idea000015-specialized-agent-library | status=OPEN | exit=upgrade or accept risk for CVE-2026-25645, CVE-2026-34073, CVE-2026-4539 and refresh committed baseline
 - QD-8QL-0007 | owner=@6code | origin=prj0000108-idea000019-crdt-python-ffi-bindings | status=OPEN | exit=upgrade or accept risk for CVE-2026-25645, CVE-2026-34073, CVE-2026-4539 and refresh committed baseline
+- QD-8QL-0008 | owner=@1project | origin=prj0000109-idea000002-missing-compose-dockerfile | status=OPEN | exit=synchronize lane state for prj0000109 in data/projects.json and docs/project/kanban.json, then rerun project_registry_governance.py validate to VALIDATION_OK
 
