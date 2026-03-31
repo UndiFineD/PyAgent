@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-31 | Total projects: 107 | Auto-synced by project_registry_governance.py (Discovery: 0, Review: 6, Released: 99)_
+_Last updated: 2026-03-31 | Total projects: 108 | Auto-synced by project_registry_governance.py (Discovery: 1, Review: 6, Released: 99)_
 
 ## How to use this board
 
@@ -59,6 +59,7 @@ Active options exploration — @2think is working or has completed .think.md.
 |---|---|---|---|---|---|---|---|
 
 
+| prj0000108 | idea000019-crdt-python-ffi-bindings | Initialize workflow artifacts for idea000019 crdt-python-ffi-bindings and hand off to @2think discovery. | prj0000108-idea000019-crdt-python-ffi-bindings | P3 | S | idea, idea000019, crdt-python-ffi-bindings | 2026-03-31 |
 ---
 
 ## Design
@@ -219,13 +220,13 @@ Stalled, cancelled, or superseded projects.
 | Lane | Count |
 |---|---|
 | Ideas | 1 |
-| Discovery | 0 |
+| Discovery | 1 |
 | Design | 0 |
 | In Sprint | 0 |
 | Review | 6 |
 | Released | 99 |
 | Archived | 1 |
-| **Total** | **107** |
+| **Total** | **108** |
 
 ---
 
