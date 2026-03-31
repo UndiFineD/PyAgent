@@ -10,7 +10,7 @@
 
 ## 2026-03-31 — prj0000108 CRDT FFI selector implementation
 - task_id: prj0000108-idea000019-crdt-python-ffi-bindings
-- lifecycle: IN_PROGRESS
+- lifecycle: DONE
 - branch: prj0000108-idea000019-crdt-python-ffi-bindings (validated)
 - changed files:
 	- src/core/crdt_bridge.py
@@ -48,6 +48,8 @@
 - unresolved risks:
 	- Rust-side `rust_core.merge_crdt` export and cross-platform native binding behavior were not implemented in this minimal Python-scoped change.
 - handoff target: @7exec
+	- commit: 4096aaced
+	- push: origin/prj0000108-idea000019-crdt-python-ffi-bindings (success)
 
 ### Lesson
 - Pattern: When selector files are missing, add selector-aligned tests first and keep implementation minimal to those contracts.
