@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-31 | Total projects: 108 | Auto-synced by project_registry_governance.py (Discovery: 0, Review: 6, Released: 100)_
+_Last updated: 2026-03-31 | Total projects: 109 | Auto-synced by project_registry_governance.py (Discovery: 0, Review: 7, Released: 100)_
 
 ## How to use this board
 
@@ -58,7 +58,6 @@ Active options exploration — @2think is working or has completed .think.md.
 | ID | Name | Summary | Branch | Priority | Budget | Tags | Updated |
 |---|---|---|---|---|---|---|---|
 
-
 ---
 
 ## Design
@@ -94,6 +93,7 @@ PR open, awaiting merge.
 | prj0000093 | projectmanager-ideas-autosync | prj0000093-projectmanager-ideas-autosync | pending | P2 | M | 2026-03-29 |
 | prj0000101 | idea-013 - backend-health-check-endpoint | — | pending | P3 | S | 2026-03-30 |
 | prj0000104 | idea000014-processing | prj0000104-idea000014-processing | pending | P2 | S | 2026-03-30 |
+| prj0000109 | idea000002-missing-compose-dockerfile | prj0000109-idea000002-missing-compose-dockerfile | pending | P1 | S | 2026-03-31 |
 ---
 
 ## Released
@@ -223,10 +223,10 @@ Stalled, cancelled, or superseded projects.
 | Discovery | 0 |
 | Design | 0 |
 | In Sprint | 0 |
-| Review | 6 |
+| Review | 7 |
 | Released | 100 |
 | Archived | 1 |
-| **Total** | **108** |
+| **Total** | **109** |
 
 ---
 

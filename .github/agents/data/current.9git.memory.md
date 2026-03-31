@@ -131,3 +131,29 @@
 - Recurrence count: 1
 - Promotion status: CANDIDATE
 
+## 2026-03-31 - prj0000109-idea000002-missing-compose-dockerfile
+- task_id: prj0000109-idea000002-missing-compose-dockerfile
+- status: DONE
+- branch_expected: prj0000109-idea000002-missing-compose-dockerfile
+- branch_observed: prj0000109-idea000002-missing-compose-dockerfile
+- branch_validation: PASS
+- scope_validation: PASS
+- notes:
+	- Confirmed branch gate pass on expected project branch.
+	- Mandatory dashboard refresh gate executed before staging; broad out-of-scope changes detected and excluded.
+	- Explicitly excluded unrelated generated local file `.github/agents/data/pip_audit_current_8ql.json` from staging/commit.
+	- Existing branch commits pushed to origin.
+	- PR created targeting `main`: https://github.com/UndiFineD/PyAgent/pull/262.
+	- Staged-file pre-commit gate passed for handoff artifacts (PRECOMMIT_RC=0).
+	- @9git closure commit created and pushed: `7251daa69629e3100985f70301dfbfad008b6cbb`.
+	- Post-push `gh` query hit `HTTP 401` due invalid `GITHUB_TOKEN`; resolved by clearing env override and re-running `gh auth status`.
+
+### Lesson
+- Pattern: Dashboard refresh consistently introduces broad out-of-scope churn during narrow project closure handoffs.
+- Root cause: `scripts/generate_project_dashboard.py` rewrites many project artifacts globally by design.
+- Prevention: Run dashboard gate before staging, then enforce explicit allowlist staging and verify excluded unrelated generated files stay untouched.
+- First seen: 2026-03-30
+- Seen in: prj0000104-idea000014-processing; prj0000105-idea000016-mixin-architecture-base; prj0000106-idea000080-smart-prompt-routing-system; prj0000107-idea000015-specialized-agent-library; prj0000109-idea000002-missing-compose-dockerfile
+- Recurrence count: 5
+- Promotion status: HARD
+

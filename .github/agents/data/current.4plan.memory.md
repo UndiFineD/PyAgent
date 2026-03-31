@@ -8,6 +8,37 @@
 
 ## Entries
 
+## prj0000109 - idea000002-missing-compose-dockerfile
+
+| Field | Value |
+|---|---|
+| task_id | prj0000109-idea000002-missing-compose-dockerfile |
+| owner_agent | @4plan |
+| source | @3design |
+| created_at | 2026-03-31 |
+| updated_at | 2026-03-31 |
+| status | DONE |
+| lifecycle | OPEN -> IN_PROGRESS -> DONE |
+| chunk_boundaries | Two chunks: Chunk A contract/regression hardening (T-DC-001..T-DC-010), Chunk B governance/handoff closure (T-DC-011..T-DC-015) |
+| acceptance_criteria_scope | AC-DC-001..AC-DC-006 mapped to owner-sequenced tasks with deterministic validation commands |
+| dependency_order | @5test red -> @6code green -> @7exec runtime -> @8ql quality/security -> @9git handoff |
+| handoff_target | @5test |
+| artifact_paths | docs/project/prj0000109-idea000002-missing-compose-dockerfile/idea000002-missing-compose-dockerfile.plan.md |
+| branch | prj0000109-idea000002-missing-compose-dockerfile (validated PASS before artifact writes) |
+| validation_evidence | c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 12 passed in 1.64s |
+
+### Lesson Entry
+
+| Field | Value |
+|---|---|
+| Pattern | Contract-stability lanes move faster when plans explicitly pair non-goal guardrails with executable regression selectors. |
+| Root cause | Prior placeholder plan did not enforce non-goal boundaries or command-level owner sequencing, leaving downstream ambiguity. |
+| Prevention | Require each task row to include objective, target files, acceptance criteria, owner, and at least one deterministic validation command. |
+| First seen | 2026-03-30 |
+| Seen in | prj0000104-idea000014-processing; prj0000107-idea000015-specialized-agent-library; prj0000108-idea000019-crdt-python-ffi-bindings; prj0000109-idea000002-missing-compose-dockerfile |
+| Recurrence count | 4 |
+| Promotion status | PROMOTED_TO_HARD_RULE |
+
 ## prj0000108 - idea000019-crdt-python-ffi-bindings
 
 | Field | Value |

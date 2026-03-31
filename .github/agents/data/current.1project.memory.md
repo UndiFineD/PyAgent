@@ -8,33 +8,9 @@
 
 ## Entries
 
-- task_id: prj0000104
-	owner_agent: @1project
-	updated_at: 2026-03-30
-	state: DONE
-	summary: Created docs/project/prj0000104-idea000014-processing canonical artifacts, registered Discovery lane in kanban.md and kanban.json, updated data/nextproject.md to prj0000105, and prepared handoff to @2think on branch prj0000104-idea000014-processing.
-
-- task_id: prj0000105
-	owner_agent: @1project
-	updated_at: 2026-03-30
-	state: DONE
-	summary: Initialized docs/project/prj0000105-idea000016-mixin-architecture-base canonical artifacts, synced Discovery lane/branch in kanban.json and kanban.md, advanced data/nextproject.md to prj0000106, and handed off discovery to @2think with think artifact IN_PROGRESS.
-
-- task_id: prj0000106
-	owner_agent: @1project
-	updated_at: 2026-03-30
-	state: DONE
-	summary: Initialized docs/project/prj0000106-idea000080-smart-prompt-routing-system canonical artifacts, registered Discovery lane in kanban.json and kanban.md, synchronized data/projects.json, and advanced data/nextproject.md to prj0000107 on branch prj0000106-idea000080-smart-prompt-routing-system.
-
-- task_id: prj0000107
-	owner_agent: @1project
-	updated_at: 2026-03-30
-	state: DONE
-	summary: Initialized docs/project/prj0000107-idea000015-specialized-agent-library canonical artifacts with branch/scope/failure sections, registered Discovery lane in kanban.json and kanban.md, synchronized data/projects.json, validated governance and docs policy tests, and advanced data/nextproject.md to prj0000108 on branch prj0000107-idea000015-specialized-agent-library.
-
-- task_id: prj0000108
+- task_id: prj0000109
 	owner_agent: @1project
 	updated_at: 2026-03-31
 	state: DONE
-	summary: Initialized docs/project/prj0000108-idea000019-crdt-python-ffi-bindings canonical artifacts with branch/validation sections, registered Discovery state in kanban.json/kanban.md/data/projects.json, advanced data/nextproject.md to prj0000109, and passed project registry + docs policy validations on branch prj0000108-idea000019-crdt-python-ffi-bindings.
+	summary: Resolved @8ql-reported registry mismatch for prj0000109 by synchronizing lane to Review across docs/project/kanban.json, docs/project/kanban.md, and data/projects.json; reran project registry and docs policy validations; and prepared commit evidence on branch prj0000109-idea000002-missing-compose-dockerfile.
 

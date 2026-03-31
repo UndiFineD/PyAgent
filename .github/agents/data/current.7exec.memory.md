@@ -8,6 +8,35 @@
 
 ## Entries
 
+## Last run - 2026-03-31
+- task_id: prj0000109-idea000002-missing-compose-dockerfile
+- Task: Runtime validation for deploy compose dockerfile fix and project execution evidence
+- Branch gate: PASS (expected=prj0000109-idea000002-missing-compose-dockerfile, observed=prj0000109-idea000002-missing-compose-dockerfile)
+- Dependency gate: PASS (`python -m pip check` -> no broken requirements), classification: NON_BLOCKING
+- Full runtime fail-fast gate: PASS (`python -m pytest src/ tests/ -x --tb=short -q` -> 1442 passed, 10 skipped, 3 warnings)
+- Conclusive follow-up gates:
+	- PASS collect-only (`python -m pytest src/ tests/ --tb=short -q --co -q`)
+	- PASS full non-fail-fast (`python -m pytest src/ tests/ --tb=short` -> 1442 passed, 10 skipped, 3 warnings)
+- Import check: SKIPPED (no Python modules changed in @6code scope for prj0000109)
+- Smoke test: SKIPPED (no CLI/API/web entrypoint changes)
+- rust_core: SKIPPED (`rust_core/` unchanged)
+- Placeholder scan: SKIPPED (no changed Python source files in @7exec scope)
+- Docs policy gate: PASS (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 15 passed)
+- Pre-commit gate: FAIL (`pre-commit run --files docs/project/prj0000109-idea000002-missing-compose-dockerfile/idea000002-missing-compose-dockerfile.exec.md .github/agents/data/current.7exec.memory.md .github/agents/data/2026-03-31.7exec.log.md`)
+- Pre-commit failure detail: shared hook `run-precommit-checks` reports formatter drift in `tests/deploy/test_compose_scope_boundary_markers.py` and `tests/docs/test_agent_workflow_policy_docs.py`
+- Outcome: BLOCKED -> @5test/@6code
+- Next handoff target: @5test/@6code for formatter remediation
+- Notes: Scope limited to execution artifact + @7exec memory/log updates; unrelated `docs/project/kanban.json` drift untouched.
+
+### Lesson
+- Pattern: Deploy-only implementation fixes can still require full runtime conclusive evidence to guard against unrelated integration regressions.
+- Root cause: Project change set resolved a deploy artifact regression and needed full-suite confirmation for stable handoff.
+- Prevention: Keep fixed execution order for @7exec: branch gate -> dependency gate -> fail-fast full suite -> collect/full reruns -> docs policy -> pre-commit scoped files.
+- First seen: 2026-03-31
+- Seen in: prj0000109-idea000002-missing-compose-dockerfile
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ## Last run - 2026-03-31 (post-remediation rerun)
 - task_id: prj0000108-idea000019-crdt-python-ffi-bindings
 - Task: Rerun @7exec validation after remediation commit 4ef8ecd3c

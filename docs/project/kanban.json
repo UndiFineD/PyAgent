@@ -156,6 +156,23 @@
   ],
   "projects": [
     {
+      "id": "prj0000109",
+      "name": "idea000002-missing-compose-dockerfile",
+      "lane": "Review",
+      "summary": "Initialize workflow artifacts for idea000002 missing-compose-dockerfile and hand off to @2think discovery.",
+      "branch": "prj0000109-idea000002-missing-compose-dockerfile",
+      "pr": null,
+      "priority": "P1",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000002",
+        "missing-compose-dockerfile"
+      ],
+      "created": "2026-03-31",
+      "updated": "2026-03-31"
+    },
+    {
       "id": "prj0000107",
       "name": "idea000015-specialized-agent-library",
       "lane": "Released",

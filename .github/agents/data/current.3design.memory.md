@@ -3,10 +3,38 @@
 ## Metadata
 - agent: @3design
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-03-30
+- updated_at: 2026-03-31
 - rollover: At new project start, append this file's entries to history.3design.memory.md in chronological order, then clear Entries.
 
 ## Entries
+- task_id: prj0000109-idea000002-missing-compose-dockerfile
+	state: DONE
+	selected_design_path: Option B (incremental governance hardening around already-fixed compose Dockerfile path contract)
+	assumptions:
+		- `deploy/compose.yaml` and `deploy/Dockerfile.pyagent` remain the current runtime contract baseline.
+		- This lane remains documentation-and-governance scoped with no deploy runtime edits.
+		- Compose topology consolidation is deferred to the dedicated consolidation lane.
+	interface_contract_notes:
+		- IFACE-DC-001 compose file to Dockerfile path contract.
+		- IFACE-DC-002 defect-lane scope guard contract.
+		- IFACE-DC-003 regression signal contract.
+		- IFACE-DC-004 handoff contract for @4plan traceability.
+		- IFACE-DC-005 testability contract for @5test risk mapping.
+		- IFACE-DC-006 non-goal boundary contract (no consolidation in this lane).
+	handoff:
+		target_agent: @4plan
+		canonical_artifact: docs/project/prj0000109-idea000002-missing-compose-dockerfile/idea000002-missing-compose-dockerfile.design.md
+		chunked_artifacts: none
+		adr_artifact: none
+	lesson:
+		Pattern: Defect-lane design artifacts stay actionable when they explicitly lock non-goals and map interfaces to planned task IDs.
+		Root cause: Stale or already-fixed defect lanes can drift into unnecessary implementation scope without explicit boundary contracts.
+		Prevention: Encode non-goal boundaries, AC IDs, and interface-to-task traceability directly in the canonical design artifact before handoff.
+		First seen: 2026-03-31
+		Seen in: prj0000109-idea000002-missing-compose-dockerfile
+		Recurrence count: 1
+		Promotion status: Candidate
+
 - task_id: prj0000108-idea000019-crdt-python-ffi-bindings
 	state: DONE
 	selected_design_path: Option B (integrate CRDT FFI into existing rust_core PyO3 module with migration fallback gate)

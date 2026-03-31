@@ -12,9 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Policy tests for workflow-agent and project documentation governance contracts."""
+
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+PRJ0000109_TEST_ARTIFACT = (
+    "docs/project/prj0000109-idea000002-missing-compose-dockerfile/idea000002-missing-compose-dockerfile.test.md"
+)
 
 
 def _read(relative_path: str) -> str:
@@ -109,6 +114,33 @@ def test_9git_enforces_branch_scope_and_failure_rules() -> None:
     assert "## Scope Validation" in git_agent_text
     assert "## Failure Disposition" in git_agent_text
     assert "## Lessons Learned" in git_agent_text
+
+
+def test_release_closure_policy_requires_idea_archival() -> None:
+    """Workflow governance must require moving released idea files into archive."""
+    shared = _normalize(_read(".github/agents/governance/shared-governance-checklist.md"))
+    master = _normalize(_read(".github/agents/0master.agent.md"))
+    git_agent = _normalize(_read(".github/agents/9git.agent.md"))
+
+    assert "when closing a project to released" in shared
+    assert "docs/project/ideas/archive/" in shared
+    assert "use docs/project/kanban.json as the canonical source" in shared
+    assert "when a project is moved to **released**" in master
+    assert "docs/project/ideas/archive/" in master
+    assert "for release-closure work on idea-backed projects" in git_agent
+    assert "include the corresponding idea-file archive move" in git_agent
+
+
+def test_project_registry_governance_supports_idea_archive_sync() -> None:
+    """Governance script must expose and enforce release idea archival support."""
+    governance = _read("scripts/project_registry_governance.py")
+    normalized = _normalize(governance)
+
+    assert "def sync_idea_archive()" in governance
+    assert "sync-idea-archive" in governance
+    assert "if lane == \"Released\":" in governance
+    assert "_archive_idea_files_for_project" in governance
+    assert "released project" in normalized and "unarchived idea file" in normalized
 
 
 def test_downstream_agents_require_branch_gate_before_work() -> None:
@@ -396,6 +428,50 @@ def test_every_project_folder_has_a_project_overview() -> None:
     )
 
 
+def test_prj0000109_test_artifact_includes_branch_scope_preconditions() -> None:
+    """prj0000109 test artifact must require branch and scope precondition evidence."""
+    artifact_text = _read(PRJ0000109_TEST_ARTIFACT)
+    normalized = _normalize(artifact_text)
+
+    assert "## branch and scope preconditions" in normalized
+    assert "expected branch: prj0000109-idea000002-missing-compose-dockerfile" in normalized
+    assert "observed branch:" in normalized
+    assert "project match: pass" in normalized or "project match: fail" in normalized
+    assert "scope-bounded files reviewed" in normalized
+    assert "required evidence:" in normalized
+    assert "git branch --show-current" in artifact_text
+
+
+def test_prj0000109_test_artifact_defines_ac_to_test_matrix_and_weak_test_gate() -> None:
+    """prj0000109 artifact must map every AC and define weak-test blocking rules."""
+    artifact_text = _read(PRJ0000109_TEST_ARTIFACT)
+    normalized = _normalize(artifact_text)
+
+    assert "## ac-to-test matrix" in normalized
+    for ac_id in ["ac-dc-001", "ac-dc-002", "ac-dc-003", "ac-dc-004", "ac-dc-005", "ac-dc-006"]:
+        assert ac_id in normalized, f"missing AC mapping in prj0000109 artifact: {ac_id}"
+
+    assert "## weak-test detection gate" in normalized
+    assert "blocks handoff to @6code" in normalized
+    assert "placeholder/stub" in normalized
+    assert "assert true" in normalized
+    assert "importerror" in normalized
+    assert "attributeerror" in normalized
+
+
+def test_prj0000109_test_artifact_defines_red_phase_e2e_selector_order() -> None:
+    """prj0000109 artifact must provide deterministic selector order with command evidence."""
+    artifact_text = _read(PRJ0000109_TEST_ARTIFACT)
+    normalized = _normalize(artifact_text)
+
+    assert "## red-phase selector order" in normalized
+    for selector_id in ["s1", "s2", "s3", "s4", "s5", "s6", "s7"]:
+        assert selector_id in normalized, f"missing selector id in prj0000109 artifact: {selector_id}"
+
+    assert "python -m pytest -q tests/deploy/test_compose_dockerfile_paths.py" in artifact_text
+    assert "python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py" in artifact_text
+
+
 # ---------------------------------------------------------------------------
 # Project numbering uniqueness
 # ---------------------------------------------------------------------------
@@ -417,8 +493,7 @@ _LEGACY_DUPLICATE_NUMBERS: dict[str, list[str]] = {
 
 
 def test_project_folder_numbers_are_unique_or_documented_legacy_duplicates() -> None:
-    """No two docs/project/ folders may share the same seven-digit prjNNNNNNN number
-    unless that duplication is explicitly listed in _LEGACY_DUPLICATE_NUMBERS.
+    """Enforce unique project folder numbering under the seven-digit scheme.
 
     This enforces the @0master numbering policy:
     - Each new prjNNNNNNN is allocated once and maps to exactly one project folder.

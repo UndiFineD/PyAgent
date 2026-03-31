@@ -17,6 +17,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import shutil
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -35,6 +36,53 @@ def _projects_path(root: Path) -> Path:
 
 def _kanban_path(root: Path) -> Path:
     return root / "docs" / "project" / "kanban.md"
+
+
+def _ideas_path(root: Path) -> Path:
+    return root / "docs" / "project" / "ideas"
+
+
+def _ideas_archive_path(root: Path) -> Path:
+    return _ideas_path(root) / "archive"
+
+
+def _idea_tags(project: dict[str, Any]) -> list[str]:
+    tags = project.get("tags")
+    if not isinstance(tags, list):
+        return []
+    return [str(tag) for tag in tags if isinstance(tag, str) and re.fullmatch(r"idea\d{6}", tag)]
+
+
+def _archive_idea_files_for_project(root: Path, project: dict[str, Any]) -> list[str]:
+    ideas_dir = _ideas_path(root)
+    archive_dir = _ideas_archive_path(root)
+    archive_dir.mkdir(parents=True, exist_ok=True)
+
+    moved: list[str] = []
+    for idea_tag in _idea_tags(project):
+        for source in sorted(ideas_dir.glob(f"{idea_tag}-*.md")):
+            target = archive_dir / source.name
+            if target.exists():
+                target.unlink()
+            shutil.move(str(source), str(target))
+            moved.append(source.name)
+    return moved
+
+
+def sync_idea_archive() -> int:
+    root = _repo_root()
+    projects = _read_projects(_projects_path(root))
+
+    moved_all: list[str] = []
+    for project in projects:
+        if project.get("lane") == "Released":
+            moved_all.extend(_archive_idea_files_for_project(root, project))
+
+    print(f"SYNC_IDEA_ARCHIVE moved={len(moved_all)}")
+    if moved_all:
+        for file_name in moved_all:
+            print(f"- {file_name}")
+    return 0
 
 
 def _read_projects(path: Path) -> list[dict[str, Any]]:
@@ -288,6 +336,22 @@ def validate() -> int:
             if lane_by_id.get(pid) != lane:
                 issues.append(f"Lane mismatch for {pid}: json={lane_by_id.get(pid)!r}, kanban={lane!r}")
 
+    # Released idea-backed projects must have their idea files archived.
+    for project in projects:
+        if project.get("lane") != "Released":
+            continue
+        for idea_tag in _idea_tags(project):
+            in_ideas = list((_ideas_path(root)).glob(f"{idea_tag}-*.md"))
+            in_archive = list((_ideas_archive_path(root)).glob(f"{idea_tag}-*.md"))
+            if in_ideas:
+                issues.append(
+                    f"Released project {project.get('id')} has unarchived idea file(s) in docs/project/ideas for {idea_tag}"
+                )
+            if not in_archive:
+                issues.append(
+                    f"Released project {project.get('id')} is missing archived idea file in docs/project/ideas/archive for {idea_tag}"
+                )
+
     if issues:
         print("VALIDATION_FAILED")
         for issue in issues:
@@ -319,6 +383,10 @@ def set_lane(project_id: str, lane: str, branch: str | None, pr: str | None) -> 
     if pr is not None:
         entry["pr"] = pr
 
+    moved: list[str] = []
+    if lane == "Released":
+        moved = _archive_idea_files_for_project(root, entry)
+
     _write_projects(projects_path, projects)
 
     lines = kanban_path.read_text(encoding="utf-8").splitlines()
@@ -329,6 +397,10 @@ def set_lane(project_id: str, lane: str, branch: str | None, pr: str | None) -> 
     kanban_path.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
 
     print(f"UPDATED {project_id} lane={lane}")
+    if moved:
+        print(f"ARCHIVED_IDEA_FILES {len(moved)}")
+        for file_name in moved:
+            print(f"- {file_name}")
     return 0
 
 
@@ -337,6 +409,7 @@ def _build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     sub.add_parser("validate", help="Validate consistency between kanban.json projects and kanban lanes.")
+    sub.add_parser("sync-idea-archive", help="Archive released project idea files under docs/project/ideas/archive.")
 
     set_lane_parser = sub.add_parser("set-lane", help="Update a project lane and sync both kanban.json + kanban.md.")
     set_lane_parser.add_argument("--id", required=True, help="Project ID (e.g., prj0000100)")
@@ -356,6 +429,9 @@ def main() -> int:
 
     if args.cmd == "set-lane":
         return set_lane(project_id=args.id, lane=args.lane, branch=args.branch, pr=args.pr)
+
+    if args.cmd == "sync-idea-archive":
+        return sync_idea_archive()
 
     parser.error(f"Unknown command: {args.cmd}")
     return 2

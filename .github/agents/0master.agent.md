@@ -162,6 +162,7 @@ Use these as high-level guardrails — avoid turning them into full implementati
 - Verify the **branch plan** is present in the project overview before implementation or git work begins.
 - Confirm the **expected branch matches the active project** and that any shared authoritative files are explicitly called out in the scope boundary.
 - Ensure the **memory files** are updated after decisions, so future agents can pick up context.
+- When a project is moved to **Released**, ensure the corresponding `ideaNNNNNN-*.md` file is moved from `docs/project/ideas/` to `docs/project/ideas/archive/` as part of the same closure workflow.
 - Confirm **CI remains green** for every merge (check workflow run status and fix failures in collaboration with @tester).
 - Ensure new work is covered by **tests or validation criteria** (even if the exact test code is written by another agent).
 - When introducing new tools, workflows, or conventions, document the how/why in `.github/agents/` so new agents can onboard quickly.
