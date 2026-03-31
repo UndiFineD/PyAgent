@@ -3,10 +3,41 @@
 ## Metadata
 - agent: @4plan
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-03-30
+- updated_at: 2026-03-31
 - rollover: At new project start, append this file's entries to history.4plan.memory.md in chronological order, then clear Entries.
 
 ## Entries
+
+## prj0000108 - idea000019-crdt-python-ffi-bindings
+
+| Field | Value |
+|---|---|
+| task_id | prj0000108-idea000019-crdt-python-ffi-bindings |
+| owner_agent | @4plan |
+| source | @3design |
+| created_at | 2026-03-31 |
+| updated_at | 2026-03-31 |
+| status | DONE |
+| lifecycle | OPEN -> IN_PROGRESS -> DONE |
+| chunk_boundaries | Two chunks: Chunk A FFI contract/core integration (T-CRDT-001..T-CRDT-010), Chunk B observability/parity/cutover (T-CRDT-011..T-CRDT-020) |
+| acceptance_criteria_scope | AC-CRDT-001..AC-CRDT-008 mapped to owner-sequenced executable tasks and deterministic command gates |
+| dependency_order | @5test red -> @6code green -> @7exec runtime -> @8ql quality/security -> @9git handoff |
+| handoff_target | @5test |
+| artifact_paths | docs/project/prj0000108-idea000019-crdt-python-ffi-bindings/idea000019-crdt-python-ffi-bindings.plan.md |
+| branch | prj0000108-idea000019-crdt-python-ffi-bindings (validated PASS before artifact writes) |
+| validation_evidence | c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 12 passed in 2.53s |
+
+### Lesson Entry
+
+| Field | Value |
+|---|---|
+| Pattern | Governance-quality plans ship faster when each AC is bound to owner-specific tasks, exact file targets, and explicit command selectors. |
+| Root cause | Placeholder plans without command-level traceability force downstream agents to reinterpret scope, delaying @5test/@6code execution. |
+| Prevention | Keep AC-to-task matrices mandatory, with one deterministic validation command per task and explicit owner sequencing. |
+| First seen | 2026-03-30 |
+| Seen in | prj0000104-idea000014-processing; prj0000107-idea000015-specialized-agent-library; prj0000108-idea000019-crdt-python-ffi-bindings |
+| Recurrence count | 3 |
+| Promotion status | PROMOTED_TO_HARD_RULE |
 
 ## prj0000107 - idea000015-specialized-agent-library
 
