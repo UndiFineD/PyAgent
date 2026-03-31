@@ -77,8 +77,7 @@ def test_canonical_compose_pyagent_dockerfile_marker_is_project_specific() -> No
     marker_map = _service_build_dockerfiles(REPO_ROOT / "deploy" / "compose.yaml")
 
     assert marker_map.get("pyagent") == "deploy/Dockerfile.pyagent", (
-        "Scope marker regression: compose.yaml pyagent service no longer points to "
-        "deploy/Dockerfile.pyagent."
+        "Scope marker regression: compose.yaml pyagent service no longer points to deploy/Dockerfile.pyagent."
     )
 
 

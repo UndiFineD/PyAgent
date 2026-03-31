@@ -18,8 +18,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PRJ0000109_TEST_ARTIFACT = (
-    "docs/project/prj0000109-idea000002-missing-compose-dockerfile/"
-    "idea000002-missing-compose-dockerfile.test.md"
+    "docs/project/prj0000109-idea000002-missing-compose-dockerfile/idea000002-missing-compose-dockerfile.test.md"
 )
 
 
