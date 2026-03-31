@@ -116,6 +116,33 @@ def test_9git_enforces_branch_scope_and_failure_rules() -> None:
     assert "## Lessons Learned" in git_agent_text
 
 
+def test_release_closure_policy_requires_idea_archival() -> None:
+    """Workflow governance must require moving released idea files into archive."""
+    shared = _normalize(_read(".github/agents/governance/shared-governance-checklist.md"))
+    master = _normalize(_read(".github/agents/0master.agent.md"))
+    git_agent = _normalize(_read(".github/agents/9git.agent.md"))
+
+    assert "when closing a project to released" in shared
+    assert "docs/project/ideas/archive/" in shared
+    assert "use docs/project/kanban.json as the canonical source" in shared
+    assert "when a project is moved to **released**" in master
+    assert "docs/project/ideas/archive/" in master
+    assert "for release-closure work on idea-backed projects" in git_agent
+    assert "include the corresponding idea-file archive move" in git_agent
+
+
+def test_project_registry_governance_supports_idea_archive_sync() -> None:
+    """Governance script must expose and enforce release idea archival support."""
+    governance = _read("scripts/project_registry_governance.py")
+    normalized = _normalize(governance)
+
+    assert "def sync_idea_archive()" in governance
+    assert "sync-idea-archive" in governance
+    assert "if lane == \"Released\":" in governance
+    assert "_archive_idea_files_for_project" in governance
+    assert "released project" in normalized and "unarchived idea file" in normalized
+
+
 def test_downstream_agents_require_branch_gate_before_work() -> None:
     """Agents 2-8 must block work when observed branch differs from expected branch."""
     downstream_agents = [

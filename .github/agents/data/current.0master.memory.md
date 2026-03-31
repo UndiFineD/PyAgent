@@ -203,3 +203,19 @@
 - Outcome:
 	- New project `prj0000109` is initialized and ready for `@2think` discovery handoff.
 
+## 2026-03-31 — Global lessons-learned workflow hardening (all projects)
+
+- Trigger: user requested implementation of fixes from lessons learned across all projects.
+- Changes applied:
+	- Enhanced `scripts/project_registry_governance.py` with automated idea archival support:
+		- New `sync-idea-archive` command to archive idea files for all `Released` projects.
+		- `set-lane --lane Released` now auto-archives matching `ideaNNNNNN-*.md` files.
+		- `validate` now fails when released idea-backed projects have unarchived or missing archive files.
+	- Extended `tests/docs/test_agent_workflow_policy_docs.py` with policy assertions for release archival requirements and governance command coverage.
+- Validation evidence:
+	- `python scripts/project_registry_governance.py sync-idea-archive` -> `moved=0` (repository already compliant).
+	- `python scripts/project_registry_governance.py validate` -> `VALIDATION_OK` (`projects=109`, `kanban_rows=109`).
+	- `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `17 passed`.
+- Outcome:
+	- Lessons-learned fixes are now enforced as repository-wide automation and policy tests for all projects.
+
