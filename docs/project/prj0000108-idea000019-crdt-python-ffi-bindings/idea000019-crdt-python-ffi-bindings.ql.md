@@ -1,7 +1,7 @@
 # idea000019-crdt-python-ffi-bindings - Quality & Security Review
 
 _Agent: @8ql | Date: 2026-03-31 | Branch: prj0000108-idea000019-crdt-python-ffi-bindings_
-_Status: BLOCKED_
+_Status: DONE_
 
 ## Scope
 | File | Change type |
@@ -18,7 +18,8 @@ _Status: BLOCKED_
 | tests/test_crdt_ffi_parity.py | Created |
 | tests/test_crdt_ffi_performance.py | Created |
 | docs/project/prj0000108-idea000019-crdt-python-ffi-bindings/* | Modified |
-| docs/project/kanban.json | Modified (pre-existing unstaged, out of requested edit scope) |
+| docs/project/kanban.json | Modified (lane normalized to In Sprint) |
+| docs/project/kanban.md | Modified (lane normalized to In Sprint) |
 
 ## Part A - Security Findings
 | ID | Severity | File | Line | Rule | Description |
@@ -29,7 +30,7 @@ _Status: BLOCKED_
 ## Part B - Quality Gaps
 | # | Type | Description | Responsible agent | Blocking? |
 |---|------|-------------|-------------------|-----------|
-| 1 | Governance | `python scripts/project_registry_governance.py validate` failed: lane mismatch for `prj0000108` (`json='Review'`, `kanban='Discovery'`). Constraint forbids modifying pre-existing unstaged `docs/project/kanban.json` in this pass. | @1project | YES |
+| 1 | Governance | Lane mismatch for `prj0000108` remediated by lane normalization to `In Sprint`; exact blocker command re-run now returns `VALIDATION_OK`. | @1project | NO |
 
 ## Part C - Lessons Written
 | Pattern | Agent memory file | Recurrence | Promoted to agent rule? |
@@ -44,7 +45,7 @@ _Status: BLOCKED_
 | A02 Cryptographic Failures | PASS | No cryptographic logic changed in scope. |
 | A03 Injection | PASS | No SQL/shell eval patterns introduced in `src/core/crdt_bridge.py`; repo-level S scan findings are baseline/test asserts. |
 | A04 Insecure Design | PASS | Contract tests enforce deterministic taxonomy and fallback behavior. |
-| A05 Security Misconfiguration | FINDING | Registry governance mismatch (`kanban` vs `projects`) blocks closure. |
+| A05 Security Misconfiguration | PASS | Governance mismatch remediated; registry/kanban validation now clean. |
 | A06 Vulnerable Components | FINDING | 3 new CVEs vs committed baseline; tracked as unresolved quality debt. |
 | A07 Authentication Failures | PASS | No auth surface touched. |
 | A08 Software/Data Integrity Failures | PASS | No workflow-file changes; no injection path introduced in CI config this pass. |
@@ -53,7 +54,7 @@ _Status: BLOCKED_
 
 ## Evidence (Commands)
 - `git branch --show-current` -> `prj0000108-idea000019-crdt-python-ffi-bindings` (PASS)
-- `git diff --name-only HEAD` -> `docs/project/kanban.json` (pre-existing unstaged)
+- `git status --short` -> `M docs/project/kanban.json`, `M docs/project/kanban.md`
 - `git ls-files --others --exclude-standard` -> no output
 - `git diff --name-only origin/main...HEAD`
 - `git diff --name-only HEAD -- .github/workflows/*.yml` -> no workflow changes
@@ -61,7 +62,7 @@ _Status: BLOCKED_
 - `.venv\Scripts\ruff.exe check --select S --output-format concise -- <crdt project files>` -> S101 findings in tests only
 - `pip-audit -f json -o .github/agents/data/pip_audit_current_8ql.json` -> 3 vulnerabilities
 - `python -c <baseline delta parser>` -> 3 new CVEs vs committed baseline
-- `python scripts/project_registry_governance.py validate` -> `VALIDATION_FAILED` (lane mismatch for prj0000108)
+- `python scripts/project_registry_governance.py validate` -> `VALIDATION_OK` (exact blocker command re-run after remediation)
 - `python scripts/architecture_governance.py validate` -> `VALIDATION_OK`
 - `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `12 passed`
 
@@ -71,5 +72,5 @@ _Status: BLOCKED_
 | Security (CodeQL / ruff-S / CVEs / workflow) | ✅ PASS (no HIGH/CRITICAL in active scope; MEDIUM baseline CVE debt recorded) |
 | Plan vs delivery | ✅ PASS (delivered selector-scoped artifacts and explicit deferred Rust item in code artifact) |
 | AC vs test coverage | ✅ PASS (AC-CRDT-001..008 mapped in test artifact and selector evidence present) |
-| Docs vs implementation | ❌ FAIL (registry governance lane mismatch unresolved under no-touch constraint for pre-existing `docs/project/kanban.json`) |
-| **Overall** | **BLOCKED** |
+| Docs vs implementation | ✅ PASS (lane sync and docs policy checks both green) |
+| **Overall** | **CLEAR -> @9git** |

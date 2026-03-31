@@ -3,10 +3,31 @@
 ## Metadata
 - agent: @8ql
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-03-29
+- updated_at: 2026-03-31
 - rollover: At new project start, append this file's entries to history.8ql.memory.md in chronological order, then clear Entries.
 
 ## Entries
+
+## Last scan - 2026-03-31
+- task_id: prj0000108-idea000019-crdt-python-ffi-bindings
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- branch: prj0000108-idea000019-crdt-python-ffi-bindings (validated)
+- files scanned: docs/project/kanban.json; docs/project/kanban.md; docs/project/prj0000108-idea000019-crdt-python-ffi-bindings/idea000019-crdt-python-ffi-bindings.ql.md
+- security/quality checks run:
+	- git branch --show-current
+	- git status --short
+	- python scripts/project_registry_governance.py validate
+	- python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
+- findings:
+	- PASS: expected branch matches observed branch
+	- PASS: exact blocker command re-run (`python scripts/project_registry_governance.py validate`) now returns `VALIDATION_OK`
+	- PASS: docs policy gate remains green (`12 passed`)
+	- MEDIUM: baseline CVE drift vs committed `pip_audit_results.json` persists (requests/cryptography/pygments), tracked as baseline quality debt outside lane-sync scope
+- blocker remediation evidence:
+	- prior blocker: lane mismatch for prj0000108 (`json='Review'`, `kanban='Discovery'`)
+	- current state: lane normalized to `In Sprint` in registry artifacts; governance validator returns `VALIDATION_OK`
+- handoff target: @9git
+- overall: CLEAN (governance blocker closed; no HIGH/CRITICAL security blockers)
 
 ## Last scan - 2026-03-31
 - task_id: prj0000108-idea000019-crdt-python-ffi-bindings
@@ -99,8 +120,8 @@
 - Root cause: Lifecycle lane transition was not synchronized across both registry sources before @8ql gate.
 - Prevention: Require a mandatory paired lane update and immediate `python scripts/project_registry_governance.py validate` during project lifecycle transitions before @7exec/@8ql handoff.
 - First seen: prj0000105-idea000016-mixin-architecture-base
-- Seen in: prj0000105-idea000016-mixin-architecture-base, prj0000106-idea000080-smart-prompt-routing-system, prj0000107-idea000015-specialized-agent-library
-- Recurrence count: 3
+- Seen in: prj0000105-idea000016-mixin-architecture-base, prj0000106-idea000080-smart-prompt-routing-system, prj0000107-idea000015-specialized-agent-library, prj0000108-idea000019-crdt-python-ffi-bindings
+- Recurrence count: 4
 - Promotion status: HARD
 
 ## Last scan - 2026-03-30
@@ -248,6 +269,5 @@
 - QD-8QL-0001 | owner=@6code | origin=prj0000104-idea000014-processing | status=OPEN | exit=upgrade or accept risk for CVE-2026-25645, CVE-2026-34073, CVE-2026-4539 and refresh committed baseline
 - QD-8QL-0004 | owner=@1project | origin=prj0000106-idea000080-smart-prompt-routing-system | status=OPEN | exit=synchronize lane state for prj0000106 in data/projects.json and docs/project/kanban.md, then rerun project_registry_governance.py validate to VALIDATION_OK
 - QD-8QL-0005 | owner=@6code | origin=prj0000107-idea000015-specialized-agent-library | status=OPEN | exit=upgrade or accept risk for CVE-2026-25645, CVE-2026-34073, CVE-2026-4539 and refresh committed baseline
-- QD-8QL-0006 | owner=@1project | origin=prj0000108-idea000019-crdt-python-ffi-bindings | status=OPEN | exit=synchronize lane state for prj0000108 in data/projects.json and docs/project/kanban.json, then rerun python scripts/project_registry_governance.py validate to VALIDATION_OK
 - QD-8QL-0007 | owner=@6code | origin=prj0000108-idea000019-crdt-python-ffi-bindings | status=OPEN | exit=upgrade or accept risk for CVE-2026-25645, CVE-2026-34073, CVE-2026-4539 and refresh committed baseline
 
