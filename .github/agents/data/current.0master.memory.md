@@ -186,3 +186,20 @@
 - Outcome:
 	- Project prj0000108 is formally closed in Released lane and repository state is aligned on `main`.
 
+## 2026-03-31 — prj0000109 allocation and initialization for next idea
+
+- Trigger: user requested a new project for the next idea.
+- Selection outcome:
+	- Candidate scan selected `idea000002-missing-compose-dockerfile` as the next unimplemented `P1` idea not yet represented in the active project registry.
+	- Assigned project ID `prj0000109` from `data/nextproject.md` and expected branch `prj0000109-idea000002-missing-compose-dockerfile`.
+- Actions completed:
+	- Finalized prior idea archival move on `main` and pushed baseline commit.
+	- Created and switched to dedicated branch `prj0000109-idea000002-missing-compose-dockerfile`.
+	- Delegated initialization to `@1project`, which created canonical project artifacts and synced `kanban.json`, `kanban.md`, `data/projects.json`, and `data/nextproject.md`.
+	- Published initialized branch to origin.
+- Validation evidence (from `@1project`):
+	- `python scripts/project_registry_governance.py validate` -> `VALIDATION_OK` (`projects=109`, `kanban_rows=109`).
+	- `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `12 passed`.
+- Outcome:
+	- New project `prj0000109` is initialized and ready for `@2think` discovery handoff.
+
