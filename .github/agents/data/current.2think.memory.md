@@ -74,3 +74,25 @@
 - Recurrence count: 1
 - Promotion status: MONITOR
 
+### 2026-03-30 - prj0000107-idea000015-specialized-agent-library
+- task_id: prj0000107-idea000015-specialized-agent-library
+- status: DONE
+- target_agent: @3design
+- canonical_artifact: docs/project/prj0000107-idea000015-specialized-agent-library/idea000015-specialized-agent-library.think.md
+- recommendation_summary: Select Option B (hybrid adapter layer over universal shell primitives) to close specialization-runtime gap with lower migration risk and stronger governance/testability.
+- prior_art_refs:
+	- docs/project/prj0000086-universal-agent-shell/universal-agent-shell.project.md
+	- docs/project/prj0000105-idea000016-mixin-architecture-base/idea000016-mixin-architecture-base.project.md
+	- docs/project/prj0000106-idea000080-smart-prompt-routing-system/idea000080-smart-prompt-routing-system.project.md
+- branch_gate_evidence: `git branch --show-current` -> `prj0000107-idea000015-specialized-agent-library`
+- rationale_for_handoff: Completed 3-option exploration with repository/external evidence, per-option SWOT, security risk-to-testability mapping, explicit decision matrix, and @3design open questions.
+
+#### Lesson
+- Pattern: Specialization-library decisions are most stable when introducing typed adapters between declarative capability metadata and shared runtime orchestration.
+- Root cause: Repository contains specialization definitions and universal shell primitives, but lacks a formal runtime contract layer connecting them.
+- Prevention: Require adapter contract schemas, allowlisted capability routing, and declared-vs-runtime parity tests before broad implementation.
+- First seen: 2026-03-30
+- Seen in: prj0000107-idea000015-specialized-agent-library
+- Recurrence count: 1
+- Promotion status: MONITOR
+

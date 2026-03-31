@@ -23,6 +23,7 @@ _No checkbox tasks found in the plan file._
   - `scripts\project_registry_governance.py`
   - `scripts\setup_structure.py`
   - `scripts\validate_project_implementation.py`
+  - `src\agents\specialization\specialized_core_binding.py`
   - `src\core\audit\AuditTrailCore.py`
   - `src\core\fuzzing\FuzzEngineCore.py`
   - `src\core\memory\AutoMemCore.py`
@@ -31,6 +32,7 @@ _No checkbox tasks found in the plan file._
   - `src\core\replay\ShadowExecutionCore.py`
   - `src\core\resilience\CircuitBreakerCore.py`
   - `src\core\universal\UniversalCoreRegistry.py`
+  - `tests\agents\specialization\test_specialized_core_binding.py`
   - `tests\core\test_core.py`
   - `tests\deps\test_pyproject_parse_failure.py`
   - `tests\docs\test_codestructure_governance.py`

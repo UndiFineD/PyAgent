@@ -63,6 +63,8 @@ class CoreRegistryProtocol(Protocol):
 
 
 LegacyDispatcher = Callable[[TaskEnvelope], Awaitable[dict[str, Any]]]
+SpecializationDispatcher = Callable[[TaskEnvelope], Awaitable[dict[str, Any]]]
+SpecializationPolicyCheck = Callable[[TaskEnvelope], bool]
 
 
 @dataclass(frozen=True)
@@ -70,7 +72,7 @@ class DispatchResult:
     """Dispatch output including routing telemetry contract fields.
 
     Args:
-        route: Route selected for final execution (`core` or `legacy`).
+        route: Route selected for final execution (`core`, `legacy`, or `specialization`).
         intent: Normalized intent used by dispatch.
         payload: Structured response payload from route execution.
         fallback_reason: Reason fallback was used, otherwise None.
@@ -93,6 +95,9 @@ class UniversalAgentShell:
         core_registry: CoreRegistryProtocol,
         legacy_dispatcher: LegacyDispatcher,
         core_timeout_seconds: float,
+        specialization_dispatcher: SpecializationDispatcher | None = None,
+        specialization_policy_check: SpecializationPolicyCheck | None = None,
+        specialization_feature_enabled: bool = False,
     ) -> None:
         """Initialize shell dependencies.
 
@@ -101,6 +106,9 @@ class UniversalAgentShell:
             core_registry: Registry used to resolve core handlers by intent.
             legacy_dispatcher: Async legacy dispatch callable.
             core_timeout_seconds: Timeout budget for core execution path.
+            specialization_dispatcher: Optional async specialization dispatcher.
+            specialization_policy_check: Optional specialization policy precondition callable.
+            specialization_feature_enabled: Runtime feature flag for specialization path.
 
         Raises:
             RoutingContractError: If timeout budget is not positive.
@@ -113,6 +121,9 @@ class UniversalAgentShell:
         self._core_registry = core_registry
         self._legacy_dispatcher = legacy_dispatcher
         self._core_timeout_seconds = core_timeout_seconds
+        self._specialization_dispatcher = specialization_dispatcher
+        self._specialization_policy_check = specialization_policy_check
+        self._specialization_feature_enabled = specialization_feature_enabled
 
     async def dispatch(self, envelope: Any) -> DispatchResult:
         """Dispatch an envelope through core route or legacy fallback path.
@@ -130,6 +141,15 @@ class UniversalAgentShell:
 
         """
         task_envelope = self._validate_envelope(envelope)
+        if self._should_use_specialization(task_envelope):
+            payload = await self._dispatch_specialization(task_envelope)
+            return DispatchResult(
+                route="specialization",
+                intent=str(task_envelope.intent or ""),
+                payload=payload,
+                fallback_reason=None,
+            )
+
         decision = self._validate_decision(self._intent_router.classify(task_envelope))
 
         if decision.preferred_route == "legacy":
@@ -264,6 +284,42 @@ class UniversalAgentShell:
         except Exception as error:
             raise LegacyDispatchError("Legacy dispatch failed") from error
 
+    def _should_use_specialization(self, envelope: TaskEnvelope) -> bool:
+        """Check feature and policy preconditions for specialization path.
+
+        Args:
+            envelope: Task envelope under dispatch.
+
+        Returns:
+            True when specialization path is enabled and authorized.
+
+        """
+        if not self._specialization_feature_enabled:
+            return False
+        if self._specialization_dispatcher is None or self._specialization_policy_check is None:
+            return False
+        return self._specialization_policy_check(envelope)
+
+    async def _dispatch_specialization(self, envelope: TaskEnvelope) -> dict[str, Any]:
+        """Dispatch envelope through specialization adapter runtime.
+
+        Args:
+            envelope: Task envelope routed to specialization path.
+
+        Returns:
+            Payload returned by specialization dispatcher.
+
+        Raises:
+            LegacyDispatchError: If specialization dispatcher is missing or fails.
+
+        """
+        if self._specialization_dispatcher is None:
+            raise LegacyDispatchError("Specialization dispatcher is not configured")
+        try:
+            return await self._specialization_dispatcher(envelope)
+        except Exception as error:  # noqa: BLE001
+            raise LegacyDispatchError("Specialization dispatch failed") from error
+
 
 def validate() -> bool:
     """Run module-level validation checks.
@@ -275,4 +331,11 @@ def validate() -> bool:
     return True
 
 
-__all__ = ["DispatchResult", "LegacyDispatcher", "UniversalAgentShell", "validate"]
+__all__ = [
+    "DispatchResult",
+    "LegacyDispatcher",
+    "SpecializationDispatcher",
+    "SpecializationPolicyCheck",
+    "UniversalAgentShell",
+    "validate",
+]

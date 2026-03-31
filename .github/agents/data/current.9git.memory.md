@@ -82,3 +82,27 @@
 - Recurrence count: 3
 - Promotion status: HARD
 
+## 2026-03-31 - prj0000107-idea000015-specialized-agent-library
+- task_id: prj0000107-idea000015-specialized-agent-library
+- status: DONE
+- branch_expected: prj0000107-idea000015-specialized-agent-library
+- branch_observed: prj0000107-idea000015-specialized-agent-library
+- branch_validation: PASS
+- scope_validation: PASS
+- notes:
+	- Continued closure from @8ql commit `e54adfcc74435c3dbf9a73f14213a5a542124ba4`.
+	- Verified requested scope inclusion from existing commit: `docs/project/kanban.json` plus agent/governance instruction updates.
+	- Verified migration from `kanban.md` to `kanban.json` references in updated instruction files (`rg` no `kanban.md` matches; expected `kanban.json` matches present).
+	- Mandatory dashboard gate executed; broad out-of-scope project doc side effects remained unstaged.
+	- Docs policy gate passed: `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `12 passed`.
+	- PR created for branch: https://github.com/UndiFineD/PyAgent/pull/260.
+
+### Lesson
+- Pattern: Mandatory dashboard generation introduces unrelated project-doc churn during scoped @9git closure work.
+- Root cause: `scripts/generate_project_dashboard.py` rewrites many project overview files in a single run.
+- Prevention: Run dashboard gate before staging, then enforce explicit file allowlist staging for active project artifacts only.
+- First seen: 2026-03-30
+- Seen in: prj0000104-idea000014-processing; prj0000105-idea000016-mixin-architecture-base; prj0000106-idea000080-smart-prompt-routing-system; prj0000107-idea000015-specialized-agent-library
+- Recurrence count: 4
+- Promotion status: HARD
+

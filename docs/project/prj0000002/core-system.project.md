@@ -27,6 +27,7 @@
 
 - Code detected in:
   - `rust_core\src\utils\system.rs`
+  - `src\agents\specialization\specialized_core_binding.py`
   - `src\core\audit\AuditTrailCore.py`
   - `src\core\fuzzing\FuzzEngineCore.py`
   - `src\core\memory\AutoMemCore.py`
@@ -35,6 +36,7 @@
   - `src\core\replay\ShadowExecutionCore.py`
   - `src\core\resilience\CircuitBreakerCore.py`
   - `src\core\universal\UniversalCoreRegistry.py`
+  - `tests\agents\specialization\test_specialized_core_binding.py`
   - `tests\core\test_core.py`
   - `tests\test_AuditTrailCore.py`
   - `tests\test_AutoMemCore.py`

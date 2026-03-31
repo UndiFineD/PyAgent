@@ -23,6 +23,10 @@ _No checkbox tasks found in the plan file._
   - `scripts\generate_test_data.py`
   - `scripts\setup_tests.py`
   - `scripts\SetupTests.py`
+  - `src\agents\specialization\specialization_registry.py`
+  - `src\agents\specialization\specialization_telemetry_bridge.py`
+  - `src\agents\specialization\specialized_agent_adapter.py`
+  - `src\agents\specialization\specialized_core_binding.py`
   - `src\core\resilience\CircuitBreakerConfig.py`
   - `src\core\resilience\CircuitBreakerCore.py`
   - `src\core\resilience\CircuitBreakerMixin.py`
@@ -31,6 +35,15 @@ _No checkbox tasks found in the plan file._
   - `src\security\models\guardrail_decision.py`
   - `src\tools\nettest.py`
   - `src\tools\proxy_test.py`
+  - `tests\agents\specialization\test_capability_policy_enforcer.py`
+  - `tests\agents\specialization\test_contract_versioning.py`
+  - `tests\agents\specialization\test_fault_injection_fallback.py`
+  - `tests\agents\specialization\test_manifest_request_parity.py`
+  - `tests\agents\specialization\test_specialization_registry.py`
+  - `tests\agents\specialization\test_specialization_telemetry_bridge.py`
+  - `tests\agents\specialization\test_specialized_agent_adapter.py`
+  - `tests\agents\specialization\test_specialized_core_binding.py`
+  - `tests\agents\specialization\test_telemetry_redaction.py`
   - `tests\agents\test_agents.py`
   - `tests\agents\test_base_agent.py`
   - `tests\backend\test_health_probes_access_control.py`
@@ -57,6 +70,7 @@ _No checkbox tasks found in the plan file._
   - `tests\core\routing\test_tie_break_fallback.py`
   - `tests\core\routing\test_tie_break_resolver.py`
   - `tests\core\test_core.py`
+  - `tests\core\universal\test_universal_agent_shell_specialization_flag.py`
   - `tests\deploy\test_compose_dockerfile_paths.py`
   - `tests\deps\test_dependency_parity_gate.py`
   - `tests\deps\test_generate_requirements_deterministic.py`

@@ -26,7 +26,7 @@ It **does** update `.github/agents/data/` memory files and `.github/agents/*.age
   - `Promotion status` must always be one of those states.
   - Keep a ledger section for unresolved quality debt with owner, originating project, and exit criteria.
   - Missing lifecycle state or ledger entry for open debt blocks handoff to @9git.
-- Hard rule: when project lifecycle lane changes occur, require paired updates in `data/projects.json` and `docs/project/kanban.md` and run `python scripts/project_registry_governance.py validate` before declaring @8ql closure.
+- Hard rule: when project lifecycle lane changes occur, require paired updates in `data/projects.json` and `docs/project/kanban.json` and run `python scripts/project_registry_governance.py validate` before declaring @8ql closure.
 
 ## Policy references (mandatory)
 
@@ -375,7 +375,7 @@ _Status: IN_PROGRESS_
 - At the beginning of each task, read .github/agents/governance/shared-governance-checklist.md and apply the role-specific items before handoff.
 - For fast repository lookup, use .github/agents/data/codestructure.md and the split index files it references.
 
-- For docs/project/kanban.md + data/projects.json lifecycle changes, run python scripts/project_registry_governance.py set-lane --id <prjNNNNNNN> --lane <lane> and then python scripts/project_registry_governance.py validate.
+- For docs/project/kanban.json + data/projects.json lifecycle changes, run python scripts/project_registry_governance.py set-lane --id <prjNNNNNNN> --lane <lane> and then python scripts/project_registry_governance.py validate.
 - For docs/architecture and docs/architecture/adr updates, run python scripts/architecture_governance.py validate (and python scripts/architecture_governance.py create --title <title> when a new ADR is required).
 - For project artifact updates under docs/project/prjNNNNNNN/, run python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py before handoff.
 

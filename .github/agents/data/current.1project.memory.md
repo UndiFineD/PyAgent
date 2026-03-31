@@ -26,3 +26,9 @@
 	state: DONE
 	summary: Initialized docs/project/prj0000106-idea000080-smart-prompt-routing-system canonical artifacts, registered Discovery lane in kanban.json and kanban.md, synchronized data/projects.json, and advanced data/nextproject.md to prj0000107 on branch prj0000106-idea000080-smart-prompt-routing-system.
 
+- task_id: prj0000107
+	owner_agent: @1project
+	updated_at: 2026-03-30
+	state: DONE
+	summary: Initialized docs/project/prj0000107-idea000015-specialized-agent-library canonical artifacts with branch/scope/failure sections, registered Discovery lane in kanban.json and kanban.md, synchronized data/projects.json, validated governance and docs policy tests, and advanced data/nextproject.md to prj0000108 on branch prj0000107-idea000015-specialized-agent-library.
+

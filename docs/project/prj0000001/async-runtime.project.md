@@ -29,6 +29,7 @@
   - `rust_core\src\async_runtime.rs`
   - `rust_core\src\async_transport.rs`
   - `scripts\prepend_async_note.py`
+  - `src\agents\specialization\runtime_feature_flags.py`
   - `src\core\runtime.py`
   - `tests\runtime\test_runtime_import.py`
   - `tests\test_async_loops.py`

@@ -24,7 +24,7 @@ The **@1project** agent establishes and maintains project structure and document
 - **Optional chunked design files**: `chunk-NNN.<project>.design.md`
 - **Optional chunked plan files**: `chunk-NNN.<project>.plan.md`
 - **Lifecycle board**: When a new project is created,
-   ensure `docs/project/kanban.md`
+   ensure `docs/project/kanban.json`
   has an entry in the correct lane. New projects without started discovery go in `Ideas`;
   projects handed off to `@2think` advance to `Discovery`. Move the row when the lane
   changes, and always update `data/projects.json` to match.
@@ -93,8 +93,8 @@ The canonical files are required for every project folder. Chunked files are req
      - `<project>.git.md`      — Status: NOT_STARTED when created by @1project
    - If the expected branch is missing, invalid, or inherited from another project, stop and return the task to `@0master` for branch assignment before handing off downstream.
 
-1a. **Update kanban.md and data/projects.json**
-    - Move the project entry from `Ideas` to `Discovery` in `docs/project/kanban.md`.
+1a. **Update kanban.json and data/projects.json**
+    - Move the project entry from `Ideas` to `Discovery` in `docs/project/kanban.json`.
     - If no entry exists yet (project was not pre-registered by `@0master`), create a
       new row in `Discovery` with the assigned `prjNNNNNNN`, name, summary, priority,
       and `budget_tier`.
@@ -419,7 +419,7 @@ _Git: @9git | Updated: <date>_
 - At the beginning of each task, read .github/agents/governance/shared-governance-checklist.md and apply the role-specific items before handoff.
 - For fast repository lookup, use .github/agents/data/codestructure.md and the split index files it references.
 
-- For docs/project/kanban.md + data/projects.json lifecycle changes, run python scripts/project_registry_governance.py set-lane --id <prjNNNNNNN> --lane <lane> and then python scripts/project_registry_governance.py validate.
+- For docs/project/kanban.json + data/projects.json lifecycle changes, run python scripts/project_registry_governance.py set-lane --id <prjNNNNNNN> --lane <lane> and then python scripts/project_registry_governance.py validate.
 - For docs/architecture and docs/architecture/adr updates, run python scripts/architecture_governance.py validate (and python scripts/architecture_governance.py create --title <title> when a new ADR is required).
 - For project artifact updates under docs/project/prjNNNNNNN/, run python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py before handoff to @2think.
 

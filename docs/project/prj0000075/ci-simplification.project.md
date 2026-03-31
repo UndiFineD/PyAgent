@@ -19,14 +19,23 @@ _No checkbox tasks found in the plan file._
 
 - Code detected in:
   - `rust_core\src\stats\tracing.rs`
+  - `src\agents\specialization\specialization_registry.py`
+  - `src\agents\specialization\specialization_telemetry_bridge.py`
+  - `src\agents\specialization\specialized_agent_adapter.py`
+  - `src\agents\specialization\specialized_core_binding.py`
   - `src\core\resilience\CircuitBreakerConfig.py`
   - `src\core\resilience\CircuitBreakerCore.py`
   - `src\core\resilience\CircuitBreakerMixin.py`
   - `src\core\resilience\CircuitBreakerRegistry.py`
   - `src\core\resilience\CircuitBreakerState.py`
   - `src\security\models\guardrail_decision.py`
+  - `tests\agents\specialization\test_specialization_registry.py`
+  - `tests\agents\specialization\test_specialization_telemetry_bridge.py`
+  - `tests\agents\specialization\test_specialized_agent_adapter.py`
+  - `tests\agents\specialization\test_specialized_core_binding.py`
   - `tests\ci\test_ci_parallelization.py`
   - `tests\ci\test_ci_workflow.py`
+  - `tests\core\universal\test_universal_agent_shell_specialization_flag.py`
   - `tests\security\test_ci_secret_guardrail_job.py`
   - `tests\security\test_rotation_gate_decision.py`
   - `tests\structure\test_ci_yaml.py`

@@ -18,6 +18,7 @@ _No checkbox tasks found in the plan file._
 ## Code detection
 
 - Code detected in:
+  - `src\agents\specialization\specialization_telemetry_bridge.py`
   - `src\core\crdt_bridge.py`
   - `src\core\n8nbridge\N8nBridgeConfig.py`
   - `src\core\n8nbridge\N8nBridgeCore.py`
@@ -25,6 +26,7 @@ _No checkbox tasks found in the plan file._
   - `src\core\n8nbridge\N8nEventAdapter.py`
   - `src\core\n8nbridge\N8nHttpClient.py`
   - `src\core\security_bridge.py`
+  - `tests\agents\specialization\test_specialization_telemetry_bridge.py`
   - `tests\ci\test_ci_workflow.py`
   - `tests\ci\test_workflow_count.py`
   - `tests\docs\test_agent_workflow_policy_docs.py`

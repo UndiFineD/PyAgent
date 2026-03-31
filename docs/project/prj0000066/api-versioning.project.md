@@ -18,8 +18,10 @@ _No checkbox tasks found in the plan file._
 ## Code detection
 
 - Code detected in:
+  - `src\agents\specialization\contract_versioning.py`
   - `src\chat\api.py`
   - `src\core\routing\policy_versioning.py`
+  - `tests\agents\specialization\test_contract_versioning.py`
   - `tests\docs\test_api_docs_exist.py`
   - `tests\test_api_ideas.py`
   - `tests\test_api_projects_lane_sync.py`

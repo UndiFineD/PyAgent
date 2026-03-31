@@ -7,6 +7,34 @@
 - rollover: At new project start, append this file's entries to history.3design.memory.md in chronological order, then clear Entries.
 
 ## Entries
+- task_id: prj0000107-idea000015-specialized-agent-library
+	state: DONE
+	selected_design_path: Option B (hybrid specialization manifests + runtime adapters over universal shell)
+	assumptions:
+		- Specialization manifests are the authoritative source for adapter input contracts.
+		- Runtime orchestration remains shell-driven while domain logic is bound through explicit `*Core` interfaces.
+		- Policy allowlist and fail-closed fallback are mandatory release gates for specialization execution.
+	interface_contract_notes:
+		- IFACE-SAL-001 specialization registry schema/version resolution contract.
+		- IFACE-SAL-002 deterministic manifest-to-shell adapter mapping contract.
+		- IFACE-SAL-003 deny-by-default capability authorization contract.
+		- IFACE-SAL-004 specialization-to-core binding contract.
+		- IFACE-SAL-005 deterministic fail-closed fallback contract.
+		- IFACE-SAL-006 redacted specialization telemetry contract.
+	handoff:
+		target_agent: @4plan
+		canonical_artifact: docs/project/prj0000107-idea000015-specialized-agent-library/idea000015-specialized-agent-library.design.md
+		chunked_artifacts: none
+		adr_artifact: docs/architecture/adr/0005-specialized-agent-library-hybrid-adapter-runtime.md
+	lesson:
+		Pattern: Hybrid specialization designs stay actionable when adapter contracts, policy gates, and parity hooks are defined together.
+		Root cause: Specialized-agent intent can stall when manifests and runtime orchestration are not connected by explicit interface contracts.
+		Prevention: Lock adapter, policy, and fallback interfaces with AC IDs and interface-to-task traceability before @4plan handoff.
+		First seen: 2026-03-30
+		Seen in: prj0000107-idea000015-specialized-agent-library
+		Recurrence count: 1
+		Promotion status: Candidate
+
 - task_id: prj0000106-idea000080-smart-prompt-routing-system
 	state: DONE
 	selected_design_path: Option B (hybrid guardrails + semantic classifier + bounded deterministic tie-break)

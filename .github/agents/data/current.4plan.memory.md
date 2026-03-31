@@ -8,6 +8,37 @@
 
 ## Entries
 
+## prj0000107 - idea000015-specialized-agent-library
+
+| Field | Value |
+|---|---|
+| task_id | prj0000107-idea000015-specialized-agent-library |
+| owner_agent | @4plan |
+| source | @3design |
+| created_at | 2026-03-31 |
+| updated_at | 2026-03-31 |
+| status | DONE |
+| lifecycle | OPEN -> IN_PROGRESS -> DONE |
+| chunk_boundaries | Two chunks: Chunk A runtime contract core (T-SAL-001..T-SAL-010), Chunk B parity/NFR/integration closure (T-SAL-011..T-SAL-020) |
+| acceptance_criteria_scope | AC-SAL-001..AC-SAL-008 mapped to executable tasks and deterministic command selectors |
+| dependency_order | @5test red -> @6code green -> @7exec runtime -> @8ql quality/security -> @9git handoff |
+| handoff_target | @5test |
+| artifact_paths | docs/project/prj0000107-idea000015-specialized-agent-library/idea000015-specialized-agent-library.plan.md |
+| branch | prj0000107-idea000015-specialized-agent-library (validated PASS before artifact writes) |
+| validation_evidence | c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 12 passed in 5.98s |
+
+### Lesson Entry
+
+| Field | Value |
+|---|---|
+| Pattern | Plan quality and downstream execution speed improve when each AC is mapped to owner-phased tasks with explicit file targets and exact pytest selectors. |
+| Root cause | Placeholder project plans lacked deterministic owner sequencing and command-level validation hooks for @5test/@6code handoff. |
+| Prevention | Continue enforcing mandatory task schema (objective, target files, acceptance criteria, validation command) with AC mapping table and dependency ordering. |
+| First seen | 2026-03-30 |
+| Seen in | prj0000104-idea000014-processing; prj0000107-idea000015-specialized-agent-library |
+| Recurrence count | 2 |
+| Promotion status | PROMOTED_TO_HARD_RULE |
+
 ## prj0000104 - idea000014-processing
 
 | Field | Value |

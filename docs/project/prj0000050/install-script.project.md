@@ -18,6 +18,7 @@ _No checkbox tasks found in the plan file._
 ## Code detection
 
 - Code detected in:
+  - `src\agents\specialization\descriptor_schema.py`
   - `tests\deps\test_install_compatibility_contract.py`
   - `tests\structure\test_data_script.py`
   - `tests\structure\test_install_script.py`

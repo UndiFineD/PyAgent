@@ -48,6 +48,10 @@ _No checkbox tasks found in the plan file._
   - `src\__init__.py`
   - `src\agents\__init__.py`
   - `src\agents\BaseAgent.py`
+  - `src\agents\specialization\__init__.py`
+  - `src\agents\specialization\contract_versioning.py`
+  - `src\agents\specialization\specialized_agent_adapter.py`
+  - `src\agents\specialization\specialized_core_binding.py`
   - `src\chat\__init__.py`
   - `src\chat\streaming.py`
   - `src\context_manager\__init__.py`
@@ -122,6 +126,10 @@ _No checkbox tasks found in the plan file._
   - `src\transactions\__init__.py`
   - `src\transport\__init__.py`
   - `tests\agents\__init__.py`
+  - `tests\agents\specialization\test_contract_versioning.py`
+  - `tests\agents\specialization\test_fault_injection_fallback.py`
+  - `tests\agents\specialization\test_specialized_agent_adapter.py`
+  - `tests\agents\specialization\test_specialized_core_binding.py`
   - `tests\agents\test_agents.py`
   - `tests\agents\test_base_agent.py`
   - `tests\core\__init__.py`
@@ -129,6 +137,7 @@ _No checkbox tasks found in the plan file._
   - `tests\core\base\mixins\test_mixin_behavior_parity.py`
   - `tests\core\routing\test_prompt_routing_facade.py`
   - `tests\core\routing\test_routing_telemetry_emitter.py`
+  - `tests\core\universal\test_universal_agent_shell_specialization_flag.py`
   - `tests\deps\test_generate_requirements_deterministic.py`
   - `tests\deps\test_install_compatibility_contract.py`
   - `tests\docs\test_agent_workflow_policy_docs.py`
