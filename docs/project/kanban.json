@@ -158,10 +158,10 @@
     {
       "id": "prj0000109",
       "name": "idea000002-missing-compose-dockerfile",
-      "lane": "Review",
+      "lane": "Released",
       "summary": "Initialize workflow artifacts for idea000002 missing-compose-dockerfile and hand off to @2think discovery.",
-      "branch": "prj0000109-idea000002-missing-compose-dockerfile",
-      "pr": null,
+      "branch": "merged",
+      "pr": "#262",
       "priority": "P1",
       "budget_tier": "S",
       "tags": [

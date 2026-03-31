@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-31 | Total projects: 109 | Auto-synced by project_registry_governance.py (Discovery: 0, Review: 7, Released: 100)_
+_Last updated: 2026-03-31 | Total projects: 109 | Auto-synced by project_registry_governance.py (Discovery: 0, Review: 6, Released: 101)_
 
 ## How to use this board
 
@@ -93,7 +93,6 @@ PR open, awaiting merge.
 | prj0000093 | projectmanager-ideas-autosync | prj0000093-projectmanager-ideas-autosync | pending | P2 | M | 2026-03-29 |
 | prj0000101 | idea-013 - backend-health-check-endpoint | — | pending | P3 | S | 2026-03-30 |
 | prj0000104 | idea000014-processing | prj0000104-idea000014-processing | pending | P2 | S | 2026-03-30 |
-| prj0000109 | idea000002-missing-compose-dockerfile | prj0000109-idea000002-missing-compose-dockerfile | pending | P1 | S | 2026-03-31 |
 ---
 
 ## Released
@@ -203,6 +202,7 @@ All projects merged to main branch.
 | prj0000106 | idea000080-smart-prompt-routing-system | Initialize workflow artifacts for idea000080 smart prompt routing system and hand off to @2think discovery. | merged | [#259](https://github.com/UndiFineD/PyAgent/pull/259) | P2 | M | 2026-03-30 |
 | prj0000107 | idea000015-specialized-agent-library | Initialize workflow artifacts for idea000015 specialized agent library and hand off to @2think discovery. | merged | [#260](https://github.com/UndiFineD/PyAgent/pull/260) | P2 | M | 2026-03-31 |
 | prj0000108 | idea000019-crdt-python-ffi-bindings | Initialize workflow artifacts for idea000019 crdt-python-ffi-bindings and hand off to @2think discovery. | merged | [#261](https://github.com/UndiFineD/PyAgent/pull/261) | P3 | S | 2026-03-31 |
+| prj0000109 | idea000002-missing-compose-dockerfile | Initialize workflow artifacts for idea000002 missing-compose-dockerfile and hand off to @2think discovery. | merged | [#262](https://github.com/UndiFineD/PyAgent/pull/262) | P1 | S | 2026-03-31 |
 ---
 
 ## Archived
@@ -223,8 +223,8 @@ Stalled, cancelled, or superseded projects.
 | Discovery | 0 |
 | Design | 0 |
 | In Sprint | 0 |
-| Review | 7 |
-| Released | 100 |
+| Review | 6 |
+| Released | 101 |
 | Archived | 1 |
 | **Total** | **109** |
 

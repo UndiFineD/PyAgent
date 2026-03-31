@@ -219,3 +219,17 @@
 - Outcome:
 	- Lessons-learned fixes are now enforced as repository-wide automation and policy tests for all projects.
 
+## 2026-03-31 — prj0000109 post-merge release registry synchronization
+
+- Trigger: user confirmed PR #262 merged.
+- Actions completed:
+	- Switched to `main` and fast-forwarded from origin.
+	- Transitioned `prj0000109` to `Released` via governance tooling with canonical merged metadata (`branch: merged`, `pr: #262`).
+	- Auto-archived the released idea file `idea000002-missing-compose-dockerfile.md` into `docs/project/ideas/archive/` via governance automation.
+	- Revalidated registry and board consistency.
+- Validation evidence:
+	- `python scripts/project_registry_governance.py set-lane --id prj0000109 --lane Released --branch merged --pr #262` -> updated and archived 1 idea file.
+	- `python scripts/project_registry_governance.py validate` -> `VALIDATION_OK` (`projects=109`, `kanban_rows=109`).
+- Outcome:
+	- Project prj0000109 is formally closed in Released lane and release-closure archival policy was applied automatically.
+
