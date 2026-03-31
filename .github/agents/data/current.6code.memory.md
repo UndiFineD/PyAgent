@@ -8,6 +8,56 @@
 
 ## Entries
 
+## 2026-03-31 — prj0000108 CRDT FFI selector implementation
+- task_id: prj0000108-idea000019-crdt-python-ffi-bindings
+- lifecycle: IN_PROGRESS
+- branch: prj0000108-idea000019-crdt-python-ffi-bindings (validated)
+- changed files:
+	- src/core/crdt_bridge.py
+	- tests/test_crdt_bridge.py
+	- tests/test_crdt_ffi_contract.py
+	- tests/test_crdt_ffi_validation.py
+	- tests/test_crdt_payload_codec.py
+	- tests/test_crdt_merge_determinism.py
+	- tests/test_crdt_error_mapping.py
+	- tests/test_crdt_ffi_observability.py
+	- tests/test_crdt_ffi_feature_flag.py
+	- tests/test_crdt_ffi_parity.py
+	- tests/test_crdt_ffi_performance.py
+	- docs/project/prj0000108-idea000019-crdt-python-ffi-bindings/idea000019-crdt-python-ffi-bindings.code.md
+- implementation summary:
+	- Implemented minimal payload-envelope CRDT bridge behavior with typed validation/merge/internal taxonomy, deterministic fallback merge, feature-flag routing, and redacted observability events.
+	- Added selector-aligned AC coverage tests for S1..S10 and executed exact selector commands.
+	- Ran targeted aggregate tests, ruff lint/docstring checks, mypy, and placeholder scans for touched files.
+- verification commands:
+	- c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_crdt_ffi_contract.py -k schema
+	- c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_crdt_bridge.py -k "ffi and envelope"
+	- c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_crdt_ffi_validation.py -k shape
+	- c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_crdt_payload_codec.py -k round_trip
+	- c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_crdt_merge_determinism.py
+	- c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_crdt_error_mapping.py
+	- c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_crdt_ffi_observability.py
+	- c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_crdt_ffi_feature_flag.py
+	- c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_crdt_ffi_parity.py
+	- c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_crdt_ffi_performance.py
+	- c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_crdt_bridge.py tests/test_crdt_ffi_contract.py tests/test_crdt_ffi_validation.py tests/test_crdt_payload_codec.py tests/test_crdt_merge_determinism.py tests/test_crdt_error_mapping.py tests/test_crdt_ffi_observability.py tests/test_crdt_ffi_feature_flag.py tests/test_crdt_ffi_parity.py tests/test_crdt_ffi_performance.py
+	- c:/Dev/PyAgent/.venv/Scripts/ruff.exe check --fix src/core/crdt_bridge.py tests/test_crdt_bridge.py tests/test_crdt_ffi_contract.py tests/test_crdt_ffi_validation.py tests/test_crdt_payload_codec.py tests/test_crdt_merge_determinism.py tests/test_crdt_error_mapping.py tests/test_crdt_ffi_observability.py tests/test_crdt_ffi_feature_flag.py tests/test_crdt_ffi_parity.py tests/test_crdt_ffi_performance.py
+	- c:/Dev/PyAgent/.venv/Scripts/ruff.exe check src/core/crdt_bridge.py tests/test_crdt_bridge.py tests/test_crdt_ffi_contract.py tests/test_crdt_ffi_validation.py tests/test_crdt_payload_codec.py tests/test_crdt_merge_determinism.py tests/test_crdt_error_mapping.py tests/test_crdt_ffi_observability.py tests/test_crdt_ffi_feature_flag.py tests/test_crdt_ffi_parity.py tests/test_crdt_ffi_performance.py
+	- c:/Dev/PyAgent/.venv/Scripts/ruff.exe check --select D src/core/crdt_bridge.py
+	- c:/Dev/PyAgent/.venv/Scripts/python.exe -m mypy src/core/crdt_bridge.py
+- unresolved risks:
+	- Rust-side `rust_core.merge_crdt` export and cross-platform native binding behavior were not implemented in this minimal Python-scoped change.
+- handoff target: @7exec
+
+### Lesson
+- Pattern: When selector files are missing, add selector-aligned tests first and keep implementation minimal to those contracts.
+- Root cause: @5test artifact defined selectors but physical selector files were absent in workspace.
+- Prevention: During @6code startup, run file inventory for selector paths and treat missing tests as required additions before implementation validation.
+- First seen: 2026-03-31
+- Seen in: prj0000108-idea000019-crdt-python-ffi-bindings
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ## 2026-03-31 — prj0000107 @7exec blocker remediation (async loop gate)
 - task_id: prj0000107-idea000015-specialized-agent-library
 - lifecycle: DONE
