@@ -1,6 +1,6 @@
 # PyAgent Project Kanban Board
 
-_Last updated: 2026-03-31 | Total projects: 108 | Auto-synced by project_registry_governance.py (Discovery: 0, Review: 6, Released: 99)_
+_Last updated: 2026-03-31 | Total projects: 108 | Auto-synced by project_registry_governance.py (Discovery: 0, Review: 6, Released: 100)_
 
 ## How to use this board
 
@@ -78,7 +78,6 @@ Active implementation — @4plan through @6code are working.
 |---|---|---|---|---|---|---|
 
 
-| prj0000108 | idea000019-crdt-python-ffi-bindings | Initialize workflow artifacts for idea000019 crdt-python-ffi-bindings and hand off to @2think discovery. | prj0000108-idea000019-crdt-python-ffi-bindings | P3 | S | 2026-03-31 |
 ---
 
 ## Review
@@ -203,6 +202,7 @@ All projects merged to main branch.
 | prj0000105 | idea-016 - mixin-architecture-base | This idea focuses on mixin architecture base in area 1 – Python agents. The current signal indicates priority P3, impact H, and urgency M. The SWOT tag is W (Weakness in current implementation). | merged | [#258](https://github.com/UndiFineD/PyAgent/pull/258) | P3 | S | 2026-03-30 |
 | prj0000106 | idea000080-smart-prompt-routing-system | Initialize workflow artifacts for idea000080 smart prompt routing system and hand off to @2think discovery. | merged | [#259](https://github.com/UndiFineD/PyAgent/pull/259) | P2 | M | 2026-03-30 |
 | prj0000107 | idea000015-specialized-agent-library | Initialize workflow artifacts for idea000015 specialized agent library and hand off to @2think discovery. | merged | [#260](https://github.com/UndiFineD/PyAgent/pull/260) | P2 | M | 2026-03-31 |
+| prj0000108 | idea000019-crdt-python-ffi-bindings | Initialize workflow artifacts for idea000019 crdt-python-ffi-bindings and hand off to @2think discovery. | merged | [#261](https://github.com/UndiFineD/PyAgent/pull/261) | P3 | S | 2026-03-31 |
 ---
 
 ## Archived
@@ -222,9 +222,9 @@ Stalled, cancelled, or superseded projects.
 | Ideas | 1 |
 | Discovery | 0 |
 | Design | 0 |
-| In Sprint | 1 |
+| In Sprint | 0 |
 | Review | 6 |
-| Released | 99 |
+| Released | 100 |
 | Archived | 1 |
 | **Total** | **108** |
 

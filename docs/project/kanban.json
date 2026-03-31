@@ -1933,10 +1933,10 @@
     {
       "id": "prj0000108",
       "name": "idea000019-crdt-python-ffi-bindings",
-      "lane": "In Sprint",
+      "lane": "Released",
       "summary": "Initialize workflow artifacts for idea000019 crdt-python-ffi-bindings and hand off to @2think discovery.",
-      "branch": "prj0000108-idea000019-crdt-python-ffi-bindings",
-      "pr": null,
+      "branch": "merged",
+      "pr": "#261",
       "priority": "P3",
       "budget_tier": "S",
       "tags": [
