@@ -106,3 +106,26 @@
 - Recurrence count: 4
 - Promotion status: HARD
 
+## 2026-03-31 - prj0000108-idea000019-crdt-python-ffi-bindings
+- task_id: prj0000108-idea000019-crdt-python-ffi-bindings
+- status: IN_PROGRESS
+- branch_expected: prj0000108-idea000019-crdt-python-ffi-bindings
+- branch_observed: prj0000108-idea000019-crdt-python-ffi-bindings
+- branch_validation: PASS
+- scope_validation: PASS
+- notes:
+	- Received @8ql clear from `idea000019-crdt-python-ffi-bindings.ql.md` (`Status: DONE`, `CLEAR -> @9git`).
+	- Mandatory dashboard refresh gate executed successfully: `python scripts/generate_project_dashboard.py` (`DASHBOARD_EXIT=0`).
+	- Docs policy gate passed: `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `12 passed`.
+	- GH auth 401 override resolved via playbook by removing invalid `GITHUB_TOKEN` env override; `gh auth status` now active/pass.
+	- Dashboard-generated out-of-scope docs changes detected and held unstaged for strict narrow-scope closure staging.
+
+### Lesson
+- Pattern: Invalid session-level `GITHUB_TOKEN` can silently flip gh auth active account state and block PR automation.
+- Root cause: Shell environment override token was stale/invalid while keyring login remained valid.
+- Prevention: Always run `gh auth status`; if 401 and env token exists, remove `GITHUB_TOKEN` and re-check before PR actions.
+- First seen: 2026-03-31
+- Seen in: prj0000108-idea000019-crdt-python-ffi-bindings
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
