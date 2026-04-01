@@ -51,6 +51,14 @@ below. Each option in the think artifact must cite evidence gathered from at lea
 6. **Risk enumeration** — for each option, list at minimum 3 failure modes and their
    likelihood/impact rating (H/M/L).
 
+## Parallel research execution
+
+- @2think may run research tasks in parallel when each thread has a distinct evidence target
+   (for example docs vs prior-art vs risk mapping).
+- Parallel outputs must be merged into one canonical option matrix before handoff.
+- If two research threads produce conflicting recommendations, explicitly record the conflict and
+   resolve it in the recommendation section before handing off to `@3design`.
+
 ---
 
 ## Minimum depth guideline

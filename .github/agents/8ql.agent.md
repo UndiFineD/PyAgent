@@ -84,6 +84,12 @@ It **does** update `.github/agents/data/` memory files and `.github/agents/*.age
    then hand the task back to `@0master`.
 6. Do not run security scans or hand off to `@9git` while branch validation fails.
 
+**Parallel scan policy (MANDATORY):**
+
+1. Static scans (CodeQL, ruff S, dependency audit) may run in parallel when target scopes are independent.
+2. Severity triage and release-signoff decisions are sequential and owned by one final reviewer.
+3. Do not hand off to `@9git` until one consolidated risk verdict is recorded in `*.ql.md`.
+
 ---
 
 ## Part A — Security Scanning

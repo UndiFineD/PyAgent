@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0.0",
+  "register_id": "parallel-agents-register",
+  "description": "Shared coordination register for parallel agent work, file touches, and file locks.",
+  "updated_at": "",
+  "updated_by": "",
+  "active_project_id": "",
+  "active_branch": "",
+  "active_wave_id": "",
+  "waves": [],
+  "agents": {
+    "@0master": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@1project": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@2think": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@3design": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@4plan": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@5test": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@6code": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@7exec": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@8ql": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@9git": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@10idea": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    }
+  },
+  "file_locks": [],
+  "lockfiles": [],
+  "event_log": []
+}

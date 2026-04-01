@@ -76,6 +76,14 @@ This agent primarily uses free Copilot models such as GPT-5 Mini, Grok Code Fast
 
 ---
 
+**Sequential-only git rule (MANDATORY):**
+
+1. Branch validation, staging, commit, push, PR create/update, and release closure are always sequential.
+2. Do not run concurrent staging or commit flows for the same project branch.
+3. If parallel upstream work produced multiple change sets, merge them to one validated staging plan first.
+
+---
+
 **Checkpoint rule (MANDATORY — applies to all project work):**
 
 1. **Start of Step 1** — ensure `docs/project/<project>/<project>.git.md` exists.

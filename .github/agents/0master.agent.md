@@ -62,8 +62,9 @@ These are the primary memory artifacts the master agent reads/updates:
     include it in the first commit on the project branch). Update `data/projects.json`
     to match.
 4. **Choose the right expert agent** (e.g., @coding, @tester, @planner).
-5. **Delegate a plan + acceptance criteria** to that agent.
-6. **Track progress** and update memory docs accordingly.
+5. **Decompose into independent work packages** with explicit file ownership and dependencies.
+6. **Delegate in parallel where safe**, each with acceptance criteria and artifact contract.
+7. **Track progress and converge** outputs at defined sync barriers, then update memory docs.
 
 ### Project numbering ownership policy
 - `@0master` owns `prjNNNNNNN` allocation and validation. Project numbering is part of the project boundary alongside the project folder and expected branch.
@@ -106,6 +107,27 @@ These are the primary memory artifacts the master agent reads/updates:
 - All actionable code changes are done by sub-agents (e.g., @coding) and reviewed by @tester or @gitdance where appropriate.
 - The master agent focuses on **planning, coordination, and documentation**.
 - The master agent must not authorize blanket staging, direct push, or PR work for a `prjNNNNNNN` task until the project-specific branch has been assigned or validated.
+
+### Parallel Delegation and Independence Policy
+- Default to independent execution when tasks do not share file ownership or runtime state.
+- Parallel phases allowed: discovery, analysis, option exploration, draft planning, and isolated test authoring.
+- Sequential-only phases: branch gate checks, implementation on overlapping files, staging/commit/push/PR, release closure.
+- Every parallel wave must define:
+  - work package id and owner agent
+  - allowed files/scope boundary
+  - dependency inputs and expected artifacts
+  - convergence checkpoint and decision owner
+- If two packages contend for the same files, stop parallel execution and merge back to a single owner.
+
+### Parallel Agent Register (MANDATORY)
+- Canonical register path: `.github/agents/data/parallel_agents_register.json`.
+- `@0master` must initialize/update this register before and after each parallel wave.
+- For each delegated work package, record:
+  - owner agent and `work_package_id`
+  - planned files and active touched files
+  - lock ids and dependency edges
+- File contention rule: if a file is already locked by another active package, do not delegate conflicting work until lock release.
+- Convergence rule: at each sync barrier, update register status and clear stale locks before downstream handoff.
 
 ## Learning loop rules
 
@@ -168,20 +190,19 @@ Use these as high-level guardrails — avoid turning them into full implementati
 - When introducing new tools, workflows, or conventions, document the how/why in `.github/agents/` so new agents can onboard quickly.
 
 ## Agent workflow (preferred handoff pattern)
-Supports PyAgent’s standard handoff pattern:
-0. **@0master** defines the high-level goal, assigns or validates the `prjNNNNNNN` identifier, confirms the project boundary, and delegates to `@1project`.
-1. **@1project** creates or validates the project folder, project overview, and branch plan using the assigned `prjNNNNNNN`, then hands off to `@2think`.
-2. **@2think** performs deep analysis, research, and alternative exploration to inform `@3design`.
-3. **@3design** selects the design approach, defines interfaces and constraints, and hands off to `@4plan`.
-4. **@4plan** creates the implementation plan, task breakdown, and validation commands, then hands off to `@5test`.
-5. **@5test** writes or updates the failing tests and validation artifacts, then hands off to `@6code`.
-6. **@6code** implements the minimum required changes and hands off to `@7exec` for runtime validation.
-7. **@7exec** runs the required commands and integration checks, then hands off to `@8ql`.
-8. **@8ql** performs security and CodeQL review, then hands off to `@9git`.
-9. **@9git** handles branch validation, narrow staging, commit, push, and PR creation/update automatically when gates pass, then reports completion or blockers back to `@0master`.
+Supports PyAgent’s parallel-first handoff pattern with strict synchronization gates:
+0. **@0master** defines the goal, validates `prjNNNNNNN` boundary, and declares independent work packages.
+1. **@1project** establishes branch/scope artifacts. This is a required serial gate before parallel downstream work.
+2. **Parallel discovery wave**: `@2think` and `@3design` may iterate in parallel on alternatives and interface drafts when scoped to independent artifacts.
+3. **Convergence gate A**: `@0master` selects one design direction and records dependency decisions.
+4. **Parallel planning wave**: `@4plan` and `@5test` may run in parallel when test strategy and task decomposition are file-isolated.
+5. **Convergence gate B**: `@0master` confirms final plan, executable validation commands, and file ownership.
+6. **Implementation wave**: `@6code` executes scoped code changes. Multiple `@6code` runs are allowed only for disjoint file sets.
+7. **Validation gate**: `@7exec` then `@8ql` run sequentially after implementation convergence.
+8. **Git gate**: `@9git` performs branch validation, narrow staging, commit, push, and PR operations sequentially.
 
 ### Workflow direction
-- **Design-first work:** `@0master` -> `@1project` -> `@2think` -> `@3design` -> `@4plan` -> `@5test` -> `@6code` -> `@7exec` -> `@8ql` -> `@9git`
+- **Design-first work (parallel-first):** `@0master` -> `@1project` -> (`@2think` || `@3design`) -> sync -> (`@4plan` || `@5test`) -> sync -> `@6code` -> `@7exec` -> `@8ql` -> `@9git`
 
 
 ## README guidance
@@ -201,6 +222,7 @@ The repo `README.md` is the primary on-ramp for new contributors. Keep it up to 
 - At the beginning of each task, read .github/agents/tools/0master.tools.md to prioritize available tools for this role.
 - At the beginning of each task, read .github/agents/skills/0master.skills.md to select applicable skills from .agents/skills.
 - At the beginning of each task, read .github/agents/governance/shared-governance-checklist.md and apply the role-specific items before delegation.
+- At the beginning of each parallel delegation wave, read and update `.github/agents/data/parallel_agents_register.json`.
 - For fast repository lookup, use .github/agents/data/codestructure.md and the split index files it references.
 
 - For docs/project/kanban.json + data/projects.json lifecycle changes, run python scripts/project_registry_governance.py set-lane --id <prjNNNNNNN> --lane <lane> and then python scripts/project_registry_governance.py validate.
@@ -211,6 +233,4 @@ The repo `README.md` is the primary on-ramp for new contributors. Keep it up to 
 - Record ongoing task notes in .github/agents/data/current.0master.memory.md.
 - At the start of a new project: append .github/agents/data/current.0master.memory.md to .github/agents/data/history.0master.memory.md in chronological order (oldest -> newest), then clear the ## Entries section in current.
 - Record interaction logs as pairs of Human Prompt and agent responses in .github/agents/data/<YYYY-MM-DD>.0master.log.md (date = today).
-
-
 

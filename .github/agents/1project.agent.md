@@ -72,6 +72,13 @@ The canonical files are required for every project folder. Chunked files are req
    then hand the task back to `@0master`.
 6. Do not create/overwrite project artifacts or hand off to `@2think` while branch validation fails.
 
+**Parallel setup contract (MANDATORY — before downstream delegation):**
+
+1. Declare independent work packages with explicit artifact ownership before any parallel handoff.
+2. Mark shared authoritative files as single-owner only; never assign shared files to multiple parallel agents.
+3. Record one convergence checkpoint in `<project>.project.md` where outputs are reconciled.
+4. If ownership is ambiguous, keep delegation sequential and return ambiguity to `@0master`.
+
 ---
 
 1. **Create or validate project folder**

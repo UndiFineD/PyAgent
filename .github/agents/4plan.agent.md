@@ -81,6 +81,12 @@ If a feature cannot be fully implemented in this sprint, it must **not** be incl
    then hand the task back to `@0master`.
 6. Do not write/overwrite plan artifacts or hand off to `@5test` while branch validation fails.
 
+**Parallel planning boundaries (MANDATORY):**
+
+1. Mark each planned task as either `parallel-safe` or `sequential-only`.
+2. `parallel-safe` tasks must have disjoint file ownership and independent acceptance criteria.
+3. Add a convergence step that defines when parallel task outputs are merged and who owns the merge decision.
+
 ---
 
 ### Step 1 — Read the design

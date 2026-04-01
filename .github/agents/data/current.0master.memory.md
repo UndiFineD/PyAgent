@@ -8,6 +8,68 @@
 
 ## Entries
 
+## 2026-04-01 — Parallel-first agent coordination policy
+
+- Trigger: user requested agents to operate more independently and in parallel where safe.
+- Decision:
+	- Adopt parallel-first delegation for independent work packages.
+	- Enforce explicit file ownership boundaries per work package.
+	- Require synchronization barriers before implementation and before validation/git.
+	- Keep git-affecting operations strictly sequential.
+- Files updated:
+	- `.github/agents/0master.agent.md`
+	- `.github/agents/tools/0master.tools.md`
+	- `.github/agents/governance/shared-governance-checklist.md`
+- Expected effect:
+	- Higher throughput in discovery/planning phases without increasing branch/scope risk.
+	- Reduced coordination bottlenecks by making parallelization default when isolation is clear.
+
+## 2026-04-01 — Parallel policy rollout across specialist agents
+
+- Trigger: user requested additional improvement after initial parallel-first master/governance update.
+- Decision:
+	- Extend independent-parallel policy into role-local instructions for `@1project`..`@10idea`.
+	- Keep git-affecting and final signoff actions strictly sequential.
+- Files updated:
+	- `.github/agents/1project.agent.md`
+	- `.github/agents/2think.agent.md`
+	- `.github/agents/3design.agent.md`
+	- `.github/agents/4plan.agent.md`
+	- `.github/agents/5test.agent.md`
+	- `.github/agents/6code.agent.md`
+	- `.github/agents/7exec.agent.md`
+	- `.github/agents/8ql.agent.md`
+	- `.github/agents/9git.agent.md`
+	- `.github/agents/10idea.agent.md`
+- Validation:
+	- `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `17 passed`.
+
+## 2026-04-01 — Shared parallel agent register
+
+- Trigger: user requested shared JSON register for parallel work tracking across `@0master` and all sub-agents.
+- Delivered:
+	- Added canonical register file: `.github/agents/data/parallel_agents_register.json`.
+	- Added mandatory register usage to `@0master` policy and shared governance checklist.
+	- Added lock/touched-file coordination requirement to 0master tools guidance.
+- Register scope:
+	- active wave metadata, per-agent package status, touched/planned files, lock ids, file locks, lockfiles, and event log.
+- Expected effect:
+	- deterministic parallel ownership and conflict prevention for overlapping file edits.
+
+## 2026-04-01 — Executable parallel register CLI
+
+- Trigger: user requested next-step executable tooling for atomic and standardized register updates.
+- Delivered:
+	- Added `scripts/parallel_register.py` with commands:
+	  - `acquire-lock`
+	  - `release-lock`
+	  - `touch-file`
+	  - `close-wave`
+	- Added focused tests: `tests/test_parallel_register.py`.
+	- Added governance/tooling references for standardized command usage.
+- Validation:
+	- `python -m pytest -q tests/test_parallel_register.py` -> `4 passed`.
+
 ## 2026-03-29 — Agent workflow hardening from lessons-learned sweep
 
 - Scope: reviewed all agent instruction files and cross-checked recurring blockers from history memory logs.

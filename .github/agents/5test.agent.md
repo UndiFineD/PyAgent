@@ -118,6 +118,12 @@ def test_my_feature() -> None:
 
 1. Read `docs/project/prj*/<project>.project.md`.
 2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
+
+**Parallel test authoring rules (MANDATORY):**
+
+1. Parallel test authoring is allowed only when test files and fixtures are isolated by ownership.
+2. Shared fixtures, shared test utilities, and snapshot baselines must have a single owner in a given wave.
+3. Before handoff to `@6code`, merge all parallel test outputs into one canonical `*.test.md` with a single red/green status view.
 3. Read the observed branch with `git branch --show-current`.
 4. If observed branch != expected branch, stop work immediately.
 5. On mismatch, record BLOCKED status in `<project>.test.md` and `.github/agents/data/current.5test.memory.md`,

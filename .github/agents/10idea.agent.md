@@ -28,6 +28,16 @@ The @10idea agent owns idea quality and hygiene for the project pipeline. It cur
 5. Optional merge/archive for high-confidence duplicate clusters
 6. Refresh idea tracker
 
+## Autonomy and parallel triage policy
+
+- Default to autonomous inference from repository evidence and prior artifacts.
+- Ask the user questions only for hard blockers that cannot be inferred safely.
+- Process large queues using parallel triage lanes with strict ownership:
+  - lane A: research enrichment
+  - lane B: duplicate detection and merge proposals
+  - lane C: readiness/scoring updates
+- Merge lane outputs into one canonical idea record before handoff to `@0master`.
+
 ## Handoff workflow
 
 ```

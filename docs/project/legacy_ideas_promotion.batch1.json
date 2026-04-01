@@ -1,0 +1,360 @@
+{
+  "generated_at": "2026-04-01T15:15:44.167072+00:00",
+  "input": "C:/Dev/PyAgent/docs/project/legacy_ideas_3_7_0.batch1.jsonl",
+  "top_n": 50,
+  "min_priority": 2,
+  "max_per_source": 1,
+  "selected_count": 50,
+  "selected": [
+    {
+      "idea_id": "idea000081",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000081-contributing-hardening.md",
+      "legacy_id": "legacy-eca12c0a30-01",
+      "source_file": "CONTRIBUTING.md",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000082",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000082-conftest-py-hardening.md",
+      "legacy_id": "legacy-896068a211-01",
+      "source_file": "conftest.py.bak",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000083",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000083-environments-hardening.md",
+      "legacy_id": "legacy-4c2f5a3d4e-01",
+      "source_file": "data/environments/environments.json",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000084",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000084-reasoning-chains-hardening.md",
+      "legacy_id": "legacy-d4fc715e34-01",
+      "source_file": "data/logs/reasoning_chains.jsonl",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000085",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000085-access-20260212-hardening.md",
+      "legacy_id": "legacy-bd2e7c1fc9-01",
+      "source_file": "data/logs/webservices/downloads/access-20260212.log",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000086",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000086-system-hardening.md",
+      "legacy_id": "legacy-f287e429a2-01",
+      "source_file": "data/prompts/architect/system.md",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000087",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000087-system-hardening.md",
+      "legacy_id": "legacy-11f020db29-01",
+      "source_file": "data/prompts/fixer/system.md",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000088",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000088-implementation-stub-developer-experience.md",
+      "legacy_id": "legacy-b5e9df7e24-09",
+      "source_file": "data/research/2601.06123v1/implementation_stub.py",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000089",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000089-workflow-implementation-developer-experience.md",
+      "legacy_id": "legacy-813c37748b-09",
+      "source_file": "data/research/asej_s2090447925006203/workflow_implementation.py",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000090",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000090-shard-hardening.md",
+      "legacy_id": "legacy-627b78496b-01",
+      "source_file": "data/test_shards/a3/4c/shard.db",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000091",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000091-download-agent-readme-hardening.md",
+      "legacy_id": "legacy-828b5d4b4a-01",
+      "source_file": "docs/architecture/DOWNLOAD_AGENT_README.md",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000092",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000092-distributed-token-bucket-rate-limiter-quick-reference-hardening.md",
+      "legacy_id": "legacy-aa2997d3e1-01",
+      "source_file": "docs/architecture/Distributed Token Bucket Rate Limiter - Quick Reference.md",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000093",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000093-task-completion-report-hardening.md",
+      "legacy_id": "legacy-79636aa11a-01",
+      "source_file": "docs/architecture/TASK_COMPLETION_REPORT.md",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000094",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000094-coding-agent-memory-hardening.md",
+      "legacy_id": "legacy-43efd89681-01",
+      "source_file": "docs/architecture/coding.agent.memory.md",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000095",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000095-executing-agent-memory-hardening.md",
+      "legacy_id": "legacy-cd185e5d99-01",
+      "source_file": "docs/architecture/executing.agent.memory.md",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000096",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000096-gitdance-agent-memory-hardening.md",
+      "legacy_id": "legacy-0378c130aa-01",
+      "source_file": "docs/architecture/gitdance.agent.memory.md",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000097",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000097-tester-agent-memory-hardening.md",
+      "legacy_id": "legacy-5a4be1446e-01",
+      "source_file": "docs/architecture/tester.agent.memory.md",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000098",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000098-evolution-log-hardening.md",
+      "legacy_id": "legacy-abd58b81cc-01",
+      "source_file": "docs/archive/evolution_log.json",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000099",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000099-agent-runner-description-hardening.md",
+      "legacy_id": "legacy-3da464eec3-01",
+      "source_file": "docs/autodoc/agent_runner_description.md",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000100",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000100-agents-description-hardening.md",
+      "legacy_id": "legacy-b1bab5bf9f-01",
+      "source_file": "docs/autodoc/agents_description.md",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000101",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000101-api-core-description-hardening.md",
+      "legacy_id": "legacy-ac6c9fe8dc-01",
+      "source_file": "docs/autodoc/api_core_description.md",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000102",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000102-autodoc-dashboard-hardening.md",
+      "legacy_id": "legacy-fc7fb7a5ac-01",
+      "source_file": "docs/autodoc/autodoc_dashboard.md",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000103",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000103-benchmarking-description-hardening.md",
+      "legacy_id": "legacy-ea12e605e8-01",
+      "source_file": "docs/autodoc/benchmarking_description.md",
+      "priority": 4
+    },
+    {
+      "idea_id": "idea000104",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000104-codeignore-hardening.md",
+      "legacy_id": "legacy-313fb7c52a-01",
+      "source_file": ".codeignore",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000105",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000105-env-hardening.md",
+      "legacy_id": "legacy-749e06f646-01",
+      "source_file": ".env.template",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000106",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000106-flake8-hardening.md",
+      "legacy_id": "legacy-6951dbb399-01",
+      "source_file": ".flake8",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000107",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000107-gitignore-hardening.md",
+      "legacy_id": "legacy-bc37d034ba-01",
+      "source_file": ".gitignore",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000108",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000108-pre-commit-config-hardening.md",
+      "legacy_id": "legacy-63a9c44a44-01",
+      "source_file": ".pre-commit-config.yaml",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000109",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000109-pylintrc-hardening.md",
+      "legacy_id": "legacy-ba293004ae-01",
+      "source_file": ".pylintrc",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000110",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000110-check-rust-core-developer-experience.md",
+      "legacy_id": "legacy-3bc11a73ca-09",
+      "source_file": "check_rust_core.py",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000111",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000111-conftest-developer-experience.md",
+      "legacy_id": "legacy-a31c7ed5d3-09",
+      "source_file": "conftest.py",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000112",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000112-64c7fc95435b51280c274a1d5935d1f906044aa2e6033feb28d1d03222490254-hardening.md",
+      "legacy_id": "legacy-f2e6626233-01",
+      "source_file": "data/agent_cache/64c7fc95435b51280c274a1d5935d1f906044aa2e6033feb28d1d03222490254.json",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000113",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000113-eda0f0f6d7d9e78a3dca11c61d52e5d7b518be25032ab28910e82f7a45d98b86-hardening.md",
+      "legacy_id": "legacy-53c88c237d-01",
+      "source_file": "data/agent_cache/eda0f0f6d7d9e78a3dca11c61d52e5d7b518be25032ab28910e82f7a45d98b86.json",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000114",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000114-agent-knowledge-index-hardening.md",
+      "legacy_id": "legacy-ff7ffea3d7-01",
+      "source_file": "data/agent_knowledge_index.json",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000115",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000115-agent-registry-hardening.md",
+      "legacy_id": "legacy-d8cdb322cc-01",
+      "source_file": "data/agent_registry.json",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000116",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000116-firewall-hardening.md",
+      "legacy_id": "legacy-e99085b0d2-01",
+      "source_file": "data/config/firewall.yaml",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000117",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000117-memory-hardening.md",
+      "legacy_id": "legacy-8afaac7df8-01",
+      "source_file": "data/config/memory.yaml",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000118",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000118-models-hardening.md",
+      "legacy_id": "legacy-b479e916c6-01",
+      "source_file": "data/config/models.yaml",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000119",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000119-sharding-hardening.md",
+      "legacy_id": "legacy-459f1f2308-01",
+      "source_file": "data/config/sharding.yaml",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000120",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000120-swarm-hardening.md",
+      "legacy_id": "legacy-220d0bddef-01",
+      "source_file": "data/config/swarm.yaml",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000121",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000121-voyager-hardening.md",
+      "legacy_id": "legacy-5df9dc504d-01",
+      "source_file": "data/config/voyager.yaml",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000122",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000122-instances-hardening.md",
+      "legacy_id": "legacy-7d85a4d86b-01",
+      "source_file": "data/environments/instances.json",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000123",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000123-shard-202602-306-jsonl-hardening.md",
+      "legacy_id": "legacy-68c49dc109-01",
+      "source_file": "data/logs/external_ai_learning/shard_202602_306.jsonl.gz",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000124",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000124-shard-202602-693-jsonl-hardening.md",
+      "legacy_id": "legacy-da7f26b654-01",
+      "source_file": "data/logs/external_ai_learning/shard_202602_693.jsonl.gz",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000125",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000125-shards-lookup-hardening.md",
+      "legacy_id": "legacy-910db7a9db-01",
+      "source_file": "data/logs/external_ai_learning/shards_lookup.index",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000126",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000126-infection-guard-hardening.md",
+      "legacy_id": "legacy-a799bfaf10-01",
+      "source_file": "data/logs/infection_guard.jsonl",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000127",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000127-structured-hardening.md",
+      "legacy_id": "legacy-6d1481f432-01",
+      "source_file": "data/logs/structured.json",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000128",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000128-test-audit-hardening.md",
+      "legacy_id": "legacy-6957d90aaa-01",
+      "source_file": "data/logs/test_audit.jsonl",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000129",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000129-test-retention-hardening.md",
+      "legacy_id": "legacy-8b6db2720a-01",
+      "source_file": "data/logs/test_retention.jsonl",
+      "priority": 3
+    },
+    {
+      "idea_id": "idea000130",
+      "file": "C:/Dev/PyAgent/docs/project/ideas/idea000130-access-20260213-hardening.md",
+      "legacy_id": "legacy-dacd88cba9-01",
+      "source_file": "data/logs/webservices/downloads/access-20260213.log",
+      "priority": 3
+    }
+  ]
+}

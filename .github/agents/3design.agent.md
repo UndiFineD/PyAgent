@@ -65,6 +65,12 @@ This agent does **not** write implementation plans or tests.
    then hand the task back to `@0master`.
 6. Do not write/overwrite design artifacts or hand off to `@4plan` while branch validation fails.
 
+**Parallel synthesis contract (MANDATORY):**
+
+1. @3design may accept parallel design inputs only when each input maps to distinct interfaces or subsystems.
+2. Canonical `*.design.md` remains single-owner and must reconcile all parallel inputs into one selected design.
+3. Do not hand off to `@4plan` until unresolved design conflicts are closed in the canonical artifact.
+
 ---
 
 ### Step 1 — Gather input

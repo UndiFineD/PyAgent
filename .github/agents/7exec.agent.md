@@ -73,6 +73,12 @@ If failures are found, it reports them to `@6code` with full diagnostic output.
    then hand the task back to `@0master`.
 6. Do not run full validation, smoke checks, or hand off to `@8ql` while branch validation fails.
 
+**Parallel validation policy (MANDATORY):**
+
+1. Validation commands may run in parallel only when they do not share mutable runtime state.
+2. Integration, environment-mutating, or order-dependent checks remain sequential.
+3. Report one consolidated pass/fail result in the canonical `*.exec.md` artifact before handoff.
+
 ---
 
 **Step 1 — Read the task context**  

@@ -138,6 +138,12 @@ implemented change affects system architecture.
 **Branch gate (MANDATORY — before any code edit or test command):**
 
 1. Read `docs/project/prj*/<project>.project.md`.
+
+**Concurrent implementation contract (MANDATORY):**
+
+1. @6code may run parallel implementation waves only for disjoint file ownership sets.
+2. Shared files (public API modules, common utils, shared configs) must be assigned to one owner only.
+3. If ownership overlap is discovered, stop parallel edits and return to a single-owner sequence.
 2. Confirm `## Branch Plan` includes an expected branch and scope boundary.
 3. Read the observed branch with `git branch --show-current`.
 4. If observed branch != expected branch, stop work immediately.
