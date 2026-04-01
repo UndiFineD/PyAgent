@@ -1,16 +1,117 @@
 {
-  "schema_version": 1,
-  "generated_at": "2026-04-01T10:03:11.273616+00:00",
+  "schema_version": 2,
+  "generated_at": "2026-04-01T12:54:48.739967+00:00",
   "source": {
     "active_dir": "docs/project/ideas",
-    "archive_dir": "docs/project/ideas/archive"
+    "archive_dir": "docs/project/ideas/archive",
+    "offset": 0,
+    "limit": null,
+    "available_total": 80,
+    "processed_total": 80
   },
   "summary": {
     "total": 80,
     "active": 73,
     "archived": 7,
     "unique_idea_ids": 80,
-    "duplicate_idea_ids": []
+    "duplicate_idea_ids": [],
+    "readiness": {
+      "ready": 0,
+      "needs-discovery": 0,
+      "blocked": 80
+    },
+    "merge_candidates": 0,
+    "review_candidates": 0
+  },
+  "queues": {
+    "ready": [],
+    "needs-discovery": [],
+    "blocked": [
+      "idea000001",
+      "idea000002",
+      "idea000003",
+      "idea000004",
+      "idea000005",
+      "idea000006",
+      "idea000007",
+      "idea000008",
+      "idea000009",
+      "idea000010",
+      "idea000011",
+      "idea000012",
+      "idea000013",
+      "idea000014",
+      "idea000015",
+      "idea000016",
+      "idea000017",
+      "idea000018",
+      "idea000019",
+      "idea000020",
+      "idea000021",
+      "idea000022",
+      "idea000023",
+      "idea000024",
+      "idea000025",
+      "idea000026",
+      "idea000027",
+      "idea000028",
+      "idea000029",
+      "idea000030",
+      "idea000031",
+      "idea000032",
+      "idea000033",
+      "idea000034",
+      "idea000035",
+      "idea000036",
+      "idea000037",
+      "idea000038",
+      "idea000039",
+      "idea000040",
+      "idea000041",
+      "idea000042",
+      "idea000043",
+      "idea000044",
+      "idea000045",
+      "idea000046",
+      "idea000047",
+      "idea000048",
+      "idea000049",
+      "idea000050",
+      "idea000051",
+      "idea000052",
+      "idea000053",
+      "idea000054",
+      "idea000055",
+      "idea000056",
+      "idea000057",
+      "idea000058",
+      "idea000059",
+      "idea000060",
+      "idea000061",
+      "idea000062",
+      "idea000063",
+      "idea000064",
+      "idea000065",
+      "idea000066",
+      "idea000067",
+      "idea000068",
+      "idea000069",
+      "idea000070",
+      "idea000071",
+      "idea000072",
+      "idea000073",
+      "idea000074",
+      "idea000075",
+      "idea000076",
+      "idea000077",
+      "idea000078",
+      "idea000079",
+      "idea000080"
+    ]
+  },
+  "duplicate_candidates": {
+    "merge_candidates": [],
+    "review_candidates": []
   },
   "ideas": [
     {
@@ -26,6 +127,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 4
+      },
+      "merged_from": [],
       "sha256": "470c6076d97befa04375200ef93713098a1f2c10a828dcde958f909463bf6ed4",
       "updated": "2026-04-01T08:26:34.437424+00:00"
     },
@@ -42,6 +165,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 4
+      },
+      "merged_from": [],
       "sha256": "03e95dac1803b4c90ed32d46875e5a523151980783da68e690f7cfbc6b413351",
       "updated": "2026-04-01T08:26:34.421146+00:00"
     },
@@ -58,6 +203,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 4
+      },
+      "merged_from": [],
       "sha256": "d4eae12c4486fe3e6aca761a5941344ff6373c46f53f92aecf5482102eeb7ad9",
       "updated": "2026-04-01T08:26:34.441039+00:00"
     },
@@ -75,6 +242,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 4,
+        "priority_score": 5
+      },
+      "merged_from": [],
       "sha256": "fda5c6259a8f970dae3175e1deeab518564aad9dba0ba057a0afe9525d3de390",
       "updated": "2026-04-01T08:26:34.441039+00:00"
     },
@@ -93,6 +282,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 4,
+        "priority_score": 5
+      },
+      "merged_from": [],
       "sha256": "659a96ba594bf449a02a126ebb18ad12c37ffcdb91b513e07ae673a2ecc73c98",
       "updated": "2026-04-01T08:26:34.444893+00:00"
     },
@@ -111,6 +322,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 4,
+        "priority_score": 5
+      },
+      "merged_from": [],
       "sha256": "ea75ecd4b32af2c4183de6609d162cbdb810e939e5e2ae0b4c00cfb91887cdca",
       "updated": "2026-04-01T08:26:34.445524+00:00"
     },
@@ -129,6 +362,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 4,
+        "priority_score": 5
+      },
+      "merged_from": [],
       "sha256": "c32074226d53407a8f40cd12b879c1a186a4b01331e0c2d992ca51f966860224",
       "updated": "2026-04-01T08:26:34.447531+00:00"
     },
@@ -145,6 +400,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 4
+      },
+      "merged_from": [],
       "sha256": "e033d4ccb45c350e00671970ba07863125dd75fa15764bdf59a25b2a426382cf",
       "updated": "2026-04-01T08:26:34.449538+00:00"
     },
@@ -162,6 +439,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 4,
+        "priority_score": 5
+      },
+      "merged_from": [],
       "sha256": "60017b860f75bbc13fb99acd7fd5783fd637552b1c08375ac5f0f8b34f38d0c4",
       "updated": "2026-04-01T08:26:34.449538+00:00"
     },
@@ -178,6 +477,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 4
+      },
+      "merged_from": [],
       "sha256": "1c1605399c698ea752c7dffea34f2f4e03af4c92f591536e19298cd01effa3ef",
       "updated": "2026-04-01T08:26:34.452429+00:00"
     },
@@ -194,6 +515,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 4
+      },
+      "merged_from": [],
       "sha256": "7750ee9a031a130f07793f2da836d0bceb4155f005e77af983e3dd85e886f7a5",
       "updated": "2026-04-01T08:26:34.424878+00:00"
     },
@@ -211,6 +554,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 4,
+        "priority_score": 5
+      },
+      "merged_from": [],
       "sha256": "eddeaa70d810b6637f5aae79d6465d44bf1348263e57706e5ef93bfd815c412a",
       "updated": "2026-04-01T08:26:34.456173+00:00"
     },
@@ -227,6 +592,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 4
+      },
+      "merged_from": [],
       "sha256": "82513c7d3cf3941df771ee6ce4ae46aa102b83ad60d1776c31c80397a4970f05",
       "updated": "2026-04-01T08:26:34.458184+00:00"
     },
@@ -243,6 +630,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 4
+      },
+      "merged_from": [],
       "sha256": "24fc3a941f61f9eba56f5cb4ca34dd7f8dcb8031bd1082becc930598a1468721",
       "updated": "2026-04-01T08:26:34.426888+00:00"
     },
@@ -259,6 +668,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 4
+      },
+      "merged_from": [],
       "sha256": "04dc5d1ee12215f1e12e79188686b84f868068bb0902f96f5b29d72bcf173dae",
       "updated": "2026-04-01T08:26:34.429522+00:00"
     },
@@ -275,6 +706,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 4
+      },
+      "merged_from": [],
       "sha256": "8cdcae1be7b2666779194c9339a35308f02d60d8127cb56b5e940debddbcc806",
       "updated": "2026-04-01T08:26:34.432455+00:00"
     },
@@ -289,6 +742,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 2,
+        "priority_score": 3
+      },
+      "merged_from": [],
       "sha256": "38d89d5039e1e7575ea3a8788acca2091560f3184aa27c0eb460ab9cba9ddb69",
       "updated": "2026-04-01T08:26:34.458184+00:00"
     },
@@ -303,6 +778,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 2,
+        "priority_score": 3
+      },
+      "merged_from": [],
       "sha256": "265446a627d33baf5c8cb3c11c8d132cf1a8040a6ce47b81c7f917037442afe2",
       "updated": "2026-04-01T08:26:34.462936+00:00"
     },
@@ -317,6 +814,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 2,
+        "priority_score": 3
+      },
+      "merged_from": [],
       "sha256": "2aa48de15954f2ba67c8a140ef469b059f34a3818c8e99baf8c7edb1cd9cb7d3",
       "updated": "2026-04-01T08:26:34.434465+00:00"
     },
@@ -331,6 +850,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 2,
+        "priority_score": 3
+      },
+      "merged_from": [],
       "sha256": "e6df12911a47daf5b3ba618b867b8792a12b8ffa5e0d6890dc9242c006122c4c",
       "updated": "2026-04-01T08:26:34.464948+00:00"
     },
@@ -345,6 +886,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 2,
+        "priority_score": 3
+      },
+      "merged_from": [],
       "sha256": "bfa95f507dd5794661166cb8d4bba05dd06fbdcb7dc4e225ae8b85792e1b29e9",
       "updated": "2026-04-01T08:26:34.466961+00:00"
     },
@@ -359,6 +922,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 2,
+        "priority_score": 3
+      },
+      "merged_from": [],
       "sha256": "9b1c0d3495d5495ec34fb4358a963f2bdb28e9074247310ee422d7edbb81a6c5",
       "updated": "2026-04-01T08:26:34.469566+00:00"
     },
@@ -373,6 +958,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 2,
+        "priority_score": 3
+      },
+      "merged_from": [],
       "sha256": "b17e52ad5c6964c8330238df3eef026d5f7e730f0adff8827cd5aa6dd418deab",
       "updated": "2026-04-01T08:26:34.469566+00:00"
     },
@@ -387,6 +994,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 2,
+        "priority_score": 3
+      },
+      "merged_from": [],
       "sha256": "4dd017a72583136db2613eb48f5e755019c221cab620b31da6c64a32f447a978",
       "updated": "2026-04-01T08:26:34.473591+00:00"
     },
@@ -401,6 +1030,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 2,
+        "priority_score": 3
+      },
+      "merged_from": [],
       "sha256": "3dc8b3694d456e31e59edb0c5d8a561d9a10f1bf7d3ca757a23eb991ecf60485",
       "updated": "2026-04-01T08:26:34.473591+00:00"
     },
@@ -415,6 +1066,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 2,
+        "priority_score": 3
+      },
+      "merged_from": [],
       "sha256": "51edb19785c22a4b347419e43ee4da190f397ba38ec56f12a8a7fe545bebc36b",
       "updated": "2026-04-01T08:26:34.473591+00:00"
     },
@@ -432,6 +1105,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 4,
+        "priority_score": 5
+      },
+      "merged_from": [],
       "sha256": "809d638fe00e8475cfc959cba2ee190ddd12ee6f2e88f5a873680ac172048790",
       "updated": "2026-04-01T08:26:34.473591+00:00"
     },
@@ -446,6 +1141,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 2,
+        "priority_score": 3
+      },
+      "merged_from": [],
       "sha256": "7641b23d149f4607f6026b5946a5a377321a398e711de91f191c4a51fe39c89d",
       "updated": "2026-04-01T08:26:34.473591+00:00"
     },
@@ -464,6 +1181,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 4,
+        "priority_score": 5
+      },
+      "merged_from": [],
       "sha256": "de806731a1f00794d7afceb61514ecb146f3d996b81771861cd4f0a41a30127f",
       "updated": "2026-04-01T08:26:34.484263+00:00"
     },
@@ -480,6 +1219,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 4
+      },
+      "merged_from": [],
       "sha256": "4f2aff8388ddad0eb61a73af18e63725767cbfc318bb9fa1bb3cb2ebd93d891f",
       "updated": "2026-04-01T08:26:34.484263+00:00"
     },
@@ -497,6 +1258,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 4,
+        "priority_score": 5
+      },
+      "merged_from": [],
       "sha256": "9c3d43bcce5b679b0d924fa68b0796ff0212588cfad839247c70108d122c88b8",
       "updated": "2026-04-01T08:26:34.490932+00:00"
     },
@@ -514,6 +1297,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 4,
+        "priority_score": 5
+      },
+      "merged_from": [],
       "sha256": "225101c80ca604bd6633950e6c8c8fd26d8ddef42de44f9d5102fd8bdc71a960",
       "updated": "2026-04-01T08:26:34.492943+00:00"
     },
@@ -530,6 +1335,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 4
+      },
+      "merged_from": [],
       "sha256": "44f40666f55e0d21319ecf28fe05b0e19047b04299465d281c0f0842928f92c0",
       "updated": "2026-04-01T08:26:34.492943+00:00"
     },
@@ -546,6 +1373,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 4
+      },
+      "merged_from": [],
       "sha256": "bdd624c41bfca8fc0ace05e7f67dc1c1a186feb61becc627a0ed8114f4e3776f",
       "updated": "2026-04-01T08:26:34.494952+00:00"
     },
@@ -560,6 +1409,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 2,
+        "priority_score": 3
+      },
+      "merged_from": [],
       "sha256": "1d4d839bafd3dabb16e3801d39e23e9040f524168f02eb5e2f64c8fe7d8f69dc",
       "updated": "2026-04-01T08:26:34.496963+00:00"
     },
@@ -578,6 +1449,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 4,
+        "priority_score": 5
+      },
+      "merged_from": [],
       "sha256": "5ec03b36c7a5c4e9b4d9797e9287bf9951b570157701ba654ebafb7fee8a5ed6",
       "updated": "2026-04-01T08:26:34.499983+00:00"
     },
@@ -592,6 +1485,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 2,
+        "priority_score": 3
+      },
+      "merged_from": [],
       "sha256": "7ab7ab05f5c9c1fcfd45d0912849d09c8680e630f387d778bc57f07a1184d760",
       "updated": "2026-04-01T08:26:34.501476+00:00"
     },
@@ -606,6 +1521,28 @@
         "docs\\project\\kanban.md",
         "docs\\project\\prj0000076\\prj0000076.think.md"
       ],
+      "template_completeness": 0.6667,
+      "missing_required_sections": [
+        "detailed proposal",
+        "requirements",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.6667,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 2,
+        "effort_score": 3,
+        "risk_score": 3,
+        "alignment_score": 2,
+        "priority_score": 3
+      },
+      "merged_from": [],
       "sha256": "9cbe4b81d71563662458753ec99665c73d0ec31d065bda362ef7eb77755f3e1a",
       "updated": "2026-04-01T08:26:34.503489+00:00"
     },
@@ -624,6 +1561,32 @@
         "docs/architecture/archive/improvement_requirements.md",
         "docs/architecture/archive/proxima_voyager.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 1
+      },
+      "merged_from": [],
       "sha256": "fc9c14c4703f758071716226366fe51c0c36d9691e8e3a58666a289fc755ef83",
       "updated": "2026-04-01T08:26:34.506737+00:00"
     },
@@ -640,6 +1603,32 @@
       "source_references": [
         "docs/architecture/archive/improvement_requirements.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 1
+      },
+      "merged_from": [],
       "sha256": "cb35abbbc7168a58fe43c3ec24e8236939ebd9036af16db1d498239092b7b0f3",
       "updated": "2026-04-01T08:26:34.508748+00:00"
     },
@@ -658,6 +1647,32 @@
         "docs/architecture/archive/improvement_requirements.md",
         "docs/architecture/archive/INFERENCE_ENGINE.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 1
+      },
+      "merged_from": [],
       "sha256": "2ff3eb00a581cd50f7c0baf2725d1279a9c4617cad5ba844e5c615a0f515be2f",
       "updated": "2026-04-01T08:26:34.508748+00:00"
     },
@@ -671,6 +1686,32 @@
       "source_references": [
         "docs/architecture/archive/improvement_requirements.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "ab70591764a67832c24f6293feea5b2519bd41be079b0025753ddad58bb00c4f",
       "updated": "2026-04-01T08:26:34.510758+00:00"
     },
@@ -686,6 +1727,32 @@
       "source_references": [
         "docs/architecture/archive/improvement_requirements.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 2,
+        "priority_score": 0
+      },
+      "merged_from": [],
       "sha256": "13a8cb65ef564d505678779334c242ed633d5659e061f8e62bc8d525da19bbdd",
       "updated": "2026-04-01T08:26:34.510758+00:00"
     },
@@ -702,6 +1769,32 @@
       "source_references": [
         "docs/architecture/archive/improvement_requirements.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 1
+      },
+      "merged_from": [],
       "sha256": "14e93df0e0a55254adfd8203e15f6fd2a0ed3a8714d964f18edcc00788268415",
       "updated": "2026-04-01T08:26:34.512767+00:00"
     },
@@ -720,6 +1813,32 @@
         "docs/architecture/archive/improvement_requirements.md",
         "docs/architecture/archive/OBSERVABILITY_DATA_STACK.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 1
+      },
+      "merged_from": [],
       "sha256": "e9ff0183b7c797caf9179538e4fa8730eca03a33fc13ea567a3b797f41eb762e",
       "updated": "2026-04-01T08:26:34.514423+00:00"
     },
@@ -738,6 +1857,32 @@
         "docs/architecture/archive/improvement_requirements.md",
         "docs/architecture/archive/transactional_integrity.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 1
+      },
+      "merged_from": [],
       "sha256": "e1f8167c2c37e0c92a5b748aacafa640ead7a0aa366e6581759d4885bd91d793",
       "updated": "2026-04-01T08:26:34.515664+00:00"
     },
@@ -756,6 +1901,32 @@
         "docs/architecture/archive/improvement_requirements.md",
         "docs/architecture/archive/agent_task_security_architecture.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 1
+      },
+      "merged_from": [],
       "sha256": "46b4829986b2ad0a4ca51d6a7e4b92fab243940ef6aca72e851452b6f8cf4382",
       "updated": "2026-04-01T08:26:34.516228+00:00"
     },
@@ -774,6 +1945,32 @@
         "docs/architecture/archive/improvement_requirements.md",
         "docs/architecture/archive/OBSERVABILITY_DATA_STACK.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 1
+      },
+      "merged_from": [],
       "sha256": "ee071a03b5c964c9445206bf526553749a1e9e55908f9ef0460d6e8653aa0c3a",
       "updated": "2026-04-01T08:26:34.518243+00:00"
     },
@@ -787,6 +1984,32 @@
       "source_references": [
         "docs/architecture/archive/UCP_OVERVIEW.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "f021f84756f2240fc606c66c835d684db7235b3f33b73e00fd67d2bb85311f6c",
       "updated": "2026-04-01T08:26:34.518243+00:00"
     },
@@ -803,6 +2026,32 @@
       "source_references": [
         "docs/architecture/archive/INFERENCE_ENGINE.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 1
+      },
+      "merged_from": [],
       "sha256": "cf5f68f849e109d6dca0e3cfc66e6cc4c0c47427aee094ad0924af599691b38b",
       "updated": "2026-04-01T08:26:34.520252+00:00"
     },
@@ -817,6 +2066,32 @@
         "docs/architecture/archive/LOOP_ANALYSIS_README.md",
         "docs/architecture/archive/concurrency.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "d3b99a5f398b305ef00781fdcca75ac1d82949863324bb8216f009eaccd2fedf",
       "updated": "2026-04-01T08:26:34.520252+00:00"
     },
@@ -830,6 +2105,32 @@
       "source_references": [
         "docs/auto_fix.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "285e9ff47e7ff1bee126458c0f151bae5f226d1bc708fc4cf035d78bd43a8c9d",
       "updated": "2026-04-01T08:26:34.524293+00:00"
     },
@@ -843,6 +2144,32 @@
       "source_references": [
         "docs/comparison_vllm-old.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "006d6a85f039fb9ce3d7bc1defcbe922dfce40d85a397cba0cd8c4d7e5db3d95",
       "updated": "2026-04-01T08:26:34.524293+00:00"
     },
@@ -856,6 +2183,32 @@
       "source_references": [
         "docs/CORE_DESIGN_GUIDE.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "af7e3a11e7a941bbf7337705cfb95dd470aa7edbaa737a7d465f15a67f825dd2",
       "updated": "2026-04-01T08:26:34.526792+00:00"
     },
@@ -869,6 +2222,32 @@
       "source_references": [
         "docs/E2E_ENCRYPTION.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "cc790ec2973fe2e1bf4ae39bf18bf474419c0d059db469eb1e06707c4080c077",
       "updated": "2026-04-01T08:26:34.526792+00:00"
     },
@@ -882,6 +2261,32 @@
       "source_references": [
         "docs/E2E_IMPLEMENTATION_SUMMARY.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "dfd5ea4dfba239e8776ca6e666b93bb3b2dd89dc4a1a99b3d04e7cfae429baa1",
       "updated": "2026-04-01T08:26:34.528801+00:00"
     },
@@ -895,6 +2300,32 @@
       "source_references": [
         "docs/FLEET_AUTO_DOC.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "2e52bad011489b39222296607c63e11ee64ac776eb5db5b5d3061a37bf7e2253",
       "updated": "2026-04-01T08:26:34.528801+00:00"
     },
@@ -908,6 +2339,32 @@
       "source_references": [
         "docs/improvement_audit_plan.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "529fc59f522e2097b9edaed95fba8c3bc9d21a0b1cbe3a336fdbe6a1d88c9c00",
       "updated": "2026-04-01T08:26:34.528801+00:00"
     },
@@ -921,6 +2378,32 @@
       "source_references": [
         "docs/IMPROVEMENT_RESEARCH.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "067dc477a749e9dd70e9e937c4d3096bb7d1e43673c4d72d67fc0dc3928390b0",
       "updated": "2026-04-01T08:26:34.531385+00:00"
     },
@@ -934,6 +2417,32 @@
       "source_references": [
         "docs/onboarding.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "cb84c577da890664abf01aac1e90b9204073c036b2489d2c33de43ced212307d",
       "updated": "2026-04-01T08:26:34.533394+00:00"
     },
@@ -947,6 +2456,32 @@
       "source_references": [
         "docs/Phase41_vLLM_Patterns.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "f221d39d26cabbc01840e77c3df4e2168046ad54d3e6b040f90c4d97a9464bce",
       "updated": "2026-04-01T08:26:34.533394+00:00"
     },
@@ -960,6 +2495,32 @@
       "source_references": [
         "docs/PROGRESS_DASHBOARD.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "ed38014c38483fc1cf8890013a0bd982505263c5c713d5cad35f45f746a9d918",
       "updated": "2026-04-01T08:26:34.535484+00:00"
     },
@@ -973,6 +2534,32 @@
       "source_references": [
         "docs/release_notes_template.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "26df322a87b2294ca330da75c2ac6a92693d3cb061f8873d639186829d45bf9b",
       "updated": "2026-04-01T08:26:34.535484+00:00"
     },
@@ -986,6 +2573,32 @@
       "source_references": [
         "docs/research_notes.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "70d1bc750986b7b89ef675f852ad6156d8535000f36e98d6802188b62d89e901",
       "updated": "2026-04-01T08:26:34.537523+00:00"
     },
@@ -999,6 +2612,32 @@
       "source_references": [
         "docs/RUST_Ready.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "02149d413ecffa7c278c1a81a2c8c5713590ea0298855c30142f0f0642a95336",
       "updated": "2026-04-01T08:26:34.537523+00:00"
     },
@@ -1012,6 +2651,32 @@
       "source_references": [
         "docs/setup.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "976e6dd1d79582591a45c4cc1e6bc6c7d15f102e42afa7207f3129e035e2b024",
       "updated": "2026-04-01T08:26:34.539619+00:00"
     },
@@ -1025,6 +2690,32 @@
       "source_references": [
         "docs/STREAMING_WEBSITE.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "d6848af7a32f7d62ca0294e94321ab2d514a48e77249b7e5c6a445896ae07168",
       "updated": "2026-04-01T08:26:34.539619+00:00"
     },
@@ -1038,6 +2729,32 @@
       "source_references": [
         "docs/TEST_QUALITY.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "406350cb680103b888a78e91813fdb77274a14de6cbdcacaf3bd3ee0e156ef5a",
       "updated": "2026-04-01T08:26:34.539619+00:00"
     },
@@ -1051,6 +2768,32 @@
       "source_references": [
         "docs/tools.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "e01d7005225309fb8f08bc8e63f16b48b4ccbfee49b3d2a604d167296a46c3a7",
       "updated": "2026-04-01T08:26:34.539619+00:00"
     },
@@ -1064,6 +2807,32 @@
       "source_references": [
         "docs/transaction-manager-architecture.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "e920299034f4f6dac90637380b8da912872d086140fadfb4100b8cb01077c555",
       "updated": "2026-04-01T08:26:34.539619+00:00"
     },
@@ -1077,6 +2846,32 @@
       "source_references": [
         "docs/V4_RELEASE_STATUS.md"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "0a8fe9ba04bb8d74b29a3cf8bbe633554e096dec20bddeb2d4e36a400818039d",
       "updated": "2026-04-01T08:26:34.539619+00:00"
     },
@@ -1090,6 +2885,32 @@
       "source_references": [
         "docs/work"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "00627ed2bb4633f2502982cdc3197d4f5a7e9172eb8415c69513ed9ec332b0ae",
       "updated": "2026-04-01T08:26:34.539619+00:00"
     },
@@ -1103,6 +2924,32 @@
       "source_references": [
         "docs/standards"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "d9c6dc70d460b240140d9ceaea595cb94783968d26ab656872a1e5238de19ad2",
       "updated": "2026-04-01T08:26:34.547385+00:00"
     },
@@ -1116,6 +2963,32 @@
       "source_references": [
         "docs/research"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "707b15bc829daaee936e5e8d93a99cec09b79e5a4d92ca90db2b8eecdcd849fd",
       "updated": "2026-04-01T08:26:34.549394+00:00"
     },
@@ -1129,6 +3002,32 @@
       "source_references": [
         "docs/prompt"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "1a286439cf9c97306665003511124fd291e41f53ff9032d48cc92884cc5c1952",
       "updated": "2026-04-01T08:26:34.549394+00:00"
     },
@@ -1142,6 +3041,32 @@
       "source_references": [
         "docs/performance"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "4dbb744b389462fa671c5ddda814f9e3ad713e89e85d7397061af61e3aa45d78",
       "updated": "2026-04-01T08:26:34.551402+00:00"
     },
@@ -1155,6 +3080,32 @@
       "source_references": [
         "docs/Key"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "62d173b1693f7e29f9792e9f63adba88a7a371cc11e5425e99374becbaef4c01",
       "updated": "2026-04-01T08:26:34.551402+00:00"
     },
@@ -1168,6 +3119,32 @@
       "source_references": [
         "docs/installation"
       ],
+      "template_completeness": 0.4167,
+      "missing_required_sections": [
+        "why this matters now",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "missing_critical_sections": [
+        "success metrics",
+        "validation commands",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.2222,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 3,
+        "confidence_score": 2,
+        "effort_score": 4,
+        "risk_score": 3,
+        "alignment_score": 1,
+        "priority_score": -1
+      },
+      "merged_from": [],
       "sha256": "7a6dcb6787999e0d065e602aebf038ae5b9db5a7c55d3b059a20502e68c51fe1",
       "updated": "2026-04-01T08:26:34.551402+00:00"
     },
@@ -1179,6 +3156,39 @@
       "source_path": "docs/project/ideas/idea000079-distributed-llm-memory.md",
       "planned_project_ids": [],
       "source_references": [],
+      "template_completeness": 0.0,
+      "missing_required_sections": [
+        "idea summary",
+        "problem statement",
+        "why this matters now",
+        "detailed proposal",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "risks and mitigations",
+        "failure handling and rollback",
+        "source references"
+      ],
+      "missing_critical_sections": [
+        "problem statement",
+        "success metrics",
+        "validation commands",
+        "risks and mitigations",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.0,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 2,
+        "confidence_score": 1,
+        "effort_score": 4,
+        "risk_score": 4,
+        "alignment_score": 1,
+        "priority_score": -4
+      },
+      "merged_from": [],
       "sha256": "08fd8acc74c22563b5dd4581651befdcdd977a2481a2a6a074fd2f5b177d4bfa",
       "updated": "2026-04-01T08:26:34.551402+00:00"
     },
@@ -1190,6 +3200,39 @@
       "source_path": "docs/project/ideas/archive/idea000080-smart-prompt-routing-system.md",
       "planned_project_ids": [],
       "source_references": [],
+      "template_completeness": 0.0,
+      "missing_required_sections": [
+        "idea summary",
+        "problem statement",
+        "why this matters now",
+        "detailed proposal",
+        "scope suggestion",
+        "requirements",
+        "dependencies and constraints",
+        "success metrics",
+        "validation commands",
+        "risks and mitigations",
+        "failure handling and rollback",
+        "source references"
+      ],
+      "missing_critical_sections": [
+        "problem statement",
+        "success metrics",
+        "validation commands",
+        "risks and mitigations",
+        "failure handling and rollback"
+      ],
+      "intake_answer_coverage": 0.0,
+      "readiness_status": "blocked",
+      "scoring": {
+        "impact_score": 2,
+        "confidence_score": 1,
+        "effort_score": 4,
+        "risk_score": 4,
+        "alignment_score": 1,
+        "priority_score": -4
+      },
+      "merged_from": [],
       "sha256": "25b519755726e38724295f40a2ce96776867d5c96f02c8a9c95b82eae4a5b589",
       "updated": "2026-04-01T08:26:34.434465+00:00"
     }
