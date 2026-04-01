@@ -91,3 +91,66 @@ def test_batch_window_controls_file_selection(tmp_path: Path) -> None:
     assert payload["available_file_count"] == 5
     assert payload["processed_file_count"] == 2
     assert payload["idea_count"] == 4
+
+
+def test_write_jsonl_split_creates_one_file_per_source(tmp_path: Path) -> None:
+    module = _load_module()
+    legacy = tmp_path / "legacy"
+    (legacy / "src" / "sub").mkdir(parents=True)
+
+    (legacy / "src" / "alpha.py").write_text("def a(): pass\n", encoding="utf-8")
+    (legacy / "src" / "sub" / "beta.py").write_text("def b(): pass\n", encoding="utf-8")
+
+    payload = module.generate_ideas(
+        legacy_root=legacy,
+        max_ideas_per_file=2,
+        offset=0,
+        limit=None,
+        max_file_bytes=1024,
+    )
+
+    output_dir = tmp_path / "split_out"
+    written = module._write_jsonl_split(output_dir, payload)
+
+    # One output file per unique source_file
+    assert len(written) == 2
+
+    alpha_out = output_dir / "src" / "alpha.jsonl"
+    beta_out = output_dir / "src" / "sub" / "beta.jsonl"
+    assert alpha_out.exists()
+    assert beta_out.exists()
+
+    # Each file only contains ideas for its source
+    import json as _json
+    alpha_ideas = [_json.loads(line) for line in alpha_out.read_text(encoding="utf-8").splitlines()]
+    beta_ideas = [_json.loads(line) for line in beta_out.read_text(encoding="utf-8").splitlines()]
+    assert all(item["source_file"] == "src/alpha.py" for item in alpha_ideas)
+    assert all(item["source_file"] == "src/sub/beta.py" for item in beta_ideas)
+
+
+def test_write_manifest_includes_split_metadata(tmp_path: Path) -> None:
+    module = _load_module()
+    legacy = tmp_path / "legacy"
+    (legacy / "src").mkdir(parents=True)
+    (legacy / "src" / "foo.py").write_text("def foo(): pass\n", encoding="utf-8")
+
+    payload = module.generate_ideas(
+        legacy_root=legacy,
+        max_ideas_per_file=1,
+        offset=0,
+        limit=None,
+        max_file_bytes=1024,
+    )
+
+    import json as _json
+    output_dir = tmp_path / "split_out"
+    written = module._write_jsonl_split(output_dir, payload)
+
+    manifest_path = tmp_path / "manifest.json"
+    module._write_manifest(manifest_path, payload, split_files=written)
+
+    manifest = _json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert "split_output_file_count" in manifest
+    assert manifest["split_output_file_count"] == 1
+    assert "split_output_files" in manifest
+    assert len(manifest["split_output_files"]) == 1
