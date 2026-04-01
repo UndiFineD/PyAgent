@@ -340,14 +340,37 @@ def generate_ideas(
 
 
 def _write_jsonl(output_path: Path, payload: dict[str, Any]) -> None:
-    """Write generated ideas as jsonl records."""
+    """Write generated ideas as a single jsonl file."""
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("w", encoding="utf-8") as handle:
         for item in payload["ideas"]:
             handle.write(json.dumps(item, ensure_ascii=False) + "\n")
 
 
-def _write_manifest(manifest_path: Path, payload: dict[str, Any]) -> None:
+def _write_jsonl_split(output_dir: Path, payload: dict[str, Any]) -> list[str]:
+    """Write one jsonl file per unique source_file, mirroring the source tree under output_dir.
+
+    Returns a sorted list of written output paths (relative to output_dir).
+    """
+    # Group ideas by source_file
+    groups: dict[str, list[dict[str, Any]]] = {}
+    for item in payload["ideas"]:
+        groups.setdefault(item["source_file"], []).append(item)
+
+    written: list[str] = []
+    for source_file, ideas in sorted(groups.items()):
+        # Mirror directory structure: src/core/base/foo.py -> output_dir/src/core/base/foo.jsonl
+        dest = output_dir / (Path(source_file).with_suffix(".jsonl"))
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        with dest.open("w", encoding="utf-8") as handle:
+            for item in ideas:
+                handle.write(json.dumps(item, ensure_ascii=False) + "\n")
+        written.append(dest.as_posix())
+
+    return written
+
+
+def _write_manifest(manifest_path: Path, payload: dict[str, Any], split_files: list[str] | None = None) -> None:
     """Write run manifest for resumable batch processing."""
     manifest = {
         key: payload[key]
@@ -362,6 +385,9 @@ def _write_manifest(manifest_path: Path, payload: dict[str, Any]) -> None:
             "idea_count",
         ]
     }
+    if split_files is not None:
+        manifest["split_output_file_count"] = len(split_files)
+        manifest["split_output_files"] = split_files
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
@@ -379,7 +405,16 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--output",
         default="docs/project/legacy_ideas_3_7_0.jsonl",
-        help="Output jsonl path in current repo",
+        help="Output jsonl path for single-file mode (ignored when --output-dir is set)",
+    )
+    parser.add_argument(
+        "--output-dir",
+        default=None,
+        help=(
+            "Directory for split-by-source-file mode. "
+            "One jsonl is written per source file, mirroring the source tree. "
+            "When set, --output is ignored."
+        ),
     )
     parser.add_argument(
         "--manifest",
@@ -428,18 +463,31 @@ def main() -> int:
         max_file_bytes=args.max_file_bytes,
     )
 
-    output_path = Path(args.output).resolve()
     manifest_path = Path(args.manifest).resolve()
-    _write_jsonl(output_path, payload)
-    _write_manifest(manifest_path, payload)
 
-    print(
-        "LEGACY_IDEA_GENERATOR_OK "
-        f"files={payload['processed_file_count']} "
-        f"ideas={payload['idea_count']} "
-        f"output={output_path} "
-        f"manifest={manifest_path}"
-    )
+    if args.output_dir is not None:
+        output_dir = Path(args.output_dir).resolve()
+        split_files = _write_jsonl_split(output_dir, payload)
+        _write_manifest(manifest_path, payload, split_files=split_files)
+        print(
+            "LEGACY_IDEA_GENERATOR_OK "
+            f"files={payload['processed_file_count']} "
+            f"ideas={payload['idea_count']} "
+            f"split_files={len(split_files)} "
+            f"output_dir={output_dir} "
+            f"manifest={manifest_path}"
+        )
+    else:
+        output_path = Path(args.output).resolve()
+        _write_jsonl(output_path, payload)
+        _write_manifest(manifest_path, payload)
+        print(
+            "LEGACY_IDEA_GENERATOR_OK "
+            f"files={payload['processed_file_count']} "
+            f"ideas={payload['idea_count']} "
+            f"output={output_path} "
+            f"manifest={manifest_path}"
+        )
     return 0
 
 
