@@ -1,5 +1,23 @@
 [
   {
+    "id": "prj0000113",
+    "name": "legacy-idea-batch-generator",
+    "lane": "Released",
+    "summary": "Generate, propose merges, and promote legacy ideas from PyAgent.3.7.0 codebase. Add shared parallel agent register and CLI for atomic work coordination.",
+    "branch": "merged",
+    "pr": "#268",
+    "priority": "P2",
+    "budget_tier": "M",
+    "tags": [
+      "ideas",
+      "legacy-generation",
+      "parallel-coordination",
+      "workflow-tooling"
+    ],
+    "created": "2026-04-01",
+    "updated": "2026-04-01"
+  },
+  {
     "id": "prj0000111",
     "name": "ci-detached-head-governance-gate",
     "lane": "Released",
