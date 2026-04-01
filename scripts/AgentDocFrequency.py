@@ -53,7 +53,7 @@ def _git_log_count(path: Path, repo_root: Path) -> int:
             text=True,
             timeout=10,
         )
-        lines = [l for l in result.stdout.splitlines() if l.strip()]
+        lines = [entry for entry in result.stdout.splitlines() if entry.strip()]
         return len(lines)
     except Exception:
         return 0
@@ -91,6 +91,7 @@ def analyse_docs(
 
     Returns:
         List of :class:`DocStats`, sorted by staleness (highest first).
+
     """
     if repo_root is None:
         repo_root = docs_dir.parent

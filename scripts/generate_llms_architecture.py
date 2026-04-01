@@ -80,9 +80,7 @@ def _render_file(path: pathlib.Path, repo_root: pathlib.Path) -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(
-        description="Generate llms-architecture.txt from docs/architecture/"
-    )
+    parser = argparse.ArgumentParser(description="Generate llms-architecture.txt from docs/architecture/")
     parser.add_argument(
         "--output",
         type=pathlib.Path,

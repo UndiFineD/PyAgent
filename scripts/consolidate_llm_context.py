@@ -36,6 +36,7 @@ from typing import Optional
 @dataclasses.dataclass(frozen=True)
 class ConsolidationConfig:
     """Configuration for the consolidation process, derived from CLI arguments."""
+
     repo_root: Path
     output_dir: Path
     apply: bool
@@ -48,6 +49,7 @@ class ConsolidationReport:
     """Report summarizing the consolidation process,
     including discovered sources, outputs, and any errors.
     """
+
     repo_root: Path
     output_dir: Path
     apply: bool
@@ -225,8 +227,9 @@ def _find_sources(repo_root: Path) -> dict[str, list[Path]]:
 
 
 def _build_llms_index(source_counts: dict[str, int]) -> str:
-    """Build the content for llms.txt, which serves as an index 
-    to the consolidated LLM context files."""
+    """Build the content for llms.txt, which serves as an index
+    to the consolidated LLM context files.
+    """
     lines: list[str] = []
     lines.append("# llms.txt")
     lines.append("")
@@ -275,8 +278,9 @@ def _build_merge_output(title: str, sources: list[Path], repo_root: Path) -> str
 
 
 def _make_docstring_block(markdown: str) -> str:
-    """Format markdown content as a block to be inserted 
-    into a Python module docstring."""
+    """Format markdown content as a block to be inserted
+    into a Python module docstring.
+    """
     marker_start = "LLM CONTEXT (auto-generated) START"
     marker_end = "LLM CONTEXT (auto-generated) END"
     # Normalize line endings and strip leading/trailing whitespace.

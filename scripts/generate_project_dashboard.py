@@ -33,7 +33,6 @@ OUT_ROOT.mkdir(parents=True, exist_ok=True)
 
 def _normalize_topic_key(topic: str) -> str:
     """Normalize a topic string into a stable file-system friendly key."""
-
     key = re.sub(r"\s+", "-", topic.strip())
     key = re.sub(r"[^a-zA-Z0-9_-]", "", key)
     return key
@@ -41,7 +40,6 @@ def _normalize_topic_key(topic: str) -> str:
 
 def _load_registry_topics() -> dict[str, str]:
     """Load optional project topics from docs/project/kanban.json keyed by project id."""
-
     if not PROJECTS_REGISTRY.exists():
         return {}
 
@@ -70,21 +68,20 @@ def _load_registry_topics() -> dict[str, str]:
 
 def _extract_task_progress(plan_path: Path, project_dir: Path) -> tuple[int, int, List[str]]:
     """Extract done/total checkbox progress from plan.md or fallback project markdown."""
-
     if plan_path.exists():
         text = plan_path.read_text(encoding="utf-8")
-        lines = [l.rstrip() for l in text.splitlines() if re.match(r"^[\s\-*]+\[[ xX]\]", l)]
+        lines = [entry.rstrip() for entry in text.splitlines() if re.match(r"^[\s\-*]+\[[ xX]\]", entry)]
         total = len(lines)
-        done = len([l for l in lines if re.match(r"^[\s\-*]+\[\s*[xX]\s*\]", l)])
+        done = len([entry for entry in lines if re.match(r"^[\s\-*]+\[\s*[xX]\s*\]", entry)])
         return done, total, lines
 
     # Legacy folders may have no plan.md. Re-use existing *.project.md progress if available.
     for project_doc in sorted(project_dir.glob("*.project.md")):
         text = project_doc.read_text(encoding="utf-8")
-        lines = [l.rstrip() for l in text.splitlines() if re.match(r"^[\s\-*]+\[[ xX]\]", l)]
+        lines = [entry.rstrip() for entry in text.splitlines() if re.match(r"^[\s\-*]+\[[ xX]\]", entry)]
         if lines:
             total = len(lines)
-            done = len([l for l in lines if re.match(r"^[\s\-*]+\[\s*[xX]\s*\]", l)])
+            done = len([entry for entry in lines if re.match(r"^[\s\-*]+\[\s*[xX]\s*\]", entry)])
             return done, total, lines
 
         match = re.search(r"(?P<done>\d+)\s+of\s+(?P<total>\d+)\s+tasks\s+completed", text, re.IGNORECASE)
@@ -98,7 +95,6 @@ def _extract_task_progress(plan_path: Path, project_dir: Path) -> tuple[int, int
 
 def _code_search_candidates(topic_key: str) -> Set[str]:
     """Generate a set of search tokens used to detect implementation files."""
-
     snake = topic_key.replace("-", "_")
     parts = re.split(r"[-_]+", topic_key)
 
@@ -115,7 +111,6 @@ def _code_search_candidates(topic_key: str) -> Set[str]:
 
 def _find_code_files(topic_key: str) -> List[Path]:
     """Return a list of repository paths that appear to implement a given topic."""
-
     candidates = _code_search_candidates(topic_key)
 
     # Common locations where work is often found.
@@ -186,13 +181,13 @@ for prj_dir in project_dirs:
         "",
         "## Links",
         "",
-        f"- Plan: `plan.md`",
+        "- Plan: `plan.md`",
     ]
 
     if design_exists:
-        out_lines.append(f"- Design: `brainstorm.md`")
+        out_lines.append("- Design: `brainstorm.md`")
     else:
-        out_lines.append(f"- Design: **MISSING** (`brainstorm.md`)")
+        out_lines.append("- Design: **MISSING** (`brainstorm.md`)")
 
     out_lines += ["", "## Tasks", ""]
     if total > 0:
@@ -247,7 +242,6 @@ lines = [
 
 def _color_yes_no(value: str) -> str:
     """Return an ANSI-colored yes/no string."""
-
     # Use green for "Yes" and red for "No" (works in most modern terminals).
     if value.lower() == "yes":
         return f"\x1b[32m{value}\x1b[0m"

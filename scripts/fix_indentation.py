@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""fix_indentation.py  -  Smart, multi-pass indentation fixer for PyAgent src/
+"""fix_indentation.py - Smart, multi-pass indentation fixer for PyAgent src.
 
 USAGE
     python scripts/fix_indentation.py [--path PATH] [--dry-run] [--verbose] [--max-passes N]
@@ -316,7 +316,11 @@ def pass_fix_orphan_imports(
         # If there is no enclosing block opener preceding this line and there
         # are no prior indented lines in the file, this is almost certainly a
         # module-level import and should not be shifted.
-        has_prior_indented = any(_indent(l) > 0 for l in result[:i] if not _is_blank_or_comment(l))
+        has_prior_indented = any(
+            _indent(existing_line) > 0
+            for existing_line in result[:i]
+            if not _is_blank_or_comment(existing_line)
+        )
         if block_start == -1 and not has_prior_indented:
             if verbose:
                 print(f"        line {i+1:5d}: SKIP (no enclosing block and no prior indents)")
@@ -430,16 +434,16 @@ def pass_fix_misindented_blocks(
         run_start = i
         run_end = i
         while run_end < len(result):
-            l = result[run_end]
-            if _is_blank_or_comment(l):
+            run_line = result[run_end]
+            if _is_blank_or_comment(run_line):
                 run_end += 1
                 continue
-            if _indent(l) > MIN_INDENT_STEP:
+            if _indent(run_line) > MIN_INDENT_STEP:
                 break
             # Stop the run if we hit a class or top-level def WITHOUT self
-            s = l.strip()
+            s = run_line.strip()
             if (s.startswith("class ") or
-                    (_DEF_RE.match(s) and "self" not in l and "cls" not in l)):
+                    (_DEF_RE.match(s) and "self" not in run_line and "cls" not in run_line)):
                 break
             run_end += 1
 
@@ -456,7 +460,11 @@ def pass_fix_misindented_blocks(
                 continue
 
         run_lines = result[run_start:run_end]
-        has_import = any(_is_import_or_simple_stmt(l.strip()) for l in run_lines if not _is_blank_or_comment(l))
+        has_import = any(
+            _is_import_or_simple_stmt(run_line.strip())
+            for run_line in run_lines
+            if not _is_blank_or_comment(run_line)
+        )
         # Apply a context or block-based indent lookup if there's no import.
         if not has_import:
             # Check if this block should be indented because it follows a try/except/def/etc.
@@ -499,11 +507,11 @@ def pass_fix_misindented_blocks(
 
         # Apply the same indent to every non-blank non-comment line in the run.
         for j in range(run_start, run_end):
-            l = result[j]
-            if _is_blank_or_comment(l):
+            run_line = result[j]
+            if _is_blank_or_comment(run_line):
                 continue
-            l_stripped = l.lstrip()
-            existing = _indent(l)
+            l_stripped = run_line.lstrip()
+            existing = _indent(run_line)
             delta = expected - current
             new_indent = max(0, existing + delta)
             if verbose:
@@ -608,14 +616,17 @@ def pass_fix_escaped_methods(
             print(f"                        -> body lines {i+1}-{block_end}")
 
         for j in range(i, block_end):
-            l = result[j]
-            if not l.strip():  # keep blank lines blank
+            block_line = result[j]
+            if not block_line.strip():  # keep blank lines blank
                 continue
-            existing_indent = _indent(l)
+            existing_indent = _indent(block_line)
             new_indent = existing_indent + delta
             if verbose:
-                print(f"          line {j+1:5d}: indent {existing_indent}->{new_indent}  {l.lstrip()[:55].rstrip()!a}")
-            result[j] = " " * new_indent + l.lstrip()
+                print(
+                    f"          line {j+1:5d}: indent {existing_indent}->{new_indent}  "
+                    f"{block_line.lstrip()[:55].rstrip()!a}"
+                )
+            result[j] = " " * new_indent + block_line.lstrip()
             changes += 1
 
         i = block_end
@@ -677,8 +688,7 @@ def repair_file(
     verbose: bool = False,
     focus_lines: set[int] | None = None,
 ) -> tuple[int, bool, list[str]]:
-    """Repair a single file.  Returns (total_changes, now_valid, new_lines).
-    """
+    """Repair a single file. Returns (total_changes, now_valid, new_lines)."""
     try:
         original = path.read_text(encoding="utf-8", errors="replace")
     except OSError:
@@ -686,7 +696,7 @@ def repair_file(
 
     lines = original.splitlines(keepends=True)
     # Ensure every line ends with a newline for consistency.
-    lines = [l if l.endswith("\n") else l + "\n" for l in lines]
+    lines = [line_text if line_text.endswith("\n") else line_text + "\n" for line_text in lines]
 
     total_changes = 0
     pass_stats: list[tuple[int, int, int, int]] = []   # (pass_num, c1, c2, c3)

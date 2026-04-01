@@ -25,7 +25,6 @@ CHECKBOX_RE = re.compile(r"^[\s\-\*]+\[([ xX])\]")
 
 def _check_plan(path: Path) -> Tuple[int, int, List[str]]:
     """Return (total, done, missing_lines) for checkboxes in plan."""
-
     if not path.exists():
         return 0, 0, [f"MISSING: {path}"]
 
