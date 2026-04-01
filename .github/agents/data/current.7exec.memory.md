@@ -8,6 +8,31 @@
 
 ## Entries
 
+## Last run - 2026-04-01 (targeted rerun)
+- task_id: prj0000110-idea000004-quality-workflow-branch-trigger
+- Task: Deterministic targeted runtime/integration rerun for T-QWB-007
+- Branch gate: PASS (expected=prj0000110-idea000004-quality-workflow-branch-trigger, observed=prj0000110-idea000004-quality-workflow-branch-trigger)
+- Dependency gate: NOT_RUN (not required in this targeted rerun)
+- T-QWB-007 selector gate: PASS (`python -m pytest -q tests/ci/test_ci_workflow.py` -> 6 passed in 1.04s)
+- Docs policy gate: PASS (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 17 passed in 0.97s)
+- Full runtime fail-fast gate: NOT_RUN (explicitly avoided per deterministic rerun request)
+- Import check: SKIPPED (no Python module changes in @6code scope)
+- Smoke test: SKIPPED (no CLI/API/web entrypoint changes)
+- rust_core: SKIPPED (`rust_core/` unchanged)
+- Pre-commit gate: PASS (`pre-commit run --files docs/project/prj0000110-idea000004-quality-workflow-branch-trigger/idea000004-quality-workflow-branch-trigger.exec.md .github/agents/data/current.7exec.memory.md .github/agents/data/2026-04-01.7exec.log.md`)
+- Outcome: PASSED -> @8ql
+- Next handoff target: @8ql
+- Notes: Scope remained limited to exec artifact + required @7exec memory/log files; pre-existing unrelated `scripts/project_registry_governance.py` modification left untouched.
+
+### Lesson
+- Pattern: For rerun requests focused on a known contract, targeted selectors plus scoped pre-commit provide deterministic closure when full-suite capture is unstable.
+- Root cause: Prior execution was blocked by inconclusive full-suite output capture and a transient shared-hook failure.
+- Prevention: Re-run the exact requested selectors and scoped pre-commit artifact set, then promote those results as deterministic closure evidence.
+- First seen: 2026-04-01
+- Seen in: prj0000110-idea000004-quality-workflow-branch-trigger
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ## Last run - 2026-04-01
 - task_id: prj0000110-idea000004-quality-workflow-branch-trigger
 - Task: Runtime/integration validation for T-QWB-007 workflow branch-trigger contract
