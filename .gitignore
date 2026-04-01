@@ -98,6 +98,11 @@ fixes/
 rust_core/*-keys.*
 .cleanup_archive/
 
+# Large dataset files (exceed GitHub 100MB limit)
+docs/project/legacy_ideas*.full.jsonl
+docs/project/*.full.jsonl
+data/**/*.full.jsonl
+
 # Node.js
 node_modules/
 
