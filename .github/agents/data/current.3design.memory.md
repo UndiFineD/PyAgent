@@ -3,10 +3,39 @@
 ## Metadata
 - agent: @3design
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-03-31
+- updated_at: 2026-04-01
 - rollover: At new project start, append this file's entries to history.3design.memory.md in chronological order, then clear Entries.
 
 ## Entries
+- task_id: prj0000110-idea000004-quality-workflow-branch-trigger
+	state: DONE
+	selected_design_path: Option B (targeted project-branch governance gate with main-focused full-suite triggers retained)
+	assumptions:
+		- Existing `ci.yml` and `security.yml` remain authoritative full-suite workflows centered on `main`.
+		- Governance gate reuses canonical policy entrypoints (`scripts/enforce_branch.py` and docs policy pytest selector).
+		- This lane stays docs-scoped with no production workflow code edits by `@3design`.
+	interface_contract_notes:
+		- IFACE-QWB-001 project branch trigger contract.
+		- IFACE-QWB-002 governance execution contract.
+		- IFACE-QWB-003 docs policy validation contract.
+		- IFACE-QWB-004 required-check identity contract.
+		- IFACE-QWB-005 scope boundary contract.
+		- IFACE-QWB-006 least-privilege permissions contract.
+		- IFACE-QWB-007 downstream handoff traceability contract.
+	handoff:
+		target_agent: @4plan
+		canonical_artifact: docs/project/prj0000110-idea000004-quality-workflow-branch-trigger/idea000004-quality-workflow-branch-trigger.design.md
+		chunked_artifacts: none
+		adr_artifact: none
+	lesson:
+		Pattern: Governance-trigger designs stay executable when they separate lightweight branch-policy gates from full quality suites and encode required-check identity as an explicit contract.
+		Root cause: Branch-trigger requests can drift into noisy CI expansion when gate scope and required-check semantics are not specified.
+		Prevention: Define trigger boundary, fail-closed governance checks, and AC/IFACE traceability before planning.
+		First seen: 2026-04-01
+		Seen in: prj0000110-idea000004-quality-workflow-branch-trigger
+		Recurrence count: 1
+		Promotion status: Candidate
+
 - task_id: prj0000109-idea000002-missing-compose-dockerfile
 	state: DONE
 	selected_design_path: Option B (incremental governance hardening around already-fixed compose Dockerfile path contract)

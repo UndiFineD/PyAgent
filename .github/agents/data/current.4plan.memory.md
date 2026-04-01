@@ -8,6 +8,37 @@
 
 ## Entries
 
+## prj0000110 - idea000004-quality-workflow-branch-trigger
+
+| Field | Value |
+|---|---|
+| task_id | prj0000110-idea000004-quality-workflow-branch-trigger |
+| owner_agent | @4plan |
+| source | @3design |
+| created_at | 2026-04-01 |
+| updated_at | 2026-04-01 |
+| status | DONE |
+| lifecycle | OPEN -> IN_PROGRESS -> DONE |
+| chunk_boundaries | Two chunks: Chunk A contract-first trigger and governance wiring (T-QWB-001..T-QWB-004), Chunk B permissions/docs/closure (T-QWB-005..T-QWB-008) |
+| acceptance_criteria_scope | AC-QWB-001..AC-QWB-006 mapped to owner-sequenced tasks with explicit validation commands |
+| dependency_order | @5test red -> @6code green -> @7exec integration -> @8ql quality/security -> @9git handoff |
+| handoff_target | @5test |
+| artifact_paths | docs/project/prj0000110-idea000004-quality-workflow-branch-trigger/idea000004-quality-workflow-branch-trigger.plan.md |
+| branch | prj0000110-idea000004-quality-workflow-branch-trigger (validated PASS before artifact writes) |
+| validation_evidence | python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 17 passed in 2.04s |
+
+### Lesson Entry
+
+| Field | Value |
+|---|---|
+| Pattern | Planning quality remains stable when each task row includes owner, concrete file list, AC linkage, and deterministic validation command. |
+| Root cause | Placeholder planning artifacts leave downstream ambiguity between @5test and @6code responsibilities and acceptance coverage. |
+| Prevention | Keep mandatory task schema and AC/interface traceability table in every @4plan artifact update. |
+| First seen | 2026-03-30 |
+| Seen in | prj0000107-idea000015-specialized-agent-library; prj0000108-idea000019-crdt-python-ffi-bindings; prj0000109-idea000002-missing-compose-dockerfile; prj0000110-idea000004-quality-workflow-branch-trigger |
+| Recurrence count | 4 |
+| Promotion status | PROMOTED_TO_HARD_RULE |
+
 ## prj0000109 - idea000002-missing-compose-dockerfile
 
 | Field | Value |

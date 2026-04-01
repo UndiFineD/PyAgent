@@ -157,3 +157,28 @@
 - Recurrence count: 5
 - Promotion status: HARD
 
+## 2026-04-01 - prj0000110-idea000004-quality-workflow-branch-trigger
+- task_id: prj0000110-idea000004-quality-workflow-branch-trigger
+- status: DONE
+- branch_expected: prj0000110-idea000004-quality-workflow-branch-trigger
+- branch_observed: prj0000110-idea000004-quality-workflow-branch-trigger
+- branch_validation: PASS
+- scope_validation: PASS_WITH_EXCLUSION
+- notes:
+	- Active working tree contains unrelated pre-existing modification in `scripts/project_registry_governance.py`; excluded from @9git scope and must remain unstaged.
+	- Mandatory dashboard refresh gate executed before staging; generated broad out-of-scope docs updates and they were left unstaged.
+	- Staged-file pre-commit gate passed on exact allowlist (PRECOMMIT_RC=0).
+	- Docs policy validation passed: `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `17 passed`.
+	- @9git commit pushed: `8ea6cfff85e448b23c253fc194ec71009cb51579`.
+	- PR created targeting `main`: https://github.com/UndiFineD/PyAgent/pull/263.
+	- gh auth override issue recurred and was resolved by removing invalid `GITHUB_TOKEN` env override before PR command.
+
+### Lesson
+- Pattern: Session-level `GITHUB_TOKEN` overrides can break gh auth and must be cleared to restore keyring-based authentication.
+- Root cause: Invalid environment token shadowed valid keyring credentials during PR automation.
+- Prevention: Always run `gh auth status`; if invalid token appears and env override exists, remove `GITHUB_TOKEN` and re-run auth check before PR operations.
+- First seen: 2026-03-31
+- Seen in: prj0000108-idea000019-crdt-python-ffi-bindings; prj0000110-idea000004-quality-workflow-branch-trigger
+- Recurrence count: 2
+- Promotion status: HARD
+

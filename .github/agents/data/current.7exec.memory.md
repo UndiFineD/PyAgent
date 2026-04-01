@@ -3,10 +3,62 @@
 ## Metadata
 - agent: @7exec
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-03-30
+- updated_at: 2026-04-01
 - rollover: At new project start, append this file's entries to history.7exec.memory.md in chronological order, then clear Entries.
 
 ## Entries
+
+## Last run - 2026-04-01 (targeted rerun)
+- task_id: prj0000110-idea000004-quality-workflow-branch-trigger
+- Task: Deterministic targeted runtime/integration rerun for T-QWB-007
+- Branch gate: PASS (expected=prj0000110-idea000004-quality-workflow-branch-trigger, observed=prj0000110-idea000004-quality-workflow-branch-trigger)
+- Dependency gate: NOT_RUN (not required in this targeted rerun)
+- T-QWB-007 selector gate: PASS (`python -m pytest -q tests/ci/test_ci_workflow.py` -> 6 passed in 1.04s)
+- Docs policy gate: PASS (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 17 passed in 0.97s)
+- Full runtime fail-fast gate: NOT_RUN (explicitly avoided per deterministic rerun request)
+- Import check: SKIPPED (no Python module changes in @6code scope)
+- Smoke test: SKIPPED (no CLI/API/web entrypoint changes)
+- rust_core: SKIPPED (`rust_core/` unchanged)
+- Pre-commit gate: PASS (`pre-commit run --files docs/project/prj0000110-idea000004-quality-workflow-branch-trigger/idea000004-quality-workflow-branch-trigger.exec.md .github/agents/data/current.7exec.memory.md .github/agents/data/2026-04-01.7exec.log.md`)
+- Outcome: PASSED -> @8ql
+- Next handoff target: @8ql
+- Notes: Scope remained limited to exec artifact + required @7exec memory/log files; pre-existing unrelated `scripts/project_registry_governance.py` modification left untouched.
+
+### Lesson
+- Pattern: For rerun requests focused on a known contract, targeted selectors plus scoped pre-commit provide deterministic closure when full-suite capture is unstable.
+- Root cause: Prior execution was blocked by inconclusive full-suite output capture and a transient shared-hook failure.
+- Prevention: Re-run the exact requested selectors and scoped pre-commit artifact set, then promote those results as deterministic closure evidence.
+- First seen: 2026-04-01
+- Seen in: prj0000110-idea000004-quality-workflow-branch-trigger
+- Recurrence count: 1
+- Promotion status: Candidate
+
+## Last run - 2026-04-01
+- task_id: prj0000110-idea000004-quality-workflow-branch-trigger
+- Task: Runtime/integration validation for T-QWB-007 workflow branch-trigger contract
+- Branch gate: PASS (expected=prj0000110-idea000004-quality-workflow-branch-trigger, observed=prj0000110-idea000004-quality-workflow-branch-trigger)
+- Dependency gate: PASS (`python -m pip check` -> no broken requirements), classification: NON_BLOCKING
+- T-QWB-007 selector gate: PASS (`python -m pytest -q tests/ci/test_ci_workflow.py` -> 6 passed in 1.23s)
+- Full runtime fail-fast gate: INCONCLUSIVE (`python -m pytest src/ tests/ -x --tb=short -q` produced empty output in two deterministic attempts)
+- Conclusive follow-up gates: NOT_RUN (blocked by inconclusive fail-fast outcome per @7exec rule)
+- Import check: SKIPPED (no Python module changes in @6code scope; changed module is `.github/workflows/ci.yml`)
+- Smoke test: SKIPPED (no CLI/API/web entrypoint changes)
+- rust_core: SKIPPED (`rust_core/` unchanged)
+- Docs policy gate: PASS (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 17 passed)
+- Pre-commit gate: FAIL (`pre-commit run --files docs/project/prj0000110-idea000004-quality-workflow-branch-trigger/idea000004-quality-workflow-branch-trigger.exec.md .github/agents/data/current.7exec.memory.md .github/agents/data/2026-04-01.7exec.log.md`)
+- Pre-commit failure detail: shared hook `run-precommit-checks` reports formatter drift in `tests/docs/test_agent_workflow_policy_docs.py` outside this task scope
+- Outcome: BLOCKED -> @6code/@0master
+- Next handoff target: @6code (runtime evidence inconclusive) and @0master (workflow blocker visibility)
+- Notes: Scope honored to exec artifact + required @7exec memory/log files; unrelated `scripts/project_registry_governance.py` modification left untouched.
+
+### Lesson
+- Pattern: Full-suite runtime commands can return empty terminal output in this environment, yielding inconclusive evidence even when deterministic command syntax is correct.
+- Root cause: `python -m pytest src/ tests/ -x --tb=short -q` produced no pass/fail stream output twice in tool capture.
+- Prevention: When full-suite output capture is empty, treat as BLOCKED after two attempts and escalate with explicit evidence rather than assuming pass/fail.
+- First seen: 2026-04-01
+- Seen in: prj0000110-idea000004-quality-workflow-branch-trigger
+- Recurrence count: 1
+- Promotion status: Candidate
 
 ## Last run - 2026-03-31
 - task_id: prj0000109-idea000002-missing-compose-dockerfile

@@ -18,4 +18,9 @@ _No checkbox tasks found in the plan file._
 ## Code detection
 
 - Code detected in:
+  - `tests\deploy\test_compose_context_contract.py`
   - `tests\deploy\test_compose_dockerfile_paths.py`
+  - `tests\deploy\test_compose_dockerfile_regression_matrix.py`
+  - `tests\deploy\test_compose_file_selection.py`
+  - `tests\deploy\test_compose_non_goal_guardrails.py`
+  - `tests\deploy\test_compose_scope_boundary_markers.py`

@@ -219,6 +219,36 @@
 - Outcome:
 	- Lessons-learned fixes are now enforced as repository-wide automation and policy tests for all projects.
 
+## 2026-04-01 — prj0000110 allocation and initialization for next idea
+
+- Trigger: user requested to start the next project.
+- Selection outcome:
+	- Candidate scan selected `idea000004-quality-workflow-branch-trigger` as the next unimplemented idea not represented in active project tags.
+	- Assigned project ID `prj0000110` from `data/nextproject.md` and expected branch `prj0000110-idea000004-quality-workflow-branch-trigger`.
+- Actions completed:
+	- Created and switched to dedicated branch `prj0000110-idea000004-quality-workflow-branch-trigger`.
+	- Delegated initialization to `@1project`, which created canonical project artifacts and synced `kanban.json`, `kanban.md`, `data/projects.json`, and `data/nextproject.md`.
+	- Published initialized branch to origin.
+- Validation evidence (from `@1project`):
+	- `python scripts/project_registry_governance.py validate` -> `VALIDATION_OK` (`projects=110`, `kanban_rows=110`).
+	- `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `17 passed`.
+- Outcome:
+	- New project `prj0000110` is initialized in Discovery and ready for `@2think` handoff.
+
+## 2026-04-01 — prj0000110 CI workload reduction implementation
+
+- Trigger: user approved implementing CI reductions using pre-commit-aligned governance.
+- Actions completed:
+	- Updated `.github/workflows/ci.yml` to add a single-run `governance` job (`Governance Gate`) that runs pre-commit quality hooks and strict mypy once per workflow.
+	- Reduced shard duplication in `test` job by removing repeated strict mypy execution across all 10 shards.
+	- Added conditional Rust build skip for lightweight shards 1-3 to reduce unnecessary setup cost.
+	- Expanded `tests/ci/test_ci_workflow.py` with assertions that lock the new governance/test-shard responsibilities.
+- Validation evidence:
+	- `python -m pytest -q tests/ci/test_ci_workflow.py` -> `6 passed`.
+	- `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `17 passed`.
+- Outcome:
+	- CI now performs governance checks once and keeps shard jobs focused on tests, reducing duplicated work while preserving deterministic policy gates.
+
 ## 2026-03-31 — prj0000109 post-merge release registry synchronization
 
 - Trigger: user confirmed PR #262 merged.

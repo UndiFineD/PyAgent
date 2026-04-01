@@ -27,26 +27,32 @@ ID_RE = re.compile(r"^prj\d{7}$")
 
 
 def _repo_root() -> Path:
+    """Get the root path of the repository."""
     return Path(__file__).resolve().parents[1]
 
 
 def _projects_path(root: Path) -> Path:
+    """Get the path to the projects JSON file."""
     return root / "docs" / "project" / "kanban.json"
 
 
 def _kanban_path(root: Path) -> Path:
+    """Get the path to the kanban markdown file."""
     return root / "docs" / "project" / "kanban.md"
 
 
 def _ideas_path(root: Path) -> Path:
+    """Get the path to the ideas directory."""
     return root / "docs" / "project" / "ideas"
 
 
 def _ideas_archive_path(root: Path) -> Path:
+    """Get the path to the archive directory for ideas."""
     return _ideas_path(root) / "archive"
 
 
 def _idea_tags(project: dict[str, Any]) -> list[str]:
+    """Extract idea tags from a project dictionary."""
     tags = project.get("tags")
     if not isinstance(tags, list):
         return []
@@ -54,6 +60,7 @@ def _idea_tags(project: dict[str, Any]) -> list[str]:
 
 
 def _archive_idea_files_for_project(root: Path, project: dict[str, Any]) -> list[str]:
+    """Archive idea files for a specific project by moving them to the archive directory."""
     ideas_dir = _ideas_path(root)
     archive_dir = _ideas_archive_path(root)
     archive_dir.mkdir(parents=True, exist_ok=True)
@@ -70,6 +77,7 @@ def _archive_idea_files_for_project(root: Path, project: dict[str, Any]) -> list
 
 
 def sync_idea_archive() -> int:
+    """Sync the idea archive by moving released project ideas to the archive directory."""
     root = _repo_root()
     projects = _read_projects(_projects_path(root))
 
@@ -86,6 +94,7 @@ def sync_idea_archive() -> int:
 
 
 def _read_projects(path: Path) -> list[dict[str, Any]]:
+    """Read the project data from the specified path."""
     raw = json.loads(path.read_text(encoding="utf-8"))
     if isinstance(raw, list):
         return [item for item in raw if isinstance(item, dict)]
@@ -97,6 +106,7 @@ def _read_projects(path: Path) -> list[dict[str, Any]]:
 
 
 def _write_projects(path: Path, projects: list[dict[str, Any]]) -> None:
+    """Write the project data to the specified path, preserving existing structure if possible."""
     existing_raw: Any
     try:
         existing_raw = json.loads(path.read_text(encoding="utf-8"))
@@ -112,10 +122,12 @@ def _write_projects(path: Path, projects: list[dict[str, Any]]) -> None:
 
 
 def _table_cells(row: str) -> list[str]:
+    """Split a table row into individual cells."""
     return [c.strip() for c in row.strip().strip("|").split("|")]
 
 
 def _lane_heading_index(lines: list[str], lane: str) -> int:
+    """Find the index of the heading for a specific lane in the kanban file."""
     heading = f"## {lane}"
     for idx, line in enumerate(lines):
         if line.strip() == heading:
@@ -124,6 +136,7 @@ def _lane_heading_index(lines: list[str], lane: str) -> int:
 
 
 def _summary_heading_index(lines: list[str]) -> int:
+    """Find the index of the '## Summary Metrics' heading in the kanban file."""
     for idx, line in enumerate(lines):
         if line.strip() == "## Summary Metrics":
             return idx
@@ -131,6 +144,7 @@ def _summary_heading_index(lines: list[str]) -> int:
 
 
 def _lane_region(lines: list[str], lane: str) -> tuple[int, int]:
+    """Find the start and end indices for a specific lane in the kanban file."""
     start = _lane_heading_index(lines, lane)
     candidate_ends = [len(lines)]
     for other in LANES:
@@ -152,6 +166,7 @@ def _lane_region(lines: list[str], lane: str) -> tuple[int, int]:
 
 
 def _find_lane_table(lines: list[str], lane: str) -> tuple[int, int, int, int]:
+    """Find the table boundaries for a specific lane in the kanban file."""
     start, end = _lane_region(lines, lane)
     header_idx = -1
     sep_idx = -1
@@ -175,6 +190,7 @@ def _find_lane_table(lines: list[str], lane: str) -> tuple[int, int, int, int]:
 
 
 def _parse_lane_rows(lines: list[str], lane: str) -> dict[str, str]:
+    """Parse the rows of a specific lane in the kanban file."""
     _, _, row_start, row_end = _find_lane_table(lines, lane)
     rows: dict[str, str] = {}
     for i in range(row_start, row_end):
@@ -188,6 +204,7 @@ def _parse_lane_rows(lines: list[str], lane: str) -> dict[str, str]:
 
 
 def _all_kanban_rows(lines: list[str]) -> dict[str, str]:
+    """Retrieve all kanban rows from all lanes."""
     merged: dict[str, str] = {}
     for lane in LANES:
         merged.update(_parse_lane_rows(lines, lane))
@@ -195,6 +212,7 @@ def _all_kanban_rows(lines: list[str]) -> dict[str, str]:
 
 
 def _format_pr(pr_value: Any) -> str:
+    """Format a PR reference for display in the kanban. Supports formats like "123", "#123", "PR #123", or full markdown links, and normalizes them to markdown links if possible."""
     if pr_value is None:
         return "pending"
     text = str(pr_value).strip()
@@ -209,6 +227,7 @@ def _format_pr(pr_value: Any) -> str:
 
 
 def _lane_row_from_project(lines: list[str], lane: str, project: dict[str, Any]) -> str:
+    """Generate a kanban row for a project in the specified lane."""
     _, _, _, _ = _find_lane_table(lines, lane)
     # Find header columns
     start, end = _lane_region(lines, lane)
@@ -242,6 +261,7 @@ def _lane_row_from_project(lines: list[str], lane: str, project: dict[str, Any])
 
 
 def _remove_project_row_everywhere(lines: list[str], project_id: str) -> list[str]:
+    """Remove all rows corresponding to the specified project ID from the kanban file."""
     out: list[str] = []
     needle = f"| {project_id} "
     for line in lines:
@@ -252,12 +272,14 @@ def _remove_project_row_everywhere(lines: list[str], project_id: str) -> list[st
 
 
 def _insert_row_in_lane(lines: list[str], lane: str, row: str) -> list[str]:
+    """Insert a row into the specified lane in the kanban file."""
     _, _, row_start, row_end = _find_lane_table(lines, lane)
     insert_at = row_end
     return lines[:insert_at] + [row] + lines[insert_at:]
 
 
 def _refresh_summary_metrics(lines: list[str], projects: list[dict[str, Any]]) -> list[str]:
+    """Refresh the summary metrics in the kanban file based on the current project data."""
     counts = {lane: 0 for lane in LANES}
     for p in projects:
         lane = p.get("lane")
@@ -307,6 +329,7 @@ def _refresh_summary_metrics(lines: list[str], projects: list[dict[str, Any]]) -
 
 
 def validate() -> int:
+    """Validate the project registry and kanban consistency."""
     root = _repo_root()
     projects = _read_projects(_projects_path(root))
     kanban_lines = _kanban_path(root).read_text(encoding="utf-8").splitlines()
@@ -364,6 +387,7 @@ def validate() -> int:
 
 
 def set_lane(project_id: str, lane: str, branch: str | None, pr: str | None) -> int:
+    """Update a project's lane and synchronize both kanban.json and kanban.md."""
     if lane not in LANES:
         raise SystemExit(f"Invalid lane: {lane}. Expected one of: {', '.join(LANES)}")
 
@@ -405,6 +429,7 @@ def set_lane(project_id: str, lane: str, branch: str | None, pr: str | None) -> 
 
 
 def _build_parser() -> argparse.ArgumentParser:
+    """Build the argument parser for the project registry governance script."""
     parser = argparse.ArgumentParser(description="Govern docs/project/kanban.md and docs/project/kanban.json updates.")
     sub = parser.add_subparsers(dest="cmd", required=True)
 
@@ -421,6 +446,7 @@ def _build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
+    """Entry point for the project registry governance script."""
     parser = _build_parser()
     args = parser.parse_args()
 

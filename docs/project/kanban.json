@@ -156,6 +156,23 @@
   ],
   "projects": [
     {
+      "id": "prj0000110",
+      "name": "idea000004-quality-workflow-branch-trigger",
+      "lane": "Discovery",
+      "summary": "Initialize workflow artifacts for idea000004 quality-workflow-branch-trigger and hand off to @2think discovery.",
+      "branch": "prj0000110-idea000004-quality-workflow-branch-trigger",
+      "pr": null,
+      "priority": "P1",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000004",
+        "quality-workflow-branch-trigger"
+      ],
+      "created": "2026-04-01",
+      "updated": "2026-04-01"
+    },
+    {
       "id": "prj0000109",
       "name": "idea000002-missing-compose-dockerfile",
       "lane": "Released",

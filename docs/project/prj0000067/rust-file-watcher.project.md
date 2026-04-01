@@ -22,6 +22,8 @@ _No checkbox tasks found in the plan file._
   - `rust_core\src\watcher.rs`
   - `src\tools\FileWatcher.py`
   - `tests\deploy\test_compose_dockerfile_paths.py`
+  - `tests\deploy\test_compose_dockerfile_regression_matrix.py`
+  - `tests\deploy\test_compose_file_selection.py`
   - `tests\runtime\test_watch_file.py`
   - `tests\security\test_rust_p2p_deps.py`
   - `tests\structure\test_config_files.py`

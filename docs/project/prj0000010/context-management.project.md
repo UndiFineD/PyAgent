@@ -21,6 +21,7 @@ _No checkbox tasks found in the plan file._
   - `scripts\consolidate_llm_context.py`
   - `src\core\ContextTransactionManager.py`
   - `src\transactions\ContextTransactionManager.py`
+  - `tests\deploy\test_compose_context_contract.py`
   - `tests\integration\test_context_and_skills.py`
   - `tests\test_consolidate_llm_context_cleanup_report.py`
   - `tests\test_consolidate_llm_context_cli.py`

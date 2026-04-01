@@ -31,6 +31,7 @@ _No checkbox tasks found in the plan file._
   - `tests\backend\test_health_probes_security.py`
   - `tests\core\routing\test_fail_closed_fallback_contract.py`
   - `tests\core\routing\test_guardrail_precedence_contract.py`
+  - `tests\deploy\test_compose_non_goal_guardrails.py`
   - `tests\deps\test_pyproject_parse_failure.py`
   - `tests\security\test_ci_secret_guardrail_job.py`
   - `tests\security\test_containment_cleanup.py`

@@ -138,7 +138,7 @@ def test_project_registry_governance_supports_idea_archive_sync() -> None:
 
     assert "def sync_idea_archive()" in governance
     assert "sync-idea-archive" in governance
-    assert "if lane == \"Released\":" in governance
+    assert 'if lane == "Released":' in governance
     assert "_archive_idea_files_for_project" in governance
     assert "released project" in normalized and "unarchived idea file" in normalized
 

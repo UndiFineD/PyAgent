@@ -1,6 +1,6 @@
 # Project Dashboard
 
-Generated: 2026-03-31T05:26:00.970451+00:00Z
+Generated: 2026-04-01T01:14:17.396030+00:00Z
 
 | Project | Completion | Code | Missing Design |
 |--------|------------|------|----------------|
@@ -108,3 +108,5 @@ Generated: 2026-03-31T05:26:00.970451+00:00Z
 | prj0000106-idea000080-smart-prompt-routing-system | 0% (0/0) | Yes | No |
 | prj0000107-idea000015-specialized-agent-library | 0% (0/0) | Yes | No |
 | prj0000108-idea000019-crdt-python-ffi-bindings | 0% (0/0) | Yes | No |
+| prj0000109-idea000002-missing-compose-dockerfile | 0% (0/0) | Yes | No |
+| prj0000110-idea000004-quality-workflow-branch-trigger | 0% (0/0) | Yes | No |

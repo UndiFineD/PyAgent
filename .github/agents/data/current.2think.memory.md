@@ -3,10 +3,32 @@
 ## Metadata
 - agent: @2think
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-03-31
+- updated_at: 2026-04-01
 - rollover: At new project start, append this file's entries to history.2think.memory.md in chronological order, then clear Entries.
 
 ## Entries
+
+### 2026-04-01 - prj0000110-idea000004-quality-workflow-branch-trigger
+- task_id: prj0000110-idea000004-quality-workflow-branch-trigger
+- status: DONE
+- target_agent: @3design
+- canonical_artifact: docs/project/prj0000110-idea000004-quality-workflow-branch-trigger/idea000004-quality-workflow-branch-trigger.think.md
+- recommendation_summary: Select Option B (targeted branch-governance quality gate with narrow full-suite triggers) to satisfy branch-trigger quality intent while avoiding reintroduction of redundant workflow sprawl.
+- prior_art_refs:
+	- docs/project/prj0000075/prj0000075.think.md
+	- docs/project/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.think.md
+	- docs/project/prj0000026/prj0000026.git.md
+- branch_gate_evidence: `git branch --show-current` -> `prj0000110-idea000004-quality-workflow-branch-trigger`
+- rationale_for_handoff: Completed 3-option analysis with repository and approved external evidence, per-option SWOT, security risk analysis, risk-to-testability mapping, and acceptance-criteria-linked recommendation.
+
+#### Lesson
+- Pattern: When an idea references a removed legacy workflow, quality-trigger discovery should map intent to current active workflows and governance scripts instead of recreating deprecated topology.
+- Root cause: Backlog idea metadata drifted from repository state after CI simplification removed `quality.yml`.
+- Prevention: Add mandatory current-state workflow inventory step before optioning, with explicit prior-art references from workflow-retirement projects.
+- First seen: 2026-04-01
+- Seen in: prj0000110-idea000004-quality-workflow-branch-trigger
+- Recurrence count: 1
+- Promotion status: MONITOR
 
 ### 2026-03-31 - prj0000108-idea000019-crdt-python-ffi-bindings
 - task_id: prj0000108-idea000019-crdt-python-ffi-bindings

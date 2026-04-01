@@ -71,7 +71,12 @@ _No checkbox tasks found in the plan file._
   - `tests\core\routing\test_tie_break_resolver.py`
   - `tests\core\test_core.py`
   - `tests\core\universal\test_universal_agent_shell_specialization_flag.py`
+  - `tests\deploy\test_compose_context_contract.py`
   - `tests\deploy\test_compose_dockerfile_paths.py`
+  - `tests\deploy\test_compose_dockerfile_regression_matrix.py`
+  - `tests\deploy\test_compose_file_selection.py`
+  - `tests\deploy\test_compose_non_goal_guardrails.py`
+  - `tests\deploy\test_compose_scope_boundary_markers.py`
   - `tests\deps\test_dependency_parity_gate.py`
   - `tests\deps\test_generate_requirements_deterministic.py`
   - `tests\deps\test_install_compatibility_contract.py`
