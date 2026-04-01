@@ -68,7 +68,11 @@ def test_ci_workflow_pull_request_trigger_includes_project_branches() -> None:
     branches = pr_trigger.get("branches", [])
     assert isinstance(branches, list), "ci.yml pull_request.branches must be a list"
     assert "main" in branches, "ci.yml pull_request.branches must continue to include 'main'"
-    assert "prj*" in branches, "ci.yml pull_request.branches must include project-branch pattern 'prj*'"
+    assert "prj[0-9][0-9][0-9][0-9][0-9][0-9][0-9]-*" in branches, (
+        "ci.yml pull_request.branches must include explicit project-branch pattern "
+        "'prj[0-9][0-9][0-9][0-9][0-9][0-9][0-9]-*'"
+    )
+    assert "prj*" not in branches, "ci.yml pull_request.branches must not use ambiguous wildcard 'prj*'"
 
 
 def test_ci_workflow_required_check_identity_contract() -> None:
@@ -79,8 +83,8 @@ def test_ci_workflow_required_check_identity_contract() -> None:
     """
     data = _load_ci_workflow()
 
-    assert data.get("name") == "CI (minimal)", (
-        "ci.yml workflow name must remain 'CI (minimal)' for required-check stability"
+    assert data.get("name") == "CI / Branch Governance", (
+        "ci.yml workflow name must remain 'CI / Branch Governance' for required-check stability"
     )
 
     jobs = data.get("jobs", {})
