@@ -27,5 +27,7 @@ repos:
         name: Run pre-commit shared checks
         entry: python scripts/ci/run_checks.py --profile precommit
         language: python
+        additional_dependencies:
+          - packaging
         stages: [pre-commit]
         pass_filenames: true
