@@ -41,7 +41,7 @@ export default defineConfig(({ mode }) => {
         {
           name: 'vite-agent-docs',
           configureServer(server) {
-            const VALID = new Set(['0master','1project','2think','3design','4plan','5test','6code','7exec','8ql','9git']);
+            const VALID = new Set(['0master','10idea','1project','2think','3design','4plan','5test','6code','7exec','8ql','9git']);
             const agentsDir = path.resolve(__dirname, '../.github/agents');
 
             server.middlewares.use('/api/agent-doc', (req, res, next) => {

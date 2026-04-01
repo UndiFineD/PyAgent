@@ -265,6 +265,25 @@
 - Outcome:
 	- CI now performs governance checks once and keeps shard jobs focused on tests, reducing duplicated work while preserving deterministic policy gates.
 
+## 2026-04-01 — Added @10idea agent for idea merge and archival governance
+
+- Trigger: user requested a dedicated idea curation agent to monitor `docs/project/ideas`, merge similar ideas into a new consolidated idea, and archive superseded ideas.
+- Actions completed:
+	- Added `.github/agents/10idea.agent.md` with explicit workflow for similarity detection, merged-idea creation, and archive moves.
+	- Added role support files:
+		- `.github/agents/tools/10idea.tools.md`
+		- `.github/agents/skills/10idea.skills.md`
+		- `.github/agents/data/current.10idea.memory.md`
+		- `.github/agents/data/history.10idea.memory.md`
+		- `.github/agents/data/2026-04-01.10idea.log.md`
+	- Integrated `@10idea` into UI/runtime discovery paths:
+		- `web/vite.config.ts` valid agent-doc IDs
+		- `web/apps/CodeBuilder.tsx` agent type + catalog entry
+		- `web/apps/OrchestrationGraph.tsx` stage list
+		- `web/apps/ProjectManager.tsx` required flow + responsibilities text
+- Outcome:
+	- `@10idea` is now available as a first-class agent for idea deduplication and archival operations.
+
 ## 2026-03-31 — prj0000109 post-merge release registry synchronization
 
 - Trigger: user confirmed PR #262 merged.

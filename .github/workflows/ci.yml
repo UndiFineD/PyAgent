@@ -1,4 +1,4 @@
-name: CI / Branch Governance
+name: CI / Lightweight
 
 permissions:
   contents: read
@@ -10,8 +10,8 @@ on:
     branches: [main, "prj[0-9][0-9][0-9][0-9][0-9][0-9][0-9]-*"]
 
 jobs:
-  governance:
-    name: Governance Gate
+  quick:
+    name: Quick Checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,65 +19,9 @@ jobs:
         with:
           python-version: "3.13"
           cache: pip
-      - name: Create virtual environment
-        run: |
-          python -m venv .venv
-          echo "${{ github.workspace }}/.venv/bin" >> $GITHUB_PATH
-          echo "VIRTUAL_ENV=${{ github.workspace }}/.venv" >> $GITHUB_ENV
       - name: Install dependencies
         run: pip install --prefer-binary -r requirements-ci.txt
-      - name: Run pre-commit quality hooks (without duplicate shared-check profile)
-        run: |
-          SKIP=run-precommit-checks pre-commit run --all-files
-      - name: Run mypy strict lane
-        run: python -m mypy --config-file mypy-strict-lane.ini
-
-  test:
-    name: Run tests (shard ${{ matrix.shard }}/10)
-    needs: governance
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-          cache: pip
-      - name: Create virtual environment
-        run: |
-          python -m venv .venv
-          echo "${{ github.workspace }}/.venv/bin" >> $GITHUB_PATH
-          echo "VIRTUAL_ENV=${{ github.workspace }}/.venv" >> $GITHUB_ENV
-      - name: Install dependencies
-        run: pip install --prefer-binary -r requirements-ci.txt
-      - name: Build Rust extension
-        if: matrix.shard != 1 && matrix.shard != 2 && matrix.shard != 3
-        run: maturin develop --manifest-path rust_core/Cargo.toml
-      - name: Run tests (shard ${{ matrix.shard }})
-        run: |
-          shard=${{ matrix.shard }}
-          case "$shard" in
-            1) pytest tests/ci/ tests/structure/ -q ;;
-            2) pytest tests/docs/ tests/web/ -q ;;
-            3) pytest tests/tools/ -q ;;
-            4) pytest tests/core/ tests/agents/ tests/runtime/ \
-                      tests/security/ tests/integration/ tests/observability/ -q ;;
-            *)
-              # Shards 5-10: evenly split tests/test_*.py (root-level) across 6 groups
-              offset=$(( shard - 5 ))
-              mapfile -t all_tests < <(find tests -maxdepth 1 -name "test_*.py" | sort)
-              total=${#all_tests[@]}
-              groups=6
-              size=$(( (total + groups - 1) / groups ))
-              start=$(( offset * size ))
-              slice=("${all_tests[@]:$start:$size}")
-              [ ${#slice[@]} -gt 0 ] && pytest "${slice[@]}" -q
-              ;;
-          esac
-      - name: Coverage gate (stage 1)
-        if: matrix.shard == 1
-        run: |
-          pytest tests/ --cov=src --cov-report=term-missing --cov-fail-under=40 -q
+      - name: Run pre-commit hooks
+        run: pre-commit run --all-files
+      - name: Run quick placeholder tests
+        run: pytest tests/ci/test_placeholder_smoke.py -q

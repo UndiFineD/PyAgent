@@ -1,0 +1,1197 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-04-01T10:03:11.273616+00:00",
+  "source": {
+    "active_dir": "docs/project/ideas",
+    "archive_dir": "docs/project/ideas/archive"
+  },
+  "summary": {
+    "total": 80,
+    "active": 73,
+    "archived": 7,
+    "unique_idea_ids": 80,
+    "duplicate_idea_ids": []
+  },
+  "ideas": [
+    {
+      "idea_id": "idea000001",
+      "title": "idea-001 - private-key-in-repo",
+      "slug": "private-key-in-repo",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000001-private-key-in-repo.md",
+      "planned_project_ids": [
+        "prj0000090"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "470c6076d97befa04375200ef93713098a1f2c10a828dcde958f909463bf6ed4",
+      "updated": "2026-04-01T08:26:34.437424+00:00"
+    },
+    {
+      "idea_id": "idea000002",
+      "title": "idea-002 - missing-compose-dockerfile",
+      "slug": "missing-compose-dockerfile",
+      "status": "archived",
+      "source_path": "docs/project/ideas/archive/idea000002-missing-compose-dockerfile.md",
+      "planned_project_ids": [
+        "prj0000012"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "03e95dac1803b4c90ed32d46875e5a523151980783da68e690f7cfbc6b413351",
+      "updated": "2026-04-01T08:26:34.421146+00:00"
+    },
+    {
+      "idea_id": "idea000003",
+      "title": "idea-003 - mypy-strict-enforcement",
+      "slug": "mypy-strict-enforcement",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000003-mypy-strict-enforcement.md",
+      "planned_project_ids": [
+        "prj0000094"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "d4eae12c4486fe3e6aca761a5941344ff6373c46f53f92aecf5482102eeb7ad9",
+      "updated": "2026-04-01T08:26:34.441039+00:00"
+    },
+    {
+      "idea_id": "idea000004",
+      "title": "idea-004 - quality-workflow-branch-trigger",
+      "slug": "quality-workflow-branch-trigger",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000004-quality-workflow-branch-trigger.md",
+      "planned_project_ids": [
+        "prj0000087",
+        "prj0000025"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "fda5c6259a8f970dae3175e1deeab518564aad9dba0ba057a0afe9525d3de390",
+      "updated": "2026-04-01T08:26:34.441039+00:00"
+    },
+    {
+      "idea_id": "idea000005",
+      "title": "idea-005 - rust-ci-workflow",
+      "slug": "rust-ci-workflow",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000005-rust-ci-workflow.md",
+      "planned_project_ids": [
+        "prj0000087",
+        "prj0000070",
+        "prj0000067"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "659a96ba594bf449a02a126ebb18ad12c37ffcdb91b513e07ae673a2ecc73c98",
+      "updated": "2026-04-01T08:26:34.444893+00:00"
+    },
+    {
+      "idea_id": "idea000006",
+      "title": "idea-006 - codeql-ci-integration",
+      "slug": "codeql-ci-integration",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000006-codeql-ci-integration.md",
+      "planned_project_ids": [
+        "prj0000088",
+        "prj0000087",
+        "prj0000075"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "ea75ecd4b32af2c4183de6609d162cbdb810e939e5e2ae0b4c00cfb91887cdca",
+      "updated": "2026-04-01T08:26:34.445524+00:00"
+    },
+    {
+      "idea_id": "idea000007",
+      "title": "idea-007 - security-scanning-ci",
+      "slug": "security-scanning-ci",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000007-security-scanning-ci.md",
+      "planned_project_ids": [
+        "prj0000075",
+        "prj0000088",
+        "prj0000084"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "c32074226d53407a8f40cd12b879c1a186a4b01331e0c2d992ca51f966860224",
+      "updated": "2026-04-01T08:26:34.447531+00:00"
+    },
+    {
+      "idea_id": "idea000008",
+      "title": "idea-008 - coverage-minimum-enforcement",
+      "slug": "coverage-minimum-enforcement",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000008-coverage-minimum-enforcement.md",
+      "planned_project_ids": [
+        "prj0000096"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "e033d4ccb45c350e00671970ba07863125dd75fa15764bdf59a25b2a426382cf",
+      "updated": "2026-04-01T08:26:34.449538+00:00"
+    },
+    {
+      "idea_id": "idea000009",
+      "title": "idea-009 - requirements-ci-deduplication",
+      "slug": "requirements-ci-deduplication",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000009-requirements-ci-deduplication.md",
+      "planned_project_ids": [
+        "prj0000077",
+        "prj0000034"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "60017b860f75bbc13fb99acd7fd5783fd637552b1c08375ac5f0f8b34f38d0c4",
+      "updated": "2026-04-01T08:26:34.449538+00:00"
+    },
+    {
+      "idea_id": "idea000010",
+      "title": "idea-010 - docker-compose-consolidation",
+      "slug": "docker-compose-consolidation",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000010-docker-compose-consolidation.md",
+      "planned_project_ids": [
+        "prj0000012"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "1c1605399c698ea752c7dffea34f2f4e03af4c92f591536e19298cd01effa3ef",
+      "updated": "2026-04-01T08:26:34.452429+00:00"
+    },
+    {
+      "idea_id": "idea000011",
+      "title": "idea-011 - stub-module-elimination",
+      "slug": "stub-module-elimination",
+      "status": "archived",
+      "source_path": "docs/project/ideas/archive/idea000011-stub-module-elimination.md",
+      "planned_project_ids": [
+        "prj0000099"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "7750ee9a031a130f07793f2da836d0bceb4155f005e77af983e3dd85e886f7a5",
+      "updated": "2026-04-01T08:26:34.424878+00:00"
+    },
+    {
+      "idea_id": "idea000012",
+      "title": "idea-012 - dependabot-renovate",
+      "slug": "dependabot-renovate",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000012-dependabot-renovate.md",
+      "planned_project_ids": [
+        "prj0000049",
+        "prj0000043"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "eddeaa70d810b6637f5aae79d6465d44bf1348263e57706e5ef93bfd815c412a",
+      "updated": "2026-04-01T08:26:34.456173+00:00"
+    },
+    {
+      "idea_id": "idea000013",
+      "title": "idea-013 - backend-health-check-endpoint",
+      "slug": "backend-health-check-endpoint",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000013-backend-health-check-endpoint.md",
+      "planned_project_ids": [
+        "prj0000101"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "82513c7d3cf3941df771ee6ce4ae46aa102b83ad60d1776c31c80397a4970f05",
+      "updated": "2026-04-01T08:26:34.458184+00:00"
+    },
+    {
+      "idea_id": "idea000014",
+      "title": "idea-014 - pyproject-requirements-sync",
+      "slug": "pyproject-requirements-sync",
+      "status": "archived",
+      "source_path": "docs/project/ideas/archive/idea000014-pyproject-requirements-sync.md",
+      "planned_project_ids": [
+        "prj0000102"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "24fc3a941f61f9eba56f5cb4ca34dd7f8dcb8031bd1082becc930598a1468721",
+      "updated": "2026-04-01T08:26:34.426888+00:00"
+    },
+    {
+      "idea_id": "idea000015",
+      "title": "idea-015 - specialized-agent-library",
+      "slug": "specialized-agent-library",
+      "status": "archived",
+      "source_path": "docs/project/ideas/archive/idea000015-specialized-agent-library.md",
+      "planned_project_ids": [
+        "prj0000086"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "04dc5d1ee12215f1e12e79188686b84f868068bb0902f96f5b29d72bcf173dae",
+      "updated": "2026-04-01T08:26:34.429522+00:00"
+    },
+    {
+      "idea_id": "idea000016",
+      "title": "idea-016 - mixin-architecture-base",
+      "slug": "mixin-architecture-base",
+      "status": "archived",
+      "source_path": "docs/project/ideas/archive/idea000016-mixin-architecture-base.md",
+      "planned_project_ids": [
+        "prj0000105"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "8cdcae1be7b2666779194c9339a35308f02d60d8127cb56b5e940debddbcc806",
+      "updated": "2026-04-01T08:26:34.432455+00:00"
+    },
+    {
+      "idea_id": "idea000017",
+      "title": "idea-017 - rust-criterion-benchmarks",
+      "slug": "rust-criterion-benchmarks",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000017-rust-criterion-benchmarks.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "38d89d5039e1e7575ea3a8788acca2091560f3184aa27c0eb460ab9cba9ddb69",
+      "updated": "2026-04-01T08:26:34.458184+00:00"
+    },
+    {
+      "idea_id": "idea000018",
+      "title": "idea-018 - rust-sub-crate-unification",
+      "slug": "rust-sub-crate-unification",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000018-rust-sub-crate-unification.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "265446a627d33baf5c8cb3c11c8d132cf1a8040a6ce47b81c7f917037442afe2",
+      "updated": "2026-04-01T08:26:34.462936+00:00"
+    },
+    {
+      "idea_id": "idea000019",
+      "title": "idea-019 - crdt-python-ffi-bindings",
+      "slug": "crdt-python-ffi-bindings",
+      "status": "archived",
+      "source_path": "docs/project/ideas/archive/idea000019-crdt-python-ffi-bindings.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "2aa48de15954f2ba67c8a140ef469b059f34a3818c8e99baf8c7edb1cd9cb7d3",
+      "updated": "2026-04-01T08:26:34.434465+00:00"
+    },
+    {
+      "idea_id": "idea000020",
+      "title": "idea-020 - amd-npu-feature-documentation",
+      "slug": "amd-npu-feature-documentation",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000020-amd-npu-feature-documentation.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "e6df12911a47daf5b3ba618b867b8792a12b8ffa5e0d6890dc9242c006122c4c",
+      "updated": "2026-04-01T08:26:34.464948+00:00"
+    },
+    {
+      "idea_id": "idea000021",
+      "title": "idea-021 - openapi-spec-generation",
+      "slug": "openapi-spec-generation",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000021-openapi-spec-generation.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "bfa95f507dd5794661166cb8d4bba05dd06fbdcb7dc4e225ae8b85792e1b29e9",
+      "updated": "2026-04-01T08:26:34.466961+00:00"
+    },
+    {
+      "idea_id": "idea000022",
+      "title": "idea-022 - jwt-refresh-token-support",
+      "slug": "jwt-refresh-token-support",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000022-jwt-refresh-token-support.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "9b1c0d3495d5495ec34fb4358a963f2bdb28e9074247310ee422d7edbb81a6c5",
+      "updated": "2026-04-01T08:26:34.469566+00:00"
+    },
+    {
+      "idea_id": "idea000023",
+      "title": "idea-023 - tailwind-config-missing",
+      "slug": "tailwind-config-missing",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000023-tailwind-config-missing.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "b17e52ad5c6964c8330238df3eef026d5f7e730f0adff8827cd5aa6dd418deab",
+      "updated": "2026-04-01T08:26:34.469566+00:00"
+    },
+    {
+      "idea_id": "idea000024",
+      "title": "idea-024 - frontend-e2e-tests",
+      "slug": "frontend-e2e-tests",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000024-frontend-e2e-tests.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "4dd017a72583136db2613eb48f5e755019c221cab620b31da6c64a32f447a978",
+      "updated": "2026-04-01T08:26:34.473591+00:00"
+    },
+    {
+      "idea_id": "idea000025",
+      "title": "idea-025 - global-state-management",
+      "slug": "global-state-management",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000025-global-state-management.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "3dc8b3694d456e31e59edb0c5d8a561d9a10f1bf7d3ca757a23eb991ecf60485",
+      "updated": "2026-04-01T08:26:34.473591+00:00"
+    },
+    {
+      "idea_id": "idea000026",
+      "title": "idea-026 - frontend-url-routing",
+      "slug": "frontend-url-routing",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000026-frontend-url-routing.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "51edb19785c22a4b347419e43ee4da190f397ba38ec56f12a8a7fe545bebc36b",
+      "updated": "2026-04-01T08:26:34.473591+00:00"
+    },
+    {
+      "idea_id": "idea000027",
+      "title": "idea-027 - windows-ci-matrix",
+      "slug": "windows-ci-matrix",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000027-windows-ci-matrix.md",
+      "planned_project_ids": [
+        "prj0000069",
+        "prj0000035"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "809d638fe00e8475cfc959cba2ee190ddd12ee6f2e88f5a873680ac172048790",
+      "updated": "2026-04-01T08:26:34.473591+00:00"
+    },
+    {
+      "idea_id": "idea000028",
+      "title": "idea-028 - property-based-test-expansion",
+      "slug": "property-based-test-expansion",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000028-property-based-test-expansion.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "7641b23d149f4607f6026b5946a5a377321a398e711de91f191c4a51fe39c89d",
+      "updated": "2026-04-01T08:26:34.473591+00:00"
+    },
+    {
+      "idea_id": "idea000029",
+      "title": "idea-029 - backend-integration-test-suite",
+      "slug": "backend-integration-test-suite",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000029-backend-integration-test-suite.md",
+      "planned_project_ids": [
+        "prj0000077",
+        "prj0000069",
+        "prj0000044"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "de806731a1f00794d7afceb61514ecb146f3d996b81771861cd4f0a41a30127f",
+      "updated": "2026-04-01T08:26:34.484263+00:00"
+    },
+    {
+      "idea_id": "idea000030",
+      "title": "idea-030 - adr-backfill",
+      "slug": "adr-backfill",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000030-adr-backfill.md",
+      "planned_project_ids": [
+        "prj0000026"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "4f2aff8388ddad0eb61a73af18e63725767cbfc318bb9fa1bb3cb2ebd93d891f",
+      "updated": "2026-04-01T08:26:34.484263+00:00"
+    },
+    {
+      "idea_id": "idea000031",
+      "title": "idea-031 - automated-api-docs-ci",
+      "slug": "automated-api-docs-ci",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000031-automated-api-docs-ci.md",
+      "planned_project_ids": [
+        "prj0000073",
+        "prj0000028"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "9c3d43bcce5b679b0d924fa68b0796ff0212588cfad839247c70108d122c88b8",
+      "updated": "2026-04-01T08:26:34.490932+00:00"
+    },
+    {
+      "idea_id": "idea000032",
+      "title": "idea-032 - changelog-automation",
+      "slug": "changelog-automation",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000032-changelog-automation.md",
+      "planned_project_ids": [
+        "prj0000087",
+        "prj0000036"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "225101c80ca604bd6633950e6c8c8fd26d8ddef42de44f9d5102fd8bdc71a960",
+      "updated": "2026-04-01T08:26:34.492943+00:00"
+    },
+    {
+      "idea_id": "idea000033",
+      "title": "idea-033 - pre-commit-ruff-version-drift",
+      "slug": "pre-commit-ruff-version-drift",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000033-pre-commit-ruff-version-drift.md",
+      "planned_project_ids": [
+        "prj0000031"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "44f40666f55e0d21319ecf28fe05b0e19047b04299465d281c0f0842928f92c0",
+      "updated": "2026-04-01T08:26:34.492943+00:00"
+    },
+    {
+      "idea_id": "idea000034",
+      "title": "idea-034 - projects-json-schema-validation",
+      "slug": "projects-json-schema-validation",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000034-projects-json-schema-validation.md",
+      "planned_project_ids": [
+        "prj0000052"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "bdd624c41bfca8fc0ace05e7f67dc1c1a186feb61becc627a0ed8114f4e3776f",
+      "updated": "2026-04-01T08:26:34.494952+00:00"
+    },
+    {
+      "idea_id": "idea000035",
+      "title": "idea-035 - torch-optional-dependency-split",
+      "slug": "torch-optional-dependency-split",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000035-torch-optional-dependency-split.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "1d4d839bafd3dabb16e3801d39e23e9040f524168f02eb5e2f64c8fe7d8f69dc",
+      "updated": "2026-04-01T08:26:34.496963+00:00"
+    },
+    {
+      "idea_id": "idea000036",
+      "title": "idea-036 - rl-module-implementation",
+      "slug": "rl-module-implementation",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000036-rl-module-implementation.md",
+      "planned_project_ids": [
+        "prj0000045",
+        "prj0000023",
+        "prj0000015"
+      ],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "5ec03b36c7a5c4e9b4d9797e9287bf9951b570157701ba654ebafb7fee8a5ed6",
+      "updated": "2026-04-01T08:26:34.499983+00:00"
+    },
+    {
+      "idea_id": "idea000037",
+      "title": "idea-037 - docs-work-folder-cleanup",
+      "slug": "docs-work-folder-cleanup",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000037-docs-work-folder-cleanup.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "7ab7ab05f5c9c1fcfd45d0912849d09c8680e630f387d778bc57f07a1184d760",
+      "updated": "2026-04-01T08:26:34.501476+00:00"
+    },
+    {
+      "idea_id": "idea000038",
+      "title": "idea-038 - chromadb-optional-extra",
+      "slug": "chromadb-optional-extra",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000038-chromadb-optional-extra.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs\\project\\kanban.md",
+        "docs\\project\\prj0000076\\prj0000076.think.md"
+      ],
+      "sha256": "9cbe4b81d71563662458753ec99665c73d0ec31d065bda362ef7eb77755f3e1a",
+      "updated": "2026-04-01T08:26:34.503489+00:00"
+    },
+    {
+      "idea_id": "idea000039",
+      "title": "idea-039 - p2p-swarm-consensus-completion",
+      "slug": "p2p-swarm-consensus-completion",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000039-p2p-swarm-consensus-completion.md",
+      "planned_project_ids": [
+        "prj0000068",
+        "prj0000072",
+        "prj0000084"
+      ],
+      "source_references": [
+        "docs/architecture/archive/improvement_requirements.md",
+        "docs/architecture/archive/proxima_voyager.md"
+      ],
+      "sha256": "fc9c14c4703f758071716226366fe51c0c36d9691e8e3a58666a289fc755ef83",
+      "updated": "2026-04-01T08:26:34.506737+00:00"
+    },
+    {
+      "idea_id": "idea000040",
+      "title": "idea-040 - resource-synergy-cross-node-scheduling",
+      "slug": "resource-synergy-cross-node-scheduling",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000040-resource-synergy-cross-node-scheduling.md",
+      "planned_project_ids": [
+        "prj0000074",
+        "prj0000008"
+      ],
+      "source_references": [
+        "docs/architecture/archive/improvement_requirements.md"
+      ],
+      "sha256": "cb35abbbc7168a58fe43c3ec24e8236939ebd9036af16db1d498239092b7b0f3",
+      "updated": "2026-04-01T08:26:34.508748+00:00"
+    },
+    {
+      "idea_id": "idea000041",
+      "title": "idea-041 - kv-v2-cache-rollout",
+      "slug": "kv-v2-cache-rollout",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000041-kv-v2-cache-rollout.md",
+      "planned_project_ids": [
+        "prj0000028",
+        "prj0000089",
+        "prj0000073"
+      ],
+      "source_references": [
+        "docs/architecture/archive/improvement_requirements.md",
+        "docs/architecture/archive/INFERENCE_ENGINE.md"
+      ],
+      "sha256": "2ff3eb00a581cd50f7c0baf2725d1279a9c4617cad5ba844e5c615a0f515be2f",
+      "updated": "2026-04-01T08:26:34.508748+00:00"
+    },
+    {
+      "idea_id": "idea000042",
+      "title": "idea-042 - semantic-cache-invalidation-engine",
+      "slug": "semantic-cache-invalidation-engine",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000042-semantic-cache-invalidation-engine.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/architecture/archive/improvement_requirements.md"
+      ],
+      "sha256": "ab70591764a67832c24f6293feea5b2519bd41be079b0025753ddad58bb00c4f",
+      "updated": "2026-04-01T08:26:34.510758+00:00"
+    },
+    {
+      "idea_id": "idea000043",
+      "title": "idea-043 - neural-context-pruning-heuristics",
+      "slug": "neural-context-pruning-heuristics",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000043-neural-context-pruning-heuristics.md",
+      "planned_project_ids": [
+        "prj0000004"
+      ],
+      "source_references": [
+        "docs/architecture/archive/improvement_requirements.md"
+      ],
+      "sha256": "13a8cb65ef564d505678779334c242ed633d5659e061f8e62bc8d525da19bbdd",
+      "updated": "2026-04-01T08:26:34.510758+00:00"
+    },
+    {
+      "idea_id": "idea000044",
+      "title": "idea-044 - zero-downtime-resharding-protocol",
+      "slug": "zero-downtime-resharding-protocol",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000044-zero-downtime-resharding-protocol.md",
+      "planned_project_ids": [
+        "prj0000067",
+        "prj0000055"
+      ],
+      "source_references": [
+        "docs/architecture/archive/improvement_requirements.md"
+      ],
+      "sha256": "14e93df0e0a55254adfd8203e15f6fd2a0ed3a8714d964f18edcc00788268415",
+      "updated": "2026-04-01T08:26:34.512767+00:00"
+    },
+    {
+      "idea_id": "idea000045",
+      "title": "idea-045 - governance-safety-hub-implementation",
+      "slug": "governance-safety-hub-implementation",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000045-governance-safety-hub-implementation.md",
+      "planned_project_ids": [
+        "prj0000028",
+        "prj0000089",
+        "prj0000073"
+      ],
+      "source_references": [
+        "docs/architecture/archive/improvement_requirements.md",
+        "docs/architecture/archive/OBSERVABILITY_DATA_STACK.md"
+      ],
+      "sha256": "e9ff0183b7c797caf9179538e4fa8730eca03a33fc13ea567a3b797f41eb762e",
+      "updated": "2026-04-01T08:26:34.514423+00:00"
+    },
+    {
+      "idea_id": "idea000046",
+      "title": "idea-046 - distributed-checkpointing-recovery",
+      "slug": "distributed-checkpointing-recovery",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000046-distributed-checkpointing-recovery.md",
+      "planned_project_ids": [
+        "prj0000083",
+        "prj0000082",
+        "prj0000066"
+      ],
+      "source_references": [
+        "docs/architecture/archive/improvement_requirements.md",
+        "docs/architecture/archive/transactional_integrity.md"
+      ],
+      "sha256": "e1f8167c2c37e0c92a5b748aacafa640ead7a0aa366e6581759d4885bd91d793",
+      "updated": "2026-04-01T08:26:34.515664+00:00"
+    },
+    {
+      "idea_id": "idea000047",
+      "title": "idea-047 - neural-scam-phishing-detection",
+      "slug": "neural-scam-phishing-detection",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000047-neural-scam-phishing-detection.md",
+      "planned_project_ids": [
+        "prj0000067",
+        "prj0000084",
+        "prj0000075"
+      ],
+      "source_references": [
+        "docs/architecture/archive/improvement_requirements.md",
+        "docs/architecture/archive/agent_task_security_architecture.md"
+      ],
+      "sha256": "46b4829986b2ad0a4ca51d6a7e4b92fab243940ef6aca72e851452b6f8cf4382",
+      "updated": "2026-04-01T08:26:34.516228+00:00"
+    },
+    {
+      "idea_id": "idea000048",
+      "title": "idea-048 - global-trace-synthesis-dashboard",
+      "slug": "global-trace-synthesis-dashboard",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000048-global-trace-synthesis-dashboard.md",
+      "planned_project_ids": [
+        "prj0000089",
+        "prj0000084",
+        "prj0000072"
+      ],
+      "source_references": [
+        "docs/architecture/archive/improvement_requirements.md",
+        "docs/architecture/archive/OBSERVABILITY_DATA_STACK.md"
+      ],
+      "sha256": "ee071a03b5c964c9445206bf526553749a1e9e55908f9ef0460d6e8653aa0c3a",
+      "updated": "2026-04-01T08:26:34.518243+00:00"
+    },
+    {
+      "idea_id": "idea000049",
+      "title": "idea-049 - ucp-agentic-commerce-adapter",
+      "slug": "ucp-agentic-commerce-adapter",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000049-ucp-agentic-commerce-adapter.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/architecture/archive/UCP_OVERVIEW.md"
+      ],
+      "sha256": "f021f84756f2240fc606c66c835d684db7235b3f33b73e00fd67d2bb85311f6c",
+      "updated": "2026-04-01T08:26:34.518243+00:00"
+    },
+    {
+      "idea_id": "idea000050",
+      "title": "idea-050 - inference-speculative-decoding-runtime",
+      "slug": "inference-speculative-decoding-runtime",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000050-inference-speculative-decoding-runtime.md",
+      "planned_project_ids": [
+        "prj0000083",
+        "prj0000026"
+      ],
+      "source_references": [
+        "docs/architecture/archive/INFERENCE_ENGINE.md"
+      ],
+      "sha256": "cf5f68f849e109d6dca0e3cfc66e6cc4c0c47427aee094ad0924af599691b38b",
+      "updated": "2026-04-01T08:26:34.520252+00:00"
+    },
+    {
+      "idea_id": "idea000051",
+      "title": "idea-051 - loop-analysis-ci-gate",
+      "slug": "loop-analysis-ci-gate",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000051-loop-analysis-ci-gate.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/architecture/archive/LOOP_ANALYSIS_README.md",
+        "docs/architecture/archive/concurrency.md"
+      ],
+      "sha256": "d3b99a5f398b305ef00781fdcca75ac1d82949863324bb8216f009eaccd2fedf",
+      "updated": "2026-04-01T08:26:34.520252+00:00"
+    },
+    {
+      "idea_id": "idea000052",
+      "title": "idea-052 - auto-fix",
+      "slug": "auto-fix",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000052-auto-fix.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/auto_fix.md"
+      ],
+      "sha256": "285e9ff47e7ff1bee126458c0f151bae5f226d1bc708fc4cf035d78bd43a8c9d",
+      "updated": "2026-04-01T08:26:34.524293+00:00"
+    },
+    {
+      "idea_id": "idea000053",
+      "title": "idea-053 - comparison-vllm-old",
+      "slug": "comparison-vllm-old",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000053-comparison-vllm-old.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/comparison_vllm-old.md"
+      ],
+      "sha256": "006d6a85f039fb9ce3d7bc1defcbe922dfce40d85a397cba0cd8c4d7e5db3d95",
+      "updated": "2026-04-01T08:26:34.524293+00:00"
+    },
+    {
+      "idea_id": "idea000054",
+      "title": "idea-054 - core-design-guide",
+      "slug": "core-design-guide",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000054-core-design-guide.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/CORE_DESIGN_GUIDE.md"
+      ],
+      "sha256": "af7e3a11e7a941bbf7337705cfb95dd470aa7edbaa737a7d465f15a67f825dd2",
+      "updated": "2026-04-01T08:26:34.526792+00:00"
+    },
+    {
+      "idea_id": "idea000055",
+      "title": "idea-055 - e2e-encryption",
+      "slug": "e2e-encryption",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000055-e2e-encryption.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/E2E_ENCRYPTION.md"
+      ],
+      "sha256": "cc790ec2973fe2e1bf4ae39bf18bf474419c0d059db469eb1e06707c4080c077",
+      "updated": "2026-04-01T08:26:34.526792+00:00"
+    },
+    {
+      "idea_id": "idea000056",
+      "title": "idea-056 - e2e-implementation-summary",
+      "slug": "e2e-implementation-summary",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000056-e2e-implementation-summary.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/E2E_IMPLEMENTATION_SUMMARY.md"
+      ],
+      "sha256": "dfd5ea4dfba239e8776ca6e666b93bb3b2dd89dc4a1a99b3d04e7cfae429baa1",
+      "updated": "2026-04-01T08:26:34.528801+00:00"
+    },
+    {
+      "idea_id": "idea000057",
+      "title": "idea-057 - fleet-auto-doc",
+      "slug": "fleet-auto-doc",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000057-fleet-auto-doc.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/FLEET_AUTO_DOC.md"
+      ],
+      "sha256": "2e52bad011489b39222296607c63e11ee64ac776eb5db5b5d3061a37bf7e2253",
+      "updated": "2026-04-01T08:26:34.528801+00:00"
+    },
+    {
+      "idea_id": "idea000058",
+      "title": "idea-058 - improvement-audit-plan",
+      "slug": "improvement-audit-plan",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000058-improvement-audit-plan.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/improvement_audit_plan.md"
+      ],
+      "sha256": "529fc59f522e2097b9edaed95fba8c3bc9d21a0b1cbe3a336fdbe6a1d88c9c00",
+      "updated": "2026-04-01T08:26:34.528801+00:00"
+    },
+    {
+      "idea_id": "idea000059",
+      "title": "idea-059 - improvement-research",
+      "slug": "improvement-research",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000059-improvement-research.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/IMPROVEMENT_RESEARCH.md"
+      ],
+      "sha256": "067dc477a749e9dd70e9e937c4d3096bb7d1e43673c4d72d67fc0dc3928390b0",
+      "updated": "2026-04-01T08:26:34.531385+00:00"
+    },
+    {
+      "idea_id": "idea000060",
+      "title": "idea-060 - onboarding",
+      "slug": "onboarding",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000060-onboarding.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/onboarding.md"
+      ],
+      "sha256": "cb84c577da890664abf01aac1e90b9204073c036b2489d2c33de43ced212307d",
+      "updated": "2026-04-01T08:26:34.533394+00:00"
+    },
+    {
+      "idea_id": "idea000061",
+      "title": "idea-061 - phase41-vllm-patterns",
+      "slug": "phase41-vllm-patterns",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000061-phase41-vllm-patterns.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/Phase41_vLLM_Patterns.md"
+      ],
+      "sha256": "f221d39d26cabbc01840e77c3df4e2168046ad54d3e6b040f90c4d97a9464bce",
+      "updated": "2026-04-01T08:26:34.533394+00:00"
+    },
+    {
+      "idea_id": "idea000062",
+      "title": "idea-062 - progress-dashboard",
+      "slug": "progress-dashboard",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000062-progress-dashboard.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/PROGRESS_DASHBOARD.md"
+      ],
+      "sha256": "ed38014c38483fc1cf8890013a0bd982505263c5c713d5cad35f45f746a9d918",
+      "updated": "2026-04-01T08:26:34.535484+00:00"
+    },
+    {
+      "idea_id": "idea000063",
+      "title": "idea-063 - release-notes-template",
+      "slug": "release-notes-template",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000063-release-notes-template.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/release_notes_template.md"
+      ],
+      "sha256": "26df322a87b2294ca330da75c2ac6a92693d3cb061f8873d639186829d45bf9b",
+      "updated": "2026-04-01T08:26:34.535484+00:00"
+    },
+    {
+      "idea_id": "idea000064",
+      "title": "idea-064 - research-notes",
+      "slug": "research-notes",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000064-research-notes.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/research_notes.md"
+      ],
+      "sha256": "70d1bc750986b7b89ef675f852ad6156d8535000f36e98d6802188b62d89e901",
+      "updated": "2026-04-01T08:26:34.537523+00:00"
+    },
+    {
+      "idea_id": "idea000065",
+      "title": "idea-065 - rust-ready",
+      "slug": "rust-ready",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000065-rust-ready.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/RUST_Ready.md"
+      ],
+      "sha256": "02149d413ecffa7c278c1a81a2c8c5713590ea0298855c30142f0f0642a95336",
+      "updated": "2026-04-01T08:26:34.537523+00:00"
+    },
+    {
+      "idea_id": "idea000066",
+      "title": "idea-066 - setup",
+      "slug": "setup",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000066-setup.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/setup.md"
+      ],
+      "sha256": "976e6dd1d79582591a45c4cc1e6bc6c7d15f102e42afa7207f3129e035e2b024",
+      "updated": "2026-04-01T08:26:34.539619+00:00"
+    },
+    {
+      "idea_id": "idea000067",
+      "title": "idea-067 - streaming-website",
+      "slug": "streaming-website",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000067-streaming-website.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/STREAMING_WEBSITE.md"
+      ],
+      "sha256": "d6848af7a32f7d62ca0294e94321ab2d514a48e77249b7e5c6a445896ae07168",
+      "updated": "2026-04-01T08:26:34.539619+00:00"
+    },
+    {
+      "idea_id": "idea000068",
+      "title": "idea-068 - test-quality",
+      "slug": "test-quality",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000068-test-quality.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/TEST_QUALITY.md"
+      ],
+      "sha256": "406350cb680103b888a78e91813fdb77274a14de6cbdcacaf3bd3ee0e156ef5a",
+      "updated": "2026-04-01T08:26:34.539619+00:00"
+    },
+    {
+      "idea_id": "idea000069",
+      "title": "idea-069 - tools",
+      "slug": "tools",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000069-tools.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/tools.md"
+      ],
+      "sha256": "e01d7005225309fb8f08bc8e63f16b48b4ccbfee49b3d2a604d167296a46c3a7",
+      "updated": "2026-04-01T08:26:34.539619+00:00"
+    },
+    {
+      "idea_id": "idea000070",
+      "title": "idea-070 - transaction-manager-architecture",
+      "slug": "transaction-manager-architecture",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000070-transaction-manager-architecture.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/transaction-manager-architecture.md"
+      ],
+      "sha256": "e920299034f4f6dac90637380b8da912872d086140fadfb4100b8cb01077c555",
+      "updated": "2026-04-01T08:26:34.539619+00:00"
+    },
+    {
+      "idea_id": "idea000071",
+      "title": "idea-071 - v4-release-status",
+      "slug": "v4-release-status",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000071-v4-release-status.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/V4_RELEASE_STATUS.md"
+      ],
+      "sha256": "0a8fe9ba04bb8d74b29a3cf8bbe633554e096dec20bddeb2d4e36a400818039d",
+      "updated": "2026-04-01T08:26:34.539619+00:00"
+    },
+    {
+      "idea_id": "idea000072",
+      "title": "idea-072 - work-docs",
+      "slug": "work-docs",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000072-work-docs.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/work"
+      ],
+      "sha256": "00627ed2bb4633f2502982cdc3197d4f5a7e9172eb8415c69513ed9ec332b0ae",
+      "updated": "2026-04-01T08:26:34.539619+00:00"
+    },
+    {
+      "idea_id": "idea000073",
+      "title": "idea-073 - standards-docs",
+      "slug": "standards-docs",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000073-standards-docs.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/standards"
+      ],
+      "sha256": "d9c6dc70d460b240140d9ceaea595cb94783968d26ab656872a1e5238de19ad2",
+      "updated": "2026-04-01T08:26:34.547385+00:00"
+    },
+    {
+      "idea_id": "idea000074",
+      "title": "idea-074 - research-docs",
+      "slug": "research-docs",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000074-research-docs.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/research"
+      ],
+      "sha256": "707b15bc829daaee936e5e8d93a99cec09b79e5a4d92ca90db2b8eecdcd849fd",
+      "updated": "2026-04-01T08:26:34.549394+00:00"
+    },
+    {
+      "idea_id": "idea000075",
+      "title": "idea-075 - prompt-docs",
+      "slug": "prompt-docs",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000075-prompt-docs.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/prompt"
+      ],
+      "sha256": "1a286439cf9c97306665003511124fd291e41f53ff9032d48cc92884cc5c1952",
+      "updated": "2026-04-01T08:26:34.549394+00:00"
+    },
+    {
+      "idea_id": "idea000076",
+      "title": "idea-076 - performance-docs",
+      "slug": "performance-docs",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000076-performance-docs.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/performance"
+      ],
+      "sha256": "4dbb744b389462fa671c5ddda814f9e3ad713e89e85d7397061af61e3aa45d78",
+      "updated": "2026-04-01T08:26:34.551402+00:00"
+    },
+    {
+      "idea_id": "idea000077",
+      "title": "idea-077 - key-docs",
+      "slug": "key-docs",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000077-key-docs.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/Key"
+      ],
+      "sha256": "62d173b1693f7e29f9792e9f63adba88a7a371cc11e5425e99374becbaef4c01",
+      "updated": "2026-04-01T08:26:34.551402+00:00"
+    },
+    {
+      "idea_id": "idea000078",
+      "title": "idea-078 - installation-docs",
+      "slug": "installation-docs",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000078-installation-docs.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/installation"
+      ],
+      "sha256": "7a6dcb6787999e0d065e602aebf038ae5b9db5a7c55d3b059a20502e68c51fe1",
+      "updated": "2026-04-01T08:26:34.551402+00:00"
+    },
+    {
+      "idea_id": "idea000079",
+      "title": "🧠 Why “distributed RAM” for LLMs is tricky",
+      "slug": "distributed-llm-memory",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000079-distributed-llm-memory.md",
+      "planned_project_ids": [],
+      "source_references": [],
+      "sha256": "08fd8acc74c22563b5dd4581651befdcdd977a2481a2a6a074fd2f5b177d4bfa",
+      "updated": "2026-04-01T08:26:34.551402+00:00"
+    },
+    {
+      "idea_id": "idea000080",
+      "title": "",
+      "slug": "smart-prompt-routing-system",
+      "status": "archived",
+      "source_path": "docs/project/ideas/archive/idea000080-smart-prompt-routing-system.md",
+      "planned_project_ids": [],
+      "source_references": [],
+      "sha256": "25b519755726e38724295f40a2ce96776867d5c96f02c8a9c95b82eae4a5b589",
+      "updated": "2026-04-01T08:26:34.434465+00:00"
+    }
+  ]
+}

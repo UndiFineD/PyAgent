@@ -11,14 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests that validate the CI workflow count and security.yml structure (prj0000075).
+"""Tests that validate the lightweight workflow count and security.yml structure.
 
 Acceptance criteria:
 - Exactly 2 workflow files: ci.yml and security.yml
-- security.yml is valid YAML with jobs.analyze
-- security.yml declares security-events: write permission
-- security.yml uses github/codeql-action (init, autobuild, analyze)
-- security.yml triggers on push/PR to main and on a schedule
+- security.yml is valid YAML with jobs.security_smoke
+- security.yml runs secret scan guardrail
+- security.yml triggers on push/PR to main
 """
 
 from pathlib import Path
@@ -31,6 +30,12 @@ _CI_YML = _WORKFLOWS_DIR / "ci.yml"
 
 
 def _load_security_yml() -> dict:
+    """Load and return security.yml as a parsed mapping.
+
+    Returns:
+        dict: Parsed YAML mapping for .github/workflows/security.yml.
+
+    """
     with _SECURITY_YML.open(encoding="utf-8") as f:
         return yaml.safe_load(f)
 
@@ -50,83 +55,69 @@ def test_exactly_two_workflow_files() -> None:
 
 
 # ---------------------------------------------------------------------------
-# T1-b: security.yml is valid YAML with jobs.analyze
+# T1-b: security.yml is valid YAML with jobs.security_smoke
 # ---------------------------------------------------------------------------
 
 
 def test_security_yml_exists_and_has_analyze_job() -> None:
-    """security.yml must exist and contain a jobs.analyze entry."""
+    """security.yml must exist and contain a jobs.security_smoke entry."""
     assert _SECURITY_YML.exists(), "security.yml does not exist"
     data = _load_security_yml()
     assert "jobs" in data, "security.yml must have a 'jobs' key"
-    assert "analyze" in data["jobs"], "security.yml must have a 'jobs.analyze' key"
+    assert "security_smoke" in data["jobs"], "security.yml must have a 'jobs.security_smoke' key"
 
 
 # ---------------------------------------------------------------------------
-# T1-c: security.yml declares security-events: write
+# T1-c: security.yml declares minimal read permissions
 # ---------------------------------------------------------------------------
 
 
 def test_security_yml_has_security_events_write_permission() -> None:
-    """security.yml must declare security-events: write for SARIF upload."""
+    """security.yml should keep minimal permissions for lightweight scans."""
     data = _load_security_yml()
     perms = data.get("permissions", {})
-    assert perms.get("security-events") == "write", (
-        "security.yml must declare 'permissions.security-events: write' "
-        "so that CodeQL SARIF results can be uploaded to the Security tab."
-    )
+    assert perms.get("contents") == "read", "security.yml must keep 'permissions.contents: read'"
 
 
 # ---------------------------------------------------------------------------
-# T1-d: security.yml uses all three codeql-action steps
+# T1-d: security.yml runs secret scan command
 # ---------------------------------------------------------------------------
 
 
-def test_security_yml_uses_codeql_action_steps() -> None:
-    """security.yml must use codeql-action init, autobuild, and analyze steps."""
+def test_security_yml_runs_secret_scan_guardrail() -> None:
+    """security.yml must run the repository secret-scan guardrail command."""
     data = _load_security_yml()
-    steps = data["jobs"]["analyze"]["steps"]
-    uses_values = [step.get("uses", "") for step in steps]
-
-    assert any("codeql-action/init" in u for u in uses_values), (
-        "security.yml must include a 'github/codeql-action/init' step"
-    )
-    assert any("codeql-action/autobuild" in u for u in uses_values), (
-        "security.yml must include a 'github/codeql-action/autobuild' step"
-    )
-    assert any("codeql-action/analyze" in u for u in uses_values), (
-        "security.yml must include a 'github/codeql-action/analyze' step"
+    steps = data["jobs"]["security_smoke"]["steps"]
+    run_values = [step.get("run", "") for step in steps]
+    assert any("python scripts/security/run_secret_scan.py" in command for command in run_values), (
+        "security.yml must include secret scan guardrail command."
     )
 
 
 # ---------------------------------------------------------------------------
-# T1-e: security.yml triggers include schedule
+# T1-e: security.yml triggers on push and pull_request to main
 # ---------------------------------------------------------------------------
 
 
 def test_security_yml_has_schedule_trigger() -> None:
-    """security.yml must include a scheduled trigger for regular background scans."""
+    """security.yml must trigger on push/pull_request to main."""
     data = _load_security_yml()
     on_block = data.get("on", data.get(True, {}))  # YAML 'on' parses as True in some versions
-    # Accept either 'on' key (string) or boolean True (PyYAML quirk)
-    if isinstance(on_block, dict):
-        assert "schedule" in on_block, "security.yml must have a 'schedule' trigger for weekly background CodeQL scans"
-    else:
-        # Try direct key lookup
-        triggers = data.get("on") or data.get(True)
-        assert triggers is not None and "schedule" in triggers, "security.yml must have a 'schedule' trigger"
+    assert isinstance(on_block, dict), "security.yml must define an 'on' trigger mapping"
+    assert "push" in on_block, "security.yml must include push trigger"
+    assert "pull_request" in on_block, "security.yml must include pull_request trigger"
+    push_branches = on_block.get("push", {}).get("branches", [])
+    pr_branches = on_block.get("pull_request", {}).get("branches", [])
+    assert "main" in push_branches, "security.yml push trigger must include main"
+    assert "main" in pr_branches, "security.yml pull_request trigger must include main"
 
 
 # ---------------------------------------------------------------------------
-# T1-f: security.yml wires in custom Python query pack
+# T1-f: security.yml avoids CodeQL matrix in lightweight mode
 # ---------------------------------------------------------------------------
 
 
 def test_security_yml_references_custom_python_queries() -> None:
-    """security.yml config must reference the local codeql-custom-queries-python pack."""
+    """security.yml should not include CodeQL steps in lightweight mode."""
     content = _SECURITY_YML.read_text(encoding="utf-8")
-    assert "codeql-custom-queries-python" in content, (
-        "security.yml must reference the custom Python query pack "
-        "('./codeql/codeql-custom-queries-python') so that local eval/shell-injection "
-        "queries run during CodeQL analysis."
-    )
+    assert "codeql-action" not in content, "security.yml should not include codeql-action in lightweight mode"

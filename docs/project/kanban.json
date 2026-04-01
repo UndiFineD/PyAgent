@@ -2,7 +2,6 @@
   "schema_version": 1,
   "updated": "2026-04-01",
   "source_of_truth": "docs/project/kanban.json",
-  "legacy_markdown": "docs/project/kanban.md",
   "lanes": [
     "Ideas",
     "Discovery",

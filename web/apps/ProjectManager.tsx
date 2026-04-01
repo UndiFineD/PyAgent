@@ -1478,6 +1478,11 @@ export const ProjectManager: React.FC = () => {
       '- Open and coordinate the full agentflow in strict sequence, then monitor handoffs.',
       '- Ensure governance checks and unblock or escalate blockers quickly.',
       '',
+      '@10idea responsibilities',
+      '- Monitor docs/project/ideas for duplicate or highly similar idea scopes.',
+      '- Merge overlapping ideas into a single, more complete idea artifact with explicit acceptance criteria.',
+      '- Archive superseded idea files into docs/project/ideas/archive with traceability notes.',
+      '',
       '@1project responsibilities',
       '- Convert the idea context into a concrete project definition artifact for the project folder.',
       '- Fill all checklist elements and map them to actionable work items.',
@@ -1486,7 +1491,7 @@ export const ProjectManager: React.FC = () => {
       'Project definition template',
       buildProjectDefinitionChecklistMarkdown(),
       '',
-      `Required flow: @0master -> @1project -> @2think -> @3design -> @4plan -> @5test -> @6code -> @7exec -> @8ql -> @9git.`,
+      `Required flow: @0master -> @10idea -> @1project -> @2think -> @3design -> @4plan -> @5test -> @6code -> @7exec -> @8ql -> @9git.`,
     ].join('\n');
 
     enqueueAgentflowInbox({

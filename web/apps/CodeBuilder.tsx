@@ -11,7 +11,7 @@ import type { AppMeta } from '../types';
 export const appMeta: AppMeta = { id: 'codebuilder', title: 'AgentFlow Builder', category: 'AI Agents' };
 
 // ── Types ───────────────────────────────────────────────────────────────────
-type AgentId = '0master' | '1project' | '2think' | '3design' | '4plan' | '5test' | '6code' | '7exec' | '8ql' | '9git';
+type AgentId = '0master' | '10idea' | '1project' | '2think' | '3design' | '4plan' | '5test' | '6code' | '7exec' | '8ql' | '9git';
 type TabId = 'chat' | 'logs' | 'doc';
 type LlmId = 'flm' | 'gpt41' | 'gpt5mini' | 'grok' | 'raptor';
 
@@ -42,6 +42,7 @@ const AGENTS: {
   color: string; bgColor: string; desc: string; docFile: string;
 }[] = [
   { id: '0master',  name: '@0master',  icon: Cpu,          color: 'text-purple-400', bgColor: 'bg-purple-900/30',  desc: 'Orchestrator',      docFile: '0master.agent.md' },
+  { id: '10idea',   name: '@10idea',   icon: ScrollText,   color: 'text-fuchsia-300', bgColor: 'bg-fuchsia-900/30', desc: 'Idea Curator',      docFile: '10idea.agent.md' },
   { id: '1project', name: '@1project', icon: FolderOpen,   color: 'text-blue-400',   bgColor: 'bg-blue-900/30',    desc: 'Project Manager',   docFile: '1project.agent.md' },
   { id: '2think',   name: '@2think',   icon: Lightbulb,    color: 'text-cyan-400',   bgColor: 'bg-cyan-900/30',    desc: 'Options Explorer',  docFile: '2think.agent.md' },
   { id: '3design',  name: '@3design',  icon: Pencil,       color: 'text-indigo-400', bgColor: 'bg-indigo-900/30',  desc: 'Architect',         docFile: '3design.agent.md' },

@@ -18,6 +18,7 @@ interface StageState {
 
 const INITIAL_STAGES: StageState[] = [
   { id: '0master',  label: '@0master',  description: 'Orchestrator',      status: 'idle' },
+  { id: '10idea',   label: '@10idea',   description: 'Idea Curator',      status: 'idle' },
   { id: '1project', label: '@1project', description: 'Project Manager',   status: 'idle' },
   { id: '2think',   label: '@2think',   description: 'Options Explorer',  status: 'idle' },
   { id: '3design',  label: '@3design',  description: 'Architect',         status: 'idle' },

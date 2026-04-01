@@ -11,26 +11,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Structural tests for docs/project/kanban.json and docs/project/kanban.md.
+"""Structural tests for docs/project/kanban.json.
 
-Validates prj0000052 project-management deliverables: the machine-readable
-project registry in kanban.json (T1) and the 7-lane Kanban board (T2).
+Validates prj0000052 project-management deliverables in the machine-readable
+project registry in kanban.json.
 
-Tests are TDD-style (red phase): written before the files exist.
-Content-dependent tests skip gracefully until the files are present and
-contain the expected marker.  Only the two existence tests fail in the red
-phase.  Acceptance criteria: AC-01 (kanban.json projects) and AC-02 (kanban.md).
+Acceptance criteria: AC-01 (kanban.json projects).
 """
 
 import json
 import re
 from pathlib import Path
 
-import pytest
-
 REPO_ROOT = Path(__file__).parent.parent.parent
 _PROJECTS_PATH = REPO_ROOT / "docs" / "project" / "kanban.json"
-_KANBAN_PATH = REPO_ROOT / "docs" / "project" / "kanban.md"
 _NEXTPROJECT_PATH = REPO_ROOT / "data" / "nextproject.md"
 
 # ---------------------------------------------------------------------------
@@ -47,13 +41,6 @@ try:
         _projects_data = None
 except (FileNotFoundError, json.JSONDecodeError):
     _projects_data = None
-
-try:
-    _kanban_content = _KANBAN_PATH.read_text(encoding="utf-8")
-    _kanban_lines = _kanban_content.splitlines()
-except FileNotFoundError:
-    _kanban_content = ""
-    _kanban_lines = []
 
 try:
     _nextproject_raw = _NEXTPROJECT_PATH.read_text(encoding="utf-8").strip()
@@ -76,24 +63,9 @@ def _expected_project_count() -> int | None:
 # ---------------------------------------------------------------------------
 # Sentinels
 # _PROJECTS_MISSING — True while docs/project/kanban.json does not yet exist
-# _KANBAN_MISSING   — True while kanban.md does not exist or lacks the
-#                     canonical H1 "# PyAgent Project Kanban Board"
 # ---------------------------------------------------------------------------
 
 _PROJECTS_MISSING = not _PROJECTS_PATH.exists()
-
-_KANBAN_MISSING = (
-    not _KANBAN_PATH.exists() or not _kanban_lines or _kanban_lines[0].strip() != "# PyAgent Project Kanban Board"
-)
-
-_SKIP_PROJECTS = pytest.mark.skipif(
-    _PROJECTS_MISSING,
-    reason="docs/project/kanban.json not yet created (awaiting @6code)",
-)
-_SKIP_KANBAN = pytest.mark.skipif(
-    _KANBAN_MISSING,
-    reason="docs/project/kanban.md not yet created (awaiting @6code)",
-)
 
 # ---------------------------------------------------------------------------
 # Domain constants
@@ -127,21 +99,8 @@ VALID_PRIORITIES = {"P1", "P2", "P3", "P4"}
 
 VALID_BUDGET_TIERS = {"XS", "S", "M", "L", "XL", "unknown"}
 
-# All 7 lane H2s plus Summary Metrics — parametrized in test_kanban_required_h2s
-KANBAN_REQUIRED_H2S = [
-    "## Ideas",
-    "## Discovery",
-    "## Design",
-    "## In Sprint",
-    "## Review",
-    "## Released",
-    "## Archived",
-    "## Summary Metrics",
-]
-
-
 # ===========================================================================
-# FILE 1: docs/project/kanban.json (projects array)
+# FILE: docs/project/kanban.json (projects array)
 # ===========================================================================
 
 
@@ -156,14 +115,12 @@ def test_projects_json_exists() -> None:
     )
 
 
-@_SKIP_PROJECTS
 def test_projects_json_valid() -> None:
     """kanban.json must expose a valid project list (array or envelope.projects)."""
     assert _projects_data is not None, "docs/project/kanban.json failed to expose a valid projects list"
     assert isinstance(_projects_data, list), f"Expected a JSON array at top level, got {type(_projects_data).__name__}"
 
 
-@_SKIP_PROJECTS
 def test_projects_json_entry_count() -> None:
     """kanban.json project entry count must align with nextproject marker.
 
@@ -175,7 +132,6 @@ def test_projects_json_entry_count() -> None:
     assert len(_projects_data) == expected, f"Expected {expected} project entries, got {len(_projects_data)}"
 
 
-@_SKIP_PROJECTS
 def test_projects_json_required_fields() -> None:
     """Every project entry in kanban.json must have all 11 required fields.
 
@@ -191,7 +147,6 @@ def test_projects_json_required_fields() -> None:
     assert not failures, f"{len(failures)} entries have missing required fields:\n" + "\n".join(failures)
 
 
-@_SKIP_PROJECTS
 def test_projects_json_lane_values() -> None:
     """All 'lane' values in kanban.json projects must be one of the 7 valid lanes."""
     assert _projects_data is not None
@@ -205,7 +160,6 @@ def test_projects_json_lane_values() -> None:
     )
 
 
-@_SKIP_PROJECTS
 def test_projects_json_priority_values() -> None:
     """All 'priority' values in kanban.json projects must be P1, P2, P3, or P4."""
     assert _projects_data is not None
@@ -220,7 +174,6 @@ def test_projects_json_priority_values() -> None:
     )
 
 
-@_SKIP_PROJECTS
 def test_projects_json_budget_tier_values() -> None:
     """All 'budget_tier' values must be one of XS, S, M, L, XL, unknown."""
     assert _projects_data is not None
@@ -235,7 +188,6 @@ def test_projects_json_budget_tier_values() -> None:
     )
 
 
-@_SKIP_PROJECTS
 def test_projects_json_prj0000052_present() -> None:
     """kanban.json projects must contain an entry with id == 'prj0000052'."""
     assert _projects_data is not None
@@ -244,60 +196,3 @@ def test_projects_json_prj0000052_present() -> None:
         "No entry with id 'prj0000052' found in docs/project/kanban.json projects. "
         "This project (project-management) must register itself."
     )
-
-
-# ===========================================================================
-# FILE 2:  docs/project/kanban.md
-# ===========================================================================
-
-
-def test_kanban_exists() -> None:
-    """kanban.md must exist and open with '# PyAgent Project Kanban Board'.
-
-    No skip guard — this test is the TDD red gate for T2 and intentionally
-    fails until @6code creates the file.
-    """
-    assert _KANBAN_PATH.exists(), f"docs/project/kanban.md not found at {_KANBAN_PATH}. Run @6code to implement T2."
-    assert _kanban_lines, "docs/project/kanban.md is empty"
-    assert _kanban_lines[0].strip() == "# PyAgent Project Kanban Board", (
-        f"Expected first line '# PyAgent Project Kanban Board', got: {_kanban_lines[0]!r}"
-    )
-
-
-@_SKIP_KANBAN
-@pytest.mark.parametrize("heading", KANBAN_REQUIRED_H2S)
-def test_kanban_required_h2s(heading: str) -> None:
-    """kanban.md must contain all 7 lane H2 headings and ## Summary Metrics."""
-    headings_in_file = {line.strip() for line in _kanban_lines if line.startswith("## ")}
-    assert heading in headings_in_file, (
-        f"Required heading {heading!r} not found in kanban.md. Present H2s: {sorted(headings_in_file)}"
-    )
-
-
-@_SKIP_KANBAN
-def test_kanban_total_rows() -> None:
-    r"""kanban.md project row count must align with nextproject marker.
-
-    A data row is any line matching r'^\|\s*prj\d{7}'.
-    """
-    pattern = re.compile(r"^\|\s*prj\d{7}")
-    data_rows = [line for line in _kanban_lines if pattern.match(line)]
-    expected = _expected_project_count()
-    assert expected is not None, "Could not derive expected project count from data/nextproject.md"
-    assert len(data_rows) == expected, f"Expected {expected} project rows in kanban.md, found {len(data_rows)}"
-
-
-@_SKIP_KANBAN
-def test_kanban_prj0000052_present() -> None:
-    """'prj0000052' must appear somewhere in the kanban.md content."""
-    assert "prj0000052" in _kanban_content, "Project ID 'prj0000052' not found in docs/project/kanban.md"
-
-
-@_SKIP_KANBAN
-def test_kanban_no_todo_fixme() -> None:
-    """kanban.md must contain no TODO, FIXME, or TBD placeholder strings."""
-    markers = ("TODO", "FIXME", "TBD")
-    for i, line in enumerate(_kanban_lines, start=1):
-        upper = line.upper()
-        for marker in markers:
-            assert marker not in upper, f"Forbidden placeholder {marker!r} found in kanban.md at line {i}: {line!r}"
