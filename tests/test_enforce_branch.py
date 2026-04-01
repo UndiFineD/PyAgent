@@ -76,6 +76,26 @@ def test_bad_branch_names_blocked(branch: str) -> None:
         assert enforce_branch.main() == 1
 
 
+def test_detached_head_in_ci_allowed() -> None:
+    """Detached HEAD is allowed in CI where branch name is not available."""
+    with (
+        patch.dict(enforce_branch.os.environ, {"CI": "true"}, clear=False),
+        patch.object(enforce_branch, "get_current_branch", return_value="HEAD"),
+        patch.object(enforce_branch, "get_staged_files", return_value=[]),
+    ):
+        assert enforce_branch.main() == 0
+
+
+def test_detached_head_without_ci_blocked() -> None:
+    """Detached HEAD outside CI should still fail branch naming policy."""
+    with (
+        patch.dict(enforce_branch.os.environ, {}, clear=True),
+        patch.object(enforce_branch, "get_current_branch", return_value="HEAD"),
+        patch.object(enforce_branch, "get_staged_files", return_value=[]),
+    ):
+        assert enforce_branch.main() == 1
+
+
 # ---------------------------------------------------------------------------
 # Project-file isolation — Rule 2
 # ---------------------------------------------------------------------------

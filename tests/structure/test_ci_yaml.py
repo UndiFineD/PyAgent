@@ -87,10 +87,11 @@ def test_ci_has_mypy_strict_lane_blocking_step() -> None:
     """
     data = _load_ci_workflow()
 
-    steps = data["jobs"]["test"]["steps"]
+    steps = data["jobs"]["governance"]["steps"]
     expected_command = "python -m mypy --config-file mypy-strict-lane.ini"
     assert any(expected_command in (step.get("run") or "") for step in steps), (
-        "CI must include a strict-lane mypy run command: python -m mypy --config-file mypy-strict-lane.ini"
+        "CI governance job must include a strict-lane mypy run command: "
+        "python -m mypy --config-file mypy-strict-lane.ini"
     )
 
 
@@ -103,9 +104,9 @@ def test_ci_mypy_strict_lane_step_is_blocking() -> None:
     """
     data = _load_ci_workflow()
 
-    steps = data["jobs"]["test"]["steps"]
+    steps = data["jobs"]["governance"]["steps"]
     strict_steps = [step for step in steps if "mypy-strict-lane.ini" in (step.get("run") or "")]
-    assert strict_steps, "Expected at least one CI step that runs mypy with mypy-strict-lane.ini."
+    assert strict_steps, "Expected at least one governance step that runs mypy with mypy-strict-lane.ini."
 
     for step in strict_steps:
         run_cmd = step.get("run") or ""

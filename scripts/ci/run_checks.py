@@ -13,7 +13,10 @@ suite used on GitHub.
 from __future__ import annotations
 
 import argparse
+import os
 import subprocess
+import sys
+from pathlib import Path
 
 # Full CI test list (matches ci-python-core workflow)
 CORE_TEST_FILES = [
@@ -101,7 +104,43 @@ CODEQL_TEST_FILES = [
 def run_command(cmd: list[str], env: dict[str, str] | None = None) -> None:
     """Run a command with optional environment variables, printing it first."""
     print(f"\n>>> Running: {' '.join(cmd)}\n")
-    subprocess.run(cmd, check=True, env=env)  # noqa: S603
+    merged_env = os.environ.copy()
+    merged_env.setdefault("PYTHONNOUSERSITE", "1")
+    if env:
+        merged_env.update(env)
+    subprocess.run(cmd, check=True, env=merged_env)  # noqa: S603
+
+
+def _repo_venv_python() -> Path:
+    """Return repository venv Python path for current platform."""
+    if os.name == "nt":
+        return Path(".venv") / "Scripts" / "python.exe"
+    return Path(".venv") / "bin" / "python"
+
+
+def _ensure_repo_venv_interpreter(argv: list[str]) -> int | None:
+    """Re-run under repository .venv Python when available.
+
+    This avoids interpreter/package drift when pre-commit resolves to a different
+    Python than the repository runtime environment.
+    """
+    if os.environ.get("PYAGENT_RUN_CHECKS_BOOTSTRAPPED") == "1":
+        return None
+
+    target = _repo_venv_python().resolve()
+    if not target.exists():
+        return None
+
+    current = Path(sys.executable).resolve()
+    if current == target:
+        return None
+
+    env = os.environ.copy()
+    env["PYAGENT_RUN_CHECKS_BOOTSTRAPPED"] = "1"
+    env.setdefault("PYTHONNOUSERSITE", "1")
+    script_path = str(Path(__file__).resolve())
+    result = subprocess.run([str(target), script_path, *argv], env=env, check=False)  # noqa: S603
+    return int(result.returncode)
 
 
 def _filter_python_targets(paths: list[str]) -> list[str]:
@@ -138,12 +177,12 @@ def run_mypy() -> None:
 
 def run_dependency_sync_gate() -> None:
     """Run dependency parity/policy gate for pyproject/requirements sync."""
-    run_command(["python", "-m", "src.tools.dependency_audit", "--root", ".", "--check"])
+    run_command([sys.executable, "-m", "src.tools.dependency_audit", "--root", ".", "--check"])
 
 
 def run_pytest(files: list[str], extra_args: list[str] | None = None) -> None:
     """Run pytest on the given list of test files with optional extra arguments."""
-    cmd = ["python", "-m", "pytest", "-q", "--no-cov"] + files
+    cmd = [sys.executable, "-m", "pytest", "-q", "--no-cov"] + files
     if extra_args:
         cmd += extra_args
     run_command(cmd)
@@ -176,6 +215,11 @@ def profile_ci() -> None:
 
 def main(argv: list[str] | None = None) -> int:
     """Main entry point for the checks script."""
+    forwarded_argv = list(argv) if argv is not None else sys.argv[1:]
+    bootstrap_rc = _ensure_repo_venv_interpreter(forwarded_argv)
+    if bootstrap_rc is not None:
+        return bootstrap_rc
+
     parser = argparse.ArgumentParser(description="Run shared sanity checks.")
     parser.add_argument(
         "--profile",

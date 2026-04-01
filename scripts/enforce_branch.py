@@ -25,6 +25,7 @@ Rules:
 
 from __future__ import annotations
 
+import os
 import re
 import subprocess
 
@@ -69,6 +70,11 @@ def extract_project_ids(staged: list[str]) -> set[str]:
 def main() -> int:
     """Main entry point for the branch naming and isolation enforcement."""
     branch = get_current_branch()
+
+    # In CI pull_request workflows, checkout often uses a detached merge ref.
+    # In that case branch naming cannot be validated meaningfully.
+    if branch == "HEAD" and (os.getenv("CI") or os.getenv("GITHUB_ACTIONS")):
+        return 0
 
     # --- Rule 1: branch naming convention ---
     branch_is_base = branch in _BASE_BRANCHES
