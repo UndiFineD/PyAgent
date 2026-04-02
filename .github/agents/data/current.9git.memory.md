@@ -10,7 +10,7 @@
 
 ## 2026-04-02 - prj0000115-ci-security-quality-workflow-consolidation
 - task_id: prj0000115-ci-security-quality-workflow-consolidation
-- status: IN_PROGRESS
+- status: DONE
 - branch_expected: prj0000115-ci-security-quality-workflow-consolidation
 - branch_observed: prj0000115-ci-security-quality-workflow-consolidation
 - branch_validation: PASS
@@ -19,7 +19,10 @@
 	- Branch gate passed (`git branch --show-current`), and `git pull` returned `Already up to date`.
 	- Handoff timeline assembled from plan -> test -> code -> exec -> ql commits.
 	- Test evidence confirmed from upstream artifacts: `14/14` CI tests pass; docs policy has one known non-blocking baseline exception.
-	- Pending final commit/push/PR actions for @9git closure.
+	- Mandatory dashboard gate executed before staging; out-of-scope generated docs changes remained unstaged.
+	- Staged-file pre-commit gate passed for allowlist files.
+	- Final @9git commit pushed: `efc2790124`.
+	- PR created: https://github.com/UndiFineD/PyAgent/pull/272.
 
 ### Lesson
 - Pattern: Project handoff quality improves when timeline evidence is captured from the exact stage-labeled commit chain before final @9git commit.
