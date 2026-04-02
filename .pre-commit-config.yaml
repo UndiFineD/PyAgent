@@ -4,12 +4,15 @@ repos:
     hooks:
       - id: ruff
         # Only run on our source/test/scripts/docs files - avoids external data baggage.
-        files: '^(src|tests|scripts|docs)/.*\\.py$'
+        files: '^(src|tests|scripts|docs)/.*\.py$'
+      - id: ruff-format
+        # Enforce consistent formatting before lint — fast, zero config.
+        files: '^(src|tests|scripts|docs)/.*\.py$'
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.19.1
     hooks:
       - id: mypy
-        files: '^(src|tests|scripts|docs)/.*\\.py$'
+        files: '^(src|tests|scripts|docs)/.*\.py$'
   - repo: local
     hooks:
       - id: enforce-branch
@@ -18,10 +21,25 @@ repos:
         language: python
         stages: [pre-commit]
       - id: secret-scan
-        name: Run secret scan guardrail
-        entry: python scripts/security/run_secret_scan.py --profile tree
+        name: Run secret scan guardrail (fail on HIGH severity)
+        # --fail-on-severity HIGH matches the former security.yml gate;
+        # this makes the pre-commit hook the single enforcement point.
+        entry: python scripts/security/run_secret_scan.py --profile tree --fail-on-severity HIGH
         language: python
         stages: [pre-commit]
+        pass_filenames: false
+      - id: rust-fmt
+        name: Rust format check
+        # Runs in check-only mode; no files are modified — just reports violations.
+        entry: cargo fmt --manifest-path rust_core/Cargo.toml -- --check
+        language: system
+        files: '\.rs$'
+        pass_filenames: false
+      - id: rust-clippy
+        name: Rust clippy lint
+        entry: cargo clippy --manifest-path rust_core/Cargo.toml -- -D warnings
+        language: system
+        files: '\.rs$'
         pass_filenames: false
       - id: run-precommit-checks
         name: Run pre-commit shared checks
