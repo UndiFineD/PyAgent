@@ -118,3 +118,26 @@ def test_ci_workflow_has_no_sharding_and_no_rust_build() -> None:
 
     rust_steps = [step for step in steps if "Rust" in (step.get("name") or "")]
     assert not rust_steps, "lightweight CI quick job should not include Rust build steps"
+
+
+def test_ci_workflow_quick_job_runs_precommit_command() -> None:
+    """Quick job step must invoke pre-commit with --all-files flag (AC-SEC-004).
+
+    Asserts the command text in the Run pre-commit hooks step to prevent
+    silent drift where the step exists by name but the command changes.
+
+    """
+    data = _load_ci_workflow()
+    jobs = data.get("jobs", {})
+    quick = jobs.get("quick", {})
+    steps = quick.get("steps", [])
+
+    pre_commit_step = next(
+        (step for step in steps if isinstance(step, dict) and step.get("name") == "Run pre-commit hooks"),
+        None,
+    )
+    assert pre_commit_step is not None, "ci.yml quick job must have a 'Run pre-commit hooks' step"
+    run_command: str = pre_commit_step.get("run", "")
+    assert "pre-commit run --all-files" in run_command, (
+        "ci.yml 'Run pre-commit hooks' step must invoke 'pre-commit run --all-files'"
+    )

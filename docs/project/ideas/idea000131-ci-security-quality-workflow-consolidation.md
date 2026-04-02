@@ -1,6 +1,6 @@
 # idea000131 - ci-security-quality-workflow-consolidation
 
-Planned project mapping: none yet
+Planned project mapping: prj0000115
 
 ## Idea summary
 Shift quality and security enforcement to pre-commit hooks first, with GitHub workflows kept minimal as verification-only safeguards.

@@ -1,5 +1,22 @@
 [
   {
+    "id": "prj0000115",
+    "name": "ci-security-quality-workflow-consolidation",
+    "lane": "Discovery",
+    "summary": "Initialize workflow artifacts for idea000131 ci-security-quality-workflow-consolidation and hand off to @2think discovery.",
+    "branch": "prj0000115-ci-security-quality-workflow-consolidation",
+    "pr": null,
+    "priority": "P1",
+    "budget_tier": "S",
+    "tags": [
+      "idea",
+      "idea000131",
+      "ci-security-quality-workflow-consolidation"
+    ],
+    "created": "2026-04-02",
+    "updated": "2026-04-02"
+  },
+  {
     "id": "prj0000114",
     "name": "ideatracker-batching-verbosity",
     "lane": "Discovery",

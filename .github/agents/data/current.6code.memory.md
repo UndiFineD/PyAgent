@@ -8,6 +8,68 @@
 
 ## Entries
 
+## 2026-04-02 — prj0000115 pre-commit drift cleanup (legacy tests)
+- task_id: prj0000115-ci-security-quality-workflow-consolidation
+- lifecycle: DONE
+- branch: prj0000115-ci-security-quality-workflow-consolidation (validated)
+- changed files:
+	- tests/test_generate_legacy_ideas.py
+	- tests/test_idea_tracker.py
+	- .github/agents/data/current.6code.memory.md
+	- .github/agents/data/2026-04-02.6code.log.md
+- implementation summary:
+	- Reproduced pre-commit blocker on the two target files where `ruff-format` reformatted both files.
+	- Kept scope constrained to formatting/lint-only drift resolution for the specified test files.
+	- Re-ran the same pre-commit selector to confirm full pass, then ran targeted pytest selector to verify behavior remained unchanged.
+- verification commands:
+	- & .\.venv\Scripts\Activate.ps1; pre-commit run --files tests/test_generate_legacy_ideas.py tests/test_idea_tracker.py
+	- & .\.venv\Scripts\Activate.ps1; pre-commit run --files tests/test_generate_legacy_ideas.py tests/test_idea_tracker.py
+	- & .\.venv\Scripts\Activate.ps1; c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_generate_legacy_ideas.py tests/test_idea_tracker.py
+- unresolved risks:
+	- None identified in scoped files.
+- handoff target: @7exec
+
+### Lesson
+- Pattern: Pre-existing formatting drift in legacy test files can block mandatory pre-commit in otherwise clean implementation branches.
+- Root cause: Test files diverged from enforced `ruff-format` style prior to this task.
+- Prevention: Run `pre-commit run --files` on touched legacy files before final staging to absorb style drift early.
+- First seen: 2026-04-02
+- Seen in: prj0000115-ci-security-quality-workflow-consolidation
+- Recurrence count: 1
+- Promotion status: Candidate
+
+## 2026-04-02 — prj0000115 scheduled security workflow (Wave B)
+- task_id: prj0000115-ci-security-quality-workflow-consolidation
+- lifecycle: DONE
+- branch: prj0000115-ci-security-quality-workflow-consolidation (validated)
+- changed files:
+	- .github/workflows/security-scheduled.yml
+	- docs/project/prj0000115-ci-security-quality-workflow-consolidation/ci-security-quality-workflow-consolidation.plan.md
+	- docs/project/prj0000115-ci-security-quality-workflow-consolidation/ci-security-quality-workflow-consolidation.code.md
+	- .github/agents/data/current.6code.memory.md
+	- .github/agents/data/2026-04-02.6code.log.md
+- implementation summary:
+	- Created scheduled security workflow with `on.schedule` and `workflow_dispatch` only.
+	- Added least-privilege workflow permissions (`contents: read`, `security-events: write`).
+	- Implemented required jobs: `dependency-audit` and `codeql-scan`.
+	- Configured CodeQL init for `languages: python` and custom query reference containing `codeql-custom-queries-python`.
+- verification commands:
+	- & .\.venv\Scripts\Activate.ps1; python -m pytest -q tests/ci/test_security_workflow.py
+	- & .\.venv\Scripts\Activate.ps1; python -m pytest -q tests/ci/test_ci_workflow.py
+	- & .\.venv\Scripts\Activate.ps1; python -m pytest -q tests/ci/test_security_workflow.py tests/ci/test_ci_workflow.py
+- unresolved risks:
+	- None identified in scoped Wave B files.
+- handoff target: @7exec
+
+### Lesson
+- Pattern: YAML workflow contract tests are most reliable when workflow keys are explicit and use stable scalar values for action `with` fields.
+- Root cause: Missing `.github/workflows/security-scheduled.yml` caused contract-test failures across all required assertions.
+- Prevention: Add workflow skeletons early with explicit trigger, permission, and action-init fields that exactly mirror tested contracts.
+- First seen: 2026-04-02
+- Seen in: prj0000115-ci-security-quality-workflow-consolidation
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ## 2026-04-02 — prj0000114 IdeaTracker artifact pipeline refactor
 - task_id: prj0000114-ideatracker-batching-verbosity
 - lifecycle: DONE

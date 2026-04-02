@@ -3,10 +3,32 @@
 ## Metadata
 - agent: @2think
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-04-01
+- updated_at: 2026-04-02
 - rollover: At new project start, append this file's entries to history.2think.memory.md in chronological order, then clear Entries.
 
 ## Entries
+
+### 2026-04-02 - prj0000115-ci-security-quality-workflow-consolidation
+- task_id: prj0000115-ci-security-quality-workflow-consolidation
+- status: DONE
+- target_agent: @3design
+- canonical_artifact: docs/project/prj0000115-ci-security-quality-workflow-consolidation/ci-security-quality-workflow-consolidation.think.md
+- recommendation_summary: Select Option C (hybrid: fast pre-commit baseline + lightweight CI verifier + scheduled heavyweight security scans) with phased rollout discipline from Option A.
+- prior_art_refs:
+	- docs/project/prj0000110-idea000004-quality-workflow-branch-trigger/idea000004-quality-workflow-branch-trigger.design.md
+	- docs/project/ideas/archive/idea000006-codeql-ci-integration.md
+	- docs/project/ideas/archive/idea000007-security-scanning-ci.md
+- branch_gate_evidence: `git branch --show-current` -> `prj0000115-ci-security-quality-workflow-consolidation`
+- rationale_for_handoff: Completed 3-option analysis with current-state evidence, decision matrix, per-option SWOT, security risk-to-testability mapping, and explicit @3design open questions.
+
+#### Lesson
+- Pattern: When repository CI is already lightweight and pre-commit-first, the highest-value discovery move is to close heavyweight scheduled security gaps instead of re-litigating fast-path checks.
+- Root cause: Backlog context reflected older CI assumptions (multiple workflows and missing pre-commit-central verification), while current repo already converged on a single lightweight workflow.
+- Prevention: Require mandatory current-state workflow inventory before option scoring and tie recommendation to observed files, not historical assumptions.
+- First seen: 2026-04-02
+- Seen in: prj0000115-ci-security-quality-workflow-consolidation
+- Recurrence count: 1
+- Promotion status: MONITOR
 
 ### 2026-04-01 - prj0000110-idea000004-quality-workflow-branch-trigger
 - task_id: prj0000110-idea000004-quality-workflow-branch-trigger

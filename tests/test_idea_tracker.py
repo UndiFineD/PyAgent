@@ -309,8 +309,7 @@ def test_similarity_blocking_finds_shared_project_duplicates(tmp_path: Path) -> 
     payload = module.build_tracker_payload(tmp_path)
 
     all_candidates = (
-        payload["duplicate_candidates"]["merge_candidates"]
-        + payload["duplicate_candidates"]["review_candidates"]
+        payload["duplicate_candidates"]["merge_candidates"] + payload["duplicate_candidates"]["review_candidates"]
     )
     candidate_pairs = {tuple(sorted(item["idea_ids"])) for item in all_candidates}
 
@@ -330,20 +329,32 @@ def test_similarity_blocking_ignores_cross_project_pairs(tmp_path: Path) -> None
 
     # 3 ideas in project A, 2 ideas in project B — disjoint titles.
     project_a_sections = [
-        "## Problem statement", "Alpha problem.",
-        "## Success metrics", "Alpha metric.",
-        "## Validation commands", "- pytest -q",
-        "## Risks and mitigations", "- Risk.",
-        "## Failure handling and rollback", "- Rollback.",
-        "## Source references", "- docs/alpha.md",
+        "## Problem statement",
+        "Alpha problem.",
+        "## Success metrics",
+        "Alpha metric.",
+        "## Validation commands",
+        "- pytest -q",
+        "## Risks and mitigations",
+        "- Risk.",
+        "## Failure handling and rollback",
+        "- Rollback.",
+        "## Source references",
+        "- docs/alpha.md",
     ]
     project_b_sections = [
-        "## Problem statement", "Beta problem.",
-        "## Success metrics", "Beta metric.",
-        "## Validation commands", "- pytest -q",
-        "## Risks and mitigations", "- Risk.",
-        "## Failure handling and rollback", "- Rollback.",
-        "## Source references", "- docs/beta.md",
+        "## Problem statement",
+        "Beta problem.",
+        "## Success metrics",
+        "Beta metric.",
+        "## Validation commands",
+        "- pytest -q",
+        "## Risks and mitigations",
+        "- Risk.",
+        "## Failure handling and rollback",
+        "- Rollback.",
+        "## Source references",
+        "- docs/beta.md",
     ]
 
     for idx in range(1, 4):
@@ -367,8 +378,7 @@ def test_similarity_blocking_ignores_cross_project_pairs(tmp_path: Path) -> None
     payload = module.build_tracker_payload(tmp_path)
 
     all_candidates = (
-        payload["duplicate_candidates"]["merge_candidates"]
-        + payload["duplicate_candidates"]["review_candidates"]
+        payload["duplicate_candidates"]["merge_candidates"] + payload["duplicate_candidates"]["review_candidates"]
     )
     candidate_pair_set = {tuple(sorted(c["idea_ids"])) for c in all_candidates}
 
@@ -402,25 +412,27 @@ def test_similarity_blocking_title_fallback_finds_similar_ungrouped_ideas(tmp_pa
 
     shared_title = "# async pipeline optimizer"  # first token "async" → blocking key title:async
     sections = [
-        "## Problem statement", "Pipeline slow.",
-        "## Success metrics", "2x faster.",
-        "## Validation commands", "- pytest -q",
-        "## Risks and mitigations", "- Risk.",
-        "## Failure handling and rollback", "- Rollback.",
-        "## Source references", "- docs/ref.md",
+        "## Problem statement",
+        "Pipeline slow.",
+        "## Success metrics",
+        "2x faster.",
+        "## Validation commands",
+        "- pytest -q",
+        "## Risks and mitigations",
+        "- Risk.",
+        "## Failure handling and rollback",
+        "- Rollback.",
+        "## Source references",
+        "- docs/ref.md",
     ]
 
     # Both ideas: no planned project mapping, identical title → title-fallback blocking applies.
     (ideas_dir / "idea000601-pipeline-alpha.md").write_text(
-        "\n".join(
-            [shared_title, "", "Planned project mapping: none yet", ""] + sections
-        ),
+        "\n".join([shared_title, "", "Planned project mapping: none yet", ""] + sections),
         encoding="utf-8",
     )
     (ideas_dir / "idea000602-pipeline-beta.md").write_text(
-        "\n".join(
-            [shared_title, "", "Planned project mapping: none yet", ""] + sections
-        ),
+        "\n".join([shared_title, "", "Planned project mapping: none yet", ""] + sections),
         encoding="utf-8",
     )
 
@@ -428,8 +440,7 @@ def test_similarity_blocking_title_fallback_finds_similar_ungrouped_ideas(tmp_pa
     payload = module.build_tracker_payload(tmp_path)
 
     all_candidates = (
-        payload["duplicate_candidates"]["merge_candidates"]
-        + payload["duplicate_candidates"]["review_candidates"]
+        payload["duplicate_candidates"]["merge_candidates"] + payload["duplicate_candidates"]["review_candidates"]
     )
     candidate_pairs = {tuple(sorted(item["idea_ids"])) for item in all_candidates}
 
@@ -446,9 +457,7 @@ def test_build_tracker_payload_verbose_logs_to_stderr(tmp_path: Path, capsys: Ca
 
     for idx in range(1, 4):
         (ideas_dir / f"idea00070{idx}-verbose-test-{idx}.md").write_text(
-            "\n".join(
-                [f"# idea-70{idx} - verbose test {idx}", "", "## Source references", "- docs/v.md"]
-            ),
+            "\n".join([f"# idea-70{idx} - verbose test {idx}", "", "## Source references", "- docs/v.md"]),
             encoding="utf-8",
         )
 
@@ -534,9 +543,7 @@ def test_similarity_verbose_heartbeat_not_tied_to_large_batch_size(
     module.build_tracker_payload(tmp_path, verbose=True, batch_size=10000)
 
     captured = capsys.readouterr()
-    progress_lines = [
-        line for line in captured.err.splitlines() if "Similarity stage: processed blocks" in line
-    ]
+    progress_lines = [line for line in captured.err.splitlines() if "Similarity stage: processed blocks" in line]
     assert len(progress_lines) >= 2, "Expected recurring similarity heartbeats with very large batch_size"
 
 

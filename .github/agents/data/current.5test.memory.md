@@ -8,6 +8,43 @@
 
 ## Entries
 
+### Entry 2026-04-02 - prj0000115 ci-security-quality workflow consolidation wave A
+- task_id: prj0000115-ci-security-quality-workflow-consolidation
+- status: DONE
+- lifecycle_transition: OPEN -> IN_PROGRESS -> DONE
+- branch_gate:
+  - expected: prj0000115-ci-security-quality-workflow-consolidation
+  - observed: prj0000115-ci-security-quality-workflow-consolidation
+  - result: PASS
+- scope:
+  - tests/ci/test_security_workflow.py
+  - tests/ci/test_ci_workflow.py
+  - docs/project/prj0000115-ci-security-quality-workflow-consolidation/ci-security-quality-workflow-consolidation.test.md
+  - .github/agents/data/current.5test.memory.md
+  - .github/agents/data/2026-04-02.5test.log.md
+- pass_fail_summary:
+  - PASS: .venv\Scripts\ruff.exe check tests/ci/test_security_workflow.py tests/ci/test_ci_workflow.py
+  - RED(expected): python -m pytest -q tests/ci/test_security_workflow.py (7 failed in 4.56s)
+  - PASS: python -m pytest -q tests/ci/test_ci_workflow.py (7 passed in 3.68s)
+- red_failure_signatures:
+  - AssertionError: security workflow file does not exist yet (.github/workflows/security-scheduled.yml)
+  - FileNotFoundError: no such file or directory .github/workflows/security-scheduled.yml
+  - non-qualifying failures absent: ImportError, AttributeError
+- handoff_notes:
+  - target_agent: @6code
+  - readiness: READY_FOR_IMPLEMENTATION
+  - implementation_delta_required:
+    - add .github/workflows/security-scheduled.yml meeting AC-SEC-001..003
+
+#### Lesson
+- Pattern: Security workflow contracts are strongest when tests validate trigger shape, permissions, and CodeQL init arguments instead of only job existence.
+- Root cause: No scheduled security workflow file exists yet, so all contract selectors fail as intended in red phase.
+- Prevention: Keep one explicit existence test plus behavior assertions that fail on missing/incorrect YAML content.
+- First seen: 2026-04-02
+- Seen in: prj0000115-ci-security-quality-workflow-consolidation
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ### Entry 2026-04-01 - prj0000110 quality workflow branch trigger red contracts
 - task_id: prj0000110-idea000004-quality-workflow-branch-trigger
 - status: DONE

@@ -3,10 +3,35 @@
 ## Metadata
 - agent: @7exec
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-04-01
+- updated_at: 2026-04-02
 - rollover: At new project start, append this file's entries to history.7exec.memory.md in chronological order, then clear Entries.
 
 ## Entries
+
+## Last run - 2026-04-02
+- task_id: prj0000115-ci-security-quality-workflow-consolidation
+- Task: T-SEC-005 closure evidence runtime validation
+- Branch gate: PASS (expected=prj0000115-ci-security-quality-workflow-consolidation, observed=prj0000115-ci-security-quality-workflow-consolidation)
+- Sync gate: PASS (`git pull` -> Already up to date; HEAD=89649d7a4407ea7b16e70d41a683cb510b7f3332)
+- Security workflow gate: PASS (`python -m pytest -v tests/ci/test_security_workflow.py` -> 7 passed)
+- CI parity gate: PASS (`python -m pytest -v tests/ci/test_ci_workflow.py` -> 7 passed)
+- Combined convergence gate: PASS (`python -m pytest -q tests/ci/test_security_workflow.py tests/ci/test_ci_workflow.py` -> 14 passed)
+- Docs policy gate: PASS WITH KNOWN BASELINE (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 16 passed, 1 known pre-existing failure)
+- Scope compliance: PASS (`.github/workflows/ci.yml`, `.pre-commit-config.yaml`, and `src/`, `backend/`, `rust_core/` unchanged)
+- Pre-commit gate: FAIL (`pre-commit run --files docs/project/prj0000115-ci-security-quality-workflow-consolidation/ci-security-quality-workflow-consolidation.exec.md .github/agents/data/current.7exec.memory.md .github/agents/data/2026-04-02.7exec.log.md`)
+- Pre-commit failure detail: shared hook `run-precommit-checks` reported pre-existing formatter drift in `tests/test_generate_legacy_ideas.py` and `tests/test_idea_tracker.py`
+- Outcome: BLOCKED -> @0master/@6code
+- Next handoff target: @0master (blocker visibility) and @6code (shared-hook formatter remediation)
+- Notes: T-SEC-005 evidence complete with 14 tests passed and scope compliance confirmed; @8ql handoff is blocked by mandatory pre-commit gate.
+
+### Lesson
+- Pattern: Deterministic closure evidence is strongest when suite-specific selectors and scope-diff selectors are captured in one ordered run.
+- Root cause: Security closure requires both behavior proof (tests) and boundary proof (workflow/source immutability checks).
+- Prevention: Keep @7exec closure sequence fixed: branch gate -> targeted suites -> docs gate -> scope diff selectors -> artifact updates.
+- First seen: 2026-04-02
+- Seen in: prj0000115-ci-security-quality-workflow-consolidation
+- Recurrence count: 1
+- Promotion status: Candidate
 
 ## Last run - 2026-04-01 (targeted rerun)
 - task_id: prj0000110-idea000004-quality-workflow-branch-trigger
