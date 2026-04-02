@@ -122,6 +122,7 @@ def test_write_jsonl_split_creates_one_file_per_source(tmp_path: Path) -> None:
 
     # Each file only contains ideas for its source
     import json as _json
+
     alpha_ideas = [_json.loads(line) for line in alpha_out.read_text(encoding="utf-8").splitlines()]
     beta_ideas = [_json.loads(line) for line in beta_out.read_text(encoding="utf-8").splitlines()]
     assert all(item["source_file"] == "src/alpha.py" for item in alpha_ideas)
@@ -143,6 +144,7 @@ def test_write_manifest_includes_split_metadata(tmp_path: Path) -> None:
     )
 
     import json as _json
+
     output_dir = tmp_path / "split_out"
     written = module._write_jsonl_split(output_dir, payload)
 
