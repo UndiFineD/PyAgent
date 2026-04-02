@@ -1,22 +1,22 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-04-02T00:07:25.057254+00:00",
+  "generated_at": "2026-04-02T00:41:53.850458+00:00",
   "source": {
     "active_dir": "docs/project/ideas",
     "archive_dir": "docs/project/ideas/archive",
     "offset": 0,
     "limit": null,
-    "available_total": 131,
-    "processed_total": 131
+    "available_total": 132,
+    "processed_total": 132
   },
   "summary": {
-    "total": 131,
-    "active": 120,
-    "archived": 11,
-    "unique_idea_ids": 131,
+    "total": 132,
+    "active": 119,
+    "archived": 13,
+    "unique_idea_ids": 132,
     "duplicate_idea_ids": [],
     "readiness": {
-      "ready": 51,
+      "ready": 52,
       "needs-discovery": 0,
       "blocked": 80
     },
@@ -75,7 +75,8 @@
       "idea000128",
       "idea000129",
       "idea000130",
-      "idea000131"
+      "idea000131",
+      "idea000132"
     ],
     "needs-discovery": [],
     "blocked": [
@@ -317,7 +318,7 @@
       },
       "merged_from": [],
       "sha256": "fda5c6259a8f970dae3175e1deeab518564aad9dba0ba057a0afe9525d3de390",
-      "updated": "2026-04-01T08:26:34.441039+00:00"
+      "updated": "2026-04-02T00:28:12.094044+00:00"
     },
     {
       "idea_id": "idea000005",
@@ -357,7 +358,7 @@
       },
       "merged_from": [],
       "sha256": "659a96ba594bf449a02a126ebb18ad12c37ffcdb91b513e07ae673a2ecc73c98",
-      "updated": "2026-04-01T08:26:34.444893+00:00"
+      "updated": "2026-04-02T00:28:12.094044+00:00"
     },
     {
       "idea_id": "idea000006",
@@ -397,7 +398,7 @@
       },
       "merged_from": [],
       "sha256": "ea75ecd4b32af2c4183de6609d162cbdb810e939e5e2ae0b4c00cfb91887cdca",
-      "updated": "2026-04-01T08:26:34.445524+00:00"
+      "updated": "2026-04-02T00:28:12.094044+00:00"
     },
     {
       "idea_id": "idea000007",
@@ -437,7 +438,7 @@
       },
       "merged_from": [],
       "sha256": "c32074226d53407a8f40cd12b879c1a186a4b01331e0c2d992ca51f966860224",
-      "updated": "2026-04-01T08:26:34.447531+00:00"
+      "updated": "2026-04-02T00:28:12.094044+00:00"
     },
     {
       "idea_id": "idea000008",
@@ -4510,8 +4511,8 @@
       "idea_id": "idea000123",
       "title": "idea000123 - shard-202602-306.jsonl Hardening",
       "slug": "shard-202602-306-jsonl-hardening",
-      "status": "active",
-      "source_path": "docs/project/ideas/idea000123-shard-202602-306-jsonl-hardening.md",
+      "status": "archived",
+      "source_path": "docs/project/ideas/archive/idea000123-shard-202602-306-jsonl-hardening.md",
       "planned_project_ids": [],
       "source_references": [
         "`data/logs/external_ai_learning/shard_202602_306.jsonl.gz`"
@@ -4539,8 +4540,8 @@
       "idea_id": "idea000124",
       "title": "idea000124 - shard-202602-693.jsonl Hardening",
       "slug": "shard-202602-693-jsonl-hardening",
-      "status": "active",
-      "source_path": "docs/project/ideas/idea000124-shard-202602-693-jsonl-hardening.md",
+      "status": "archived",
+      "source_path": "docs/project/ideas/archive/idea000124-shard-202602-693-jsonl-hardening.md",
       "planned_project_ids": [],
       "source_references": [
         "`data/logs/external_ai_learning/shard_202602_693.jsonl.gz`"
@@ -4770,8 +4771,41 @@
         "idea000006",
         "idea000007"
       ],
-      "sha256": "408309181481670f2bcc19d9c6b73f4e26a0539b4f263ffdee4f666a1297e422",
-      "updated": "2026-04-02T00:07:20.141828+00:00"
+      "sha256": "6f54c676efcd0ee9b4a26c99e2db9ef96a87c5a6c07a0bbdfaa834ab59952cbb",
+      "updated": "2026-04-02T00:28:12.094044+00:00"
+    },
+    {
+      "idea_id": "idea000132",
+      "title": "idea000132 - external-ai-learning-jsonl-shards-hardening",
+      "slug": "external-ai-learning-jsonl-shards-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000132-external-ai-learning-jsonl-shards-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/project/ideas/idea000123-shard-202602-306-jsonl-hardening.md",
+        "docs/project/ideas/idea000124-shard-202602-693-jsonl-hardening.md",
+        "docs/project/legacy_idea_merge_proposals.batch1.json",
+        "docs/project/ideatracker.json"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "idea000123 (docs/project/ideas/idea000123-shard-202602-306-jsonl-hardening.md)",
+        "idea000124 (docs/project/ideas/idea000124-shard-202602-693-jsonl-hardening.md)"
+      ],
+      "sha256": "a9afedf3e995281a2f9b591183e60ee9f022381da520bbb4aa49b83bedd05e27",
+      "updated": "2026-04-02T00:41:50.992021+00:00"
     }
   ]
 }

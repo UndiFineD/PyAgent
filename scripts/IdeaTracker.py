@@ -19,6 +19,7 @@ import hashlib
 import itertools
 import json
 import re
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -64,6 +65,21 @@ CRITICAL_SECTIONS = [
     "risks and mitigations",
     "failure handling and rollback",
 ]
+
+# Stop-words excluded from title-based blocking keys.
+_STOP_WORDS: frozenset[str] = frozenset(
+    {"a", "an", "the", "of", "in", "for", "and", "or", "to", "with", "at", "by", "from"}
+)
+
+
+def _log(msg: str) -> None:
+    """Write a progress message to stderr, flushing immediately.
+
+    Args:
+        msg: The progress message to emit.
+
+    """
+    print(msg, file=sys.stderr, flush=True)
 
 
 def _repo_root() -> Path:
@@ -371,30 +387,105 @@ def _collect_idea_record(repo_root: Path, file_path: Path, archived: bool) -> di
     }
 
 
+def _blocking_keys(record: dict[str, Any]) -> list[str]:
+    """Return blocking keys for a record used in scalable candidate narrowing.
+
+    Two records are only compared if they share at least one blocking key.
+    Primary keys are derived from shared ``planned_project_ids``.  When a
+    record has no project mapping the fallback is the first significant
+    (non-stop-word) title token.
+
+    Args:
+        record: Idea record dict as produced by ``_collect_idea_record``.
+
+    Returns:
+        Non-empty list of string blocking keys.
+
+    """
+    keys: list[str] = []
+    for pid in record.get("planned_project_ids") or []:
+        keys.append(f"proj:{pid.lower()}")
+    if not keys:
+        tokens = [t for t in _tokenize(record.get("title", "")) if t not in _STOP_WORDS]
+        keys.append(f"title:{tokens[0]}" if tokens else "title:_ungrouped_")
+    return keys
+
+
 def _build_similarity_clusters(
     records: list[dict[str, Any]],
     merge_threshold: float,
     review_threshold: float,
+    verbose: bool = False,
 ) -> list[dict[str, Any]]:
-    """Build pairwise duplicate candidates for merge/review queues."""
-    active_records = [record for record in records if record.get("status") == "active" and record.get("idea_id")]
+    """Build duplicate candidates using blocking to replace O(n^2) exhaustive search.
+
+    Rather than comparing every active record pair, records are grouped into
+    *blocks* by shared ``planned_project_id`` (primary) or first significant
+    title token (fallback).  Only intra-block pairs are evaluated; pairs seen
+    in multiple overlapping blocks are deduplicated by sorted idea-ID key.
+
+    Tradeoff: ideas with no shared project mapping *and* a dissimilar title
+    prefix will not be compared.  This bounded miss risk is acceptable for
+    large-scale runs (100 000+ ideas) where exhaustive O(n^2) is prohibitive.
+    Obvious duplicates — same project or similar title start — are reliably
+    detected.  The tradeoff is documented here and validated by tests.
+
+    Args:
+        records: Full list of idea records (active and archived).
+        merge_threshold: Similarity score at or above which a pair is a merge candidate.
+        review_threshold: Minimum score for inclusion as a review candidate.
+        verbose: When True, emit a blocking statistics line to stderr.
+
+    Returns:
+        List of candidate dicts sorted by descending score.
+
+    """
+    active_records = [r for r in records if r.get("status") == "active" and r.get("idea_id")]
+    if not active_records:
+        return []
+
+    block_map: dict[str, list[dict[str, Any]]] = {}
+    for record in active_records:
+        for key in _blocking_keys(record):
+            block_map.setdefault(key, []).append(record)
+
+    seen_pairs: set[tuple[str, str]] = set()
     clusters: list[dict[str, Any]] = []
 
-    for left, right in itertools.combinations(active_records, 2):
-        signals = _idea_similarity(left, right)
-        score = signals["score"]
-        if score < review_threshold:
+    for block in block_map.values():
+        if len(block) < 2:
             continue
+        for left, right in itertools.combinations(block, 2):
+            pair_key = (
+                min(left["idea_id"], right["idea_id"]),
+                max(left["idea_id"], right["idea_id"]),
+            )
+            if pair_key in seen_pairs:
+                continue
+            seen_pairs.add(pair_key)
+            signals = _idea_similarity(left, right)
+            score = signals["score"]
+            if score < review_threshold:
+                continue
+            candidate_type = "merge_candidate" if score >= merge_threshold else "review_candidate"
+            clusters.append(
+                {
+                    "type": candidate_type,
+                    "score": score,
+                    "idea_ids": [left["idea_id"], right["idea_id"]],
+                    "paths": [left["source_path"], right["source_path"]],
+                    "signals": signals,
+                }
+            )
 
-        candidate_type = "merge_candidate" if score >= merge_threshold else "review_candidate"
-        clusters.append(
-            {
-                "type": candidate_type,
-                "score": score,
-                "idea_ids": [left["idea_id"], right["idea_id"]],
-                "paths": [left["source_path"], right["source_path"]],
-                "signals": signals,
-            }
+    if verbose:
+        n = len(active_records)
+        exhaustive = n * (n - 1) // 2
+        _log(
+            f"[IdeaTracker] Similarity blocking: {n} active records, "
+            f"{len(seen_pairs)} pairs evaluated "
+            f"(vs {exhaustive} exhaustive), "
+            f"{len(clusters)} above threshold"
         )
 
     clusters.sort(key=lambda item: (item["score"], item["idea_ids"][0], item["idea_ids"][1]), reverse=True)
@@ -407,8 +498,24 @@ def build_tracker_payload(
     limit: int | None = None,
     merge_threshold: float = 0.8,
     review_threshold: float = 0.6,
+    batch_size: int = 1000,
+    verbose: bool = False,
 ) -> dict[str, Any]:
-    """Build idea tracker payload for active and archived ideas."""
+    """Build idea tracker payload for active and archived ideas.
+
+    Args:
+        repo_root: Repository root path.
+        offset: Start index into the combined sorted file list.
+        limit: Maximum number of files to process; None means all.
+        merge_threshold: Similarity score at or above which a pair is a merge candidate.
+        review_threshold: Minimum similarity score for a review candidate.
+        batch_size: Emit a stderr progress line every this many files when *verbose*.
+        verbose: When True, log collection and similarity progress to stderr.
+
+    Returns:
+        Tracker payload dict with schema_version 2.
+
+    """
     ideas_root = repo_root / "docs" / "project" / "ideas"
     archive_root = ideas_root / "archive"
 
@@ -422,9 +529,14 @@ def build_tracker_payload(
     scoped_end = None if limit is None else scoped_start + max(limit, 0)
     scoped = all_files_with_status[scoped_start:scoped_end]
 
+    if verbose:
+        _log(f"[IdeaTracker] Collecting {len(scoped)} idea files (batch_size={batch_size})")
+
     records: list[dict[str, Any]] = []
-    for file_path, archived in scoped:
+    for idx, (file_path, archived) in enumerate(scoped, start=1):
         records.append(_collect_idea_record(repo_root, file_path, archived=archived))
+        if verbose and batch_size > 0 and idx % batch_size == 0:
+            _log(f"[IdeaTracker] Processed {idx}/{len(scoped)} files...")
 
     records.sort(key=lambda item: (item.get("idea_id", ""), item.get("status", ""), item.get("source_path", "")))
 
@@ -437,7 +549,7 @@ def build_tracker_payload(
         "blocked": sum(1 for item in records if item.get("readiness_status") == "blocked"),
     }
 
-    similarity_clusters = _build_similarity_clusters(records, merge_threshold, review_threshold)
+    similarity_clusters = _build_similarity_clusters(records, merge_threshold, review_threshold, verbose=verbose)
     merge_candidates = [item for item in similarity_clusters if item["type"] == "merge_candidate"]
     review_candidates = [item for item in similarity_clusters if item["type"] == "review_candidate"]
 
@@ -525,6 +637,19 @@ def _build_parser() -> argparse.ArgumentParser:
         default=0.6,
         help="Similarity threshold for review candidates (default: 0.6).",
     )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=1000,
+        dest="batch_size",
+        help="Log progress every N files during collection (default: 1000).",
+    )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Emit progress messages to stderr during long runs.",
+    )
     return parser
 
 
@@ -542,6 +667,8 @@ def main() -> int:
         limit=args.limit,
         merge_threshold=args.merge_threshold,
         review_threshold=args.review_threshold,
+        batch_size=args.batch_size,
+        verbose=args.verbose,
     )
     write_tracker(output_path, payload)
 

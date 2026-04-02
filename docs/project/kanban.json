@@ -155,6 +155,24 @@
   ],
   "projects": [
     {
+      "id": "prj0000114",
+      "name": "ideatracker-batching-verbosity",
+      "lane": "Discovery",
+      "summary": "Optimize scripts/IdeaTracker.py for very large idea sets by adding verbose progress and batch-oriented processing.",
+      "branch": "prj0000114-ideatracker-batching-verbosity",
+      "pr": null,
+      "priority": "P2",
+      "budget_tier": "S",
+      "tags": [
+        "ideatracker",
+        "batching",
+        "verbosity",
+        "scalability"
+      ],
+      "created": "2026-04-02",
+      "updated": "2026-04-02"
+    },
+    {
       "id": "prj0000113",
       "name": "legacy-idea-batch-generator",
       "lane": "Released",
