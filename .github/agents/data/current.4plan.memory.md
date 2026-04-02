@@ -8,6 +8,25 @@
 
 ## Entries
 
+## prj0000115 - ci-security-quality-workflow-consolidation
+
+| Field | Value |
+|---|---|
+| task_id | prj0000115-ci-security-quality-workflow-consolidation |
+| owner_agent | @4plan |
+| source | @0master assignment + @3design artifact |
+| created_at | 2026-04-02 |
+| updated_at | 2026-04-02 |
+| status | DONE |
+| lifecycle | OPEN -> IN_PROGRESS -> DONE |
+| chunk_boundaries | Single planning chunk with tasks T-SEC-001..T-SEC-005 |
+| acceptance_criteria_scope | AC-SEC-001..AC-SEC-004 mapped to task ownership, validation commands, and parallel boundaries |
+| dependency_order | Parallel Wave A (T-SEC-001 + T-SEC-003) -> Sequential T-SEC-002 -> Convergence T-SEC-004 -> Closure T-SEC-005 |
+| handoff_target | @5test |
+| artifact_paths | docs/project/prj0000115-ci-security-quality-workflow-consolidation/ci-security-quality-workflow-consolidation.plan.md |
+| branch | prj0000115-ci-security-quality-workflow-consolidation (validated PASS before artifact writes) |
+| validation_evidence | python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 16 passed, 1 failed (pre-existing missing legacy file: docs/project/prj0000005/prj005-llm-swarm-architecture.git.md) |
+
 ## prj0000114 - ideatracker-batching-verbosity
 
 | Field | Value |
