@@ -1,22 +1,22 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-04-01T12:54:48.739967+00:00",
+  "generated_at": "2026-04-02T00:07:25.057254+00:00",
   "source": {
     "active_dir": "docs/project/ideas",
     "archive_dir": "docs/project/ideas/archive",
     "offset": 0,
     "limit": null,
-    "available_total": 80,
-    "processed_total": 80
+    "available_total": 131,
+    "processed_total": 131
   },
   "summary": {
-    "total": 80,
-    "active": 73,
-    "archived": 7,
-    "unique_idea_ids": 80,
+    "total": 131,
+    "active": 120,
+    "archived": 11,
+    "unique_idea_ids": 131,
     "duplicate_idea_ids": [],
     "readiness": {
-      "ready": 0,
+      "ready": 51,
       "needs-discovery": 0,
       "blocked": 80
     },
@@ -24,7 +24,59 @@
     "review_candidates": 0
   },
   "queues": {
-    "ready": [],
+    "ready": [
+      "idea000081",
+      "idea000082",
+      "idea000083",
+      "idea000084",
+      "idea000085",
+      "idea000086",
+      "idea000087",
+      "idea000088",
+      "idea000089",
+      "idea000090",
+      "idea000091",
+      "idea000092",
+      "idea000093",
+      "idea000094",
+      "idea000095",
+      "idea000096",
+      "idea000097",
+      "idea000098",
+      "idea000099",
+      "idea000100",
+      "idea000101",
+      "idea000102",
+      "idea000103",
+      "idea000104",
+      "idea000105",
+      "idea000106",
+      "idea000107",
+      "idea000108",
+      "idea000109",
+      "idea000110",
+      "idea000111",
+      "idea000112",
+      "idea000113",
+      "idea000114",
+      "idea000115",
+      "idea000116",
+      "idea000117",
+      "idea000118",
+      "idea000119",
+      "idea000120",
+      "idea000121",
+      "idea000122",
+      "idea000123",
+      "idea000124",
+      "idea000125",
+      "idea000126",
+      "idea000127",
+      "idea000128",
+      "idea000129",
+      "idea000130",
+      "idea000131"
+    ],
     "needs-discovery": [],
     "blocked": [
       "idea000001",
@@ -232,8 +284,8 @@
       "idea_id": "idea000004",
       "title": "idea-004 - quality-workflow-branch-trigger",
       "slug": "quality-workflow-branch-trigger",
-      "status": "active",
-      "source_path": "docs/project/ideas/idea000004-quality-workflow-branch-trigger.md",
+      "status": "archived",
+      "source_path": "docs/project/ideas/archive/idea000004-quality-workflow-branch-trigger.md",
       "planned_project_ids": [
         "prj0000087",
         "prj0000025"
@@ -271,8 +323,8 @@
       "idea_id": "idea000005",
       "title": "idea-005 - rust-ci-workflow",
       "slug": "rust-ci-workflow",
-      "status": "active",
-      "source_path": "docs/project/ideas/idea000005-rust-ci-workflow.md",
+      "status": "archived",
+      "source_path": "docs/project/ideas/archive/idea000005-rust-ci-workflow.md",
       "planned_project_ids": [
         "prj0000087",
         "prj0000070",
@@ -311,8 +363,8 @@
       "idea_id": "idea000006",
       "title": "idea-006 - codeql-ci-integration",
       "slug": "codeql-ci-integration",
-      "status": "active",
-      "source_path": "docs/project/ideas/idea000006-codeql-ci-integration.md",
+      "status": "archived",
+      "source_path": "docs/project/ideas/archive/idea000006-codeql-ci-integration.md",
       "planned_project_ids": [
         "prj0000088",
         "prj0000087",
@@ -351,8 +403,8 @@
       "idea_id": "idea000007",
       "title": "idea-007 - security-scanning-ci",
       "slug": "security-scanning-ci",
-      "status": "active",
-      "source_path": "docs/project/ideas/idea000007-security-scanning-ci.md",
+      "status": "archived",
+      "source_path": "docs/project/ideas/archive/idea000007-security-scanning-ci.md",
       "planned_project_ids": [
         "prj0000075",
         "prj0000088",
@@ -3235,6 +3287,1491 @@
       "merged_from": [],
       "sha256": "25b519755726e38724295f40a2ce96776867d5c96f02c8a9c95b82eae4a5b589",
       "updated": "2026-04-01T08:26:34.434465+00:00"
+    },
+    {
+      "idea_id": "idea000081",
+      "title": "idea000081 - contributing Hardening",
+      "slug": "contributing-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000081-contributing-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`CONTRIBUTING.md`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "f0e43befa0b3d9160e8c350b626e23feada823052caa2539e1375649e3536559",
+      "updated": "2026-04-01T20:35:02.445329+00:00"
+    },
+    {
+      "idea_id": "idea000082",
+      "title": "idea000082 - conftest.py Hardening",
+      "slug": "conftest-py-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000082-conftest-py-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`conftest.py.bak`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "5a0a1578a022558dd934a03318a99e54501617b4a34dc0b89e8343ea315de591",
+      "updated": "2026-04-01T20:35:02.445329+00:00"
+    },
+    {
+      "idea_id": "idea000083",
+      "title": "idea000083 - environments Hardening",
+      "slug": "environments-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000083-environments-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/environments/environments.json`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "9adb737c0abdd860c21fdcf88d6a42adf777a98b4f73b783359d0609a34fd502",
+      "updated": "2026-04-01T20:35:02.446565+00:00"
+    },
+    {
+      "idea_id": "idea000084",
+      "title": "idea000084 - reasoning-chains Hardening",
+      "slug": "reasoning-chains-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000084-reasoning-chains-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/logs/reasoning_chains.jsonl`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "fc1e5289088460f92d0386212ee7a729158a8b6b603bef6fa6b343fc986c86a4",
+      "updated": "2026-04-01T20:35:02.447566+00:00"
+    },
+    {
+      "idea_id": "idea000085",
+      "title": "idea000085 - access-20260212 Hardening",
+      "slug": "access-20260212-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000085-access-20260212-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/logs/webservices/downloads/access-20260212.log`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "ddfa07a1de43cfb560c200a413c070451c0ddb951650fe3d0063282d94c76535",
+      "updated": "2026-04-01T20:35:02.447566+00:00"
+    },
+    {
+      "idea_id": "idea000086",
+      "title": "idea000086 - system Hardening",
+      "slug": "system-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000086-system-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/prompts/architect/system.md`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "7a993465bd82c11fd196015fe48f22e9bb0a7fe5319cae0976b1e7b315c4b488",
+      "updated": "2026-04-01T20:35:02.448645+00:00"
+    },
+    {
+      "idea_id": "idea000087",
+      "title": "idea000087 - system Hardening",
+      "slug": "system-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000087-system-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/prompts/fixer/system.md`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "0b8e3dd31d1b18f2a035ef74ece80b08cf1303a96113d372c374b2767cddce2f",
+      "updated": "2026-04-01T20:35:02.449779+00:00"
+    },
+    {
+      "idea_id": "idea000088",
+      "title": "idea000088 - implementation-stub Developer Experience",
+      "slug": "implementation-stub-developer-experience",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000088-implementation-stub-developer-experience.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/research/2601.06123v1/implementation_stub.py`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "b5e082b77b869bed1aa572c7f66c6ba170bc43041aae4a3d2c8dc7e8cc181a67",
+      "updated": "2026-04-01T20:35:02.450376+00:00"
+    },
+    {
+      "idea_id": "idea000089",
+      "title": "idea000089 - workflow-implementation Developer Experience",
+      "slug": "workflow-implementation-developer-experience",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000089-workflow-implementation-developer-experience.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/research/asej_s2090447925006203/workflow_implementation.py`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "11673e698a704c05efeaf309a62f98892c34d588a1c02f13d217b88b3f475da1",
+      "updated": "2026-04-01T20:35:02.451389+00:00"
+    },
+    {
+      "idea_id": "idea000090",
+      "title": "idea000090 - shard Hardening",
+      "slug": "shard-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000090-shard-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/test_shards/a3/4c/shard.db`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "54e7c65e085db0ddc0498e40276520e640754bbd9af723f901549e7ee153f025",
+      "updated": "2026-04-01T20:35:02.452410+00:00"
+    },
+    {
+      "idea_id": "idea000091",
+      "title": "idea000091 - download-agent-readme Hardening",
+      "slug": "download-agent-readme-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000091-download-agent-readme-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`docs/architecture/DOWNLOAD_AGENT_README.md`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "7e60ddea00c7604264e5de35de238c7d1a81d96f6aeee45512cf58130864b14a",
+      "updated": "2026-04-01T20:35:02.454422+00:00"
+    },
+    {
+      "idea_id": "idea000092",
+      "title": "idea000092 - distributed-token-bucket-rate-limiter---quick-reference Hardening",
+      "slug": "distributed-token-bucket-rate-limiter-quick-reference-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000092-distributed-token-bucket-rate-limiter-quick-reference-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`docs/architecture/Distributed Token Bucket Rate Limiter - Quick Reference.md`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "f0cd9e5eb035b40bd91b5687e6a884ed291ba7eef8597e7e46abbfa9c86e5d8e",
+      "updated": "2026-04-01T20:35:02.455419+00:00"
+    },
+    {
+      "idea_id": "idea000093",
+      "title": "idea000093 - task-completion-report Hardening",
+      "slug": "task-completion-report-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000093-task-completion-report-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`docs/architecture/TASK_COMPLETION_REPORT.md`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "d19fe91e01bc80cec65a6b6e7dbc62ad1113c11a8a8cb45ebdb7705151735118",
+      "updated": "2026-04-01T20:35:02.456428+00:00"
+    },
+    {
+      "idea_id": "idea000094",
+      "title": "idea000094 - coding.agent.memory Hardening",
+      "slug": "coding-agent-memory-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000094-coding-agent-memory-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`docs/architecture/coding.agent.memory.md`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "479f76f719f647e7841c5e5a8e6fcc90f6dbf271ebe46f9a4d1aee4bd9ef288a",
+      "updated": "2026-04-01T20:35:02.457420+00:00"
+    },
+    {
+      "idea_id": "idea000095",
+      "title": "idea000095 - executing.agent.memory Hardening",
+      "slug": "executing-agent-memory-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000095-executing-agent-memory-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`docs/architecture/executing.agent.memory.md`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "983fc0120f329cf0219a5f43b364650b108b22e3498886b00c8ba6df5cdd54ea",
+      "updated": "2026-04-01T20:35:02.458420+00:00"
+    },
+    {
+      "idea_id": "idea000096",
+      "title": "idea000096 - gitdance.agent.memory Hardening",
+      "slug": "gitdance-agent-memory-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000096-gitdance-agent-memory-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`docs/architecture/gitdance.agent.memory.md`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "144d0ea48605ced141816e9dd4af44c500a349019875792ced1e436eb3250d3f",
+      "updated": "2026-04-01T20:35:02.459417+00:00"
+    },
+    {
+      "idea_id": "idea000097",
+      "title": "idea000097 - tester.agent.memory Hardening",
+      "slug": "tester-agent-memory-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000097-tester-agent-memory-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`docs/architecture/tester.agent.memory.md`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "f5cccc75d16cd0ea5990ecd4f6b652137a28bc11f15eadd95606589da6cdc330",
+      "updated": "2026-04-01T20:35:02.459417+00:00"
+    },
+    {
+      "idea_id": "idea000098",
+      "title": "idea000098 - evolution-log Hardening",
+      "slug": "evolution-log-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000098-evolution-log-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`docs/archive/evolution_log.json`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "7aa46ab15f4167617fbf9acbf41fdd2b3294f4a660423dcf3b22ec5fe5a443cf",
+      "updated": "2026-04-01T20:35:02.460418+00:00"
+    },
+    {
+      "idea_id": "idea000099",
+      "title": "idea000099 - agent-runner-description Hardening",
+      "slug": "agent-runner-description-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000099-agent-runner-description-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`docs/autodoc/agent_runner_description.md`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "91025607d7935698df956c319ac7ae419e085921960b12bba6f6a70d7df2c169",
+      "updated": "2026-04-01T20:35:02.468515+00:00"
+    },
+    {
+      "idea_id": "idea000100",
+      "title": "idea000100 - agents-description Hardening",
+      "slug": "agents-description-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000100-agents-description-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`docs/autodoc/agents_description.md`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "2d2469bcc1b61f32af1aae32e26b804d60b7ed622a83787e9c2a7db2b5beba02",
+      "updated": "2026-04-01T20:35:02.469506+00:00"
+    },
+    {
+      "idea_id": "idea000101",
+      "title": "idea000101 - api-core-description Hardening",
+      "slug": "api-core-description-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000101-api-core-description-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`docs/autodoc/api_core_description.md`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "caeb970671b17f7e072a4236a0cd7e7f3fe7381ec076c6cb9abeb186280057b4",
+      "updated": "2026-04-01T20:35:02.470510+00:00"
+    },
+    {
+      "idea_id": "idea000102",
+      "title": "idea000102 - autodoc-dashboard Hardening",
+      "slug": "autodoc-dashboard-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000102-autodoc-dashboard-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`docs/autodoc/autodoc_dashboard.md`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "ee16c2770e62b8c955abecd09ef4a888a170d570a8f8422f0e6df673d2b4e325",
+      "updated": "2026-04-01T20:35:02.471507+00:00"
+    },
+    {
+      "idea_id": "idea000103",
+      "title": "idea000103 - benchmarking-description Hardening",
+      "slug": "benchmarking-description-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000103-benchmarking-description-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`docs/autodoc/benchmarking_description.md`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "9115374722aaf1ace3162254082ccb5f03c53505680010b47455f6c6f4f27aaa",
+      "updated": "2026-04-01T20:35:02.472018+00:00"
+    },
+    {
+      "idea_id": "idea000104",
+      "title": "idea000104 - .codeignore Hardening",
+      "slug": "codeignore-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000104-codeignore-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`.codeignore`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "8a85b0a533dd9252e4aecd3549a9d4591eb28d3a0165dccbb900a498999cc6b3",
+      "updated": "2026-04-01T20:35:02.483579+00:00"
+    },
+    {
+      "idea_id": "idea000105",
+      "title": "idea000105 - .env Hardening",
+      "slug": "env-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000105-env-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`.env.template`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "10e5da7e7ed83ecbb3cc93da810397644767eeee702e38ebb5669134f2b1decb",
+      "updated": "2026-04-01T20:35:02.484580+00:00"
+    },
+    {
+      "idea_id": "idea000106",
+      "title": "idea000106 - .flake8 Hardening",
+      "slug": "flake8-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000106-flake8-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`.flake8`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "ad13134ef03f2672e0de223302b4392a030102f7b5960ef36dcdf60c716d913e",
+      "updated": "2026-04-01T20:35:02.485579+00:00"
+    },
+    {
+      "idea_id": "idea000107",
+      "title": "idea000107 - .gitignore Hardening",
+      "slug": "gitignore-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000107-gitignore-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`.gitignore`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "411a65202b072af2f673a0410b345684ba6b563ec8b1f9556c9213dfb07f28c9",
+      "updated": "2026-04-01T20:35:02.488092+00:00"
+    },
+    {
+      "idea_id": "idea000108",
+      "title": "idea000108 - .pre-commit-config Hardening",
+      "slug": "pre-commit-config-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000108-pre-commit-config-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`.pre-commit-config.yaml`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "07e98c72b79ec951e22c8895b09005185d69679f147598fbe833fd82a7e88d2a",
+      "updated": "2026-04-01T20:35:02.489105+00:00"
+    },
+    {
+      "idea_id": "idea000109",
+      "title": "idea000109 - .pylintrc Hardening",
+      "slug": "pylintrc-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000109-pylintrc-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`.pylintrc`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "a2719eb79d9e83ee8db31410aef771e11836ed4707d13351b84f6284680f2b47",
+      "updated": "2026-04-01T20:35:02.490105+00:00"
+    },
+    {
+      "idea_id": "idea000110",
+      "title": "idea000110 - check-rust-core Developer Experience",
+      "slug": "check-rust-core-developer-experience",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000110-check-rust-core-developer-experience.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`check_rust_core.py`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "9c1390ddb9ce55c83ab732c996393d927224cbd580e39c6ee5422b938bfb1f59",
+      "updated": "2026-04-01T20:35:02.491614+00:00"
+    },
+    {
+      "idea_id": "idea000111",
+      "title": "idea000111 - conftest Developer Experience",
+      "slug": "conftest-developer-experience",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000111-conftest-developer-experience.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`conftest.py`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "80e910e22391749ffbbafc7588a020a64bbf1aab0d6e9908a63b6c75862d099e",
+      "updated": "2026-04-01T20:35:02.491614+00:00"
+    },
+    {
+      "idea_id": "idea000112",
+      "title": "idea000112 - 64c7fc95435b51280c274a1d5935d1f906044aa2e6033feb28d1d03222490254 Hardening",
+      "slug": "64c7fc95435b51280c274a1d5935d1f906044aa2e6033feb28d1d03222490254-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000112-64c7fc95435b51280c274a1d5935d1f906044aa2e6033feb28d1d03222490254-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/agent_cache/64c7fc95435b51280c274a1d5935d1f906044aa2e6033feb28d1d03222490254.json`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "a886caf363287352c5fd5621f272cc941e8a5d27d695d8fe97b7e00de3d76dd1",
+      "updated": "2026-04-01T20:35:02.492790+00:00"
+    },
+    {
+      "idea_id": "idea000113",
+      "title": "idea000113 - eda0f0f6d7d9e78a3dca11c61d52e5d7b518be25032ab28910e82f7a45d98b86 Hardening",
+      "slug": "eda0f0f6d7d9e78a3dca11c61d52e5d7b518be25032ab28910e82f7a45d98b86-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000113-eda0f0f6d7d9e78a3dca11c61d52e5d7b518be25032ab28910e82f7a45d98b86-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/agent_cache/eda0f0f6d7d9e78a3dca11c61d52e5d7b518be25032ab28910e82f7a45d98b86.json`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "612a2d4669685739a21d8229580e08088b41c4835d80a0b72955868aa577609b",
+      "updated": "2026-04-01T20:35:02.493801+00:00"
+    },
+    {
+      "idea_id": "idea000114",
+      "title": "idea000114 - agent-knowledge-index Hardening",
+      "slug": "agent-knowledge-index-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000114-agent-knowledge-index-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/agent_knowledge_index.json`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "1851e0923905048764ab64d440c9644ac1082c1cc75103a8fa0defa4150c0ff0",
+      "updated": "2026-04-01T20:35:02.494800+00:00"
+    },
+    {
+      "idea_id": "idea000115",
+      "title": "idea000115 - agent-registry Hardening",
+      "slug": "agent-registry-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000115-agent-registry-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/agent_registry.json`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "d7b5dd2bfdf87ef4eb2ad0e7ebe492d24241668ed2216d02f0ecf962bcbd5f11",
+      "updated": "2026-04-01T20:35:02.495802+00:00"
+    },
+    {
+      "idea_id": "idea000116",
+      "title": "idea000116 - firewall Hardening",
+      "slug": "firewall-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000116-firewall-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/config/firewall.yaml`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "0f0ed499339eacd872f8763b5cf3913190ee4b0cf05efdace9e102c36f986607",
+      "updated": "2026-04-01T20:35:02.495802+00:00"
+    },
+    {
+      "idea_id": "idea000117",
+      "title": "idea000117 - memory Hardening",
+      "slug": "memory-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000117-memory-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/config/memory.yaml`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "52e1b063ad3e567a682c439c014de3a51091a6c9cd26c307b4b9c2280ca5b1fc",
+      "updated": "2026-04-01T20:35:02.497802+00:00"
+    },
+    {
+      "idea_id": "idea000118",
+      "title": "idea000118 - models Hardening",
+      "slug": "models-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000118-models-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/config/models.yaml`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "a3c76c28f881316a4ca204d6bcb65066905edf5c4facf0aa9146887ea5d406b9",
+      "updated": "2026-04-01T20:35:02.498440+00:00"
+    },
+    {
+      "idea_id": "idea000119",
+      "title": "idea000119 - sharding Hardening",
+      "slug": "sharding-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000119-sharding-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/config/sharding.yaml`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "da6c3db4e0f8138dd3ee45eada5a34ce8ce9a3775edeef5f57a9c7465c64b709",
+      "updated": "2026-04-01T20:35:02.500453+00:00"
+    },
+    {
+      "idea_id": "idea000120",
+      "title": "idea000120 - swarm Hardening",
+      "slug": "swarm-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000120-swarm-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/config/swarm.yaml`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "587ad3d9ab6bbd367da22514b8ce5f29266387ac9ace23b9e8b535e5bbc16fe7",
+      "updated": "2026-04-01T20:35:02.501451+00:00"
+    },
+    {
+      "idea_id": "idea000121",
+      "title": "idea000121 - voyager Hardening",
+      "slug": "voyager-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000121-voyager-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/config/voyager.yaml`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "7b160182be9cbb8fa008180b3f007c25a4cb631fca30ce3ca4a2cc3f9b7fed8e",
+      "updated": "2026-04-01T20:35:02.502534+00:00"
+    },
+    {
+      "idea_id": "idea000122",
+      "title": "idea000122 - instances Hardening",
+      "slug": "instances-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000122-instances-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/environments/instances.json`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "3ef1ffb73f939213d8c96aa047519c4a971d5790b20eda4f9444fed93162bbf1",
+      "updated": "2026-04-01T20:35:02.505514+00:00"
+    },
+    {
+      "idea_id": "idea000123",
+      "title": "idea000123 - shard-202602-306.jsonl Hardening",
+      "slug": "shard-202602-306-jsonl-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000123-shard-202602-306-jsonl-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/logs/external_ai_learning/shard_202602_306.jsonl.gz`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "e29c809d1fab4e96093259f3d4071fd7e9367e10ca4d32ae4f16b87f164949ef",
+      "updated": "2026-04-01T20:35:02.506511+00:00"
+    },
+    {
+      "idea_id": "idea000124",
+      "title": "idea000124 - shard-202602-693.jsonl Hardening",
+      "slug": "shard-202602-693-jsonl-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000124-shard-202602-693-jsonl-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/logs/external_ai_learning/shard_202602_693.jsonl.gz`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "38f4f531aa645b771516c86ae9aa8d2f66887f5ff23c88ee26d979679adc8ff3",
+      "updated": "2026-04-01T20:35:02.507512+00:00"
+    },
+    {
+      "idea_id": "idea000125",
+      "title": "idea000125 - shards-lookup Hardening",
+      "slug": "shards-lookup-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000125-shards-lookup-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/logs/external_ai_learning/shards_lookup.index`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "87b277946c80a77a4a1e64e29ed913b8a7d45f84eb38d7264d25cfc4819945cb",
+      "updated": "2026-04-01T20:35:02.508516+00:00"
+    },
+    {
+      "idea_id": "idea000126",
+      "title": "idea000126 - infection-guard Hardening",
+      "slug": "infection-guard-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000126-infection-guard-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/logs/infection_guard.jsonl`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "298b042f7fecadb1a6b2fc58b83f1d1d55cc28166b87a299e417dc1716defd1e",
+      "updated": "2026-04-01T20:35:02.509516+00:00"
+    },
+    {
+      "idea_id": "idea000127",
+      "title": "idea000127 - structured Hardening",
+      "slug": "structured-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000127-structured-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/logs/structured.json`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "1ea5d070307cbfcde8cc7ab3506f6406395c79b00f6eacff00682e669ce7f2bc",
+      "updated": "2026-04-01T20:35:02.510512+00:00"
+    },
+    {
+      "idea_id": "idea000128",
+      "title": "idea000128 - test-audit Hardening",
+      "slug": "test-audit-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000128-test-audit-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/logs/test_audit.jsonl`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "651217a3948320fb55c426d3c8aa9ade2dc1ccfe30046ea2e02a0465db04d1fc",
+      "updated": "2026-04-01T20:35:02.512025+00:00"
+    },
+    {
+      "idea_id": "idea000129",
+      "title": "idea000129 - test-retention Hardening",
+      "slug": "test-retention-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000129-test-retention-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/logs/test_retention.jsonl`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "bc13ab56b69512fb532b847475b380efc5deb20f2c0b50bf12f3fd0d1bbfe3d0",
+      "updated": "2026-04-01T20:35:02.513043+00:00"
+    },
+    {
+      "idea_id": "idea000130",
+      "title": "idea000130 - access-20260213 Hardening",
+      "slug": "access-20260213-hardening",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000130-access-20260213-hardening.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "`data/logs/webservices/downloads/access-20260213.log`"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "none"
+      ],
+      "sha256": "024e3bdd709e9f9d02112133bf4837abf3d7debc911f4f53ababf81c9cc24088",
+      "updated": "2026-04-01T20:35:02.514057+00:00"
+    },
+    {
+      "idea_id": "idea000131",
+      "title": "idea000131 - ci-security-quality-workflow-consolidation",
+      "slug": "ci-security-quality-workflow-consolidation",
+      "status": "active",
+      "source_path": "docs/project/ideas/idea000131-ci-security-quality-workflow-consolidation.md",
+      "planned_project_ids": [],
+      "source_references": [
+        "docs/project/ideas/archive/idea000004-quality-workflow-branch-trigger.md",
+        "docs/project/ideas/archive/idea000005-rust-ci-workflow.md",
+        "docs/project/ideas/archive/idea000006-codeql-ci-integration.md",
+        "docs/project/ideas/archive/idea000007-security-scanning-ci.md"
+      ],
+      "template_completeness": 1.0,
+      "missing_required_sections": [],
+      "missing_critical_sections": [],
+      "intake_answer_coverage": 1.0,
+      "readiness_status": "ready",
+      "scoring": {
+        "impact_score": 5,
+        "confidence_score": 5,
+        "effort_score": 2,
+        "risk_score": 3,
+        "alignment_score": 3,
+        "priority_score": 8
+      },
+      "merged_from": [
+        "idea000004",
+        "idea000005",
+        "idea000006",
+        "idea000007"
+      ],
+      "sha256": "408309181481670f2bcc19d9c6b73f4e26a0539b4f263ffdee4f666a1297e422",
+      "updated": "2026-04-02T00:07:20.141828+00:00"
     }
   ]
 }
