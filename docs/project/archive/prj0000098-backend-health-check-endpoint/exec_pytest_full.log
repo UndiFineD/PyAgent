@@ -1,0 +1,99 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.12, pytest-9.0.2, pluggy-1.6.0 -- C:\Dev\PyAgent\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default' -> database=DirectoryBasedExampleDatabase(WindowsPath('C:/Dev/PyAgent/.hypothesis/examples'))
+rootdir: C:\Dev\PyAgent
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.12.1, hypothesis-6.115.0, asyncio-1.3.0, cov-7.0.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 1286 items
+
+tests/agents/test_agents.py::test_placeholder PASSED                     [  0%]
+tests/agents/test_base_agent.py::test_manifest_defaults PASSED           [  0%]
+tests/agents/test_base_agent.py::test_manifest_custom_fields PASSED      [  0%]
+tests/agents/test_base_agent.py::test_initial_state_is_idle PASSED       [  0%]
+tests/agents/test_base_agent.py::test_start_transitions_to_running PASSED [  0%]
+tests/agents/test_base_agent.py::test_stop_transitions_to_stopped PASSED [  0%]
+tests/agents/test_base_agent.py::test_reset_from_stopped_to_idle PASSED  [  0%]
+tests/agents/test_base_agent.py::test_start_raises_if_already_running PASSED [  0%]
+tests/agents/test_base_agent.py::test_reset_raises_if_running PASSED     [  0%]
+tests/agents/test_base_agent.py::test_dispatch_echoes_payload PASSED     [  0%]
+tests/agents/test_base_agent.py::test_dispatch_raises_if_not_running PASSED [  0%]
+tests/agents/test_base_agent.py::test_dispatch_respects_max_concurrency PASSED [  0%]
+tests/agents/test_base_agent.py::test_validate_returns_true PASSED       [  1%]
+tests/agents/test_base_agent.py::test_repr_contains_name PASSED          [  1%]
+tests/ci/test_ci_parallelization.py::test_ci_workflow_has_matrix PASSED  [  1%]
+tests/ci/test_ci_parallelization.py::test_ci_matrix_has_three_shards PASSED [  1%]
+tests/ci/test_ci_parallelization.py::test_requirements_ci_has_xdist PASSED [  1%]
+tests/ci/test_ci_parallelization.py::test_ci_uses_parallel_flag PASSED   [  1%]
+tests/ci/test_ci_workflow.py::test_ci_workflow_exists PASSED             [  1%]
+tests/ci/test_ci_workflow.py::test_ci_workflow_sanity PASSED             [  1%]
+tests/ci/test_workflow_count.py::test_exactly_two_workflow_files PASSED  [  1%]
+tests/ci/test_workflow_count.py::test_security_yml_exists_and_has_analyze_job PASSED [  1%]
+tests/ci/test_workflow_count.py::test_security_yml_has_security_events_write_permission PASSED [  1%]
+tests/ci/test_workflow_count.py::test_security_yml_uses_codeql_action_steps PASSED [  1%]
+tests/ci/test_workflow_count.py::test_security_yml_has_schedule_trigger PASSED [  1%]
+tests/ci/test_workflow_count.py::test_security_yml_references_custom_python_queries PASSED [  2%]
+tests/core/test_core.py::test_placeholder PASSED                         [  2%]
+tests/deploy/test_compose_dockerfile_paths.py::test_compose_reference_contract_uses_expected_pyagent_dockerfile_path PASSED [  2%]
+tests/deploy/test_compose_dockerfile_paths.py::test_compose_referenced_dockerfile_path_exists_in_repository PASSED [  2%]
+tests/docs/test_agent_workflow_policy_docs.py::test_0master_documents_project_numbering_ownership_and_continuity PASSED [  2%]
+tests/docs/test_agent_workflow_policy_docs.py::test_1project_requires_assigned_identifier_and_template_sections PASSED [  2%]
+tests/docs/test_agent_workflow_policy_docs.py::test_1project_enforces_branch_gate_before_handoff PASSED [  2%]
+tests/docs/test_agent_workflow_policy_docs.py::test_0master_enforces_delegation_preflight_branch_gate PASSED [  2%]
+tests/docs/test_agent_workflow_policy_docs.py::test_9git_enforces_branch_scope_and_failure_rules PASSED [  2%]
+tests/docs/test_agent_workflow_policy_docs.py::test_downstream_agents_require_branch_gate_before_work PASSED [  2%]
+tests/docs/test_agent_workflow_policy_docs.py::test_all_workflow_agents_carry_exact_branch_governance_contract PASSED [  2%]
+tests/docs/test_agent_workflow_policy_docs.py::test_legacy_git_summaries_document_branch_exception_and_corrective_ownership PASSED [  2%]
+tests/docs/test_agent_workflow_policy_docs.py::test_git_summaries_use_modern_branch_plan_format_or_carry_legacy_exception FAILED [  2%]
+
+================================== FAILURES ===================================
+_ test_git_summaries_use_modern_branch_plan_format_or_carry_legacy_exception __
+
+    def test_git_summaries_use_modern_branch_plan_format_or_carry_legacy_exception() -> None:
+        """Every *.git.md under docs/project/ must either.
+    
+        A) Comply with the modern Branch Plan template (all _MODERN_REQUIRED_SECTIONS present), OR
+        B) Carry an explicit ## Legacy Branch Exception section that explains the historical
+           deviation and documents corrective ownership by @0master and @9git.
+    
+        Legacy files in _LEGACY_GIT_SUMMARY_PATHS are expected to fall under (B).
+        Any new git summary that lacks the exception section must satisfy (A) in full.
+        If a legacy file partially adopts the modern format it must complete the migration.
+        """
+        all_git_files = sorted(REPO_ROOT.glob("docs/project/**/*.git.md"))
+        assert all_git_files, "No *.git.md files found under docs/project/ ù check glob path"
+    
+        for git_file in all_git_files:
+            relative = git_file.relative_to(REPO_ROOT).as_posix()
+            raw_text = git_file.read_text(encoding="utf-8")
+            has_legacy_exception = "## Legacy Branch Exception" in raw_text
+            has_branch_plan = "## Branch Plan" in raw_text
+    
+            is_known_legacy = relative in _LEGACY_GIT_SUMMARY_PATHS
+    
+            if has_legacy_exception and not has_branch_plan:
+                # Pure-legacy layout: exception section is sufficient ù validate the exception
+                # section itself carries the minimum required content.
+                normalized = _normalize(raw_text)
+                assert "@0master" in normalized, f"{relative}: ## Legacy Branch Exception must reference @0master"
+                assert "@9git" in normalized, f"{relative}: ## Legacy Branch Exception must reference @9git"
+            else:
+                # Modern layout required: either no legacy exception, or migration in progress
+                # (has Branch Plan alongside an exception).  Either way all modern sections
+                # must be present.
+                for section in _MODERN_REQUIRED_SECTIONS:
+>                   assert section in raw_text, (
+                        f"{relative}: missing required modern section '{section}'. "
+                        "Add the section or add a ## Legacy Branch Exception to document "
+                        "the historical deviation."
+                    )
+E                   AssertionError: docs/project/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.git.md: missing required modern section '## Branch Plan'. Add the section or add a ## Legacy Branch Exception to document the historical deviation.
+E                   assert '## Branch Plan' in '# prj0000098-backend-health-check-endpoint - Git Summary\n\n_Status: NOT_STARTED_\n_Git: @9git | Updated: 2026-03-29_\n\n## Branch\nprj0000098-backend-health-check-endpoint\n\n## Commit Hash\nN/A\n\n## Files Changed\n| File | Change |\n|---|---|\n\n## PR Link\nN/A\n'
+
+tests\docs\test_agent_workflow_policy_docs.py:353: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/docs/test_agent_workflow_policy_docs.py::test_git_summaries_use_modern_branch_plan_format_or_carry_legacy_exception
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+======================== 1 failed, 37 passed in 6.19s =========================

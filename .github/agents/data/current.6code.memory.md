@@ -3,10 +3,47 @@
 ## Metadata
 - agent: @6code
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-03-31
+- updated_at: 2026-04-02
 - rollover: At new project start, append this file's entries to history.6code.memory.md in chronological order, then clear Entries.
 
 ## Entries
+
+## 2026-04-02 — prj0000114 IdeaTracker artifact pipeline refactor
+- task_id: prj0000114-ideatracker-batching-verbosity
+- lifecycle: DONE
+- branch: prj0000114-ideatracker-batching-verbosity (validated)
+- changed files:
+	- scripts/IdeaTracker.py
+	- scripts/idea_tracker_artifacts.py
+	- scripts/idea_tracker_similarity.py
+	- scripts/idea_tracker_pipeline.py
+	- tests/test_idea_tracker.py
+	- docs/project/prj0000114-ideatracker-batching-verbosity/ideatracker-batching-verbosity.code.md
+	- .github/agents/data/current.6code.memory.md
+	- .github/agents/data/2026-04-02.6code.log.md
+- implementation summary:
+	- Refactored IdeaTracker into an artifact-driven batch pipeline while keeping `scripts/IdeaTracker.py` as the CLI entrypoint.
+	- Added deterministic per-batch artifacts for progress, mappings, references, section names, tokens, and similarities under `docs/project/`.
+	- Rebuilt final tracker payload assembly from persisted artifacts and added rerun-safe upsert semantics so batch rewrites do not duplicate rows.
+	- Extended the focused tracker regression suite with artifact-shape and incremental rewrite coverage.
+- verification commands:
+	- c:/Dev/PyAgent/.venv/Scripts/ruff.exe check --fix scripts/IdeaTracker.py scripts/idea_tracker_artifacts.py scripts/idea_tracker_similarity.py scripts/idea_tracker_pipeline.py tests/test_idea_tracker.py
+	- c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_idea_tracker.py
+	- c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
+	- c:/Dev/PyAgent/.venv/Scripts/ruff.exe check --output-format concise scripts/IdeaTracker.py scripts/idea_tracker_artifacts.py scripts/idea_tracker_similarity.py scripts/idea_tracker_pipeline.py tests/test_idea_tracker.py
+	- c:/Dev/PyAgent/.venv/Scripts/python.exe -c "... temporary repo CLI smoke run ..."
+- unresolved risks:
+	- Scoped offset/limit runs still emit scoped final payloads; a future resume mode could assemble a global final output from previously materialized windows.
+- handoff target: @7exec
+
+### Lesson
+- Pattern: Incremental artifact pipelines become rerun-safe when persisted rows are keyed by stable entities (`idea_id`, `(idea_id, reference)`, pair keys) instead of only by batch ID.
+- Root cause: Pure batch-key replacement leaves room for duplicates when the same ideas are reprocessed with different batch boundaries or rerun configurations.
+- Prevention: Use batch IDs for observability, but use entity-key upserts for persisted artifact content and reserve batch ledgers for progress tracking only.
+- First seen: 2026-04-02
+- Seen in: prj0000114-ideatracker-batching-verbosity
+- Recurrence count: 1
+- Promotion status: Candidate
 
 ## 2026-03-31 — prj0000108 @7exec blocker remediation (async loop + format)
 - task_id: prj0000108-idea000019-crdt-python-ffi-bindings

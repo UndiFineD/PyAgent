@@ -3,10 +3,29 @@
 ## Metadata
 - agent: @4plan
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-03-31
+- updated_at: 2026-04-02
 - rollover: At new project start, append this file's entries to history.4plan.memory.md in chronological order, then clear Entries.
 
 ## Entries
+
+## prj0000114 - ideatracker-batching-verbosity
+
+| Field | Value |
+|---|---|
+| task_id | prj0000114-ideatracker-batching-verbosity |
+| owner_agent | @4plan |
+| source | user request + current branch behavior |
+| created_at | 2026-04-02 |
+| updated_at | 2026-04-02 |
+| status | DONE |
+| lifecycle | OPEN -> IN_PROGRESS -> DONE |
+| chunk_boundaries | Single planning artifact with four execution phases and tasks T-IT-001..T-IT-008 |
+| acceptance_criteria_scope | Current state, target state, affected files, deterministic artifact schema, phased execution, validation strategy, and rollback boundaries captured in the canonical plan |
+| dependency_order | @5test contract/resume regressions -> @6code staged refactor -> @7exec resumed/full-run validation -> @8ql quality/security -> @9git handoff |
+| handoff_target | @5test |
+| artifact_paths | docs/project/prj0000114-ideatracker-batching-verbosity/ideatracker-batching-verbosity.plan.md |
+| branch | prj0000114-ideatracker-batching-verbosity (validated PASS before artifact writes) |
+| validation_evidence | git branch --show-current -> prj0000114-ideatracker-batching-verbosity; c:/Dev/PyAgent/.venv/Scripts/python.exe scripts/IdeaTracker.py --help -> PASS; c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_idea_tracker.py -> 11 passed in 5.95s; c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 17 passed in 10.68s |
 
 ## prj0000110 - idea000004-quality-workflow-branch-trigger
 

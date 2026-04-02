@@ -16,12 +16,14 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import itertools
-import json
 import re
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
+
+from scripts.idea_tracker_artifacts import write_json
+from scripts.idea_tracker_pipeline import run_incremental_tracker, write_split_tracker_chunks
 
 IDEA_ID_RE = re.compile(r"(idea\d{6})", re.IGNORECASE)
 PLANNED_MAPPING_RE = re.compile(r"^Planned project mapping:\s*(.+)$", re.IGNORECASE)
@@ -64,6 +66,21 @@ CRITICAL_SECTIONS = [
     "risks and mitigations",
     "failure handling and rollback",
 ]
+
+# Stop-words excluded from title-based blocking keys.
+_STOP_WORDS: frozenset[str] = frozenset(
+    {"a", "an", "the", "of", "in", "for", "and", "or", "to", "with", "at", "by", "from"}
+)
+
+
+def _log(msg: str) -> None:
+    """Write a progress message to stderr, flushing immediately.
+
+    Args:
+        msg: The progress message to emit.
+
+    """
+    print(msg, file=sys.stderr, flush=True)
 
 
 def _repo_root() -> Path:
@@ -277,37 +294,6 @@ def _tokenize(text: str) -> set[str]:
     return {token for token in TOKEN_RE.findall(text.lower()) if token}
 
 
-def _jaccard_similarity(left: set[str], right: set[str]) -> float:
-    """Return Jaccard similarity of two token sets."""
-    if not left and not right:
-        return 0.0
-    union = left | right
-    if not union:
-        return 0.0
-    return len(left & right) / len(union)
-
-
-def _idea_similarity(left: dict[str, Any], right: dict[str, Any]) -> dict[str, Any]:
-    """Compute weighted similarity and component signals between two idea records."""
-    title_sim = _jaccard_similarity(_tokenize(left.get("title", "")), _tokenize(right.get("title", "")))
-    mapping_sim = _jaccard_similarity(
-        set(left.get("planned_project_ids", [])),
-        set(right.get("planned_project_ids", [])),
-    )
-    source_sim = _jaccard_similarity(
-        set(left.get("source_references", [])),
-        set(right.get("source_references", [])),
-    )
-
-    score = (0.5 * title_sim) + (0.3 * mapping_sim) + (0.2 * source_sim)
-    return {
-        "score": round(score, 4),
-        "title_similarity": round(title_sim, 4),
-        "mapping_similarity": round(mapping_sim, 4),
-        "source_similarity": round(source_sim, 4),
-    }
-
-
 def _file_sha256(file_path: Path) -> str:
     """Return SHA-256 for deterministic change tracking."""
     digest = hashlib.sha256()
@@ -359,6 +345,7 @@ def _collect_idea_record(repo_root: Path, file_path: Path, archived: bool) -> di
         "template_completeness": completeness,
         "missing_required_sections": missing_sections,
         "missing_critical_sections": missing_critical,
+        "section_names": sorted(section_names),
         "intake_answer_coverage": intake_coverage,
         "readiness_status": readiness_status,
         "scoring": {
@@ -371,34 +358,30 @@ def _collect_idea_record(repo_root: Path, file_path: Path, archived: bool) -> di
     }
 
 
-def _build_similarity_clusters(
-    records: list[dict[str, Any]],
-    merge_threshold: float,
-    review_threshold: float,
-) -> list[dict[str, Any]]:
-    """Build pairwise duplicate candidates for merge/review queues."""
-    active_records = [record for record in records if record.get("status") == "active" and record.get("idea_id")]
-    clusters: list[dict[str, Any]] = []
+def _blocking_keys(record: dict[str, Any]) -> list[str]:
+    """Return blocking keys for a record used in scalable candidate narrowing.
 
-    for left, right in itertools.combinations(active_records, 2):
-        signals = _idea_similarity(left, right)
-        score = signals["score"]
-        if score < review_threshold:
-            continue
+    Two records are only compared if they share at least one blocking key.
+    Primary keys are derived from shared ``planned_project_ids``.  When a
+    record has no project mapping the fallback is the first significant
+    (non-stop-word) title token.
 
-        candidate_type = "merge_candidate" if score >= merge_threshold else "review_candidate"
-        clusters.append(
-            {
-                "type": candidate_type,
-                "score": score,
-                "idea_ids": [left["idea_id"], right["idea_id"]],
-                "paths": [left["source_path"], right["source_path"]],
-                "signals": signals,
-            }
-        )
+    Args:
+        record: Idea record dict as produced by ``_collect_idea_record``.
 
-    clusters.sort(key=lambda item: (item["score"], item["idea_ids"][0], item["idea_ids"][1]), reverse=True)
-    return clusters
+    Returns:
+        Non-empty list of string blocking keys.
+
+    """
+    keys: list[str] = []
+    planned_project_ids = cast(list[str], record.get("planned_project_ids") or [])
+    for pid in planned_project_ids:
+        normalized_pid = pid.lower()
+        keys.append(f"proj:{normalized_pid}")
+    if not keys:
+        tokens = [t for t in _tokenize(record.get("title", "")) if t not in _STOP_WORDS]
+        keys.append(f"title:{tokens[0]}" if tokens else "title:_ungrouped_")
+    return keys
 
 
 def build_tracker_payload(
@@ -407,85 +390,66 @@ def build_tracker_payload(
     limit: int | None = None,
     merge_threshold: float = 0.8,
     review_threshold: float = 0.6,
+    batch_size: int = 1000,
+    verbose: bool = False,
+    checkpoint_output_path: Path | None = None,
 ) -> dict[str, Any]:
-    """Build idea tracker payload for active and archived ideas."""
-    ideas_root = repo_root / "docs" / "project" / "ideas"
-    archive_root = ideas_root / "archive"
+    """Build idea tracker payload for active and archived ideas.
 
-    active_files_all = sorted(path for path in ideas_root.glob("idea*.md") if path.is_file())
-    archived_files_all = sorted(path for path in archive_root.glob("idea*.md") if path.is_file())
+    Args:
+        repo_root: Repository root path.
+        offset: Start index into the combined sorted file list.
+        limit: Maximum number of files to process; None means all.
+        merge_threshold: Similarity score at or above which a pair is a merge candidate.
+        review_threshold: Minimum similarity score for a review candidate.
+        batch_size: Emit a stderr progress line every this many files when *verbose*.
+        verbose: When True, log collection and similarity progress to stderr.
+        checkpoint_output_path: Optional output file path to write progress checkpoints.
 
-    all_files_with_status: list[tuple[Path, bool]] = [(path, False) for path in active_files_all]
-    all_files_with_status += [(path, True) for path in archived_files_all]
+    Returns:
+        Tracker payload dict with schema_version 2.
 
-    scoped_start = max(offset, 0)
-    scoped_end = None if limit is None else scoped_start + max(limit, 0)
-    scoped = all_files_with_status[scoped_start:scoped_end]
-
-    records: list[dict[str, Any]] = []
-    for file_path, archived in scoped:
-        records.append(_collect_idea_record(repo_root, file_path, archived=archived))
-
-    records.sort(key=lambda item: (item.get("idea_id", ""), item.get("status", ""), item.get("source_path", "")))
-
-    ids = [item["idea_id"] for item in records if item.get("idea_id")]
-    duplicate_ids = sorted({idea_id for idea_id in ids if ids.count(idea_id) > 1})
-
-    readiness_counts = {
-        "ready": sum(1 for item in records if item.get("readiness_status") == "ready"),
-        "needs-discovery": sum(1 for item in records if item.get("readiness_status") == "needs-discovery"),
-        "blocked": sum(1 for item in records if item.get("readiness_status") == "blocked"),
-    }
-
-    similarity_clusters = _build_similarity_clusters(records, merge_threshold, review_threshold)
-    merge_candidates = [item for item in similarity_clusters if item["type"] == "merge_candidate"]
-    review_candidates = [item for item in similarity_clusters if item["type"] == "review_candidate"]
-
-    active_count = sum(1 for item in records if item.get("status") == "active")
-    archived_count = sum(1 for item in records if item.get("status") == "archived")
-
-    return {
-        "schema_version": 2,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "source": {
-            "active_dir": "docs/project/ideas",
-            "archive_dir": "docs/project/ideas/archive",
-            "offset": scoped_start,
-            "limit": limit,
-            "available_total": len(all_files_with_status),
-            "processed_total": len(records),
-        },
-        "summary": {
-            "total": len(records),
-            "active": active_count,
-            "archived": archived_count,
-            "unique_idea_ids": len(set(ids)),
-            "duplicate_idea_ids": duplicate_ids,
-            "readiness": readiness_counts,
-            "merge_candidates": len(merge_candidates),
-            "review_candidates": len(review_candidates),
-        },
-        "queues": {
-            "ready": [item["idea_id"] for item in records if item.get("readiness_status") == "ready"],
-            "needs-discovery": [
-                item["idea_id"]
-                for item in records
-                if item.get("readiness_status") == "needs-discovery"
-            ],
-            "blocked": [item["idea_id"] for item in records if item.get("readiness_status") == "blocked"],
-        },
-        "duplicate_candidates": {
-            "merge_candidates": merge_candidates,
-            "review_candidates": review_candidates,
-        },
-        "ideas": records,
-    }
+    """
+    return run_incremental_tracker(
+        repo_root,
+        offset=offset,
+        limit=limit,
+        merge_threshold=merge_threshold,
+        review_threshold=review_threshold,
+        batch_size=batch_size,
+        verbose=verbose,
+        output_path=checkpoint_output_path,
+        collect_record=_collect_idea_record,
+        tokenize=_tokenize,
+        blocking_keys=_blocking_keys,
+        log=_log,
+    )
 
 
 def write_tracker(output_path: Path, payload: dict[str, Any]) -> None:
-    """Write tracker JSON to disk."""
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    """Write tracker JSON to disk.
+
+    Args:
+        output_path: Output file path.
+        payload: JSON payload to write.
+
+    """
+    write_json(output_path, payload)
+
+
+def _write_split_tracker_chunks(output_path: Path, payload: dict[str, Any], chunk_size: int) -> int:
+    """Write split tracker chunk files named ``<stem>-NNNNNN.json``.
+
+    Args:
+        output_path: Main tracker output file path.
+        payload: Final tracker payload.
+        chunk_size: Number of idea records per split file.
+
+    Returns:
+        Number of chunk files written.
+
+    """
+    return write_split_tracker_chunks(output_path, payload, chunk_size)
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -525,6 +489,31 @@ def _build_parser() -> argparse.ArgumentParser:
         default=0.6,
         help="Similarity threshold for review candidates (default: 0.6).",
     )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=1000,
+        dest="batch_size",
+        help="Log progress every N files during collection (default: 1000).",
+    )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Emit progress messages to stderr during long runs.",
+    )
+    parser.add_argument(
+        "--split-output",
+        action="store_true",
+        default=True,
+        help="Also write split chunk files as <output-stem>-NNNNNN.json using --batch-size.",
+    )
+    parser.add_argument(
+        "--no-split-output",
+        action="store_false",
+        dest="split_output",
+        help="Disable split chunk output files.",
+    )
     return parser
 
 
@@ -542,8 +531,14 @@ def main() -> int:
         limit=args.limit,
         merge_threshold=args.merge_threshold,
         review_threshold=args.review_threshold,
+        batch_size=args.batch_size,
+        verbose=args.verbose,
+        checkpoint_output_path=output_path,
     )
     write_tracker(output_path, payload)
+    split_count = 0
+    if args.split_output:
+        split_count = _write_split_tracker_chunks(output_path, payload, args.batch_size)
 
     summary = payload["summary"]
     print(
@@ -551,7 +546,7 @@ def main() -> int:
         f"total={summary['total']} active={summary['active']} archived={summary['archived']} "
         f"ready={summary['readiness']['ready']} needs_discovery={summary['readiness']['needs-discovery']} "
         f"blocked={summary['readiness']['blocked']} merge_candidates={summary['merge_candidates']} "
-        f"review_candidates={summary['review_candidates']} output={output_path}"
+        f"review_candidates={summary['review_candidates']} output={output_path} split_files={split_count}"
     )
     return 0
 

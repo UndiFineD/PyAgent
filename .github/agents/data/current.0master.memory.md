@@ -8,6 +8,93 @@
 
 ## Entries
 
+## 2026-04-02 — prj0000114 escalated to artifact-driven pipeline refactor
+
+- Trigger: user requested a fuller refactor for IdeaTracker because 200k ideas is only the beginning and incremental outputs/artifacts are needed for future scale.
+- Planning delivered by @4plan:
+	- Refactor plan written to `docs/project/prj0000114-ideatracker-batching-verbosity/ideatracker-batching-verbosity.plan.md`.
+	- Direction: keep `scripts/IdeaTracker.py` as CLI entrypoint, move heavy work behind helper modules, and persist deterministic batch artifacts under `docs/project/`.
+- Implementation delivered by @6code:
+	- Added helper modules:
+		- `scripts/idea_tracker_artifacts.py`
+		- `scripts/idea_tracker_pipeline.py`
+		- `scripts/idea_tracker_similarity.py`
+	- Refactored `scripts/IdeaTracker.py` into an artifact-driven pipeline.
+	- Added/maintained batch-persisted artifacts in `docs/project/` for:
+		- progress
+		- mapping
+		- references
+		- section names
+		- tokens
+		- similarities
+	- Preserved final outputs:
+		- `docs/project/ideatracker.json`
+		- split `docs/project/ideatracker-NNNNNN.json` files
+	- Added rewrite-safe incremental behavior so rerunning the same batch window replaces stable rows rather than duplicating them.
+- Direct validation by @0master:
+	- `runTests tests/test_idea_tracker.py` -> `26 passed, 0 failed`
+	- editor diagnostics: no errors in pipeline modules or tracker tests.
+- Current branch: `prj0000114-ideatracker-batching-verbosity`
+
+## 2026-04-02 — prj0000114 IdeaTracker batching and verbosity project initialized and implemented
+
+- Trigger: user requested `scripts/IdeaTracker.py` become more verbose and scale better for 100,000+ ideas with batch processing around 1000.
+- Project boundary assigned:
+	- Project id: `prj0000114`
+	- Branch: `prj0000114-ideatracker-batching-verbosity`
+	- Lane: `Discovery`
+- Governance setup delivered by @1project:
+	- Added project artifacts under `docs/project/prj0000114-ideatracker-batching-verbosity/`
+	- Updated `docs/project/kanban.json`, `data/projects.json`, and `data/nextproject.md`
+	- Validation:
+		- `python scripts/project_registry_governance.py validate` -> `VALIDATION_OK`
+		- `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `17 passed`
+- Implementation delivered by @6code:
+	- `scripts/IdeaTracker.py`: added batch-size and verbose support, stderr progress logging, and blocking-based duplicate candidate narrowing to avoid full O(n^2) comparisons.
+	- `tests/test_idea_tracker.py`: added focused coverage for batching/progress and duplicate-candidate blocking behavior.
+- Direct validation by @0master:
+	- `runTests tests/test_idea_tracker.py` -> `16 passed, 0 failed`
+	- editor diagnostics: no errors in `scripts/IdeaTracker.py` or `tests/test_idea_tracker.py`
+- Notes:
+	- Unrelated pre-existing idea-merge workspace changes were preserved and not used as scope for `prj0000114` implementation.
+	- Current branch after handoff: `prj0000114-ideatracker-batching-verbosity`
+
+## 2026-04-02 — @10idea merge/archive pass executed
+
+- Trigger: user requested another @10idea merge of similar ideas and archival of superseded ideas.
+- Branch gate:
+	- Observed before action: `main` (blocked for project-scoped idea maintenance).
+	- Switched to: `feature/idea-merge-archive-10idea` before delegation.
+- Delegation: @10idea executed candidate analysis with existing idea tooling and performed one high-confidence semantic consolidation.
+- Delivered:
+	- Created `docs/project/ideas/idea000132-external-ai-learning-jsonl-shards-hardening.md`.
+	- Archived (moved):
+		- `docs/project/ideas/idea000123-shard-202602-306-jsonl-hardening.md` -> `docs/project/ideas/archive/idea000123-shard-202602-306-jsonl-hardening.md`
+		- `docs/project/ideas/idea000124-shard-202602-693-jsonl-hardening.md` -> `docs/project/ideas/archive/idea000124-shard-202602-693-jsonl-hardening.md`
+	- Refreshed `docs/project/ideatracker.json`.
+- Reported tracker deltas:
+	- total: 131 -> 132
+	- active: 120 -> 119
+	- archived: 11 -> 13
+	- ready: 51 -> 52
+	- blocked: 80 -> 80
+- Governance validation:
+	- `python scripts/project_registry_governance.py validate` -> `VALIDATION_OK`.
+
+## 2026-04-02 — PR #270 merged (pre-commit-first quality gates)
+
+- Branch: `feature/idea-merge-archive-10idea` → main
+- Merge commit: `be6513c50f`
+- Contents merged:
+	- `.pre-commit-config.yaml`: added ruff-format, rust-fmt, rust-clippy; upgraded secret-scan to --fail-on-severity HIGH
+	- `.github/workflows/security.yml`: deleted (redundant — ci.yml covers via pre-commit run --all-files)
+	- `docs/project/ideas/idea000131-ci-security-quality-workflow-consolidation.md`: created
+	- `docs/project/ideas/archive/idea000{004,005,006,007}*`: archived (superseded by idea000131)
+	- `docs/project/ideatracker.json`: active=120, archived=11
+- Note: PR #269 (full legacy corpus, 206k ideas) also already merged at 4ab8ef807f.
+- Current HEAD: be6513c50f (main, clean, up to date)
+- Status: CLOSED
+
 ## 2026-04-01 — Parallel-first agent coordination policy
 
 - Trigger: user requested agents to operate more independently and in parallel where safe.
