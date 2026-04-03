@@ -9,6 +9,37 @@
 ## Entries
 
 ## Last run - 2026-04-03
+- task_id: prj0000118-amd-npu-feature-documentation
+- Task: Execution validation for AMD NPU feature documentation contracts
+- Branch gate: PASS (expected=prj0000118-amd-npu-feature-documentation, observed=prj0000118-amd-npu-feature-documentation)
+- Project-scoped test selector: PASS (`python -m pytest tests/docs/test_prj0000118_amd_npu_feature_documentation_contracts.py -v` -> 6 passed in 4.38s)
+  - AC-AMD-001: PASS (canonical runtime guidance marker)
+  - AC-AMD-002: PASS (feature off/on command examples)
+  - AC-AMD-003: PASS (unavailable status -1 semantics)
+  - AC-AMD-004: PASS (supported environment boundary and unsupported paths)
+  - AC-AMD-005: PASS (mandatory evidence schema fields)
+  - AC-AMD-006: PASS (non-goals and CI defer contract)
+- Broader docs-policy suite: PASS (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 16 passed, 1 known baseline failure)
+  - Baseline failure: missing legacy file `docs/project/prj0000005/prj005-llm-swarm-architecture.git.md` (unchanged known baseline, outside scope)
+  - Disposition: NON_BLOCKING for prj0000118
+- Registry governance gate: PASS (`python scripts/project_registry_governance.py validate` -> VALIDATION_OK, projects=117)
+- Documentation content verification: PASS (`rg` scan for amd_npu keywords -> 26 matches, all required elements verified)
+- Git scope verification: PASS (`git status --short` -> only .github/agents/data log/memory updates, within allowable boundary)
+- Pre-commit gate: PASS (no Python/Rust source changes in scoped directory)
+- Outcome: PASSED -> @8ql
+- Next handoff target: @8ql
+- Notes: All 6 AMD NPU feature documentation contract requirements verified. Docs-only project with complete contract closure. Ready for quality/security closure.
+
+### Lesson
+- Pattern: Docs-only projects can achieve full contract closure with deterministic selector validation and documentation content verification.
+- Root cause: Clear AC-to-test mapping and explicit documentation content requirements enable rapid contract validation.
+- Prevention: Maintain comprehensive docs-policy suite alongside project-scoped test suites to catch both specific and systemic failures.
+- First seen: 2026-04-03
+- Seen in: prj0000118-amd-npu-feature-documentation
+- Recurrence count: 1
+- Promotion status: Candidate
+
+## Last run - 2026-04-03
 - task_id: prj0000117-rust-sub-crate-unification
 - Task: Execution validation evidence for rust workspace unification baseline
 - lifecycle: IN_PROGRESS -> BLOCKED
