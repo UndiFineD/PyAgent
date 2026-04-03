@@ -8,6 +8,49 @@
 
 ## Entries
 
+### Entry 2026-04-03 - prj0000116 rust criterion benchmark baseline red contracts
+- task_id: prj0000116-rust-criterion-benchmarks
+- status: DONE
+- lifecycle_transition: OPEN -> IN_PROGRESS -> DONE
+- branch_gate:
+  - expected: prj0000116-rust-criterion-benchmarks
+  - observed: prj0000116-rust-criterion-benchmarks
+  - result: PASS
+- scope:
+  - tests/rust/test_rust_criterion_baseline.py
+  - tests/ci/test_ci_workflow.py
+  - docs/project/prj0000116-rust-criterion-benchmarks/rust-criterion-benchmarks.test.md
+  - .github/agents/data/current.5test.memory.md
+  - .github/agents/data/2026-04-03.5test.log.md
+- pass_fail_summary:
+  - PASS: .venv\Scripts\ruff.exe check --fix tests/rust/test_rust_criterion_baseline.py tests/ci/test_ci_workflow.py
+  - PASS: .venv\Scripts\ruff.exe check tests/rust/test_rust_criterion_baseline.py tests/ci/test_ci_workflow.py
+  - PASS: .venv\Scripts\ruff.exe check --select D tests/rust/test_rust_criterion_baseline.py tests/ci/test_ci_workflow.py
+  - RED(expected): python -m pytest -q tests/rust/test_rust_criterion_baseline.py tests/ci/test_ci_workflow.py::test_ci_workflow_has_single_rust_benchmark_smoke_step_without_threshold_gate (4 failed in 4.74s)
+  - BASELINE_FAIL(known): python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py (1 failed, 16 passed)
+- red_failure_signatures:
+  - AssertionError: rust_core/Cargo.toml must add criterion under [dev-dependencies] for stats baseline bench
+  - AssertionError: rust_core/benches/stats_baseline.rs must exist
+  - AssertionError: ci.yml must contain exactly one benchmark smoke command: 'cargo bench --bench stats_baseline -- --noplot'
+  - non-qualifying failures absent: ImportError, AttributeError
+- handoff_notes:
+  - target_agent: @6code
+  - readiness: READY_FOR_IMPLEMENTATION
+  - implementation_delta_required:
+    - add criterion under rust_core/Cargo.toml [dev-dependencies]
+    - add [[bench]] target name=stats_baseline with harness=false
+    - add rust_core/benches/stats_baseline.rs with Criterion harness + naming contract
+    - add single CI smoke benchmark command and artifact check in .github/workflows/ci.yml
+
+#### Lesson
+- Pattern: Red-phase benchmark contracts are strongest when they validate Cargo wiring, Criterion macros, and CI command semantics as text-level structure checks.
+- Root cause: Repository has no Criterion dev-dependency, no stats benchmark harness file, and no CI smoke benchmark command yet.
+- Prevention: Keep three independent contract selectors for Cargo, bench source, and CI smoke so @6code receives precise implementation deltas.
+- First seen: 2026-04-03
+- Seen in: prj0000116-rust-criterion-benchmarks
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ### Entry 2026-04-02 - prj0000115 ci-security-quality workflow consolidation wave A
 - task_id: prj0000115-ci-security-quality-workflow-consolidation
 - status: DONE

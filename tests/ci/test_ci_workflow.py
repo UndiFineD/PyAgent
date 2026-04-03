@@ -14,6 +14,7 @@
 """Tests for CI workflow."""
 
 import os
+from typing import Iterable
 
 import yaml
 
@@ -40,6 +41,23 @@ def _on_block(workflow: dict) -> dict:
 
     """
     return workflow.get("on", workflow.get(True, {}))
+
+
+def _iter_run_commands(steps: list[dict]) -> Iterable[str]:
+    """Yield normalized run commands from workflow steps.
+
+    Args:
+        steps: CI step mappings from a workflow job.
+
+    Yields:
+        str: Trimmed shell command text.
+
+    """
+    for step in steps:
+        if isinstance(step, dict):
+            run_value = step.get("run")
+            if isinstance(run_value, str):
+                yield run_value.strip()
 
 
 def test_ci_workflow_exists() -> None:
@@ -140,4 +158,51 @@ def test_ci_workflow_quick_job_runs_precommit_command() -> None:
     run_command: str = pre_commit_step.get("run", "")
     assert "pre-commit run --all-files" in run_command, (
         "ci.yml 'Run pre-commit hooks' step must invoke 'pre-commit run --all-files'"
+    )
+
+
+def test_ci_workflow_has_single_rust_benchmark_smoke_step_without_threshold_gate() -> None:
+    """CI must include one bounded Rust benchmark smoke command.
+
+    This contract enforces IFACE-BENCH-003 and IFACE-BENCH-005 behavior:
+    one smoke benchmark command and no heavy matrix expansion or threshold gating.
+
+    """
+    data = _load_ci_workflow()
+    jobs = data.get("jobs", {})
+
+    matching_commands: list[str] = []
+    command_text: list[str] = []
+
+    for job in jobs.values():
+        if not isinstance(job, dict):
+            continue
+        for command in _iter_run_commands(job.get("steps", [])):
+            command_text.append(command)
+            if "cargo bench --bench stats_baseline -- --noplot" in command:
+                matching_commands.append(command)
+
+    assert len(matching_commands) == 1, (
+        "ci.yml must contain exactly one benchmark smoke command: "
+        "'cargo bench --bench stats_baseline -- --noplot'"
+    )
+
+    combined_commands = "\n".join(command_text)
+    assert "rust_core/target/criterion/" in combined_commands, (
+        "ci.yml benchmark smoke integration must check rust_core/target/criterion/ artifact presence"
+    )
+
+    lowered = combined_commands.lower()
+    assert "threshold" not in lowered, "ci.yml benchmark smoke step must not enforce threshold gating in v1"
+
+    rust_bench_matrix_jobs = [
+        job_name
+        for job_name, job in jobs.items()
+        if isinstance(job, dict)
+        and "strategy" in job
+        and "cargo bench --bench stats_baseline -- --noplot"
+        in "\n".join(_iter_run_commands(job.get("steps", [])))
+    ]
+    assert not rust_bench_matrix_jobs, (
+        "ci.yml benchmark smoke integration must not run in a strategy/matrix job"
     )
