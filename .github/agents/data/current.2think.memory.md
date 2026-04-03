@@ -8,6 +8,30 @@
 
 ## Entries
 
+### 2026-04-03 - prj0000117-rust-sub-crate-unification
+- task_id: prj0000117-rust-sub-crate-unification
+- status: DONE
+- target_agent: @3design
+- canonical_artifact: docs/project/prj0000117-rust-sub-crate-unification/rust-sub-crate-unification.think.md
+- recommendation_summary: Select Option B (root-workspace unification anchored at rust_core/Cargo.toml) to achieve dependency/lockfile convergence while preserving maturin and existing CI command contracts.
+- prior_art_refs:
+	- docs/project/archive/prj0000005/prj005-llm-swarm-architecture.project.md
+	- docs/project/prj0000108-idea000019-crdt-python-ffi-bindings/idea000019-crdt-python-ffi-bindings.think.md
+	- docs/architecture/adr/0006-crdt-python-ffi-in-rust-core.md
+	- docs/project/prj0000116-rust-criterion-benchmarks/rust-criterion-benchmarks.think.md
+- branch_gate_evidence: `git branch --show-current` -> `prj0000117-rust-sub-crate-unification`
+- rationale_for_handoff: Completed 3-option analysis with repository and approved external Cargo guidance, SWOT/security risk-to-testability mapping, decision matrix, design open questions, and minimal-first implementation slice.
+- required_validation: `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> unchanged known baseline failure in `test_legacy_git_summaries_document_branch_exception_and_corrective_ownership` due missing legacy file `docs/project/prj0000005/prj005-llm-swarm-architecture.git.md`.
+
+#### Lesson
+- Pattern: Rust multi-crate governance decisions should preserve existing root build contracts while centralizing dependency and patch ownership.
+- Root cause: Separate standalone lockfiles and crate-local patch declarations increase drift and security-governance ambiguity.
+- Prevention: Prefer root workspace topology that keeps existing primary manifest path stable and enforces root-level patch/dependency checks with package-scoped command validation.
+- First seen: 2026-04-03
+- Seen in: prj0000117-rust-sub-crate-unification
+- Recurrence count: 1
+- Promotion status: MONITOR
+
 ### 2026-04-03 - prj0000116-rust-criterion-benchmarks
 - task_id: prj0000116-rust-criterion-benchmarks
 - status: DONE
