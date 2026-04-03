@@ -1,5 +1,23 @@
 [
   {
+    "id": "prj0000119",
+    "name": "pytest-stabilization",
+    "lane": "Released",
+    "summary": "Restore missing legacy project artifacts and registry continuity so pytest and structure gates pass after the prj0000118 merge.",
+    "branch": "prj0000119-pytest-stabilization",
+    "pr": "#277",
+    "priority": "P2",
+    "budget_tier": "S",
+    "tags": [
+      "pytest",
+      "stabilization",
+      "registry",
+      "post-merge"
+    ],
+    "created": "2026-04-03",
+    "updated": "2026-04-03"
+  },
+  {
     "id": "prj0000112",
     "name": "reserved-skipped",
     "lane": "Archived",
@@ -18,10 +36,10 @@
   {
     "id": "prj0000118",
     "name": "amd-npu-feature-documentation",
-    "lane": "Discovery",
+    "lane": "Released",
     "summary": "Initialize workflow artifacts for idea000020 amd-npu-feature-documentation and hand off to @2think discovery.",
     "branch": "prj0000118-amd-npu-feature-documentation",
-    "pr": null,
+    "pr": "#276",
     "priority": "P3",
     "budget_tier": "S",
     "tags": [
