@@ -99,7 +99,7 @@
       "Pre-commit hook not enforced in all CI paths"
     ],
     "opportunities": [
-      "AI tooling improving rapidly — agents can be upgraded with new models",
+      "AI tooling improving rapidly \u00e2\u20ac\u201d agents can be upgraded with new models",
       "WCAG compliance creates accessible, production-ready UI for demos",
       "Rust FFI bridge enables near-native performance at Python ergonomics",
       "Community interest in multi-agent workflow tooling growing"
@@ -157,7 +157,7 @@
     {
       "id": "prj0000118",
       "name": "amd-npu-feature-documentation",
-      "lane": "Discovery",
+      "lane": "Review",
       "summary": "Initialize workflow artifacts for idea000020 amd-npu-feature-documentation and hand off to @2think discovery.",
       "branch": "prj0000118-amd-npu-feature-documentation",
       "pr": null,
@@ -191,7 +191,7 @@
     {
       "id": "prj0000116",
       "name": "rust-criterion-benchmarks",
-      "lane": "Discovery",
+      "lane": "Review",
       "summary": "Initialize workflow artifacts for idea000017 rust-criterion-benchmarks and hand off to @2think discovery.",
       "branch": "prj0000116-rust-criterion-benchmarks",
       "pr": null,
@@ -208,7 +208,7 @@
     {
       "id": "prj0000115",
       "name": "ci-security-quality-workflow-consolidation",
-      "lane": "Discovery",
+      "lane": "Review",
       "summary": "Initialize workflow artifacts for idea000131 ci-security-quality-workflow-consolidation and hand off to @2think discovery.",
       "branch": "prj0000115-ci-security-quality-workflow-consolidation",
       "pr": null,
@@ -220,7 +220,7 @@
         "ci-security-quality-workflow-consolidation"
       ],
       "created": "2026-04-02",
-      "updated": "2026-04-02"
+      "updated": "2026-04-03"
     },
     {
       "id": "prj0000114",
@@ -250,7 +250,13 @@
         "legacy-generation",
         "parallel-coordination",
         "workflow-tooling"
-      ]
+      ],
+      "branch": "merged",
+      "pr": "#268",
+      "priority": "P2",
+      "budget_tier": "M",
+      "created": "2026-04-01",
+      "updated": "2026-04-01"
     },
     {
       "id": "prj0000111",
@@ -273,7 +279,7 @@
     {
       "id": "prj0000110",
       "name": "idea000004-quality-workflow-branch-trigger",
-      "lane": "Discovery",
+      "lane": "Review",
       "summary": "Initialize workflow artifacts for idea000004 quality-workflow-branch-trigger and hand off to @2think discovery.",
       "branch": "prj0000110-idea000004-quality-workflow-branch-trigger",
       "pr": null,
@@ -285,7 +291,7 @@
         "quality-workflow-branch-trigger"
       ],
       "created": "2026-04-01",
-      "updated": "2026-04-01"
+      "updated": "2026-04-03"
     },
     {
       "id": "prj0000109",
@@ -2001,7 +2007,7 @@
       "id": "prj0000094",
       "name": "idea-003 - mypy-strict-enforcement",
       "lane": "Review",
-      "summary": "This idea focuses on mypy strict enforcement in area 1 – Python agents. The current signal indicates priority P1, impact H, and urgency H. The SWOT tag is W (Weakness in current implementation).",
+      "summary": "This idea focuses on mypy strict enforcement in area 1 \u00e2\u20ac\u201c Python agents. The current signal indicates priority P1, impact H, and urgency H. The SWOT tag is W (Weakness in current implementation).",
       "branch": null,
       "pr": null,
       "priority": "P3",
@@ -2035,7 +2041,7 @@
       "id": "prj0000101",
       "name": "idea-013 - backend-health-check-endpoint",
       "lane": "Review",
-      "summary": "This idea focuses on backend health check endpoint in area 3 – Backend. The current signal indicates priority P2, impact M, and urgency H. The SWOT tag is W (Weakness in current implementation).",
+      "summary": "This idea focuses on backend health check endpoint in area 3 \u00e2\u20ac\u201c Backend. The current signal indicates priority P2, impact M, and urgency H. The SWOT tag is W (Weakness in current implementation).",
       "branch": null,
       "pr": null,
       "priority": "P3",
@@ -2051,7 +2057,7 @@
       "id": "prj0000102",
       "name": "idea-014 - pyproject-requirements-sync",
       "lane": "Released",
-      "summary": "This idea focuses on pyproject requirements sync in area 9 – Dependencies. The current signal indicates priority P2, impact M, and urgency M. The SWOT tag is W (Weakness in current implementation).",
+      "summary": "This idea focuses on pyproject requirements sync in area 9 \u00e2\u20ac\u201c Dependencies. The current signal indicates priority P2, impact M, and urgency M. The SWOT tag is W (Weakness in current implementation).",
       "branch": "merged",
       "pr": "#251 #252",
       "priority": "P3",
@@ -2067,7 +2073,7 @@
       "id": "prj0000105",
       "name": "idea-016 - mixin-architecture-base",
       "lane": "Released",
-      "summary": "This idea focuses on mixin architecture base in area 1 – Python agents. The current signal indicates priority P3, impact H, and urgency M. The SWOT tag is W (Weakness in current implementation).",
+      "summary": "This idea focuses on mixin architecture base in area 1 \u00e2\u20ac\u201c Python agents. The current signal indicates priority P3, impact H, and urgency M. The SWOT tag is W (Weakness in current implementation).",
       "branch": "merged",
       "pr": "#258",
       "priority": "P3",
@@ -2095,6 +2101,22 @@
       ],
       "created": "2026-03-31",
       "updated": "2026-03-31"
+    },
+    {
+      "id": "prj0000112",
+      "name": "reserved-skipped",
+      "lane": "Archived",
+      "summary": "Project ID prj0000112 was allocated but never used. Reserved/skipped.",
+      "branch": "n/a",
+      "pr": "n/a",
+      "priority": "P4",
+      "budget_tier": "unknown",
+      "tags": [
+        "reserved",
+        "skipped"
+      ],
+      "created": "2026-04-01",
+      "updated": "2026-04-01"
     }
   ]
 }

@@ -1,5 +1,21 @@
 [
   {
+    "id": "prj0000112",
+    "name": "reserved-skipped",
+    "lane": "Archived",
+    "summary": "Project ID prj0000112 was allocated but never used. Reserved/skipped.",
+    "branch": "n/a",
+    "pr": "n/a",
+    "priority": "P4",
+    "budget_tier": "unknown",
+    "tags": [
+      "reserved",
+      "skipped"
+    ],
+    "created": "2026-04-01",
+    "updated": "2026-04-01"
+  },
+  {
     "id": "prj0000118",
     "name": "amd-npu-feature-documentation",
     "lane": "Discovery",
@@ -1869,7 +1885,7 @@
     "id": "prj0000094",
     "name": "idea-003 - mypy-strict-enforcement",
     "lane": "Review",
-    "summary": "This idea focuses on mypy strict enforcement in area 1 – Python agents. The current signal indicates priority P1, impact H, and urgency H. The SWOT tag is W (Weakness in current implementation).",
+    "summary": "This idea focuses on mypy strict enforcement in area 1 \u00e2\u20ac\u201c Python agents. The current signal indicates priority P1, impact H, and urgency H. The SWOT tag is W (Weakness in current implementation).",
     "branch": null,
     "pr": null,
     "priority": "P3",
@@ -1903,7 +1919,7 @@
     "id": "prj0000101",
     "name": "idea-013 - backend-health-check-endpoint",
     "lane": "Review",
-    "summary": "This idea focuses on backend health check endpoint in area 3 – Backend. The current signal indicates priority P2, impact M, and urgency H. The SWOT tag is W (Weakness in current implementation).",
+    "summary": "This idea focuses on backend health check endpoint in area 3 \u00e2\u20ac\u201c Backend. The current signal indicates priority P2, impact M, and urgency H. The SWOT tag is W (Weakness in current implementation).",
     "branch": null,
     "pr": null,
     "priority": "P3",
@@ -1919,7 +1935,7 @@
     "id": "prj0000102",
     "name": "idea-014 - pyproject-requirements-sync",
     "lane": "Released",
-    "summary": "This idea focuses on pyproject requirements sync in area 9 – Dependencies. The current signal indicates priority P2, impact M, and urgency M. The SWOT tag is W (Weakness in current implementation).",
+    "summary": "This idea focuses on pyproject requirements sync in area 9 \u00e2\u20ac\u201c Dependencies. The current signal indicates priority P2, impact M, and urgency M. The SWOT tag is W (Weakness in current implementation).",
     "branch": "merged",
     "pr": "#251 #252",
     "priority": "P3",
@@ -1935,7 +1951,7 @@
     "id": "prj0000105",
     "name": "idea-016 - mixin-architecture-base",
     "lane": "Released",
-    "summary": "This idea focuses on mixin architecture base in area 1 – Python agents. The current signal indicates priority P3, impact H, and urgency M. The SWOT tag is W (Weakness in current implementation).",
+    "summary": "This idea focuses on mixin architecture base in area 1 \u00e2\u20ac\u201c Python agents. The current signal indicates priority P3, impact H, and urgency M. The SWOT tag is W (Weakness in current implementation).",
     "branch": "merged",
     "pr": "#258",
     "priority": "P3",

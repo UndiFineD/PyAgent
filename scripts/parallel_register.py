@@ -46,10 +46,12 @@ class RegisterConflictError(RuntimeError):
 
 
 def _utc_now() -> str:
+    """Get the current UTC time as an ISO 8601 string."""
     return datetime.now(timezone.utc).isoformat()
 
 
 def _new_agent_state() -> dict[str, Any]:
+    """Create a new agent state dictionary with default values."""
     return {
         "status": "idle",
         "work_package_id": "",
@@ -62,6 +64,7 @@ def _new_agent_state() -> dict[str, Any]:
 
 
 def _normalize_register(data: dict[str, Any]) -> dict[str, Any]:
+    """Normalize the register data structure, ensuring all required fields are present."""
     data.setdefault("schema_version", "1.0.0")
     data.setdefault("register_id", "parallel-agents-register")
     data.setdefault("description", "Shared coordination register for parallel agent work, file touches, and file locks.")
@@ -90,6 +93,7 @@ def _normalize_register(data: dict[str, Any]) -> dict[str, Any]:
 
 @contextmanager
 def _register_mutex(lock_path: Path, timeout_seconds: float = 8.0) -> Iterator[None]:
+    """Context manager for acquiring a mutex on the register file."""
     start = time.monotonic()
     while True:
         try:
@@ -109,6 +113,7 @@ def _register_mutex(lock_path: Path, timeout_seconds: float = 8.0) -> Iterator[N
 
 
 def _load_register(register_path: Path) -> dict[str, Any]:
+    """Load the parallel register from a JSON file."""
     if not register_path.exists():
         return _normalize_register({})
 
@@ -118,6 +123,7 @@ def _load_register(register_path: Path) -> dict[str, Any]:
 
 
 def _atomic_write_json(path: Path, payload: dict[str, Any]) -> None:
+    """Atomically write a JSON payload to a file."""
     path.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=str(path.parent), delete=False) as tmp:
         json.dump(payload, tmp, indent=2, ensure_ascii=False)
@@ -127,11 +133,13 @@ def _atomic_write_json(path: Path, payload: dict[str, Any]) -> None:
 
 
 def _append_unique(items: list[str], value: str) -> None:
+    """Append a value to a list if it is not already present."""
     if value and value not in items:
         items.append(value)
 
 
 def _refresh_lockfiles(register: dict[str, Any]) -> None:
+    """Refresh the list of lockfiles in the register."""
     register["lockfiles"] = sorted(
         {
             str(lock["file_path"])
@@ -142,6 +150,7 @@ def _refresh_lockfiles(register: dict[str, Any]) -> None:
 
 
 def _append_event(register: dict[str, Any], event_type: str, actor: str, payload: dict[str, Any]) -> None:
+    """Append an event to the register's event log."""
     register["event_log"].append(
         {
             "ts": _utc_now(),
@@ -153,6 +162,7 @@ def _append_event(register: dict[str, Any], event_type: str, actor: str, payload
 
 
 def _touch_metadata(register: dict[str, Any], updated_by: str, project_id: str, branch: str, wave_id: str) -> None:
+    """Update the metadata of the register with the provided information."""
     register["updated_at"] = _utc_now()
     register["updated_by"] = updated_by
     if project_id:
@@ -164,6 +174,7 @@ def _touch_metadata(register: dict[str, Any], updated_by: str, project_id: str, 
 
 
 def _ensure_agent(register: dict[str, Any], agent: str) -> dict[str, Any]:
+    """Ensure that *agent* exists in the register and return its state dictionary."""
     if agent not in register["agents"]:
         register["agents"][agent] = _new_agent_state()
     return register["agents"][agent]
@@ -179,6 +190,22 @@ def acquire_lock(
     branch: str,
     wave_id: str,
 ) -> dict[str, Any]:
+    """Acquire a lock in the parallel register.
+
+    Args:
+        register_path: Path to the parallel register JSON file.
+        agent: Name of the agent acquiring the lock.
+        work_package_id: ID of the work package associated with the lock.
+        file_path: Path to the file being locked.
+        lock_id: ID of the lock to be acquired.
+        project_id: ID of the project associated with the lock.
+        branch: Branch name associated with the lock.
+        wave_id: ID of the wave associated with the lock.
+
+    Returns:
+        A dictionary containing the status and details of the acquired lock.
+
+    """
     mutex = register_path.with_suffix(register_path.suffix + ".lock")
 
     with _register_mutex(mutex):
@@ -227,6 +254,18 @@ def acquire_lock(
 
 
 def release_lock(register_path: Path, agent: str, lock_id: str, wave_id: str) -> dict[str, Any]:
+    """Release a lock in the parallel register.
+
+    Args:
+        register_path: Path to the parallel register JSON file.
+        agent: Name of the agent releasing the lock.
+        lock_id: ID of the lock to be released.
+        wave_id: ID of the wave associated with the lock.
+
+    Returns:
+        A dictionary containing the status and details of the released lock.
+
+    """
     mutex = register_path.with_suffix(register_path.suffix + ".lock")
 
     with _register_mutex(mutex):
@@ -275,6 +314,22 @@ def touch_file(
     branch: str,
     wave_id: str,
 ) -> dict[str, Any]:
+    """Touch a file in the parallel register.
+
+    Args:
+        register_path: Path to the parallel register JSON file.
+        agent: Name of the agent touching the file.
+        work_package_id: ID of the work package associated with the file.
+        file_path: Path to the file being touched.
+        kind: Type of touch operation ("planned" or "touching").
+        project_id: ID of the project associated with the file.
+        branch: Branch name associated with the file.
+        wave_id: ID of the wave associated with the file.
+
+    Returns:
+        A dictionary containing the status and details of the touched file.
+
+    """
     if kind not in {"planned", "touching"}:
         raise ValueError("kind must be one of: planned, touching")
 
@@ -310,6 +365,18 @@ def touch_file(
 
 
 def close_wave(register_path: Path, actor: str, wave_id: str, note: str) -> dict[str, Any]:
+    """Close a wave in the parallel register.
+
+    Args:
+        register_path: Path to the parallel register JSON file.
+        actor: Name of the actor closing the wave.
+        wave_id: ID of the wave to close.
+        note: Note or description for the wave.
+
+    Returns:
+        A dictionary containing the status and details of the closed wave.
+
+    """
     mutex = register_path.with_suffix(register_path.suffix + ".lock")
 
     with _register_mutex(mutex):
@@ -358,6 +425,20 @@ def open_wave(
     branch: str,
     note: str,
 ) -> dict[str, Any]:
+    """Open a wave in the parallel register.
+
+    Args:
+        register_path: Path to the parallel register JSON file.
+        actor: Name of the actor opening the wave.
+        wave_id: ID of the wave to open.
+        project_id: ID of the project associated with the wave.
+        branch: Branch name associated with the wave.
+        note: Note or description for the wave.
+
+    Returns:
+        A dictionary containing the status and details of the opened wave.
+
+    """
     mutex = register_path.with_suffix(register_path.suffix + ".lock")
 
     with _register_mutex(mutex):
@@ -392,6 +473,7 @@ def open_wave(
 
 
 def _build_parser() -> argparse.ArgumentParser:
+    """Build the argument parser for the parallel register CLI."""
     parser = argparse.ArgumentParser(description="Manage the parallel agents register atomically.")
     parser.add_argument("--register", default=str(DEFAULT_REGISTER), help="Path to parallel register JSON")
 
@@ -436,6 +518,7 @@ def _build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
+    """Main entry point for the parallel register CLI."""
     args = _build_parser().parse_args()
     register_path = Path(args.register).resolve()
 
