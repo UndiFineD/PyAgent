@@ -8,6 +8,29 @@
 
 ## Entries
 
+## Last run - 2026-04-03
+- task_id: prj0000116-rust-criterion-benchmarks
+- Task: Execution validation evidence for rust criterion benchmark baseline
+- Branch gate: PASS (expected=prj0000116-rust-criterion-benchmarks, observed=prj0000116-rust-criterion-benchmarks)
+- Sync gate: PASS (`git pull` -> Already up to date)
+- Selector gate: PASS (`python -m pytest -q tests/rust/test_rust_criterion_baseline.py` -> 3 passed)
+- Selector gate: PASS (`python -m pytest -q tests/ci/test_ci_workflow.py` -> 8 passed)
+- Convergence gate: PASS (`python -m pytest -q tests/rust/test_rust_criterion_baseline.py tests/ci/test_ci_workflow.py` -> 11 passed)
+- Docs policy gate: FAIL (known baseline unchanged) (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 16 passed, 1 failed)
+- Baseline failure detail: missing legacy file `docs/project/prj0000005/prj005-llm-swarm-architecture.git.md` referenced by `tests/docs/test_agent_workflow_policy_docs.py::test_legacy_git_summaries_document_branch_exception_and_corrective_ownership`
+- Outcome: BLOCKED (docs-policy baseline) | evidence committed per user request
+- Next handoff target: @0master / @6code for baseline docs-policy remediation ownership
+- Notes: Requested selectors passed; docs-policy failure signature unchanged from known baseline.
+
+### Lesson
+- Pattern: Project-scoped execution evidence can be complete while docs-policy selector remains blocked by legacy baseline gaps outside active project scope.
+- Root cause: Legacy summary file for prj0000005 is missing, and docs-policy selector hard-requires it.
+- Prevention: Keep this baseline failure explicitly documented in @7exec artifacts and avoid misclassifying it as a new regression.
+- First seen: 2026-04-03
+- Seen in: prj0000116-rust-criterion-benchmarks
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ## Last run - 2026-04-02
 - task_id: prj0000115-ci-security-quality-workflow-consolidation
 - Task: T-SEC-005 closure evidence runtime validation
