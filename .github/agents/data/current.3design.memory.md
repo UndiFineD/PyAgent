@@ -7,6 +7,34 @@
 - rollover: At new project start, append this file's entries to history.3design.memory.md in chronological order, then clear Entries.
 
 ## Entries
+- task_id: prj0000118-amd-npu-feature-documentation
+	state: DONE
+	selected_design_path: Option B (canonical docs plus maintainer verification checklist)
+	assumptions:
+		- Canonical runtime guidance remains in `docs/performance/HARDWARE_ACCELERATION.md`, with project artifacts providing governance traceability.
+		- `rust_core/Cargo.toml` feature declaration and `rust_core/src/hardware.rs` fallback semantics are the authoritative repository evidence for this lane.
+		- CI automation for AMD NPU remains deferred until repeated maintainer evidence justifies a dedicated follow-on project.
+	interface_contract_notes:
+		- IFACE-AMD-001 canonical documentation location contract.
+		- IFACE-AMD-002 feature activation command contract.
+		- IFACE-AMD-003 unsupported fallback (`-1`) interpretation contract.
+		- IFACE-AMD-004 environment gate contract.
+		- IFACE-AMD-005 validation evidence schema contract.
+		- IFACE-AMD-006 deferred CI automation contract.
+	handoff:
+		target_agent: @4plan
+		canonical_artifact: docs/project/prj0000118-amd-npu-feature-documentation/amd-npu-feature-documentation.design.md
+		chunked_artifacts: none
+		adr_artifact: none
+	lesson:
+		Pattern: Docs-only hardware feature projects stay actionable when unsupported behavior semantics and evidence schema are both mandatory acceptance gates.
+		Root cause: Feature documentation efforts often stop at activation prose and omit fallback interpretation plus auditable validation proof requirements.
+		Prevention: Require AC table with IFACE mapping, explicit supported/unsupported matrix, and evidence template fields before @4plan handoff.
+		First seen: 2026-04-03
+		Seen in: prj0000118-amd-npu-feature-documentation
+		Recurrence count: 1
+		Promotion status: Candidate
+
 - task_id: prj0000117-rust-sub-crate-unification
 	state: DONE
 	selected_design_path: Option B (root Cargo workspace unification with root package retained)
