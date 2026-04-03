@@ -3,10 +3,33 @@
 ## Metadata
 - agent: @2think
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-04-02
+- updated_at: 2026-04-03
 - rollover: At new project start, append this file's entries to history.2think.memory.md in chronological order, then clear Entries.
 
 ## Entries
+
+### 2026-04-03 - prj0000116-rust-criterion-benchmarks
+- task_id: prj0000116-rust-criterion-benchmarks
+- status: DONE
+- target_agent: @3design
+- canonical_artifact: docs/project/prj0000116-rust-criterion-benchmarks/rust-criterion-benchmarks.think.md
+- recommendation_summary: Leading option is Option B (minimal Rust Criterion harness plus lightweight CI smoke benchmark) for strongest balance of governance-compliant first slice and anti-drift enforcement.
+- prior_art_refs:
+	- docs/architecture/1agents.md
+	- docs/architecture/archive/9operations-observability.md
+	- docs/architecture/adr/0006-crdt-python-ffi-in-rust-core.md
+	- docs/project/prj0000108-idea000019-crdt-python-ffi-bindings/idea000019-crdt-python-ffi-bindings.think.md
+- branch_gate_evidence: `git branch --show-current` -> `prj0000116-rust-criterion-benchmarks`; `git pull --ff-only` -> `Already up to date.`
+- rationale_for_handoff: Branch gate and policy references validated; three options documented with SWOT, security risks, risk-to-testability mapping, decision matrix, and concrete downstream file targets. Required docs-policy test run completed with known baseline failure in `test_legacy_git_summaries_document_branch_exception_and_corrective_ownership` due missing legacy file `docs/project/prj0000005/prj005-llm-swarm-architecture.git.md`.
+
+#### Lesson
+- Pattern: Docs-policy selector can fail for known historical missing legacy files outside active project scope.
+- Root cause: Repository-wide historical artifact gap (`prj0000005` legacy git summary) remains unresolved.
+- Prevention: Always run required selector, report exact known baseline failure, and avoid scope-creep fixes in unrelated legacy projects during active project delivery.
+- First seen: 2026-04-03
+- Seen in: prj0000116-rust-criterion-benchmarks
+- Recurrence count: 1
+- Promotion status: MONITOR
 
 ### 2026-04-02 - prj0000115-ci-security-quality-workflow-consolidation
 - task_id: prj0000115-ci-security-quality-workflow-consolidation
