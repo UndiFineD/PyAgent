@@ -183,8 +183,7 @@ def test_ci_workflow_has_single_rust_benchmark_smoke_step_without_threshold_gate
                 matching_commands.append(command)
 
     assert len(matching_commands) == 1, (
-        "ci.yml must contain exactly one benchmark smoke command: "
-        "'cargo bench --bench stats_baseline -- --noplot'"
+        "ci.yml must contain exactly one benchmark smoke command: 'cargo bench --bench stats_baseline -- --noplot'"
     )
 
     combined_commands = "\n".join(command_text)
@@ -200,9 +199,6 @@ def test_ci_workflow_has_single_rust_benchmark_smoke_step_without_threshold_gate
         for job_name, job in jobs.items()
         if isinstance(job, dict)
         and "strategy" in job
-        and "cargo bench --bench stats_baseline -- --noplot"
-        in "\n".join(_iter_run_commands(job.get("steps", [])))
+        and "cargo bench --bench stats_baseline -- --noplot" in "\n".join(_iter_run_commands(job.get("steps", [])))
     ]
-    assert not rust_bench_matrix_jobs, (
-        "ci.yml benchmark smoke integration must not run in a strategy/matrix job"
-    )
+    assert not rust_bench_matrix_jobs, "ci.yml benchmark smoke integration must not run in a strategy/matrix job"

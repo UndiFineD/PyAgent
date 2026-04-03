@@ -74,9 +74,7 @@ def test_rust_core_cargo_declares_criterion_baseline_bench_contract() -> None:
         (entry for entry in bench_entries if isinstance(entry, dict) and entry.get("name") == "stats_baseline"),
         None,
     )
-    assert stats_baseline_entry is not None, (
-        "rust_core/Cargo.toml must declare [[bench]] name='stats_baseline'"
-    )
+    assert stats_baseline_entry is not None, "rust_core/Cargo.toml must declare [[bench]] name='stats_baseline'"
     assert stats_baseline_entry.get("harness") is False, (
         "rust_core/Cargo.toml bench target 'stats_baseline' must set harness=false for Criterion"
     )
@@ -110,9 +108,9 @@ def test_stats_baseline_benchmark_contains_design_naming_contract_markers() -> N
 
     source = _stats_benchmark_source()
 
-    assert (
-        re.search(r"benchmark_group\(\s*\"stats/[a-zA-Z0-9_\-]+\"\s*\)", source) is not None
-    ), "stats_baseline benchmark must define a group name matching stats/<domain>"
+    assert re.search(r"benchmark_group\(\s*\"stats/[a-zA-Z0-9_\-]+\"\s*\)", source) is not None, (
+        "stats_baseline benchmark must define a group name matching stats/<domain>"
+    )
 
     assert (
         re.search(r"BenchmarkId::new\(\s*\"[a-zA-Z0-9_\-]+/[a-zA-Z0-9_\-]+\"", source) is not None

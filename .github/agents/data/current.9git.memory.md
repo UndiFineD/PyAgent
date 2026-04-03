@@ -3,10 +3,37 @@
 ## Metadata
 - agent: @9git
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-03-30
+- updated_at: 2026-04-03
 - rollover: At new project start, append this file's entries to history.9git.memory.md in chronological order, then clear Entries.
 
 ## Entries
+
+## 2026-04-03 - prj0000116-rust-criterion-benchmarks
+- task_id: prj0000116-rust-criterion-benchmarks
+- status: IN_PROGRESS
+- branch_expected: prj0000116-rust-criterion-benchmarks
+- branch_observed: prj0000116-rust-criterion-benchmarks
+- branch_validation: PASS
+- scope_validation: PASS
+- notes:
+	- Branch gate passed; `git pull` → `Already up to date`.
+	- Full commit timeline assembled: 10 upstream commits (think → design → plan → test → feat → exec → ql × 3 → fix).
+	- @8ql cleared to @9git: all quality gates PASS; docs policy baseline fail is pre-existing non-blocking.
+	- 11/11 project tests pass; cargo clippy 0 warnings; ruff clean on test files.
+	- `rust_core/Cargo.lock` was modified (unstaged companion to committed Cargo.toml bench dep); staged in @9git final commit.
+	- Dashboard gate executed; broad side-effect files excluded from staging.
+	- Staged manifest: git.md, project.md (dashboard), current.9git.memory.md, 2026-04-03.9git.log.md, rust_core/Cargo.lock.
+	- Commit `docs(prj0000116): finalize git handoff and PR readiness` pushed.
+	- PR: TBD (populated after creation).
+
+### Lesson
+- Pattern: `rust_core/Cargo.lock` updated silently when `cargo bench` or `cargo clippy --bench` runs; must check `git diff --name-only` before finalizing scope manifest and always include Cargo.lock alongside Cargo.toml changes.
+- Root cause: Cargo deterministically regenerates Cargo.lock on any bench/clippy invocation that resolves new deps.
+- Prevention: Always check for Cargo.lock diff after any Rust task; stage it in the same commit as Cargo.toml.
+- First seen: 2026-04-03
+- Seen in: prj0000116-rust-criterion-benchmarks
+- Recurrence count: 1
+- Promotion status: CANDIDATE
 
 ## 2026-04-02 - prj0000115-ci-security-quality-workflow-consolidation
 - task_id: prj0000115-ci-security-quality-workflow-consolidation
