@@ -8,6 +8,25 @@
 
 ## Entries
 
+## prj0000118 - amd-npu-feature-documentation
+
+| Field | Value |
+|---|---|
+| task_id | prj0000118-amd-npu-feature-documentation |
+| owner_agent | @4plan |
+| source | user request + @3design artifact |
+| created_at | 2026-04-03 |
+| updated_at | 2026-04-03 |
+| status | DONE |
+| lifecycle | OPEN -> IN_PROGRESS -> DONE |
+| chunk_boundaries | Chunk C1 (T-AMD-001..T-AMD-004) and Chunk C2 (T-AMD-005..T-AMD-007) |
+| acceptance_criteria_scope | AC-AMD-001..AC-AMD-006 mapped to IFACE-AMD-001..IFACE-AMD-006 with per-task owner and command gates |
+| dependency_order | T-AMD-001 -> T-AMD-002 -> (T-AMD-003 || T-AMD-004) -> T-AMD-005 -> T-AMD-006 -> T-AMD-007 |
+| handoff_target | @5test (first), then @6code, @7exec, @8ql, @9git |
+| artifact_paths | docs/project/prj0000118-amd-npu-feature-documentation/amd-npu-feature-documentation.plan.md |
+| branch | prj0000118-amd-npu-feature-documentation (validated PASS before artifact writes) |
+| validation_evidence | python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 1 failed, 16 passed; unchanged known baseline missing legacy file docs/project/prj0000005/prj005-llm-swarm-architecture.git.md |
+
 ## prj0000117 - rust-sub-crate-unification
 
 | Field | Value |

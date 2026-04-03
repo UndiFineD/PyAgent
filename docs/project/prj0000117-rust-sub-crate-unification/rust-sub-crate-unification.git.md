@@ -29,7 +29,7 @@ _Git: @9git | Updated: 2026-04-03_
 | 8 | `64b6f7692f` | docs(prj0000117): quality/security gate evidence |
 | 9 | `884f40a799` | docs(prj0000117): quality/security gate evidence (project-scoped pass) |
 
-## Scope Compliance Summary
+## Scope Validation
 | Scope area | Result | Notes |
 |---|---|---|
 | `docs/project/prj0000117-rust-sub-crate-unification/` | PASS | Project artifacts updated by stage owners and @9git handoff. |

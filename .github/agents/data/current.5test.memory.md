@@ -8,6 +8,47 @@
 
 ## Entries
 
+### Entry 2026-04-03 - prj0000118 amd npu feature documentation red contracts
+- task_id: prj0000118-amd-npu-feature-documentation
+- status: DONE
+- lifecycle_transition: OPEN -> IN_PROGRESS -> DONE
+- branch_gate:
+  - expected: prj0000118-amd-npu-feature-documentation
+  - observed: prj0000118-amd-npu-feature-documentation
+  - result: PASS
+- scope:
+  - tests/docs/test_prj0000118_amd_npu_feature_documentation_contracts.py
+  - docs/project/prj0000118-amd-npu-feature-documentation/amd-npu-feature-documentation.test.md
+  - .github/agents/data/current.5test.memory.md
+  - .github/agents/data/2026-04-03.5test.log.md
+- pass_fail_summary:
+  - PASS: .venv\Scripts\ruff.exe check --fix tests/docs/test_prj0000118_amd_npu_feature_documentation_contracts.py
+  - PASS: .venv\Scripts\ruff.exe check tests/docs/test_prj0000118_amd_npu_feature_documentation_contracts.py
+  - PASS: .venv\Scripts\ruff.exe check --select D tests/docs/test_prj0000118_amd_npu_feature_documentation_contracts.py
+  - RED(expected): python -m pytest -q tests/docs/test_prj0000118_amd_npu_feature_documentation_contracts.py (6 failed in 6.68s)
+- red_failure_signatures:
+  - AssertionError: missing canonical runtime guidance marker section for amd_npu
+  - AssertionError: missing feature-off and feature-on command examples
+  - AssertionError: missing AMD_NPU_STATUS_UNAVAILABLE and -1 fallback semantics
+  - AssertionError: missing Windows x86_64 + AMD Ryzen AI SDK boundary and unsupported path phrase
+  - AssertionError: missing mandatory evidence schema fields
+  - AssertionError: missing non-goals and CI defer contract text
+  - non-qualifying failures absent: ImportError, AttributeError
+- handoff_notes:
+  - target_agent: @6code
+  - readiness: READY_FOR_IMPLEMENTATION
+  - implementation_delta_required:
+    - update docs/performance/HARDWARE_ACCELERATION.md to satisfy AC-AMD-001..006 selectors
+
+#### Lesson
+- Pattern: Docs-only red contracts are strongest when each AC maps to one assertion-focused selector and one aggregate selector.
+- Root cause: AMD NPU guidance lacks canonical marker, command parity, fallback semantics, environment boundary, evidence schema, and defer/non-goals language.
+- Prevention: Keep phrase-level selectors aligned to AC text and fail on missing contract language, not file existence.
+- First seen: 2026-04-03
+- Seen in: prj0000118-amd-npu-feature-documentation
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ### Entry 2026-04-03 - prj0000117 rust sub-crate workspace unification red contracts
 - task_id: prj0000117-rust-sub-crate-unification
 - status: DONE

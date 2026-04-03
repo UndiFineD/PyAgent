@@ -8,6 +8,30 @@
 
 ## Entries
 
+### 2026-04-03 - prj0000118-amd-npu-feature-documentation
+- task_id: prj0000118-amd-npu-feature-documentation
+- status: DONE
+- target_agent: @3design
+- canonical_artifact: docs/project/prj0000118-amd-npu-feature-documentation/amd-npu-feature-documentation.think.md
+- recommendation_summary: Select Option B (canonical docs plus maintainer verification checklist) to keep scope documentation-only while adding deterministic validation evidence and reducing activation ambiguity for amd_npu.
+- prior_art_refs:
+	- docs/project/prj0000117-rust-sub-crate-unification/rust-sub-crate-unification.test.md
+	- docs/project/archive/prj0000056/rust-async-transport-activation.think.md
+	- docs/project/archive/prj0000051/readme-update.think.md
+	- docs/project/archive/prj0000076/prj0000076.think.md
+- branch_gate_evidence: `git branch --show-current` -> `prj0000118-amd-npu-feature-documentation`
+- rationale_for_handoff: Completed 3-option discovery with repository and approved external evidence, explicit constraint mapping, stakeholder impact, SWOT, per-option security risk analysis, and risk-to-testability mapping.
+- required_validation: `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> unchanged known baseline failure in `test_legacy_git_summaries_document_branch_exception_and_corrective_ownership` due missing legacy file `docs/project/prj0000005/prj005-llm-swarm-architecture.git.md`.
+
+#### Lesson
+- Pattern: Optional Rust feature documentation should include explicit activation prerequisites and a maintainer verification checklist even when CI automation is deferred.
+- Root cause: Feature flags and cfg-gated code existed without a canonical validation contract, leading to usability and governance ambiguity.
+- Prevention: Require discovery artifacts to map each key risk to a concrete validation signal and capture minimum evidence expectations for maintainers.
+- First seen: 2026-04-03
+- Seen in: prj0000118-amd-npu-feature-documentation
+- Recurrence count: 1
+- Promotion status: MONITOR
+
 ### 2026-04-03 - prj0000117-rust-sub-crate-unification
 - task_id: prj0000117-rust-sub-crate-unification
 - status: DONE

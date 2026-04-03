@@ -27,6 +27,82 @@ For high-level orchestration, PyAgent utilizes `FastFlowLM` (https://github.com/
 PyAgent supports ONNX Runtime as a fallback or secondary engine.
 - **AMD EP**: If an AMD-compatible ONNX Execution Provider is detected, PyAgent configures the runtime to offload kernels to the NPU or ROCm-compatible GPUs.
 
+## Canonical AMD NPU Runtime Guidance
+
+This section is the canonical runtime guidance location for amd_npu feature usage and verification.
+
+### Activation Commands
+
+PyAgent provides two command forms for AMD NPU feature verification:
+
+**Feature-Off (Disabled) Path:**
+```bash
+cargo run --bin pyagent_cli -- amd-npu-status
+```
+
+**Feature-On (Enabled) Path:**
+```bash
+cargo run --features amd_npu --bin pyagent_cli -- amd-npu-status
+```
+
+### Supported Environments
+
+The AMD NPU feature is supported on the following platforms:
+
+- **OS**: Windows x86_64
+- **Hardware**: AMD Ryzen AI series (Ryzen 7040/8040/9000 and compatible)
+- **Dependency**: AMD Ryzen AI SDK (required for compilation and execution)
+
+### Unsupported Paths
+
+The following environments are explicitly unsupported:
+
+- Linux/macOS systems (no AMD Ryzen AI SDK available)
+- Non-AMD processors
+- ARM64 or other non-x86_64 architectures
+- Older AMD Ryzen processors without NPU hardware
+
+### Fallback Semantics
+
+When the AMD NPU feature is unavailable (not compiled in, SDK not installed, or unsupported hardware), the runtime returns a specific exit code:
+
+- **Exit Status Code**: `-1` (AMD_NPU_STATUS_UNAVAILABLE)
+- **Meaning**: The amd_npu feature is not available in this environment
+- **Safe Interpretation**: Applications must check for this exit code and fall back to CPU execution without error
+
+When you observe an exit status of `-1`, the safe interpretation is that the AMD NPU hardware or SDK is not available in the current environment, and the application should transparently fall back to standard CPU-based execution.
+
+### Validation Evidence Schema
+
+To verify AMD NPU feature support and behavior, use the following mandatory evidence schema:
+
+| Field | Description | Mandatory |
+|-------|-------------|-----------|
+| Command | The exact shell command executed (e.g., `cargo run --features amd_npu --bin pyagent_cli -- amd-npu-status`) | Yes, all fields are mandatory |
+| Exit Status | The exit code returned by the command | Yes |
+| Observed Outcome | The actual output or behavior captured from stdout/stderr | Yes |
+| Runner Context | The OS, hardware, and SDK information where the command was executed | Yes |
+
+All fields are mandatory for complete evidence audit trails.
+
+### Non-Goals
+
+The following are explicitly **not** in scope for this documentation or the amd_npu feature:
+
+- Automatic AMD SDK download or installation
+- Cross-platform SDK compilation (Windows x86_64 only)
+- Real-time NPU utilization monitoring (future work)
+- Hardware feature detection beyond exit code checking
+
+### CI Defer Contract
+
+The amd_npu feature and its validation are **deferred from CI automation**. This is a deliberate design choice because:
+
+1. CI environments may not have AMD Ryzen AI hardware
+2. The SDK is Windows x86_64-only and requires manual installation
+3. CI defer contract applies to all AMD NPU tests and validations
+4. Feature validation is the responsibility of hardware-owning developers
+
 ---
 
 ## AMD GPU (ROCm)
