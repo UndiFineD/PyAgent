@@ -99,7 +99,7 @@
       "Pre-commit hook not enforced in all CI paths"
     ],
     "opportunities": [
-      "AI tooling improving rapidly \u00e2\u20ac\u201d agents can be upgraded with new models",
+      "AI tooling improving rapidly â€” agents can be upgraded with new models",
       "WCAG compliance creates accessible, production-ready UI for demos",
       "Rust FFI bridge enables near-native performance at Python ergonomics",
       "Community interest in multi-agent workflow tooling growing"
@@ -154,6 +154,24 @@
     }
   ],
   "projects": [
+    {
+      "id": "prj0000121",
+      "name": "ci-setup-python-stack-overflow",
+      "lane": "Discovery",
+      "summary": "Post-merge hotfix boundary for PR #280 CI / Lightweight failure in actions/setup-python@v5 with 'Maximum call stack size exceeded'.",
+      "branch": "prj0000121-ci-setup-python-stack-overflow",
+      "pr": null,
+      "priority": "P1",
+      "budget_tier": "S",
+      "tags": [
+        "hotfix",
+        "post-merge",
+        "ci",
+        "setup-python"
+      ],
+      "created": "2026-04-03",
+      "updated": "2026-04-03"
+    },
     {
       "id": "prj0000120",
       "name": "openapi-spec-generation",
@@ -2042,7 +2060,7 @@
       "id": "prj0000094",
       "name": "idea-003 - mypy-strict-enforcement",
       "lane": "Review",
-      "summary": "This idea focuses on mypy strict enforcement in area 1 \u00e2\u20ac\u201c Python agents. The current signal indicates priority P1, impact H, and urgency H. The SWOT tag is W (Weakness in current implementation).",
+      "summary": "This idea focuses on mypy strict enforcement in area 1 â€“ Python agents. The current signal indicates priority P1, impact H, and urgency H. The SWOT tag is W (Weakness in current implementation).",
       "branch": null,
       "pr": null,
       "priority": "P3",
@@ -2076,7 +2094,7 @@
       "id": "prj0000101",
       "name": "idea-013 - backend-health-check-endpoint",
       "lane": "Review",
-      "summary": "This idea focuses on backend health check endpoint in area 3 \u00e2\u20ac\u201c Backend. The current signal indicates priority P2, impact M, and urgency H. The SWOT tag is W (Weakness in current implementation).",
+      "summary": "This idea focuses on backend health check endpoint in area 3 â€“ Backend. The current signal indicates priority P2, impact M, and urgency H. The SWOT tag is W (Weakness in current implementation).",
       "branch": null,
       "pr": null,
       "priority": "P3",
@@ -2092,7 +2110,7 @@
       "id": "prj0000102",
       "name": "idea-014 - pyproject-requirements-sync",
       "lane": "Released",
-      "summary": "This idea focuses on pyproject requirements sync in area 9 \u00e2\u20ac\u201c Dependencies. The current signal indicates priority P2, impact M, and urgency M. The SWOT tag is W (Weakness in current implementation).",
+      "summary": "This idea focuses on pyproject requirements sync in area 9 â€“ Dependencies. The current signal indicates priority P2, impact M, and urgency M. The SWOT tag is W (Weakness in current implementation).",
       "branch": "merged",
       "pr": "#251 #252",
       "priority": "P3",
@@ -2108,7 +2126,7 @@
       "id": "prj0000105",
       "name": "idea-016 - mixin-architecture-base",
       "lane": "Released",
-      "summary": "This idea focuses on mixin architecture base in area 1 \u00e2\u20ac\u201c Python agents. The current signal indicates priority P3, impact H, and urgency M. The SWOT tag is W (Weakness in current implementation).",
+      "summary": "This idea focuses on mixin architecture base in area 1 â€“ Python agents. The current signal indicates priority P3, impact H, and urgency M. The SWOT tag is W (Weakness in current implementation).",
       "branch": "merged",
       "pr": "#258",
       "priority": "P3",

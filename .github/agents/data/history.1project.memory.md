@@ -1,5 +1,21 @@
 # 1project Memory
 
+## prj0000120 - openapi-spec-generation
+
+| Field | Value |
+|---|---|
+| **task_id** | prj0000120 |
+| **owner_agent** | @1project |
+| **source** | @1project |
+| **created_at** | 2026-04-03 |
+| **updated_at** | 2026-04-03 |
+| **status** | DONE |
+| **summary** | Initialized project boundary for idea000021-openapi-spec-generation on branch prj0000120-openapi-spec-generation by creating all canonical artifacts, updating kanban/projects/nextproject and idea mapping, and preparing validation plus scoped commit/push. |
+| **handoff_target** | @2think |
+| **artifact_paths** | docs/project/prj0000120-openapi-spec-generation/, docs/project/kanban.json, data/projects.json, data/nextproject.md |
+
+---
+
 ## prj001 - conftest-typing-fixes
 
 | Field | Value |

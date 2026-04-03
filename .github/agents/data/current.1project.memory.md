@@ -8,9 +8,9 @@
 
 ## Entries
 
-- task_id: prj0000120
+- task_id: prj0000121
 	owner_agent: @1project
 	updated_at: 2026-04-03
 	state: DONE
-	summary: Initialized project boundary for idea000021-openapi-spec-generation on branch prj0000120-openapi-spec-generation by creating all canonical artifacts, updating kanban/projects/nextproject and idea mapping, and preparing validation plus scoped commit/push.
+	summary: Initialized post-merge hotfix boundary for ci-setup-python-stack-overflow on branch prj0000121-ci-setup-python-stack-overflow with canonical artifacts, Discovery registry entries, nextproject advancement, governance validation, and scoped commit/push readiness.
 
