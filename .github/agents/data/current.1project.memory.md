@@ -8,9 +8,10 @@
 
 ## Entries
 
-- task_id: prj0000116
+
+- task_id: prj0000117
 	owner_agent: @1project
 	updated_at: 2026-04-03
-	state: IN_PROGRESS
-	summary: Initialized project boundary for idea000017-rust-criterion-benchmarks on branch prj0000116-rust-criterion-benchmarks by creating canonical artifacts, updating registry files, advancing nextproject to prj0000117, and preparing governance validation and commit/push.
+	state: DONE
+	summary: Initialized project boundary for idea000018-rust-sub-crate-unification on branch prj0000117-rust-sub-crate-unification by creating all canonical artifacts, updating kanban/projects/nextproject/idea mapping, running governance validation, and preparing scoped commit/push.
 

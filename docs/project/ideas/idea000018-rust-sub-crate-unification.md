@@ -1,6 +1,6 @@
 # idea-018 - rust-sub-crate-unification
 
-Planned project mapping: None yet
+Planned project mapping: prj0000117
 
 ## Idea summary
 This idea focuses on rust sub crate unification in area 2 – Rust core. The current signal indicates priority P3, impact M, and urgency M. The SWOT tag is W (Weakness in current implementation).
