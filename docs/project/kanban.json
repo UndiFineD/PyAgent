@@ -155,6 +155,23 @@
   ],
   "projects": [
     {
+      "id": "prj0000118",
+      "name": "amd-npu-feature-documentation",
+      "lane": "Discovery",
+      "summary": "Initialize workflow artifacts for idea000020 amd-npu-feature-documentation and hand off to @2think discovery.",
+      "branch": "prj0000118-amd-npu-feature-documentation",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000020",
+        "amd-npu-feature-documentation"
+      ],
+      "created": "2026-04-03",
+      "updated": "2026-04-03"
+    },
+    {
       "id": "prj0000117",
       "name": "rust-sub-crate-unification",
       "lane": "Released",
