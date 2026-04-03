@@ -357,3 +357,11 @@ prj0000075 ci-simplification branch prj0000075-ci-simplification — project set
 - task_id: prj0000108 | owner_agent: @1project | updated_at: 2026-03-31 | state: DONE
 	summary: Initialized docs/project/prj0000108-idea000019-crdt-python-ffi-bindings canonical artifacts with branch/validation sections, registered Discovery state in kanban.json/kanban.md/data/projects.json, advanced data/nextproject.md to prj0000109, and passed project registry + docs policy validations on branch prj0000108-idea000019-crdt-python-ffi-bindings.
 
+## 2026-04-03 rollover - prj0000117 to prj0000118
+
+- task_id: prj0000117 | owner_agent: @1project | updated_at: 2026-04-03 | state: DONE
+	summary: Initialized project boundary for idea000018-rust-sub-crate-unification on branch prj0000117-rust-sub-crate-unification by creating all canonical artifacts, updating kanban/projects/nextproject/idea mapping, running governance validation, and preparing scoped commit/push.
+
+- task_id: prj0000118 | owner_agent: @1project | updated_at: 2026-04-03 | state: DONE
+	summary: Re-verified branch gate on prj0000118-amd-npu-feature-documentation, applied the authorized single-line blocker remediation in prj0000117 (`## Scope Validation`), reran required validations (`tests/docs/test_agent_workflow_policy_docs.py` and `scripts/project_registry_governance.py validate`), confirmed docs-policy now fails only on accepted legacy prj0000005 missing file, and proceeded with scoped commit/push preparation.
+

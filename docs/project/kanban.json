@@ -155,6 +155,23 @@
   ],
   "projects": [
     {
+      "id": "prj0000120",
+      "name": "openapi-spec-generation",
+      "lane": "Discovery",
+      "summary": "Initialize workflow artifacts for idea000021 openapi spec generation and hand off to @2think discovery.",
+      "branch": "prj0000120-openapi-spec-generation",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000021",
+        "openapi-spec-generation"
+      ],
+      "created": "2026-04-03",
+      "updated": "2026-04-03"
+    },
+    {
       "id": "prj0000119",
       "name": "pytest-stabilization",
       "lane": "Released",
