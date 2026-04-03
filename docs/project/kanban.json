@@ -157,7 +157,7 @@
     {
       "id": "prj0000117",
       "name": "rust-sub-crate-unification",
-      "lane": "Discovery",
+      "lane": "Released",
       "summary": "Initialize workflow artifacts for idea000018 rust-sub-crate-unification and hand off to @2think discovery.",
       "branch": "prj0000117-rust-sub-crate-unification",
       "pr": null,
