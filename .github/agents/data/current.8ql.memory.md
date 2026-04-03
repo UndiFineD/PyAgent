@@ -8,7 +8,34 @@
 
 ## Entries
 
-## Last scan - 2026-04-03 (prj0000117 reopened gate with corrected Rust scope)
+## prj0000118 — amd-npu-feature-documentation (Quality/Security Closure — DONE)
+- task_id: prj0000118-amd-npu-feature-documentation
+- lifecycle: IN_PROGRESS -> DONE
+- branch: prj0000118-amd-npu-feature-documentation (validated ✅)
+- project_type: docs-only (no source/CI changes)
+- files_modified: 28 (HARDWARE_ACCELERATION.md +76, project artifacts +9, test file +1, agent data +12)
+- security/quality checks run:
+  - git branch --show-current → prj0000118-amd-npu-feature-documentation ✅
+  - python -m pytest tests/docs/test_prj0000118_amd_npu_feature_documentation_contracts.py -v → 6 passed ✅
+  - Docs claims vs code validation:
+    - `rg -n amd_npu rust_core/Cargo.toml` → line 65 feature declaration ✅
+    - `rg -n amd_npu rust_core/src/hardware.rs` → module + cfg blocks (lines 67-105) ✅
+    - `rg -n AMD_NPU_STATUS_UNAVAILABLE rust_core/src/hardware.rs` → -1 constant (line 71) ✅
+  - git diff --stat origin/main...HEAD → scope boundary clean ✅
+  - Pre-commit gate → skipped (no code changes) ✅
+- findings:
+  - PASS: branch gate validated (prj0000118-amd-npu-feature-documentation)
+  - PASS: all 6 AC tests pass (3.73s) — AC-AMD-001..006 coverage complete
+  - PASS: docs claims verified against source (amd_npu feature, exit codes, fallback semantics all confirmed)
+  - PASS: plan vs delivery (6/6 tasks, 0 deferred)
+  - PASS: AC vs test coverage (6/6 ACs, 6/6 tests, 100% coverage)
+  - PASS: docs vs implementation (no stale references)
+  - PASS: governance state valid (projects=117)
+- severity: N/A (docs-only, no security vectors)
+- handoff_target: @9git
+- overall: CLEAN — all gates pass, docs verified, ready for staging/commit ✅
+
+## Last scan - 2026-04-03 (prj0000117 final gate)
 - task_id: prj0000117-rust-sub-crate-unification
 - lifecycle: OPEN -> IN_PROGRESS -> DONE
 - branch: prj0000117-rust-sub-crate-unification (validated; up to date)
