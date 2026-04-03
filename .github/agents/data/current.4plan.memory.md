@@ -3,10 +3,29 @@
 ## Metadata
 - agent: @4plan
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-04-02
+- updated_at: 2026-04-03
 - rollover: At new project start, append this file's entries to history.4plan.memory.md in chronological order, then clear Entries.
 
 ## Entries
+
+## prj0000116 - rust-criterion-benchmarks
+
+| Field | Value |
+|---|---|
+| task_id | prj0000116-rust-criterion-benchmarks |
+| owner_agent | @4plan |
+| source | user request + @3design artifact |
+| created_at | 2026-04-03 |
+| updated_at | 2026-04-03 |
+| status | DONE |
+| lifecycle | OPEN -> IN_PROGRESS -> DONE |
+| chunk_boundaries | Single planning chunk with tasks T-BENCH-001..T-BENCH-009 |
+| acceptance_criteria_scope | AC-BENCH-001..AC-BENCH-007 mapped to per-task owners, file targets, and deterministic validation commands |
+| dependency_order | T-BENCH-001 -> T-BENCH-002 -> (T-BENCH-003 || T-BENCH-004) -> T-BENCH-005 -> T-BENCH-006 -> T-BENCH-007 -> T-BENCH-008 -> T-BENCH-009 |
+| handoff_target | @5test (initial), with explicit closure tasks for @7exec/@8ql/@9git |
+| artifact_paths | docs/project/prj0000116-rust-criterion-benchmarks/rust-criterion-benchmarks.plan.md |
+| branch | prj0000116-rust-criterion-benchmarks (validated PASS before artifact writes) |
+| validation_evidence | python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> known baseline failure remains missing legacy file docs/project/prj0000005/prj005-llm-swarm-architecture.git.md |
 
 ## prj0000115 - ci-security-quality-workflow-consolidation
 
