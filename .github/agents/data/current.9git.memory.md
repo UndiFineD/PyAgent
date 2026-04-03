@@ -8,6 +8,33 @@
 
 ## Entries
 
+## 2026-04-03 - prj0000117-rust-sub-crate-unification
+- task_id: prj0000117-rust-sub-crate-unification
+- status: IN_PROGRESS
+- branch_expected: prj0000117-rust-sub-crate-unification
+- branch_observed: prj0000117-rust-sub-crate-unification
+- branch_validation: PASS
+- scope_validation: PASS
+- notes:
+	- Branch gate passed; `git pull` -> `Already up to date`.
+	- Commit timeline collected from `origin/main..HEAD` with 9 project commits (project init -> think -> design -> plan -> test -> feat -> exec -> ql -> ql pass).
+	- Existing PR check for branch returned none (`gh pr view --head prj0000117-rust-sub-crate-unification` -> not found).
+	- Quality evidence assembled from @7exec and @8ql artifacts:
+		- Workspace/CI selectors passing (`7 passed`, `8 passed`, then consolidated `15 passed`).
+		- Docs policy baseline remains known non-project failure (`1 failed, 16 passed`) for missing historical legacy file `prj0000005`.
+		- Rust metadata/workspace integrity checks passed.
+	- Prepared @9git scope-manifest for final docs-only handoff files and recorded pending pre-commit evidence in project git artifact.
+	- Next actions: dashboard refresh gate -> scoped staging -> pre-commit -> final commit/push -> PR create.
+
+### Lesson
+- Pattern: Recording the exact `origin/main..HEAD` timeline before final handoff prevents ambiguity when multiple quality-stage commits exist in close succession.
+- Root cause: Parallel stage cadence can produce similar commit subjects (`quality/security gate evidence`) that are hard to disambiguate without timeline capture.
+- Prevention: Always add ordered commit table (hash + subject) to project git summary before final @9git commit.
+- First seen: 2026-04-03
+- Seen in: prj0000117-rust-sub-crate-unification
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
 ## 2026-04-03 - prj0000116-rust-criterion-benchmarks
 - task_id: prj0000116-rust-criterion-benchmarks
 - status: IN_PROGRESS

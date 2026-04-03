@@ -3,10 +3,52 @@
 ## Metadata
 - agent: @5test
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-03-31
+- updated_at: 2026-04-03
 - rollover: At new project start, append this file's entries to history.5test.memory.md in chronological order, then clear Entries.
 
 ## Entries
+
+### Entry 2026-04-03 - prj0000117 rust sub-crate workspace unification red contracts
+- task_id: prj0000117-rust-sub-crate-unification
+- status: DONE
+- lifecycle_transition: OPEN -> IN_PROGRESS -> DONE
+- branch_gate:
+  - expected: prj0000117-rust-sub-crate-unification
+  - observed: prj0000117-rust-sub-crate-unification
+  - result: PASS
+- scope:
+  - tests/rust/test_workspace_unification_contracts.py
+  - tests/ci/test_ci_workspace_unification_contracts.py
+  - docs/project/prj0000117-rust-sub-crate-unification/rust-sub-crate-unification.test.md
+  - .github/agents/data/current.5test.memory.md
+  - .github/agents/data/2026-04-03.5test.log.md
+- pass_fail_summary:
+  - PASS: .venv\Scripts\ruff.exe check --fix tests/rust/test_workspace_unification_contracts.py tests/ci/test_ci_workspace_unification_contracts.py
+  - PASS: .venv\Scripts\ruff.exe check tests/rust/test_workspace_unification_contracts.py tests/ci/test_ci_workspace_unification_contracts.py
+  - PASS: .venv\Scripts\ruff.exe check --select D tests/rust/test_workspace_unification_contracts.py tests/ci/test_ci_workspace_unification_contracts.py
+  - RED(expected): python -m pytest -q tests/rust/test_workspace_unification_contracts.py tests/ci/test_ci_workspace_unification_contracts.py (3 failed, 4 passed)
+  - BASELINE_FAIL(known): python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py (1 failed, 16 passed)
+- red_failure_signatures:
+  - AssertionError: rust_core/Cargo.toml [workspace].members must include 'crdt', 'p2p', and 'security'
+  - AssertionError: Workspace lockfile contract violation due to existing member Cargo.lock files
+  - AssertionError: rust_core/Cargo.toml must own [patch.crates-io] for workspace-wide dependency overrides
+  - non-qualifying failures absent: ImportError, AttributeError
+- handoff_notes:
+  - target_agent: @6code
+  - readiness: READY_FOR_IMPLEMENTATION
+  - implementation_delta_required:
+    - add [workspace] members (crdt, p2p, security) to rust_core/Cargo.toml
+    - remove member Cargo.lock files and keep rust_core/Cargo.lock as singleton
+    - move [patch.crates-io] ownership to rust_core/Cargo.toml from member manifests
+
+#### Lesson
+- Pattern: Workspace-migration red contracts are strongest when they combine TOML structure checks for workspace membership and patch ownership with lockfile singleton assertions.
+- Root cause: Current Rust layout is mixed standalone crates with member lockfiles and crate-local patch governance, not root-workspace governance.
+- Prevention: Keep three independent selectors for workspace membership, lockfile singleton, and root patch ownership so implementation deltas are explicit.
+- First seen: 2026-04-03
+- Seen in: prj0000117-rust-sub-crate-unification
+- Recurrence count: 1
+- Promotion status: Candidate
 
 ### Entry 2026-04-03 - prj0000116 rust criterion benchmark baseline red contracts
 - task_id: prj0000116-rust-criterion-benchmarks

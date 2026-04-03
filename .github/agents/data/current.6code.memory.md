@@ -8,6 +8,42 @@
 
 ## Entries
 
+## 2026-04-03 — prj0000117 rust workspace unification baseline
+- task_id: prj0000117-rust-sub-crate-unification
+- lifecycle: DONE
+- branch: prj0000117-rust-sub-crate-unification (validated)
+- changed files:
+	- rust_core/Cargo.toml
+	- rust_core/p2p/Cargo.toml
+	- rust_core/Cargo.lock
+	- rust_core/crdt/Cargo.lock
+	- rust_core/p2p/Cargo.lock
+	- rust_core/security/Cargo.lock
+	- docs/project/prj0000117-rust-sub-crate-unification/rust-sub-crate-unification.code.md
+	- .github/agents/data/current.6code.memory.md
+	- .github/agents/data/2026-04-03.6code.log.md
+- implementation summary:
+	- Added root workspace membership for `crdt`, `p2p`, and `security` in `rust_core/Cargo.toml` while preserving root package+maturin+bench contract.
+	- Moved `patch.crates-io` governance to root Cargo manifest and removed crate-local patch block from `rust_core/p2p/Cargo.toml`.
+	- Generated authoritative `rust_core/Cargo.lock` and removed member lockfiles in `crdt`, `p2p`, and `security`.
+	- Kept CI workflow unchanged because lightweight CI and benchmark context contracts were already satisfied.
+- verification commands:
+	- python -m pytest -q tests/rust/test_workspace_unification_contracts.py tests/ci/test_ci_workspace_unification_contracts.py
+	- python -m pytest -q tests/ci/test_ci_workflow.py
+	- cargo metadata --manifest-path rust_core/Cargo.toml --no-deps
+- unresolved risks:
+	- None identified in scoped files.
+- handoff target: @7exec
+
+### Lesson
+- Pattern: Mixed package+workspace Cargo manifests can satisfy Python install/bench contracts and Rust workspace governance simultaneously when root package metadata is left intact.
+- Root cause: Red contracts failed because workspace membership/patch ownership and lockfile authority were distributed across member crates.
+- Prevention: Centralize workspace policy (`[workspace]`, `[patch.crates-io]`, canonical `Cargo.lock`) at `rust_core/Cargo.toml` and keep member manifests package-local only.
+- First seen: 2026-04-03
+- Seen in: prj0000117-rust-sub-crate-unification
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ## 2026-04-03 — prj0000116 rust benchmark clippy remediation
 - task_id: prj0000116-rust-criterion-benchmarks
 - lifecycle: DONE

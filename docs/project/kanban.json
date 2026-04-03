@@ -155,6 +155,23 @@
   ],
   "projects": [
     {
+      "id": "prj0000117",
+      "name": "rust-sub-crate-unification",
+      "lane": "Discovery",
+      "summary": "Initialize workflow artifacts for idea000018 rust-sub-crate-unification and hand off to @2think discovery.",
+      "branch": "prj0000117-rust-sub-crate-unification",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000018",
+        "rust-sub-crate-unification"
+      ],
+      "created": "2026-04-03",
+      "updated": "2026-04-03"
+    },
+    {
       "id": "prj0000116",
       "name": "rust-criterion-benchmarks",
       "lane": "Discovery",

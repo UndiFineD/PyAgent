@@ -9,6 +9,31 @@
 ## Entries
 
 ## Last run - 2026-04-03
+- task_id: prj0000117-rust-sub-crate-unification
+- Task: Execution validation evidence for rust workspace unification baseline
+- lifecycle: IN_PROGRESS -> BLOCKED
+- Branch gate: PASS (expected=prj0000117-rust-sub-crate-unification, observed=prj0000117-rust-sub-crate-unification)
+- Sync gate: PASS (`git pull` -> Already up to date)
+- Dependency gate: PASS (`python -m pip check` -> No broken requirements found), classification: NON_BLOCKING
+- Selector gate: PASS (`python -m pytest -q tests/rust/test_workspace_unification_contracts.py tests/ci/test_ci_workspace_unification_contracts.py` -> 7 passed)
+- Selector gate: PASS (`python -m pytest -q tests/ci/test_ci_workflow.py` -> 8 passed)
+- Docs policy gate: FAIL (known baseline unchanged) (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 1 failed, 16 passed)
+- Baseline failure detail: missing legacy file `docs/project/prj0000005/prj005-llm-swarm-architecture.git.md` in `tests/docs/test_agent_workflow_policy_docs.py::test_legacy_git_summaries_document_branch_exception_and_corrective_ownership`
+- Cargo metadata gate: PASS (`cargo metadata --manifest-path rust_core/Cargo.toml --no-deps` resolved workspace members and targets)
+- Outcome: BLOCKED (docs-policy baseline) | evidence committed per user request
+- Next handoff target: @0master / owning docs scope
+- Notes: Requested branch/sync and validation commands executed; docs-policy failure signature matches known baseline.
+
+### Lesson
+- Pattern: Docs-policy legacy-file baseline can remain unchanged across project-scoped execution validations and must be recorded as a non-regression blocker.
+- Root cause: Historical artifact `docs/project/prj0000005/prj005-llm-swarm-architecture.git.md` is absent while docs-policy selector still requires it.
+- Prevention: Keep explicit baseline-failure annotation in @7exec artifacts and route remediation to owning legacy-docs scope instead of active project scope.
+- First seen: 2026-04-03
+- Seen in: prj0000116-rust-criterion-benchmarks; prj0000117-rust-sub-crate-unification
+- Recurrence count: 2
+- Promotion status: Promoted to hard rule
+
+## Last run - 2026-04-03
 - task_id: prj0000116-rust-criterion-benchmarks
 - Task: Execution validation evidence for rust criterion benchmark baseline
 - Branch gate: PASS (expected=prj0000116-rust-criterion-benchmarks, observed=prj0000116-rust-criterion-benchmarks)

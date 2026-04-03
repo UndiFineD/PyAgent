@@ -7,6 +7,33 @@
 - rollover: At new project start, append this file's entries to history.3design.memory.md in chronological order, then clear Entries.
 
 ## Entries
+- task_id: prj0000117-rust-sub-crate-unification
+	state: DONE
+	selected_design_path: Option B (root Cargo workspace unification with root package retained)
+	assumptions:
+		- `rust_core/Cargo.toml` remains the canonical manifest path for `maturin` and CI benchmark smoke.
+		- Workspace migration is delivered as an atomic slice with lockfile convergence and targeted command updates.
+		- Root-owned patch governance must preserve the existing p2p security override behavior.
+	interface_contract_notes:
+		- IFACE-WS-001 build command continuity contract.
+		- IFACE-WS-002 package-scoped workspace command contract.
+		- IFACE-WS-003 benchmark smoke compatibility contract.
+		- IFACE-WS-004 single-lockfile governance contract.
+		- IFACE-WS-005 root-owned patch governance contract.
+	handoff:
+		target_agent: @4plan
+		canonical_artifact: docs/project/prj0000117-rust-sub-crate-unification/rust-sub-crate-unification.design.md
+		chunked_artifacts: none
+		adr_artifact: pending @4plan/@8ql confirmation
+	lesson:
+		Pattern: Rust workspace migrations stay actionable when lockfile policy, command continuity, and patch-ownership contracts are specified together.
+		Root cause: Unification tasks fail when teams migrate manifests without explicit command and lockfile contracts.
+		Prevention: Require AC table plus IFACE-to-task traceability that binds workspace shape to deterministic validation commands.
+		First seen: 2026-04-03
+		Seen in: prj0000117-rust-sub-crate-unification
+		Recurrence count: 1
+		Promotion status: Candidate
+
 - task_id: prj0000116-rust-criterion-benchmarks
 	state: DONE
 	selected_design_path: Option B (minimal Rust Criterion harness plus lightweight CI smoke benchmark)

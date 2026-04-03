@@ -8,6 +8,25 @@
 
 ## Entries
 
+## prj0000117 - rust-sub-crate-unification
+
+| Field | Value |
+|---|---|
+| task_id | prj0000117-rust-sub-crate-unification |
+| owner_agent | @4plan |
+| source | user request + @3design artifact |
+| created_at | 2026-04-03 |
+| updated_at | 2026-04-03 |
+| status | DONE |
+| lifecycle | OPEN -> IN_PROGRESS -> DONE |
+| chunk_boundaries | Single planning chunk with tasks T-WS-001..T-WS-009 |
+| acceptance_criteria_scope | AC-WS-001..AC-WS-007 mapped to per-task owners, file targets, and deterministic validation commands |
+| dependency_order | T-WS-001 -> T-WS-002 -> (T-WS-003 || T-WS-004) -> T-WS-005 -> T-WS-006 -> T-WS-007 -> T-WS-008 -> T-WS-009 |
+| handoff_target | @5test (initial), with explicit closure tasks for @7exec/@8ql/@9git |
+| artifact_paths | docs/project/prj0000117-rust-sub-crate-unification/rust-sub-crate-unification.plan.md |
+| branch | prj0000117-rust-sub-crate-unification (validated PASS before artifact writes) |
+| validation_evidence | c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> known baseline failure unchanged: missing legacy file docs/project/prj0000005/prj005-llm-swarm-architecture.git.md |
+
 ## prj0000116 - rust-criterion-benchmarks
 
 | Field | Value |
