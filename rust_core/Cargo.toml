@@ -51,6 +51,11 @@ features = ["extension-module"]
 
 [dev-dependencies]
 tempfile     = "3.5"
+criterion    = "0.5"
+
+[[bench]]
+name = "stats_baseline"
+harness = false
 
 [features]
 extension-module = ["pyo3/extension-module"]

@@ -25,3 +25,9 @@ jobs:
         run: pre-commit run --all-files
       - name: Run quick placeholder tests
         run: pytest tests/ci/test_placeholder_smoke.py -q
+      - name: Run rust benchmark smoke
+        run: |
+          pushd rust_core
+          cargo bench --bench stats_baseline -- --noplot
+          popd
+          test -d rust_core/target/criterion/
