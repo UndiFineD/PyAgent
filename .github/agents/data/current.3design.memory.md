@@ -3,10 +3,37 @@
 ## Metadata
 - agent: @3design
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-04-01
+- updated_at: 2026-04-03
 - rollover: At new project start, append this file's entries to history.3design.memory.md in chronological order, then clear Entries.
 
 ## Entries
+- task_id: prj0000116-rust-criterion-benchmarks
+	state: DONE
+	selected_design_path: Option B (minimal Rust Criterion harness plus lightweight CI smoke benchmark)
+	assumptions:
+		- Initial scope targets one or two bounded pure functions in `rust_core` stats modules.
+		- CI benchmark lane is smoke-only in v1 (no regression-threshold enforcement).
+		- `cargo bench` remains the canonical command entrypoint for local validation.
+	interface_contract_notes:
+		- IFACE-BENCH-001 benchmark file and deterministic naming contract.
+		- IFACE-BENCH-002 local command entrypoint contract (`cargo bench --bench stats_baseline`).
+		- IFACE-BENCH-003 CI smoke command contract (`--noplot`, exit-success gate).
+		- IFACE-BENCH-004 artifact contract (`rust_core/target/criterion/**`).
+		- IFACE-BENCH-005 minimal scope boundary contract.
+	handoff:
+		target_agent: @4plan
+		canonical_artifact: docs/project/prj0000116-rust-criterion-benchmarks/rust-criterion-benchmarks.design.md
+		chunked_artifacts: none
+		adr_artifact: none
+	lesson:
+		Pattern: Benchmark governance lands cleanly when CI introduces harness-health smoke checks before any threshold enforcement.
+		Root cause: Immediate threshold gating in early benchmark adoption creates flakiness and slows rollout.
+		Prevention: Lock smoke-only pass criteria, explicit naming contracts, and AC/IFACE traceability in the design artifact.
+		First seen: 2026-04-03
+		Seen in: prj0000116-rust-criterion-benchmarks
+		Recurrence count: 1
+		Promotion status: Candidate
+
 - task_id: prj0000110-idea000004-quality-workflow-branch-trigger
 	state: DONE
 	selected_design_path: Option B (targeted project-branch governance gate with main-focused full-suite triggers retained)
