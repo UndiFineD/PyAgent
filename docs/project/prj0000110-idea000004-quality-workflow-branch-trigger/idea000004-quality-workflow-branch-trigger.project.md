@@ -22,6 +22,7 @@ _No checkbox tasks found in the plan file._
   - `scripts\enforce_branch.py`
   - `src\tools\code_quality.py`
   - `tests\ci\test_ci_workflow.py`
+  - `tests\ci\test_security_workflow.py`
   - `tests\ci\test_workflow_count.py`
   - `tests\docs\test_agent_workflow_policy_docs.py`
   - `tests\test_core_quality.py`

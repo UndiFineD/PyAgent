@@ -8,6 +8,48 @@
 
 ## Entries
 
+## Last scan - 2026-04-03 (prj0000120 final gate)
+- task_id: prj0000120-openapi-spec-generation
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- branch: prj0000120-openapi-spec-generation (validated)
+- files scanned: scripts/generate_backend_openapi.py; tests/docs/test_backend_openapi_drift.py; docs/api/index.md; docs/api/openapi/backend_openapi.json; .github/workflows/ci.yml; docs/project/prj0000120-openapi-spec-generation/*
+- security/quality checks run:
+	- git branch --show-current
+	- git diff --name-only HEAD
+	- python -m ruff check scripts/generate_backend_openapi.py tests/docs/test_backend_openapi_drift.py --select S
+	- python scripts/generate_backend_openapi.py
+	- python -m pytest -q tests/docs/test_backend_openapi_drift.py
+	- python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
+	- python scripts/architecture_governance.py validate
+	- git diff -- docs/api/openapi/backend_openapi.json
+- findings:
+	- PASS: branch gate matched expected project branch.
+	- PASS: workflow security sanity review shows explicit least-privilege permissions and no context interpolation risks.
+	- PASS: deterministic regeneration produced no diff for `docs/api/openapi/backend_openapi.json`.
+	- PASS: drift selector green (`3 passed`), docs policy selector green (`17 passed`), architecture governance validator green (`VALIDATION_OK`).
+	- INFO: Ruff S101 assert usage in script/test lane (non-blocking in current controlled workflow).
+	- QUALITY_GAP (NON_BLOCKING): AC-OAS-004/AC-OAS-005 rely on grep/manual evidence instead of dedicated automated tests.
+- handoff target: @9git
+- overall: CLEAN (no HIGH/CRITICAL security blockers)
+
+### Lesson
+- Pattern: Assert-based contract guards in deterministic generator lanes are acceptable as informational security findings when execution context is controlled, but should remain visible.
+- Root cause: Ruff S101 flags assert usage even in deterministic artifact/test lanes.
+- Prevention: Classify S101 in this lane as informational unless asserts protect externally reachable security boundaries.
+- First seen: prj0000120-openapi-spec-generation
+- Seen in: prj0000120-openapi-spec-generation
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
+## Unresolved quality debt ledger
+- id: QD-8QL-0016
+- status: OPEN
+- severity: LOW
+- owner: @5test
+- originating project: prj0000120-openapi-spec-generation
+- description: AC-OAS-004 and AC-OAS-005 currently depend on grep/manual checks in project artifacts rather than dedicated executable tests in `tests/`.
+- exit criteria: Add deterministic automated selectors in `tests/` that assert CI drift-step presence and docs artifact link contract, then update project artifacts to reference those selectors.
+
 ## prj0000118 — amd-npu-feature-documentation (Quality/Security Closure — DONE)
 - task_id: prj0000118-amd-npu-feature-documentation
 - lifecycle: IN_PROGRESS -> DONE

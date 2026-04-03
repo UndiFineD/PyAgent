@@ -36,6 +36,7 @@ _No checkbox tasks found in the plan file._
   - `tests\core\base\mixins\test_host_validation_in_mixins.py`
   - `tests\core\base\mixins\test_mixin_behavior_parity.py`
   - `tests\docs\test_architecture_adr_governance.py`
+  - `tests\rust\test_rust_criterion_baseline.py`
   - `tests\structure\test_architecture_naming.py`
   - `tests\structure\test_base_dirs.py`
   - `tests\test_AuditTrailMixin.py`

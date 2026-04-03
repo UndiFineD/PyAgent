@@ -8,6 +8,25 @@
 
 ## Entries
 
+## prj0000120 - openapi-spec-generation
+
+| Field | Value |
+|---|---|
+| task_id | prj0000120-openapi-spec-generation |
+| owner_agent | @4plan |
+| source | user request + @2think Option A + @3design artifact + ADR-0007 |
+| created_at | 2026-04-03 |
+| updated_at | 2026-04-03 |
+| status | DONE |
+| lifecycle | OPEN -> IN_PROGRESS -> DONE |
+| chunk_boundaries | Chunk C1 (T-OAS-001..T-OAS-004) for drift contract, generator/artifact, docs link, and CI touch point; Chunk C2 (T-OAS-005..T-OAS-007) for execution, quality, and git closure |
+| acceptance_criteria_scope | AC-OAS-001..AC-OAS-006 mapped to IFACE-OAS-001..IFACE-OAS-007 with explicit file ownership and validation commands |
+| dependency_order | T-OAS-001 -> T-OAS-002 -> (T-OAS-003 || T-OAS-004) -> T-OAS-005 -> T-OAS-006 -> T-OAS-007 |
+| handoff_target | @5test |
+| artifact_paths | docs/project/prj0000120-openapi-spec-generation/openapi-spec-generation.plan.md |
+| branch | prj0000120-openapi-spec-generation (validated PASS before artifact writes) |
+| validation_evidence | c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 17 passed in 6.16s |
+
 ## prj0000118 - amd-npu-feature-documentation
 
 | Field | Value |

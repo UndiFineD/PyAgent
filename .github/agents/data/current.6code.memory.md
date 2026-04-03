@@ -8,6 +8,43 @@
 
 ## Entries
 
+## 2026-04-03 — prj0000120 backend OpenAPI artifact generation
+- task_id: prj0000120-openapi-spec-generation
+- lifecycle: DONE
+- branch: prj0000120-openapi-spec-generation (validated)
+- changed files:
+	- scripts/generate_backend_openapi.py
+	- docs/api/openapi/backend_openapi.json
+	- docs/api/index.md
+	- .github/workflows/ci.yml
+	- docs/project/prj0000120-openapi-spec-generation/openapi-spec-generation.code.md
+	- .github/agents/data/current.6code.memory.md
+	- .github/agents/data/2026-04-03.6code.log.md
+- implementation summary:
+	- Added an explicit backend-only OpenAPI generator script that imports `backend.app` only and writes deterministic JSON to `docs/api/openapi/backend_openapi.json`.
+	- Generated and committed the backend OpenAPI artifact from `backend.app.openapi()`.
+	- Added a consumer-only docs link in `docs/api/index.md` and a lightweight drift-selector step in `.github/workflows/ci.yml`.
+	- Kept the drift lane read-only and preserved phase-one exclusion of `src.github_app` and `src.chat.api`.
+- verification commands:
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; c:/Dev/PyAgent/.venv/Scripts/python.exe scripts/generate_backend_openapi.py
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; c:/Dev/PyAgent/.venv/Scripts/ruff.exe check --fix scripts/generate_backend_openapi.py
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; c:/Dev/PyAgent/.venv/Scripts/ruff.exe check scripts/generate_backend_openapi.py
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; c:/Dev/PyAgent/.venv/Scripts/ruff.exe check --select D scripts/generate_backend_openapi.py
+	- c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_backend_openapi_drift.py
+	- c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
+- unresolved risks:
+	- No code blocker identified for @7exec. Backend app import still emits expected dev-mode logging during generation, but it did not affect deterministic artifact output or drift checks.
+- handoff target: @7exec
+
+### Lesson
+- Pattern: Backend OpenAPI contract lanes stay stable when one explicit script owns artifact generation and tests/CI remain read-only drift verifiers.
+- Root cause: The repository exposed `backend.app.openapi()` at runtime, but no committed backend schema artifact or explicit generator command existed.
+- Prevention: Keep generation, verification, and docs publication separated; constrain phase one to `backend.app`; and commit the canonical JSON under `docs/api/openapi/`.
+- First seen: 2026-04-03
+- Seen in: prj0000120-openapi-spec-generation
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ## 2026-04-03 — prj0000117 rust workspace unification baseline
 - task_id: prj0000117-rust-sub-crate-unification
 - lifecycle: DONE

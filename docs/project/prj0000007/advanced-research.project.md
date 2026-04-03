@@ -1,6 +1,6 @@
-# pytest-stabilization
+# advanced-research
 
-**Project ID:** `prj0000119-pytest-stabilization`
+**Project ID:** `prj0000007`
 
 ## Links
 
@@ -17,8 +17,9 @@ _No checkbox tasks found in the plan file._
 
 ## Code detection
 
-- No obvious implementation files found in `src/`, `rust_core/src/`, or repository root.
-  (This is a heuristic; adjust project topic naming if needed.)
+- Code detected in:
+  - `rust_core\src\agents\research.rs`
+  - `tests\test_research_packages.py`
 
 ## Missing design
 

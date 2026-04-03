@@ -9,6 +9,33 @@
 ## Entries
 
 ## Last run - 2026-04-03
+- task_id: prj0000120-openapi-spec-generation
+- Task: Deterministic execution validation for backend OpenAPI artifact workflow
+- Branch gate: PASS (expected=prj0000120-openapi-spec-generation, observed=prj0000120-openapi-spec-generation)
+- Relevant changed files (project scope):
+	- scripts/generate_backend_openapi.py
+	- tests/docs/test_backend_openapi_drift.py
+	- docs/api/index.md
+	- docs/api/openapi/backend_openapi.json
+	- .github/workflows/ci.yml
+- Command gate: PASS (`c:/Dev/PyAgent/.venv/Scripts/python.exe scripts/generate_backend_openapi.py`)
+- Test gate: PASS (`c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_backend_openapi_drift.py` -> 3 passed in 8.25s)
+- Test gate: PASS (`c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_api_docs_exist.py` -> 8 passed in 5.73s)
+- Fixes applied: None required
+- Outcome: PASSED -> @8ql
+- Next handoff target: @8ql
+- Notes: All required prj0000120 deterministic checks passed without execution-level blockers.
+
+### Lesson
+- Pattern: OpenAPI artifact lanes stay stable when execution validation runs generator first and then drift/docs selectors in a fixed order.
+- Root cause: None (no failure observed in this run).
+- Prevention: Keep the three deterministic commands as the minimum @7exec gate for this project lane.
+- First seen: 2026-04-03
+- Seen in: prj0000120-openapi-spec-generation
+- Recurrence count: 1
+- Promotion status: Candidate
+
+## Last run - 2026-04-03
 - task_id: prj0000118-amd-npu-feature-documentation
 - Task: Execution validation for AMD NPU feature documentation contracts
 - Branch gate: PASS (expected=prj0000118-amd-npu-feature-documentation, observed=prj0000118-amd-npu-feature-documentation)

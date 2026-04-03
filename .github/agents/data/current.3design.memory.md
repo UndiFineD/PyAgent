@@ -7,6 +7,35 @@
 - rollover: At new project start, append this file's entries to history.3design.memory.md in chronological order, then clear Entries.
 
 ## Entries
+- task_id: prj0000120-openapi-spec-generation
+	state: DONE
+	selected_design_path: Option A (script-first committed backend-only OpenAPI artifact with narrow drift enforcement)
+	assumptions:
+		- `backend/app.py` remains the sole phase-one schema authority and no runtime route behavior change is required.
+		- `docs/api/` remains the narrative publication surface, with generated JSON treated as a publishable static asset instead of generated Markdown.
+		- Lightweight CI in `.github/workflows/ci.yml` can absorb one narrow pytest selector without expanding into a full docs build lane.
+	interface_contract_notes:
+		- IFACE-OAS-001 backend-only schema authority contract.
+		- IFACE-OAS-002 explicit generator script ownership contract.
+		- IFACE-OAS-003 committed artifact path and deterministic serialization contract.
+		- IFACE-OAS-004 read-only drift pytest contract.
+		- IFACE-OAS-005 lightweight CI enforcement contract.
+		- IFACE-OAS-006 docs publication consumer-only contract.
+		- IFACE-OAS-007 phase-one exclusion contract for secondary FastAPI apps.
+	handoff:
+		target_agent: @4plan
+		canonical_artifact: docs/project/prj0000120-openapi-spec-generation/openapi-spec-generation.design.md
+		chunked_artifacts: none
+		adr_artifact: docs/architecture/adr/0007-script-first-backend-openapi-artifact-governance.md
+	lesson:
+		Pattern: API contract publication lanes stay implementable when generation ownership, verification ownership, and docs publication ownership are assigned to separate surfaces.
+		Root cause: OpenAPI efforts become brittle when scripts, tests, CI, and docs builds all try to own generation at once.
+		Prevention: Require a single generator entrypoint, a read-only drift test, a narrow CI selector, and explicit publication boundaries in the canonical design artifact.
+		First seen: 2026-04-03
+		Seen in: prj0000120-openapi-spec-generation
+		Recurrence count: 1
+		Promotion status: Candidate
+
 - task_id: prj0000118-amd-npu-feature-documentation
 	state: DONE
 	selected_design_path: Option B (canonical docs plus maintainer verification checklist)

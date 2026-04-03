@@ -8,6 +8,30 @@
 
 ## Entries
 
+### 2026-04-03 - prj0000120-openapi-spec-generation
+- task_id: prj0000120-openapi-spec-generation
+- status: DONE
+- target_agent: @3design
+- canonical_artifact: docs/project/prj0000120-openapi-spec-generation/openapi-spec-generation.think.md
+- recommendation_summary: Select Option A (script-first committed backend OpenAPI spec with targeted drift test and lightweight CI verification) to keep schema generation explicit, keep CI cheap, and avoid coupling contract freshness to MkDocs or repo-wide multi-app imports.
+- prior_art_refs:
+	- docs/project/archive/prj0000073/prj0000073.think.md
+	- docs/project/archive/prj0000098-backend-health-check-endpoint/prj0000098-backend-health-check-endpoint.git.md
+	- .github/workflows/ci.yml
+	- mkdocs.yml
+- branch_gate_evidence: `git branch --show-current` -> `prj0000120-openapi-spec-generation`; `git rev-parse HEAD` -> `a0c510d44c926503eaa75636f956611dda3db554`
+- rationale_for_handoff: Completed 4-option discovery with repository and approved external GitHub evidence, explicit constraint mapping, stale-idea correction, stakeholder impact, decision matrix, SWOT, and per-option risk-to-testability mapping. Runtime probe confirmed `backend.app.openapi()` emits a usable schema (`56` paths, `17` schemas) but import is not side-effect free.
+- required_validation: `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py`
+
+#### Lesson
+- Pattern: Contract-governance projects land best when artifact generation is an explicit script, while tests and CI only verify drift.
+- Root cause: Runtime-generated schemas are easy to expose but become operationally noisy when import side effects, docs publication, and multi-app discovery are coupled together.
+- Prevention: Separate generation, verification, and publication concerns; scope phase one to the dominant app surface and map every operational risk to a validation signal.
+- First seen: 2026-04-03
+- Seen in: prj0000120-openapi-spec-generation
+- Recurrence count: 1
+- Promotion status: MONITOR
+
 ### 2026-04-03 - prj0000118-amd-npu-feature-documentation
 - task_id: prj0000118-amd-npu-feature-documentation
 - status: DONE

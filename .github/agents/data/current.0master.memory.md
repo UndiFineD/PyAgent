@@ -1,10 +1,50 @@
 # Current Memory - 0master
 
 ## Metadata
-- updated_at: 2026-04-02
+- updated_at: 2026-04-03
 - rollover: At new project start, append this file's entries to history.0master.memory.md in chronological order, then clear Entries.
 
 ## Entries
+
+## 2026-04-03 — @1project continuation validated for prj0000120
+
+- Trigger: user requested `continue @1project`.
+- Branch gate check: active branch `prj0000120-openapi-spec-generation` matches project boundary.
+- Re-validated @1project outputs:
+	- `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `17 passed`
+	- `python scripts/project_registry_governance.py validate` -> `VALIDATION_OK`, `projects=120`
+	- `data/nextproject.md` remains `prj0000121`
+	- `idea000021-openapi-spec-generation` remains mapped to `prj0000120`
+- Disposition: @1project initialization accepted and closed; project is ready for downstream phases.
+
+## 2026-04-03 — prj0000120 allocated for idea000021 openapi-spec-generation
+
+- Trigger: user confirmed PR #279 merged and requested continuation.
+- Post-merge sync state:
+	- main includes merge commit `b0725a5f0e` for PR #279.
+	- No staged or unstaged changes were present before delegation.
+	- Candidate idea `idea000021-openapi-spec-generation` was confirmed unmapped and eligible.
+- Project boundary assigned:
+	- Project id: prj0000120
+	- Idea: idea000021-openapi-spec-generation
+	- Branch: prj0000120-openapi-spec-generation
+	- Lane: Discovery
+- @1project delivered:
+	- Canonical artifacts created under `docs/project/prj0000120-openapi-spec-generation/`
+	- Registry updated in `docs/project/kanban.json` and `data/projects.json`
+	- `data/nextproject.md` advanced to `prj0000121`
+	- Idea file updated: planned project mapping = `prj0000120`
+	- Branch gate PASS in project overview (`Observed branch == Expected branch`)
+	- `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `17 passed`
+	- `python scripts/project_registry_governance.py validate` -> `VALIDATION_OK`, `projects=120`
+	- Commit `a0c510d44c` pushed to `origin/prj0000120-openapi-spec-generation`
+- Convergence gate A:
+	- @2think completed discovery and selected Option A.
+	- Decision: phase one will target `backend/app.py` only and use an explicit generation script for a committed OpenAPI artifact.
+	- Verification direction: add a narrow pytest drift check and keep CI enforcement lightweight.
+	- Rejected directions for phase one: MkDocs-owned generation, repo-wide multi-app coupling, and CI-only ephemeral artifacts.
+	- Open design questions for @3design: committed schema location, normalization strategy for drift checks, and whether `src/github_app.py` is deferred or modeled as future multi-spec expansion.
+- Next step: @3design to turn the selected discovery option into a concrete design artifact for phase-one backend OpenAPI contract governance.
 
 
 ## 2026-04-02 — prj0000115 allocated for idea000131 ci-security-quality-workflow-consolidation

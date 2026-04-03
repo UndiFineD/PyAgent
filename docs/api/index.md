@@ -44,6 +44,12 @@ Host: localhost:8000
 X-API-Key: your-api-key
 ```
 
+## OpenAPI Artifact
+
+The committed machine-readable backend worker schema is published as a static docs asset at
+[openapi/backend_openapi.json](openapi/backend_openapi.json). This file is generated explicitly from
+`backend.app` and reviewed in Git; the docs site consumes it and does not generate it during builds.
+
 ---
 
 ## Contents

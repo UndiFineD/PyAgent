@@ -8,6 +8,46 @@
 
 ## Entries
 
+### Entry 2026-04-03 - prj0000120 openapi spec generation red contracts
+- task_id: prj0000120-openapi-spec-generation
+- status: DONE
+- lifecycle_transition: OPEN -> IN_PROGRESS -> DONE
+- branch_gate:
+  - expected: prj0000120-openapi-spec-generation
+  - observed: prj0000120-openapi-spec-generation
+  - result: PASS
+- scope:
+  - tests/docs/test_backend_openapi_drift.py
+  - docs/project/prj0000120-openapi-spec-generation/openapi-spec-generation.test.md
+  - .github/agents/data/current.5test.memory.md
+  - .github/agents/data/2026-04-03.5test.log.md
+- pass_fail_summary:
+  - PASS: .venv\Scripts\ruff.exe check --fix tests/docs/test_backend_openapi_drift.py
+  - PASS: .venv\Scripts\ruff.exe check tests/docs/test_backend_openapi_drift.py
+  - PASS: .venv\Scripts\ruff.exe check --select D tests/docs/test_backend_openapi_drift.py
+  - RED(expected): python -m pytest -q tests/docs/test_backend_openapi_drift.py (2 failed, 1 passed in 4.92s)
+  - PASS: python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py (17 passed in 5.61s)
+- red_failure_signatures:
+  - AssertionError: Missing committed backend OpenAPI artifact at C:\Dev\PyAgent\docs\api\openapi\backend_openapi.json. @6code must add the generator and commit the backend-only schema before drift checks can pass.
+  - non-qualifying failures absent: ImportError, AttributeError
+- handoff_notes:
+  - target_agent: @6code
+  - readiness: READY_FOR_IMPLEMENTATION
+  - implementation_delta_required:
+    - add scripts/generate_backend_openapi.py with backend.app as the only phase-one import target
+    - commit docs/api/openapi/backend_openapi.json generated from backend.app.openapi()
+    - preserve read-only drift verification semantics in tests/docs/test_backend_openapi_drift.py
+    - avoid importing src.github_app or src.chat.api in the generator, test lane, or CI selector
+
+#### Lesson
+- Pattern: OpenAPI drift red contracts are strongest when one selector proves the committed artifact is missing or stale and another proves parity checks stay read-only.
+- Root cause: The repository exposes backend.app.openapi() at runtime, but the phase-one generator and committed backend artifact do not exist yet.
+- Prevention: Keep generation, committed artifact ownership, and drift verification separate so missing freshness fails via assertion-level contract checks instead of import-level failures.
+- First seen: 2026-04-03
+- Seen in: prj0000120-openapi-spec-generation
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ### Entry 2026-04-03 - prj0000118 amd npu feature documentation red contracts
 - task_id: prj0000118-amd-npu-feature-documentation
 - status: DONE
