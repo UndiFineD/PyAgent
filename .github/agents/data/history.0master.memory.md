@@ -1,12 +1,34 @@
 # PyAgent — Master Agent Memory
 
-_Last updated: 2026-03-27_
+_Last updated: 2026-04-04_
 
 **Next available prj:** see `data/nextproject.md`
 
 ---
 
 ## 2026-03-27 — prj0000089 agent-learning-loop — RELEASED ✅ PR #231
+## 2026-04-04 — prj0000123 RELEASED ✅ PR #285 #286
+
+- Post-merge hotfix for PR #284 CI drift (`test_ac_oas_003_drift_check_is_read_only_and_semantic`).
+- Fix: narrow canonicalization in `tests/docs/test_backend_openapi_drift.py` stripping volatile `ValidationError`/`HTTPValidationError` schema internals.
+- Commits: `ce50ffe3df` (artifact regeneration), `e09a9f3228` (test stabilization), `693c137c2a` (memory closure).
+- PR #285 was merged before fix commit; PR #286 opened as replacement. CI green on #286; merged.
+- Registry: registered in `data/projects.json` + `kanban.json` as Released; `nextproject.md` advanced to `prj0000124`.
+
+## 2026-04-04 — prj0000122 — green-phase handoff pending (@6code)
+
+- Full pipeline: @2think (Option A) → @3design (API-key bootstrap, opaque refresh tokens, file-backed session store) → @4plan (T-JRT-001 to T-JRT-009) → @5test (RED: 5 failing, `POST /v1/auth/session` 404).
+- Implementation scope: `backend/auth_session_store.py` (new), `backend/auth.py`, `backend/app.py`.
+- Next step: @6code green-phase (paused for prj0000123 hotfix; resume after prj0000124 is initialized).
+
+## 2026-04-04 — prj0000121 RELEASED ✅ PR #281, prj0000120 RELEASED ✅ PR #280
+
+- prj0000120: openapi-spec-generation — full pipeline; PR #280 merged; idea000021 archived.
+- prj0000121: ci-setup-python-stack-overflow — hotfix for `actions/setup-python@v5` stack overflow; PR #281 merged.
+- Registry closure via PR #282 on `prj0000121-ci-setup-python-stack-overflow`.
+
+---
+
 
 **Branch:** `prj0000089-agent-learning-loop`
 **PR:** [#231](https://github.com/UndiFineD/PyAgent/pull/231) — **merged 2026-03-27**

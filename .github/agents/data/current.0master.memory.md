@@ -1,203 +1,43 @@
 # Current Memory - 0master
 
 ## Metadata
-- updated_at: 2026-04-03
+- updated_at: 2026-04-04
 - rollover: At new project start, append this file's entries to history.0master.memory.md in chronological order, then clear Entries.
 
 ## Entries
 
 ## 2026-04-04 — prj0000123 reopened CI stabilization via PR #286
+## 2026-04-04 — prj0000124 initialized — LLM Gateway greenfield
 
-- Trigger: user requested fixing new CI failure notifications linked to run `23979515530` after prior handoff.
-- Investigation:
-	- Confirmed failing selector remained `tests/docs/test_backend_openapi_drift.py::test_ac_oas_003_drift_check_is_read_only_and_semantic`.
-	- Verified branch gate still matched `prj0000123-openapi-drift-post-merge-hotfix`.
-	- Found PR `#285` was already merged and no longer a valid CI surface for new commits.
-- Fix applied:
-	- Narrow canonicalization update in `tests/docs/test_backend_openapi_drift.py` to ignore framework-volatile `ValidationError` / `HTTPValidationError` component details while preserving app-contract drift checks.
-	- Commit: `e09a9f3228`.
-- Validation evidence:
-	- `pytest tests/docs/test_backend_openapi_drift.py -q` -> `3 passed` (repeatedly stable)
-	- `pytest tests/docs/test_agent_workflow_policy_docs.py -q` -> `17 passed`
-- Git outcome:
-	- Opened replacement PR `#286` (because #285 already merged before latest fix commit landed):
-	  https://github.com/UndiFineD/PyAgent/pull/286
-	- Current status checks on #286 show `CI / Lightweight` running (`state: unknown`) with target run `23980024551`.
-
-## 2026-04-04 — prj0000123 post-merge hotfix for PR #284 CI drift
-
-- Trigger: user reported PR #284 merged and requested fixing CI errors.
-- Failure triage outcome:
-	- Failing check: `CI / Lightweight`.
-	- Failing selector: `tests/docs/test_backend_openapi_drift.py::test_ac_oas_003_drift_check_is_read_only_and_semantic`.
-	- Root cause: committed `docs/api/openapi/backend_openapi.json` drifted from `backend.app.openapi()`.
-- Project boundary assigned:
-	- Project id: `prj0000123`
-	- Branch: `prj0000123-openapi-drift-post-merge-hotfix`
+- Trigger: user requested wrap-up of prj0000123 and new project start for an LLM Gateway component.
+- prj0000123 closure:
+	- PR #286 CI: `CI / Lightweight = success` (run `23980087164`). Merged via `gh pr merge 286` → squash SHA `ab7eb81d80`.
+	- Registered prj0000123 in `data/projects.json` and `docs/project/kanban.json` as Released (was missing from registry).
+	- `data/nextproject.md` advanced to `prj0000124` then `prj0000125` after both registrations.
+- prj0000124 project boundary:
+	- Project id: `prj0000124`
+	- Name: `llm-gateway`
+	- Expected branch: `prj0000124-llm-gateway`
 	- Lane: `Discovery`
-- Delegation outcomes:
-	- @1project initialized artifacts under `docs/project/prj0000123-openapi-drift-post-merge-hotfix/`, updated `data/projects.json`, `docs/project/kanban.json`, and advanced `data/nextproject.md` to `prj0000124`.
-	- @6code applied minimal fix by regenerating `docs/api/openapi/backend_openapi.json`.
-	- @7exec validated:
-		- `pytest tests/docs/test_backend_openapi_drift.py -q` -> `3 passed`
-		- `pytest tests/docs/test_agent_workflow_policy_docs.py -q` -> `17 passed`
-	- @8ql quality gate: PASS (no blocking security findings for scope).
-	- @9git completed handoff, commit `ce50ffe3df`, PR `#285` opened to `main`.
-- Scope discipline:
-	- Preserved user local change by explicitly excluding `docs/project/PROJECT_DASHBOARD.md` from staging.
-
-
-## 2026-04-04 — prj0000122 allocated for idea000022 jwt-refresh-token-support
-
-- Trigger: user requested a new project.
-- Preflight:
-	- Confirmed `data/nextproject.md` = `prj0000122`.
-	- Confirmed `idea000022-jwt-refresh-token-support.md` had no project mapping.
-	- Cleared project-start workspace noise before delegation and enforced branch isolation.
-- Project boundary assigned:
-	- Project id: `prj0000122`
-	- Idea: `idea000022-jwt-refresh-token-support`
-	- Expected branch: `prj0000122-jwt-refresh-token-support`
-	- Lane: `Discovery`
-- @1project delivered:
-	- Canonical artifacts created under `docs/project/prj0000122-jwt-refresh-token-support/`.
-	- Registry updated in `data/projects.json` and `docs/project/kanban.json`.
-	- Idea mapping updated in `docs/project/ideas/idea000022-jwt-refresh-token-support.md`.
-	- `data/nextproject.md` advanced.
-	- Validation evidence:
-		- `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `17 passed`
-		- `python scripts/project_registry_governance.py validate` -> `VALIDATION_OK`, `projects=122`
-	- Commit pushed: `d5235d18a8` on `prj0000122-jwt-refresh-token-support`.
-- Next step: @2think discovery for prj0000122.
-
-## 2026-04-04 — prj0000122 discovery completed
-
-- @2think recommendation: Option A — backend-owned refresh-session store with opaque rotating refresh tokens and short-lived access JWTs.
-- Main evidence:
-	- `backend/auth.py` validates JWTs only; no issuance, rotation, or revocation path exists.
-	- `backend/app.py` has protected REST/WebSocket auth wiring but no refresh/bootstrap endpoint.
-	- JWT minting is currently test-side, indicating missing production issuance flow.
-	- Existing backend persistence utilities are generic and not auth-session specific.
-- Likely phase-one scope:
-	- `backend/auth.py`
-	- `backend/app.py`
-	- new backend auth-session store module
-	- `tests/test_backend_auth.py`
-	- `tests/test_backend_worker.py`
-- Open design questions to resolve in @3design:
-	- initial credential/bootstrap flow for authenticated session creation
-	- whether refresh-session state must survive restart / multi-instance deployment in phase one
-- Next step: @3design to turn the selected option into a concrete phase-one backend JWT refresh design.
-
-## 2026-04-04 — prj0000122 design completed
-
-- @3design selected a phase-one design with:
-	- API-key bootstrap via `POST /v1/auth/session`
-	- backend-issued short-lived access JWTs
-	- opaque rotating refresh tokens
-	- dedicated file-backed single-instance session store at `data/auth/refresh_sessions.json`
-- Design outputs:
-	- canonical design: `docs/project/prj0000122-jwt-refresh-token-support/jwt-refresh-token-support.design.md`
-	- ADR: `docs/architecture/adr/0008-backend-managed-refresh-sessions-for-jwt-renewal.md`
-- Likely phase-one scope:
-	- `backend/auth.py`
-	- `backend/app.py`
-	- new `backend/auth_session_store.py`
-	- `tests/test_backend_auth.py`
-	- new `tests/test_backend_refresh_sessions.py`
-	- `tests/test_backend_worker.py`
-- Remaining condition:
-	- if multi-instance/shared-process durability is required immediately, persistence must be re-scoped before implementation; otherwise phase one is unblocked.
-- Next step: @4plan implementation planning for prj0000122.
-
-## 2026-04-04 — prj0000122 planning completed
-
-- @4plan converted the design into executable tasks `T-JRT-001` through `T-JRT-009`.
-- First red-phase slice selected:
-	- `T-JRT-001` in `tests/test_backend_refresh_sessions.py`
-	- focus on bootstrap success/401 cases, refresh rotation, replay rejection, logout revocation, restart reload, and hashed-at-rest persistence assertions.
-- Planned implementation order:
-	- @5test writes failing session-refresh tests first
-	- @6code implements new `backend/auth_session_store.py` plus `backend/auth.py` / `backend/app.py` route and token changes
-	- @7exec/@8ql/@9git close the lane after integrated validation
-- Key dependencies:
-	- deterministic `PYAGENT_AUTH_SESSION_STORE_PATH` override for tests
-	- fixture-controlled `PYAGENT_API_KEY` and `PYAGENT_JWT_SECRET`
-	- no scope expansion into multi-instance shared auth persistence or mid-connection WebSocket refresh
-- Next step: @5test red-phase for prj0000122.
-
-## 2026-04-04 — prj0000122 red-phase completed
-
-- @5test added `tests/test_backend_refresh_sessions.py` and executed the first red slice.
-- RED evidence:
-	- `python -m pytest -q tests/test_backend_refresh_sessions.py` -> `5 failed`
-	- primary signal is expected missing behavior: `POST /v1/auth/session` returns `404` where the contract requires `200` / `401`.
-- This is a valid red state because failures come from absent routes/session lifecycle behavior, not import/setup noise.
-- Implementation blockers handed to @6code:
-	- missing `/v1/auth/session`, `/v1/auth/refresh`, `/v1/auth/logout`
-	- missing hashed-at-rest refresh-session persistence and rotation/replay/logout support
-- Next step: @6code green-phase implementation for prj0000122.
-
-## 2026-04-04 — post-merge closure completed for prj0000120 and prj0000121
-
-- Trigger: user confirmed PR #281 merged and requested workflow continuation.
-- @1project closure completed on `prj0000121-ci-setup-python-stack-overflow`:
-	- Updated `data/projects.json` and `docs/project/kanban.json`:
-		- `prj0000120` -> `Released`, `pr: "#280"`
-		- `prj0000121` -> `Released`, `pr: "#281"`
-	- Preserved `data/nextproject.md` as `prj0000122`.
-	- Archived idea by move only (no archive read required):
-		- `docs/project/ideas/idea000021-openapi-spec-generation.md`
-		- -> `docs/project/ideas/archive/idea000021-openapi-spec-generation.md`
-	- Validation evidence:
-		- `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `17 passed`
-		- `python scripts/project_registry_governance.py validate` -> `VALIDATION_OK`, `projects=121`
-	- Commit pushed: `0edb22c1ea`.
-- Git handoff:
-	- Opened closure PR to `main`: `#282` (`chore(prj0000121): post-merge closure for pr 280 and pr 281`).
-- Scope discipline:
-	- Existing local edits in `.github/workflows/ci.yml` and `docs/project/PROJECT_DASHBOARD.md` were intentionally excluded from closure commit.
-
-## 2026-04-03 — @1project continuation validated for prj0000120
-
-- Trigger: user requested `continue @1project`.
-- Branch gate check: active branch `prj0000120-openapi-spec-generation` matches project boundary.
-- Re-validated @1project outputs:
+	- Idea tag: none (greenfield)
+	- Commit: `b4ebed30c6` on `origin/prj0000124-llm-gateway`
+- Feature scope (10 pillars):
+	1. Routing and load balancing
+	2. Authentication and access control
+	3. Token budgeting
+	4. Guardrails and policy enforcement
+	5. Semantic caching
+	6. Model fallback
+	7. Observability
+	8. Context management
+	9. Memory integration
+	10. Tool and skill catchers
+- Primary source area: `src/core/gateway/` (new subsystem)
+- @1project validation evidence:
 	- `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `17 passed`
-	- `python scripts/project_registry_governance.py validate` -> `VALIDATION_OK`, `projects=120`
-	- `data/nextproject.md` remains `prj0000121`
-	- `idea000021-openapi-spec-generation` remains mapped to `prj0000120`
-- Disposition: @1project initialization accepted and closed; project is ready for downstream phases.
-
-## 2026-04-03 — prj0000120 allocated for idea000021 openapi-spec-generation
-
-- Trigger: user confirmed PR #279 merged and requested continuation.
-- Post-merge sync state:
-	- main includes merge commit `b0725a5f0e` for PR #279.
-	- No staged or unstaged changes were present before delegation.
-	- Candidate idea `idea000021-openapi-spec-generation` was confirmed unmapped and eligible.
-- Project boundary assigned:
-	- Project id: prj0000120
-	- Idea: idea000021-openapi-spec-generation
-	- Branch: prj0000120-openapi-spec-generation
-	- Lane: Discovery
-- @1project delivered:
-	- Canonical artifacts created under `docs/project/prj0000120-openapi-spec-generation/`
-	- Registry updated in `docs/project/kanban.json` and `data/projects.json`
-	- `data/nextproject.md` advanced to `prj0000121`
-	- Idea file updated: planned project mapping = `prj0000120`
-	- Branch gate PASS in project overview (`Observed branch == Expected branch`)
-	- `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `17 passed`
-	- `python scripts/project_registry_governance.py validate` -> `VALIDATION_OK`, `projects=120`
-	- Commit `a0c510d44c` pushed to `origin/prj0000120-openapi-spec-generation`
-- Convergence gate A:
-	- @2think completed discovery and selected Option A.
-	- Decision: phase one will target `backend/app.py` only and use an explicit generation script for a committed OpenAPI artifact.
-	- Verification direction: add a narrow pytest drift check and keep CI enforcement lightweight.
-	- Rejected directions for phase one: MkDocs-owned generation, repo-wide multi-app coupling, and CI-only ephemeral artifacts.
-	- Open design questions for @3design: committed schema location, normalization strategy for drift checks, and whether `src/github_app.py` is deferred or modeled as future multi-spec expansion.
-- Next step: @3design to turn the selected discovery option into a concrete design artifact for phase-one backend OpenAPI contract governance.
-
+	- `python scripts/project_registry_governance.py validate` -> `VALIDATION_OK, projects=124`
+- Next step: @2think discovery for prj0000124.
+- Active parallel work: prj0000122 (@6code green-phase pending — paused during hotfix/new-project init).
 ## 2026-04-03 — prj0000120 execution, quality, and git handoff completed
 
 - @7exec validation: PASS
