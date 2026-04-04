@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "register_id": "parallel-agents-register",
   "description": "Shared coordination register for parallel agent work, file touches, and file locks.",
-  "updated_at": "2026-04-04T17:43:43.705071+00:00",
+  "updated_at": "2026-04-04T18:19:55.848616+00:00",
   "updated_by": "0master",
   "active_project_id": "prj0000125",
   "active_branch": "prj0000125-llm-gateway-lessons-learned-fixes",
@@ -21,6 +21,13 @@
       "closed_at": "2026-04-04T17:43:43.705021+00:00",
       "closed_by": "0master",
       "note": "4plan phase complete: plan.md created with T-LGW2-001..006, C/D already done, commit af64828b3f"
+    },
+    {
+      "wave_id": "prj0000125.wave3",
+      "status": "closed",
+      "closed_at": "2026-04-04T18:19:55.848573+00:00",
+      "closed_by": "0master",
+      "note": "5test RED complete: added T-LGW2-001,002,003,005 with expected fails; commit 3d19b335b7"
     }
   ],
   "agents": {
@@ -140,6 +147,15 @@
       "planned_files": [],
       "lock_ids": [],
       "updated_at": "2026-04-04T17:43:43.705057+00:00"
+    },
+    "5test": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": "2026-04-04T18:19:55.848604+00:00"
     }
   },
   "file_locks": [
@@ -169,6 +185,15 @@
       "status": "released",
       "acquired_at": "2026-04-04T17:36:01.217521+00:00",
       "released_at": "2026-04-04T17:43:43.375570+00:00"
+    },
+    {
+      "lock_id": "lock-1105e6210a99",
+      "file_path": "tests/core/gateway/test_gateway_core_orchestration.py",
+      "owner_agent": "5test",
+      "work_package_id": "prj0000125.wave3.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T18:15:08.128955+00:00",
+      "released_at": "2026-04-04T18:19:55.502604+00:00"
     }
   ],
   "lockfiles": [],
@@ -267,6 +292,44 @@
       "payload": {
         "wave_id": "prj0000125.wave2",
         "note": "4plan phase complete: plan.md created with T-LGW2-001..006, C/D already done, commit af64828b3f"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:15:08.129003+00:00",
+      "event": "acquire-lock",
+      "actor": "5test",
+      "payload": {
+        "lock_id": "lock-1105e6210a99",
+        "file_path": "tests/core/gateway/test_gateway_core_orchestration.py",
+        "work_package_id": "prj0000125.wave3.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:19:55.502654+00:00",
+      "event": "release-lock",
+      "actor": "5test",
+      "payload": {
+        "lock_id": "lock-1105e6210a99",
+        "file_path": "tests/core/gateway/test_gateway_core_orchestration.py",
+        "work_package_id": "prj0000125.wave3.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:19:55.848611+00:00",
+      "event": "wave-agent-reset",
+      "actor": "0master",
+      "payload": {
+        "agent": "5test",
+        "wave_id": "prj0000125.wave3"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:19:55.848621+00:00",
+      "event": "close-wave",
+      "actor": "0master",
+      "payload": {
+        "wave_id": "prj0000125.wave3",
+        "note": "5test RED complete: added T-LGW2-001,002,003,005 with expected fails; commit 3d19b335b7"
       }
     }
   ]

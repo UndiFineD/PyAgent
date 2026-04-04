@@ -16,6 +16,17 @@
 - Commit: `af64828b3f plan(prj0000125)` pushed to origin.
 - Next step: @5test — write all 4 RED tasks (T-LGW2-001, 002, 003, 005) in one session, parallel-safe.
 
+## 2026-04-04 — prj0000125 @5test RED phase complete
+
+- @5test added RED tests for T-LGW2-001, T-LGW2-002, T-LGW2-003, and T-LGW2-005 in `tests/core/gateway/test_gateway_core_orchestration.py`.
+- RED evidence captured as expected (4 failed, 4 passed):
+	- budget-denied path still calls provider
+	- provider exception still propagates
+	- telemetry emit exception still propagates
+	- deterministic event-order sentinel fails (`assert 1 < 0`)
+- Commit: `3d19b335b7 test(prj0000125)` pushed to origin.
+- Next step: @6code GREEN phase for T-LGW2-004 and T-LGW2-006.
+
 ## 2026-04-04 — prj0000125 @3design phase complete
 
 - Trigger: @2think was already done (commit `644dd9dc6f`); user re-submitted "learn all lessons" prompt from new session; advanced to @3design.
