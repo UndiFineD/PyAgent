@@ -6,6 +6,29 @@
 
 ## Entries
 
+## 2026-04-04 — prj0000123 post-merge hotfix for PR #284 CI drift
+
+- Trigger: user reported PR #284 merged and requested fixing CI errors.
+- Failure triage outcome:
+	- Failing check: `CI / Lightweight`.
+	- Failing selector: `tests/docs/test_backend_openapi_drift.py::test_ac_oas_003_drift_check_is_read_only_and_semantic`.
+	- Root cause: committed `docs/api/openapi/backend_openapi.json` drifted from `backend.app.openapi()`.
+- Project boundary assigned:
+	- Project id: `prj0000123`
+	- Branch: `prj0000123-openapi-drift-post-merge-hotfix`
+	- Lane: `Discovery`
+- Delegation outcomes:
+	- @1project initialized artifacts under `docs/project/prj0000123-openapi-drift-post-merge-hotfix/`, updated `data/projects.json`, `docs/project/kanban.json`, and advanced `data/nextproject.md` to `prj0000124`.
+	- @6code applied minimal fix by regenerating `docs/api/openapi/backend_openapi.json`.
+	- @7exec validated:
+		- `pytest tests/docs/test_backend_openapi_drift.py -q` -> `3 passed`
+		- `pytest tests/docs/test_agent_workflow_policy_docs.py -q` -> `17 passed`
+	- @8ql quality gate: PASS (no blocking security findings for scope).
+	- @9git completed handoff, commit `ce50ffe3df`, PR `#285` opened to `main`.
+- Scope discipline:
+	- Preserved user local change by explicitly excluding `docs/project/PROJECT_DASHBOARD.md` from staging.
+
+
 ## 2026-04-04 — prj0000122 allocated for idea000022 jwt-refresh-token-support
 
 - Trigger: user requested a new project.
