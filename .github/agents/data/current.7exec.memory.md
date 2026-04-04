@@ -8,6 +8,30 @@
 
 ## Entries
 
+## Last run - 2026-04-04 (rerun after remediation commit dc7d0cc8feec68c47fea725fcf72549d9be52197)
+- task_id: prj0000124-llm-gateway
+- Task: Re-run execution gate to confirm prior pre-commit blocker clearance
+- lifecycle: IN_PROGRESS -> BLOCKED
+- Branch gate: PASS (expected=prj0000124-llm-gateway, observed=prj0000124-llm-gateway)
+- Required selector gate: PASS (`python -m pytest -q tests/core/gateway/test_gateway_core_orchestration.py` -> 4 passed in 5.10s)
+- Required selector gate: PASS (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 17 passed in 8.17s)
+- Required selector gate: PASS (`python -m pytest -q tests/test_backend_refresh_sessions.py -k "session or refresh or logout"` -> 5 passed in 6.88s)
+- Mandatory pre-commit gate: FAIL (`pre-commit run --files tests/core/gateway/test_gateway_core_orchestration.py docs/project/prj0000124-llm-gateway/llm-gateway.exec.md .github/agents/data/current.7exec.memory.md .github/agents/data/2026-04-04.7exec.log.md`)
+- Blocker evidence: shared pre-commit lane fails with `tests/test_core_quality.py::test_each_core_has_test_file` and `tests/test_core_quality.py::test_validate_function_exists` on `src/core/gateway/gateway_core.py`
+- Blocker classification: BLOCKING, IN_SCOPE (quality gate regression surfaced by shared pre-commit checks)
+- Outcome: BLOCKED -> @6code
+- Next handoff target: @6code
+- Notes: Previous formatting blocker for `tests/core/gateway/test_gateway_core_orchestration.py` is cleared; blocker shifted to core-quality gate requirements.
+
+### Lesson
+- Pattern: Clearing one pre-commit blocker can reveal a subsequent blocking gate in the same shared check pipeline.
+- Root cause: `run-precommit-checks` executes `tests/test_core_quality.py`, which now fails on missing quality contracts for `src/core/gateway/gateway_core.py`.
+- Prevention: Before @7exec rerun, execute full `pre-commit run --files <exact handoff set>` and inspect downstream shared-gate pytest lanes, not only formatter checks.
+- First seen: 2026-04-04
+- Seen in: prj0000124-llm-gateway (initial blocker + rerun blocker transition)
+- Recurrence count: 2
+- Promotion status: Promoted to hard rule
+
 ## Last run - 2026-04-04
 - task_id: prj0000124-llm-gateway
 - Task: Runtime validation for gateway green-slice orchestration handoff evidence

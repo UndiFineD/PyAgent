@@ -4,11 +4,7 @@ _Status: BLOCKED_
 _Executor: @7exec | Updated: 2026-04-04_
 
 ## Execution Plan
-Validate runtime readiness for prj0000124 green slice using deterministic selectors provided by handoff:
-1) gateway orchestration tests,
-2) docs policy gate,
-3) focused backend refresh-session regression guard.
-Record exact command evidence, classify blockers if present, and produce @8ql-ready handoff evidence.
+Re-run deterministic execution validation for prj0000124 after remediation commit `dc7d0cc8feec68c47fea725fcf72549d9be52197`, using the required selector order and exact pre-commit file set provided by @0master.
 
 ## Run Log
 ```
@@ -16,35 +12,36 @@ Record exact command evidence, classify blockers if present, and produce @8ql-re
 > git branch --show-current
 prj0000124-llm-gateway
 
-[2026-04-04] Dependency preflight
-> & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pip check
-No broken requirements found.
-
-[2026-04-04] Command 1 - Targeted gateway tests
+[2026-04-04] Required command 1
 > & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/core/gateway/test_gateway_core_orchestration.py
 ....                                                                                                                 [100%]
-4 passed in 4.75s
+4 passed in 5.10s
 
-[2026-04-04] Command 2 - Project docs policy
+[2026-04-04] Required command 2
 > & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
 .................                                                                                                    [100%]
-17 passed in 10.91s
+17 passed in 8.17s
 
-[2026-04-04] Command 3 - Focused backend auth-session regression guard
+[2026-04-04] Required command 3
 > & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/test_backend_refresh_sessions.py -k "session or refresh or logout"
 .....                                                                                                                [100%]
-5 passed in 7.42s
+5 passed in 6.88s
 
-[2026-04-04] Mandatory pre-commit gate on changed files
-> & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; pre-commit run --files docs/project/prj0000124-llm-gateway/llm-gateway.exec.md .github/agents/data/current.7exec.memory.md .github/agents/data/2026-04-04.7exec.log.md
+[2026-04-04] Required command 4
+> & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; pre-commit run --files tests/core/gateway/test_gateway_core_orchestration.py docs/project/prj0000124-llm-gateway/llm-gateway.exec.md .github/agents/data/current.7exec.memory.md .github/agents/data/2026-04-04.7exec.log.md
+ruff (legacy alias)......................................................Passed
+ruff format..............................................................Passed
+mypy.....................................................................Passed
+Enforce branch naming convention.........................................Passed
+Run secret scan guardrail (fail on HIGH severity)........................Passed
 Run pre-commit shared checks.............................................Failed
-Would reformat: tests\core\gateway\test_gateway_core_orchestration.py
-1 file would be reformatted, 562 files already formatted
 
-[2026-04-04] Blocker confirmation
-> & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; ruff format --check tests/core/gateway/test_gateway_core_orchestration.py
-Would reformat: tests\core\gateway\test_gateway_core_orchestration.py
-1 file would be reformatted
+[2026-04-04] pre-commit shared check failure evidence
+> pytest -q --no-cov ... tests/test_core_quality.py ...
+FAILED tests/test_core_quality.py::test_each_core_has_test_file
+FAILED tests/test_core_quality.py::test_validate_function_exists
+AssertionError: Core modules without tests: ['src\\core\\gateway\\gateway_core.py']
+AssertionError: Core modules missing validate(): ['src\\core\\gateway\\gateway_core.py']
 ```
 
 ## Pass/Fail Summary
@@ -53,9 +50,7 @@ Would reformat: tests\core\gateway\test_gateway_core_orchestration.py
 | pytest -q tests/core/gateway/test_gateway_core_orchestration.py | PASS | 4 passed |
 | pytest -q tests/docs/test_agent_workflow_policy_docs.py | PASS | 17 passed |
 | pytest -q tests/test_backend_refresh_sessions.py -k "session or refresh or logout" | PASS | 5 passed |
-| branch gate | PASS | expected=prj0000124-llm-gateway, observed=prj0000124-llm-gateway |
-| dependency gate (pip check) | PASS | No broken requirements found |
-| pre-commit run --files <evidence files> | FAIL | shared hook fails due ruff format check on tests/core/gateway/test_gateway_core_orchestration.py |
+| pre-commit run --files tests/core/gateway/test_gateway_core_orchestration.py docs/project/prj0000124-llm-gateway/llm-gateway.exec.md .github/agents/data/current.7exec.memory.md .github/agents/data/2026-04-04.7exec.log.md | FAIL | `run-precommit-checks` fails on `tests/test_core_quality.py` assertions for `src/core/gateway/gateway_core.py` |
 
 ## Blockers
-- BLOCKING (in-scope): pre-commit shared check fails because `tests/core/gateway/test_gateway_core_orchestration.py` is not ruff-format clean. @7exec does not modify tests; remediation ownership should return to @5test/@6code before @8ql handoff.
+- BLOCKING (in-scope): mandatory pre-commit shared gate still fails. The prior formatting blocker is cleared, but a new blocking quality-gate failure is now surfaced: `tests/test_core_quality.py::test_each_core_has_test_file` and `tests/test_core_quality.py::test_validate_function_exists` both fail for `src/core/gateway/gateway_core.py`. No @8ql handoff.
