@@ -27,6 +27,33 @@
 - Commit: `3d19b335b7 test(prj0000125)` pushed to origin.
 - Next step: @6code GREEN phase for T-LGW2-004 and T-LGW2-006.
 
+## 2026-04-04 — prj0000125 @6code, @7exec, @8ql, @9git progression
+
+- @6code GREEN complete:
+	- Implemented fail-closed runtime in `src/core/gateway/gateway_core.py` (budget-denied guard, provider-exception fail envelope, degraded telemetry guard).
+	- Implemented deterministic shared `event_log` ordering pattern in `tests/core/gateway/test_gateway_core_orchestration.py`.
+	- Validation: `tests/core/gateway/` = 9 passed.
+	- Commit: `52d4386d2e` pushed.
+- @7exec validation gate:
+	- `tests/core/gateway/test_gateway_core_orchestration.py` = 8 passed
+	- `tests/core/gateway/test_gateway_core.py` = 1 passed
+	- `tests/core/gateway/` = 9 passed
+	- `tests/docs/test_agent_workflow_policy_docs.py` = 17 passed
+	- Commit: `77b2166d06` pushed.
+- @8ql quality/security gate:
+	- Focused gateway tests pass, docs governance pass, architecture governance VALIDATION_OK, py_compile pass.
+	- No HIGH/CRITICAL blockers.
+	- Commit: `2fddad4f67` pushed.
+- @9git first attempt blocked by pre-commit D417 (test docstring arg descriptions).
+- Remediation wave executed:
+	- @6code fixed D417 in orchestration tests and preserved staged ql/register artifacts.
+	- Commit: `9fea47aa60` pushed.
+- @9git retry:
+	- Opened PR `#289` -> https://github.com/UndiFineD/PyAgent/pull/289
+	- State: OPEN
+	- Title: `prj0000125: gateway lessons-learned fail-closed and deterministic ordering fixes`
+	- Branch to `main` handoff completed.
+
 ## 2026-04-04 — prj0000125 @3design phase complete
 
 - Trigger: @2think was already done (commit `644dd9dc6f`); user re-submitted "learn all lessons" prompt from new session; advanced to @3design.

@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "register_id": "parallel-agents-register",
   "description": "Shared coordination register for parallel agent work, file touches, and file locks.",
-  "updated_at": "2026-04-04T18:24:31.352682+00:00",
+  "updated_at": "2026-04-04T18:41:36.567153+00:00",
   "updated_by": "0master",
   "active_project_id": "prj0000125",
   "active_branch": "prj0000125-llm-gateway-lessons-learned-fixes",
@@ -35,6 +35,13 @@
       "closed_at": "2026-04-04T18:24:31.352639+00:00",
       "closed_by": "0master",
       "note": "6code GREEN complete: runtime fail-closed + deterministic ordering implemented, tests/core/gateway 9 passed, commit 52d4386d2e"
+    },
+    {
+      "wave_id": "prj0000125.wave5",
+      "status": "closed",
+      "closed_at": "2026-04-04T18:41:36.567111+00:00",
+      "closed_by": "0master",
+      "note": "D417 blocker remediation complete via 6code; commit 9fea47aa60; 9git opened PR #289"
     }
   ],
   "agents": {
@@ -171,7 +178,7 @@
       "touching_files": [],
       "planned_files": [],
       "lock_ids": [],
-      "updated_at": "2026-04-04T18:24:31.352671+00:00"
+      "updated_at": "2026-04-04T18:41:36.567142+00:00"
     }
   },
   "file_locks": [
@@ -228,6 +235,15 @@
       "status": "released",
       "acquired_at": "2026-04-04T18:20:26.730535+00:00",
       "released_at": "2026-04-04T18:24:30.995544+00:00"
+    },
+    {
+      "lock_id": "lock-0cbc484b034c",
+      "file_path": "tests/core/gateway/test_gateway_core_orchestration.py",
+      "owner_agent": "6code",
+      "work_package_id": "prj0000125.wave5.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T18:37:34.538712+00:00",
+      "released_at": "2026-04-04T18:41:36.250524+00:00"
     }
   ],
   "lockfiles": [],
@@ -422,6 +438,44 @@
       "payload": {
         "wave_id": "prj0000125.wave4",
         "note": "6code GREEN complete: runtime fail-closed + deterministic ordering implemented, tests/core/gateway 9 passed, commit 52d4386d2e"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:37:34.538748+00:00",
+      "event": "acquire-lock",
+      "actor": "6code",
+      "payload": {
+        "lock_id": "lock-0cbc484b034c",
+        "file_path": "tests/core/gateway/test_gateway_core_orchestration.py",
+        "work_package_id": "prj0000125.wave5.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:41:36.250559+00:00",
+      "event": "release-lock",
+      "actor": "6code",
+      "payload": {
+        "lock_id": "lock-0cbc484b034c",
+        "file_path": "tests/core/gateway/test_gateway_core_orchestration.py",
+        "work_package_id": "prj0000125.wave5.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:41:36.567148+00:00",
+      "event": "wave-agent-reset",
+      "actor": "0master",
+      "payload": {
+        "agent": "6code",
+        "wave_id": "prj0000125.wave5"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:41:36.567158+00:00",
+      "event": "close-wave",
+      "actor": "0master",
+      "payload": {
+        "wave_id": "prj0000125.wave5",
+        "note": "D417 blocker remediation complete via 6code; commit 9fea47aa60; 9git opened PR #289"
       }
     }
   ]
