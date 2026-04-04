@@ -155,6 +155,414 @@
   ],
   "projects": [
     {
+      "id": "prj0000126",
+      "name": "private-key-in-repo",
+      "lane": "Discovery",
+      "summary": "Initialize workflow artifacts for idea000001-private-key-in-repo private-key-in-repo and queue rapid sequence rollout.",
+      "branch": "prj0000126-private-key-in-repo",
+      "pr": null,
+      "priority": "P1",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000001",
+        "private-key-in-repo"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000127",
+      "name": "mypy-strict-enforcement",
+      "lane": "Discovery",
+      "summary": "Initialize workflow artifacts for idea000003-mypy-strict-enforcement mypy-strict-enforcement and queue rapid sequence rollout.",
+      "branch": "prj0000127-mypy-strict-enforcement",
+      "pr": null,
+      "priority": "P2",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000003",
+        "mypy-strict-enforcement"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000128",
+      "name": "coverage-minimum-enforcement",
+      "lane": "Discovery",
+      "summary": "Initialize workflow artifacts for idea000008-coverage-minimum-enforcement coverage-minimum-enforcement and queue rapid sequence rollout.",
+      "branch": "prj0000128-coverage-minimum-enforcement",
+      "pr": null,
+      "priority": "P2",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000008",
+        "coverage-minimum-enforcement"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000129",
+      "name": "requirements-ci-deduplication",
+      "lane": "Discovery",
+      "summary": "Initialize workflow artifacts for idea000009-requirements-ci-deduplication requirements-ci-deduplication and queue rapid sequence rollout.",
+      "branch": "prj0000129-requirements-ci-deduplication",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000009",
+        "requirements-ci-deduplication"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000130",
+      "name": "docker-compose-consolidation",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000010-docker-compose-consolidation docker-compose-consolidation and queue rapid sequence rollout.",
+      "branch": "prj0000130-docker-compose-consolidation",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000010",
+        "docker-compose-consolidation"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000131",
+      "name": "dependabot-renovate",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000012-dependabot-renovate dependabot-renovate and queue rapid sequence rollout.",
+      "branch": "prj0000131-dependabot-renovate",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000012",
+        "dependabot-renovate"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000132",
+      "name": "backend-health-check-endpoint",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000013-backend-health-check-endpoint backend-health-check-endpoint and queue rapid sequence rollout.",
+      "branch": "prj0000132-backend-health-check-endpoint",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000013",
+        "backend-health-check-endpoint"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000133",
+      "name": "rust-criterion-benchmarks",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000017-rust-criterion-benchmarks rust-criterion-benchmarks and queue rapid sequence rollout.",
+      "branch": "prj0000133-rust-criterion-benchmarks",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000017",
+        "rust-criterion-benchmarks"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000134",
+      "name": "jwt-refresh-token-support",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000022-jwt-refresh-token-support jwt-refresh-token-support and queue rapid sequence rollout.",
+      "branch": "prj0000134-jwt-refresh-token-support",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000022",
+        "jwt-refresh-token-support"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000135",
+      "name": "tailwind-config-missing",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000023-tailwind-config-missing tailwind-config-missing and queue rapid sequence rollout.",
+      "branch": "prj0000135-tailwind-config-missing",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000023",
+        "tailwind-config-missing"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000136",
+      "name": "frontend-e2e-tests",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000024-frontend-e2e-tests frontend-e2e-tests and queue rapid sequence rollout.",
+      "branch": "prj0000136-frontend-e2e-tests",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000024",
+        "frontend-e2e-tests"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000137",
+      "name": "global-state-management",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000025-global-state-management global-state-management and queue rapid sequence rollout.",
+      "branch": "prj0000137-global-state-management",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000025",
+        "global-state-management"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000138",
+      "name": "frontend-url-routing",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000026-frontend-url-routing frontend-url-routing and queue rapid sequence rollout.",
+      "branch": "prj0000138-frontend-url-routing",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000026",
+        "frontend-url-routing"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000139",
+      "name": "windows-ci-matrix",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000027-windows-ci-matrix windows-ci-matrix and queue rapid sequence rollout.",
+      "branch": "prj0000139-windows-ci-matrix",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000027",
+        "windows-ci-matrix"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000140",
+      "name": "property-based-test-expansion",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000028-property-based-test-expansion property-based-test-expansion and queue rapid sequence rollout.",
+      "branch": "prj0000140-property-based-test-expansion",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000028",
+        "property-based-test-expansion"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000141",
+      "name": "backend-integration-test-suite",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000029-backend-integration-test-suite backend-integration-test-suite and queue rapid sequence rollout.",
+      "branch": "prj0000141-backend-integration-test-suite",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000029",
+        "backend-integration-test-suite"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000142",
+      "name": "adr-backfill",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000030-adr-backfill adr-backfill and queue rapid sequence rollout.",
+      "branch": "prj0000142-adr-backfill",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000030",
+        "adr-backfill"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000143",
+      "name": "automated-api-docs-ci",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000031-automated-api-docs-ci automated-api-docs-ci and queue rapid sequence rollout.",
+      "branch": "prj0000143-automated-api-docs-ci",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000031",
+        "automated-api-docs-ci"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000144",
+      "name": "changelog-automation",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000032-changelog-automation changelog-automation and queue rapid sequence rollout.",
+      "branch": "prj0000144-changelog-automation",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000032",
+        "changelog-automation"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000145",
+      "name": "pre-commit-ruff-version-drift",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000033-pre-commit-ruff-version-drift pre-commit-ruff-version-drift and queue rapid sequence rollout.",
+      "branch": "prj0000145-pre-commit-ruff-version-drift",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000033",
+        "pre-commit-ruff-version-drift"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000146",
+      "name": "projects-json-schema-validation",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000034-projects-json-schema-validation projects-json-schema-validation and queue rapid sequence rollout.",
+      "branch": "prj0000146-projects-json-schema-validation",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000034",
+        "projects-json-schema-validation"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000147",
+      "name": "torch-optional-dependency-split",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000035-torch-optional-dependency-split torch-optional-dependency-split and queue rapid sequence rollout.",
+      "branch": "prj0000147-torch-optional-dependency-split",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000035",
+        "torch-optional-dependency-split"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000148",
+      "name": "rl-module-implementation",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000036-rl-module-implementation rl-module-implementation and queue rapid sequence rollout.",
+      "branch": "prj0000148-rl-module-implementation",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000036",
+        "rl-module-implementation"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
+      "id": "prj0000149",
+      "name": "docs-work-folder-cleanup",
+      "lane": "Ideas",
+      "summary": "Initialize workflow artifacts for idea000037-docs-work-folder-cleanup docs-work-folder-cleanup and queue rapid sequence rollout.",
+      "branch": "prj0000149-docs-work-folder-cleanup",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000037",
+        "docs-work-folder-cleanup"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
+    {
       "id": "prj0000125",
       "name": "llm-gateway-lessons-learned-fixes",
       "lane": "Discovery",

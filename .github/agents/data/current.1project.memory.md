@@ -8,16 +8,8 @@
 
 ## Entries
 
-- task_id: prj0000125
-- task_id: prj0000124-closure-pr287
-	owner_agent: @1project
-	updated_at: 2026-04-04
-	state: DONE
-	summary: Completed post-merge closure for llm-gateway on branch prj0000124-llm-gateway by moving prj0000124 to Released with PR #287 in data/projects.json and docs/project/kanban.json, preserving the existing dashboard/project documentation refreshes already present in the branch working tree, and passing required documentation plus registry governance validations before the scoped closure commit.
-
-- task_id: prj0000124
-	owner_agent: @1project
-	updated_at: 2026-04-04
-	state: DONE
-	summary: Initialized the follow-up remediation boundary for merged PR #287 / prj0000124 on branch prj0000125-llm-gateway-lessons-learned-fixes with canonical artifacts, Discovery registry entries, nextproject advancement to prj0000126, required memory/log rollover, and passing docs-policy plus registry validation evidence.
-
+- task_id: prj0000126-batch-start-24
+  owner_agent: @1project
+  updated_at: 2026-04-04
+  state: DONE
+  summary: Batch-started prj0000126 through prj0000149 on branch prj0000126-next-24-ideas-rollout by creating canonical project artifacts for each idea-backed project, registering lanes in data/projects.json and docs/project/kanban.json, creating a 6-wave rapid rollout plan in prj0000126, advancing data/nextproject.md to prj0000150, and passing required governance validations.
