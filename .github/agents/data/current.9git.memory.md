@@ -8,6 +8,25 @@
 
 ## Entries
 
+## 2026-04-04 - prj0000122-jwt-refresh-token-support
+- task_id: prj0000122-jwt-refresh-token-support
+- status: IN_PROGRESS
+- branch_expected: prj0000122-jwt-refresh-token-support
+- branch_observed: prj0000122-jwt-refresh-token-support
+- branch_validation: PASS
+- scope_validation: PASS_WITH_EXCLUSION
+- notes:
+	- Mandatory dashboard gate executed before staging (`python scripts/generate_project_dashboard.py`).
+	- Mandatory placeholder scans executed; baseline placeholder hits were outside staged scope.
+	- Narrow allowlist staging applied to backend auth slice + prj0000122 artifacts + lane memory/log updates.
+	- Out-of-scope `docs/project/PROJECT_DASHBOARD.md` remained unstaged.
+	- Governance gates passed:
+		- `python scripts/project_registry_governance.py validate` -> `VALIDATION_OK`.
+		- `python scripts/architecture_governance.py validate` -> `VALIDATION_OK`.
+		- `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `17 passed`.
+	- Staged-file pre-commit passed at `2026-04-04T13:32:14.9728197+01:00`.
+	- Primary commit created: `40d1714506` (`feat(prj0000122): add jwt refresh session support slice`).
+
 ## 2026-04-03 - prj0000121-ci-setup-python-stack-overflow
 - task_id: prj0000121-ci-setup-python-stack-overflow
 - status: DONE
