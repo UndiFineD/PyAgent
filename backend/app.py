@@ -20,6 +20,7 @@ import logging
 import os
 import random
 import re
+import secrets
 import time
 import uuid
 from datetime import date, datetime, timezone
@@ -27,15 +28,18 @@ from pathlib import Path
 from typing import Any, Literal
 from typing import Optional as _Opt
 
+import jwt
 import psutil
 from cryptography.exceptions import InvalidTag
-from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException, Query, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from .auth import require_auth, websocket_auth
+from . import auth as auth_mod
+from .auth import JWT_ALGORITHM, require_auth, websocket_auth
+from .auth_session_store import RefreshSessionStore
 from .automem_benchmark_store import automem_benchmark_store
 from .logging_config import get_logger, setup_logging
 from .memory_store import memory_store
@@ -219,6 +223,104 @@ def _resolve_log_read_path(agent_id: str) -> Path:
 
 
 app = FastAPI(title="PyAgent Backend Worker", version="0.1.0")
+
+_DEFAULT_ACCESS_TTL_SECONDS = 900
+_DEFAULT_REFRESH_TTL_SECONDS = 604800
+_DEFAULT_REFRESH_STORE_PATH = _PROJECT_ROOT / "data" / "auth" / "refresh_sessions.json"
+_refresh_store_cache: dict[str, RefreshSessionStore] = {}
+
+
+def _resolve_refresh_store_path() -> Path:
+    """Resolve refresh-session store path from environment.
+
+    Returns:
+        Path: Concrete filesystem path for session persistence.
+
+    """
+    configured = os.getenv("PYAGENT_AUTH_SESSION_STORE_PATH", "").strip()
+    if not configured:
+        return _DEFAULT_REFRESH_STORE_PATH
+    return Path(configured)
+
+
+def _get_refresh_store() -> RefreshSessionStore:
+    """Get or create a store instance for the current configured path.
+
+    Returns:
+        RefreshSessionStore: Store bound to the resolved path.
+
+    """
+    path = _resolve_refresh_store_path().resolve()
+    cache_key = str(path)
+    store = _refresh_store_cache.get(cache_key)
+    if store is None:
+        store = RefreshSessionStore(path=path)
+        _refresh_store_cache[cache_key] = store
+    return store
+
+
+def _utcnow_epoch() -> int:
+    """Return the current UTC epoch timestamp.
+
+    Returns:
+        int: Current UTC timestamp in seconds.
+
+    """
+    return int(datetime.now(timezone.utc).timestamp())
+
+
+def _issue_access_token(*, subject: str, session_id: str, expires_in: int) -> str:
+    """Issue a backend-managed access JWT.
+
+    Args:
+        subject: Subject claim.
+        session_id: Session identifier claim.
+        expires_in: Access token TTL in seconds.
+
+    Returns:
+        str: Encoded JWT access token.
+
+    Raises:
+        HTTPException: If JWT signing is not configured.
+
+    """
+    if not auth_mod.JWT_SECRET:
+        raise HTTPException(status_code=503, detail="JWT signing secret not configured")
+
+    now = _utcnow_epoch()
+    payload = {
+        "sub": subject,
+        "sid": session_id,
+        "jti": str(uuid.uuid4()),
+        "iat": now,
+        "exp": now + expires_in,
+        "typ": "access",
+    }
+    return jwt.encode(payload, auth_mod.JWT_SECRET, algorithm=JWT_ALGORITHM)
+
+
+def _token_response(*, access_token: str, refresh_token: str, session_id: str, subject: str) -> dict[str, Any]:
+    """Build the session/bootstrap response payload.
+
+    Args:
+        access_token: Access JWT.
+        refresh_token: Opaque refresh token.
+        session_id: Session identifier.
+        subject: Subject identifier.
+
+    Returns:
+        dict[str, Any]: API response payload.
+
+    """
+    return {
+        "access_token": access_token,
+        "token_type": "Bearer",
+        "expires_in": _DEFAULT_ACCESS_TTL_SECONDS,
+        "refresh_token": refresh_token,
+        "refresh_expires_in": _DEFAULT_REFRESH_TTL_SECONDS,
+        "session_id": session_id,
+        "subject": subject,
+    }
 
 _logger = setup_logging()
 _logger.info("PyAgent backend starting", extra={"correlation_id": "", "endpoint": ""})
@@ -453,6 +555,120 @@ class AutoMemKvWriteRequest(BaseModel):
     """Request body for writing one AutoMem KV value."""
 
     value: Any
+
+
+class RefreshTokenRequest(BaseModel):
+    """Request body for refresh/logout endpoints.
+
+    Attributes:
+        refresh_token: Opaque refresh token.
+
+    """
+
+    refresh_token: str
+
+
+@app.post("/v1/auth/session")
+async def create_auth_session(x_api_key: str | None = Header(default=None)) -> dict[str, Any]:
+    """Bootstrap a managed auth session from the shared API key.
+
+    Args:
+        x_api_key: API key provided in request header.
+
+    Returns:
+        dict[str, Any]: Managed access/refresh token pair.
+
+    """
+    if not auth_mod.verify_api_key(auth_mod.API_KEY, x_api_key):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    subject = "service:api_key"
+    session_id = str(uuid.uuid4())
+    token_family_id = str(uuid.uuid4())
+    refresh_token_jti = str(uuid.uuid4())
+    refresh_token = secrets.token_urlsafe(48)
+    refresh_expires_at = _utcnow_epoch() + _DEFAULT_REFRESH_TTL_SECONDS
+
+    await _get_refresh_store().create_session(
+        session_id=session_id,
+        subject=subject,
+        token_family_id=token_family_id,
+        refresh_token_jti=refresh_token_jti,
+        refresh_token=refresh_token,
+        refresh_expires_at=refresh_expires_at,
+        access_expires_in_seconds=_DEFAULT_ACCESS_TTL_SECONDS,
+    )
+    access_token = _issue_access_token(
+        subject=subject,
+        session_id=session_id,
+        expires_in=_DEFAULT_ACCESS_TTL_SECONDS,
+    )
+    return _token_response(
+        access_token=access_token,
+        refresh_token=refresh_token,
+        session_id=session_id,
+        subject=subject,
+    )
+
+
+@app.post("/v1/auth/refresh")
+async def refresh_auth_session(body: RefreshTokenRequest) -> dict[str, Any]:
+    """Rotate a refresh token and return a new managed token pair.
+
+    Args:
+        body: Refresh token payload.
+
+    Returns:
+        dict[str, Any]: Rotated managed access/refresh token pair.
+
+    """
+    if not body.refresh_token:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    next_refresh_token = secrets.token_urlsafe(48)
+    updated = await _get_refresh_store().rotate_session(
+        refresh_token=body.refresh_token,
+        next_refresh_token=next_refresh_token,
+        next_refresh_token_jti=str(uuid.uuid4()),
+        next_refresh_expires_at=_utcnow_epoch() + _DEFAULT_REFRESH_TTL_SECONDS,
+    )
+    if updated is None:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    session_id = str(updated["session_id"])
+    subject = str(updated["subject"])
+    access_token = _issue_access_token(
+        subject=subject,
+        session_id=session_id,
+        expires_in=_DEFAULT_ACCESS_TTL_SECONDS,
+    )
+    return _token_response(
+        access_token=access_token,
+        refresh_token=next_refresh_token,
+        session_id=session_id,
+        subject=subject,
+    )
+
+
+@app.post("/v1/auth/logout")
+async def logout_auth_session(body: RefreshTokenRequest) -> dict[str, Any]:
+    """Revoke the refresh-session family represented by an active token.
+
+    Args:
+        body: Refresh token payload.
+
+    Returns:
+        dict[str, Any]: Revocation status payload.
+
+    """
+    if not body.refresh_token:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    revoked = await _get_refresh_store().revoke_session(refresh_token=body.refresh_token)
+    if revoked is None:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    return {"status": "revoked", "session_id": str(revoked["session_id"])}
 
 
 @_auth_router.get("/metrics/system", response_model=SystemMetricsResponse)

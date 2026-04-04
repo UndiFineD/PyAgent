@@ -3,10 +3,16 @@
 ## Metadata
 - agent: @1project
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-04-03
+- updated_at: 2026-04-04
 - rollover: At new project start, append this file's entries to history.1project.memory.md in chronological order, then clear Entries.
 
 ## Entries
+
+- task_id: prj0000122
+	owner_agent: @1project
+	updated_at: 2026-04-04
+	state: DONE
+	summary: Initialized project boundary for idea000022 jwt-refresh-token-support on branch prj0000122-jwt-refresh-token-support with canonical artifacts, Discovery registry entries in data/projects.json and docs/project/kanban.json, nextproject advancement to prj0000123, idea mapping update, and required validation pass evidence.
 
 - task_id: prj0000121
 	owner_agent: @1project

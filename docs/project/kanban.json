@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated": "2026-04-03",
+  "updated": "2026-04-04",
   "source_of_truth": "docs/project/kanban.json",
   "lanes": [
     "Ideas",
@@ -154,6 +154,23 @@
     }
   ],
   "projects": [
+    {
+      "id": "prj0000122",
+      "name": "jwt-refresh-token-support",
+      "lane": "Review",
+      "summary": "Initialize workflow artifacts for idea000022 jwt refresh token support and hand off to @2think discovery.",
+      "branch": "prj0000122-jwt-refresh-token-support",
+      "pr": null,
+      "priority": "P3",
+      "budget_tier": "S",
+      "tags": [
+        "idea",
+        "idea000022",
+        "jwt-refresh-token-support"
+      ],
+      "created": "2026-04-04",
+      "updated": "2026-04-04"
+    },
     {
       "id": "prj0000121",
       "name": "ci-setup-python-stack-overflow",

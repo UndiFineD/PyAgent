@@ -3,250 +3,42 @@
 ## Metadata
 - agent: @4plan
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-04-03
+- updated_at: 2026-04-04
 - rollover: At new project start, append this file's entries to history.4plan.memory.md in chronological order, then clear Entries.
 
 ## Entries
 
-## prj0000120 - openapi-spec-generation
+## prj0000122 - jwt-refresh-token-support
 
 | Field | Value |
 |---|---|
-| task_id | prj0000120-openapi-spec-generation |
+| task_id | prj0000122-jwt-refresh-token-support |
 | owner_agent | @4plan |
-| source | user request + @2think Option A + @3design artifact + ADR-0007 |
-| created_at | 2026-04-03 |
-| updated_at | 2026-04-03 |
+| source | user request + project overview + think artifact + design artifact + ADR-0008 |
+| created_at | 2026-04-04 |
+| updated_at | 2026-04-04 |
 | status | DONE |
 | lifecycle | OPEN -> IN_PROGRESS -> DONE |
-| chunk_boundaries | Chunk C1 (T-OAS-001..T-OAS-004) for drift contract, generator/artifact, docs link, and CI touch point; Chunk C2 (T-OAS-005..T-OAS-007) for execution, quality, and git closure |
-| acceptance_criteria_scope | AC-OAS-001..AC-OAS-006 mapped to IFACE-OAS-001..IFACE-OAS-007 with explicit file ownership and validation commands |
-| dependency_order | T-OAS-001 -> T-OAS-002 -> (T-OAS-003 || T-OAS-004) -> T-OAS-005 -> T-OAS-006 -> T-OAS-007 |
+| chunk_boundaries | Chunk C1 (T-JRT-001..T-JRT-006) for red contracts and bounded backend implementation; Chunk C2 (T-JRT-007..T-JRT-009) for execution, quality, and git closure |
+| acceptance_criteria_scope | AC-JRT-001..AC-JRT-009 mapped to IFACE-JRT-001..IFACE-JRT-009 with explicit owners, target files, and validation commands |
+| dependency_order | Parallel red wave (T-JRT-001 || T-JRT-002 || T-JRT-003) -> T-JRT-004 -> T-JRT-005 -> T-JRT-006 -> T-JRT-007 -> T-JRT-008 -> T-JRT-009 |
 | handoff_target | @5test |
-| artifact_paths | docs/project/prj0000120-openapi-spec-generation/openapi-spec-generation.plan.md |
-| branch | prj0000120-openapi-spec-generation (validated PASS before artifact writes) |
-| validation_evidence | c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 17 passed in 6.16s |
-
-## prj0000118 - amd-npu-feature-documentation
-
-| Field | Value |
-|---|---|
-| task_id | prj0000118-amd-npu-feature-documentation |
-| owner_agent | @4plan |
-| source | user request + @3design artifact |
-| created_at | 2026-04-03 |
-| updated_at | 2026-04-03 |
-| status | DONE |
-| lifecycle | OPEN -> IN_PROGRESS -> DONE |
-| chunk_boundaries | Chunk C1 (T-AMD-001..T-AMD-004) and Chunk C2 (T-AMD-005..T-AMD-007) |
-| acceptance_criteria_scope | AC-AMD-001..AC-AMD-006 mapped to IFACE-AMD-001..IFACE-AMD-006 with per-task owner and command gates |
-| dependency_order | T-AMD-001 -> T-AMD-002 -> (T-AMD-003 || T-AMD-004) -> T-AMD-005 -> T-AMD-006 -> T-AMD-007 |
-| handoff_target | @5test (first), then @6code, @7exec, @8ql, @9git |
-| artifact_paths | docs/project/prj0000118-amd-npu-feature-documentation/amd-npu-feature-documentation.plan.md |
-| branch | prj0000118-amd-npu-feature-documentation (validated PASS before artifact writes) |
-| validation_evidence | python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 1 failed, 16 passed; unchanged known baseline missing legacy file docs/project/prj0000005/prj005-llm-swarm-architecture.git.md |
-
-## prj0000117 - rust-sub-crate-unification
-
-| Field | Value |
-|---|---|
-| task_id | prj0000117-rust-sub-crate-unification |
-| owner_agent | @4plan |
-| source | user request + @3design artifact |
-| created_at | 2026-04-03 |
-| updated_at | 2026-04-03 |
-| status | DONE |
-| lifecycle | OPEN -> IN_PROGRESS -> DONE |
-| chunk_boundaries | Single planning chunk with tasks T-WS-001..T-WS-009 |
-| acceptance_criteria_scope | AC-WS-001..AC-WS-007 mapped to per-task owners, file targets, and deterministic validation commands |
-| dependency_order | T-WS-001 -> T-WS-002 -> (T-WS-003 || T-WS-004) -> T-WS-005 -> T-WS-006 -> T-WS-007 -> T-WS-008 -> T-WS-009 |
-| handoff_target | @5test (initial), with explicit closure tasks for @7exec/@8ql/@9git |
-| artifact_paths | docs/project/prj0000117-rust-sub-crate-unification/rust-sub-crate-unification.plan.md |
-| branch | prj0000117-rust-sub-crate-unification (validated PASS before artifact writes) |
-| validation_evidence | c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> known baseline failure unchanged: missing legacy file docs/project/prj0000005/prj005-llm-swarm-architecture.git.md |
-
-## prj0000116 - rust-criterion-benchmarks
-
-| Field | Value |
-|---|---|
-| task_id | prj0000116-rust-criterion-benchmarks |
-| owner_agent | @4plan |
-| source | user request + @3design artifact |
-| created_at | 2026-04-03 |
-| updated_at | 2026-04-03 |
-| status | DONE |
-| lifecycle | OPEN -> IN_PROGRESS -> DONE |
-| chunk_boundaries | Single planning chunk with tasks T-BENCH-001..T-BENCH-009 |
-| acceptance_criteria_scope | AC-BENCH-001..AC-BENCH-007 mapped to per-task owners, file targets, and deterministic validation commands |
-| dependency_order | T-BENCH-001 -> T-BENCH-002 -> (T-BENCH-003 || T-BENCH-004) -> T-BENCH-005 -> T-BENCH-006 -> T-BENCH-007 -> T-BENCH-008 -> T-BENCH-009 |
-| handoff_target | @5test (initial), with explicit closure tasks for @7exec/@8ql/@9git |
-| artifact_paths | docs/project/prj0000116-rust-criterion-benchmarks/rust-criterion-benchmarks.plan.md |
-| branch | prj0000116-rust-criterion-benchmarks (validated PASS before artifact writes) |
-| validation_evidence | python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> known baseline failure remains missing legacy file docs/project/prj0000005/prj005-llm-swarm-architecture.git.md |
-
-## prj0000115 - ci-security-quality-workflow-consolidation
-
-| Field | Value |
-|---|---|
-| task_id | prj0000115-ci-security-quality-workflow-consolidation |
-| owner_agent | @4plan |
-| source | @0master assignment + @3design artifact |
-| created_at | 2026-04-02 |
-| updated_at | 2026-04-02 |
-| status | DONE |
-| lifecycle | OPEN -> IN_PROGRESS -> DONE |
-| chunk_boundaries | Single planning chunk with tasks T-SEC-001..T-SEC-005 |
-| acceptance_criteria_scope | AC-SEC-001..AC-SEC-004 mapped to task ownership, validation commands, and parallel boundaries |
-| dependency_order | Parallel Wave A (T-SEC-001 + T-SEC-003) -> Sequential T-SEC-002 -> Convergence T-SEC-004 -> Closure T-SEC-005 |
-| handoff_target | @5test |
-| artifact_paths | docs/project/prj0000115-ci-security-quality-workflow-consolidation/ci-security-quality-workflow-consolidation.plan.md |
-| branch | prj0000115-ci-security-quality-workflow-consolidation (validated PASS before artifact writes) |
-| validation_evidence | python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 16 passed, 1 failed (pre-existing missing legacy file: docs/project/prj0000005/prj005-llm-swarm-architecture.git.md) |
-
-## prj0000114 - ideatracker-batching-verbosity
-
-| Field | Value |
-|---|---|
-| task_id | prj0000114-ideatracker-batching-verbosity |
-| owner_agent | @4plan |
-| source | user request + current branch behavior |
-| created_at | 2026-04-02 |
-| updated_at | 2026-04-02 |
-| status | DONE |
-| lifecycle | OPEN -> IN_PROGRESS -> DONE |
-| chunk_boundaries | Single planning artifact with four execution phases and tasks T-IT-001..T-IT-008 |
-| acceptance_criteria_scope | Current state, target state, affected files, deterministic artifact schema, phased execution, validation strategy, and rollback boundaries captured in the canonical plan |
-| dependency_order | @5test contract/resume regressions -> @6code staged refactor -> @7exec resumed/full-run validation -> @8ql quality/security -> @9git handoff |
-| handoff_target | @5test |
-| artifact_paths | docs/project/prj0000114-ideatracker-batching-verbosity/ideatracker-batching-verbosity.plan.md |
-| branch | prj0000114-ideatracker-batching-verbosity (validated PASS before artifact writes) |
-| validation_evidence | git branch --show-current -> prj0000114-ideatracker-batching-verbosity; c:/Dev/PyAgent/.venv/Scripts/python.exe scripts/IdeaTracker.py --help -> PASS; c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_idea_tracker.py -> 11 passed in 5.95s; c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 17 passed in 10.68s |
-
-## prj0000110 - idea000004-quality-workflow-branch-trigger
-
-| Field | Value |
-|---|---|
-| task_id | prj0000110-idea000004-quality-workflow-branch-trigger |
-| owner_agent | @4plan |
-| source | @3design |
-| created_at | 2026-04-01 |
-| updated_at | 2026-04-01 |
-| status | DONE |
-| lifecycle | OPEN -> IN_PROGRESS -> DONE |
-| chunk_boundaries | Two chunks: Chunk A contract-first trigger and governance wiring (T-QWB-001..T-QWB-004), Chunk B permissions/docs/closure (T-QWB-005..T-QWB-008) |
-| acceptance_criteria_scope | AC-QWB-001..AC-QWB-006 mapped to owner-sequenced tasks with explicit validation commands |
-| dependency_order | @5test red -> @6code green -> @7exec integration -> @8ql quality/security -> @9git handoff |
-| handoff_target | @5test |
-| artifact_paths | docs/project/prj0000110-idea000004-quality-workflow-branch-trigger/idea000004-quality-workflow-branch-trigger.plan.md |
-| branch | prj0000110-idea000004-quality-workflow-branch-trigger (validated PASS before artifact writes) |
-| validation_evidence | python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 17 passed in 2.04s |
+| artifact_paths | docs/project/prj0000122-jwt-refresh-token-support/jwt-refresh-token-support.plan.md |
+| branch | prj0000122-jwt-refresh-token-support (validated PASS before artifact writes) |
+| first_red_slice | T-JRT-001 only: create `tests/test_backend_refresh_sessions.py` with temp store-path fixture, bootstrap success/401, refresh success, replay 401, and no-plaintext-persistence assertions |
+| validation_evidence | git branch --show-current -> prj0000122-jwt-refresh-token-support; c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 17 passed in 6.41s |
 
 ### Lesson Entry
 
 | Field | Value |
 |---|---|
-| Pattern | Planning quality remains stable when each task row includes owner, concrete file list, AC linkage, and deterministic validation command. |
-| Root cause | Placeholder planning artifacts leave downstream ambiguity between @5test and @6code responsibilities and acceptance coverage. |
-| Prevention | Keep mandatory task schema and AC/interface traceability table in every @4plan artifact update. |
-| First seen | 2026-03-30 |
-| Seen in | prj0000107-idea000015-specialized-agent-library; prj0000108-idea000019-crdt-python-ffi-bindings; prj0000109-idea000002-missing-compose-dockerfile; prj0000110-idea000004-quality-workflow-branch-trigger |
-| Recurrence count | 4 |
-| Promotion status | PROMOTED_TO_HARD_RULE |
-
-## prj0000109 - idea000002-missing-compose-dockerfile
-
-| Field | Value |
-|---|---|
-| task_id | prj0000109-idea000002-missing-compose-dockerfile |
-| owner_agent | @4plan |
-| source | @3design |
-| created_at | 2026-03-31 |
-| updated_at | 2026-03-31 |
-| status | DONE |
-| lifecycle | OPEN -> IN_PROGRESS -> DONE |
-| chunk_boundaries | Two chunks: Chunk A contract/regression hardening (T-DC-001..T-DC-010), Chunk B governance/handoff closure (T-DC-011..T-DC-015) |
-| acceptance_criteria_scope | AC-DC-001..AC-DC-006 mapped to owner-sequenced tasks with deterministic validation commands |
-| dependency_order | @5test red -> @6code green -> @7exec runtime -> @8ql quality/security -> @9git handoff |
-| handoff_target | @5test |
-| artifact_paths | docs/project/prj0000109-idea000002-missing-compose-dockerfile/idea000002-missing-compose-dockerfile.plan.md |
-| branch | prj0000109-idea000002-missing-compose-dockerfile (validated PASS before artifact writes) |
-| validation_evidence | c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 12 passed in 1.64s |
-
-### Lesson Entry
-
-| Field | Value |
-|---|---|
-| Pattern | Contract-stability lanes move faster when plans explicitly pair non-goal guardrails with executable regression selectors. |
-| Root cause | Prior placeholder plan did not enforce non-goal boundaries or command-level owner sequencing, leaving downstream ambiguity. |
-| Prevention | Require each task row to include objective, target files, acceptance criteria, owner, and at least one deterministic validation command. |
-| First seen | 2026-03-30 |
-| Seen in | prj0000104-idea000014-processing; prj0000107-idea000015-specialized-agent-library; prj0000108-idea000019-crdt-python-ffi-bindings; prj0000109-idea000002-missing-compose-dockerfile |
-| Recurrence count | 4 |
-| Promotion status | PROMOTED_TO_HARD_RULE |
-
-## prj0000108 - idea000019-crdt-python-ffi-bindings
-
-| Field | Value |
-|---|---|
-| task_id | prj0000108-idea000019-crdt-python-ffi-bindings |
-| owner_agent | @4plan |
-| source | @3design |
-| created_at | 2026-03-31 |
-| updated_at | 2026-03-31 |
-| status | DONE |
-| lifecycle | OPEN -> IN_PROGRESS -> DONE |
-| chunk_boundaries | Two chunks: Chunk A FFI contract/core integration (T-CRDT-001..T-CRDT-010), Chunk B observability/parity/cutover (T-CRDT-011..T-CRDT-020) |
-| acceptance_criteria_scope | AC-CRDT-001..AC-CRDT-008 mapped to owner-sequenced executable tasks and deterministic command gates |
-| dependency_order | @5test red -> @6code green -> @7exec runtime -> @8ql quality/security -> @9git handoff |
-| handoff_target | @5test |
-| artifact_paths | docs/project/prj0000108-idea000019-crdt-python-ffi-bindings/idea000019-crdt-python-ffi-bindings.plan.md |
-| branch | prj0000108-idea000019-crdt-python-ffi-bindings (validated PASS before artifact writes) |
-| validation_evidence | c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 12 passed in 2.53s |
-
-### Lesson Entry
-
-| Field | Value |
-|---|---|
-| Pattern | Governance-quality plans ship faster when each AC is bound to owner-specific tasks, exact file targets, and explicit command selectors. |
-| Root cause | Placeholder plans without command-level traceability force downstream agents to reinterpret scope, delaying @5test/@6code execution. |
-| Prevention | Keep AC-to-task matrices mandatory, with one deterministic validation command per task and explicit owner sequencing. |
-| First seen | 2026-03-30 |
-| Seen in | prj0000104-idea000014-processing; prj0000107-idea000015-specialized-agent-library; prj0000108-idea000019-crdt-python-ffi-bindings |
-| Recurrence count | 3 |
-| Promotion status | PROMOTED_TO_HARD_RULE |
-
-## prj0000107 - idea000015-specialized-agent-library
-
-| Field | Value |
-|---|---|
-| task_id | prj0000107-idea000015-specialized-agent-library |
-| owner_agent | @4plan |
-| source | @3design |
-| created_at | 2026-03-31 |
-| updated_at | 2026-03-31 |
-| status | DONE |
-| lifecycle | OPEN -> IN_PROGRESS -> DONE |
-| chunk_boundaries | Two chunks: Chunk A runtime contract core (T-SAL-001..T-SAL-010), Chunk B parity/NFR/integration closure (T-SAL-011..T-SAL-020) |
-| acceptance_criteria_scope | AC-SAL-001..AC-SAL-008 mapped to executable tasks and deterministic command selectors |
-| dependency_order | @5test red -> @6code green -> @7exec runtime -> @8ql quality/security -> @9git handoff |
-| handoff_target | @5test |
-| artifact_paths | docs/project/prj0000107-idea000015-specialized-agent-library/idea000015-specialized-agent-library.plan.md |
-| branch | prj0000107-idea000015-specialized-agent-library (validated PASS before artifact writes) |
-| validation_evidence | c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 12 passed in 5.98s |
-
-### Lesson Entry
-
-| Field | Value |
-|---|---|
-| Pattern | Plan quality and downstream execution speed improve when each AC is mapped to owner-phased tasks with explicit file targets and exact pytest selectors. |
-| Root cause | Placeholder project plans lacked deterministic owner sequencing and command-level validation hooks for @5test/@6code handoff. |
-| Prevention | Continue enforcing mandatory task schema (objective, target files, acceptance criteria, validation command) with AC mapping table and dependency ordering. |
-| First seen | 2026-03-30 |
-| Seen in | prj0000104-idea000014-processing; prj0000107-idea000015-specialized-agent-library |
-| Recurrence count | 2 |
-| Promotion status | PROMOTED_TO_HARD_RULE |
-
-## prj0000104 - idea000014-processing
+| Pattern | Red-wave planning is easier to hand off when parallel-safe test tasks are disjoint by file and merged through one explicit convergence artifact. |
+| Root cause | Refresh-token work spans three test surfaces, and without a defined merge point the red phase can drift into overlapping ownership. |
+| Prevention | Keep the first red wave file-disjoint, reserve shared artifact edits for one convergence task, and require deterministic selectors per file. |
+| First seen | 2026-04-04 |
+| Seen in | prj0000122-jwt-refresh-token-support |
+| Recurrence count | 1 |
+| Promotion status | CANDIDATE |
 
 | Field | Value |
 |---|---|

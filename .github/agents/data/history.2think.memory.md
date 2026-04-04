@@ -917,3 +917,22 @@ into design (3design) and keeps the agent workflow chain explicit.
 | **artifact_paths** | docs/project/prj030-agent-doc-frequency/agent-doc-frequency.think.md |
 | **key_decision** | Option A (Step-Gated Full Overwrite): one sentence per agent's Operating Procedure; no StorageTransaction dependency; matches existing write pattern |
 | **open_questions_for_3design** | Template authority (inline vs ARTIFACT_TEMPLATES.md); initialization ownership; checkpoint granularity; whether existing 4 artifact types also get the checkpoint rule |
+
+---
+
+## 2026-04-04 rollover from current.2think.memory.md
+
+Archived prior `current.2think.memory.md` project entries before starting `prj0000122-jwt-refresh-token-support`.
+
+- `prj0000120-openapi-spec-generation` — recommended script-first committed backend OpenAPI spec with drift verification.
+- `prj0000118-amd-npu-feature-documentation` — recommended canonical docs plus maintainer verification checklist.
+- `prj0000117-rust-sub-crate-unification` — recommended root-workspace unification anchored at `rust_core/Cargo.toml`.
+- `prj0000116-rust-criterion-benchmarks` — recommended minimal Criterion harness plus lightweight CI smoke benchmark.
+- `prj0000115-ci-security-quality-workflow-consolidation` — recommended hybrid fast-path + scheduled heavyweight security scans.
+- `prj0000110-idea000004-quality-workflow-branch-trigger` — recommended targeted branch-governance quality gating over workflow sprawl.
+- `prj0000108-idea000019-crdt-python-ffi-bindings` — recommended integrating CRDT APIs into the existing `rust_core` PyO3 module.
+- `prj0000105-idea000016-mixin-architecture-base` — recommended incremental migration to `src/core/base/mixins/` with compatibility shims.
+- `prj0000104-idea000014-processing` — recommended `pyproject.toml` as canonical dependency source with generated `requirements.txt`.
+- `prj0000106-idea000080-smart-prompt-routing-system` — recommended hybrid routing with deterministic guardrails and bounded adaptive classification.
+- `prj0000107-idea000015-specialized-agent-library` — recommended typed adapter layer over universal shell primitives.
+- `prj0000109-idea000002-missing-compose-dockerfile` — recommended incremental hardening around the existing deploy-local Dockerfile fix.

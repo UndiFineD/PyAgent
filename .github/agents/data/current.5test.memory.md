@@ -8,6 +8,46 @@
 
 ## Entries
 
+### Entry 2026-04-04 - prj0000122 jwt refresh-token support red slice T-JRT-001
+- task_id: prj0000122-jwt-refresh-token-support
+- status: DONE
+- lifecycle_transition: OPEN -> IN_PROGRESS -> DONE
+- branch_gate:
+  - expected: prj0000122-jwt-refresh-token-support
+  - observed: prj0000122-jwt-refresh-token-support
+  - result: PASS
+- scope:
+  - tests/test_backend_refresh_sessions.py
+  - docs/project/prj0000122-jwt-refresh-token-support/jwt-refresh-token-support.test.md
+  - .github/agents/data/current.5test.memory.md
+  - .github/agents/data/2026-04-04.5test.log.md
+- pass_fail_summary:
+  - PASS: .venv\Scripts\ruff.exe check --fix tests/test_backend_refresh_sessions.py
+  - PASS: .venv\Scripts\ruff.exe check tests/test_backend_refresh_sessions.py
+  - PASS: .venv\Scripts\ruff.exe check --select D tests/test_backend_refresh_sessions.py
+  - RED(expected): c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_backend_refresh_sessions.py (5 failed in 4.77s)
+- red_failure_signatures:
+  - AssertionError: assert 404 == 200 for POST /v1/auth/session bootstrap success contract
+  - AssertionError: assert 404 == 401 for invalid API-key bootstrap rejection contract
+  - AssertionError: downstream refresh/logout/hash-at-rest checks blocked behind missing bootstrap route behavior
+  - non-qualifying failures absent: ImportError, AttributeError
+- handoff_notes:
+  - target_agent: @6code
+  - readiness: READY_FOR_IMPLEMENTATION
+  - implementation_delta_required:
+    - add POST /v1/auth/session route with API-key bootstrap contract
+    - add POST /v1/auth/refresh and POST /v1/auth/logout contracts
+    - add backend-managed refresh-session persistence with no plaintext refresh token at rest
+
+#### Lesson
+- Pattern: Red contracts for new route families are strongest when tests assert concrete status/payload behavior against real endpoints and fail on 404/contract mismatches.
+- Root cause: Phase-one auth-session routes and persistence behavior are not implemented yet.
+- Prevention: Keep first-slice tests anchored to bootstrap success/rejection, then chain refresh, replay, and logout assertions through that bootstrap contract.
+- First seen: 2026-04-04
+- Seen in: prj0000122-jwt-refresh-token-support
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ### Entry 2026-04-03 - prj0000120 openapi spec generation red contracts
 - task_id: prj0000120-openapi-spec-generation
 - status: DONE

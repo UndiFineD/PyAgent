@@ -1,6 +1,6 @@
 # idea-022 - jwt-refresh-token-support
 
-Planned project mapping: None yet
+Planned project mapping: prj0000122
 
 ## Idea summary
 This idea focuses on jwt refresh token support in area 3 – Backend. The current signal indicates priority P3, impact M, and urgency M. The SWOT tag is O (Opportunity to improve capability).

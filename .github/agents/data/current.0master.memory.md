@@ -6,6 +6,97 @@
 
 ## Entries
 
+## 2026-04-04 — prj0000122 allocated for idea000022 jwt-refresh-token-support
+
+- Trigger: user requested a new project.
+- Preflight:
+	- Confirmed `data/nextproject.md` = `prj0000122`.
+	- Confirmed `idea000022-jwt-refresh-token-support.md` had no project mapping.
+	- Cleared project-start workspace noise before delegation and enforced branch isolation.
+- Project boundary assigned:
+	- Project id: `prj0000122`
+	- Idea: `idea000022-jwt-refresh-token-support`
+	- Expected branch: `prj0000122-jwt-refresh-token-support`
+	- Lane: `Discovery`
+- @1project delivered:
+	- Canonical artifacts created under `docs/project/prj0000122-jwt-refresh-token-support/`.
+	- Registry updated in `data/projects.json` and `docs/project/kanban.json`.
+	- Idea mapping updated in `docs/project/ideas/idea000022-jwt-refresh-token-support.md`.
+	- `data/nextproject.md` advanced.
+	- Validation evidence:
+		- `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `17 passed`
+		- `python scripts/project_registry_governance.py validate` -> `VALIDATION_OK`, `projects=122`
+	- Commit pushed: `d5235d18a8` on `prj0000122-jwt-refresh-token-support`.
+- Next step: @2think discovery for prj0000122.
+
+## 2026-04-04 — prj0000122 discovery completed
+
+- @2think recommendation: Option A — backend-owned refresh-session store with opaque rotating refresh tokens and short-lived access JWTs.
+- Main evidence:
+	- `backend/auth.py` validates JWTs only; no issuance, rotation, or revocation path exists.
+	- `backend/app.py` has protected REST/WebSocket auth wiring but no refresh/bootstrap endpoint.
+	- JWT minting is currently test-side, indicating missing production issuance flow.
+	- Existing backend persistence utilities are generic and not auth-session specific.
+- Likely phase-one scope:
+	- `backend/auth.py`
+	- `backend/app.py`
+	- new backend auth-session store module
+	- `tests/test_backend_auth.py`
+	- `tests/test_backend_worker.py`
+- Open design questions to resolve in @3design:
+	- initial credential/bootstrap flow for authenticated session creation
+	- whether refresh-session state must survive restart / multi-instance deployment in phase one
+- Next step: @3design to turn the selected option into a concrete phase-one backend JWT refresh design.
+
+## 2026-04-04 — prj0000122 design completed
+
+- @3design selected a phase-one design with:
+	- API-key bootstrap via `POST /v1/auth/session`
+	- backend-issued short-lived access JWTs
+	- opaque rotating refresh tokens
+	- dedicated file-backed single-instance session store at `data/auth/refresh_sessions.json`
+- Design outputs:
+	- canonical design: `docs/project/prj0000122-jwt-refresh-token-support/jwt-refresh-token-support.design.md`
+	- ADR: `docs/architecture/adr/0008-backend-managed-refresh-sessions-for-jwt-renewal.md`
+- Likely phase-one scope:
+	- `backend/auth.py`
+	- `backend/app.py`
+	- new `backend/auth_session_store.py`
+	- `tests/test_backend_auth.py`
+	- new `tests/test_backend_refresh_sessions.py`
+	- `tests/test_backend_worker.py`
+- Remaining condition:
+	- if multi-instance/shared-process durability is required immediately, persistence must be re-scoped before implementation; otherwise phase one is unblocked.
+- Next step: @4plan implementation planning for prj0000122.
+
+## 2026-04-04 — prj0000122 planning completed
+
+- @4plan converted the design into executable tasks `T-JRT-001` through `T-JRT-009`.
+- First red-phase slice selected:
+	- `T-JRT-001` in `tests/test_backend_refresh_sessions.py`
+	- focus on bootstrap success/401 cases, refresh rotation, replay rejection, logout revocation, restart reload, and hashed-at-rest persistence assertions.
+- Planned implementation order:
+	- @5test writes failing session-refresh tests first
+	- @6code implements new `backend/auth_session_store.py` plus `backend/auth.py` / `backend/app.py` route and token changes
+	- @7exec/@8ql/@9git close the lane after integrated validation
+- Key dependencies:
+	- deterministic `PYAGENT_AUTH_SESSION_STORE_PATH` override for tests
+	- fixture-controlled `PYAGENT_API_KEY` and `PYAGENT_JWT_SECRET`
+	- no scope expansion into multi-instance shared auth persistence or mid-connection WebSocket refresh
+- Next step: @5test red-phase for prj0000122.
+
+## 2026-04-04 — prj0000122 red-phase completed
+
+- @5test added `tests/test_backend_refresh_sessions.py` and executed the first red slice.
+- RED evidence:
+	- `python -m pytest -q tests/test_backend_refresh_sessions.py` -> `5 failed`
+	- primary signal is expected missing behavior: `POST /v1/auth/session` returns `404` where the contract requires `200` / `401`.
+- This is a valid red state because failures come from absent routes/session lifecycle behavior, not import/setup noise.
+- Implementation blockers handed to @6code:
+	- missing `/v1/auth/session`, `/v1/auth/refresh`, `/v1/auth/logout`
+	- missing hashed-at-rest refresh-session persistence and rotation/replay/logout support
+- Next step: @6code green-phase implementation for prj0000122.
+
 ## 2026-04-04 — post-merge closure completed for prj0000120 and prj0000121
 
 - Trigger: user confirmed PR #281 merged and requested workflow continuation.
