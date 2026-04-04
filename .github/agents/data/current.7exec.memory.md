@@ -8,6 +8,29 @@
 
 ## Entries
 
+## Last run - 2026-04-04
+- task_id: prj0000122-jwt-refresh-token-support
+- Task: Deterministic execution validation for JWT refresh-session phase-one slice
+- lifecycle: IN_PROGRESS -> DONE
+- Branch gate: PASS (expected=prj0000122-jwt-refresh-token-support, observed=prj0000122-jwt-refresh-token-support)
+- In-scope changed files (slice): backend/auth_session_store.py, backend/app.py, tests/test_backend_refresh_sessions.py
+- Required selector gate: PASS (`python -m pytest -q tests/test_backend_refresh_sessions.py` -> 5 passed in 7.68s)
+- Required selector gate: PASS (`python -m pytest -q tests/test_backend_auth.py` -> 19 passed in 4.95s)
+- Required selector gate: PASS (`python -m pytest -q tests/test_backend_worker.py` -> 21 passed in 5.36s)
+- Fixes applied: None required
+- Outcome: PASSED (deterministic slice set) -> @8ql readiness: PASS
+- Next handoff target: @8ql
+- Notes: This run intentionally validated only the user-requested deterministic selector set; broader @7exec mandatory global gates were not executed in this request.
+
+### Lesson
+- Pattern: Running the three backend selectors in fixed order provides deterministic phase-one execution confidence for JWT session refresh changes.
+- Root cause: None (all targeted selectors passed).
+- Prevention: Keep @7exec slice validations pinned to the exact selector list provided by plan/handoff for deterministic reruns.
+- First seen: 2026-04-04
+- Seen in: prj0000122-jwt-refresh-token-support
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ## Last run - 2026-04-03
 - task_id: prj0000121-ci-setup-python-stack-overflow
 - Task: Execution validation for CI setup-python stack overflow hotfix

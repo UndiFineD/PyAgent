@@ -157,7 +157,7 @@
     {
       "id": "prj0000122",
       "name": "jwt-refresh-token-support",
-      "lane": "Discovery",
+      "lane": "Review",
       "summary": "Initialize workflow artifacts for idea000022 jwt refresh token support and hand off to @2think discovery.",
       "branch": "prj0000122-jwt-refresh-token-support",
       "pr": null,

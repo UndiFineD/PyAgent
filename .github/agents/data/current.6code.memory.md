@@ -3,10 +3,42 @@
 ## Metadata
 - agent: @6code
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-04-03
+- updated_at: 2026-04-04
 - rollover: At new project start, append this file's entries to history.6code.memory.md in chronological order, then clear Entries.
 
 ## Entries
+
+## 2026-04-04 — prj0000122 jwt refresh token support (phase-one red slice)
+- task_id: prj0000122-jwt-refresh-token-support
+- lifecycle: DONE
+- branch: prj0000122-jwt-refresh-token-support (validated)
+- changed files:
+	- backend/auth_session_store.py
+	- backend/app.py
+	- docs/project/prj0000122-jwt-refresh-token-support/jwt-refresh-token-support.code.md
+	- .github/agents/data/current.6code.memory.md
+	- .github/agents/data/2026-04-04.6code.log.md
+- implementation summary:
+	- Implemented a minimal backend-managed refresh-session slice with three new routes: `POST /v1/auth/session`, `POST /v1/auth/refresh`, and `POST /v1/auth/logout`.
+	- Added file-backed refresh-session persistence with atomic writes, single-process lock protection, and SHA-256 hash-at-rest for refresh tokens.
+	- Added refresh token rotation and replay rejection, plus logout revocation behavior aligned to the red contract.
+	- Preserved existing legacy auth behavior for protected routes and WebSocket handshake auth.
+- verification commands:
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/test_backend_refresh_sessions.py
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; .venv\Scripts\ruff.exe check --fix backend/auth_session_store.py backend/app.py
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; .venv\Scripts\ruff.exe check backend/auth_session_store.py backend/app.py
+- unresolved risks:
+	- Current slice does not yet include restart-recovery coverage or broader compatibility selectors outside `tests/test_backend_refresh_sessions.py`.
+- handoff target: @7exec
+
+### Lesson
+- Pattern: Route-level auth session bootstrapping can stay bounded when persistence, rotation, and revocation are encapsulated in a dedicated store module.
+- Root cause: Backend previously validated JWT/API key only and lacked session lifecycle routes/state.
+- Prevention: Keep session-state concerns in a dedicated store and keep route layer additive for first-slice delivery.
+- First seen: 2026-04-04
+- Seen in: prj0000122-jwt-refresh-token-support
+- Recurrence count: 1
+- Promotion status: Candidate
 
 ## 2026-04-03 — prj0000121 CI setup-python stack overflow hotfix
 - task_id: prj0000121-ci-setup-python-stack-overflow

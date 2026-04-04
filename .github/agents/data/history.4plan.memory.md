@@ -110,6 +110,13 @@ where test cases are written and validated against the plan.
 
 ---
 
+## 2026-04-04 rollover - current.4plan.memory.md reset for prj0000122
+
+- Archived current-memory coverage for completed planning projects `prj0000104`, `prj0000105`, `prj0000106`, `prj0000107`, `prj0000108`, `prj0000109`, `prj0000110`, `prj0000114`, `prj0000115`, `prj0000116`, `prj0000117`, `prj0000118`, and `prj0000120` before opening `prj0000122-jwt-refresh-token-support`.
+- Preserved active hard-rule lessons: every task must include objective, target files, acceptance criteria, owner, and at least one deterministic validation command; conclusive gate evidence is required before DONE.
+
+---
+
 ## prj0000097 - stub-module-elimination
 
 | Field | Value |

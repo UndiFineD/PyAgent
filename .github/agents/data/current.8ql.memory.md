@@ -8,6 +8,41 @@
 
 ## Entries
 
+## Last scan - 2026-04-04 (prj0000122 phase-one first green slice)
+- task_id: prj0000122-jwt-refresh-token-support
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- branch: prj0000122-jwt-refresh-token-support (validated)
+- files scanned: backend/app.py; backend/auth_session_store.py; tests/test_backend_refresh_sessions.py; docs/project/prj0000122-jwt-refresh-token-support/*
+- security/quality checks run:
+	- git branch --show-current
+	- git diff --name-only HEAD
+	- git ls-files --others --exclude-standard
+	- .venv\Scripts\ruff.exe check backend/app.py backend/auth_session_store.py --select S --output-format concise
+	- python -m pytest -q tests/test_backend_refresh_sessions.py
+	- python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
+	- rg -n 'token_urlsafe|sha256|hashlib|jwt\.encode|jwt\.decode|typ"\s*:\s*"access"|refresh|revoke|os\.replace|mkstemp|compare_digest' backend/app.py backend/auth_session_store.py tests/test_backend_refresh_sessions.py backend/auth.py
+	- python -c <pip_audit_results baseline parser>
+- findings:
+	- PASS: branch gate matched expected branch.
+	- PASS: refresh-session deterministic selector green (`5 passed`).
+	- PASS: docs policy validator green (`17 passed`).
+	- PASS: refresh tokens are opaque and hash-at-rest only; no plaintext persistence found.
+	- PASS: rotation replay rejected (`401`) and logout revocation enforced (`401` on subsequent refresh).
+	- PASS: atomic persistence write path confirmed (`tempfile.mkstemp` + `os.replace`).
+	- INFO: Ruff S311 in `backend/app.py` points to pre-existing FLM metrics simulation lines, not the auth-session slice.
+	- NON_BLOCKING: this first green slice closes AC-JRT-001/003/005/008; remaining ACs are deferred to downstream slices.
+- handoff target: @9git
+- overall: CLEAN (no HIGH/CRITICAL security blockers in scope)
+
+### Lesson
+- Pattern: In bounded backend auth slices, combine focused Ruff-S + exact selector rerun + line-level token/persistence grep evidence to avoid false blockers from unrelated modules.
+- Root cause: Repository files can contain unrelated lint findings (e.g., simulation randomness) in the same modified file.
+- Prevention: Classify unrelated-in-file findings as informational when unchanged and outside the active slice behavior.
+- First seen: prj0000122-jwt-refresh-token-support
+- Seen in: prj0000122-jwt-refresh-token-support
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
 ## Last scan - 2026-04-03 (prj0000121 hotfix gate)
 - task_id: prj0000121-ci-setup-python-stack-overflow
 - lifecycle: OPEN -> IN_PROGRESS -> DONE
