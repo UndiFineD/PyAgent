@@ -51,7 +51,22 @@ All checks passed!
 
 .venv\Scripts\ruff.exe check --select D src/core/gateway/gateway_core.py src/core/gateway/__init__.py
 All checks passed!
+
+.venv\Scripts\ruff.exe format tests/core/gateway/test_gateway_core_orchestration.py
+1 file reformatted
+
+python -m pytest -q tests/core/gateway/test_gateway_core_orchestration.py
+....                                                                                                                 [100%]
+4 passed in 6.72s
+
+.venv\Scripts\ruff.exe format --check tests/core/gateway/test_gateway_core_orchestration.py
+1 file already formatted
 ```
+
+## Post-7exec Remediation Note
+Addressed @7exec blocker for formatting drift in `tests/core/gateway/test_gateway_core_orchestration.py` by
+applying `ruff format` and re-running the requested selector and formatter check. No behavioral logic changes were
+introduced; remediation is formatting-only.
 
 ## Deferred Items
 1. Router fallback recovery paths beyond constructor compatibility.

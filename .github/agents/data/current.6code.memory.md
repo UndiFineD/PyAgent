@@ -8,6 +8,36 @@
 
 ## Entries
 
+## 2026-04-04 — prj0000124 gateway orchestration formatting remediation
+- task_id: prj0000124-llm-gateway
+- lifecycle: DONE
+- branch: prj0000124-llm-gateway (validated)
+- changed files:
+	- tests/core/gateway/test_gateway_core_orchestration.py
+	- docs/project/prj0000124-llm-gateway/llm-gateway.code.md
+	- .github/agents/data/current.6code.memory.md
+	- .github/agents/data/2026-04-04.6code.log.md
+- implementation summary:
+	- Applied `ruff format` to normalize `tests/core/gateway/test_gateway_core_orchestration.py` after @7exec pre-commit failure.
+	- Re-ran the required targeted pytest selector and formatter check; both passed.
+	- Updated project code artifact with a remediation note and command evidence.
+- verification commands:
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; .venv\Scripts\ruff.exe format tests/core/gateway/test_gateway_core_orchestration.py
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/core/gateway/test_gateway_core_orchestration.py
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; .venv\Scripts\ruff.exe format --check tests/core/gateway/test_gateway_core_orchestration.py
+- unresolved risks:
+	- None identified for this remediation slice.
+- handoff target: @7exec
+
+### Lesson
+- Pattern: When @7exec reports pre-commit formatting drift, run scoped `ruff format` on the exact file and then re-run both selector and `--check` gate.
+- Root cause: Formatter drift in `tests/core/gateway/test_gateway_core_orchestration.py` caused pre-commit failure despite passing tests.
+- Prevention: Add a scoped `ruff format --check` validation for touched test files before handoff.
+- First seen: 2026-04-04
+- Seen in: prj0000124-llm-gateway
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ## 2026-04-04 — prj0000124 llm gateway fail-closed orchestration green slice
 - task_id: prj0000124-llm-gateway
 - lifecycle: DONE

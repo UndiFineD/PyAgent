@@ -310,9 +310,7 @@ def _load_gateway_core_class() -> type[Any]:
     try:
         module = importlib.import_module("src.core.gateway.gateway_core")
     except ModuleNotFoundError:  # pragma: no cover - red-phase contract signal.
-        pytest.fail(
-            "Missing module contract src.core.gateway.gateway_core required for RED-SLICE-LGW-001."
-        )
+        pytest.fail("Missing module contract src.core.gateway.gateway_core required for RED-SLICE-LGW-001.")
 
     gateway_core_cls = getattr(module, "GatewayCore", None)
     if gateway_core_cls is None:
