@@ -84,7 +84,14 @@ All tasks satisfy mandatory schema: objective, target files, acceptance criteria
 2. Strict lane remains non-blocking until exactly five consecutive green runs are recorded (`N=5`).
 3. Promotion to required is a discrete change after evidence capture.
 4. Broad lane remains warning-only throughout this project.
-5. Any F1 or F3 class incident triggers required->warning rollback.
+5. Any F1 or F3 class incident triggers required -> warning rollback.
+
+## Warn-Phase Runbook Notes (T-MYPY-006)
+- F1: Config authority mismatch for strict lane command/config source.
+- F2: Deterministic strict-allowlist regression.
+- F3: CI instability or flapping in strict lane outcomes.
+- Promotion prerequisite marker: `N=5` consecutive green strict-lane runs in warn mode.
+- This warn-phase slice does not perform required-phase promotion.
 
 ## Rollback Checkpoints
 | Checkpoint | Trigger | Action | Re-entry Condition |

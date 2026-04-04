@@ -27,6 +27,18 @@ jobs:
         run: pytest tests/ci/test_placeholder_smoke.py -q
       - name: Run backend OpenAPI drift check
         run: pytest tests/docs/test_backend_openapi_drift.py -q
+      - name: Mypy strict allowlist lane (warn only, phase-1)
+        continue-on-error: true
+        run: |
+          python -m mypy --config-file pyproject.toml \
+            src/core/base/mixins/base_behavior_mixin.py \
+            src/core/base/mixins/host_contract.py \
+            src/core/base/mixins/shim_registry.py \
+            src/core/agent_registry.py \
+            src/core/agent_state_manager.py
+      - name: Mypy broad visibility lane (warn only)
+        continue-on-error: true
+        run: python -m mypy --config-file mypy.ini src
       - name: Run rust benchmark smoke
         run: |
           pushd rust_core

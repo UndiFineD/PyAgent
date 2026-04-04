@@ -8,6 +8,37 @@
 
 ## Entries
 
+## 2026-04-04 — prj0000127 mypy strict enforcement warn-phase green slice
+- task_id: prj0000127-mypy-strict-enforcement
+- lifecycle: DONE
+- branch: prj0000127-mypy-strict-enforcement (validated)
+- changed files:
+	- .github/workflows/ci.yml
+	- docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.plan.md
+	- docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.exec.md
+	- docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.code.md
+	- .github/agents/data/current.6code.memory.md
+	- .github/agents/data/2026-04-04.6code.log.md
+- implementation summary:
+	- Added strict allowlist mypy warning lane in CI with explicit `--config-file pyproject.toml` and phase-1 file targets.
+	- Preserved broad warning lane with explicit `--config-file mypy.ini src` to keep strict vs broad distinction explicit.
+	- Updated warn-phase runbook docs with F1/F2/F3 rollback taxonomy, required -> warning rollback policy, and N=5 promotion prerequisites without promoting required phase.
+- verification commands:
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -k "prj0000127 or mypy or promotion"
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
+- unresolved risks:
+	- Required-phase promotion tasks (T-MYPY-008..010) remain intentionally out of scope for this warn-phase slice.
+- handoff target: @7exec
+
+### Lesson
+- Pattern: Progressive typing rollouts are stable when strict and broad lanes use explicit config authority and distinct CI steps.
+- Root cause: RED contracts failed because CI lacked explicit strict command/config authority and exec artifacts lacked N=5 promotion markers.
+- Prevention: Always encode strict allowlist and broad visibility as separate commands, each with explicit `--config-file`, and publish warn->required prerequisites in runbook docs.
+- First seen: 2026-04-04
+- Seen in: prj0000127-mypy-strict-enforcement
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ## 2026-04-04 — prj0000125 llm gateway lessons learned fixes (green phase)
 - task_id: prj0000125-llm-gateway-lessons-learned-fixes
 - lifecycle: DONE
