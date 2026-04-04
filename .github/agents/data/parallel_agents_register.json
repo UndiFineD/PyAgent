@@ -2,10 +2,10 @@
   "schema_version": "1.0.0",
   "register_id": "parallel-agents-register",
   "description": "Shared coordination register for parallel agent work, file touches, and file locks.",
-  "updated_at": "2026-04-04T19:26:09.265835+00:00",
+  "updated_at": "2026-04-04T21:37:39.555025+00:00",
   "updated_by": "0master",
-  "active_project_id": "prj0000126",
-  "active_branch": "prj0000126-next-24-ideas-rollout",
+  "active_project_id": "prj0000127",
+  "active_branch": "prj0000127-mypy-strict-enforcement",
   "active_wave_id": "",
   "waves": [
     {
@@ -49,6 +49,20 @@
       "closed_at": "2026-04-04T19:26:09.265793+00:00",
       "closed_by": "0master",
       "note": "Batch-started prj0000126-prj0000149, validations passed, commit e3b91adfca"
+    },
+    {
+      "wave_id": "prj0000127.wave1",
+      "status": "closed",
+      "closed_at": "2026-04-04T21:33:45.628880+00:00",
+      "closed_by": "0master",
+      "note": "2think complete for prj0000127; options + M1 done; commit ed767e8ee5"
+    },
+    {
+      "wave_id": "prj0000127.wave2",
+      "status": "closed",
+      "closed_at": "2026-04-04T21:37:39.554978+00:00",
+      "closed_by": "0master",
+      "note": "3design complete for prj0000127; M2 done; commit bd58fd954f"
     }
   ],
   "agents": {
@@ -158,7 +172,7 @@
       "touching_files": [],
       "planned_files": [],
       "lock_ids": [],
-      "updated_at": "2026-04-04T17:23:03.063370+00:00"
+      "updated_at": "2026-04-04T21:37:39.555011+00:00"
     },
     "4plan": {
       "status": "idle",
@@ -195,6 +209,15 @@
       "planned_files": [],
       "lock_ids": [],
       "updated_at": "2026-04-04T19:26:09.265823+00:00"
+    },
+    "2think": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": "2026-04-04T21:33:45.628909+00:00"
     }
   },
   "file_locks": [
@@ -287,6 +310,24 @@
       "status": "released",
       "acquired_at": "2026-04-04T19:14:48.436937+00:00",
       "released_at": "2026-04-04T19:22:35.041428+00:00"
+    },
+    {
+      "lock_id": "lock-9a4edebbcc81",
+      "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.think.md",
+      "owner_agent": "2think",
+      "work_package_id": "prj0000127.wave1.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T21:28:23.016470+00:00",
+      "released_at": "2026-04-04T21:33:45.236777+00:00"
+    },
+    {
+      "lock_id": "lock-8068dcafd27c",
+      "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.design.md",
+      "owner_agent": "3design",
+      "work_package_id": "prj0000127.wave2.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T21:33:55.013578+00:00",
+      "released_at": "2026-04-04T21:37:39.210863+00:00"
     }
   ],
   "lockfiles": [],
@@ -597,6 +638,82 @@
       "payload": {
         "wave_id": "prj0000126.wave1",
         "note": "Batch-started prj0000126-prj0000149, validations passed, commit e3b91adfca"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:28:23.017544+00:00",
+      "event": "acquire-lock",
+      "actor": "2think",
+      "payload": {
+        "lock_id": "lock-9a4edebbcc81",
+        "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.think.md",
+        "work_package_id": "prj0000127.wave1.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:33:45.236821+00:00",
+      "event": "release-lock",
+      "actor": "2think",
+      "payload": {
+        "lock_id": "lock-9a4edebbcc81",
+        "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.think.md",
+        "work_package_id": "prj0000127.wave1.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:33:45.628915+00:00",
+      "event": "wave-agent-reset",
+      "actor": "0master",
+      "payload": {
+        "agent": "2think",
+        "wave_id": "prj0000127.wave1"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:33:45.628925+00:00",
+      "event": "close-wave",
+      "actor": "0master",
+      "payload": {
+        "wave_id": "prj0000127.wave1",
+        "note": "2think complete for prj0000127; options + M1 done; commit ed767e8ee5"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:33:55.013624+00:00",
+      "event": "acquire-lock",
+      "actor": "3design",
+      "payload": {
+        "lock_id": "lock-8068dcafd27c",
+        "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.design.md",
+        "work_package_id": "prj0000127.wave2.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:37:39.210901+00:00",
+      "event": "release-lock",
+      "actor": "3design",
+      "payload": {
+        "lock_id": "lock-8068dcafd27c",
+        "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.design.md",
+        "work_package_id": "prj0000127.wave2.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:37:39.555018+00:00",
+      "event": "wave-agent-reset",
+      "actor": "0master",
+      "payload": {
+        "agent": "3design",
+        "wave_id": "prj0000127.wave2"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:37:39.555030+00:00",
+      "event": "close-wave",
+      "actor": "0master",
+      "payload": {
+        "wave_id": "prj0000127.wave2",
+        "note": "3design complete for prj0000127; M2 done; commit bd58fd954f"
       }
     }
   ]

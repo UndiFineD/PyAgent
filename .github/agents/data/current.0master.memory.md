@@ -6,6 +6,28 @@
 
 ## Entries
 
+## 2026-04-04 — prj0000126 released and prj0000127 advanced
+
+- PR `#290` was re-verified as `MERGED` and prj0000126 closure executed.
+- @1project closure results for `prj0000126`:
+	- Set Released status in `data/projects.json` and `docs/project/kanban.json` with PR linkage.
+	- Updated `docs/project/prj0000126-private-key-in-repo/private-key-in-repo.project.md` to closure alignment.
+	- Applied idea archival policy: moved `docs/project/ideas/idea000001-private-key-in-repo.md` to `docs/project/ideas/archive/idea000001-private-key-in-repo.md`.
+	- Validation: docs policy 17 passed; registry validate VALIDATION_OK projects=149.
+	- Commit: `a14eafdffa` pushed.
+- Continuation moved to `prj0000127-mypy-strict-enforcement`.
+- @2think completed on prj0000127:
+	- Replaced placeholder options with concrete progressive strictness alternatives.
+	- Updated M1 to DONE.
+	- Validation: docs policy 17 passed.
+	- Commit: `ed767e8ee5` pushed.
+- @3design completed on prj0000127:
+	- Produced actionable design for phased mypy strict rollout, CI warn->required gating, rollback/failure handling, and acceptance mapping.
+	- Updated M2 to DONE.
+	- Validation: docs policy 17 passed.
+	- Commit: `bd58fd954f` pushed.
+- Next step: @4plan on prj0000127.
+
 ## 2026-04-04 — prj0000126 program kickoff: next 24 ideas started
 
 - User objective: make a rapid implementation plan for next 24 ideas and start projects.
