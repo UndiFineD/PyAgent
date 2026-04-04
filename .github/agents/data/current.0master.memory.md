@@ -6,6 +6,18 @@
 
 ## Entries
 
+## 2026-04-04 — prj0000125 @3design phase complete
+
+- Trigger: @2think was already done (commit `644dd9dc6f`); user re-submitted "learn all lessons" prompt from new session; advanced to @3design.
+- @3design produced `llm-gateway-lessons-learned-fixes.design.md` with 4-wave design:
+  - Wave A (Critical): fail-closed runtime — budget-denied guard, provider exception → `status=failed`+`commit_failure`, degraded telemetry trap.
+  - Wave B (High): shared chronological event log fixture replaces concatenated `.calls` lists; ordering asserted via `event_log.index()`.
+  - Wave C (High): prj0000124 project.md milestones all set DONE; ADR 0009 `## Part 2 — prj0000125 Remediation` appended.
+  - Wave D (Closed): `gateway_core.py` is COMPLIANT with snake_case naming standard; no rename needed.
+- Governance: docs policy 17 passed; architecture governance VALIDATION_OK (9 ADRs).
+- Commit: `1c16acfde6 design(prj0000125)` pushed to origin.
+- Next step: @4plan — execute A → B → C → D wave ordering.
+
 ## 2026-04-04 — prj0000124 released and prj0000125 initialized
 
 - Trigger: user reported PR `#287` merged and requested wrap-up, switch to `main`, commit uncommitted files, and start a new lessons-learned fixes project.

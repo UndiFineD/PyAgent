@@ -2,12 +2,20 @@
   "schema_version": "1.0.0",
   "register_id": "parallel-agents-register",
   "description": "Shared coordination register for parallel agent work, file touches, and file locks.",
-  "updated_at": "",
-  "updated_by": "",
-  "active_project_id": "",
-  "active_branch": "",
+  "updated_at": "2026-04-04T17:23:03.063389+00:00",
+  "updated_by": "0master",
+  "active_project_id": "prj0000125",
+  "active_branch": "prj0000125-llm-gateway-lessons-learned-fixes",
   "active_wave_id": "",
-  "waves": [],
+  "waves": [
+    {
+      "wave_id": "prj0000125.wave1",
+      "status": "closed",
+      "closed_at": "2026-04-04T17:23:03.063323+00:00",
+      "closed_by": "0master",
+      "note": "3design phase complete: design.md created, ADR 0009 amended, wave A-D decisions finalized, commit 1c16acfde6"
+    }
+  ],
   "agents": {
     "@0master": {
       "status": "idle",
@@ -107,9 +115,96 @@
       "planned_files": [],
       "lock_ids": [],
       "updated_at": ""
+    },
+    "3design": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": "2026-04-04T17:23:03.063370+00:00"
     }
   },
-  "file_locks": [],
+  "file_locks": [
+    {
+      "lock_id": "lock-68488e227632",
+      "file_path": "docs/project/prj0000125-llm-gateway-lessons-learned-fixes/llm-gateway-lessons-learned-fixes.design.md",
+      "owner_agent": "3design",
+      "work_package_id": "prj0000125.wave1.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T17:07:24.515686+00:00",
+      "released_at": "2026-04-04T17:23:02.267798+00:00"
+    },
+    {
+      "lock_id": "lock-6423c3c6c8ec",
+      "file_path": "docs/architecture/adr/0009-llm-gateway-hybrid-split-plane.md",
+      "owner_agent": "3design",
+      "work_package_id": "prj0000125.wave1.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T17:07:32.671883+00:00",
+      "released_at": "2026-04-04T17:23:02.726766+00:00"
+    }
+  ],
   "lockfiles": [],
-  "event_log": []
+  "event_log": [
+    {
+      "ts": "2026-04-04T17:07:24.614064+00:00",
+      "event": "acquire-lock",
+      "actor": "3design",
+      "payload": {
+        "lock_id": "lock-68488e227632",
+        "file_path": "docs/project/prj0000125-llm-gateway-lessons-learned-fixes/llm-gateway-lessons-learned-fixes.design.md",
+        "work_package_id": "prj0000125.wave1.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T17:07:32.671926+00:00",
+      "event": "acquire-lock",
+      "actor": "3design",
+      "payload": {
+        "lock_id": "lock-6423c3c6c8ec",
+        "file_path": "docs/architecture/adr/0009-llm-gateway-hybrid-split-plane.md",
+        "work_package_id": "prj0000125.wave1.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T17:23:02.267858+00:00",
+      "event": "release-lock",
+      "actor": "3design",
+      "payload": {
+        "lock_id": "lock-68488e227632",
+        "file_path": "docs/project/prj0000125-llm-gateway-lessons-learned-fixes/llm-gateway-lessons-learned-fixes.design.md",
+        "work_package_id": "prj0000125.wave1.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T17:23:02.726809+00:00",
+      "event": "release-lock",
+      "actor": "3design",
+      "payload": {
+        "lock_id": "lock-6423c3c6c8ec",
+        "file_path": "docs/architecture/adr/0009-llm-gateway-hybrid-split-plane.md",
+        "work_package_id": "prj0000125.wave1.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T17:23:03.063381+00:00",
+      "event": "wave-agent-reset",
+      "actor": "0master",
+      "payload": {
+        "agent": "3design",
+        "wave_id": "prj0000125.wave1"
+      }
+    },
+    {
+      "ts": "2026-04-04T17:23:03.063397+00:00",
+      "event": "close-wave",
+      "actor": "0master",
+      "payload": {
+        "wave_id": "prj0000125.wave1",
+        "note": "3design phase complete: design.md created, ADR 0009 amended, wave A-D decisions finalized, commit 1c16acfde6"
+      }
+    }
+  ]
 }

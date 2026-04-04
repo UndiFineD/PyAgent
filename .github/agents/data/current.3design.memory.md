@@ -38,7 +38,44 @@
 		Recurrence count: 1
 		Promotion status: Candidate
 
-- task_id: prj0000124-llm-gateway
+- task_id: prj0000125-llm-gateway-lessons-learned-fixes
+	state: DONE
+	branch: prj0000125-llm-gateway-lessons-learned-fixes
+	selected_design_path: 4-wave targeted remediation (A=runtime, B=tests, C=docs, D=naming record)
+	assumptions:
+		- No topology changes. Phase-one gateway architecture from prj0000124 is the baseline.
+		- budget_manager.reserve() returns dict with "allowed" key; absent key treated as True.
+		- Exception handling catches Exception subclasses only; BaseException non-Exception types propagate.
+		- naming_standards.md takes precedence over copilot-instructions.md for module naming.
+	interface_contract_notes:
+		- handle() lifecycle: emit_start -> pre_policy -> budget_reserve (A1) -> cache/route/emit_decision -> provider_execute (A2) -> post_policy -> commit/cache_write/tool -> emit_result (A3) -> return
+		- Result status: "success" | "denied" (pre-policy, budget, post-policy) | "failed" (provider exception)
+		- telemetry.degraded=True set when emit_result raises; response still returned
+		- Shared event_log fixture for all stub chronological ordering assertions
+		- gateway_core.py: snake_case compliant with naming_standards.md; no rename
+	key_decisions:
+		- A1: budget_denied path: reservation.get("allowed", True) sentinel; fail-closed with budget_denied error envelope
+		- A2: provider_exception: catch Exception, call commit_failure, return status="failed" envelope
+		- A3: degraded telemetry: wrap emit_result, set telemetry.degraded=True on exception, always return
+		- B1: replace stub_a.calls + stub_b.calls concatenation with shared event_log: list[str] injected into all stubs
+		- C1: prj0000124 milestones all updated to DONE; status lane set to Done
+		- C2: ADR 0009 Part 2 section appended; status Accepted unchanged
+		- D1: gateway_core.py is COMPLIANT with naming_standards.md; NO RENAME
+	handoff:
+		target_agent: @4plan
+		wave_order: A -> B -> C -> D(closed)
+		canonical_artifact: docs/project/prj0000125-llm-gateway-lessons-learned-fixes/llm-gateway-lessons-learned-fixes.design.md
+		adr_artifact: docs/architecture/adr/0009-llm-gateway-hybrid-split-plane.md (Part 2 appended)
+		commit_sha: 1c16acfde6
+	lesson:
+		Pattern: Post-merge remediation projects require explicit fail-closed path audits before any implementation handoff.
+		Root cause: Phase-one gateway slices ship happy-path contracts but leave budget-denied, exception, and telemetry-failure paths as implicit.
+		Prevention: Require explicit fail-closed path table in design acceptance criteria with one pytest selector per path before @4plan handoff.
+		First seen: 2026-04-04
+		Seen in: prj0000125-llm-gateway-lessons-learned-fixes
+		Recurrence count: 1
+		Promotion status: Candidate
+
 	state: DONE
 	selected_design_path: Option C (Hybrid Split-Plane Gateway: Python control plane + Python-implemented Rust-ready data-plane contracts)
 	assumptions:
