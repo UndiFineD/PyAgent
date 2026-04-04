@@ -157,10 +157,10 @@
     {
       "id": "prj0000124",
       "name": "llm-gateway",
-      "lane": "Discovery",
+      "lane": "Released",
       "summary": "Initialize workflow artifacts for greenfield llm-gateway project and hand off to @2think discovery.",
       "branch": "prj0000124-llm-gateway",
-      "pr": null,
+      "pr": "#287",
       "priority": "P1",
       "budget_tier": "L",
       "tags": [

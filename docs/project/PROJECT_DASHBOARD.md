@@ -1,6 +1,6 @@
 # Project Dashboard
 
-Generated: 2026-04-03T21:21:45.950629+00:00Z
+Generated: 2026-04-04T15:17:47.642880+00:00Z
 
 | Project | Completion | Code | Missing Design |
 |--------|------------|------|----------------|
@@ -27,3 +27,6 @@ Generated: 2026-04-03T21:21:45.950629+00:00Z
 | prj0000119-pytest-stabilization | 0% (0/0) | No | Yes |
 | prj0000120-openapi-spec-generation | 0% (0/0) | Yes | No |
 | prj0000121-ci-setup-python-stack-overflow | 0% (0/0) | Yes | No |
+| prj0000122-jwt-refresh-token-support | 0% (0/0) | Yes | No |
+| prj0000123-openapi-drift-post-merge-hotfix | 0% (0/0) | Yes | No |
+| prj0000124-llm-gateway | 0% (0/0) | Yes | No |

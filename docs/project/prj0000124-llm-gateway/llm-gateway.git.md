@@ -25,7 +25,7 @@ _Git: @9git | Updated: 2026-04-04_
 | docs/project/kanban.json + data/projects.json + data/nextproject.md | PASS | Registry/lane sequencing updates included in project branch diff |
 
 ## Commit Hash
-PENDING (set by handoff commit `chore(prj0000124): complete git handoff and open gateway core slice PR`)
+`7a80167983a11a84d39a24c958f0a479fcb11a89` (post-merge closure commit already pushed on `prj0000124-llm-gateway` before the docs-only @9git evidence update)
 
 ## Files Changed
 | File | Change |
@@ -35,7 +35,7 @@ PENDING (set by handoff commit `chore(prj0000124): complete git handoff and open
 | docs/project/prj0000124-llm-gateway/llm-gateway.git.md | modified |
 
 ## PR Link
-https://github.com/UndiFineD/PyAgent/pull/287
+https://github.com/UndiFineD/PyAgent/pull/288
 
 ## Legacy Branch Exception
 None
@@ -48,19 +48,21 @@ Pre-PR `gh pr view --head` compatibility can vary by GH CLI version; use `gh pr 
 
 ## Gate Evidence
 - Branch gate: `git branch --show-current` -> `prj0000124-llm-gateway` (PASS)
-- Scope evidence: `git diff --name-only origin/main...HEAD` reviewed; files remain within project-defined gateway/docs/registry boundary (PASS)
+- Existing PR check: `gh pr list --state open --head prj0000124-llm-gateway --json number,url,state,title` -> `[]` before create, then PR #288 OPEN after create (PASS)
+- Closure delta evidence: `git log --oneline origin/main..HEAD` -> `7a80167983 chore(prj0000124): post-merge closure and dashboard sync` (PASS)
+- Scope evidence: `git diff --name-only origin/main...HEAD` reviewed; files remain within project-defined closure/docs/registry boundary (PASS)
 - Dashboard gate (mandatory): `python scripts/generate_project_dashboard.py` -> PASS (`Generated 26 project folders and dashboard.`)
 - Docs policy gate (mandatory for project docs updates): `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `17 passed` (PASS)
-- Docs-only preflight gate: `pre-commit run run-precommit-checks 2>&1` -> PASS (`Run pre-commit shared checks ... Skipped (no files to check)`)
+- Docs-only preflight gate: `pre-commit run run-precommit-checks 2>&1` -> PASS (`Run pre-commit shared checks.........................(no files to check)Skipped`)
 - Pre-commit evidence block:
 	- command: `pre-commit run --files docs/project/prj0000124-llm-gateway/llm-gateway.git.md .github/agents/data/current.9git.memory.md .github/agents/data/2026-04-04.9git.log.md`
-	- timestamp: `2026-04-04T16:18:52.3751756+01:00`
+	- timestamp: `2026-04-04T16:47:40.3176222+01:00`
 	- result: PASS
 	- failing hook: none
 - Staged-file scope manifest:
 	- `.github/agents/data/2026-04-04.9git.log.md` -> required daily 9git interaction log append for prj0000124
 	- `.github/agents/data/current.9git.memory.md` -> required current-lane memory update for prj0000124 handoff evidence
-	- `docs/project/prj0000124-llm-gateway/llm-gateway.git.md` -> required project git summary update with branch/scope/gate/PR evidence
+	- `docs/project/prj0000124-llm-gateway/llm-gateway.git.md` -> required project git summary update with closure PR evidence
 - @7exec key selectors:
 	- `python -m pytest -q tests/core/gateway/test_gateway_core_orchestration.py` -> `4 passed`
 	- `python -m pytest -q tests/core/gateway/test_gateway_core.py` -> `1 passed`

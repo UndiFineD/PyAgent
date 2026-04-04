@@ -26,6 +26,7 @@ _No checkbox tasks found in the plan file._
   - `src\agents\specialization\specialized_core_binding.py`
   - `src\core\audit\AuditTrailCore.py`
   - `src\core\fuzzing\FuzzEngineCore.py`
+  - `src\core\gateway\gateway_core.py`
   - `src\core\memory\AutoMemCore.py`
   - `src\core\n8nbridge\N8nBridgeCore.py`
   - `src\core\reasoning\CortCore.py`
@@ -33,6 +34,8 @@ _No checkbox tasks found in the plan file._
   - `src\core\resilience\CircuitBreakerCore.py`
   - `src\core\universal\UniversalCoreRegistry.py`
   - `tests\agents\specialization\test_specialized_core_binding.py`
+  - `tests\core\gateway\test_gateway_core.py`
+  - `tests\core\gateway\test_gateway_core_orchestration.py`
   - `tests\core\test_core.py`
   - `tests\deps\test_pyproject_parse_failure.py`
   - `tests\docs\test_codestructure_governance.py`

@@ -619,7 +619,7 @@
     "created": "2026-03-26",
     "updated": "2026-03-27"
   },
-  {
+        "pr": "#287",
     "id": "prj0000082",
     "name": "agent-execution-sandbox",
     "lane": "Released",

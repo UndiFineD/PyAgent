@@ -8,6 +8,12 @@
 
 ## Entries
 
+- task_id: prj0000124-closure-pr287
+	owner_agent: @1project
+	updated_at: 2026-04-04
+	state: DONE
+	summary: Completed post-merge closure for llm-gateway on branch prj0000124-llm-gateway by moving prj0000124 to Released with PR #287 in data/projects.json and docs/project/kanban.json, preserving the existing dashboard/project documentation refreshes already present in the branch working tree, and passing required documentation plus registry governance validations before the scoped closure commit.
+
 - task_id: prj0000124
 	owner_agent: @1project
 	updated_at: 2026-04-04
