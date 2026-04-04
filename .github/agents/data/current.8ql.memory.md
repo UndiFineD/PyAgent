@@ -8,6 +8,40 @@
 
 ## Entries
 
+## Last scan - 2026-04-04 (prj0000124 phase-one gateway core slice)
+- task_id: prj0000124-llm-gateway
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- branch: prj0000124-llm-gateway (validated)
+- files scanned: src/core/gateway/gateway_core.py; src/core/gateway/__init__.py; tests/core/gateway/test_gateway_core.py; tests/core/gateway/test_gateway_core_orchestration.py; docs/project/prj0000124-llm-gateway/*; docs/architecture/adr/0009-llm-gateway-hybrid-split-plane.md
+- security/quality checks run:
+	- git branch --show-current
+	- python -m pytest -q tests/core/gateway/test_gateway_core_orchestration.py
+	- python -m pytest -q tests/core/gateway/test_gateway_core.py
+	- python -m pytest -q tests/test_core_quality.py -k "gateway_core or validate_function_exists or each_core_has_test_file"
+	- .venv\Scripts\ruff.exe check src/core/gateway/gateway_core.py src/core/gateway/__init__.py tests/core/gateway/test_gateway_core.py tests/core/gateway/test_gateway_core_orchestration.py --select S --output-format concise
+	- python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
+	- python scripts/architecture_governance.py validate
+	- python scripts/project_registry_governance.py validate
+- findings:
+	- PASS: branch gate matched expected project branch.
+	- PASS: required focused selectors are green (`4 passed`, `1 passed`, `2 passed 3 deselected`).
+	- PASS: docs policy gate green (`17 passed`).
+	- PASS: architecture governance validator green (`VALIDATION_OK`, `adr_files=9`).
+	- PASS: project registry governance validator green (`VALIDATION_OK`, `projects=124`).
+	- INFO: Ruff security scan reported S101 assertions only in pytest test files; no in-scope production-path security finding.
+- blocker severity: NONE
+- handoff target: @9git
+- overall: CLEAN (PASS; no HIGH/CRITICAL blockers)
+
+### Lesson
+- Pattern: Ruff S101 findings in pytest-only contract tests should be dispositioned as informational when execution selectors and governance gates are green.
+- Root cause: Security lint rule set includes assertion checks that are expected in pytest test lanes.
+- Prevention: Keep Ruff-S triage scoped by runtime surface; do not block release on test-only S101 without exploitability in production paths.
+- First seen: prj0000124-llm-gateway
+- Seen in: prj0000124-llm-gateway
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
 ## Last scan - 2026-04-04 (prj0000122 phase-one first green slice)
 - task_id: prj0000122-jwt-refresh-token-support
 - lifecycle: OPEN -> IN_PROGRESS -> DONE

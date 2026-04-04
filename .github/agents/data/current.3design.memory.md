@@ -38,3 +38,34 @@
 		Recurrence count: 1
 		Promotion status: Candidate
 
+- task_id: prj0000124-llm-gateway
+	state: DONE
+	selected_design_path: Option C (Hybrid Split-Plane Gateway: Python control plane + Python-implemented Rust-ready data-plane contracts)
+	assumptions:
+		- Phase one remains in-process and prioritizes contract stability over deployment topology expansion.
+		- Existing provider/routing/resilience/back-end modules are wrapped via explicit gateway interfaces instead of rewritten.
+		- Fail-closed behavior is mandatory at policy/auth/budget/tool gates.
+	interface_contract_notes:
+		- IFACE-GW-001 GatewayCore orchestration contract.
+		- IFACE-GW-002 GatewayPolicyEngine pre/post/tool policy contract.
+		- IFACE-GW-003 GatewayRouter route-plan contract.
+		- IFACE-GW-004 ProviderRuntimeAdapter execution contract.
+		- IFACE-GW-005 GatewayBudgetManager reserve/commit contract.
+		- IFACE-GW-006 GatewaySemanticCache lookup/write contract.
+		- IFACE-GW-007 GatewayFallbackManager fallback-chain contract.
+		- IFACE-GW-008 GatewayTelemetryEmitter correlation contract.
+		- IFACE-GW-009 ToolSkillCatcher interception contract.
+	handoff:
+		target_agent: @4plan
+		canonical_artifact: docs/project/prj0000124-llm-gateway/llm-gateway.design.md
+		chunked_artifacts: none
+		adr_artifact: docs/architecture/adr/0009-llm-gateway-hybrid-split-plane.md
+	lesson:
+		Pattern: Split-plane gateway projects move faster when contracts are pinned to existing integration points and tied to explicit @4plan task IDs.
+		Root cause: Planning drift appears when interface contracts are defined without concrete ownership mapping to integration modules.
+		Prevention: Require interface-to-task traceability and acceptance-criteria IDs in the canonical design artifact before handoff.
+		First seen: 2026-04-04
+		Seen in: prj0000124-llm-gateway
+		Recurrence count: 1
+		Promotion status: Candidate
+

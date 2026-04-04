@@ -8,6 +8,30 @@
 
 ## Entries
 
+### 2026-04-04 - prj0000124-llm-gateway
+- task_id: prj0000124-llm-gateway
+- status: DONE
+- target_agent: @3design
+- canonical_artifact: docs/project/prj0000124-llm-gateway/llm-gateway.think.md
+- recommendation_summary: Select Option C (hybrid split-plane gateway) to combine fail-closed control-plane governance with a data-plane hot path that can start in Python and graduate selective operations to Rust after parity gates.
+- prior_art_refs:
+	- docs/architecture/adr/0004-smart-prompt-routing-hybrid-guardrails.md
+	- docs/architecture/adr/0005-specialized-agent-library-hybrid-adapter-runtime.md
+	- docs/project/archive/prj0000088-ai-fuzzing-security/prj0000088-ai-fuzzing-security.think.md
+	- docs/architecture/archive/TASK_COMPLETION_REPORT.md
+- branch_gate_evidence: `git branch --show-current` -> `prj0000124-llm-gateway`
+- rationale_for_handoff: Repository discovery confirmed reusable routing, guardrail, provider, resilience, auth, memory, and tracing primitives already exist but are fragmented. Option C gives full requirement coverage with bounded phase-one complexity and clear contracts for @3design.
+- required_validation: `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py`
+
+#### Lesson
+- Pattern: For new gateway surfaces, prefer split-plane contracts when both governance controls and hot-path performance are first-class requirements.
+- Root cause: Existing capabilities were present but scattered, creating policy sequencing and ownership ambiguity.
+- Prevention: Define one canonical request lifecycle contract with mandatory guardrail and telemetry checkpoints before expanding provider breadth.
+- First seen: 2026-04-04
+- Seen in: prj0000124-llm-gateway
+- Recurrence count: 1
+- Promotion status: MONITOR
+
 ### 2026-04-04 - prj0000122-jwt-refresh-token-support
 - task_id: prj0000122-jwt-refresh-token-support
 - status: DONE

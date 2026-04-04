@@ -1,5 +1,24 @@
 [
   {
+    "id": "prj0000124",
+    "name": "llm-gateway",
+    "lane": "Discovery",
+    "summary": "Initialize workflow artifacts for greenfield llm-gateway project and hand off to @2think discovery.",
+    "branch": "prj0000124-llm-gateway",
+    "pr": null,
+    "priority": "P1",
+    "budget_tier": "L",
+    "tags": [
+      "greenfield",
+      "llm-gateway",
+      "gateway",
+      "routing",
+      "policy"
+    ],
+    "created": "2026-04-04",
+    "updated": "2026-04-04"
+  },
+  {
     "id": "prj0000122",
     "name": "jwt-refresh-token-support",
     "lane": "Discovery",

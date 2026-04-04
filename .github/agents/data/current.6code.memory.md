@@ -8,6 +8,102 @@
 
 ## Entries
 
+## 2026-04-04 — prj0000124 gateway core-quality gate remediation
+- task_id: prj0000124-llm-gateway
+- lifecycle: DONE
+- branch: prj0000124-llm-gateway (validated)
+- changed files:
+	- src/core/gateway/gateway_core.py
+	- tests/core/gateway/test_gateway_core.py
+	- docs/project/prj0000124-llm-gateway/llm-gateway.code.md
+	- .github/agents/data/current.6code.memory.md
+	- .github/agents/data/2026-04-04.6code.log.md
+- implementation summary:
+	- Added module-level `validate()` helper to satisfy static core-quality `validate` gate for gateway core.
+	- Added compliant gateway test filename `tests/core/gateway/test_gateway_core.py` to satisfy core-to-test mapping gate.
+	- Preserved `GatewayCore.handle` orchestration behavior and kept scope minimal.
+- verification commands:
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/test_core_quality.py -k "gateway_core or validate_function_exists or each_core_has_test_file"
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/core/gateway/test_gateway_core_orchestration.py
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; pre-commit run --files src/core/gateway/gateway_core.py tests/core/gateway/test_gateway_core_orchestration.py
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
+- unresolved risks:
+	- None identified in the scoped gateway-core quality remediation.
+- handoff target: @7exec
+
+### Lesson
+- Pattern: Core-quality gates rely on static filename mapping and top-level `validate()` presence, independent of behavioral test coverage.
+- Root cause: `src/core/gateway/gateway_core.py` lacked a module-level `validate()` function and no gateway-core test filename matched the expected mapping prefixes.
+- Prevention: For each new core module, add a top-level `validate()` helper and ensure at least one test filename matches `test_<module>.py` or `test_core_<path>.py` mapping.
+- First seen: 2026-04-04
+- Seen in: prj0000124-llm-gateway
+- Recurrence count: 1
+- Promotion status: Candidate
+
+## 2026-04-04 — prj0000124 gateway orchestration formatting remediation
+- task_id: prj0000124-llm-gateway
+- lifecycle: DONE
+- branch: prj0000124-llm-gateway (validated)
+- changed files:
+	- tests/core/gateway/test_gateway_core_orchestration.py
+	- docs/project/prj0000124-llm-gateway/llm-gateway.code.md
+	- .github/agents/data/current.6code.memory.md
+	- .github/agents/data/2026-04-04.6code.log.md
+- implementation summary:
+	- Applied `ruff format` to normalize `tests/core/gateway/test_gateway_core_orchestration.py` after @7exec pre-commit failure.
+	- Re-ran the required targeted pytest selector and formatter check; both passed.
+	- Updated project code artifact with a remediation note and command evidence.
+- verification commands:
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; .venv\Scripts\ruff.exe format tests/core/gateway/test_gateway_core_orchestration.py
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/core/gateway/test_gateway_core_orchestration.py
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; .venv\Scripts\ruff.exe format --check tests/core/gateway/test_gateway_core_orchestration.py
+- unresolved risks:
+	- None identified for this remediation slice.
+- handoff target: @7exec
+
+### Lesson
+- Pattern: When @7exec reports pre-commit formatting drift, run scoped `ruff format` on the exact file and then re-run both selector and `--check` gate.
+- Root cause: Formatter drift in `tests/core/gateway/test_gateway_core_orchestration.py` caused pre-commit failure despite passing tests.
+- Prevention: Add a scoped `ruff format --check` validation for touched test files before handoff.
+- First seen: 2026-04-04
+- Seen in: prj0000124-llm-gateway
+- Recurrence count: 1
+- Promotion status: Candidate
+
+## 2026-04-04 — prj0000124 llm gateway fail-closed orchestration green slice
+- task_id: prj0000124-llm-gateway
+- lifecycle: DONE
+- branch: prj0000124-llm-gateway (validated)
+- changed files:
+	- src/core/gateway/__init__.py
+	- src/core/gateway/gateway_core.py
+	- docs/project/prj0000124-llm-gateway/llm-gateway.code.md
+	- .github/agents/data/current.6code.memory.md
+	- .github/agents/data/2026-04-04.6code.log.md
+- implementation summary:
+	- Added minimal `GatewayCore` orchestration contract required by RED-SLICE-LGW-001 tests.
+	- Enforced fail-closed pre-policy deny path before budget/provider actions.
+	- Enforced reserve-before-execute sequencing and post-policy deny side-effect blocking.
+	- Returned a deterministic result envelope containing `decision`, `budget`, and `telemetry` sections.
+- verification commands:
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/core/gateway/test_gateway_core_orchestration.py -k fail_closed
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/core/gateway/test_gateway_core_orchestration.py
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; .venv\Scripts\ruff.exe check src/core/gateway/gateway_core.py src/core/gateway/__init__.py
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; .venv\Scripts\ruff.exe check --select D src/core/gateway/gateway_core.py src/core/gateway/__init__.py
+- unresolved risks:
+	- Slice remains intentionally narrow and does not include broader fallback/cache/memory orchestration behavior from later plan tasks.
+- handoff target: @7exec
+
+### Lesson
+- Pattern: For first-slice orchestration work, constructor-compatible dependency injection plus deterministic fail-closed sequencing enables green tests without overbuilding.
+- Root cause: `GatewayCore` contract module/class did not exist and orchestration sequence guarantees were absent.
+- Prevention: Implement orchestration as an explicit ordered pipeline with deny short-circuit gates before side effects.
+- First seen: 2026-04-04
+- Seen in: prj0000124-llm-gateway
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ## 2026-04-04 — prj0000123 openapi drift post-merge hotfix
 - task_id: prj0000123-openapi-drift-post-merge-hotfix
 - lifecycle: DONE

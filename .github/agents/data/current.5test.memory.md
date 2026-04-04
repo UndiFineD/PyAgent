@@ -3,10 +3,49 @@
 ## Metadata
 - agent: @5test
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-04-03
+- updated_at: 2026-04-04
 - rollover: At new project start, append this file's entries to history.5test.memory.md in chronological order, then clear Entries.
 
 ## Entries
+
+### Entry 2026-04-04 - prj0000124 llm gateway red slice RED-SLICE-LGW-001
+- task_id: prj0000124-llm-gateway
+- status: DONE
+- lifecycle_transition: OPEN -> IN_PROGRESS -> DONE
+- branch_gate:
+  - expected: prj0000124-llm-gateway
+  - observed: prj0000124-llm-gateway
+  - result: PASS
+- scope:
+  - tests/core/gateway/test_gateway_core_orchestration.py
+  - docs/project/prj0000124-llm-gateway/llm-gateway.test.md
+  - .github/agents/data/current.5test.memory.md
+  - .github/agents/data/2026-04-04.5test.log.md
+- pass_fail_summary:
+  - PASS: .venv\Scripts\ruff.exe check --fix tests/core/gateway/test_gateway_core_orchestration.py
+  - PASS: .venv\Scripts\ruff.exe check tests/core/gateway/test_gateway_core_orchestration.py
+  - PASS: .venv\Scripts\ruff.exe check --select D tests/core/gateway/test_gateway_core_orchestration.py
+  - RED(expected): c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/core/gateway/test_gateway_core_orchestration.py -k fail_closed (3 failed, 1 deselected)
+  - RED(expected): c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/core/gateway/test_gateway_core_orchestration.py (4 failed)
+  - PASS: c:/Dev/PyAgent/.venv/Scripts/python.exe -m pytest -q tests/docs/test_agent_workflow_policy_docs.py (17 passed)
+- red_failure_signatures:
+  - Failed: Missing module contract src.core.gateway.gateway_core required for RED-SLICE-LGW-001.
+  - non-qualifying failures absent: SyntaxError, ImportError at collection time, test setup crash
+- handoff_notes:
+  - target_agent: @6code
+  - readiness: READY_FOR_IMPLEMENTATION
+  - implementation_delta_required:
+    - add src/core/gateway/gateway_core.py with GatewayCore orchestration contract
+    - satisfy fail-closed and ordering invariants encoded in tests/core/gateway/test_gateway_core_orchestration.py
+
+#### Lesson
+- Pattern: RED-first gateway tests should encode orchestration invariants with dependency stubs and explicit contract-loader failures.
+- Root cause: `src.core.gateway.gateway_core` contract module/class does not exist yet.
+- Prevention: Keep loader-level RED signal explicit while preserving behavioral assertions that will activate immediately once contract module lands.
+- First seen: 2026-04-04
+- Seen in: prj0000124-llm-gateway
+- Recurrence count: 1
+- Promotion status: Candidate
 
 ### Entry 2026-04-04 - prj0000122 jwt refresh-token support red slice T-JRT-001
 - task_id: prj0000122-jwt-refresh-token-support

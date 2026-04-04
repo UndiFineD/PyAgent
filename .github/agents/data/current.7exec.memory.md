@@ -3,10 +3,83 @@
 ## Metadata
 - agent: @7exec
 - lifecycle: OPEN -> IN_PROGRESS -> DONE|BLOCKED
-- updated_at: 2026-04-02
+- updated_at: 2026-04-04
 - rollover: At new project start, append this file's entries to history.7exec.memory.md in chronological order, then clear Entries.
 
 ## Entries
+
+## Last run - 2026-04-04 (rerun after remediation commit 7d58dc9e94b61552b941874bfe8db16d1a828d4f)
+- task_id: prj0000124-llm-gateway
+- Task: Re-run execution gate and confirm blockers are cleared for gateway core slice
+- lifecycle: IN_PROGRESS -> DONE
+- Branch gate: PASS (expected=prj0000124-llm-gateway, observed=prj0000124-llm-gateway)
+- Required selector gate: PASS (`python -m pytest -q tests/core/gateway/test_gateway_core_orchestration.py` -> 4 passed in 5.43s)
+- Required selector gate: PASS (`python -m pytest -q tests/core/gateway/test_gateway_core.py` -> 1 passed in 5.06s)
+- Required selector gate: PASS (`python -m pytest -q tests/test_core_quality.py -k "gateway_core or validate_function_exists or each_core_has_test_file"` -> 2 passed, 3 deselected in 5.41s)
+- Required selector gate: PASS (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 17 passed in 9.78s)
+- Mandatory pre-commit gate: PASS (`pre-commit run --files src/core/gateway/gateway_core.py tests/core/gateway/test_gateway_core.py tests/core/gateway/test_gateway_core_orchestration.py docs/project/prj0000124-llm-gateway/llm-gateway.exec.md .github/agents/data/current.7exec.memory.md .github/agents/data/2026-04-04.7exec.log.md`)
+- Dependency warning classification: NONE
+- Outcome: PASSED -> @8ql readiness: PASS
+- Next handoff target: @8ql
+- Notes: Prior in-scope pre-commit/core-quality blocker is cleared on this rerun.
+
+### Lesson
+- Pattern: Re-running the exact handoff command set with the full pre-commit file list confirms blocker clearance without scope drift.
+- Root cause: Prior blocker came from downstream shared checks in pre-commit and required exact command parity to verify remediation.
+- Prevention: Keep @7exec reruns pinned to the exact required selector and pre-commit file list from handoff.
+- First seen: 2026-04-04
+- Seen in: prj0000124-llm-gateway
+- Recurrence count: 1
+- Promotion status: Candidate
+
+## Last run - 2026-04-04 (rerun after remediation commit dc7d0cc8feec68c47fea725fcf72549d9be52197)
+- task_id: prj0000124-llm-gateway
+- Task: Re-run execution gate to confirm prior pre-commit blocker clearance
+- lifecycle: IN_PROGRESS -> BLOCKED
+- Branch gate: PASS (expected=prj0000124-llm-gateway, observed=prj0000124-llm-gateway)
+- Required selector gate: PASS (`python -m pytest -q tests/core/gateway/test_gateway_core_orchestration.py` -> 4 passed in 5.10s)
+- Required selector gate: PASS (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 17 passed in 8.17s)
+- Required selector gate: PASS (`python -m pytest -q tests/test_backend_refresh_sessions.py -k "session or refresh or logout"` -> 5 passed in 6.88s)
+- Mandatory pre-commit gate: FAIL (`pre-commit run --files tests/core/gateway/test_gateway_core_orchestration.py docs/project/prj0000124-llm-gateway/llm-gateway.exec.md .github/agents/data/current.7exec.memory.md .github/agents/data/2026-04-04.7exec.log.md`)
+- Blocker evidence: shared pre-commit lane fails with `tests/test_core_quality.py::test_each_core_has_test_file` and `tests/test_core_quality.py::test_validate_function_exists` on `src/core/gateway/gateway_core.py`
+- Blocker classification: BLOCKING, IN_SCOPE (quality gate regression surfaced by shared pre-commit checks)
+- Outcome: BLOCKED -> @6code
+- Next handoff target: @6code
+- Notes: Previous formatting blocker for `tests/core/gateway/test_gateway_core_orchestration.py` is cleared; blocker shifted to core-quality gate requirements.
+
+### Lesson
+- Pattern: Clearing one pre-commit blocker can reveal a subsequent blocking gate in the same shared check pipeline.
+- Root cause: `run-precommit-checks` executes `tests/test_core_quality.py`, which now fails on missing quality contracts for `src/core/gateway/gateway_core.py`.
+- Prevention: Before @7exec rerun, execute full `pre-commit run --files <exact handoff set>` and inspect downstream shared-gate pytest lanes, not only formatter checks.
+- First seen: 2026-04-04
+- Seen in: prj0000124-llm-gateway (initial blocker + rerun blocker transition)
+- Recurrence count: 2
+- Promotion status: Promoted to hard rule
+
+## Last run - 2026-04-04
+- task_id: prj0000124-llm-gateway
+- Task: Runtime validation for gateway green-slice orchestration handoff evidence
+- lifecycle: IN_PROGRESS -> DONE
+- Branch gate: PASS (expected=prj0000124-llm-gateway, observed=prj0000124-llm-gateway)
+- Dependency gate: PASS (`python -m pip check` -> No broken requirements found), classification: NON_BLOCKING
+- Required selector gate: PASS (`python -m pytest -q tests/core/gateway/test_gateway_core_orchestration.py` -> 4 passed in 4.75s)
+- Required selector gate: PASS (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 17 passed in 10.91s)
+- Required selector gate: PASS (`python -m pytest -q tests/test_backend_refresh_sessions.py -k "session or refresh or logout"` -> 5 passed in 7.42s)
+- Mandatory pre-commit gate: FAIL (`pre-commit run --files docs/project/prj0000124-llm-gateway/llm-gateway.exec.md .github/agents/data/current.7exec.memory.md .github/agents/data/2026-04-04.7exec.log.md`)
+- Blocker evidence: `ruff format --check tests/core/gateway/test_gateway_core_orchestration.py` -> Would reformat (1 file)
+- Blocker classification: BLOCKING, IN_SCOPE (gateway test formatting drift; remediation owner @5test/@6code)
+- Outcome: BLOCKED -> @6code/@5test (no @8ql handoff yet)
+- Next handoff target: @6code/@5test
+- Notes: Requested three runtime selectors all passed; mandatory pre-commit shared gate blocks downstream handoff.
+
+### Lesson
+- Pattern: Even with fully green runtime selectors, shared pre-commit gates can block handoff when test-format drift exists.
+- Root cause: `tests/core/gateway/test_gateway_core_orchestration.py` is not ruff-format clean under shared pre-commit checks.
+- Prevention: Require @5test/@6code to run `ruff format` on touched test files before @7exec evidence capture.
+- First seen: 2026-04-04
+- Seen in: prj0000124-llm-gateway
+- Recurrence count: 1
+- Promotion status: Candidate
 
 ## Last run - 2026-04-04
 - task_id: prj0000122-jwt-refresh-token-support

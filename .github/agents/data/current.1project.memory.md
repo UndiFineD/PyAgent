@@ -8,6 +8,12 @@
 
 ## Entries
 
+- task_id: prj0000124
+	owner_agent: @1project
+	updated_at: 2026-04-04
+	state: DONE
+	summary: Initialized project boundary for greenfield llm-gateway on branch prj0000124-llm-gateway with canonical artifacts, Discovery registry entries in data/projects.json and docs/project/kanban.json, nextproject advancement to prj0000125, and required validation pass evidence.
+
 - task_id: prj0000122
 	owner_agent: @1project
 	updated_at: 2026-04-04

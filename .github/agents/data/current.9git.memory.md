@@ -252,13 +252,6 @@
 - Promotion status: CANDIDATE
 
 ## 2026-03-31 - prj0000109-idea000002-missing-compose-dockerfile
-- task_id: prj0000109-idea000002-missing-compose-dockerfile
-- status: DONE
-- branch_expected: prj0000109-idea000002-missing-compose-dockerfile
-- branch_observed: prj0000109-idea000002-missing-compose-dockerfile
-- branch_validation: PASS
-- scope_validation: PASS
-- notes:
 	- Confirmed branch gate pass on expected project branch.
 	- Mandatory dashboard refresh gate executed before staging; broad out-of-scope changes detected and excluded.
 	- Explicitly excluded unrelated generated local file `.github/agents/data/pip_audit_current_8ql.json` from staging/commit.
@@ -268,6 +261,34 @@
 	- @9git closure commit created and pushed: `7251daa69629e3100985f70301dfbfad008b6cbb`.
 	- Post-push `gh` query hit `HTTP 401` due invalid `GITHUB_TOKEN`; resolved by clearing env override and re-running `gh auth status`.
 
+## 2026-04-04 - prj0000124-llm-gateway
+- task_id: prj0000124-llm-gateway
+- status: DONE
+- branch_expected: prj0000124-llm-gateway
+- branch_observed: prj0000124-llm-gateway
+- branch_validation: PASS
+- scope_validation: PASS
+- notes:
+	- Branch gate verified (`git branch --show-current` -> `prj0000124-llm-gateway`).
+	- Scope gate verified from `git diff --name-only origin/main...HEAD`; gateway slice files + project docs/registry artifacts are in-bounds for prj0000124.
+	- Existing PR check performed with compatible command: `gh pr list --state open --head prj0000124-llm-gateway`; no open PR found before creation.
+	- Mandatory dashboard/docs gates passed before staging:
+	  - `python scripts/generate_project_dashboard.py`
+	  - `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `17 passed`
+	  - `pre-commit run run-precommit-checks 2>&1` -> PASS
+	- Narrow staging applied to required handoff files only; out-of-scope dashboard side effects intentionally left unstaged.
+	- Staged-file pre-commit passed at `2026-04-04T16:18:52.3751756+01:00`.
+	- PR created: https://github.com/UndiFineD/PyAgent/pull/287.
+	- Pending at record-write time: final docs-only handoff commit/push with message `chore(prj0000124): complete git handoff and open gateway core slice PR`.
+
+### Lesson
+- Pattern: GH CLI subcommand flags differ across versions (`gh pr view --head` unavailable in this environment).
+- Root cause: Local gh version does not support `--head` on `gh pr view`.
+- Prevention: Use `gh pr list --state open --head <branch>` for branch-based PR discovery to avoid duplicate PRs.
+- First seen: 2026-04-04
+- Seen in: prj0000124-llm-gateway
+- Recurrence count: 1
+- Promotion status: CANDIDATE
 ### Lesson
 - Pattern: Dashboard refresh consistently introduces broad out-of-scope churn during narrow project closure handoffs.
 - Root cause: `scripts/generate_project_dashboard.py` rewrites many project artifacts globally by design.
