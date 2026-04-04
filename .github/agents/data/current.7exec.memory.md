@@ -8,6 +8,28 @@
 
 ## Entries
 
+## Last run - 2026-04-04
+- task_id: prj0000125-llm-gateway-lessons-learned-fixes
+- Task: Execute @7exec validation gate for gateway GREEN implementation commit 52d4386d2e
+- lifecycle: IN_PROGRESS -> DONE
+- Branch gate: PASS (expected=prj0000125-llm-gateway-lessons-learned-fixes, observed=prj0000125-llm-gateway-lessons-learned-fixes)
+- Required selector gate: PASS (`& c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; pytest -q tests/core/gateway/test_gateway_core_orchestration.py` -> 8 passed in 5.42s)
+- Required selector gate: PASS (`& c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; pytest -q tests/core/gateway/test_gateway_core.py` -> 1 passed in 5.80s)
+- Required selector gate: PASS (`& c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; pytest -q tests/core/gateway/` -> 9 passed in 6.34s)
+- Required selector gate: PASS (`& c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 17 passed in 8.07s)
+- Outcome: PASSED -> @8ql
+- Next handoff target: @8ql
+- Notes: Validation executed exactly as requested. No interruptions or timeouts.
+
+### Lesson
+- Pattern: Deterministic @7exec evidence remains stable when branch gate and exact selector order are executed without expanding scope.
+- Root cause: None (all required gates passed).
+- Prevention: Keep runtime gate limited to explicit selector list and record exact command/result pairs for handoff.
+- First seen: 2026-04-04
+- Seen in: prj0000125-llm-gateway-lessons-learned-fixes
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ## Last run - 2026-04-04 (rerun after remediation commit 7d58dc9e94b61552b941874bfe8db16d1a828d4f)
 - task_id: prj0000124-llm-gateway
 - Task: Re-run execution gate and confirm blockers are cleared for gateway core slice
