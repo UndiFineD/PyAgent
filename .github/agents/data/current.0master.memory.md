@@ -9,6 +9,28 @@
 ## 2026-04-04 — prj0000123 reopened CI stabilization via PR #286
 ## 2026-04-04 — prj0000124 initialized — LLM Gateway greenfield
 
+## 2026-04-04 — prj0000124 phase-one slice advanced to Review (PR #287)
+
+- Continuation trigger: user requested `continue` after project initialization.
+- Delivery progression completed:
+	- @2think selected Option C (Hybrid Split-Plane Gateway) and completed options artifact.
+	- @3design finalized architecture and created ADR `0009-llm-gateway-hybrid-split-plane.md`.
+	- @4plan produced executable roadmap (`T-LGW-001+`) with RED entrypoint.
+	- @5test created RED slice in `tests/core/gateway/test_gateway_core_orchestration.py` (contract-level expected failures).
+	- @6code implemented green slice in `src/core/gateway/gateway_core.py` + package init.
+	- @7exec validated slice and surfaced/cleared two gate blockers (format + core-quality naming/validate contract).
+	- @8ql quality/security gate: PASS/CLEAR (no blocking severity).
+	- @9git opened PR `#287`: https://github.com/UndiFineD/PyAgent/pull/287.
+- Current status:
+	- Branch: `prj0000124-llm-gateway`
+	- Lane intent: Review (open PR, merge pending)
+	- Scope shipped in this slice: fail-closed orchestration contract baseline only, not full gateway.
+- Key evidence snapshots:
+	- `tests/core/gateway/test_gateway_core_orchestration.py` -> 4 passed
+	- `tests/core/gateway/test_gateway_core.py` -> 1 passed
+	- `tests/test_core_quality.py -k gateway_core...` -> pass
+	- docs/registry/adr governance validations -> pass
+
 - Trigger: user requested wrap-up of prj0000123 and new project start for an LLM Gateway component.
 - prj0000123 closure:
 	- PR #286 CI: `CI / Lightweight = success` (run `23980087164`). Merged via `gh pr merge 286` → squash SHA `ab7eb81d80`.
