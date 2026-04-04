@@ -9,6 +9,31 @@
 ## Entries
 
 ## Last run - 2026-04-04
+- task_id: prj0000124-llm-gateway
+- Task: Runtime validation for gateway green-slice orchestration handoff evidence
+- lifecycle: IN_PROGRESS -> DONE
+- Branch gate: PASS (expected=prj0000124-llm-gateway, observed=prj0000124-llm-gateway)
+- Dependency gate: PASS (`python -m pip check` -> No broken requirements found), classification: NON_BLOCKING
+- Required selector gate: PASS (`python -m pytest -q tests/core/gateway/test_gateway_core_orchestration.py` -> 4 passed in 4.75s)
+- Required selector gate: PASS (`python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 17 passed in 10.91s)
+- Required selector gate: PASS (`python -m pytest -q tests/test_backend_refresh_sessions.py -k "session or refresh or logout"` -> 5 passed in 7.42s)
+- Mandatory pre-commit gate: FAIL (`pre-commit run --files docs/project/prj0000124-llm-gateway/llm-gateway.exec.md .github/agents/data/current.7exec.memory.md .github/agents/data/2026-04-04.7exec.log.md`)
+- Blocker evidence: `ruff format --check tests/core/gateway/test_gateway_core_orchestration.py` -> Would reformat (1 file)
+- Blocker classification: BLOCKING, IN_SCOPE (gateway test formatting drift; remediation owner @5test/@6code)
+- Outcome: BLOCKED -> @6code/@5test (no @8ql handoff yet)
+- Next handoff target: @6code/@5test
+- Notes: Requested three runtime selectors all passed; mandatory pre-commit shared gate blocks downstream handoff.
+
+### Lesson
+- Pattern: Even with fully green runtime selectors, shared pre-commit gates can block handoff when test-format drift exists.
+- Root cause: `tests/core/gateway/test_gateway_core_orchestration.py` is not ruff-format clean under shared pre-commit checks.
+- Prevention: Require @5test/@6code to run `ruff format` on touched test files before @7exec evidence capture.
+- First seen: 2026-04-04
+- Seen in: prj0000124-llm-gateway
+- Recurrence count: 1
+- Promotion status: Candidate
+
+## Last run - 2026-04-04
 - task_id: prj0000122-jwt-refresh-token-support
 - Task: Deterministic execution validation for JWT refresh-session phase-one slice
 - lifecycle: IN_PROGRESS -> DONE
