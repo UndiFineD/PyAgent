@@ -8,6 +8,30 @@
 
 ## Entries
 
+### 2026-04-04 - prj0000127-mypy-strict-enforcement
+- task_id: prj0000127-mypy-strict-enforcement
+- status: DONE
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- target_agent: @3design
+- canonical_artifact: docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.think.md
+- recommendation_summary: Choose progressive blocking allowlist strictness (Option B) for `src/core` with phased expansion, deterministic guardrails, and explicit config-precedence governance.
+- prior_art_refs:
+	- docs/project/archive/prj0000092-mypy-strict-enforcement/prj0000092-mypy-strict-enforcement.think.md
+	- docs/project/prj0000124-llm-gateway/llm-gateway.plan.md
+	- docs/project/kanban.json
+- branch_gate_evidence: `git branch --show-current` -> `prj0000127-mypy-strict-enforcement`
+- rationale_for_handoff: Repository evidence shows conflicting mypy baselines across `mypy.ini` and `pyproject.toml`; progressive scoped blocking achieves enforceable quality gains without immediate broad refactor risk.
+- required_validation: `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py`
+
+#### Lesson
+- Pattern: Dual linter/type-check config surfaces with opposite defaults can silently dilute intended governance.
+- Root cause: Incremental migration introduced stricter `pyproject.toml` settings while permissive `mypy.ini` remained active.
+- Prevention: Require explicit canonical-config declaration plus deterministic tests that assert effective strict-lane behavior.
+- First seen: 2026-04-04
+- Seen in: prj0000127-mypy-strict-enforcement
+- Recurrence count: 1
+- Promotion status: MONITOR
+
 ### 2026-04-04 - prj0000125-llm-gateway-lessons-learned-fixes
 - task_id: prj0000125-llm-gateway-lessons-learned-fixes
 - status: DONE

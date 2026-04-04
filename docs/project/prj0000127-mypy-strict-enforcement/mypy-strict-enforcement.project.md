@@ -34,7 +34,7 @@ Initialize a lightweight project boundary for mypy-strict-enforcement, seeded fr
 ## Milestones
 | # | Milestone | Agent | Status |
 |---|---|---|---|
-| M1 | Options explored | @2think | NOT_STARTED |
+| M1 | Options explored | @2think | DONE |
 | M2 | Design confirmed | @3design | NOT_STARTED |
 | M3 | Plan finalized | @4plan | NOT_STARTED |
 | M4 | Tests written | @5test | NOT_STARTED |
