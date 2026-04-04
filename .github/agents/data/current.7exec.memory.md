@@ -9,6 +9,28 @@
 ## Entries
 
 ## Last run - 2026-04-04
+- task_id: prj0000127-mypy-strict-enforcement
+- Task: Execute @7exec validation gate for warn-phase mypy strict rollout
+- lifecycle: IN_PROGRESS -> DONE
+- Branch gate: PASS (expected=prj0000127-mypy-strict-enforcement, observed=prj0000127-mypy-strict-enforcement)
+- Required selector gate: PASS (`& c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -k "prj0000127 or mypy or promotion"` -> 2 passed, 17 deselected in 3.83s)
+- Required docs-policy gate: PASS (`& c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> 19 passed in 6.78s)
+- Required strict-lane mypy gate: PASS (`& c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m mypy --config-file pyproject.toml src/core/base/mixins/base_behavior_mixin.py src/core/base/mixins/host_contract.py src/core/base/mixins/shim_registry.py src/core/agent_registry.py src/core/agent_state_manager.py` -> Success: no issues found in 5 source files)
+- Required broad-lane mypy gate: PASS (`& c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m mypy --config-file mypy.ini src` -> Success: no issues found in 207 source files)
+- Outcome: PASSED -> @8ql
+- Next handoff target: @8ql
+- Notes: All requested warn-phase validation gates passed without interruption.
+
+### Lesson
+- Pattern: Warn-phase rollout gates stay deterministic when run in fixed command order with explicit config files.
+- Root cause: None (all gates passed).
+- Prevention: Keep strict-lane selectors and full-lane mypy checks pinned to explicit config paths in handoff runbooks.
+- First seen: 2026-04-04
+- Seen in: prj0000127-mypy-strict-enforcement
+- Recurrence count: 1
+- Promotion status: Candidate
+
+## Last run - 2026-04-04
 - task_id: prj0000125-llm-gateway-lessons-learned-fixes
 - Task: Execute @7exec validation gate for gateway GREEN implementation commit 52d4386d2e
 - lifecycle: IN_PROGRESS -> DONE
