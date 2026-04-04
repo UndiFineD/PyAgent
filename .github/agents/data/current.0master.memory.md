@@ -6,6 +6,26 @@
 
 ## Entries
 
+## 2026-04-04 — post-merge closure completed for prj0000120 and prj0000121
+
+- Trigger: user confirmed PR #281 merged and requested workflow continuation.
+- @1project closure completed on `prj0000121-ci-setup-python-stack-overflow`:
+	- Updated `data/projects.json` and `docs/project/kanban.json`:
+		- `prj0000120` -> `Released`, `pr: "#280"`
+		- `prj0000121` -> `Released`, `pr: "#281"`
+	- Preserved `data/nextproject.md` as `prj0000122`.
+	- Archived idea by move only (no archive read required):
+		- `docs/project/ideas/idea000021-openapi-spec-generation.md`
+		- -> `docs/project/ideas/archive/idea000021-openapi-spec-generation.md`
+	- Validation evidence:
+		- `python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py` -> `17 passed`
+		- `python scripts/project_registry_governance.py validate` -> `VALIDATION_OK`, `projects=121`
+	- Commit pushed: `0edb22c1ea`.
+- Git handoff:
+	- Opened closure PR to `main`: `#282` (`chore(prj0000121): post-merge closure for pr 280 and pr 281`).
+- Scope discipline:
+	- Existing local edits in `.github/workflows/ci.yml` and `docs/project/PROJECT_DASHBOARD.md` were intentionally excluded from closure commit.
+
 ## 2026-04-03 — @1project continuation validated for prj0000120
 
 - Trigger: user requested `continue @1project`.
