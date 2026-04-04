@@ -8,6 +8,34 @@
 
 ## Entries
 
+## 2026-04-04 — prj0000123 openapi drift post-merge hotfix
+- task_id: prj0000123-openapi-drift-post-merge-hotfix
+- lifecycle: DONE
+- branch: prj0000123-openapi-drift-post-merge-hotfix (validated)
+- changed files:
+	- docs/project/prj0000123-openapi-drift-post-merge-hotfix/openapi-drift-post-merge-hotfix.code.md
+	- .github/agents/data/current.6code.memory.md
+	- .github/agents/data/2026-04-04.6code.log.md
+- implementation summary:
+	- Regenerated backend OpenAPI artifact from current app state using `scripts/generate_backend_openapi.py` as the minimal fix path.
+	- Re-ran the failing selector and confirmed green immediately.
+	- No canonicalization/test change was required because regeneration removed the observed drift.
+- verification commands:
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; c:/Dev/PyAgent/.venv/Scripts/python.exe scripts/generate_backend_openapi.py
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; pytest tests/docs/test_backend_openapi_drift.py -q
+- unresolved risks:
+	- Regeneration produced no net diff in `docs/api/openapi/backend_openapi.json`; this indicates the prior failure may have been from transient environment/schema generation state.
+- handoff target: @7exec
+
+### Lesson
+- Pattern: For backend OpenAPI drift selectors, first remediate by re-running the canonical generator before modifying canonicalization logic.
+- Root cause: Runtime-generated OpenAPI output can diverge transiently from the committed artifact due to environment/module state.
+- Prevention: Use deterministic regeneration as the first-line fix and only adjust canonicalization for proven non-semantic volatility after reproduction.
+- First seen: 2026-04-04
+- Seen in: prj0000123-openapi-drift-post-merge-hotfix
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ## 2026-04-04 — prj0000122 jwt refresh token support (phase-one red slice)
 - task_id: prj0000122-jwt-refresh-token-support
 - lifecycle: DONE

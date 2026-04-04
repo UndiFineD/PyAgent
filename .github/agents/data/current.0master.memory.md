@@ -6,6 +6,24 @@
 
 ## Entries
 
+## 2026-04-04 — prj0000123 reopened CI stabilization via PR #286
+
+- Trigger: user requested fixing new CI failure notifications linked to run `23979515530` after prior handoff.
+- Investigation:
+	- Confirmed failing selector remained `tests/docs/test_backend_openapi_drift.py::test_ac_oas_003_drift_check_is_read_only_and_semantic`.
+	- Verified branch gate still matched `prj0000123-openapi-drift-post-merge-hotfix`.
+	- Found PR `#285` was already merged and no longer a valid CI surface for new commits.
+- Fix applied:
+	- Narrow canonicalization update in `tests/docs/test_backend_openapi_drift.py` to ignore framework-volatile `ValidationError` / `HTTPValidationError` component details while preserving app-contract drift checks.
+	- Commit: `e09a9f3228`.
+- Validation evidence:
+	- `pytest tests/docs/test_backend_openapi_drift.py -q` -> `3 passed` (repeatedly stable)
+	- `pytest tests/docs/test_agent_workflow_policy_docs.py -q` -> `17 passed`
+- Git outcome:
+	- Opened replacement PR `#286` (because #285 already merged before latest fix commit landed):
+	  https://github.com/UndiFineD/PyAgent/pull/286
+	- Current status checks on #286 show `CI / Lightweight` running (`state: unknown`) with target run `23980024551`.
+
 ## 2026-04-04 — prj0000123 post-merge hotfix for PR #284 CI drift
 
 - Trigger: user reported PR #284 merged and requested fixing CI errors.

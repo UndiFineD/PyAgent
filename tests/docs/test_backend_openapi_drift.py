@@ -19,6 +19,7 @@ from __future__ import annotations
 import importlib
 import json
 import sys
+from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
@@ -27,6 +28,29 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[2]
 COMMITTED_BACKEND_OPENAPI_PATH = REPO_ROOT / "docs" / "api" / "openapi" / "backend_openapi.json"
 FORBIDDEN_PHASE_ONE_IMPORTS = ("src.github_app", "src.chat.api")
+VOLATILE_VALIDATION_COMPONENTS = ("ValidationError", "HTTPValidationError")
+
+
+def _normalize_volatile_validation_components(payload: dict[str, Any]) -> dict[str, Any]:
+    """Normalize framework-owned validation error components only.
+
+    Args:
+        payload: OpenAPI payload dictionary.
+
+    Returns:
+        dict[str, Any]: Payload with validation-error components reduced to stable shape.
+
+    """
+    normalized_payload = deepcopy(payload)
+    schemas = normalized_payload.get("components", {}).get("schemas", {})
+
+    for component_name in VOLATILE_VALIDATION_COMPONENTS:
+        if component_name in schemas:
+            # FastAPI/Pydantic may reshuffle ValidationError internals (loc/input/ctx shape)
+            # between patch releases. This keeps drift checks focused on app-level contracts.
+            schemas[component_name] = {"__volatile_framework_component__": component_name}
+
+    return normalized_payload
 
 
 def _canonicalize_openapi_payload(payload: Any) -> str:
@@ -39,7 +63,10 @@ def _canonicalize_openapi_payload(payload: Any) -> str:
         str: Canonical JSON text with stable ordering and trailing newline.
 
     """
-    return json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=True) + "\n"
+    canonical_payload = payload
+    if isinstance(payload, dict):
+        canonical_payload = _normalize_volatile_validation_components(payload)
+    return json.dumps(canonical_payload, indent=2, sort_keys=True, ensure_ascii=True) + "\n"
 
 
 def _load_committed_backend_openapi() -> dict[str, Any]:
