@@ -8,6 +8,38 @@
 
 ## Entries
 
+## prj0000124 - llm-gateway
+
+| Field | Value |
+|---|---|
+| task_id | prj0000124-llm-gateway |
+| owner_agent | @4plan |
+| source | user request + `llm-gateway.project.md` + `llm-gateway.think.md` + `llm-gateway.design.md` + ADR-0009 |
+| created_at | 2026-04-04 |
+| updated_at | 2026-04-04 |
+| status | DONE |
+| lifecycle | OPEN -> IN_PROGRESS -> DONE |
+| chunk_boundaries | Phase 1 MVP tasks T-LGW-001..T-LGW-011.5 (bounded slices sized for ~10 code and ~10 test files max per sprint wave); Phase 2 hardening tasks T-LGW-012..T-LGW-015.5; Phase 3 acceleration tasks T-LGW-016..T-LGW-018 |
+| acceptance_criteria_scope | AC-GW-001..AC-GW-008 mapped to explicit tasks, owners, file scopes, and deterministic commands |
+| dependency_order | Phase 1 contract foundation -> phase-1 convergence -> phase-2 hardening -> phase-2 convergence -> phase-3 parity and service seam |
+| handoff_target | @5test |
+| artifact_paths | docs/project/prj0000124-llm-gateway/llm-gateway.plan.md |
+| branch | prj0000124-llm-gateway (validated PASS before artifact writes) |
+| first_red_slice | RED-SLICE-LGW-001 on `tests/core/gateway/test_gateway_core_orchestration.py` with fail-closed sequence assertions and selector `python -m pytest -q tests/core/gateway/test_gateway_core_orchestration.py -k fail_closed` |
+| validation_evidence | python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py -> 17 passed in 9.00s |
+
+### Lesson Entry
+
+| Field | Value |
+|---|---|
+| Pattern | Large split-plane plans stay executable when each task declares owner, explicit file list, AC mapping, and at least one deterministic selector. |
+| Root cause | Placeholder plans and vague tasks create downstream ambiguity between @5test, @6code, @7exec, and @8ql gates. |
+| Prevention | Enforce mandatory task schema (objective, files, owner, dependencies, validation command, AC mapping) and include explicit convergence steps for parallel-safe waves. |
+| First seen | 2026-03-28 |
+| Seen in | prj0000093-projectmanager-ideas-autosync; prj0000122-jwt-refresh-token-support; prj0000124-llm-gateway |
+| Recurrence count | 3 |
+| Promotion status | PROMOTED_TO_HARD_RULE |
+
 ## prj0000122 - jwt-refresh-token-support
 
 | Field | Value |
