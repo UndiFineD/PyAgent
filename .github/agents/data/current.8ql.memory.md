@@ -8,6 +8,39 @@
 
 ## Entries
 
+## Last scan - 2026-04-04 (prj0000127 warn-phase mypy strict enforcement)
+- task_id: prj0000127-mypy-strict-enforcement
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- branch: prj0000127-mypy-strict-enforcement (validated)
+- files scanned: .github/workflows/ci.yml; docs/project/prj0000127-mypy-strict-enforcement/*; tests/docs/test_agent_workflow_policy_docs.py; .github/agents/data/current.*.memory.md; .github/agents/data/2026-04-04.*.log.md
+- security/quality checks run:
+	- git branch --show-current
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python scripts/project_registry_governance.py validate
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m py_compile .github/workflows/ci.yml
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -c "import yaml, pathlib; ... yaml.safe_load(...)"
+	- git diff --name-only origin/main...HEAD
+	- rg lightweight secret patterns across changed files
+- findings:
+	- PASS: branch gate matched expected project branch.
+	- PASS: docs policy gate green (`19 passed in 6.79s`).
+	- PASS: registry governance validator green (`VALIDATION_OK`, `projects=149`).
+	- NON_APPLICABLE: `py_compile` on YAML produced expected syntax failure; YAML parsing used as correct sanity alternative.
+	- PASS: workflow sanity review found explicit least-privilege permissions and no `pull_request_target` or untrusted-context interpolation in `run:` steps.
+	- PASS: lightweight changed-file secret scan returned `SECRET_SCAN_CLEAR`.
+- blocker severity: NONE
+- handoff target: @9git
+- overall: CLEAN (PASS; no HIGH/CRITICAL security or governance blockers)
+
+### Lesson
+- Pattern: Workflow syntax checks must use YAML-aware parsing/linting rather than Python compilation when the artifact is `.yml`.
+- Root cause: A requested command attempted `py_compile` against YAML, which is syntactically invalid for Python by design.
+- Prevention: When workflow files are in scope, run `yaml.safe_load` (or equivalent YAML lint) as the mandatory fallback sanity check and record non-applicability of `py_compile`.
+- First seen: prj0000127-mypy-strict-enforcement
+- Seen in: prj0000127-mypy-strict-enforcement
+- Recurrence count: 1
+- Promotion status: CANDIDATE
+
 ## Last scan - 2026-04-04 (prj0000125 gateway lessons-learned fixes)
 - task_id: prj0000125-llm-gateway-lessons-learned-fixes
 - lifecycle: OPEN -> IN_PROGRESS -> DONE
