@@ -8,6 +8,31 @@
 
 ## Entries
 
+### 2026-04-05 - prj0000128-coverage-minimum-enforcement
+- task_id: prj0000128-coverage-minimum-enforcement
+- status: DONE
+- lifecycle: OPEN -> IN_PROGRESS -> DONE
+- target_agent: @3design
+- canonical_artifact: docs/project/prj0000128-coverage-minimum-enforcement/coverage-minimum-enforcement.think.md
+- recommendation_summary: Prefer a dedicated blocking coverage job in the existing `ci.yml` that consumes the already-configured `pyproject.toml` floor (`fail_under = 40`) before any further ratchet increase.
+- prior_art_refs:
+	- docs/project/archive/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.think.md
+	- docs/project/archive/prj0000096-coverage-minimum-enforcement/coverage-minimum-enforcement.test.md
+	- docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.think.md
+	- docs/project/prj0000110-idea000004-quality-workflow-branch-trigger/idea000004-quality-workflow-branch-trigger.think.md
+- branch_gate_evidence: `git branch --show-current` -> `prj0000128-coverage-minimum-enforcement`
+- rationale_for_handoff: Current repo evidence shows the earlier low-threshold idea text is stale: `pyproject.toml` already enforces `fail_under >= 40`, but `.github/workflows/ci.yml` and `tests/structure/test_ci_yaml.py` still keep blocking CI coverage-free. The smallest valuable next slice is to reconnect CI to the existing floor without raising it.
+- required_validation: `& c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py`
+
+#### Lesson
+- Pattern: Coverage governance can drift into a config-only state where the floor exists in policy files but not in blocking CI reality.
+- Root cause: An earlier ratchet project updated `pyproject.toml` and config tests, while the later lightweight CI contract and structure tests preserved a no-coverage runtime path.
+- Prevention: Couple threshold-authority tests and CI-structure tests to the same enforcement state, and prefer one explicit blocking coverage job in the existing workflow over duplicated or implicit gating.
+- First seen: 2026-03-28
+- Seen in: prj0000096-coverage-minimum-enforcement, prj0000128-coverage-minimum-enforcement
+- Recurrence count: 2
+- Promotion status: HARD_RULE
+
 ### 2026-04-04 - prj0000127-mypy-strict-enforcement
 - task_id: prj0000127-mypy-strict-enforcement
 - status: DONE

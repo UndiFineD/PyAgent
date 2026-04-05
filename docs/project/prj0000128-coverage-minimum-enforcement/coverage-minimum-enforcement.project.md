@@ -34,7 +34,7 @@ Initialize a lightweight project boundary for coverage-minimum-enforcement, seed
 ## Milestones
 | # | Milestone | Agent | Status |
 |---|---|---|---|
-| M1 | Options explored | @2think | NOT_STARTED |
+| M1 | Options explored | @2think | DONE |
 | M2 | Design confirmed | @3design | NOT_STARTED |
 | M3 | Plan finalized | @4plan | NOT_STARTED |
 | M4 | Tests written | @5test | NOT_STARTED |
@@ -44,7 +44,7 @@ Initialize a lightweight project boundary for coverage-minimum-enforcement, seed
 | M8 | Committed | @9git | NOT_STARTED |
 
 ## Status
-_Last updated: 2026-04-04_
-Lane bootstrap complete for quick-start sequencing.
+_Last updated: 2026-04-05_
+M1 discovery complete. Current repo evidence shows the configured coverage floor exists in `pyproject.toml`, but active lightweight CI still does not execute a blocking coverage gate.
 
 
