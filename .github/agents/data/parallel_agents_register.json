@@ -2,8 +2,8 @@
   "schema_version": "1.0.0",
   "register_id": "parallel-agents-register",
   "description": "Shared coordination register for parallel agent work, file touches, and file locks.",
-  "updated_at": "2026-04-04T22:16:57.235524+00:00",
-  "updated_by": "0master",
+  "updated_at": "2026-04-05T06:48:55.620787+00:00",
+  "updated_by": "@1project",
   "active_project_id": "prj0000127",
   "active_branch": "prj0000127-mypy-strict-enforcement",
   "active_wave_id": "",
@@ -84,6 +84,13 @@
       "closed_at": "2026-04-04T22:16:57.235482+00:00",
       "closed_by": "0master",
       "note": "6code GREEN warn-phase complete for prj0000127; commit f5eaaddd6f"
+    },
+    {
+      "wave_id": "prj0000127.close",
+      "status": "closed",
+      "closed_at": "2026-04-05T06:48:55.620730+00:00",
+      "closed_by": "@1project",
+      "note": "Closed prj0000127 release bookkeeping wave after PR #291 merge closure."
     }
   ],
   "agents": {
@@ -229,7 +236,7 @@
       "touching_files": [],
       "planned_files": [],
       "lock_ids": [],
-      "updated_at": "2026-04-04T19:26:09.265823+00:00"
+      "updated_at": "2026-04-05T06:48:55.620772+00:00"
     },
     "2think": {
       "status": "idle",
@@ -385,6 +392,24 @@
       "status": "released",
       "acquired_at": "2026-04-04T22:13:00.840289+00:00",
       "released_at": "2026-04-04T22:16:56.870330+00:00"
+    },
+    {
+      "lock_id": "lock-cdc312b76ca1",
+      "file_path": "docs/project/kanban.json",
+      "owner_agent": "1project",
+      "work_package_id": "prj0000127.close.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-05T06:43:47.659652+00:00",
+      "released_at": "2026-04-05T06:48:49.672696+00:00"
+    },
+    {
+      "lock_id": "lock-69aa02336a82",
+      "file_path": "data/projects.json",
+      "owner_agent": "1project",
+      "work_package_id": "prj0000127.close.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-05T06:43:48.020541+00:00",
+      "released_at": "2026-04-05T06:48:50.021584+00:00"
     }
   ],
   "lockfiles": [],
@@ -905,6 +930,64 @@
       "payload": {
         "wave_id": "prj0000127.wave5",
         "note": "6code GREEN warn-phase complete for prj0000127; commit f5eaaddd6f"
+      }
+    },
+    {
+      "ts": "2026-04-05T06:43:47.660309+00:00",
+      "event": "acquire-lock",
+      "actor": "1project",
+      "payload": {
+        "lock_id": "lock-cdc312b76ca1",
+        "file_path": "docs/project/kanban.json",
+        "work_package_id": "prj0000127.close.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-05T06:43:48.020598+00:00",
+      "event": "acquire-lock",
+      "actor": "1project",
+      "payload": {
+        "lock_id": "lock-69aa02336a82",
+        "file_path": "data/projects.json",
+        "work_package_id": "prj0000127.close.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-05T06:48:49.672732+00:00",
+      "event": "release-lock",
+      "actor": "1project",
+      "payload": {
+        "lock_id": "lock-cdc312b76ca1",
+        "file_path": "docs/project/kanban.json",
+        "work_package_id": "prj0000127.close.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-05T06:48:50.021619+00:00",
+      "event": "release-lock",
+      "actor": "1project",
+      "payload": {
+        "lock_id": "lock-69aa02336a82",
+        "file_path": "data/projects.json",
+        "work_package_id": "prj0000127.close.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-05T06:48:55.620780+00:00",
+      "event": "wave-agent-reset",
+      "actor": "@1project",
+      "payload": {
+        "agent": "1project",
+        "wave_id": "prj0000127.close"
+      }
+    },
+    {
+      "ts": "2026-04-05T06:48:55.620794+00:00",
+      "event": "close-wave",
+      "actor": "@1project",
+      "payload": {
+        "wave_id": "prj0000127.close",
+        "note": "Closed prj0000127 release bookkeeping wave after PR #291 merge closure."
       }
     }
   ]

@@ -19,10 +19,10 @@
   {
     "id": "prj0000127",
     "name": "mypy-strict-enforcement",
-    "lane": "Discovery",
-    "summary": "Initialize workflow artifacts for idea000003-mypy-strict-enforcement mypy-strict-enforcement and queue rapid sequence rollout.",
-    "branch": "prj0000127-mypy-strict-enforcement",
-    "pr": null,
+    "lane": "Released",
+    "summary": "Release closure for mypy-strict-enforcement after PR #291 merged, with registry alignment and idea archival completed.",
+    "branch": "merged",
+    "pr": "#291",
     "priority": "P2",
     "budget_tier": "S",
     "tags": [
@@ -31,7 +31,7 @@
       "mypy-strict-enforcement"
     ],
     "created": "2026-04-04",
-    "updated": "2026-04-04"
+    "updated": "2026-04-05"
   },
   {
     "id": "prj0000128",
