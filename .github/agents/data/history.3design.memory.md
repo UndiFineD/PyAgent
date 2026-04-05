@@ -418,6 +418,67 @@ the design intent.
 		First seen: 2026-04-03
 		Seen in: prj0000120-openapi-spec-generation
 		Recurrence count: 1
+
+---
+
+## 2026-04-05 rollover from current.3design.memory.md
+
+### prj0000122-jwt-refresh-token-support
+- state: DONE
+- selected_design_path: Option A (API-key bootstrap + file-backed refresh-session store + opaque rotating refresh tokens + short-lived access JWTs)
+- canonical_artifact: docs/project/prj0000122-jwt-refresh-token-support/jwt-refresh-token-support.design.md
+- adr_artifact: docs/architecture/adr/0008-backend-managed-refresh-sessions-for-jwt-renewal.md
+- lesson:
+	- Pattern: Backend auth upgrades stay implementation-ready when bootstrap identity and persistence durability are resolved explicitly before planning.
+	- Root cause: Refresh-token projects stall when teams leave initial session creation or storage durability as follow-up questions.
+	- Prevention: Lock the bootstrap credential, persistence boundary, revocation semantics, and IFACE-to-task traceability in the canonical design artifact before @4plan handoff.
+	- First seen: 2026-04-04
+	- Seen in: prj0000122-jwt-refresh-token-support
+	- Recurrence count: 1
+	- Promotion status: Candidate
+
+### prj0000124-llm-gateway
+- state: DONE
+- selected_design_path: Option C (Hybrid Split-Plane Gateway: Python control plane + Python-implemented Rust-ready data-plane contracts)
+- canonical_artifact: docs/project/prj0000124-llm-gateway/llm-gateway.design.md
+- adr_artifact: docs/architecture/adr/0009-llm-gateway-hybrid-split-plane.md
+- lesson:
+	- Pattern: Split-plane gateway projects move faster when contracts are pinned to existing integration points and tied to explicit @4plan task IDs.
+	- Root cause: Planning drift appears when interface contracts are defined without concrete ownership mapping to integration modules.
+	- Prevention: Require interface-to-task traceability and acceptance-criteria IDs in the canonical design artifact before handoff.
+	- First seen: 2026-04-04
+	- Seen in: prj0000124-llm-gateway
+	- Recurrence count: 1
+	- Promotion status: Candidate
+
+### prj0000125-llm-gateway-lessons-learned-fixes
+- state: DONE
+- branch: prj0000125-llm-gateway-lessons-learned-fixes
+- selected_design_path: 4-wave targeted remediation (A=runtime, B=tests, C=docs, D=naming record)
+- canonical_artifact: docs/project/prj0000125-llm-gateway-lessons-learned-fixes/llm-gateway-lessons-learned-fixes.design.md
+- adr_artifact: docs/architecture/adr/0009-llm-gateway-hybrid-split-plane.md (Part 2 appended)
+- lesson:
+	- Pattern: Post-merge remediation projects require explicit fail-closed path audits before any implementation handoff.
+	- Root cause: Phase-one gateway slices ship happy-path contracts but leave budget-denied, exception, and telemetry-failure paths as implicit.
+	- Prevention: Require explicit fail-closed path table in design acceptance criteria with one pytest selector per path before @4plan handoff.
+	- First seen: 2026-04-04
+	- Seen in: prj0000125-llm-gateway-lessons-learned-fixes
+	- Recurrence count: 1
+	- Promotion status: Candidate
+
+### prj0000127-mypy-strict-enforcement
+- state: DONE
+- branch: prj0000127-mypy-strict-enforcement
+- selected_design_path: Option B (progressive blocking allowlist with warn->required CI promotion)
+- canonical_artifact: docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.design.md
+- lesson:
+	- Pattern: Progressive type-enforcement efforts stay executable when warn/required lane contracts, rollback rules, and allowlist drift checks are designed together.
+	- Root cause: Teams often define strictness goals without deterministic promotion and rollback mechanics, causing gate flapping and ad-hoc bypasses.
+	- Prevention: Require AC table + interface-to-task traceability + explicit failure taxonomy in design before @4plan handoff.
+	- First seen: 2026-04-04
+	- Seen in: prj0000127-mypy-strict-enforcement
+	- Recurrence count: 1
+	- Promotion status: Candidate
 		Promotion status: Candidate
 
 - task_id: prj0000118-amd-npu-feature-documentation

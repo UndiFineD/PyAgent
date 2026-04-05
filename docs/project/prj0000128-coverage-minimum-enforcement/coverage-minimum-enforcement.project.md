@@ -35,7 +35,7 @@ Initialize a lightweight project boundary for coverage-minimum-enforcement, seed
 | # | Milestone | Agent | Status |
 |---|---|---|---|
 | M1 | Options explored | @2think | DONE |
-| M2 | Design confirmed | @3design | NOT_STARTED |
+| M2 | Design confirmed | @3design | DONE |
 | M3 | Plan finalized | @4plan | NOT_STARTED |
 | M4 | Tests written | @5test | NOT_STARTED |
 | M5 | Code implemented | @6code | NOT_STARTED |
@@ -45,6 +45,6 @@ Initialize a lightweight project boundary for coverage-minimum-enforcement, seed
 
 ## Status
 _Last updated: 2026-04-05_
-M1 discovery complete. Current repo evidence shows the configured coverage floor exists in `pyproject.toml`, but active lightweight CI still does not execute a blocking coverage gate.
+M1 and M2 are complete. The selected design reconciles the stale idea premise with current repo truth and defines one dedicated blocking `coverage` job in `ci.yml` that honors the existing `fail_under = 40` baseline from `pyproject.toml`.
 
 
