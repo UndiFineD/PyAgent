@@ -45,3 +45,17 @@ jobs:
           cargo bench --bench stats_baseline -- --noplot
           popd
           test -d rust_core/target/criterion/
+
+  coverage:
+    name: Coverage Gate
+    runs-on: ubuntu-latest
+    needs: [quick]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: pip install --prefer-binary -r requirements-ci.txt
+      - name: Run coverage gate
+        run: pytest tests -q --cov=src --cov-branch --cov-config=pyproject.toml --cov-report=term-missing --cov-report=xml

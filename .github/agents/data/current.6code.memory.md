@@ -8,6 +8,36 @@
 
 ## Entries
 
+## 2026-04-05 — prj0000128 coverage minimum enforcement (green wave T-COV-004)
+- task_id: prj0000128-coverage-minimum-enforcement
+- lifecycle: DONE
+- branch: prj0000128-coverage-minimum-enforcement (validated)
+- changed files:
+	- .github/workflows/ci.yml
+	- docs/project/prj0000128-coverage-minimum-enforcement/coverage-minimum-enforcement.code.md
+	- .github/agents/data/current.6code.memory.md
+	- .github/agents/data/2026-04-05.6code.log.md
+- implementation summary:
+	- Added one dedicated blocking `jobs.coverage` in `.github/workflows/ci.yml`.
+	- Preserved `jobs.quick`, set `jobs.coverage.needs` to include `quick`, and added canonical pytest-cov flags.
+	- Kept threshold authority in `pyproject.toml` by omitting inline `--cov-fail-under` and any soft-fail controls.
+- verification commands:
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/structure/test_ci_yaml.py -k "coverage or quick"
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/test_coverage_config.py
+	- & c:\Dev\PyAgent\.venv\Scripts\Activate.ps1; python -m pytest -q tests/docs/test_agent_workflow_policy_docs.py
+- unresolved risks:
+	- None identified in GREEN scope for T-COV-004.
+- handoff target: @7exec
+
+### Lesson
+- Pattern: Coverage gating stays deterministic when workflow shape, dependency order, and command flags are asserted in dedicated structure tests.
+- Root cause: CI lacked a `coverage` job, so RED contracts for blocking coverage and canonical command markers failed.
+- Prevention: Keep a single dedicated coverage job with explicit `needs: quick` and canonical pytest-cov flags; never duplicate threshold authority in workflow commands.
+- First seen: 2026-04-05
+- Seen in: prj0000128-coverage-minimum-enforcement
+- Recurrence count: 1
+- Promotion status: Candidate
+
 ## 2026-04-04 — prj0000127 mypy strict enforcement warn-phase green slice
 - task_id: prj0000127-mypy-strict-enforcement
 - lifecycle: DONE
