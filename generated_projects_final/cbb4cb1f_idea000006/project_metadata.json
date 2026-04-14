@@ -1,0 +1,12 @@
+{
+  "idea_id": "idea000006",
+  "title": "idea-006 - codeql-ci-integration",
+  "description": "integration - codeql-ci",
+  "categories": [
+    "integration"
+  ],
+  "source_ideas_merged": 0,
+  "source_idea_ids": [],
+  "created_at": "2026-04-06T12:18:07.839607",
+  "version": "1.0.0"
+}

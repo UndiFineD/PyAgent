@@ -1,0 +1,1898 @@
+{
+  "total_ideas": 209490,
+  "batch_size": 100,
+  "total_batches": 2095,
+  "scale_factor": 2094.9,
+  "batches": [
+    {
+      "batch_number": 1,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 1150
+    },
+    {
+      "batch_number": 2,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 2300
+    },
+    {
+      "batch_number": 3,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 3450
+    },
+    {
+      "batch_number": 4,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 4600
+    },
+    {
+      "batch_number": 5,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 5750
+    },
+    {
+      "batch_number": 6,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 6900
+    },
+    {
+      "batch_number": 7,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 8050
+    },
+    {
+      "batch_number": 8,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 9200
+    },
+    {
+      "batch_number": 9,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 10350
+    },
+    {
+      "batch_number": 10,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 11500
+    },
+    {
+      "batch_number": 11,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 12650
+    },
+    {
+      "batch_number": 12,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 13800
+    },
+    {
+      "batch_number": 13,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 14950
+    },
+    {
+      "batch_number": 14,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 16100
+    },
+    {
+      "batch_number": 15,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 17250
+    },
+    {
+      "batch_number": 16,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 18400
+    },
+    {
+      "batch_number": 17,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 19550
+    },
+    {
+      "batch_number": 18,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 20700
+    },
+    {
+      "batch_number": 19,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 21850
+    },
+    {
+      "batch_number": 20,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 23000
+    },
+    {
+      "batch_number": 21,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 24150
+    },
+    {
+      "batch_number": 22,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 25300
+    },
+    {
+      "batch_number": 23,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 26450
+    },
+    {
+      "batch_number": 24,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 27600
+    },
+    {
+      "batch_number": 25,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 28750
+    },
+    {
+      "batch_number": 26,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 29900
+    },
+    {
+      "batch_number": 27,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 31050
+    },
+    {
+      "batch_number": 28,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 32200
+    },
+    {
+      "batch_number": 29,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 33350
+    },
+    {
+      "batch_number": 30,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 34500
+    },
+    {
+      "batch_number": 31,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 35650
+    },
+    {
+      "batch_number": 32,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 36800
+    },
+    {
+      "batch_number": 33,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 37950
+    },
+    {
+      "batch_number": 34,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 39100
+    },
+    {
+      "batch_number": 35,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 40250
+    },
+    {
+      "batch_number": 36,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 41400
+    },
+    {
+      "batch_number": 37,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 42550
+    },
+    {
+      "batch_number": 38,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 43700
+    },
+    {
+      "batch_number": 39,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 44850
+    },
+    {
+      "batch_number": 40,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 46000
+    },
+    {
+      "batch_number": 41,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 47150
+    },
+    {
+      "batch_number": 42,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 48300
+    },
+    {
+      "batch_number": 43,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 49450
+    },
+    {
+      "batch_number": 44,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 50600
+    },
+    {
+      "batch_number": 45,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 51750
+    },
+    {
+      "batch_number": 46,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 52900
+    },
+    {
+      "batch_number": 47,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 54050
+    },
+    {
+      "batch_number": 48,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 55200
+    },
+    {
+      "batch_number": 49,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 56350
+    },
+    {
+      "batch_number": 50,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 57500
+    },
+    {
+      "batch_number": 51,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 58650
+    },
+    {
+      "batch_number": 52,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 59800
+    },
+    {
+      "batch_number": 53,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 60950
+    },
+    {
+      "batch_number": 54,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 62100
+    },
+    {
+      "batch_number": 55,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 63250
+    },
+    {
+      "batch_number": 56,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 64400
+    },
+    {
+      "batch_number": 57,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 65550
+    },
+    {
+      "batch_number": 58,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 66700
+    },
+    {
+      "batch_number": 59,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 67850
+    },
+    {
+      "batch_number": 60,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 69000
+    },
+    {
+      "batch_number": 61,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 70150
+    },
+    {
+      "batch_number": 62,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 71300
+    },
+    {
+      "batch_number": 63,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 72450
+    },
+    {
+      "batch_number": 64,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 73600
+    },
+    {
+      "batch_number": 65,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 74750
+    },
+    {
+      "batch_number": 66,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 75900
+    },
+    {
+      "batch_number": 67,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 77050
+    },
+    {
+      "batch_number": 68,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 78200
+    },
+    {
+      "batch_number": 69,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 79350
+    },
+    {
+      "batch_number": 70,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 80500
+    },
+    {
+      "batch_number": 71,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 81650
+    },
+    {
+      "batch_number": 72,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 82800
+    },
+    {
+      "batch_number": 73,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 83950
+    },
+    {
+      "batch_number": 74,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 85100
+    },
+    {
+      "batch_number": 75,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 86250
+    },
+    {
+      "batch_number": 76,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 87400
+    },
+    {
+      "batch_number": 77,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 88550
+    },
+    {
+      "batch_number": 78,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 89700
+    },
+    {
+      "batch_number": 79,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 90850
+    },
+    {
+      "batch_number": 80,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 92000
+    },
+    {
+      "batch_number": 81,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 93150
+    },
+    {
+      "batch_number": 82,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 94300
+    },
+    {
+      "batch_number": 83,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 95450
+    },
+    {
+      "batch_number": 84,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 96600
+    },
+    {
+      "batch_number": 85,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 97750
+    },
+    {
+      "batch_number": 86,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 98900
+    },
+    {
+      "batch_number": 87,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 100050
+    },
+    {
+      "batch_number": 88,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 101200
+    },
+    {
+      "batch_number": 89,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 102350
+    },
+    {
+      "batch_number": 90,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 103500
+    },
+    {
+      "batch_number": 91,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 104650
+    },
+    {
+      "batch_number": 92,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 105800
+    },
+    {
+      "batch_number": 93,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 106950
+    },
+    {
+      "batch_number": 94,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 108100
+    },
+    {
+      "batch_number": 95,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 109250
+    },
+    {
+      "batch_number": 96,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 110400
+    },
+    {
+      "batch_number": 97,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 111550
+    },
+    {
+      "batch_number": 98,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 112700
+    },
+    {
+      "batch_number": 99,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 113850
+    },
+    {
+      "batch_number": 100,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 115000
+    },
+    {
+      "batch_number": 101,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 116150
+    },
+    {
+      "batch_number": 102,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 117300
+    },
+    {
+      "batch_number": 103,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 118450
+    },
+    {
+      "batch_number": 104,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 119600
+    },
+    {
+      "batch_number": 105,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 120750
+    },
+    {
+      "batch_number": 106,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 121900
+    },
+    {
+      "batch_number": 107,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 123050
+    },
+    {
+      "batch_number": 108,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 124200
+    },
+    {
+      "batch_number": 109,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 125350
+    },
+    {
+      "batch_number": 110,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 126500
+    },
+    {
+      "batch_number": 111,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 127650
+    },
+    {
+      "batch_number": 112,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 128800
+    },
+    {
+      "batch_number": 113,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 129950
+    },
+    {
+      "batch_number": 114,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 131100
+    },
+    {
+      "batch_number": 115,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 132250
+    },
+    {
+      "batch_number": 116,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 133400
+    },
+    {
+      "batch_number": 117,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 134550
+    },
+    {
+      "batch_number": 118,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 135700
+    },
+    {
+      "batch_number": 119,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 136850
+    },
+    {
+      "batch_number": 120,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 138000
+    },
+    {
+      "batch_number": 121,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 139150
+    },
+    {
+      "batch_number": 122,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 140300
+    },
+    {
+      "batch_number": 123,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 141450
+    },
+    {
+      "batch_number": 124,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 142600
+    },
+    {
+      "batch_number": 125,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 143750
+    },
+    {
+      "batch_number": 126,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 144900
+    },
+    {
+      "batch_number": 127,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 146050
+    },
+    {
+      "batch_number": 128,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 147200
+    },
+    {
+      "batch_number": 129,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 148350
+    },
+    {
+      "batch_number": 130,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 149500
+    },
+    {
+      "batch_number": 131,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 150650
+    },
+    {
+      "batch_number": 132,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 151800
+    },
+    {
+      "batch_number": 133,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 152950
+    },
+    {
+      "batch_number": 134,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 154100
+    },
+    {
+      "batch_number": 135,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 155250
+    },
+    {
+      "batch_number": 136,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 156400
+    },
+    {
+      "batch_number": 137,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 157550
+    },
+    {
+      "batch_number": 138,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 158700
+    },
+    {
+      "batch_number": 139,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 159850
+    },
+    {
+      "batch_number": 140,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 161000
+    },
+    {
+      "batch_number": 141,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 162150
+    },
+    {
+      "batch_number": 142,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 163300
+    },
+    {
+      "batch_number": 143,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 164450
+    },
+    {
+      "batch_number": 144,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 165600
+    },
+    {
+      "batch_number": 145,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 166750
+    },
+    {
+      "batch_number": 146,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 167900
+    },
+    {
+      "batch_number": 147,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 169050
+    },
+    {
+      "batch_number": 148,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 170200
+    },
+    {
+      "batch_number": 149,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 171350
+    },
+    {
+      "batch_number": 150,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 172500
+    },
+    {
+      "batch_number": 151,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 173650
+    },
+    {
+      "batch_number": 152,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 174800
+    },
+    {
+      "batch_number": 153,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 175950
+    },
+    {
+      "batch_number": 154,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 177100
+    },
+    {
+      "batch_number": 155,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 178250
+    },
+    {
+      "batch_number": 156,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 179400
+    },
+    {
+      "batch_number": 157,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 180550
+    },
+    {
+      "batch_number": 158,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 181700
+    },
+    {
+      "batch_number": 159,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 182850
+    },
+    {
+      "batch_number": 160,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 184000
+    },
+    {
+      "batch_number": 161,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 185150
+    },
+    {
+      "batch_number": 162,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 186300
+    },
+    {
+      "batch_number": 163,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 187450
+    },
+    {
+      "batch_number": 164,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 188600
+    },
+    {
+      "batch_number": 165,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 189750
+    },
+    {
+      "batch_number": 166,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 190900
+    },
+    {
+      "batch_number": 167,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 192050
+    },
+    {
+      "batch_number": 168,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 193200
+    },
+    {
+      "batch_number": 169,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 194350
+    },
+    {
+      "batch_number": 170,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 195500
+    },
+    {
+      "batch_number": 171,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 196650
+    },
+    {
+      "batch_number": 172,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 197800
+    },
+    {
+      "batch_number": 173,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 198950
+    },
+    {
+      "batch_number": 174,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 200100
+    },
+    {
+      "batch_number": 175,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 201250
+    },
+    {
+      "batch_number": 176,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 202400
+    },
+    {
+      "batch_number": 177,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 203550
+    },
+    {
+      "batch_number": 178,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 204700
+    },
+    {
+      "batch_number": 179,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 205850
+    },
+    {
+      "batch_number": 180,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 207000
+    },
+    {
+      "batch_number": 181,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 208150
+    },
+    {
+      "batch_number": 182,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 209300
+    },
+    {
+      "batch_number": 183,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 210450
+    },
+    {
+      "batch_number": 184,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 211600
+    },
+    {
+      "batch_number": 185,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 212750
+    },
+    {
+      "batch_number": 186,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 213900
+    },
+    {
+      "batch_number": 187,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 215050
+    },
+    {
+      "batch_number": 188,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 216200
+    },
+    {
+      "batch_number": 189,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 217350
+    },
+    {
+      "batch_number": 190,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 218500
+    },
+    {
+      "batch_number": 191,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 219650
+    },
+    {
+      "batch_number": 192,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 220800
+    },
+    {
+      "batch_number": 193,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 221950
+    },
+    {
+      "batch_number": 194,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 223100
+    },
+    {
+      "batch_number": 195,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 224250
+    },
+    {
+      "batch_number": 196,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 225400
+    },
+    {
+      "batch_number": 197,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 226550
+    },
+    {
+      "batch_number": 198,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 227700
+    },
+    {
+      "batch_number": 199,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 228850
+    },
+    {
+      "batch_number": 200,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 230000
+    },
+    {
+      "batch_number": 201,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 231150
+    },
+    {
+      "batch_number": 202,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 232300
+    },
+    {
+      "batch_number": 203,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 233450
+    },
+    {
+      "batch_number": 204,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 234600
+    },
+    {
+      "batch_number": 205,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 235750
+    },
+    {
+      "batch_number": 206,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 236900
+    },
+    {
+      "batch_number": 207,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 238050
+    },
+    {
+      "batch_number": 208,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 239200
+    },
+    {
+      "batch_number": 209,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 240350
+    },
+    {
+      "batch_number": 210,
+      "ideas": 100,
+      "projects": 93,
+      "code_files": 93,
+      "test_files": 93,
+      "estimated_loc": 1150,
+      "cumulative_loc": 241500
+    }
+  ]
+}

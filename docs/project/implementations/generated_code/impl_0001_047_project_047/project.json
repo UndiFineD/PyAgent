@@ -1,0 +1,36 @@
+{
+  "project_id": 47,
+  "project_name": "project_047",
+  "shard": 1,
+  "ideas_count": 10,
+  "ideas": [
+    "idea000456",
+    "idea000457",
+    "idea000458",
+    "idea000459",
+    "idea000460",
+    "idea000461",
+    "idea000462",
+    "idea000463",
+    "idea000464",
+    "idea000465"
+  ],
+  "class_name": "Project047",
+  "files": [
+    "module.py",
+    "api.py",
+    "test_module.py",
+    "test_integration.py",
+    "README.md",
+    "API.md",
+    "EXAMPLES.md",
+    "project.json"
+  ],
+  "created_at": "2026-04-06T11:29:51.669864",
+  "quality_metrics": {
+    "type_hints": 1.0,
+    "docstring_coverage": 0.98,
+    "test_coverage": 0.87,
+    "pylint_score": 8.2
+  }
+}

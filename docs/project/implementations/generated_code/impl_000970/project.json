@@ -1,0 +1,18 @@
+{
+  "project_id": "impl_000970",
+  "batch": 98,
+  "archetype": "hardening",
+  "component": "component_98_0",
+  "created_at": "2026-04-06T07:19:12.149951",
+  "files": {
+    "module": "module.py",
+    "api": "api.py",
+    "test": "test_module.py"
+  },
+  "loc": {
+    "module": 35,
+    "api": 22,
+    "test": 21,
+    "total": 78
+  }
+}

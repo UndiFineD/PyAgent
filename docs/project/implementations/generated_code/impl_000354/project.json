@@ -1,0 +1,18 @@
+{
+  "project_id": "impl_000354",
+  "batch": 36,
+  "archetype": "coverage",
+  "component": "component_36_4",
+  "created_at": "2026-04-06T07:19:11.839946",
+  "files": {
+    "module": "module.py",
+    "api": "api.py",
+    "test": "test_module.py"
+  },
+  "loc": {
+    "module": 37,
+    "api": 22,
+    "test": 21,
+    "total": 80
+  }
+}

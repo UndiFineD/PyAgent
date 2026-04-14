@@ -1,0 +1,1920 @@
+{
+  "synthesized_ideas": [
+    {
+      "idea_id": "merged-81fbe621",
+      "title": "Unified Analytics, Dashboard System",
+      "description": "Unified implementation combining 29 related concepts.\nKey features:\n  \u2022 Create interactive React dashboard for real-time data visualization (alternative implementation)\n  \u2022 Create interactive React dashboard for real-time data visualization with caching layer\n\nSynthesized from 29 source ideas for comprehensive coverage.",
+      "planned_project_ids": [
+        "ai_ml",
+        "backend",
+        "data",
+        "frontend",
+        "infrastructure",
+        "tooling"
+      ],
+      "source_references": [
+        "docs/frontend.md",
+        "docs/api/2.md",
+        "docs/data.md"
+      ],
+      "source_idea_ids": [
+        "idea-000001",
+        "idea-000005",
+        "idea-000025",
+        "idea-000033",
+        "idea-000034",
+        "idea-000036",
+        "idea-000069",
+        "idea-000073",
+        "idea-000075",
+        "idea-000087",
+        "idea-000100",
+        "idea-000116",
+        "idea-000127",
+        "idea-000128",
+        "idea-000132",
+        "idea-000138",
+        "idea-000139",
+        "idea-000144",
+        "idea-000147",
+        "idea-000152",
+        "idea-000156",
+        "idea-000158",
+        "idea-000159",
+        "idea-000164",
+        "idea-000168",
+        "idea-000188",
+        "idea-000196",
+        "idea-000198",
+        "idea-000200"
+      ],
+      "scoring": {
+        "implementation_readiness": 7.9,
+        "synthesis_confidence": 0.8108971488281826
+      },
+      "synthesis_metadata": {
+        "merged_from_count": 29,
+        "member_idea_ids": [
+          "idea-000001",
+          "idea-000005",
+          "idea-000025",
+          "idea-000033",
+          "idea-000034",
+          "idea-000036",
+          "idea-000069",
+          "idea-000073",
+          "idea-000075",
+          "idea-000087",
+          "idea-000100",
+          "idea-000116",
+          "idea-000127",
+          "idea-000128",
+          "idea-000132",
+          "idea-000138",
+          "idea-000139",
+          "idea-000144",
+          "idea-000147",
+          "idea-000152",
+          "idea-000156",
+          "idea-000158",
+          "idea-000159",
+          "idea-000164",
+          "idea-000168",
+          "idea-000188",
+          "idea-000196",
+          "idea-000198",
+          "idea-000200"
+        ],
+        "combined_categories": [
+          "ai_ml",
+          "backend",
+          "data",
+          "frontend",
+          "infrastructure",
+          "tooling"
+        ],
+        "combined_references": [
+          "docs/frontend.md",
+          "docs/api/2.md",
+          "docs/data.md"
+        ],
+        "average_readiness": 7.9,
+        "synthesis_confidence": 0.8108971488281826,
+        "synthesis_timestamp": "2026-04-06T10:25:11.671476+00:00"
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "merged-96fc6fbf",
+      "title": "Comprehensive Kubernetes Implementation",
+      "description": "Unified implementation combining 19 related concepts.\nKey features:\n  \u2022 Configure Kubernetes cluster for microservices deployment with monitoring (alternative implementation)\n  \u2022 Configure Kubernetes cluster for microservices deployment with monitoring with caching layer\n\nSynthesized from 19 source ideas for comprehensive coverage.",
+      "planned_project_ids": [
+        "backend",
+        "data",
+        "infrastructure",
+        "tooling"
+      ],
+      "source_references": [
+        "docs/api/3.md",
+        "docs/infrastructure.md"
+      ],
+      "source_idea_ids": [
+        "idea-000004",
+        "idea-000021",
+        "idea-000038",
+        "idea-000040",
+        "idea-000041",
+        "idea-000065",
+        "idea-000076",
+        "idea-000086",
+        "idea-000089",
+        "idea-000091",
+        "idea-000096",
+        "idea-000125",
+        "idea-000126",
+        "idea-000145",
+        "idea-000151",
+        "idea-000174",
+        "idea-000186",
+        "idea-000189",
+        "idea-000190"
+      ],
+      "scoring": {
+        "implementation_readiness": 8.0,
+        "synthesis_confidence": 0.9074463937621828
+      },
+      "synthesis_metadata": {
+        "merged_from_count": 19,
+        "member_idea_ids": [
+          "idea-000004",
+          "idea-000021",
+          "idea-000038",
+          "idea-000040",
+          "idea-000041",
+          "idea-000065",
+          "idea-000076",
+          "idea-000086",
+          "idea-000089",
+          "idea-000091",
+          "idea-000096",
+          "idea-000125",
+          "idea-000126",
+          "idea-000145",
+          "idea-000151",
+          "idea-000174",
+          "idea-000186",
+          "idea-000189",
+          "idea-000190"
+        ],
+        "combined_categories": [
+          "backend",
+          "data",
+          "infrastructure",
+          "tooling"
+        ],
+        "combined_references": [
+          "docs/api/3.md",
+          "docs/infrastructure.md"
+        ],
+        "average_readiness": 8.0,
+        "synthesis_confidence": 0.9074463937621828,
+        "synthesis_timestamp": "2026-04-06T10:25:11.671840+00:00"
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "merged-97852221",
+      "title": "Comprehensive Pipeline Implementation",
+      "description": "Unified implementation combining 30 related concepts.\nKey features:\n  \u2022 Build scalable ETL pipeline for data transformation and loading (alternative implementation)\n  \u2022 Build scalable ETL pipeline for data transformation and loading with caching layer\n\nSynthesized from 30 source ideas for comprehensive coverage.",
+      "planned_project_ids": [
+        "ai_ml",
+        "backend",
+        "data",
+        "frontend",
+        "infrastructure",
+        "security",
+        "tooling"
+      ],
+      "source_references": [
+        "docs/backend.md",
+        "docs/api/5.md",
+        "docs/data.md"
+      ],
+      "source_idea_ids": [
+        "idea-000006",
+        "idea-000008",
+        "idea-000014",
+        "idea-000018",
+        "idea-000035",
+        "idea-000037",
+        "idea-000042",
+        "idea-000054",
+        "idea-000074",
+        "idea-000085",
+        "idea-000090",
+        "idea-000093",
+        "idea-000094",
+        "idea-000095",
+        "idea-000097",
+        "idea-000109",
+        "idea-000110",
+        "idea-000121",
+        "idea-000124",
+        "idea-000129",
+        "idea-000136",
+        "idea-000150",
+        "idea-000161",
+        "idea-000165",
+        "idea-000167",
+        "idea-000170",
+        "idea-000172",
+        "idea-000173",
+        "idea-000183",
+        "idea-000193"
+      ],
+      "scoring": {
+        "implementation_readiness": 7.6,
+        "synthesis_confidence": 0.9051062347614041
+      },
+      "synthesis_metadata": {
+        "merged_from_count": 30,
+        "member_idea_ids": [
+          "idea-000006",
+          "idea-000008",
+          "idea-000014",
+          "idea-000018",
+          "idea-000035",
+          "idea-000037",
+          "idea-000042",
+          "idea-000054",
+          "idea-000074",
+          "idea-000085",
+          "idea-000090",
+          "idea-000093",
+          "idea-000094",
+          "idea-000095",
+          "idea-000097",
+          "idea-000109",
+          "idea-000110",
+          "idea-000121",
+          "idea-000124",
+          "idea-000129",
+          "idea-000136",
+          "idea-000150",
+          "idea-000161",
+          "idea-000165",
+          "idea-000167",
+          "idea-000170",
+          "idea-000172",
+          "idea-000173",
+          "idea-000183",
+          "idea-000193"
+        ],
+        "combined_categories": [
+          "ai_ml",
+          "backend",
+          "data",
+          "frontend",
+          "infrastructure",
+          "security",
+          "tooling"
+        ],
+        "combined_references": [
+          "docs/backend.md",
+          "docs/api/5.md",
+          "docs/data.md"
+        ],
+        "average_readiness": 7.6,
+        "synthesis_confidence": 0.9051062347614041,
+        "synthesis_timestamp": "2026-04-06T10:25:11.672230+00:00"
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "merged-7095b347",
+      "title": "Comprehensive Management Implementation",
+      "description": "Unified implementation combining 24 related concepts.\nKey features:\n  \u2022 Create REST API endpoints for user CRUD operations with proper authentication (alternative implementation)\n  \u2022 Create REST API endpoints for user CRUD operations with proper authentication with caching layer\n\nSynthesized from 24 source ideas for comprehensive coverage.",
+      "planned_project_ids": [
+        "ai_ml",
+        "backend",
+        "data",
+        "frontend",
+        "infrastructure",
+        "security",
+        "tooling"
+      ],
+      "source_references": [
+        "docs/backend.md",
+        "docs/api/1.md",
+        "docs/security.md"
+      ],
+      "source_idea_ids": [
+        "idea-000009",
+        "idea-000017",
+        "idea-000028",
+        "idea-000044",
+        "idea-000045",
+        "idea-000047",
+        "idea-000050",
+        "idea-000057",
+        "idea-000058",
+        "idea-000061",
+        "idea-000062",
+        "idea-000088",
+        "idea-000113",
+        "idea-000115",
+        "idea-000122",
+        "idea-000134",
+        "idea-000135",
+        "idea-000146",
+        "idea-000149",
+        "idea-000163",
+        "idea-000177",
+        "idea-000178",
+        "idea-000182",
+        "idea-000191"
+      ],
+      "scoring": {
+        "implementation_readiness": 7.3,
+        "synthesis_confidence": 0.8291248606465992
+      },
+      "synthesis_metadata": {
+        "merged_from_count": 24,
+        "member_idea_ids": [
+          "idea-000009",
+          "idea-000017",
+          "idea-000028",
+          "idea-000044",
+          "idea-000045",
+          "idea-000047",
+          "idea-000050",
+          "idea-000057",
+          "idea-000058",
+          "idea-000061",
+          "idea-000062",
+          "idea-000088",
+          "idea-000113",
+          "idea-000115",
+          "idea-000122",
+          "idea-000134",
+          "idea-000135",
+          "idea-000146",
+          "idea-000149",
+          "idea-000163",
+          "idea-000177",
+          "idea-000178",
+          "idea-000182",
+          "idea-000191"
+        ],
+        "combined_categories": [
+          "ai_ml",
+          "backend",
+          "data",
+          "frontend",
+          "infrastructure",
+          "security",
+          "tooling"
+        ],
+        "combined_references": [
+          "docs/backend.md",
+          "docs/api/1.md",
+          "docs/security.md"
+        ],
+        "average_readiness": 7.3,
+        "synthesis_confidence": 0.8291248606465992,
+        "synthesis_timestamp": "2026-04-06T10:25:11.672594+00:00"
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "merged-5ce53363",
+      "title": "Unified Implement, Learning System",
+      "description": "Unified implementation combining 18 related concepts.\nKey features:\n  \u2022 Build API wrapper for ML model inference with caching (alternative implementation)\n  \u2022 Build API wrapper for ML model inference with caching with caching layer\n\nSynthesized from 18 source ideas for comprehensive coverage.",
+      "planned_project_ids": [
+        "ai_ml",
+        "backend",
+        "data",
+        "security"
+      ],
+      "source_references": [
+        "docs/api/4.md",
+        "docs/backend.md",
+        "docs/ai_ml.md"
+      ],
+      "source_idea_ids": [
+        "idea-000020",
+        "idea-000029",
+        "idea-000030",
+        "idea-000032",
+        "idea-000048",
+        "idea-000056",
+        "idea-000059",
+        "idea-000060",
+        "idea-000079",
+        "idea-000112",
+        "idea-000117",
+        "idea-000130",
+        "idea-000133",
+        "idea-000141",
+        "idea-000142",
+        "idea-000155",
+        "idea-000187",
+        "idea-000199"
+      ],
+      "scoring": {
+        "implementation_readiness": 7.3,
+        "synthesis_confidence": 0.8331808278867106
+      },
+      "synthesis_metadata": {
+        "merged_from_count": 18,
+        "member_idea_ids": [
+          "idea-000020",
+          "idea-000029",
+          "idea-000030",
+          "idea-000032",
+          "idea-000048",
+          "idea-000056",
+          "idea-000059",
+          "idea-000060",
+          "idea-000079",
+          "idea-000112",
+          "idea-000117",
+          "idea-000130",
+          "idea-000133",
+          "idea-000141",
+          "idea-000142",
+          "idea-000155",
+          "idea-000187",
+          "idea-000199"
+        ],
+        "combined_categories": [
+          "ai_ml",
+          "backend",
+          "data",
+          "security"
+        ],
+        "combined_references": [
+          "docs/api/4.md",
+          "docs/backend.md",
+          "docs/ai_ml.md"
+        ],
+        "average_readiness": 7.3,
+        "synthesis_confidence": 0.8331808278867106,
+        "synthesis_timestamp": "2026-04-06T10:25:11.672834+00:00"
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "merged-f62a73e4",
+      "title": "Unified Security, Refactor System",
+      "description": "Unified implementation combining 2 related concepts.\nKey features:\n  \u2022 Implementation detail #23 for backend system\n  \u2022 Implementation detail #98 for backend system\n\nSynthesized from 2 source ideas for comprehensive coverage.",
+      "planned_project_ids": [
+        "frontend"
+      ],
+      "source_references": [
+        "docs/feature-98.md",
+        "docs/feature-23.md"
+      ],
+      "source_idea_ids": [
+        "idea-000023",
+        "idea-000098"
+      ],
+      "scoring": {
+        "implementation_readiness": 6.0,
+        "synthesis_confidence": 0.6799999999999999
+      },
+      "synthesis_metadata": {
+        "merged_from_count": 2,
+        "member_idea_ids": [
+          "idea-000023",
+          "idea-000098"
+        ],
+        "combined_categories": [
+          "frontend"
+        ],
+        "combined_references": [
+          "docs/feature-98.md",
+          "docs/feature-23.md"
+        ],
+        "average_readiness": 6.0,
+        "synthesis_confidence": 0.6799999999999999,
+        "synthesis_timestamp": "2026-04-06T10:25:11.672971+00:00"
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "merged-3abd695c",
+      "title": "Comprehensive Frontend Implementation",
+      "description": "Unified implementation combining 2 related concepts.\nKey features:\n  \u2022 Implementation detail #31 for tooling system\n  \u2022 Implementation detail #99 for tooling system\n\nSynthesized from 2 source ideas for comprehensive coverage.",
+      "planned_project_ids": [
+        "security"
+      ],
+      "source_references": [
+        "docs/feature-99.md",
+        "docs/feature-31.md"
+      ],
+      "source_idea_ids": [
+        "idea-000031",
+        "idea-000099"
+      ],
+      "scoring": {
+        "implementation_readiness": 5.5,
+        "synthesis_confidence": 0.6799999999999999
+      },
+      "synthesis_metadata": {
+        "merged_from_count": 2,
+        "member_idea_ids": [
+          "idea-000031",
+          "idea-000099"
+        ],
+        "combined_categories": [
+          "security"
+        ],
+        "combined_references": [
+          "docs/feature-99.md",
+          "docs/feature-31.md"
+        ],
+        "average_readiness": 5.5,
+        "synthesis_confidence": 0.6799999999999999,
+        "synthesis_timestamp": "2026-04-06T10:25:11.674367+00:00"
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "merged-9ef01e37",
+      "title": "Comprehensive Feature Implementation",
+      "description": "Unified implementation combining 2 related concepts.\nKey features:\n  \u2022 Implementation detail #51 for frontend system\n  \u2022 Implementation detail #81 for frontend system\n\nSynthesized from 2 source ideas for comprehensive coverage.",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-81.md",
+        "docs/feature-51.md"
+      ],
+      "source_idea_ids": [
+        "idea-000051",
+        "idea-000081"
+      ],
+      "scoring": {
+        "implementation_readiness": 5.0,
+        "synthesis_confidence": 0.6799999999999999
+      },
+      "synthesis_metadata": {
+        "merged_from_count": 2,
+        "member_idea_ids": [
+          "idea-000051",
+          "idea-000081"
+        ],
+        "combined_categories": [
+          "tooling"
+        ],
+        "combined_references": [
+          "docs/feature-81.md",
+          "docs/feature-51.md"
+        ],
+        "average_readiness": 5.0,
+        "synthesis_confidence": 0.6799999999999999,
+        "synthesis_timestamp": "2026-04-06T10:25:11.674482+00:00"
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "merged-0689e23d",
+      "title": "Comprehensive Refactor Implementation",
+      "description": "Unified implementation combining 2 related concepts.\nKey features:\n  \u2022 Implementation detail #154 for data system\n  \u2022 Implementation detail #160 for data system\n\nSynthesized from 2 source ideas for comprehensive coverage.",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-154.md",
+        "docs/feature-160.md"
+      ],
+      "source_idea_ids": [
+        "idea-000154",
+        "idea-000160"
+      ],
+      "scoring": {
+        "implementation_readiness": 6.5,
+        "synthesis_confidence": 0.6799999999999999
+      },
+      "synthesis_metadata": {
+        "merged_from_count": 2,
+        "member_idea_ids": [
+          "idea-000154",
+          "idea-000160"
+        ],
+        "combined_categories": [
+          "ai_ml"
+        ],
+        "combined_references": [
+          "docs/feature-154.md",
+          "docs/feature-160.md"
+        ],
+        "average_readiness": 6.5,
+        "synthesis_confidence": 0.6799999999999999,
+        "synthesis_timestamp": "2026-04-06T10:25:11.674540+00:00"
+      },
+      "status": "active"
+    }
+  ],
+  "ungrouped_ideas": [
+    {
+      "idea_id": "idea-000002",
+      "title": "Feature 2: Refactor tooling",
+      "description": "Implementation detail #2 for infrastructure system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-2.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000003",
+      "title": "Feature 3: Refactor tooling",
+      "description": "Implementation detail #3 for backend system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-3.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000007",
+      "title": "Feature 7: Enhance frontend",
+      "description": "Implementation detail #7 for ai_ml system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-7.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000010",
+      "title": "Feature 10: Optimize tooling",
+      "description": "Implementation detail #10 for data system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-10.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000011",
+      "title": "Feature 11: Optimize security",
+      "description": "Implementation detail #11 for tooling system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-11.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 6
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000012",
+      "title": "Feature 12: Refactor infrastructure",
+      "description": "Implementation detail #12 for security system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-12.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000013",
+      "title": "Feature 13: Refactor ai_ml",
+      "description": "Implementation detail #13 for ai_ml system",
+      "planned_project_ids": [
+        "data"
+      ],
+      "source_references": [
+        "docs/feature-13.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000015",
+      "title": "Feature 15: Fix ai_ml",
+      "description": "Implementation detail #15 for infrastructure system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-15.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000016",
+      "title": "Feature 16: Refactor security",
+      "description": "Implementation detail #16 for security system",
+      "planned_project_ids": [
+        "frontend"
+      ],
+      "source_references": [
+        "docs/feature-16.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000019",
+      "title": "Feature 19: Refactor security",
+      "description": "Implementation detail #19 for tooling system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-19.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 6
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000022",
+      "title": "Feature 22: Refactor tooling",
+      "description": "Implementation detail #22 for data system",
+      "planned_project_ids": [
+        "security"
+      ],
+      "source_references": [
+        "docs/feature-22.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000024",
+      "title": "Feature 24: Optimize data",
+      "description": "Implementation detail #24 for ai_ml system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-24.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000026",
+      "title": "Feature 26: Refactor data",
+      "description": "Implementation detail #26 for ai_ml system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-26.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000027",
+      "title": "Feature 27: Enhance data",
+      "description": "Implementation detail #27 for backend system",
+      "planned_project_ids": [
+        "data"
+      ],
+      "source_references": [
+        "docs/feature-27.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000039",
+      "title": "Feature 39: Refactor infrastructure",
+      "description": "Implementation detail #39 for ai_ml system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-39.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000043",
+      "title": "Feature 43: Refactor ai_ml",
+      "description": "Implementation detail #43 for tooling system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-43.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000046",
+      "title": "Feature 46: Fix infrastructure",
+      "description": "Implementation detail #46 for infrastructure system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-46.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000049",
+      "title": "Feature 49: Fix frontend",
+      "description": "Implementation detail #49 for tooling system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-49.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000052",
+      "title": "Feature 52: Refactor frontend",
+      "description": "Implementation detail #52 for security system",
+      "planned_project_ids": [
+        "frontend"
+      ],
+      "source_references": [
+        "docs/feature-52.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000053",
+      "title": "Feature 53: Refactor security",
+      "description": "Implementation detail #53 for security system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-53.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000055",
+      "title": "Feature 55: Refactor data",
+      "description": "Implementation detail #55 for frontend system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-55.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000063",
+      "title": "Feature 63: Fix ai_ml",
+      "description": "Implementation detail #63 for security system",
+      "planned_project_ids": [
+        "security"
+      ],
+      "source_references": [
+        "docs/feature-63.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000064",
+      "title": "Feature 64: Refactor security",
+      "description": "Implementation detail #64 for security system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-64.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000066",
+      "title": "Feature 66: Optimize frontend",
+      "description": "Implementation detail #66 for tooling system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-66.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000067",
+      "title": "Feature 67: Optimize frontend",
+      "description": "Implementation detail #67 for frontend system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-67.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000068",
+      "title": "Feature 68: Optimize ai_ml",
+      "description": "Implementation detail #68 for backend system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-68.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000070",
+      "title": "Feature 70: Fix frontend",
+      "description": "Implementation detail #70 for frontend system",
+      "planned_project_ids": [
+        "data"
+      ],
+      "source_references": [
+        "docs/feature-70.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000071",
+      "title": "Feature 71: Enhance data",
+      "description": "Implementation detail #71 for data system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-71.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000072",
+      "title": "Feature 72: Enhance frontend",
+      "description": "Implementation detail #72 for infrastructure system",
+      "planned_project_ids": [
+        "frontend"
+      ],
+      "source_references": [
+        "docs/feature-72.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000077",
+      "title": "Feature 77: Enhance security",
+      "description": "Implementation detail #77 for data system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-77.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000078",
+      "title": "Feature 78: Optimize infrastructure",
+      "description": "Implementation detail #78 for tooling system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-78.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000080",
+      "title": "Feature 80: Enhance data",
+      "description": "Implementation detail #80 for frontend system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-80.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 6
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000082",
+      "title": "Feature 82: Enhance ai_ml",
+      "description": "Implementation detail #82 for tooling system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-82.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000083",
+      "title": "Feature 83: Refactor tooling",
+      "description": "Implementation detail #83 for ai_ml system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-83.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000084",
+      "title": "Feature 84: Optimize backend",
+      "description": "Implementation detail #84 for tooling system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-84.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000092",
+      "title": "Feature 92: Refactor frontend",
+      "description": "Implementation detail #92 for backend system",
+      "planned_project_ids": [
+        "data"
+      ],
+      "source_references": [
+        "docs/feature-92.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000101",
+      "title": "Feature 101: Refactor ai_ml",
+      "description": "Implementation detail #101 for infrastructure system",
+      "planned_project_ids": [
+        "frontend"
+      ],
+      "source_references": [
+        "docs/feature-101.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 6
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000102",
+      "title": "Feature 102: Optimize data",
+      "description": "Implementation detail #102 for tooling system",
+      "planned_project_ids": [
+        "frontend"
+      ],
+      "source_references": [
+        "docs/feature-102.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000103",
+      "title": "Feature 103: Optimize data",
+      "description": "Implementation detail #103 for tooling system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-103.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000104",
+      "title": "Feature 104: Optimize security",
+      "description": "Implementation detail #104 for data system",
+      "planned_project_ids": [
+        "frontend"
+      ],
+      "source_references": [
+        "docs/feature-104.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000105",
+      "title": "Feature 105: Optimize data",
+      "description": "Implementation detail #105 for frontend system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-105.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000106",
+      "title": "Feature 106: Optimize tooling",
+      "description": "Implementation detail #106 for backend system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-106.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000107",
+      "title": "Feature 107: Refactor frontend",
+      "description": "Implementation detail #107 for tooling system",
+      "planned_project_ids": [
+        "data"
+      ],
+      "source_references": [
+        "docs/feature-107.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000108",
+      "title": "Feature 108: Refactor infrastructure",
+      "description": "Implementation detail #108 for data system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-108.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000111",
+      "title": "Feature 111: Optimize tooling",
+      "description": "Implementation detail #111 for frontend system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-111.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000114",
+      "title": "Feature 114: Fix ai_ml",
+      "description": "Implementation detail #114 for backend system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-114.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000118",
+      "title": "Feature 118: Refactor data",
+      "description": "Implementation detail #118 for infrastructure system",
+      "planned_project_ids": [
+        "data"
+      ],
+      "source_references": [
+        "docs/feature-118.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000119",
+      "title": "Feature 119: Enhance tooling",
+      "description": "Implementation detail #119 for tooling system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-119.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000120",
+      "title": "Feature 120: Refactor backend",
+      "description": "Implementation detail #120 for ai_ml system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-120.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000123",
+      "title": "Feature 123: Fix backend",
+      "description": "Implementation detail #123 for ai_ml system",
+      "planned_project_ids": [
+        "security"
+      ],
+      "source_references": [
+        "docs/feature-123.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000131",
+      "title": "Feature 131: Fix ai_ml",
+      "description": "Implementation detail #131 for data system",
+      "planned_project_ids": [
+        "security"
+      ],
+      "source_references": [
+        "docs/feature-131.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000137",
+      "title": "Feature 137: Enhance data",
+      "description": "Implementation detail #137 for frontend system",
+      "planned_project_ids": [
+        "security"
+      ],
+      "source_references": [
+        "docs/feature-137.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000140",
+      "title": "Feature 140: Optimize infrastructure",
+      "description": "Implementation detail #140 for infrastructure system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-140.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000143",
+      "title": "Feature 143: Fix frontend",
+      "description": "Implementation detail #143 for backend system",
+      "planned_project_ids": [
+        "security"
+      ],
+      "source_references": [
+        "docs/feature-143.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 6
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000148",
+      "title": "Feature 148: Optimize security",
+      "description": "Implementation detail #148 for security system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-148.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000153",
+      "title": "Feature 153: Refactor infrastructure",
+      "description": "Implementation detail #153 for data system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-153.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000157",
+      "title": "Feature 157: Optimize tooling",
+      "description": "Implementation detail #157 for tooling system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-157.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000162",
+      "title": "Feature 162: Fix security",
+      "description": "Implementation detail #162 for security system",
+      "planned_project_ids": [
+        "data"
+      ],
+      "source_references": [
+        "docs/feature-162.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000166",
+      "title": "Feature 166: Optimize security",
+      "description": "Implementation detail #166 for backend system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-166.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 6
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000169",
+      "title": "Feature 169: Fix infrastructure",
+      "description": "Implementation detail #169 for infrastructure system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-169.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000171",
+      "title": "Feature 171: Refactor frontend",
+      "description": "Implementation detail #171 for ai_ml system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-171.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000175",
+      "title": "Feature 175: Optimize security",
+      "description": "Implementation detail #175 for ai_ml system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-175.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000176",
+      "title": "Feature 176: Enhance tooling",
+      "description": "Implementation detail #176 for infrastructure system",
+      "planned_project_ids": [
+        "security"
+      ],
+      "source_references": [
+        "docs/feature-176.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000179",
+      "title": "Feature 179: Optimize data",
+      "description": "Implementation detail #179 for backend system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-179.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000180",
+      "title": "Feature 180: Fix tooling",
+      "description": "Implementation detail #180 for ai_ml system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-180.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000181",
+      "title": "Feature 181: Refactor tooling",
+      "description": "Implementation detail #181 for security system",
+      "planned_project_ids": [
+        "data"
+      ],
+      "source_references": [
+        "docs/feature-181.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000184",
+      "title": "Feature 184: Refactor backend",
+      "description": "Implementation detail #184 for ai_ml system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-184.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000185",
+      "title": "Feature 185: Fix tooling",
+      "description": "Implementation detail #185 for frontend system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-185.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000192",
+      "title": "Feature 192: Fix tooling",
+      "description": "Implementation detail #192 for infrastructure system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-192.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000194",
+      "title": "Feature 194: Refactor security",
+      "description": "Implementation detail #194 for infrastructure system",
+      "planned_project_ids": [
+        "frontend"
+      ],
+      "source_references": [
+        "docs/feature-194.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000195",
+      "title": "Feature 195: Optimize security",
+      "description": "Implementation detail #195 for infrastructure system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-195.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 6
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000197",
+      "title": "Feature 197: Enhance infrastructure",
+      "description": "Implementation detail #197 for security system",
+      "planned_project_ids": [
+        "data"
+      ],
+      "source_references": [
+        "docs/feature-197.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    }
+  ],
+  "synthesis_records": [
+    {
+      "source_idea_ids": [
+        "idea-000001",
+        "idea-000005",
+        "idea-000025",
+        "idea-000033",
+        "idea-000034",
+        "idea-000036",
+        "idea-000069",
+        "idea-000073",
+        "idea-000075",
+        "idea-000087",
+        "idea-000100",
+        "idea-000116",
+        "idea-000127",
+        "idea-000128",
+        "idea-000132",
+        "idea-000138",
+        "idea-000139",
+        "idea-000144",
+        "idea-000147",
+        "idea-000152",
+        "idea-000156",
+        "idea-000158",
+        "idea-000159",
+        "idea-000164",
+        "idea-000168",
+        "idea-000188",
+        "idea-000196",
+        "idea-000198",
+        "idea-000200"
+      ],
+      "synthesized_idea_id": "merged-81fbe621",
+      "theme": "visualization",
+      "confidence": 0.8108971488281826,
+      "timestamp": "2026-04-06T10:25:11.674583+00:00"
+    },
+    {
+      "source_idea_ids": [
+        "idea-000004",
+        "idea-000021",
+        "idea-000038",
+        "idea-000040",
+        "idea-000041",
+        "idea-000065",
+        "idea-000076",
+        "idea-000086",
+        "idea-000089",
+        "idea-000091",
+        "idea-000096",
+        "idea-000125",
+        "idea-000126",
+        "idea-000145",
+        "idea-000151",
+        "idea-000174",
+        "idea-000186",
+        "idea-000189",
+        "idea-000190"
+      ],
+      "synthesized_idea_id": "merged-96fc6fbf",
+      "theme": "cluster",
+      "confidence": 0.9074463937621828,
+      "timestamp": "2026-04-06T10:25:11.674588+00:00"
+    },
+    {
+      "source_idea_ids": [
+        "idea-000006",
+        "idea-000008",
+        "idea-000014",
+        "idea-000018",
+        "idea-000035",
+        "idea-000037",
+        "idea-000042",
+        "idea-000054",
+        "idea-000074",
+        "idea-000085",
+        "idea-000090",
+        "idea-000093",
+        "idea-000094",
+        "idea-000095",
+        "idea-000097",
+        "idea-000109",
+        "idea-000110",
+        "idea-000121",
+        "idea-000124",
+        "idea-000129",
+        "idea-000136",
+        "idea-000150",
+        "idea-000161",
+        "idea-000165",
+        "idea-000167",
+        "idea-000170",
+        "idea-000172",
+        "idea-000173",
+        "idea-000183",
+        "idea-000193"
+      ],
+      "synthesized_idea_id": "merged-97852221",
+      "theme": "pipeline",
+      "confidence": 0.9051062347614041,
+      "timestamp": "2026-04-06T10:25:11.674592+00:00"
+    },
+    {
+      "source_idea_ids": [
+        "idea-000009",
+        "idea-000017",
+        "idea-000028",
+        "idea-000044",
+        "idea-000045",
+        "idea-000047",
+        "idea-000050",
+        "idea-000057",
+        "idea-000058",
+        "idea-000061",
+        "idea-000062",
+        "idea-000088",
+        "idea-000113",
+        "idea-000115",
+        "idea-000122",
+        "idea-000134",
+        "idea-000135",
+        "idea-000146",
+        "idea-000149",
+        "idea-000163",
+        "idea-000177",
+        "idea-000178",
+        "idea-000182",
+        "idea-000191"
+      ],
+      "synthesized_idea_id": "merged-7095b347",
+      "theme": "proper",
+      "confidence": 0.8291248606465992,
+      "timestamp": "2026-04-06T10:25:11.674596+00:00"
+    },
+    {
+      "source_idea_ids": [
+        "idea-000020",
+        "idea-000029",
+        "idea-000030",
+        "idea-000032",
+        "idea-000048",
+        "idea-000056",
+        "idea-000059",
+        "idea-000060",
+        "idea-000079",
+        "idea-000112",
+        "idea-000117",
+        "idea-000130",
+        "idea-000133",
+        "idea-000141",
+        "idea-000142",
+        "idea-000155",
+        "idea-000187",
+        "idea-000199"
+      ],
+      "synthesized_idea_id": "merged-5ce53363",
+      "theme": "learning",
+      "confidence": 0.8331808278867106,
+      "timestamp": "2026-04-06T10:25:11.674599+00:00"
+    },
+    {
+      "source_idea_ids": [
+        "idea-000023",
+        "idea-000098"
+      ],
+      "synthesized_idea_id": "merged-f62a73e4",
+      "theme": "refactor",
+      "confidence": 0.6799999999999999,
+      "timestamp": "2026-04-06T10:25:11.674602+00:00"
+    },
+    {
+      "source_idea_ids": [
+        "idea-000031",
+        "idea-000099"
+      ],
+      "synthesized_idea_id": "merged-3abd695c",
+      "theme": "optimize",
+      "confidence": 0.6799999999999999,
+      "timestamp": "2026-04-06T10:25:11.674605+00:00"
+    },
+    {
+      "source_idea_ids": [
+        "idea-000051",
+        "idea-000081"
+      ],
+      "synthesized_idea_id": "merged-9ef01e37",
+      "theme": "detail",
+      "confidence": 0.6799999999999999,
+      "timestamp": "2026-04-06T10:25:11.674608+00:00"
+    },
+    {
+      "source_idea_ids": [
+        "idea-000154",
+        "idea-000160"
+      ],
+      "synthesized_idea_id": "merged-0689e23d",
+      "theme": "refactor",
+      "confidence": 0.6799999999999999,
+      "timestamp": "2026-04-06T10:25:11.674611+00:00"
+    }
+  ],
+  "report": {
+    "summary": {
+      "original_ideas": 200,
+      "synthesized_ideas": 9,
+      "ungrouped_ideas": 72,
+      "total_new_ideas": 81,
+      "ideas_consolidated": 119,
+      "consolidation_percentage": 59.5
+    },
+    "synthesis_analysis": {
+      "clusters_found": 9,
+      "avg_cluster_size": 14.222222222222221,
+      "synthesis_threshold": 0.65,
+      "timestamp": "2026-04-06T10:25:11.674626+00:00"
+    }
+  }
+}

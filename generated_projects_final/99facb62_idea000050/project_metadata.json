@@ -1,0 +1,12 @@
+{
+  "idea_id": "idea000050",
+  "title": "idea-050 - inference-speculative-decoding-runtime",
+  "description": "runtime - inference-speculative-decoding",
+  "categories": [
+    "runtime"
+  ],
+  "source_ideas_merged": 0,
+  "source_idea_ids": [],
+  "created_at": "2026-04-06T12:18:07.919480",
+  "version": "1.0.0"
+}

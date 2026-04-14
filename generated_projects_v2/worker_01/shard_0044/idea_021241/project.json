@@ -1,0 +1,66 @@
+{
+  "idea_id": 21241,
+  "category": "infrastructure",
+  "primary_template": "python_module",
+  "secondary_templates": [
+    "configuration",
+    "python_module"
+  ],
+  "files": [
+    {
+      "name": "idea_021241.py",
+      "path": "/home/dev/PyAgent/generated_projects_v2/worker_01/shard_0044/idea_021241/idea_021241.py",
+      "type": "implementation",
+      "language": "python_module",
+      "size_loc": 600
+    },
+    {
+      "name": "test_idea_021241.py",
+      "path": "/home/dev/PyAgent/generated_projects_v2/worker_01/shard_0044/idea_021241/test_idea_021241.py",
+      "type": "test",
+      "language": "python_module",
+      "size_loc": 300
+    },
+    {
+      "name": "impl_021241.yaml",
+      "path": "/home/dev/PyAgent/generated_projects_v2/worker_01/shard_0044/idea_021241/impl_021241.yaml",
+      "type": "alternative_implementation",
+      "language": "configuration",
+      "size_loc": 150
+    },
+    {
+      "name": "config.yaml",
+      "path": "/home/dev/PyAgent/generated_projects_v2/worker_01/shard_0044/idea_021241/config.yaml",
+      "type": "config",
+      "size_loc": 150
+    },
+    {
+      "name": "Dockerfile",
+      "path": "/home/dev/PyAgent/generated_projects_v2/worker_01/shard_0044/idea_021241/Dockerfile",
+      "type": "docker",
+      "size_loc": 30
+    },
+    {
+      "name": "README.md",
+      "path": "/home/dev/PyAgent/generated_projects_v2/worker_01/shard_0044/idea_021241/README.md",
+      "type": "documentation",
+      "size_loc": 50
+    },
+    {
+      "name": ".github_workflows_ci.yaml",
+      "path": "/home/dev/PyAgent/generated_projects_v2/worker_01/shard_0044/idea_021241/.github_workflows_ci.yaml",
+      "type": "ci_cd",
+      "size_loc": 40
+    },
+    {
+      "name": "package.json",
+      "path": "/home/dev/PyAgent/generated_projects_v2/worker_01/shard_0044/idea_021241/package.json",
+      "type": "manifest",
+      "size_loc": 20
+    }
+  ],
+  "generated_at": "2026-04-06T09:50:00Z",
+  "worker_id": 1,
+  "shard_id": 44,
+  "version": "2.0.0"
+}

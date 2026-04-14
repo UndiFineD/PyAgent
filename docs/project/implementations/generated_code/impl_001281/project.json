@@ -1,0 +1,9 @@
+{
+  "id": "impl_001281",
+  "num": 1281,
+  "archetype": "observability",
+  "created": "2026-04-06T08:22:46.133870",
+  "files": 7,
+  "tests": 4,
+  "loc": 1804
+}

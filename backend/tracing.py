@@ -30,6 +30,7 @@ def setup_tracing(exporter: SpanExporter | None = None) -> trace.Tracer:
 
     Returns:
         A :class:`opentelemetry.trace.Tracer` scoped to ``pyagent.backend``.
+
     """
     provider = TracerProvider()
     span_exporter: SpanExporter = exporter if exporter is not None else ConsoleSpanExporter()

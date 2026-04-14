@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-04-06T07:19:12.162582",
+  "batches_processed": 100,
+  "projects_generated": 1000,
+  "files_generated": 3000,
+  "total_loc": 83600,
+  "velocity": {
+    "projects_per_batch": 10,
+    "files_per_batch": 30,
+    "loc_per_batch": 836,
+    "loc_per_project": 83
+  },
+  "sample_files": [
+    {
+      "project": "impl_000000",
+      "file": "module.py",
+      "loc": 34
+    },
+    {
+      "project": "impl_000000",
+      "file": "api.py",
+      "loc": 22
+    },
+    {
+      "project": "impl_000000",
+      "file": "test_module.py",
+      "loc": 21
+    },
+    {
+      "project": "impl_000001",
+      "file": "module.py",
+      "loc": 47
+    },
+    {
+      "project": "impl_000001",
+      "file": "api.py",
+      "loc": 22
+    },
+    {
+      "project": "impl_000001",
+      "file": "test_module.py",
+      "loc": 21
+    },
+    {
+      "project": "impl_000002",
+      "file": "module.py",
+      "loc": 35
+    },
+    {
+      "project": "impl_000002",
+      "file": "api.py",
+      "loc": 22
+    },
+    {
+      "project": "impl_000002",
+      "file": "test_module.py",
+      "loc": 21
+    },
+    {
+      "project": "impl_000003",
+      "file": "module.py",
+      "loc": 50
+    }
+  ],
+  "extrapolation": {
+    "full_batches": 2095,
+    "estimated_projects": 20950,
+    "estimated_loc": 1751420
+  }
+}

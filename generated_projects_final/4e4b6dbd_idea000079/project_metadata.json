@@ -1,0 +1,12 @@
+{
+  "idea_id": "idea000079",
+  "title": "how to run a local llm with distributed ram among multiple computers in the same network",
+  "description": "memory - distributed-llm",
+  "categories": [
+    "memory"
+  ],
+  "source_ideas_merged": 0,
+  "source_idea_ids": [],
+  "created_at": "2026-04-06T12:18:07.946698",
+  "version": "1.0.0"
+}

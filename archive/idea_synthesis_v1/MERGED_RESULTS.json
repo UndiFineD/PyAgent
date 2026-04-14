@@ -1,0 +1,3426 @@
+{
+  "merged_ideas": [
+    {
+      "idea_id": "idea-000002",
+      "title": "Feature 2: Refactor tooling",
+      "description": "Implementation detail #2 for infrastructure system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-2.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000003",
+      "title": "Feature 3: Refactor tooling",
+      "description": "Implementation detail #3 for backend system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-3.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000007",
+      "title": "Feature 7: Enhance frontend",
+      "description": "Implementation detail #7 for ai_ml system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-7.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000010",
+      "title": "Feature 10: Optimize tooling",
+      "description": "Implementation detail #10 for data system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-10.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000011",
+      "title": "Feature 11: Optimize security",
+      "description": "Implementation detail #11 for tooling system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-11.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 6
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000012",
+      "title": "Feature 12: Refactor infrastructure",
+      "description": "Implementation detail #12 for security system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-12.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000013",
+      "title": "Feature 13: Refactor ai_ml",
+      "description": "Implementation detail #13 for ai_ml system",
+      "planned_project_ids": [
+        "data"
+      ],
+      "source_references": [
+        "docs/feature-13.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000015",
+      "title": "Feature 15: Fix ai_ml",
+      "description": "Implementation detail #15 for infrastructure system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-15.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000016",
+      "title": "Feature 16: Refactor security",
+      "description": "Implementation detail #16 for security system",
+      "planned_project_ids": [
+        "frontend"
+      ],
+      "source_references": [
+        "docs/feature-16.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000019",
+      "title": "Feature 19: Refactor security",
+      "description": "Implementation detail #19 for tooling system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-19.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 6
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000022",
+      "title": "Feature 22: Refactor tooling",
+      "description": "Implementation detail #22 for data system",
+      "planned_project_ids": [
+        "security"
+      ],
+      "source_references": [
+        "docs/feature-22.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000023",
+      "title": "Feature 23: Refactor security",
+      "description": "Implementation detail #23 for backend system",
+      "planned_project_ids": [
+        "frontend"
+      ],
+      "source_references": [
+        "docs/feature-23.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000024",
+      "title": "Feature 24: Optimize data",
+      "description": "Implementation detail #24 for ai_ml system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-24.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000026",
+      "title": "Feature 26: Refactor data",
+      "description": "Implementation detail #26 for ai_ml system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-26.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000027",
+      "title": "Feature 27: Enhance data",
+      "description": "Implementation detail #27 for backend system",
+      "planned_project_ids": [
+        "data"
+      ],
+      "source_references": [
+        "docs/feature-27.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000028",
+      "title": "Create FastAPI endpoints for user management",
+      "description": "Create REST API endpoints for user CRUD operations with proper authentication with caching layer",
+      "planned_project_ids": [
+        "infrastructure",
+        "ai_ml",
+        "security",
+        "frontend",
+        "data",
+        "tooling",
+        "backend"
+      ],
+      "source_references": [
+        "docs/backend.md",
+        "docs/security.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 9
+      },
+      "status": "active",
+      "merged_from": [
+        "idea-000062",
+        "idea-000163",
+        "idea-000134"
+      ]
+    },
+    {
+      "idea_id": "idea-000030",
+      "title": "Create machine learning model API",
+      "description": "Build API wrapper for ML model inference with caching with caching layer",
+      "planned_project_ids": [
+        "ai_ml",
+        "backend",
+        "data"
+      ],
+      "source_references": [
+        "docs/backend.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 6
+      },
+      "status": "active",
+      "merged_from": [
+        "idea-000117",
+        "idea-000187"
+      ]
+    },
+    {
+      "idea_id": "idea-000031",
+      "title": "Feature 31: Optimize frontend",
+      "description": "Implementation detail #31 for tooling system",
+      "planned_project_ids": [
+        "security"
+      ],
+      "source_references": [
+        "docs/feature-31.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000037",
+      "title": "Create data pipeline for ETL",
+      "description": "Build scalable ETL pipeline for data transformation and loading with caching layer",
+      "planned_project_ids": [
+        "frontend",
+        "backend",
+        "security",
+        "data"
+      ],
+      "source_references": [
+        "docs/data.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 9
+      },
+      "status": "active",
+      "merged_from": [
+        "idea-000074",
+        "idea-000165"
+      ]
+    },
+    {
+      "idea_id": "idea-000039",
+      "title": "Feature 39: Refactor infrastructure",
+      "description": "Implementation detail #39 for ai_ml system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-39.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000040",
+      "title": "Setup Kubernetes cluster deployment",
+      "description": "Configure Kubernetes cluster for microservices deployment with monitoring with caching layer",
+      "planned_project_ids": [
+        "infrastructure",
+        "tooling",
+        "backend",
+        "data"
+      ],
+      "source_references": [
+        "docs/infrastructure.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 9
+      },
+      "status": "active",
+      "merged_from": [
+        "idea-000041",
+        "idea-000145",
+        "idea-000174"
+      ]
+    },
+    {
+      "idea_id": "idea-000043",
+      "title": "Feature 43: Refactor ai_ml",
+      "description": "Implementation detail #43 for tooling system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-43.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000046",
+      "title": "Feature 46: Fix infrastructure",
+      "description": "Implementation detail #46 for infrastructure system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-46.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000049",
+      "title": "Feature 49: Fix frontend",
+      "description": "Implementation detail #49 for tooling system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-49.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000051",
+      "title": "Feature 51: Fix data",
+      "description": "Implementation detail #51 for frontend system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-51.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 6
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000052",
+      "title": "Feature 52: Refactor frontend",
+      "description": "Implementation detail #52 for security system",
+      "planned_project_ids": [
+        "frontend"
+      ],
+      "source_references": [
+        "docs/feature-52.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000053",
+      "title": "Feature 53: Refactor security",
+      "description": "Implementation detail #53 for security system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-53.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000055",
+      "title": "Feature 55: Refactor data",
+      "description": "Implementation detail #55 for frontend system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-55.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000063",
+      "title": "Feature 63: Fix ai_ml",
+      "description": "Implementation detail #63 for security system",
+      "planned_project_ids": [
+        "security"
+      ],
+      "source_references": [
+        "docs/feature-63.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000064",
+      "title": "Feature 64: Refactor security",
+      "description": "Implementation detail #64 for security system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-64.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000066",
+      "title": "Feature 66: Optimize frontend",
+      "description": "Implementation detail #66 for tooling system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-66.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000067",
+      "title": "Feature 67: Optimize frontend",
+      "description": "Implementation detail #67 for frontend system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-67.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000068",
+      "title": "Feature 68: Optimize ai_ml",
+      "description": "Implementation detail #68 for backend system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-68.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000070",
+      "title": "Feature 70: Fix frontend",
+      "description": "Implementation detail #70 for frontend system",
+      "planned_project_ids": [
+        "data"
+      ],
+      "source_references": [
+        "docs/feature-70.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000071",
+      "title": "Feature 71: Enhance data",
+      "description": "Implementation detail #71 for data system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-71.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000072",
+      "title": "Feature 72: Enhance frontend",
+      "description": "Implementation detail #72 for infrastructure system",
+      "planned_project_ids": [
+        "frontend"
+      ],
+      "source_references": [
+        "docs/feature-72.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000073",
+      "title": "Build React dashboard for analytics",
+      "description": "Create interactive React dashboard for real-time data visualization (alternative implementation)",
+      "planned_project_ids": [
+        "frontend",
+        "data"
+      ],
+      "source_references": [
+        "docs/api/2.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 10
+      },
+      "status": "active",
+      "merged_from": [
+        "idea-000036",
+        "idea-000087",
+        "idea-000100",
+        "idea-000132",
+        "idea-000156",
+        "idea-000158",
+        "idea-000164",
+        "idea-000196",
+        "idea-000198",
+        "idea-000200"
+      ]
+    },
+    {
+      "idea_id": "idea-000075",
+      "title": "Develop React dashboard for analytics",
+      "description": "Create interactive React dashboard for real-time data visualization with caching layer",
+      "planned_project_ids": [
+        "infrastructure",
+        "ai_ml",
+        "data",
+        "frontend",
+        "tooling",
+        "backend"
+      ],
+      "source_references": [
+        "docs/data.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 9
+      },
+      "status": "active",
+      "merged_from": [
+        "idea-000069",
+        "idea-000168",
+        "idea-000144"
+      ]
+    },
+    {
+      "idea_id": "idea-000077",
+      "title": "Feature 77: Enhance security",
+      "description": "Implementation detail #77 for data system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-77.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000078",
+      "title": "Feature 78: Optimize infrastructure",
+      "description": "Implementation detail #78 for tooling system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-78.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000079",
+      "title": "Create machine learning model API",
+      "description": "Build API wrapper for ML model inference with caching with caching layer",
+      "planned_project_ids": [
+        "security",
+        "ai_ml",
+        "backend",
+        "data"
+      ],
+      "source_references": [
+        "docs/ai_ml.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active",
+      "merged_from": [
+        "idea-000141"
+      ]
+    },
+    {
+      "idea_id": "idea-000080",
+      "title": "Feature 80: Enhance data",
+      "description": "Implementation detail #80 for frontend system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-80.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 6
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000081",
+      "title": "Feature 81: Fix data",
+      "description": "Implementation detail #81 for frontend system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-81.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000082",
+      "title": "Feature 82: Enhance ai_ml",
+      "description": "Implementation detail #82 for tooling system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-82.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000083",
+      "title": "Feature 83: Refactor tooling",
+      "description": "Implementation detail #83 for ai_ml system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-83.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000084",
+      "title": "Feature 84: Optimize backend",
+      "description": "Implementation detail #84 for tooling system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-84.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000089",
+      "title": "Setup Kubernetes cluster deployment",
+      "description": "Configure Kubernetes cluster for microservices deployment with monitoring (alternative implementation)",
+      "planned_project_ids": [
+        "infrastructure",
+        "tooling"
+      ],
+      "source_references": [
+        "docs/api/3.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 10
+      },
+      "status": "active",
+      "merged_from": [
+        "idea-000065",
+        "idea-000125",
+        "idea-000126",
+        "idea-000151",
+        "idea-000186",
+        "idea-000189",
+        "idea-000190"
+      ]
+    },
+    {
+      "idea_id": "idea-000092",
+      "title": "Feature 92: Refactor frontend",
+      "description": "Implementation detail #92 for backend system",
+      "planned_project_ids": [
+        "data"
+      ],
+      "source_references": [
+        "docs/feature-92.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000094",
+      "title": "Create data pipeline for ETL",
+      "description": "Build scalable ETL pipeline for data transformation and loading (alternative implementation)",
+      "planned_project_ids": [
+        "backend",
+        "data"
+      ],
+      "source_references": [
+        "docs/api/5.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 10
+      },
+      "status": "active",
+      "merged_from": [
+        "idea-000018",
+        "idea-000095",
+        "idea-000109",
+        "idea-000121",
+        "idea-000124",
+        "idea-000136",
+        "idea-000150",
+        "idea-000161",
+        "idea-000170",
+        "idea-000183"
+      ]
+    },
+    {
+      "idea_id": "idea-000097",
+      "title": "Create data pipeline for ETL",
+      "description": "Build scalable ETL pipeline for data transformation and loading with caching layer",
+      "planned_project_ids": [
+        "infrastructure",
+        "ai_ml",
+        "security",
+        "data",
+        "tooling",
+        "backend"
+      ],
+      "source_references": [
+        "docs/backend.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active",
+      "merged_from": [
+        "idea-000054",
+        "idea-000129",
+        "idea-000167",
+        "idea-000172"
+      ]
+    },
+    {
+      "idea_id": "idea-000098",
+      "title": "Feature 98: Refactor security",
+      "description": "Implementation detail #98 for backend system",
+      "planned_project_ids": [
+        "frontend"
+      ],
+      "source_references": [
+        "docs/feature-98.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000099",
+      "title": "Feature 99: Optimize frontend",
+      "description": "Implementation detail #99 for tooling system",
+      "planned_project_ids": [
+        "security"
+      ],
+      "source_references": [
+        "docs/feature-99.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000101",
+      "title": "Feature 101: Refactor ai_ml",
+      "description": "Implementation detail #101 for infrastructure system",
+      "planned_project_ids": [
+        "frontend"
+      ],
+      "source_references": [
+        "docs/feature-101.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 6
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000102",
+      "title": "Feature 102: Optimize data",
+      "description": "Implementation detail #102 for tooling system",
+      "planned_project_ids": [
+        "frontend"
+      ],
+      "source_references": [
+        "docs/feature-102.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000103",
+      "title": "Feature 103: Optimize data",
+      "description": "Implementation detail #103 for tooling system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-103.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000104",
+      "title": "Feature 104: Optimize security",
+      "description": "Implementation detail #104 for data system",
+      "planned_project_ids": [
+        "frontend"
+      ],
+      "source_references": [
+        "docs/feature-104.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000105",
+      "title": "Feature 105: Optimize data",
+      "description": "Implementation detail #105 for frontend system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-105.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000106",
+      "title": "Feature 106: Optimize tooling",
+      "description": "Implementation detail #106 for backend system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-106.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000107",
+      "title": "Feature 107: Refactor frontend",
+      "description": "Implementation detail #107 for tooling system",
+      "planned_project_ids": [
+        "data"
+      ],
+      "source_references": [
+        "docs/feature-107.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000108",
+      "title": "Feature 108: Refactor infrastructure",
+      "description": "Implementation detail #108 for data system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-108.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000111",
+      "title": "Feature 111: Optimize tooling",
+      "description": "Implementation detail #111 for frontend system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-111.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000114",
+      "title": "Feature 114: Fix ai_ml",
+      "description": "Implementation detail #114 for backend system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-114.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000115",
+      "title": "Implement FastAPI endpoints for user management",
+      "description": "Create REST API endpoints for user CRUD operations with proper authentication (alternative implementation)",
+      "planned_project_ids": [
+        "backend",
+        "security"
+      ],
+      "source_references": [
+        "docs/api/1.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 9
+      },
+      "status": "active",
+      "merged_from": [
+        "idea-000009",
+        "idea-000122",
+        "idea-000146",
+        "idea-000182"
+      ]
+    },
+    {
+      "idea_id": "idea-000118",
+      "title": "Feature 118: Refactor data",
+      "description": "Implementation detail #118 for infrastructure system",
+      "planned_project_ids": [
+        "data"
+      ],
+      "source_references": [
+        "docs/feature-118.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000119",
+      "title": "Feature 119: Enhance tooling",
+      "description": "Implementation detail #119 for tooling system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-119.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000120",
+      "title": "Feature 120: Refactor backend",
+      "description": "Implementation detail #120 for ai_ml system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-120.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000123",
+      "title": "Feature 123: Fix backend",
+      "description": "Implementation detail #123 for ai_ml system",
+      "planned_project_ids": [
+        "security"
+      ],
+      "source_references": [
+        "docs/feature-123.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000131",
+      "title": "Feature 131: Fix ai_ml",
+      "description": "Implementation detail #131 for data system",
+      "planned_project_ids": [
+        "security"
+      ],
+      "source_references": [
+        "docs/feature-131.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000137",
+      "title": "Feature 137: Enhance data",
+      "description": "Implementation detail #137 for frontend system",
+      "planned_project_ids": [
+        "security"
+      ],
+      "source_references": [
+        "docs/feature-137.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000140",
+      "title": "Feature 140: Optimize infrastructure",
+      "description": "Implementation detail #140 for infrastructure system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-140.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 3
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000142",
+      "title": "Implement machine learning model API",
+      "description": "Build API wrapper for ML model inference with caching (alternative implementation)",
+      "planned_project_ids": [
+        "ai_ml",
+        "backend"
+      ],
+      "source_references": [
+        "docs/api/4.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 10
+      },
+      "status": "active",
+      "merged_from": [
+        "idea-000020",
+        "idea-000199"
+      ]
+    },
+    {
+      "idea_id": "idea-000143",
+      "title": "Feature 143: Fix frontend",
+      "description": "Implementation detail #143 for backend system",
+      "planned_project_ids": [
+        "security"
+      ],
+      "source_references": [
+        "docs/feature-143.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 6
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000148",
+      "title": "Feature 148: Optimize security",
+      "description": "Implementation detail #148 for security system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-148.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000153",
+      "title": "Feature 153: Refactor infrastructure",
+      "description": "Implementation detail #153 for data system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-153.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000154",
+      "title": "Feature 154: Refactor tooling",
+      "description": "Implementation detail #154 for data system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-154.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000157",
+      "title": "Feature 157: Optimize tooling",
+      "description": "Implementation detail #157 for tooling system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-157.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000159",
+      "title": "Develop React dashboard for analytics",
+      "description": "Create interactive React dashboard for real-time data visualization with caching layer",
+      "planned_project_ids": [
+        "infrastructure",
+        "frontend",
+        "backend",
+        "data"
+      ],
+      "source_references": [
+        "docs/frontend.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 9
+      },
+      "status": "active",
+      "merged_from": [
+        "idea-000005",
+        "idea-000127"
+      ]
+    },
+    {
+      "idea_id": "idea-000160",
+      "title": "Feature 160: Refactor tooling",
+      "description": "Implementation detail #160 for data system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-160.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 6
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000162",
+      "title": "Feature 162: Fix security",
+      "description": "Implementation detail #162 for security system",
+      "planned_project_ids": [
+        "data"
+      ],
+      "source_references": [
+        "docs/feature-162.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000166",
+      "title": "Feature 166: Optimize security",
+      "description": "Implementation detail #166 for backend system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-166.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 6
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000169",
+      "title": "Feature 169: Fix infrastructure",
+      "description": "Implementation detail #169 for infrastructure system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-169.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000171",
+      "title": "Feature 171: Refactor frontend",
+      "description": "Implementation detail #171 for ai_ml system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-171.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000175",
+      "title": "Feature 175: Optimize security",
+      "description": "Implementation detail #175 for ai_ml system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-175.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000176",
+      "title": "Feature 176: Enhance tooling",
+      "description": "Implementation detail #176 for infrastructure system",
+      "planned_project_ids": [
+        "security"
+      ],
+      "source_references": [
+        "docs/feature-176.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000179",
+      "title": "Feature 179: Optimize data",
+      "description": "Implementation detail #179 for backend system",
+      "planned_project_ids": [
+        "infrastructure"
+      ],
+      "source_references": [
+        "docs/feature-179.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 5
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000180",
+      "title": "Feature 180: Fix tooling",
+      "description": "Implementation detail #180 for ai_ml system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-180.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000181",
+      "title": "Feature 181: Refactor tooling",
+      "description": "Implementation detail #181 for security system",
+      "planned_project_ids": [
+        "data"
+      ],
+      "source_references": [
+        "docs/feature-181.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000184",
+      "title": "Feature 184: Refactor backend",
+      "description": "Implementation detail #184 for ai_ml system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-184.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000185",
+      "title": "Feature 185: Fix tooling",
+      "description": "Implementation detail #185 for frontend system",
+      "planned_project_ids": [
+        "ai_ml"
+      ],
+      "source_references": [
+        "docs/feature-185.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 4
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000192",
+      "title": "Feature 192: Fix tooling",
+      "description": "Implementation detail #192 for infrastructure system",
+      "planned_project_ids": [
+        "tooling"
+      ],
+      "source_references": [
+        "docs/feature-192.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 8
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000194",
+      "title": "Feature 194: Refactor security",
+      "description": "Implementation detail #194 for infrastructure system",
+      "planned_project_ids": [
+        "frontend"
+      ],
+      "source_references": [
+        "docs/feature-194.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000195",
+      "title": "Feature 195: Optimize security",
+      "description": "Implementation detail #195 for infrastructure system",
+      "planned_project_ids": [
+        "backend"
+      ],
+      "source_references": [
+        "docs/feature-195.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 6
+      },
+      "status": "active"
+    },
+    {
+      "idea_id": "idea-000197",
+      "title": "Feature 197: Enhance infrastructure",
+      "description": "Implementation detail #197 for security system",
+      "planned_project_ids": [
+        "data"
+      ],
+      "source_references": [
+        "docs/feature-197.md"
+      ],
+      "scoring": {
+        "implementation_readiness": 7
+      },
+      "status": "active"
+    }
+  ],
+  "merge_records": [
+    {
+      "source_id": "idea-000001",
+      "target_id": "idea-000069",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.239992+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/data.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "data",
+          "frontend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000005",
+      "target_id": "idea-000159",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240051+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/frontend.md"
+        ],
+        "planned_project_ids": [
+          "data",
+          "backend",
+          "frontend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000069",
+      "target_id": "idea-000075",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240064+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/data.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "data",
+          "frontend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000188",
+      "target_id": "idea-000139",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240074+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/frontend.md"
+        ],
+        "planned_project_ids": [
+          "data",
+          "frontend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000004",
+      "target_id": "idea-000038",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240085+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/3.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "tooling"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000091",
+      "target_id": "idea-000021",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240102+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/infrastructure.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "tooling"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000096",
+      "target_id": "idea-000021",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240114+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/infrastructure.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "tooling"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000038",
+      "target_id": "idea-000065",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240123+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/3.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "tooling"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000041",
+      "target_id": "idea-000040",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240134+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/infrastructure.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "tooling",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000145",
+      "target_id": "idea-000040",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240143+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/infrastructure.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "tooling",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000076",
+      "target_id": "idea-000065",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240151+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/3.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "tooling"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000065",
+      "target_id": "idea-000089",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240160+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/3.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "tooling"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000086",
+      "target_id": "idea-000174",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240169+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/infrastructure.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "tooling",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000125",
+      "target_id": "idea-000089",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240177+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/3.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "tooling"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000126",
+      "target_id": "idea-000089",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240185+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/3.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "tooling"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000151",
+      "target_id": "idea-000089",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240192+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/3.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "tooling"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000186",
+      "target_id": "idea-000089",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240199+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/3.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "tooling"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000189",
+      "target_id": "idea-000089",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240207+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/3.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "tooling"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000190",
+      "target_id": "idea-000089",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240214+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/3.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "tooling"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000006",
+      "target_id": "idea-000018",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240224+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/5.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000008",
+      "target_id": "idea-000129",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240295+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md"
+        ],
+        "planned_project_ids": [
+          "security",
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000014",
+      "target_id": "idea-000035",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240309+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000042",
+      "target_id": "idea-000018",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240318+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/5.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000090",
+      "target_id": "idea-000018",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240327+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/5.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000093",
+      "target_id": "idea-000018",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240335+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/5.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000018",
+      "target_id": "idea-000094",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240342+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/5.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000110",
+      "target_id": "idea-000035",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240352+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000193",
+      "target_id": "idea-000035",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240359+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000074",
+      "target_id": "idea-000037",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240367+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/data.md"
+        ],
+        "planned_project_ids": [
+          "security",
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000054",
+      "target_id": "idea-000097",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240377+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000095",
+      "target_id": "idea-000094",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240387+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/5.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000109",
+      "target_id": "idea-000094",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240395+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/5.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000121",
+      "target_id": "idea-000094",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240403+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/5.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000124",
+      "target_id": "idea-000094",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240411+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/5.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000136",
+      "target_id": "idea-000094",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240419+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/5.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000150",
+      "target_id": "idea-000094",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240427+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/5.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000161",
+      "target_id": "idea-000094",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240435+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/5.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000170",
+      "target_id": "idea-000094",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240443+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/5.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000183",
+      "target_id": "idea-000094",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240450+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/5.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000173",
+      "target_id": "idea-000129",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240461+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "security",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000017",
+      "target_id": "idea-000009",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240513+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/1.md"
+        ],
+        "planned_project_ids": [
+          "security",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000057",
+      "target_id": "idea-000009",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240529+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/1.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "security"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000058",
+      "target_id": "idea-000009",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240540+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/1.md"
+        ],
+        "planned_project_ids": [
+          "security",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000113",
+      "target_id": "idea-000009",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240549+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/1.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "security"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000009",
+      "target_id": "idea-000115",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240557+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/1.md"
+        ],
+        "planned_project_ids": [
+          "security",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000122",
+      "target_id": "idea-000115",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240567+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/1.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "security"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000146",
+      "target_id": "idea-000115",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240574+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/1.md"
+        ],
+        "planned_project_ids": [
+          "security",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000182",
+      "target_id": "idea-000115",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240582+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/1.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "security"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000029",
+      "target_id": "idea-000020",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240590+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/4.md"
+        ],
+        "planned_project_ids": [
+          "ai_ml",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000048",
+      "target_id": "idea-000020",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240598+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/4.md"
+        ],
+        "planned_project_ids": [
+          "ai_ml",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000059",
+      "target_id": "idea-000020",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240605+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/4.md"
+        ],
+        "planned_project_ids": [
+          "ai_ml",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000112",
+      "target_id": "idea-000020",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240613+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/4.md"
+        ],
+        "planned_project_ids": [
+          "ai_ml",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000130",
+      "target_id": "idea-000020",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240620+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/4.md"
+        ],
+        "planned_project_ids": [
+          "ai_ml",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000133",
+      "target_id": "idea-000020",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240627+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/4.md"
+        ],
+        "planned_project_ids": [
+          "ai_ml",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000020",
+      "target_id": "idea-000142",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240635+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/4.md"
+        ],
+        "planned_project_ids": [
+          "ai_ml",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000199",
+      "target_id": "idea-000142",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240644+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/4.md"
+        ],
+        "planned_project_ids": [
+          "ai_ml",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000033",
+      "target_id": "idea-000025",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240697+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/2.md"
+        ],
+        "planned_project_ids": [
+          "data",
+          "frontend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000025",
+      "target_id": "idea-000034",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240715+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/2.md"
+        ],
+        "planned_project_ids": [
+          "data",
+          "frontend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000034",
+      "target_id": "idea-000036",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240728+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/2.md"
+        ],
+        "planned_project_ids": [
+          "data",
+          "frontend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000036",
+      "target_id": "idea-000073",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240737+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/2.md"
+        ],
+        "planned_project_ids": [
+          "data",
+          "frontend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000087",
+      "target_id": "idea-000073",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240746+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/2.md"
+        ],
+        "planned_project_ids": [
+          "frontend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000100",
+      "target_id": "idea-000073",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240795+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/2.md"
+        ],
+        "planned_project_ids": [
+          "data",
+          "frontend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000132",
+      "target_id": "idea-000073",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240810+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/2.md"
+        ],
+        "planned_project_ids": [
+          "frontend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000156",
+      "target_id": "idea-000073",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240820+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/2.md"
+        ],
+        "planned_project_ids": [
+          "data",
+          "frontend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000158",
+      "target_id": "idea-000073",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240828+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/2.md"
+        ],
+        "planned_project_ids": [
+          "frontend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000164",
+      "target_id": "idea-000073",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240836+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/2.md"
+        ],
+        "planned_project_ids": [
+          "data",
+          "frontend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000196",
+      "target_id": "idea-000073",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240843+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/2.md"
+        ],
+        "planned_project_ids": [
+          "frontend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000198",
+      "target_id": "idea-000073",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240851+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/2.md"
+        ],
+        "planned_project_ids": [
+          "data",
+          "frontend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000200",
+      "target_id": "idea-000073",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240890+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/api/2.md"
+        ],
+        "planned_project_ids": [
+          "frontend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000128",
+      "target_id": "idea-000138",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240913+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/frontend.md"
+        ],
+        "planned_project_ids": [
+          "data",
+          "frontend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000045",
+      "target_id": "idea-000044",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240927+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/security.md"
+        ],
+        "planned_project_ids": [
+          "security",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000061",
+      "target_id": "idea-000044",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240937+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/security.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "security"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000149",
+      "target_id": "idea-000044",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240945+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/security.md"
+        ],
+        "planned_project_ids": [
+          "security",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000047",
+      "target_id": "idea-000135",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.240990+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/security.md"
+        ],
+        "planned_project_ids": [
+          "security",
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000050",
+      "target_id": "idea-000163",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.241009+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md"
+        ],
+        "planned_project_ids": [
+          "security",
+          "tooling",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000088",
+      "target_id": "idea-000177",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.241021+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md"
+        ],
+        "planned_project_ids": [
+          "security",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000117",
+      "target_id": "idea-000030",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.241030+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md"
+        ],
+        "planned_project_ids": [
+          "ai_ml",
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000187",
+      "target_id": "idea-000030",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.241039+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md"
+        ],
+        "planned_project_ids": [
+          "ai_ml",
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000056",
+      "target_id": "idea-000032",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.241047+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/ai_ml.md"
+        ],
+        "planned_project_ids": [
+          "ai_ml",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000060",
+      "target_id": "idea-000032",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.241055+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/ai_ml.md"
+        ],
+        "planned_project_ids": [
+          "ai_ml",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000116",
+      "target_id": "idea-000116",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.241065+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/data.md"
+        ],
+        "planned_project_ids": [
+          "data",
+          "frontend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000138",
+      "target_id": "idea-000138",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.241073+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/frontend.md"
+        ],
+        "planned_project_ids": [
+          "frontend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000139",
+      "target_id": "idea-000139",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.241348+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/frontend.md"
+        ],
+        "planned_project_ids": [
+          "frontend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000021",
+      "target_id": "idea-000021",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.241374+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/infrastructure.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "tooling"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000035",
+      "target_id": "idea-000035",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.241385+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000044",
+      "target_id": "idea-000044",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.241396+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/security.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "security"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000085",
+      "target_id": "idea-000085",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.241408+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/data.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000155",
+      "target_id": "idea-000155",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.241416+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md"
+        ],
+        "planned_project_ids": [
+          "ai_ml",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000177",
+      "target_id": "idea-000177",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.241465+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md"
+        ],
+        "planned_project_ids": [
+          "backend",
+          "security"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000032",
+      "target_id": "idea-000032",
+      "reason": "Similar ideas (score: 1.00)",
+      "score": 1.0,
+      "timestamp": "2026-04-06T10:11:03.241482+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/ai_ml.md"
+        ],
+        "planned_project_ids": [
+          "ai_ml",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000168",
+      "target_id": "idea-000075",
+      "reason": "Similar ideas (score: 0.93)",
+      "score": 0.925,
+      "timestamp": "2026-04-06T10:11:03.241517+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/data.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "frontend",
+          "tooling",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000127",
+      "target_id": "idea-000159",
+      "reason": "Similar ideas (score: 0.93)",
+      "score": 0.925,
+      "timestamp": "2026-04-06T10:11:03.241526+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/frontend.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "frontend",
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000174",
+      "target_id": "idea-000040",
+      "reason": "Similar ideas (score: 0.93)",
+      "score": 0.925,
+      "timestamp": "2026-04-06T10:11:03.241534+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/infrastructure.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "tooling",
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000165",
+      "target_id": "idea-000037",
+      "reason": "Similar ideas (score: 0.93)",
+      "score": 0.925,
+      "timestamp": "2026-04-06T10:11:03.241584+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/data.md"
+        ],
+        "planned_project_ids": [
+          "frontend",
+          "backend",
+          "security",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000129",
+      "target_id": "idea-000097",
+      "reason": "Similar ideas (score: 0.93)",
+      "score": 0.925,
+      "timestamp": "2026-04-06T10:11:03.241606+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "security",
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000167",
+      "target_id": "idea-000097",
+      "reason": "Similar ideas (score: 0.93)",
+      "score": 0.925,
+      "timestamp": "2026-04-06T10:11:03.241617+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "ai_ml",
+          "security",
+          "data",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000172",
+      "target_id": "idea-000097",
+      "reason": "Similar ideas (score: 0.93)",
+      "score": 0.925,
+      "timestamp": "2026-04-06T10:11:03.241625+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "ai_ml",
+          "security",
+          "data",
+          "tooling",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000147",
+      "target_id": "idea-000144",
+      "reason": "Similar ideas (score: 0.93)",
+      "score": 0.925,
+      "timestamp": "2026-04-06T10:11:03.241636+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/data.md"
+        ],
+        "planned_project_ids": [
+          "ai_ml",
+          "infrastructure",
+          "data",
+          "frontend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000152",
+      "target_id": "idea-000144",
+      "reason": "Similar ideas (score: 0.93)",
+      "score": 0.925,
+      "timestamp": "2026-04-06T10:11:03.241644+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/data.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "ai_ml",
+          "frontend",
+          "data",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000062",
+      "target_id": "idea-000028",
+      "reason": "Similar ideas (score: 0.93)",
+      "score": 0.925,
+      "timestamp": "2026-04-06T10:11:03.241652+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md"
+        ],
+        "planned_project_ids": [
+          "security",
+          "infrastructure",
+          "backend",
+          "frontend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000163",
+      "target_id": "idea-000028",
+      "reason": "Similar ideas (score: 0.93)",
+      "score": 0.925,
+      "timestamp": "2026-04-06T10:11:03.241660+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "security",
+          "frontend",
+          "tooling",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000135",
+      "target_id": "idea-000134",
+      "reason": "Similar ideas (score: 0.93)",
+      "score": 0.925,
+      "timestamp": "2026-04-06T10:11:03.241668+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/security.md"
+        ],
+        "planned_project_ids": [
+          "security",
+          "infrastructure",
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000178",
+      "target_id": "idea-000134",
+      "reason": "Similar ideas (score: 0.93)",
+      "score": 0.925,
+      "timestamp": "2026-04-06T10:11:03.241677+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/security.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "security",
+          "frontend",
+          "data",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000191",
+      "target_id": "idea-000134",
+      "reason": "Similar ideas (score: 0.93)",
+      "score": 0.925,
+      "timestamp": "2026-04-06T10:11:03.241684+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/security.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "ai_ml",
+          "security",
+          "data",
+          "frontend",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000141",
+      "target_id": "idea-000079",
+      "reason": "Similar ideas (score: 0.93)",
+      "score": 0.925,
+      "timestamp": "2026-04-06T10:11:03.241734+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/ai_ml.md"
+        ],
+        "planned_project_ids": [
+          "security",
+          "ai_ml",
+          "backend",
+          "data"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000144",
+      "target_id": "idea-000075",
+      "reason": "Similar ideas (score: 0.87)",
+      "score": 0.8683,
+      "timestamp": "2026-04-06T10:11:03.241749+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/data.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "ai_ml",
+          "data",
+          "frontend",
+          "tooling",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    },
+    {
+      "source_id": "idea-000134",
+      "target_id": "idea-000028",
+      "reason": "Similar ideas (score: 0.75)",
+      "score": 0.75,
+      "timestamp": "2026-04-06T10:11:03.241767+00:00",
+      "merged_fields": {
+        "source_references": [
+          "docs/backend.md",
+          "docs/security.md"
+        ],
+        "planned_project_ids": [
+          "infrastructure",
+          "ai_ml",
+          "security",
+          "frontend",
+          "data",
+          "tooling",
+          "backend"
+        ]
+      },
+      "work_reduction": 1.0
+    }
+  ],
+  "report": {
+    "summary": {
+      "original_ideas": 200,
+      "merged_ideas": 93,
+      "ideas_removed": 107,
+      "removal_percentage": 53.5
+    },
+    "execution_impact": {
+      "original_shards": 1,
+      "merged_shards": 1,
+      "shards_eliminated": 0,
+      "work_reduction_percentage": 0.0,
+      "estimated_hours_saved": 0
+    },
+    "merge_analysis": {
+      "total_candidates": 1256,
+      "automatic_merges": 107,
+      "merge_threshold_used": 0.75,
+      "review_threshold_used": 0.55
+    },
+    "timestamp": "2026-04-06T10:11:03.241806+00:00"
+  },
+  "analysis": {
+    "total_ideas": 200,
+    "potential_merges": 582,
+    "potential_reviews": 674,
+    "work_reduction": 291.0,
+    "work_reduction_percentage": 145.5
+  }
+}

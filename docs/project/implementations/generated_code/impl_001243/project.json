@@ -1,0 +1,9 @@
+{
+  "id": "impl_001243",
+  "num": 1243,
+  "archetype": "hardening",
+  "created": "2026-04-06T08:22:46.103990",
+  "files": 7,
+  "tests": 4,
+  "loc": 1800
+}

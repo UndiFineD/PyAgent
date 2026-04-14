@@ -1,0 +1,18 @@
+{
+  "idea_id": "merged-0000010",
+  "title": "Comprehensive Improvement-Research Implementation (merged 3 ideas)",
+  "description": "Unified system merging 3 related concepts.\nKey aspects:\n  \u2022 docs - research\n  \u2022 notes - research\n  \u2022 research - improvement\n\nSynthesized from 3 source ideas.",
+  "categories": [
+    "docs",
+    "notes",
+    "research"
+  ],
+  "source_ideas_merged": 3,
+  "source_idea_ids": [
+    "idea000059",
+    "idea000064",
+    "idea000074"
+  ],
+  "created_at": "2026-04-06T12:18:07.754837",
+  "version": "1.0.0"
+}

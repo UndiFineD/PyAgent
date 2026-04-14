@@ -1,0 +1,12 @@
+# Component 1282
+
+Archetype: performance
+
+## Summary
+Implements performance patterns for 1282.
+
+## Features
+- Performance support
+- Test coverage >85%
+- Async/sync modes
+- Monitoring ready

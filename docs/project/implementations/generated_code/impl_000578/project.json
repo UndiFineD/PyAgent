@@ -1,0 +1,18 @@
+{
+  "project_id": "impl_000578",
+  "batch": 58,
+  "archetype": "observability",
+  "component": "component_58_8",
+  "created_at": "2026-04-06T07:19:11.961993",
+  "files": {
+    "module": "module.py",
+    "api": "api.py",
+    "test": "test_module.py"
+  },
+  "loc": {
+    "module": 34,
+    "api": 22,
+    "test": 21,
+    "total": 77
+  }
+}

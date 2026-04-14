@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [package]
 name         = "rust_core"
 version      = "0.1.0"
@@ -68,3 +69,75 @@ async-transport = ["tokio", "quinn", "tokio-tungstenite"]
 
 [patch.crates-io]
 libp2p-yamux = { path = "p2p/libp2p-yamux" }
+=======
+[package]
+name         = "rust_core"
+version      = "0.1.0"
+edition      = "2021"
+
+[workspace]
+members = ["crdt", "p2p", "security"]
+
+[lib]
+name         = "rust_core"
+crate-type   = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.24.1" }
+once_cell    = "1.17"
+sha2         = "0.10"
+hex          = "0.4"
+rand         = "0.8"
+hmac         = "0.12"
+regex        = "1.10"
+chacha20poly1305 = "0.10"
+hkdf         = "0.12"
+rand_core    = "0.6"
+walkdir      = "2.4"
+serde_json   = "1.0"
+glob         = "0.3"
+sysinfo      = "0.30"
+ndarray      = { version = "0.15", features = ["rayon"] }
+md-5         = "0.10"
+rand_distr   = "0.4"
+rayon        = "1.8"
+rustfft      = "6.2"
+base64       = "0.22.1"
+dotenvy      = "0.15"
+serde        = { version = "1.0", features = ["derive"] }
+prometheus   = "0.14"
+chrono       = { version = "0.4", features = ["serde"] }
+evalexpr     = "11"
+x25519-dalek = { version = "2", features = ["static_secrets"] }
+dashmap      = "6"
+zeroize      = { version = "1", features = ["derive"] }
+uuid         = { version = "1", features = ["v4"] }
+subtle       = "2"
+snow             = "0.10"
+ed25519-dalek    = { version = "2", features = ["rand_core"] }
+tokio            = { version = "1", features = ["full"], optional = true }
+ciborium         = "0.2"
+quinn            = { version = "0.11", optional = true }
+tokio-tungstenite = { version = "0.24", optional = true }
+
+[package.metadata.maturin]
+name = "_rust_core"
+features = ["extension-module"]
+
+[dev-dependencies]
+tempfile     = "3.5"
+criterion    = "0.5"
+
+[[bench]]
+name = "stats_baseline"
+harness = false
+
+[features]
+extension-module = ["pyo3/extension-module"]
+amd_npu = []
+default = []
+async-transport = ["tokio", "quinn", "tokio-tungstenite"]
+
+[patch.crates-io]
+libp2p-yamux = { path = "p2p/libp2p-yamux" }
+>>>>>>> b8e7af5e9d6 ([PHASE1-BATCH-001] Implement Ideas 6-10: Automated deps, Tailwind config, Frontend E2E, Windows CI, Backend integration)

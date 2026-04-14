@@ -1,0 +1,16 @@
+{
+  "idea_id": "merged-0000013",
+  "title": "Comprehensive Idea-003 Implementation (merged 3 ideas)",
+  "description": "Unified system merging 3 related concepts.\nKey aspects:\n  \u2022 enforcement - coverage-minimum\n  \u2022 enforcement - mypy-strict\n\nSynthesized from 3 source ideas.",
+  "categories": [
+    "enforcement"
+  ],
+  "source_ideas_merged": 3,
+  "source_idea_ids": [
+    "idea000003",
+    "idea000003",
+    "idea000008"
+  ],
+  "created_at": "2026-04-06T12:18:07.787246",
+  "version": "1.0.0"
+}

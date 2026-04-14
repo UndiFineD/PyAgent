@@ -1,0 +1,3184 @@
+[
+  {
+    "idea_id": "idea-000001",
+    "title": "Develop React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization with caching layer",
+    "planned_project_ids": [
+      "frontend",
+      "data",
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/data.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000002",
+    "title": "Feature 2: Refactor tooling",
+    "description": "Implementation detail #2 for infrastructure system",
+    "planned_project_ids": [
+      "tooling"
+    ],
+    "source_references": [
+      "docs/feature-2.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000003",
+    "title": "Feature 3: Refactor tooling",
+    "description": "Implementation detail #3 for backend system",
+    "planned_project_ids": [
+      "tooling"
+    ],
+    "source_references": [
+      "docs/feature-3.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000004",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring (alternative implementation)",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling"
+    ],
+    "source_references": [
+      "docs/api/3.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000005",
+    "title": "Develop React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization with caching layer",
+    "planned_project_ids": [
+      "frontend",
+      "data",
+      "backend"
+    ],
+    "source_references": [
+      "docs/frontend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000006",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading (alternative implementation)",
+    "planned_project_ids": [
+      "data",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/5.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000007",
+    "title": "Feature 7: Enhance frontend",
+    "description": "Implementation detail #7 for ai_ml system",
+    "planned_project_ids": [
+      "tooling"
+    ],
+    "source_references": [
+      "docs/feature-7.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000008",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading with caching layer",
+    "planned_project_ids": [
+      "data",
+      "backend",
+      "security"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000009",
+    "title": "Implement FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication (alternative implementation)",
+    "planned_project_ids": [
+      "backend",
+      "security"
+    ],
+    "source_references": [
+      "docs/api/1.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000010",
+    "title": "Feature 10: Optimize tooling",
+    "description": "Implementation detail #10 for data system",
+    "planned_project_ids": [
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/feature-10.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000011",
+    "title": "Feature 11: Optimize security",
+    "description": "Implementation detail #11 for tooling system",
+    "planned_project_ids": [
+      "backend"
+    ],
+    "source_references": [
+      "docs/feature-11.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000012",
+    "title": "Feature 12: Refactor infrastructure",
+    "description": "Implementation detail #12 for security system",
+    "planned_project_ids": [
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/feature-12.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000013",
+    "title": "Feature 13: Refactor ai_ml",
+    "description": "Implementation detail #13 for ai_ml system",
+    "planned_project_ids": [
+      "data"
+    ],
+    "source_references": [
+      "docs/feature-13.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 3
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000014",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading with caching layer",
+    "planned_project_ids": [
+      "data",
+      "backend",
+      "data"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000015",
+    "title": "Feature 15: Fix ai_ml",
+    "description": "Implementation detail #15 for infrastructure system",
+    "planned_project_ids": [
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/feature-15.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000016",
+    "title": "Feature 16: Refactor security",
+    "description": "Implementation detail #16 for security system",
+    "planned_project_ids": [
+      "frontend"
+    ],
+    "source_references": [
+      "docs/feature-16.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000017",
+    "title": "Implement FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication (alternative implementation)",
+    "planned_project_ids": [
+      "backend",
+      "security"
+    ],
+    "source_references": [
+      "docs/api/1.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000018",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading (alternative implementation)",
+    "planned_project_ids": [
+      "data",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/5.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000019",
+    "title": "Feature 19: Refactor security",
+    "description": "Implementation detail #19 for tooling system",
+    "planned_project_ids": [
+      "tooling"
+    ],
+    "source_references": [
+      "docs/feature-19.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000020",
+    "title": "Implement machine learning model API",
+    "description": "Build API wrapper for ML model inference with caching (alternative implementation)",
+    "planned_project_ids": [
+      "ai_ml",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/4.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000021",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring with caching layer",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling",
+      "tooling"
+    ],
+    "source_references": [
+      "docs/infrastructure.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000022",
+    "title": "Feature 22: Refactor tooling",
+    "description": "Implementation detail #22 for data system",
+    "planned_project_ids": [
+      "security"
+    ],
+    "source_references": [
+      "docs/feature-22.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 3
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000023",
+    "title": "Feature 23: Refactor security",
+    "description": "Implementation detail #23 for backend system",
+    "planned_project_ids": [
+      "frontend"
+    ],
+    "source_references": [
+      "docs/feature-23.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000024",
+    "title": "Feature 24: Optimize data",
+    "description": "Implementation detail #24 for ai_ml system",
+    "planned_project_ids": [
+      "backend"
+    ],
+    "source_references": [
+      "docs/feature-24.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 3
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000025",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization (alternative implementation)",
+    "planned_project_ids": [
+      "frontend",
+      "data"
+    ],
+    "source_references": [
+      "docs/api/2.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000026",
+    "title": "Feature 26: Refactor data",
+    "description": "Implementation detail #26 for ai_ml system",
+    "planned_project_ids": [
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/feature-26.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000027",
+    "title": "Feature 27: Enhance data",
+    "description": "Implementation detail #27 for backend system",
+    "planned_project_ids": [
+      "data"
+    ],
+    "source_references": [
+      "docs/feature-27.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000028",
+    "title": "Create FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication with caching layer",
+    "planned_project_ids": [
+      "backend",
+      "security",
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000029",
+    "title": "Implement machine learning model API",
+    "description": "Build API wrapper for ML model inference with caching (alternative implementation)",
+    "planned_project_ids": [
+      "ai_ml",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/4.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000030",
+    "title": "Create machine learning model API",
+    "description": "Build API wrapper for ML model inference with caching with caching layer",
+    "planned_project_ids": [
+      "ai_ml",
+      "backend",
+      "data"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000031",
+    "title": "Feature 31: Optimize frontend",
+    "description": "Implementation detail #31 for tooling system",
+    "planned_project_ids": [
+      "security"
+    ],
+    "source_references": [
+      "docs/feature-31.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 3
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000032",
+    "title": "Create machine learning model API",
+    "description": "Build API wrapper for ML model inference with caching with caching layer",
+    "planned_project_ids": [
+      "ai_ml",
+      "backend",
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/ai_ml.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000033",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization (alternative implementation)",
+    "planned_project_ids": [
+      "frontend",
+      "data"
+    ],
+    "source_references": [
+      "docs/api/2.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000034",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization (alternative implementation)",
+    "planned_project_ids": [
+      "frontend",
+      "data"
+    ],
+    "source_references": [
+      "docs/api/2.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000035",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading with caching layer",
+    "planned_project_ids": [
+      "data",
+      "backend",
+      "backend"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000036",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization (alternative implementation)",
+    "planned_project_ids": [
+      "frontend",
+      "data"
+    ],
+    "source_references": [
+      "docs/api/2.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000037",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading with caching layer",
+    "planned_project_ids": [
+      "data",
+      "backend",
+      "security"
+    ],
+    "source_references": [
+      "docs/data.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000038",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring (alternative implementation)",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling"
+    ],
+    "source_references": [
+      "docs/api/3.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000039",
+    "title": "Feature 39: Refactor infrastructure",
+    "description": "Implementation detail #39 for ai_ml system",
+    "planned_project_ids": [
+      "backend"
+    ],
+    "source_references": [
+      "docs/feature-39.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 3
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000040",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring with caching layer",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling",
+      "data"
+    ],
+    "source_references": [
+      "docs/infrastructure.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000041",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring with caching layer",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling",
+      "data"
+    ],
+    "source_references": [
+      "docs/infrastructure.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000042",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading (alternative implementation)",
+    "planned_project_ids": [
+      "data",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/5.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000043",
+    "title": "Feature 43: Refactor ai_ml",
+    "description": "Implementation detail #43 for tooling system",
+    "planned_project_ids": [
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/feature-43.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000044",
+    "title": "Create FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication with caching layer",
+    "planned_project_ids": [
+      "backend",
+      "security",
+      "backend"
+    ],
+    "source_references": [
+      "docs/security.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000045",
+    "title": "Create FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication with caching layer",
+    "planned_project_ids": [
+      "backend",
+      "security",
+      "backend"
+    ],
+    "source_references": [
+      "docs/security.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000046",
+    "title": "Feature 46: Fix infrastructure",
+    "description": "Implementation detail #46 for infrastructure system",
+    "planned_project_ids": [
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/feature-46.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000047",
+    "title": "Create FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication with caching layer",
+    "planned_project_ids": [
+      "backend",
+      "security",
+      "data"
+    ],
+    "source_references": [
+      "docs/security.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000048",
+    "title": "Implement machine learning model API",
+    "description": "Build API wrapper for ML model inference with caching (alternative implementation)",
+    "planned_project_ids": [
+      "ai_ml",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/4.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000049",
+    "title": "Feature 49: Fix frontend",
+    "description": "Implementation detail #49 for tooling system",
+    "planned_project_ids": [
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/feature-49.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000050",
+    "title": "Create FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication with caching layer",
+    "planned_project_ids": [
+      "backend",
+      "security",
+      "tooling"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000051",
+    "title": "Feature 51: Fix data",
+    "description": "Implementation detail #51 for frontend system",
+    "planned_project_ids": [
+      "tooling"
+    ],
+    "source_references": [
+      "docs/feature-51.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000052",
+    "title": "Feature 52: Refactor frontend",
+    "description": "Implementation detail #52 for security system",
+    "planned_project_ids": [
+      "frontend"
+    ],
+    "source_references": [
+      "docs/feature-52.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000053",
+    "title": "Feature 53: Refactor security",
+    "description": "Implementation detail #53 for security system",
+    "planned_project_ids": [
+      "tooling"
+    ],
+    "source_references": [
+      "docs/feature-53.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 3
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000054",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading with caching layer",
+    "planned_project_ids": [
+      "data",
+      "backend",
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000055",
+    "title": "Feature 55: Refactor data",
+    "description": "Implementation detail #55 for frontend system",
+    "planned_project_ids": [
+      "tooling"
+    ],
+    "source_references": [
+      "docs/feature-55.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000056",
+    "title": "Create machine learning model API",
+    "description": "Build API wrapper for ML model inference with caching with caching layer",
+    "planned_project_ids": [
+      "ai_ml",
+      "backend",
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/ai_ml.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000057",
+    "title": "Implement FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication (alternative implementation)",
+    "planned_project_ids": [
+      "backend",
+      "security"
+    ],
+    "source_references": [
+      "docs/api/1.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000058",
+    "title": "Implement FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication (alternative implementation)",
+    "planned_project_ids": [
+      "backend",
+      "security"
+    ],
+    "source_references": [
+      "docs/api/1.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000059",
+    "title": "Implement machine learning model API",
+    "description": "Build API wrapper for ML model inference with caching (alternative implementation)",
+    "planned_project_ids": [
+      "ai_ml",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/4.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000060",
+    "title": "Create machine learning model API",
+    "description": "Build API wrapper for ML model inference with caching with caching layer",
+    "planned_project_ids": [
+      "ai_ml",
+      "backend",
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/ai_ml.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000061",
+    "title": "Create FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication with caching layer",
+    "planned_project_ids": [
+      "backend",
+      "security",
+      "backend"
+    ],
+    "source_references": [
+      "docs/security.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000062",
+    "title": "Create FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication with caching layer",
+    "planned_project_ids": [
+      "backend",
+      "security",
+      "frontend"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000063",
+    "title": "Feature 63: Fix ai_ml",
+    "description": "Implementation detail #63 for security system",
+    "planned_project_ids": [
+      "security"
+    ],
+    "source_references": [
+      "docs/feature-63.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000064",
+    "title": "Feature 64: Refactor security",
+    "description": "Implementation detail #64 for security system",
+    "planned_project_ids": [
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/feature-64.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000065",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring (alternative implementation)",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling"
+    ],
+    "source_references": [
+      "docs/api/3.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000066",
+    "title": "Feature 66: Optimize frontend",
+    "description": "Implementation detail #66 for tooling system",
+    "planned_project_ids": [
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/feature-66.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 3
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000067",
+    "title": "Feature 67: Optimize frontend",
+    "description": "Implementation detail #67 for frontend system",
+    "planned_project_ids": [
+      "tooling"
+    ],
+    "source_references": [
+      "docs/feature-67.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000068",
+    "title": "Feature 68: Optimize ai_ml",
+    "description": "Implementation detail #68 for backend system",
+    "planned_project_ids": [
+      "tooling"
+    ],
+    "source_references": [
+      "docs/feature-68.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000069",
+    "title": "Develop React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization with caching layer",
+    "planned_project_ids": [
+      "frontend",
+      "data",
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/data.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000070",
+    "title": "Feature 70: Fix frontend",
+    "description": "Implementation detail #70 for frontend system",
+    "planned_project_ids": [
+      "data"
+    ],
+    "source_references": [
+      "docs/feature-70.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000071",
+    "title": "Feature 71: Enhance data",
+    "description": "Implementation detail #71 for data system",
+    "planned_project_ids": [
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/feature-71.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000072",
+    "title": "Feature 72: Enhance frontend",
+    "description": "Implementation detail #72 for infrastructure system",
+    "planned_project_ids": [
+      "frontend"
+    ],
+    "source_references": [
+      "docs/feature-72.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000073",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization (alternative implementation)",
+    "planned_project_ids": [
+      "frontend",
+      "data"
+    ],
+    "source_references": [
+      "docs/api/2.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 10
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000074",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading with caching layer",
+    "planned_project_ids": [
+      "data",
+      "backend",
+      "security"
+    ],
+    "source_references": [
+      "docs/data.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000075",
+    "title": "Develop React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization with caching layer",
+    "planned_project_ids": [
+      "frontend",
+      "data",
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/data.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000076",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring (alternative implementation)",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling"
+    ],
+    "source_references": [
+      "docs/api/3.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000077",
+    "title": "Feature 77: Enhance security",
+    "description": "Implementation detail #77 for data system",
+    "planned_project_ids": [
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/feature-77.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000078",
+    "title": "Feature 78: Optimize infrastructure",
+    "description": "Implementation detail #78 for tooling system",
+    "planned_project_ids": [
+      "backend"
+    ],
+    "source_references": [
+      "docs/feature-78.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000079",
+    "title": "Create machine learning model API",
+    "description": "Build API wrapper for ML model inference with caching with caching layer",
+    "planned_project_ids": [
+      "ai_ml",
+      "backend",
+      "security"
+    ],
+    "source_references": [
+      "docs/ai_ml.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000080",
+    "title": "Feature 80: Enhance data",
+    "description": "Implementation detail #80 for frontend system",
+    "planned_project_ids": [
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/feature-80.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000081",
+    "title": "Feature 81: Fix data",
+    "description": "Implementation detail #81 for frontend system",
+    "planned_project_ids": [
+      "tooling"
+    ],
+    "source_references": [
+      "docs/feature-81.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000082",
+    "title": "Feature 82: Enhance ai_ml",
+    "description": "Implementation detail #82 for tooling system",
+    "planned_project_ids": [
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/feature-82.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000083",
+    "title": "Feature 83: Refactor tooling",
+    "description": "Implementation detail #83 for ai_ml system",
+    "planned_project_ids": [
+      "tooling"
+    ],
+    "source_references": [
+      "docs/feature-83.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000084",
+    "title": "Feature 84: Optimize backend",
+    "description": "Implementation detail #84 for tooling system",
+    "planned_project_ids": [
+      "tooling"
+    ],
+    "source_references": [
+      "docs/feature-84.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000085",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading with caching layer",
+    "planned_project_ids": [
+      "data",
+      "backend",
+      "backend"
+    ],
+    "source_references": [
+      "docs/data.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000086",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring with caching layer",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling",
+      "backend"
+    ],
+    "source_references": [
+      "docs/infrastructure.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000087",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization (alternative implementation)",
+    "planned_project_ids": [
+      "frontend",
+      "data"
+    ],
+    "source_references": [
+      "docs/api/2.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 10
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000088",
+    "title": "Create FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication with caching layer",
+    "planned_project_ids": [
+      "backend",
+      "security",
+      "security"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000089",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring (alternative implementation)",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling"
+    ],
+    "source_references": [
+      "docs/api/3.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 10
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000090",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading (alternative implementation)",
+    "planned_project_ids": [
+      "data",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/5.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000091",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring with caching layer",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling",
+      "tooling"
+    ],
+    "source_references": [
+      "docs/infrastructure.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000092",
+    "title": "Feature 92: Refactor frontend",
+    "description": "Implementation detail #92 for backend system",
+    "planned_project_ids": [
+      "data"
+    ],
+    "source_references": [
+      "docs/feature-92.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000093",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading (alternative implementation)",
+    "planned_project_ids": [
+      "data",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/5.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000094",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading (alternative implementation)",
+    "planned_project_ids": [
+      "data",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/5.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 10
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000095",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading (alternative implementation)",
+    "planned_project_ids": [
+      "data",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/5.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000096",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring with caching layer",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling",
+      "tooling"
+    ],
+    "source_references": [
+      "docs/infrastructure.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000097",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading with caching layer",
+    "planned_project_ids": [
+      "data",
+      "backend",
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000098",
+    "title": "Feature 98: Refactor security",
+    "description": "Implementation detail #98 for backend system",
+    "planned_project_ids": [
+      "frontend"
+    ],
+    "source_references": [
+      "docs/feature-98.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000099",
+    "title": "Feature 99: Optimize frontend",
+    "description": "Implementation detail #99 for tooling system",
+    "planned_project_ids": [
+      "security"
+    ],
+    "source_references": [
+      "docs/feature-99.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000100",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization (alternative implementation)",
+    "planned_project_ids": [
+      "frontend",
+      "data"
+    ],
+    "source_references": [
+      "docs/api/2.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000101",
+    "title": "Feature 101: Refactor ai_ml",
+    "description": "Implementation detail #101 for infrastructure system",
+    "planned_project_ids": [
+      "frontend"
+    ],
+    "source_references": [
+      "docs/feature-101.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000102",
+    "title": "Feature 102: Optimize data",
+    "description": "Implementation detail #102 for tooling system",
+    "planned_project_ids": [
+      "frontend"
+    ],
+    "source_references": [
+      "docs/feature-102.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000103",
+    "title": "Feature 103: Optimize data",
+    "description": "Implementation detail #103 for tooling system",
+    "planned_project_ids": [
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/feature-103.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000104",
+    "title": "Feature 104: Optimize security",
+    "description": "Implementation detail #104 for data system",
+    "planned_project_ids": [
+      "frontend"
+    ],
+    "source_references": [
+      "docs/feature-104.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000105",
+    "title": "Feature 105: Optimize data",
+    "description": "Implementation detail #105 for frontend system",
+    "planned_project_ids": [
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/feature-105.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000106",
+    "title": "Feature 106: Optimize tooling",
+    "description": "Implementation detail #106 for backend system",
+    "planned_project_ids": [
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/feature-106.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000107",
+    "title": "Feature 107: Refactor frontend",
+    "description": "Implementation detail #107 for tooling system",
+    "planned_project_ids": [
+      "data"
+    ],
+    "source_references": [
+      "docs/feature-107.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000108",
+    "title": "Feature 108: Refactor infrastructure",
+    "description": "Implementation detail #108 for data system",
+    "planned_project_ids": [
+      "backend"
+    ],
+    "source_references": [
+      "docs/feature-108.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000109",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading (alternative implementation)",
+    "planned_project_ids": [
+      "data",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/5.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000110",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading with caching layer",
+    "planned_project_ids": [
+      "data",
+      "backend",
+      "data"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000111",
+    "title": "Feature 111: Optimize tooling",
+    "description": "Implementation detail #111 for frontend system",
+    "planned_project_ids": [
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/feature-111.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 3
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000112",
+    "title": "Implement machine learning model API",
+    "description": "Build API wrapper for ML model inference with caching (alternative implementation)",
+    "planned_project_ids": [
+      "ai_ml",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/4.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000113",
+    "title": "Implement FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication (alternative implementation)",
+    "planned_project_ids": [
+      "backend",
+      "security"
+    ],
+    "source_references": [
+      "docs/api/1.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000114",
+    "title": "Feature 114: Fix ai_ml",
+    "description": "Implementation detail #114 for backend system",
+    "planned_project_ids": [
+      "backend"
+    ],
+    "source_references": [
+      "docs/feature-114.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000115",
+    "title": "Implement FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication (alternative implementation)",
+    "planned_project_ids": [
+      "backend",
+      "security"
+    ],
+    "source_references": [
+      "docs/api/1.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000116",
+    "title": "Develop React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization with caching layer",
+    "planned_project_ids": [
+      "frontend",
+      "data",
+      "frontend"
+    ],
+    "source_references": [
+      "docs/data.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000117",
+    "title": "Create machine learning model API",
+    "description": "Build API wrapper for ML model inference with caching with caching layer",
+    "planned_project_ids": [
+      "ai_ml",
+      "backend",
+      "data"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000118",
+    "title": "Feature 118: Refactor data",
+    "description": "Implementation detail #118 for infrastructure system",
+    "planned_project_ids": [
+      "data"
+    ],
+    "source_references": [
+      "docs/feature-118.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000119",
+    "title": "Feature 119: Enhance tooling",
+    "description": "Implementation detail #119 for tooling system",
+    "planned_project_ids": [
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/feature-119.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000120",
+    "title": "Feature 120: Refactor backend",
+    "description": "Implementation detail #120 for ai_ml system",
+    "planned_project_ids": [
+      "backend"
+    ],
+    "source_references": [
+      "docs/feature-120.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000121",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading (alternative implementation)",
+    "planned_project_ids": [
+      "data",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/5.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000122",
+    "title": "Implement FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication (alternative implementation)",
+    "planned_project_ids": [
+      "backend",
+      "security"
+    ],
+    "source_references": [
+      "docs/api/1.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000123",
+    "title": "Feature 123: Fix backend",
+    "description": "Implementation detail #123 for ai_ml system",
+    "planned_project_ids": [
+      "security"
+    ],
+    "source_references": [
+      "docs/feature-123.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000124",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading (alternative implementation)",
+    "planned_project_ids": [
+      "data",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/5.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000125",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring (alternative implementation)",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling"
+    ],
+    "source_references": [
+      "docs/api/3.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000126",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring (alternative implementation)",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling"
+    ],
+    "source_references": [
+      "docs/api/3.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000127",
+    "title": "Develop React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization with caching layer",
+    "planned_project_ids": [
+      "frontend",
+      "data",
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/frontend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000128",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization with caching layer",
+    "planned_project_ids": [
+      "frontend",
+      "data",
+      "data"
+    ],
+    "source_references": [
+      "docs/frontend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000129",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading with caching layer",
+    "planned_project_ids": [
+      "data",
+      "backend",
+      "security"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000130",
+    "title": "Implement machine learning model API",
+    "description": "Build API wrapper for ML model inference with caching (alternative implementation)",
+    "planned_project_ids": [
+      "ai_ml",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/4.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000131",
+    "title": "Feature 131: Fix ai_ml",
+    "description": "Implementation detail #131 for data system",
+    "planned_project_ids": [
+      "security"
+    ],
+    "source_references": [
+      "docs/feature-131.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 3
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000132",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization (alternative implementation)",
+    "planned_project_ids": [
+      "frontend",
+      "data"
+    ],
+    "source_references": [
+      "docs/api/2.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 10
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000133",
+    "title": "Implement machine learning model API",
+    "description": "Build API wrapper for ML model inference with caching (alternative implementation)",
+    "planned_project_ids": [
+      "ai_ml",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/4.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000134",
+    "title": "Create FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication with caching layer",
+    "planned_project_ids": [
+      "backend",
+      "security",
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/security.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000135",
+    "title": "Create FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication with caching layer",
+    "planned_project_ids": [
+      "backend",
+      "security",
+      "data"
+    ],
+    "source_references": [
+      "docs/security.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000136",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading (alternative implementation)",
+    "planned_project_ids": [
+      "data",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/5.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 10
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000137",
+    "title": "Feature 137: Enhance data",
+    "description": "Implementation detail #137 for frontend system",
+    "planned_project_ids": [
+      "security"
+    ],
+    "source_references": [
+      "docs/feature-137.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000138",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization with caching layer",
+    "planned_project_ids": [
+      "frontend",
+      "data",
+      "frontend"
+    ],
+    "source_references": [
+      "docs/frontend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000139",
+    "title": "Develop React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization with caching layer",
+    "planned_project_ids": [
+      "frontend",
+      "data",
+      "frontend"
+    ],
+    "source_references": [
+      "docs/frontend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000140",
+    "title": "Feature 140: Optimize infrastructure",
+    "description": "Implementation detail #140 for infrastructure system",
+    "planned_project_ids": [
+      "tooling"
+    ],
+    "source_references": [
+      "docs/feature-140.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 3
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000141",
+    "title": "Create machine learning model API",
+    "description": "Build API wrapper for ML model inference with caching with caching layer",
+    "planned_project_ids": [
+      "ai_ml",
+      "backend",
+      "data"
+    ],
+    "source_references": [
+      "docs/ai_ml.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000142",
+    "title": "Implement machine learning model API",
+    "description": "Build API wrapper for ML model inference with caching (alternative implementation)",
+    "planned_project_ids": [
+      "ai_ml",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/4.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 10
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000143",
+    "title": "Feature 143: Fix frontend",
+    "description": "Implementation detail #143 for backend system",
+    "planned_project_ids": [
+      "security"
+    ],
+    "source_references": [
+      "docs/feature-143.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000144",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization with caching layer",
+    "planned_project_ids": [
+      "frontend",
+      "data",
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/data.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000145",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring with caching layer",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling",
+      "data"
+    ],
+    "source_references": [
+      "docs/infrastructure.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000146",
+    "title": "Implement FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication (alternative implementation)",
+    "planned_project_ids": [
+      "backend",
+      "security"
+    ],
+    "source_references": [
+      "docs/api/1.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000147",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization with caching layer",
+    "planned_project_ids": [
+      "frontend",
+      "data",
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/data.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000148",
+    "title": "Feature 148: Optimize security",
+    "description": "Implementation detail #148 for security system",
+    "planned_project_ids": [
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/feature-148.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000149",
+    "title": "Create FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication with caching layer",
+    "planned_project_ids": [
+      "backend",
+      "security",
+      "backend"
+    ],
+    "source_references": [
+      "docs/security.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000150",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading (alternative implementation)",
+    "planned_project_ids": [
+      "data",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/5.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000151",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring (alternative implementation)",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling"
+    ],
+    "source_references": [
+      "docs/api/3.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 10
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000152",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization with caching layer",
+    "planned_project_ids": [
+      "frontend",
+      "data",
+      "backend"
+    ],
+    "source_references": [
+      "docs/data.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000153",
+    "title": "Feature 153: Refactor infrastructure",
+    "description": "Implementation detail #153 for data system",
+    "planned_project_ids": [
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/feature-153.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000154",
+    "title": "Feature 154: Refactor tooling",
+    "description": "Implementation detail #154 for data system",
+    "planned_project_ids": [
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/feature-154.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000155",
+    "title": "Create machine learning model API",
+    "description": "Build API wrapper for ML model inference with caching with caching layer",
+    "planned_project_ids": [
+      "ai_ml",
+      "backend",
+      "backend"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000156",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization (alternative implementation)",
+    "planned_project_ids": [
+      "frontend",
+      "data"
+    ],
+    "source_references": [
+      "docs/api/2.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000157",
+    "title": "Feature 157: Optimize tooling",
+    "description": "Implementation detail #157 for tooling system",
+    "planned_project_ids": [
+      "tooling"
+    ],
+    "source_references": [
+      "docs/feature-157.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000158",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization (alternative implementation)",
+    "planned_project_ids": [
+      "frontend",
+      "data"
+    ],
+    "source_references": [
+      "docs/api/2.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 10
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000159",
+    "title": "Develop React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization with caching layer",
+    "planned_project_ids": [
+      "frontend",
+      "data",
+      "backend"
+    ],
+    "source_references": [
+      "docs/frontend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000160",
+    "title": "Feature 160: Refactor tooling",
+    "description": "Implementation detail #160 for data system",
+    "planned_project_ids": [
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/feature-160.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000161",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading (alternative implementation)",
+    "planned_project_ids": [
+      "data",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/5.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000162",
+    "title": "Feature 162: Fix security",
+    "description": "Implementation detail #162 for security system",
+    "planned_project_ids": [
+      "data"
+    ],
+    "source_references": [
+      "docs/feature-162.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000163",
+    "title": "Create FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication with caching layer",
+    "planned_project_ids": [
+      "backend",
+      "security",
+      "tooling"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000164",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization (alternative implementation)",
+    "planned_project_ids": [
+      "frontend",
+      "data"
+    ],
+    "source_references": [
+      "docs/api/2.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000165",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading with caching layer",
+    "planned_project_ids": [
+      "data",
+      "backend",
+      "frontend"
+    ],
+    "source_references": [
+      "docs/data.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000166",
+    "title": "Feature 166: Optimize security",
+    "description": "Implementation detail #166 for backend system",
+    "planned_project_ids": [
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/feature-166.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000167",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading with caching layer",
+    "planned_project_ids": [
+      "data",
+      "backend",
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000168",
+    "title": "Develop React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization with caching layer",
+    "planned_project_ids": [
+      "frontend",
+      "data",
+      "tooling"
+    ],
+    "source_references": [
+      "docs/data.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000169",
+    "title": "Feature 169: Fix infrastructure",
+    "description": "Implementation detail #169 for infrastructure system",
+    "planned_project_ids": [
+      "backend"
+    ],
+    "source_references": [
+      "docs/feature-169.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000170",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading (alternative implementation)",
+    "planned_project_ids": [
+      "data",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/5.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000171",
+    "title": "Feature 171: Refactor frontend",
+    "description": "Implementation detail #171 for ai_ml system",
+    "planned_project_ids": [
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/feature-171.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000172",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading with caching layer",
+    "planned_project_ids": [
+      "data",
+      "backend",
+      "tooling"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000173",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading with caching layer",
+    "planned_project_ids": [
+      "data",
+      "backend",
+      "security"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000174",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring with caching layer",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling",
+      "backend"
+    ],
+    "source_references": [
+      "docs/infrastructure.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000175",
+    "title": "Feature 175: Optimize security",
+    "description": "Implementation detail #175 for ai_ml system",
+    "planned_project_ids": [
+      "backend"
+    ],
+    "source_references": [
+      "docs/feature-175.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000176",
+    "title": "Feature 176: Enhance tooling",
+    "description": "Implementation detail #176 for infrastructure system",
+    "planned_project_ids": [
+      "security"
+    ],
+    "source_references": [
+      "docs/feature-176.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000177",
+    "title": "Create FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication with caching layer",
+    "planned_project_ids": [
+      "backend",
+      "security",
+      "security"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000178",
+    "title": "Create FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication with caching layer",
+    "planned_project_ids": [
+      "backend",
+      "security",
+      "frontend"
+    ],
+    "source_references": [
+      "docs/security.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000179",
+    "title": "Feature 179: Optimize data",
+    "description": "Implementation detail #179 for backend system",
+    "planned_project_ids": [
+      "infrastructure"
+    ],
+    "source_references": [
+      "docs/feature-179.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000180",
+    "title": "Feature 180: Fix tooling",
+    "description": "Implementation detail #180 for ai_ml system",
+    "planned_project_ids": [
+      "backend"
+    ],
+    "source_references": [
+      "docs/feature-180.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000181",
+    "title": "Feature 181: Refactor tooling",
+    "description": "Implementation detail #181 for security system",
+    "planned_project_ids": [
+      "data"
+    ],
+    "source_references": [
+      "docs/feature-181.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000182",
+    "title": "Implement FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication (alternative implementation)",
+    "planned_project_ids": [
+      "backend",
+      "security"
+    ],
+    "source_references": [
+      "docs/api/1.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000183",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading (alternative implementation)",
+    "planned_project_ids": [
+      "data",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/5.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000184",
+    "title": "Feature 184: Refactor backend",
+    "description": "Implementation detail #184 for ai_ml system",
+    "planned_project_ids": [
+      "tooling"
+    ],
+    "source_references": [
+      "docs/feature-184.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000185",
+    "title": "Feature 185: Fix tooling",
+    "description": "Implementation detail #185 for frontend system",
+    "planned_project_ids": [
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/feature-185.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 4
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000186",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring (alternative implementation)",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling"
+    ],
+    "source_references": [
+      "docs/api/3.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000187",
+    "title": "Create machine learning model API",
+    "description": "Build API wrapper for ML model inference with caching with caching layer",
+    "planned_project_ids": [
+      "ai_ml",
+      "backend",
+      "data"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000188",
+    "title": "Develop React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization with caching layer",
+    "planned_project_ids": [
+      "frontend",
+      "data",
+      "frontend"
+    ],
+    "source_references": [
+      "docs/frontend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000189",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring (alternative implementation)",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling"
+    ],
+    "source_references": [
+      "docs/api/3.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000190",
+    "title": "Setup Kubernetes cluster deployment",
+    "description": "Configure Kubernetes cluster for microservices deployment with monitoring (alternative implementation)",
+    "planned_project_ids": [
+      "infrastructure",
+      "tooling"
+    ],
+    "source_references": [
+      "docs/api/3.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000191",
+    "title": "Create FastAPI endpoints for user management",
+    "description": "Create REST API endpoints for user CRUD operations with proper authentication with caching layer",
+    "planned_project_ids": [
+      "backend",
+      "security",
+      "ai_ml"
+    ],
+    "source_references": [
+      "docs/security.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 5
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000192",
+    "title": "Feature 192: Fix tooling",
+    "description": "Implementation detail #192 for infrastructure system",
+    "planned_project_ids": [
+      "tooling"
+    ],
+    "source_references": [
+      "docs/feature-192.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000193",
+    "title": "Create data pipeline for ETL",
+    "description": "Build scalable ETL pipeline for data transformation and loading with caching layer",
+    "planned_project_ids": [
+      "data",
+      "backend",
+      "backend"
+    ],
+    "source_references": [
+      "docs/backend.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000194",
+    "title": "Feature 194: Refactor security",
+    "description": "Implementation detail #194 for infrastructure system",
+    "planned_project_ids": [
+      "frontend"
+    ],
+    "source_references": [
+      "docs/feature-194.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000195",
+    "title": "Feature 195: Optimize security",
+    "description": "Implementation detail #195 for infrastructure system",
+    "planned_project_ids": [
+      "backend"
+    ],
+    "source_references": [
+      "docs/feature-195.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 6
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000196",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization (alternative implementation)",
+    "planned_project_ids": [
+      "frontend",
+      "data"
+    ],
+    "source_references": [
+      "docs/api/2.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000197",
+    "title": "Feature 197: Enhance infrastructure",
+    "description": "Implementation detail #197 for security system",
+    "planned_project_ids": [
+      "data"
+    ],
+    "source_references": [
+      "docs/feature-197.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 7
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000198",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization (alternative implementation)",
+    "planned_project_ids": [
+      "frontend",
+      "data"
+    ],
+    "source_references": [
+      "docs/api/2.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000199",
+    "title": "Implement machine learning model API",
+    "description": "Build API wrapper for ML model inference with caching (alternative implementation)",
+    "planned_project_ids": [
+      "ai_ml",
+      "backend"
+    ],
+    "source_references": [
+      "docs/api/4.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 9
+    },
+    "status": "active"
+  },
+  {
+    "idea_id": "idea-000200",
+    "title": "Build React dashboard for analytics",
+    "description": "Create interactive React dashboard for real-time data visualization (alternative implementation)",
+    "planned_project_ids": [
+      "frontend",
+      "data"
+    ],
+    "source_references": [
+      "docs/api/2.md"
+    ],
+    "scoring": {
+      "implementation_readiness": 8
+    },
+    "status": "active"
+  }
+]

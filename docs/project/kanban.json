@@ -99,7 +99,7 @@
       "Pre-commit hook not enforced in all CI paths"
     ],
     "opportunities": [
-      "AI tooling improving rapidly â€” agents can be upgraded with new models",
+      "AI tooling improving rapidly \u00e2\u20ac\u201d agents can be upgraded with new models",
       "WCAG compliance creates accessible, production-ready UI for demos",
       "Rust FFI bridge enables near-native performance at Python ergonomics",
       "Community interest in multi-agent workflow tooling growing"
@@ -174,10 +174,10 @@
     {
       "id": "prj0000127",
       "name": "mypy-strict-enforcement",
-      "lane": "Discovery",
-      "summary": "Initialize workflow artifacts for idea000003-mypy-strict-enforcement mypy-strict-enforcement and queue rapid sequence rollout.",
-      "branch": "prj0000127-mypy-strict-enforcement",
-      "pr": null,
+      "lane": "Released",
+      "summary": "Release closure for mypy-strict-enforcement after PR #291 merged, with registry alignment and idea archival completed.",
+      "branch": "merged",
+      "pr": "#291",
       "priority": "P2",
       "budget_tier": "S",
       "tags": [
@@ -186,7 +186,7 @@
         "mypy-strict-enforcement"
       ],
       "created": "2026-04-04",
-      "updated": "2026-04-04"
+      "updated": "2026-04-05"
     },
     {
       "id": "prj0000128",
@@ -2524,7 +2524,7 @@
       "id": "prj0000094",
       "name": "idea-003 - mypy-strict-enforcement",
       "lane": "Review",
-      "summary": "This idea focuses on mypy strict enforcement in area 1 â€“ Python agents. The current signal indicates priority P1, impact H, and urgency H. The SWOT tag is W (Weakness in current implementation).",
+      "summary": "This idea focuses on mypy strict enforcement in area 1 \u00e2\u20ac\u201c Python agents. The current signal indicates priority P1, impact H, and urgency H. The SWOT tag is W (Weakness in current implementation).",
       "branch": null,
       "pr": null,
       "priority": "P3",
@@ -2558,7 +2558,7 @@
       "id": "prj0000101",
       "name": "idea-013 - backend-health-check-endpoint",
       "lane": "Review",
-      "summary": "This idea focuses on backend health check endpoint in area 3 â€“ Backend. The current signal indicates priority P2, impact M, and urgency H. The SWOT tag is W (Weakness in current implementation).",
+      "summary": "This idea focuses on backend health check endpoint in area 3 \u00e2\u20ac\u201c Backend. The current signal indicates priority P2, impact M, and urgency H. The SWOT tag is W (Weakness in current implementation).",
       "branch": null,
       "pr": null,
       "priority": "P3",
@@ -2574,7 +2574,7 @@
       "id": "prj0000102",
       "name": "idea-014 - pyproject-requirements-sync",
       "lane": "Released",
-      "summary": "This idea focuses on pyproject requirements sync in area 9 â€“ Dependencies. The current signal indicates priority P2, impact M, and urgency M. The SWOT tag is W (Weakness in current implementation).",
+      "summary": "This idea focuses on pyproject requirements sync in area 9 \u00e2\u20ac\u201c Dependencies. The current signal indicates priority P2, impact M, and urgency M. The SWOT tag is W (Weakness in current implementation).",
       "branch": "merged",
       "pr": "#251 #252",
       "priority": "P3",
@@ -2590,7 +2590,7 @@
       "id": "prj0000105",
       "name": "idea-016 - mixin-architecture-base",
       "lane": "Released",
-      "summary": "This idea focuses on mixin architecture base in area 1 â€“ Python agents. The current signal indicates priority P3, impact H, and urgency M. The SWOT tag is W (Weakness in current implementation).",
+      "summary": "This idea focuses on mixin architecture base in area 1 \u00e2\u20ac\u201c Python agents. The current signal indicates priority P3, impact H, and urgency M. The SWOT tag is W (Weakness in current implementation).",
       "branch": "merged",
       "pr": "#258",
       "priority": "P3",
@@ -2653,6 +2653,24 @@
       ],
       "created": "2026-04-04",
       "updated": "2026-04-04"
+    },
+    {
+      "id": "prj000101",
+      "name": "000001_private_key_in_repo",
+      "lane": "In Sprint",
+      "summary": "Phase 1 Batch 001 - private key in repo implementation",
+      "branch": "prj000101-000001_private_key_in_repo",
+      "pr": null,
+      "priority": "P2",
+      "budget_tier": "S",
+      "tags": [
+        "batch-001",
+        "batch-001-prj000101",
+        "idea000001-private-key-in-repo",
+        "000001_private_key_in_repo"
+      ],
+      "created": "2026-04-06",
+      "updated": "2026-04-06"
     }
   ]
 }

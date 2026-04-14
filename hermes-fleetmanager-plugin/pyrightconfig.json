@@ -1,0 +1,26 @@
+{
+  "venvPath": ".",
+  "pythonVersion": "3.12",
+  "include": [
+    "."
+  ],
+  "exclude": [
+    "**/__pycache__",
+    "**/node_modules",
+    "**/.venv",
+    "build",
+    "dist",
+    ".git"
+  ],
+  "typeCheckingMode": "basic",
+  "reportMissingTypeStubs": false,
+  "reportMissingImports": false,
+  "extraPaths": [
+    ".",
+    ".github/agents",
+    ".github/agents/orchestration",
+    "/home/dev/.github/agents",
+    "/home/dev/.github/agents/orchestration",
+    "/home/dev/.github/agents/code"
+  ]
+}

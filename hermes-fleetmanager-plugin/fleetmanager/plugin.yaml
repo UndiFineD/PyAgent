@@ -1,0 +1,14 @@
+name: fleetmanager
+version: 1.0.0
+description: "FleetManager — orchestrates specialized agent fleet for task execution and coordination."
+pip_requires:
+  - "psycopg2-binary>=2.9.0"
+requires_env:
+  - "POSTGRES_HOST"
+  - "POSTGRES_PORT"
+  - "POSTGRES_DB"
+  - "POSTGRES_USER"
+  - "POSTGRES_PASSWORD"
+hooks:
+  - on_session_end
+  - on_turn_start

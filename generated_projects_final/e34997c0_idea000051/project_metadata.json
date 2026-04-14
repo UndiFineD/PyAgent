@@ -1,0 +1,12 @@
+{
+  "idea_id": "idea000051",
+  "title": "idea-051 - loop-analysis-ci-gate",
+  "description": "gate - loop-analysis-ci",
+  "categories": [
+    "gate"
+  ],
+  "source_ideas_merged": 0,
+  "source_idea_ids": [],
+  "created_at": "2026-04-06T12:18:07.920854",
+  "version": "1.0.0"
+}

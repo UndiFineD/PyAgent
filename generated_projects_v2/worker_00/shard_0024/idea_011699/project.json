@@ -1,0 +1,66 @@
+{
+  "idea_id": 11699,
+  "category": "infrastructure",
+  "primary_template": "python_module",
+  "secondary_templates": [
+    "configuration",
+    "python_module"
+  ],
+  "files": [
+    {
+      "name": "idea_011699.py",
+      "path": "/home/dev/PyAgent/generated_projects_v2/worker_00/shard_0024/idea_011699/idea_011699.py",
+      "type": "implementation",
+      "language": "python_module",
+      "size_loc": 600
+    },
+    {
+      "name": "test_idea_011699.py",
+      "path": "/home/dev/PyAgent/generated_projects_v2/worker_00/shard_0024/idea_011699/test_idea_011699.py",
+      "type": "test",
+      "language": "python_module",
+      "size_loc": 300
+    },
+    {
+      "name": "impl_011699.yaml",
+      "path": "/home/dev/PyAgent/generated_projects_v2/worker_00/shard_0024/idea_011699/impl_011699.yaml",
+      "type": "alternative_implementation",
+      "language": "configuration",
+      "size_loc": 150
+    },
+    {
+      "name": "config.yaml",
+      "path": "/home/dev/PyAgent/generated_projects_v2/worker_00/shard_0024/idea_011699/config.yaml",
+      "type": "config",
+      "size_loc": 150
+    },
+    {
+      "name": "Dockerfile",
+      "path": "/home/dev/PyAgent/generated_projects_v2/worker_00/shard_0024/idea_011699/Dockerfile",
+      "type": "docker",
+      "size_loc": 30
+    },
+    {
+      "name": "README.md",
+      "path": "/home/dev/PyAgent/generated_projects_v2/worker_00/shard_0024/idea_011699/README.md",
+      "type": "documentation",
+      "size_loc": 50
+    },
+    {
+      "name": ".github_workflows_ci.yaml",
+      "path": "/home/dev/PyAgent/generated_projects_v2/worker_00/shard_0024/idea_011699/.github_workflows_ci.yaml",
+      "type": "ci_cd",
+      "size_loc": 40
+    },
+    {
+      "name": "package.json",
+      "path": "/home/dev/PyAgent/generated_projects_v2/worker_00/shard_0024/idea_011699/package.json",
+      "type": "manifest",
+      "size_loc": 20
+    }
+  ],
+  "generated_at": "2026-04-06T09:50:00Z",
+  "worker_id": 0,
+  "shard_id": 24,
+  "version": "2.0.0"
+}

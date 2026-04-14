@@ -1,0 +1,9 @@
+{
+  "id": "impl_001250",
+  "num": 1250,
+  "archetype": "coverage",
+  "created": "2026-04-06T08:22:46.113269",
+  "files": 7,
+  "tests": 4,
+  "loc": 1799
+}

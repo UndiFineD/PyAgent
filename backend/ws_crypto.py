@@ -20,9 +20,9 @@ from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.serialization import (
     Encoding,
-    PublicFormat,
-    PrivateFormat,
     NoEncryption,
+    PrivateFormat,
+    PublicFormat,
 )
 
 
@@ -31,6 +31,7 @@ def generate_keypair() -> tuple[bytes, bytes]:
 
     Returns:
         (private_key_bytes, public_key_bytes) — each 32 bytes.
+
     """
     private_key = X25519PrivateKey.generate()
     private_bytes = private_key.private_bytes(
@@ -54,6 +55,7 @@ def derive_shared_secret(private_key_bytes: bytes, peer_public_key_bytes: bytes)
 
     Returns:
         32-byte shared secret suitable for AES-256 key material.
+
     """
     from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PublicKey
 
@@ -73,6 +75,7 @@ def encrypt_message(key: bytes, plaintext: bytes) -> bytes:
 
     Returns:
         ``nonce[12] + ciphertext + gcm_tag[16]`` — the nonce is prepended.
+
     """
     nonce = os.urandom(12)
     aesgcm = AESGCM(key)
@@ -94,6 +97,7 @@ def decrypt_message(key: bytes, ciphertext: bytes) -> bytes:
     Raises:
         cryptography.exceptions.InvalidTag: If the GCM authentication tag is invalid.
         ValueError: If *ciphertext* is shorter than the 12-byte nonce.
+
     """
     if len(ciphertext) < 12:
         raise ValueError("Ciphertext too short — nonce missing")

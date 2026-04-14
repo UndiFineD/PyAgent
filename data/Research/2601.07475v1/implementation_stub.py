@@ -17,8 +17,7 @@ import torch.nn as nn
 
 
 class ARCQuantLayer(nn.Module):
-    """
-    Augmented Residual Channel (ARC) Quantization Layer (arXiv:2601.07475).
+    """Augmented Residual Channel (ARC) Quantization Layer (arXiv:2601.07475).
     Compensates for NVFP4 quantization loss in sensitive outlier channels.
     """
 

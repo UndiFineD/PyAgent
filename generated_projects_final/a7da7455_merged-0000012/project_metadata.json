@@ -1,0 +1,18 @@
+{
+  "idea_id": "merged-0000012",
+  "title": "Comprehensive Idea-078 Implementation (merged 5 ideas)",
+  "description": "Unified system merging 5 related concepts.\nKey aspects:\n  \u2022 docs - installation\n  \u2022 docs - key\n  \u2022 docs - prompt\n  \u2022 docs - standards\n\nSynthesized from 5 source ideas.",
+  "categories": [
+    "docs"
+  ],
+  "source_ideas_merged": 5,
+  "source_idea_ids": [
+    "idea000072",
+    "idea000073",
+    "idea000075",
+    "idea000077",
+    "idea000078"
+  ],
+  "created_at": "2026-04-06T12:18:07.762279",
+  "version": "1.0.0"
+}

@@ -1,0 +1,36 @@
+{
+  "project_id": 36,
+  "project_name": "project_036",
+  "shard": 1,
+  "ideas_count": 10,
+  "ideas": [
+    "idea000346",
+    "idea000347",
+    "idea000348",
+    "idea000349",
+    "idea000350",
+    "idea000351",
+    "idea000352",
+    "idea000353",
+    "idea000354",
+    "idea000355"
+  ],
+  "class_name": "Project036",
+  "files": [
+    "module.py",
+    "api.py",
+    "test_module.py",
+    "test_integration.py",
+    "README.md",
+    "API.md",
+    "EXAMPLES.md",
+    "project.json"
+  ],
+  "created_at": "2026-04-06T11:29:51.669760",
+  "quality_metrics": {
+    "type_hints": 1.0,
+    "docstring_coverage": 0.98,
+    "test_coverage": 0.87,
+    "pylint_score": 8.2
+  }
+}

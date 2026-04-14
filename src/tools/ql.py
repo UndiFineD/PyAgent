@@ -53,7 +53,11 @@ def _run_cmd(cmd: list[str], capture: bool = False) -> Tuple[int, str, str]:
 
 def _get_merge_base(base: str) -> Optional[str]:
     """Get the merge base commit hash for the current HEAD and the given base branch."""
-    proc = subprocess.run(["git", "merge-base", "HEAD", base], capture_output=True, text=True)  # noqa: S603 S607
+    proc = subprocess.run(
+        ["git", "merge-base", "HEAD", base],
+        capture_output=True,
+        text=True, check=True
+    )
     if proc.returncode != 0:
         return None
     return proc.stdout.strip()
@@ -68,6 +72,7 @@ def _get_changed_files(base: str) -> List[str]:
         ["git", "diff", "--name-only", merge_base, "HEAD"],  # noqa: S607
         capture_output=True,
         text=True,
+        check=True
     )
     if proc.returncode != 0:
         return []
@@ -86,7 +91,12 @@ def _guess_project_name(branch: str) -> str:
 
 def _get_current_branch() -> str:
     """Get the current Git branch name."""
-    proc = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True, text=True)  # noqa: S603 S607
+    proc = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        capture_output=True,
+        text=True,
+        check=True
+    )
     if proc.returncode != 0:
         return ""  # best effort
     return proc.stdout.strip()
@@ -122,7 +132,7 @@ def _render_markdown_report(
         A string containing the markdown report.
 
     """
-    date = datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+    date = datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat() + "Z"
     header = f"# {project} — 8QL Security Scan\n\n"
     header += "_Status: IN_PROGRESS_\n"
     header += f"_Scanner: @8ql | Updated: {date}_\n\n"

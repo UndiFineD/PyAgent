@@ -12,16 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from typing import Optional, Tuple
+
 import torch
 import torch.nn as nn
-from typing import Optional, Tuple
 
 
 class KVzapSurrogate(nn.Module):
-    """
-    Lightweight surrogate model to predict KV importance scores from hidden states.
+    """Lightweight surrogate model to predict KV importance scores from hidden states.
     As per arXiv:2601.07891, this can be a Linear layer or a small MLP.
     """
+
     def __init__(self, hidden_dim: int, num_heads: int, use_mlp: bool = True):
         super().__init__()
         if use_mlp:
@@ -47,8 +48,7 @@ def kvzap_prune(
     threshold: float,
     window_size: int = 128
 ) -> Tuple[torch.Tensor, torch.Tensor]:
-    """
-    Prunes KV cache based on predicted importance scores.
+    """Prunes KV cache based on predicted importance scores.
     """
     with torch.no_grad():
         # Predict scores for each head at each position

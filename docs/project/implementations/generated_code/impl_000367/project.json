@@ -1,0 +1,18 @@
+{
+  "project_id": "impl_000367",
+  "batch": 37,
+  "archetype": "resilience",
+  "component": "component_37_7",
+  "created_at": "2026-04-06T07:19:11.851742",
+  "files": {
+    "module": "module.py",
+    "api": "api.py",
+    "test": "test_module.py"
+  },
+  "loc": {
+    "module": 50,
+    "api": 22,
+    "test": 21,
+    "total": 93
+  }
+}
