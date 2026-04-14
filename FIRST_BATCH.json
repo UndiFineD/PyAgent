@@ -1,0 +1,907 @@
+{
+  "batch_id": "batch-001",
+  "description": "First 100 high-priority ideas",
+  "project_range": "prj000101-prj000200",
+  "ideas": [
+    {
+      "id": "idea000001-private-key-in-repo",
+      "title": "000001 private key in repo",
+      "status": "Implemented",
+      "priority": "P1",
+      "swot": "T",
+      "folder": "f00",
+      "score": 15
+    },
+    {
+      "id": "idea000003-mypy-strict-enforcement",
+      "title": "000003 mypy strict enforcement",
+      "status": "Not Started",
+      "priority": "P1",
+      "swot": "W",
+      "folder": "f00",
+      "score": 14
+    },
+    {
+      "id": "idea000008-coverage-minimum-enforcement",
+      "title": "000008 coverage minimum enforcement",
+      "status": "Not Started",
+      "priority": "P2",
+      "swot": "W",
+      "folder": "f00",
+      "score": 12
+    },
+    {
+      "id": "idea000009-requirements-ci-deduplication",
+      "title": "000009 requirements ci deduplication",
+      "status": "Not Started",
+      "priority": "P2",
+      "swot": "W",
+      "folder": "f00",
+      "score": 12
+    },
+    {
+      "id": "idea000010-docker-compose-consolidation",
+      "title": "000010 docker compose consolidation",
+      "status": "Not Started",
+      "priority": "P2",
+      "swot": "W",
+      "folder": "f00",
+      "score": 12
+    },
+    {
+      "id": "idea000013-backend-health-check-endpoint",
+      "title": "000013 backend health check endpoint",
+      "status": "Not Started",
+      "priority": "P2",
+      "swot": "W",
+      "folder": "f00",
+      "score": 12
+    },
+    {
+      "id": "idea000012-dependabot-renovate",
+      "title": "000012 dependabot renovate",
+      "status": "Not Started",
+      "priority": "P2",
+      "swot": "O",
+      "folder": "f00",
+      "score": 11
+    },
+    {
+      "id": "idea000023-tailwind-config-missing",
+      "title": "000023 tailwind config missing",
+      "status": "Not Started",
+      "priority": "P3",
+      "swot": "W",
+      "folder": "f00",
+      "score": 10
+    },
+    {
+      "id": "idea000024-frontend-e2e-tests",
+      "title": "000024 frontend e2e tests",
+      "status": "Not Started",
+      "priority": "P3",
+      "swot": "W",
+      "folder": "f00",
+      "score": 10
+    },
+    {
+      "id": "idea000027-windows-ci-matrix",
+      "title": "000027 windows ci matrix",
+      "status": "Not Started",
+      "priority": "P3",
+      "swot": "W",
+      "folder": "f00",
+      "score": 10
+    },
+    {
+      "id": "idea000029-backend-integration-test-suite",
+      "title": "000029 backend integration test suite",
+      "status": "Not Started",
+      "priority": "P3",
+      "swot": "W",
+      "folder": "f00",
+      "score": 10
+    },
+    {
+      "id": "idea000031-automated-api-docs-ci",
+      "title": "000031 automated api docs ci",
+      "status": "Not Started",
+      "priority": "P3",
+      "swot": "W",
+      "folder": "f00",
+      "score": 10
+    },
+    {
+      "id": "idea000033-pre-commit-ruff-version-drift",
+      "title": "000033 pre commit ruff version drift",
+      "status": "Not Started",
+      "priority": "P3",
+      "swot": "W",
+      "folder": "f00",
+      "score": 10
+    },
+    {
+      "id": "idea000017-rust-criterion-benchmarks",
+      "title": "000017 rust criterion benchmarks",
+      "status": "Not Started",
+      "priority": "P3",
+      "swot": "O",
+      "folder": "f00",
+      "score": 9
+    },
+    {
+      "id": "idea000022-jwt-refresh-token-support",
+      "title": "000022 jwt refresh token support",
+      "status": "Not Started",
+      "priority": "P3",
+      "swot": "O",
+      "folder": "f00",
+      "score": 9
+    },
+    {
+      "id": "idea000025-global-state-management",
+      "title": "000025 global state management",
+      "status": "Not Started",
+      "priority": "P3",
+      "swot": "O",
+      "folder": "f00",
+      "score": 9
+    },
+    {
+      "id": "idea000026-frontend-url-routing",
+      "title": "000026 frontend url routing",
+      "status": "Not Started",
+      "priority": "P3",
+      "swot": "O",
+      "folder": "f00",
+      "score": 9
+    },
+    {
+      "id": "idea000028-property-based-test-expansion",
+      "title": "000028 property based test expansion",
+      "status": "Not Started",
+      "priority": "P3",
+      "swot": "O",
+      "folder": "f00",
+      "score": 9
+    },
+    {
+      "id": "idea000030-adr-backfill",
+      "title": "000030 adr backfill",
+      "status": "Not Started",
+      "priority": "P3",
+      "swot": "O",
+      "folder": "f00",
+      "score": 9
+    },
+    {
+      "id": "idea000032-changelog-automation",
+      "title": "000032 changelog automation",
+      "status": "Not Started",
+      "priority": "P3",
+      "swot": "O",
+      "folder": "f00",
+      "score": 9
+    },
+    {
+      "id": "idea010000-style-rule-severity-test-resilience",
+      "title": "010000 style rule severity test resilience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010001-style-rule-test-developer-experience",
+      "title": "010001 style rule test developer experience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010002-style-rule-test-documentation",
+      "title": "010002 style rule test documentation",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010003-style-rule-test-hardening",
+      "title": "010003 style rule test hardening",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010004-style-rule-test-performance",
+      "title": "010004 style rule test performance",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010005-style-rule-test-resilience",
+      "title": "010005 style rule test resilience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010006-template-manager-test-developer-experience",
+      "title": "010006 template manager test developer experience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010007-template-manager-test-documentation",
+      "title": "010007 template manager test documentation",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010008-template-manager-test-hardening",
+      "title": "010008 template manager test hardening",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010009-template-manager-test-performance",
+      "title": "010009 template manager test performance",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010010-template-manager-test-resilience",
+      "title": "010010 template manager test resilience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010011-test-gap-test-developer-experience",
+      "title": "010011 test gap test developer experience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010012-test-gap-test-documentation",
+      "title": "010012 test gap test documentation",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010013-test-gap-test-hardening",
+      "title": "010013 test gap test hardening",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010014-test-gap-test-performance",
+      "title": "010014 test gap test performance",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010015-test-gap-test-resilience",
+      "title": "010015 test gap test resilience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010016-typed-prompts-test-developer-experience",
+      "title": "010016 typed prompts test developer experience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010017-typed-prompts-test-documentation",
+      "title": "010017 typed prompts test documentation",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010018-typed-prompts-test-hardening",
+      "title": "010018 typed prompts test hardening",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea010019-typed-prompts-test-performance",
+      "title": "010019 typed prompts test performance",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f01",
+      "score": 1
+    },
+    {
+      "id": "idea020000-move-external-to-src-test-resilience",
+      "title": "020000 move external to src test resilience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020001-move-external-to-src-test-py-hardening",
+      "title": "020001 move external to src test py hardening",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020002-move-external-to-src-test-py-performance",
+      "title": "020002 move external to src test py performance",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020003-prepare-refactor-patches-test-developer-experience",
+      "title": "020003 prepare refactor patches test developer experience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020004-prepare-refactor-patches-test-documentation",
+      "title": "020004 prepare refactor patches test documentation",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020005-prepare-refactor-patches-test-hardening",
+      "title": "020005 prepare refactor patches test hardening",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020006-prepare-refactor-patches-test-performance",
+      "title": "020006 prepare refactor patches test performance",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020007-prepare-refactor-patches-test-resilience",
+      "title": "020007 prepare refactor patches test resilience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020008-prepare-refactor-patches-test-py-observability",
+      "title": "020008 prepare refactor patches test py observability",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020009-prepare-refactor-patches-test-py-test-coverage",
+      "title": "020009 prepare refactor patches test py test coverage",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020010-refactor-external-batch-developer-experience",
+      "title": "020010 refactor external batch developer experience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020011-refactor-external-batch-documentation",
+      "title": "020011 refactor external batch documentation",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020012-refactor-external-batch-hardening",
+      "title": "020012 refactor external batch hardening",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020013-refactor-external-batch-performance",
+      "title": "020013 refactor external batch performance",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020014-refactor-external-batch-resilience",
+      "title": "020014 refactor external batch resilience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020015-refactor-external-batch-test-developer-experience",
+      "title": "020015 refactor external batch test developer experience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020016-refactor-external-batch-test-documentation",
+      "title": "020016 refactor external batch test documentation",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020017-refactor-external-batch-test-hardening",
+      "title": "020017 refactor external batch test hardening",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020018-refactor-external-batch-test-performance",
+      "title": "020018 refactor external batch test performance",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea020019-refactor-external-batch-test-resilience",
+      "title": "020019 refactor external batch test resilience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f02",
+      "score": 1
+    },
+    {
+      "id": "idea030000-structured-output-orchestrator-test-migration-readiness",
+      "title": "030000 structured output orchestrator test migration readine",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030001-structured-output-orchestrator-test-observability",
+      "title": "030001 structured output orchestrator test observability",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030002-structured-output-orchestrator-test-security",
+      "title": "030002 structured output orchestrator test security",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030003-structured-output-orchestrator-test-test-coverage",
+      "title": "030003 structured output orchestrator test test coverage",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030004-structured-output-orchestrator-test-py-manual-fix-observability",
+      "title": "030004 structured output orchestrator test py manual fix obs",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030005-structured-output-orchestrator-test-py-manual-fix-test-coverage",
+      "title": "030005 structured output orchestrator test py manual fix tes",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030006-structured-output-params-test-developer-experience",
+      "title": "030006 structured output params test developer experience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030007-structured-output-params-test-documentation",
+      "title": "030007 structured output params test documentation",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030008-structured-output-params-test-hardening",
+      "title": "030008 structured output params test hardening",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030009-structured-output-params-test-performance",
+      "title": "030009 structured output params test performance",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030010-structured-output-params-test-resilience",
+      "title": "030010 structured output params test resilience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030011-structured-output-params-test-py-manual-fix-hardening",
+      "title": "030011 structured output params test py manual fix hardening",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030012-structured-output-params-test-py-manual-fix-performance",
+      "title": "030012 structured output params test py manual fix performan",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030013-tokenizer-info-test-developer-experience",
+      "title": "030013 tokenizer info test developer experience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030014-tokenizer-info-test-documentation",
+      "title": "030014 tokenizer info test documentation",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030015-tokenizer-info-test-hardening",
+      "title": "030015 tokenizer info test hardening",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030016-tokenizer-info-test-performance",
+      "title": "030016 tokenizer info test performance",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030017-tokenizer-info-test-resilience",
+      "title": "030017 tokenizer info test resilience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030018-tokenizer-info-test-py-manual-fix-hardening",
+      "title": "030018 tokenizer info test py manual fix hardening",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea030019-tokenizer-info-test-py-manual-fix-performance",
+      "title": "030019 tokenizer info test py manual fix performance",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f03",
+      "score": 1
+    },
+    {
+      "id": "idea040000-proactive-agent-test-py-manual-fix-performance",
+      "title": "040000 proactive agent test py manual fix performance",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040001-quantum-reasoner-agent-py-auto-fix-hardening",
+      "title": "040001 quantum reasoner agent py auto fix hardening",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040002-quantum-reasoner-agent-py-auto-fix-performance",
+      "title": "040002 quantum reasoner agent py auto fix performance",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040003-quantum-reasoner-agent-py-hardening",
+      "title": "040003 quantum reasoner agent py hardening",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040004-quantum-reasoner-agent-py-performance",
+      "title": "040004 quantum reasoner agent py performance",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040005-quantum-reasoner-agent-test-developer-experience",
+      "title": "040005 quantum reasoner agent test developer experience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040006-quantum-reasoner-agent-test-documentation",
+      "title": "040006 quantum reasoner agent test documentation",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040007-quantum-reasoner-agent-test-hardening",
+      "title": "040007 quantum reasoner agent test hardening",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040008-quantum-reasoner-agent-test-performance",
+      "title": "040008 quantum reasoner agent test performance",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040009-quantum-reasoner-agent-test-resilience",
+      "title": "040009 quantum reasoner agent test resilience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040010-quantum-reasoner-agent-test-py-manual-fix-hardening",
+      "title": "040010 quantum reasoner agent test py manual fix hardening",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040011-quantum-reasoner-agent-test-py-manual-fix-performance",
+      "title": "040011 quantum reasoner agent test py manual fix performance",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040012-reality-anchor-agent-test-developer-experience",
+      "title": "040012 reality anchor agent test developer experience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040013-reality-anchor-agent-test-documentation",
+      "title": "040013 reality anchor agent test documentation",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040014-reality-anchor-agent-test-hardening",
+      "title": "040014 reality anchor agent test hardening",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040015-reality-anchor-agent-test-performance",
+      "title": "040015 reality anchor agent test performance",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040016-reality-anchor-agent-test-resilience",
+      "title": "040016 reality anchor agent test resilience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040017-reality-anchor-agent-test-py-manual-fix-hardening",
+      "title": "040017 reality anchor agent test py manual fix hardening",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040018-reality-anchor-agent-test-py-manual-fix-performance",
+      "title": "040018 reality anchor agent test py manual fix performance",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    },
+    {
+      "id": "idea040019-reality-grafting-agent-test-developer-experience",
+      "title": "040019 reality grafting agent test developer experience",
+      "status": "Not Started",
+      "priority": "Unknown",
+      "swot": "?",
+      "folder": "f04",
+      "score": 1
+    }
+  ]
+}

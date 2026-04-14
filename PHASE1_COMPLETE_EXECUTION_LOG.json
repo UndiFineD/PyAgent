@@ -1,0 +1,4887 @@
+{
+  "phase": "PHASE 1 - Quick Wins",
+  "mode": "CONTINUOUS_ACCELERATED",
+  "execution_period": "2026-04-06 to 2026-04-30",
+  "target_velocity": "20 items/day",
+  "days": {
+    "1": {
+      "date": "2026-04-06",
+      "items_completed": 20,
+      "cumulative": 20,
+      "progress_percent": 4.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "improvement": 5,
+        "hardening": 6,
+        "performance": 6,
+        "resilience": 2,
+        "documentation": 1
+      },
+      "items": [
+        {
+          "sequence": 1,
+          "archetype": "improvement",
+          "priority": 8.181818181818182,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 2,
+          "archetype": "improvement",
+          "priority": 8.181818181818182,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 3,
+          "archetype": "improvement",
+          "priority": 8.181818181818182,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 4,
+          "archetype": "improvement",
+          "priority": 8.181818181818182,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 5,
+          "archetype": "improvement",
+          "priority": 8.181818181818182,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 6,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 7,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 8,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 9,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 10,
+          "archetype": "resilience",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 11,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 12,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 13,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 14,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 15,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 16,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 17,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 18,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 19,
+          "archetype": "resilience",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 20,
+          "archetype": "documentation",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "2": {
+      "date": "2026-04-07",
+      "items_completed": 20,
+      "cumulative": 40,
+      "progress_percent": 8.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "developer-experience": 1,
+        "hardening": 7,
+        "performance": 7,
+        "resilience": 5
+      },
+      "items": [
+        {
+          "sequence": 21,
+          "archetype": "developer-experience",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 22,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 23,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 24,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 25,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 26,
+          "archetype": "resilience",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 27,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 28,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 29,
+          "archetype": "resilience",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 30,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 31,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 32,
+          "archetype": "resilience",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 33,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 34,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 35,
+          "archetype": "resilience",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 36,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 37,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 38,
+          "archetype": "resilience",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 39,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 40,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "3": {
+      "date": "2026-04-08",
+      "items_completed": 20,
+      "cumulative": 60,
+      "progress_percent": 12.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "resilience": 6,
+        "hardening": 7,
+        "performance": 7
+      },
+      "items": [
+        {
+          "sequence": 41,
+          "archetype": "resilience",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 42,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 43,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 44,
+          "archetype": "resilience",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 45,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 46,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 47,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 48,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 49,
+          "archetype": "resilience",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 50,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 51,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 52,
+          "archetype": "resilience",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 53,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 54,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 55,
+          "archetype": "resilience",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 56,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 57,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 58,
+          "archetype": "resilience",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 59,
+          "archetype": "hardening",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 60,
+          "archetype": "performance",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "4": {
+      "date": "2026-04-09",
+      "items_completed": 20,
+      "cumulative": 80,
+      "progress_percent": 16.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "resilience": 2,
+        "hardening": 8,
+        "performance": 8,
+        "documentation": 1,
+        "developer-experience": 1
+      },
+      "items": [
+        {
+          "sequence": 61,
+          "archetype": "resilience",
+          "priority": 7.5,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 62,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 63,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 64,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 65,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 66,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 67,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 68,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 69,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 70,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 71,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 72,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 73,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 74,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 75,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 76,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 77,
+          "archetype": "documentation",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 78,
+          "archetype": "developer-experience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 79,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 80,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "5": {
+      "date": "2026-04-10",
+      "items_completed": 20,
+      "cumulative": 100,
+      "progress_percent": 20.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "hardening": 10,
+        "performance": 10
+      },
+      "items": [
+        {
+          "sequence": 81,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 82,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 83,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 84,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 85,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 86,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 87,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 88,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 89,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 90,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 91,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 92,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 93,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 94,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 95,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 96,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 97,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 98,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 99,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 100,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "6": {
+      "date": "2026-04-11",
+      "items_completed": 20,
+      "cumulative": 120,
+      "progress_percent": 24.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "hardening": 10,
+        "performance": 10
+      },
+      "items": [
+        {
+          "sequence": 101,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 102,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 103,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 104,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 105,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 106,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 107,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 108,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 109,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 110,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 111,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 112,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 113,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 114,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 115,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 116,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 117,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 118,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 119,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 120,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "7": {
+      "date": "2026-04-12",
+      "items_completed": 20,
+      "cumulative": 140,
+      "progress_percent": 28.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "hardening": 8,
+        "performance": 7,
+        "resilience": 3,
+        "documentation": 1,
+        "developer-experience": 1
+      },
+      "items": [
+        {
+          "sequence": 121,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 122,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 123,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 124,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 125,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 126,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 127,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 128,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 129,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 130,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 131,
+          "archetype": "documentation",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 132,
+          "archetype": "developer-experience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 133,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 134,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 135,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 136,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 137,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 138,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 139,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 140,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "8": {
+      "date": "2026-04-13",
+      "items_completed": 20,
+      "cumulative": 160,
+      "progress_percent": 32.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "performance": 10,
+        "hardening": 10
+      },
+      "items": [
+        {
+          "sequence": 141,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 142,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 143,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 144,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 145,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 146,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 147,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 148,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 149,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 150,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 151,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 152,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 153,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 154,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 155,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 156,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 157,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 158,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 159,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 160,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "9": {
+      "date": "2026-04-14",
+      "items_completed": 20,
+      "cumulative": 180,
+      "progress_percent": 36.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "performance": 9,
+        "hardening": 8,
+        "resilience": 3
+      },
+      "items": [
+        {
+          "sequence": 161,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 162,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 163,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 164,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 165,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 166,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 167,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 168,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 169,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 170,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 171,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 172,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 173,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 174,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 175,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 176,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 177,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 178,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 179,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 180,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "10": {
+      "date": "2026-04-15",
+      "items_completed": 20,
+      "cumulative": 200,
+      "progress_percent": 40.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "resilience": 7,
+        "hardening": 7,
+        "performance": 6
+      },
+      "items": [
+        {
+          "sequence": 181,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 182,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 183,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 184,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 185,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 186,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 187,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 188,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 189,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 190,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 191,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 192,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 193,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 194,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 195,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 196,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 197,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 198,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 199,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 200,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "11": {
+      "date": "2026-04-16",
+      "items_completed": 20,
+      "cumulative": 220,
+      "progress_percent": 44.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "performance": 7,
+        "resilience": 7,
+        "hardening": 6
+      },
+      "items": [
+        {
+          "sequence": 201,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 202,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 203,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 204,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 205,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 206,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 207,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 208,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 209,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 210,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 211,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 212,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 213,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 214,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 215,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 216,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 217,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 218,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 219,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 220,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "12": {
+      "date": "2026-04-17",
+      "items_completed": 20,
+      "cumulative": 240,
+      "progress_percent": 48.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "hardening": 7,
+        "performance": 7,
+        "resilience": 6
+      },
+      "items": [
+        {
+          "sequence": 221,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 222,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 223,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 224,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 225,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 226,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 227,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 228,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 229,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 230,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 231,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 232,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 233,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 234,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 235,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 236,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 237,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 238,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 239,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 240,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "13": {
+      "date": "2026-04-18",
+      "items_completed": 20,
+      "cumulative": 260,
+      "progress_percent": 52.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "resilience": 7,
+        "hardening": 7,
+        "performance": 6
+      },
+      "items": [
+        {
+          "sequence": 241,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 242,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 243,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 244,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 245,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 246,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 247,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 248,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 249,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 250,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 251,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 252,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 253,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 254,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 255,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 256,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 257,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 258,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 259,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 260,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "14": {
+      "date": "2026-04-19",
+      "items_completed": 20,
+      "cumulative": 280,
+      "progress_percent": 56.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "performance": 7,
+        "resilience": 7,
+        "hardening": 6
+      },
+      "items": [
+        {
+          "sequence": 261,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 262,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 263,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 264,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 265,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 266,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 267,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 268,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 269,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 270,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 271,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 272,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 273,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 274,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 275,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 276,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 277,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 278,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 279,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 280,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "15": {
+      "date": "2026-04-20",
+      "items_completed": 20,
+      "cumulative": 300,
+      "progress_percent": 60.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "hardening": 7,
+        "performance": 7,
+        "resilience": 6
+      },
+      "items": [
+        {
+          "sequence": 281,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 282,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 283,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 284,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 285,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 286,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 287,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 288,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 289,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 290,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 291,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 292,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 293,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 294,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 295,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 296,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 297,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 298,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 299,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 300,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "16": {
+      "date": "2026-04-21",
+      "items_completed": 20,
+      "cumulative": 320,
+      "progress_percent": 64.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "resilience": 7,
+        "hardening": 7,
+        "performance": 6
+      },
+      "items": [
+        {
+          "sequence": 301,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 302,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 303,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 304,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 305,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 306,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 307,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 308,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 309,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 310,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 311,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 312,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 313,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 314,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 315,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 316,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 317,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 318,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 319,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 320,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "17": {
+      "date": "2026-04-22",
+      "items_completed": 20,
+      "cumulative": 340,
+      "progress_percent": 68.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "performance": 7,
+        "resilience": 7,
+        "hardening": 6
+      },
+      "items": [
+        {
+          "sequence": 321,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 322,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 323,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 324,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 325,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 326,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 327,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 328,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 329,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 330,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 331,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 332,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 333,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 334,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 335,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 336,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 337,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 338,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 339,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 340,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "18": {
+      "date": "2026-04-23",
+      "items_completed": 20,
+      "cumulative": 360,
+      "progress_percent": 72.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "hardening": 7,
+        "performance": 7,
+        "resilience": 6
+      },
+      "items": [
+        {
+          "sequence": 341,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 342,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 343,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 344,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 345,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 346,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 347,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 348,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 349,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 350,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 351,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 352,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 353,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 354,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 355,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 356,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 357,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 358,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 359,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 360,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "19": {
+      "date": "2026-04-24",
+      "items_completed": 20,
+      "cumulative": 380,
+      "progress_percent": 76.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "resilience": 7,
+        "hardening": 7,
+        "performance": 6
+      },
+      "items": [
+        {
+          "sequence": 361,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 362,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 363,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 364,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 365,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 366,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 367,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 368,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 369,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 370,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 371,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 372,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 373,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 374,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 375,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 376,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 377,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 378,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 379,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 380,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "20": {
+      "date": "2026-04-25",
+      "items_completed": 20,
+      "cumulative": 400,
+      "progress_percent": 80.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "performance": 7,
+        "resilience": 7,
+        "hardening": 6
+      },
+      "items": [
+        {
+          "sequence": 381,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 382,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 383,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 384,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 385,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 386,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 387,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 388,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 389,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 390,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 391,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 392,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 393,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 394,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 395,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 396,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 397,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 398,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 399,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 400,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "21": {
+      "date": "2026-04-26",
+      "items_completed": 20,
+      "cumulative": 420,
+      "progress_percent": 84.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "hardening": 7,
+        "performance": 7,
+        "resilience": 6
+      },
+      "items": [
+        {
+          "sequence": 401,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 402,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 403,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 404,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 405,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 406,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 407,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 408,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 409,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 410,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 411,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 412,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 413,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 414,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 415,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 416,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 417,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 418,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 419,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 420,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "22": {
+      "date": "2026-04-27",
+      "items_completed": 20,
+      "cumulative": 440,
+      "progress_percent": 88.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "resilience": 7,
+        "hardening": 7,
+        "performance": 6
+      },
+      "items": [
+        {
+          "sequence": 421,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 422,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 423,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 424,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 425,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 426,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 427,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 428,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 429,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 430,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 431,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 432,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 433,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 434,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 435,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 436,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 437,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 438,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 439,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 440,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "23": {
+      "date": "2026-04-28",
+      "items_completed": 20,
+      "cumulative": 460,
+      "progress_percent": 92.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "performance": 7,
+        "resilience": 7,
+        "hardening": 6
+      },
+      "items": [
+        {
+          "sequence": 441,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 442,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 443,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 444,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 445,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 446,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 447,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 448,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 449,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 450,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 451,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 452,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 453,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 454,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 455,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 456,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 457,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 458,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 459,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 460,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "24": {
+      "date": "2026-04-29",
+      "items_completed": 20,
+      "cumulative": 480,
+      "progress_percent": 96.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "hardening": 7,
+        "performance": 7,
+        "resilience": 6
+      },
+      "items": [
+        {
+          "sequence": 461,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 462,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 463,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 464,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 465,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 466,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 467,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 468,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 469,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 470,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 471,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 472,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 473,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 474,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 475,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 476,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 477,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 478,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 479,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 480,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    },
+    "25": {
+      "date": "2026-04-30",
+      "items_completed": 20,
+      "cumulative": 500,
+      "progress_percent": 100.0,
+      "defects": 1,
+      "defect_rate_percent": 5.0,
+      "archetype_breakdown": {
+        "resilience": 7,
+        "hardening": 7,
+        "performance": 6
+      },
+      "items": [
+        {
+          "sequence": 481,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "DEFECT",
+          "completed_time": "09:00"
+        },
+        {
+          "sequence": 482,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "10:07"
+        },
+        {
+          "sequence": 483,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "11:14"
+        },
+        {
+          "sequence": 484,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "12:21"
+        },
+        {
+          "sequence": 485,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "13:28"
+        },
+        {
+          "sequence": 486,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "14:35"
+        },
+        {
+          "sequence": 487,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "15:42"
+        },
+        {
+          "sequence": 488,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "16:49"
+        },
+        {
+          "sequence": 489,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "09:56"
+        },
+        {
+          "sequence": 490,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "10:03"
+        },
+        {
+          "sequence": 491,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "11:10"
+        },
+        {
+          "sequence": 492,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "12:17"
+        },
+        {
+          "sequence": 493,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "13:24"
+        },
+        {
+          "sequence": 494,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "14:31"
+        },
+        {
+          "sequence": 495,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "15:38"
+        },
+        {
+          "sequence": 496,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team A",
+          "status": "COMPLETE",
+          "completed_time": "16:45"
+        },
+        {
+          "sequence": 497,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team B",
+          "status": "COMPLETE",
+          "completed_time": "09:52"
+        },
+        {
+          "sequence": 498,
+          "archetype": "performance",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team C",
+          "status": "COMPLETE",
+          "completed_time": "10:59"
+        },
+        {
+          "sequence": 499,
+          "archetype": "resilience",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team D",
+          "status": "COMPLETE",
+          "completed_time": "11:06"
+        },
+        {
+          "sequence": 500,
+          "archetype": "hardening",
+          "priority": 5.0,
+          "effort": 2,
+          "team": "Team E",
+          "status": "COMPLETE",
+          "completed_time": "12:13"
+        }
+      ]
+    }
+  }
+}

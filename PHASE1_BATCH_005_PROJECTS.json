@@ -1,0 +1,164 @@
+{
+  "batch": "Phase 1 Batch 005",
+  "ideas_range": "121-150",
+  "project_range": "prj000201-prj000230",
+  "total_projects": 30,
+  "total_files": 210,
+  "projects": [
+    {
+      "project_id": "prj000201",
+      "name": "API Gateway - Request Routing",
+      "category": "API/Gateway/Proxy"
+    },
+    {
+      "project_id": "prj000202",
+      "name": "API Gateway - Authentication Layer",
+      "category": "API/Gateway/Proxy"
+    },
+    {
+      "project_id": "prj000203",
+      "name": "API Gateway - Rate Limiting",
+      "category": "API/Gateway/Proxy"
+    },
+    {
+      "project_id": "prj000204",
+      "name": "Reverse Proxy - Load Balancing",
+      "category": "API/Gateway/Proxy"
+    },
+    {
+      "project_id": "prj000205",
+      "name": "Reverse Proxy - SSL/TLS Termination",
+      "category": "API/Gateway/Proxy"
+    },
+    {
+      "project_id": "prj000206",
+      "name": "API Versioning - Request Routing",
+      "category": "API/Gateway/Proxy"
+    },
+    {
+      "project_id": "prj000207",
+      "name": "Request/Response - Content Negotiation",
+      "category": "API/Gateway/Proxy"
+    },
+    {
+      "project_id": "prj000208",
+      "name": "API Gateway - Caching Layer",
+      "category": "API/Gateway/Proxy"
+    },
+    {
+      "project_id": "prj000209",
+      "name": "Service Mesh - sidecar Proxy",
+      "category": "API/Gateway/Proxy"
+    },
+    {
+      "project_id": "prj000210",
+      "name": "Webhook - Proxy Relay",
+      "category": "API/Gateway/Proxy"
+    },
+    {
+      "project_id": "prj000211",
+      "name": "Message Queue - In-Memory Queue",
+      "category": "Message/Queue"
+    },
+    {
+      "project_id": "prj000212",
+      "name": "Message Queue - Pub/Sub System",
+      "category": "Message/Queue"
+    },
+    {
+      "project_id": "prj000213",
+      "name": "Message Queue - Priority Queue",
+      "category": "Message/Queue"
+    },
+    {
+      "project_id": "prj000214",
+      "name": "Message Processing - Consumer Group",
+      "category": "Message/Queue"
+    },
+    {
+      "project_id": "prj000215",
+      "name": "Message Processing - Batch Processing",
+      "category": "Message/Queue"
+    },
+    {
+      "project_id": "prj000216",
+      "name": "Message Serialization - Format Handler",
+      "category": "Message/Queue"
+    },
+    {
+      "project_id": "prj000217",
+      "name": "Message Ordering - Guarantees",
+      "category": "Message/Queue"
+    },
+    {
+      "project_id": "prj000218",
+      "name": "Message Acknowledgment - ACK System",
+      "category": "Message/Queue"
+    },
+    {
+      "project_id": "prj000219",
+      "name": "Message Routing - Content-Based Router",
+      "category": "Message/Queue"
+    },
+    {
+      "project_id": "prj000220",
+      "name": "Message Transformation - Pipeline",
+      "category": "Message/Queue"
+    },
+    {
+      "project_id": "prj000221",
+      "name": "Stream Processing - Source/Sink",
+      "category": "Stream/Pipeline"
+    },
+    {
+      "project_id": "prj000222",
+      "name": "Stream Processing - Operators",
+      "category": "Stream/Pipeline"
+    },
+    {
+      "project_id": "prj000223",
+      "name": "Stream Processing - Windowing",
+      "category": "Stream/Pipeline"
+    },
+    {
+      "project_id": "prj000224",
+      "name": "Stream Processing - Stateful Processing",
+      "category": "Stream/Pipeline"
+    },
+    {
+      "project_id": "prj000225",
+      "name": "Data Pipeline - DAG Execution",
+      "category": "Stream/Pipeline"
+    },
+    {
+      "project_id": "prj000226",
+      "name": "Data Pipeline - Task Scheduling",
+      "category": "Stream/Pipeline"
+    },
+    {
+      "project_id": "prj000227",
+      "name": "Data Pipeline - Monitoring & Metrics",
+      "category": "Stream/Pipeline"
+    },
+    {
+      "project_id": "prj000228",
+      "name": "Stream Processing - Joining Streams",
+      "category": "Stream/Pipeline"
+    },
+    {
+      "project_id": "prj000229",
+      "name": "Stream Processing - Exactly-Once Semantics",
+      "category": "Stream/Pipeline"
+    },
+    {
+      "project_id": "prj000230",
+      "name": "Data Lineage - Tracking & Provenance",
+      "category": "Stream/Pipeline"
+    }
+  ],
+  "categories": {
+    "API/Gateway/Proxy": 10,
+    "Message/Queue": 10,
+    "Stream/Pipeline": 10
+  }
+}

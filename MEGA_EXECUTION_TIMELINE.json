@@ -1,0 +1,33 @@
+{
+  "project": "52,655 Ideas Execution",
+  "start_date": "2026-04-06",
+  "phases": {
+    "phase_1": {
+      "name": "Quick Wins",
+      "items": 500,
+      "start": "2026-04-06",
+      "end": "2026-04-30",
+      "duration_days": 25,
+      "velocity": 20,
+      "status": "COMPLETE"
+    },
+    "phase_2": {
+      "name": "Architecture",
+      "items": 1924,
+      "start": "2026-05-01",
+      "end": "2026-07-03",
+      "duration_days": 64,
+      "velocity": 30,
+      "status": "QUEUED"
+    },
+    "phase_3": {
+      "name": "Features",
+      "items": 49731,
+      "start": "2026-07-03",
+      "duration_weeks": "20+",
+      "status": "PLANNING"
+    }
+  },
+  "total_items": 52655,
+  "total_duration_estimate": "9-12 months"
+}

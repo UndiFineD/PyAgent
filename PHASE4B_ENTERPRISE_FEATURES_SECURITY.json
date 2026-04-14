@@ -1,0 +1,443 @@
+{
+  "phase": "PHASE 4B - Enterprise Features & Security",
+  "version": "1.0",
+  "created_at": "2026-04-06T18:07:00Z",
+  "overview": {
+    "description": "Multi-tenancy, advanced authentication, RBAC, encryption, and compliance",
+    "total_epics": 4,
+    "total_stories": 22,
+    "total_tasks": 154,
+    "estimated_hours": 720,
+    "estimated_duration_weeks": 3,
+    "team_size": 7,
+    "priority": "HIGH"
+  },
+  "epics": [
+    {
+      "epic_id": "PHASE4B_EPIC_001",
+      "name": "Multi-Tenancy Architecture",
+      "description": "Complete multi-tenant system with data isolation and resource quotas",
+      "stories_count": 6,
+      "total_effort_hours": 180,
+      "stories": [
+        {
+          "story_id": "P4B_S001",
+          "title": "Tenant isolation framework",
+          "description": "Implement tenant context and data isolation",
+          "effort_hours": 36,
+          "tasks": [
+            {"task": "Design tenant context propagation", "hours": 12},
+            {"task": "Implement row-level security (RLS)", "hours": 14},
+            {"task": "Build tenant routing middleware", "hours": 10}
+          ]
+        },
+        {
+          "story_id": "P4B_S002",
+          "title": "Resource quota management",
+          "description": "Enforce per-tenant resource limits",
+          "effort_hours": 28,
+          "tasks": [
+            {"task": "Design quota schema", "hours": 8},
+            {"task": "Implement quota enforcement", "hours": 12},
+            {"task": "Build quota reporting", "hours": 8}
+          ]
+        },
+        {
+          "story_id": "P4B_S003",
+          "title": "Tenant-aware caching",
+          "description": "Cache data with tenant isolation",
+          "effort_hours": 24,
+          "tasks": [
+            {"task": "Design cache key strategy", "hours": 8},
+            {"task": "Implement tenant-scoped cache", "hours": 10},
+            {"task": "Add cache invalidation logic", "hours": 6}
+          ]
+        },
+        {
+          "story_id": "P4B_S004",
+          "title": "Tenant data migration",
+          "description": "Support tenant onboarding and data migration",
+          "effort_hours": 32,
+          "tasks": [
+            {"task": "Design migration framework", "hours": 10},
+            {"task": "Implement data import/export", "hours": 14},
+            {"task": "Build verification system", "hours": 8}
+          ]
+        },
+        {
+          "story_id": "P4B_S005",
+          "title": "Tenant billing & metering",
+          "description": "Track and bill tenant usage",
+          "effort_hours": 36,
+          "tasks": [
+            {"task": "Design metering system", "hours": 10},
+            {"task": "Implement usage tracking", "hours": 16},
+            {"task": "Build billing integration", "hours": 10}
+          ]
+        },
+        {
+          "story_id": "P4B_S006",
+          "title": "Multi-tenant operations",
+          "description": "Operational tools for tenant management",
+          "effort_hours": 24,
+          "tasks": [
+            {"task": "Build admin dashboard", "hours": 12},
+            {"task": "Implement tenant management API", "hours": 12}
+          ]
+        }
+      ]
+    },
+    {
+      "epic_id": "PHASE4B_EPIC_002",
+      "name": "Advanced Authentication & Authorization",
+      "description": "Enterprise-grade auth with SSO, SAML, RBAC",
+      "stories_count": 6,
+      "total_effort_hours": 190,
+      "stories": [
+        {
+          "story_id": "P4B_S007",
+          "title": "OAuth2 & OpenID Connect",
+          "description": "Implement OAuth2/OIDC for single sign-on",
+          "effort_hours": 40,
+          "tasks": [
+            {"task": "Implement OAuth2 provider", "hours": 16},
+            {"task": "Add OIDC support", "hours": 16},
+            {"task": "Build token management", "hours": 8}
+          ]
+        },
+        {
+          "story_id": "P4B_S008",
+          "title": "SAML 2.0 integration",
+          "description": "Support SAML 2.0 for enterprise SSO",
+          "effort_hours": 32,
+          "tasks": [
+            {"task": "Implement SAML 2.0 service provider", "hours": 14},
+            {"task": "Add assertion validation", "hours": 10},
+            {"task": "Build attribute mapping", "hours": 8}
+          ]
+        },
+        {
+          "story_id": "P4B_S009",
+          "title": "Role-based access control (RBAC)",
+          "description": "Flexible RBAC system with permission management",
+          "effort_hours": 44,
+          "tasks": [
+            {"task": "Design permission schema", "hours": 12},
+            {"task": "Implement RBAC engine", "hours": 20},
+            {"task": "Build permission management UI", "hours": 12}
+          ]
+        },
+        {
+          "story_id": "P4B_S010",
+          "title": "Attribute-based access control (ABAC)",
+          "description": "Fine-grained access control with attributes",
+          "effort_hours": 36,
+          "tasks": [
+            {"task": "Design attribute schema", "hours": 10},
+            {"task": "Implement policy evaluation", "hours": 16},
+            {"task": "Build policy management", "hours": 10}
+          ]
+        },
+        {
+          "story_id": "P4B_S011",
+          "title": "MFA & step-up authentication",
+          "description": "Multi-factor authentication and step-up flows",
+          "effort_hours": 28,
+          "tasks": [
+            {"task": "Implement TOTP/SMS MFA", "hours": 12},
+            {"task": "Add step-up challenges", "hours": 10},
+            {"task": "Build MFA management UI", "hours": 6}
+          ]
+        },
+        {
+          "story_id": "P4B_S012",
+          "title": "Session management & security",
+          "description": "Secure session handling with anti-CSRF, HSTS",
+          "effort_hours": 10,
+          "tasks": [
+            {"task": "Implement secure cookies", "hours": 4},
+            {"task": "Add CSRF protection", "hours": 4},
+            {"task": "Configure security headers", "hours": 2}
+          ]
+        }
+      ]
+    },
+    {
+      "epic_id": "PHASE4B_EPIC_003",
+      "name": "Data Encryption & Protection",
+      "description": "Encryption at rest and in transit, key management",
+      "stories_count": 5,
+      "total_effort_hours": 170,
+      "stories": [
+        {
+          "story_id": "P4B_S013",
+          "title": "Encryption at rest",
+          "description": "Encrypt database and storage at rest",
+          "effort_hours": 40,
+          "tasks": [
+            {"task": "Design encryption schema", "hours": 10},
+            {"task": "Implement database encryption", "hours": 18},
+            {"task": "Add encrypted backups", "hours": 12}
+          ]
+        },
+        {
+          "story_id": "P4B_S014",
+          "title": "Encryption in transit",
+          "description": "TLS/SSL for all data in transit",
+          "effort_hours": 24,
+          "tasks": [
+            {"task": "Implement TLS 1.3", "hours": 8},
+            {"task": "Add certificate management", "hours": 10},
+            {"task": "Configure HSTS & CAA records", "hours": 6}
+          ]
+        },
+        {
+          "story_id": "P4B_S015",
+          "title": "Key management system (KMS)",
+          "description": "Enterprise key management with HSM support",
+          "effort_hours": 44,
+          "tasks": [
+            {"task": "Design KMS architecture", "hours": 12},
+            {"task": "Implement key rotation", "hours": 16},
+            {"task": "Add HSM integration", "hours": 16}
+          ]
+        },
+        {
+          "story_id": "P4B_S016",
+          "title": "Encrypted fields",
+          "description": "Application-level field encryption",
+          "effort_hours": 32,
+          "tasks": [
+            {"task": "Design field encryption", "hours": 8},
+            {"task": "Implement encrypted columns", "hours": 16},
+            {"task": "Build key lookup system", "hours": 8}
+          ]
+        },
+        {
+          "story_id": "P4B_S017",
+          "title": "Secrets management",
+          "description": "Secure storage and rotation of secrets",
+          "effort_hours": 30,
+          "tasks": [
+            {"task": "Integrate with HashiCorp Vault", "hours": 12},
+            {"task": "Implement secret rotation", "hours": 12},
+            {"task": "Add audit logging", "hours": 6}
+          ]
+        }
+      ]
+    },
+    {
+      "epic_id": "PHASE4B_EPIC_004",
+      "name": "Compliance & Audit Logging",
+      "description": "Complete audit trails and compliance with regulations",
+      "stories_count": 5,
+      "total_effort_hours": 180,
+      "stories": [
+        {
+          "story_id": "P4B_S018",
+          "title": "Comprehensive audit logging",
+          "description": "Log all user actions and system changes",
+          "effort_hours": 36,
+          "tasks": [
+            {"task": "Design audit schema", "hours": 8},
+            {"task": "Implement audit middleware", "hours": 16},
+            {"task": "Build audit search/export", "hours": 12}
+          ]
+        },
+        {
+          "story_id": "P4B_S019",
+          "title": "GDPR compliance",
+          "description": "GDPR-compliant data handling and privacy",
+          "effort_hours": 44,
+          "tasks": [
+            {"task": "Implement data subject requests", "hours": 16},
+            {"task": "Add right to be forgotten", "hours": 16},
+            {"task": "Build consent management", "hours": 12}
+          ]
+        },
+        {
+          "story_id": "P4B_S020",
+          "title": "HIPAA compliance",
+          "description": "HIPAA-compliant healthcare data handling",
+          "effort_hours": 40,
+          "tasks": [
+            {"task": "Implement PHI encryption", "hours": 14},
+            {"task": "Add access controls for PHI", "hours": 14},
+            {"task": "Build PHI audit reports", "hours": 12}
+          ]
+        },
+        {
+          "story_id": "P4B_S021",
+          "title": "SOC 2 controls",
+          "description": "Implement SOC 2 Type II controls",
+          "effort_hours": 32,
+          "tasks": [
+            {"task": "Document control implementation", "hours": 12},
+            {"task": "Implement automated checks", "hours": 14},
+            {"task": "Build compliance dashboards", "hours": 6}
+          ]
+        },
+        {
+          "story_id": "P4B_S022",
+          "title": "Data residency & sovereignty",
+          "description": "Support data residency requirements",
+          "effort_hours": 28,
+          "tasks": [
+            {"task": "Implement data locality enforcement", "hours": 12},
+            {"task": "Add compliance labeling", "hours": 10},
+            {"task": "Build residency reporting", "hours": 6}
+          ]
+        }
+      ]
+    }
+  ],
+  "security_stack": {
+    "authentication": {
+      "oauth2": "Keycloak or custom implementation",
+      "saml": "python3-saml",
+      "mfa": "pyotp + twilio"
+    },
+    "authorization": {
+      "rbac": "Custom RBAC engine",
+      "abac": "Opa/Rego for policy evaluation"
+    },
+    "encryption": {
+      "at_rest": "AES-256-GCM with per-tenant keys",
+      "in_transit": "TLS 1.3",
+      "key_management": "HashiCorp Vault or AWS KMS"
+    },
+    "secrets": {
+      "management": "HashiCorp Vault",
+      "rotation": "Automated every 90 days"
+    },
+    "audit": {
+      "logging": "Immutable audit log (database)",
+      "siem_integration": "Splunk / ELK",
+      "retention": "7 years (compliance requirement)"
+    }
+  },
+  "compliance_frameworks": {
+    "gdpr": {
+      "data_subject_rights": "Implemented",
+      "consent_management": "Implemented",
+      "dpa_ready": true
+    },
+    "hipaa": {
+      "phi_encryption": "AES-256",
+      "access_controls": "RBAC + MFA",
+      "audit_trails": "24 months"
+    },
+    "soc2": {
+      "type": "Type II",
+      "controls": 18,
+      "audit_frequency": "Annual"
+    },
+    "pci_dss": {
+      "version": "3.2.1",
+      "controls": 12,
+      "scope": "Optional (if handling cards)"
+    }
+  },
+  "multi_tenancy_model": {
+    "isolation_level": "Row-level security (RLS)",
+    "data_location": "Shared database with tenant_id partitioning",
+    "resource_quotas": {
+      "max_users": "Configurable",
+      "max_storage": "Configurable",
+      "max_api_calls": "Configurable"
+    },
+    "cost_model": "Usage-based billing per tenant"
+  },
+  "performance_targets": {
+    "auth_latency": {
+      "oauth2_token": "< 200ms",
+      "saml_login": "< 500ms",
+      "mfa_verification": "< 100ms"
+    },
+    "rbac_latency": {
+      "permission_check": "< 50ms (with caching)"
+    },
+    "encryption_overhead": {
+      "write_overhead": "< 5%",
+      "read_overhead": "< 2%"
+    },
+    "audit_latency": {
+      "log_write": "< 100ms (async)"
+    }
+  },
+  "testing_strategy": {
+    "unit_tests": {
+      "count": 110,
+      "coverage": "92%",
+      "focus": ["Auth flows", "RBAC", "Encryption", "Audit logging"]
+    },
+    "integration_tests": {
+      "count": 70,
+      "coverage": "88%",
+      "focus": ["Multi-tenancy", "Compliance", "OAuth2/SAML"]
+    },
+    "security_tests": [
+      {
+        "name": "OWASP Top 10",
+        "coverage": "100%",
+        "tools": ["OWASP ZAP", "Burp Suite"]
+      },
+      {
+        "name": "Encryption validation",
+        "coverage": "All fields",
+        "verification": "Manual + automated"
+      },
+      {
+        "name": "Compliance verification",
+        "frameworks": ["GDPR", "HIPAA", "SOC 2"]
+      }
+    ],
+    "penetration_tests": [
+      "SQL injection",
+      "XSS attacks",
+      "CSRF attacks",
+      "Privilege escalation",
+      "Data leakage"
+    ]
+  },
+  "timeline": {
+    "week_1": {
+      "phase": "Foundation & Design",
+      "tasks": [
+        "Design multi-tenancy architecture",
+        "Plan authentication strategy",
+        "Design security architecture"
+      ],
+      "hours": 160
+    },
+    "week_2": {
+      "phase": "Auth & Tenancy Implementation",
+      "tasks": [
+        "Implement OAuth2/SAML",
+        "Build RBAC system",
+        "Deploy multi-tenancy layer"
+      ],
+      "hours": 280
+    },
+    "week_3": {
+      "phase": "Security & Compliance",
+      "tasks": [
+        "Implement encryption",
+        "Deploy audit logging",
+        "Implement compliance controls"
+      ],
+      "hours": 280
+    },
+    "total": "720 hours (3 weeks)"
+  },
+  "success_criteria": [
+    "OAuth2/SAML SSO working with 100+ test scenarios",
+    "RBAC protecting all endpoints with 92%+ code coverage",
+    "AES-256 encryption for sensitive data",
+    "100% audit trail coverage with zero gaps",
+    "GDPR compliance verified independently",
+    "180+ tests passing with 90%+ coverage",
+    "Penetration tests pass with zero critical findings",
+    "Multi-tenancy isolation verified"
+  ]
+}

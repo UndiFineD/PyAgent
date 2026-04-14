@@ -1,0 +1,409 @@
+{
+  "started_at": "2026-04-06T06:37:14.622856",
+  "batch": "quick_wins",
+  "total_items": 500,
+  "processing_first": 50,
+  "items": [
+    {
+      "id": "extracted_94be1252",
+      "sequence": 1,
+      "archetype": "improvement",
+      "priority": 8.181818181818182,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "extracted_5b316753",
+      "sequence": 2,
+      "archetype": "improvement",
+      "priority": 8.181818181818182,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "extracted_f59bb974",
+      "sequence": 3,
+      "archetype": "improvement",
+      "priority": 8.181818181818182,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "extracted_f47d0116",
+      "sequence": 4,
+      "archetype": "improvement",
+      "priority": 8.181818181818182,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "extracted_66d308a8",
+      "sequence": 5,
+      "archetype": "improvement",
+      "priority": 8.181818181818182,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-896068a211-01",
+      "sequence": 6,
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-896068a211-03",
+      "sequence": 7,
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-eca12c0a30-01",
+      "sequence": 8,
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-eca12c0a30-03",
+      "sequence": 9,
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-eca12c0a30-05",
+      "sequence": 10,
+      "archetype": "resilience",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-4c2f5a3d4e-01",
+      "sequence": 11,
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-4c2f5a3d4e-03",
+      "sequence": 12,
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-d4fc715e34-01",
+      "sequence": 13,
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-d4fc715e34-03",
+      "sequence": 14,
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-bd2e7c1fc9-01",
+      "sequence": 15,
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-bd2e7c1fc9-03",
+      "sequence": 16,
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-813c37748b-01",
+      "sequence": 17,
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-813c37748b-03",
+      "sequence": 18,
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-813c37748b-05",
+      "sequence": 19,
+      "archetype": "resilience",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-813c37748b-07",
+      "sequence": 20,
+      "archetype": "documentation",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-813c37748b-09",
+      "sequence": 21,
+      "archetype": "developer-experience",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-627b78496b-01",
+      "sequence": 22,
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-627b78496b-03",
+      "sequence": 23,
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-43efd89681-01",
+      "sequence": 24,
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-43efd89681-03",
+      "sequence": 25,
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-43efd89681-05",
+      "sequence": 26,
+      "archetype": "resilience",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-aa2997d3e1-01",
+      "sequence": 27,
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-aa2997d3e1-03",
+      "sequence": 28,
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-aa2997d3e1-05",
+      "sequence": 29,
+      "archetype": "resilience",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-828b5d4b4a-01",
+      "sequence": 30,
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-828b5d4b4a-03",
+      "sequence": 31,
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-828b5d4b4a-05",
+      "sequence": 32,
+      "archetype": "resilience",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-cd185e5d99-01",
+      "sequence": 33,
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-cd185e5d99-03",
+      "sequence": 34,
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-cd185e5d99-05",
+      "sequence": 35,
+      "archetype": "resilience",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-0378c130aa-01",
+      "sequence": 36,
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-0378c130aa-03",
+      "sequence": 37,
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-0378c130aa-05",
+      "sequence": 38,
+      "archetype": "resilience",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-79636aa11a-01",
+      "sequence": 39,
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-79636aa11a-03",
+      "sequence": 40,
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-79636aa11a-05",
+      "sequence": 41,
+      "archetype": "resilience",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-5a4be1446e-01",
+      "sequence": 42,
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-5a4be1446e-03",
+      "sequence": 43,
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-5a4be1446e-05",
+      "sequence": 44,
+      "archetype": "resilience",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-abd58b81cc-01",
+      "sequence": 45,
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-abd58b81cc-03",
+      "sequence": 46,
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-3da464eec3-01",
+      "sequence": 47,
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-3da464eec3-03",
+      "sequence": 48,
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-3da464eec3-05",
+      "sequence": 49,
+      "archetype": "resilience",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    },
+    {
+      "id": "legacy-b1bab5bf9f-01",
+      "sequence": 50,
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "status": "QUEUED"
+    }
+  ],
+  "summary": {}
+}

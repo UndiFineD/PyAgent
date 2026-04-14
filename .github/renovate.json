@@ -1,0 +1,89 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    "group:monorepos",
+    "group:recommended",
+    "workarounds:all"
+  ],
+  "timezone": "UTC",
+  "schedule": [
+    "before 3am on Monday"
+  ],
+  "labels": [
+    "dependencies",
+    "renovate"
+  ],
+  "assignees": [
+    "@dependabot"
+  ],
+  "reviewers": [
+    "team:maintainers"
+  ],
+  "automerge": true,
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
+  "minimumReleaseAge": "3 days",
+  "rangeStrategy": "auto",
+  "ignoreDeps": [],
+  "python": {
+    "enabled": true
+  },
+  "npm": {
+    "enabled": true
+  },
+  "docker": {
+    "enabled": true,
+    "automerge": true,
+    "automergeType": "pr",
+    "automergeStrategy": "squash"
+  },
+  "packageRules": [
+    {
+      "description": "Disable automerge for major version updates",
+      "updateTypes": [
+        "major"
+      ],
+      "automerge": false
+    },
+    {
+      "description": "Disable automerge for minor version updates",
+      "updateTypes": [
+        "minor"
+      ],
+      "automerge": false
+    },
+    {
+      "description": "Automerge patch and digest updates",
+      "updateTypes": [
+        "patch",
+        "digest",
+        "lockFileMaintenance"
+      ],
+      "automerge": true
+    },
+    {
+      "description": "Enable automerge for security updates",
+      "matchDatasources": [
+        "npm",
+        "pypi"
+      ],
+      "matchUpdateTypes": [
+        "security"
+      ],
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "labels": [
+      "security",
+      "dependencies"
+    ],
+    "assignees": [
+      "@dependabot"
+    ]
+  },
+  "enableVulnerabilityAlerts": true
+}

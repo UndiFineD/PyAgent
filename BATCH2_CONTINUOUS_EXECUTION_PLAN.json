@@ -1,0 +1,59 @@
+{
+  "phase": "PHASE 1",
+  "batch": 2,
+  "date_range": "2026-04-07 to 2026-04-11",
+  "days": {
+    "day_2": {
+      "date": "2026-04-07",
+      "target": 20,
+      "items": [
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
+      "cumulative": 55,
+      "progress_percent": 11.0
+    },
+    "day_3": {
+      "date": "2026-04-08",
+      "target": 20,
+      "items": [
+        41,
+        42,
+        43,
+        44,
+        45
+      ],
+      "cumulative": 75,
+      "progress_percent": 15.0
+    },
+    "day_4": {
+      "date": "2026-04-09",
+      "target": 20,
+      "items": [
+        46,
+        47,
+        48,
+        49,
+        50
+      ],
+      "cumulative": 95,
+      "progress_percent": 19.0
+    },
+    "day_5": {
+      "date": "2026-04-10",
+      "target": 20,
+      "items": [
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "cumulative": 115,
+      "progress_percent": 23.0
+    }
+  }
+}

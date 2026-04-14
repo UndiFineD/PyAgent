@@ -1,0 +1,541 @@
+{
+  "phase": "PHASE 4C - Scaling & Distributed Systems",
+  "version": "1.0",
+  "created_at": "2026-04-06T18:05:00Z",
+  "overview": {
+    "description": "Complete horizontal scaling, multi-region replication, and distributed systems architecture",
+    "total_epics": 4,
+    "total_stories": 28,
+    "total_tasks": 186,
+    "estimated_hours": 800,
+    "estimated_duration_weeks": 4,
+    "team_size": 8,
+    "priority": "CRITICAL"
+  },
+  "epics": [
+    {
+      "epic_id": "PHASE4C_EPIC_001",
+      "name": "Database Sharding & Horizontal Scaling",
+      "description": "Implement horizontal database sharding for multi-region data distribution",
+      "stories_count": 7,
+      "total_effort_hours": 210,
+      "stories": [
+        {
+          "story_id": "P4C_S001",
+          "title": "Design sharding key strategy",
+          "description": "Determine optimal sharding key for data partitioning",
+          "effort_hours": 24,
+          "tasks": [
+            {"task": "Analyze data distribution patterns", "hours": 8},
+            {"task": "Evaluate sharding key candidates", "hours": 8},
+            {"task": "Design consistency strategy", "hours": 8}
+          ]
+        },
+        {
+          "story_id": "P4C_S002",
+          "title": "Implement shard router",
+          "description": "Build routing layer to direct queries to correct shard",
+          "effort_hours": 32,
+          "tasks": [
+            {"task": "Implement hash-based router", "hours": 12},
+            {"task": "Add range-based routing fallback", "hours": 10},
+            {"task": "Build router caching", "hours": 10}
+          ]
+        },
+        {
+          "story_id": "P4C_S003",
+          "title": "Data migration pipeline",
+          "description": "Zero-downtime data migration across shards",
+          "effort_hours": 40,
+          "tasks": [
+            {"task": "Design dual-write strategy", "hours": 12},
+            {"task": "Implement migration orchestrator", "hours": 16},
+            {"task": "Build verification system", "hours": 12}
+          ]
+        },
+        {
+          "story_id": "P4C_S004",
+          "title": "Shard rebalancing",
+          "description": "Rebalance data across shards as they grow",
+          "effort_hours": 28,
+          "tasks": [
+            {"task": "Monitor shard sizes", "hours": 8},
+            {"task": "Implement rebalancing algorithm", "hours": 12},
+            {"task": "Build automated triggers", "hours": 8}
+          ]
+        },
+        {
+          "story_id": "P4C_S005",
+          "title": "Cross-shard transactions",
+          "description": "Support ACID transactions across multiple shards",
+          "effort_hours": 36,
+          "tasks": [
+            {"task": "Implement 2-phase commit", "hours": 14},
+            {"task": "Add rollback strategy", "hours": 12},
+            {"task": "Build consistency checker", "hours": 10}
+          ]
+        },
+        {
+          "story_id": "P4C_S006",
+          "title": "Sharding monitoring dashboard",
+          "description": "Real-time visibility into shard health and distribution",
+          "effort_hours": 30,
+          "tasks": [
+            {"task": "Design dashboard layout", "hours": 8},
+            {"task": "Implement metrics collection", "hours": 12},
+            {"task": "Build alerting rules", "hours": 10}
+          ]
+        },
+        {
+          "story_id": "P4C_S007",
+          "title": "Failover & recovery",
+          "description": "Automatic failover when shard becomes unavailable",
+          "effort_hours": 20,
+          "tasks": [
+            {"task": "Implement health checks", "hours": 6},
+            {"task": "Build failover orchestration", "hours": 10},
+            {"task": "Test recovery procedures", "hours": 4}
+          ]
+        }
+      ]
+    },
+    {
+      "epic_id": "PHASE4C_EPIC_002",
+      "name": "Service Mesh & Load Balancing",
+      "description": "Implement service-to-service communication with intelligent load balancing",
+      "stories_count": 7,
+      "total_effort_hours": 196,
+      "stories": [
+        {
+          "story_id": "P4C_S008",
+          "title": "Service mesh control plane",
+          "description": "Deploy Istio/Linkerd control plane for service orchestration",
+          "effort_hours": 44,
+          "tasks": [
+            {"task": "Design control plane architecture", "hours": 12},
+            {"task": "Set up Istio deployment", "hours": 16},
+            {"task": "Configure mTLS", "hours": 16}
+          ]
+        },
+        {
+          "story_id": "P4C_S009",
+          "title": "Intelligent load balancing",
+          "description": "Implement context-aware load balancing (least connections, latency-based)",
+          "effort_hours": 36,
+          "tasks": [
+            {"task": "Implement round-robin router", "hours": 10},
+            {"task": "Add latency-aware routing", "hours": 14},
+            {"task": "Build connection pooling", "hours": 12}
+          ]
+        },
+        {
+          "story_id": "P4C_S010",
+          "title": "Circuit breaker & retry logic",
+          "description": "Implement circuit breakers to prevent cascade failures",
+          "effort_hours": 28,
+          "tasks": [
+            {"task": "Implement circuit breaker state machine", "hours": 10},
+            {"task": "Add exponential backoff retry", "hours": 10},
+            {"task": "Build timeout management", "hours": 8}
+          ]
+        },
+        {
+          "story_id": "P4C_S011",
+          "title": "Traffic splitting & canary deployments",
+          "description": "Support gradual rollouts with traffic splitting",
+          "effort_hours": 32,
+          "tasks": [
+            {"task": "Implement traffic splitting rules", "hours": 12},
+            {"task": "Add weighted routing", "hours": 12},
+            {"task": "Build canary orchestration", "hours": 8}
+          ]
+        },
+        {
+          "story_id": "P4C_S012",
+          "title": "Service discovery",
+          "description": "Dynamic service discovery with health checking",
+          "effort_hours": 28,
+          "tasks": [
+            {"task": "Integrate with Consul/Kubernetes DNS", "hours": 10},
+            {"task": "Implement health checks", "hours": 10},
+            {"task": "Build cache invalidation", "hours": 8}
+          ]
+        },
+        {
+          "story_id": "P4C_S013",
+          "title": "Request tracing & observability",
+          "description": "Distributed tracing across service mesh",
+          "effort_hours": 20,
+          "tasks": [
+            {"task": "Integrate Jaeger/Zipkin", "hours": 10},
+            {"task": "Add trace propagation", "hours": 8},
+            {"task": "Build sampling strategy", "hours": 2}
+          ]
+        },
+        {
+          "story_id": "P4C_S014",
+          "title": "Rate limiting & quotas",
+          "description": "Per-service and per-client rate limiting",
+          "effort_hours": 8,
+          "tasks": [
+            {"task": "Implement token bucket algorithm", "hours": 4},
+            {"task": "Add quota enforcement", "hours": 4}
+          ]
+        }
+      ]
+    },
+    {
+      "epic_id": "PHASE4C_EPIC_003",
+      "name": "Global Replication & Multi-Region Architecture",
+      "description": "Deploy globally distributed system with multi-region replication",
+      "stories_count": 8,
+      "total_effort_hours": 224,
+      "stories": [
+        {
+          "story_id": "P4C_S015",
+          "title": "Multi-region database replication",
+          "description": "Set up master-replica replication across regions",
+          "effort_hours": 40,
+          "tasks": [
+            {"task": "Design replication topology", "hours": 12},
+            {"task": "Implement log-based replication", "hours": 16},
+            {"task": "Build conflict resolution", "hours": 12}
+          ]
+        },
+        {
+          "story_id": "P4C_S016",
+          "title": "Cache replication layer",
+          "description": "Replicate Redis caches across regions",
+          "effort_hours": 28,
+          "tasks": [
+            {"task": "Design cache replication strategy", "hours": 8},
+            {"task": "Implement Redis cluster replication", "hours": 12},
+            {"task": "Add fallback mechanisms", "hours": 8}
+          ]
+        },
+        {
+          "story_id": "P4C_S017",
+          "title": "Geo-routing & latency optimization",
+          "description": "Route requests to nearest region",
+          "effort_hours": 32,
+          "tasks": [
+            {"task": "Implement GeoIP routing", "hours": 12},
+            {"task": "Add latency-based routing", "hours": 12},
+            {"task": "Build DNS failover", "hours": 8}
+          ]
+        },
+        {
+          "story_id": "P4C_S018",
+          "title": "Eventual consistency framework",
+          "description": "Handle eventual consistency with conflict resolution",
+          "effort_hours": 36,
+          "tasks": [
+            {"task": "Design vector clock versioning", "hours": 12},
+            {"task": "Implement conflict detection", "hours": 12},
+            {"task": "Build resolution strategies", "hours": 12}
+          ]
+        },
+        {
+          "story_id": "P4C_S019",
+          "title": "Event synchronization across regions",
+          "description": "Replicate events with ordering guarantees",
+          "effort_hours": 32,
+          "tasks": [
+            {"task": "Design global event log", "hours": 12},
+            {"task": "Implement ordering guarantees", "hours": 12},
+            {"task": "Build idempotency handling", "hours": 8}
+          ]
+        },
+        {
+          "story_id": "P4C_S020",
+          "title": "Regional failover orchestration",
+          "description": "Automatic failover when region becomes unavailable",
+          "effort_hours": 28,
+          "tasks": [
+            {"task": "Implement region health checks", "hours": 8},
+            {"task": "Build failover automation", "hours": 12},
+            {"task": "Test disaster scenarios", "hours": 8}
+          ]
+        },
+        {
+          "story_id": "P4C_S021",
+          "title": "Cross-region transaction support",
+          "description": "Support ACID transactions across regions",
+          "effort_hours": 24,
+          "tasks": [
+            {"task": "Implement distributed transactions", "hours": 10},
+            {"task": "Add two-phase commit", "hours": 10},
+            {"task": "Build timeout handling", "hours": 4}
+          ]
+        },
+        {
+          "story_id": "P4C_S022",
+          "title": "Global monitoring dashboard",
+          "description": "Multi-region health and performance monitoring",
+          "effort_hours": 4,
+          "tasks": [
+            {"task": "Build region-aware metrics aggregation", "hours": 4}
+          ]
+        }
+      ]
+    },
+    {
+      "epic_id": "PHASE4C_EPIC_004",
+      "name": "Disaster Recovery & Business Continuity",
+      "description": "Comprehensive backup, recovery, and continuity strategies",
+      "stories_count": 6,
+      "total_effort_hours": 170,
+      "stories": [
+        {
+          "story_id": "P4C_S023",
+          "title": "Backup strategy & automation",
+          "description": "Automated incremental backups with retention policies",
+          "effort_hours": 32,
+          "tasks": [
+            {"task": "Design backup architecture", "hours": 8},
+            {"task": "Implement incremental backups", "hours": 12},
+            {"task": "Build retention policies", "hours": 12}
+          ]
+        },
+        {
+          "story_id": "P4C_S024",
+          "title": "Disaster recovery procedures",
+          "description": "Document and test recovery procedures",
+          "effort_hours": 28,
+          "tasks": [
+            {"task": "Write runbooks", "hours": 10},
+            {"task": "Build recovery automation", "hours": 12},
+            {"task": "Test recovery scenarios", "hours": 6}
+          ]
+        },
+        {
+          "story_id": "P4C_S025",
+          "title": "Point-in-time recovery",
+          "description": "Recover to any point in time",
+          "effort_hours": 36,
+          "tasks": [
+            {"task": "Implement WAL archiving", "hours": 12},
+            {"task": "Build recovery indexing", "hours": 12},
+            {"task": "Add recovery verification", "hours": 12}
+          ]
+        },
+        {
+          "story_id": "P4C_S026",
+          "title": "RTO/RPO optimization",
+          "description": "Minimize recovery time and data loss",
+          "effort_hours": 32,
+          "tasks": [
+            {"task": "Optimize replication latency", "hours": 12},
+            {"task": "Implement parallel recovery", "hours": 12},
+            {"task": "Build metrics tracking", "hours": 8}
+          ]
+        },
+        {
+          "story_id": "P4C_S027",
+          "title": "Chaos engineering & resilience testing",
+          "description": "Test system resilience with fault injection",
+          "effort_hours": 28,
+          "tasks": [
+            {"task": "Build chaos injection framework", "hours": 12},
+            {"task": "Create failure scenarios", "hours": 10},
+            {"task": "Implement automated testing", "hours": 6}
+          ]
+        },
+        {
+          "story_id": "P4C_S028",
+          "title": "Business continuity planning",
+          "description": "Document continuity strategies and procedures",
+          "effort_hours": 14,
+          "tasks": [
+            {"task": "Write continuity procedures", "hours": 8},
+            {"task": "Build continuity dashboards", "hours": 6}
+          ]
+        }
+      ]
+    }
+  ],
+  "technical_components": {
+    "sharding": {
+      "technology": "PostgreSQL with pg_partman",
+      "approach": "Hash-based sharding on idea_id",
+      "replicas": "3 replicas per shard",
+      "consistency": "Strong consistency with 2-phase commit"
+    },
+    "service_mesh": {
+      "technology": "Istio 1.15+",
+      "load_balancing": "Least request + latency-aware",
+      "mtls": "Enabled by default",
+      "circuit_breaker": "Outlier detection enabled"
+    },
+    "replication": {
+      "technology": "PostgreSQL streaming replication + pglogical",
+      "lag_target": "< 1 second",
+      "failover": "Automatic with pg_auto_failover"
+    },
+    "cache": {
+      "technology": "Redis Cluster with georeplication",
+      "replication_factor": "3",
+      "consistency": "Eventual consistency with TTL"
+    },
+    "monitoring": {
+      "metrics": "Prometheus + Thanos",
+      "logs": "ELK Stack or Loki",
+      "tracing": "Jaeger",
+      "alerts": "AlertManager"
+    }
+  },
+  "deployment_architecture": {
+    "regions": [
+      {
+        "name": "us-east-1",
+        "type": "Primary",
+        "shards": 12,
+        "replicas": 3,
+        "capacity": "100K requests/sec"
+      },
+      {
+        "name": "us-west-1",
+        "type": "Secondary",
+        "shards": 12,
+        "replicas": 3,
+        "capacity": "100K requests/sec"
+      },
+      {
+        "name": "eu-west-1",
+        "type": "Tertiary",
+        "shards": 12,
+        "replicas": 3,
+        "capacity": "100K requests/sec"
+      },
+      {
+        "name": "ap-southeast-1",
+        "type": "Tertiary",
+        "shards": 12,
+        "replicas": 3,
+        "capacity": "100K requests/sec"
+      }
+    ],
+    "total_capacity": "400K requests/sec across all regions"
+  },
+  "performance_targets": {
+    "latency": {
+      "p50": "< 50ms",
+      "p99": "< 200ms",
+      "p99_9": "< 500ms"
+    },
+    "throughput": {
+      "requests_per_second": "100K per region",
+      "total_capacity": "400K RPS"
+    },
+    "availability": {
+      "uptime": "99.99%",
+      "recovery_time": "< 5 minutes",
+      "data_loss": "< 1 second"
+    },
+    "cost_efficiency": {
+      "cost_per_request": "< $0.0001",
+      "regional_distribution": "Balanced"
+    }
+  },
+  "testing_strategy": {
+    "unit_tests": {
+      "count": 120,
+      "coverage": "90%",
+      "focus": ["Sharding logic", "Routing", "Failover"]
+    },
+    "integration_tests": {
+      "count": 80,
+      "coverage": "85%",
+      "focus": ["Cross-shard ops", "Region failover", "Replication"]
+    },
+    "performance_tests": [
+      {
+        "name": "Shard scaling",
+        "load": "100K RPS",
+        "duration": "30 minutes"
+      },
+      {
+        "name": "Regional failover",
+        "regions": 4,
+        "failure_scenarios": 10
+      },
+      {
+        "name": "Cross-region latency",
+        "regions": 4,
+        "measurement": "p99 latency"
+      }
+    ],
+    "chaos_tests": [
+      "Shard failure",
+      "Network partition",
+      "Region outage",
+      "Cascading failures"
+    ]
+  },
+  "timeline": {
+    "week_1": {
+      "phase": "Design & Planning",
+      "tasks": [
+        "Finalize sharding strategy",
+        "Design service mesh",
+        "Plan replication topology"
+      ],
+      "hours": 80
+    },
+    "week_2": {
+      "phase": "Sharding Implementation",
+      "tasks": [
+        "Implement shard router",
+        "Build data migration pipeline",
+        "Set up cross-shard transactions"
+      ],
+      "hours": 160
+    },
+    "week_3": {
+      "phase": "Service Mesh & Replication",
+      "tasks": [
+        "Deploy Istio control plane",
+        "Implement intelligent routing",
+        "Set up multi-region replication"
+      ],
+      "hours": 160
+    },
+    "week_4": {
+      "phase": "DR & Testing",
+      "tasks": [
+        "Implement backup/recovery",
+        "Run chaos tests",
+        "Performance optimization"
+      ],
+      "hours": 400
+    },
+    "total": "800 hours (4 weeks)"
+  },
+  "risk_mitigation": [
+    {
+      "risk": "Data consistency issues during migration",
+      "mitigation": "Dual-write strategy with verification before cutover"
+    },
+    {
+      "risk": "Region failover causing cascading failures",
+      "mitigation": "Circuit breakers + exponential backoff + fallback queues"
+    },
+    {
+      "risk": "Cross-region latency impacting user experience",
+      "mitigation": "Geo-routing + caching + read replicas in user region"
+    },
+    {
+      "risk": "Complexity of multi-region operations",
+      "mitigation": "Comprehensive monitoring + automated runbooks + chaos testing"
+    }
+  ],
+  "success_criteria": [
+    "All shards operating with < 100ms latency",
+    "4-region deployment with < 5 second failover",
+    "99.99% availability SLA met",
+    "Cross-region replication lag < 1 second",
+    "Chaos tests pass with 100% recovery",
+    "200+ integration tests with 85%+ coverage",
+    "Complete runbooks and procedures documented"
+  ]
+}

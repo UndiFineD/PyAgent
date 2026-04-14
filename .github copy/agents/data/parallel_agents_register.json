@@ -1,0 +1,911 @@
+{
+  "schema_version": "1.0.0",
+  "register_id": "parallel-agents-register",
+  "description": "Shared coordination register for parallel agent work, file touches, and file locks.",
+  "updated_at": "2026-04-04T22:16:57.235524+00:00",
+  "updated_by": "0master",
+  "active_project_id": "prj0000127",
+  "active_branch": "prj0000127-mypy-strict-enforcement",
+  "active_wave_id": "",
+  "waves": [
+    {
+      "wave_id": "prj0000125.wave1",
+      "status": "closed",
+      "closed_at": "2026-04-04T17:23:03.063323+00:00",
+      "closed_by": "0master",
+      "note": "3design phase complete: design.md created, ADR 0009 amended, wave A-D decisions finalized, commit 1c16acfde6"
+    },
+    {
+      "wave_id": "prj0000125.wave2",
+      "status": "closed",
+      "closed_at": "2026-04-04T17:43:43.705021+00:00",
+      "closed_by": "0master",
+      "note": "4plan phase complete: plan.md created with T-LGW2-001..006, C/D already done, commit af64828b3f"
+    },
+    {
+      "wave_id": "prj0000125.wave3",
+      "status": "closed",
+      "closed_at": "2026-04-04T18:19:55.848573+00:00",
+      "closed_by": "0master",
+      "note": "5test RED complete: added T-LGW2-001,002,003,005 with expected fails; commit 3d19b335b7"
+    },
+    {
+      "wave_id": "prj0000125.wave4",
+      "status": "closed",
+      "closed_at": "2026-04-04T18:24:31.352639+00:00",
+      "closed_by": "0master",
+      "note": "6code GREEN complete: runtime fail-closed + deterministic ordering implemented, tests/core/gateway 9 passed, commit 52d4386d2e"
+    },
+    {
+      "wave_id": "prj0000125.wave5",
+      "status": "closed",
+      "closed_at": "2026-04-04T18:41:36.567111+00:00",
+      "closed_by": "0master",
+      "note": "D417 blocker remediation complete via 6code; commit 9fea47aa60; 9git opened PR #289"
+    },
+    {
+      "wave_id": "prj0000126.wave1",
+      "status": "closed",
+      "closed_at": "2026-04-04T19:26:09.265793+00:00",
+      "closed_by": "0master",
+      "note": "Batch-started prj0000126-prj0000149, validations passed, commit e3b91adfca"
+    },
+    {
+      "wave_id": "prj0000127.wave1",
+      "status": "closed",
+      "closed_at": "2026-04-04T21:33:45.628880+00:00",
+      "closed_by": "0master",
+      "note": "2think complete for prj0000127; options + M1 done; commit ed767e8ee5"
+    },
+    {
+      "wave_id": "prj0000127.wave2",
+      "status": "closed",
+      "closed_at": "2026-04-04T21:37:39.554978+00:00",
+      "closed_by": "0master",
+      "note": "3design complete for prj0000127; M2 done; commit bd58fd954f"
+    },
+    {
+      "wave_id": "prj0000127.wave3",
+      "status": "closed",
+      "closed_at": "2026-04-04T21:42:36.548050+00:00",
+      "closed_by": "0master",
+      "note": "4plan complete for prj0000127; M3 done; commit f061c45cf8"
+    },
+    {
+      "wave_id": "prj0000127.wave4",
+      "status": "closed",
+      "closed_at": "2026-04-04T22:13:00.114001+00:00",
+      "closed_by": "0master",
+      "note": "5test RED complete for prj0000127; T-MYPY-001..003 done; commit de56fb3950"
+    },
+    {
+      "wave_id": "prj0000127.wave5",
+      "status": "closed",
+      "closed_at": "2026-04-04T22:16:57.235482+00:00",
+      "closed_by": "0master",
+      "note": "6code GREEN warn-phase complete for prj0000127; commit f5eaaddd6f"
+    }
+  ],
+  "agents": {
+    "@0master": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@1project": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@2think": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@3design": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@4plan": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@5test": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@6code": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@7exec": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@8ql": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@9git": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "@10idea": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": ""
+    },
+    "3design": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": "2026-04-04T21:37:39.555011+00:00"
+    },
+    "4plan": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": "2026-04-04T21:42:36.548083+00:00"
+    },
+    "5test": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": "2026-04-04T22:13:00.114032+00:00"
+    },
+    "6code": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": "2026-04-04T22:16:57.235511+00:00"
+    },
+    "1project": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": "2026-04-04T19:26:09.265823+00:00"
+    },
+    "2think": {
+      "status": "idle",
+      "work_package_id": "",
+      "depends_on": [],
+      "touching_files": [],
+      "planned_files": [],
+      "lock_ids": [],
+      "updated_at": "2026-04-04T21:33:45.628909+00:00"
+    }
+  },
+  "file_locks": [
+    {
+      "lock_id": "lock-68488e227632",
+      "file_path": "docs/project/prj0000125-llm-gateway-lessons-learned-fixes/llm-gateway-lessons-learned-fixes.design.md",
+      "owner_agent": "3design",
+      "work_package_id": "prj0000125.wave1.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T17:07:24.515686+00:00",
+      "released_at": "2026-04-04T17:23:02.267798+00:00"
+    },
+    {
+      "lock_id": "lock-6423c3c6c8ec",
+      "file_path": "docs/architecture/adr/0009-llm-gateway-hybrid-split-plane.md",
+      "owner_agent": "3design",
+      "work_package_id": "prj0000125.wave1.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T17:07:32.671883+00:00",
+      "released_at": "2026-04-04T17:23:02.726766+00:00"
+    },
+    {
+      "lock_id": "lock-6856dac322bc",
+      "file_path": "docs/project/prj0000125-llm-gateway-lessons-learned-fixes/llm-gateway-lessons-learned-fixes.plan.md",
+      "owner_agent": "4plan",
+      "work_package_id": "prj0000125.wave2.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T17:36:01.217521+00:00",
+      "released_at": "2026-04-04T17:43:43.375570+00:00"
+    },
+    {
+      "lock_id": "lock-1105e6210a99",
+      "file_path": "tests/core/gateway/test_gateway_core_orchestration.py",
+      "owner_agent": "5test",
+      "work_package_id": "prj0000125.wave3.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T18:15:08.128955+00:00",
+      "released_at": "2026-04-04T18:19:55.502604+00:00"
+    },
+    {
+      "lock_id": "lock-0dd3297f58ec",
+      "file_path": "src/core/gateway/gateway_core.py",
+      "owner_agent": "6code",
+      "work_package_id": "prj0000125.wave4.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T18:20:26.309338+00:00",
+      "released_at": "2026-04-04T18:24:30.659864+00:00"
+    },
+    {
+      "lock_id": "lock-36c98c0136df",
+      "file_path": "tests/core/gateway/test_gateway_core_orchestration.py",
+      "owner_agent": "6code",
+      "work_package_id": "prj0000125.wave4.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T18:20:26.730535+00:00",
+      "released_at": "2026-04-04T18:24:30.995544+00:00"
+    },
+    {
+      "lock_id": "lock-0cbc484b034c",
+      "file_path": "tests/core/gateway/test_gateway_core_orchestration.py",
+      "owner_agent": "6code",
+      "work_package_id": "prj0000125.wave5.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T18:37:34.538712+00:00",
+      "released_at": "2026-04-04T18:41:36.250524+00:00"
+    },
+    {
+      "lock_id": "lock-6b3463930910",
+      "file_path": "data/projects.json",
+      "owner_agent": "1project",
+      "work_package_id": "prj0000126.wave1.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T19:14:47.418621+00:00",
+      "released_at": "2026-04-04T19:22:34.294316+00:00"
+    },
+    {
+      "lock_id": "lock-aae0c5740060",
+      "file_path": "docs/project/kanban.json",
+      "owner_agent": "1project",
+      "work_package_id": "prj0000126.wave1.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T19:14:48.007031+00:00",
+      "released_at": "2026-04-04T19:22:34.670057+00:00"
+    },
+    {
+      "lock_id": "lock-c83cf39816fa",
+      "file_path": "data/nextproject.md",
+      "owner_agent": "1project",
+      "work_package_id": "prj0000126.wave1.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T19:14:48.436937+00:00",
+      "released_at": "2026-04-04T19:22:35.041428+00:00"
+    },
+    {
+      "lock_id": "lock-9a4edebbcc81",
+      "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.think.md",
+      "owner_agent": "2think",
+      "work_package_id": "prj0000127.wave1.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T21:28:23.016470+00:00",
+      "released_at": "2026-04-04T21:33:45.236777+00:00"
+    },
+    {
+      "lock_id": "lock-8068dcafd27c",
+      "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.design.md",
+      "owner_agent": "3design",
+      "work_package_id": "prj0000127.wave2.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T21:33:55.013578+00:00",
+      "released_at": "2026-04-04T21:37:39.210863+00:00"
+    },
+    {
+      "lock_id": "lock-aa05a2a268d1",
+      "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.plan.md",
+      "owner_agent": "4plan",
+      "work_package_id": "prj0000127.wave3.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T21:38:41.375689+00:00",
+      "released_at": "2026-04-04T21:42:36.226502+00:00"
+    },
+    {
+      "lock_id": "lock-e7402bf37514",
+      "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.test.md",
+      "owner_agent": "5test",
+      "work_package_id": "prj0000127.wave4.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T22:08:11.651215+00:00",
+      "released_at": "2026-04-04T22:12:59.752363+00:00"
+    },
+    {
+      "lock_id": "lock-7530d97e7b9d",
+      "file_path": ".github/workflows/ci.yml",
+      "owner_agent": "6code",
+      "work_package_id": "prj0000127.wave5.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T22:13:00.476290+00:00",
+      "released_at": "2026-04-04T22:16:56.456522+00:00"
+    },
+    {
+      "lock_id": "lock-9e80433e08a6",
+      "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.exec.md",
+      "owner_agent": "6code",
+      "work_package_id": "prj0000127.wave5.wp1",
+      "status": "released",
+      "acquired_at": "2026-04-04T22:13:00.840289+00:00",
+      "released_at": "2026-04-04T22:16:56.870330+00:00"
+    }
+  ],
+  "lockfiles": [],
+  "event_log": [
+    {
+      "ts": "2026-04-04T17:07:24.614064+00:00",
+      "event": "acquire-lock",
+      "actor": "3design",
+      "payload": {
+        "lock_id": "lock-68488e227632",
+        "file_path": "docs/project/prj0000125-llm-gateway-lessons-learned-fixes/llm-gateway-lessons-learned-fixes.design.md",
+        "work_package_id": "prj0000125.wave1.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T17:07:32.671926+00:00",
+      "event": "acquire-lock",
+      "actor": "3design",
+      "payload": {
+        "lock_id": "lock-6423c3c6c8ec",
+        "file_path": "docs/architecture/adr/0009-llm-gateway-hybrid-split-plane.md",
+        "work_package_id": "prj0000125.wave1.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T17:23:02.267858+00:00",
+      "event": "release-lock",
+      "actor": "3design",
+      "payload": {
+        "lock_id": "lock-68488e227632",
+        "file_path": "docs/project/prj0000125-llm-gateway-lessons-learned-fixes/llm-gateway-lessons-learned-fixes.design.md",
+        "work_package_id": "prj0000125.wave1.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T17:23:02.726809+00:00",
+      "event": "release-lock",
+      "actor": "3design",
+      "payload": {
+        "lock_id": "lock-6423c3c6c8ec",
+        "file_path": "docs/architecture/adr/0009-llm-gateway-hybrid-split-plane.md",
+        "work_package_id": "prj0000125.wave1.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T17:23:03.063381+00:00",
+      "event": "wave-agent-reset",
+      "actor": "0master",
+      "payload": {
+        "agent": "3design",
+        "wave_id": "prj0000125.wave1"
+      }
+    },
+    {
+      "ts": "2026-04-04T17:23:03.063397+00:00",
+      "event": "close-wave",
+      "actor": "0master",
+      "payload": {
+        "wave_id": "prj0000125.wave1",
+        "note": "3design phase complete: design.md created, ADR 0009 amended, wave A-D decisions finalized, commit 1c16acfde6"
+      }
+    },
+    {
+      "ts": "2026-04-04T17:36:01.217562+00:00",
+      "event": "acquire-lock",
+      "actor": "4plan",
+      "payload": {
+        "lock_id": "lock-6856dac322bc",
+        "file_path": "docs/project/prj0000125-llm-gateway-lessons-learned-fixes/llm-gateway-lessons-learned-fixes.plan.md",
+        "work_package_id": "prj0000125.wave2.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T17:43:43.375625+00:00",
+      "event": "release-lock",
+      "actor": "4plan",
+      "payload": {
+        "lock_id": "lock-6856dac322bc",
+        "file_path": "docs/project/prj0000125-llm-gateway-lessons-learned-fixes/llm-gateway-lessons-learned-fixes.plan.md",
+        "work_package_id": "prj0000125.wave2.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T17:43:43.705065+00:00",
+      "event": "wave-agent-reset",
+      "actor": "0master",
+      "payload": {
+        "agent": "4plan",
+        "wave_id": "prj0000125.wave2"
+      }
+    },
+    {
+      "ts": "2026-04-04T17:43:43.705076+00:00",
+      "event": "close-wave",
+      "actor": "0master",
+      "payload": {
+        "wave_id": "prj0000125.wave2",
+        "note": "4plan phase complete: plan.md created with T-LGW2-001..006, C/D already done, commit af64828b3f"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:15:08.129003+00:00",
+      "event": "acquire-lock",
+      "actor": "5test",
+      "payload": {
+        "lock_id": "lock-1105e6210a99",
+        "file_path": "tests/core/gateway/test_gateway_core_orchestration.py",
+        "work_package_id": "prj0000125.wave3.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:19:55.502654+00:00",
+      "event": "release-lock",
+      "actor": "5test",
+      "payload": {
+        "lock_id": "lock-1105e6210a99",
+        "file_path": "tests/core/gateway/test_gateway_core_orchestration.py",
+        "work_package_id": "prj0000125.wave3.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:19:55.848611+00:00",
+      "event": "wave-agent-reset",
+      "actor": "0master",
+      "payload": {
+        "agent": "5test",
+        "wave_id": "prj0000125.wave3"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:19:55.848621+00:00",
+      "event": "close-wave",
+      "actor": "0master",
+      "payload": {
+        "wave_id": "prj0000125.wave3",
+        "note": "5test RED complete: added T-LGW2-001,002,003,005 with expected fails; commit 3d19b335b7"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:20:26.309390+00:00",
+      "event": "acquire-lock",
+      "actor": "6code",
+      "payload": {
+        "lock_id": "lock-0dd3297f58ec",
+        "file_path": "src/core/gateway/gateway_core.py",
+        "work_package_id": "prj0000125.wave4.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:20:26.730587+00:00",
+      "event": "acquire-lock",
+      "actor": "6code",
+      "payload": {
+        "lock_id": "lock-36c98c0136df",
+        "file_path": "tests/core/gateway/test_gateway_core_orchestration.py",
+        "work_package_id": "prj0000125.wave4.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:24:30.659917+00:00",
+      "event": "release-lock",
+      "actor": "6code",
+      "payload": {
+        "lock_id": "lock-0dd3297f58ec",
+        "file_path": "src/core/gateway/gateway_core.py",
+        "work_package_id": "prj0000125.wave4.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:24:30.995582+00:00",
+      "event": "release-lock",
+      "actor": "6code",
+      "payload": {
+        "lock_id": "lock-36c98c0136df",
+        "file_path": "tests/core/gateway/test_gateway_core_orchestration.py",
+        "work_package_id": "prj0000125.wave4.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:24:31.352677+00:00",
+      "event": "wave-agent-reset",
+      "actor": "0master",
+      "payload": {
+        "agent": "6code",
+        "wave_id": "prj0000125.wave4"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:24:31.352687+00:00",
+      "event": "close-wave",
+      "actor": "0master",
+      "payload": {
+        "wave_id": "prj0000125.wave4",
+        "note": "6code GREEN complete: runtime fail-closed + deterministic ordering implemented, tests/core/gateway 9 passed, commit 52d4386d2e"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:37:34.538748+00:00",
+      "event": "acquire-lock",
+      "actor": "6code",
+      "payload": {
+        "lock_id": "lock-0cbc484b034c",
+        "file_path": "tests/core/gateway/test_gateway_core_orchestration.py",
+        "work_package_id": "prj0000125.wave5.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:41:36.250559+00:00",
+      "event": "release-lock",
+      "actor": "6code",
+      "payload": {
+        "lock_id": "lock-0cbc484b034c",
+        "file_path": "tests/core/gateway/test_gateway_core_orchestration.py",
+        "work_package_id": "prj0000125.wave5.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:41:36.567148+00:00",
+      "event": "wave-agent-reset",
+      "actor": "0master",
+      "payload": {
+        "agent": "6code",
+        "wave_id": "prj0000125.wave5"
+      }
+    },
+    {
+      "ts": "2026-04-04T18:41:36.567158+00:00",
+      "event": "close-wave",
+      "actor": "0master",
+      "payload": {
+        "wave_id": "prj0000125.wave5",
+        "note": "D417 blocker remediation complete via 6code; commit 9fea47aa60; 9git opened PR #289"
+      }
+    },
+    {
+      "ts": "2026-04-04T19:14:47.418669+00:00",
+      "event": "acquire-lock",
+      "actor": "1project",
+      "payload": {
+        "lock_id": "lock-6b3463930910",
+        "file_path": "data/projects.json",
+        "work_package_id": "prj0000126.wave1.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T19:14:48.007097+00:00",
+      "event": "acquire-lock",
+      "actor": "1project",
+      "payload": {
+        "lock_id": "lock-aae0c5740060",
+        "file_path": "docs/project/kanban.json",
+        "work_package_id": "prj0000126.wave1.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T19:14:48.436976+00:00",
+      "event": "acquire-lock",
+      "actor": "1project",
+      "payload": {
+        "lock_id": "lock-c83cf39816fa",
+        "file_path": "data/nextproject.md",
+        "work_package_id": "prj0000126.wave1.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T19:22:34.294399+00:00",
+      "event": "release-lock",
+      "actor": "1project",
+      "payload": {
+        "lock_id": "lock-6b3463930910",
+        "file_path": "data/projects.json",
+        "work_package_id": "prj0000126.wave1.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T19:22:34.670100+00:00",
+      "event": "release-lock",
+      "actor": "1project",
+      "payload": {
+        "lock_id": "lock-aae0c5740060",
+        "file_path": "docs/project/kanban.json",
+        "work_package_id": "prj0000126.wave1.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T19:22:35.041472+00:00",
+      "event": "release-lock",
+      "actor": "1project",
+      "payload": {
+        "lock_id": "lock-c83cf39816fa",
+        "file_path": "data/nextproject.md",
+        "work_package_id": "prj0000126.wave1.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T19:26:09.265830+00:00",
+      "event": "wave-agent-reset",
+      "actor": "0master",
+      "payload": {
+        "agent": "1project",
+        "wave_id": "prj0000126.wave1"
+      }
+    },
+    {
+      "ts": "2026-04-04T19:26:09.265839+00:00",
+      "event": "close-wave",
+      "actor": "0master",
+      "payload": {
+        "wave_id": "prj0000126.wave1",
+        "note": "Batch-started prj0000126-prj0000149, validations passed, commit e3b91adfca"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:28:23.017544+00:00",
+      "event": "acquire-lock",
+      "actor": "2think",
+      "payload": {
+        "lock_id": "lock-9a4edebbcc81",
+        "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.think.md",
+        "work_package_id": "prj0000127.wave1.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:33:45.236821+00:00",
+      "event": "release-lock",
+      "actor": "2think",
+      "payload": {
+        "lock_id": "lock-9a4edebbcc81",
+        "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.think.md",
+        "work_package_id": "prj0000127.wave1.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:33:45.628915+00:00",
+      "event": "wave-agent-reset",
+      "actor": "0master",
+      "payload": {
+        "agent": "2think",
+        "wave_id": "prj0000127.wave1"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:33:45.628925+00:00",
+      "event": "close-wave",
+      "actor": "0master",
+      "payload": {
+        "wave_id": "prj0000127.wave1",
+        "note": "2think complete for prj0000127; options + M1 done; commit ed767e8ee5"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:33:55.013624+00:00",
+      "event": "acquire-lock",
+      "actor": "3design",
+      "payload": {
+        "lock_id": "lock-8068dcafd27c",
+        "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.design.md",
+        "work_package_id": "prj0000127.wave2.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:37:39.210901+00:00",
+      "event": "release-lock",
+      "actor": "3design",
+      "payload": {
+        "lock_id": "lock-8068dcafd27c",
+        "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.design.md",
+        "work_package_id": "prj0000127.wave2.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:37:39.555018+00:00",
+      "event": "wave-agent-reset",
+      "actor": "0master",
+      "payload": {
+        "agent": "3design",
+        "wave_id": "prj0000127.wave2"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:37:39.555030+00:00",
+      "event": "close-wave",
+      "actor": "0master",
+      "payload": {
+        "wave_id": "prj0000127.wave2",
+        "note": "3design complete for prj0000127; M2 done; commit bd58fd954f"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:38:41.375740+00:00",
+      "event": "acquire-lock",
+      "actor": "4plan",
+      "payload": {
+        "lock_id": "lock-aa05a2a268d1",
+        "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.plan.md",
+        "work_package_id": "prj0000127.wave3.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:42:36.226554+00:00",
+      "event": "release-lock",
+      "actor": "4plan",
+      "payload": {
+        "lock_id": "lock-aa05a2a268d1",
+        "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.plan.md",
+        "work_package_id": "prj0000127.wave3.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:42:36.548090+00:00",
+      "event": "wave-agent-reset",
+      "actor": "0master",
+      "payload": {
+        "agent": "4plan",
+        "wave_id": "prj0000127.wave3"
+      }
+    },
+    {
+      "ts": "2026-04-04T21:42:36.548101+00:00",
+      "event": "close-wave",
+      "actor": "0master",
+      "payload": {
+        "wave_id": "prj0000127.wave3",
+        "note": "4plan complete for prj0000127; M3 done; commit f061c45cf8"
+      }
+    },
+    {
+      "ts": "2026-04-04T22:08:11.651257+00:00",
+      "event": "acquire-lock",
+      "actor": "5test",
+      "payload": {
+        "lock_id": "lock-e7402bf37514",
+        "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.test.md",
+        "work_package_id": "prj0000127.wave4.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T22:12:59.752424+00:00",
+      "event": "release-lock",
+      "actor": "5test",
+      "payload": {
+        "lock_id": "lock-e7402bf37514",
+        "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.test.md",
+        "work_package_id": "prj0000127.wave4.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T22:13:00.114038+00:00",
+      "event": "wave-agent-reset",
+      "actor": "0master",
+      "payload": {
+        "agent": "5test",
+        "wave_id": "prj0000127.wave4"
+      }
+    },
+    {
+      "ts": "2026-04-04T22:13:00.114049+00:00",
+      "event": "close-wave",
+      "actor": "0master",
+      "payload": {
+        "wave_id": "prj0000127.wave4",
+        "note": "5test RED complete for prj0000127; T-MYPY-001..003 done; commit de56fb3950"
+      }
+    },
+    {
+      "ts": "2026-04-04T22:13:00.476336+00:00",
+      "event": "acquire-lock",
+      "actor": "6code",
+      "payload": {
+        "lock_id": "lock-7530d97e7b9d",
+        "file_path": ".github/workflows/ci.yml",
+        "work_package_id": "prj0000127.wave5.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T22:13:00.840330+00:00",
+      "event": "acquire-lock",
+      "actor": "6code",
+      "payload": {
+        "lock_id": "lock-9e80433e08a6",
+        "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.exec.md",
+        "work_package_id": "prj0000127.wave5.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T22:16:56.456568+00:00",
+      "event": "release-lock",
+      "actor": "6code",
+      "payload": {
+        "lock_id": "lock-7530d97e7b9d",
+        "file_path": ".github/workflows/ci.yml",
+        "work_package_id": "prj0000127.wave5.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T22:16:56.870376+00:00",
+      "event": "release-lock",
+      "actor": "6code",
+      "payload": {
+        "lock_id": "lock-9e80433e08a6",
+        "file_path": "docs/project/prj0000127-mypy-strict-enforcement/mypy-strict-enforcement.exec.md",
+        "work_package_id": "prj0000127.wave5.wp1"
+      }
+    },
+    {
+      "ts": "2026-04-04T22:16:57.235518+00:00",
+      "event": "wave-agent-reset",
+      "actor": "0master",
+      "payload": {
+        "agent": "6code",
+        "wave_id": "prj0000127.wave5"
+      }
+    },
+    {
+      "ts": "2026-04-04T22:16:57.235529+00:00",
+      "event": "close-wave",
+      "actor": "0master",
+      "payload": {
+        "wave_id": "prj0000127.wave5",
+        "note": "6code GREEN warn-phase complete for prj0000127; commit f5eaaddd6f"
+      }
+    }
+  ]
+}

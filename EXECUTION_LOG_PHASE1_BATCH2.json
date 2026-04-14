@@ -1,0 +1,372 @@
+{
+  "timestamp": "2026-04-06T06:57:39.476889",
+  "phase": "PHASE 1 - Quick Wins",
+  "batch_range": "16-115",
+  "items_processed": 100,
+  "total_effort": 200,
+  "by_archetype": {
+    "performance": 41,
+    "hardening": 41,
+    "resilience": 14,
+    "documentation": 2,
+    "developer-experience": 2
+  },
+  "by_priority": {
+    "8": 46,
+    "5": 54
+  },
+  "by_team": {
+    "Team A": {
+      "count": 20,
+      "effort": 40
+    },
+    "Team B": {
+      "count": 20,
+      "effort": 40
+    },
+    "Team C": {
+      "count": 20,
+      "effort": 40
+    },
+    "Team D": {
+      "count": 20,
+      "effort": 40
+    },
+    "Team E": {
+      "count": 20,
+      "effort": 40
+    }
+  },
+  "items": [
+    {
+      "id": "legacy-bd2e7c1fc9-03",
+      "sequence": 16,
+      "title": "access-20260212 Performance",
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team A",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-813c37748b-01",
+      "sequence": 17,
+      "title": "workflow-implementation Hardening",
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team B",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-813c37748b-03",
+      "sequence": 18,
+      "title": "workflow-implementation Performance",
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team C",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-813c37748b-05",
+      "sequence": 19,
+      "title": "workflow-implementation Resilience",
+      "archetype": "resilience",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team D",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-813c37748b-07",
+      "sequence": 20,
+      "title": "workflow-implementation Documentation",
+      "archetype": "documentation",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team E",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-813c37748b-09",
+      "sequence": 21,
+      "title": "workflow-implementation Developer Experience",
+      "archetype": "developer-experience",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team A",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-627b78496b-01",
+      "sequence": 22,
+      "title": "shard Hardening",
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team B",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-627b78496b-03",
+      "sequence": 23,
+      "title": "shard Performance",
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team C",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-43efd89681-01",
+      "sequence": 24,
+      "title": "coding.agent.memory Hardening",
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team D",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-43efd89681-03",
+      "sequence": 25,
+      "title": "coding.agent.memory Performance",
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team E",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-43efd89681-05",
+      "sequence": 26,
+      "title": "coding.agent.memory Resilience",
+      "archetype": "resilience",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team A",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-aa2997d3e1-01",
+      "sequence": 27,
+      "title": "distributed-token-bucket-rate-limiter---quick-reference Hard",
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team B",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-aa2997d3e1-03",
+      "sequence": 28,
+      "title": "distributed-token-bucket-rate-limiter---quick-reference Perf",
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team C",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-aa2997d3e1-05",
+      "sequence": 29,
+      "title": "distributed-token-bucket-rate-limiter---quick-reference Resi",
+      "archetype": "resilience",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team D",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-828b5d4b4a-01",
+      "sequence": 30,
+      "title": "download-agent-readme Hardening",
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team E",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-828b5d4b4a-03",
+      "sequence": 31,
+      "title": "download-agent-readme Performance",
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team A",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-828b5d4b4a-05",
+      "sequence": 32,
+      "title": "download-agent-readme Resilience",
+      "archetype": "resilience",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team B",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-cd185e5d99-01",
+      "sequence": 33,
+      "title": "executing.agent.memory Hardening",
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team C",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-cd185e5d99-03",
+      "sequence": 34,
+      "title": "executing.agent.memory Performance",
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team D",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-cd185e5d99-05",
+      "sequence": 35,
+      "title": "executing.agent.memory Resilience",
+      "archetype": "resilience",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team E",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-0378c130aa-01",
+      "sequence": 36,
+      "title": "gitdance.agent.memory Hardening",
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team A",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-0378c130aa-03",
+      "sequence": 37,
+      "title": "gitdance.agent.memory Performance",
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team B",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-0378c130aa-05",
+      "sequence": 38,
+      "title": "gitdance.agent.memory Resilience",
+      "archetype": "resilience",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team C",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-79636aa11a-01",
+      "sequence": 39,
+      "title": "task-completion-report Hardening",
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team D",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-79636aa11a-03",
+      "sequence": 40,
+      "title": "task-completion-report Performance",
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team E",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-79636aa11a-05",
+      "sequence": 41,
+      "title": "task-completion-report Resilience",
+      "archetype": "resilience",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team A",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-5a4be1446e-01",
+      "sequence": 42,
+      "title": "tester.agent.memory Hardening",
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team B",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-5a4be1446e-03",
+      "sequence": 43,
+      "title": "tester.agent.memory Performance",
+      "archetype": "performance",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team C",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-5a4be1446e-05",
+      "sequence": 44,
+      "title": "tester.agent.memory Resilience",
+      "archetype": "resilience",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team D",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    },
+    {
+      "id": "legacy-abd58b81cc-01",
+      "sequence": 45,
+      "title": "evolution-log Hardening",
+      "archetype": "hardening",
+      "priority": 7.5,
+      "effort": 2,
+      "assigned_to": "Team E",
+      "status": "QUEUED",
+      "estimated_days": 0.4
+    }
+  ]
+}

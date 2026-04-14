@@ -1,0 +1,143 @@
+name: Windows CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ windows-2019, windows-2022 ]
+        python-version: [ '3.9', '3.10', '3.11', '3.12' ]
+        include:
+          # Extended test matrix for latest versions
+          - os: windows-2022
+            python-version: '3.12'
+            coverage: true
+            lint: true
+
+    name: Test - Windows (${{ matrix.os }}) - Python ${{ matrix.python-version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+          pip install -r requirements-ci.txt
+
+      - name: Run linting (pylint, flake8, ruff)
+        if: matrix.lint
+        run: |
+          python -m pylint src/ --disable=all --enable=E --max-line-length=120
+          python -m flake8 src/ --count --select=E9,F63,F7,F82 --show-source --statistics
+          python -m ruff check src/ --select=E,W,F
+
+      - name: Run type checking (mypy)
+        if: matrix.lint
+        run: |
+          python -m mypy src/ --ignore-missing-imports --no-implicit-optional
+
+      - name: Run tests
+        run: |
+          python -m pytest tests/ -v --tb=short -x
+
+      - name: Run tests with coverage
+        if: matrix.coverage
+        run: |
+          python -m pytest tests/ -v --cov=src --cov-report=xml --cov-report=term-missing
+
+      - name: Upload coverage reports
+        if: matrix.coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.xml
+          flags: windows
+          os: windows
+          python: ${{ matrix.python-version }}
+
+      - name: Test with Docker (if available)
+        if: always()
+        shell: pwsh
+        run: |
+          if (Get-Command docker -ErrorAction SilentlyContinue) {
+            Write-Host "Docker is available"
+            docker --version
+          } else {
+            Write-Host "Docker is not available on this runner"
+          }
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results-windows-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: |
+            test-results/
+            coverage.xml
+
+  build:
+    needs: test
+    runs-on: windows-2022
+    if: success()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade build wheel setuptools
+          pip install -r requirements.txt
+
+      - name: Build distribution
+        run: |
+          python -m build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-windows
+          path: dist/
+
+  notify:
+    needs: [ test, build ]
+    runs-on: windows-2022
+    if: always()
+
+    steps:
+      - name: Check test status
+        run: |
+          if ("${{ needs.test.result }}" -eq "success") {
+            Write-Host "All tests passed on Windows!"
+          } else {
+            Write-Host "Some tests failed on Windows."
+            exit 1
+          }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # CI requirements include runtime deps + test/dev tooling.
 # Runtime deps are declared in requirements.txt.
 # requirements.txt is generated from pyproject.toml.
@@ -36,3 +37,43 @@ mkdocstrings-python==2.0.3
 
 # Formatting
 lm-format-enforcer==0.11.3
+=======
+# CI requirements include runtime deps + test/dev tooling.
+# Runtime deps are declared in requirements.txt.
+# requirements.txt is generated from pyproject.toml.
+-r requirements.txt
+
+# Lint / typecheck
+ruff==0.15.6
+flake8==7.3.0
+mypy==1.19.1
+
+# Testing
+pytest==9.0.2
+pytest-anyio==0.0.0
+pytest-asyncio==1.3.0
+pytest-cov==7.0.0
+pytest-xdist>=3.6
+coverage==7.13.1
+hypothesis==6.115.0
+
+pytest-xdist>=3.6
+
+# Build / packaging / docs
+maturin==1.12.5
+build==1.4.0
+ghp-import==2.1.0
+pre_commit==4.5.1
+
+# Documentation
+mkdocs==1.6.1
+mkdocs-autorefs==1.4.4
+mkdocs-get-deps==0.2.0
+mkdocs-material==9.7.4
+mkdocs-material-extensions==1.3.1
+mkdocstrings==1.0.3
+mkdocstrings-python==2.0.3
+
+# Formatting
+lm-format-enforcer==0.11.3
+>>>>>>> b8e7af5e9d6 ([PHASE1-BATCH-001] Implement Ideas 6-10: Automated deps, Tailwind config, Frontend E2E, Windows CI, Backend integration)

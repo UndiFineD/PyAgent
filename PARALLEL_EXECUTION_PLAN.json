@@ -1,0 +1,328 @@
+{
+  "execution_plan": {
+    "version": "1.0.0",
+    "title": "Parallel Execution System for 200K+ Ideas",
+    "timestamp": "2026-04-06T08:18:00Z",
+    "status": "LIVE",
+    "target": {
+      "total_ideas": 211000,
+      "total_shards": 422,
+      "ideas_per_shard": 500,
+      "total_projects": "~21100",
+      "estimated_files": "~84400",
+      "estimated_loc": "~1,200,000"
+    },
+    "infrastructure": {
+      "workers": 10,
+      "shards_per_worker": 42.2,
+      "actual_shard_distribution": [
+        { "worker_id": 0, "shards": "0-41", "count": 42 },
+        { "worker_id": 1, "shards": "42-83", "count": 42 },
+        { "worker_id": 2, "shards": "84-125", "count": 42 },
+        { "worker_id": 3, "shards": "126-167", "count": 42 },
+        { "worker_id": 4, "shards": "168-209", "count": 42 },
+        { "worker_id": 5, "shards": "210-251", "count": 42 },
+        { "worker_id": 6, "shards": "252-293", "count": 42 },
+        { "worker_id": 7, "shards": "294-335", "count": 42 },
+        { "worker_id": 8, "shards": "336-377", "count": 42 },
+        { "worker_id": 9, "shards": "378-421", "count": 44 }
+      ]
+    },
+    "pipeline_stages": [
+      {
+        "stage": "@0master",
+        "description": "Coordination & delegation. Routes each idea through the 9-stage pipeline. Maintains governance and decision logging.",
+        "file": ".github/agents/0master.agent.md",
+        "inputs": ["idea_id", "idea_file", "acceptance_criteria"],
+        "outputs": ["project_id", "project_definition"],
+        "roles": ["Router", "Coordinator", "Decision Logger"]
+      },
+      {
+        "stage": "@1project",
+        "description": "Project setup. Creates project structure, naming, directory layout.",
+        "file": ".github/agents/1project.agent.md",
+        "inputs": ["project_definition"],
+        "outputs": ["project_structure", "kanban_entry"]
+      },
+      {
+        "stage": "@2think",
+        "description": "Analysis & exploration. Understands problem domain, constraints, dependencies.",
+        "file": ".github/agents/2think.agent.md",
+        "inputs": ["project_structure", "idea"],
+        "outputs": ["analysis_document", "constraint_map"]
+      },
+      {
+        "stage": "@3design",
+        "description": "Architecture & design decisions. Creates technical design, module layout, interfaces.",
+        "file": ".github/agents/3design.agent.md",
+        "inputs": ["analysis_document"],
+        "outputs": ["design_document", "module_graph"]
+      },
+      {
+        "stage": "@4plan",
+        "description": "Implementation planning. Creates detailed task breakdown, acceptance criteria.",
+        "file": ".github/agents/4plan.agent.md",
+        "inputs": ["design_document"],
+        "outputs": ["implementation_plan", "test_strategy"]
+      },
+      {
+        "stage": "@5test",
+        "description": "Test writing (red phase). Creates failing tests that define spec.",
+        "file": ".github/agents/5test.agent.md",
+        "inputs": ["implementation_plan"],
+        "outputs": ["test_suite.py", "test_fixtures"]
+      },
+      {
+        "stage": "@6code",
+        "description": "Implementation (green phase). Writes code to make tests pass. No stubs or TODOs.",
+        "file": ".github/agents/6code.agent.md",
+        "inputs": ["test_suite.py", "implementation_plan"],
+        "outputs": ["implementation/*.py", "docstrings", "type_hints"]
+      },
+      {
+        "stage": "@7exec",
+        "description": "Execution & deployment. Runs code, validates behavior, deploys.",
+        "file": ".github/agents/7exec.agent.md",
+        "inputs": ["implementation/*.py"],
+        "outputs": ["execution_log", "deployment_status"]
+      },
+      {
+        "stage": "@8ql",
+        "description": "Query & security analysis. Security scanning, performance analysis.",
+        "file": ".github/agents/8ql.agent.md",
+        "inputs": ["implementation/*.py"],
+        "outputs": ["security_report", "perf_analysis"]
+      },
+      {
+        "stage": "@9git",
+        "description": "Git & GitHub. Commits, pushes, creates PRs, merges to main.",
+        "file": ".github/agents/9git.agent.md",
+        "inputs": ["all_outputs", "security_report"],
+        "outputs": ["commit_hash", "pr_link", "merge_status"]
+      }
+    ],
+    "quality_gates": {
+      "syntax_validation": {
+        "tool": "ast.parse()",
+        "requirement": "100% of code must be syntactically valid Python"
+      },
+      "type_hints": {
+        "tool": "mypy --ignore-missing-imports",
+        "requirement": "All functions must have type hints"
+      },
+      "docstrings": {
+        "tool": "ruff check --select D",
+        "requirement": "All functions/classes must have Google-style docstrings"
+      },
+      "linting": {
+        "tool": "ruff check",
+        "requirement": "Must pass all linting rules (I001, D100-D107, etc)"
+      },
+      "test_coverage": {
+        "tool": "coverage.py",
+        "requirement": "Minimum 85% line coverage"
+      },
+      "test_execution": {
+        "tool": "pytest",
+        "requirement": "100% of tests must pass"
+      }
+    },
+    "distributed_queue": {
+      "type": "file-lock based",
+      "location": "/tmp/shard_queue",
+      "per_shard_lock": "locks/shard_XXXX.lock",
+      "states": ["PENDING", "PROCESSING", "COMPLETE", "FAILED"],
+      "max_retries": 3,
+      "retry_strategy": "exponential backoff with jitter"
+    },
+    "retry_policy": {
+      "max_attempts": 3,
+      "base_delay": 1.0,
+      "max_delay": 60.0,
+      "backoff_formula": "min(base_delay * 2^attempt, max_delay) + jitter(±20%)"
+    },
+    "progress_reporting": {
+      "interval_minutes": 30,
+      "channels": ["Telegram", "local_logs"],
+      "metrics_reported": [
+        "shards_completed",
+        "ideas_processed",
+        "projects_created",
+        "files_generated",
+        "lines_of_code",
+        "quality_pass_rate",
+        "velocity (ideas/hour)",
+        "eta_hours"
+      ],
+      "milestone_alerts": [
+        "50K ideas",
+        "100K ideas",
+        "150K ideas",
+        "200K ideas"
+      ]
+    },
+    "expected_output_structure": {
+      "root": "/home/dev/PyAgent/implementations/generated_code",
+      "layout": {
+        "worker_00/": "Worker 0 outputs",
+        "worker_00/shard_0000/": "Shard 0 outputs",
+        "worker_00/shard_0000/idea_000001_impl.py": "Implementation code",
+        "worker_00/shard_0000/test_idea_000001.py": "Test code",
+        "worker_00/shard_0000/SUMMARY.json": "Shard completion summary",
+        "FINAL_REPORT.json": "Execution summary across all workers"
+      }
+    },
+    "execution_milestones": [
+      {
+        "ideas": 0,
+        "milestone": "START",
+        "shards": 0,
+        "eta_hours": "~21-24"
+      },
+      {
+        "ideas": 50000,
+        "milestone": "25% COMPLETE",
+        "shards": 100,
+        "eta_hours": "~15-18"
+      },
+      {
+        "ideas": 100000,
+        "milestone": "50% COMPLETE",
+        "shards": 200,
+        "eta_hours": "~10-12"
+      },
+      {
+        "ideas": 150000,
+        "milestone": "75% COMPLETE",
+        "shards": 300,
+        "eta_hours": "~5-7"
+      },
+      {
+        "ideas": 200000,
+        "milestone": "95% COMPLETE",
+        "shards": 400,
+        "eta_hours": "~1"
+      },
+      {
+        "ideas": 211000,
+        "milestone": "COMPLETE",
+        "shards": 422,
+        "eta_hours": 0
+      }
+    ],
+    "velocity_targets": {
+      "ideas_per_hour": "~10000",
+      "shards_per_hour": "~20",
+      "projects_per_hour": "~1000",
+      "files_per_hour": "~4000",
+      "loc_per_hour": "~60000"
+    },
+    "system_components": [
+      {
+        "name": "distributed_queue.py",
+        "lines": 250,
+        "purpose": "File-lock based queue for shard coordination",
+        "key_methods": [
+          "lock_shard()",
+          "mark_shard_processing()",
+          "mark_shard_complete()",
+          "get_queue_stats()"
+        ]
+      },
+      {
+        "name": "quality_gates.py",
+        "lines": 380,
+        "purpose": "Per-shard validation (syntax, types, docs, coverage, linting)",
+        "key_methods": [
+          "validate_syntax()",
+          "check_type_hints()",
+          "validate_docstrings()",
+          "lint_code()",
+          "run_all_gates()"
+        ]
+      },
+      {
+        "name": "retry_handler.py",
+        "lines": 110,
+        "purpose": "Exponential backoff retry logic with jitter",
+        "key_methods": [
+          "exponential_backoff()",
+          "retry()"
+        ]
+      },
+      {
+        "name": "worker.py",
+        "lines": 280,
+        "purpose": "Individual worker processing 42 shards",
+        "key_methods": [
+          "process_shard()",
+          "process_all_shards()",
+          "_execute_idea_pipeline()"
+        ]
+      },
+      {
+        "name": "metrics_tracker.py",
+        "lines": 280,
+        "purpose": "Real-time metrics, velocity calculation, ETA, bottleneck detection",
+        "key_methods": [
+          "checkpoint()",
+          "get_velocity()",
+          "calculate_eta()",
+          "detect_bottlenecks()"
+        ]
+      },
+      {
+        "name": "telegram_reporter.py",
+        "lines": 150,
+        "purpose": "Telegram progress reports (30-min intervals + milestones)",
+        "key_methods": [
+          "send_progress_report()",
+          "send_milestone_alert()",
+          "send_error_alert()"
+        ]
+      },
+      {
+        "name": "orchestrator.py",
+        "lines": 320,
+        "purpose": "Main orchestrator: spawn workers, monitor progress, finalize",
+        "key_methods": [
+          "run()",
+          "_monitor_progress()",
+          "_collect_metrics()",
+          "_finalize()"
+        ]
+      },
+      {
+        "name": "main.py",
+        "lines": 120,
+        "purpose": "CLI entry point with argparse for --workers, --shards, --telegram",
+        "key_methods": [
+          "main()"
+        ]
+      }
+    ],
+    "how_to_run": {
+      "option_1_full_system": "python -m parallel_execution.main --workers 10 --shards 422 --telegram",
+      "option_2_dry_run": "python -m parallel_execution.main --workers 10 --shards 422 --dry-run",
+      "option_3_custom": "python -m parallel_execution.main --workers N --shards M --output-dir /path",
+      "prerequisites": [
+        "Python 3.9+",
+        "asyncio (stdlib)",
+        "fcntl (Unix only)",
+        "git (for @9git)",
+        "pytest, mypy, ruff, coverage (for quality gates)",
+        "python-telegram-bot (for Telegram reporting)"
+      ]
+    },
+    "notes": {
+      "architecture": "Async worker pool with file-lock coordination. Each worker processes 42 shards sequentially (not concurrent within worker). Across 10 workers = 420 parallel shard streams.",
+      "bottleneck_detection": "Monitors velocity stability via coefficient of variation. Detects stalls (zero progress) and quality spikes.",
+      "graceful_degradation": "If one worker fails, others continue. Shard locks prevent double-processing. Failed shards can be retried.",
+      "transaction_safety": "Future: integrate PyAgent's StorageTransaction for atomic file writes and rollback.",
+      "scalability": "Design supports 100+ workers. Each worker is independent asyncio task. Add workers via --workers flag.",
+      "real_time_tracking": "Checkpoints every 30 minutes with velocity calculation. ETA confidence increases with checkpoint history.",
+      "quality_bars": "Enforces syntax, type hints, docstrings, linting, coverage, tests. No exceptions.",
+      "integration_readiness": "Designed to integrate with hermes pairing approve telegram for real-time Telegram delivery."
+    }
+  }
+}

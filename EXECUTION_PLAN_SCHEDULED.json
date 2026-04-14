@@ -1,0 +1,41 @@
+{
+  "plan_started": "2026-04-06T06:37:32.162050",
+  "total_ideas": 52655,
+  "batches_scheduled": [
+    {
+      "name": "quick_wins",
+      "description": "High ROI improvements",
+      "items": 500,
+      "avg_effort": 2.0,
+      "total_effort": 1000,
+      "person_weeks": 66.66666666666667,
+      "team_of_5_weeks": 13.3,
+      "scheduled_week": 1,
+      "scheduled_duration": "Week 1-14"
+    },
+    {
+      "name": "arch_security",
+      "description": "Security hardening",
+      "items": 4,
+      "avg_effort": 3.25,
+      "total_effort": 13,
+      "person_weeks": 1.0833333333333333,
+      "team_of_5_weeks": 0.2,
+      "scheduled_week": 15,
+      "scheduled_duration": "Week 15-15"
+    },
+    {
+      "name": "arch_hardening",
+      "description": "Robustness improvements",
+      "items": 278,
+      "avg_effort": 2.028776978417266,
+      "total_effort": 564,
+      "person_weeks": 47.0,
+      "team_of_5_weeks": 9.4,
+      "scheduled_week": 16,
+      "scheduled_duration": "Week 16-25"
+    }
+  ],
+  "timeline_estimate": {},
+  "team_recommendations": {}
+}

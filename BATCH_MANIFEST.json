@@ -1,0 +1,184 @@
+{
+  "arch_api-consistency": {
+    "sequence": 1,
+    "item_count": 402,
+    "total_effort": 1209,
+    "effort_distribution": {
+      "3": 399,
+      "4": 3
+    },
+    "archetype_distribution": {
+      "api-consistency": 402
+    },
+    "avg_effort": 3.0074626865671643,
+    "estimated_weeks": 48.36
+  },
+  "arch_developer-experience": {
+    "sequence": 2,
+    "item_count": 1,
+    "total_effort": 3,
+    "effort_distribution": {
+      "3": 1
+    },
+    "archetype_distribution": {
+      "developer-experience": 1
+    },
+    "avg_effort": 3.0,
+    "estimated_weeks": 0.12
+  },
+  "arch_documentation": {
+    "sequence": 3,
+    "item_count": 1,
+    "total_effort": 3,
+    "effort_distribution": {
+      "3": 1
+    },
+    "archetype_distribution": {
+      "documentation": 1
+    },
+    "avg_effort": 3.0,
+    "estimated_weeks": 0.12
+  },
+  "arch_feature": {
+    "sequence": 4,
+    "item_count": 500,
+    "total_effort": 1500,
+    "effort_distribution": {
+      "3": 500
+    },
+    "archetype_distribution": {
+      "feature": 500
+    },
+    "avg_effort": 3.0,
+    "estimated_weeks": 60.0
+  },
+  "arch_hardening": {
+    "sequence": 5,
+    "item_count": 278,
+    "total_effort": 564,
+    "effort_distribution": {
+      "3": 8,
+      "2": 270
+    },
+    "archetype_distribution": {
+      "hardening": 278
+    },
+    "avg_effort": 2.028776978417266,
+    "estimated_weeks": 22.56
+  },
+  "arch_migration-readiness": {
+    "sequence": 6,
+    "item_count": 4,
+    "total_effort": 13,
+    "effort_distribution": {
+      "3": 3,
+      "4": 1
+    },
+    "archetype_distribution": {
+      "migration-readiness": 4
+    },
+    "avg_effort": 3.25,
+    "estimated_weeks": 0.52
+  },
+  "arch_observability": {
+    "sequence": 7,
+    "item_count": 459,
+    "total_effort": 1385,
+    "effort_distribution": {
+      "3": 451,
+      "4": 8
+    },
+    "archetype_distribution": {
+      "observability": 459
+    },
+    "avg_effort": 3.017429193899782,
+    "estimated_weeks": 55.4
+  },
+  "arch_performance": {
+    "sequence": 8,
+    "item_count": 279,
+    "total_effort": 566,
+    "effort_distribution": {
+      "3": 8,
+      "2": 271
+    },
+    "archetype_distribution": {
+      "performance": 279
+    },
+    "avg_effort": 2.028673835125448,
+    "estimated_weeks": 22.64
+  },
+  "arch_resilience": {
+    "sequence": 9,
+    "item_count": 274,
+    "total_effort": 551,
+    "effort_distribution": {
+      "3": 3,
+      "2": 271
+    },
+    "archetype_distribution": {
+      "resilience": 274
+    },
+    "avg_effort": 2.010948905109489,
+    "estimated_weeks": 22.04
+  },
+  "arch_security": {
+    "sequence": 10,
+    "item_count": 4,
+    "total_effort": 13,
+    "effort_distribution": {
+      "3": 3,
+      "4": 1
+    },
+    "archetype_distribution": {
+      "security": 4
+    },
+    "avg_effort": 3.25,
+    "estimated_weeks": 0.52
+  },
+  "arch_test-coverage": {
+    "sequence": 11,
+    "item_count": 459,
+    "total_effort": 1385,
+    "effort_distribution": {
+      "3": 451,
+      "4": 8
+    },
+    "archetype_distribution": {
+      "test-coverage": 459
+    },
+    "avg_effort": 3.017429193899782,
+    "estimated_weeks": 55.4
+  },
+  "priority_queue": {
+    "sequence": 12,
+    "item_count": 49494,
+    "total_effort": 148482,
+    "effort_distribution": {
+      "3": 49494
+    },
+    "archetype_distribution": {
+      "feature": 49494
+    },
+    "avg_effort": 3.0,
+    "estimated_weeks": 5939.280000000001
+  },
+  "quick_wins": {
+    "sequence": 13,
+    "item_count": 500,
+    "total_effort": 1000,
+    "effort_distribution": {
+      "2": 500
+    },
+    "archetype_distribution": {
+      "improvement": 5,
+      "hardening": 181,
+      "performance": 180,
+      "resilience": 128,
+      "documentation": 3,
+      "developer-experience": 3
+    },
+    "avg_effort": 2.0,
+    "estimated_weeks": 40.0
+  }
+}

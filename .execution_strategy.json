@@ -1,0 +1,851 @@
+{
+  "total_ideas": 2100,
+  "phase_strategy": {
+    "phase_0_critical_threats": {
+      "description": "P1 ideas + Security/Threat tags (must do immediately)",
+      "score_threshold": [
+        100,
+        Infinity
+      ],
+      "tags": [
+        "P1",
+        "T"
+      ]
+    },
+    "phase_1_high_value": {
+      "description": "P2 ideas + Weaknesses (high-impact fixes)",
+      "score_threshold": [
+        8,
+        20
+      ],
+      "tags": [
+        "P2",
+        "W"
+      ]
+    },
+    "phase_2_features": {
+      "description": "P3 ideas + Opportunities (new features)",
+      "score_threshold": [
+        3,
+        8
+      ],
+      "tags": [
+        "P3",
+        "O"
+      ]
+    },
+    "phase_3_polish": {
+      "description": "P4 + Strengths (refactoring, testing, docs)",
+      "score_threshold": [
+        0,
+        3
+      ],
+      "tags": [
+        "P4",
+        "S"
+      ]
+    }
+  },
+  "sample_prioritized": [
+    {
+      "id": "idea004069-hopper-sim-test-py-manual-fix-performance",
+      "title": "004069 hopper sim test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f00"
+    },
+    {
+      "id": "idea004850-model-fallback-test-py-manual-fix-performance",
+      "title": "004850 model fallback test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f00"
+    },
+    {
+      "id": "idea007568-autodebuggerorchestrator-test-documentation",
+      "title": "007568 autodebuggerorchestrator test documentation",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f00"
+    },
+    {
+      "id": "idea003964-cuda-graph-config-test-py-manual-fix-performance",
+      "title": "003964 cuda graph config test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f00"
+    },
+    {
+      "id": "idea004635-doc-gen-core-py-manual-fix-hardening",
+      "title": "004635 doc gen core py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f00"
+    },
+    {
+      "id": "idea019963-fix-version-bottom-test-py-observability",
+      "title": "019963 fix version bottom test py observability",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f01"
+    },
+    {
+      "id": "idea013628-agent-runner-test-security",
+      "title": "013628 agent runner test security",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f01"
+    },
+    {
+      "id": "idea013708-session-manager-test-security",
+      "title": "013708 session manager test security",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f01"
+    },
+    {
+      "id": "idea015429-securityguardagent-test-hardening",
+      "title": "015429 securityguardagent test hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f01"
+    },
+    {
+      "id": "idea019945-fix-hardcoded-paths-resilience",
+      "title": "019945 fix hardcoded paths resilience",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f01"
+    },
+    {
+      "id": "idea028848-registry-test-py-manual-fix-test-coverage",
+      "title": "028848 registry test py manual fix test coverage",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea028639-model-registry-py-manual-fix-performance",
+      "title": "028639 model registry py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea026368-proposals-test-py-manual-fix-test-coverage",
+      "title": "026368 proposals test py manual fix test coverage",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea028928-connection-pool-test-py-manual-fix-test-coverage",
+      "title": "028928 connection pool test py manual fix test coverage",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea024689-semantic-decay-advanced-test-py-manual-fix-performance",
+      "title": "024689 semantic decay advanced test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea028495-event-test-py-manual-fix-performance",
+      "title": "028495 event test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea025309-streaming-mixin-test-py-manual-fix-performance",
+      "title": "025309 streaming mixin test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea026755-extract-json-transformer-test-py-manual-fix-performance",
+      "title": "026755 extract json transformer test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea024962-agent-verifier-test-py-manual-fix-hardening",
+      "title": "024962 agent verifier test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea028150-base-test-py-manual-fix-hardening",
+      "title": "028150 base test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea021028-multimodal-buffer-py-manual-fix-hardening",
+      "title": "021028 multimodal buffer py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea024724-strategy-optimizer-test-py-manual-fix-performance",
+      "title": "024724 strategy optimizer test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea028576-sharded-state-loader-test-py-manual-fix-test-coverage",
+      "title": "028576 sharded state loader test py manual fix test coverage",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea025342-task-queue-mixin-test-py-manual-fix-hardening",
+      "title": "025342 task queue mixin test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea029023-prefix-cache-manager-suggested-test-py-manual-fix-test-coverage",
+      "title": "029023 prefix cache manager suggested test py manual fix test coverage",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea025448-module-loader-test-py-manual-fix-hardening",
+      "title": "025448 module loader test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea029502-selectors-test-security",
+      "title": "029502 selectors test security",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea022238-meta-test-security",
+      "title": "022238 meta test security",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea027966-manager-py-auto-fix-performance",
+      "title": "027966 manager py auto fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea025766-semantic-decay-advanced-test-py-manual-fix-hardening",
+      "title": "025766 semantic decay advanced test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea027675-prefix-cache-manager-test-cpython-313-performance",
+      "title": "027675 prefix cache manager test cpython 313 performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea020290-web-security-scanner-agent-test-documentation",
+      "title": "020290 web security scanner agent test documentation",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea025292-stream-manager-mixin-py-manual-fix-hardening",
+      "title": "025292 stream manager mixin py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea021285-shell-core-test-py-manual-fix-test-coverage",
+      "title": "021285 shell core test py manual fix test coverage",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea021240-shard-core-py-auto-fix-hardening",
+      "title": "021240 shard core py auto fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea026832-backend-test-py-manual-fix-performance",
+      "title": "026832 backend test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea023128-active-directory-attack-defense-core-test-test-coverage",
+      "title": "023128 active directory attack defense core test test coverage",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea025128-data-parsing-mixin-test-py-manual-fix-test-coverage",
+      "title": "025128 data parsing mixin test py manual fix test coverage",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f02"
+    },
+    {
+      "id": "idea031522-debug-intelligence-gaps-test-performance",
+      "title": "031522 debug intelligence gaps test performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea034736-economy-core-test-py-manual-fix-hardening",
+      "title": "034736 economy core test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea033701-hopper-sim-test-py-manual-fix-observability",
+      "title": "033701 hopper sim test py manual fix observability",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea037474-api-suggested-test-security",
+      "title": "037474 api suggested test security",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea030270-discovery-service-suggested-py-aggressive-fix-bak-hardening",
+      "title": "030270 discovery service suggested py aggressive fix bak hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea034570-agent-registry-suggested-test-security",
+      "title": "034570 agent registry suggested test security",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea035113-registry-overlay-suggested-test-py-manual-fix-hardening",
+      "title": "035113 registry overlay suggested test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea038973-branch-comparison-suggested-test-py-manual-fix-hardening",
+      "title": "038973 branch comparison suggested test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea037295-slash-commands-modular-test-py-manual-fix-test-coverage",
+      "title": "037295 slash commands modular test py manual fix test coverage",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea032130-environment-detector-test-py-manual-fix-performance",
+      "title": "032130 environment detector test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea037738-analyst-agent-test-py-manual-fix-hardening",
+      "title": "037738 analyst agent test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea033538-notification-tools-py-manual-fix-performance",
+      "title": "033538 notification tools py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea031890-fixture-factory-test-cpython-313-performance",
+      "title": "031890 fixture factory test cpython 313 performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea037615-loader-suggested-py-manual-fix-hardening",
+      "title": "037615 loader suggested py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea030106-huggingface-test-py-manual-fix-hardening",
+      "title": "030106 huggingface test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea032089-cross-platform-helper-test-py-manual-fix-hardening",
+      "title": "032089 cross platform helper test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea036762-sovereignty-orchestrator-test-py-manual-fix-performance",
+      "title": "036762 sovereignty orchestrator test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea031604-debug-swarm-test-resilience",
+      "title": "031604 debug swarm test resilience",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea035681-interleaving-orchestrator-test-py-manual-fix-performance",
+      "title": "035681 interleaving orchestrator test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea037234-rtp-server-core-py-auto-fix-test-coverage",
+      "title": "037234 rtp server core py auto fix test coverage",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea037756-benchmark-agent-unified-features-test-py-manual-fix-hardening",
+      "title": "037756 benchmark agent unified features test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea032455-test-assertion-test-py-manual-fix-hardening",
+      "title": "032455 test assertion test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea039477-context-visualizer-test-py-manual-fix-hardening",
+      "title": "039477 context visualizer test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea037545-environment-test-py-manual-fix-test-coverage",
+      "title": "037545 environment test py manual fix test coverage",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea030981-testing-utils-py-auto-fix-hardening",
+      "title": "030981 testing utils py auto fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea034205-coordinator-test-py-manual-fix-performance",
+      "title": "034205 coordinator test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea035965-self-healing-core-py-aggressive-fix-bak-performance",
+      "title": "035965 self healing core py aggressive fix bak performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea038338-context-compressor-core-suggested-py-auto-fix-hardening",
+      "title": "038338 context compressor core suggested py auto fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea030018-tokenizer-info-test-py-manual-fix-hardening",
+      "title": "030018 tokenizer info test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea031275-final-fix-test-cpython-313-performance",
+      "title": "031275 final fix test cpython 313 performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea037856-tech-debt-agent-py-auto-fix-performance",
+      "title": "037856 tech debt agent py auto fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea032067-cleanup-strategy-test-py-manual-fix-hardening",
+      "title": "032067 cleanup strategy test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea030580-models-py-auto-fix-performance",
+      "title": "030580 models py auto fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea030590-base-py-auto-fix-performance",
+      "title": "030590 base py auto fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea030463-agent-api-server-test-py-manual-fix-performance",
+      "title": "030463 agent api server test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea038761-context-entity-mixin-suggested-test-py-manual-fix-hardening",
+      "title": "038761 context entity mixin suggested test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea032675-test-profile-test-py-manual-fix-performance",
+      "title": "032675 test profile test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f03"
+    },
+    {
+      "id": "idea047184-prepare-refactor-patches-test-security",
+      "title": "047184 prepare refactor patches test security",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea047029-apply-safe-fixes-test-py-manual-fix-test-coverage",
+      "title": "047029 apply safe fixes test py manual fix test coverage",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea043253-orchestrator-agent-py-manual-fix-performance",
+      "title": "043253 orchestrator agent py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea044694-notification-config-test-py-manual-fix-performance",
+      "title": "044694 notification config test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea042068-run-test-py-manual-fix-hardening",
+      "title": "042068 run test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea049599-arch-advisor-agent-errors-hardening",
+      "title": "049599 arch advisor agent errors hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea045311-refinement-engine-py-manual-fix-hardening",
+      "title": "045311 refinement engine py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea041705-domain-generator-test-py-manual-fix-hardening",
+      "title": "041705 domain generator test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea040710-rust-agent-test-py-manual-fix-performance",
+      "title": "040710 rust agent test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea045151-improvement-archive-test-py-manual-fix-hardening",
+      "title": "045151 improvement archive test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea045972-metrics-collector-test-py-manual-fix-performance",
+      "title": "045972 metrics collector test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea040954-arxiv-core-test-py-manual-fix-performance",
+      "title": "040954 arxiv core test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea044749-trend-data-test-py-manual-fix-hardening",
+      "title": "044749 trend data test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea046215-report-scheduler-test-py-manual-fix-performance",
+      "title": "046215 report scheduler test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea040373-linter-core-test-py-manual-fix-hardening",
+      "title": "040373 linter core test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea044342-pylint-fixer-mixin-test-py-manual-fix-performance",
+      "title": "044342 pylint fixer mixin test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea043174-changes-entry-mixin-test-py-manual-fix-performance",
+      "title": "043174 changes entry mixin test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea046794-stats-agent-test-py-manual-fix-hardening",
+      "title": "046794 stats agent test py manual fix hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea049691-attention-buffer-agent-errors-resilience",
+      "title": "049691 attention buffer agent errors resilience",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea041072-memo-rag-agent-test-py-manual-fix-performance",
+      "title": "041072 memo rag agent test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea045857-changelog-template-test-py-manual-fix-performance",
+      "title": "045857 changelog template test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea040899-ollama-connector-agent-test-py-manual-fix-performance",
+      "title": "040899 ollama connector agent test py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea043982-self-optimizer-agent-py-manual-fix-performance",
+      "title": "043982 self optimizer agent py manual fix performance",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea042337-security-audit-agent-test-hardening",
+      "title": "042337 security audit agent test hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    },
+    {
+      "id": "idea049707-audio-reasoning-agent-errors-hardening",
+      "title": "049707 audio reasoning agent errors hardening",
+      "score": 6,
+      "swot": "?",
+      "priority": "Unknown",
+      "folder": "f04"
+    }
+  ]
+}

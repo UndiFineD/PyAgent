@@ -1,0 +1,34 @@
+{
+  "total_scanned": 209469,
+  "implemented_count": 1,
+  "not_started_count": 209468,
+  "status_distribution": {
+    "Not Started": 209468,
+    "Implemented": 1
+  },
+  "priority_distribution": {
+    "Unknown": 209431,
+    "P2": 7,
+    "P3": 24,
+    "P4": 5,
+    "P1": 2
+  },
+  "area_distribution": {
+    "uncategorized": 209431,
+    "area8": 5,
+    "area2": 4,
+    "area5": 5,
+    "area1": 4,
+    "area3": 4,
+    "area4": 5,
+    "area7": 3,
+    "area6": 5,
+    "area9": 3
+  },
+  "swot_distribution": {
+    "?": 209431,
+    "W": 16,
+    "O": 20,
+    "T": 2
+  }
+}

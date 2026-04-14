@@ -1,0 +1,29 @@
+{
+  "phase_1": {
+    "name": "Index & Analyze",
+    "duration": 1,
+    "daily_velocity": 209490
+  },
+  "phase_2": {
+    "name": "Group & Batch",
+    "duration": 1,
+    "daily_velocity": 209490
+  },
+  "phase_3": {
+    "name": "Create Projects",
+    "duration": 10,
+    "daily_velocity": 21000
+  },
+  "phase_4": {
+    "name": "Generate Code",
+    "duration": 30,
+    "daily_velocity": 7000
+  },
+  "phase_5": {
+    "name": "Tests & Docs",
+    "duration": 20,
+    "daily_velocity": 10500
+  },
+  "total_duration": 62,
+  "team_size": 30
+}

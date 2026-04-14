@@ -1,0 +1,123 @@
+{
+  "sprint_number": 1,
+  "sprint_start": "2026-04-06",
+  "sprint_end": "2026-04-19",
+  "sprint_duration_days": 14,
+  "batches": {
+    "current": {
+      "range": "1-15",
+      "items": 15,
+      "status": "COMPLETE"
+    },
+    "week1": {
+      "range": "16-115",
+      "items": 100,
+      "status": "IN_PROGRESS"
+    },
+    "week2": {
+      "range": "116-250",
+      "items": 135,
+      "status": "QUEUED"
+    }
+  },
+  "daily_plan": {
+    "1": {
+      "date": "2026-04-06",
+      "batch": "Batch 1",
+      "items_target": 15,
+      "cumulative": 30,
+      "progress_pct": 6.0
+    },
+    "2": {
+      "date": "2026-04-07",
+      "batch": "Batch 2",
+      "items_target": 15,
+      "cumulative": 45,
+      "progress_pct": 9.0
+    },
+    "3": {
+      "date": "2026-04-08",
+      "batch": "Batch 2",
+      "items_target": 15,
+      "cumulative": 60,
+      "progress_pct": 12.0
+    },
+    "4": {
+      "date": "2026-04-09",
+      "batch": "Batch 2",
+      "items_target": 15,
+      "cumulative": 75,
+      "progress_pct": 15.0
+    },
+    "5": {
+      "date": "2026-04-10",
+      "batch": "Batch 2",
+      "items_target": 15,
+      "cumulative": 90,
+      "progress_pct": 18.0
+    },
+    "6": {
+      "date": "2026-04-11",
+      "batch": "Batch 2",
+      "items_target": 15,
+      "cumulative": 105,
+      "progress_pct": 21.0
+    },
+    "7": {
+      "date": "2026-04-12",
+      "batch": "Batch 2",
+      "items_target": 15,
+      "cumulative": 120,
+      "progress_pct": 24.0
+    },
+    "8": {
+      "date": "2026-04-13",
+      "batch": "Batch 3",
+      "items_target": 15,
+      "cumulative": 135,
+      "progress_pct": 27.0
+    },
+    "9": {
+      "date": "2026-04-14",
+      "batch": "Batch 3",
+      "items_target": 15,
+      "cumulative": 150,
+      "progress_pct": 30.0
+    },
+    "10": {
+      "date": "2026-04-15",
+      "batch": "Batch 3",
+      "items_target": 15,
+      "cumulative": 165,
+      "progress_pct": 33.0
+    },
+    "11": {
+      "date": "2026-04-16",
+      "batch": "Batch 3",
+      "items_target": 15,
+      "cumulative": 180,
+      "progress_pct": 36.0
+    },
+    "12": {
+      "date": "2026-04-17",
+      "batch": "Batch 3",
+      "items_target": 15,
+      "cumulative": 195,
+      "progress_pct": 39.0
+    },
+    "13": {
+      "date": "2026-04-18",
+      "batch": "Batch 3",
+      "items_target": 15,
+      "cumulative": 210,
+      "progress_pct": 42.0
+    },
+    "14": {
+      "date": "2026-04-19",
+      "batch": "Batch 3",
+      "items_target": 15,
+      "cumulative": 225,
+      "progress_pct": 45.0
+    }
+  }
+}

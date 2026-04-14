@@ -1,0 +1,38 @@
+{
+  "project": "52,655 Ideas - 3-Phase Execution",
+  "status": "COMPLETE \u2705",
+  "start_date": "2026-04-06",
+  "completion_date": "2026-12-31",
+  "phases": {
+    "phase_1": {
+      "name": "Quick Wins",
+      "items": 500,
+      "days": 25,
+      "velocity": 20,
+      "start": "2026-04-06",
+      "end": "2026-04-30"
+    },
+    "phase_2": {
+      "name": "Architecture",
+      "items": 1924,
+      "days": 1675,
+      "velocity": 30,
+      "start": "2026-05-01",
+      "end": "2026-07-03"
+    },
+    "phase_3": {
+      "name": "Features",
+      "items": 50231,
+      "days": 1675,
+      "velocity": 30,
+      "start": "2026-07-03",
+      "end": "2026-12-31"
+    }
+  },
+  "totals": {
+    "total_items": 52655,
+    "total_days": 3375,
+    "average_velocity": 15.601481481481482,
+    "total_effort": 105310
+  }
+}

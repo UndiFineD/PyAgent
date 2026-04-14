@@ -1,0 +1,113 @@
+{
+  "phase": "PHASE 2 - Architecture",
+  "batches": {
+    "arch_api-consistency": {
+      "name": "arch_api-consistency",
+      "items": 402,
+      "effort": 1209,
+      "avg_effort": 3.0074626865671643,
+      "archetypes": {
+        "api-consistency": 402
+      },
+      "priorities": {
+        "5": 14,
+        "4": 2,
+        "3": 385,
+        "2": 1
+      }
+    },
+    "arch_developer-experience": {
+      "name": "arch_developer-experience",
+      "items": 1,
+      "effort": 3,
+      "avg_effort": 3.0,
+      "archetypes": {
+        "developer-experience": 1
+      },
+      "priorities": {
+        "5": 1
+      }
+    },
+    "arch_documentation": {
+      "name": "arch_documentation",
+      "items": 1,
+      "effort": 3,
+      "avg_effort": 3.0,
+      "archetypes": {
+        "documentation": 1
+      },
+      "priorities": {
+        "5": 1
+      }
+    },
+    "arch_feature": {
+      "name": "arch_feature",
+      "items": 500,
+      "effort": 1500,
+      "avg_effort": 3.0,
+      "archetypes": {
+        "feature": 500
+      },
+      "priorities": {
+        "4": 500
+      }
+    },
+    "arch_hardening": {
+      "name": "arch_hardening",
+      "items": 278,
+      "effort": 564,
+      "avg_effort": 2.028776978417266,
+      "archetypes": {
+        "hardening": 278
+      },
+      "priorities": {
+        "5": 273,
+        "3": 5
+      }
+    },
+    "arch_migration-readiness": {
+      "name": "arch_migration-readiness",
+      "items": 4,
+      "effort": 13,
+      "avg_effort": 3.25,
+      "archetypes": {
+        "migration-readiness": 4
+      },
+      "priorities": {
+        "5": 1,
+        "4": 1,
+        "3": 2
+      }
+    },
+    "arch_observability": {
+      "name": "arch_observability",
+      "items": 459,
+      "effort": 1385,
+      "avg_effort": 3.017429193899782,
+      "archetypes": {
+        "observability": 459
+      },
+      "priorities": {
+        "5": 20,
+        "4": 3,
+        "3": 431,
+        "2": 5
+      }
+    },
+    "arch_performance": {
+      "name": "arch_performance",
+      "items": 279,
+      "effort": 566,
+      "avg_effort": 2.028673835125448,
+      "archetypes": {
+        "performance": 279
+      },
+      "priorities": {
+        "5": 274,
+        "3": 5
+      }
+    }
+  },
+  "total_items": 1924,
+  "execution_timeline": {}
+}
